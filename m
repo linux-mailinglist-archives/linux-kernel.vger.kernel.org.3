@@ -2,75 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A92584C3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA05F584B5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234288AbiG2G5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
+        id S234225AbiG2GGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiG2G5B (ORCPT
+        with ESMTP id S229512AbiG2GGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:57:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7858543E59;
-        Thu, 28 Jul 2022 23:56:59 -0700 (PDT)
-X-UUID: e705fe584324436294893162a29294b1-20220729
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:c21bd177-cf5a-408f-8477-83817d7699ca,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:6c88bacf-a6cf-4fb6-be1b-c60094821ca2,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: e705fe584324436294893162a29294b1-20220729
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1107082872; Fri, 29 Jul 2022 14:56:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
- Fri, 29 Jul 2022 06:56:15 +0000
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 29 Jul 2022 11:51:36 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 29 Jul 2022 11:51:35 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tomasz Figa <tfiga@google.com>,
-        <nicolas.dufresne@collabora.com>
-CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5, 4/8] media: mediatek: vcodec: Add more extra processing for multi-core encoding
-Date:   Fri, 29 Jul 2022 11:51:25 +0800
-Message-ID: <20220729035129.3634-5-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220729035129.3634-1-irui.wang@mediatek.com>
-References: <20220729035129.3634-1-irui.wang@mediatek.com>
+        Fri, 29 Jul 2022 02:06:45 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204F46B24C;
+        Thu, 28 Jul 2022 23:06:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kivefSVoxjXjSLi+/qyaV7eT8YdO9RvqkoT0/pBYEIJBc8FtQdp6x8TgJXSjVZL/yfkT2pPsUwb44A7mrNfTqguaoU9pcB4RJHfvYuPx2XVs6aSejBen2uw9vjSyw6EeNoIJNTd/HWYpD7lw2LlCdfW/8q9OU1Cr2LTVH7cJdGYkEuJvEUGV0SvAqh99rYly6iTX5jADATOyx/a8hmo7WwU/kC2QlV3GWJzgaZsuULWyTzFA7RKF1T7lmY8xySR0s/HLmT5wdalzPYRFLHXRUO+pMjnlGfhIR8g/3CqyA51k7NpqHiz61g1H7bhiNdwC8LjVHi1xH6DRGwrvTm4BHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PnA9H+1uM1ZoSijHclKkaEW0o2yJ/jT73MfNgphOE3g=;
+ b=PDfYDXvgxcUsgjCpzBcBgYLaM4aKjC4ERIa0XRdTXUUkps1zRvD1WwX4NKy2TaQaCpVGmuHFonG+HXvGyYBeXWfiVXEslHcOucYAfBcHBX0az5ekLjqTGM3Ht+2BgdssAdW95WR+YMxmzcicW0nh/ZHKa9RfnTAVmMbkdXDZ0sEsXGxu83VZv+kG4eZFNfc2OOWpZ3Jabvk70tjtlqV5jOAsx+1qu4zOAeOTOVJN+DJeruIiyxvg+0+gFklNNQJUCEIqS2z+WCds59YCYOnPewnT8qmqRdQHIZuebZEg22L7c2zOvLVv2ax7KBHHPiccpyHHmRRc3theUKIQqfDpMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PnA9H+1uM1ZoSijHclKkaEW0o2yJ/jT73MfNgphOE3g=;
+ b=ILlc3y1bOsaBwRChlAzSxVt2aMsUDR4/hZkaedLvR6p181Kx+IF+RcOGcdDe4Sczj5HEYIUXpof4BbCdLkiMTb2QN2LiG0CjYYpA7B/T66yk2kYyxXPsVi+4M/ZzhCFmU6Zt9laSK5jhsulmi76Wg5Ehotvxbotz1br4mgUx8hg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com (2603:10b6:930:20::11)
+ by MN0PR12MB6032.namprd12.prod.outlook.com (2603:10b6:208:3cc::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Fri, 29 Jul
+ 2022 06:06:42 +0000
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::1901:1d1e:a186:b37a]) by CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::1901:1d1e:a186:b37a%8]) with mapi id 15.20.5482.006; Fri, 29 Jul 2022
+ 06:06:41 +0000
+Message-ID: <23b43ea0-0a92-e132-ada3-ebe86dbaf673@amd.com>
+Date:   Fri, 29 Jul 2022 11:36:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv2 5/7] KVM: SVM: Add VNMI support in inject_nmi
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+ <20220709134230.2397-6-santosh.shukla@amd.com> <Yth2eik6usFvC4vW@google.com>
+From:   "Shukla, Santosh" <santosh.shukla@amd.com>
+In-Reply-To: <Yth2eik6usFvC4vW@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0022.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::27) To CY5PR12MB6323.namprd12.prod.outlook.com
+ (2603:10b6:930:20::11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9ab4bf45-a776-41f2-6a6e-08da71288166
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6032:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bYfsTyXQYgMFO6HkQZKLUJr2FSl/6YUvZrxcGug8hTaxvv0kn1/QsjCTv5Mr0rS7zU0oks8lO2XHLaSPhz+wbxAl258rApV0uKbVNInGBdtGzQ6h15LaQSd5WBp/873Exkb8zYsRap0bcn5hNzQYyT6FjLv9UQR+sadpi+E8+dX6+RjtPYDWiBfhFx10xhTKNghPEsF9ib1MvoD+2iArYx0W8H8DAceyZNiRnQ3dCk+gcbZqXvJ6JWpxzsz/DlSi0dnB8xElM8wL8+7N4vzNb8IypW6CRFzU1/mo3G02m7tLNTIJ0+j8U/QTMNJMKNK9QZvIFT7Hc1Bfl/CvRBgQZbt3RY1i8IPhQNGzX80so2RQbxxp/7ifE0c5f+iwE8l2+r16rMBRToXyQ2tMKCKvqpgZVE/TlbTJmC94NYE+N9xJah4IBydtmVIVN4yKKCmmrwIHxcy9CRl3PeJk4tszW0mx53eQHZ/nMQX+XzJHKizn5BNW+3mtkvHs77vD/PfRhz4GQSATHPUonoZxj1L3nRbyWSKCWKBq4EYXzHoPX/Skxt2kjA58VBjJoEF7PUpABpwQ5Dos66VI2paCuCoHTFhCnPcKv+a4K91ShiasPU4lPd6hJEeyyxdStqM5RrZbcq6MOM/LlayuGqWWpKrdbsIZO54n2f13RerI22S1n2J0FBM/+nb0W+QFnrpa0ssjC4EoMZi1Xc94uprXLPwD8dbZSZWH2nP1NTFOt4UaZEVHBi0DXCznQGJuTZTpX5Z0lkiAbtVuwplkOBChk2tEA92xsK9J98fPjKPmb9DS1Ttac+5/fa+r3qoLdT1j9ubWD1kYskuJRxwZADTB6UZTpg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6323.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(366004)(39860400002)(8676002)(4326008)(6666004)(8936002)(36756003)(41300700001)(5660300002)(66946007)(38100700002)(316002)(66556008)(2906002)(66476007)(6916009)(31686004)(54906003)(83380400001)(186003)(6486002)(86362001)(6512007)(53546011)(2616005)(31696002)(6506007)(26005)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2U4RWZFQ0lXcHowdDllZkplQzlzT2JXa2tHbTgra1hXZnZySWxnSmM3UTJ6?=
+ =?utf-8?B?R3VSUFBDZFh1NXY0SDNDSmkvVlk2dVQ5TVZ1dGh4ZkZSZWd3R0tOYjRnM2hk?=
+ =?utf-8?B?V012aExYMzlVY3VpUUxKcVJOM1dvNTd5REJ2ZE9zZDBQd25jVFhFY0dtZ3pl?=
+ =?utf-8?B?MjRQM0gwQ3JKL0diZHlwWWhKS2EybFdsRTRadDJBS2NJeTB2djJEalBiWXY2?=
+ =?utf-8?B?YlVIUTJMelNxck0xdk9wMWNZWDhBQ3l4b1Z3bThLZFNKb25ubmNlOWZYQXZt?=
+ =?utf-8?B?VjR3SDRRN0NIejg1S25lZHJNaEVET25MQ2hZQi8rNGpyZjFSQWZ4aFdOUC9H?=
+ =?utf-8?B?Z0NUUDNIcnBMRFY1QlhUWWdpWGlIdCtUVTNzUGt6UHhRMjBhbnpmbjIwL2lF?=
+ =?utf-8?B?b2sxVjdybkU1WFRUWDI2enhhOWdYYzRpVW9CQkp0ZzIrdEJHbGVtNVRxdy8y?=
+ =?utf-8?B?SGYwSDUzYTVYQTZGS0o1N2x6ZmNIVjNET3pVZ0NGMjlmbjBnOFE4ejVBNUdX?=
+ =?utf-8?B?dXBJeDljQUpSUmJoY1RjRzkwbHlNTEVNUDFwNXRZVFpGY0NKbkd3WTVKbmtG?=
+ =?utf-8?B?TGhlYWVIUHZ1YXpLZUJWTEFVU3hadFlDTmFXZVdkOERaRnYrYzZrcVJhUjR1?=
+ =?utf-8?B?NHdyR1h4dEdhaitBUlFyZkNxVCtsbDhrRjVHbk01MWFVV1lkQkxXdzNKd1pE?=
+ =?utf-8?B?UzZOMk5zY090andNd2c5Wlgrb2kvbU0xcTJYc2VKZDE0ZlJQTjJ2RGFvNk9Z?=
+ =?utf-8?B?dzdzQlE5WmF3T1JxbFN2U3VvbmNQZEEzT0Fjai9lbEF5dmIvZlV0TngvbGw4?=
+ =?utf-8?B?dm4rWmZiOW1pRUZYc0djYUNzNllZSmVIRlhCNHg0bUFWSGY4Q0wvdEJDRXp2?=
+ =?utf-8?B?MExwVUxQT3IrOWxaWTNtekxmeHhVdDNUQkE5UEtKdmh4Ti9HVTNtYjNhTGx6?=
+ =?utf-8?B?QmxLRWFJMU5xdklmdkZYMDBBdnZzbS9KUlVFa1QxUklTV1FLVlU2SHBrUXIv?=
+ =?utf-8?B?RFZOblFrQkN5ZGVvVnZDMXJPWXI1YURsVzJvUXZDNm9EMXZJcUtySEVDREtM?=
+ =?utf-8?B?enVrUWhQN3ErL01kWTJscTAyMTd6eklIWGNIRlg0T2NET1JaYTdJeUpwTmpu?=
+ =?utf-8?B?aCt0aStSc3JDNzBxYVM5NGVzbndiTkU3cFBxNVB6UkkrOVFDRWZCL0d0S3hn?=
+ =?utf-8?B?Q2o5WklmUEFHMll1OHRlaGs5Z2h1bUxXcFNUUG01SjVWQWNLMFFqekZFTjNk?=
+ =?utf-8?B?T2krb25EVVdXeGtjeCtMQ3hFUGdUZEhNSzlxeG9RK3FnblJWR1hiWklOVXNG?=
+ =?utf-8?B?NmE4ZDNLMm9rVEVSVlc2d3lLSFVpUjFESGcvRU1xRnRyeXN4N1J1QjdoN08y?=
+ =?utf-8?B?ZXV5YjJuOXUwNXRRVE9tWkkra1NIaDJ4R0RWcll6dENxWXh0SDk2LzBOSXVI?=
+ =?utf-8?B?ZEs5a3JHSDljVjBXTW0vOWM4YjVDUlMzbm8vV3RxYkUzbFJ3YzVJSld0OS9v?=
+ =?utf-8?B?L2wxNit6U0EyUDZjNDdydnBxTlZCMHBIVStSUTBTTytPYW5CcWFocW1qcC85?=
+ =?utf-8?B?VDZjcEJTTkdKaitjVlo2djZmbVlOd0pzV2tjbXY1dklvenBPZ1lKa1drSVFB?=
+ =?utf-8?B?enBTaStrWmRPTHFIZVVOeFB2dkZndXd1M1BMSXRLZGJGQy9nTkNGalY1M3Zz?=
+ =?utf-8?B?ZjdaMGdWMFhWUmZUYzVZZzJwcSsrYTZveVI4blp3TFJPS1ZTd013ZzVSc1Bx?=
+ =?utf-8?B?Q25jMlEvcHVDaUxwZ3BoL0xhYlJjR1JtRlhZc3lFQlExMW1XQWFXZ2gxN2FS?=
+ =?utf-8?B?ZzdUeU1icGx3YnBkL21ESmR4OEk3Qzg3S0UwZlFQbGU3TTF0ajl2TzFtKzdM?=
+ =?utf-8?B?M2d2YnM3bllRYUNIRXB0bkE1Q0FPazFyVWhoS3NiU3VWczJWcE5TU3RHeDRp?=
+ =?utf-8?B?N3dsQ3I2TzZWNUt1eG1DWnVyY3FPS2NVNjFmajdNT0t3NU01V0ZXQTd2Ukkr?=
+ =?utf-8?B?d0hObXpSaVpMY0g0TVFYcmVxVnhLdXJMNDF5blYzRDJJVWQ0SkFSMGlyNnls?=
+ =?utf-8?B?STJKemhvdHUrNzJpcjF0em1kakxFOFB0N3FGc2VQTXNaUDlUbWJWUEFzckU3?=
+ =?utf-8?Q?S9pslcdQJb94T5nhtCkXc/wTk?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ab4bf45-a776-41f2-6a6e-08da71288166
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6323.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 06:06:41.3051
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: obMqSZL5/k3/OVFwmBKlQUOdYQXKNlxlc53rf/PmSg/e4Deu2ZhG3WCxGgiOFRlJ1o8mc6gWtaX1FNTggosUgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6032
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,429 +130,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a bit for indicating support multi-core encoding, because multi-core
-encoding need more working buffers for encoder hardware. The working
-buffers are allocated from kernel side then pass to scp firmware side
-through shared memory, the struct definition must be kept align between
-kernel and scp firmware side. New another shared memory struct for
-multi-core encoding.
+Hi Sean,
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   2 +
- .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
- .../mediatek/vcodec/mtk_vcodec_util.h         |   2 +
- .../mediatek/vcodec/venc/venc_h264_if.c       | 207 +++++++++++++++---
- 4 files changed, 195 insertions(+), 35 deletions(-)
+On 7/21/2022 3:11 AM, Sean Christopherson wrote:
+> On Sat, Jul 09, 2022, Santosh Shukla wrote:
+>> Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
+>> will clear V_NMI to acknowledge processing has started and will keep the
+>> V_NMI_MASK set until the processor is done with processing the NMI event.
+>>
+>> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+>> ---
+>> v2:
+>> - Added WARN_ON check for vnmi pending.
+>> - use `get_vnmi_vmcb` to get correct vmcb so to inject vnmi.
+>>
+>>  arch/x86/kvm/svm/svm.c | 10 +++++++++-
+>>  1 file changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+>> index 44c1f2317b45..c73a1809a7c7 100644
+>> --- a/arch/x86/kvm/svm/svm.c
+>> +++ b/arch/x86/kvm/svm/svm.c
+>> @@ -3375,12 +3375,20 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
+>>  static void svm_inject_nmi(struct kvm_vcpu *vcpu)
+>>  {
+>>  	struct vcpu_svm *svm = to_svm(vcpu);
+>> +	struct vmcb *vmcb = NULL;
+>> +
+>> +	++vcpu->stat.nmi_injections;
+>> +	if (is_vnmi_enabled(svm)) {
+>> +		vmcb = get_vnmi_vmcb(svm);
+>> +		WARN_ON(vmcb->control.int_ctl & V_NMI_PENDING);
+> 
+> Haven't read the spec, but based on the changelog I assume the flag doesn't get
+> cleared until the NMI is fully delivered.  That means this WARN will fire if a
+> VM-Exit occurs during delivery as KVM will re-inject the event, e.g. if KVM is
+> using shadow paging and a #PF handle by KVM occurs during delivery.
+> 
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index 644021c5bbd4..250e9833b955 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -27,6 +27,8 @@
- #define WAIT_INTR_TIMEOUT_MS	1000
- #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
- #define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
-+#define MTK_VENC_MULTICORE_ENABLE BIT(1)
-+#define IS_VENC_MULTICORE(capability) ((capability) & MTK_VENC_MULTICORE_ENABLE)
- 
- /*
-  * enum mtk_hw_reg_idx - MTK hw register base index
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-index ace78c4b5b9e..a4c2cbf4040e 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-@@ -11,6 +11,7 @@
- 
- #include "mtk_vcodec_dec_hw.h"
- #include "mtk_vcodec_drv.h"
-+#include "mtk_vcodec_enc_hw.h"
- #include "mtk_vcodec_util.h"
- 
- void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
-@@ -26,6 +27,24 @@ void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
- }
- EXPORT_SYMBOL(mtk_vcodec_get_reg_addr);
- 
-+void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *ctx,
-+					 int hw_id)
-+{
-+	struct mtk_venc_hw_dev *sub_core;
-+
-+	if (hw_id >= MTK_VENC_HW_MAX) {
-+		mtk_v4l2_err("Invalid hw_id = %d", hw_id);
-+		return NULL;
-+	}
-+
-+	sub_core = (struct mtk_venc_hw_dev *)ctx->dev->enc_hw_dev[hw_id];
-+	if (!sub_core)
-+		return NULL;
-+
-+	return sub_core->reg_base;
-+}
-+EXPORT_SYMBOL(mtk_venc_get_core_reg_addr);
-+
- int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
- 			struct mtk_vcodec_mem *mem)
- {
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-index 71956627a0e2..0033c53d5589 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-@@ -50,6 +50,8 @@ struct mtk_vcodec_dev;
- 
- void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
- 				unsigned int reg_idx);
-+void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *data,
-+					 int hw_id);
- int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
- 				struct mtk_vcodec_mem *mem);
- void mtk_vcodec_mem_free(struct mtk_vcodec_ctx *data,
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-index 4d9b8798dffe..3a565929f2b0 100644
---- a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-@@ -50,6 +50,24 @@ enum venc_h264_vpu_work_buf {
- 	VENC_H264_VPU_WORK_BUF_MAX,
- };
- 
-+/*
-+ * enum venc_multi_core_work_buf - h264 multi core encoder buffer index
-+ */
-+enum venc_multi_core_work_buf {
-+	VENC_MULTI_CORE_WORK_BUF_RC_INFO_CORE0,
-+	VENC_MULTI_CORE_WORK_BUF_RC_CODE,
-+	VENC_MULTI_CORE_WORK_BUF_REC_LUMA,
-+	VENC_MULTI_CORE_WORK_BUF_REC_CHROMA,
-+	VENC_MULTI_CORE_WORK_BUF_REF_LUMA,
-+	VENC_MULTI_CORE_WORK_BUF_REF_CHROMA,
-+	VENC_MULTI_CORE_WORK_BUF_MV_INFO_1,
-+	VENC_MULTI_CORE_WORK_BUF_MV_INFO_2,
-+	VENC_MULTI_CORE_WORK_BUF_SKIP_FRAME,
-+	VENC_MULTI_CORE_WORK_BUF_RC_INFO_CORE1,
-+	VENC_MULTI_CORE_WORK_BUF_FR_RC_INFO,
-+	VENC_MULTI_CORE_WORK_BUF_MAX,
-+};
-+
- /*
-  * enum venc_h264_bs_mode - for bs_mode argument in h264_enc_vpu_encode
-  */
-@@ -94,6 +112,47 @@ struct venc_h264_vpu_config {
- 	u32 wfd;
- };
- 
-+/*
-+ * struct venc_h264_vpu_config_ext - Structure for h264 encoder configuration
-+ *                               AP-W/R : AP is writer/reader on this item
-+ *                               VPU-W/R: VPU is write/reader on this item
-+ * @input_fourcc: input fourcc
-+ * @bitrate: target bitrate (in bps)
-+ * @pic_w: picture width. Picture size is visible stream resolution, in pixels,
-+ *         to be used for display purposes; must be smaller or equal to buffer
-+ *         size.
-+ * @pic_h: picture height
-+ * @buf_w: buffer width. Buffer size is stream resolution in pixels aligned to
-+ *         hardware requirements.
-+ * @buf_h: buffer height
-+ * @gop_size: group of picture size (idr frame)
-+ * @intra_period: intra frame period
-+ * @framerate: frame rate in fps
-+ * @profile: as specified in standard
-+ * @level: as specified in standard
-+ * @wfd: WFD mode 1:on, 0:off
-+ * @max_qp: max quant parameter
-+ * @min_qp: min quant parameter
-+ * @reserved: reserved configs
-+ */
-+struct venc_h264_vpu_config_ext {
-+	u32 input_fourcc;
-+	u32 bitrate;
-+	u32 pic_w;
-+	u32 pic_h;
-+	u32 buf_w;
-+	u32 buf_h;
-+	u32 gop_size;
-+	u32 intra_period;
-+	u32 framerate;
-+	u32 profile;
-+	u32 level;
-+	u32 wfd;
-+	u32 max_qp;
-+	u32 min_qp;
-+	u32 reserved[8];
-+};
-+
- /*
-  * struct venc_h264_vpu_buf - Structure for buffer information
-  *                            AP-W/R : AP is writer/reader on this item
-@@ -127,6 +186,17 @@ struct venc_h264_vsi {
- 	struct venc_h264_vpu_buf work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
- };
- 
-+/*
-+ * struct venc_multi_core_vsi - Structure for VPU driver control and info share
-+ *				Used for multi-core encode sharing
-+ * @config: h264 encoder configuration
-+ * @work_bufs: working buffer information in VPU side
-+ */
-+struct venc_multi_core_vsi {
-+	struct venc_h264_vpu_config_ext config;
-+	struct venc_h264_vpu_buf work_bufs[VENC_MULTI_CORE_WORK_BUF_MAX];
-+};
-+
- /*
-  * struct venc_h264_inst - h264 encoder AP driver instance
-  * @hw_base: h264 encoder hardware register base
-@@ -140,11 +210,12 @@ struct venc_h264_vsi {
-  * @vpu_inst: VPU instance to exchange information between AP and VPU
-  * @vsi: driver structure allocated by VPU side and shared to AP side for
-  *	 control and info share
-+ * @core_vsi: used for multi-core encode info sharing.
-  * @ctx: context for v4l2 layer integration
-  */
- struct venc_h264_inst {
--	void __iomem *hw_base;
--	struct mtk_vcodec_mem work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
-+	void __iomem *hw_base[MTK_VENC_HW_MAX];
-+	struct mtk_vcodec_mem work_bufs[VENC_MULTI_CORE_WORK_BUF_MAX];
- 	struct mtk_vcodec_mem pps_buf;
- 	bool work_buf_allocated;
- 	unsigned int frm_cnt;
-@@ -152,12 +223,13 @@ struct venc_h264_inst {
- 	unsigned int prepend_hdr;
- 	struct venc_vpu_inst vpu_inst;
- 	struct venc_h264_vsi *vsi;
-+	struct venc_multi_core_vsi *core_vsi;
- 	struct mtk_vcodec_ctx *ctx;
- };
- 
- static inline u32 h264_read_reg(struct venc_h264_inst *inst, u32 addr)
- {
--	return readl(inst->hw_base + addr);
-+	return readl(inst->hw_base[MTK_VENC_CORE_0] + addr);
- }
- 
- static unsigned int h264_get_profile(struct venc_h264_inst *inst,
-@@ -227,14 +299,20 @@ static unsigned int h264_get_level(struct venc_h264_inst *inst,
- 
- static void h264_enc_free_work_buf(struct venc_h264_inst *inst)
- {
--	int i;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	int i, max_work_buf;
- 
- 	mtk_vcodec_debug_enter(inst);
- 
-+	if (IS_VENC_MULTICORE(ctx->dev->enc_capability))
-+		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-+	else
-+		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-+
- 	/* Except the SKIP_FRAME buffers,
- 	 * other buffers need to be freed by AP.
- 	 */
--	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-+	for (i = 0; i < max_work_buf; i++) {
- 		if (i != VENC_H264_VPU_WORK_BUF_SKIP_FRAME)
- 			mtk_vcodec_mem_free(inst->ctx, &inst->work_bufs[i]);
- 	}
-@@ -246,13 +324,22 @@ static void h264_enc_free_work_buf(struct venc_h264_inst *inst)
- 
- static int h264_enc_alloc_work_buf(struct venc_h264_inst *inst)
- {
--	int i;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	struct venc_h264_vpu_buf *wb;
-+	int i, max_work_buf;
- 	int ret = 0;
--	struct venc_h264_vpu_buf *wb = inst->vsi->work_bufs;
- 
- 	mtk_vcodec_debug_enter(inst);
- 
--	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-+	if (IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-+		wb = inst->core_vsi->work_bufs;
-+		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-+	} else {
-+		wb = inst->vsi->work_bufs;
-+		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-+	}
-+
-+	for (i = 0; i < max_work_buf; i++) {
- 		/*
- 		 * This 'wb' structure is set by VPU side and shared to AP for
- 		 * buffer allocation and IO virtual addr mapping. For most of
-@@ -342,22 +429,22 @@ static unsigned int h264_enc_wait_venc_done(struct venc_h264_inst *inst)
- 	return irq_status;
- }
- 
--static int h264_frame_type(struct venc_h264_inst *inst)
-+static int h264_frame_type(unsigned int frm_cnt, unsigned int gop_size,
-+			   unsigned int intra_period)
- {
--	if ((inst->vsi->config.gop_size != 0 &&
--	     (inst->frm_cnt % inst->vsi->config.gop_size) == 0) ||
--	    (inst->frm_cnt == 0 && inst->vsi->config.gop_size == 0)) {
-+	if ((gop_size != 0 && (frm_cnt % gop_size) == 0) ||
-+	    (frm_cnt == 0 && gop_size == 0)) {
- 		/* IDR frame */
- 		return VENC_H264_IDR_FRM;
--	} else if ((inst->vsi->config.intra_period != 0 &&
--		    (inst->frm_cnt % inst->vsi->config.intra_period) == 0) ||
--		   (inst->frm_cnt == 0 && inst->vsi->config.intra_period == 0)) {
-+	} else if ((intra_period != 0 && (frm_cnt % intra_period) == 0) ||
-+		   (frm_cnt == 0 && intra_period == 0)) {
- 		/* I frame */
- 		return VENC_H264_I_FRM;
- 	} else {
- 		return VENC_H264_P_FRM;  /* Note: B frames are not supported */
- 	}
- }
-+
- static int h264_encode_sps(struct venc_h264_inst *inst,
- 			   struct mtk_vcodec_mem *bs_buf,
- 			   unsigned int *bs_size)
-@@ -437,15 +524,25 @@ static int h264_encode_frame(struct venc_h264_inst *inst,
- 			     struct mtk_vcodec_mem *bs_buf,
- 			     unsigned int *bs_size)
- {
--	int ret = 0;
--	unsigned int irq_status;
- 	struct venc_frame_info frame_info;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	unsigned int irq_status, gop_size, intra_period;
-+	int ret = 0;
- 
- 	mtk_vcodec_debug_enter(inst);
- 	mtk_vcodec_debug(inst, "frm_cnt = %d\n ", inst->frm_cnt);
-+
-+	if (IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-+		gop_size = inst->core_vsi->config.gop_size;
-+		intra_period = inst->core_vsi->config.intra_period;
-+	} else {
-+		gop_size = inst->vsi->config.gop_size;
-+		intra_period = inst->vsi->config.intra_period;
-+	}
- 	frame_info.frm_count = inst->frm_cnt;
- 	frame_info.skip_frm_count = inst->skip_frm_cnt;
--	frame_info.frm_type = h264_frame_type(inst);
-+	frame_info.frm_type = h264_frame_type(inst->frm_cnt, gop_size,
-+					      intra_period);
- 	mtk_vcodec_debug(inst, "frm_count = %d,skip_frm_count =%d,frm_type=%d.\n",
- 			 frame_info.frm_count, frame_info.skip_frm_count,
- 			 frame_info.frm_type);
-@@ -501,8 +598,8 @@ static void h264_encode_filler(struct venc_h264_inst *inst, void *buf,
- static int h264_enc_init(struct mtk_vcodec_ctx *ctx)
- {
- 	const bool is_ext = MTK_ENC_CTX_IS_EXT(ctx);
--	int ret = 0;
- 	struct venc_h264_inst *inst;
-+	int ret, i;
- 
- 	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
- 	if (!inst)
-@@ -511,13 +608,23 @@ static int h264_enc_init(struct mtk_vcodec_ctx *ctx)
- 	inst->ctx = ctx;
- 	inst->vpu_inst.ctx = ctx;
- 	inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
--	inst->hw_base = mtk_vcodec_get_reg_addr(inst->ctx, VENC_SYS);
- 
- 	mtk_vcodec_debug_enter(inst);
- 
- 	ret = vpu_enc_init(&inst->vpu_inst);
- 
--	inst->vsi = (struct venc_h264_vsi *)inst->vpu_inst.vsi;
-+	inst->hw_base[0] = mtk_vcodec_get_reg_addr(inst->ctx, VENC_SYS);
-+
-+	if (IS_VENC_MULTICORE(ctx->dev->enc_capability)) {
-+		inst->core_vsi =
-+			(struct venc_multi_core_vsi *)inst->vpu_inst.vsi;
-+
-+		for (i = 1; i < MTK_VENC_HW_MAX; i++)
-+			inst->hw_base[i] =
-+				mtk_venc_get_core_reg_addr(inst->ctx, i);
-+	} else {
-+		inst->vsi = (struct venc_h264_vsi *)inst->vpu_inst.vsi;
-+	}
- 
- 	mtk_vcodec_debug_leave(inst);
- 
-@@ -624,31 +731,61 @@ static int h264_enc_encode(void *handle,
- 	return ret;
- }
- 
-+static void h264_enc_set_configs(struct venc_h264_inst *inst,
-+				 struct venc_enc_param *enc_prm)
-+{
-+	inst->vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
-+	inst->vsi->config.bitrate = enc_prm->bitrate;
-+	inst->vsi->config.pic_w = enc_prm->width;
-+	inst->vsi->config.pic_h = enc_prm->height;
-+	inst->vsi->config.buf_w = enc_prm->buf_width;
-+	inst->vsi->config.buf_h = enc_prm->buf_height;
-+	inst->vsi->config.gop_size = enc_prm->gop_size;
-+	inst->vsi->config.framerate = enc_prm->frm_rate;
-+	inst->vsi->config.intra_period = enc_prm->intra_period;
-+	inst->vsi->config.profile =
-+		h264_get_profile(inst, enc_prm->h264_profile);
-+	inst->vsi->config.level =
-+		h264_get_level(inst, enc_prm->h264_level);
-+	inst->vsi->config.wfd = 0;
-+}
-+
-+static void h264_enc_set_core_configs(struct venc_h264_inst *inst,
-+				      struct venc_enc_param *enc_prm)
-+{
-+	inst->core_vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
-+	inst->core_vsi->config.bitrate = enc_prm->bitrate;
-+	inst->core_vsi->config.pic_w = enc_prm->width;
-+	inst->core_vsi->config.pic_h = enc_prm->height;
-+	inst->core_vsi->config.buf_w = enc_prm->buf_width;
-+	inst->core_vsi->config.buf_h = enc_prm->buf_height;
-+	inst->core_vsi->config.gop_size = enc_prm->gop_size;
-+	inst->core_vsi->config.framerate = enc_prm->frm_rate;
-+	inst->core_vsi->config.intra_period = enc_prm->intra_period;
-+	inst->core_vsi->config.profile =
-+		h264_get_profile(inst, enc_prm->h264_profile);
-+	inst->core_vsi->config.level =
-+		h264_get_level(inst, enc_prm->h264_level);
-+	inst->core_vsi->config.wfd = 0;
-+}
-+
- static int h264_enc_set_param(void *handle,
- 			      enum venc_set_param_type type,
- 			      struct venc_enc_param *enc_prm)
- {
- 	int ret = 0;
- 	struct venc_h264_inst *inst = (struct venc_h264_inst *)handle;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
- 
- 	mtk_vcodec_debug(inst, "->type=%d", type);
- 
- 	switch (type) {
- 	case VENC_SET_PARAM_ENC:
--		inst->vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
--		inst->vsi->config.bitrate = enc_prm->bitrate;
--		inst->vsi->config.pic_w = enc_prm->width;
--		inst->vsi->config.pic_h = enc_prm->height;
--		inst->vsi->config.buf_w = enc_prm->buf_width;
--		inst->vsi->config.buf_h = enc_prm->buf_height;
--		inst->vsi->config.gop_size = enc_prm->gop_size;
--		inst->vsi->config.framerate = enc_prm->frm_rate;
--		inst->vsi->config.intra_period = enc_prm->intra_period;
--		inst->vsi->config.profile =
--			h264_get_profile(inst, enc_prm->h264_profile);
--		inst->vsi->config.level =
--			h264_get_level(inst, enc_prm->h264_level);
--		inst->vsi->config.wfd = 0;
-+		if (IS_VENC_MULTICORE(ctx->dev->enc_capability))
-+			h264_enc_set_core_configs(inst, enc_prm);
-+		else
-+			h264_enc_set_configs(inst, enc_prm);
-+
- 		ret = vpu_enc_set_param(&inst->vpu_inst, type, enc_prm);
- 		if (ret)
- 			break;
--- 
-2.18.0
+Right,.
 
+
+For the above scenario i.e.. if VMEXIT happens during delivery of virtual NMI
+then EXITINTINFO will be set accordingly and V_NMI_MASK is saved as 0.
+hypervisor will re-inject event in next VMRUN.
+
+I just wanted to track above scenario,. I will replace it with pr_debug().
+
+Thanks,
+Santosh
+
+
+>> +		vmcb->control.int_ctl |= V_NMI_PENDING;
+>> +		return;
+>> +	}
+>>  
+>>  	svm->vmcb->control.event_inj = SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_NMI;
+>>  	vcpu->arch.hflags |= HF_NMI_MASK;
+>>  	if (!sev_es_guest(vcpu->kvm))
+>>  		svm_set_intercept(svm, INTERCEPT_IRET);
+>> -	++vcpu->stat.nmi_injections;
+>>  }
+>>  
+>>  static void svm_inject_irq(struct kvm_vcpu *vcpu)
+>> -- 
+>> 2.25.1
+>>

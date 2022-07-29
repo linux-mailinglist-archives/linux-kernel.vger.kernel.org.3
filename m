@@ -2,194 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FA1584908
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4B258490D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiG2AWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S233621AbiG2AZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiG2AWg (ORCPT
+        with ESMTP id S232560AbiG2AZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:22:36 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ED17B1DB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:22:34 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z22so4061780edd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=YbqiOPzZmbvFzZa130GwJGGGwEXthWuw9oeJXPqxLMw=;
-        b=kRjkFi56KoI/XZGvwlf6yOjdbiP1tOmPWovRkV0lQ9r/9z+zKKFuNvzZ526mN8SbkY
-         2TdEpBoXlMQ+lVoNCpoWhAPvoC8JWZChWscjFpUjaHrW9+uuQyrM093O5JJ2ch0W3yhw
-         53t5JnC3EDdl/YBCZLn7vwtZGg7twxgkwE0VE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=YbqiOPzZmbvFzZa130GwJGGGwEXthWuw9oeJXPqxLMw=;
-        b=p3CjOnbZoPmqHBOLtD0YsJ/QD2gTnFVZlBH/+fqKQpqsIVyCwbBib2gXZVncwFzWg6
-         g7U//Rlcihq3SDkMQgXPkaxbv4apqG4xS5+YJ1ZFKvdBKW6UiKRMSRQmmMSvS5haN5ry
-         jahrFNnnGXFz3Ws3XLdcqIb7+lyAhT+6lOgi2tcwlFoBML5134kjdiZDXuyozWLESuMh
-         gmGccZk4Ji0aW2WAJJpEs7NIARQcpi/3dAJTFW+H/oXTvPh/KdfdFS+SgIRBO7RCcGeq
-         /IJfiLqifgDWWupHCfAxT1/RgfiiASXQrIRm36NpXqGhnQoccnEkIXqA+I4hy8xYhGdp
-         Q67A==
-X-Gm-Message-State: AJIora/U41iTYZMh9uhCQOgg+xLwtXdTtTPhJZkvtcwuSU1KSM/1mNTh
-        7uW4TAwavfcjsB7ajhhtdaGTkLLtsE1pe+Kz
-X-Google-Smtp-Source: AGRyM1v9U0affx8c2UR6ktBOCNW1Fm+wDn+p+QQphTV1LNSgR9yomZr50Kfx4j6noExSVqfWT/Jb6g==
-X-Received: by 2002:a05:6402:5191:b0:43b:d047:dcb5 with SMTP id q17-20020a056402519100b0043bd047dcb5mr1256841edd.390.1659054152849;
-        Thu, 28 Jul 2022 17:22:32 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id f11-20020a170906560b00b0072b2eab813fsm964008ejq.75.2022.07.28.17.22.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 17:22:31 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id k8so1995701wrd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:22:31 -0700 (PDT)
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr744258wrr.617.1659054151464; Thu, 28
- Jul 2022 17:22:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
-In-Reply-To: <1657544224-10680-1-git-send-email-quic_vpolimer@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 28 Jul 2022 17:22:18 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U_GStziLOCVLs_FC_2Vr=ykGfbb4ZtUp79iV8V=B0cEA@mail.gmail.com>
-Message-ID: <CAD=FV=U_GStziLOCVLs_FC_2Vr=ykGfbb4ZtUp79iV8V=B0cEA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Add PSR support for eDP
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 28 Jul 2022 20:25:23 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347E89FFA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:25:22 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220729002519epoutp02b05fd230c969192259dc8c5b57f27736~GJRz09DkF2755027550epoutp02K
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:25:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220729002519epoutp02b05fd230c969192259dc8c5b57f27736~GJRz09DkF2755027550epoutp02K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659054319;
+        bh=koeQxC1CaOa4b7/9eLTD8KByAFxytDocEf6VI8T3VaY=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=aFerxI/GjYtOUusWSxc1D7ZQDDWuH2rQoF/q9VJICNS1sohQMRsUJe+ZsMjIsp56J
+         0zqj2crhyKac8YJ1lBi67cJb1YZnebtUOWYXdqshtOPe9dvuQF2QUoY7psaiedVmxF
+         KMCQHj5iAH13lbckKgTzy1jzQt1tpQGNnuaIn7E4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220729002518epcas2p462b8f60cd410cdfbe5e811bd5e1586ec~GJRzjMA8O2734727347epcas2p46;
+        Fri, 29 Jul 2022 00:25:18 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lv7Zk3DN6z4x9Q3; Fri, 29 Jul
+        2022 00:25:18 +0000 (GMT)
+X-AuditID: b6c32a45-471ff700000025c2-8b-62e328edb123
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        33.79.09666.DE823E26; Fri, 29 Jul 2022 09:25:17 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v0] f2fs: allow direct read for zoned device
+Reply-To: eunhee83.rho@samsung.com
+Sender: Eunhee Rho <eunhee83.rho@samsung.com>
+From:   Eunhee Rho <eunhee83.rho@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eunhee Rho <eunhee83.rho@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p3>
+Date:   Fri, 29 Jul 2022 09:25:17 +0900
+X-CMS-MailID: 20220729002517epcms2p35eed262c3349287436c1848ab350c2d4
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJKsWRmVeSWpSXmKPExsWy7bCmue5bjcdJBk8v61ucnnqWyeLlIU2L
+        n0862CyerJ/FbHFpkbvF5V1z2BzYPDat6mTz2L3gM5NH35ZVjB6fN8kFsERl22SkJqakFimk
+        5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYArVZSKEvMKQUKBSQWFyvp
+        29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGdcbpjDWnCYraLl
+        3G2WBsYVrF2MHBwSAiYSV2a6djFycQgJ7GCUaD6wiBkkzisgKPF3h3AXIyeHsICNxMbma+wg
+        tpCAksTfg/eZIOK6ElO2TGIEsdkEtCWuHG9nBZkjIjCRSeLAznesIAkJAV6JGe1PWSBsaYnt
+        y7cyQtgaEj+W9TJD2KISN1e/ZYex3x+bD1UjItF67yxUjaDEg5+7oeISEnc3trBB2PkSPU+O
+        MkHYFRI7V1yFqtGXuNaxEWwvr4CvxOv5fWA2i4CqxJw7nVD3uEjs/joXrJdZQF5i+9s5YL8z
+        C2hKrN+lDwkeZYkjt1hgPmnY+Jsdnc0swCfRcfgvXHzHvCdQ16hJLP64ABoKMhI3NtyHintI
+        NC3ewDqBUXEWIqBnIblhFsINCxiZVzGKpRYU56anFhsVGMKjNjk/dxMjOA1que5gnPz2g94h
+        RiYOxkOMEhzMSiK8CdH3k4R4UxIrq1KL8uOLSnNSiw8xmgJ9P5FZSjQ5H5iI80riDU0sDUzM
+        zAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MMWYlL438Z/v9ewwm3GlMNcNVo3n
+        lrF5ZR9u8smvy7sh9dfnkjgLYyJruq9Dwo2wX790lJu/HlfesFtsz0GNjNx/B3XXhJe+rTum
+        471Kct0mPv+qysipU+9fWdbwIuZdx/k/dxYIhf5eFtmTyGOjfSLOeUPgNHMOdUFVy52Gl69H
+        zpKsX979/qWJkM3ZFYc1ZrlGy8dHVjAEGl/evbJrioD9jXUTzeZ9dVi+rHJNYMPDsJZ1GfwO
+        E8JCXDluPl7AdPKZlwz7Jo/EH17+GllHtnf1KZtsN//96NXZBU556+3rdMPcEpo6Kq1zmuwq
+        fz5kWBfeyZ9toN5d8KM0oYp3ioDV/7ivz0pqD60wdbmoxFKckWioxVxUnAgA16imRwwEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220729002517epcms2p35eed262c3349287436c1848ab350c2d4
+References: <CGME20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p3>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+For zoned devices, f2fs forbids direct IO and forces buffered IO
+to serialize write IOs. However, the constraint does not apply to
+read IOs.
 
-On Mon, Jul 11, 2022 at 5:57 AM Vinod Polimera
-<quic_vpolimer@quicinc.com> wrote:
->
-> Changes in v2:
->   - Use dp bridge to set psr entry/exit instead of dpu_enocder.
->   - Don't modify whitespaces.
->   - Set self refresh aware from atomic_check.
->   - Set self refresh aware only if psr is supported.
->   - Provide a stub for msm_dp_display_set_psr.
->   - Move dp functions to bridge code.
->
-> Changes in v3:
->   - Change callback names to reflect atomic interfaces.
->   - Move bridge callback change to separate patch as suggested by Dmitry.
->   - Remove psr function declaration from msm_drv.h.
->   - Set self_refresh_aware flag only if psr is supported.
->   - Modify the variable names to simpler form.
->   - Define bit fields for PSR settings.
->   - Add comments explaining the steps to enter/exit psr.
->   - Change DRM_INFO to drm_dbg_db.
->
-> Changes in v4:
->   - Move the get crtc functions to drm_atomic.
->   - Add atomic functions for DP bridge too.
->   - Add ternary operator to choose eDP or DP ops.
->   - Return true/false instead of 1/0.
->   - mode_valid missing in the eDP bridge ops.
->   - Move the functions to get crtc into drm_atomic.c.
->   - Fix compilation issues.
->   - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
->   - Check for crtc state enable while reserving resources.
->
-> Changes in v5:
->   - Move the mode_valid changes into a different patch.
->   - Complete psr_op_comp only when isr is set.
->   - Move the DP atomic callback changes to a different patch.
->   - Get crtc from drm connector state crtc.
->   - Move to separate patch for check for crtc state enable while
-> reserving resources.
->
-> Changes in v6:
->   - Remove crtc from dpu_encoder_virt struct.
->   - fix crtc check during vblank toggle crtc.
->   - Misc changes.
->
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
->
-> Vinod Polimera (10):
->   drm/msm/disp/dpu: clear dpu_assign_crtc and get crtc from connector
->     state instead of dpu_enc
->   drm: add helper functions to retrieve old and new crtc
->   drm/msm/dp: use atomic callbacks for DP bridge ops
->   drm/msm/dp: Add basic PSR support for eDP
->   drm/msm/dp: use the eDP bridge ops to validate eDP modes
->   drm/bridge: use atomic enable/disable callbacks for panel bridge
->   drm/bridge: add psr support for panel bridge callbacks
->   drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
->     functions
->   drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
->   drm/msm/disp/dpu: check for crtc enable rather than crtc active to
->     release shared resources
->
->  drivers/gpu/drm/bridge/panel.c              |  68 ++++++++--
->  drivers/gpu/drm/drm_atomic.c                |  60 +++++++++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  17 ++-
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  56 +++++----
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |   8 --
->  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |   2 +-
->  drivers/gpu/drm/msm/dp/dp_catalog.c         |  81 ++++++++++++
->  drivers/gpu/drm/msm/dp/dp_catalog.h         |   4 +
->  drivers/gpu/drm/msm/dp/dp_ctrl.c            |  73 +++++++++++
->  drivers/gpu/drm/msm/dp/dp_ctrl.h            |   3 +
->  drivers/gpu/drm/msm/dp/dp_display.c         |  31 +++--
->  drivers/gpu/drm/msm/dp/dp_display.h         |   2 +
->  drivers/gpu/drm/msm/dp/dp_drm.c             | 184 ++++++++++++++++++++++++++--
->  drivers/gpu/drm/msm/dp/dp_drm.h             |   9 +-
->  drivers/gpu/drm/msm/dp/dp_link.c            |  36 ++++++
->  drivers/gpu/drm/msm/dp/dp_panel.c           |  22 ++++
->  drivers/gpu/drm/msm/dp/dp_panel.h           |   6 +
->  drivers/gpu/drm/msm/dp/dp_reg.h             |  27 ++++
->  include/drm/drm_atomic.h                    |   7 ++
->  19 files changed, 631 insertions(+), 65 deletions(-)
+Signed-off-by: Eunhee Rho <eunhee83.rho@samsung.com>
+---
+ fs/f2fs/f2fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I spent some time looking at the first few patches. I can try to look
-at more later this week, though (as you've noticed) many of my reviews
-are more nit-picks because I don't really have experience with PSR and
-my overall knowledge of the Qualcomm DP driver is pretty weak.
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d0f428aef34b..f69731f17402 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4471,7 +4471,7 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
+ 	 * for blkzoned device, fallback direct IO to buffered IO, so
+ 	 * all IOs can be serialized by log-structured write.
+ 	 */
+-	if (f2fs_sb_has_blkzoned(sbi))
++	if (f2fs_sb_has_blkzoned(sbi) && (rw == WRITE))
+ 		return true;
+ 	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
+ 		if (block_unaligned_IO(inode, iocb, iter))
+-- 
+2.25.1
 
-I tried to at least pick to give a Tested-by, but when I did that it
-didn't work flawlessly. I picked this series to the chromeos-5.15
-tree, which is pretty close to mainline right now. I left it sitting
-at a screen with a blinking cursor which pretty much means it's always
-transitioning into and out of PSR. I've seen several glitches on the
-screen with the series applied. :( No idea what's wrong--that's just
-me black-box testing. I did try to add debug printouts to see if we
-were hitting "PSR_UPDATE_ERROR_INT | PSR_WAKE_ERROR_INT" but I didn't
-see my printouts...
-
-FWIW: I'm running with KASAN enabled which could affect timings...
-Glitches happen every few minutes or so for me and so far I haven't
-see any glitches without KASAN, but that could just be chance...
-
--Doug

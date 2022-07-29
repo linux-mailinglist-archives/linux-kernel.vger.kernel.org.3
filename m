@@ -2,65 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7BE5849CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09FE5849D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233700AbiG2CeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S233935AbiG2CgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiG2CeD (ORCPT
+        with ESMTP id S233595AbiG2CgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:34:03 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454937B1F0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:33:59 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ef5380669cso37831147b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bhKqWbjoKDCkljIXjd3L5hRrxiXqibk3EBcu7l45Nl0=;
-        b=0UyNGR35PMfbACWYluMYhSrKoeO7t3MQF9pr5+Uy3iUinWpuXCs2Pp2kU+WZvbdi41
-         Px/sk01RbCmHEDbBCNN0R3AsnzjdnqLVZusBAG41xhITboYh6fD1GvPRW93HAjGTgJMr
-         NTw+Ei5wjRa0UtppH/nsYrcStfSl5rFr5Pvrecm2GL/VasxoUjGG9cZXNn2YBRN/wn3Z
-         7E9lwFLhWok6Ech10K+mM4ptlrGdUlJJug3yfljaCHKl47khufKy7KNymkr4VYjcFXeG
-         R+a5drl20TxEuyTUcnBOVI6OXJir6EAaiUkIFy+yuu0/tJUqAapThMZiGQeRA1ghPjHz
-         j/WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bhKqWbjoKDCkljIXjd3L5hRrxiXqibk3EBcu7l45Nl0=;
-        b=pHIKIawFrPvjqE61247KUhVvsaplwgOT00QK9QgtgZPUcOK+rvMoLIApunXmIZceVE
-         xnsb0kDKJ5d9Vj9S5YKHY5lHQ8JZxuZ7fFFHWuBKUnSpZbVqpWFAsgBu0v3h1fFSz8qQ
-         H5065x7E+FNKIUqyAg5BNxDF1T7loQzFw075g5qHMSvlmhObuJhvAM3V4SxzkptsJey4
-         8qdA/lbeuTUbEuswKuKCDweiav6H/jAA4+Y+NqYA/m0pXRy3mAZe301NKqpHEyjQjTg7
-         RIr+9FGxLEDXYloxXeT/D3oQLHxsWsvDe0qrRvpjblw+bNEC13zA40pDeAFPKHmyOqsx
-         nVng==
-X-Gm-Message-State: ACgBeo3yxx2HLVn+ngScyyO5ktOF2K8D1Rln/iBX5Uq1fX8dc0MWuvzM
-        ebgW+psqRv486jnvFD/7rIvqsIMh8WYPjOUfkhgMDg==
-X-Google-Smtp-Source: AA6agR48qYuFMVFSm9BB/b98bUBorupQvIHSeW37mOpWAs8ai7c+L+x/iSr4a75JK/OJQnaYWFb86y2tAKc8RgFc5A8=
-X-Received: by 2002:a05:690c:826:b0:321:57d:27f0 with SMTP id
- by6-20020a05690c082600b00321057d27f0mr1428734ywb.141.1659062038535; Thu, 28
- Jul 2022 19:33:58 -0700 (PDT)
+        Thu, 28 Jul 2022 22:36:20 -0400
+Received: from out20-85.mail.aliyun.com (out20-85.mail.aliyun.com [115.124.20.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784BA52FE3;
+        Thu, 28 Jul 2022 19:36:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1142877|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.091604-0.000316197-0.90808;FP=11801277814066224926|4|1|5|0|-1|-1|-1;HT=ay29a033018047205;MF=longjin@ringotek.cn;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.OgOkP57_1659062123;
+Received: from localhost.localdomain(mailfrom:longjin@RinGoTek.cn fp:SMTPD_---.OgOkP57_1659062123)
+          by smtp.aliyun-inc.com;
+          Fri, 29 Jul 2022 10:35:38 +0800
+From:   fslongjin <longjin@RinGoTek.cn>
+To:     corbet@lwn.net, twoerner@gmail.com, keescook@chromium.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fslongjin <longjin@RinGoTek.cn>
+Subject: [PATCH] Documentation: Fixed errors in the title level of coding style documents
+Date:   Fri, 29 Jul 2022 10:34:54 +0800
+Message-Id: <20220729023454.18085-1-longjin@RinGoTek.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220728032000.127-1-xieyongji@bytedance.com> <20220728032000.127-3-xieyongji@bytedance.com>
-In-Reply-To: <20220728032000.127-3-xieyongji@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 29 Jul 2022 10:33:22 +0800
-Message-ID: <CAMZfGtVGjn1bkC345EykA0b86HoR2m6tmc_JYs7GnEvBCh9ETA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] vduse: Use memcpy_{to,from}_page() in do_bounce()
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, xiaodong.liu@intel.com,
-        maxime.coquelin@redhat.com, stefanha@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +38,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:20 AM Xie Yongji <xieyongji@bytedance.com> wrote:
->
-> kmap_atomic() is being deprecated in favor of kmap_local_page().
->
-> The use of kmap_atomic() in do_bounce() is all thread local therefore
-> kmap_local_page() is a sufficient replacement.
->
-> Convert to kmap_local_page() but, instead of open coding it,
-> use the helpers memcpy_to_page() and memcpy_from_page().
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> Acked-by: Jason Wang <jasowang@redhat.com>
+In Section 3, `Placing Braces and Spaces`. In the previous document, only
+`Spaces` is written in the subtitle without the `Braces`. I think this
+ may be a format error caused by negligence, so I fixed it.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Signed-off-by: fslongjin <longjin@RinGoTek.cn>
+---
+ Documentation/process/coding-style.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 03eb53fd029a..2a26bcb9f391 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -120,6 +120,9 @@ that breaks the ability to grep for them.
+ 3) Placing Braces and Spaces
+ ----------------------------
+ 
++3.1) Braces
++***********
++
+ The other issue that always comes up in C styling is the placement of
+ braces.  Unlike the indent size, there are few technical reasons to
+ choose one placement strategy over the other, but the preferred way, as
+@@ -231,7 +234,7 @@ Also, use braces when a loop contains more than a single simple statement:
+ 			do_something();
+ 	}
+ 
+-3.1) Spaces
++3.2) Spaces
+ ***********
+ 
+ Linux kernel style for use of spaces depends (mostly) on
+-- 
+2.20.1
+

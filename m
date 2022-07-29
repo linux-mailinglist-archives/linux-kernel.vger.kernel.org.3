@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFA0585694
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC93585695
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 23:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239384AbiG2VkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 17:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S239406AbiG2Vk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 17:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239328AbiG2VkR (ORCPT
+        with ESMTP id S239328AbiG2VkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 17:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38D6252;
-        Fri, 29 Jul 2022 14:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BACE7B829CD;
-        Fri, 29 Jul 2022 21:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 53AFDC433D7;
-        Fri, 29 Jul 2022 21:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659130813;
-        bh=ysiwbxtc6/5eLqh2EUgtobEZ7Cdyg4zNRPiSJBZDWYo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c3/khEa68dGRYkUMEAf0eSXDmMD/ZaVxM/Py/oncriCC9LLF+gePYBCcn68ZS1zAg
-         wwjdSQh3fgpUiB9VhXM3FiE5SBrO/hIX2yGtTk4yEtuTzCff4JedLlCSOnHIBpt/sB
-         fxy2nhI5/akbHcic2DMeUhXd4+kbXnTNiVGhtBjnFYDVa6s0I4JCj2g4pJww3omDVa
-         ianKh/TMPNLWZoBAcMvNDdkXbVJxs2+PYx9uTecwhElmh2x0Cr6TvzgaQ5xM9sH0Nz
-         doo9nCssm5pXGXOt2rN9DnO4cI1b6uBBpPQOJc3TEK+b7Vv47ZqhgppcTXMV/fFL0n
-         80Xuv8nJVVQlA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 387B1C43140;
-        Fri, 29 Jul 2022 21:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 29 Jul 2022 17:40:23 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE9917A86;
+        Fri, 29 Jul 2022 14:40:22 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id f65so4929107pgc.12;
+        Fri, 29 Jul 2022 14:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=vlA58bxC1AaisPQbaqWyCf1NUWhlZZvll0BcgQ47j/g=;
+        b=GZC/zVEtAyvBd6idTM5yLb4hsR+lTlVC2hm5phsgfPtLGDlW+WTsmWuuF/JuqpZtEp
+         gIOT5is98EzAPNTxvG7OWSJJv082JTUHCJtwDXpjryuOSJnTXK/29JlA6QfHsEfXJme7
+         nvNcslcs0uzw35BhPdkrlpDAsYcyrRqvWalZNlB8yjPhPrgMckenustUsjSr8onXVdQC
+         lm5LyqfHIH9zNlR9jQu3o8ZwZRkjE9bTIGJdjXq8fcW7wSk3DreWA3oNIRXuS8ulCgPU
+         kEPfeBrdTmQ8kKQfk1OueBRDmuWpg1l+5vd+GIWEUQp9YCwMFiRo7cHMA85glGjt31Ph
+         H0Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=vlA58bxC1AaisPQbaqWyCf1NUWhlZZvll0BcgQ47j/g=;
+        b=GuMPHp2HQTQp/qLAhjQZxKL9ITBYQrZjLT2lNpBARSGySlAizvF/siwxF2xOmKOW/I
+         Z3MeQsz/MPDK6OXmHjhB7vNvHIyPtQE2nQ/M7VbgzxL5O7tlowrz15Dh8U51P0ZGVYvL
+         jmWswP2fLNsyaYteCaF64QrYYzKRHiwyD7VnJoHtKOiyYWaXgNrfUA/vLnKaFKZrhdx/
+         5Ll6/XhebCvAsig4ez2mrNY3XPsUGt/h0M/Y4qIoqEUw+pEY1OPuIxW2VMWvESufSSgR
+         QDihq5KzksJjbpIPU3dAVfflrxxmL/hCZBvgjpam/IvdmiVHsDQIzMfeEHp5wx71sa/+
+         AIKQ==
+X-Gm-Message-State: AJIora/vzjq636Ay0yGXwPiYxZGEEXrTOATxlnDPDlI795D1Sh6fDsVo
+        vkc5K4/UxVjgv6mFVVifs3Y=
+X-Google-Smtp-Source: AGRyM1vK5rSuKX7+bKgzsce/ianR1zZl7MeRzFCxZLZGqcjDEYw2LOGCuyT8z4hAdJMcz00zcwCx5A==
+X-Received: by 2002:a63:c158:0:b0:41a:6685:59de with SMTP id p24-20020a63c158000000b0041a668559demr4549446pgi.95.1659130821474;
+        Fri, 29 Jul 2022 14:40:21 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m24-20020a170902bb9800b0016c68b56be7sm4037099pls.158.2022.07.29.14.40.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 14:40:20 -0700 (PDT)
+Message-ID: <e9b5eae5-1bb5-0071-4f47-b6d57288506e@gmail.com>
+Date:   Fri, 29 Jul 2022 14:40:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: fix test_progs -j error with fentry/fexit tests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165913081322.32307.9736154924263103124.git-patchwork-notify@kernel.org>
-Date:   Fri, 29 Jul 2022 21:40:13 +0000
-References: <20220729194106.1207472-1-song@kernel.org>
-In-Reply-To: <20220729194106.1207472-1-song@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, jolsa@kernel.org, rostedt@goodmis.org,
-        andrii@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [net-next PATCH v5 10/14] net: dsa: qca8k: move port FDB/MDB
+ function to common code
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220727113523.19742-1-ansuelsmth@gmail.com>
+ <20220727113523.19742-11-ansuelsmth@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220727113523.19742-11-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Fri, 29 Jul 2022 12:41:06 -0700 you wrote:
-> Then multiple threads are attaching/detaching fentry/fexit programs to
-> the same trampoline, we may call register_fentry on the same trampoline
-> twice: register_fentry(), unregister_fentry(), then register_fentry again.
-> This causes ftrace_set_filter_ip() for the same ip on tr->fops twice,
-> which leaves duplicated ip in tr->fops. The extra ip is not cleaned up
-> properly on unregister and thus causes failures with further register in
-> register_ftrace_direct_multi():
+On 7/27/22 04:35, Christian Marangi wrote:
+> The same port FDB/MDB function are used by drivers based on qca8k family
+> switch. Move them to common code to make them accessible also by other
+> drivers.
+> Also drop bulk read/write functions and make them static
 > 
-> [...]
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Here is the summary with links:
-  - [bpf-next] bpf: fix test_progs -j error with fentry/fexit tests
-    https://git.kernel.org/bpf/bpf-next/c/dc81f8d1e8ea
-
-You are awesome, thank you!
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Florian

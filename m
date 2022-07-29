@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7274A5855D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BBC5855E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238704AbiG2T7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S238967AbiG2UGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238877AbiG2T7V (ORCPT
+        with ESMTP id S229564AbiG2UGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:59:21 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443F189E90;
-        Fri, 29 Jul 2022 12:59:20 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id e16so5507993pfm.11;
-        Fri, 29 Jul 2022 12:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=NFtB5w26t9HkZR90SOzX7+kqkeWvxLjJ+yXgD8mSTL8=;
-        b=kYJpRYXcs0BpAHRthkEYWwoGTDm3mg2IhTCkR4+pXmWwRer4oCgrbsopCkvHq0LM29
-         R/83JZRdkn01R58g0pun57DqbGSYw/HZH1VPOvwZguT3WhbOKxdAQrlLPudpkgUqKcwM
-         WzvRgiACgv3i83PuAZchchg6PFEqawodFoJeoEVyghiIc1F5a7pLEjjNEM3XkTOVl6QM
-         3lyw72Of/gic7WcjSDol9kK6p4YGueioQV8Eqa7bbnberY3hawUOz4M0w90Bq+/utMej
-         iszxVewnyBQJJcRcNwtR64xGDAU2crr4BOE2aGQmVfUSc7PpzAPLxangktQU2zOfNI5c
-         2sTg==
+        Fri, 29 Jul 2022 16:06:12 -0400
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135C363914;
+        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id r186so4807971pgr.2;
+        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=NFtB5w26t9HkZR90SOzX7+kqkeWvxLjJ+yXgD8mSTL8=;
-        b=aS9wDDVLZ3YQvHLCkfC59vpOQOzqRHW98U+88N0AX0O22oWlaqTIp5IbZKtQS+d08g
-         8H0mBZ35Me3DgLakak6X8vv6E+RkFdCGgvPTMyzbMtGJPgWa2VQxsde7oONEvKBNuk8+
-         N2NjHMul6O12oTU5PjZ4EZJOrOKluIUvfvrETSM3CNU3fFsTqZQTWFY4yEV6qDDCXsRL
-         UBrsFDLvyamYM8KvFY0oduUfvHLSW1SzdMjTPYRn4ogZEsCrvbIHhBvmrGOSrvJUhlsk
-         jBMZkjhshIvFA6hFxgseyuki8ZjQbrmQSDM29XKQ0DdxhhYgB30Wwi2ReZmncBra00jo
-         tWoA==
-X-Gm-Message-State: AJIora/mVHG6h5mT+Y+9E0FnWhdHNZBTsNoU9cOp0eRFdaZa9VYOzLMC
-        QwMOAzgCea17wYYxsjZ9nHI=
-X-Google-Smtp-Source: AGRyM1uAAqMmy0cDuYbePTOONdKdGb8DK8kbeNWw8zXcD7zczWYEGqsXxWFAC4hJ/HSCcYOpu9fDUg==
-X-Received: by 2002:a63:2205:0:b0:417:61fd:cd35 with SMTP id i5-20020a632205000000b0041761fdcd35mr4065690pgi.544.1659124759663;
-        Fri, 29 Jul 2022 12:59:19 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:df80])
-        by smtp.gmail.com with ESMTPSA id d8-20020a17090a7bc800b001f2ef3c7956sm6269020pjl.25.2022.07.29.12.59.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 12:59:18 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 29 Jul 2022 09:59:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Xuewen Yan <xuewen.yan94@gmail.com>,
-        Waiman Long <longman@redhat.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
-        Lukasz Luba <Lukasz.Luba@arm.com>, pengcheng.lai@unisoc.com
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-Message-ID: <YuQ8FWtrMsgDmGAr@slm.duckdns.org>
-References: <20220705123705.764-1-xuewen.yan@unisoc.com>
- <20220711174629.uehfmqegcwn2lqzu@wubuntu>
- <YsyO9GM9mCydaybo@slm.duckdns.org>
- <c1426573-92a7-9f0d-a6b8-aa612248b9a9@redhat.com>
- <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
- <CAB8ipk-8cbur-m733py-cw4bXCt7gkd8gAOXtKO+-fV1B2EeZw@mail.gmail.com>
- <YuGbYCfAG81mZBnN@slm.duckdns.org>
- <CAB8ipk_gCLtvEahsp2DvPJf4NxRsM8WCYmmH=yTd7zQE+81_Yg@mail.gmail.com>
- <20220729083949.6uaojl3vqyvwpkuk@wubuntu>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=FB+0W8v8UDMpFz9rL6S4eZJw9kfVH7QjSk7HN7wEXkY=;
+        b=ZL2Nad0F5qbfqgqCmDIZh/o8X9lxNfaSlUUJguj9EgE24iF+8Lwx9B2uf5ozVPHP+L
+         6CiCO7ivF5wPW0EJMdE78UwPmPknQ5ayCDaQjeZHJ8PO19MZKXaY42DdLzLNsOcoxrkB
+         9WseFS/LL7IIdy9iy+DmzKn1CGpxdjac+kize8btUUOZC7QWAo7JuoQ80B5Kpeher3rz
+         sIigJJ5K/TjMU8xdRYz1AD1o3VzE5tsih1gno1G8lfLKInKAMWso8lapxFSvjxDhpOQW
+         A04GxNwmWkxBiszCYh9ewNiR+cl+vv7CNO/n26S0budgw+4FjMy001OsLSTROv93hD8x
+         TdKQ==
+X-Gm-Message-State: AJIora+ZSEvOhh7gLYVudxwTv8FCRdqdv7PC6q92Kbnx8T/q4ttisWVX
+        KRGraLste8rrLxAoudv7JeE=
+X-Google-Smtp-Source: AGRyM1tInMycz2iLxo2bv+KHymYOshzLCE6LdcJ59I+SaA75WRa0GNpXbX3yXBDfQg1M+2RWj8IR7A==
+X-Received: by 2002:aa7:8554:0:b0:52b:cfed:168b with SMTP id y20-20020aa78554000000b0052bcfed168bmr5148694pfn.4.1659125169057;
+        Fri, 29 Jul 2022 13:06:09 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:f090:7a49:3465:6a5? ([2620:15c:211:201:f090:7a49:3465:6a5])
+        by smtp.gmail.com with ESMTPSA id g197-20020a6252ce000000b0052531985e3esm3356171pfb.22.2022.07.29.13.06.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Jul 2022 13:06:08 -0700 (PDT)
+Message-ID: <d473f4b3-9aba-fe39-d88c-b762d9d779b0@acm.org>
+Date:   Fri, 29 Jul 2022 13:06:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729083949.6uaojl3vqyvwpkuk@wubuntu>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3] scsi: ufs: Get boot device storage type from command
+ line
+Content-Language: en-US
+To:     "Chetan Chinnadagudihundi Ravindranath (Consultant) (QUIC)" 
+        <quic_cchinnad@quicinc.com>
+Cc:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+References: <1659034814-3473-1-git-send-email-quic_cchinnad@quicinc.com>
+ <77330f3a-5f73-e10f-7e85-f3df304aa4d7@acm.org>
+ <f1cf652a-4a36-fe60-5a98-14b9d97c9a41@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <f1cf652a-4a36-fe60-5a98-14b9d97c9a41@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 09:39:49AM +0100, Qais Yousef wrote:
-> I *think* it's because we haven't removed cpus_read_lock() from
-> cpuset_attach(). So we end up holding the lock twice in the same path. Since we
-> hold it unconditionally now, we should remove cpuset dependency on
-> cpus_read_lock() I believe.
+On 7/29/22 05:54, Chetan Chinnadagudihundi Ravindranath (Consultant) 
+(QUIC) wrote:
+> Please suggest any efficient way of making ufs-cmdline part of vmlinux.
 
-Ah, yeah, that's because pending write locker makes future reader lockers
-wait, so even if we're holding read lock, if we try to read lock again, we
-end up waiting. I'll make the cpus_read_lock() unconditional in cgroup core
-and drop it from cpuset's attach operation.
+A patch description should not only explain what has been changed but 
+also why a change is being made. Information about why support is being 
+added for the androidboot.bootdevice parameter in the Qualcomm UFS host 
+controller driver is missing from the patch description.
 
-Thanks.
+Please also address Christoph's comment about this new command-line 
+parameter not being used anywhere in the upstream kernel tree.
 
--- 
-tejun
+Thanks,
+
+Bart.

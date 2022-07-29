@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2606758541B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EA558541F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238273AbiG2REF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S238281AbiG2REy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbiG2RED (ORCPT
+        with ESMTP id S237332AbiG2REw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:04:03 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234035C36F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:04:03 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id l68so5198996vsc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6zatqDCQGQ7pcyKsn675gStM1jLZTDHMOU3KbwKZIXU=;
-        b=DaZOfmfWox6JldZkjME27+h4OILP1kD1qdJCUQa09VMxSMAl63LAMZgvNIec3mpyz4
-         0oIrQ2xifCgURzyApHI20US6VNfjoQC2jPXL9jxWjyr9lZA1hFnUQgEL9EXlDWPmJVDD
-         Z+WaXjBxMzMXbjzO7Fmh+TshsmrLsh5OTH+3/csuny0o9pxwM1vU+/6dV5oqX80IkY1j
-         cfIgg3FwFsNVIlLga1DI5nRIIR5Mof2Jcd05+oN/OcGyCQXDfzIs/guoNWi2ffPMYh6l
-         PEhRXXemD+2t0Wzdb3Ric6OWG52M0KMeEBZkQuCn9Q7wgt2n1JTkP8T+AKBLRPmoGgE6
-         sCTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6zatqDCQGQ7pcyKsn675gStM1jLZTDHMOU3KbwKZIXU=;
-        b=FhxKE8eZFLET07LZhcst3HNO97/fmzHEUd5nz5VuL2gZzIf1nfcx4opIhJ5xP2mmMP
-         ek0gMgvY7OlgBuCfC7MGZLd547uqYf33Ci7tk+fvE6MARKnMJszQBiOTkMeZReg8Gt25
-         NuWfLFo8U2ngk989QJ/X5xYkuuK5xn/ZNtEH1ck1gDwBg6AI+JfD+dlB2gnirVoyZ4om
-         dn7rorSp/UHSyR6/W1iL2xKA8amWfHm+mAqLP0JS0NOi34ouPNOMe0MbpDZr+z3aE8b2
-         yjxQ49WO7xLwpKDQEMQBxgtn/vnwD+9xDD6L3Aajw5RjFEO+xOH82gxnlG1i4+ztW63T
-         OhaA==
-X-Gm-Message-State: AJIora/+G4qtBrjHW3htlocZjQ4MrjO2nrhtkRCbF5H9rhVmhE2rGC2m
-        JvhRzZxzGq6kzA5i7KmqvP6rpggtdk3Rbl3c6kc=
-X-Google-Smtp-Source: AGRyM1u+T6tEG0sJ2rFDEdBNnmVeP6+Lj7IQkLbLJeTiQDdL7Eq+spPyQqqfUEhX6RdsANmLVstf4JcXH1d1POmeO8k=
-X-Received: by 2002:a67:d381:0:b0:358:5b78:82e1 with SMTP id
- b1-20020a67d381000000b003585b7882e1mr1869266vsj.33.1659114241897; Fri, 29 Jul
- 2022 10:04:01 -0700 (PDT)
+        Fri, 29 Jul 2022 13:04:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87606E8A9;
+        Fri, 29 Jul 2022 10:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 782A061ED2;
+        Fri, 29 Jul 2022 17:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5827C433D6;
+        Fri, 29 Jul 2022 17:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659114290;
+        bh=DcWx9p4/hRXdIOIZbgcqzhHWPEITyeP4nUssIzvB3QM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MyuwebyxPwQX7aoJ6RCB20cBgehfI0qjQcX0JWaKec8cxithLKyNyi0FgneLt4bVq
+         X1+RmgpKRchKldM2MZ1Cqr8W9euSgS/WGgNv+uY/peCtZ3b6ex1s8+4L0+cq2Y4V8w
+         b01nBuvqGoqzhiaXxUxNqcbskHujUGgOrKgpd9+BkRzGxzqxreE7GSAIMN0vvdsteA
+         YwqgtgMKYUWWkViZaSdpAwuy9/10trHlG0ei5dulY1c1enAq919MWmxAfPcKHBBnPn
+         NtHQn03U/F974h4EUM9H1n+8Z6v6owM1J4nY9UP4Nm25rgLJ7q0kOrHe6JPyejuKIY
+         n+5sswJDTAxcw==
+Date:   Fri, 29 Jul 2022 12:04:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH] asm-generic: Support NO_IOPORT_MAP in pci_iomap.h
+Message-ID: <20220729170449.GA463615@bhelgaas>
 MIME-Version: 1.0
-Received: by 2002:ab0:2e92:0:0:0:0:0 with HTTP; Fri, 29 Jul 2022 10:04:01
- -0700 (PDT)
-From:   princss mecry <princssm12@gmail.com>
-Date:   Fri, 29 Jul 2022 10:04:01 -0700
-Message-ID: <CABQ_W2fEYuRxaf9hrC95kXApTvLJ+2Y=OY11O1SCNDi2YfU6bA@mail.gmail.com>
-Subject: hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        NA_DOLLARS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722212248.802500-1-shorne@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please i need your kind Assistance. I will be very glad if you can assist
-me to receive this sum of ( $8.5 Million US dollars.) into your bank
-account, my name is  princess mercy i am 21years,i need who will help
-me save  this fund,
-i lost my father and only brother,
-Please contact me through my private email:(princessmercy68@yahoo.com),
- for more information
+On Sat, Jul 23, 2022 at 06:22:48AM +0900, Stafford Horne wrote:
+> When building OpenRISC PCI which has no ioport_map we get the following build
+> error.
+> 
+>     lib/pci_iomap.c: In function 'pci_iomap_range':
+>       CC      drivers/i2c/i2c-core-base.o
+>     ./include/asm-generic/pci_iomap.h:29:41: error: implicit declaration of function 'ioport_map'; did you mean 'ioremap'? [-Werror=implicit-function-declaration]
+>        29 | #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
+>           |                                         ^~~~~~~~~~
+>     lib/pci_iomap.c:44:24: note: in expansion of macro '__pci_ioport_map'
+>        44 |                 return __pci_ioport_map(dev, start, len);
+>           |                        ^~~~~~~~~~~~~~~~
+> 
+> This patch adds a NULL definition of __pci_ioport_map for architetures
+> which do not support ioport_map.
+> 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
+
+Appended to my pci/header-cleanup-immutable branch for v5.20, thanks!
+
+> ---
+> The Kconfig I am using to test this is here:
+>   https://github.com/stffrdhrn/linux/commits/or1k-virt-4
+> 
+>  include/asm-generic/pci_iomap.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/asm-generic/pci_iomap.h b/include/asm-generic/pci_iomap.h
+> index 5a2f9bf53384..8fbb0a55545d 100644
+> --- a/include/asm-generic/pci_iomap.h
+> +++ b/include/asm-generic/pci_iomap.h
+> @@ -25,6 +25,8 @@ extern void pci_iounmap(struct pci_dev *dev, void __iomem *);
+>  #ifdef CONFIG_NO_GENERIC_PCI_IOPORT_MAP
+>  extern void __iomem *__pci_ioport_map(struct pci_dev *dev, unsigned long port,
+>  				      unsigned int nr);
+> +#elif !defined(CONFIG_HAS_IOPORT_MAP)
+> +#define __pci_ioport_map(dev, port, nr) NULL
+>  #else
+>  #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
+>  #endif
+> -- 
+> 2.36.1
+> 

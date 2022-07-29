@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5700584C2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19299584C33
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiG2GxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S235212AbiG2Gxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbiG2Gw6 (ORCPT
+        with ESMTP id S235153AbiG2GxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:52:58 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4F580508
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:52:56 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id a9so2717981qtw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B9NJPMCqsZZzif8NOi6LqBERuaw3Qi0GLNSjXaKH72E=;
-        b=ouhZLlcvdbHtvTf8YiOPEo07AwaL3uSKyKjAL/0/JobC+hqJYFj2hPitySQnXMVmXr
-         jX6Vj8FadMnkc9GRr+1qhzOjhORahTchrfixJIj93dV669SrEQNR/NYkeBnpX9XCDKrD
-         EjuCOGzLj3ynVi0ctabQWqVkPDbPd2Ig6ob8oT4bMqPeiiV0pQaRf8KZSEl9n6KNLinf
-         3GuoC/3SaicfSNEPRZpHzpFr/uSBf4MFNIdKJWjH3Wa3b6Ln/wBd32CagEzMmi8daPFs
-         xu4o2NbjuLbjWvnAuwsi4guqdXJXAAkf1Ot94cP4ACDhDg5aBIDVeqPoEMatRMlmFHI1
-         qiXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B9NJPMCqsZZzif8NOi6LqBERuaw3Qi0GLNSjXaKH72E=;
-        b=IRVpW5n190SjFe4l84RY63ETPs0rItjmtPSgutNXGGgrUNFICKE9AqSlPAK2r5G1fY
-         hYs4+pSG8Jwo0wRvwFmvE5i0uqwvfE+yAxqwxB0MauM/n0EoMP4clJxyv1qEIcqz8Don
-         jAQIrrPGR+c4daejHqleYrxnrwgvw9R+WKIthyi1sbXkyGt/9152upLjn8BmeiGLAxOw
-         r8JUy74n+uJ8Z/pVXC6rTXjnr/MP+9ZHg+UF24Hl5Baf6kZhms1MhGONRHB4WQK3cG7N
-         4CHylhqeJoBIwRDK2kEHoi6STSMxvwvyEOux1/NwU4gOe8FR52LDEJtwUeCMPRCWhiev
-         HMkw==
-X-Gm-Message-State: AJIora/CE3mpFhTFzM3b1lmK/cuws/7E8W/+LGmJw9lji37yVbY5t3S3
-        ns4UgdmgWjaXoS1OW6jwiWSop1HxOK7UyxYl+dYXVw==
-X-Google-Smtp-Source: AGRyM1ulXYs5LWVIFJXKUv4+yuTHZrksYcFCAawy5yUnHHithMuDKkcC43SQczJ+AibEVdQ6zRlR2WiS6vf9kyrleIc=
-X-Received: by 2002:ac8:5942:0:b0:31f:39f6:aba7 with SMTP id
- 2-20020ac85942000000b0031f39f6aba7mr2122937qtz.295.1659077575797; Thu, 28 Jul
- 2022 23:52:55 -0700 (PDT)
+        Fri, 29 Jul 2022 02:53:22 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AACE81B00
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:53:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LvJBG0jjkz4x1Y;
+        Fri, 29 Jul 2022 16:53:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659077590;
+        bh=mMQHa95tZrtKAkKeRbCcHdd7SVD3uqX6L7aTavd4BmI=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=gokuqtaqlk17LP6I/P2clgOWiapPyjljq5Fa/jnOMj8Ln7tdwUAC0mIq6pqLZv4aO
+         lMg02ahMBupC9gROCF1HCPi23mzBTxYMxU2kjZi/4L5TH54rktOb7l8EMpEar1e77w
+         PCOlMuj6i98zKM10riGf3w100QnM/4j1AQDycpU8CyEvPP13IgfxiThCvn635/5SFd
+         KnCuaUkSRLpBvu91Yevu9mtCwZzU5XNdzKkqyoSXiJ7tPQ8Q2t9dD/muO063u0lmAl
+         30zdzIfNi7CXYXcjt//J/A4IsvnN44+o3KJadZFs/01KWsz3JWw+TbN/60NpCe8HoM
+         OCQ7kVw2QyWAw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Miaoqian Lin <linmq006@gmail.com>, Scott Wood <oss@buserror.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Nick Child <nick.child@ibm.com>, Nate Case <ncase@xes-inc.com>,
+        Kumar Gala <galak@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] powerpc/85xx: Fix reference leak in
+ xes_mpc85xx_setup_arch
+In-Reply-To: <20220603121752.23548-1-linmq006@gmail.com>
+References: <20220603121752.23548-1-linmq006@gmail.com>
+Date:   Fri, 29 Jul 2022 16:53:06 +1000
+Message-ID: <87pmhobeb1.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220727100615.638072-1-dmitry.baryshkov@linaro.org>
- <CAL_JsqJjLn8ypBo+bBoO+CE-si7gemP02fi8EWk97QRPPpNoVg@mail.gmail.com> <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
-In-Reply-To: <CAK7LNARXbXZFpxiHuLhzjJ4YahfV6z3dNPAdkkmeOXONBx8u3w@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 29 Jul 2022 09:52:44 +0300
-Message-ID: <CAA8EJprM4WAgfVTJ15azFtSH6POL5uuseHO=zVxRd44RmqKZjw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: take into account DT_SCHEMA_FILES changes while
- checking dtbs
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 at 08:55, Masahiro Yamada <masahiroy@kernel.org> wrote:
+Miaoqian Lin <linmq006@gmail.com> writes:
+> of_find_node_by_path() returns remote device nodepointer with
+> refcount incremented, we should use of_node_put() on it when done.
+> Add missing of_node_put() to avoid refcount leak.
 >
-> On Thu, Jul 28, 2022 at 2:36 AM Rob Herring <robh+dt@kernel.org> wrote:
-> >
-> > On Wed, Jul 27, 2022 at 4:06 AM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > It is useful to be able to recheck dtbs files against a limited set of
-> > > DT schema files. This can be accomplished by using differnt
-> > > DT_SCHEMA_FILES argument values while rerunning make dtbs_check. However
-> > > for some reason if_changed_rule doesn't pick up the rule_dtc changes
-> > > (and doesn't retrigger the build).
-> > >
-> > > Fix this by changing if_changed_rule to if_changed_dep and squashing DTC
-> > > and dt-validate into a single new command. Then if_changed_dep triggers
-> > > on DT_SCHEMA_FILES changes and reruns the build/check.
-> > >
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  scripts/Makefile.lib | 14 ++++++--------
-> > >  1 file changed, 6 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > > index c88b98b5dc44..3df470289382 100644
-> > > --- a/scripts/Makefile.lib
-> > > +++ b/scripts/Makefile.lib
-> > > @@ -383,17 +383,15 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
-> > >  DT_BINDING_DIR := Documentation/devicetree/bindings
-> > >  DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
-> > >
-> > > -quiet_cmd_dtb_check =  CHECK   $@
-> > > -      cmd_dtb_check =  $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
-> > > +quiet_cmd_dtb =        DTC/CHECK   $@
-> >
-> > This is supposed to be 7 chars or less. DTCCHK or DTC_CHK perhaps. Or
-> > always do just 'DTC'. I can fixup when applying.
-> >
-> > I'll give it a few days for other comments.
+> Fixes: 3038acf9091f ("powerpc/85xx: Add platform support for X-ES MPC85xx boards")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> changes in v2:
+> - update Fixes tag.
+> v1 Link: https://lore.kernel.org/all/20220603120907.19999-1-linmq006@gmail.com
+> ---
+>  arch/powerpc/platforms/85xx/xes_mpc85xx.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
->
->
-> When you change DT_SCHEMA_FILES, re-running dt-validate should be enough.
-> You do not need to re-run dtc.
->
-> I guess the strangeness comes from the fact that you are trying to do the
->  two different things in a single rule.
+> diff --git a/arch/powerpc/platforms/85xx/xes_mpc85xx.c b/arch/powerpc/platforms/85xx/xes_mpc85xx.c
+> index 5836e4ecb7a0..93f67b430714 100644
+> --- a/arch/powerpc/platforms/85xx/xes_mpc85xx.c
+> +++ b/arch/powerpc/platforms/85xx/xes_mpc85xx.c
+> @@ -130,6 +130,8 @@ static void __init xes_mpc85xx_setup_arch(void)
+>  	mpc85xx_smp_init();
+>  
+>  	fsl_pci_assign_primary();
+> +
+> +	of_node_put(root);
+>  }
 
-The issue is that with the current rules the dt-validate isn't
-re-executed on DT_SCHEMA_FILES changes. Thus comes my proposal.
+For context, here is the full function:
 
--- 
-With best wishes
-Dmitry
+static void __init xes_mpc85xx_setup_arch(void)
+{
+	struct device_node *root;
+	const char *model = "Unknown";
+
+	root = of_find_node_by_path("/");
+	if (root == NULL)
+		return;
+
+	model = of_get_property(root, "model", NULL);
+
+	printk(KERN_INFO "X-ES MPC85xx-based single-board computer: %s\n",
+	       model + strlen("xes,"));
+
+	xes_mpc85xx_fixups();
+
+	mpc85xx_smp_init();
+
+	fsl_pci_assign_primary();
+}
+
+
+So yes it's missing an of_node_put(root).
+
+But rather than add the of_node_put(), it would be simpler to just use
+of_root directly, then it doesn't need an of_node_put() at all.
+
+But then look closer. To begin with model is assigned "Unknown", but
+then unconditionally overwritten by the of_get_property() call. So
+that's a waste of space.
+
+And then if there's no model property of_get_property() will return
+NULL, and then the model + strlen("xes,") would oops.
+
+And all of that just to print the model at boot, which is not really
+necessary, anyone who cares can look it up in /proc/device-tree
+after the system has booted.
+
+So please just remove the lookup and printing of model entirely.
+
+cheers

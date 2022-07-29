@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227B358512B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A27E58512C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 15:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiG2NxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 09:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S235925AbiG2Nzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 09:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236196AbiG2NxS (ORCPT
+        with ESMTP id S235996AbiG2Nzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:53:18 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C893B962
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:53:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id iw1so4673685plb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=g4LT+6Vc6EAW7pOz6CH6o1bZ0MDiGNCAo1jgsVCoQag=;
-        b=hmsmQLanMwnWzEgOVGlslRv1ShxsFCWhqRUllHlVRCXoJvohWgLtMX3mpxz5w1QAo5
-         ojwpxTMrkr07++O/fg1cuHuCk1DTLX/980o0jnaaI45We6DdCyxajzhKUnk6eS9EPuo2
-         dnf03PVazcRno8nVhB4adrUZGiGCGD75l3+FHAy/HzMVIzRv1Q7IQeBWQj06UXwNGXIZ
-         MJClL/qy7kbIEVvmKjv/dblqvt+ITCVl61rbucdmybcyiD+CDdRKJJY/dGIuKDsiUSVZ
-         HfNaVdJKO+jXoO+tHLasEqoHYwTjm5dxrKAbRC4cvJSzNKPJ8cn1zGqGHr12EUnI0vbC
-         l9gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=g4LT+6Vc6EAW7pOz6CH6o1bZ0MDiGNCAo1jgsVCoQag=;
-        b=mEdbsjR5Cu8TECsrI6tELtg22+qOqqkBzRRe/aFY+mEjSEGN6jpJf1SxMWVTBnGwhx
-         Jd5QLyiF5ialZ3Swbiz+zcyZb+Ldr7Pkg57tLFuv/Nh0w6LO9YTzGrz2gUvwL4J+SMXT
-         clr+mYR+1/atv50qSUUIbY7j1iQP2D7mb0K5DSKJKWXxyL5hL6AtJ+HMCgvWAihUPHWS
-         y6IYiyB3PwzV9gHGtlpHQcd2/Pr7RiEt1pWzy5clf4hcey80AWo89cS1siUgnChyVoIs
-         HNDXW1OJvOcu0GYZfrPWinQJUwWg+idMQFWlLpzsW7DjNMi/HKfX964d7DZD++gBX5e3
-         HKLw==
-X-Gm-Message-State: ACgBeo0YGcZ0IsDOZaLgWw+7xYNor7Qx13KMLY1rBuqH/Bz9lAyc9/7S
-        TVORg902rxEc/D8KNBdo8CDanQ==
-X-Google-Smtp-Source: AA6agR6kysUOxI+yQ+wn8SjwdttWDeEfbpR2glp/K1ujc4LvCyuxBwvyKJzdpW02VhsqGY4qyhv2GA==
-X-Received: by 2002:a17:903:40ce:b0:16e:c71b:8b0e with SMTP id t14-20020a17090340ce00b0016ec71b8b0emr228498pld.154.1659102794078;
-        Fri, 29 Jul 2022 06:53:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902e5c100b001618b70dcc9sm3684540plf.101.2022.07.29.06.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 06:53:13 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 13:53:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Shukla, Santosh" <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 5/7] KVM: SVM: Add VNMI support in inject_nmi
-Message-ID: <YuPmRbBcUp931KMP@google.com>
-References: <20220709134230.2397-1-santosh.shukla@amd.com>
- <20220709134230.2397-6-santosh.shukla@amd.com>
- <Yth2eik6usFvC4vW@google.com>
- <23b43ea0-0a92-e132-ada3-ebe86dbaf673@amd.com>
+        Fri, 29 Jul 2022 09:55:39 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDF166AF0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 06:55:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CA47E2100F;
+        Fri, 29 Jul 2022 13:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659102934;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tMxPr0Lef2neweoLGsYk7K3Rnge938US2kNI8g1jvs8=;
+        b=MER5t0Tu+UFMApl6c0ph1SFAM6AnFJ1rmJP7zkKQXqUc9/p9pNz1O7/IZwjOp9Y4PJ3Ot2
+        kqld92mpg0yHmBRcKAU7lNBxD5P+vZBxfzP8zMm8hcQnijZUvHxP/QPt89O04mX4FV4bBw
+        1Zbfr1YyieqTiVwt6QZEuXhId/HrVRo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659102934;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tMxPr0Lef2neweoLGsYk7K3Rnge938US2kNI8g1jvs8=;
+        b=a5reKtOqwU1PwgT/9+gjgQh+PKbMYjPjVbs7Yfo8ubfdjzilYux/0WU33yYEHtg5shLBo0
+        J5raeUgg4nNwGHDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94DA513A8E;
+        Fri, 29 Jul 2022 13:55:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DPjBItbm42KWWAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 29 Jul 2022 13:55:34 +0000
+Date:   Fri, 29 Jul 2022 15:55:32 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Sterba <dsterba@suse.com>
+Subject: Re: [PATCH v2 1/1] drivers/base/cpu: Print kernel arch
+Message-ID: <YuPm1HioKV7W1G7u@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220729125141.12786-1-pvorel@suse.cz>
+ <YuPYWLD7xxcNmuCx@pevik>
+ <YuPlUOT1nFyT9Fm7@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <23b43ea0-0a92-e132-ada3-ebe86dbaf673@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YuPlUOT1nFyT9Fm7@kroah.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022, Shukla, Santosh wrote:
-> Hi Sean,
-> 
-> On 7/21/2022 3:11 AM, Sean Christopherson wrote:
-> > On Sat, Jul 09, 2022, Santosh Shukla wrote:
-> >> +	++vcpu->stat.nmi_injections;
-> >> +	if (is_vnmi_enabled(svm)) {
-> >> +		vmcb = get_vnmi_vmcb(svm);
-> >> +		WARN_ON(vmcb->control.int_ctl & V_NMI_PENDING);
-> > 
-> > Haven't read the spec, but based on the changelog I assume the flag doesn't get
-> > cleared until the NMI is fully delivered.  That means this WARN will fire if a
-> > VM-Exit occurs during delivery as KVM will re-inject the event, e.g. if KVM is
-> > using shadow paging and a #PF handle by KVM occurs during delivery.
-> > 
-> 
-> Right,.
-> 
-> 
-> For the above scenario i.e.. if VMEXIT happens during delivery of virtual NMI
-> then EXITINTINFO will be set accordingly and V_NMI_MASK is saved as 0.
-> hypervisor will re-inject event in next VMRUN.
-> 
-> I just wanted to track above scenario,. I will replace it with pr_debug().
+Hi Greg,
 
-No, this is normal (albeit uncommon) behavior, don't print anything.  Even if it
-weren't normal behavior, pr_debug() is usually the wrong choice in KVM.
+> On Fri, Jul 29, 2022 at 02:53:44PM +0200, Petr Vorel wrote:
+> > Hi all,
+
+> > > Print the machine hardware name (UTS_MACHINE) in /proc/sys/kernel/arch.
+
+> > > This helps people who debug kernel with initramfs with minimal
+> > > environment (i.e. without coreutils or even busybox) or allow to open
+> > > sysfs file instead of run 'uname -m' in high level languages.
+
+> > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > > ---
+
+> > Changes v1->v2:
+> > * Add file into /proc/sys/kernel/ (previously it was in
+> >   /sys/devices/system/cpu/). There are 
+
+> Looks like this line ended too soon?
+OK, Friday. I'm sorry to be too abstracted today.
+I was about to explain the reason - that there are other related files
+osrelease, ostype.
+
+> > * Update Documentation/ABI/ (Greg)
+
+> This looks good to me, I'll queue it up after the next -rc1 is out
+> unless someone objects.
+Thanks!
+
+Kind regards,
+Petr
+
+> greg k-h

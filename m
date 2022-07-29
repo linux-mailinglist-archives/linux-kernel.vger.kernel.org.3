@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAB5584DC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44014584DCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiG2JFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S235479AbiG2JGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiG2JFm (ORCPT
+        with ESMTP id S235547AbiG2JGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:05:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2D177A65;
-        Fri, 29 Jul 2022 02:05:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6A75ECE2586;
-        Fri, 29 Jul 2022 09:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2401C433C1;
-        Fri, 29 Jul 2022 09:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659085537;
-        bh=wvE5EHGmPigV4oD45oTwiHHUQ4e3yEtd8+Rek83/iZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u4XFhk2DKQ9ZhFdCgE/O1FOABLAVZrwk5XV7UmcIVw0wNVMKeJ8oCvvhbPIuruugH
-         lVJ16TpQyhX33sT2ppx+Igx96tQu+Ozi3VhO8Fp70k/RFxgMPRPKZr5MSGiWsvJ9GD
-         Wn1kY+HYPAecHr7gurrqG2aWeXQUfEWMgIiVr7Ps=
-Date:   Fri, 29 Jul 2022 11:05:34 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com, alexander.shishkin@linux.intel.com,
-        leo.yan@linaro.org, james.clark@arm.com, will@kernel.org,
-        robin.murphy@arm.com, acme@kernel.org, peterz@infradead.org,
-        corbet@lwn.net, mathieu.poirier@linaro.org, mark.rutland@arm.com,
-        jonathan.cameron@huawei.com, john.garry@huawei.com,
-        helgaas@kernel.org, lorenzo.pieralisi@arm.com,
-        suzuki.poulose@arm.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-doc@vger.kernel.org, prime.zeng@huawei.com,
-        liuqi115@huawei.com, zhangshaokun@hisilicon.com,
-        linuxarm@huawei.com, bagasdotme@gmail.com
-Subject: Re: [PATCH v11 2/8] hwtracing: hisi_ptt: Add trace function support
- for HiSilicon PCIe Tune and Trace device
-Message-ID: <YuOi3i0XHV++z1YI@kroah.com>
-References: <20220721130116.43366-1-yangyicong@huawei.com>
- <20220721130116.43366-3-yangyicong@huawei.com>
- <YuKZKGKMz+UcbETM@kroah.com>
- <33f372f6-36bf-f84e-bca0-86347fa4d579@huawei.com>
+        Fri, 29 Jul 2022 05:06:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D09184EE1;
+        Fri, 29 Jul 2022 02:06:03 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b26so5242148wrc.2;
+        Fri, 29 Jul 2022 02:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=aoZulIv3y36JRZIiQsGvDhyRsXj2GJggkkB5mXQFhe8=;
+        b=QoRLfjAHO6sKauqQzX4lw5ZbE7Y7BXHOewDqAIwlu5yYl26PtUP/NLemRAHi92RAO0
+         Oy24HCq/rZ1a8ZIHzsBSBT6efHc+ip362E1NWf81a3+VfmLMLZJWMBY+jl/S4r60r8pR
+         JtsaGmuqxVmLKfGmclgdxivdwUZtPu9JHPqkr2nTxfhLn9wIoVo93UwWrgeC3ZtrivhI
+         V6ikdSKKzucBC9yMTOHad0Vhoff73dl1uSkP6Otb99LYWRM9/Bd37tQoJ3dnk9/NkdEH
+         IRZlugnpt/A9ea3lR3bmDOlNRC6YggOs8PnofXPnOv+STYVbuWNWIyfBzyz2zv5NGX8+
+         WoBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=aoZulIv3y36JRZIiQsGvDhyRsXj2GJggkkB5mXQFhe8=;
+        b=vnM57saCvSuIfVnm7lq/rsKl5s2P9CUHCK0lz0snk6qs/hvo9f/X6jNWtjHP/R2VP/
+         GG+k5LYT66AuUoBNAzwunLzpHnyGX714yDLPZdWIPr+h1g+2uPHe8/OrSsssof8p1ET1
+         0/2hCyQ6N0Kl3o5OAECVHB0KZIn2obK5eHJgPuBEOlXt6Obe3hvey8/BU7fx0C5ChNiR
+         xQr1L2oqm61POGf/fjkEGQ+GRYxq+eNihSgsLhbR/HyzWOXmg+U73hLOOaDpn+ZZI+3F
+         BSGfP3tPD/4ia5hQYJxRpXhhplRslogg5y9qbJGe+yZCCQWMe218iqU0N+xlE3YT/Cow
+         ZLOQ==
+X-Gm-Message-State: ACgBeo0zOO1PIPqoxEh5g5iG9KRoauIsbQ16RJB1asLuGM5D0JsxA3m6
+        4+YHkJoNdW+m0NCCfe1+C0+Vl6Ik4P8TaQ==
+X-Google-Smtp-Source: AA6agR7hYytTH2onaLqWvkQZ7NjcLI16AUUpKqMsUJSJq0W3JSLa/aw8cJ2NpQ2GJm3inAswNS9oFw==
+X-Received: by 2002:adf:f108:0:b0:21e:8132:a3d3 with SMTP id r8-20020adff108000000b0021e8132a3d3mr1793420wro.337.1659085561716;
+        Fri, 29 Jul 2022 02:06:01 -0700 (PDT)
+Received: from debian ([2402:3a80:1968:2207:9bad:2dcb:1b0c:a3b7])
+        by smtp.gmail.com with ESMTPSA id p4-20020a7bcc84000000b003a325bd8517sm4176078wma.5.2022.07.29.02.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 02:06:01 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 10:05:45 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/101] 5.10.134-rc2 review
+Message-ID: <YuOi6UdE5lsCcUwR@debian>
+References: <20220728150340.045826831@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <33f372f6-36bf-f84e-bca0-86347fa4d579@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220728150340.045826831@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 03:29:14PM +0800, Yicong Yang wrote:
-> >> +	/*
-> >> +	 * Handle the interrupt on the same cpu which starts the trace to avoid
-> >> +	 * context mismatch. Otherwise we'll trigger the WARN from the perf
-> >> +	 * core in event_function_local().
-> >> +	 */
-> >> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
-> >> +				 cpumask_of(cpu)));
-> > 
-> > If this hits, you just crashed the machine :(
-> > 
+Hi Greg,
+
+On Thu, Jul 28, 2022 at 05:05:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.134 release.
+> There are 101 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> We'll likely to have a calltrace here without crash the machine and reboot in
-> most time, unless user has set panic_on_warn.
+> Responses should be made by Sat, 30 Jul 2022 15:03:14 +0000.
+> Anything received after that time might be too late.
 
-Again, please do not use WARN_ON for this, please read:
-	https://elixir.bootlin.com/linux/v5.19-rc8/source/include/asm-generic/bug.h#L74
+Build test (gcc version 11.3.1 20220724):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-If you want a traceback (what would you do with that?), then call the
-function to give you that.  Don't crash people's boxes.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-> > Please properly recover from errors if you hit them, like this.  Don't
-> > just give up and throw a message to userspace and watch the machine
-> > reboot with all data lost.
-> > 
-> > Same for the other WARN_ON() instances here.  Handle the error and
-> > report it properly up the call chain.
-> > 
-> 
-> The driver use WARN_ON() in two places, once in pmu::start() and another in cpu teardown's
-> callback, both when the irq_set_affinity() failed. This is common to behave so when driver
-> fails to set irq affinity in pmu::start() and cpu_teardown():
+[1]. https://openqa.qa.codethink.co.uk/tests/1584
+[2]. https://openqa.qa.codethink.co.uk/tests/1587
 
-Don't repeat broken patterns please.
 
-> yangyicong@ubuntu:~/mainline_linux/linux/drivers$ grep -rn WARN_ON ./ | grep irq_set_affinity
-> ./perf/arm_smmuv3_pmu.c:649:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
-> ./perf/arm_smmuv3_pmu.c:895:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
-> ./perf/arm-ccn.c:1214:          WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
-> ./perf/qcom_l2_pmu.c:796:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(cpu)));
-> ./perf/qcom_l2_pmu.c:834:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(target)));
-> ./perf/arm_dmc620_pmu.c:624:    WARN_ON(irq_set_affinity(irq->irq_num, cpumask_of(target)));
-> ./perf/fsl_imx8_ddr_perf.c:674: WARN_ON(irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)));
-> ./perf/xgene_pmu.c:1793:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
-> ./perf/xgene_pmu.c:1826:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
-> ./perf/hisilicon/hisi_pcie_pmu.c:658:           WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)));
-> ./perf/hisilicon/hisi_pcie_pmu.c:684:   WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(target)));
-> ./perf/hisilicon/hisi_uncore_pmu.c:495: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)));
-> ./perf/hisilicon/hisi_uncore_pmu.c:528: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(target)));
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-Great, you can fix all of these up as well any time :)
-
-thanks,
-
-greg k-h
+--
+Regards
+Sudip

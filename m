@@ -2,207 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045085856C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7A85856CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbiG2WMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S239029AbiG2WPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiG2WMr (ORCPT
+        with ESMTP id S229683AbiG2WPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:12:47 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808382C66C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:12:43 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id tk8so10717101ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5pUodpWMMYknb87Q/iOWoD6ROI6Lgw19uUzBdPJ3Uyg=;
-        b=ccG1+zJ7elZwhNagMS5JcpEVguCuMJpnXq4J+9UD0xVVeLupKVDjJ86X+7fzk2RCY8
-         qq6oycJ/rCAUrHbBuK/sk5W9RXbIIiFDikRsuh5+GFMFCH9pJQRG+zSbamJUlvEfuP31
-         PUPvv8ZNOeLbnW7w0LPgc4o5CWidkTFzV3vzA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5pUodpWMMYknb87Q/iOWoD6ROI6Lgw19uUzBdPJ3Uyg=;
-        b=6CGDex1VgVrM+oDkB4jqZQl9Foa9hDT12O8zhIU/9z3Rg5JIfzqdvzlEkCJaisoepd
-         1BqTOh4w6gaVu15cZxlWwOU8+h1YFRq3E4PqwR84iTns6H8RrRjAkOJH8VGC/wu2O8jd
-         skhIW1VBZSt5aZR26TUOjRj2gKmq015lpcdBSJJatvEw2Qr1PYvtLzEvHYeHxbx77YtQ
-         dJI9Stx9noy3RV27/QeoaL9OQ/4i+yRjWuOtElyBkxcj4hNDnU3WBbjJfwE7n/uQcZSD
-         mo48GuW13d/G6R7AoS1Jek87zp53cr9gH6TtTX7dHzBTbHQdJ5nkcXw3BNEmQK4MSC7e
-         AYeQ==
-X-Gm-Message-State: AJIora9Lqcq7I3IEMHac+/2kM+34m9y7Z8ij6siu92IrHylzEjo6IYza
-        1alxkLkB0GPg9pLjfJ+uZ44aqWiNWojyFyU0zH0=
-X-Google-Smtp-Source: AGRyM1t9lTi1yUpBxbVnuhHDl+qaVqP7pel5U0eZX1468pwQsX9CDVwTPTPIK3pfwHEK1bP/87akNQ==
-X-Received: by 2002:a17:907:75f2:b0:72b:564c:465e with SMTP id jz18-20020a17090775f200b0072b564c465emr4093921ejc.689.1659132761604;
-        Fri, 29 Jul 2022 15:12:41 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id n20-20020a1709062bd400b00711edab7622sm2144558ejg.40.2022.07.29.15.12.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 15:12:40 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id id17so3165302wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:12:40 -0700 (PDT)
-X-Received: by 2002:a05:600c:1e0f:b0:3a3:191c:a3c8 with SMTP id
- ay15-20020a05600c1e0f00b003a3191ca3c8mr3873397wmb.151.1659132759907; Fri, 29
- Jul 2022 15:12:39 -0700 (PDT)
+        Fri, 29 Jul 2022 18:15:46 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30084.outbound.protection.outlook.com [40.107.3.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2934A80F;
+        Fri, 29 Jul 2022 15:15:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SzFBlUIyZlFtmGWzvcmttYKvC2iM1dVrSTKdHk/WHLNO5lpvOrCITeqEZt9sZ++QxTl0vd0ITLMSRaiv5FVKi51nfFL0d3g8M42ofLJzZkjvfNdKk0aiK0ZFSlpsbq4VzT4rQyQqfWZRZG3B8ZRBBvXhqWIsdkdZG9ACH+YsPlHjdCcaeS/S4XAV7YxEg8ozWCNDNvnaqFoXvTsoGFTahTeaAqDvXW4R+r+aHnDpf2BkvcuXRD4BLdK/mcsnD5FAOA4X4uEuVqjdcQJvNz5SMOVchIhBVXSF+Bc7IDCrUdMG6AdOwIlzkRtkuEDnHW/ftClKvy8lmLatf8yN+WmTpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mOH0YKAKtvWv1dheocDHDngOmwFPArjMNuPYs+fAa7g=;
+ b=UplDLT9nqWO9/4qHThBVQzO16doYbpo2XJRoAHKyOre20VQVr/fBDDONH9TpL4sDO0K6ES8WnXPJ7QjVz4vPdv1Pk7vjqj336oE5RRpKhkdIqf3BL9sGD7O14SMbuPuuHKfNdwOzhTdqekcDfBDIlOBTBmmcL6hZnhJKnKdnh2ZLcRs2+mTtk7XSXIQMmoBWyNKxRftrxw/Ahvqz/HJVT5vHILyrPtYZ4ShF6zABbUU2Z141KQ2TH5P0XGeHy7w2lQ7B+hObPKIXjB51Qc0OvoRk/cQ2ZC0CBJnYgW5l+9/8cYJqmVhKQ4qXmdhUQxLAMy9ajyKhf27+xCoYCdMdYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mOH0YKAKtvWv1dheocDHDngOmwFPArjMNuPYs+fAa7g=;
+ b=jBFxOYolDfGiZiPi3jtHVPJfjyOU9zqCI4QV0HDCvMGCDmfGfa/V15OjK4RuhD5EPwKXjv65eSyRI7GktvJ93FMtA0nwaBtYsrhj0fylRnGGg3q4DUPN1SoGvoHQaY0Iqv8nOjuCoI21xKm9Jj0bdT4EHKJu+ucv9OfzB0QA5RZ44by+4+zlyfpjufQlqjNupquS9e65Lm2JVHF5sK64L54w6iwjLkxYOjFsjfzTTavIeXVFI0hIlNYK6GQGiRP2fSPLm/WiHNnhId/873sfkS83LBCh1HG85Wcd8VGMIVzCxbNrjglroWiZntth35Q0V/EC5fA9N9f23z+Vti7jYA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AM6PR03MB6005.eurprd03.prod.outlook.com (2603:10a6:20b:e2::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.25; Fri, 29 Jul
+ 2022 22:15:39 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::7d32:560f:9dd0:c36]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::7d32:560f:9dd0:c36%4]) with mapi id 15.20.5482.011; Fri, 29 Jul 2022
+ 22:15:39 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [RFC PATCH net-next 0/9] net: pcs: Add support for devices probed
+ in the "usual" manner
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>, UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <2d028102-dd6a-c9f6-9e18-5abf84eb37a1@seco.com>
+ <20220719181113.q5jf7mpr7ygeioqw@skbuf>
+ <20220711160519.741990-1-sean.anderson@seco.com>
+ <20220719152539.i43kdp7nolbp2vnp@skbuf>
+ <bec4c9c3-e51b-5623-3cae-6df1a8ce898f@seco.com>
+ <20220719153811.izue2q7qff7fjyru@skbuf>
+ <2d028102-dd6a-c9f6-9e18-5abf84eb37a1@seco.com>
+ <20220719181113.q5jf7mpr7ygeioqw@skbuf>
+ <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
+ <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
+ <20220720135314.5cjxiifrq5ig4vjb@skbuf>
+ <8622e12e-66c9-e338-27a1-07e53390881e@seco.com>
+Message-ID: <9747f8ef-66b3-0870-cbc0-c1783896b30d@seco.com>
+Date:   Fri, 29 Jul 2022 18:15:33 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <8622e12e-66c9-e338-27a1-07e53390881e@seco.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0004.namprd13.prod.outlook.com
+ (2603:10b6:208:256::9) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-References: <20220720155445.RFC.1.I2999ac2d08643f0c2f3fe916cca86f8c832c8142@changeid>
- <CAA8EJpombZYHKXKd=rLte0pUaXjep0t7+H-uz_sFTuJwjH3y9A@mail.gmail.com>
-In-Reply-To: <CAA8EJpombZYHKXKd=rLte0pUaXjep0t7+H-uz_sFTuJwjH3y9A@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 29 Jul 2022 15:12:27 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VUWouY58oX+6iBThz_PiDe1_zrs7Ls4gBKER8bo_Y8QQ@mail.gmail.com>
-Message-ID: <CAD=FV=VUWouY58oX+6iBThz_PiDe1_zrs7Ls4gBKER8bo_Y8QQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] drm/panel-edp: Allow overriding the eDP EDID
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Clark <robdclark@gmail.com>,
-        LinusW <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sean Paul <seanpaul@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bb9f1722-a288-49fb-5b00-08da71afde22
+X-MS-TrafficTypeDiagnostic: AM6PR03MB6005:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lsUrRhb86xcmmZXQXk2Bonf0BAvyNa4Mw3x+foO2GCeNFloHr+OFP/fFPLa0ZuPZZsLvZ/2luLWqAE7ZOk1D9l42asBsSnTauItV+N7riyZ3zCPPOb02QkxS5ctjIcBM+qdKOzpYbgaEks4B0HfnOfpoZJDpbCuhbGVP4jqufHQLASOVzFcYHEShh2Clb6eFom/0yc1KqpvB3/Vnb6RPHcN6ptb+crIhsJUoZCOppZS4Zt12XyPgJySz6fT1zub7a46FaSgaY/78FwrZ27mrkFGBefPeAT4lDSzZAmhFcOjSQ4CZqrd8tYoH0AOM/3RJjCXMi+m4/em7RrWw/M1BF0klD57JrTgd+PZydrF4h2oMZzJ80HQ3KRZPN6BmOXlsnDAO9oFbttfVSFY9xwfLvGHJsAkti7PPjfutYDXY08V2tiNTLcW7sV8nJEh3laPoLQK/+TOtMJLZPuxJ0lX/pbXzdGE9/i86pX0bfTZk7Ll2WwvHDUqgj+zE+20TfE5P6s6VTC2LmIvizAOAj8gx8fhwFQ8Hf6IOsjqSH/73xviycLJKbDz5EK3aHW/xRW+QvMupM7XVzcvKQnZhD3LskOtPIvmJOqKNfIgfVRdDgVuv2j5uFKC25hO8HvrZ4vCt3vX1PFxF12VOWlXAwAY8O6ZNvFIj6dIvuleur+7/f6u/0jvEm1b6FhHRPtYlz4WmjwfR9uULmmqV25m4+koB7jzVSP//wb3hgyW+8ES+Heq69f/tJnuPrkVIuGOBvYKqmCuwu+SNeTSE8l9iSaCZAt46MPQ0B1bcbCe6YDj8oMwgB1ObwMyU7hlU779BkHbXn6/6UEw0TFI6H2+gIJXivHMUTXiGKLf36/9tVO0AIDw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39850400004)(346002)(136003)(396003)(366004)(31696002)(52116002)(478600001)(6512007)(6486002)(26005)(41300700001)(86362001)(6506007)(6666004)(38100700002)(38350700002)(2616005)(53546011)(186003)(8676002)(83380400001)(7406005)(8936002)(7416002)(2906002)(5660300002)(31686004)(44832011)(66946007)(36756003)(316002)(6916009)(54906003)(4326008)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enlXVVM1b0NrQTNGU20zUnY5YUtxZVQzRys2L3dOT0dIczUwQVR4SDR0dFFq?=
+ =?utf-8?B?TThvbVVHbVZnRk9KQlpmNzFDNE1NWjNZZXhWc2tkQzYwRHZBZzlPbG1qYU5k?=
+ =?utf-8?B?TFhva2hWd1RVKytYZmlQVGo5cWFBMWtrd0J1ZE9wTURtYkdMejJEU0hGZ3g5?=
+ =?utf-8?B?SlRENzhmRUFiY0lYaVhFZnU5NG96RnI0N3J3NllSQ3ppNnhNRFlaMlRGOTUr?=
+ =?utf-8?B?UUNQS1NaLzExQTZlK0JENmRpaVh3bFZJbmtSekloaWR6ZkFnV01oMmNZeThN?=
+ =?utf-8?B?MjYxVlVTNVlJUjl6SG4vbnB6WUtvbXZ0cUJLbldLMGtXRFZRREJsOHZHVFI2?=
+ =?utf-8?B?anViMEZpKzJaRTB6bWEyc2laYjlNTWR4SzZjdFoxc09XT1lCNmhDVFN4MFdj?=
+ =?utf-8?B?QThWSy9iVEhCY2pVdHFEZ1NQMWNLMXlNN0dwUEpobmFEempHcjcyc0d6M1Aw?=
+ =?utf-8?B?RGxFZWgxTUdIUWpKanpLNXhVQVRmYXpPNmhQWEpFVDlHYVJ1SGR3TmUzN1BQ?=
+ =?utf-8?B?T0Z2MUFUV3ZjRXZVdDZqeVBMNzNzbHM4V051TlJ2djRjQytlc2NwN0dqcWN0?=
+ =?utf-8?B?NDdBd1l4QzN1RERzSWd2eC9teGRQT3kxZ20vTDZZOTlYbTcyL1d2aEFkWjF6?=
+ =?utf-8?B?ZFNtU0JIK2VoZkxwZnEwSUQ0M3dIRjB1djFrZ0pub25kTzlXMkszejhPWTRi?=
+ =?utf-8?B?UndheStnaUFOaG9DNC9TZWpwcHJ3QVRZem5KRjl4QmpWQ1ZBcHIzL290ekVX?=
+ =?utf-8?B?aFQ5OSswcWREQWNNQm5lY2hMeDA5OXFPR3RiSXk2bVc1THlLdWJTR0w1a1Js?=
+ =?utf-8?B?cFNmZFdTVVRjaWVCLy9RRnZVbkFLYjR0b0JOSzJFRFRZMzRZRTBWZW93dlZ0?=
+ =?utf-8?B?MjEySXEwNjQ4ZjR3THZJUk5wRHcxSm9mSjZHVjRPc0FMd2k3bkR1UFUwOHRy?=
+ =?utf-8?B?RWxqajhOQVc5U3dxejNYWU9maFlZTTZkZkxqQko0ZDdVZ09ReG5XenVxTzB6?=
+ =?utf-8?B?Y21CRzJ5K1gwWi9hYW9XNTlHek1BWTJjcWtwa0RJY1NBNzAwVStINml1Y0NS?=
+ =?utf-8?B?d3VQUUV4RElsTEJNMVc5czBPVWZUQkNNWGpENnJhbFBKVXJjbUhKd1NDQ2Rk?=
+ =?utf-8?B?MmZVdzFhNkF5U0pKUG1GMGt1enBNRE8rTzI1SXEzeVM3R0Rqd1dPVzlUdE8w?=
+ =?utf-8?B?T0NibCt2RDdyZG1ZT0U5U08zbWNpck5mUEJiR1cwVlJSekQxcThlcEp6MjBR?=
+ =?utf-8?B?ZmlJdytGbm92MWkyc2lSNWtIWjZzMmVJK2JmZ3NkV1N1TGxLTGZXUllMc0dq?=
+ =?utf-8?B?Mi9SdTg5K2pRMmt5T3l1K3E0NVRkZ0pYdGhDNDlvZjE3ZzQ2ZWF4UGRRS2Mw?=
+ =?utf-8?B?UUUyT1ZUU2N6SnlaN004emplUmczVXVOUitONGVNclJsbFRSdVFVWW9sNzg4?=
+ =?utf-8?B?ZWxQUkJCZnd0ditySEdReXQ3UUlLWUMxdkREdC9BNE55MUQ3czc1ZWtDVUdC?=
+ =?utf-8?B?ZHpBbW1xbWY3Ri81QU83YktjVW9ZMHVVa01PL2tPR2U5NDJWS2NpWHRLV2dq?=
+ =?utf-8?B?Ynl0bVpLK0pGVFhEak9TK2xDRzV0UEdkTFFTQ0E3cGd3V3pQVXlUNnFtd3Qx?=
+ =?utf-8?B?ckZna2JvenpmdEdlcDlGTk1HYTBGYURRUmFNNm04MnlWd0NPdThISVhLMG44?=
+ =?utf-8?B?TWl6Qit6ME8zR0RZMUlzR0Z4b2pIWDcrbWdqRy94ZUlrUFZJRkVNVzZhQlla?=
+ =?utf-8?B?N3NHUUdwRkNzUTNERThZRUxaYWRhZi9YYUF6bXcrMlhOdUR2Ym9wc0hHdkpv?=
+ =?utf-8?B?Zmw1WmxNKzVud1dyeXJpSG5JR3Q0aWh3Q3JGOW51RVNKSU94Z09QakFaNVFI?=
+ =?utf-8?B?L3hhdEUzYktWRkJYeGtsMHZsWkQ5Sk1uSHJtOU5kWVBIODh4WkJ1UmZ0N0FU?=
+ =?utf-8?B?RzJ1TXNpWVIvUnJSQkFvVnhtR0MxaVlNTHZ1QXpZSTJ0a1lDcWVzQndPRUU3?=
+ =?utf-8?B?TUFCc20zMklmTG9kMk1icXdnaWZlN2d0RUloV2l2M3JldHhQS1FwYVhnVyt5?=
+ =?utf-8?B?Wk1sbEpqWkhFUHNyM1hLcmtUalRhSVFYTnRPRzZTWStlN3o1VmJjQkRrQ1ps?=
+ =?utf-8?B?WEJCT0g4ZnVMaTZlSldibHVMWEZ4SDMvMnUzSXJqeVdRMVBQRHpQL0Q5L3NI?=
+ =?utf-8?B?aGc9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb9f1722-a288-49fb-5b00-08da71afde22
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2022 22:15:38.8542
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1LgFnzlCVyknS92fG6rUOXyD/qkYtK1ydGd5Kpp+ZjwEWAFcM18bmJkd3vDi1WKXufFybHDNxmwQSDQAMItyww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB6005
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 7/21/22 5:41 PM, Sean Anderson wrote:
+> On 7/20/22 9:53 AM, Vladimir Oltean wrote:
+>> On Tue, Jul 19, 2022 at 03:34:45PM -0400, Sean Anderson wrote:
+>>> We could do it, but it'd be a pretty big hack. Something like the
+>>> following. Phylink would need to be modified to grab the lock before
+>>> every op and check if the PCS is dead or not. This is of course still
+>>> not optimal, since there's no way to re-attach a PCS once it goes away.
+>> 
+>> You assume it's just phylink who operates on a PCS structure, but if you
+>> include your search pool to also cover include/linux/pcs/pcs-xpcs.h,
+>> you'll see a bunch of exported functions which are called directly by
+>> the client drivers (stmmac, sja1105). At this stage it gets pretty hard
+>> to validate that drivers won't attempt from any code path to do
+>> something stupid with a dead PCS. All in all it creates an environment
+>> with insanely weak guarantees; that's pretty hard to get behind IMO.
+> 
+> Right. To do this properly, we'd need wrapper functions for all the PCS
+> operations. And the super-weak guarantees is why I referred to this as a
+> "hack". But we could certainly make it so that removing a PCS might not
+> bring down the MAC.
+> 
+>>> IMO a better solution is to use devlink and submit a patch to add
+>>> notifications which the MAC driver can register for. That way it can
+>>> find out when the PCS goes away and potentially do something about it
+>>> (or just let itself get removed).
+>> 
+>> Not sure I understand what connection there is between devlink (device
+>> links) and PCS {de}registration notifications. 
+> 
+> The default action when a supplier is going to be removed is to remove
+> the consumers. However, it'd be nice to notify the consumer beforehand.
+> If we used device links, this would need to be integrated (since otherwise
+> we'd only find out that a PCS was gone after the MAC was gone too).
+> 
+>> We could probably add those
+>> notifications without any intervention from the device core: we would
+>> just need to make this new PCS "core" to register an blocking_notifier_call_chain
+>> to which interested drivers could add their notifier blocks. How a> certain phylink user is going to determine that "hey, this PCS is
+>> definitely mine and I can use it" is an open question. In any case, my
+>> expectation is that we have a notifier chain, we can at least continue
+>> operating (avoid unbinding the struct device), but essentially move our
+>> phylink_create/phylink_destroy calls to within those notifier blocks.
+>> Again, retrofitting this model to existing drivers, phylink API (and
+>> maybe even its internal structure) is something that's hard to hop on
+>> board of; I think it's a solution waiting for a problem, and I don't
+>> have an interest to develop or even review it.
+> 
+> I don't either. I'd much rather just bring down the whole MAC when any
+> PCS gets removed. Whatever we decide on doing here should also be done
+> for (serdes) phys as well, since they have all the same pitfalls. For
+> that reason I'd rather use a generic, non-intrusive solution like device
+> links. I know Russell mentioned composite devices, but I think those
+> would have similar advantages/drawbacks as a device-link-based solution
+> (unbinding of one device unbinds the rest).
 
-On Thu, Jul 21, 2022 at 4:36 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Thu, 21 Jul 2022 at 01:55, Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > I found that writing to `/sys/kernel/debug/dri/*/eDP*/edid_override`
-> > wasn't working for me. I could see the new EDID take effect in
-> > `/sys/class/drm/card*-eDP*/edid` but userspace wasn't seeing it..
-> >
-> > The problem was that panel-edp was caching the EDID that it read and
-> > using that over and over again.
-> >
-> > Let's change panel-edp to look at the EDID that's stored in the
-> > connector. This is still a cache, which is important since this
-> > function is called multiple times and readin the EDID is slow, but
-> > this property is automatically updated by drm_get_edid() (which reads
-> > the EDID) and also updated when writing the edid_override in debugfs.
-> >
-> > Fixes: 63358e24ee79 ("drm/panel: panel-simple: Cache the EDID as long as we retain power")
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
->
-> A different proposal for you to consider:
-> Change drm_get_edid/drm_do_get_edid to return int rather than struct
-> edid, while caching the EDID in the connector. Or maybe add a new API
-> drm_read_edid() and make drm_get_edid() deprecated in favour of it.
-> The goal should be to let all drivers use connector-cached EDID rather
-> than getting  the EDID, parsing it and kfree()ing it immediately
-> afterwards.
+OK, I've thought about this a bit more. Right now, you can crash the
+kernel by unbinding a phy (either serdes or networking) and waiting for
+a state change. The serdes problem could probably be solved by
+strengthening the existing device_link_add calls. This will of course
+unbind the netdev if you unbind the serdes. I think this is not a common
+use case; if a user does this they probably know what they're doing (or
+not).
 
-I think the majority of drivers don't actually want the cached EDID
-behavior so the edp-panel case is actually pretty rare. For everyone
-else I think DRM is handling things in a pretty reasonable way.
-Looking closely, it looks like there have been a bunch of patches
-landed in this area recently and so I assume people are happy enough
-with the current design for the majority of cases.
+The problem with ethernet phys is a bit worse. It's very common to have
+something like
 
-I guess your point though, is that the way I'm using the API right now
-in ${SUBJECT} patch is a bit gross and maybe the DRM core needs a
-helper of some sort for this case? Essentially what we're saying is
-that we have inside knowledge this is a built-in panel and thus the
-EDID will never change and it's a waste of time to read it again and
-again. We could somehow tell the DRM core that.
+	+ netdev
+	|
+	+-+ mdiobus
+	  |
+	  +-- phy
 
-I guess I could add a function like drm_edid_read_if_needed(). That
-would essentially use the existing blob if it was there and read it
-otherwise. Does that work? Basically:
+which poses a problem for device links. The phy is a child of the
+netdev, so it should be unbound first. device_link_add will see this and
+refuse to create a link, since such a link implies that netdev should be
+unbound before phy.
 
-def drm_edid_read_if_needed(...):
-  if (connector->edid_blob_ptr)
-    return dupe_edid(connector->edid_blob_ptr);
-  return drm_edid_read(...);
+One solution might be something like:
 
-I guess maybe we'd want a _ddc variant too.
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index a74b320f5b27..05894e1c3e59 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -27,6 +27,7 @@
+ #include <linux/phy.h>
+ #include <linux/phy_led_triggers.h>
+ #include <linux/property.h>
++#include <linux/rtnetlink.h>
+ #include <linux/sfp.h>
+ #include <linux/skbuff.h>
+ #include <linux/slab.h>
+@@ -3111,6 +3112,13 @@ static int phy_remove(struct device *dev)
+ {
+        struct phy_device *phydev = to_phy_device(dev);
+ 
++	// I'm pretty sure this races with multiple unbinds...
++       rtnl_lock();
++       device_unlock(dev);
++       dev_close(phydev->attached_dev);
++       device_lock(dev);
++       rtnl_unlock();
++       WARN_ON(phydev->attached_dev);
++
+        cancel_delayed_work_sync(&phydev->state_queue);
+ 
+        mutex_lock(&phydev->lock);
 
-Adding Jani since the recent patches I see touching this were his and
-there are even comments there about what to do about drivers that want
-to cache the EDID.
+which is probably the least intrusive we can get. But this isn't very
+nice for PCSs.
 
+First, PCSs are not always used by netdevs. So there's no generic way to
+ask the user "please clean up this PCS." Additionally, most PCS users
+expect the PCS to be around for the lifetime of the driver (or at least
+until they're done using it).
 
-> Most probably we should be able to move
-> drm_connector_update_edid_property() into drm_do_get_edid() and drop
-> it from the rest of the code. This might require additional thought
-> about locking, to ensure that nobody pulls the cached edid out from
-> under our feet.
+Maybe the best solution is to provide some helper functions to use with
+bus_register_notifier and just let the drivers fend for themselves. Or
+possibly default to a devlink, but allow registering a notifier instead.
 
-This all looks like it's moving now, actually. Looking around at
-recent changes, I see that now the property gets updated in a
-different call.
-
-Old (deprecated)
-1. drm_get_edid() <-- Updates the EDID property
-2. drm_add_edid_modes()
-
-New:
-1. drm_edid_read()
-2. drm_edid_connector_update() <-- Updates the EDID property
-
-
- > Extra "bonus" points to consider:
-> - Maybe it's time to add get_edid() to the drm_panel interface, teach
-> panel_bridge about it and let drm_bridge_connector handle all the
-> details?
->
-> So, while this looks like a longer path, I think it's worth checking
-> that we can refactor this piece of code.
-
-It's certainly interesting to consider. At the moment, though, it
-doesn't look super easy to do. Points to note:
-
-1. We don't necessarily want to cache the EDID for all display types.
-For builtin panels it makes sense to do so, but it's less obvious for
-external displays. _In theory_ we could try to cache the EDID for
-external devices if we're really certain that we'll notice when
-they're unplugged / re-plugged again but I'm not convinced that all
-drivers always handle this. In any case, I tend to assume that when
-we're dealing with external displays we're a little less interested in
-trying to optimize all of the milliseconds away. If nothing else there
-are hundreds of milliseconds of hotplug detect debounce happening for
-external displays. Yes, we could have a rule about only caching the
-EDID only for eDP displays but then the motivation of moving it out of
-edp-panel and to drm_bridge_connector is a lot less.
-
-2. At the moment, drm_bridge_connector only calls get_modes() if it
-doesn't have get_edid() implemented. At the moment the panel-edp code
-actually _combines_ the EDID and any hardcoded modes that were
-specified. I think we'd have to resolve this difference if we do what
-you suggest. The panel-edp behavior comes from before the split out of
-panel-simple and dates from 2013 when panel-simple was first added.
-Certainly we could arbitrarily change one behavior or the other but I
-don't know what the fallout would be.
-
-3. We still don't have universal conversion to panel_bridge and
-drm_bridge_connector. Some drivers are still calling the panel
-functions directly. Until everything is converted it will be extra
-cruft / scaffolding to make this change without breaking those calling
-the panel directly. I don't think there's enough of a hurry to do this
-that it's worth the extra cruft. There just aren't that many built-in
-panels that read an EDID that aren't handled by the generic panel-edp.
-
-
--Doug
+--Sean

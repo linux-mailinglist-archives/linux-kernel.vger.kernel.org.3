@@ -2,125 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18652585018
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 14:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568D6585027
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 14:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiG2MbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 08:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S234529AbiG2Mlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 08:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiG2MbQ (ORCPT
+        with ESMTP id S232085AbiG2Mlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 08:31:16 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD6C67586
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 05:31:15 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id b16so7101334lfb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 05:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UscPiVc3W69u2SDEZgLhh627QT22j/EkeFjDm8ewhDU=;
-        b=nJrpxtj3/Yr1byjkae9e+eAEwtAZS6cQLSq9Wf/FbOweTm1lCQVUsPbRKq3KsquHix
-         Ahx76WP2GWkQOvWSzNFy/ojyGd9Wrx02NkjPklNTCGLCJEyvOFX2lCKqmtSGsrSciIga
-         juEvUdPxt4sxwKHufQCBxHAQGnMZw0p0eyn1K88qjYMCqpIC8Hj5RFCIHsOW7O6qvkuU
-         6U2SdnxZg83UIY3mAlDL62txLD3y11abWwFFIGB9Klz0ZvA0NHYkD7Lmo1AXFwWl4L10
-         LCF2cCFW4VSrlv8DHIP2JK3k43qO7RHanKnUtmINBDajIStTnQ7okAWfcVh35ThcWcQl
-         Hrbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UscPiVc3W69u2SDEZgLhh627QT22j/EkeFjDm8ewhDU=;
-        b=6Uf2jmDBMWY1SsVCANAUaT2OubminXZR2nFim+QK+9fJjExMDGqE25ZlxgMEe+5UYl
-         Gmry/fmFLz/8+mfsw8e/UWPM0Ib490Uio0RQJIzMnO54CLMU+Nv1KtMyVXdsbwT4wKNL
-         AbAS+VJqTcD7g3zS6dBCX5Wv9Sr2B7xL4ZajmNOanzOxk74PMaTHOGubWVG9nXkjNRbh
-         /8S0WnTL34LES3fq4CIPXZoC8Xi/2qL0nfSsqg8f9cV43uCGh0ibrXLwA+TlBVhNEf1d
-         LEhrV6NJ6GV5ChvAM624alEp7Kvy5WT42eWZIhoPO24puL/r54GhE/AWT5HYEMiJOpFp
-         zQFA==
-X-Gm-Message-State: AJIora/LpwXk8fGauf5WXyNOppQhWfqIflp+jMRFvN0amkU4NXpxAN+G
-        wurui4wpeZJbaCjrirRQPA6IW7H5wqoaNTdhVzfLUw==
-X-Google-Smtp-Source: AA6agR62HeE51l5IAK04JRZwMFJ1wYjG83cpBLDmLAJjptPk6vF7HAk3w0wXXYaTfDZ+/dbgsxR4PZ99SvySsvQiBoI=
-X-Received: by 2002:a05:6512:1093:b0:48a:7c08:8d29 with SMTP id
- j19-20020a056512109300b0048a7c088d29mr1161026lfg.540.1659097873241; Fri, 29
- Jul 2022 05:31:13 -0700 (PDT)
+        Fri, 29 Jul 2022 08:41:50 -0400
+Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052A854AFC;
+        Fri, 29 Jul 2022 05:41:46 -0700 (PDT)
+Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.emlix.com (Postfix) with ESMTPS id 3C8EF5FED8;
+        Fri, 29 Jul 2022 14:41:45 +0200 (CEST)
+Date:   Fri, 29 Jul 2022 14:41:44 +0200
+From:   Daniel =?iso-8859-1?Q?Gl=F6ckner?= <dg@emlix.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru
+Subject: Re: [PATCH v5 1/2] fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+Message-ID: <20220729124143.GA31715@homes.emlix.com>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+ <20220719112335.9528-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-References: <000000000000e6917605e48ce2bf@google.com> <Yt6DjrMdIhpQmm7V@codewreck.org>
- <CACT4Y+Yx2MZ9KEX9gfm-LahQE4KaXX=u4RQBuj-1gS57KL0OSw@mail.gmail.com> <2916828.W3qMjvkFlE@silver>
-In-Reply-To: <2916828.W3qMjvkFlE@silver>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 29 Jul 2022 14:31:01 +0200
-Message-ID: <CACT4Y+Ycz2a2tuPs4R2WS3Gs+rvLBrusamCq3kQ3wj8R+=rX6w@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in p9_client_destroy
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     asmadeus@codewreck.org, Vlastimil Babka <vbabka@suse.cz>,
-        syzbot <syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, davem@davemloft.net,
-        edumazet@google.com, elver@google.com, ericvh@gmail.com,
-        hdanton@sina.com, k.kahurani@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, lucho@ionkov.net,
-        netdev@vger.kernel.org, pabeni@redhat.com, rientjes@google.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719112335.9528-2-i.bornyakov@metrotek.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 14:10, Christian Schoenebeck
-<linux_oss@crudebyte.com> wrote:
->
-> On Montag, 25. Juli 2022 14:45:08 CEST Dmitry Vyukov wrote:
-> > On Mon, 25 Jul 2022 at 13:51, <asmadeus@codewreck.org> wrote:
-> > > Vlastimil Babka wrote on Mon, Jul 25, 2022 at 12:15:24PM +0200:
-> > > > On 7/24/22 15:17, syzbot wrote:
-> > > > > syzbot has bisected this issue to:
-> > > > >
-> > > > > commit 7302e91f39a81a9c2efcf4bc5749d18128366945
-> > > > > Author: Marco Elver <elver@google.com>
-> > > > > Date:   Fri Jan 14 22:03:58 2022 +0000
-> > > > >
-> > > > >     mm/slab_common: use WARN() if cache still has objects on destroy
-> > > >
-> > > > Just to state the obvious, bisection pointed to a commit that added the
-> > > > warning, but the reason for the warning would be that p9 is destroying a
-> > > > kmem_cache without freeing all the objects there first, and that would
-> > > > be
-> > > > true even before the commit.
-> > >
-> > > Probably true from the moment that cache/idr was introduced... I've got
-> > > a couple of fixes in next but given syzcaller claims that's the tree it
-> > > was produced on I guess there can be more such leaks.
-> > > (well, the lines it sent in the backtrace yesterday don't match next,
-> > > but I wouldn't count on it)
-> > >
-> > > If someone wants to have a look please feel free, I would bet the
-> > > problem is just that p9_fd_close() doesn't call or does something
-> > > equivalent to p9_conn_cancel() and there just are some requests that
-> > > haven't been sent yet when the mount is closed..
-> > > But I don't have/can/want to take the time to check right now as I
-> > > consider such a leak harmless enough, someone has to be root or
-> > > equivalent to do 9p mounts in most cases.
-> >
-> > FWIW with KASAN we have allocation stacks for each heap object. So
-> > when KASAN is enabled that warning could list all live object
-> > allocation stacks.
->
-> With allocation stack you mean the backtrace/call stack at the point in time
-> when the memory originally was acquired?
->
-> If the answer is yes, then sure, if someone had a chance to post those
-> backtraces, then that would help us to take a closer look at where this leak
-> might happen. Otherwise I fear it will end up among those other "lack of
-> priority" issues.
+Hi,
 
-Yes, I meant providing allocation stacks for leaked objects.
-Filed https://bugzilla.kernel.org/show_bug.cgi?id=216306 for this feature.
+On Tue, Jul 19, 2022 at 02:23:34PM +0300, Ivan Bornyakov wrote:
+> +	struct spi_transfer lsc_xfers[] = {
+> +		{
+> +			.tx_buf = lsc_init_addr,
+> +			.len = sizeof(lsc_init_addr),
+> +			.cs_change = 1,
+> +		}, {
+> +			.tx_buf = lsc_bitstream_burst,
+> +			.len = sizeof(lsc_bitstream_burst),
+> +			.cs_change = 1,
+> +		},
+> +	};
+
+cs_change in the last transfer of a message will not prevent transfers
+with other spi devices on the bus from taking place. You want to use
+spi_bus_lock and friends in addition.
+
+Best regards,
+
+  Daniel

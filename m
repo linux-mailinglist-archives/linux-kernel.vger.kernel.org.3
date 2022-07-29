@@ -2,172 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6499E58517D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18B158517F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiG2OX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S237009AbiG2OY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbiG2OXZ (ORCPT
+        with ESMTP id S236981AbiG2OY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:23:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551106D9DC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:23:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BF4E934B1C;
-        Fri, 29 Jul 2022 14:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659104601; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=41yTqV34Y9S/L+H/w43+RTmir3H4LTje1VGve6f4RDU=;
-        b=g4e8RkVotq+qshmeZR5PldOGSHDtXeCHF643L5YFJSvubFf8NpSSh02YreA7qWwBK5oaq7
-        t+KznGB12iPdKHpj57zBPmmZCBLbbS8S4AnFJeDZk8zKkhBA66scK9HwUunEE25bWWpSgR
-        KnPKszz7TFJwx1bp0Eha+ZaakGxpU94=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659104601;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=41yTqV34Y9S/L+H/w43+RTmir3H4LTje1VGve6f4RDU=;
-        b=tG9PlLHEzBx4R6SnDnH8mnJ2jtVkxqABaeWviAc6YFeCL5OdXahdIrxFrgU/cADu1ktln/
-        mb6ke0H4wYMftOBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 851AE13A1B;
-        Fri, 29 Jul 2022 14:23:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qjxKH1nt42JzZAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 29 Jul 2022 14:23:21 +0000
-Message-ID: <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
-Date:   Fri, 29 Jul 2022 16:23:21 +0200
+        Fri, 29 Jul 2022 10:24:26 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D86C138
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:25 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso2574405wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LypYebNOHjfta90jCiEF7l4jJITyPo34Kh+cxFf5b7k=;
+        b=o/VoIs1FYnbSYgcdN1Mey6VbgelHyJu1ATCEWwD53mdKhrXpjQui5rDM7ZZlXtE+fS
+         MUVqTmYxWlsowO+bpTuzy/oVsaembdjMiLzApJgcq5dArVqtptZevLreiKLD8CgRs3kr
+         MvGq1W04Uy8IEEITpzUTp2vB2QhQnKKJbVTNG/vMkIIndei2g1G9H7zRpNz4iiHkULmI
+         aLRqDypMhjfFvunZDaLYNnqjmaQ2WYJwoTKglmL55DegwMx48k5zXYGUUqM2NuAYGUGM
+         qrHPV7ks4LLs2lJBqSSgv7wmY90Cr7frvWqbTwKpyYEZDWXTz9+9QBM7I40bXPwPR1Na
+         1OBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LypYebNOHjfta90jCiEF7l4jJITyPo34Kh+cxFf5b7k=;
+        b=ziaXryLJQgkenpovo2zzA2SJp7CovkHjUdIf3iwdkt4cCqUNxdqft/tmNlpwMMj1Sd
+         yEc8Yt3s4+2LmXqnTp1pKzMfZI28zpUNYYniMJOO4CUOMjAQwqSCNy7tRbI4B2Mrpurt
+         3hrq18rl7NB/KFd/rgcZfOogq6j/sJcSCXvIcYtAJWBlRcf/kXklM1ksuENqhKvNgMBK
+         +6dzlZq3Z02xhMNeya+oExmyNfCXypBSlIbsSPoDC3gm/bQ+7sO0Y8eo+D1S7CIoe9hZ
+         H+gkwjJ33GF8XkpZYJfkHkGfDaCZyH8wxb5opJwQD681xhF3qA6q9jT/uIXdQPJ8M78r
+         CpIg==
+X-Gm-Message-State: AJIora+u3Yw7Z3chOlnAO3AvyqofizXrflBDWqTgejWqM7we/k+vNOVS
+        at8P4AWArC2MFpBxLyJ/DJpkCf0+6ubJ/nUDvWGbMw==
+X-Google-Smtp-Source: AGRyM1vcvoixpQIqXoSvh3g/D9PPji8zVRLepMsp2jSLV0A+j/g1kK1tqIHam+9nDFHK6ZhaYv+FN2GWeQvomzERy5c=
+X-Received: by 2002:a05:600c:19d2:b0:3a3:2cdb:cc02 with SMTP id
+ u18-20020a05600c19d200b003a32cdbcc02mr3018045wmq.182.1659104663337; Fri, 29
+ Jul 2022 07:24:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
- kmb_plane_atomic_update()
-Content-Language: en-US
-To:     Zeng Jingxiang <zengjx95@gmail.com>, anitha.chrisanthus@intel.com,
-        edmund.j.dea@intel.com, airlied@linux.ie, daniel@ffwll.ch,
-        laurent.pinchart@ideasonboard.com, maxime@cerno.tech,
-        ville.syrjala@linux.intel.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Zeng Jingxiang <linuszeng@tencent.com>
-References: <20220729030711.2117849-1-zengjx95@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220729030711.2117849-1-zengjx95@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------dFxj7YZV00EUycLoniKD5Q4Y"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220729074351.138260-1-irogers@google.com> <20220729074351.138260-6-irogers@google.com>
+ <393770c6-8469-a5b5-5106-a98420bb6e00@huawei.com>
+In-Reply-To: <393770c6-8469-a5b5-5106-a98420bb6e00@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 29 Jul 2022 07:24:10 -0700
+Message-ID: <CAP-5=fUQ2nAHyN5Egxfpyotc0u4O1wsZ8VKzwffOhGhV++L6=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 05/17] perf jevents: Remove the type/version variables
+To:     John Garry <john.garry@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------dFxj7YZV00EUycLoniKD5Q4Y
-Content-Type: multipart/mixed; boundary="------------sj5f9zrJyPyQK1Z5Zze4SzFW";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Zeng Jingxiang <zengjx95@gmail.com>, anitha.chrisanthus@intel.com,
- edmund.j.dea@intel.com, airlied@linux.ie, daniel@ffwll.ch,
- laurent.pinchart@ideasonboard.com, maxime@cerno.tech,
- ville.syrjala@linux.intel.com
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Zeng Jingxiang <linuszeng@tencent.com>
-Message-ID: <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
-Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
- kmb_plane_atomic_update()
-References: <20220729030711.2117849-1-zengjx95@gmail.com>
-In-Reply-To: <20220729030711.2117849-1-zengjx95@gmail.com>
+On Fri, Jul 29, 2022 at 1:30 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 29/07/2022 08:43, Ian Rogers wrote:
+> > pmu_events_map has a type variable that is always initialized to "core"
+> > and a version variable that is never read. Remove these from the API as
+> > it is straightforward to add them back when necessary.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> Reviewed-by: John Garry <john.garry@huawei.com>
+>
+> Please note the questions, below.
+>
+> > ---
+> >   tools/perf/pmu-events/empty-pmu-events.c | 6 ++----
+> >   tools/perf/pmu-events/jevents.py         | 6 ------
+> >   tools/perf/pmu-events/pmu-events.h       | 2 --
+> >   tools/perf/tests/expand-cgroup.c         | 2 --
+> >   tools/perf/tests/parse-metric.c          | 2 --
+> >   5 files changed, 2 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+> > index 77e655c6f116..4182a986f505 100644
+> > --- a/tools/perf/pmu-events/empty-pmu-events.c
+> > +++ b/tools/perf/pmu-events/empty-pmu-events.c
+> > @@ -110,15 +110,13 @@ static const struct pmu_event pme_test_soc_cpu[] = {
+> >
+> >   const struct pmu_events_map pmu_events_map[] = {
+> >       {
+> > +             .arch = "testarch",
+>
+> Is this really supposed to be part of this patch?
 
---------------sj5f9zrJyPyQK1Z5Zze4SzFW
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Agreed. Looks like it should have been in the previous.
 
-SGkNCg0KQW0gMjkuMDcuMjIgdW0gMDU6MDcgc2NocmllYiBaZW5nIEppbmd4aWFuZzoNCj4g
-RnJvbTogWmVuZyBKaW5neGlhbmcgPGxpbnVzemVuZ0B0ZW5jZW50LmNvbT4NCj4gDQo+IFRo
-ZSAicGxhbmUiIHBvaW50ZXIgd2FzIGFjY2VzcyBiZWZvcmUgY2hlY2tpbmcgaWYgaXQgd2Fz
-IE5VTEwuDQo+IA0KPiBUaGUgZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRlKCkgZnVu
-Y3Rpb24gd2lsbCBkZXJlZmVyZW5jZQ0KPiB0aGUgcG9pbnRlciAicGxhbmUiLg0KPiAzNDUJ
-c3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqb2xkX3BsYW5lX3N0YXRlID0NCj4gCQlkcm1fYXRv
-bWljX2dldF9vbGRfcGxhbmVfc3RhdGUoc3RhdGUsIHBsYW5lKTsNCj4gMzQ2CXN0cnVjdCBk
-cm1fcGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0ZSA9DQo+IAkJZHJtX2F0b21pY19nZXRf
-bmV3X3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFuZSk7DQo+IA0KPiBBIE5VTEwgY2hlY2sgZm9y
-ICJwbGFuZSIgaW5kaWNhdGVzIHRoYXQgaXQgbWF5IGJlIE5VTEwNCj4gMzYzCWlmICghcGxh
-bmUgfHwgIW5ld19wbGFuZV9zdGF0ZSB8fCAhb2xkX3BsYW5lX3N0YXRlKQ0KDQpJcyB0aGlz
-IGFuIGFjdHVhbCBidWcgdGhhdCBoYXBwZW5zPw0KDQpBbGwgcGxhbmVzIHNob3VsZCBhbHdh
-eXMgaGF2ZSBhIHN0YXRlLiBUaGVyZWZvcmUgdGhlIHRlc3RzIGZvciANCiFuZXdfcGxhbmVf
-c3RhdGUgYW5kICFvbGRfcGxhbmVfc3RhdGUgY2FuIGJlIHJlbW92ZWQsIEknZCBzYXkuDQoN
-CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEZpeGVzOiA5Nzc2OTdlMjBiM2QgKCJk
-cm0vYXRvbWljOiBQYXNzIHRoZSBmdWxsIHN0YXRlIHRvIHBsYW5lcyBhdG9taWMgZGlzYWJs
-ZSBhbmQgdXBkYXRlIikNCj4gRml4ZXM6IDM3NDE4YmYxNGMxMyAoImRybTogVXNlIHN0YXRl
-IGhlbHBlciBpbnN0ZWFkIG9mIHRoZSBwbGFuZSBzdGF0ZSBwb2ludGVyIikNCj4gU2lnbmVk
-LW9mZi1ieTogWmVuZyBKaW5neGlhbmcgPGxpbnVzemVuZ0B0ZW5jZW50LmNvbT4NCj4gLS0t
-DQo+ICAgZHJpdmVycy9ncHUvZHJtL2ttYi9rbWJfcGxhbmUuYyB8IDEzICsrKysrKysrLS0t
-LS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9rbWIva21iX3BsYW5lLmMg
-Yi9kcml2ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jDQo+IGluZGV4IDI3MzViOGViMzUz
-Ny4uZDJiYzk5OGI2NWNlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0va21iL2tt
-Yl9wbGFuZS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9rbWIva21iX3BsYW5lLmMNCj4g
-QEAgLTM0MiwxMCArMzQyLDcgQEAgc3RhdGljIHZvaWQga21iX3BsYW5lX3NldF9hbHBoYShz
-dHJ1Y3Qga21iX2RybV9wcml2YXRlICprbWIsDQo+ICAgc3RhdGljIHZvaWQga21iX3BsYW5l
-X2F0b21pY191cGRhdGUoc3RydWN0IGRybV9wbGFuZSAqcGxhbmUsDQo+ICAgCQkJCSAgICBz
-dHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqc3RhdGUpDQo+ICAgew0KPiAtCXN0cnVjdCBkcm1f
-cGxhbmVfc3RhdGUgKm9sZF9wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X29sZF9wbGFu
-ZV9zdGF0ZShzdGF0ZSwNCj4gLQkJCQkJCQkJCQkgcGxhbmUpOw0KPiAtCXN0cnVjdCBkcm1f
-cGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19wbGFu
-ZV9zdGF0ZShzdGF0ZSwNCj4gLQkJCQkJCQkJCQkgcGxhbmUpOw0KPiArCXN0cnVjdCBkcm1f
-cGxhbmVfc3RhdGUgKm9sZF9wbGFuZV9zdGF0ZSwgKm5ld19wbGFuZV9zdGF0ZTsNCj4gICAJ
-c3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmI7DQo+ICAgCXN0cnVjdCBrbWJfZHJtX3ByaXZh
-dGUgKmttYjsNCj4gICAJdW5zaWduZWQgaW50IHdpZHRoOw0KPiBAQCAtMzYwLDcgKzM1Nywx
-MyBAQCBzdGF0aWMgdm9pZCBrbWJfcGxhbmVfYXRvbWljX3VwZGF0ZShzdHJ1Y3QgZHJtX3Bs
-YW5lICpwbGFuZSwNCj4gICAJc3RhdGljIGRtYV9hZGRyX3QgYWRkcltNQVhfU1VCX1BMQU5F
-U107DQo+ICAgCXN0cnVjdCBkaXNwX2NmZyAqaW5pdF9kaXNwX2NmZzsNCj4gICANCj4gLQlp
-ZiAoIXBsYW5lIHx8ICFuZXdfcGxhbmVfc3RhdGUgfHwgIW9sZF9wbGFuZV9zdGF0ZSkNCj4g
-KwlpZiAoIXBsYW5lKQ0KPiArCQlyZXR1cm47DQo+ICsNCj4gKwlvbGRfcGxhbmVfc3RhdGUg
-PSBkcm1fYXRvbWljX2dldF9vbGRfcGxhbmVfc3RhdGUoc3RhdGUsIHBsYW5lKTsNCj4gKwlu
-ZXdfcGxhbmVfc3RhdGUgPSBkcm1fYXRvbWljX2dldF9uZXdfcGxhbmVfc3RhdGUoc3RhdGUs
-IHBsYW5lKTsNCj4gKw0KPiArCWlmICghbmV3X3BsYW5lX3N0YXRlIHx8ICFvbGRfcGxhbmVf
-c3RhdGUpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQo+ICAgCWZiID0gbmV3X3BsYW5lX3N0YXRl
-LT5mYjsNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
-b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
-LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
-ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Thanks,
+Ian
 
---------------sj5f9zrJyPyQK1Z5Zze4SzFW--
-
---------------dFxj7YZV00EUycLoniKD5Q4Y
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLj7VkFAwAAAAAACgkQlh/E3EQov+Ad
-Zg//R4VYlh2BljVqjozhuI2AHSb42lYJ4w8vMJigf0CR6rHQNj3t4FVREFRA6Mgru5ekCUz9+vFy
-SFUwg0kZjMr57vT/iWBzm60DNkUSiizkyNXPpwUxW82m11dhtPjsp7nh5rgHVXlbrTjnQNi2M0QJ
-Qya+EySc8bUy4Oytczg2pGrJXlY48UlNOnLyUI8ZY8B9Qzm7UlqkMmxqrAeFEfhoPDP/jIG27whs
-Y2ip3XcCPtY62+Xj3EiHOsWvCq6cKmJ20u8YRUypij6VuoJWOrJ/vrfj4VwVlEZkP/K/KhOo+5BH
-cK75WSOPzzvIZLkuy/qkwHc8NL941+F2gu4d2BPmjgVNwU3QiTW9ezol8XvS+nB5typ0sEN/LTZ+
-mFfh8BBoY3aGY1eU1LMOBhC6YO0KGglfuDtedFKXYiHim2AvPLt36uvMjDcEfPOLo2HCmx25mlqT
-kkqh0Moe/GR48GW6/soiexuF1NslXd+xvMtOnv+TP0E5e5p4mCysZ6txEmwmJTMpMYwt4VBY32T0
-8fPMTSPi8wE+Ej64reX4Ash+ULxBBpW2S61cVknUajrkZiRFrY7Jph1zNeMslOW7A5t0chx3exIQ
-sPD0xb2VfKH65x9MTsBqfWpS0aiXn9DWdzXsJrbjYvAPS5/YCnkAhEasCX49WyCsmIshjk2TP9p/
-pY0=
-=VE1D
------END PGP SIGNATURE-----
-
---------------dFxj7YZV00EUycLoniKD5Q4Y--
+> >               .cpuid = "testcpu",
+> > -             .version = "v1",
+> > -             .type = "core",
+> >               .table = pme_test_soc_cpu,
+> >       },
+> >       {
+> > +             .arch = 0,
+>
+> Same as above
+>
+> >               .cpuid = 0,
+> > -             .version = 0,
+> > -             .type = 0,
+> >               .table = 0,
+> >       },
+> >   };
+> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> > index e6e6c42c3f8a..98d18d5c3830 100755
+> > --- a/tools/perf/pmu-events/jevents.py
+> > +++ b/tools/perf/pmu-events/jevents.py
+> > @@ -312,8 +312,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
+> >         _args.output_file.write("""{
+> >   \t.arch = "testarch",
+> >   \t.cpuid = "testcpu",
+> > -\t.version = "v1",
+> > -\t.type = "core",
+> >   \t.table = pme_test_soc_cpu,
+> >   },
+> >   """)
+> > @@ -329,8 +327,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
+> >               _args.output_file.write(f"""{{
+> >   \t.arch = "{arch}",
+> >   \t.cpuid = "{cpuid}",
+> > -\t.version = "{row[1]}",
+> > -\t.type = "{row[3]}",
+> >   \t.table = {tblname}
+> >   }},
+> >   """)
+> > @@ -339,8 +335,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
+> >     _args.output_file.write("""{
+> >   \t.arch = 0,
+> >   \t.cpuid = 0,
+> > -\t.version = 0,
+> > -\t.type = 0,
+> >   \t.table = 0,
+> >   }
+> >   };
+> > diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
+> > index 7a360792635f..a491b117c8ac 100644
+> > --- a/tools/perf/pmu-events/pmu-events.h
+> > +++ b/tools/perf/pmu-events/pmu-events.h
+> > @@ -40,8 +40,6 @@ struct pmu_event {
+> >   struct pmu_events_map {
+> >       const char *arch;
+> >       const char *cpuid;
+> > -     const char *version;
+> > -     const char *type;               /* core, uncore etc */
+> >       const struct pmu_event *table;
+> >   };
+> >
+> > diff --git a/tools/perf/tests/expand-cgroup.c b/tools/perf/tests/expand-cgroup.c
+> > index dfefe5b60eb2..dc4038f997d7 100644
+> > --- a/tools/perf/tests/expand-cgroup.c
+> > +++ b/tools/perf/tests/expand-cgroup.c
+> > @@ -197,8 +197,6 @@ static int expand_metric_events(void)
+> >       };
+> >       const struct pmu_events_map ev_map = {
+> >               .cpuid          = "test",
+> > -             .version        = "1",
+> > -             .type           = "core",
+> >               .table          = pme_test,
+> >       };
+> >
+> > diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
+> > index 07b6f4ec024f..1b811a26f4ee 100644
+> > --- a/tools/perf/tests/parse-metric.c
+> > +++ b/tools/perf/tests/parse-metric.c
+> > @@ -81,8 +81,6 @@ static struct pmu_event pme_test[] = {
+> >
+> >   static const struct pmu_events_map map = {
+> >       .cpuid          = "test",
+> > -     .version        = "1",
+> > -     .type           = "core",
+> >       .table          = pme_test,
+> >   };
+> >
+>

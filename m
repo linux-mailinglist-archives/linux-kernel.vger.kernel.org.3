@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94812585227
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C530E585229
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236983AbiG2PNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S236700AbiG2PO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiG2PNv (ORCPT
+        with ESMTP id S231158AbiG2PO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:13:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E719DF69
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC5161B87
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9AAFC433D6;
-        Fri, 29 Jul 2022 15:13:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659107630;
-        bh=yXwKBem/pIh5VcizuE/JJL37vzadKBIwU9OceZYtNwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YhXSlkk8SXs2rVej5JJoT/xtkxn8M0yyI2WG3XtIHH+06+gfFP9DX750bb5wftqgZ
-         oR+4hHTDOl79Z4wHMHmKfxunmKAxqOXgbSRclQ8DId2wl01hpBVs13h234voxLRXuk
-         0D6G4Ow4XBs71JHb+M5oK7G7Awbrj8c6dhFSV8S0=
-Date:   Fri, 29 Jul 2022 17:13:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] soundwire: sysfs: remove sdw_slave_sysfs_init()
-Message-ID: <YuP5K2/egiL/l9yk@kroah.com>
-References: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
- <20220729135041.2285908-4-gregkh@linuxfoundation.org>
- <95dcb89d-bfc7-7bc4-5ec5-04537bc0758d@linux.intel.com>
+        Fri, 29 Jul 2022 11:14:26 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0649DF69;
+        Fri, 29 Jul 2022 08:14:25 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 141so8653981ybn.4;
+        Fri, 29 Jul 2022 08:14:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=/QL5+pAGoJTVkIc1JlAfzpkNJEewyBqE+JMkFocGLnU=;
+        b=IhTgHObsOOl0N6yyk+clVl37SDoIJ+qIMu7gzAmpPevWbXtMAuKVe+UrP4VpO+u/Pp
+         yka0hUQrRrOMwgSBwxe6pkSCRtIrw3NqrT5OFEppl1GWd2ZJ1tq5BvJNtjqWtwoLFYnf
+         bH1Rmw7pP/ciyFKNqJ0zGovQnh2y89MKzKByz0DOpoCxPwUCrkU8pC3Ub2XxCXBnVzRg
+         lSuobuDgTId087MkfSO97XBssGUyGOHX/gygptEUIogj07QPdyOiBNX231nni1lZfBc4
+         y37/Z5Itp8356d5YCJe8t5jao4ujBmpF4x987i54gl6KJ84vhOYvdbBVEtfWan0LYTdU
+         FQAA==
+X-Gm-Message-State: ACgBeo2VOtc1C3IWVbQ2sYMO/EEdPohglcRiTewYYOht49BmX8CfmltO
+        9G9+5X79vD2fgSPQJWEI1UwMa8hc5R+iGUNxn6V9/xwBqTjWjw==
+X-Google-Smtp-Source: AA6agR7B8jbwE/kwU4Jkz5MnFAYcjyg3Ngioc4FsgoC5hEzRd5tbR8tdn6OsyMyXO6idWo2fPKbUuQzLtulW4gy3BLA=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr2881455ybm.482.1659107665140; Fri, 29
+ Jul 2022 08:14:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <95dcb89d-bfc7-7bc4-5ec5-04537bc0758d@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 29 Jul 2022 17:14:14 +0200
+Message-ID: <CAJZ5v0gRQ=DmY-nOO6ZEMF6hX_cSVVL=QX_0Kvo9wtVjwtQh2g@mail.gmail.com>
+Subject: [GIT PULL] Last-minute power management fix for v5.19
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:00:42AM -0500, Pierre-Louis Bossart wrote:
-> 
-> 
-> > diff --git a/drivers/soundwire/sysfs_slave_dpn.c b/drivers/soundwire/sysfs_slave_dpn.c
-> > index c4b6543c09fd..a3fb380ee519 100644
-> > --- a/drivers/soundwire/sysfs_slave_dpn.c
-> > +++ b/drivers/soundwire/sysfs_slave_dpn.c
-> > @@ -283,6 +283,9 @@ int sdw_slave_sysfs_dpn_init(struct sdw_slave *slave)
-> >  	int ret;
-> >  	int i;
-> >  
-> > +	if (!slave->prop.source_ports && !slave->prop.sink_ports)
-> > +		return 0;
-> > +
-> >  	mask = slave->prop.source_ports;
-> >  	for_each_set_bit(i, &mask, 32) {
-> >  		ret = add_all_attributes(&slave->dev, i, 1);
-> 
-> I am struggling with this one since the driver is still adding
-> attributes manually. You mentioned in the other thread that
-> 
-> "
-> That's what the is_visible() callback is for in the groups structure,
-> you determine if the attribute is visable or not at runtime, you don't
-> rely on the driver itself to add/remove attributes, that does not scale
-> and again, is racy.
-> "
-> 
-> I interpret that as "there's still a race here", no?
+Hi Linus,
 
-Yes, there is, BUT as you are creating all of these attributes "on the
-fly" for now, I don't see a simple conversion to fix that up.  Let me do
-these, the easy ones first.  Your dynamic attribute allocations are the
-harder things to do, let me think about those after I've fixed the rest
-of the tree up with the trivial ones :)
+Please pull from the tag
 
-thanks,
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.19-rc9
 
-greg k-h
+with top-most commit d295ad34f236c3518634fb6403d4c0160456e470
+
+ intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
+
+on top of commit e0dccc3b76fb35bb257b4118367a883073d7390e
+
+ Linux 5.19-rc8
+
+to receive a last-minute power management fix for 5.19.
+
+This makes some false positive RCU splats resulting from a recent
+intel_idle driver change go away (Waiman Long).
+
+Thanks!
+
+
+---------------
+
+Waiman Long (1):
+      intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
+
+---------------
+
+ drivers/idle/intel_idle.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)

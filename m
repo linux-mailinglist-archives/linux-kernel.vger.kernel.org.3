@@ -2,169 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDBC5856F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58E85856FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbiG2Wxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S239378AbiG2WzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiG2WxY (ORCPT
+        with ESMTP id S232195AbiG2WzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:53:24 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9D583F35;
-        Fri, 29 Jul 2022 15:53:23 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id e69so4655063iof.5;
-        Fri, 29 Jul 2022 15:53:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qdPiZGCx2gOg+Z8f5WWlV+ALjDbF5Hu969TqFhTswc8=;
-        b=v1qSuFOxS34jl27PtbSR+wiKmL48jw+uYZ1bTR7QkEd7dcNyLhCSjrAZqtu6dsXX9N
-         xMPjNayJQ1P73TNo4ZlD7K3/Zm0F2SOi1E9C5H4T8TNnUcttX9h5oIh7tQRcCfF9fRsW
-         O0zw2q2ntdZgazLnzhxADRw5tX2meLfD0s13J049qdtd2ScuP+nTNrm/psy/1Dv44a30
-         azVsZMkirn1ZiVDaDcljF36N+dHhWdruGyuIuyL/2hphJUZAZMt+aucx8YSxbeN9KWjX
-         P2PvP/Y6a/J+ntSbKm+xkNP0fPP3udgfdXR5yyf9ZugJBxHvta5VU03NBOz8E8gbwEvd
-         XmKg==
-X-Gm-Message-State: AJIora9G4Y2H+CEzY27UOU+Pmv3xThPoVxKF9Gsc7x4nyn5sBG08EDNz
-        +DeZCLy3c6wNnJ8fTQjhKw==
-X-Google-Smtp-Source: AGRyM1tVKy42bKeKa7Lz5BjK7FPG39AaKdNNz7b3gF69f/Zl3T81ORLeG5jHeetLJGrjQH3iD0lfEQ==
-X-Received: by 2002:a5e:a618:0:b0:67c:27b4:1f93 with SMTP id q24-20020a5ea618000000b0067c27b41f93mr1846960ioi.75.1659135202913;
-        Fri, 29 Jul 2022 15:53:22 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r1-20020a92c5a1000000b002ddd1e250c0sm1994579ilt.5.2022.07.29.15.53.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 15:53:22 -0700 (PDT)
-Received: (nullmailer pid 87726 invoked by uid 1000);
-        Fri, 29 Jul 2022 22:53:20 -0000
-Date:   Fri, 29 Jul 2022 16:53:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ryder Lee <ryder.lee@mediatek.com>, Rex-BC.Chen@mediatek.com,
-        TingHan.Shen@mediatek.com, Liju-clr.Chen@mediatek.com,
-        Jian.Yang@mediatek.com
-Subject: Re: [PATCH v2] dt-bindings: PCI: mediatek-gen3: Add support for
- MT8188 and MT8195
-Message-ID: <20220729225320.GA82746-robh@kernel.org>
-References: <20220729033331.3075-1-jianjun.wang@mediatek.com>
+        Fri, 29 Jul 2022 18:55:00 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6D83F35;
+        Fri, 29 Jul 2022 15:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659135300; x=1690671300;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RxGyrQX3VcKrDZrjlFCWR11WzftdxIDuBbyGkk0QBfY=;
+  b=F37/l6QmqEvIN5hKH412uKwqIr3Wz9DLv70I1j+a8z1jEC81DFztcQgN
+   xD2Pi/6EreMSNxKBRlmLakfJAt5p2KEvV3WPANeWID8luG7a5qzlWnKSq
+   W9D0RQHwuDUMW4hdT3CWwgHyjjA8ikPrhCNk05Epa07tYENhFvrBw3FjR
+   SdqCWLIhHO2FYIi0vOoHI6OCGahizjphlvOsyRm3VwyP5o6GSGhrPzk0h
+   Imft2ef+0a4+M29g/Cxh+HjNEmZq/go/iKk3DudbNfQ5kLyqr8uPJvz7P
+   PXdTpfR8pM55ELZ82M7f3SFdhKVoD8mgDgKtcM6SNbcSEw37ahfn7aUKb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="269245423"
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="269245423"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 15:54:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
+   d="scan'208";a="669415484"
+Received: from svdas-mobl.amr.corp.intel.com (HELO [10.209.20.175]) ([10.209.20.175])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 15:54:59 -0700
+Message-ID: <1bcf0b54-6ddf-b343-87c5-f7fd7538759c@intel.com>
+Date:   Fri, 29 Jul 2022 15:54:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729033331.3075-1-jianjun.wang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic> <20220729022851.mdj3wuevkztspodh@desk>
+ <YuPpKa6OsG9e9nTj@zn.tnic> <20220729173609.45o7lllpvsgjttqt@desk>
+ <YuRDbuQPYiYBZghm@zn.tnic> <20220729214627.wowu5sny226c5pe4@desk>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220729214627.wowu5sny226c5pe4@desk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 11:33:31AM +0800, Jianjun Wang wrote:
-> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as MT8192.
+On 7/29/22 14:46, Pawan Gupta wrote:
+> Let me see if there is a way to distinguish between 4. and 5. below:
 > 
-> Also add new clock name "peri_mem" since the MT8188 and MT8195 use clock
-> "peri_mem" instead of "top_133m".
-> 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> ---
-> Changes in v2:
-> Merge two patches into one.
-> ---
->  .../bindings/pci/mediatek-pcie-gen3.yaml      | 51 +++++++++++++++----
->  1 file changed, 40 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 0499b94627ae..038e25ae0be7 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -43,12 +43,16 @@ description: |+
->    each set has its own address for MSI message, and supports 32 MSI vectors
->    to generate interrupt.
->  
-> -allOf:
-> -  - $ref: /schemas/pci/pci-bus.yaml#
-> -
->  properties:
->    compatible:
-> -    const: mediatek,mt8192-pcie
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-pcie
-> +              - mediatek,mt8195-pcie
-> +          - const: mediatek,mt8192-pcie
-> +      - items:
-> +          - const: mediatek,mt8192-pcie
->  
->    reg:
->      maxItems: 1
-> @@ -78,13 +82,7 @@ properties:
->      maxItems: 6
->  
->    clock-names:
-> -    items:
-> -      - const: pl_250m
-> -      - const: tl_26m
-> -      - const: tl_96m
-> -      - const: tl_32k
-> -      - const: peri_26m
-> -      - const: top_133m
-> +    maxItems: 6
->  
->    assigned-clocks:
->      maxItems: 1
-> @@ -126,9 +124,40 @@ required:
->    - interrupts
->    - ranges
->    - clocks
-> +  - clock-names
->    - '#interrupt-cells'
->    - interrupt-controller
->  
-> +allOf:
-> +  - $ref: /schemas/pci/pci-bus.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8188-pcie
-> +              - mediatek,mt8195-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pl_250m
-> +            - const: tl_26m
-> +            - const: tl_96m
-> +            - const: tl_32k
-> +            - const: peri_26m
-> +            - const: peri_mem
-> +    else:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pl_250m
-> +            - const: tl_26m
-> +            - const: tl_96m
-> +            - const: tl_32k
-> +            - const: peri_26m
-> +            - const: top_133m
+>    CPU category				  X86_BUG_MMIO_STALE_DATA	X86_BUG_MMIO_UNKNOWN
+> -----------------------------------------------------------------------------------------------
+> 1. Known affected (in cpu list)			1				0
+> 2. CPUs with HW immunity (MMIO_NO=1)		0				0
+> 3. Other vendors				0				0
+> 4. Older Intel CPUs				0				1
+> 5. Not affected current CPUs (but MMIO_NO=0)	0				?
 
-I'm not sure it's worth enforcing just the last clock name. Just do:
+This seems like something we would need to go back to our colleagues to
+figure out.  Basically, at the time of publishing the
+X86_BUG_MMIO_STALE_DATA papers, what was considered "older"?
 
-enum: [ peri_mem, top_133m ]
-
-And key in the top level.
-
-Rob
+In other words, we need the folks at Intel that did this good work to
+_show_ their work (at least part of it).

@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA2058498D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709E0584990
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiG2CFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S233916AbiG2CFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiG2CFb (ORCPT
+        with ESMTP id S233915AbiG2CFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:05:31 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0028C2654A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:05:29 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso7027682pjo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:05:29 -0700 (PDT)
+        Thu, 28 Jul 2022 22:05:40 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B26479EDB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:05:36 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d3so3349630pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PQPxhecMMGrqgnvl1RYt1P0R5Uvv2aKASwgCAn7Phe8=;
-        b=j5nWXS2yN3xRH2vvBgQIilwdiWeecYwiAszsfvGo+ZmflzeozdenVJVOoJC3cMeVft
-         u8Tz3VEhWSLetIg9GQz+LzvknUDQRMDxjFVGfJY/e2dpb2EqATSyuAiRKBaABEYbHjj+
-         6LtNUvOF+Q1uVxleFDiUoCe80JQv6a9RO5U9w=
+        bh=Qnm397qKOrwfzm1QwV9TIH3ScZHJLkEYcuStD8Q7SkM=;
+        b=elHSEy0VM+Xv5YuY0Lg3YbWgop5ELXqX8GcdMSC0NCpVPoRgJO5waBEexKa3rIC1Y0
+         jy9Li+jjGSanRI0P4n2Tvk02QtYISSwEcqtMnGzza2RhdxamxnEQFXBknfPA4dZGLBSd
+         kINT+Nv+kPr/6rGw+A9lfOU2r56cpOBlu/3Q8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PQPxhecMMGrqgnvl1RYt1P0R5Uvv2aKASwgCAn7Phe8=;
-        b=dc9e6ETonSZ3xDMu1sKnKLAb8/nJGHfVb6m4O6kqDVygGOPfn/HqXEjaQs7hKdfeBP
-         aTk9ULY8DrMOr08osx5NJGtyN0PaLp9vaO81H+shokLTIhULut/ACNmRLrHGdH09vWhR
-         CsjeIp0EA3jwIPzTaDBS0+KH05//rAEyzGdc2GfLrC6pNWWP5PRDq01lmdV7OzJSOAfB
-         jItYPXsKfWPhwHFGn/qrATXkDBHmcryO25Hvs74f+yahtGwXqTXaH9TkOWvJYa2nsO7g
-         zZzOBjzaqjpyvNXRKjjFpLk5n9zEBdcNvkKXgXhK6X2rJfh551JgH4K2Fi+/TErm6fOJ
-         3TjA==
-X-Gm-Message-State: ACgBeo0EdHrGrDSy8bOxEHPrFx+Q3WAY/6oZl2a1uBzTAO7W6Cv/DrU/
-        aH4ZKc84BWjUlpxheqejXpbipQ==
-X-Google-Smtp-Source: AA6agR7BCdlcbu27dD6NFwhWH1isDT1btrN6hUxN8jMKdBhGXsxNwG/13hDnNDx3sjS3iFqZ3ECLwA==
-X-Received: by 2002:a17:902:cec1:b0:16d:c4f2:66c5 with SMTP id d1-20020a170902cec100b0016dc4f266c5mr1664693plg.20.1659060329435;
-        Thu, 28 Jul 2022 19:05:29 -0700 (PDT)
+        bh=Qnm397qKOrwfzm1QwV9TIH3ScZHJLkEYcuStD8Q7SkM=;
+        b=rTHcYB1OdU3R5jTNgYt2hqhOpLfEVzIRizEYqUPVhnYiyoLtXhLEq5uJM0ooptbsLw
+         3FsWvbLiZdMzDV5cAVm+zl7iTjKR6sxlDelzd+snQY4FWxjxu9e9nKyVgTZp5X3HSkye
+         Lc/7HJOc4yLK09R21bwB/d8EFPyh6ZzoMx/2TNVOFylaLxMgyiMGtshALXg+lwnDm5qG
+         HTTV8KxCRpsTXsdHrcYFILtvoFrcYcBhbLvR6iT30gR2KOkfM78DreVLx2ivHwlCgMsq
+         rI0HwstgUw3C7H2C4dYOy5yQjLaFeExCp3Xg+9jnrJHa5D2V3JNbDpETjwuklPf4IKOM
+         lAQw==
+X-Gm-Message-State: ACgBeo14T6bAMuMdHN/rRVySC99QsNFRBzHQjNtdE/fHn809Q879K+/N
+        fqYmGrknloBgzrYO8nhl+BnjzQ==
+X-Google-Smtp-Source: AA6agR6ZwmWWB2HJoI2F3O7RaKnaExn+p5P23PzdYvz5ursyKkvSSxTu0+RF97eWB+aPdq26rkFWKw==
+X-Received: by 2002:a17:902:7612:b0:16d:2dbe:26f2 with SMTP id k18-20020a170902761200b0016d2dbe26f2mr1612786pll.94.1659060335694;
+        Thu, 28 Jul 2022 19:05:35 -0700 (PDT)
 Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id y124-20020a62ce82000000b005258df7615bsm1571901pfg.0.2022.07.28.19.05.22
+        by smtp.gmail.com with ESMTPSA id y124-20020a62ce82000000b005258df7615bsm1571901pfg.0.2022.07.28.19.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 19:05:29 -0700 (PDT)
+        Thu, 28 Jul 2022 19:05:35 -0700 (PDT)
 From:   Daniil Lunev <dlunev@chromium.org>
 To:     Adrian Hunter <adrian.hunter@intel.com>,
         Bart Van Assche <bvanassche@acm.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Daniil Lunev <dlunev@chromium.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Gross <agross@kernel.org>,
         Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
         Daejun Park <daejun7.park@samsung.com>,
-        Eric Biggers <ebiggers@google.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-scsi@vger.kernel.org
-Subject: [PATCH v3 1/2] ufs: add function to check CRYPTO capability
-Date:   Fri, 29 Jul 2022 12:05:07 +1000
-Message-Id: <20220729120216.v3.1.I6b7934b96fff0d5ea22531e57c0a11f0ccd1acd8@changeid>
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v3 2/2] ufs: core: print UFSHCD capabilities in controller's sysfs node
+Date:   Fri, 29 Jul 2022 12:05:08 +1000
+Message-Id: <20220729120216.v3.2.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220729020508.4147751-1-dlunev@chromium.org>
 References: <20220729020508.4147751-1-dlunev@chromium.org>
@@ -84,120 +76,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To align with other capability check functions.
+Allows userspace to check if Clock Scaling, Write Booster and Inline
+Crypto Engine functionality can be enabled.
 
 Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
- drivers/ufs/core/ufshcd-crypto.c | 8 ++++----
- drivers/ufs/host/ufs-mediatek.c  | 2 +-
- drivers/ufs/host/ufs-qcom-ice.c  | 4 ++--
- drivers/ufs/host/ufshcd-pci.c    | 2 +-
- include/ufs/ufshcd.h             | 5 +++++
- 5 files changed, 13 insertions(+), 8 deletions(-)
+---
 
-diff --git a/drivers/ufs/core/ufshcd-crypto.c b/drivers/ufs/core/ufshcd-crypto.c
-index 198360fe5e8e1..f819488bbde14 100644
---- a/drivers/ufs/core/ufshcd-crypto.c
-+++ b/drivers/ufs/core/ufshcd-crypto.c
-@@ -118,7 +118,7 @@ static int ufshcd_crypto_keyslot_evict(struct blk_crypto_profile *profile,
+Changes in v3:
+* Expose each capability individually.
+* Update documentation to represent new scheme.
+
+Changes in v2:
+* Add documentation entry for the new sysfs node.
+
+ Documentation/ABI/testing/sysfs-driver-ufs | 39 ++++++++++++++++++++
+ drivers/ufs/core/ufs-sysfs.c               | 41 ++++++++++++++++++++++
+ 2 files changed, 80 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 6b248abb1bd71..805d76f7d7aef 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1591,6 +1591,45 @@ Description:	This entry shows the status of HPB.
  
- bool ufshcd_crypto_enable(struct ufs_hba *hba)
- {
--	if (!(hba->caps & UFSHCD_CAP_CRYPTO))
-+	if (!ufshcd_is_crypto_supported(hba))
- 		return false;
+ 		The file is read only.
  
- 	/* Reset might clear all keys, so reprogram all the keys. */
-@@ -165,7 +165,7 @@ int ufshcd_hba_init_crypto_capabilities(struct ufs_hba *hba)
- 	 * hasn't advertised that crypto is supported.
- 	 */
- 	if (!(hba->capabilities & MASK_CRYPTO_SUPPORT) ||
--	    !(hba->caps & UFSHCD_CAP_CRYPTO))
-+	    !ufshcd_is_crypto_supported(hba))
- 		goto out;
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
++What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of clock scaling.
++
++		== ============================
++		0  Clock scaling is not enabled.
++		1  Clock scaling is enabled.
++		== ============================
++
++		The file is read only.
++
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/write_booster
++What:		/sys/bus/platform/devices/*.ufs/capabilities/write_booster
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of Write Booster.
++
++		== ============================
++		0  Write Booster can not be enabled.
++		1  Write Booster can be enabled.
++		== ============================
++
++		The file is read only.
++
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/crypto
++What:		/sys/bus/platform/devices/*.ufs/capabilities/crypto
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of Inline Crypto Engine support.
++
++		== ============================
++		0  Inline Crypto Engine can not be used.
++		1  Inline Crypto Engine can be used.
++		== ============================
++
++		The file is read only.
++
+ What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/activation_thld
+ Date:		February 2021
+ Contact:	Avri Altman <avri.altman@wdc.com>
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 0a088b47d5570..4a3e58d545fe5 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -279,6 +279,46 @@ static const struct attribute_group ufs_sysfs_default_group = {
+ 	.attrs = ufs_sysfs_ufshcd_attrs,
+ };
  
- 	hba->crypto_capabilities.reg_val =
-@@ -225,7 +225,7 @@ void ufshcd_init_crypto(struct ufs_hba *hba)
- {
- 	int slot;
- 
--	if (!(hba->caps & UFSHCD_CAP_CRYPTO))
-+	if (!ufshcd_is_crypto_supported(hba))
- 		return;
- 
- 	/* Clear all keyslots - the number of keyslots is (CFGC + 1) */
-@@ -235,6 +235,6 @@ void ufshcd_init_crypto(struct ufs_hba *hba)
- 
- void ufshcd_crypto_register(struct ufs_hba *hba, struct request_queue *q)
- {
--	if (hba->caps & UFSHCD_CAP_CRYPTO)
-+	if (ufshcd_is_crypto_supported(hba))
- 		blk_crypto_register(&hba->crypto_profile, q);
- }
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index beabc3ccd30b3..4bdf6a709126d 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -182,7 +182,7 @@ static int ufs_mtk_hce_enable_notify(struct ufs_hba *hba,
- 			ufs_mtk_host_reset(hba);
- 		}
- 
--		if (hba->caps & UFSHCD_CAP_CRYPTO)
-+		if (ufshcd_is_crypto_supported(hba))
- 			ufs_mtk_crypto_enable(hba);
- 
- 		if (host->caps & UFS_MTK_CAP_DISABLE_AH8) {
-diff --git a/drivers/ufs/host/ufs-qcom-ice.c b/drivers/ufs/host/ufs-qcom-ice.c
-index 745e48ec598f8..180a015b6973d 100644
---- a/drivers/ufs/host/ufs-qcom-ice.c
-+++ b/drivers/ufs/host/ufs-qcom-ice.c
-@@ -161,7 +161,7 @@ static void qcom_ice_optimization_enable(struct ufs_qcom_host *host)
- 
- int ufs_qcom_ice_enable(struct ufs_qcom_host *host)
- {
--	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
-+	if (!ufshcd_is_crypto_supported(host->hba))
- 		return 0;
- 	qcom_ice_low_power_mode_enable(host);
- 	qcom_ice_optimization_enable(host);
-@@ -189,7 +189,7 @@ int ufs_qcom_ice_resume(struct ufs_qcom_host *host)
- {
- 	int err;
- 
--	if (!(host->hba->caps & UFSHCD_CAP_CRYPTO))
-+	if (!ufshcd_is_crypto_supported(host->hba))
- 		return 0;
- 
- 	err = qcom_ice_wait_bist_status(host);
-diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
-index 04166bda41daa..c06ccef348065 100644
---- a/drivers/ufs/host/ufshcd-pci.c
-+++ b/drivers/ufs/host/ufshcd-pci.c
-@@ -89,7 +89,7 @@ static int ufs_intel_hce_enable_notify(struct ufs_hba *hba,
- 				       enum ufs_notify_change_status status)
- {
- 	/* Cannot enable ICE until after HC enable */
--	if (status == POST_CHANGE && hba->caps & UFSHCD_CAP_CRYPTO) {
-+	if (status == POST_CHANGE && ufshcd_is_crypto_supported(hba)) {
- 		u32 hce = ufshcd_readl(hba, REG_CONTROLLER_ENABLE);
- 
- 		hce |= CRYPTO_GENERAL_ENABLE;
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index a92271421718e..ddbf470f8f455 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1005,6 +1005,11 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
- 	return hba->caps & UFSHCD_CAP_WB_EN;
- }
- 
-+static inline bool ufshcd_is_crypto_supported(struct ufs_hba *hba)
++static ssize_t clock_scaling_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
 +{
-+	return hba->caps & UFSHCD_CAP_CRYPTO;
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_clkscaling_supported(hba));
 +}
 +
- #define ufshcd_writel(hba, val, reg)	\
- 	writel((val), (hba)->mmio_base + (reg))
- #define ufshcd_readl(hba, reg)	\
++static ssize_t write_booster_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_wb_allowed(hba));
++}
++
++static ssize_t crypto_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_crypto_supported(hba));
++}
++
++static DEVICE_ATTR_RO(clock_scaling);
++static DEVICE_ATTR_RO(write_booster);
++static DEVICE_ATTR_RO(crypto);
++
++static struct attribute *ufs_sysfs_capabilities_attrs[] = {
++	&dev_attr_clock_scaling.attr,
++	&dev_attr_write_booster.attr,
++	&dev_attr_crypto.attr,
++	NULL
++};
++
++static const struct attribute_group ufs_sysfs_capabilities_group = {
++	.name = "capabilities",
++	.attrs = ufs_sysfs_capabilities_attrs,
++};
++
+ static ssize_t monitor_enable_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+@@ -1134,6 +1174,7 @@ static const struct attribute_group ufs_sysfs_attributes_group = {
+ 
+ static const struct attribute_group *ufs_sysfs_groups[] = {
+ 	&ufs_sysfs_default_group,
++	&ufs_sysfs_capabilities_group,
+ 	&ufs_sysfs_monitor_group,
+ 	&ufs_sysfs_device_descriptor_group,
+ 	&ufs_sysfs_interconnect_descriptor_group,
 -- 
 2.31.0
 

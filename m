@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B73585706
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74DD58570B
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 01:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiG2W7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S239600AbiG2XCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 19:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiG2W7U (ORCPT
+        with ESMTP id S232317AbiG2XCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:59:20 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C190868A1;
-        Fri, 29 Jul 2022 15:59:19 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id j20so1643908ila.6;
-        Fri, 29 Jul 2022 15:59:19 -0700 (PDT)
+        Fri, 29 Jul 2022 19:02:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F38987215;
+        Fri, 29 Jul 2022 16:02:29 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p8so5771370plq.13;
+        Fri, 29 Jul 2022 16:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=yzM0hFgBu1xt2XGwoIjXneNwzi+RimX6tpHZJOB2AP0=;
+        b=ir7GiNB0OtmgqVQSXzwqVX4judqnkcrnIfnBM7W7//ath+Cf1M9QQr/nih9LwFKQhd
+         Xa4dOdcLKH8PZYbt4jwaD8IxZge85e0vQBo1HoGBeCy0J7BiW1VeySTnbOVYrkoKX+6A
+         7+0JYNE4fig26gCwwxYFXn+qMSK1nzbz0xe2LB7wSIoSRGW9ueeAsfCfUhormv1+RLqo
+         LswZMbiHTtZQuUUrL7PB4EvbYbY9X5obMCdQfUCL2+toUnPip+XOfakHrnwvbAiZL2Ix
+         Urh2Os7d4+lQrYQRdzS0KgOU/Ic+0mJ2o30wS16tCE9fM1uwsSN6rTl+ps9VgczAo/2l
+         gTAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qtHVxHIf1ranp5UWH3YvWfj77wihU7UmTQjplZtOLAo=;
-        b=ExMdEO/yc7Q2jjfpUl3Q4BfFMVmdYwbM3yk31ciKSoUvPV9+x3REuNM+o3tCEm/lFK
-         RgqgB08Q06ubYiOlAwOvm5p6POz0aNlrsbehGyOoYs/h+wNcYfuvKA04EgW8HVEl1EXf
-         RCxl4rWs1oRA48rrgoM7xiCadBmMRFdPYmASBqFkUz2tt6hR9P5vKdrTHtoNm/Tk8iWp
-         QGN+YrYVuqbFLmlK0qnhE6l5JDYcJlX4ytnI0UdWjZzSljetmssLPgPcdXadDqmRVOkj
-         Suboj2dhQwBA0KlcOKXIyiR2sDzRXLKBuEAWtbZVxKkmNRVRguFUNPChyvr3HXYYRMLy
-         O4zg==
-X-Gm-Message-State: AJIora9nT66XRht9PzkX7IHlRQqL/Wl/9QGAN/gXwMjfSflbLMmn6dLj
-        yqrLL8/wtKjWgceXWUJ4/w==
-X-Google-Smtp-Source: AGRyM1uImBYJJceitPtvDPkne05B/TOaHpSUK/ydXKTmD9uWheT6PiMogps3kBxE+zuC91ugtcAjAQ==
-X-Received: by 2002:a05:6e02:1c23:b0:2dc:e497:8b12 with SMTP id m3-20020a056e021c2300b002dce4978b12mr2184159ilh.151.1659135558409;
-        Fri, 29 Jul 2022 15:59:18 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056638168500b0033f5e8dab90sm2262072jat.143.2022.07.29.15.59.16
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=yzM0hFgBu1xt2XGwoIjXneNwzi+RimX6tpHZJOB2AP0=;
+        b=tPOfFVIDBBaHaqPRIH3ccp3GyIs4XOfC0lfewCpQ/OP60OV4BAAsC/dXaHxeWtb2La
+         HA4aVB6Wu55QXYf418BqNUQBBbYr3Kx7D6XZGrfz5HMVxbGflB4pfc001EuS7JVMfQC5
+         cXFq5z8LSXUL6kWDc/zFJa+TC+8LvogvSa2I4SLmQInIjzZNvFKjSFuMyUILQePp25P8
+         eXNXiaogy0ydo6TmzySovMMxJRrjiQUrDwjJrhpVyh6IcJ2XPpU3Ab49nEnvegO99Izm
+         jYEh9MzOWpe/tBGEVu8oTowqRVs351oS8AhgYVAFCxGKVD4QmmlZXw5RYNhr929Qweqi
+         22/A==
+X-Gm-Message-State: ACgBeo3w/7bSJd5nC0TEzv7Bb4qNyMArAREV1eRQHAG4W3bfJoUPFvZb
+        mYAyzWuU25hKfT2e/Ish4eU=
+X-Google-Smtp-Source: AA6agR4JUutFcoRxZ6GluGT+YeEGvzGq8+IsI2NnGrU696TA5ppnrURTd2RCObDkpjQ8nrxrV56TXg==
+X-Received: by 2002:a17:903:1110:b0:16b:6968:1d08 with SMTP id n16-20020a170903111000b0016b69681d08mr5994440plh.3.1659135748891;
+        Fri, 29 Jul 2022 16:02:28 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:df80])
+        by smtp.gmail.com with ESMTPSA id x11-20020a1709028ecb00b0016c38eb1f3asm4097730plo.214.2022.07.29.16.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 15:59:17 -0700 (PDT)
-Received: (nullmailer pid 96409 invoked by uid 1000);
-        Fri, 29 Jul 2022 22:59:15 -0000
-Date:   Fri, 29 Jul 2022 16:59:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        MandyJH Liu <mandyjh.liu@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 06/20] dt-bindings: power: mediatek: Add bindings for
- MediaTek SCPSYS
-Message-ID: <20220729225915.GA96357-robh@kernel.org>
-References: <20220729063208.16799-1-tinghan.shen@mediatek.com>
- <20220729063208.16799-7-tinghan.shen@mediatek.com>
+        Fri, 29 Jul 2022 16:02:13 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 29 Jul 2022 13:02:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Namhyung Kim <namhyung@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: Re: [PATCH v2 cgroup/for-5.20] cgroup: Replace
+ cgroup->ancestor_ids[] with ->ancestors[]
+Message-ID: <YuRm8s/CFmGKYPc1@slm.duckdns.org>
+References: <YuQvcCrcgNWbtndU@slm.duckdns.org>
+ <YuRJ7uzKY5/fokH5@slm.duckdns.org>
+ <YuRiQc35guAWcbjt@blackbook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220729063208.16799-7-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YuRiQc35guAWcbjt@blackbook>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 14:31:54 +0800, Tinghan Shen wrote:
-> The System Control Processor System (SCPSYS) has several power
-> management related tasks in the system. Add the bindings for it.
+On Sat, Jul 30, 2022 at 12:42:09AM +0200, Michal Koutný wrote:
+> On Fri, Jul 29, 2022 at 10:58:22AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > @@ -520,8 +520,8 @@ struct cgroup_root {
+> >  	/* The root cgroup.  Root is destroyed on its release. */
+> >  	struct cgroup cgrp;
+> >  
+> > -	/* for cgrp->ancestor_ids[0] */
+> > -	u64 cgrp_ancestor_id_storage;
+> > +	/* for cgrp->ancestors[0] */
+> > +	u64 cgrp_ancestor_storage;
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  .../bindings/mfd/mediatek,mt8195-scpsys.yaml  | 67 +++++++++++++++++++
->  .../power/mediatek,power-controller.yaml      |  2 +-
->  2 files changed, 68 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml
-> 
+> Just noticed, this member is (and was AFAICS) superfluous.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I should have changed the type to struct cgroup * but that's the space into
+which cgroup_root->cgrp->ancestors[] stretch into.
+
+Thanks.
+
+-- 
+tejun

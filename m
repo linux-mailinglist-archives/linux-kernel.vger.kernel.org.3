@@ -2,122 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DDC5848DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B85848DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiG2ACq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 20:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S233111AbiG2AIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbiG2ACl (ORCPT
+        with ESMTP id S230312AbiG2AIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 20:02:41 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 361FD4C62D;
-        Thu, 28 Jul 2022 17:02:41 -0700 (PDT)
-Received: from kbox (unknown [76.135.27.191])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C693820FE893;
-        Thu, 28 Jul 2022 17:02:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C693820FE893
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659052960;
-        bh=5HsiSU6m/N6TMarfRdE3+yKjdjkRJvzIxn0ww+MA5EQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3wnN+IxGKceZ3K5xAhgyW4p7SUtOA5jHr6JAFv1X7+vk02/skz386Uve2498aWq7
-         LiObo1cOVNJrUHdjfE1jJdKCqpjuVWW6DVONZrS6MIDdozga1kI8x8bdqJFc7IoDD2
-         iVsQw6wmdjvybihrILNDnuSbu29/vnz6mZ4wB52I=
-Date:   Thu, 28 Jul 2022 17:02:34 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beaub@linux.microsoft.com
-Subject: Re: tracing/user_events: Tracking broken status and feedback
-Message-ID: <20220729000234.GA2746@kbox>
-References: <20220725231900.GA2389@kbox>
+        Thu, 28 Jul 2022 20:08:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6478D4F6A8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659053280; x=1690589280;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sLJCN07nOnV2nuNqzb0HOazEzWaWF6LVXLLQihWpp9w=;
+  b=bpO+r9xIQViDEHa4un/c/iyK1zh/bUr2Bmo7sp4lkwfAC9GMHyOvvuc2
+   nIKWEtsQP094JeEEhOkbSTp7pEmYQLDwNe1JKLzmvSD1lY5z4VtCdtfRo
+   SHkcB7Qquglnh3Tkw+Pg+JFb/3kkotfeQ/d+t1p0lbAjQzmkhf5h76zm1
+   XlhMTg2ioQopHpn2OTVfcJaywGHx2Vai4IWtM4Vq80sdG4gdIhN+b82ru
+   CYtdYFljGps5ORup0TvQ953y8nvsGnqW78G11EfvWP55KPTh5dLJ+8r4Z
+   DMJhI6nVuVJ2hYMAlmyOQnK6EsMl25lhC4p+7SAlM5KPcsu/rMXUDhuP9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="288668294"
+X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
+   d="scan'208";a="288668294"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 17:07:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,199,1654585200"; 
+   d="scan'208";a="633939516"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Jul 2022 17:07:58 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHDXp-000Akg-22;
+        Fri, 29 Jul 2022 00:07:57 +0000
+Date:   Fri, 29 Jul 2022 08:07:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 5bb6c1d1126ebcbcd6314f80d82f50b021a9e351
+Message-ID: <62e324ca.6nvNaxKYlbWUsm1L%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725231900.GA2389@kbox>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 04:19:00PM -0700, Beau Belgrave wrote:
-> To help keep track of what is required to remove the broken status from
-> user_events I am starting this thread. I would like to use this thread
-> to provide status on the work that has been done so far and to have a
-> discussion about when the broken status can be removed.
-> 
-> Feedback threads from 5.18 version of user_events:
-> 1. https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
-> 2. https://lore.kernel.org/all/1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com/
-> 
-> All the feedback has been addressed in the patchsets 1 and 2 (see below).
-> Here are the details: 
-> 
-> 1. Use bits vs bytes in event enabled memory mappings.
-> Fixed in patchset 1.
-> 
-> 2. Pack ABI structures where size is used.
-> Fixed in patchset 1.
-> 
-> 3. Don't trust user strings for string formatting.
-> Fixed in patchset 1.
-> 
-> 4. Move to refcount APIs vs atomic for tracking references.
-> Fixed in patchset 1.
-> 
-> 5. Ensure event_mutex is held during registration.
-> Fixed in patchset 2.
-> 
-> With these, I believe I have addressed all issues to remove the
-> "broken status".
-> 
-> Here is the list of additional feedback (and status) that I don't believe
-> should have a bearing on removing the "broken status":
-> 
-> 1. Kernel vs user tracers in ABI.
-> This is not done, the plan is to build a libtracepoint library that allows
-> working with both kernel and user tracers in user programs. Steven is
-> working on this at the moment. I don't believe this is required to remove
-> the broken status, but it will help prove the ABI by having it.
-> 
-> No patchset yet.
-> 
-> 2. Container/namespace isolation of events.
-> user_events utilizes tracefs for user facing files in the ABI. I've created
-> an RFC patchset showing how if tracefs offered an isolated directory
-> structure per-namespace the user_events ABI is unaffected. This is true for
-> other ABIs that tracefs hosts, if they would like to integrate. I don't
-> believe this is required to remove the broken status, however, it's useful
-> to have to see how the ABI is unaffected while we work toward enabling
-> isolation within tracing.
-> 
-> See patchset 3.
-> 
-> Patchsets:
-> 1. https://lore.kernel.org/all/20220425184631.2068-1-beaub@linux.microsoft.com/
-> 2. https://lore.kernel.org/all/20220328223225.1992-1-beaub@linux.microsoft.com/
-> 3. https://lore.kernel.org/all/20220707215828.2021-1-beaub@linux.microsoft.com/
-> 
-> Thanks,
-> -Beau
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 5bb6c1d1126ebcbcd6314f80d82f50b021a9e351  Revert "x86/sev: Expose sev_es_ghcb_hv_call() for use by HyperV"
 
-Steven had feedback on patchset 1 here:
-https://lore.kernel.org/all/20220726180115.69320865@gandalf.local.home/
+elapsed time: 797m
 
-I've updated patchset 1 and 3 to address this feedback.
+configs tested: 88
+configs skipped: 2
 
-Updated patchsets:
-1. https://lore.kernel.org/all/20220728233309.1896-1-beaub@linux.microsoft.com/
-3. https://lore.kernel.org/all/20220728235241.2249-1-beaub@linux.microsoft.com/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
--Beau
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                                defconfig
+arc                  randconfig-r043-20220728
+riscv                randconfig-r042-20220728
+s390                 randconfig-r044-20220728
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a013
+powerpc                           allnoconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+arm                              allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+arm64                            allyesconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+s390                       zfcpdump_defconfig
+openrisc                         alldefconfig
+i386                          randconfig-c001
+ia64                        generic_defconfig
+sh                           se7343_defconfig
+arm                            mps2_defconfig
+openrisc                    or1ksim_defconfig
+xtensa                  cadence_csp_defconfig
+mips                           ip32_defconfig
+arc                            hsdk_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                     sh7710voipgw_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+m68k                        m5407c3_defconfig
+powerpc                     taishan_defconfig
+sh                         ap325rxa_defconfig
+powerpc                      tqm8xx_defconfig
+arm                          lpd270_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+hexagon              randconfig-r041-20220728
+hexagon              randconfig-r045-20220728
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+powerpc                 mpc836x_mds_defconfig
+riscv                             allnoconfig
+x86_64                        randconfig-k001
+powerpc                     tqm5200_defconfig
+powerpc                        fsp2_defconfig
+powerpc                      katmai_defconfig
+powerpc                   microwatt_defconfig
+powerpc                      ppc64e_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

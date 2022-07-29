@@ -2,83 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7B758562C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D597758562F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 22:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbiG2Ucy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 16:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S238672AbiG2UdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 16:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiG2Ucv (ORCPT
+        with ESMTP id S229931AbiG2UdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 16:32:51 -0400
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A575FAD1;
-        Fri, 29 Jul 2022 13:32:50 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id r186so4851960pgr.2;
-        Fri, 29 Jul 2022 13:32:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=xrL2XtamT4FT/8smQHiuGpzknBloKpSyaDrKzyKKzI8=;
-        b=feIR/FL8YP1JUzNo1dW3QSvo+YtDDJfeQ7EmogCU0CbrPsNdkte5q6NuHYBjdHnocK
-         hry/f+zg/0Ve8jK7sXkL4ZO5wY+X6ixRtZY+fNtNH2k/T5jkBMuW/KkYyZZEtACg8/Kw
-         GLTsHUqO6MEzvo3AUkaX26kDF8GJzC7+Q9CIacIvg63Dmp5fjOdbENG8Gr/smBf492rc
-         Dh6JBtcTQjIXCNpIvAnHZIPJNUB/2AlCt8qZ4fqoZaYMew670kV26/hnY5It6BF+yIxY
-         DjT7rzZdsW/RO1aaH/hmrFA6XolvTsKHwZcaui/T1290vMAeLkVPejxUB77FvLBZj3x+
-         PjTA==
-X-Gm-Message-State: AJIora+XEyBRGVRUNWmUPnwQaF7JoTe9Wp1W3OvP92waKFVzyBwqS0nP
-        50np9sOMd/aRi+aKv8qJ9gpm/WRgrCk=
-X-Google-Smtp-Source: AGRyM1tfK+Ex8JPsNPlR9sehgbM7kOjECRUhkjL+zNkOKxPYsL0Y9Xauh9Aa7Vitt3rjc1KrjauPng==
-X-Received: by 2002:a63:6c06:0:b0:419:ab8e:e177 with SMTP id h6-20020a636c06000000b00419ab8ee177mr4144562pgc.188.1659126770003;
-        Fri, 29 Jul 2022 13:32:50 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:f090:7a49:3465:6a5? ([2620:15c:211:201:f090:7a49:3465:6a5])
-        by smtp.gmail.com with ESMTPSA id o70-20020a17090a0a4c00b001e29ddf9f4fsm3475340pjo.3.2022.07.29.13.32.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 13:32:49 -0700 (PDT)
-Message-ID: <6ad66ba9-0488-de6d-fec5-0feb5ca92de6@acm.org>
-Date:   Fri, 29 Jul 2022 13:32:47 -0700
+        Fri, 29 Jul 2022 16:33:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2C367162;
+        Fri, 29 Jul 2022 13:33:17 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D83D66019F8;
+        Fri, 29 Jul 2022 21:33:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659126796;
+        bh=JE9yLr73dTeyo3+2VHkB5/L8XO+ZrpQ1qwaLSyUkuP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=orf3OoP6cMCHdWcib7IB2wAeMdOGbEK6ft6Z+GntI0KU9g49SGWJ/Qcv46oaAY75+
+         T04nDQxyq5WokkTk42rCN+zt4i3mvzbJC4fTkinlvO51W5ZWHTJSugmUSlLpVKWWlF
+         hl1zBGz+1KMtiqgknyPeg09tqwVIlt1+PU1tU6HOA3q6dfh3+/oRFtZPJyLm0kuZDE
+         XOx9uuGSEEMIuPst5FeYMuKJEef6jdWyJZH6rwbvtplA+nr4IKXxRHQkuxnhnVS/to
+         I9XEkLQWUWIMl9DC59MYNznXRSGarTQ0PdPgJk9vb3A0nXLuQj9+IPLMORwJYCiAgd
+         vXU2URX4cLYRQ==
+Date:   Fri, 29 Jul 2022 16:33:10 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Subject: Re: [PATCH v8 0/6] Add LVTS architecture thermal
+Message-ID: <20220729203310.b26hcmeharlgiq7v@notapiano>
+References: <20220726135506.485108-1-bchihi@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 4/6] scsi: ufs: wb: Add
- ufshcd_is_wb_buf_flush_allowed()
-Content-Language: en-US
-To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220729045600epcms2p45c0f8a5a0a76c7fe85b0961570de89ce@epcms2p4>
- <20220729045433epcms2p77ff2cdde6ddffd9ab0b0810ebe84f0e5@epcms2p7>
- <20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b@epcms2p7>
- <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
- <CGME20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p1>
- <20220729045656epcms2p1e6912ae09ca2122d4d04854878e19b2c@epcms2p1>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220729045656epcms2p1e6912ae09ca2122d4d04854878e19b2c@epcms2p1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220726135506.485108-1-bchihi@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 21:56, Jinyoung CHOI wrote:
-> The explicit flushing should check the following.
-> 	- UFSHCD_CAP_WB_EN
-> 	- UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
+On Tue, Jul 26, 2022 at 03:55:00PM +0200, Balsam CHIHI wrote:
+> This series moves thermal files related to MediaTek to the mediatek folder.
+> And introduce the new architecture LVTS (low voltage thermal sensor) driver to report
+> the highest temperature in the SoC and record the highest temperature sensor,
+> each sensor as a hot zone.
+> The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+> The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+> can connect up to 7 TSMCUs.
 > 
-> Changed to improve readability.
+> The architecture will be the first to be used on mt8192 and mt8195.
+> 
+> Changelog:
+> Changes in v8:
+>         - Fix Coding style issues
+>         - Rebase to kernel-5.18.rc8
+>         - Rebase on top of these series :
+>           - [RESEND v8 00/19] Cleanup MediaTek clk reset drivers and support SoCs :
+>                 https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
+>           - [PATCH v6 00/12] thermal OF rework :
+>                 https://lore.kernel.org/all/20220722200007.1839356-1-daniel.lezcano@linexp.org/
+>         - Add multi-instance support and SRC Modularization :
+>           - Rewrite DTS and DT bindings
+>             - Add DT bindings for MT8195
+>             - One LVTS node for each HW Domain (AP and MCU)
+>           - One SW Instance for each HW Domain, for each SoC
+>           - Add an SRC file for each SoC (MT8192 and MT8195)
+>           - Add a Kconfig sub-menu entry for each SoC
+>         - Shrink LVTS instance iospace length from 0x1000 to 0x400
+>         - Replace platform_get_resource by platform_get_mem_or_io to get Base Address
+>         - Replace platform_get_resource by platform_get_irq to get Interrupt Number
+>         - Add "lvts_" prefix to functions and structs
+> 
+> Changes in v7:
+>         - Fix coding style issues
+>         - Rewrite dt bindings
+>           - was not accurate
+>           - Use mt8195 for example (instead of mt8192)
+>           - Rename mt6873 to mt8192
+>           - Remove clock name
+>         - Rebased on top of to series:
+>           - https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+>           - https://patchwork.kernel.org/project/linux-pm/list/?series=639386
+> 
+> Changes in v6:
+>         - Remove temperature aggregation (it will be added in another series)
+>         - Update the way to read the temperature (read one sensor instead of all)
+>         - Add support of mt8195
+> 
+> Changes in v5:
+>         - Use 'git mv' for the relocated file.
+> 
+> Changes in v4:
+>         - Rebase to kernel-v5.13-rc1
+>         - Resend
+> 
+> Changes in v3:
+>         - change the expression in the lvts_temp_to_raw to dev_s64.
+> 
+> Changes in v2:
+>         - Rebase to kernel-5.11-rc1.
+>         - sort headers
+>         - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+>         - disconstruct the api of lvts_read_tc_msr_raw.
+>         - add the initial value max_temp = 0 and compare e.q.
+>           in the lvts_read_all_tc_temperature.
+>         - add the return with an invalid number in the lvts_init.
+> 
+> This series depends on [1] and [2].
+> 
+> [1]https://lore.kernel.org/all/20220523093346.28493-1-rex-bc.chen@mediatek.com/
+> [2]https://lore.kernel.org/all/20220722200007.1839356-1-daniel.lezcano@linexp.org/
+> 
+> Alexandre Bailon (2):
+>   dt-bindings: thermal: Add binding document for LVTS thermal
+>     controllers
+>   arm64: dts: mt8195: Add efuse node to mt8195
+> 
+> Michael Kao (3):
+>   thermal: mediatek: Relocate driver to mediatek folder
+>   thermal: mediatek: Add LVTS drivers for SoC theraml zones for mt8192
+>   thermal: mediatek: Add thermal zone settings for mt8195
+> 
+> Tinghan Shen (1):
+>   arm64: dts: mt8195: Add thermal zone
+> 
+>  .../thermal/mediatek,mt8192-lvts.yaml         |  73 ++
+>  .../thermal/mediatek,mt8195-lvts.yaml         |  75 ++
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 131 ++-
+>  drivers/thermal/Kconfig                       |  14 +-
+>  drivers/thermal/Makefile                      |   2 +-
+>  drivers/thermal/mediatek/Kconfig              |  62 ++
+>  drivers/thermal/mediatek/Makefile             |   4 +
+>  drivers/thermal/mediatek/lvts_mt8192.c        | 241 +++++
+>  drivers/thermal/mediatek/lvts_mt8195.c        | 253 +++++
+>  .../{mtk_thermal.c => mediatek/soc_temp.c}    |   2 +-
+>  drivers/thermal/mediatek/soc_temp_lvts.c      | 928 ++++++++++++++++++
+>  drivers/thermal/mediatek/soc_temp_lvts.h      | 366 +++++++
+>  12 files changed, 2138 insertions(+), 13 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8195-lvts.yaml
+>  create mode 100644 drivers/thermal/mediatek/Kconfig
+>  create mode 100644 drivers/thermal/mediatek/Makefile
+>  create mode 100644 drivers/thermal/mediatek/lvts_mt8192.c
+>  create mode 100644 drivers/thermal/mediatek/lvts_mt8195.c
+>  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (99%)
+>  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+>  create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Given that you're adding a driver that supports both mt8192 and mt8195, and also
+the DT thermal nodes for mt8195, maybe you could the DT nodes for mt8192 here as
+well?
+
+Thanks,
+Nícolas

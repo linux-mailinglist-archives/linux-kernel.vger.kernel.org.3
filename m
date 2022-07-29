@@ -2,333 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBAF584CB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A404584CB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 09:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiG2Hdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 03:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S234848AbiG2HeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 03:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbiG2Hdf (ORCPT
+        with ESMTP id S234883AbiG2HeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 03:33:35 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43B380F75;
-        Fri, 29 Jul 2022 00:33:33 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id bh13so3401561pgb.4;
-        Fri, 29 Jul 2022 00:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9LPUFJmXdbFOIoQIzVmevfRqWTjJu2lLo6I95Q1UPKw=;
-        b=WUD07WFZnARhVi+sjFNPLhJNT/I/Wh1irjbf7dzqej0PNm3c/ALfzRITV6LOJlWm8z
-         ml0GkwnM/FJ7sx0iFGWkiHNoJZEerFomh43MoRd2k+zes7/K3JsXCg5x/z2UKB34fYqo
-         eQPzyRBVj2417klaApRGonyHVM+zVY4bsFK3YipQC0T/DdoYpLcSjnEGjcZsloZLU3HK
-         Xl0/+vkHdbBXz5cdTBZDJmsc9PfqLDoQJX/YhHmlvTYgnfZ3SFwrzySIe/hZSTFdTW9n
-         R/jN/G27bOzYGojhi5prMy6pADJOsqwNrUcd9adGo5VoAkOhpm7+PMugQRcTy5fm5DLj
-         JKyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9LPUFJmXdbFOIoQIzVmevfRqWTjJu2lLo6I95Q1UPKw=;
-        b=YJsUGJwSa+Z+rwoOgxrX3i9q63413ULPIgcdtImbLRPbdDPfJvo7ovMn1r1EKCrrp/
-         e9yrt11WSya/+qIipN+GGkZ83/1RBdUP99gquQbw+UUWoVz3g+7bEIS4mA9ORWYOa+HX
-         QZXj7zpYW9mOmqkitrOs67o6n2aMUVM2rDLmLwTm4PqAyTkKQ/N/jCS6aR6Z00nsdVsH
-         Y/diiOy14gKH1XPdg7X6BfLhBpPbTk46XNTykC2aBeMihJpVktn8dSgZ4ilfSKad3aJ9
-         TRBQhJZ6lSzN7f3l9AgVhEpc5+B0cu/ul0qZ5qxovymNVyhe/WAqBYp/fg0aKE2zgAJN
-         KNmQ==
-X-Gm-Message-State: AJIora+DKz+flnfgA6Acn+uY3jvHkwzbip20ACggvcHwhVL8AD2ymScf
-        E4500O8s+J1yikUCswTyIKoPYHBUkhGmX0fzK3U=
-X-Google-Smtp-Source: AGRyM1uhaGzJXep9Xdja2SZuc6uhwT2HtMv09jJUke+i1dvNoYF+pz/J9aN8Phecfo4l7wT0ZE2gM0Gcc2kydRNQLjM=
-X-Received: by 2002:a63:944:0:b0:41a:3744:6c6 with SMTP id 65-20020a630944000000b0041a374406c6mr1978019pgj.375.1659080013097;
- Fri, 29 Jul 2022 00:33:33 -0700 (PDT)
+        Fri, 29 Jul 2022 03:34:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64878049C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:34:12 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oHKVT-0007Pt-Hy; Fri, 29 Jul 2022 09:33:59 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2F80CBD688;
+        Fri, 29 Jul 2022 07:33:55 +0000 (UTC)
+Date:   Fri, 29 Jul 2022 09:33:52 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
+Message-ID: <20220729073352.rfxdyjvttjp7rnfk@pengutronix.de>
+References: <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
+ <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
+ <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+ <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
+ <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
+ <20220728105049.43gbjuctezxzmm4j@pengutronix.de>
+ <20220728125734.1c380d25.max@enpas.org>
+ <CABGWkvo0B8XM+5qLhz3zY2DzyUrEQtQyJnd91VweUWDUcjyr5A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220705123705.764-1-xuewen.yan@unisoc.com> <20220711174629.uehfmqegcwn2lqzu@wubuntu>
- <YsyO9GM9mCydaybo@slm.duckdns.org> <c1426573-92a7-9f0d-a6b8-aa612248b9a9@redhat.com>
- <Ys41ZF5TmSnLLNRB@slm.duckdns.org> <CAB8ipk-8cbur-m733py-cw4bXCt7gkd8gAOXtKO+-fV1B2EeZw@mail.gmail.com>
- <YuGbYCfAG81mZBnN@slm.duckdns.org>
-In-Reply-To: <YuGbYCfAG81mZBnN@slm.duckdns.org>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Fri, 29 Jul 2022 15:33:22 +0800
-Message-ID: <CAB8ipk_gCLtvEahsp2DvPJf4NxRsM8WCYmmH=yTd7zQE+81_Yg@mail.gmail.com>
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
-        Lukasz Luba <Lukasz.Luba@arm.com>, pengcheng.lai@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uvqgmkh7exxi4qsq"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvo0B8XM+5qLhz3zY2DzyUrEQtQyJnd91VweUWDUcjyr5A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun
 
-On Thu, Jul 28, 2022 at 4:09 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
->
-> Can youp please see whether the following patch fixes the problem?
->
+--uvqgmkh7exxi4qsq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have tested the patch, sadly, although the original deadlock call
-stack is gone, there seems to be a new problem.
-I did a preliminary analysis, but no further in-depth analysis. I
-haven't found the root cause yet, but I think I should let you know
-the test results first.
-Once I find the root cause, I'll report back immediately.
-The thread-A is waiting for the cpu_hotplug_lock's writer, but the
-writer is waiting for the readers:
+On 29.07.2022 08:52:07, Dario Binacchi wrote:
+> Hello Marc and Max,
+>=20
+> On Thu, Jul 28, 2022 at 12:57 PM Max Staudt <max@enpas.org> wrote:
+> >
+> > On Thu, 28 Jul 2022 12:50:49 +0200
+> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> > > On 28.07.2022 12:23:04, Dario Binacchi wrote:
+> > > > > > Does it make sense to use the device tree
+> > > > >
+> > > > > The driver doesn't support DT and DT only works for static serial
+> > > > > interfaces.
+> > >
+> > > Have you seen my remarks about Device Tree?
+> >
+> > Dario, there seems to be a misunderstanding about the Device Tree.
+> >
+> > It is used *only* for hardware that is permanently attached, present at
+> > boot, and forever after. Not for dyamically added stuff, and definitely
+> > not for ldiscs that have to be attached manually by the user.
+> >
+> >
+> > The only exception to this is if you have an embedded device with an
+> > slcan adapter permanently attached to one of its UARTs. Then you can
+> > use the serdev ldisc adapter to attach the ldisc automatically at boot.
+>=20
+> It is evident that I am lacking some skills (I will try to fix it :)).
 
-PID: 1106   TASK: ffffff8097e90000  CPU: 7   COMMAND: "OomAdjuster"
- #0 [ffffffc011a23850] __switch_to at ffffffc0081229b4
- #1 [ffffffc011a238b0] __schedule at ffffffc009c824f8
- #2 [ffffffc011a23910] schedule at ffffffc009c82b50
- #3 [ffffffc011a23970] percpu_rwsem_wait at ffffffc00828fbf4
- #4 [ffffffc011a239b0] __percpu_down_read at ffffffc0082901a8
- #5 [ffffffc011a239e0] cpus_read_lock at ffffffc0081dadc8
- #6 [ffffffc011a23a20] cpuset_attach at ffffffc008366f10
- #7 [ffffffc011a23a90] cgroup_migrate_execute at ffffffc00834f808
- #8 [ffffffc011a23b60] cgroup_attach_task at ffffffc0083539f0
- #9 [ffffffc011a23bd0] __cgroup1_procs_write at ffffffc00835f6e8
-#10 [ffffffc011a23c30] cgroup1_tasks_write at ffffffc00835f054
-#11 [ffffffc011a23c60] cgroup_file_write at ffffffc008348b2c
-#12 [ffffffc011a23c90] kernfs_fop_write_iter at ffffffc008754514
-#13 [ffffffc011a23d50] vfs_write at ffffffc008607ac8
-#14 [ffffffc011a23db0] ksys_write at ffffffc008607714
-#15 [ffffffc011a23df0] __arm64_sys_write at ffffffc00860767c
-#16 [ffffffc011a23e10] invoke_syscall at ffffffc00813dcac
-#17 [ffffffc011a23e30] el0_svc_common at ffffffc00813dbc4
-#18 [ffffffc011a23e70] do_el0_svc at ffffffc00813daa8
-#19 [ffffffc011a23e80] el0_svc at ffffffc0098828d8
-#20 [ffffffc011a23ea0] el0t_64_sync_handler at ffffffc00988284c
-#21 [ffffffc011a23fe0] el0t_64_sync at ffffffc008091e44
+We're all here to learn something!
 
-cpu_hotplug_lock = $3 = {
-  rss = {
-    gp_state = 2,
-    gp_count = 1,
-    gp_wait = {
-      lock = {
-        {
-          rlock = {
-            raw_lock = {
-              {
-                val = {
-                  counter = 0
-                },
-                {
-                  locked = 0 '\000',
-                  pending = 0 '\000'
-                },
-                {
-                  locked_pending = 0,
-                  tail = 0
-                }
-              }
-            }
-          }
-        }
-      },
-      head = {
-        next = 0xffffffc00b0eb6a0 <cpu_hotplug_lock+16>,
-        prev = 0xffffffc00b0eb6a0 <cpu_hotplug_lock+16>
-      }
-    },
-    cb_head = {
-      next = 0x0,
-      func = 0x0
-    }
-  },
-  read_count = 0xffffffc00b0a0808 <__percpu_rwsem_rc_cpu_hotplug_lock>,
-  writer = {
-    task = 0xffffff80f303ca00
-  },
-  {
-    waiters = {
-      lock = {
-        {
-          rlock = {
-            raw_lock = {
-              {
-                val = {
-                  counter = 0
-                },
-                {
-                  locked = 0 '\000',
-                  pending = 0 '\000'
-                },
-                {
-                  locked_pending = 0,
-                  tail = 0
-                }
-              }
-            }
-          }
-        }
-      },
-      head = {
-        next = 0xffffffc011a23958,
-        prev = 0xffffffc01430bcb8
-      }
-    },
-    destroy_list_entry = {
-      next = 0x0,
-      prev = 0xffffffc011a23958
-    }
-  },
-  block = {
-    counter = 1
-  }
-}
+> I think it is equally clear that it is not worth going down this path.
 
-PID: 15760  TASK: ffffff80f303ca00  CPU: 5   COMMAND: "test.sh"
- #0 [ffffffc0129639a0] __switch_to at ffffffc0081229b4
- #1 [ffffffc012963a00] __schedule at ffffffc009c824f8
- #2 [ffffffc012963a60] schedule at ffffffc009c82b50
- #3 [ffffffc012963a90] percpu_down_write at ffffffc00828f9d8
- #4 [ffffffc012963ae0] _cpu_down at ffffffc009884550
- #5 [ffffffc012963b40] cpu_device_down at ffffffc0081df814
- #6 [ffffffc012963b60] cpu_subsys_offline at ffffffc008d8dd8c
- #7 [ffffffc012963b90] device_offline at ffffffc008d77124
- #8 [ffffffc012963bd0] online_store at ffffffc008d76d44
- #9 [ffffffc012963c30] dev_attr_store at ffffffc008d7ba30
-#10 [ffffffc012963c60] sysfs_kf_write at ffffffc0087578d0
-#11 [ffffffc012963c90] kernfs_fop_write_iter at ffffffc008754514
-#12 [ffffffc012963d50] vfs_write at ffffffc008607ac8
-#13 [ffffffc012963db0] ksys_write at ffffffc008607714
-#14 [ffffffc012963df0] __arm64_sys_write at ffffffc00860767c
-#15 [ffffffc012963e10] invoke_syscall at ffffffc00813dcac
-#16 [ffffffc012963e30] el0_svc_common at ffffffc00813dbf4
-#17 [ffffffc012963e70] do_el0_svc at ffffffc00813daa8
-#18 [ffffffc012963e80] el0_svc at ffffffc0098828d8
-#19 [ffffffc012963ea0] el0t_64_sync_handler at ffffffc00988284c
-#20 [ffffffc012963fe0] el0t_64_sync at ffffffc008091e44
+If you have a static attached serial devices serdev is the way to go.
+But slcan has so many drawbacks compared to "real" CAN adapters that I
+hope the no one uses them in such a scenario.
 
-Thanks!
-BR
--- 
-xuewen.yan
+> > If you are actively developing for such a use case, please let us know,
+> > so we know what you're after and can help you better :)
+>=20
+> I don't have a use case, other than to try, if possible, to make the driv=
+er
+> autonomous from slcand / slcan_attach for the CAN bus setup.
 
-> Thanks.
->
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 13c8e91d78620..7caefc8af9127 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -2345,6 +2345,38 @@ int task_cgroup_path(struct task_struct *task, char *buf, size_t buflen)
->  }
->  EXPORT_SYMBOL_GPL(task_cgroup_path);
->
-> +/**
-> + * lock_threadgroup - Stabilize threadgroups
-> + *
-> + * cgroup migration operations need the threadgroups stabilized against forks
-> + * and exits, which can be achieved by write-locking cgroup_threadgroup_rwsem.
-> + *
-> + * Note that write-locking threadgdroup_rwsem is nested inside CPU hotplug
-> + * disable. This is because cpuset needs CPU hotplug disabled during ->attach()
-> + * and bringing up a CPU may involve creating new tasks which can require
-> + * read-locking threadgroup_rwsem. If we call cpuset's ->attach() with
-> + * threadgroup_rwsem write-locked with hotplug enabled, we can deadlock by
-> + * cpuset waiting for an on-going CPU hotplug operation which in turn is waiting
-> + * for the threadgroup_rwsem to be released to create new tasks. See the
-> + * following for more details:
-> + *
-> + * http://lkml.kernel.org/r/20220711174629.uehfmqegcwn2lqzu@wubuntu
-> + */
-> +static void lock_threadgroup(void)
-> +{
-> +       cpus_read_lock();
-> +       percpu_down_write(&cgroup_threadgroup_rwsem);
-> +}
-> +
-> +/**
-> + * lock_threadgroup - Undo lock_threadgroup
-> + */
-> +static void unlock_threadgroup(void)
-> +{
-> +       percpu_up_write(&cgroup_threadgroup_rwsem);
-> +       cpus_read_unlock();
-> +}
-> +
->  /**
->   * cgroup_migrate_add_task - add a migration target task to a migration context
->   * @task: target task
-> @@ -2822,7 +2854,6 @@ int cgroup_attach_task(struct cgroup *dst_cgrp, struct task_struct *leader,
->
->  struct task_struct *cgroup_procs_write_start(char *buf, bool threadgroup,
->                                              bool *locked)
-> -       __acquires(&cgroup_threadgroup_rwsem)
->  {
->         struct task_struct *tsk;
->         pid_t pid;
-> @@ -2840,7 +2871,7 @@ struct task_struct *cgroup_procs_write_start(char *buf, bool threadgroup,
->          */
->         lockdep_assert_held(&cgroup_mutex);
->         if (pid || threadgroup) {
-> -               percpu_down_write(&cgroup_threadgroup_rwsem);
-> +               lock_threadgroup();
->                 *locked = true;
->         } else {
->                 *locked = false;
-> @@ -2876,7 +2907,7 @@ struct task_struct *cgroup_procs_write_start(char *buf, bool threadgroup,
->
->  out_unlock_threadgroup:
->         if (*locked) {
-> -               percpu_up_write(&cgroup_threadgroup_rwsem);
-> +               unlock_threadgroup();
->                 *locked = false;
->         }
->  out_unlock_rcu:
-> @@ -2885,7 +2916,6 @@ struct task_struct *cgroup_procs_write_start(char *buf, bool threadgroup,
->  }
->
->  void cgroup_procs_write_finish(struct task_struct *task, bool locked)
-> -       __releases(&cgroup_threadgroup_rwsem)
->  {
->         struct cgroup_subsys *ss;
->         int ssid;
-> @@ -2894,7 +2924,8 @@ void cgroup_procs_write_finish(struct task_struct *task, bool locked)
->         put_task_struct(task);
->
->         if (locked)
-> -               percpu_up_write(&cgroup_threadgroup_rwsem);
-> +               unlock_threadgroup();
-> +
->         for_each_subsys(ss, ssid)
->                 if (ss->post_attach)
->                         ss->post_attach();
-> @@ -2953,7 +2984,7 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
->
->         lockdep_assert_held(&cgroup_mutex);
->
-> -       percpu_down_write(&cgroup_threadgroup_rwsem);
-> +       lock_threadgroup();
->
->         /* look up all csses currently attached to @cgrp's subtree */
->         spin_lock_irq(&css_set_lock);
-> @@ -2984,7 +3015,7 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
->         ret = cgroup_migrate_execute(&mgctx);
->  out_finish:
->         cgroup_migrate_finish(&mgctx);
-> -       percpu_up_write(&cgroup_threadgroup_rwsem);
-> +       unlock_threadgroup();
->         return ret;
->  }
->
+=46rom my point of view your job is done!
+
+> Returning to Marc's previous analysis:
+> "... Some USB CAN drivers query the bit timing const from the USB device."
+>=20
+> Can we think of taking the gs_usb driver as inspiration for getting/setti=
+ng the
+> bit timings?
+>=20
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb=
+=2Ec#L951
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb=
+=2Ec#L510
+>=20
+> and, as done with patches:
+>=20
+> can: slcan: extend the protocol with CAN state info
+> can: slcan: extend the protocol with error info
+
+You can define a way to query bit timing constants and CAN clock rate,
+but you have to get this into the "official" firmware. You have to roll
+out a firmware update to all devices. What about non official firmware?
+
+> further extend the protocol to get/set the bit timing from / to the adapt=
+er ?
+> In the case of non-standard bit rates, the driver would try, depending on=
+ the
+> firmware of the adapter, to calculate and set the bit timings autonomousl=
+y.
+
+If an adapter follows 100% the official firmware doc the BTR registers
+are interpreted as SJA1000 with 8 MHz CAN clock.
+
+See
+
+| https://lore.kernel.org/all/20220728105049.43gbjuctezxzmm4j@pengutronix.de
+
+where I compare the 125 Kbit/s BTR config of the documentation with the
+bit timing calculated by the kernel algorithm.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--uvqgmkh7exxi4qsq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLjjV0ACgkQrX5LkNig
+011JXggAirzTuOAHUICqHeBohgikqNvfpTC2TSgukAcL9Gw2AkuU4P9kXEW/lHTc
+gjVFYxly67MCoBLXjpcbS4tvY4KveQBrD1UdFjka6NmWuSK1cf6TBiv9aw6OCWb+
+tWVgZuVk9SuPCDaHaY0ohfP4XflqH2M+ruFdKuoN2bElkM9gOv9exPCE+etGiVKq
+PnhCVwcGpUn04XqIOcnaIGjjhH68/rOLFnZH8vcV2uzHJ4iCfzok+1i5wZq0pvr6
+PtpHnfomhjtyc+kpzdEVoIz2e6ew1vQkQWchzhrRzrk+bnwMlnOBdvhbbkVecAKd
+oqeuYMqzgnafTco7n6a93CnUEQt/FA==
+=aZAq
+-----END PGP SIGNATURE-----
+
+--uvqgmkh7exxi4qsq--

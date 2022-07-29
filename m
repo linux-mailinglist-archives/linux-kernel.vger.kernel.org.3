@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93ED584A5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3817E584A5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiG2Dvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S234203AbiG2Dvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiG2Dvc (ORCPT
+        with ESMTP id S234127AbiG2Dvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:51:32 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9151D4AD42
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:51:31 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-322b5199358so36593137b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bhvxyYsWTQqC9Gm8wP/8rb/nF1GRUx4/FKdDJYpHwI8=;
-        b=QJC6TIISriSHw4s3GOGwdFqx4V/oFS6/BrSJWZuFqOAYgAx+XjxP+W3NZd+FwwWZDI
-         62NUM0HZZfkMzeyO9q1ELu97xCZB6D8Je9HPvq7JJlhuMq7qM+6GzM2A/jsdu13UV+H7
-         bfl7S5YQTOIkC3/I/DKm1aZsqH6DvqMxBb2aMotvXv010MxUMYKGkb57MHRgb+v5+smc
-         QXsTX2ZdO3rjzpoNP7HR7GlnU7PSkhWL64s/D8NjedPVyEJbNSY7g0sZopwK8basGg/h
-         n9QM/A7tPVpeRDu7VYL/6GSu9vWoHIhWubfPVuE8OCF1r+hibOZOoXvuHwVMLEDfzwuK
-         40LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bhvxyYsWTQqC9Gm8wP/8rb/nF1GRUx4/FKdDJYpHwI8=;
-        b=TUUCqr4erfd+jJPKiUMwFzTq1z8baPslauBPC0AQf/COicQ1A2WFyBDsAsyjwOzF62
-         021xoggm4ppmBp41a17O+/hnAIpRLd34rmKgRdMpOBumwVgtfIjjJb/cCL/cBuN/m9SN
-         sbCah/tu8WGQCoAaL/t2L1g7DJAdRwSOILr6QLpYebZB5ZqT64zLdz3q7wJqWiWPO/6O
-         BWd+KqjlxxwaeUrrMPrJ4wzRYzEF61X4qkd+mJ8rcwElH4xE2HEqWNW6CMaM9Rs5TEb/
-         ZYwi8HjZjsn6Px+rsecWWCGkpmKtmMFEDd0cAw6zVlyi1iwMvXKu6rdekJiIkEvMuv2N
-         5viA==
-X-Gm-Message-State: ACgBeo0PEWzOG0ZZ0bEDy/EJnE1esDGFIft8WPo65F06JWS4pvA47y0d
-        eZxzJhVFOu4ChsBlizuqEdNf5WoFQSpWwxmgoro=
-X-Google-Smtp-Source: AA6agR6Ts/5ETt0ZM3Pvy14Ws59Nn7wtfoIpHbVtVhBjPF6HDnAGkIYCCBJMQLpQ5gibFOpQqk4ll0DkARUSBjczx7o=
-X-Received: by 2002:a0d:da02:0:b0:31c:a0e9:4165 with SMTP id
- c2-20020a0dda02000000b0031ca0e94165mr1564021ywe.439.1659066689699; Thu, 28
- Jul 2022 20:51:29 -0700 (PDT)
+        Thu, 28 Jul 2022 23:51:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D07CB5B;
+        Thu, 28 Jul 2022 20:51:39 -0700 (PDT)
+X-UUID: 7b8fb5f6b6054ae9b4b432e5ec5e4d5b-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:a50d1b30-8045-4e09-b1df-05fae615385b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:d1a6a5d0-841b-4e95-ad42-8f86e18f54fc,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 7b8fb5f6b6054ae9b4b432e5ec5e4d5b-20220729
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 924437438; Fri, 29 Jul 2022 11:51:33 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 29 Jul 2022 11:51:31 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 29 Jul 2022 11:51:30 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tomasz Figa <tfiga@google.com>,
+        <nicolas.dufresne@collabora.com>
+CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5, 0/8] Support H264 multi-core encoder on MT8195
+Date:   Fri, 29 Jul 2022 11:51:21 +0800
+Message-ID: <20220729035129.3634-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220718120149.GD2338@kadam> <20220719055047.322355-3-ztong0001@gmail.com>
- <YtalnN70xXy3PNNN@kroah.com> <CAA5qM4A7-hCf8hZq4M8O5havY29PYqym1_TNrWJvcc-LWbLnmA@mail.gmail.com>
- <YuDdHMaB6jWARQzA@kroah.com>
-In-Reply-To: <YuDdHMaB6jWARQzA@kroah.com>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Thu, 28 Jul 2022 20:51:19 -0700
-Message-ID: <CAA5qM4DHbmTzZ7Yv-zEYx=3bu_TOZ1hKfe5dDgZ7DhG=ZPpORA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] staging: rtl8192u: move debug files to debugfs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,79 +73,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 11:37 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jul 19, 2022 at 11:30:48PM -0700, Tong Zhang wrote:
-> > On Tue, Jul 19, 2022 at 5:53 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Mon, Jul 18, 2022 at 10:50:37PM -0700, Tong Zhang wrote:
-> > > > There are 4 debug files created under /proc/net/[Devname]. Devname could
-> > > > Due to this is purely for debuging as files are created read only,
-> > > > move this to debugfs like other NIC drivers do instead of using procfs.
-> > > > This is also to prepare for address rmmod warn issue.
-> > >
-> > > Minor comments based on good debugfs usage:
-> > >
-> > > > --- a/drivers/staging/rtl8192u/r8192U.h
-> > > > +++ b/drivers/staging/rtl8192u/r8192U.h
-> > > > @@ -1061,6 +1061,9 @@ typedef struct r8192_priv {
-> > > >       struct delayed_work gpio_change_rf_wq;
-> > > >       struct delayed_work initialgain_operate_wq;
-> > > >       struct workqueue_struct *priv_wq;
-> > > > +
-> > > > +     /* debugfs */
-> > > > +     struct dentry *debugfs_dir;
-> > >
-> > > Why do you need to save this dentry?  Can't you just look it up when you
-> > > want to remove the files?
-> > >
-> > > > +void rtl8192_debugfs_init(struct net_device *dev)
-> > > >  {
-> > > > -     struct proc_dir_entry *dir;
-> > > > +     struct dentry *dir;
-> > > > +     struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
-> > >
-> > > No need to cast this.  Same for later on in this file.
-> > >
-> > > > -     if (!rtl8192_proc)
-> > > > +     dir = debugfs_create_dir(dev->name, NULL);
-> > > > +     if (IS_ERR(dir))
-> > > >               return;
-> > >
-> >
-> > I'm reading this code and your comment again.
-> > Adding this check will avoid calling into debugfs_create_file() and 4
-> > function calls and doing checks from there, probably will save a
-> > couple of CPU cycles and avoid branch prediction penalty if there is
-> > any.
-> > I don't think the compiler can optimize for this case though it's not
-> > performance critical. Anyho I personally feel it is better to keep
-> > this.
->
-> It's not an optimization issue, it's a "we never care about the results
-> of a call to debugfs_*() issue".
->
-> That's all, debugfs is intended to be easy to use, and you should never
-> care about the return values of if it worked or not, so your code should
-> not check it and do anything different based on it.
->
-> Yes, it's not like "normal" kernel code, but debugfs is not normal at
-> all, and should never expect to work as it's only for debugging.
+MT8195 has two H264 encoder hardware, named core0 and core1, this two
+cores can encode two input frames separately at the same time to achieve
+higher performance.
 
-Hi Greg,
-Thanks for your review. I am mostly on the same page with you.
-IMHO, since Ubuntu(or Debian derivative in general?) enables debugfs by default,
-I think we need to make those ``debug''' code work although they might
-not be designed to be used like this.
-To my limited knowledge, iotop actually uses debugfs to show IO utilization.
-(There might be more though)
-Anyway, I incorporated your review and sent it as v3.
-Thanks again!
-- Tong
+This series of patches are used to enable the two H264 encoder cores,
+the difference between encoding process before and after enable two
+cores is just like as below:
+As-Is: Synchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+...
+To-Be: Asynchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> job_finish
+..V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> job_finish
+(venc core0 may encode done here, done the encoding result to client)
+V4L2_VIDIOC_QBUF#2 --> device_run(triger encoder) --> job_finish.
 
->
-> thanks,
->
-> greg k-h
+---
+changes compared with v4:
+- reabse to the newer linux media stage tree.
+- remove "mediatek,venc-multi-core" property since sub-device can
+  be probed by of_platform_populate api directly.
+- some modifications for patch v4's review comments.
+
+changes compared with v3:
+- rebase to the newer linux media stage.
+- add a capability to indicate scp firmware support multi-core.
+- probe core0 as main device, core1 as sub-device.
+
+changes compared with v2:
+- update venc core dt-bindings, add two new properties for current
+  usage.
+- parse venc multi_core mode from device tree.
+- rebase to the newer linux media stage.
+
+changes compared with v1:
+- of_platform_populate was used in place of the component framework.
+- new yaml file for venc cores.
+- some modifications for patch v1's review comments.
+---
+
+Irui Wang (8):
+  dt-bindings: media: mediatek: vcodec: Adds encoder cores dt-bindings
+    for mt8195
+  media: mediatek: vcodec: Enable venc dual core usage
+  media: mediatek: vcodec: Refactor venc power manage function
+  media: mediatek: vcodec: Add more extra processing for multi-core
+    encoding
+  media: mediatek: vcodec: Add venc power on/off function
+  media: mediatek: vcodec: Refactor encoder clock on/off function
+  media: mediatek: vcodec: Add multi-core encoding process
+  media: mediatek: vcodec: Return encoding result in asynchronous mode
+
+ .../media/mediatek,vcodec-encoder-core.yaml   | 218 ++++++++++++++++
+ .../media/mediatek,vcodec-encoder.yaml        |   1 -
+ .../media/platform/mediatek/vcodec/Makefile   |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  28 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 113 ++++++--
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.h |  11 +-
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  44 +++-
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.c       | 156 +++++++++++
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.h       |  34 +++
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.c       | 178 +++++++++++--
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |  11 +-
+ .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
+ .../mediatek/vcodec/mtk_vcodec_util.h         |   3 +
+ .../mediatek/vcodec/venc/venc_h264_if.c       | 243 ++++++++++++++----
+ .../mediatek/vcodec/venc/venc_vp8_if.c        |   3 +-
+ .../platform/mediatek/vcodec/venc_drv_if.c    |  75 ++++--
+ .../platform/mediatek/vcodec/venc_drv_if.h    |   6 +
+ .../platform/mediatek/vcodec/venc_vpu_if.c    |   9 +-
+ .../platform/mediatek/vcodec/venc_vpu_if.h    |   3 +-
+ 19 files changed, 1028 insertions(+), 131 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.h
+
+-- 
+2.18.0
+

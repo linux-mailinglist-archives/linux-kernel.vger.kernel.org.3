@@ -2,105 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797C65855B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1535855AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238719AbiG2Tr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S238884AbiG2Tqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiG2Trx (ORCPT
+        with ESMTP id S238755AbiG2Tqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:47:53 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D491067586;
-        Fri, 29 Jul 2022 12:47:50 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 992A0320085B;
-        Fri, 29 Jul 2022 15:47:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 29 Jul 2022 15:47:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1659124069; x=1659210469; bh=gBa96b9MFSOKIkAQUuKyhWNI9
-        gnNQPrOWjHllrefEKQ=; b=DMw+2TH4p+EGsByQMMnfEmDk7MOAFql/S3rJLmwTi
-        HDpDD67r+CqezaXRZ5O4nfFC0E5Xfx3QY7YIjZIhGnGF+LLoFJ3T6xy7PgnO3E9x
-        uUIMY9B9xs+mYGkoGeHHBHYJcXD+lsg/JTyQquYKD6od99tJmjNBHAXy0cl6aED9
-        ZwCIPILC1vCnk4t0+eY3RdbxaEtgftrQLoqy2QjeaAYiuZkAhcAFTrvNJ00kjNaT
-        IAFBHf6+WHqTLyy+0/rZ1tmmoQbjrXFIa4cLt1BbwD1WFu3nSAsRMQqqgGteig1X
-        +94kR4xUnDhQomxw56iVQ9ao/8skkvP+7fxc+LFbV5/sA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1659124069; x=1659210469; bh=gBa96b9MFSOKIkAQUuKyhWNI9gnNQPrOWjH
-        llrefEKQ=; b=1E4CKwbQ5XIjXKz36456d/ffDHyU/2IwHkMxy/1mNazZ4YvRpdU
-        A2ljIqse8I1Vx6yz77SURPN2hJeH4kC0qWCvk8FYJjrXX0elIBNLAyeqSHTiPYt5
-        UWHnX/joR8UXq1Mxvb0O9muJne0xSMrzgmRWNte5+UnOeN2S2kTu5ZrsXR4aIpWw
-        cNM6XfdGz0l1lBaaj8LnT/PeeMkvsQNTE8v1px+YNwxUzgLkJ9U7mUcw7Swjp53S
-        D/9E5Ov+Acey1lzQwZRlRCzQ8MQTOav51rS4ofTppUKzTTdPfV2LjTH6XJetHKI0
-        oQP9hpiXNSkabFVFyFkMO7WkVdZHRIJL7Jw==
-X-ME-Sender: <xms:ZDnkYvbg_5MxdkoycBIWhETxDpUnmN4KB_i4coJUf2HvI2TkXUKfNg>
-    <xme:ZDnkYubozeZg38Zo7jv2EdTU70Pjij4gBHEyEd2mjZfu5nqfK-otl8xwXnWrPGAoP
-    Ta6j0KaCWE37e6-rg>
-X-ME-Received: <xmr:ZDnkYh8mU2Qk6BYVm3k6viPSfRp_ep3iVOjeZ8PTD5mzPJ1pxbl28redj0vjfPW0tWXCXCfvzMJB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddujedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
-    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:ZDnkYlqBHrdT1_g0_b7eiBGaZKtiaB7Aqh2mmYMwg4XyjTn0Z9oGmw>
-    <xmx:ZDnkYqqzb-fq00BTAYrLTtPD3RwgDL2eZ0d2iMCRBz31su013nwGNg>
-    <xmx:ZDnkYrTXmHMNDW6TCjxpKIyNvq7fKdMUFfkduHNq7eiOWKz0WhgOvg>
-    <xmx:ZTnkYjnrrblwJsKW4BtqWiq15cYh6X6FKN2swtfm8fD7TQKKPYjp1w>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 Jul 2022 15:47:48 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: Fix oudated __bpf_skc_lookup() comment
-Date:   Fri, 29 Jul 2022 14:45:41 -0500
-Message-Id: <2c105a1ff3071796189093c536218e44ea3b1aa0.1659122785.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
+        Fri, 29 Jul 2022 15:46:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7267586
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7Uyb73v5rTeGi6O22hmhJ+u8gllUvmeLKJcs+R3V8JY=; b=fGF3arBN3qZwrpge7TrypIPvtU
+        lqSRvYisb02UGydgHErTPZdJUjvC8IilC6S4OQ+JNwa+4MV37da9is0EM6tVOs8imwcccqdsuLEzs
+        qDhvWgPZBdEgI2fiBKwXv6V0Ltaxje17UqBPUroWL4oqJCcrRny9j0na/OoOs0QYjw7k456Tqib0D
+        IgyYXviQHOt808H80OQ1mCYrMjs1yB+Nda4h/F6y2pXpGcrPbns0M8tIn+0mFjJyzoOIWubHkOWn+
+        AD2gJDLSd7cVTdJJOFbvMKeGI4mOoAPF/zGpiPYjfwkMlO23ykt+frY8ddmhWhfKTpz0Jx44jkVbZ
+        vs6YnXnw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oHVwL-0050n0-CU; Fri, 29 Jul 2022 19:46:29 +0000
+Date:   Fri, 29 Jul 2022 20:46:29 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     alexlzhu@fb.com
+Cc:     linux-mm@kvack.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/sys_x86_64: fix VMA alginment for mmap file to THP
+Message-ID: <YuQ5FYWMXLw+LpVA@casper.infradead.org>
+References: <20220729194214.1309313-1-alexlzhu@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729194214.1309313-1-alexlzhu@fb.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function returns a pointer now.
+On Fri, Jul 29, 2022 at 12:42:14PM -0700, alexlzhu@devvm6390.atn0.facebook.com wrote:
+> From: alexlzhu <alexlzhu@fb.com>
+> 
+> With CONFIG_READ_ONLY_THP_FOR_FS, the Linux kernel supports using THPs for
+> read-only mmapped files, such as shared libraries. However, on x86 the
+> kernel makes no attempt to actually align those mappings on 2MB boundaries,
+> which makes it impossible to use those THPs most of the time. This issue
+> applies to general file mapping THP as well as existing setups using
+> CONFIG_READ_ONLY_THP_FOR_FS. This is easily fixed by using the alignment
+> info passed to vm_unmapped_area. The problem can be seen in
+> /proc/PID/smaps where THPeligible is set to 0 on mappings to eligible
+> shared object files as shown below.
 
-Fixes: edbf8c01de5a ("bpf: add skc_lookup_tcp helper")
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- net/core/filter.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5d16d66727fc..866ca05f95e0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6463,8 +6463,6 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
- 
- /* bpf_skc_lookup performs the core lookup for different types of sockets,
-  * taking a reference on the socket if it doesn't have the flag SOCK_RCU_FREE.
-- * Returns the socket as an 'unsigned long' to simplify the casting in the
-- * callers to satisfy BPF_CALL declarations.
-  */
- static struct sock *
- __bpf_skc_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
--- 
-2.37.1
-
+Can't your filesystem just use thp_get_unmapped_area() like
+ext2/ext4/fuse/xfs do?

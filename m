@@ -2,197 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C6B5856EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B155A5856F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbiG2WtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S239543AbiG2WtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiG2WtC (ORCPT
+        with ESMTP id S239510AbiG2WtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:49:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84661054E;
-        Fri, 29 Jul 2022 15:49:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F9E36069C;
-        Fri, 29 Jul 2022 22:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2029C433C1;
-        Fri, 29 Jul 2022 22:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659134940;
-        bh=LkvPfzYtfb9EjP1LAFWhigdFg66QIUbWSN0sx4uuD5U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rIhE8QZHqZkY2dVBmpIWzaOfDZb672NNgWXlQNsS69rJ8P3KUjxsDZxTUIxKDm9+u
-         G4NSbiizBSRcct7TwS6e2ZIInUXS/CxOnm4gIPY87wW7Jtw24BjnrqhoCQyFUmIrM8
-         pIgD8bPiju7uEAovlI/r7oc284DMDdcRyJpth8jltcEUr+3DGZJ0MkJnx/coSs1KXa
-         Tkmi8UxohvDSfh35guDxJ6pj5UvcoM06b0xoeWKrosAHmk7GoShC/efILj+LlrUep8
-         mO02f5HHBLOHTxHDhtmstuIe1keiTRFI7jkDANOxSr1wpb0r7q9NQz6r25kQVQA+7w
-         wjUHd6ZUu4ljQ==
-Received: by mail-yb1-f180.google.com with SMTP id e127so9757059yba.12;
-        Fri, 29 Jul 2022 15:49:00 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3/JwWBDBqMmq+8EQMAMtM9wVPsYeOHOK7ha75oKVsCOBaRR/R1
-        OgWlr6sjd9gXUWBObQ49NNauLQsdbxhp+KkcJcM=
-X-Google-Smtp-Source: AA6agR42WT30UcPMWcAnSW+BY9IARYILzVHBkx7ZY7ZWL7bp4J+x4UkZWsqyY/BK+Ob3MBki6HHkRAC0sguKu/PL3pw=
-X-Received: by 2002:a25:9d8c:0:b0:676:cd19:b236 with SMTP id
- v12-20020a259d8c000000b00676cd19b236mr2019179ybp.257.1659134939828; Fri, 29
- Jul 2022 15:48:59 -0700 (PDT)
+        Fri, 29 Jul 2022 18:49:07 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E4D85F84
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:49:06 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id m7so4676388qkk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9PHjNC5/MEnwibKTgt66y4B8QHXUMZZ8F7xsD/e5vT8=;
+        b=h5vuR3bE9y86uyovtmo+yMSm360p7Vfl+m/49LSoNn6riovGoQldvmVXCT7DMuEA+M
+         IxaHvlgpbrKuzx2KC81SJNf6wnUn5SDvFoEVVZT+mYB5ZvGliFP4XHH3cVBpAOFOrFrD
+         +HlGmxArwenxwq3vCI6EkqRmtcu2JHfggoQLhMQ02F5fv3eM0WUfr+OfmUW1HqKpsrEW
+         u47RbtzG0G/WyvxcmydCuApqYXvYxUxf5TSTMstpcA5rC6TrJdpHCoTL0AWFsqU2NE4N
+         cH2+YQIN6Zw7OPF2QJ+/zrQj2UvKU33Fw8i1un0LliOyo9O6HWW/q8wJcqATrNPgKyrY
+         JcCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9PHjNC5/MEnwibKTgt66y4B8QHXUMZZ8F7xsD/e5vT8=;
+        b=wxqn/rXRvCpYtxvcjqDgJGwvVCaaobOg1X3dOn8SE9l60M8CsF2ErWk8vP9qJvNgsS
+         oRbIoXMMdDcze0R999WgTHdV/K5vvSRrWqEMJ6MnTd+3u4nggZ5JS1H7HitIl6ifGJao
+         qU2rZVshA/eXj89I3xRw74cbEF8Nujk278D4ZRFWBNdkxEf+FUSr8tNZmWxVj+YzWjSO
+         NpehasHE1wMrl1rCLI0vDvi2nxc1+x336AyhK81SooQ64oBtWNv7CNtP5LoibQ0jt+T1
+         GECGUpRhm8ZL31jexSlnfEX+esnko34I2npl3i8OS+iaCCE3F0Mnwam+aZ7sYWo+aYnc
+         M3kw==
+X-Gm-Message-State: AJIora/prDhixVodIRSiNyQ/gnHWcPB27UGPDkbQjcgKfiVmOIhKDTlv
+        +n74gwZZWTxaxK/Fbo9p/lvGZCGzXos6+3XX+iPbCA==
+X-Google-Smtp-Source: AGRyM1uerL6gJ1ZFWTeneCIa8WSwBLci00q0rhU6N0/noz4neg/CzP0j0yv4ifJ1Sjs4tut+nLC5fMrK/suZn65SJSU=
+X-Received: by 2002:a05:620a:f0e:b0:6b5:48f6:91da with SMTP id
+ v14-20020a05620a0f0e00b006b548f691damr4443449qkl.446.1659134945084; Fri, 29
+ Jul 2022 15:49:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727210600.120221-1-logang@deltatee.com> <20220727210600.120221-2-logang@deltatee.com>
- <YuKZmloAcZWY5of8@infradead.org>
-In-Reply-To: <YuKZmloAcZWY5of8@infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 29 Jul 2022 15:48:48 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4jtiuNPzC2aK-Jo80X15AWdYi7HQ2n7YWqVP6Uux3hYg@mail.gmail.com>
-Message-ID: <CAPhsuW4jtiuNPzC2aK-Jo80X15AWdYi7HQ2n7YWqVP6Uux3hYg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] md/raid5: Refactor raid5_get_active_stripe()
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
+References: <CA+khW7iknv0hcn-D2tRt8HFseUnyTV7BwpohQHtEyctbA1k27w@mail.gmail.com>
+ <20220729224254.1798-1-liulin063@gmail.com>
+In-Reply-To: <20220729224254.1798-1-liulin063@gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 29 Jul 2022 15:48:54 -0700
+Message-ID: <CA+khW7iLeSZPweZEz_tfP+LRtpvZbfvstZWgUbNrEDK-Ntxyxw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Do more tight ALU bounds tracking
+To:     Youlin Li <liulin063@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 7:13 AM Christoph Hellwig <hch@infradead.org> wrote:
+On Fri, Jul 29, 2022 at 3:43 PM Youlin Li <liulin063@gmail.com> wrote:
 >
-> On Wed, Jul 27, 2022 at 03:05:56PM -0600, Logan Gunthorpe wrote:
-> > Refactor the raid5_get_active_stripe() to read more linearly in
-> > the order it's typically executed.
-> >
-> > The init_stripe() call is called if a free stripe is found and the
-> > function is exited early which removes a lot of if (sh) checks and
-> > unindents the following code.
-> >
-> > Remove the while loop in favour of the 'goto retry' pattern, which
-> > reduces indentation further. And use a 'goto wait_for_stripe' instead
-> > of an additional indent seeing it is the unusual path and this makes
-> > the code easier to read.
-> >
-> > No functional changes intended. Will make subsequent changes
-> > in patches easier to understand.
+> In adjust_scalar_min_max_vals(), let 32bit bounds learn from 64bit bounds
+> to get more tight bounds tracking. Similar operation can be found in
+> reg_set_min_max().
 >
-> I find the new loop even more confusing than the old one.  I'd go
-> with something like the version below (on top of the whol md-next tree
-> that pulled this in way too fast..)
+> Also, we can now fold reg_bounds_sync() into zext_32_to_64().
+>
+> Before:
+>
+>     func#0 @0
+>     0: R1=ctx(off=0,imm=0) R10=fp0
+>     0: (b7) r0 = 0                        ; R0_w=0
+>     1: (b7) r1 = 0                        ; R1_w=0
+>     2: (87) r1 = -r1                      ; R1_w=scalar()
+>     3: (87) r1 = -r1                      ; R1_w=scalar()
+>     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+>     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
+>     6: (95) exit
+>
+> It can be seen that even if the 64bit bounds is clear here, the 32bit
+> bounds is still in the state of 'UNKNOWN'.
+>
+> After:
+>
+>     func#0 @0
+>     0: R1=ctx(off=0,imm=0) R10=fp0
+>     0: (b7) r0 = 0                        ; R0_w=0
+>     1: (b7) r1 = 0                        ; R1_w=0
+>     2: (87) r1 = -r1                      ; R1_w=scalar()
+>     3: (87) r1 = -r1                      ; R1_w=scalar()
+>     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
+>     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
+>     6: (95) exit
+>
+> Signed-off-by: Youlin Li <liulin063@gmail.com>
 
-This looks good to me. Christoph, would you mind send official patch
-for this?
+Looks good to me. Thanks Youlin.
 
-Thanks,
-Song
+Acked-by: Hao Luo <haoluo@google.com>
 
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 4456ac51f7c53..cd8ec4995a49b 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -811,54 +811,54 @@ static struct stripe_head *__raid5_get_active_stripe(struct r5conf *conf,
->
->         spin_lock_irq(conf->hash_locks + hash);
->
-> -retry:
-> -       if (!noquiesce && conf->quiesce) {
-> -               /*
-> -                * Must release the reference to batch_last before waiting,
-> -                * on quiesce, otherwise the batch_last will hold a reference
-> -                * to a stripe and raid5_quiesce() will deadlock waiting for
-> -                * active_stripes to go to zero.
-> -                */
-> -               if (ctx && ctx->batch_last) {
-> -                       raid5_release_stripe(ctx->batch_last);
-> -                       ctx->batch_last = NULL;
-> -               }
-> -
-> -               wait_event_lock_irq(conf->wait_for_quiescent, !conf->quiesce,
-> -                                   *(conf->hash_locks + hash));
-> -       }
-> +       for (;;) {
-> +               if (!noquiesce && conf->quiesce) {
-> +                       /*
-> +                        * Must release the reference to batch_last before
-> +                        * waiting on quiesce, otherwise the batch_last will
-> +                        * hold a reference to a stripe and raid5_quiesce()
-> +                        * will deadlock waiting for active_stripes to go to
-> +                        * zero.
-> +                        */
-> +                       if (ctx && ctx->batch_last) {
-> +                               raid5_release_stripe(ctx->batch_last);
-> +                               ctx->batch_last = NULL;
-> +                       }
->
-> -       sh = find_get_stripe(conf, sector, conf->generation - previous, hash);
-> -       if (sh)
-> -               goto out;
-> +                       wait_event_lock_irq(conf->wait_for_quiescent,
-> +                                           !conf->quiesce,
-> +                                           *(conf->hash_locks + hash));
-> +               }
->
-> -       if (test_bit(R5_INACTIVE_BLOCKED, &conf->cache_state))
-> -               goto wait_for_stripe;
-> +               sh = find_get_stripe(conf, sector, conf->generation - previous,
-> +                                    hash);
-> +               if (sh)
-> +                       break;
->
-> -       sh = get_free_stripe(conf, hash);
-> -       if (sh) {
-> -               r5c_check_stripe_cache_usage(conf);
-> -               init_stripe(sh, sector, previous);
-> -               atomic_inc(&sh->count);
-> -               goto out;
-> -       }
-> +               if (!test_bit(R5_INACTIVE_BLOCKED, &conf->cache_state)) {
-> +                       sh = get_free_stripe(conf, hash);
-> +                       if (sh) {
-> +                               r5c_check_stripe_cache_usage(conf);
-> +                               init_stripe(sh, sector, previous);
-> +                               atomic_inc(&sh->count);
-> +                               break;
-> +                       }
->
-> -       if (!test_bit(R5_DID_ALLOC, &conf->cache_state))
-> -               set_bit(R5_ALLOC_MORE, &conf->cache_state);
-> +                       if (!test_bit(R5_DID_ALLOC, &conf->cache_state))
-> +                               set_bit(R5_ALLOC_MORE, &conf->cache_state);
-> +               }
->
-> -wait_for_stripe:
-> -       if (noblock)
-> -               goto out;
-> +               if (noblock)
-> +                       break;
->
-> -       set_bit(R5_INACTIVE_BLOCKED, &conf->cache_state);
-> -       r5l_wake_reclaim(conf->log, 0);
-> -       wait_event_lock_irq(conf->wait_for_stripe,
-> -                           is_inactive_blocked(conf, hash),
-> -                           *(conf->hash_locks + hash));
-> -       clear_bit(R5_INACTIVE_BLOCKED, &conf->cache_state);
-> -       goto retry;
-> +               set_bit(R5_INACTIVE_BLOCKED, &conf->cache_state);
-> +               r5l_wake_reclaim(conf->log, 0);
-> +               wait_event_lock_irq(conf->wait_for_stripe,
-> +                                   is_inactive_blocked(conf, hash),
-> +                                   *(conf->hash_locks + hash));
-> +               clear_bit(R5_INACTIVE_BLOCKED, &conf->cache_state);
-> +       }
->
-> -out:
->         spin_unlock_irq(conf->hash_locks + hash);
->         return sh;
->  }
+Hao

@@ -2,289 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFAA585206
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0F8585215
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbiG2PDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S236626AbiG2PIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiG2PDp (ORCPT
+        with ESMTP id S236038AbiG2PID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:03:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008F81582F;
-        Fri, 29 Jul 2022 08:03:41 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LvVyj4VRjz67PfY;
-        Fri, 29 Jul 2022 22:58:53 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 29 Jul 2022 17:03:38 +0200
-Received: from [10.195.35.4] (10.195.35.4) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Jul
- 2022 16:03:37 +0100
-Message-ID: <d8356ddc-56e7-7324-5330-ff2bd54bcba4@huawei.com>
-Date:   Fri, 29 Jul 2022 16:03:36 +0100
+        Fri, 29 Jul 2022 11:08:03 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919AB7F525
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:08:02 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p1so4839644plr.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=CvT5d2Uml4zSYK74zNGu6gfXjeWpkRQwLmz3buaPtes=;
+        b=l6Kkj/TiL0A33Ps7q+Lj2N4BqxMTHm6c5+Hf7aDbC1bWNTo5CGQj2ZGxiT31ad2qCr
+         TUvj+2uAqPqiG0ZExrrTMudERXR+yW1OgUwp8G0RWLXae1TbE9+GFJAaBZlvvwJ1Diw5
+         ca8eaU3YeTw0eQg2JxIVMBi/k0ANOBMnwD5HznKNFIZFljmw1oo5VpFTPBqHY7YgPuQ+
+         7T1xizLPeyX4MYfBYnBBoGRBnUAKWcdfOORA40WO+NGuOnZVa33RR3MxHZZiq9j1YJIL
+         VHr4FgCwpfe+nNEv/LsSJV1FVUOw2jn++bZNS6kDSRmLhX39OmkNXx/N1s+vCDXX1m+n
+         6eKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=CvT5d2Uml4zSYK74zNGu6gfXjeWpkRQwLmz3buaPtes=;
+        b=jltioXDkjZQxagc0ciuNPBwS3G74/OWVLZiPk4LBILhciRbWRVhY++SsQAuS1nD2lT
+         ei+q731QiAGsjjVYiu7FUSiXpimmNsgJWcsDZjly2W7BSF+0oI0wWsrUWJNTDPhueGtW
+         IGa/RixcAybDzgzKXUSpDIwS77BJnDqf973Pdr0a9BPyQN/XMcI1b/Rb82f/+mIOCmdW
+         PAYAimbrod4tut2yWosBD5cGBaFJY154p7g3AXZU9PtOBg1R9QCwttm6wXtrQK7OehNk
+         GCF2FNV+jWK1LwSg1VDwBDYilFIL2Ba9xVilyZWU/uHLEpB86Mx1jG1ZXqpX+uI64DqX
+         xpXQ==
+X-Gm-Message-State: ACgBeo3GEK7w4lpjijP7OBvo4ZwiaO0TXvOPIRcQgDo8B2u+xvABiyGa
+        nyf8TXDdZrq8EP/f5OMSCtzDxQ==
+X-Google-Smtp-Source: AA6agR5Wvr+L32gHkej9UgwrHzDHH7qVdbrxRlzLjnTkIDFbEIEx5UPc7lnO+jzihd9V9k4+U9eIkA==
+X-Received: by 2002:a17:902:ce05:b0:16b:e725:6f6c with SMTP id k5-20020a170902ce0500b0016be7256f6cmr4355459plg.110.1659107281282;
+        Fri, 29 Jul 2022 08:08:01 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b126-20020a621b84000000b0052859441ad3sm2948663pfb.214.2022.07.29.08.08.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 08:08:00 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 15:07:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Fully re-evaluate MMIO caching when
+ SPTE masks change
+Message-ID: <YuP3zGmpiALuXfW+@google.com>
+References: <20220728221759.3492539-1-seanjc@google.com>
+ <20220728221759.3492539-3-seanjc@google.com>
+ <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 00/17] Compress the pmu_event tables
-To:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        "James Clark" <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Kan Liang" <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-CC:     Stephane Eranian <eranian@google.com>
-References: <20220729074351.138260-1-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220729074351.138260-1-irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.35.4]
-X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/07/2022 08:43, Ian Rogers wrote:
-> jevents.py creates a number of large arrays from the json events. The
-> arrays contain pointers to strings that need relocating. The
-> relocations have file size, run time and memory costs. These changes
-> refactor the pmu_events API so that the storage of the pmu_event
-> struct isn't exposed. The format is then changed to an offset within a
-> combined big string, with adjacent pmu_event struct variables being
-> next to each other in the string separated by \0 - meaning only the
-> first variable of the struct needs its offset recording.
+On Fri, Jul 29, 2022, Kai Huang wrote:
+> On Thu, 2022-07-28 at 22:17 +0000, Sean Christopherson wrote:
+> > Fully re-evaluate whether or not MMIO caching can be enabled when SPTE
+> > masks change; simply clearing enable_mmio_caching when a configuration
+> > isn't compatible with caching fails to handle the scenario where the
+> > masks are updated, e.g. by VMX for EPT or by SVM to account for the C-bit
+> > location, and toggle compatibility from false=>true.
+> > 
+> > Snapshot the original module param so that re-evaluating MMIO caching
+> > preserves userspace's desire to allow caching.  Use a snapshot approach
+> > so that enable_mmio_caching still reflects KVM's actual behavior.
+> > 
+
+..
+
+> > @@ -340,6 +353,12 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask)
+> >  	BUG_ON((u64)(unsigned)access_mask != access_mask);
+> >  	WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
+> >  
+> > +	/*
+> > +	 * Reset to the original module param value to honor userspace's desire
+> > +	 * to (dis)allow MMIO caching.  Update the param itself so that
+> > +	 * userspace can see whether or not KVM is actually using MMIO caching.
+> > +	 */
+> > +	enable_mmio_caching = allow_mmio_caching;
 > 
-> Some related fixes are contained with the patches. The architecture
-> jevents.py creates tables for can now be set by the JEVENTS_ARCH make
-> variable, with a new 'all' that generates the events and metrics for
-> all architectures.
+> I think the problem comes from MMIO caching mask/value are firstly set in
+> kvm_mmu_reset_all_pte_masks() (which calls kvm_mmu_set_mmio_spte_mask() and may
+> change enable_mmio_caching), and later vendor specific code _may_ or _may_not_
+> call kvm_mmu_set_mmio_spte_mask() again to adjust the mask/value.  And when it
+> does, the second call from vendor specific code shouldn't depend on the
+> 'enable_mmio_caching' value calculated in the first call in 
+> kvm_mmu_reset_all_pte_masks().
 
-Hi Ian,
+Correct.
 
-I am going through this series currently.
+> Instead of using 'allow_mmio_caching', should we just remove
+> kvm_mmu_set_mmio_spte_mask() in kvm_mmu_reset_all_pte_masks() and enforce vendor
+> specific code to always call kvm_mmu_set_mmio_spte_mask() depending on whatever
+> hardware feature the vendor uses?
 
-But I just wanted to mention my idea again on how to compress the 
-tables. Maybe you thought that there was no value in my idea or didn't 
-get it, but I'll mention it again just in case...
+Hmm, I'd rather not force vendor code to duplicate the "basic" functionality.
+It's somewhat silly to preserve the common path since both SVM and VMX need to
+override it, but on the other hand those overrides are conditional.
 
-Background:
-There is much duplication in events between cores. And currently we have 
-something like this:
+Case in point, if I'm reading the below patch correctly, svm_shadow_mmio_mask will
+be left '0' if the platform doesn't support memory encryption (svm_adjust_mmio_mask()
+will bail early).  That's a solvable problem, but then I think KVM just ends up
+punting this issue to SVM to some extent.
 
-pmu-events/pmu-events.c:
-struct pmu_event core0[] {
-{
-	.name = event0,
-	.event = "event=0x0",
-},
-{
-	.name = event1,
-	.event = "event=0x1",
-},
-{
-	.name = event2,
-	.event = "event=0x2",
-	.desc = "event2 common desc",
-},
-...
-};
+Another flaw in the below patch is that enable_mmio_caching doesn't need to be
+tracked on a per-VM basis.  VMX with EPT can have different masks, but barring a
+massive change in KVM or hardware, there will never be a scenario where caching is
+enabled for one VM but not another.
 
-struct pmu_event core1[] {
-{
-	.name = event0,
-	.event = "event=0x0",
-},
-{
-	.name = event1,
-	.event = "event=0x1",
-},
-{
-	.name = event2,
-	.event = "event=0x2",
-	.desc = "event2 desc for core1",
-},
-...
-};
+And isn't the below patch also broken for TDX?  For TDX, unless things have changed,
+the mask+value is supposed to be SUPPRES_VE==0 && RWX==0.  So either KVM is generating
+the wrong mask (MAXPHYADDR < 51), or KVM is incorrectly marking MMIO caching as disabled
+in the TDX case.
 
+Lastly, in prepration for TDX, enable_mmio_caching should be changed to key off
+of the _mask_, not the value.  E.g. for TDX, the value will be '0', but the mask
+should be SUPPRESS_VE | RWX.
 
-struct pmu_evenets_map map[] = {
-{
-	.cpuid = "0000",
-	.table = core0,
-},
-{
-	.cpuid = "0001",
-	.table = core1,
-},
-...
-};
-
-If you check broadwell and broadwellde frontent.json you will notice 
-that they are identical, which is an extreme example of duplication.
-
-Proposal for change:
-Make each event in the per-core pmu event table point to common event. 
-Each common event is unique, and each event per-core will point to a 
-common event. So if 2x cores have same event but small difference, then 
-there would be still 2x common events.
-
-pmu-events/pmu-events.c:
-struct pmu_event common_events[] {
-{
-	.name = event0,
-	.event = "event=0x0",
-},
-{
-	.name = event1,
-	.event = "event=0x1",
-},
-{
-	.name = event2,
-	.event = "event=0x2",
-	.desc = "event2 common desc",
-},
-{
-	.name = event2,
-	.event = "event=0x2",
-	.desc = "event2 desc for core1",
-},
-...
-};
-
-struct pmu_event_ptr {
-	struct pmu_event *pmu_event;
-}
-
-struct pmu_event_ptr core0[] {
-{
-	.pmu_event = &common_events[0],
-},
-{
-	.pmu_event = &common_events[1],
-},
-{
-	.pmu_event = &common_events[2],
-},
-...
-};
-
-struct pmu_event_ptr core0[] {
-{
-	.pmu_event = &common_events[0],
-},
-{
-	.pmu_event = &common_events[1],
-},
-{
-	.pmu_event = &common_events[3],
-},
-...
-};
-
-struct pmu_evenets_map map[] = {
-{
-	.cpuid = "0000",
-	.table = core0,
-},
-{
-	.cpuid = "0001",
-	.table = core1,
-},
-...
-};
-
-For x86, first step in JSON parsing would be to go through the JSON 
-files and compile a list of unique events. Then second step is to 
-process each per-core JSON to create the pmu events table, using the 
-common events. Using a per common event hash would make the lookup quicker.
-
-I'm not sure what you think. From figures below you seem to be saving 
-~20% at best - I would guess (with a capital G) that my method could 
-save a lot more.
-
-This implementation would require core pmu.c to be changed, but there is 
-ways that this could be done without needing to change core pmu.c
-
-Thanks,
-John
-
+> I am suggesting this way because in Isaku's TDX patch
 > 
-> An example of the improvement to the file size on x86 is:
-> no jevents - the same 19,788,464bytes
-> x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
-> all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
-> default build options plus NO_LIBBFD=1.
+> [PATCH v7 037/102] KVM: x86/mmu: Track shadow MMIO value/mask on a per-VM basis
 > 
-> I originally suggested fixing this problem in:
-> https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
+> we will enable per-VM MMIO mask/value, which will remove global
+> shadow_mmio_mask/shadow_mmio_value, and I am already suggesting something
+> similar:
 > 
-> v3. Fix an ARM build issue with a missed weak symbol. Perform some
->      pytype clean up.
-> v2. Split the substring folding optimization to its own patch and
->      comment tweaks as suggested by Namhyung Kim
->      <namhyung@kernel.org>. Recompute the file size savings with the
->      latest json events and metrics.
+> https://lore.kernel.org/all/20220719084737.GU1379820@ls.amr.corp.intel.com/
 > 
-> Ian Rogers (17):
->    perf jevents: Clean up pytype warnings
->    perf jevents: Simplify generation of C-string
->    perf jevents: Add JEVENTS_ARCH make option
->    perf jevent: Add an 'all' architecture argument
->    perf jevents: Remove the type/version variables
->    perf jevents: Provide path to json file on error
->    perf jevents: Sort json files entries
->    perf pmu-events: Hide pmu_sys_event_tables
->    perf pmu-events: Avoid passing pmu_events_map
->    perf pmu-events: Hide pmu_events_map
->    perf test: Use full metric resolution
->    perf pmu-events: Move test events/metrics to json
->    perf pmu-events: Don't assume pmu_event is an array
->    perf pmu-events: Hide the pmu_events
->    perf metrics: Copy entire pmu_event in find metric
->    perf jevents: Compress the pmu_events_table
->    perf jevents: Fold strings optimization
-> 
->   tools/perf/arch/arm64/util/pmu.c              |   4 +-
->   tools/perf/pmu-events/Build                   |   6 +-
->   .../arch/test/test_soc/cpu/metrics.json       |  64 +++
->   tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
->   tools/perf/pmu-events/jevents.py              | 495 ++++++++++++++----
->   tools/perf/pmu-events/pmu-events.h            |  40 +-
->   tools/perf/tests/expand-cgroup.c              |  25 +-
->   tools/perf/tests/parse-metric.c               |  77 +--
->   tools/perf/tests/pmu-events.c                 | 466 +++++++----------
->   tools/perf/util/metricgroup.c                 | 275 ++++++----
->   tools/perf/util/metricgroup.h                 |   5 +-
->   tools/perf/util/pmu.c                         | 139 ++---
->   tools/perf/util/pmu.h                         |   8 +-
->   tools/perf/util/s390-sample-raw.c             |  50 +-
->   14 files changed, 1140 insertions(+), 718 deletions(-)
->   create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
-> 
-

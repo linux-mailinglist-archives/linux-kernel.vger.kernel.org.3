@@ -2,195 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04415853B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF045853B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbiG2Qmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        id S237989AbiG2Qn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237824AbiG2Qml (ORCPT
+        with ESMTP id S236744AbiG2QnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:42:41 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816D445F77;
-        Fri, 29 Jul 2022 09:42:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=I0sePq6rCVZfxouy1PxONZQBMjMeOXI8wteh+r/gn/A=; b=HWxurkv2DxU+7ybwyuSLZWFljF
-        QkbcSMRl/25e9R993s3MWb3G/0c+WzjaL9cygJeq1nksguusQKWJcL4rit/6MbKMfTn4rB2BvL1pb
-        G+CoLMdBn6w5+hM4kypJITdSari9sUOeTuc9ZbKsrVd96NKkOClHJy5d0DSV8iH4bjbmZ5Fjf5D4p
-        CTj1j0JgLCGGQ1Ga6PO6AUowNMcO4KouA5VjR7o8xbC9wFYI1tVBLYh6yr1qqhkUMQ3bYGdEpG2ul
-        DMHP/eFq97VC2AT50Fz9Y0uvFTFByhO5GkFeGQnMrVeQrV8ad7Vx0vEL9VpXlL+u6ChIJN/MmgEJ6
-        p078m2Vw==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oHT41-00BAtH-OR; Fri, 29 Jul 2022 18:42:13 +0200
-Date:   Fri, 29 Jul 2022 15:42:00 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, Guenter Roeck <linux@roeck-us.net>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH v2] drm/tests: Split up test cases in
- igt_check_drm_format_min_pitch
-Message-ID: <20220729164200.tigobs62ylfjk3hs@mail.igalia.com>
-References: <20220729124726.748221-1-mairacanal@riseup.net>
+        Fri, 29 Jul 2022 12:43:24 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEE721251;
+        Fri, 29 Jul 2022 09:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659113003; x=1690649003;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=rtqlWzoBg32+YUKG0SS5QWN9yxKR8MwGAO832LwRtmg=;
+  b=R6sZN6wZUpLNbyaurM/YQOmVc7E9htuKOOghqdRgzQL4ZgSMKoRzUpfw
+   p2ySSiQxBoiSdYecFQOx6LwnBBO/nnPeNlQp0uamb3+CQAI/TG27BcLmJ
+   OBN8Pj47UD81mgcsaKBPQvGF8xf0rmTIw1maAY18cM/+7BVk4li+00zZI
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Jul 2022 09:43:23 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 09:43:22 -0700
+Received: from [10.110.38.152] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Jul
+ 2022 09:43:22 -0700
+Message-ID: <59e835e6-b694-07c5-16a1-5f7774fc4177@quicinc.com>
+Date:   Fri, 29 Jul 2022 09:43:21 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="us3k4w46mzsadc3u"
-Content-Disposition: inline
-In-Reply-To: <20220729124726.748221-1-mairacanal@riseup.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+From:   "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        John Garry <john.garry@huawei.com>,
+        Can Guo <quic_cang@quicinc.com>, <stanley.chu@mediatek.com>,
+        <adrian.hunter@intel.com>, <alim.akhtar@samsung.com>,
+        <avri.altman@wdc.com>, <beanhuo@micron.com>,
+        <quic_nguyenb@quicinc.com>, <quic_ziqichen@quicinc.com>,
+        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>
+CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
+ <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+ <f93045ec-569c-bd09-3617-d7d7aca4e5cd@huawei.com>
+ <ea33dee8-673c-0716-1640-28df7c983ca7@quicinc.com>
+ <10288041-8c3d-7e3a-9049-10b9fcd8baed@acm.org>
+ <6da1447d-01d6-222e-fc98-7e96b154d2d0@quicinc.com>
+In-Reply-To: <6da1447d-01d6-222e-fc98-7e96b154d2d0@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bart,
 
---us3k4w46mzsadc3u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/28/2022 2:07 PM, Asutosh Das (asd) wrote:
+> On 7/28/2022 1:29 PM, Bart Van Assche wrote:
+>> On 7/28/22 12:15, Asutosh Das (asd) wrote:
+>>> Hello John,
+>>>
+>>> On 7/28/2022 12:10 PM, John Garry wrote:
+>>>> On 19/07/2022 08:01, Can Guo wrote:
+>>>>> +
+>>>>> +    hba->nr_queues[HCTX_TYPE_DEFAULT] = num_possible_cpus();
+>>>>> +    hba->nr_queues[HCTX_TYPE_READ] = 0;
+>>>>> +    hba->nr_queues[HCTX_TYPE_POLL] = 1;
+>>>>> +
+>>>>> +    for (i = 0; i < HCTX_MAX_TYPES; i++)
+>>>>> +        host->nr_hw_queues += hba->nr_queues[i];
+>>>>> +
+>>>>> +    host->can_queue = hba->nutrs;
+>>>>> +    host->cmd_per_lun = hba->nutrs;
+>>>>> +
+>>>>> +    /* One more reserved for dev_cmd_queue */
+>>>>> +    hba->nr_hw_queues = host->nr_hw_queues + 1;
+>>>>> +
+>>>>
+>>>> So this would mean that the host can accept .can_queue * 
+>>>> .nr_hw_queues numbers of requests simultaneously - is that true?
+>>>
+>>> That would mean that .can_queue * .nr_hw_queues numbers of request 
+>>> may be queued to the host.
+>>> Please can you elaborate if you see an issue.
+>>
+>> Hi Asutosh,
+>>
+>> The `host_tagset` flag has been introduced by John and Hannes some 
+>> time ago. See also commit bdb01301f3ea ("scsi: Add host and host 
+>> template flag 'host_tagset'"). This flag supports sharing tags across 
+>> hardware queues and could be used to support UFSHCI 4.0 controllers 
+>> that do not support the EXT_IID feature.
+>>
+>> In order not to complicate the implementation further, I propose to 
+>> fall back to the UFSHCI 3.0 compatibility mode for UFSHCI 4.0 
+>> controllers that do not support the EXT_IID feature.
+>>
+>> To answer John's question: the maximum number of outstanding commands 
+>> is 16 * hba->nutrs if EXT_IID is supported (EXT_IID is a four bits 
+>> field). If the hardware queue index is encoded in the EXT_IID field, 
+>> hba->nutrs is the number of commands per hardware queue.
+>>
+>> Thanks,
+>>
+>> Bart.
+> 
+> Thanks Bart, I wasn't aware of the background of John's Q. I will 
+> consider your proposal and get back.
+> 
 
-On 07/29, Ma=EDra Canal wrote:
-> The igt_check_drm_format_min_pitch() function had a lot of
-> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
-> various test assertion structures on the stack.
->=20
-> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
-> and MIPS architectures, such as:
->=20
-> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_forma=
-t_min_pitch':
-> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
-> 3712 bytes is larger than 2048 bytes
->=20
-> So, the igt_check_drm_format_min_pitch() test case was split into three
-> smaller functions: one testing single plane formats, one testing
-> multi-planar formats, and the other testing tiled formats.
->=20
-> Fixes: 0421bb0baa84 ("drm: selftest: convert drm_format selftest to KUnit=
-")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Andr=E9 Almeida <andrealmeid@igalia.com>
+I went through the change and fwiu of your proposal is to use 
+host_tagset = 1 if HC doesn't support EXT_IID capability.
+That way tags would be shared across 16 HWQs (4-bit IID encoding the 
+queue-ids).
+That would also mean that the hba->nutrs would have to be adjusted such 
+that the tags(8-bit) don't exceed 255.
 
-Applied to drm-misc-next
+Summarily,
+if EXT_IID is not supported:
+host_tagset = 1, maximum configurable hba->nutrs = 16, maximum 
+configurable nr_hw_queues = 16.
+maximum number of outstanding commands to host = 16 x 16 = 256.
 
-Thanks,
+if EXT_IID is supported:
+host_tagset = 0, maximum confiugrable hba-nutrs = 255, maximum 
+configurable nr_hw_queues = 255.
 
-Melissa
-> ---
-> v1 -> v2:
-> - Add Guenter's Tested-by tag.
-> - Add Andr=E9's Reviewed-by tag.
-> - Replace "multiple planes" for "multi-planar" (Andr=E9 Almeida).
-> - Add Fixes tag (Melissa Wen).
-> ---
->  drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/te=
-sts/drm_format_test.c
-> index 056cb8599d6d..afb4bca72187 100644
-> --- a/drivers/gpu/drm/tests/drm_format_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_test.c
-> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct ku=
-nit *test)
->  	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
->  }
-> =20
-> -static void igt_check_drm_format_min_pitch(struct kunit *test)
-> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit=
- *test)
->  {
->  	const struct drm_format_info *info =3D NULL;
-> =20
-> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct ku=
-nit *test)
->  			(uint64_t)UINT_MAX * 4);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)=
-),
->  			(uint64_t)(UINT_MAX - 1) * 4);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_multi_planar(struct kunit=
- *test)
-> +{
-> +	const struct drm_format_info *info =3D NULL;
-> =20
->  	/* Test 2 planes format */
->  	info =3D drm_format_info(DRM_FORMAT_NV12);
-> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct ku=
-nit *test)
->  			(uint64_t)(UINT_MAX - 1) / 2);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1)=
- / 2),
->  			(uint64_t)(UINT_MAX - 1) / 2);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit=
- *test)
-> +{
-> +	const struct drm_format_info *info =3D NULL;
-> =20
->  	/* Test tiled format */
->  	info =3D drm_format_info(DRM_FORMAT_X0L2);
-> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kun=
-it *test)
->  static struct kunit_case drm_format_tests[] =3D {
->  	KUNIT_CASE(igt_check_drm_format_block_width),
->  	KUNIT_CASE(igt_check_drm_format_block_height),
-> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multi_planar),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
->  	{ }
->  };
-> =20
-> --=20
-> 2.37.1
->=20
+Please let me know if I'm missing something.
 
---us3k4w46mzsadc3u
-Content-Type: application/pgp-signature; name="signature.asc"
+Thank you,
+-asd
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLkDcoACgkQwqF3j0dL
-ehxEEg/+OchgHJgfQDSDNvSuoU6LSFztXLcnsmVB1tAc0/mhQZGml7wGaqof2SAn
-AthWTU8hPxjS6IP2xg+8GnhAagJVSDTbKr8nBGd8jguGtYAC+MeoK1ow+UYPgERH
-XUFZ6IYGtEHanOfw4UXsczgUsTOsxmAsHjAlVmeikCUXTQNsyXd3D7IYBoubgef/
-TRSAoa1HTCHaQLymIXNJC5HoT2W1DuUuo9nfBI5qv3F9fhCQbNTPJiZer6R1qhks
-rpvQcJwJ3FvdEQ0CooH8zuyzw0CtaNPFCeA64ldeDSmhONXjHNYFSmEZ9XgO3g4z
-ylOqVPDpM8/XaZ4ZOion5VP/THoOxBFKIYa3VwZ7w7sEsVSuBSGSuC5MJQXxjPeB
-xDtxWY4ZiMVKGwWcfQpkgNHW/yaDVWIxtTqW++hhGzWLh9BI8PfYDmbOEshvWQKO
-9Z/O4hFsF5bkj96bAwwLZtyhBayziz6rf7RheqfoRmhwfbX9e8CFRoFqTLsywD/C
-3YyZTTMJHFPhhNKTPHVchfeqei18zdFDnPUCvGdQZERY3ktAzbV/ld9gFuEV2nqe
-/66fxjfw//s4Pw4w4UJDZ9oj1wuVtGU4g/ZadwIl0TdVcrrK8ptKn48aJy0CQJW8
-CY0rxO0pnYX4Oh/MxsR/0/5oRtoqrKj0BKOYvCq5B07f7oOX1g4=
-=Jncg
------END PGP SIGNATURE-----
 
---us3k4w46mzsadc3u--
+

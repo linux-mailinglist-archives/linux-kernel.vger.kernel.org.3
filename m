@@ -2,99 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3B75849C0
+	by mail.lfdr.de (Postfix) with ESMTP id 83D095849BF
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 04:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233744AbiG2C3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 22:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S233613AbiG2C24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 22:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233686AbiG2C25 (ORCPT
+        with ESMTP id S229535AbiG2C2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 22:28:57 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C707AC16
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 19:28:55 -0700 (PDT)
-Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26T2SfTE079144;
-        Fri, 29 Jul 2022 11:28:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
- Fri, 29 Jul 2022 11:28:41 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26T2SebN079141
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 29 Jul 2022 11:28:40 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <afa1ac2c-a023-a91e-e596-60931b38247e@I-love.SAKURA.ne.jp>
-Date:   Fri, 29 Jul 2022 11:28:40 +0900
+        Thu, 28 Jul 2022 22:28:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E7D7B1F4;
+        Thu, 28 Jul 2022 19:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659061734; x=1690597734;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=12gKVngtqnjv+QPw8p8qTC74M0DQ2NH3SlFgYl5vsoQ=;
+  b=GOFV5TQyBSl8WuneX8oGHNn9c0iIHCd8LtAy+syRT3pC/7VVlFzrQEiY
+   RoxItuoRBhWYGCkTJxOG+uq93MWiWn4azOaRrLUMdeEcfstuG0oharIum
+   9tSf/stDTLvWnootubaRPBk0hHOmMp/ANbHW2PXvOUZNjLgc4cjSJx1Br
+   eY5vaP15eQWBuYsHiaLJS88diZ4U8rOxjF0eeFTrR651rwYq1TtDXX783
+   7answ6K2XeVCygpLH9kSfOk9Dw3m9KUnbvA+ytUpBwibcIJY7I1U5UyPW
+   wMEKsaao694wSTpFXST139wXxguq1977leqDMpYIaA/YPc+TWz6lXfcIc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="275555809"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="275555809"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:28:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="669120036"
+Received: from astallix-mobl.amr.corp.intel.com (HELO desk) ([10.212.148.249])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 19:28:52 -0700
+Date:   Thu, 28 Jul 2022 19:28:51 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [RESEND RFC PATCH] x86/bugs: Add "unknown" reporting for MMIO
+ Stale Data
+Message-ID: <20220729022851.mdj3wuevkztspodh@desk>
+References: <a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com>
+ <YuJ6TQpSTIeXLNfB@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] workqueue: don't skip lockdep wq dependency in
- cancel_work_sync()
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Johannes Berg <johannes.berg@intel.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>
-References: <21b9c1ac-64b7-7f4b-1e62-bf2f021fffcd@I-love.SAKURA.ne.jp>
- <YuK78Jiy12BJG/Tp@slm.duckdns.org>
- <0ad532b2-df5f-331a-ae7f-21460fc62fe2@I-love.SAKURA.ne.jp>
- <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
-In-Reply-To: <97cbf8a9-d5e1-376f-6a49-3474871ea6b4@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuJ6TQpSTIeXLNfB@zn.tnic>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thinking more, I might be confused by difference between
+On Thu, Jul 28, 2022 at 02:00:13PM +0200, Borislav Petkov wrote:
+> On Thu, Jul 14, 2022 at 06:30:18PM -0700, Pawan Gupta wrote:
+> > Older CPUs beyond its Servicing period are not listed in the affected
+> > processor list for MMIO Stale Data vulnerabilities. These CPUs currently
+> > report "Not affected" in sysfs, which may not be correct.
+> > 
+> > Add support for "Unknown" reporting for such CPUs. Mitigation is not
+> > deployed when the status is "Unknown".
+> > 
+> > "CPU is beyond its Servicing period" means these CPUs are beyond their
+> > Servicing [1] period and have reached End of Servicing Updates (ESU) [2].
+> > 
+> >   [1] Servicing: The process of providing functional and security
+> >   updates to Intel processors or platforms, utilizing the Intel Platform
+> >   Update (IPU) process or other similar mechanisms.
+> > 
+> >   [2] End of Servicing Updates (ESU): ESU is the date at which Intel
+> >   will no longer provide Servicing, such as through IPU or other similar
+> >   update processes. ESU dates will typically be aligned to end of
+> >   quarter.
+> 
+> The explanations of those things need to be...
+> 
+> > Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+> > Suggested-by: Tony Luck <tony.luck@intel.com>
+> > Fixes: 8d50cdf8b834 ("x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > ---
+> > CPU vulnerability is unknown if, hardware doesn't set the immunity bits
+> > and CPU is not in the known-affected-list.
+> > 
+> > In order to report the unknown status, this patch sets the MMIO bug
+> > for all Intel CPUs that don't have the hardware immunity bits set.
+> > Based on the known-affected-list of CPUs, mitigation selection then
+> > deploys the mitigation or sets the "Unknown" status; which is ugly.
+> > 
+> > I will appreciate suggestions to improve this.
+> > 
+> > Thanks,
+> > Pawan
+> > 
+> >  .../hw-vuln/processor_mmio_stale_data.rst     |  3 +++
+> >  arch/x86/kernel/cpu/bugs.c                    | 11 +++++++-
+> >  arch/x86/kernel/cpu/common.c                  | 26 +++++++++++++------
+> >  arch/x86/kernel/cpu/cpu.h                     |  1 +
+> >  4 files changed, 32 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > index 9393c50b5afc..55524e0798da 100644
+> > --- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > +++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+> > @@ -230,6 +230,9 @@ The possible values in this file are:
+> >       * - 'Mitigation: Clear CPU buffers'
+> >         - The processor is vulnerable and the CPU buffer clearing mitigation is
+> >           enabled.
+> > +     * - 'Unknown: CPU is beyond its Servicing period'
+> > +       - The processor vulnerability status is unknown because it is
+> > +	 out of Servicing period. Mitigation is not attempted.
+> 
+> ... here.
 
-  the lockdep "struct work_struct" dependency handling
+Sure, I will move it here.
 
-and
+> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> > index 736262a76a12..82088410870e 100644
+> > --- a/arch/x86/kernel/cpu/common.c
+> > +++ b/arch/x86/kernel/cpu/common.c
+> > @@ -1286,6 +1286,22 @@ static bool arch_cap_mmio_immune(u64 ia32_cap)
+> >  		ia32_cap & ARCH_CAP_SBDR_SSDP_NO);
+> >  }
+> >  
+> > +bool __init mmio_stale_data_unknown(void)
+> 
+> This function need to go to ...cpu/intel.c
 
-  the lockdep "struct work" dependency handling
+It will be big churn to move this function to ...cpu/intel.c.
 
-. In an example that
+cpu/intel.c is not compiled for !CONFIG_CPU_SUP_INTEL, and bugs.c
+depends on this function. For bugs.c to compile there needs to be
+another version of this function for !CONFIG_CPU_SUP_INTEL.
 
-      work3_function() { /* nothing */ }
-      work4_function() { mutex_lock(&mutex); ... }
+Secondly, this function relies on cpu_vuln_blacklist and
+arch_cap_mmio_immune(), both are in cpu/common.c and defined static.
+They would also need to made available in cpu/intel.c.
 
-      other_function() {
-        queue_work(ordered_wq, &work3);
-        queue_work(ordered_wq, &work4);
-        mutex_lock(&mutex);
-        cancel_work_sync(&work4);
-      }
+To keep things simple, can this stay in cpu/common.c? And if there is a
+compelling reason, I am willing to make the required changes.
 
-, possibility of deadlock must be reported by lockdep via
-the lockdep "struct work" dependency handling.
+> > +{
+> > +	u64 ia32_cap = x86_read_arch_cap_msr();
+> > +
+> > +	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+> > +		return false;
+> 
+> <---- newline here.
+> 
+> > +	/*
+> > +	 * CPU vulnerability is unknown when, hardware doesn't set the
+> 
+> no comma after the "when"
+> 
+> > +	 * immunity bits and CPU is not in the known affected list.
+> > +	 */
+> > +	if (!cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> > +	    !arch_cap_mmio_immune(ia32_cap))
+> > +		return true;
+> 
+> <---- newline here.
 
-Then, prior to commit d6e89786bed977f3, lockdep flagging
+Will do this, and above changes.
 
-  the lockdep "struct work_struct" dependency handling
+> > +	return false;
+> > +}
+> > +
+> >  static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+> >  {
+> >  	u64 ia32_cap = x86_read_arch_cap_msr();
+> > @@ -1349,14 +1365,8 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+> >  	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
+> >  		    setup_force_cpu_bug(X86_BUG_SRBDS);
+> >  
+> > -	/*
+> > -	 * Processor MMIO Stale Data bug enumeration
+> > -	 *
+> > -	 * Affected CPU list is generally enough to enumerate the vulnerability,
+> > -	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
+> > -	 * not want the guest to enumerate the bug.
+> > -	 */
+> > -	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+> > +	 /* Processor MMIO Stale Data bug enumeration */
+> > +	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL &&
+> 
+> Why is that vendor check here? We have the cpu_vuln_blacklist for a
+> reason.
 
-as if cancel_work_sync() was flush_work() is a problem, and
-lockdep not flagging
+cpu_vuln_blacklist only has in-support MMIO vulnerable CPUs.
 
-  the lockdep "struct work" dependency handling
+There is no easy way to report unknown status for older CPUs. This
+patch sets the MMIO bug for all Intel CPUs that don't have the hardware
+immunity bits set.
 
- from cancel_work_sync() as if flush_work() is also a problem.
+Later, mmio_select_mitigation() deploys the mitigation or sets the
+"Unknown" status based on the known-affected-list of CPUs i.e.
+cpu_vuln_blacklist.
 
-Then, commit d6e89786bed977f3 might be OK, but commit 87915adc3f0acdf0
-was wrong in that it preserved lockdep not flagging
+The vendor check is required, otherwise MMIO bug will be set for
+non-Intel CPUs also.
 
-  the lockdep "struct work" dependency handling
-
- from cancel_work_sync() as if flush_work().
-
+Thanks,
+Pawan

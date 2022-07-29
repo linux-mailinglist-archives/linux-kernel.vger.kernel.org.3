@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217D85848D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 01:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9C55848D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 02:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiG1Xzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 19:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S233136AbiG2ABO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 20:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiG1XzS (ORCPT
+        with ESMTP id S230098AbiG2ABK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 19:55:18 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147011928B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:55:17 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id i13so3996024edj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 16:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=PR2g7EG7sP3ZrKB5jtxwTJwCSPOaOLj4Nh76QscH7Q0=;
-        b=C94F3jKJb6dzeORs7XX/pGVTpxhjREhHluNRo9dqoQEx9YnN4qsCcY6GRdCa/8j4DI
-         +iIQt1T2yzhkNLYedmfrfmdBJsOPDg5u1CyaXD5xbA9/OpDecgOFJNosiGdBlN3W367U
-         uLhyCcWZ4otNM3/bp50wHK31vUP+eJ0YxFDR0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=PR2g7EG7sP3ZrKB5jtxwTJwCSPOaOLj4Nh76QscH7Q0=;
-        b=g7z3TyEGDUaN2B3dlB+9GvKakzv1OxTbpXQn1knI2v6Jg4BCZhrrc060t0vvpZFUoJ
-         xAZidxagTMd5dDzXcUvZHRYnJpjMJbI9dKQTqzeHnEhMvtM7F7gYw4C6RZ4XT36n4PEO
-         VbIOpScNpjyl3ZquKk7a9TCCTh3StrOJ51WUaScBhLnQDZviurOBZD0Ksx8xFckmx8pL
-         kwymzV54z07OSvyhBhUHh7Gi6qH+t9rxng7OJy9KmTnYEMQvYBmgBpVG8CyhdviN0xCW
-         ddQfbJzxURzNzcQ0u4zx1z8VReuCdF5jOV8Nxe4dRPsK/O23LB920kDmN0J5nc8cTj/x
-         rS4w==
-X-Gm-Message-State: AJIora/bRMlzlgRSSflMOhzk1+QqR0MwOg/ttzwzQLsFTQRyA+wiW7yP
-        ZYE64wpBUPCF1O2nhZWsJnheaAx39eS5Lw==
-X-Google-Smtp-Source: AGRyM1vqW8H84F0zeaHSSa6xgxseUIZe6OkYYIVJveO7Ku6P+EHynMnmekorcGus6dCFNxce5Mghnw==
-X-Received: by 2002:aa7:cd84:0:b0:43c:532b:65e9 with SMTP id x4-20020aa7cd84000000b0043c532b65e9mr1271957edv.330.1659052515697;
-        Thu, 28 Jul 2022 16:55:15 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170906308500b0072b32de7794sm950648ejv.70.2022.07.28.16.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 16:55:15 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] documentation: debugfs: add a missing closing parenthesis
-Date:   Fri, 29 Jul 2022 01:55:03 +0200
-Message-Id: <20220728235503.651254-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.37.0
+        Thu, 28 Jul 2022 20:01:10 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD902317B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 17:01:09 -0700 (PDT)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 9618B1003FEE9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 00:00:58 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id HDR4o3euAUff9HDR4oUz4S; Fri, 29 Jul 2022 00:00:58 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62e3233a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RgO8CyIxsXoA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IlCN+LVpZZv/2wDtMkGzYjGWueiFl8LKY4901R8Cdgg=; b=QDSoXFBoKQSXvUgomcigUHL6/R
+        QrHONW297aedlyIX8UzgQPJxEvJ+gOcgBFWS+H2I1nrQ3B+qDY32/PVWpp0orrhQzb371o5rJdJMf
+        PDqHWBKzdkGdPZDMSJELut77X1R23IrrUmE/Rmvz4/Sa5PjWoSQXvNYV+Sn/SQSD0ziDPpEa1Uo0S
+        hIWj12EHMntf3OnGBGT7VKJMT3cVnWGNI0KZOuhzLWAiuTx92NH39JrnQnNP4PqWccG6Voqz6of1o
+        3cyyKYXAGv37MzK4UNMuIG/24t3djaXKajbwJ3cbZUM/eMpUoYCGTKnrdTjDkzr4xDtLpvtnXLmep
+        wwfYgE1g==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37872 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oHDR2-001hZx-Mp;
+        Thu, 28 Jul 2022 18:00:56 -0600
+Subject: Re: [PATCH 5.15 000/202] 5.15.58-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220728133327.660846209@linuxfoundation.org>
+In-Reply-To: <20220728133327.660846209@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <9737730d-9015-e8f8-1309-98aab0aeb3b3@w6rz.net>
+Date:   Thu, 28 Jul 2022 17:00:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oHDR2-001hZx-Mp
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37872
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +93,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 7/28/22 6:33 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.58 release.
+> There are 202 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 30 Jul 2022 13:32:45 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.58-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The two impacted sentences ought to be one, concatenated at the point of
-the missing parenthesis that has been added.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v1 -> v2:
-
-In disgrace, I made typo in the subject of v1. Here is a v2 without that
-typo.
----
- Documentation/filesystems/debugfs.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/filesystems/debugfs.rst b/Documentation/filesystems/debugfs.rst
-index 71b1fee56d2a..a810eee40a8b 100644
---- a/Documentation/filesystems/debugfs.rst
-+++ b/Documentation/filesystems/debugfs.rst
-@@ -155,8 +155,8 @@ any code which does so in the mainline.  Note that all files created with
- debugfs_create_blob() are read-only.
- 
- If you want to dump a block of registers (something that happens quite
--often during development, even if little such code reaches mainline.
--Debugfs offers two functions: one to make a registers-only file, and
-+often during development, even if little such code reaches mainline),
-+debugfs offers two functions: one to make a registers-only file, and
- another to insert a register block in the middle of another sequential
- file::
- 
--- 
-2.37.0
+Tested-by: Ron Economos <re@w6rz.net>
 

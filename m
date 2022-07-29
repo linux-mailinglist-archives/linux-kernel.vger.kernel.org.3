@@ -2,192 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B66B5855A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E65B5855A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbiG2TmW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Jul 2022 15:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S238520AbiG2Tmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237395AbiG2TmV (ORCPT
+        with ESMTP id S237395AbiG2TmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:42:21 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D60EE0F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:42:20 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 26THAKC7027647
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:42:20 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3hkjkn5124-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:42:19 -0700
-Received: from twshared20276.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 29 Jul 2022 12:42:19 -0700
-Received: by devvm6390.atn0.facebook.com (Postfix, from userid 352741)
-        id 57B88189EA0F; Fri, 29 Jul 2022 12:42:16 -0700 (PDT)
-From:   <alexlzhu@devvm6390.atn0.facebook.com>, <alexlzhu@fb.com>
-To:     <linux-mm@kvack.org>, <kernel-team@fb.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     alexlzhu <alexlzhu@fb.com>
-Subject: [PATCH] x86/sys_x86_64: fix VMA alginment for mmap file to THP
-Date:   Fri, 29 Jul 2022 12:42:14 -0700
-Message-ID: <20220729194214.1309313-1-alexlzhu@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 29 Jul 2022 15:42:25 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB976D54E;
+        Fri, 29 Jul 2022 12:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1659123743;
+        bh=yfpz3eZOzFusdrvGSIrT5vP213KUwZ2IU/B7Jq1m2iQ=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=KK3XAgAB8W4tAkjRvqN1BO9jOs9hZ0tMpFS434sVoLyHzr9g+4dWtL86JnlzpewvK
+         fNb7/wWYWoY3ja6jEypBk/Mji/qcrdeykIj/GvugE8tpNSt41jD7UtjF75rc/o+TAl
+         B9N7pa9jEb0+OAKHTcKLTxwf5DPqdG2G/J3uoPq0=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 66E8E1280728;
+        Fri, 29 Jul 2022 15:42:23 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sAM1TJKT386L; Fri, 29 Jul 2022 15:42:23 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1659123743;
+        bh=yfpz3eZOzFusdrvGSIrT5vP213KUwZ2IU/B7Jq1m2iQ=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=KK3XAgAB8W4tAkjRvqN1BO9jOs9hZ0tMpFS434sVoLyHzr9g+4dWtL86JnlzpewvK
+         fNb7/wWYWoY3ja6jEypBk/Mji/qcrdeykIj/GvugE8tpNSt41jD7UtjF75rc/o+TAl
+         B9N7pa9jEb0+OAKHTcKLTxwf5DPqdG2G/J3uoPq0=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id DB6A61280614;
+        Fri, 29 Jul 2022 15:42:22 -0400 (EDT)
+Message-ID: <d3a4b15f5eab509f9830f858a82f0db394d201db.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.19-rc8
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 29 Jul 2022 15:42:21 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: J-uyhaxZv2Lcs68lpPwUrfi4u87W1Nq5
-X-Proofpoint-ORIG-GUID: J-uyhaxZv2Lcs68lpPwUrfi4u87W1Nq5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-29_19,2022-07-28_02,2022-06-22_01
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_NXDOMAIN,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_PDS_FROM_2_EMAILS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: alexlzhu <alexlzhu@fb.com>
+Four fixes, three in drivers.  The two biggest fixes are ufs and the
+remaining driver and core fix are small and obvious (and the core fix
+is low risk).
 
-With CONFIG_READ_ONLY_THP_FOR_FS, the Linux kernel supports using THPs for
-read-only mmapped files, such as shared libraries. However, on x86 the
-kernel makes no attempt to actually align those mappings on 2MB boundaries,
-which makes it impossible to use those THPs most of the time. This issue
-applies to general file mapping THP as well as existing setups using
-CONFIG_READ_ONLY_THP_FOR_FS. This is easily fixed by using the alignment
-info passed to vm_unmapped_area. The problem can be seen in
-/proc/PID/smaps where THPeligible is set to 0 on mappings to eligible
-shared object files as shown below.
+The patch is available here:
 
-Before this patch:
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-7fc6a7e18000-7fc6a80cc000 r-xp 00000000 00:1e 199856
-/usr/lib64/libcrypto.so.1.1.1k
-Size:               2768 kB
-THPeligible:    0
-VmFlags: rd ex mr mw me
+The short changelog is:
 
-With this patch the library is mapped at a 2MB aligned address:
+Bart Van Assche (1):
+      scsi: ufs: core: Fix a race condition related to device management
 
-fbdfe200000-7fbdfe4b4000 r-xp 00000000 00:1e 199856
-/usr/lib64/libcrypto.so.1.1.1k
-Size:               2768 kB
-THPeligible:    1
-VmFlags: rd ex mr mw me
+David Jeffery (1):
+      scsi: mpt3sas: Stop fw fault watchdog work item during system shutdown
 
-This fixes the alignment of VMAs for any mmap of a file that has the
-rd and ex permissions and size >= 2MB. The VMA alignment and
-THPeligible field for shared and anonymous memory are handled
-separately and are thus not effected by this change.
+Jason Yan (1):
+      scsi: core: Fix warning in scsi_alloc_sgtables()
 
-Signed-off-by: alexlzhu <alexlzhu@fb.com>
+Liang He (1):
+      scsi: ufs: host: Hold reference returned by of_parse_phandle()
+
+And the diffstat:
+
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |  1 +
+ drivers/scsi/scsi_ioctl.c            |  2 +-
+ drivers/ufs/core/ufshcd.c            | 58 +++++++++++++++++++++++++-----------
+ drivers/ufs/host/ufshcd-pltfrm.c     | 15 ++++++++--
+ 4 files changed, 55 insertions(+), 21 deletions(-)
+
+With full diff below.
+
+James
+
 ---
- arch/x86/entry/vdso/vma.c    |  2 +-
- arch/x86/include/asm/elf.h   |  2 +-
- arch/x86/kernel/sys_x86_64.c | 29 ++++++++++++++++++-----------
- 3 files changed, 20 insertions(+), 13 deletions(-)
-
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 1000d457c332..da916040d2ba 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -337,7 +337,7 @@ static unsigned long vdso_addr(unsigned long start, unsigned len)
- 	 * Forcibly align the final address in case we have a hardware
- 	 * issue that requires alignment for performance reasons.
- 	 */
--	addr = align_vdso_addr(addr);
-+	addr = align_vdso_addr(addr, len);
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index b519f4b59d30..5e8887fa02c8 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -11386,6 +11386,7 @@ scsih_shutdown(struct pci_dev *pdev)
+ 	_scsih_ir_shutdown(ioc);
+ 	_scsih_nvme_shutdown(ioc);
+ 	mpt3sas_base_mask_interrupts(ioc);
++	mpt3sas_base_stop_watchdog(ioc);
+ 	ioc->shost_recovery = 1;
+ 	mpt3sas_base_make_ioc_ready(ioc, SOFT_RESET);
+ 	ioc->shost_recovery = 0;
+diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
+index a480c4d589f5..729e309e6034 100644
+--- a/drivers/scsi/scsi_ioctl.c
++++ b/drivers/scsi/scsi_ioctl.c
+@@ -450,7 +450,7 @@ static int sg_io(struct scsi_device *sdev, struct sg_io_hdr *hdr, fmode_t mode)
+ 		goto out_put_request;
  
- 	return addr;
- }
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index cb0ff1055ab1..65a09a0e0e97 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -396,5 +396,5 @@ struct va_alignment {
- } ____cacheline_aligned;
+ 	ret = 0;
+-	if (hdr->iovec_count) {
++	if (hdr->iovec_count && hdr->dxfer_len) {
+ 		struct iov_iter i;
+ 		struct iovec *iov = NULL;
  
- extern struct va_alignment va_align;
--extern unsigned long align_vdso_addr(unsigned long);
-+extern unsigned long align_vdso_addr(unsigned long addr, unsigned long len);
- #endif /* _ASM_X86_ELF_H */
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 8cc653ffdccd..2506242e37aa 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -25,11 +25,18 @@
- /*
-  * Align a virtual address to avoid aliasing in the I$ on AMD F15h.
-  */
--static unsigned long get_align_mask(void)
-+static unsigned long get_align_mask(unsigned long len)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c7b337480e3e..3d367be71728 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2953,37 +2953,59 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
+ 		struct ufshcd_lrb *lrbp, int max_timeout)
  {
- 	/* handle 32- and 64-bit case with a single conditional */
--	if (va_align.flags < 0 || !(va_align.flags & (2 - mmap_is_ia32())))
-+	if (va_align.flags < 0 || !(va_align.flags & (2 - mmap_is_ia32()))) {
+-	int err = 0;
+-	unsigned long time_left;
++	unsigned long time_left = msecs_to_jiffies(max_timeout);
+ 	unsigned long flags;
++	bool pending;
++	int err;
+ 
++retry:
+ 	time_left = wait_for_completion_timeout(hba->dev_cmd.complete,
+-			msecs_to_jiffies(max_timeout));
++						time_left);
+ 
+-	spin_lock_irqsave(hba->host->host_lock, flags);
+-	hba->dev_cmd.complete = NULL;
+ 	if (likely(time_left)) {
 +		/*
-+		 * Read-only file mappings can be mapped using transparent huge pages;
-+		 * make sure that large mappings are 2MB aligned.
++		 * The completion handler called complete() and the caller of
++		 * this function still owns the @lrbp tag so the code below does
++		 * not trigger any race conditions.
 +		 */
-+		if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) && len >= PMD_SIZE)
-+			return PMD_SIZE - 1;
- 		return 0;
-+	}
- 
- 	if (!(current->flags & PF_RANDOMIZE))
- 		return 0;
-@@ -47,16 +54,16 @@ static unsigned long get_align_mask(void)
-  * value before calling vm_unmapped_area() or ORed directly to the
-  * address.
-  */
--static unsigned long get_align_bits(void)
-+static unsigned long get_align_bits(unsigned long len)
- {
--	return va_align.bits & get_align_mask();
-+	return va_align.bits & get_align_mask(len);
- }
- 
--unsigned long align_vdso_addr(unsigned long addr)
-+unsigned long align_vdso_addr(unsigned long addr, unsigned long len)
- {
--	unsigned long align_mask = get_align_mask();
-+	unsigned long align_mask = get_align_mask(len);
- 	addr = (addr + align_mask) & ~align_mask;
--	return addr | get_align_bits();
-+	return addr | get_align_bits(len);
- }
- 
- static int __init control_va_addr_alignment(char *str)
-@@ -151,8 +158,8 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 	info.align_mask = 0;
- 	info.align_offset = pgoff << PAGE_SHIFT;
- 	if (filp) {
--		info.align_mask = get_align_mask();
--		info.align_offset += get_align_bits();
-+		info.align_mask = get_align_mask(len);
-+		info.align_offset += get_align_bits(len);
++		hba->dev_cmd.complete = NULL;
+ 		err = ufshcd_get_tr_ocs(lrbp);
+ 		if (!err)
+ 			err = ufshcd_dev_cmd_completion(hba, lrbp);
+-	}
+-	spin_unlock_irqrestore(hba->host->host_lock, flags);
+-
+-	if (!time_left) {
++	} else {
+ 		err = -ETIMEDOUT;
+ 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
+ 			__func__, lrbp->task_tag);
+-		if (!ufshcd_clear_cmds(hba, 1U << lrbp->task_tag))
++		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
+ 			/* successfully cleared the command, retry if needed */
+ 			err = -EAGAIN;
+-		/*
+-		 * in case of an error, after clearing the doorbell,
+-		 * we also need to clear the outstanding_request
+-		 * field in hba
+-		 */
+-		spin_lock_irqsave(&hba->outstanding_lock, flags);
+-		__clear_bit(lrbp->task_tag, &hba->outstanding_reqs);
+-		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++			/*
++			 * Since clearing the command succeeded we also need to
++			 * clear the task tag bit from the outstanding_reqs
++			 * variable.
++			 */
++			spin_lock_irqsave(&hba->outstanding_lock, flags);
++			pending = test_bit(lrbp->task_tag,
++					   &hba->outstanding_reqs);
++			if (pending) {
++				hba->dev_cmd.complete = NULL;
++				__clear_bit(lrbp->task_tag,
++					    &hba->outstanding_reqs);
++			}
++			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++			if (!pending) {
++				/*
++				 * The completion handler ran while we tried to
++				 * clear the command.
++				 */
++				time_left = 1;
++				goto retry;
++			}
++		} else {
++			dev_err(hba->dev, "%s: failed to clear tag %d\n",
++				__func__, lrbp->task_tag);
++		}
  	}
- 	return vm_unmapped_area(&info);
+ 
+ 	return err;
+diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
+index e7332cc65b1f..173aea8e9997 100644
+--- a/drivers/ufs/host/ufshcd-pltfrm.c
++++ b/drivers/ufs/host/ufshcd-pltfrm.c
+@@ -108,9 +108,20 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+ 	return ret;
  }
-@@ -209,8 +216,8 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	info.align_mask = 0;
- 	info.align_offset = pgoff << PAGE_SHIFT;
- 	if (filp) {
--		info.align_mask = get_align_mask();
--		info.align_offset += get_align_bits();
-+		info.align_mask = get_align_mask(len);
-+		info.align_offset += get_align_bits(len);
+ 
++static bool phandle_exists(const struct device_node *np,
++			   const char *phandle_name, int index)
++{
++	struct device_node *parse_np = of_parse_phandle(np, phandle_name, index);
++
++	if (parse_np)
++		of_node_put(parse_np);
++
++	return parse_np != NULL;
++}
++
+ #define MAX_PROP_SIZE 32
+ static int ufshcd_populate_vreg(struct device *dev, const char *name,
+-		struct ufs_vreg **out_vreg)
++				struct ufs_vreg **out_vreg)
+ {
+ 	char prop_name[MAX_PROP_SIZE];
+ 	struct ufs_vreg *vreg = NULL;
+@@ -122,7 +133,7 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
  	}
- 	addr = vm_unmapped_area(&info);
- 	if (!(addr & ~PAGE_MASK))
--- 
-2.30.2
+ 
+ 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
+-	if (!of_parse_phandle(np, prop_name, 0)) {
++	if (!phandle_exists(np, prop_name, 0)) {
+ 		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
+ 				__func__, prop_name);
+ 		goto out;
 

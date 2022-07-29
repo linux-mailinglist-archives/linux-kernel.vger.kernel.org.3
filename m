@@ -2,91 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1BA5854BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9E45854BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238243AbiG2RtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S238309AbiG2Rtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238096AbiG2RtA (ORCPT
+        with ESMTP id S238096AbiG2Rts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:49:00 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED0389A84
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:48:59 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z19so5252118plb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 10:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=PTRupmp5vsLtMUYck90Z7yNnJEZgEVE+WjYQFBmYlJE=;
-        b=dZIpPUXOgSfBNELSae/S8aQkP6DV6ayAYEnmtZooiXfEyh+MMKpkCvpwZUlvTpEAkK
-         G/qpjTm2j+mhW8XIe6o75toIeVLE1G0p9VOgp+v6O3ab95FxQNNHaWbal2VtR4Td0tVJ
-         VTHAAKlPwj+Aedxm0R880y53SQzweX3DNSkaXMWGePt19yUwtqLEZNXl812jy7cFEvWY
-         Kg0oV1Hq+kBogxJ51xmQtjpP2+LmaEaeY9s/2Bne5hnFtacTzXiGCnb1sDoSvX4KSt/P
-         TD/LrOV1GSIrSPT9EUaEc5NLbwuLB4JxgMniSp9H6bgRsPUx/ltYqelxYkE/SnIwCJkM
-         jyuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=PTRupmp5vsLtMUYck90Z7yNnJEZgEVE+WjYQFBmYlJE=;
-        b=ZElWx4jv61JdKxb1IR+nvBH2EzD814YPrGaJ51CrItWK/oAuSJsRNs6O7bkfzV3ryL
-         x+AlFmRE4bMR2D9ANlJeOzNpO82kDEycSY6kUq6BfjRUmFUAi83ZBIake45p5SVw0BFb
-         jsSxOFbTaBkV0pCHRHLlP1GJUZk0VKnMxbDnZS4JCcyWE/sSbyqxp+Vl655tqrxjA8tQ
-         B9LzZty/V6IUQ81xD3JlmvmAH7XZspT4NXWg8pU0KszZDcM+/11StaFd4R+CDvMlTyto
-         WiWaR/j1mpJMRXXDWiAVr8E+PxSrSF95ABUr59cuiHfD6SyRrV6DqbTRV5ZEn4V/eASK
-         VkTw==
-X-Gm-Message-State: ACgBeo1pm/IdudI7LXlpfXIk6khFoDCrnn+a0hG6s+z3QIWHM1UIYS/l
-        BnAzer2h+0442BEo6IxXuHlJkImQyqKRZw==
-X-Google-Smtp-Source: AA6agR6FAJ5onZVuWEdXDjXacsA4rjiICGO1wSe5bgK5CukF6i921ex19FBZiNXsDyqeVYngrys1Yg==
-X-Received: by 2002:a17:902:f7c6:b0:16d:c795:d43e with SMTP id h6-20020a170902f7c600b0016dc795d43emr4986750plw.162.1659116938601;
-        Fri, 29 Jul 2022 10:48:58 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r17-20020a170903411100b0016c29dcf1f7sm3883867pld.122.2022.07.29.10.48.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 10:48:58 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 17:48:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: do not shadow apic global definition
-Message-ID: <YuQdhaUi0ur4l/zb@google.com>
-References: <20220729084533.54500-1-mailhol.vincent@wanadoo.fr>
+        Fri, 29 Jul 2022 13:49:48 -0400
+Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6CC89A9E;
+        Fri, 29 Jul 2022 10:49:47 -0700 (PDT)
+Received: from mailer.emlix.com (unknown [81.20.119.6])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.emlix.com (Postfix) with ESMTPS id 7AC965FDAA;
+        Fri, 29 Jul 2022 19:49:45 +0200 (CEST)
+Date:   Fri, 29 Jul 2022 19:49:45 +0200
+From:   Daniel =?iso-8859-1?Q?Gl=F6ckner?= <dg@emlix.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 2/2] dt-bindings: fpga: add binding doc for ecp5-spi
+ fpga mgr
+Message-ID: <20220729174945.GA7164@homes.emlix.com>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+ <20220719112335.9528-3-i.bornyakov@metrotek.ru>
+ <20220729090123.GA28299@homes.emlix.com>
+ <20220729163347.irqqqcvh2biliqg2@x260>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220729084533.54500-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220729163347.irqqqcvh2biliqg2@x260>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022, Vincent Mailhol wrote:
-> arch/x86/include/asm/apic.h declares a global variable named `apic'.
+On Fri, Jul 29, 2022 at 07:33:47PM +0300, Ivan Bornyakov wrote:
+> On Fri, Jul 29, 2022 at 11:01:24AM +0200, Daniel Glöckner wrote:
+> > On Tue, Jul 19, 2022 at 02:23:35PM +0300, Ivan Bornyakov wrote:
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - lattice,ecp5-fpga-mgr
+> > 
+> > Since this driver uses the same interface as the existing
+> > drivers/fpga/machxo2-spi.c driver, wouldn't it be advisable to use a
+> > similar compatible id, i.e. lattice,ecp5-slave-spi?
+> > 
 > 
-> Many function arguments from arch/x86/kvm/lapic.h also uses the same
-> name and thus shadow the global declaration. For each case of
-> shadowing, rename the function argument from `apic' to `lapic'.
+> To quote Krzysztof Kozlowski from v1 review:
+>  > Do not encode interface name in compatible so no "spi"
 > 
-> This patch silences below -Wshadow warnings:
+> See https://lore.kernel.org/linux-fpga/044a9736-a4ec-c250-7755-c80a5bcbe38b@linaro.org/
 
-This is just the tip of the iceberg, nearly every KVM x86 .c file has at least one
-"apic" variable.  arch/x86/kvm/lapic.c alone has nearly 100.  If this were the very
-last step before a kernel-wide (or even KVM-wide) enabling of -Wshadow then maybe
-it would be worth doing, but as it stands IMO it's unnecesary churn.
+true... MachXO2 to MachXO5 and those Nexus chips speak that protocol both
+over spi and i2c and the position in the device tree decides which one it
+should be. Maybe the compatible string in the existing driver should be
+changed to lattice,machxo2. After all there is no other MachXO2-specific
+interface/protocol except maybe jtag.
 
-What I would really love is to not have the global (and exported!) "apic", but
-properly solving that, i.e. not just a rename, would require a significant rework.
+Best regards,
+
+  Daniel

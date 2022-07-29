@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531E058542D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2607058542F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 19:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238292AbiG2RHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 13:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S238302AbiG2RH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 13:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236684AbiG2RHU (ORCPT
+        with ESMTP id S238295AbiG2RHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 13:07:20 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45A766BB7;
-        Fri, 29 Jul 2022 10:07:19 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g12so5155747pfb.3;
-        Fri, 29 Jul 2022 10:07:19 -0700 (PDT)
+        Fri, 29 Jul 2022 13:07:23 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8641873938;
+        Fri, 29 Jul 2022 10:07:22 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d3so5144243pls.4;
+        Fri, 29 Jul 2022 10:07:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=2WImMabT+BMkggdA4vU26+hYnskt5BujSBi4wp3YAFI=;
-        b=kMnwMW4dyNMbl8O6StUAt/bDDf451l18zZSaEAa6g12ZQ88sijyzpFm3Q2fvlQp474
-         TLqTe8J4ixl8FUUOAo1wqAGrelpqJQGi5K3HGZw6TqYI1NI+MHRuDg9CxbiYSabTGzTm
-         0/YyVkDGAzKlL8pPmdWmLht+fELLyTIM7S+z2eZ2SoD/aqdMmwvg0WWf3v58fgzwcQnd
-         ZUJ2ya4KDGobFeJ3+USUf5V7fph36UTmlmjQQCFL3sX9b1X+j4YdFoFNo1x6hWTlrdKL
-         zDZv4WjwQkA5Jo6YCCoicVkQw23QE9JZIe9580/8ghnjxUTfYTXyh1cqqgR1rSAIQsas
-         zuOw==
+        bh=FldoPR8BVfM3iFKwCM1XMFRXAR81Z32eid0v1j3G9ms=;
+        b=HKz9QeN1B04S71KqwGZWo+wwf6kYkXxGdcKiMMHsrsr13IRifPJQhbh5KiqAal/DsE
+         vmjJYbyNR97KhbEFgVt6sDx0Pw/eEnSBmdQG15mvI3z/WZaWhK4GWeFNA03PfPyOe5vu
+         yTKimkqFzz72xhuoFlkIVRLFDeoQnq3XOJyLCDpX7m1tK4Kb4xNn9qopeHrIDF5PxWAm
+         JZW/VRTDBeDZKYhtX4Xk349gSo/lWOrmUHKaG+44tHdLZEUNGvlJNmt/LwMdPDoQMNCC
+         6fvIfU7eJFgMMkHB2vZYsWnHyfQTqJAKlMVd5pQHRv1+lWJdaWbpupNA3RegpyUILm1P
+         MI2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=2WImMabT+BMkggdA4vU26+hYnskt5BujSBi4wp3YAFI=;
-        b=x6PIBoI1+4hzvF29E69Jg9+idmOxnlQbtJnQGTkqjZMLq/tBXmHsiytqGdDYKsiwEn
-         A8OB9bsZZfUvjkvhQ+QSbhj4dmjM/4dMoJGU1JvG0hU6CGzIteXJJ3cfKSj4ZCyv5p+M
-         FzVdnEnyKAxGPQWMesP5T38cDLYh2ahRHGbuYsxwWweyc1JXB+VWhcOS+CBnYITeIULz
-         Y254JVzRY9h9SXznmERrSE4AfvoKQcw9tq4HtamB3Ft9f4HIcYtMaB6TIk8eUWi4x07R
-         df1S+M0Y9J/GFyUJGgGPzGEyx8Rjpa2pkct0guY8VVLA/19zbKJyMyu1OV4KbzIXS7sO
-         MAZg==
-X-Gm-Message-State: AJIora/7cgvOIqvqY249Y5zc1vA/jMlOHR9arwT333qvepv8o/YOfYj2
-        HGh7lZFDafIpzmCmmKVws9Y=
-X-Google-Smtp-Source: AGRyM1uqiA5uYpdRF1Kv0pg/4Id474Fcz4gvwkFH0VoZ51lSLrvQSOlfecvBfbl+FZfD2Iymsy3QEw==
-X-Received: by 2002:a05:6a00:793:b0:52a:b261:f8e7 with SMTP id g19-20020a056a00079300b0052ab261f8e7mr4712172pfu.20.1659114439169;
-        Fri, 29 Jul 2022 10:07:19 -0700 (PDT)
+        bh=FldoPR8BVfM3iFKwCM1XMFRXAR81Z32eid0v1j3G9ms=;
+        b=qVYjYlmuRUNsWYWE/Q1KBGI+Z+tX60VdAQUIsZl/qJ6os0ZDFDLO8CjRj0T5WTu67O
+         JsUC5XrJHGvIUXEaidT32PZG63tDg6QS0J67rly4+FomwhqPvJbkQ0PJATx0Y2o9c9ol
+         1DfuIHHYdraBJb6uWZhVQ4sLHy3ngSCQFNdvMFXJ6dACoO54x5SgGyM10rPgH0soBPyb
+         JL0vOBKJpraSt7K8Y5e6py1bxDECJAIQ+0t5chEHxag1cx1nXCy2ipwPXygukRj1h+Yo
+         1Fx98vO3HDX9qkpid8n8A8jvB28/ZVCaK9djgWqDoUlTQeHuCpo4RRet5iPaRzV1hyzv
+         hwDQ==
+X-Gm-Message-State: ACgBeo0wtcp/aQe9cbkjojy5XB2Vb6FjE101odc7OTZGY8jyyOAdMnj9
+        Hjm5A8IDX7bY461Z07E/m0s=
+X-Google-Smtp-Source: AA6agR56jDy8w/4vyMlbH3lvpqcpJ00Ke/e1+Z/3QybslmIHKNYd1sUZrzP7R7Q9uY7p/hqGynTRKw==
+X-Received: by 2002:a17:90a:9709:b0:1f3:7ac:73dd with SMTP id x9-20020a17090a970900b001f307ac73ddmr5214940pjo.184.1659114442062;
+        Fri, 29 Jul 2022 10:07:22 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b0016dc240b24bsm3974627plg.95.2022.07.29.10.07.17
+        by smtp.gmail.com with ESMTPSA id jz21-20020a17090b14d500b001f1ef42fd7bsm6183882pjb.36.2022.07.29.10.07.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 10:07:17 -0700 (PDT)
+        Fri, 29 Jul 2022 10:07:20 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org,
         Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>,
+        linux-kernel@vger.kernel.org (open list),
         linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
         linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-Date:   Fri, 29 Jul 2022 10:07:40 -0700
-Message-Id: <20220729170744.1301044-2-robdclark@gmail.com>
+        FRAMEWORK)
+Subject: [PATCH 2/3] drm/prime: Wire up mmap_info support
+Date:   Fri, 29 Jul 2022 10:07:41 -0700
+Message-Id: <20220729170744.1301044-3-robdclark@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220729170744.1301044-1-robdclark@gmail.com>
 References: <20220729170744.1301044-1-robdclark@gmail.com>
@@ -79,131 +83,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-This is a fairly narrowly focused interface, providing a way for a VMM
-in userspace to tell the guest kernel what pgprot settings to use when
-mapping a buffer to guest userspace.
-
-For buffers that get mapped into guest userspace, virglrenderer returns
-a dma-buf fd to the VMM (crosvm or qemu).  In addition to mapping the
-pages into the guest VM, it needs to report to drm/virtio in the guest
-the cache settings to use for guest userspace.  In particular, on some
-architectures, creating aliased mappings with different cache attributes
-is frowned upon, so it is important that the guest mappings have the
-same cache attributes as any potential host mappings.
+Just plumbing the thing thru an extra layer.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/dma-buf/dma-buf.c    | 26 ++++++++++++++++++++++++++
- include/linux/dma-buf.h      |  7 +++++++
- include/uapi/linux/dma-buf.h | 28 ++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
+ drivers/gpu/drm/drm_prime.c | 12 ++++++++++++
+ include/drm/drm_drv.h       |  7 +++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 32f55640890c..d02d6c2a3b49 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -326,6 +326,29 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
- 	return 0;
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index e3f09f18110c..f58586e131c5 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -784,6 +784,17 @@ int drm_gem_dmabuf_mmap(struct dma_buf *dma_buf, struct vm_area_struct *vma)
  }
+ EXPORT_SYMBOL(drm_gem_dmabuf_mmap);
  
-+static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
++static int drm_gem_dmabuf_mmap_info(struct dma_buf *dma_buf)
 +{
-+	struct dma_buf_info arg;
++	struct drm_gem_object *obj = dma_buf->priv;
++	struct drm_device *dev = obj->dev;
 +
-+	if (copy_from_user(&arg, uarg, sizeof(arg)))
-+		return -EFAULT;
++	if (!dev->driver->gem_prime_mmap_info)
++		return -ENOSYS;
 +
-+	switch (arg.param) {
-+	case DMA_BUF_INFO_VM_PROT:
-+		if (!dmabuf->ops->mmap_info)
-+			return -ENOSYS;
-+		arg.value = dmabuf->ops->mmap_info(dmabuf);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (copy_to_user(uarg, &arg, sizeof(arg)))
-+		return -EFAULT;
-+
-+	return 0;
++	return dev->driver->gem_prime_mmap_info(obj);
 +}
 +
- static long dma_buf_ioctl(struct file *file,
- 			  unsigned int cmd, unsigned long arg)
- {
-@@ -369,6 +392,9 @@ static long dma_buf_ioctl(struct file *file,
- 	case DMA_BUF_SET_NAME_B:
- 		return dma_buf_set_name(dmabuf, (const char __user *)arg);
- 
-+	case DMA_BUF_IOCTL_INFO:
-+		return dma_buf_info(dmabuf, (const void __user *)arg);
-+
- 	default:
- 		return -ENOTTY;
- 	}
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 71731796c8c3..6f4de64a5937 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -283,6 +283,13 @@ struct dma_buf_ops {
- 	 */
- 	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
- 
-+	/**
-+	 * @mmap_info:
-+	 *
-+	 * Return mmapping info for the buffer.  See DMA_BUF_INFO_VM_PROT.
-+	 */
-+	int (*mmap_info)(struct dma_buf *);
-+
- 	int (*vmap)(struct dma_buf *dmabuf, struct iosys_map *map);
- 	void (*vunmap)(struct dma_buf *dmabuf, struct iosys_map *map);
+ static const struct dma_buf_ops drm_gem_prime_dmabuf_ops =  {
+ 	.cache_sgt_mapping = true,
+ 	.attach = drm_gem_map_attach,
+@@ -792,6 +803,7 @@ static const struct dma_buf_ops drm_gem_prime_dmabuf_ops =  {
+ 	.unmap_dma_buf = drm_gem_unmap_dma_buf,
+ 	.release = drm_gem_dmabuf_release,
+ 	.mmap = drm_gem_dmabuf_mmap,
++	.mmap_info = drm_gem_dmabuf_mmap_info,
+ 	.vmap = drm_gem_dmabuf_vmap,
+ 	.vunmap = drm_gem_dmabuf_vunmap,
  };
-diff --git a/include/uapi/linux/dma-buf.h b/include/uapi/linux/dma-buf.h
-index b1523cb8ab30..a41adac0f46a 100644
---- a/include/uapi/linux/dma-buf.h
-+++ b/include/uapi/linux/dma-buf.h
-@@ -85,6 +85,32 @@ struct dma_buf_sync {
+diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+index f6159acb8856..797c0f8c2dd0 100644
+--- a/include/drm/drm_drv.h
++++ b/include/drm/drm_drv.h
+@@ -355,6 +355,13 @@ struct drm_driver {
+ 	 */
+ 	int (*gem_prime_mmap)(struct drm_gem_object *obj, struct vm_area_struct *vma);
  
- #define DMA_BUF_NAME_LEN	32
- 
-+
-+/**
-+ * struct dma_buf_info - Query info about the buffer.
-+ */
-+struct dma_buf_info {
-+
-+#define DMA_BUF_INFO_VM_PROT      1
-+#  define DMA_BUF_VM_PROT_WC      0
-+#  define DMA_BUF_VM_PROT_CACHED  1
-+
 +	/**
-+	 * @param: Which param to query
++	 * @gem_prim_mmap_info:
 +	 *
-+	 * DMA_BUF_INFO_BM_PROT:
-+	 *     Query the access permissions of userspace mmap's of this buffer.
-+	 *     Returns one of DMA_BUF_VM_PROT_x
++	 * Get info about mmap setup by gem_prime_mmap.  See dma_buf_ops:mmap_info.
 +	 */
-+	__u32 param;
-+	__u32 pad;
++	int (*gem_prime_mmap_info)(struct drm_gem_object *obj);
 +
-+	/**
-+	 * @value: Return value of the query.
-+	 */
-+	__u64 value;
-+};
-+
- #define DMA_BUF_BASE		'b'
- #define DMA_BUF_IOCTL_SYNC	_IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
- 
-@@ -95,4 +121,6 @@ struct dma_buf_sync {
- #define DMA_BUF_SET_NAME_A	_IOW(DMA_BUF_BASE, 1, __u32)
- #define DMA_BUF_SET_NAME_B	_IOW(DMA_BUF_BASE, 1, __u64)
- 
-+#define DMA_BUF_IOCTL_INFO	_IOWR(DMA_BUF_BASE, 2, struct dma_buf_info)
-+
- #endif
+ 	/**
+ 	 * @dumb_create:
+ 	 *
 -- 
 2.36.1
 

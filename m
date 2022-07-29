@@ -2,1602 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0786F584F96
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6787584F81
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 13:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbiG2LZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 07:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S234819AbiG2LXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 07:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236060AbiG2LZF (ORCPT
+        with ESMTP id S233298AbiG2LXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 07:25:05 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E172867CB9;
-        Fri, 29 Jul 2022 04:24:58 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 26TB5WpY050856;
-        Fri, 29 Jul 2022 19:05:33 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 29 Jul
- 2022 19:23:18 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Dhananjay Phadke <dhphadke@microsoft.com>,
-        "Johnny Huang" <johnny_huang@aspeedtech.com>
-CC:     <linux-aspeed@lists.ozlabs.org>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <BMC-SW@aspeedtech.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>
-Subject: [PATCH v9 5/5] crypto: aspeed: add HACE crypto driver
-Date:   Fri, 29 Jul 2022 19:23:13 +0800
-Message-ID: <20220729112313.86169-6-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220729112313.86169-1-neal_liu@aspeedtech.com>
-References: <20220729112313.86169-1-neal_liu@aspeedtech.com>
+        Fri, 29 Jul 2022 07:23:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E472181B
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 04:23:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1294B20D9A;
+        Fri, 29 Jul 2022 11:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659093819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v7mYg8s2ljTAisX7r4qpAGjXTWjAO7TsOyM5P3i2EQU=;
+        b=G7F0txVRAFpR26VJbZu0RDkP+yigpbnuVa9dqe6N3qFtFfAcdlaz2BIXwV0NdLYCVoiQSH
+        EZRDcnYu3XqrYxa5wKeE1p3rl1Oips58p7oCfP9oNT2jcAtPrtMIt9ZQRbMH4PdiMP8meN
+        MAJEYyF00CBGkaJ6bnrN7xm+H+yNHsI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659093819;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v7mYg8s2ljTAisX7r4qpAGjXTWjAO7TsOyM5P3i2EQU=;
+        b=7RcFovqcE80eOfqKDOm7E/jMfjecEk/Qn3/MzGSpqM5lh3GN2gYz3UTN16UeqYe1Is5Mg5
+        jdXWG4RaxqC3IVBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB61B13A1B;
+        Fri, 29 Jul 2022 11:23:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RxvJNDrD42LCFgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 29 Jul 2022 11:23:38 +0000
+Message-ID: <ec5dc308-e75f-eb4e-3837-a7221506f773@suse.cz>
+Date:   Fri, 29 Jul 2022 13:23:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 26TB5WpY050856
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 14/16] mm/slab_common: drop kmem_alloc & avoid
+ dereferencing fields when not using
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-15-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220712133946.307181-15-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add HACE crypto driver to support symmetric-key
-encryption and decryption with multiple modes of
-operation.
+On 7/12/22 15:39, Hyeonggon Yoo wrote:
+> Drop kmem_alloc event class, and define kmalloc and kmem_cache_alloc
+> using TRACE_EVENT() macro.
+> 
+> And then this patch does:
+>    - Do not pass pointer to struct kmem_cache to trace_kmalloc.
+>      gfp flag is enough to know if it's accounted or not.
+>    - Avoid dereferencing s->object_size and s->size when not using kmem_cache_alloc event.
+>    - Avoid dereferencing s->name in when not using kmem_cache_free event.
+> 
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
-Reviewed-by: Dhananjay Phadke <dphadke@linux.microsoft.com>
----
- drivers/crypto/aspeed/Kconfig              |   17 +
- drivers/crypto/aspeed/Makefile             |    7 +-
- drivers/crypto/aspeed/aspeed-hace-crypto.c | 1135 ++++++++++++++++++++
- drivers/crypto/aspeed/aspeed-hace.c        |   84 +-
- drivers/crypto/aspeed/aspeed-hace.h        |  112 ++
- 5 files changed, 1352 insertions(+), 3 deletions(-)
- create mode 100644 drivers/crypto/aspeed/aspeed-hace-crypto.c
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-diff --git a/drivers/crypto/aspeed/Kconfig b/drivers/crypto/aspeed/Kconfig
-index 03e3fc61498e..001bf2e09a72 100644
---- a/drivers/crypto/aspeed/Kconfig
-+++ b/drivers/crypto/aspeed/Kconfig
-@@ -30,3 +30,20 @@ config CRYPTO_DEV_ASPEED_HACE_HASH
- 	  hash driver.
- 	  Supports multiple message digest standards, including
- 	  SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, and so on.
-+
-+config CRYPTO_DEV_ASPEED_HACE_CRYPTO
-+	bool "Enable Aspeed Hash & Crypto Engine (HACE) crypto"
-+	depends on CRYPTO_DEV_ASPEED
-+	select CRYPTO_ENGINE
-+	select CRYPTO_AES
-+	select CRYPTO_DES
-+	select CRYPTO_ECB
-+	select CRYPTO_CBC
-+	select CRYPTO_CFB
-+	select CRYPTO_OFB
-+	select CRYPTO_CTR
-+	help
-+	  Select here to enable Aspeed Hash & Crypto Engine (HACE)
-+	  crypto driver.
-+	  Supports AES/DES symmetric-key encryption and decryption
-+	  with ECB/CBC/CFB/OFB/CTR options.
-diff --git a/drivers/crypto/aspeed/Makefile b/drivers/crypto/aspeed/Makefile
-index 8bc8d4fed5a9..421e2ca9c53e 100644
---- a/drivers/crypto/aspeed/Makefile
-+++ b/drivers/crypto/aspeed/Makefile
-@@ -1,6 +1,9 @@
- obj-$(CONFIG_CRYPTO_DEV_ASPEED) += aspeed_crypto.o
--aspeed_crypto-objs := aspeed-hace.o \
--		      $(hace-hash-y)
-+aspeed_crypto-objs := aspeed-hace.o	\
-+		      $(hace-hash-y)	\
-+		      $(hace-crypto-y)
- 
- obj-$(CONFIG_CRYPTO_DEV_ASPEED_HACE_HASH) += aspeed-hace-hash.o
- hace-hash-$(CONFIG_CRYPTO_DEV_ASPEED_HACE_HASH) := aspeed-hace-hash.o
-+obj-$(CONFIG_CRYPTO_DEV_ASPEED_HACE_CRYPTO) += aspeed-hace-crypto.o
-+hace-crypto-$(CONFIG_CRYPTO_DEV_ASPEED_HACE_CRYPTO) := aspeed-hace-crypto.o
-diff --git a/drivers/crypto/aspeed/aspeed-hace-crypto.c b/drivers/crypto/aspeed/aspeed-hace-crypto.c
-new file mode 100644
-index 000000000000..ba6158f5cf18
---- /dev/null
-+++ b/drivers/crypto/aspeed/aspeed-hace-crypto.c
-@@ -0,0 +1,1135 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (c) 2021 Aspeed Technology Inc.
-+ */
-+
-+#include "aspeed-hace.h"
-+
-+#ifdef CONFIG_CRYPTO_DEV_ASPEED_HACE_CRYPTO_DEBUG
-+#define CIPHER_DBG(h, fmt, ...)	\
-+	dev_info((h)->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
-+#else
-+#define CIPHER_DBG(h, fmt, ...)	\
-+	dev_dbg((h)->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
-+#endif
-+
-+static int aspeed_crypto_do_fallback(struct skcipher_request *areq)
-+{
-+	struct aspeed_cipher_reqctx *rctx = skcipher_request_ctx(areq);
-+	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(areq);
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	int err;
-+
-+	skcipher_request_set_tfm(&rctx->fallback_req, ctx->fallback_tfm);
-+	skcipher_request_set_callback(&rctx->fallback_req, areq->base.flags,
-+				      areq->base.complete, areq->base.data);
-+	skcipher_request_set_crypt(&rctx->fallback_req, areq->src, areq->dst,
-+				   areq->cryptlen, areq->iv);
-+
-+	if (rctx->enc_cmd & HACE_CMD_ENCRYPT)
-+		err = crypto_skcipher_encrypt(&rctx->fallback_req);
-+	else
-+		err = crypto_skcipher_decrypt(&rctx->fallback_req);
-+
-+	return err;
-+}
-+
-+static bool aspeed_crypto_need_fallback(struct skcipher_request *areq)
-+{
-+	struct aspeed_cipher_reqctx *rctx = skcipher_request_ctx(areq);
-+
-+	if (areq->cryptlen == 0)
-+		return true;
-+
-+	if ((rctx->enc_cmd & HACE_CMD_DES_SELECT) &&
-+	    !IS_ALIGNED(areq->cryptlen, DES_BLOCK_SIZE))
-+		return true;
-+
-+	if ((!(rctx->enc_cmd & HACE_CMD_DES_SELECT)) &&
-+	    !IS_ALIGNED(areq->cryptlen, AES_BLOCK_SIZE))
-+		return true;
-+
-+	return false;
-+}
-+
-+static int aspeed_hace_crypto_handle_queue(struct aspeed_hace_dev *hace_dev,
-+					   struct skcipher_request *req)
-+{
-+	if (hace_dev->version == AST2500_VERSION &&
-+	    aspeed_crypto_need_fallback(req)) {
-+		CIPHER_DBG(hace_dev, "SW fallback\n");
-+		return aspeed_crypto_do_fallback(req);
-+	}
-+
-+	return crypto_transfer_skcipher_request_to_engine(
-+			hace_dev->crypt_engine_crypto, req);
-+}
-+
-+static int aspeed_crypto_do_request(struct crypto_engine *engine, void *areq)
-+{
-+	struct skcipher_request *req = skcipher_request_cast(areq);
-+	struct crypto_skcipher *cipher = crypto_skcipher_reqtfm(req);
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+	struct aspeed_engine_crypto *crypto_engine;
-+	int rc;
-+
-+	crypto_engine = &hace_dev->crypto_engine;
-+	crypto_engine->req = req;
-+	crypto_engine->flags |= CRYPTO_FLAGS_BUSY;
-+
-+	rc = ctx->start(hace_dev);
-+
-+	if (rc != -EINPROGRESS)
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int aspeed_sk_complete(struct aspeed_hace_dev *hace_dev, int err)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct skcipher_request *req;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+
-+	if (rctx->enc_cmd & HACE_CMD_IV_REQUIRE) {
-+		if (rctx->enc_cmd & HACE_CMD_DES_SELECT)
-+			memcpy(req->iv, crypto_engine->cipher_ctx +
-+			       DES_KEY_SIZE, DES_KEY_SIZE);
-+		else
-+			memcpy(req->iv, crypto_engine->cipher_ctx,
-+			       AES_BLOCK_SIZE);
-+	}
-+
-+	crypto_engine->flags &= ~CRYPTO_FLAGS_BUSY;
-+
-+	crypto_finalize_skcipher_request(hace_dev->crypt_engine_crypto, req,
-+					 err);
-+
-+	return err;
-+}
-+
-+static int aspeed_sk_transfer_sg(struct aspeed_hace_dev *hace_dev)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct device *dev = hace_dev->dev;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct skcipher_request *req;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+
-+	if (req->src == req->dst) {
-+		dma_unmap_sg(dev, req->src, rctx->src_nents, DMA_BIDIRECTIONAL);
-+	} else {
-+		dma_unmap_sg(dev, req->src, rctx->src_nents, DMA_TO_DEVICE);
-+		dma_unmap_sg(dev, req->dst, rctx->dst_nents, DMA_FROM_DEVICE);
-+	}
-+
-+	return aspeed_sk_complete(hace_dev, 0);
-+}
-+
-+static int aspeed_sk_transfer(struct aspeed_hace_dev *hace_dev)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct skcipher_request *req;
-+	struct scatterlist *out_sg;
-+	int nbytes = 0;
-+	int rc = 0;
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+	out_sg = req->dst;
-+
-+	/* Copy output buffer to dst scatter-gather lists */
-+	nbytes = sg_copy_from_buffer(out_sg, rctx->dst_nents,
-+				     crypto_engine->cipher_addr, req->cryptlen);
-+	if (!nbytes) {
-+		dev_warn(hace_dev->dev, "invalid sg copy, %s:0x%x, %s:0x%x\n",
-+			 "nbytes", nbytes, "cryptlen", req->cryptlen);
-+		rc = -EINVAL;
-+	}
-+
-+	CIPHER_DBG(hace_dev, "%s:%d, %s:%d, %s:%d, %s:%p\n",
-+		   "nbytes", nbytes, "req->cryptlen", req->cryptlen,
-+		   "nb_out_sg", rctx->dst_nents,
-+		   "cipher addr", crypto_engine->cipher_addr);
-+
-+	return aspeed_sk_complete(hace_dev, rc);
-+}
-+
-+static int aspeed_sk_start(struct aspeed_hace_dev *hace_dev)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct skcipher_request *req;
-+	struct scatterlist *in_sg;
-+	int nbytes;
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+	in_sg = req->src;
-+
-+	nbytes = sg_copy_to_buffer(in_sg, rctx->src_nents,
-+				   crypto_engine->cipher_addr, req->cryptlen);
-+
-+	CIPHER_DBG(hace_dev, "%s:%d, %s:%d, %s:%d, %s:%p\n",
-+		   "nbytes", nbytes, "req->cryptlen", req->cryptlen,
-+		   "nb_in_sg", rctx->src_nents,
-+		   "cipher addr", crypto_engine->cipher_addr);
-+
-+	if (!nbytes) {
-+		dev_warn(hace_dev->dev, "invalid sg copy, %s:0x%x, %s:0x%x\n",
-+			 "nbytes", nbytes, "cryptlen", req->cryptlen);
-+		return -EINVAL;
-+	}
-+
-+	crypto_engine->resume = aspeed_sk_transfer;
-+
-+	/* Trigger engines */
-+	ast_hace_write(hace_dev, crypto_engine->cipher_dma_addr,
-+		       ASPEED_HACE_SRC);
-+	ast_hace_write(hace_dev, crypto_engine->cipher_dma_addr,
-+		       ASPEED_HACE_DEST);
-+	ast_hace_write(hace_dev, req->cryptlen, ASPEED_HACE_DATA_LEN);
-+	ast_hace_write(hace_dev, rctx->enc_cmd, ASPEED_HACE_CMD);
-+
-+	return -EINPROGRESS;
-+}
-+
-+static int aspeed_sk_start_sg(struct aspeed_hace_dev *hace_dev)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct aspeed_sg_list *src_list, *dst_list;
-+	dma_addr_t src_dma_addr, dst_dma_addr;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct skcipher_request *req;
-+	struct scatterlist *s;
-+	int src_sg_len;
-+	int dst_sg_len;
-+	int total, i;
-+	int rc;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+
-+	rctx->enc_cmd |= HACE_CMD_DES_SG_CTRL | HACE_CMD_SRC_SG_CTRL |
-+			 HACE_CMD_AES_KEY_HW_EXP | HACE_CMD_MBUS_REQ_SYNC_EN;
-+
-+	/* BIDIRECTIONAL */
-+	if (req->dst == req->src) {
-+		src_sg_len = dma_map_sg(hace_dev->dev, req->src,
-+					rctx->src_nents, DMA_BIDIRECTIONAL);
-+		dst_sg_len = src_sg_len;
-+		if (!src_sg_len) {
-+			dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
-+			return -EINVAL;
-+		}
-+
-+	} else {
-+		src_sg_len = dma_map_sg(hace_dev->dev, req->src,
-+					rctx->src_nents, DMA_TO_DEVICE);
-+		if (!src_sg_len) {
-+			dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
-+			return -EINVAL;
-+		}
-+
-+		dst_sg_len = dma_map_sg(hace_dev->dev, req->dst,
-+					rctx->dst_nents, DMA_FROM_DEVICE);
-+		if (!dst_sg_len) {
-+			dev_warn(hace_dev->dev, "dma_map_sg() dst error\n");
-+			rc = -EINVAL;
-+			goto free_req_src;
-+		}
-+	}
-+
-+	src_list = (struct aspeed_sg_list *)crypto_engine->cipher_addr;
-+	src_dma_addr = crypto_engine->cipher_dma_addr;
-+	total = req->cryptlen;
-+
-+	for_each_sg(req->src, s, src_sg_len, i) {
-+		src_list[i].phy_addr = sg_dma_address(s);
-+
-+		if (total > sg_dma_len(s)) {
-+			src_list[i].len = sg_dma_len(s);
-+			total -= src_list[i].len;
-+
-+		} else {
-+			/* last sg list */
-+			src_list[i].len = total;
-+			src_list[i].len |= BIT(31);
-+			total = 0;
-+		}
-+
-+		src_list[i].phy_addr = cpu_to_le32(src_list[i].phy_addr);
-+		src_list[i].len = cpu_to_le32(src_list[i].len);
-+	}
-+
-+	if (total != 0) {
-+		rc = -EINVAL;
-+		goto free_req;
-+	}
-+
-+	if (req->dst == req->src) {
-+		dst_list = src_list;
-+		dst_dma_addr = src_dma_addr;
-+
-+	} else {
-+		dst_list = (struct aspeed_sg_list *)crypto_engine->dst_sg_addr;
-+		dst_dma_addr = crypto_engine->dst_sg_dma_addr;
-+		total = req->cryptlen;
-+
-+		for_each_sg(req->dst, s, dst_sg_len, i) {
-+			dst_list[i].phy_addr = sg_dma_address(s);
-+
-+			if (total > sg_dma_len(s)) {
-+				dst_list[i].len = sg_dma_len(s);
-+				total -= dst_list[i].len;
-+
-+			} else {
-+				/* last sg list */
-+				dst_list[i].len = total;
-+				dst_list[i].len |= BIT(31);
-+				total = 0;
-+			}
-+
-+			dst_list[i].phy_addr = cpu_to_le32(dst_list[i].phy_addr);
-+			dst_list[i].len = cpu_to_le32(dst_list[i].len);
-+
-+		}
-+
-+		dst_list[dst_sg_len].phy_addr = 0;
-+		dst_list[dst_sg_len].len = 0;
-+	}
-+
-+	if (total != 0) {
-+		rc = -EINVAL;
-+		goto free_req;
-+	}
-+
-+	crypto_engine->resume = aspeed_sk_transfer_sg;
-+
-+	/* Memory barrier to ensure all data setup before engine starts */
-+	mb();
-+
-+	/* Trigger engines */
-+	ast_hace_write(hace_dev, src_dma_addr, ASPEED_HACE_SRC);
-+	ast_hace_write(hace_dev, dst_dma_addr, ASPEED_HACE_DEST);
-+	ast_hace_write(hace_dev, req->cryptlen, ASPEED_HACE_DATA_LEN);
-+	ast_hace_write(hace_dev, rctx->enc_cmd, ASPEED_HACE_CMD);
-+
-+	return -EINPROGRESS;
-+
-+free_req:
-+	if (req->dst == req->src) {
-+		dma_unmap_sg(hace_dev->dev, req->src, rctx->src_nents,
-+			     DMA_BIDIRECTIONAL);
-+
-+	} else {
-+		dma_unmap_sg(hace_dev->dev, req->dst, rctx->dst_nents,
-+			     DMA_TO_DEVICE);
-+		dma_unmap_sg(hace_dev->dev, req->src, rctx->src_nents,
-+			     DMA_TO_DEVICE);
-+	}
-+
-+	return rc;
-+
-+free_req_src:
-+	dma_unmap_sg(hace_dev->dev, req->src, rctx->src_nents, DMA_TO_DEVICE);
-+
-+	return rc;
-+}
-+
-+static int aspeed_hace_skcipher_trigger(struct aspeed_hace_dev *hace_dev)
-+{
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+	struct aspeed_cipher_reqctx *rctx;
-+	struct crypto_skcipher *cipher;
-+	struct aspeed_cipher_ctx *ctx;
-+	struct skcipher_request *req;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	req = crypto_engine->req;
-+	rctx = skcipher_request_ctx(req);
-+	cipher = crypto_skcipher_reqtfm(req);
-+	ctx = crypto_skcipher_ctx(cipher);
-+
-+	/* enable interrupt */
-+	rctx->enc_cmd |= HACE_CMD_ISR_EN;
-+
-+	rctx->dst_nents = sg_nents(req->dst);
-+	rctx->src_nents = sg_nents(req->src);
-+
-+	ast_hace_write(hace_dev, crypto_engine->cipher_ctx_dma,
-+		       ASPEED_HACE_CONTEXT);
-+
-+	if (rctx->enc_cmd & HACE_CMD_IV_REQUIRE) {
-+		if (rctx->enc_cmd & HACE_CMD_DES_SELECT)
-+			memcpy(crypto_engine->cipher_ctx + DES_BLOCK_SIZE,
-+			       req->iv, DES_BLOCK_SIZE);
-+		else
-+			memcpy(crypto_engine->cipher_ctx, req->iv,
-+			       AES_BLOCK_SIZE);
-+	}
-+
-+	if (hace_dev->version == AST2600_VERSION) {
-+		memcpy(crypto_engine->cipher_ctx + 16, ctx->key, ctx->key_len);
-+
-+		return aspeed_sk_start_sg(hace_dev);
-+	}
-+
-+	memcpy(crypto_engine->cipher_ctx + 16, ctx->key, AES_MAX_KEYLENGTH);
-+
-+	return aspeed_sk_start(hace_dev);
-+}
-+
-+static int aspeed_des_crypt(struct skcipher_request *req, u32 cmd)
-+{
-+	struct aspeed_cipher_reqctx *rctx = skcipher_request_ctx(req);
-+	struct crypto_skcipher *cipher = crypto_skcipher_reqtfm(req);
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+	u32 crypto_alg = cmd & HACE_CMD_OP_MODE_MASK;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	if (crypto_alg == HACE_CMD_CBC || crypto_alg == HACE_CMD_ECB) {
-+		if (!IS_ALIGNED(req->cryptlen, DES_BLOCK_SIZE))
-+			return -EINVAL;
-+	}
-+
-+	rctx->enc_cmd = cmd | HACE_CMD_DES_SELECT | HACE_CMD_RI_WO_DATA_ENABLE |
-+			HACE_CMD_DES | HACE_CMD_CONTEXT_LOAD_ENABLE |
-+			HACE_CMD_CONTEXT_SAVE_ENABLE;
-+
-+	return aspeed_hace_crypto_handle_queue(hace_dev, req);
-+}
-+
-+static int aspeed_des_setkey(struct crypto_skcipher *cipher, const u8 *key,
-+			     unsigned int keylen)
-+{
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
-+	struct crypto_tfm *tfm = crypto_skcipher_tfm(cipher);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+	int rc;
-+
-+	CIPHER_DBG(hace_dev, "keylen: %d bits\n", keylen);
-+
-+	if (keylen != DES_KEY_SIZE && keylen != DES3_EDE_KEY_SIZE) {
-+		dev_warn(hace_dev->dev, "invalid keylen: %d bits\n", keylen);
-+		return -EINVAL;
-+	}
-+
-+	if (keylen == DES_KEY_SIZE) {
-+		rc = crypto_des_verify_key(tfm, key);
-+		if (rc)
-+			return rc;
-+
-+	} else if (keylen == DES3_EDE_KEY_SIZE) {
-+		rc = crypto_des3_ede_verify_key(tfm, key);
-+		if (rc)
-+			return rc;
-+	}
-+
-+	memcpy(ctx->key, key, keylen);
-+	ctx->key_len = keylen;
-+
-+	crypto_skcipher_clear_flags(ctx->fallback_tfm, CRYPTO_TFM_REQ_MASK);
-+	crypto_skcipher_set_flags(ctx->fallback_tfm, cipher->base.crt_flags &
-+				  CRYPTO_TFM_REQ_MASK);
-+
-+	return crypto_skcipher_setkey(ctx->fallback_tfm, key, keylen);
-+}
-+
-+static int aspeed_tdes_ctr_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CTR |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_ctr_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CTR |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_ofb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_OFB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_ofb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_OFB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_cfb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CFB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_cfb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CFB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_cbc_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CBC |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_cbc_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CBC |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_ecb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_ECB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_tdes_ecb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_ECB |
-+				HACE_CMD_TRIPLE_DES);
-+}
-+
-+static int aspeed_des_ctr_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CTR |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_ctr_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CTR |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_ofb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_OFB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_ofb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_OFB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_cfb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CFB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_cfb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CFB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_cbc_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CBC |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_cbc_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CBC |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_ecb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_ECB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_des_ecb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_des_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_ECB |
-+				HACE_CMD_SINGLE_DES);
-+}
-+
-+static int aspeed_aes_crypt(struct skcipher_request *req, u32 cmd)
-+{
-+	struct aspeed_cipher_reqctx *rctx = skcipher_request_ctx(req);
-+	struct crypto_skcipher *cipher = crypto_skcipher_reqtfm(req);
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+	u32 crypto_alg = cmd & HACE_CMD_OP_MODE_MASK;
-+
-+	if (crypto_alg == HACE_CMD_CBC || crypto_alg == HACE_CMD_ECB) {
-+		if (!IS_ALIGNED(req->cryptlen, AES_BLOCK_SIZE))
-+			return -EINVAL;
-+	}
-+
-+	CIPHER_DBG(hace_dev, "%s\n",
-+		   (cmd & HACE_CMD_ENCRYPT) ? "encrypt" : "decrypt");
-+
-+	cmd |= HACE_CMD_AES_SELECT | HACE_CMD_RI_WO_DATA_ENABLE |
-+	       HACE_CMD_CONTEXT_LOAD_ENABLE | HACE_CMD_CONTEXT_SAVE_ENABLE;
-+
-+	switch (ctx->key_len) {
-+	case AES_KEYSIZE_128:
-+		cmd |= HACE_CMD_AES128;
-+		break;
-+	case AES_KEYSIZE_192:
-+		cmd |= HACE_CMD_AES192;
-+		break;
-+	case AES_KEYSIZE_256:
-+		cmd |= HACE_CMD_AES256;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	rctx->enc_cmd = cmd;
-+
-+	return aspeed_hace_crypto_handle_queue(hace_dev, req);
-+}
-+
-+static int aspeed_aes_setkey(struct crypto_skcipher *cipher, const u8 *key,
-+			     unsigned int keylen)
-+{
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+	struct crypto_aes_ctx gen_aes_key;
-+
-+	CIPHER_DBG(hace_dev, "keylen: %d bits\n", (keylen * 8));
-+
-+	if (keylen != AES_KEYSIZE_128 && keylen != AES_KEYSIZE_192 &&
-+	    keylen != AES_KEYSIZE_256)
-+		return -EINVAL;
-+
-+	if (ctx->hace_dev->version == AST2500_VERSION) {
-+		aes_expandkey(&gen_aes_key, key, keylen);
-+		memcpy(ctx->key, gen_aes_key.key_enc, AES_MAX_KEYLENGTH);
-+
-+	} else {
-+		memcpy(ctx->key, key, keylen);
-+	}
-+
-+	ctx->key_len = keylen;
-+
-+	crypto_skcipher_clear_flags(ctx->fallback_tfm, CRYPTO_TFM_REQ_MASK);
-+	crypto_skcipher_set_flags(ctx->fallback_tfm, cipher->base.crt_flags &
-+				  CRYPTO_TFM_REQ_MASK);
-+
-+	return crypto_skcipher_setkey(ctx->fallback_tfm, key, keylen);
-+}
-+
-+static int aspeed_aes_ctr_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CTR);
-+}
-+
-+static int aspeed_aes_ctr_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CTR);
-+}
-+
-+static int aspeed_aes_ofb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_OFB);
-+}
-+
-+static int aspeed_aes_ofb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_OFB);
-+}
-+
-+static int aspeed_aes_cfb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CFB);
-+}
-+
-+static int aspeed_aes_cfb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CFB);
-+}
-+
-+static int aspeed_aes_cbc_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_CBC);
-+}
-+
-+static int aspeed_aes_cbc_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_CBC);
-+}
-+
-+static int aspeed_aes_ecb_decrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_DECRYPT | HACE_CMD_ECB);
-+}
-+
-+static int aspeed_aes_ecb_encrypt(struct skcipher_request *req)
-+{
-+	return aspeed_aes_crypt(req, HACE_CMD_ENCRYPT | HACE_CMD_ECB);
-+}
-+
-+static int aspeed_crypto_cra_init(struct crypto_skcipher *tfm)
-+{
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	struct skcipher_alg *alg = crypto_skcipher_alg(tfm);
-+	const char *name = crypto_tfm_alg_name(&tfm->base);
-+	struct aspeed_hace_alg *crypto_alg;
-+
-+
-+	crypto_alg = container_of(alg, struct aspeed_hace_alg, alg.skcipher);
-+	ctx->hace_dev = crypto_alg->hace_dev;
-+	ctx->start = aspeed_hace_skcipher_trigger;
-+
-+	CIPHER_DBG(ctx->hace_dev, "%s\n", name);
-+
-+	ctx->fallback_tfm = crypto_alloc_skcipher(name, 0, CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_NEED_FALLBACK);
-+	if (IS_ERR(ctx->fallback_tfm)) {
-+		dev_err(ctx->hace_dev->dev, "ERROR: Cannot allocate fallback for %s %ld\n",
-+			name, PTR_ERR(ctx->fallback_tfm));
-+		return PTR_ERR(ctx->fallback_tfm);
-+	}
-+
-+	crypto_skcipher_set_reqsize(tfm, sizeof(struct aspeed_cipher_reqctx) +
-+			 crypto_skcipher_reqsize(ctx->fallback_tfm));
-+
-+	ctx->enginectx.op.do_one_request = aspeed_crypto_do_request;
-+	ctx->enginectx.op.prepare_request = NULL;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+
-+	return 0;
-+}
-+
-+static void aspeed_crypto_cra_exit(struct crypto_skcipher *tfm)
-+{
-+	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(tfm);
-+	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
-+
-+	CIPHER_DBG(hace_dev, "%s\n", crypto_tfm_alg_name(&tfm->base));
-+	crypto_free_skcipher(ctx->fallback_tfm);
-+}
-+
-+struct aspeed_hace_alg aspeed_crypto_algs[] = {
-+	{
-+		.alg.skcipher = {
-+			.min_keysize	= AES_MIN_KEY_SIZE,
-+			.max_keysize	= AES_MAX_KEY_SIZE,
-+			.setkey		= aspeed_aes_setkey,
-+			.encrypt	= aspeed_aes_ecb_encrypt,
-+			.decrypt	= aspeed_aes_ecb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ecb(aes)",
-+				.cra_driver_name	= "aspeed-ecb-aes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= AES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= AES_BLOCK_SIZE,
-+			.min_keysize	= AES_MIN_KEY_SIZE,
-+			.max_keysize	= AES_MAX_KEY_SIZE,
-+			.setkey		= aspeed_aes_setkey,
-+			.encrypt	= aspeed_aes_cbc_encrypt,
-+			.decrypt	= aspeed_aes_cbc_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cbc(aes)",
-+				.cra_driver_name	= "aspeed-cbc-aes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= AES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= AES_BLOCK_SIZE,
-+			.min_keysize	= AES_MIN_KEY_SIZE,
-+			.max_keysize	= AES_MAX_KEY_SIZE,
-+			.setkey		= aspeed_aes_setkey,
-+			.encrypt	= aspeed_aes_cfb_encrypt,
-+			.decrypt	= aspeed_aes_cfb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cfb(aes)",
-+				.cra_driver_name	= "aspeed-cfb-aes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= 1,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= AES_BLOCK_SIZE,
-+			.min_keysize	= AES_MIN_KEY_SIZE,
-+			.max_keysize	= AES_MAX_KEY_SIZE,
-+			.setkey		= aspeed_aes_setkey,
-+			.encrypt	= aspeed_aes_ofb_encrypt,
-+			.decrypt	= aspeed_aes_ofb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ofb(aes)",
-+				.cra_driver_name	= "aspeed-ofb-aes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= 1,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.min_keysize	= DES_KEY_SIZE,
-+			.max_keysize	= DES_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_des_ecb_encrypt,
-+			.decrypt	= aspeed_des_ecb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ecb(des)",
-+				.cra_driver_name	= "aspeed-ecb-des",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES_KEY_SIZE,
-+			.max_keysize	= DES_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_des_cbc_encrypt,
-+			.decrypt	= aspeed_des_cbc_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cbc(des)",
-+				.cra_driver_name	= "aspeed-cbc-des",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES_KEY_SIZE,
-+			.max_keysize	= DES_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_des_cfb_encrypt,
-+			.decrypt	= aspeed_des_cfb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cfb(des)",
-+				.cra_driver_name	= "aspeed-cfb-des",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES_KEY_SIZE,
-+			.max_keysize	= DES_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_des_ofb_encrypt,
-+			.decrypt	= aspeed_des_ofb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ofb(des)",
-+				.cra_driver_name	= "aspeed-ofb-des",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.min_keysize	= DES3_EDE_KEY_SIZE,
-+			.max_keysize	= DES3_EDE_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_tdes_ecb_encrypt,
-+			.decrypt	= aspeed_tdes_ecb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ecb(des3_ede)",
-+				.cra_driver_name	= "aspeed-ecb-tdes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES3_EDE_KEY_SIZE,
-+			.max_keysize	= DES3_EDE_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_tdes_cbc_encrypt,
-+			.decrypt	= aspeed_tdes_cbc_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cbc(des3_ede)",
-+				.cra_driver_name	= "aspeed-cbc-tdes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES3_EDE_KEY_SIZE,
-+			.max_keysize	= DES3_EDE_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_tdes_cfb_encrypt,
-+			.decrypt	= aspeed_tdes_cfb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "cfb(des3_ede)",
-+				.cra_driver_name	= "aspeed-cfb-tdes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES3_EDE_KEY_SIZE,
-+			.max_keysize	= DES3_EDE_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_tdes_ofb_encrypt,
-+			.decrypt	= aspeed_tdes_ofb_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ofb(des3_ede)",
-+				.cra_driver_name	= "aspeed-ofb-tdes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC |
-+							  CRYPTO_ALG_NEED_FALLBACK,
-+				.cra_blocksize		= DES_BLOCK_SIZE,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+};
-+
-+struct aspeed_hace_alg aspeed_crypto_algs_g6[] = {
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= AES_BLOCK_SIZE,
-+			.min_keysize	= AES_MIN_KEY_SIZE,
-+			.max_keysize	= AES_MAX_KEY_SIZE,
-+			.setkey		= aspeed_aes_setkey,
-+			.encrypt	= aspeed_aes_ctr_encrypt,
-+			.decrypt	= aspeed_aes_ctr_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ctr(aes)",
-+				.cra_driver_name	= "aspeed-ctr-aes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC,
-+				.cra_blocksize		= 1,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES_KEY_SIZE,
-+			.max_keysize	= DES_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_des_ctr_encrypt,
-+			.decrypt	= aspeed_des_ctr_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ctr(des)",
-+				.cra_driver_name	= "aspeed-ctr-des",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC,
-+				.cra_blocksize		= 1,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+	{
-+		.alg.skcipher = {
-+			.ivsize		= DES_BLOCK_SIZE,
-+			.min_keysize	= DES3_EDE_KEY_SIZE,
-+			.max_keysize	= DES3_EDE_KEY_SIZE,
-+			.setkey		= aspeed_des_setkey,
-+			.encrypt	= aspeed_tdes_ctr_encrypt,
-+			.decrypt	= aspeed_tdes_ctr_decrypt,
-+			.init		= aspeed_crypto_cra_init,
-+			.exit		= aspeed_crypto_cra_exit,
-+			.base = {
-+				.cra_name		= "ctr(des3_ede)",
-+				.cra_driver_name	= "aspeed-ctr-tdes",
-+				.cra_priority		= 300,
-+				.cra_flags		= CRYPTO_ALG_KERN_DRIVER_ONLY |
-+							  CRYPTO_ALG_ASYNC,
-+				.cra_blocksize		= 1,
-+				.cra_ctxsize		= sizeof(struct aspeed_cipher_ctx),
-+				.cra_alignmask		= 0x0f,
-+				.cra_module		= THIS_MODULE,
-+			}
-+		}
-+	},
-+
-+};
-+
-+void aspeed_unregister_hace_crypto_algs(struct aspeed_hace_dev *hace_dev)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(aspeed_crypto_algs); i++)
-+		crypto_unregister_skcipher(&aspeed_crypto_algs[i].alg.skcipher);
-+
-+	if (hace_dev->version != AST2600_VERSION)
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(aspeed_crypto_algs_g6); i++)
-+		crypto_unregister_skcipher(&aspeed_crypto_algs_g6[i].alg.skcipher);
-+}
-+
-+void aspeed_register_hace_crypto_algs(struct aspeed_hace_dev *hace_dev)
-+{
-+	int rc, i;
-+
-+	CIPHER_DBG(hace_dev, "\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(aspeed_crypto_algs); i++) {
-+		aspeed_crypto_algs[i].hace_dev = hace_dev;
-+		rc = crypto_register_skcipher(&aspeed_crypto_algs[i].alg.skcipher);
-+		if (rc) {
-+			CIPHER_DBG(hace_dev, "Failed to register %s\n",
-+				   aspeed_crypto_algs[i].alg.skcipher.base.cra_name);
-+		}
-+	}
-+
-+	if (hace_dev->version != AST2600_VERSION)
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(aspeed_crypto_algs_g6); i++) {
-+		aspeed_crypto_algs_g6[i].hace_dev = hace_dev;
-+		rc = crypto_register_skcipher(&aspeed_crypto_algs_g6[i].alg.skcipher);
-+		if (rc) {
-+			CIPHER_DBG(hace_dev, "Failed to register %s\n",
-+				   aspeed_crypto_algs_g6[i].alg.skcipher.base.cra_name);
-+		}
-+	}
-+}
-diff --git a/drivers/crypto/aspeed/aspeed-hace.c b/drivers/crypto/aspeed/aspeed-hace.c
-index 23a66f481b62..4fefc9e69d72 100644
---- a/drivers/crypto/aspeed/aspeed-hace.c
-+++ b/drivers/crypto/aspeed/aspeed-hace.c
-@@ -25,6 +25,7 @@
- static irqreturn_t aspeed_hace_irq(int irq, void *dev)
- {
- 	struct aspeed_hace_dev *hace_dev = (struct aspeed_hace_dev *)dev;
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
- 	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
- 	u32 sts;
- 
-@@ -40,9 +41,24 @@ static irqreturn_t aspeed_hace_irq(int irq, void *dev)
- 			dev_warn(hace_dev->dev, "HASH no active requests.\n");
- 	}
- 
-+	if (sts & HACE_CRYPTO_ISR) {
-+		if (crypto_engine->flags & CRYPTO_FLAGS_BUSY)
-+			tasklet_schedule(&crypto_engine->done_task);
-+		else
-+			dev_warn(hace_dev->dev, "CRYPTO no active requests.\n");
-+	}
-+
- 	return IRQ_HANDLED;
- }
- 
-+static void aspeed_hace_crypto_done_task(unsigned long data)
-+{
-+	struct aspeed_hace_dev *hace_dev = (struct aspeed_hace_dev *)data;
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
-+
-+	crypto_engine->resume(hace_dev);
-+}
-+
- static void aspeed_hace_hash_done_task(unsigned long data)
- {
- 	struct aspeed_hace_dev *hace_dev = (struct aspeed_hace_dev *)data;
-@@ -56,6 +72,9 @@ static void aspeed_hace_register(struct aspeed_hace_dev *hace_dev)
- #ifdef CONFIG_CRYPTO_DEV_ASPEED_HACE_HASH
- 	aspeed_register_hace_hash_algs(hace_dev);
- #endif
-+#ifdef CONFIG_CRYPTO_DEV_ASPEED_HACE_CRYPTO
-+	aspeed_register_hace_crypto_algs(hace_dev);
-+#endif
- }
- 
- static void aspeed_hace_unregister(struct aspeed_hace_dev *hace_dev)
-@@ -63,6 +82,9 @@ static void aspeed_hace_unregister(struct aspeed_hace_dev *hace_dev)
- #ifdef CONFIG_CRYPTO_DEV_ASPEED_HACE_HASH
- 	aspeed_unregister_hace_hash_algs(hace_dev);
- #endif
-+#ifdef CONFIG_CRYPTO_DEV_ASPEED_HACE_CRYPTO
-+	aspeed_unregister_hace_crypto_algs(hace_dev);
-+#endif
- }
- 
- static const struct of_device_id aspeed_hace_of_matches[] = {
-@@ -73,6 +95,7 @@ static const struct of_device_id aspeed_hace_of_matches[] = {
- 
- static int aspeed_hace_probe(struct platform_device *pdev)
- {
-+	struct aspeed_engine_crypto *crypto_engine;
- 	const struct of_device_id *hace_dev_id;
- 	struct aspeed_engine_hash *hash_engine;
- 	struct aspeed_hace_dev *hace_dev;
-@@ -93,6 +116,7 @@ static int aspeed_hace_probe(struct platform_device *pdev)
- 	hace_dev->dev = &pdev->dev;
- 	hace_dev->version = (unsigned long)hace_dev_id->data;
- 	hash_engine = &hace_dev->hash_engine;
-+	crypto_engine = &hace_dev->crypto_engine;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 
-@@ -146,6 +170,21 @@ static int aspeed_hace_probe(struct platform_device *pdev)
- 	tasklet_init(&hash_engine->done_task, aspeed_hace_hash_done_task,
- 		     (unsigned long)hace_dev);
- 
-+	/* Initialize crypto hardware engine structure for crypto */
-+	hace_dev->crypt_engine_crypto = crypto_engine_alloc_init(hace_dev->dev,
-+								 true);
-+	if (!hace_dev->crypt_engine_crypto) {
-+		rc = -ENOMEM;
-+		goto err_engine_hash_start;
-+	}
-+
-+	rc = crypto_engine_start(hace_dev->crypt_engine_crypto);
-+	if (rc)
-+		goto err_engine_crypto_start;
-+
-+	tasklet_init(&crypto_engine->done_task, aspeed_hace_crypto_done_task,
-+		     (unsigned long)hace_dev);
-+
- 	/* Allocate DMA buffer for hash engine input used */
- 	hash_engine->ahash_src_addr =
- 		dmam_alloc_coherent(&pdev->dev,
-@@ -155,7 +194,45 @@ static int aspeed_hace_probe(struct platform_device *pdev)
- 	if (!hash_engine->ahash_src_addr) {
- 		dev_err(&pdev->dev, "Failed to allocate dma buffer\n");
- 		rc = -ENOMEM;
--		goto err_engine_hash_start;
-+		goto err_engine_crypto_start;
-+	}
-+
-+	/* Allocate DMA buffer for crypto engine context used */
-+	crypto_engine->cipher_ctx =
-+		dmam_alloc_coherent(&pdev->dev,
-+				    PAGE_SIZE,
-+				    &crypto_engine->cipher_ctx_dma,
-+				    GFP_KERNEL);
-+	if (!crypto_engine->cipher_ctx) {
-+		dev_err(&pdev->dev, "Failed to allocate cipher ctx dma\n");
-+		rc = -ENOMEM;
-+		goto err_engine_crypto_start;
-+	}
-+
-+	/* Allocate DMA buffer for crypto engine input used */
-+	crypto_engine->cipher_addr =
-+		dmam_alloc_coherent(&pdev->dev,
-+				    ASPEED_CRYPTO_SRC_DMA_BUF_LEN,
-+				    &crypto_engine->cipher_dma_addr,
-+				    GFP_KERNEL);
-+	if (!crypto_engine->cipher_addr) {
-+		dev_err(&pdev->dev, "Failed to allocate cipher addr dma\n");
-+		rc = -ENOMEM;
-+		goto err_engine_crypto_start;
-+	}
-+
-+	/* Allocate DMA buffer for crypto engine output used */
-+	if (hace_dev->version == AST2600_VERSION) {
-+		crypto_engine->dst_sg_addr =
-+			dmam_alloc_coherent(&pdev->dev,
-+					    ASPEED_CRYPTO_DST_DMA_BUF_LEN,
-+					    &crypto_engine->dst_sg_dma_addr,
-+					    GFP_KERNEL);
-+		if (!crypto_engine->dst_sg_addr) {
-+			dev_err(&pdev->dev, "Failed to allocate dst_sg dma\n");
-+			rc = -ENOMEM;
-+			goto err_engine_crypto_start;
-+		}
- 	}
- 
- 	aspeed_hace_register(hace_dev);
-@@ -164,6 +241,8 @@ static int aspeed_hace_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+err_engine_crypto_start:
-+	crypto_engine_exit(hace_dev->crypt_engine_crypto);
- err_engine_hash_start:
- 	crypto_engine_exit(hace_dev->crypt_engine_hash);
- clk_exit:
-@@ -175,13 +254,16 @@ static int aspeed_hace_probe(struct platform_device *pdev)
- static int aspeed_hace_remove(struct platform_device *pdev)
- {
- 	struct aspeed_hace_dev *hace_dev = platform_get_drvdata(pdev);
-+	struct aspeed_engine_crypto *crypto_engine = &hace_dev->crypto_engine;
- 	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
- 
- 	aspeed_hace_unregister(hace_dev);
- 
- 	crypto_engine_exit(hace_dev->crypt_engine_hash);
-+	crypto_engine_exit(hace_dev->crypt_engine_crypto);
- 
- 	tasklet_kill(&hash_engine->done_task);
-+	tasklet_kill(&crypto_engine->done_task);
- 
- 	clk_disable_unprepare(hace_dev->clk);
- 
-diff --git a/drivers/crypto/aspeed/aspeed-hace.h b/drivers/crypto/aspeed/aspeed-hace.h
-index 3494ff22f69d..f2cde23b56ae 100644
---- a/drivers/crypto/aspeed/aspeed-hace.h
-+++ b/drivers/crypto/aspeed/aspeed-hace.h
-@@ -7,9 +7,12 @@
- #include <linux/err.h>
- #include <linux/fips.h>
- #include <linux/dma-mapping.h>
-+#include <crypto/aes.h>
-+#include <crypto/des.h>
- #include <crypto/scatterwalk.h>
- #include <crypto/internal/aead.h>
- #include <crypto/internal/akcipher.h>
-+#include <crypto/internal/des.h>
- #include <crypto/internal/hash.h>
- #include <crypto/internal/kpp.h>
- #include <crypto/internal/skcipher.h>
-@@ -24,15 +27,75 @@
-  * HACE register definitions *
-  *                           *
-  * ***************************/
-+#define ASPEED_HACE_SRC			0x00	/* Crypto Data Source Base Address Register */
-+#define ASPEED_HACE_DEST		0x04	/* Crypto Data Destination Base Address Register */
-+#define ASPEED_HACE_CONTEXT		0x08	/* Crypto Context Buffer Base Address Register */
-+#define ASPEED_HACE_DATA_LEN		0x0C	/* Crypto Data Length Register */
-+#define ASPEED_HACE_CMD			0x10	/* Crypto Engine Command Register */
-+
-+/* G5 */
-+#define ASPEED_HACE_TAG			0x18	/* HACE Tag Register */
-+/* G6 */
-+#define ASPEED_HACE_GCM_ADD_LEN		0x14	/* Crypto AES-GCM Additional Data Length Register */
-+#define ASPEED_HACE_GCM_TAG_BASE_ADDR	0x18	/* Crypto AES-GCM Tag Write Buff Base Address Reg */
- 
- #define ASPEED_HACE_STS			0x1C	/* HACE Status Register */
-+
- #define ASPEED_HACE_HASH_SRC		0x20	/* Hash Data Source Base Address Register */
- #define ASPEED_HACE_HASH_DIGEST_BUFF	0x24	/* Hash Digest Write Buffer Base Address Register */
- #define ASPEED_HACE_HASH_KEY_BUFF	0x28	/* Hash HMAC Key Buffer Base Address Register */
- #define ASPEED_HACE_HASH_DATA_LEN	0x2C	/* Hash Data Length Register */
- #define ASPEED_HACE_HASH_CMD		0x30	/* Hash Engine Command Register */
- 
-+/* crypto cmd */
-+#define  HACE_CMD_SINGLE_DES		0
-+#define  HACE_CMD_TRIPLE_DES		BIT(17)
-+#define  HACE_CMD_AES_SELECT		0
-+#define  HACE_CMD_DES_SELECT		BIT(16)
-+#define  HACE_CMD_ISR_EN		BIT(12)
-+#define  HACE_CMD_CONTEXT_SAVE_ENABLE	(0)
-+#define  HACE_CMD_CONTEXT_SAVE_DISABLE	BIT(9)
-+#define  HACE_CMD_AES			(0)
-+#define  HACE_CMD_DES			(0)
-+#define  HACE_CMD_RC4			BIT(8)
-+#define  HACE_CMD_DECRYPT		(0)
-+#define  HACE_CMD_ENCRYPT		BIT(7)
-+
-+#define  HACE_CMD_ECB			(0x0 << 4)
-+#define  HACE_CMD_CBC			(0x1 << 4)
-+#define  HACE_CMD_CFB			(0x2 << 4)
-+#define  HACE_CMD_OFB			(0x3 << 4)
-+#define  HACE_CMD_CTR			(0x4 << 4)
-+#define  HACE_CMD_OP_MODE_MASK		(0x7 << 4)
-+
-+#define  HACE_CMD_AES128		(0x0 << 2)
-+#define  HACE_CMD_AES192		(0x1 << 2)
-+#define  HACE_CMD_AES256		(0x2 << 2)
-+#define  HACE_CMD_OP_CASCADE		(0x3)
-+#define  HACE_CMD_OP_INDEPENDENT	(0x1)
-+
-+/* G5 */
-+#define  HACE_CMD_RI_WO_DATA_ENABLE	(0)
-+#define  HACE_CMD_RI_WO_DATA_DISABLE	BIT(11)
-+#define  HACE_CMD_CONTEXT_LOAD_ENABLE	(0)
-+#define  HACE_CMD_CONTEXT_LOAD_DISABLE	BIT(10)
-+/* G6 */
-+#define  HACE_CMD_AES_KEY_FROM_OTP	BIT(24)
-+#define  HACE_CMD_GHASH_TAG_XOR_EN	BIT(23)
-+#define  HACE_CMD_GHASH_PAD_LEN_INV	BIT(22)
-+#define  HACE_CMD_GCM_TAG_ADDR_SEL	BIT(21)
-+#define  HACE_CMD_MBUS_REQ_SYNC_EN	BIT(20)
-+#define  HACE_CMD_DES_SG_CTRL		BIT(19)
-+#define  HACE_CMD_SRC_SG_CTRL		BIT(18)
-+#define  HACE_CMD_CTR_IV_AES_96		(0x1 << 14)
-+#define  HACE_CMD_CTR_IV_DES_32		(0x1 << 14)
-+#define  HACE_CMD_CTR_IV_AES_64		(0x2 << 14)
-+#define  HACE_CMD_CTR_IV_AES_32		(0x3 << 14)
-+#define  HACE_CMD_AES_KEY_HW_EXP	BIT(13)
-+#define  HACE_CMD_GCM			(0x5 << 4)
-+
- /* interrupt status reg */
-+#define  HACE_CRYPTO_ISR		BIT(12)
- #define  HACE_HASH_ISR			BIT(9)
- #define  HACE_HASH_BUSY			BIT(0)
- 
-@@ -77,6 +140,9 @@
- #define ASPEED_HASH_SRC_DMA_BUF_LEN	0xa000
- #define ASPEED_HASH_QUEUE_LENGTH	50
- 
-+#define HACE_CMD_IV_REQUIRE		(HACE_CMD_CBC | HACE_CMD_CFB | \
-+					 HACE_CMD_OFB | HACE_CMD_CTR)
-+
- struct aspeed_hace_dev;
- 
- typedef int (*aspeed_hace_fn_t)(struct aspeed_hace_dev *);
-@@ -147,6 +213,48 @@ struct aspeed_sham_reqctx {
- 	u64			digcnt[2];
- };
- 
-+struct aspeed_engine_crypto {
-+	struct tasklet_struct		done_task;
-+	unsigned long			flags;
-+	struct skcipher_request		*req;
-+
-+	/* context buffer */
-+	void				*cipher_ctx;
-+	dma_addr_t			cipher_ctx_dma;
-+
-+	/* input buffer, could be single/scatter-gather lists */
-+	void				*cipher_addr;
-+	dma_addr_t			cipher_dma_addr;
-+
-+	/* output buffer, only used in scatter-gather lists */
-+	void				*dst_sg_addr;
-+	dma_addr_t			dst_sg_dma_addr;
-+
-+	/* callback func */
-+	aspeed_hace_fn_t		resume;
-+};
-+
-+struct aspeed_cipher_ctx {
-+	struct crypto_engine_ctx	enginectx;
-+
-+	struct aspeed_hace_dev		*hace_dev;
-+	int				key_len;
-+	u8				key[AES_MAX_KEYLENGTH];
-+
-+	/* callback func */
-+	aspeed_hace_fn_t		start;
-+
-+	struct crypto_skcipher          *fallback_tfm;
-+};
-+
-+struct aspeed_cipher_reqctx {
-+	int enc_cmd;
-+	int src_nents;
-+	int dst_nents;
-+
-+	struct skcipher_request         fallback_req;   /* keep at the end */
-+};
-+
- struct aspeed_hace_dev {
- 	void __iomem			*regs;
- 	struct device			*dev;
-@@ -155,8 +263,10 @@ struct aspeed_hace_dev {
- 	unsigned long			version;
- 
- 	struct crypto_engine		*crypt_engine_hash;
-+	struct crypto_engine		*crypt_engine_crypto;
- 
- 	struct aspeed_engine_hash	hash_engine;
-+	struct aspeed_engine_crypto	crypto_engine;
- };
- 
- struct aspeed_hace_alg {
-@@ -182,5 +292,7 @@ enum aspeed_version {
- 
- void aspeed_register_hace_hash_algs(struct aspeed_hace_dev *hace_dev);
- void aspeed_unregister_hace_hash_algs(struct aspeed_hace_dev *hace_dev);
-+void aspeed_register_hace_crypto_algs(struct aspeed_hace_dev *hace_dev);
-+void aspeed_unregister_hace_crypto_algs(struct aspeed_hace_dev *hace_dev);
- 
- #endif
--- 
-2.25.1
+With some comments:
+
+> ---
+>  include/trace/events/kmem.h | 64 +++++++++++++++++++++++++------------
+>  mm/slab.c                   | 16 ++++------
+>  mm/slab_common.c            | 17 ++++++----
+>  mm/slob.c                   | 16 +++-------
+>  mm/slub.c                   | 13 +++-----
+>  5 files changed, 70 insertions(+), 56 deletions(-)
+> 
+> diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
+> index e078ebcdc4b1..0ded2c351062 100644
+> --- a/include/trace/events/kmem.h
+> +++ b/include/trace/events/kmem.h
+> @@ -9,17 +9,15 @@
+>  #include <linux/tracepoint.h>
+>  #include <trace/events/mmflags.h>
+>  
+> -DECLARE_EVENT_CLASS(kmem_alloc,
+> +TRACE_EVENT(kmem_cache_alloc,
+>  
+>  	TP_PROTO(unsigned long call_site,
+>  		 const void *ptr,
+>  		 struct kmem_cache *s,
+> -		 size_t bytes_req,
+> -		 size_t bytes_alloc,
+>  		 gfp_t gfp_flags,
+>  		 int node),
+>  
+> -	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node),
+> +	TP_ARGS(call_site, ptr, s, gfp_flags, node),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	unsigned long,	call_site	)
+> @@ -34,8 +32,8 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>  	TP_fast_assign(
+>  		__entry->call_site	= call_site;
+>  		__entry->ptr		= ptr;
+> -		__entry->bytes_req	= bytes_req;
+> -		__entry->bytes_alloc	= bytes_alloc;
+> +		__entry->bytes_req	= s->object_size;
+> +		__entry->bytes_alloc	= s->size;
+>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+>  		__entry->node		= node;
+>  		__entry->accounted	= IS_ENABLED(CONFIG_MEMCG_KMEM) ?
+
+This assignment continues by ...
+	(s && s->flags & SLAB_ACCOUNT)) : false;
+
+We could now remove the "s &&" as we assume it's non-NULL anyway.
+
+> @@ -53,22 +51,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>  		__entry->accounted ? "true" : "false")
+>  );
+>  
+> -DEFINE_EVENT(kmem_alloc, kmalloc,
+> +TRACE_EVENT(kmalloc,
+>  
+> -	TP_PROTO(unsigned long call_site, const void *ptr,
+> -		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
+> -		 gfp_t gfp_flags, int node),
+> +	TP_PROTO(unsigned long call_site,
+> +		 const void *ptr,
+> +		 size_t bytes_req,
+> +		 size_t bytes_alloc,
+> +		 gfp_t gfp_flags,
+> +		 int node),
+>  
+> -	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
+> -);
+> +	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node),
+>  
+> -DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
+> +	TP_STRUCT__entry(
+> +		__field(	unsigned long,	call_site	)
+> +		__field(	const void *,	ptr		)
+> +		__field(	size_t,		bytes_req	)
+> +		__field(	size_t,		bytes_alloc	)
+> +		__field(	unsigned long,	gfp_flags	)
+> +		__field(	int,		node		)
+> +		__field(	bool,		accounted	)
+> +	),
+>  
+> -	TP_PROTO(unsigned long call_site, const void *ptr,
+> -		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
+> -		 gfp_t gfp_flags, int node),
+> +	TP_fast_assign(
+> +		__entry->call_site	= call_site;
+> +		__entry->ptr		= ptr;
+> +		__entry->bytes_req	= bytes_req;
+> +		__entry->bytes_alloc	= bytes_alloc;
+> +		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+> +		__entry->node		= node;
+> +		__entry->accounted	= IS_ENABLED(CONFIG_MEMCG_KMEM) ?
+> +					  (gfp_flags & __GFP_ACCOUNT) : false;
+
+This test could be perhaps moved to TP_printk and the accounted field
+removed completely, but we need to make sure trace-cmd (which reads the
+binary entries and does the printk in userspace) can interpret the tests
+properly, including the IS_ENABLED(CONFIG_MEMCG_KMEM) part.
+
+> +	),
+>  
+> -	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
+> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",
+> +		(void *)__entry->call_site,
+> +		__entry->ptr,
+> +		__entry->bytes_req,
+> +		__entry->bytes_alloc,
+> +		show_gfp_flags(__entry->gfp_flags),
+> +		__entry->node,
+> +		__entry->accounted ? "true" : "false")
+>  );
+>  
+>  TRACE_EVENT(kfree,
+> @@ -93,20 +115,20 @@ TRACE_EVENT(kfree,
+>  
+>  TRACE_EVENT(kmem_cache_free,
+>  
+> -	TP_PROTO(unsigned long call_site, const void *ptr, const char *name),
+> +	TP_PROTO(unsigned long call_site, const void *ptr, const struct kmem_cache *s),
+>  
+> -	TP_ARGS(call_site, ptr, name),
+> +	TP_ARGS(call_site, ptr, s),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	unsigned long,	call_site	)
+>  		__field(	const void *,	ptr		)
+> -		__string(	name,	name	)
+> +		__string(	name,		s->name		)
+>  	),
+>  
+>  	TP_fast_assign(
+>  		__entry->call_site	= call_site;
+>  		__entry->ptr		= ptr;
+> -		__assign_str(name, name);
+> +		__assign_str(name, s->name);
+>  	),
+>  
+>  	TP_printk("call_site=%pS ptr=%p name=%s",
+> diff --git a/mm/slab.c b/mm/slab.c
+> index f9b74831e3f4..1685e5507a59 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3447,8 +3447,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+>  {
+>  	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
+>  
+> -	trace_kmem_cache_alloc(_RET_IP_, ret, cachep, cachep->object_size,
+> -			       cachep->size, flags, NUMA_NO_NODE);
+> +	trace_kmem_cache_alloc(_RET_IP_, ret, cachep, flags, NUMA_NO_NODE);
+>  
+>  	return ret;
+>  }
+> @@ -3537,8 +3536,9 @@ kmem_cache_alloc_trace(struct kmem_cache *cachep, gfp_t flags, size_t size)
+>  	ret = slab_alloc(cachep, NULL, flags, size, _RET_IP_);
+>  
+>  	ret = kasan_kmalloc(cachep, ret, size, flags);
+> -	trace_kmalloc(_RET_IP_, ret, cachep,
+> -		      size, cachep->size, flags, NUMA_NO_NODE);
+> +	trace_kmalloc(_RET_IP_, ret,
+> +		      size, cachep->size,
+> +		      flags, NUMA_NO_NODE);
+
+This could now fit on 2, maybe even 1 line?
+Other trace_* calls could be perhaps also reduced, please check.
+
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(kmem_cache_alloc_trace);
+> @@ -3561,9 +3561,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
+>  {
+>  	void *ret = slab_alloc_node(cachep, NULL, flags, nodeid, cachep->object_size, _RET_IP_);
+>  
+> -	trace_kmem_cache_alloc(_RET_IP_, ret, cachep,
+> -			       cachep->object_size, cachep->size,
+> -			       flags, nodeid);
+> +	trace_kmem_cache_alloc(_RET_IP_, ret, cachep, flags, nodeid);
+>  
+>  	return ret;
+>  }
+> @@ -3588,7 +3586,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+>  	ret = slab_alloc_node(cachep, NULL, flags, nodeid, size, _RET_IP_);
+>  
+>  	ret = kasan_kmalloc(cachep, ret, size, flags);
+> -	trace_kmalloc(_RET_IP_, ret, cachep,
+> +	trace_kmalloc(_RET_IP_, ret,
+>  		      size, cachep->size,
+>  		      flags, nodeid);
+>  	return ret;
+> @@ -3652,7 +3650,7 @@ void kmem_cache_free(struct kmem_cache *cachep, void *objp)
+>  	if (!cachep)
+>  		return;
+>  
+> -	trace_kmem_cache_free(_RET_IP_, objp, cachep->name);
+> +	trace_kmem_cache_free(_RET_IP_, objp, cachep);
+>  	__do_kmem_cache_free(cachep, objp, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free);
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 0e66b4911ebf..c01c6b8f0d34 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -933,7 +933,7 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
+>  
+>  	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+>  		ret = kmalloc_large_node_notrace(size, flags, node);
+> -		trace_kmalloc(_RET_IP_, ret, NULL,
+> +		trace_kmalloc(_RET_IP_, ret,
+>  			      size, PAGE_SIZE << get_order(size),
+>  			      flags, node);
+>  		return ret;
+> @@ -946,8 +946,9 @@ void *__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller
+>  
+>  	ret = __kmem_cache_alloc_node(s, flags, node, size, caller);
+>  	ret = kasan_kmalloc(s, ret, size, flags);
+> -	trace_kmalloc(_RET_IP_, ret, s, size,
+> -		      s->size, flags, node);
+> +	trace_kmalloc(_RET_IP_, ret,
+> +		      size, s->size,
+> +		      flags, node);
+>  	return ret;
+>  }
+>  
+> @@ -1075,8 +1076,9 @@ void *kmalloc_large(size_t size, gfp_t flags)
+>  {
+>  	void *ret = __kmalloc_large_node_notrace(size, flags, NUMA_NO_NODE);
+>  
+> -	trace_kmalloc(_RET_IP_, ret, NULL, size,
+> -		      PAGE_SIZE << get_order(size), flags, NUMA_NO_NODE);
+> +	trace_kmalloc(_RET_IP_, ret,
+> +		      size, PAGE_SIZE << get_order(size),
+> +		      flags, NUMA_NO_NODE);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(kmalloc_large);
+> @@ -1090,8 +1092,9 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+>  {
+>  	void *ret = __kmalloc_large_node_notrace(size, flags, node);
+>  
+> -	trace_kmalloc(_RET_IP_, ret, NULL, size,
+> -		      PAGE_SIZE << get_order(size), flags, node);
+> +	trace_kmalloc(_RET_IP_, ret,
+> +		      size, PAGE_SIZE << get_order(size),
+> +		      flags, node);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(kmalloc_large_node);
+> diff --git a/mm/slob.c b/mm/slob.c
+> index a4d50d957c25..97a4d2407f96 100644
+> --- a/mm/slob.c
+> +++ b/mm/slob.c
+> @@ -507,8 +507,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
+>  		*m = size;
+>  		ret = (void *)m + minalign;
+>  
+> -		trace_kmalloc(caller, ret, NULL,
+> -			      size, size + minalign, gfp, node);
+> +		trace_kmalloc(caller, ret, size, size + minalign, gfp, node);
+>  	} else {
+>  		unsigned int order = get_order(size);
+>  
+> @@ -516,8 +515,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
+>  			gfp |= __GFP_COMP;
+>  		ret = slob_new_pages(gfp, order, node);
+>  
+> -		trace_kmalloc(caller, ret, NULL,
+> -			      size, PAGE_SIZE << order, gfp, node);
+> +		trace_kmalloc(caller, ret, size, PAGE_SIZE << order, gfp, node);
+>  	}
+>  
+>  	kmemleak_alloc(ret, size, 1, gfp);
+> @@ -608,14 +606,10 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
+>  
+>  	if (c->size < PAGE_SIZE) {
+>  		b = slob_alloc(c->size, flags, c->align, node, 0);
+> -		trace_kmem_cache_alloc(_RET_IP_, b, NULL, c->object_size,
+> -				       SLOB_UNITS(c->size) * SLOB_UNIT,
+
+Hm we lose the SLOB_UNITS() adjustment here. Maybe we don't care that much,
+maybe simply c->size could be already stored with SLOB_UNITS() (but didn't
+check if other stuff breaks with that).
+
+Thanks!
+
+> -				       flags, node);
+> +		trace_kmem_cache_alloc(_RET_IP_, b, c, flags, node);
+>  	} else {
+>  		b = slob_new_pages(flags, get_order(c->size), node);
+> -		trace_kmem_cache_alloc(_RET_IP_, b, NULL, c->object_size,
+> -				       PAGE_SIZE << get_order(c->size),
+> -				       flags, node);
+> +		trace_kmem_cache_alloc(_RET_IP_, b, c, flags, node);
+>  	}
+>  
+>  	if (b && c->ctor) {
+> @@ -671,7 +665,7 @@ static void kmem_rcu_free(struct rcu_head *head)
+>  void kmem_cache_free(struct kmem_cache *c, void *b)
+>  {
+>  	kmemleak_free_recursive(b, c->flags);
+> -	trace_kmem_cache_free(_RET_IP_, b, c->name);
+> +	trace_kmem_cache_free(_RET_IP_, b, c);
+>  	if (unlikely(c->flags & SLAB_TYPESAFE_BY_RCU)) {
+>  		struct slob_rcu *slob_rcu;
+>  		slob_rcu = b + (c->size - sizeof(struct slob_rcu));
+> diff --git a/mm/slub.c b/mm/slub.c
+> index f1aa51480dc4..a49c69469c64 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -3243,8 +3243,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>  {
+>  	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
+>  
+> -	trace_kmem_cache_alloc(_RET_IP_, ret, s, s->object_size,
+> -				s->size, gfpflags, NUMA_NO_NODE);
+> +	trace_kmem_cache_alloc(_RET_IP_, ret, s, gfpflags, NUMA_NO_NODE);
+>  
+>  	return ret;
+>  }
+> @@ -3274,7 +3273,7 @@ void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
+>  void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
+>  {
+>  	void *ret = slab_alloc(s, NULL, gfpflags, _RET_IP_, size);
+> -	trace_kmalloc(_RET_IP_, ret, s, size, s->size, gfpflags, NUMA_NO_NODE);
+> +	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags, NUMA_NO_NODE);
+>  	ret = kasan_kmalloc(s, ret, size, gfpflags);
+>  	return ret;
+>  }
+> @@ -3285,8 +3284,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
+>  {
+>  	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, s->object_size);
+>  
+> -	trace_kmem_cache_alloc(_RET_IP_, ret, s,
+> -			       s->object_size, s->size, gfpflags, node);
+> +	trace_kmem_cache_alloc(_RET_IP_, ret, s, gfpflags, node);
+>  
+>  	return ret;
+>  }
+> @@ -3299,8 +3297,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
+>  {
+>  	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, size);
+>  
+> -	trace_kmalloc(_RET_IP_, ret, s,
+> -		      size, s->size, gfpflags, node);
+> +	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags, node);
+>  
+>  	ret = kasan_kmalloc(s, ret, size, gfpflags);
+>  	return ret;
+> @@ -3544,7 +3541,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
+>  	s = cache_from_obj(s, x);
+>  	if (!s)
+>  		return;
+> -	trace_kmem_cache_free(_RET_IP_, x, s->name);
+> +	trace_kmem_cache_free(_RET_IP_, x, s);
+>  	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free);
 

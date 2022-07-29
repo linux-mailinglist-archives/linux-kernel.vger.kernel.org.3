@@ -2,76 +2,911 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D381E584A3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78B8584A40
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbiG2Dho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S234121AbiG2DjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiG2Dhh (ORCPT
+        with ESMTP id S233780AbiG2DjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:37:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00CF7CB40
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 20:37:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8C6B8264F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D1BEC433D6;
-        Fri, 29 Jul 2022 03:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659065854;
-        bh=9mcUUg5lmuACGthaun+7+p+qT7sMOwljbBFVfcsaj+o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dkjcWeaRfHdg3UDbnV/TDsjdjAPiKyXeDcQEf3rYd1lOSBheySxpw+IYn5t+bm3Px
-         pE7t5RJreDKPYYAUVmPa6V964ElXyGMePl7HPy+2W2hWrA00dOr09150ez1WcmDEXR
-         zgEGB3ZtBZiOYzBt2JzAdzGBn9B6qoA2Tb3jMT3SrexkSzAmk/dfdUrPgErLYH88N3
-         BcPkLqiwUSIXKLpNnTklNtbr8ayJmkXstGnW1mclDqJxKUs5rKxUoZqWz3YmPSfrOU
-         SbAIAsXsZFR2bMWCFmo3twJ3s5Z4mxYzpAcw84FG+wzyOnesMCIo7T17QS+U+lY6A7
-         70/WKIgPA6/lw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 07180C43140;
-        Fri, 29 Jul 2022 03:37:34 +0000 (UTC)
-Subject: Re: [git pull] drm fixes for 5.19 final
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9txsRyEJWjrTsha6wkqcdTM5MmTqRVns5b9eQCaQAwJpNg@mail.gmail.com>
-References: <CAPM=9txsRyEJWjrTsha6wkqcdTM5MmTqRVns5b9eQCaQAwJpNg@mail.gmail.com>
-X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-X-PR-Tracked-Message-Id: <CAPM=9txsRyEJWjrTsha6wkqcdTM5MmTqRVns5b9eQCaQAwJpNg@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-29
-X-PR-Tracked-Commit-Id: f16a2f593d0095e82e6b7f9d776f869c8ab45952
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e2c0490769ef8a95b61304389116ccc85c53e12
-Message-Id: <165906585402.27318.8863200340585582598.pr-tracker-bot@kernel.org>
-Date:   Fri, 29 Jul 2022 03:37:34 +0000
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 28 Jul 2022 23:39:00 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685E67B375;
+        Thu, 28 Jul 2022 20:38:57 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id va17so6436172ejb.0;
+        Thu, 28 Jul 2022 20:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SUUW8JlQ7VxUm84LVsAyCxayzoXt4OH9XV6CNM8BpII=;
+        b=nWYgs0i+BzXlsXtBVwPg56gDIr82eQQHCZkfAv0cwERiPcM8mF7nfUxPAFWcpz+EM/
+         oPbUJjbkCWZTgWYYKIyM5ka3tgPlIF8Op/FGwECcSQKNYJ4YtEAMUnp2mzMrfCO409EY
+         uI/6dPqQqi2mZtNlNLzhQpnqiUMt9jqekqpzI4odKYWvzo82JXGmNFAPO3oHt6oL1Wg9
+         Y2uPMV4ciNnjOC7oC4LTWRXqeJFoloxydZeUrYg3OElZ4zkXp7rkNjp3cyC3Ob6Ri6Ci
+         aGBZTH/iYEeskuqXzRmTfF93i1NmAF/m7EBINVSYFvnWtbyhjDkp5EdKM556+V7AXjS2
+         NN6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SUUW8JlQ7VxUm84LVsAyCxayzoXt4OH9XV6CNM8BpII=;
+        b=34L/wR0fb73fVBQ2LKsEyOCSWkx8iitYfjEcoujb7m/Xis0lJO9NXk7A+7sog/8y3x
+         bStO0qtNdNP9Xry9wkqgi3FZdYY+oxTqchCWl/+45ZY8HcIC8R1pJoZIhmvZwPMaUb5F
+         +hdd6UFi9NOeqt4kd4d/WV6pCVJmqkbHX8+8J8P5J974e/9h5WlSmjTZF8Ksvf/D1vjt
+         A+FVhnyTIgobRB5gK1es+idSCmUWUfO2bhe7l/HacCcxphfpu0DjkxB25txfis6uMQjs
+         vBJCE40f4jMQpKHg4axsMfBZMH+dNziNQjTB7NTpAdp8Yevfi/YTgoatnLf74bh2wVxI
+         1Iag==
+X-Gm-Message-State: AJIora8wU8m2ZpoCzwVLpfLjLePJTEym9mzHs6DJdxEEdBODi1AFdZD5
+        bB7paLRFjjYGzJc7nUYSJS4cn/OVjGDbFF2laPA=
+X-Google-Smtp-Source: AGRyM1u24MNzY/kHt1+5k9n3bbNGg0JjTF+ja5vMsPqV8JeLrmQTh+3NtjBafwbMOX6L2Ub65TiFL/8dJEsgjA/4iM0=
+X-Received: by 2002:a17:906:844f:b0:72b:549e:a654 with SMTP id
+ e15-20020a170906844f00b0072b549ea654mr1288382ejy.535.1659065935760; Thu, 28
+ Jul 2022 20:38:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <1658242365-27797-1-git-send-email-u0084500@gmail.com> <1658242365-27797-3-git-send-email-u0084500@gmail.com>
+In-Reply-To: <1658242365-27797-3-git-send-email-u0084500@gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 29 Jul 2022 11:38:44 +0800
+Message-ID: <CADiBU38OGHyAHReKhB7i_p6PUkGE5eCiN_G9_Es-DKtG0Yc71A@mail.gmail.com>
+Subject: Re: [PATCH v8 2/3] iio: adc: Add rtq6056 support
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 29 Jul 2022 13:31:03 +1000:
+Hi, Jonathan:
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-29
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e2c0490769ef8a95b61304389116ccc85c53e12
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+cy_huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=8819=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E6=99=9A=E4=B8=8A10:52=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> Add Richtek rtq6056 supporting.
+>
+> It can be used for the system to monitor load current and power with 16-b=
+it
+> resolution.
+>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> ---
+> Since v8
+> - Instead of 'integraion_time' for voltage channel, use per channel sampl=
+ing
+>   frequency to be more generic.
+For the v8 change, is there still anything need to be refined?
+>
+> Since v7
+> - Use 'DEFINE_RUNTIME_DEV_PM_OPS' to replace the explicit declaration of =
+pm_ops.
+>
+> Since v6
+> - Remove specific rtq6056 ABI document.
+> - Remove the redundant blank line.
+> - To prevent the race condition for attribute wrtie and shunt resistor wr=
+ite,
+>   use 'iio_device_claim_direct_mode' API.
+> - Refine the order for 'action_reset' and 'pm_runtime'.
+> - Fix text typo in comment like as ohm to Ohm and timea to time.
+>
+> Since v5
+> - Fix kernel version text for ABI.
+>
+> Since v4
+> - Add '__aligned(8)' for timestamp member in buffer_trigger_handler funct=
+ion.
+> - Declare timestamp from 'int64_t' to more unified 's64'.
+>
+> Since v3
+> - Refine pm_runtime API calling order in 'read_channel' API.
+> - Fix vshunt wrong scale for divider.
+> - Refine the comment text.
+> - Use 'devm_add_action_or_reset' to decrease the code usage in probe
+>   function.
+> - Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
+> - minor fix for the comma.
+> - Use pm_ptr to replace the direct assigned pm_ops.
+>
+> Since v2
+> - Rename file from 'rtq6056-adc' to 'rtq6056'.
+> - Refine the ABI, if generic already defined it, remove it and check the =
+channel
+>   report unit.
+> - Add copyright text.
+> - include the correct header.
+> - change the property parsing name.
+> - To use iio_chan_spec address field.
+> - Refine each channel separate and shared_by_all.
+> - Use pm_runtime and pm_runtime_autosuspend.
+> - Remove the shutdown callback. From the HW suggestion, it's not recommen=
+ded to
+>   use battery as the power supply.
+> - Check all scale unit (voltage->mV, current->mA, power->milliWatt).
+> - Use the read_avail to provide the interface for attribute value list.
+> - Add comma for the last element in the const integer array.
+> - Refine each ADC label text.
+> - In read_label callback, replace snprintf to sysfs_emit.
+> ---
+>  drivers/iio/adc/Kconfig   |  15 ++
+>  drivers/iio/adc/Makefile  |   1 +
+>  drivers/iio/adc/rtq6056.c | 661 ++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 677 insertions(+)
+>  create mode 100644 drivers/iio/adc/rtq6056.c
+>
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 48ace74..caebd1a 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -908,6 +908,21 @@ config ROCKCHIP_SARADC
+>           To compile this driver as a module, choose M here: the
+>           module will be called rockchip_saradc.
+>
+> +config RICHTEK_RTQ6056
+> +       tristate "Richtek RTQ6056 Current and Power Monitor ADC"
+> +       depends on I2C
+> +       select REGMAP_I2C
+> +       select IIO_BUFFER
+> +       select IIO_TRIGGERED_BUFFER
+> +       help
+> +         Say yes here to enable RQT6056 ADC support.
+> +         RTQ6056 is a high accuracy current-sense monitor with I2C and S=
+MBus
+> +         compatible interface, and the device provides full information =
+for
+> +         system by reading out the load current and power.
+> +
+> +         This driver can also be built as a module. If so, the module wi=
+ll be
+> +         called rtq6056.
+> +
+>  config RZG2L_ADC
+>         tristate "Renesas RZ/G2L ADC driver"
+>         depends on ARCH_RZG2L || COMPILE_TEST
+> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+> index 39d806f..cda7580 100644
+> --- a/drivers/iio/adc/Makefile
+> +++ b/drivers/iio/adc/Makefile
+> @@ -84,6 +84,7 @@ obj-$(CONFIG_QCOM_PM8XXX_XOADC) +=3D qcom-pm8xxx-xoadc.=
+o
+>  obj-$(CONFIG_RCAR_GYRO_ADC) +=3D rcar-gyroadc.o
+>  obj-$(CONFIG_RN5T618_ADC) +=3D rn5t618-adc.o
+>  obj-$(CONFIG_ROCKCHIP_SARADC) +=3D rockchip_saradc.o
+> +obj-$(CONFIG_RICHTEK_RTQ6056) +=3D rtq6056.o
+>  obj-$(CONFIG_RZG2L_ADC) +=3D rzg2l_adc.o
+>  obj-$(CONFIG_SC27XX_ADC) +=3D sc27xx_adc.o
+>  obj-$(CONFIG_SPEAR_ADC) +=3D spear_adc.o
+> diff --git a/drivers/iio/adc/rtq6056.c b/drivers/iio/adc/rtq6056.c
+> new file mode 100644
+> index 00000000..c1b2e8d
+> --- /dev/null
+> +++ b/drivers/iio/adc/rtq6056.c
+> @@ -0,0 +1,661 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Richtek Technology Corp.
+> + *
+> + * ChiYuan Huang <cy_huang@richtek.com>
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/types.h>
+> +#include <linux/util_macros.h>
+> +
+> +#include <linux/iio/buffer.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/iio/sysfs.h>
+> +#include <linux/iio/trigger_consumer.h>
+> +#include <linux/iio/triggered_buffer.h>
+> +
+> +#define RTQ6056_REG_CONFIG     0x00
+> +#define RTQ6056_REG_SHUNTVOLT  0x01
+> +#define RTQ6056_REG_BUSVOLT    0x02
+> +#define RTQ6056_REG_POWER      0x03
+> +#define RTQ6056_REG_CURRENT    0x04
+> +#define RTQ6056_REG_CALIBRATION        0x05
+> +#define RTQ6056_REG_MASKENABLE 0x06
+> +#define RTQ6056_REG_ALERTLIMIT 0x07
+> +#define RTQ6056_REG_MANUFACTID 0xFE
+> +#define RTQ6056_REG_DIEID      0xFF
+> +
+> +#define RTQ6056_VENDOR_ID      0x1214
+> +#define RTQ6056_DEFAULT_CONFIG 0x4127
+> +#define RTQ6056_CONT_ALLON     7
+> +
+> +enum {
+> +       RTQ6056_CH_VSHUNT =3D 0,
+> +       RTQ6056_CH_VBUS,
+> +       RTQ6056_CH_POWER,
+> +       RTQ6056_CH_CURRENT,
+> +       RTQ6056_MAX_CHANNEL
+> +};
+> +
+> +enum {
+> +       F_OPMODE =3D 0,
+> +       F_VSHUNTCT,
+> +       F_VBUSCT,
+> +       F_AVG,
+> +       F_RESET,
+> +       F_MAX_FIELDS
+> +};
+> +
+> +struct rtq6056_priv {
+> +       struct device *dev;
+> +       struct regmap *regmap;
+> +       struct regmap_field *rm_fields[F_MAX_FIELDS];
+> +       u32 shunt_resistor_uohm;
+> +       int vshuntct_us;
+> +       int vbusct_us;
+> +       int avg_sample;
+> +};
+> +
+> +static const struct reg_field rtq6056_reg_fields[F_MAX_FIELDS] =3D {
+> +       [F_OPMODE] =3D REG_FIELD(RTQ6056_REG_CONFIG, 0, 2),
+> +       [F_VSHUNTCT] =3D REG_FIELD(RTQ6056_REG_CONFIG, 3, 5),
+> +       [F_VBUSCT] =3D REG_FIELD(RTQ6056_REG_CONFIG, 6, 8),
+> +       [F_AVG] =3D REG_FIELD(RTQ6056_REG_CONFIG, 9, 11),
+> +       [F_RESET] =3D REG_FIELD(RTQ6056_REG_CONFIG, 15, 15),
+> +};
+> +
+> +static const struct iio_chan_spec rtq6056_channels[RTQ6056_MAX_CHANNEL +=
+ 1] =3D {
+> +       {
+> +               .type =3D IIO_VOLTAGE,
+> +               .indexed =3D 1,
+> +               .channel =3D 0,
+> +               .address =3D RTQ6056_REG_SHUNTVOLT,
+> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
+> +                                     BIT(IIO_CHAN_INFO_SCALE) |
+> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> +               .info_mask_separate_available =3D BIT(IIO_CHAN_INFO_SAMP_=
+FREQ),
+> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
+NG_RATIO),
+> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
+OVERSAMPLING_RATIO),
+> +               .scan_index =3D 0,
+> +               .scan_type =3D {
+> +                       .sign =3D 's',
+> +                       .realbits =3D 16,
+> +                       .storagebits =3D 16,
+> +                       .endianness =3D IIO_CPU,
+> +               },
+> +       },
+> +       {
+> +               .type =3D IIO_VOLTAGE,
+> +               .indexed =3D 1,
+> +               .channel =3D 1,
+> +               .address =3D RTQ6056_REG_BUSVOLT,
+> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
+> +                                     BIT(IIO_CHAN_INFO_SCALE) |
+> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> +               .info_mask_separate_available =3D BIT(IIO_CHAN_INFO_SAMP_=
+FREQ),
+> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
+NG_RATIO),
+> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
+OVERSAMPLING_RATIO),
+> +               .scan_index =3D 1,
+> +               .scan_type =3D {
+> +                       .sign =3D 'u',
+> +                       .realbits =3D 16,
+> +                       .storagebits =3D 16,
+> +                       .endianness =3D IIO_CPU,
+> +               },
+> +       },
+> +       {
+> +               .type =3D IIO_POWER,
+> +               .indexed =3D 1,
+> +               .channel =3D 2,
+> +               .address =3D RTQ6056_REG_POWER,
+> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
+> +                                     BIT(IIO_CHAN_INFO_SCALE) |
+> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
+NG_RATIO),
+> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
+OVERSAMPLING_RATIO),
+> +               .scan_index =3D 2,
+> +               .scan_type =3D {
+> +                       .sign =3D 'u',
+> +                       .realbits =3D 16,
+> +                       .storagebits =3D 16,
+> +                       .endianness =3D IIO_CPU,
+> +               },
+> +       },
+> +       {
+> +               .type =3D IIO_CURRENT,
+> +               .indexed =3D 1,
+> +               .channel =3D 3,
+> +               .address =3D RTQ6056_REG_CURRENT,
+> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
+> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
+> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
+NG_RATIO),
+> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
+OVERSAMPLING_RATIO),
+> +               .scan_index =3D 3,
+> +               .scan_type =3D {
+> +                       .sign =3D 's',
+> +                       .realbits =3D 16,
+> +                       .storagebits =3D 16,
+> +                       .endianness =3D IIO_CPU,
+> +               },
+> +       },
+> +       IIO_CHAN_SOFT_TIMESTAMP(RTQ6056_MAX_CHANNEL),
+> +};
+> +
+> +static int rtq6056_adc_read_channel(struct rtq6056_priv *priv,
+> +                                   struct iio_chan_spec const *ch,
+> +                                   int *val)
+> +{
+> +       struct device *dev =3D priv->dev;
+> +       unsigned int addr =3D ch->address;
+> +       unsigned int regval;
+> +       int ret;
+> +
+> +       pm_runtime_get_sync(dev);
+> +       ret =3D regmap_read(priv->regmap, addr, &regval);
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Power and VBUS is unsigned 16-bit, others are signed 16-bit */
+> +       if (addr =3D=3D RTQ6056_REG_BUSVOLT || addr =3D=3D RTQ6056_REG_PO=
+WER)
+> +               *val =3D regval;
+> +       else
+> +               *val =3D sign_extend32(regval, 16);
+> +
+> +       return IIO_VAL_INT;
+> +}
+> +
+> +static int rtq6056_adc_read_scale(struct iio_chan_spec const *ch, int *v=
+al,
+> +                                 int *val2)
+> +{
+> +       switch (ch->address) {
+> +       case RTQ6056_REG_SHUNTVOLT:
+> +               /* VSHUNT lsb  2.5uV */
+> +               *val =3D 2500;
+> +               *val2 =3D 1000000;
+> +               return IIO_VAL_FRACTIONAL;
+> +       case RTQ6056_REG_BUSVOLT:
+> +               /* VBUS lsb 1.25mV */
+> +               *val =3D 1250;
+> +               *val2 =3D 1000;
+> +               return IIO_VAL_FRACTIONAL;
+> +       case RTQ6056_REG_POWER:
+> +               /* Power lsb 25mW */
+> +               *val =3D 25;
+> +               return IIO_VAL_INT;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +}
+> +
+> +/*
+> + * Sample frequency for channel VSHUNT and VBUS. The indices correspond
+> + * with the bit value expected by the chip. And it can be found at
+> + * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
+> + */
+> +static const int rtq6056_samp_freq_list[] =3D {
+> +       7194, 4926, 3717, 1904, 964, 485, 243, 122,
+> +};
+> +
+> +static int rtq6056_adc_set_samp_freq(struct rtq6056_priv *priv,
+> +                                    struct iio_chan_spec const *ch, int =
+val)
+> +{
+> +       struct regmap_field *rm_field;
+> +       unsigned int selector;
+> +       int *ct, ret;
+> +
+> +       if (val > 7194 || val < 122)
+> +               return -EINVAL;
+> +
+> +       if (ch->address =3D=3D RTQ6056_REG_SHUNTVOLT) {
+> +               rm_field =3D priv->rm_fields[F_VSHUNTCT];
+> +               ct =3D &priv->vshuntct_us;
+> +       } else if (ch->address =3D=3D RTQ6056_REG_BUSVOLT) {
+> +               rm_field =3D priv->rm_fields[F_VBUSCT];
+> +               ct =3D &priv->vbusct_us;
+> +       } else
+> +               return -EINVAL;
+> +
+> +       selector =3D find_closest_descending(val, rtq6056_samp_freq_list,
+> +                                          ARRAY_SIZE(rtq6056_samp_freq_l=
+ist));
+> +
+> +       ret =3D regmap_field_write(rm_field, selector);
+> +       if (ret)
+> +               return ret;
+> +
+> +       *ct =3D 1000000 / rtq6056_samp_freq_list[selector];
+> +
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Available averaging rate for rtq6056. The indices correspond with the=
+ bit
+> + * value expected by the chip. And it can be found at
+> + * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
+> + */
+> +static const int rtq6056_avg_sample_list[] =3D {
+> +       1, 4, 16, 64, 128, 256, 512, 1024,
+> +};
+> +
+> +static int rtq6056_adc_set_average(struct rtq6056_priv *priv, int val)
+> +{
+> +       unsigned int selector;
+> +       int ret;
+> +
+> +       if (val > 1024 || val < 1)
+> +               return -EINVAL;
+> +
+> +       selector =3D find_closest(val, rtq6056_avg_sample_list,
+> +                               ARRAY_SIZE(rtq6056_avg_sample_list));
+> +
+> +       ret =3D regmap_field_write(priv->rm_fields[F_AVG], selector);
+> +       if (ret)
+> +               return ret;
+> +
+> +       priv->avg_sample =3D rtq6056_avg_sample_list[selector];
+> +
+> +       return 0;
+> +}
+> +
+> +static int rtq6056_adc_get_sample_freq(struct rtq6056_priv *priv,
+> +                                      struct iio_chan_spec const *ch, in=
+t *val)
+> +{
+> +       int sample_time;
+> +
+> +       if (ch->address =3D=3D RTQ6056_REG_SHUNTVOLT)
+> +               sample_time =3D priv->vshuntct_us;
+> +       else if (ch->address =3D=3D RTQ6056_REG_BUSVOLT)
+> +               sample_time =3D priv->vbusct_us;
+> +       else {
+> +               sample_time =3D priv->vshuntct_us + priv->vbusct_us;
+> +               sample_time *=3D priv->avg_sample;
+> +       }
+> +
+> +       *val =3D 1000000 / sample_time;
+> +
+> +       return IIO_VAL_INT;
+> +}
+> +
+> +static int rtq6056_adc_read_raw(struct iio_dev *indio_dev,
+> +                               struct iio_chan_spec const *chan, int *va=
+l,
+> +                               int *val2, long mask)
+> +{
+> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
+> +
+> +       switch (mask) {
+> +       case IIO_CHAN_INFO_RAW:
+> +               return rtq6056_adc_read_channel(priv, chan, val);
+> +       case IIO_CHAN_INFO_SCALE:
+> +               return rtq6056_adc_read_scale(chan, val, val2);
+> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +               *val =3D priv->avg_sample;
+> +               return IIO_VAL_INT;
+> +       case IIO_CHAN_INFO_SAMP_FREQ:
+> +               return rtq6056_adc_get_sample_freq(priv, chan, val);
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +}
+> +
+> +static int rtq6056_adc_read_avail(struct iio_dev *indio_dev,
+> +                                 struct iio_chan_spec const *chan,
+> +                                 const int **vals, int *type, int *lengt=
+h,
+> +                                 long mask)
+> +{
+> +       switch (mask) {
+> +       case IIO_CHAN_INFO_SAMP_FREQ:
+> +               *vals =3D rtq6056_samp_freq_list;
+> +               *type =3D IIO_VAL_INT;
+> +               *length =3D ARRAY_SIZE(rtq6056_samp_freq_list);
+> +               return IIO_AVAIL_LIST;
+> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +               *vals =3D rtq6056_avg_sample_list;
+> +               *type =3D IIO_VAL_INT;
+> +               *length =3D ARRAY_SIZE(rtq6056_avg_sample_list);
+> +               return IIO_AVAIL_LIST;
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +}
+> +
+> +static int rtq6056_adc_write_raw(struct iio_dev *indio_dev,
+> +                                struct iio_chan_spec const *chan, int va=
+l,
+> +                                int val2, long mask)
+> +{
+> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
+> +       int ret;
+> +
+> +       ret =3D iio_device_claim_direct_mode(indio_dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (mask) {
+> +       case IIO_CHAN_INFO_SAMP_FREQ:
+> +               ret =3D rtq6056_adc_set_samp_freq(priv, chan, val);
+> +               break;
+> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +               ret =3D rtq6056_adc_set_average(priv, val);
+> +               break;
+> +       default:
+> +               ret =3D -EINVAL;
+> +               break;
+> +       }
+> +
+> +       iio_device_release_direct_mode(indio_dev);
+> +
+> +       return ret;
+> +}
+> +
+> +static const char *rtq6056_channel_labels[RTQ6056_MAX_CHANNEL] =3D {
+> +       [RTQ6056_CH_VSHUNT] =3D "Vshunt",
+> +       [RTQ6056_CH_VBUS] =3D "Vbus",
+> +       [RTQ6056_CH_POWER] =3D "Power",
+> +       [RTQ6056_CH_CURRENT] =3D "Current",
+> +};
+> +
+> +static int rtq6056_adc_read_label(struct iio_dev *indio_dev,
+> +                                 struct iio_chan_spec const *chan,
+> +                                 char *label)
+> +{
+> +       return sysfs_emit(label, "%s\n", rtq6056_channel_labels[chan->cha=
+nnel]);
+> +}
+> +
+> +static int rtq6056_set_shunt_resistor(struct rtq6056_priv *priv,
+> +                                     int resistor_uohm)
+> +{
+> +       unsigned int calib_val;
+> +       int ret;
+> +
+> +       if (resistor_uohm <=3D 0) {
+> +               dev_err(priv->dev, "Invalid resistor [%d]\n", resistor_uo=
+hm);
+> +               return -EINVAL;
+> +       }
+> +
+> +       /* calibration =3D 5120000 / (Rshunt (uOhm) * current lsb (1mA)) =
+*/
+> +       calib_val =3D 5120000 / resistor_uohm;
+> +       ret =3D regmap_write(priv->regmap, RTQ6056_REG_CALIBRATION, calib=
+_val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       priv->shunt_resistor_uohm =3D resistor_uohm;
+> +
+> +       return 0;
+> +}
+> +
+> +static ssize_t shunt_resistor_show(struct device *dev,
+> +                                  struct device_attribute *attr, char *b=
+uf)
+> +{
+> +       struct rtq6056_priv *priv =3D iio_priv(dev_to_iio_dev(dev));
+> +       int vals[2] =3D { priv->shunt_resistor_uohm, 1000000 };
+> +
+> +       return iio_format_value(buf, IIO_VAL_FRACTIONAL, 1, vals);
+> +}
+> +
+> +static ssize_t shunt_resistor_store(struct device *dev,
+> +                                   struct device_attribute *attr,
+> +                                   const char *buf, size_t len)
+> +{
+> +       struct iio_dev *indio_dev =3D dev_to_iio_dev(dev);
+> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
+> +       int val, val_fract, ret;
+> +
+> +       ret =3D iio_device_claim_direct_mode(indio_dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D iio_str_to_fixpoint(buf, 100000, &val, &val_fract);
+> +       if (ret)
+> +               goto out_store;
+> +
+> +       ret =3D rtq6056_set_shunt_resistor(priv, val * 1000000 + val_frac=
+t);
+> +
+> +out_store:
+> +       iio_device_release_direct_mode(indio_dev);
+> +
+> +       return ret ?: len;
+> +}
+> +
+> +static IIO_DEVICE_ATTR_RW(shunt_resistor, 0);
+> +
+> +static struct attribute *rtq6056_attributes[] =3D {
+> +       &iio_dev_attr_shunt_resistor.dev_attr.attr,
+> +       NULL
+> +};
+> +
+> +static const struct attribute_group rtq6056_attribute_group =3D {
+> +       .attrs =3D rtq6056_attributes,
+> +};
+> +
+> +static const struct iio_info rtq6056_info =3D {
+> +       .attrs =3D &rtq6056_attribute_group,
+> +       .read_raw =3D rtq6056_adc_read_raw,
+> +       .read_avail =3D rtq6056_adc_read_avail,
+> +       .write_raw =3D rtq6056_adc_write_raw,
+> +       .read_label =3D rtq6056_adc_read_label,
+> +};
+> +
+> +static irqreturn_t rtq6056_buffer_trigger_handler(int irq, void *p)
+> +{
+> +       struct iio_poll_func *pf =3D p;
+> +       struct iio_dev *indio_dev =3D pf->indio_dev;
+> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
+> +       struct device *dev =3D priv->dev;
+> +       struct {
+> +               u16 vals[RTQ6056_MAX_CHANNEL];
+> +               s64 timestamp __aligned(8);
+> +       } data;
+> +       unsigned int raw;
+> +       int i =3D 0, bit, ret;
+> +
+> +       memset(&data, 0, sizeof(data));
+> +
+> +       pm_runtime_get_sync(dev);
+> +
+> +       for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->mas=
+klength) {
+> +               unsigned int addr =3D rtq6056_channels[bit].address;
+> +
+> +               ret =3D regmap_read(priv->regmap, addr, &raw);
+> +               if (ret)
+> +                       goto out;
+> +
+> +               data.vals[i++] =3D raw;
+> +       }
+> +
+> +       iio_push_to_buffers_with_timestamp(indio_dev, &data, iio_get_time=
+_ns(indio_dev));
+> +
+> +out:
+> +       pm_runtime_mark_last_busy(dev);
+> +       pm_runtime_put(dev);
+> +
+> +       iio_trigger_notify_done(indio_dev->trig);
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static void rtq6056_enter_shutdown_state(void *dev)
+> +{
+> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
+> +
+> +       /* Enter shutdown state */
+> +       regmap_field_write(priv->rm_fields[F_OPMODE], 0);
+> +}
+> +
+> +static bool rtq6056_is_readable_reg(struct device *dev, unsigned int reg=
+)
+> +{
+> +       switch (reg) {
+> +       case RTQ6056_REG_CONFIG ... RTQ6056_REG_ALERTLIMIT:
+> +       case RTQ6056_REG_MANUFACTID ... RTQ6056_REG_DIEID:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
+> +}
+> +
+> +static bool rtq6056_is_writeable_reg(struct device *dev, unsigned int re=
+g)
+> +{
+> +       switch (reg) {
+> +       case RTQ6056_REG_CONFIG:
+> +       case RTQ6056_REG_CALIBRATION ... RTQ6056_REG_ALERTLIMIT:
+> +               return true;
+> +       default:
+> +               return false;
+> +       }
+> +}
+> +
+> +static const struct regmap_config rtq6056_regmap_config =3D {
+> +       .reg_bits =3D 8,
+> +       .val_bits =3D 16,
+> +       .val_format_endian =3D REGMAP_ENDIAN_BIG,
+> +       .max_register =3D RTQ6056_REG_DIEID,
+> +       .readable_reg =3D rtq6056_is_readable_reg,
+> +       .writeable_reg =3D rtq6056_is_writeable_reg,
+> +};
+> +
+> +static int rtq6056_probe(struct i2c_client *i2c)
+> +{
+> +       struct iio_dev *indio_dev;
+> +       struct rtq6056_priv *priv;
+> +       struct device *dev =3D &i2c->dev;
+> +       struct regmap *regmap;
+> +       unsigned int vendor_id, shunt_resistor_uohm;
+> +       int ret;
+> +
+> +       if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_WORD_DA=
+TA))
+> +               return -EOPNOTSUPP;
+> +
+> +       indio_dev =3D devm_iio_device_alloc(dev, sizeof(*priv));
+> +       if (!indio_dev)
+> +               return -ENOMEM;
+> +
+> +       priv =3D iio_priv(indio_dev);
+> +       priv->dev =3D dev;
+> +       priv->vshuntct_us =3D priv->vbusct_us =3D 1037;
+> +       priv->avg_sample =3D 1;
+> +       i2c_set_clientdata(i2c, priv);
+> +
+> +       regmap =3D devm_regmap_init_i2c(i2c, &rtq6056_regmap_config);
+> +       if (IS_ERR(regmap))
+> +               return dev_err_probe(dev, PTR_ERR(regmap),
+> +                                    "Failed to init regmap\n");
+> +
+> +       priv->regmap =3D regmap;
+> +
+> +       ret =3D regmap_read(regmap, RTQ6056_REG_MANUFACTID, &vendor_id);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret,
+> +                                    "Failed to get manufacturer info\n")=
+;
+> +
+> +       if (vendor_id !=3D RTQ6056_VENDOR_ID)
+> +               return dev_err_probe(dev, -ENODEV,
+> +                                    "Invalid vendor id 0x%04x\n", vendor=
+_id);
+> +
+> +       ret =3D devm_regmap_field_bulk_alloc(dev, regmap, priv->rm_fields=
+,
+> +                                          rtq6056_reg_fields, F_MAX_FIEL=
+DS);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "Failed to init regmap fie=
+ld\n");
+> +
+> +       /*
+> +        * By default, configure average sample as 1, bus and shunt conve=
+rsion
+> +        * time as 1037 microsecond, and operating mode to all on.
+> +        */
+> +       ret =3D regmap_write(regmap, RTQ6056_REG_CONFIG, RTQ6056_DEFAULT_=
+CONFIG);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret,
+> +                                    "Failed to enable continuous sensing=
+\n");
+> +
+> +       ret =3D devm_add_action_or_reset(dev, rtq6056_enter_shutdown_stat=
+e, dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
+> +       pm_runtime_use_autosuspend(dev);
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_mark_last_busy(dev);
+> +       ret =3D devm_pm_runtime_enable(dev);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "Failed to enable pm_runti=
+me\n");
+> +
+> +       /* By default, use 2000 micro-Ohm resistor */
+> +       shunt_resistor_uohm =3D 2000;
+> +       device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+> +                                &shunt_resistor_uohm);
+> +
+> +       ret =3D rtq6056_set_shunt_resistor(priv, shunt_resistor_uohm);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret,
+> +                                    "Failed to init shunt resistor\n");
+> +
+> +       indio_dev->name =3D "rtq6056";
+> +       indio_dev->modes =3D INDIO_DIRECT_MODE;
+> +       indio_dev->channels =3D rtq6056_channels;
+> +       indio_dev->num_channels =3D ARRAY_SIZE(rtq6056_channels);
+> +       indio_dev->info =3D &rtq6056_info;
+> +
+> +       ret =3D devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
+> +                                             rtq6056_buffer_trigger_hand=
+ler,
+> +                                             NULL);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret,
+> +                                    "Failed to allocate iio trigger buff=
+er\n");
+> +
+> +       return devm_iio_device_register(dev, indio_dev);
+> +}
+> +
+> +static int rtq6056_runtime_suspend(struct device *dev)
+> +{
+> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
+> +
+> +       /* Configure to shutdown mode */
+> +       return regmap_field_write(priv->rm_fields[F_OPMODE], 0);
+> +}
+> +
+> +static int rtq6056_runtime_resume(struct device *dev)
+> +{
+> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
+> +       int sample_rdy_time_us, ret;
+> +
+> +       ret =3D regmap_field_write(priv->rm_fields[F_OPMODE], RTQ6056_CON=
+T_ALLON);
+> +       if (ret)
+> +               return ret;
+> +
+> +       sample_rdy_time_us =3D priv->vbusct_us + priv->vshuntct_us;
+> +       sample_rdy_time_us *=3D priv->avg_sample;
+> +
+> +       usleep_range(sample_rdy_time_us, sample_rdy_time_us + 100);
+> +
+> +       return 0;
+> +}
+> +
+> +static DEFINE_RUNTIME_DEV_PM_OPS(rtq6056_pm_ops, rtq6056_runtime_suspend=
+,
+> +                                rtq6056_runtime_resume, NULL);
+> +
+> +static const struct of_device_id rtq6056_device_match[] =3D {
+> +       { .compatible =3D "richtek,rtq6056" },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, rtq6056_device_match);
+> +
+> +static struct i2c_driver rtq6056_driver =3D {
+> +       .driver =3D {
+> +               .name =3D "rtq6056",
+> +               .of_match_table =3D rtq6056_device_match,
+> +               .pm =3D pm_ptr(&rtq6056_pm_ops),
+> +       },
+> +       .probe_new =3D rtq6056_probe,
+> +};
+> +module_i2c_driver(rtq6056_driver);
+> +
+> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> +MODULE_DESCRIPTION("Richtek RTQ6056 Driver");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 2.7.4
+>

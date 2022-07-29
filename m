@@ -2,150 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0F8585215
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD872585217
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiG2PIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S236971AbiG2PIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbiG2PID (ORCPT
+        with ESMTP id S233738AbiG2PIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:08:03 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919AB7F525
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:08:02 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id p1so4839644plr.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=CvT5d2Uml4zSYK74zNGu6gfXjeWpkRQwLmz3buaPtes=;
-        b=l6Kkj/TiL0A33Ps7q+Lj2N4BqxMTHm6c5+Hf7aDbC1bWNTo5CGQj2ZGxiT31ad2qCr
-         TUvj+2uAqPqiG0ZExrrTMudERXR+yW1OgUwp8G0RWLXae1TbE9+GFJAaBZlvvwJ1Diw5
-         ca8eaU3YeTw0eQg2JxIVMBi/k0ANOBMnwD5HznKNFIZFljmw1oo5VpFTPBqHY7YgPuQ+
-         7T1xizLPeyX4MYfBYnBBoGRBnUAKWcdfOORA40WO+NGuOnZVa33RR3MxHZZiq9j1YJIL
-         VHr4FgCwpfe+nNEv/LsSJV1FVUOw2jn++bZNS6kDSRmLhX39OmkNXx/N1s+vCDXX1m+n
-         6eKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=CvT5d2Uml4zSYK74zNGu6gfXjeWpkRQwLmz3buaPtes=;
-        b=jltioXDkjZQxagc0ciuNPBwS3G74/OWVLZiPk4LBILhciRbWRVhY++SsQAuS1nD2lT
-         ei+q731QiAGsjjVYiu7FUSiXpimmNsgJWcsDZjly2W7BSF+0oI0wWsrUWJNTDPhueGtW
-         IGa/RixcAybDzgzKXUSpDIwS77BJnDqf973Pdr0a9BPyQN/XMcI1b/Rb82f/+mIOCmdW
-         PAYAimbrod4tut2yWosBD5cGBaFJY154p7g3AXZU9PtOBg1R9QCwttm6wXtrQK7OehNk
-         GCF2FNV+jWK1LwSg1VDwBDYilFIL2Ba9xVilyZWU/uHLEpB86Mx1jG1ZXqpX+uI64DqX
-         xpXQ==
-X-Gm-Message-State: ACgBeo3GEK7w4lpjijP7OBvo4ZwiaO0TXvOPIRcQgDo8B2u+xvABiyGa
-        nyf8TXDdZrq8EP/f5OMSCtzDxQ==
-X-Google-Smtp-Source: AA6agR5Wvr+L32gHkej9UgwrHzDHH7qVdbrxRlzLjnTkIDFbEIEx5UPc7lnO+jzihd9V9k4+U9eIkA==
-X-Received: by 2002:a17:902:ce05:b0:16b:e725:6f6c with SMTP id k5-20020a170902ce0500b0016be7256f6cmr4355459plg.110.1659107281282;
-        Fri, 29 Jul 2022 08:08:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b126-20020a621b84000000b0052859441ad3sm2948663pfb.214.2022.07.29.08.08.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 08:08:00 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 15:07:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH 2/4] KVM: x86/mmu: Fully re-evaluate MMIO caching when
- SPTE masks change
-Message-ID: <YuP3zGmpiALuXfW+@google.com>
-References: <20220728221759.3492539-1-seanjc@google.com>
- <20220728221759.3492539-3-seanjc@google.com>
- <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
+        Fri, 29 Jul 2022 11:08:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A0980F5E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:08:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D83834179;
+        Fri, 29 Jul 2022 15:08:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659107312; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7cHPQIB6zQDwcGtL276NpmzoSPq4JV+FEJd0yazhehc=;
+        b=qxg01MO2yHUbuFhuXC8GxKwY03/nprCcVK+16yZnJawMOw4ADuMmgylbIT5ipEOFaYj68l
+        ajxnl3gF8eytDOv29Bg18pUXEJcNNRbOwy9DENMSYug+51Gkk2xxwi2sI8nbDloR6kVLsC
+        jP2o1Zy/oKOHBL8Gi86RZ6MKmk0hbx4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659107312;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7cHPQIB6zQDwcGtL276NpmzoSPq4JV+FEJd0yazhehc=;
+        b=UcQg6MB8qBcg7vTB/xVsUq9+KkBIhY4RGdXAr6P/TNOhdu5Gpsr/ce1E2JoQHoPqR5/WYY
+        INdAwjURNsrnMyAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F2BB213A1B;
+        Fri, 29 Jul 2022 15:08:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I2iQOu/342ICdQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 29 Jul 2022 15:08:31 +0000
+Message-ID: <e77f9820-c818-d7af-185b-b8814313048b@suse.cz>
+Date:   Fri, 29 Jul 2022 17:08:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 00/15] common kmalloc v3
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022, Kai Huang wrote:
-> On Thu, 2022-07-28 at 22:17 +0000, Sean Christopherson wrote:
-> > Fully re-evaluate whether or not MMIO caching can be enabled when SPTE
-> > masks change; simply clearing enable_mmio_caching when a configuration
-> > isn't compatible with caching fails to handle the scenario where the
-> > masks are updated, e.g. by VMX for EPT or by SVM to account for the C-bit
-> > location, and toggle compatibility from false=>true.
-> > 
-> > Snapshot the original module param so that re-evaluating MMIO caching
-> > preserves userspace's desire to allow caching.  Use a snapshot approach
-> > so that enable_mmio_caching still reflects KVM's actual behavior.
-> > 
-
-..
-
-> > @@ -340,6 +353,12 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask)
-> >  	BUG_ON((u64)(unsigned)access_mask != access_mask);
-> >  	WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
-> >  
-> > +	/*
-> > +	 * Reset to the original module param value to honor userspace's desire
-> > +	 * to (dis)allow MMIO caching.  Update the param itself so that
-> > +	 * userspace can see whether or not KVM is actually using MMIO caching.
-> > +	 */
-> > +	enable_mmio_caching = allow_mmio_caching;
+On 7/12/22 15:39, Hyeonggon Yoo wrote:
+> This is v3 of common kmalloc series.
 > 
-> I think the problem comes from MMIO caching mask/value are firstly set in
-> kvm_mmu_reset_all_pte_masks() (which calls kvm_mmu_set_mmio_spte_mask() and may
-> change enable_mmio_caching), and later vendor specific code _may_ or _may_not_
-> call kvm_mmu_set_mmio_spte_mask() again to adjust the mask/value.  And when it
-> does, the second call from vendor specific code shouldn't depend on the
-> 'enable_mmio_caching' value calculated in the first call in 
-> kvm_mmu_reset_all_pte_masks().
-
-Correct.
-
-> Instead of using 'allow_mmio_caching', should we just remove
-> kvm_mmu_set_mmio_spte_mask() in kvm_mmu_reset_all_pte_masks() and enforce vendor
-> specific code to always call kvm_mmu_set_mmio_spte_mask() depending on whatever
-> hardware feature the vendor uses?
-
-Hmm, I'd rather not force vendor code to duplicate the "basic" functionality.
-It's somewhat silly to preserve the common path since both SVM and VMX need to
-override it, but on the other hand those overrides are conditional.
-
-Case in point, if I'm reading the below patch correctly, svm_shadow_mmio_mask will
-be left '0' if the platform doesn't support memory encryption (svm_adjust_mmio_mask()
-will bail early).  That's a solvable problem, but then I think KVM just ends up
-punting this issue to SVM to some extent.
-
-Another flaw in the below patch is that enable_mmio_caching doesn't need to be
-tracked on a per-VM basis.  VMX with EPT can have different masks, but barring a
-massive change in KVM or hardware, there will never be a scenario where caching is
-enabled for one VM but not another.
-
-And isn't the below patch also broken for TDX?  For TDX, unless things have changed,
-the mask+value is supposed to be SUPPRES_VE==0 && RWX==0.  So either KVM is generating
-the wrong mask (MAXPHYADDR < 51), or KVM is incorrectly marking MMIO caching as disabled
-in the TDX case.
-
-Lastly, in prepration for TDX, enable_mmio_caching should be changed to key off
-of the _mask_, not the value.  E.g. for TDX, the value will be '0', but the mask
-should be SUPPRESS_VE | RWX.
-
-> I am suggesting this way because in Isaku's TDX patch
+> This series generalize most of kmalloc functions and move its
+> implementation into mm/slab_common.c.
 > 
-> [PATCH v7 037/102] KVM: x86/mmu: Track shadow MMIO value/mask on a per-VM basis
+> I believe this series give better maintainability of code for SLAB and SLUB.
+> Please consider applying.
 > 
-> we will enable per-VM MMIO mask/value, which will remove global
-> shadow_mmio_mask/shadow_mmio_value, and I am already suggesting something
-> similar:
+> This series is based on slab/for-next and also available at
+> https://github.com/hygoni/linux/tree/slab-common-v3r0
 > 
-> https://lore.kernel.org/all/20220719084737.GU1379820@ls.amr.corp.intel.com/
-> 
+> Any feedbacks/reviews will be appreciated.
+
+Hi, thanks for all your efforts. It's shaping up nicely so I think the next
+version will be ready to be added to -next after the 5.20 merge window.
+As I've finished the individual reviews, I'm looking at the result and see a
+bit more potential for cleanups, which could be perhaps incorporated to
+existing patches, or additionally:
+
+- kmalloc_large_node_notrace() has only one caller, can be removed and the
+caller can call __kmalloc_large_node_notrace() directly, especially if it's
+not __always_inline as I've IIRC suggested.
+
+- kmem_cache_alloc_trace() and kmem_cache_alloc_node_trace() are weird ones,
+they are in fact for kmalloc despite the name. They depend on
+CONFIG_TRACING, yet if you look carefully, the !CONFIG_TRACING variant also
+goes through a trace_* function. The actual difference seems that
+slab_alloc() thus kasan_alloc() and kfence_alloc() don't get the orig_size
+that way, which is dubious. It might be worth trying to unify this as well?
+E.g.
+  - use only the CONFIG_TRACING variant, discard the other
+  - declare it in mm/slab.h, this is not for general usage
+  - single implementation in mm/slab_common.c that calls
+    __kmem_cache_alloc_node() from SLAB/SLUB and does the trace

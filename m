@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A33584964
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 03:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76C8584966
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 03:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiG2BmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 21:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S233704AbiG2Boo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 21:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbiG2Bl7 (ORCPT
+        with ESMTP id S232005AbiG2Bom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 21:41:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1E1165BB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 18:41:57 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lv9Bc1zbXzWfhk;
-        Fri, 29 Jul 2022 09:38:00 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Jul 2022 09:41:54 +0800
-Subject: Re: [RFC PATCH v4 8/8] hugetlb: use new vma_lock for pmd sharing
- synchronization
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220706202347.95150-1-mike.kravetz@oracle.com>
- <20220706202347.95150-9-mike.kravetz@oracle.com>
- <ddab06a9-ab81-5ebd-9273-c50744f6da60@huawei.com> <YuLLqbq1aOwFPsdi@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <2adbbbd2-51d2-744d-77b4-374fe651873b@huawei.com>
-Date:   Fri, 29 Jul 2022 09:41:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 28 Jul 2022 21:44:42 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CBE1B7BE;
+        Thu, 28 Jul 2022 18:44:41 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id rq15so31486ejc.10;
+        Thu, 28 Jul 2022 18:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aF9gxkNndIgzxO4AAV2+dCxMOnVAFOcQmkQ7z0dG0LQ=;
+        b=DkPDztBrjKGeUM8fYgh3HSkhbfjiQ1Do2/grF7UQtK9v28BIKg0JZ27vfyJNxRzttm
+         3vXvuKJWjqWpPD0HunGTmKg/NhUka0O07nOS+qJokOgHQPdsQNSmtpx8CNQ5VNJu9GTM
+         K8gFEH2/If39puZptjgci66b3Q5rd3xt58Ic0GZ/UGq7cjIcgzBZmU1KbvsnQzdN+S/5
+         1HtH07umLN1aiAf51mXocMACYoRm+LiMYIM8+N472n3L8bnHd+RNI4OqIh9het/5iGir
+         S8t12mQM6/hq7GEwheCmjTHUdxAy89NucTWTIQHKzq0Qs/+pAhLDR25D55Mp6YyGd3Y2
+         eM4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aF9gxkNndIgzxO4AAV2+dCxMOnVAFOcQmkQ7z0dG0LQ=;
+        b=dFikAwW/psArOiKHKjuwHR3Um20rXhx7iyBrAns3yxeKoMmKQsSK4GIRPo+TLvVDMJ
+         ZewmAkoTCefJkXQ3PsdaPn53MAv2rsg1weBVppT8glbQVi9dreAQQ191R/RHDA0VwAvT
+         pIhITbRS2SObWcnY9LC0x3Tjk0E4A92tsGPmXjW3fVjlUVOL4AULmbbR9+OB5Unhi/rU
+         Noe3Y9Z1/bWWS0ASiymlR5OdIr104TrMK+7TaAGuK2LOkgDT/30FrhUW8MeC2VRW8CEv
+         HFcJvRexdYK8WWHtzMMmHeQp22cWFCWUsSfC8zaIu1+DSSzu7Lezl2sekIla5U0hChG6
+         R9UA==
+X-Gm-Message-State: AJIora+V3oSFFhsEA6MRIMpPblx4afkFW7X9rkA6tC28N+5GoEPYcLmV
+        j2yCdNz/JxTfQtgl96QMYoLnEevHqcaYpcrM9jXRqhTgjBo=
+X-Google-Smtp-Source: AGRyM1vjQcSp2ZAQaomxl7a1v4biiRSbfuqN2bNchtQAYfANA3sZxwrE0GMkEQoF47S8DtLsOTbRn0bVDeMbcPScxsM=
+X-Received: by 2002:a17:907:2ccc:b0:72b:6907:fce6 with SMTP id
+ hg12-20020a1709072ccc00b0072b6907fce6mr1155919ejc.115.1659059079918; Thu, 28
+ Jul 2022 18:44:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YuLLqbq1aOwFPsdi@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <4A5CBF60-9590-417D-ADE7-7C6FDA8520DB@linux.ibm.com>
+In-Reply-To: <4A5CBF60-9590-417D-ADE7-7C6FDA8520DB@linux.ibm.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Jul 2022 18:44:28 -0700
+Message-ID: <CAEf4BzZPaYzhH6zoJVMrOyJOPOcs19xUkmmw2y0uRFF5Z_eznA@mail.gmail.com>
+Subject: Re: [next-20220721] Build failure powerpc (tools/bpf)
+To:     Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, Andrii Nakryiko <andrii@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/29 1:47, Mike Kravetz wrote:
-> On 07/28/22 14:51, Miaohe Lin wrote:
-snip
->>
->> Do we need to check &mm->mm_users == 0 here in case the address_space of corresponding process
->> has exited? In this case, mmdrop will drop the last reference and free the skipped_mm. So we will
->> use skipped_mm below after it's freed?
->>
-> 
-> Good point!
-> I think we need to wait to drop since we want to hold the read lock.
-> Will update.
-> 
->>> +		vma = find_vma(skipped_mm, skipped_vm_start);
->>> +		if (!vma || vma->vm_file->f_mapping != mapping ||
->>
->> If skipped_vm_start is unmapped and remapped as a anon vma before we taking the mmap_read_lock,
->> vma->vm_file will be NULL?
->>
-> 
-> IIUC, vma->vm_file will always be set even for an anon vma.  The fault
-> code depends on this.  See beginning of hugetlb_fault() where we
-> unconditionally do:
-> 
-> mapping = vma->vm_file->f_mapping;
+On Fri, Jul 22, 2022 at 12:04 AM Sachin Sant <sachinp@linux.ibm.com> wrote:
+>
+> next-20220721 build fails on IBM Power server with following error:
+>
+> libbpf.c: In function 'bpf_program__attach_ksyscall':
+> libbpf.c:10130:45: error: '%s' directive argument is null [-Werror=format-truncation=]
+>    snprintf(func_name, sizeof(func_name), "__%s_sys_%s",
+>                                              ^~
+> cc1: all warnings being treated as errors
+> make[4]: *** [/home/linux-next/tools/build/Makefile.build:96: /home/linux-next/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
+> make[3]: *** [Makefile:157: /home/linux-next/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2
+> make[2]: *** [Makefile:55: /home/linux-next/tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2
+> make[1]: *** [Makefile:76: bpf/resolve_btfids] Error 2
+> make: *** [Makefile:1439: tools/bpf/resolve_btfids] Error 2
+>
+> next-20220719 was good. Git bisect points to following commit
+>
+> Commit 708ac5bea0ce
+>     libbpf: add ksyscall/kretsyscall sections support for syscall kprobes
+>
+>
 
-What if vma is non-hugetlb anon vma?
+This was addressed by [0], thanks for report!
 
-Thanks.
+  [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=64893e83f916
+
+> Reverting this commit allows me to build the kernel.
+>
+> Have attached .config used for build.
+>
+> - Sachin
+>

@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71B5584DE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E2E584DEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiG2JLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S235578AbiG2JO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiG2JLd (ORCPT
+        with ESMTP id S235065AbiG2JOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:11:33 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFE77AC2E;
-        Fri, 29 Jul 2022 02:11:32 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id o12so4111775pfp.5;
-        Fri, 29 Jul 2022 02:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=tAfuCia8g3UGLQjPkQqMIogLpqoBvseGFs11sBYSBWc=;
-        b=dAhK3qlNLVMH1/IkAssvtHxsuZv95YEeaKjQM1jt++T0Ec0Eod8tiJRf503fuujft2
-         YbgEYlIVLWycgSn2QNcFdD8FuRKc5D+JNCPPP6SgsFSeJED9DOIREu8sRw8K/2MpGDMm
-         b44mSDp/gVKW8cjNTeRGTxoN+g1C+2BqHV1cj4NkeL+bCPny3DvlhWSHMG4DZZr5XIps
-         AUL9kMO/1SW1/r6SjXfI4+PZFR1fOId5BXJkQyfV3sa7ZFZymnhQdqobY+OebRvOIUea
-         D/bEWMkt0Tg+fqgBdULHbampU4wto8pU9sR3DGoolJ89l7ITOmJUxEmk3hKF/ZQPQjjb
-         NUdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=tAfuCia8g3UGLQjPkQqMIogLpqoBvseGFs11sBYSBWc=;
-        b=IZUt1jegFIiZewx+H/28DSLM9wTjMGbgkU8wIgMS5/iGgU7Vs6t5R5X4MpgirqLrDT
-         MsbAVDEZ1Cpa9fzJvBSIJ+zg4LGX9+tAkpdIOS7z/aEYqYfJNC+Qx3o5Z2iwQCSIYTy4
-         ZAIH1DS5OkfO56ZY/qjca5zgU3u0f9Eu4wo3UycopUqRyBlrJyFuvL/oHP+tzXltlezC
-         Z0VMUJKI8dkAKRYTxmyHI6Rt6+7stCSSrbllez18HanyEvKTmvGUEiqbr6gzXx47bZnH
-         WUGaL7tNszRnXfVAqUi1Oj9o5dbcmWxYbtlV2vT+Kp5p2D+uc/GJx3ye5J/eT0T2IK0z
-         T2PQ==
-X-Gm-Message-State: AJIora9kP/nWEJfu51LHah3XIjaGL6jwoxb2AthxlABUACHIqGKUaZyF
-        h3Tnj8Dc06nADojNYRJaT2GMfvHmz0U=
-X-Google-Smtp-Source: AGRyM1sJgAt2iYbjeBsSUgtZZUJ0GAhAPqJDcEvNmYz8HtpcmL7VRNHNnxngssbVKwn9518Dg6MoJw==
-X-Received: by 2002:a63:b56:0:b0:41a:495a:2a26 with SMTP id a22-20020a630b56000000b0041a495a2a26mr2206570pgl.411.1659085892129;
-        Fri, 29 Jul 2022 02:11:32 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-14.three.co.id. [116.206.28.14])
-        by smtp.gmail.com with ESMTPSA id bt21-20020a17090af01500b001f1ea1152aasm69925pjb.57.2022.07.29.02.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 02:11:31 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id A834E104A60; Fri, 29 Jul 2022 16:11:27 +0700 (WIB)
-Date:   Fri, 29 Jul 2022 16:11:26 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] maintainer-pgp-guide: update ECC support
- information
-Message-ID: <YuOkPtg+Wa7KldPm@debian.me>
-References: <20220727-docs-pgp-guide-v1-0-c48fb06cb9af@linuxfoundation.org>
- <20220727-docs-pgp-guide-v1-3-c48fb06cb9af@linuxfoundation.org>
+        Fri, 29 Jul 2022 05:14:21 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5811B7AC2E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:14:20 -0700 (PDT)
+X-UUID: 0e13a8ba34ce4f8bb343410adde7a9df-20220729
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:df15acc0-e73b-4b09-af16-5d862d645184,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:df15acc0-e73b-4b09-af16-5d862d645184,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:2e8ab824-a982-4824-82d2-9da3b6056c2a,C
+        OID:058a361201d4,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0e13a8ba34ce4f8bb343410adde7a9df-20220729
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chunxu.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 456777970; Fri, 29 Jul 2022 17:14:15 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 29 Jul 2022 17:14:13 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 29 Jul 2022 17:14:11 +0800
+From:   Chunxu Li <chunxu.li@mediatek.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <matthias.bgg@gmail.com>, <jiaxin.yu@mediatek.com>,
+        <tzungbi@google.com>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <project_global_chrome_upstream_group@mediatek.com>,
+        Chunxu Li <chunxu.li@mediatek.com>
+Subject: [PATCH 0/3] support SOF for mt8186
+Date:   Fri, 29 Jul 2022 17:14:01 +0800
+Message-ID: <20220729091404.7799-1-chunxu.li@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220727-docs-pgp-guide-v1-3-c48fb06cb9af@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 04:57:06PM -0400, Konstantin Ryabitsev wrote:
->  
-> -    If for some reason you prefer to stay with RSA subkeys, just replace
-> -    "ed25519" with "rsa2048" in the above command. Additionally, if you
-> -    plan to use a hardware device that does not support ED25519 ECC
-> -    keys, like Nitrokey Pro or a Yubikey, then you should use
-> -    "nistp256" instead or "ed25519."
-> +    Note, that if you plan to use a hardware device that does not
-> +    support ED25519 ECC keys, you should choose "nistp256" instead or
-> +    "ed25519."
->  
+In these patches, we add SOF support for mt8186 which have HiFi5 DSP
+inside.
 
-nistp256 isn't just ECC key algo other than ed25519. In fact, it is a
-part of NIST curve family (the others are nistp384 and nistp521).
+Chunxu Li (3):
+  ASoC: mediatek: mt8186: support DSP downlink
+  ASoC: mediatek: mt8186: add SOF support on
+    mt8186-mt6366-rt1019-rt5682s
+  ASoC: mediatek: mt8186: add SOF support on
+    mt8186-mt6366-da7219-max98357
 
-Maybe we can just say "If unsure, or if your hardware device does not
-support ED25519, use one of NIST curves (nistp256, nistp384, or nistp521)
-instead".
+ sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    |   3 +
+ sound/soc/mediatek/mt8186/mt8186-dai-i2s.c    |  12 ++
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    | 168 ++++++++++++++++--
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 168 ++++++++++++++++--
+ 4 files changed, 325 insertions(+), 26 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.18.0
+

@@ -2,215 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00ABB584E5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A996F584E60
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbiG2JtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S235745AbiG2Jt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbiG2JtP (ORCPT
+        with ESMTP id S235763AbiG2JtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:49:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5D352DD6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:49:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B6073402E;
-        Fri, 29 Jul 2022 09:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659088151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQHS9ztplh4Ee/QPpTZd5woby2nOAyOs3B+Gm7PCNnA=;
-        b=U+4k02oyX7Q2rlHerS8t13TJaOlns3elgFnaWTAvDVh9oGtAHSW03zGGXeeTekyUaOM68h
-        4WvG7H+NFEzyr+NLQMVt0X/t2u4Dnky/PHYebKeviDIoKebXtxoPnVO8m2AqFD7KVT7l8K
-        +hzxvy3N2IwoaMU77xpXYvAlPhFZ7FQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659088151;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQHS9ztplh4Ee/QPpTZd5woby2nOAyOs3B+Gm7PCNnA=;
-        b=L9ZJ/9BlgL5aYuxLQa1zhmjd7v50EnfyjYh40aoHv19tPTOOhCS0YaQsXE+dUU7Q8CwIjV
-        EhJujbh3NuRZzjDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 49B5013A8E;
-        Fri, 29 Jul 2022 09:49:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vFtaEBet42IZbQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 29 Jul 2022 09:49:11 +0000
-Message-ID: <976e08ef-a73b-1090-d147-e03fc600d149@suse.cz>
-Date:   Fri, 29 Jul 2022 11:49:10 +0200
+        Fri, 29 Jul 2022 05:49:25 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E35115004A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:49:23 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL9MhreNiALxBAA--.46055S3;
+        Fri, 29 Jul 2022 17:49:21 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
+To:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn>
+Date:   Fri, 29 Jul 2022 17:49:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 11/15] mm/sl[au]b: introduce common alloc/free
- functions without tracepoint
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
- <20220712133946.307181-12-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220712133946.307181-12-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9DxL9MhreNiALxBAA--.46055S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFy5Aw45XF4fWF18Jw4kCrg_yoWrJr43pF
+        W3Crs3Krs3GrnxXF1Sqw10gF1Ykan7W3yaqFW3t34FyrnxWF18ZFW5tr4DJa47Xw4rKr4F
+        gFyFga48uF1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUSsjbUUUUU=
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 15:39, Hyeonggon Yoo wrote:
-> To unify kmalloc functions in later patch, introduce common alloc/free
-> functions that does not have tracepoint.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Hi, Ruoyao
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Tested this series of patches v3 on a CLFS 5.5 system, using the new
+cross toolchain,
+$ dmesg | head
+[    0.000000] Linux version 5.19.0-rc7new-toolchain+ (loongson@linux) 
+(loongarch64-unknown-linux-gnu-gcc (GCC) 13.0.0 20220726 (experimental) 
+[master revision 
+cf7eac5805e:1e0611b64d8:3fb68f2e666d9de7e0326af9f43b12c9e98f19a6], GNU 
+ld (GNU Binutils) 2.39.50.20220726) #1 SMP PREEMPT Fri Jul 29 05:24:15 
+EDT 2022
 
-> ---
-> 
-> v3: 
->    Tried to avoid affecting existing functions.
-> 
->  mm/slab.c | 36 +++++++++++++++++++++++++++++-------
->  mm/slab.h |  4 ++++
->  mm/slub.c | 13 +++++++++++++
->  3 files changed, 46 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index a2f43425a0ae..375e35c14430 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3560,6 +3560,14 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
->  }
->  EXPORT_SYMBOL(kmem_cache_alloc_node);
->  
-> +void *__kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
-> +			     int nodeid, size_t orig_size,
-> +			     unsigned long caller)
-> +{
-> +	return slab_alloc_node(cachep, NULL, flags, nodeid,
-> +			       orig_size, caller);
-> +}
-> +
->  #ifdef CONFIG_TRACING
->  void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
->  				  gfp_t flags,
-> @@ -3645,6 +3653,26 @@ void *__kmalloc(size_t size, gfp_t flags)
->  }
->  EXPORT_SYMBOL(__kmalloc);
->  
-> +static __always_inline
-> +void __do_kmem_cache_free(struct kmem_cache *cachep, void *objp,
-> +			  unsigned long caller)
-> +{
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	debug_check_no_locks_freed(objp, cachep->object_size);
-> +	if (!(cachep->flags & SLAB_DEBUG_OBJECTS))
-> +		debug_check_no_obj_freed(objp, cachep->object_size);
-> +	__cache_free(cachep, objp, caller);
-> +	local_irq_restore(flags);
-> +}
-> +
-> +void __kmem_cache_free(struct kmem_cache *cachep, void *objp,
-> +		       unsigned long caller)
-> +{
-> +	__do_kmem_cache_free(cachep, objp, caller);
-> +}
-> +
->  /**
->   * kmem_cache_free - Deallocate an object
->   * @cachep: The cache the allocation was from.
-> @@ -3655,18 +3683,12 @@ EXPORT_SYMBOL(__kmalloc);
->   */
->  void kmem_cache_free(struct kmem_cache *cachep, void *objp)
->  {
-> -	unsigned long flags;
->  	cachep = cache_from_obj(cachep, objp);
->  	if (!cachep)
->  		return;
->  
->  	trace_kmem_cache_free(_RET_IP_, objp, cachep->name);
-> -	local_irq_save(flags);
-> -	debug_check_no_locks_freed(objp, cachep->object_size);
-> -	if (!(cachep->flags & SLAB_DEBUG_OBJECTS))
-> -		debug_check_no_obj_freed(objp, cachep->object_size);
-> -	__cache_free(cachep, objp, _RET_IP_);
-> -	local_irq_restore(flags);
-> +	__do_kmem_cache_free(cachep, objp, _RET_IP_);
->  }
->  EXPORT_SYMBOL(kmem_cache_free);
->  
-> diff --git a/mm/slab.h b/mm/slab.h
-> index c81c92d421f1..9193e9c1f040 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -275,6 +275,10 @@ void create_kmalloc_caches(slab_flags_t);
->  struct kmem_cache *kmalloc_slab(size_t, gfp_t);
->  
->  void *kmalloc_large_node_notrace(size_t size, gfp_t flags, int node);
-> +void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
-> +			      int node, size_t orig_size,
-> +			      unsigned long caller);
-> +void __kmem_cache_free(struct kmem_cache *s, void *x, unsigned long caller);
->  #endif
->  
->  gfp_t kmalloc_fix_flags(gfp_t flags);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 6cb7ca27f3b7..74eb78678c98 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3262,6 +3262,14 @@ void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->  }
->  EXPORT_SYMBOL(kmem_cache_alloc_lru);
->  
-> +void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags,
-> +			      int node, size_t orig_size,
-> +			      unsigned long caller)
-> +{
-> +	return slab_alloc_node(s, NULL, gfpflags, node,
-> +			       caller, orig_size);
-> +}
-> +
->  #ifdef CONFIG_TRACING
->  void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
->  {
-> @@ -3526,6 +3534,11 @@ void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
->  }
->  #endif
->  
-> +void __kmem_cache_free(struct kmem_cache *s, void *x, unsigned long caller)
-> +{
-> +	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, caller);
-> +}
-> +
->  void kmem_cache_free(struct kmem_cache *s, void *x)
->  {
->  	s = cache_from_obj(s, x);
+Relocation error when manually loading nf_tables.ko module,
+$ sudo modprobe nf_tables
+odprobe: ERROR: could not insert 'nf_tables': Exec format error
+
+$ dmesg
+[   61.506737] kmod: module nf_tables: PCALA offset = 0x90007ffffed8c000 
+does not fit in 32-bit signed and is unsupported by kernel! dangerous 
+apply_r_larch_pcala_hi20 (71) relocation
+
+Do you have the same problem over there?
+
+Thanks,
+Youling
+
+On 07/29/2022 04:38 PM, Xi Ruoyao wrote:
+> The version 2.00 of LoongArch ELF ABI specification introduced new
+> relocation types, and the development tree of Binutils and GCC has
+> started to use them.  If the kernel is built with the latest snapshot of
+> Binutils or GCC, it will fail to load the modules because of unrecognized
+> relocation types in modules.
+>
+> Add support for GOT and new relocation types for the module loader, so
+> the kernel (with modules) can be built with the "normal" code model and
+> function properly.
+>
+> This series does not break the compatibility with old toolchain using
+> stack-based relocation types, so with the patches applied the kernel can
+> be be built with both old and new toolchains.
+>
+> Tested by building the kernel with both Binutils & GCC master branch and
+> my system Binutils & GCC (without new relocation type support), running
+> both the builds with 35 in-tree modules loaded, and loading one module
+> with 20 GOT loads (loaded addresses verified by comparing with
+> /proc/kallsyms).
+>
+> Changes from v3 to v4:
+>
+> - No code change.  Reword the commit message of the 3rd patch again
+>   based on suggestion from Huacai.
+>
+> Changes from v2 to v3:
+>
+> - Use `union loongarch_instruction` instead of explicit bit shifts
+>   applying the relocation.  Suggested by Youling.
+> - For R_LARCH_B26, move the alignment check before the range check to be
+>   consistent with stack pop relocations.  Suggested by Youling.
+> - Reword the commit message of the 3rd patch.  Suggested by Huacai.
+>
+> Changes from v1 to v2:
+>
+> - Fix a stupid programming error (confusion between the number of PLT
+>   entries and the number of GOT entries).  (Bug spotted by Youling).
+> - Synthesize the _GLOBAL_OFFSET_TABLE_ symbol with module.lds, instead
+>   of faking it at runtime.  The 3rd patch from V1 is now merged into
+>   the 1st patch because it would be a one-line change.  (Suggested by
+>   Jinyang).
+> - Keep reloc_rela_handlers[] ordered by the relocation type ID.
+>   (Suggested by Youling).
+> - Remove -fplt along with -Wa,-mla-* options because it's the default.
+>   (Suggested by Youling).
+>
+> Xi Ruoyao (4):
+>   LoongArch: Add section of GOT for kernel module
+>   LoongArch: Support R_LARCH_SOP_PUSH_GPREL relocation type in kernel
+>     module
+>   LoongArch: Remove -fplt and -Wa,-mla-* from CFLAGS
+>   LoongArch: Support modules with new relocation types
+>
+>  arch/loongarch/Makefile                 |  4 --
+>  arch/loongarch/include/asm/elf.h        | 37 ++++++++++
+>  arch/loongarch/include/asm/module.h     | 23 ++++++
+>  arch/loongarch/include/asm/module.lds.h |  1 +
+>  arch/loongarch/kernel/head.S            | 10 +--
+>  arch/loongarch/kernel/module-sections.c | 51 +++++++++++--
+>  arch/loongarch/kernel/module.c          | 96 +++++++++++++++++++++++++
+>  7 files changed, 209 insertions(+), 13 deletions(-)
+>
 

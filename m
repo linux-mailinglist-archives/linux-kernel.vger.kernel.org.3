@@ -2,198 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3C35855D7
+	by mail.lfdr.de (Postfix) with ESMTP id 420F05855D6
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 21:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239019AbiG2T6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 15:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S238511AbiG2T6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 15:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiG2T55 (ORCPT
+        with ESMTP id S238597AbiG2T5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:57:57 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D7B87C20
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:57:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id m20so384908ejx.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:57:56 -0700 (PDT)
+        Fri, 29 Jul 2022 15:57:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A7388747;
+        Fri, 29 Jul 2022 12:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659124670; x=1690660670;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=lcjqI8FrP3V5N/9npV1/6lw5cZCj1gLkdJcDcjHZ4tA=;
+  b=QQxQiignqrOX4VzD1ChXQIFWI9yTidSGFXkjg0iangbf/0rJ+NMaNcBt
+   EzsExpUCyMipe6ZhALgA0LLYchGNkVTcYwIeINg/R2kFeiBp9HpTvYMKT
+   3P48wzwuXGL79aoc888P6SAZy91mVnDq4iCmej7nEHyHE1277lNiZk5TT
+   Q2Togq7YL+ABK3lxElKrQ76byL+DQkn7e8glZ9WxI8FE0UxQ/rp9n/iJ5
+   akVdbG4A6jpFS0gbRjyBjfdeS5Qls8zoyRc9dGiPchJlBbbeFYronKkJK
+   xr1+xGRS+lS6vvyffGjQUj+/ZA42rLXrxpfT585R1caOtauAJrN783K6z
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
+   d="scan'208";a="184367832"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jul 2022 12:57:49 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 29 Jul 2022 12:57:49 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 29 Jul 2022 12:57:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DkEMFO+yWv0Huoxt2d+cCDmyRShLIWDQE0ertng5GbQWqhmG+laUw0/Nr7O+IlhcL5bJVZ94XT8Hd00QJR9tvQ2cjLHRbbf64mMHOlq7Xl1WuXfc/23T/vgnp79NSBxHQQpFSIUKQeemu93UsidCGD8RP9Rr6Lh+TtuIuU0sEXSoLURJW94s+Ad/DGudxXjpiBx2/R3ESOohVnRyJx7JXMqEFfRB8R2KUkAIO9C2mODv1HCS8QvHpZxbKF/9JswXiMzPAs+Ssqj0zO6SnX/tZl5NXqhnb9YBSZQ012Lg5E+KkyOTQwwn/o59rHu+tjaIIZV7PKVIsEJGIhC+/hs73Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lcjqI8FrP3V5N/9npV1/6lw5cZCj1gLkdJcDcjHZ4tA=;
+ b=feDQgVtXePoGlgMbs69/JBHFny9BT2OiqfaSBoUftLcy9d+sYR7e22csKrcKKc/x0srGTeD/GThHauRyUAep4R8SsWMXEpEE5Huai5T1Dc2OFdb2+Fd6F8Wg6zRL9waEWB+UEwY9xEdCg1mEOpSL3oMYYY00fxMOg7t+2TrmtMNpmBuDcqRVyYGSu8KXaQhmk1II02Ku66h5eBBBY8esthYG9aHv99M50j3o3Z7Z/QjLXxasmdS/Sg8IFs6cbITO/1ygoYQ+gUa71rxYuf3PxNf6UENJBqIvRtVN3WNQf/8lYCR2I344CnkWepxsa2EuEHmZpIalvj038el8B1/7ZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=W+QN4O2BhXHS+vUE27PDdCSUcq9hnSAP99uK5Xn1FCM=;
-        b=Zj2jLtqa9dUSEbGnR+hTFlVho37WJlcebbvW7QtxZQ0BO9XFH3vP2obk6NtwMZBu9R
-         lvbWvFWpxmZeSay2R3uGC3Gv6F/586vBXsKjvhZu7UkEmvbwxhHNC+8Oiy55snkgH5t7
-         txYnsgBEpnqU+xpfPzP7gA3W/jmyDWqpjGygI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=W+QN4O2BhXHS+vUE27PDdCSUcq9hnSAP99uK5Xn1FCM=;
-        b=fDF/N7cDjTG3zKlDNVuaiMPlQfF5Uy3XsYDK4WOwWyYatLwrp3kybkFaA9KsUcJxrl
-         /zJzSMjux+jWdDgvTHBzzL5sJioVqyITovpgNb/c+HvG5CLsl1L9UPy3flsuXjU972t8
-         lIK2bzGzXZWI7wElM/n5C4yMMGGPl8fKcm+o9yCwpjuTfXrGsZ9ElkTSLWOnvI53wz6X
-         M29rvr+fVQvK6s+SOXHLQcocviSLSjeyY/VO1geGyBodL2J0NBQUBvJwBuxjHK7gs3lF
-         wR0oEQx1NDtRdCvsJLXnjRT664azp/SpG/siLxDkBi2Kd3WEoSro1Te5GfGtRMqqd14h
-         t9uA==
-X-Gm-Message-State: AJIora8aGQzFZ6jIlfrDdKFMYHaMoW3Q+5JRbu8Rwl8tftBdzaVLNJGj
-        sYQ2nlrL0pRU4NTphdTTHw43Jw7f6neo1oz8LmE=
-X-Google-Smtp-Source: AGRyM1sQ95HrjlgqqFsLlxrWLJYE0tJ1VdqmG9X17tMlVzP/Q9ZZfDYn6xXGNH+2sVDJNUBRG3XkcA==
-X-Received: by 2002:a17:906:7e43:b0:72b:52de:b039 with SMTP id z3-20020a1709067e4300b0072b52deb039mr4154117ejr.198.1659124674230;
-        Fri, 29 Jul 2022 12:57:54 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id dk15-20020a0564021d8f00b0043cedad30a5sm2887914edb.21.2022.07.29.12.57.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Jul 2022 12:57:53 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id 8-20020a05600c024800b003a2fe343db1so2943111wmj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 12:57:53 -0700 (PDT)
-X-Received: by 2002:a05:600c:1e0f:b0:3a3:191c:a3c8 with SMTP id
- ay15-20020a05600c1e0f00b003a3191ca3c8mr3637779wmb.151.1659124672731; Fri, 29
- Jul 2022 12:57:52 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lcjqI8FrP3V5N/9npV1/6lw5cZCj1gLkdJcDcjHZ4tA=;
+ b=nfryQOzPLyBXnLM3ydIXfzForTtS7IFonYicxPS+K11CrsFFooo4lxslFgZSo+0j6HGLJgUaJhtIIUqRwRJGwHh8uYFhEHh5ZPMyOvSUrxIBapICszfHS0LfAbsefx/l97GepRaEcXn/YmJQT7bFgCGd328moCK2NP+ut0kKElY=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by SA1PR11MB5947.namprd11.prod.outlook.com (2603:10b6:806:23b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Fri, 29 Jul
+ 2022 19:57:42 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%9]) with mapi id 15.20.5482.011; Fri, 29 Jul 2022
+ 19:57:42 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <radhey.shyam.pandey@amd.com>, <michal.simek@xilinx.com>,
+        <Nicolas.Ferre@microchip.com>, <Claudiu.Beznea@microchip.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <git@amd.com>, <git@xilinx.com>
+Subject: Re: [PATCH v2 net-next 2/2] net: macb: Add zynqmp SGMII dynamic
+ configuration support
+Thread-Topic: [PATCH v2 net-next 2/2] net: macb: Add zynqmp SGMII dynamic
+ configuration support
+Thread-Index: AQHYo4V27nMabYc56kyi1EJgLCldPA==
+Date:   Fri, 29 Jul 2022 19:57:41 +0000
+Message-ID: <68815710-cdf2-a8b6-fc1f-5ecef6e112e8@microchip.com>
+References: <1659123350-10638-1-git-send-email-radhey.shyam.pandey@amd.com>
+ <1659123350-10638-3-git-send-email-radhey.shyam.pandey@amd.com>
+In-Reply-To: <1659123350-10638-3-git-send-email-radhey.shyam.pandey@amd.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4395d0fa-6085-4121-8adc-08da719c98e8
+x-ms-traffictypediagnostic: SA1PR11MB5947:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: shCS7WXxtC2DoCbzkHavYSDWtvvI2rb3BKCFCpHhBGNhvxoNgdax2UxUNN6T0tZGGsOTSRjtJPGeFL7BfqAtWD3ZCneV1HQ/S/TVAKK8ylhZE/hKlY/SZ7XwyOGt8fDL+DNTbRjYWXHNQNJaCX49h1BTGpxZefaLwzYuV2hAieRiFZ0+DzQqu/C46rF/L1LMeyNxN/OKHaolMW3crfxkL//eqxk2eE2oh2eFqelo8xqYEgrkOz7kJf30ohcYViULGrQtO/ZD4qmBdC4MI9pncvNCVKAJwCRq2Yb6x+T0JLm9leH0d5e5VhSZfFF42mLdqBC8t/wh5hifk+H63DBhEdmYIzimKHmm4g3kZfuLQaeLsGY7UPVtBYDtiD2OvybJAT5aWaPp3rdCWYsJOfZOPT9kiVlHqzYRIvbyb+nJVG5X/ILRemhzSLG9FizNFthfgqIPuQxlZLQG0qAlnc834N1rq+RswzKcHfKLzHVTFoJif3EQPZuSOKqsGlfLHajWrl8VB1vIEuhxJt0kv4T48/WIGhyX0RiDeeXlQdv6Hru9jkOEa2OrSuqHaaSlw1LZsFQZx+LlUR1PteXECVtf2iG0pFJSEa6pBuUNJVnKUptuykQ04i3fmmbHs8gy6dtXBvRnjLS10NGlq3bFq67LT2OW2bmwV+JvxGFkUJapADNVtmH3rjEg7eAHwjeYvBtJ2rDYCF/i0uybfrTX5ymhuB46+rIXWPuSRUc6h4uBikloqhtEH7dj7dDukUXPBgkYXPsc36/EvghtrQrlc1lRev3l5ckeAc/wvkRiIU2CdR+n5vy9VpvQOeH+lc2RpbBP02NuMasNAACHEb4l9cN2wvmMfIX8Ji8rPOZEC4Y+XYhSore+eNZhO/oyM4AdCymz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(376002)(136003)(366004)(39860400002)(4744005)(5660300002)(2906002)(8936002)(36756003)(7416002)(110136005)(54906003)(76116006)(316002)(91956017)(4326008)(8676002)(66446008)(64756008)(66556008)(66476007)(26005)(478600001)(41300700001)(31686004)(66946007)(38070700005)(31696002)(6512007)(6486002)(71200400001)(6506007)(86362001)(83380400001)(186003)(38100700002)(2616005)(53546011)(122000001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WmhhMkNGcUNPWmpaeUtFeW14d1hLTmlGWkxXbkRwaFJxc3ZoS0VrSTlXa1c3?=
+ =?utf-8?B?VUhkaFgvUzVkQWRzb3hsUHhvYjJJWnZDZnlQQ0FPNzlHZnViVTkxbEZsSEVt?=
+ =?utf-8?B?d3NmLzVuTHBkbEdTRnoveEdiTlR2ZDVJQkRnS2JxSXlzbS9kQlhzMnpleDdl?=
+ =?utf-8?B?U1BERUVmYXdLd0t4NmQ3WVVheTh4ZEVPTndDdEtGSjN3dVYrY0pLbzQxRTRl?=
+ =?utf-8?B?U1JFczRESUVQYnZkTGJXcjJwSkpkT0wzb2lLRW5OUDRNeDhNeElDUzZXa0o5?=
+ =?utf-8?B?N212c0NJakhlR1BqcWZpRXdON3lmSjZtL3FGNkI0cFJ5cnRCVHMwcjZqV1hU?=
+ =?utf-8?B?MnlPd1pZSDQ0OGs4N0xwLzNLdXRVck51OUtCc3lLRkUvcWFRSkZtbnVzZDVu?=
+ =?utf-8?B?Tnh1VUg5YzFoMUY4cnNBVGlHVjJwRGtMcFJWNWdCRWtzMzZIOWtidkczaThx?=
+ =?utf-8?B?M1FRSE10OS94d1VETG00UWgrOExpWVpJR080eEx4MXZrR2lLTU4vWG9oNGJs?=
+ =?utf-8?B?TmdlY3pXSTVndENreldqSWs5YnVaZzRXMXlQZ0RuMFhHSXpYVVp6bDdRd0o4?=
+ =?utf-8?B?b2FVOGpqMEVCZzczcnBqaHkwYnl2V3NveHlrL0MvMDNzcTE2ajNNNk82Tk1R?=
+ =?utf-8?B?R24rM1l2THpxRHpHcFVOV3VPSmY2VGxqZGlxR1F4NFVNdXZJRzQyZnJhMnVu?=
+ =?utf-8?B?b1dNZTYrM2RoQTYrMWRnL05VdU1QY3QydlJNVFlQc0pFQUhjSmlZRmxQUXZs?=
+ =?utf-8?B?UXNtUElHVGdpMnVTZGF4cGU1VjU0U0RtUWdCMUZEem1udGJxcmkvb3VzVDkw?=
+ =?utf-8?B?M3BHOVJMWEFIc3dkTUF1V2NVSXNBMGZGdkRqZ2thRGtXZTJhOFp1SHJaQS9Z?=
+ =?utf-8?B?TlU2WTZSNTR0c1Z1SDJEem10bU52MnZ1eWRGdERUeFU1NWVqUkIwLzF1dUpG?=
+ =?utf-8?B?T29LMmMrYzJhZ3lPeFZBMkRYd1RUUFBPMWlNS0U0TlIzbmNUc3BvOGJCeGlj?=
+ =?utf-8?B?WSs3N3VmTy9LV1NyQXlMR2J4WDE5Q0JvMlRyR1BrVEtQOEZhdmh5UWFKVy9Z?=
+ =?utf-8?B?WllFekg5Q3g4NkRtOXF6ZXlleDR3THVRekNWcVRjU2hlZXBKN1dzaks5Vmdu?=
+ =?utf-8?B?Wk8wdnI1aUVEKzBONmVFa1orcEpZMG0rUi9SRXFDV2JqRzNTeVBPK2UxUUMx?=
+ =?utf-8?B?dE9FcE9UMXVWVkdJYkh6NUNxVE00K1F5VzFSaTRHWmpmSG9waEJycDVkRzFZ?=
+ =?utf-8?B?amhqTlJUYXYwTXR0OHc0ZnUwQ3JEQXdZR2F4bGw2ajFraHFFLzZuOXZreSs3?=
+ =?utf-8?B?QXQzNVprSVJTREVGQUREMCsrZ3ovY251M2d1QjM5dkhCK2NYTkxZYVhiRUUv?=
+ =?utf-8?B?TWRRbkZFc3FBMk54MWlyZWVrUmtEKzgzME0rM1gzK2syenFiV09Qbjdaaksx?=
+ =?utf-8?B?Y1JpSkFHNC9zb2MxK3QzRGlLUHNJMkpWa3c1cm9aZUtDVUVDb0U3dFJ4Tmg2?=
+ =?utf-8?B?citLTzBxOTc0ZHBXbklxMXZhdUlZbmhvV2huVG05emIyOGtXYWNUTWpQR1R5?=
+ =?utf-8?B?OC9adUlpL3pDSXYzWVYrazRzZDlGT1h6TytBZVlJZTI5U3NnNU9GV2hhSjdN?=
+ =?utf-8?B?Z3pvSTlnZmtnVldHeVBwekpFVTdZRWg3SW11K3oxTGFRdjF3dGw0bWRqS3ph?=
+ =?utf-8?B?NVBIUkdybytCUmNnSHJBSXNucWY5QW53MWREaTBBS2dhWTROWHNmd1QzWlp0?=
+ =?utf-8?B?aXE1eFZKKzFjdkJSZURtVXdLSWRpRDMrcWdnZXNEUDBjTGlqN0Q5UWQ2U1pX?=
+ =?utf-8?B?L3JDUjE0VllxNzdIWWkwR3gxSFdrLzBHN29BUW5yNU4rNTR2RUtzeHQyNGJw?=
+ =?utf-8?B?MjFsOGRYVGJ3anNCdFpZUDd4SkhYM1UvNVR3V1J5dy83dkRjc21yejdGTUNQ?=
+ =?utf-8?B?WTlFa2NreSsrWWNlc0xQZWpFQSt1d2RqNVdsckVadVNvRjZRSVd2ZzJ6SHY2?=
+ =?utf-8?B?cng1MmRoZ05TVUt6Z3c5bmIxUFFTblEvVW5XOC9GZjRoWkJPa3o4Uk1jb01Q?=
+ =?utf-8?B?S0dZUHIrSGV4WVF4YlJEVTc5TUV4SjQ4SmVKVzh1d25YcDJmc2o0VFpTVkNO?=
+ =?utf-8?B?akhJK2RYenBCazhvUno3allVbXM0cXNzTjJzc2NxQmd0RjVVMC95bWNYc1Nk?=
+ =?utf-8?B?VUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <01838CEF147ECA4390A26DE0A4BF13C5@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
- <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com> <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
- <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
- <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com> <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
- <20220729075118.ofnpk52tk4usm3n3@penduick> <CAD=FV=WUB68-DQ-pAFjGaG-kid33ve4Qc3iqb8OUh61xTBohmg@mail.gmail.com>
- <20220729164136.opucqg64qz4ypmvo@penduick>
-In-Reply-To: <20220729164136.opucqg64qz4ypmvo@penduick>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 29 Jul 2022 12:57:40 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UKYksHjuVR27DPdUFFtJrQKB2KbT08qjeYLNW_3y_Mfg@mail.gmail.com>
-Message-ID: <CAD=FV=UKYksHjuVR27DPdUFFtJrQKB2KbT08qjeYLNW_3y_Mfg@mail.gmail.com>
-Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp LQ140M1JW46
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4395d0fa-6085-4121-8adc-08da719c98e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2022 19:57:41.9935
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nss1iOn7wThviWpKMh+yjKbhTdghEpgteuAEluv1JP9Oj4wMyAhk0Foe5r34YjBi7l3YLaBDXJ+Ch/yS9974UL5TcrVcA4VLMXPU1D6D5K0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5947
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Jul 29, 2022 at 9:41 AM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> On Fri, Jul 29, 2022 at 07:50:20AM -0700, Doug Anderson wrote:
-> > On Fri, Jul 29, 2022 at 12:51 AM Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > On Thu, Jul 28, 2022 at 02:18:38PM -0700, Doug Anderson wrote:
-> > > > Hi,
-> > > >
-> > > > On Thu, Jul 28, 2022 at 10:34 AM Abhinav Kumar
-> > > > <quic_abhinavk@quicinc.com> wrote:
-> > > > >
-> > > > > Hi Rob and Doug
-> > > > >
-> > > > > On 7/22/2022 10:36 AM, Rob Clark wrote:
-> > > > > > On Fri, Jul 22, 2022 at 9:48 AM Doug Anderson <dianders@chromium.org> wrote:
-> > > > > >>
-> > > > > >> Hi,
-> > > > > >>
-> > > > > >> On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> > > > > >>>
-> > > > > >>> + sankeerth
-> > > > > >>>
-> > > > > >>> Hi Doug
-> > > > > >>>
-> > > > > >>> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
-> > > > > >>>> The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD reference
-> > > > > >>>> board. This panel supports 144 Hz and 60 Hz. In the EDID, the 144 Hz
-> > > > > >>>> mode is listed first and thus is marked preferred. The EDID decode I
-> > > > > >>>> ran says:
-> > > > > >>>>
-> > > > > >>>>     First detailed timing includes the native pixel format and preferred
-> > > > > >>>>     refresh rate.
-> > > > > >>>>
-> > > > > >>>>     ...
-> > > > > >>>>
-> > > > > >>>>     Detailed Timing Descriptors:
-> > > > > >>>>       DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.500 MHz
-> > > > > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
-> > > > > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
-> > > > > >>>>       DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.370 MHz
-> > > > > >>>>                    Hfront   48 Hsync  32 Hback  80 Hpol N
-> > > > > >>>>                    Vfront    3 Vsync   5 Vback  69 Vpol N
-> > > > > >>>>
-> > > > > >>>> I'm proposing here that the above is actually a bug and that the 60 Hz
-> > > > > >>>> mode really should be considered preferred by Linux.
-> > > > >
-> > > > > Its a bit tricky to say that this is a bug but I think we can certainly
-> > > > > add here that for an internal display we would have ideally had the
-> > > > > lower resolution first to indicate it as default.
-> > > >
-> > > > Yeah, it gets into the vagueness of the EDID spec in general. As far
-> > > > as I can find it's really up to the monitor to decide by what means it
-> > > > chooses the "preferred" refresh rate if the monitor can support many.
-> > > > Some displays may decide that the normal rate is "preferred" and some
-> > > > may decide that the high refresh rate is "preferred". Neither display
-> > > > is "wrong" per say, but it's nice to have some consistency here and to
-> > > > make it so that otherwise "dumb" userspace will get something
-> > > > reasonable by default. I'll change it to say:
-> > > >
-> > > > While the EDID spec appears to allow a display to use any criteria for
-> > > > picking which refresh mode is "preferred" or "optimal", that vagueness
-> > > > is a bit annoying. From Linux's point of view let's choose the 60 Hz
-> > > > one as the default.
-> > >
-> > > And if we start making that decision, it should be for all panels with a
-> > > similar constraint, so most likely handled by the core, and the new
-> > > policy properly documented.
-> > >
-> > > Doing that just for a single panel is weird.
-> >
-> > Yeah, though having a "general policy" in the core can be problematic.
-> >
-> > In general I think panel EDIDs are only trustworthy as far as you can
-> > throw them. They are notorious for having wrong and incorrect
-> > information, which is why the EDID quirk list exists to begin with.
-> > Trying to change how we're going to interpret all EDIDs, even all
-> > EDIDs for eDP panels, seems like it will break someone somewhere.
-> > Maybe there are EDIDs out there that were only ever validated at the
-> > higher refresh rate and they don't work / flicker / cause digitizer
-> > noise at the lower refresh rate. Heck, we've seen eDP panel vendors
-> > that can't even get their checksum correct, so I'm not sure I want to
-> > make a global assertion that all panels validated their "secondary"
-> > display mode.
-> >
-> > In this particular case, we have validated that this particular Sharp
-> > panel works fine at the lower refresh rate.
-> >
-> > I would also note that, as far as I understand it, ODMs actually can
-> > request different EDIDs from the panel vendors. In the past we have
-> > been able to get panel vendors to change EDIDs. Thus for most panels
-> > I'd expect that we would discover this early, change the EDID default,
-> > and be done with it. The case here is a little unusual in that by the
-> > time we got involved and started digging into this panel too many were
-> > created and nobody wants to throw away those old panels. This is why
-> > I'm treating it as a quirk/bug. Really: we should have updated the
-> > EDID of the panel but we're unable to in this case.
->
-> You raise some good points, but most of the discussion around that patch
-> were mostly around performances, power consumption and so on.
->
-> This is very much a policy decision, and if there is some panel where
-> the EDID reports 60Hz but is broken, then that panel should be the
-> exception to the policy
->
-> But doing it for a single panel is just odd
-
-OK, fair enough. I'll abandon this patch at least as far as mainline
-is concerned, then.
-
--Doug
+T24gMjkvMDcvMjAyMiAyMDozNSwgUmFkaGV5IFNoeWFtIFBhbmRleSB3cm90ZToNCj4gQWRkIHN1
+cHBvcnQgZm9yIHRoZSBkeW5hbWljIGNvbmZpZ3VyYXRpb24gd2hpY2ggdGFrZXMgY2FyZSBvZiBj
+b25maWd1cmluZw0KPiB0aGUgR0VNIHNlY3VyZSBzcGFjZSBjb25maWd1cmF0aW9uIHJlZ2lzdGVy
+cyB1c2luZyBFRU1JIEFQSXMuIEhpZ2ggbGV2ZWwNCj4gc2VxdWVuY2UgaXMgdG86DQo+IC0gQ2hl
+Y2sgZm9yIHRoZSBQTSBkeW5hbWljIGNvbmZpZ3VyYXRpb24gc3VwcG9ydCwgaWYgbm8gZXJyb3Ig
+cHJvY2VlZCB3aXRoDQo+ICAgR0VNIGR5bmFtaWMgY29uZmlndXJhdGlvbnMobmV4dCBzdGVwcykg
+b3RoZXJ3aXNlIHNraXAgdGhlIGR5bmFtaWMNCj4gICBjb25maWd1cmF0aW9uLg0KPiAtIENvbmZp
+Z3VyZSBHRU0gRml4ZWQgY29uZmlndXJhdGlvbnMuDQo+IC0gQ29uZmlndXJlIEdFTV9DTEtfQ1RS
+TCAoZ2VtWF9zZ21paV9tb2RlKS4NCj4gLSBUcmlnZ2VyIEdFTSByZXNldC4NCj4gDQo+IFNpZ25l
+ZC1vZmYtYnk6IFJhZGhleSBTaHlhbSBQYW5kZXkgPHJhZGhleS5zaHlhbS5wYW5kZXlAYW1kLmNv
+bT4NCj4gUmV2aWV3ZWQtYnk6IEFuZHJldyBMdW5uIDxhbmRyZXdAbHVubi5jaD4NCj4gVGVzdGVk
+LWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPiAoZm9yIE1QRlMp
+DQoNCkRvIHlvdSBoYXZlIGNjIHN1cHByZXNzaW9uIHR1cm5lZCBvbiBvciBkaWQgdGhpcyBub3Qg
+Z2V0IHBpY2tlZCB1cA0KYi9jIG9mIHRoZSAoZm9yIE1QRlMpIHlvdSBhZGRlZD8gSW4gdGhlIGZ1
+dHVyZSwgcGxlYXNlIENDIG1lIG9uDQpsYXRlciByZXZpc2lvbnMgaWYgSSBwcm92aWRlZCBhIHRl
+c3RlZC1ieSA6KQ0KVGhhbmtzLA0KQ29ub3IuDQo=

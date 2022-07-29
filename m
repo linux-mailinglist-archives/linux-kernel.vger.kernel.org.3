@@ -2,184 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D46584B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592ED584B9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 08:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiG2GSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 02:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S234409AbiG2GUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 02:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiG2GSD (ORCPT
+        with ESMTP id S233734AbiG2GUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 02:18:03 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3554D12AE5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:18:02 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26T61jeZ001082;
-        Fri, 29 Jul 2022 06:17:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=Xtxiki/EPMi4MAjwNLuKgeSTBr+MppvzMGFAOZ67pUw=;
- b=hz1z2Ph09Aifx53FCC9wrCuiOLcAaaLUY5D28nko6JesxduB9s2GS35D227Vz4nPTih2
- UX5kp13FdHwCqlaBYsAIcwk7fHav1AVTulS0CTu8JavBZyxHtKFqDrzq5k+9UbWDT+BP
- lMgIAwNN5tJCpiLW/HmIbOhggVFgCP/XcOrUjPndU3grnlKX85kWvWFTdb9JcZHAO6ax
- e9hnpPxNen9rhXNjdkV0efiTXNNvjcZzXAB4XNL5jiVFUeuMxQyCtg6g5rmNFdf9jsXS
- x6++iNHA1MnPioLtGurxlQZjbSsH6gdrpItSz63FzEZs7UyaxI/6v4zyRTAXdtCY2Thb vA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hm9x1rg0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Jul 2022 06:17:47 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26T62vnF009581;
-        Fri, 29 Jul 2022 06:17:47 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hm9x1rfyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Jul 2022 06:17:47 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26T65uTo013507;
-        Fri, 29 Jul 2022 06:17:46 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 3hg9794u5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Jul 2022 06:17:46 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26T6Hj4K42336750
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Jul 2022 06:17:45 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A7FE136059;
-        Fri, 29 Jul 2022 06:17:45 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D30913605E;
-        Fri, 29 Jul 2022 06:17:40 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.86.244])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Jul 2022 06:17:40 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v11 0/8] mm/demotion: Memory tiers and demotion
-In-Reply-To: <87a68smqov.fsf@yhuang6-desk2.ccr.corp.intel.com>
-References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
- <87a68smqov.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Fri, 29 Jul 2022 11:47:38 +0530
-Message-ID: <87edy4sarh.fsf@linux.ibm.com>
+        Fri, 29 Jul 2022 02:20:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BB77AC02
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Jul 2022 23:20:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659075630; x=1690611630;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O6OYbm2gxM1GLdwFs8plDdKvmt+/5iVzkbxo7ZIcVPA=;
+  b=oHnkRwxFC448xj83AoLN8BscEeaO0DEo5nwxtL1stE+Ema9xHH2kZ2ym
+   sMV7Ek3Sn8dfs1R/lpP3+Kd4PEw/P5QkRJ2mSuYnCcHeEK9GNt1shnMyU
+   3JMyeWCjt6h8jqCZmY0AeCjBAiFvkPVuz4ERUd7BWi3iAJz5ZLjqt9m1a
+   j7jHdaJdmMiXxSKBKrVPRKN2zoY7EjZRyI4n1464MTDlEuQ/QS3RrzyCx
+   L4IUYOt294ZXjYvOj6rLfTUPHrx+WAVlR0e2vDkAjYw2BmSOsEJwzWFUA
+   89JRWto2IjtILCwKMEqIU76dR0Xg7qTOhANaO97/3UEKyfIheENxGbIz2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="352701407"
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="352701407"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2022 23:20:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,200,1654585200"; 
+   d="scan'208";a="743429195"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Jul 2022 23:20:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHJMI-000BBj-09;
+        Fri, 29 Jul 2022 06:20:26 +0000
+Date:   Fri, 29 Jul 2022 14:19:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-zicbom 5/5]
+ arch/riscv/mm/dma-noncoherent.c:25:3: error: expected ')'
+Message-ID: <202207291449.lbTs6gOb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Ev1QFyMJhyf9eAV1KQSx-1o3DvFlAxe9
-X-Proofpoint-GUID: oRmxRDiqmTdaBijarp5k21uis49r95UK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-28_06,2022-07-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 adultscore=0
- spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207290023
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Huang, Ying" <ying.huang@intel.com> writes:
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-zicbom
+head:   1631ba1259d6d7f49b6028f2a1a0fa02be1c522a
+commit: 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a [5/5] riscv: Add support for non-coherent devices using zicbom extension
+config: riscv-randconfig-r004-20220728 (https://download.01.org/0day-ci/archive/20220729/202207291449.lbTs6gOb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/1631ba1259d6d7f49b6028f2a1a0fa02be1c522a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-zicbom
+        git checkout 1631ba1259d6d7f49b6028f2a1a0fa02be1c522a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->
->> The current kernel has the basic memory tiering support: Inactive pages on a
->> higher tier NUMA node can be migrated (demoted) to a lower tier NUMA node to
->> make room for new allocations on the higher tier NUMA node. Frequently accessed
->> pages on a lower tier NUMA node can be migrated (promoted) to a higher tier NUMA
->> node to improve the performance.
->>
->> In the current kernel, memory tiers are defined implicitly via a demotion path
->> relationship between NUMA nodes, which is created during the kernel
->> initialization and updated when a NUMA node is hot-added or hot-removed. The
->> current implementation puts all nodes with CPU into the top tier, and builds the
->> tier hierarchy tier-by-tier by establishing the per-node demotion targets based
->> on the distances between nodes.
->>
->> This current memory tier kernel interface needs to be improved for several
->> important use cases:
->>
->> * The current tier initialization code always initializes each memory-only NUMA
->>   node into a lower tier. But a memory-only NUMA node may have a high
->>   performance memory device (e.g. a DRAM device attached via CXL.mem or a
->>   DRAM-backed memory-only node on a virtual machine) and should be put into a
->>   higher tier.
->>
->> * The current tier hierarchy always puts CPU nodes into the top tier. But on a
->>   system with HBM (e.g. GPU memory) devices, these memory-only HBM NUMA nodes
->>   should be in the top tier, and DRAM nodes with CPUs are better to be placed
->>   into the next lower tier.
->>
->> * Also because the current tier hierarchy always puts CPU nodes into the top
->>   tier, when a CPU is hot-added (or hot-removed) and triggers a memory node from
->>   CPU-less into a CPU node (or vice versa), the memory tier hierarchy gets
->>   changed, even though no memory node is added or removed. This can make the
->>   tier hierarchy unstable and make it difficult to support tier-based memory
->>   accounting.
->>
->> * A higher tier node can only be demoted to selected nodes on the next lower
->>   tier as defined by the demotion path, not any other node from any lower tier.
->>   This strict, hard-coded demotion order does not work in all use cases (e.g.
->>   some use cases may want to allow cross-socket demotion to another node in the
->>   same demotion tier as a fallback when the preferred demotion node is out of
->>   space), and has resulted in the feature request for an interface to override
->>   the system-wide, per-node demotion order from the userspace. This demotion
->>   order is also inconsistent with the page allocation fallback order when all
->>   the nodes in a higher tier are out of space: The page allocation can fall back
->>   to any node from any lower tier, whereas the demotion order doesn't allow
->>   that.
->>
->> This patch series make the creation of memory tiers explicit under
->> the control of device driver.
->>
->> Memory Tier Initialization
->> ==========================
->>
->> Linux kernel presents memory devices as NUMA nodes and each memory device is of
->> a specific type. The memory type of a device is represented by its abstract 
->> distance. A memory tier corresponds to a range of abstract distance. This allows
->> for classifying memory devices with a specific performance range into a memory
->> tier.
->>
->> By default, all memory nodes are assigned to the default tier with
->> abstract distance 512.
->>
->> A device driver can move its memory nodes from the default tier. For example,
->> PMEM can move its memory nodes below the default tier, whereas GPU can move its
->> memory nodes above the default tier.
->>
->> The kernel initialization code makes the decision on which exact tier a memory
->> node should be assigned to based on the requests from the device drivers as well
->> as the memory device hardware information provided by the firmware.
->>
->> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
->
-> Some patch description of [0/8] is same as that of [1/8] originally.  It
-> appears that you revised [1/8], but forget to revise [0/8] too.  Please
-> do that.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I just sent v12 making sure smaller value of abstract distance imply
-faster(higher) memory tier. I missed in that in v11. 
+All errors (new ones prefixed by >>):
 
--aneesh
+>> arch/riscv/mm/dma-noncoherent.c:25:3: error: expected ')'
+                   ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:99:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(5),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:28:3: error: expected ')'
+                   ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:99:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(5),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:31:3: error: expected ')'
+                   ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:99:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(5),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:48:3: error: expected ')'
+                   ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+                   ^
+   arch/riscv/include/asm/errata_list.h:99:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(5),                                                      \
+           ^
+   arch/riscv/mm/dma-noncoherent.c:59:2: error: expected ')'
+           ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
+           ^
+   arch/riscv/include/asm/errata_list.h:99:2: note: expanded from macro 'ALT_CMO_OP'
+           __nops(5),                                                      \
+           ^
+   5 errors generated.
+
+
+vim +25 arch/riscv/mm/dma-noncoherent.c
+
+    17	
+    18	void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+    19				      enum dma_data_direction dir)
+    20	{
+    21		void *vaddr = phys_to_virt(paddr);
+    22	
+    23		switch (dir) {
+    24		case DMA_TO_DEVICE:
+  > 25			ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+    26			break;
+    27		case DMA_FROM_DEVICE:
+    28			ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+    29			break;
+    30		case DMA_BIDIRECTIONAL:
+    31			ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
+    32			break;
+    33		default:
+    34			break;
+    35		}
+    36	}
+    37	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

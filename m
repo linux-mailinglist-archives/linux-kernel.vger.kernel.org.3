@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8965D585378
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACF558540A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbiG2Qcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S238112AbiG2Q67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiG2Qcb (ORCPT
+        with ESMTP id S232321AbiG2Q65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:32:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485871263A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:32:30 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHSuU-0000YK-3x; Fri, 29 Jul 2022 18:32:22 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oHSuS-00013U-EU; Fri, 29 Jul 2022 18:32:20 +0200
-Date:   Fri, 29 Jul 2022 18:32:20 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Subject: Re: [PATCH net v1 1/1] net: dsa: microchip: KSZ9893: do not write to
- not supported Output Clock Control Register
-Message-ID: <20220729163220.GE10850@pengutronix.de>
-References: <20220728131852.41518-1-o.rempel@pengutronix.de>
- <20220728222316.1d538cb3@kernel.org>
- <20220729094840.GB10850@pengutronix.de>
- <20220729084149.5a061772@kernel.org>
+        Fri, 29 Jul 2022 12:58:57 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C881E89A63;
+        Fri, 29 Jul 2022 09:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=HcyS1kHLPZESdGp9R+oyPMtufBfDWfydet05Vxb7ves=;
+        b=cjwCDrbFQMPGAFMf7CwS3hbVeF0L1QgdRtCzntfr6jV/Nde1TBFZlb+iQ1Go80mbJBsNC5wxGBzNg
+         Po6YVgkyCIjsNH9NMTnXj7MZud6wK91Aw3GrM7jtIo+r5ke1lLEqvtbUUbXhgwnaEFg30SoykgSNDu
+         GXLKyQ0jQZNOhYXQsLAWnh1TOqCR1zHgB+bJAZCn5nuNGzQoTHDdlJVqAK4IMX/DyblhVE5dZbjdci
+         VzlNoUGHc3AqGEY7BF0dI3umPdyQoKAxQzxup33pYjF3hASj0BNeImHt1LLyv89CrpDZsOEnam9dpa
+         K0zDQ35r5/9PLn19/BebA1KzYIPKKxA==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000012,0.006052)], BW: [Enabled, t: (0.000035,0.000001)], RTDA: [Enabled, t: (0.081346), Hit: No, Details: v2.41.0; Id: 15.52k00k.1g95ealga.9p5; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([85.93.58.13])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Fri, 29 Jul 2022 19:58:36 +0300
+Date:   Fri, 29 Jul 2022 19:33:47 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Daniel =?utf-8?B?R2zDtmNrbmVy?= <dg@emlix.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 2/2] dt-bindings: fpga: add binding doc for ecp5-spi
+ fpga mgr
+Message-ID: <20220729163347.irqqqcvh2biliqg2@x260>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+ <20220719112335.9528-3-i.bornyakov@metrotek.ru>
+ <20220729090123.GA28299@homes.emlix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220729084149.5a061772@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220729090123.GA28299@homes.emlix.com>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 08:41:49AM -0700, Jakub Kicinski wrote:
-> On Fri, 29 Jul 2022 11:48:40 +0200 Oleksij Rempel wrote:
-> > On Thu, Jul 28, 2022 at 10:23:16PM -0700, Jakub Kicinski wrote:
-> > > On Thu, 28 Jul 2022 15:18:52 +0200 Oleksij Rempel wrote:  
-> > > > KSZ9893 compatible chips do not have "Output Clock Control Register 0x0103".
-> > > > So, avoid writing to it.  
-> > > 
-> > > Respin will be needed regardless of the answer to Andrew - patch does
-> > > not apply.  
-> > 
-> > Hm, this driver was hardly refactored in net-next. I'll better send it
-> > against net-next otherwise things will break.
+On Fri, Jul 29, 2022 at 11:01:24AM +0200, Daniel Glöckner wrote:
+> Hi,
 > 
-> Probably fine either way, with the net-next patch (i.e. this patch) 
-> on the list we shouldn't have problems resolving the conflict correctly.
+> On Tue, Jul 19, 2022 at 02:23:35PM +0300, Ivan Bornyakov wrote:
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - lattice,ecp5-fpga-mgr
 > 
-> The real question is whether it's okay for 5.19 to not have this patch.
-> It'd be good to have the user-visible impact specified in the commit
-> message.
+> Since this driver uses the same interface as the existing
+> drivers/fpga/machxo2-spi.c driver, wouldn't it be advisable to use a
+> similar compatible id, i.e. lattice,ecp5-slave-spi?
+> 
 
-So far I'm not aware about issues related to this, only warning in the data
-sheet:
-"RESERVED address space must not be written under any circumstances. Failure
-to heed this warning may result in untoward operation and unexpected results."
+To quote Krzysztof Kozlowski from v1 review:
+ > Do not encode interface name in compatible so no "spi"
 
-I have send this patch as part of register access validation patch set.
-There are move fixes any way.
+See https://lore.kernel.org/linux-fpga/044a9736-a4ec-c250-7755-c80a5bcbe38b@linaro.org/
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - program-gpios
+> > +  - init-gpios
+> > +  - done-gpios
+> 
+> I think some of the GPIOs can be made optional by reading the status
+> register or using the refresh command, assuming the slave spi interface
+> stayed enabled after previous programming and we are not dealing with
+> several chained FPGAs. But that can of course be left as an exercise for
+> other developers.
+
+I would prefer the latter.
+

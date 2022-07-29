@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048775856CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF085856D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 00:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbiG2WTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 18:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S238894AbiG2WVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 18:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238953AbiG2WT3 (ORCPT
+        with ESMTP id S238561AbiG2WVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 18:19:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8F747AE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659133168; x=1690669168;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7e1IU0/1VL/UlTDUWskyup1/DxjZcpExuYk7fPqQkS4=;
-  b=EriA1AuC0pBWUj+d/kIPDTyMNiHKMCzQAPNaxbzG5UZouSY/+PYQ3mZX
-   U1KMFpsZznCcHiKCegwcWy1tBxhA3qIG5tRgNS4bkyNVVrrtiIrK4+i4C
-   pxUj8rgeH+EsvVOSqQmWqq124YrcoU6fgauUQ0Gl8tLCmAmTkz8fFvfWY
-   t882x1KFMpowHND0Z20K1p6VX52oN53IO9imQQ3BQbjC8W3cDhUfvjCKe
-   fIXHvXKPRIii2VRoNNlbfkXQtGjYWogFtT7HDPcQdhiDZHbHfefuK2lo0
-   F20vLkSTFVukvNV8yX4cXSbLJBfzw6pVcEU8lPxcNwQedfN5eEuotRqsw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="352861652"
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="352861652"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 15:19:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,202,1654585200"; 
-   d="scan'208";a="629537051"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2022 15:19:26 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHYKL-000C8r-2A;
-        Fri, 29 Jul 2022 22:19:25 +0000
-Date:   Sat, 30 Jul 2022 06:18:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/vdso 8/8]
- arch/x86/entry/vdso/vgetrandom.c:10:9: warning: no previous prototype for
- function '__vdso_getrandom'
-Message-ID: <202207300604.XFoJYXtZ-lkp@intel.com>
+        Fri, 29 Jul 2022 18:21:02 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3EC10570
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:21:01 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-32269d60830so64060167b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 15:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=6d5jMCrauedgyT6F3RzrXl4yXsf77OwIiAgFmSDNs60=;
+        b=KND3DX2oNAnvBZSYAP9l0+wMQn4NM1c8v+cm6KmmOk5YgsenBcGER8LTTVidfdvBVz
+         wLmZgm7JgZaXR3MLfLW6nA3DhBoULSckK4/YBlGSuJp2OaKzrMH6NC3IOt5bi4ax/Sci
+         4JAUkA97QPjqcKhea/qNKO7v+OGDmrH48oXqmfSbGIAmhcjMvFOugl/tQyDhOe8GINE7
+         lfwiBMQbl54sXQlj80BUynK722Zbc4bHLiJDZXEpAZJ+LdjemqvPZX0yFkHSTQziHTmO
+         qOa489xnknNxYXeZy3x37/uU2HxZNSgvi5jmwe3bplgCIOUL2i3Hz2lJJK6ixPWYY4W+
+         +J4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=6d5jMCrauedgyT6F3RzrXl4yXsf77OwIiAgFmSDNs60=;
+        b=mZMBV8+0XJ3KIVxEwZaIYpmVOLKHFonAiMSXkgwTp34DriB/pwU580JfGscYTAr8+1
+         QLme6rRM8gZ2SwMltCfGUegTV885HJYr4xSrciGtrcAucCX2NtkvKHf7N8v4cvv542Km
+         KnVz2e+PX881Pg+vXUudDXJ3+1VNxBvh/bL822o2G9nVKbypF7N+iLa4eE6Fy/D7JlFR
+         PWQfugTY1j79wxlGrj9bPZtcL5Kv3xZi+mcA9IuTN4QMYqGpO2Ix9XsaH7Axmibctvvh
+         8pweLbEoyGd2QB3di/OnTsGdCyz0D1x4o/W/v7lsdMVTQeip+VfFQD6lozwWYH0LDcMC
+         1QCw==
+X-Gm-Message-State: ACgBeo1Z4pYY4cFhtVSH0ONIGoccwtXcn1gZUrMnvVmeRnhMleWAmMjJ
+        jYim80g/+8w6HVhG7iR9WcN8K9/nsfbqQeAmZ3E=
+X-Google-Smtp-Source: AA6agR7txTsTRXtBYKOmUw4MWDkbmdn1opjTDbXw9teYLPVNY6GsyqR8MBJkwCF/oBQCvHHq9G87ABE1sCj339GYlMg=
+X-Received: by 2002:a81:178d:0:b0:31f:5b19:6f1c with SMTP id
+ 135-20020a81178d000000b0031f5b196f1cmr4844374ywx.116.1659133260155; Fri, 29
+ Jul 2022 15:21:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Sender: mr.musa.ahmed7@gmail.com
+Received: by 2002:a05:7010:7208:b0:2e8:68d5:94de with HTTP; Fri, 29 Jul 2022
+ 15:20:59 -0700 (PDT)
+From:   Aisha Al-Qaddafi <aisha.gdaff21@gmail.com>
+Date:   Fri, 29 Jul 2022 15:20:59 -0700
+X-Google-Sender-Auth: P55Cj0d5-sZnbG96jgBG9ZJOnUc
+Message-ID: <CAAz8YJ9rPAZC17nxjYNAkTQQr3gwu+BJ_A1OGyYW24PFJmCrNQ@mail.gmail.com>
+Subject: My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112f listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8907]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aisha.gdaff21[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mr.musa.ahmed7[at]gmail.com]
+        *  1.7 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
-head:   7f252f719a107b2d29b14c2f7143a80d4fa14349
-commit: 7f252f719a107b2d29b14c2f7143a80d4fa14349 [8/8] random: implement getrandom() in vDSO
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220730/202207300604.XFoJYXtZ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/7f252f719a107b2d29b14c2f7143a80d4fa14349
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
-        git checkout 7f252f719a107b2d29b14c2f7143a80d4fa14349
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vdso/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/entry/vdso/vgetrandom.c:10:9: warning: no previous prototype for function '__vdso_getrandom' [-Wmissing-prototypes]
-   ssize_t __vdso_getrandom(void **state, void *buffer, size_t len, unsigned long flags)
-           ^
-   arch/x86/entry/vdso/vgetrandom.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t __vdso_getrandom(void **state, void *buffer, size_t len, unsigned long flags)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/__vdso_getrandom +10 arch/x86/entry/vdso/vgetrandom.c
-
-     9	
-  > 10	ssize_t __vdso_getrandom(void **state, void *buffer, size_t len, unsigned long flags)
-    11	{
-    12		return __cvdso_getrandom(state, buffer, len, flags);
-    13	}
-    14	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about the investment
+funds

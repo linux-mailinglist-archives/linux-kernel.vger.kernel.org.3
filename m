@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BCB584F3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04B584F3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 12:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiG2KyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 06:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
+        id S234462AbiG2Kwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 06:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiG2Kx6 (ORCPT
+        with ESMTP id S232387AbiG2Kwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 06:53:58 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D5686898
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:53:57 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id a89so5350480edf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:53:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Xp9zvBEtNP0sLWBfliMYcm9HXkv6yC+SaOOe7WcEjlA=;
-        b=Jkd57X3PfNoC6i+t6yjqqQFwmaUIG1T6efiWJnieeSLwOL4/FxtGn+RA9o3MMEwSyP
-         f9e/l/QX9nY68foO+/vxdlypH4PX5tLz4d/wR88gvz85NKD6YegqbFAqdeJ/PMyrDqlE
-         XxTXTr2z7wXstC9sGKRmRDqAFpys4KsjtuLib90goBJ4EoHJ7aewvStK0HL63FBrPnoh
-         akLWzAKMBeMZN8uTcG3LuY4NM+A/WMpdy1cP/vKq3jKqx8cUIOp+kWB5XFpxznbYOXx8
-         7l3LD2alCAm11II8Xs46EIw9S4ujSw7nvWpgohZ7XXR2o75qsMM+Eo9cAuf9Ozd21boF
-         P9EQ==
-X-Gm-Message-State: AJIora+M3R6n4LTWnxaVq+9Wb72H5h1onKzE3Pj8tFsPCXct91YcklNn
-        uP30+aGHWJQiuysC6/FvGiL5uCkJ58NSrA==
-X-Google-Smtp-Source: AGRyM1sJog8zoXoYhoRgdRKzX/JyPkg0AG/pecwJreQTpr6foRxqBc+gEleJuDK4vScjCyOeKpGx/g==
-X-Received: by 2002:a05:6402:1cc8:b0:437:a61a:5713 with SMTP id ds8-20020a0564021cc800b00437a61a5713mr2998033edb.340.1659092035969;
-        Fri, 29 Jul 2022 03:53:55 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-019.fbsv.net. [2a03:2880:31ff:13::face:b00c])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa7cb15000000b0043cfda1368fsm1972031edt.82.2022.07.29.03.53.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 03:53:55 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] misc: bcm_vk: Remove usage of deprecated functions
-Date:   Fri, 29 Jul 2022 03:52:40 -0700
-Message-Id: <20220729105240.748241-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 29 Jul 2022 06:52:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B778DF27
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 03:52:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ED30A20AED;
+        Fri, 29 Jul 2022 10:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659091971; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2jFk7KjatevBX9qkUNyew5+Z48AxgI4rYcE1gHhuGkI=;
+        b=VkgSS74AZQQjyEi870a9fUXR6xg4szvzKgogtvoOm1HspLBHDylf3Ehby6bQ99P5RLcuwk
+        ZD6N2o2155wuQiUs/BBvl0/6FHGXZaAVPHWhHYAOPsZNvf5Zd7+Ku04NRBayUX3YKNvkZv
+        C8Q0XJRBzhQW2lId0aurR78goaRCpvQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659091971;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2jFk7KjatevBX9qkUNyew5+Z48AxgI4rYcE1gHhuGkI=;
+        b=1uHNLdFMX8WtqVJXB0jYlK2rliNu1vPjyrKWSpEqr+A+tLCDuldudh9cFTqvb1BpEqZ8VX
+        FNVq+IOnSrCWFBBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C8ADE13A8E;
+        Fri, 29 Jul 2022 10:52:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +idEMAO842KFCQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 29 Jul 2022 10:52:51 +0000
+Message-ID: <aabdcc5b-d303-fda4-f3c9-4478a4adcf0b@suse.cz>
+Date:   Fri, 29 Jul 2022 12:52:51 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 13/15] mm/slab_common: unify NUMA and UMA version of
+ tracepoints
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-14-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220712133946.307181-14-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ida_simple_get() and ida_simple_remove() functions are deprecated now.
-These functions were replaced by ida_alloc() and ida_free()
-respectively. This patch modernize bcm_vk to use the replacement
-functions.
+On 7/12/22 15:39, Hyeonggon Yoo wrote:
+> Drop kmem_alloc event class, rename kmem_alloc_node to kmem_alloc, and
+> remove _node postfix for NUMA version of tracepoints.
+> 
+> This will break some tools that depend on {kmem_cache_alloc,kmalloc}_node,
+> but at this point maintaining both kmem_alloc and kmem_alloc_node
+> event classes does not makes sense at all.
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- drivers/misc/bcm-vk/bcm_vk_dev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
-index a16b99bdaa13..a3a82ebbc699 100644
---- a/drivers/misc/bcm-vk/bcm_vk_dev.c
-+++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
-@@ -1401,7 +1401,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		bcm_vk_tty_set_irq_enabled(vk, i);
- 	}
- 
--	id = ida_simple_get(&bcm_vk_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&bcm_vk_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		err = id;
- 		dev_err(dev, "unable to get id\n");
-@@ -1500,7 +1500,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	misc_device->name = NULL;
- 
- err_ida_remove:
--	ida_simple_remove(&bcm_vk_ida, id);
-+	ida_free(&bcm_vk_ida, id);
- 
- err_irq:
- 	for (i = 0; i < vk->num_irqs; i++)
-@@ -1573,7 +1573,7 @@ static void bcm_vk_remove(struct pci_dev *pdev)
- 	if (misc_device->name) {
- 		misc_deregister(misc_device);
- 		kfree(misc_device->name);
--		ida_simple_remove(&bcm_vk_ida, vk->devid);
-+		ida_free(&bcm_vk_ida, vk->devid);
- 	}
- 	for (i = 0; i < vk->num_irqs; i++)
- 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i), vk);
--- 
-2.30.2
-
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>

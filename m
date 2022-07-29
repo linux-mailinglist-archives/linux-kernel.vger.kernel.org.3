@@ -2,911 +2,1250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78B8584A40
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E16E584A41
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 05:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbiG2DjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Jul 2022 23:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S234102AbiG2DjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Jul 2022 23:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiG2DjA (ORCPT
+        with ESMTP id S233314AbiG2Diz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Jul 2022 23:39:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685E67B375;
-        Thu, 28 Jul 2022 20:38:57 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id va17so6436172ejb.0;
-        Thu, 28 Jul 2022 20:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SUUW8JlQ7VxUm84LVsAyCxayzoXt4OH9XV6CNM8BpII=;
-        b=nWYgs0i+BzXlsXtBVwPg56gDIr82eQQHCZkfAv0cwERiPcM8mF7nfUxPAFWcpz+EM/
-         oPbUJjbkCWZTgWYYKIyM5ka3tgPlIF8Op/FGwECcSQKNYJ4YtEAMUnp2mzMrfCO409EY
-         uI/6dPqQqi2mZtNlNLzhQpnqiUMt9jqekqpzI4odKYWvzo82JXGmNFAPO3oHt6oL1Wg9
-         Y2uPMV4ciNnjOC7oC4LTWRXqeJFoloxydZeUrYg3OElZ4zkXp7rkNjp3cyC3Ob6Ri6Ci
-         aGBZTH/iYEeskuqXzRmTfF93i1NmAF/m7EBINVSYFvnWtbyhjDkp5EdKM556+V7AXjS2
-         NN6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SUUW8JlQ7VxUm84LVsAyCxayzoXt4OH9XV6CNM8BpII=;
-        b=34L/wR0fb73fVBQ2LKsEyOCSWkx8iitYfjEcoujb7m/Xis0lJO9NXk7A+7sog/8y3x
-         bStO0qtNdNP9Xry9wkqgi3FZdYY+oxTqchCWl/+45ZY8HcIC8R1pJoZIhmvZwPMaUb5F
-         +hdd6UFi9NOeqt4kd4d/WV6pCVJmqkbHX8+8J8P5J974e/9h5WlSmjTZF8Ksvf/D1vjt
-         A+FVhnyTIgobRB5gK1es+idSCmUWUfO2bhe7l/HacCcxphfpu0DjkxB25txfis6uMQjs
-         vBJCE40f4jMQpKHg4axsMfBZMH+dNziNQjTB7NTpAdp8Yevfi/YTgoatnLf74bh2wVxI
-         1Iag==
-X-Gm-Message-State: AJIora8wU8m2ZpoCzwVLpfLjLePJTEym9mzHs6DJdxEEdBODi1AFdZD5
-        bB7paLRFjjYGzJc7nUYSJS4cn/OVjGDbFF2laPA=
-X-Google-Smtp-Source: AGRyM1u24MNzY/kHt1+5k9n3bbNGg0JjTF+ja5vMsPqV8JeLrmQTh+3NtjBafwbMOX6L2Ub65TiFL/8dJEsgjA/4iM0=
-X-Received: by 2002:a17:906:844f:b0:72b:549e:a654 with SMTP id
- e15-20020a170906844f00b0072b549ea654mr1288382ejy.535.1659065935760; Thu, 28
- Jul 2022 20:38:55 -0700 (PDT)
+        Thu, 28 Jul 2022 23:38:55 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A3E7CB43;
+        Thu, 28 Jul 2022 20:38:51 -0700 (PDT)
+Received: from [10.88.19.200] (10.88.19.200) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 29 Jul 2022
+ 11:38:44 +0800
+Message-ID: <129ba04c-9d49-966b-6401-eb9b1dfd41cd@amlogic.com>
+Date:   Fri, 29 Jul 2022 11:38:47 +0800
 MIME-Version: 1.0
-References: <1658242365-27797-1-git-send-email-u0084500@gmail.com> <1658242365-27797-3-git-send-email-u0084500@gmail.com>
-In-Reply-To: <1658242365-27797-3-git-send-email-u0084500@gmail.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Fri, 29 Jul 2022 11:38:44 +0800
-Message-ID: <CADiBU38OGHyAHReKhB7i_p6PUkGE5eCiN_G9_Es-DKtG0Yc71A@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] iio: adc: Add rtq6056 support
-To:     Jonathan Cameron <jic23@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v2 1/4] perf/amlogic: Add support for Amlogic meson G12
+ SoC DDR PMU driver
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        cy_huang <cy_huang@richtek.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>
+References: <20220726230329.2844101-1-jiucheng.xu@amlogic.com>
+ <A555E3E2-289D-4D27-A63A-B6BAFE33C912@gmail.com>
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+In-Reply-To: <A555E3E2-289D-4D27-A63A-B6BAFE33C912@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.88.19.200]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jonathan:
+Okay, It looks good. I will change aml to meson for all function name.
 
-cy_huang <u0084500@gmail.com> =E6=96=BC 2022=E5=B9=B47=E6=9C=8819=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E6=99=9A=E4=B8=8A10:52=E5=AF=AB=E9=81=93=EF=BC=9A
+
+On 2022/7/28 19:03, Christian Hewitt wrote:
+> [ EXTERNAL EMAIL ]
 >
-> From: ChiYuan Huang <cy_huang@richtek.com>
 >
-> Add Richtek rtq6056 supporting.
+>> On 27 Jul 2022, at 3:03 am, Jiucheng Xu <jiucheng.xu@amlogic.com> wrote:
+>>
+>> This patch adds support Amlogic meson G12 series SoC
+>> DDR bandwidth PMU driver framework and interfaces.
+>>
+>> The PMU not only can monitor the total DDR bandwidth,
+>> but also the bandwidth which is from individual IP module.
+>>
+>> Example usage:
+>>
+>> $ perf stat -a -e aml_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
+>>
+>> - or -
+>>
+>> $ perf stat -a -e \
+>>    aml_ddr_bw/total_rw_bytes/,\
+>>    aml_ddr_bw/chan_1_rw_bytes,arm=1/ -I 1000 \
+>>    sleep 10
+>>
+>> g12 SoC support 4 channels to monitor DDR bandwidth
+>> simultaneously. Each channel can monitor up to 4 IP modules
+>> simultaneously.
+>>
+>> For Instance, If you want to get the sum of DDR bandwidth
+>> from CPU, GPU, USB3.0 and VDEC. You can use the following
+>> command parameters to display.
+>>
+>> $ perf stat -a -e \
+>>    aml_ddr_bw/chan_2_rw_bytes,arm=1,gpu=1,usb3_0=1,nna=1/ -I 1000 \
+>>    sleep 10
+>>
+>> Other events are supported, and advertised via perf list.
+>>
+>> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>> Changes v1 -> v2:
+>>   - Remove inline to let GCC make the decisions
+>>   - Remove spinlock
+>>   - Remove ddr_cnt_accumulate()
+>>   - Remove the message which only indicate a bug
+>>   - Remove all dev_warn() message
+>>   - Use hweight64() helper instead of whole loop
+>>   - Remove setting of hwc
+>>   - Use for_each_set_bit() helper for bit loop
+>>   - Use sysfs_emit() in sysfs show
+>>   - Remove checking for bugs
+>>   - Replace irq_set_affinity_hint() to irq_set_affinity()
+>>   - Remove #ifdef CONFIG_OF
+>>   - Use devm_platform_ioremap_resource() instead of
+>>     platform_get_resource()&ioremap()
+>>   - Use platform_get_irq() instead of platform_get_resource()&ioremap()
+>>   - Replace IRQF_SHARED to IRQF_NOBALANCING
+>>   - Remove meaningless log like "init ok"
+>>   - Use compatible instead of creating new property to distinguish
+>>     different platform.
+>>   - Use the is_visible callback to avoid exposing unsupported fmt_attr
+>>   - Use module_platform_driver_probe() instead of module_init/exit
+>> ---
+>> MAINTAINERS                             |   7 +
+>> drivers/perf/Kconfig                    |   2 +
+>> drivers/perf/Makefile                   |   1 +
+>> drivers/perf/amlogic/Kconfig            |  10 +
+>> drivers/perf/amlogic/Makefile           |   5 +
+>> drivers/perf/amlogic/aml_ddr_pmu_core.c | 551 ++++++++++++++++++++++++
+>> drivers/perf/amlogic/aml_ddr_pmu_g12.c  | 388 +++++++++++++++++
+>> include/soc/amlogic/aml_ddr_pmu.h       |  76 ++++
+>> 8 files changed, 1040 insertions(+)
+>> create mode 100644 drivers/perf/amlogic/Kconfig
+>> create mode 100644 drivers/perf/amlogic/Makefile
+>> create mode 100644 drivers/perf/amlogic/aml_ddr_pmu_core.c
+>> create mode 100644 drivers/perf/amlogic/aml_ddr_pmu_g12.c
+>> create mode 100644 include/soc/amlogic/aml_ddr_pmu.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index f679152bdbad..cb6ee59a4f44 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1050,6 +1050,13 @@ S:	Maintained
+>> F:	Documentation/hid/amd-sfh*
+>> F:	drivers/hid/amd-sfh-hid/
+>>
+>> +AMLOGIC DDR PMU DRIVER
+>> +M:	Jiucheng Xu <jiucheng.xu@amlogic.com>
+>> +S:	Supported
+>> +W:	http://www.amlogic.com
+>> +F:	drivers/perf/amlogic/
+>> +F:	include/soc/amlogic/
+>> +
+>> AMPHION VPU CODEC V4L2 DRIVER
+>> M:	Ming Qian <ming.qian@nxp.com>
+>> M:	Shijie Qin <shijie.qin@nxp.com>
+>> diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+>> index 1e2d69453771..68200c798128 100644
+>> --- a/drivers/perf/Kconfig
+>> +++ b/drivers/perf/Kconfig
+>> @@ -192,4 +192,6 @@ config MARVELL_CN10K_DDR_PMU
+>> 	  Enable perf support for Marvell DDR Performance monitoring
+>> 	  event on CN10K platform.
+>>
+>> +source "drivers/perf/amlogic/Kconfig"
+>> +
+>> endmenu
+>> diff --git a/drivers/perf/Makefile b/drivers/perf/Makefile
+>> index 57a279c61df5..ef82b27e36d0 100644
+>> --- a/drivers/perf/Makefile
+>> +++ b/drivers/perf/Makefile
+>> @@ -1,4 +1,5 @@
+>> # SPDX-License-Identifier: GPL-2.0
+>> +obj-$(CONFIG_AML_DDR_PMU) += amlogic/
+> Upstream kernel Amlogic drivers normally use MESON naming, so the
+> config item would be e.g. CONFIG_MESON_DDR_PMU.
 >
-> It can be used for the system to monitor load current and power with 16-b=
-it
-> resolution.
+>> obj-$(CONFIG_ARM_CCI_PMU) += arm-cci.o
+>> obj-$(CONFIG_ARM_CCN) += arm-ccn.o
+>> obj-$(CONFIG_ARM_CMN) += arm-cmn.o
+>> diff --git a/drivers/perf/amlogic/Kconfig b/drivers/perf/amlogic/Kconfig
+>> new file mode 100644
+>> index 000000000000..0e421c15c8c7
+>> --- /dev/null
+>> +++ b/drivers/perf/amlogic/Kconfig
+>> @@ -0,0 +1,10 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +config AML_DDR_PMU
+>> +	tristate "Amlogic DDR Bandwidth Performance Monitor"
+>> +	depends on ARCH_MESON || COMPILE_TEST
+>> +	help
+>> +          Provides support for the DDR performance monitor
+>> +          in Amlogic SoCs, which can give information about
+>> +          memory throughput and other related events. It
+>> +          supports multiple channels to monitor the memory
+>> +          bandwidth simultaneously.
+>> diff --git a/drivers/perf/amlogic/Makefile b/drivers/perf/amlogic/Makefile
+>> new file mode 100644
+>> index 000000000000..874b885aa5cc
+>> --- /dev/null
+>> +++ b/drivers/perf/amlogic/Makefile
+>> @@ -0,0 +1,5 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +obj-$(CONFIG_AML_DDR_PMU) += aml_ddr_pmu.o
+>> +
+>> +aml_ddr_pmu-y	:= aml_ddr_pmu_core.o aml_ddr_pmu_g12.o
+> I would similarly expect to see meson_ filenames to reflect the
+> MESON driver name, e.g. meson_ddr_pmu
 >
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
-> Since v8
-> - Instead of 'integraion_time' for voltage channel, use per channel sampl=
-ing
->   frequency to be more generic.
-For the v8 change, is there still anything need to be refined?
+>> diff --git a/drivers/perf/amlogic/aml_ddr_pmu_core.c b/drivers/perf/amlogic/aml_ddr_pmu_core.c
+>> new file mode 100644
+>> index 000000000000..4e2f7f0d9af7
+>> --- /dev/null
+>> +++ b/drivers/perf/amlogic/aml_ddr_pmu_core.c
+>> @@ -0,0 +1,551 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022 Amlogic, Inc. All rights reserved.
+>> + */
+>> +#include <linux/bitfield.h>
+>> +#include <linux/init.h>
+>> +#include <linux/irqreturn.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_irq.h>
+>> +#include <linux/perf_event.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/printk.h>
+>> +#include <linux/sysfs.h>
+>> +#include <linux/types.h>
+>> +#include <linux/version.h>
+>> +
+>> +#include <soc/amlogic/aml_ddr_pmu.h>
+>> +
+>> +#define DDR_PERF_DEV_NAME "aml_ddr_bw"
+>> +#define MAX_AXI_PORTS_OF_CHANNEL	4	/* A DMC channel can monitor max 4 axi ports */
+>> +
+>> +#define to_ddr_pmu(p)		container_of(p, struct ddr_pmu, pmu)
+>> +
+>> +#define hw_info_to_pmu(p)	container_of(p, struct ddr_pmu, info)
+>> +
+>> +static void dmc_pmu_enable(struct ddr_pmu *pmu)
+>> +{
+>> +	if (!pmu->pmu_enabled)
+>> +		pmu->info.ops->enable(&pmu->info);
+>> +
+>> +	pmu->pmu_enabled = true;
+>> +}
+>> +
+>> +static void dmc_pmu_disable(struct ddr_pmu *pmu)
+>> +{
+>> +	if (pmu->pmu_enabled)
+>> +		pmu->info.ops->disable(&pmu->info);
+>> +
+>> +	pmu->pmu_enabled = false;
+>> +}
+>> +
+>> +static void aml_ddr_config_axi_id(struct ddr_pmu *pmu, int axi_id, int chann)
+> And I would similarly expect to see meson_ structures to reflect
+> the MESON driver name, e.g. meson_ddr_config_axi_id
 >
-> Since v7
-> - Use 'DEFINE_RUNTIME_DEV_PM_OPS' to replace the explicit declaration of =
-pm_ops.
->
-> Since v6
-> - Remove specific rtq6056 ABI document.
-> - Remove the redundant blank line.
-> - To prevent the race condition for attribute wrtie and shunt resistor wr=
-ite,
->   use 'iio_device_claim_direct_mode' API.
-> - Refine the order for 'action_reset' and 'pm_runtime'.
-> - Fix text typo in comment like as ohm to Ohm and timea to time.
->
-> Since v5
-> - Fix kernel version text for ABI.
->
-> Since v4
-> - Add '__aligned(8)' for timestamp member in buffer_trigger_handler funct=
-ion.
-> - Declare timestamp from 'int64_t' to more unified 's64'.
->
-> Since v3
-> - Refine pm_runtime API calling order in 'read_channel' API.
-> - Fix vshunt wrong scale for divider.
-> - Refine the comment text.
-> - Use 'devm_add_action_or_reset' to decrease the code usage in probe
->   function.
-> - Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
-> - minor fix for the comma.
-> - Use pm_ptr to replace the direct assigned pm_ops.
->
-> Since v2
-> - Rename file from 'rtq6056-adc' to 'rtq6056'.
-> - Refine the ABI, if generic already defined it, remove it and check the =
-channel
->   report unit.
-> - Add copyright text.
-> - include the correct header.
-> - change the property parsing name.
-> - To use iio_chan_spec address field.
-> - Refine each channel separate and shared_by_all.
-> - Use pm_runtime and pm_runtime_autosuspend.
-> - Remove the shutdown callback. From the HW suggestion, it's not recommen=
-ded to
->   use battery as the power supply.
-> - Check all scale unit (voltage->mV, current->mA, power->milliWatt).
-> - Use the read_avail to provide the interface for attribute value list.
-> - Add comma for the last element in the const integer array.
-> - Refine each ADC label text.
-> - In read_label callback, replace snprintf to sysfs_emit.
-> ---
->  drivers/iio/adc/Kconfig   |  15 ++
->  drivers/iio/adc/Makefile  |   1 +
->  drivers/iio/adc/rtq6056.c | 661 ++++++++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 677 insertions(+)
->  create mode 100644 drivers/iio/adc/rtq6056.c
->
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 48ace74..caebd1a 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -908,6 +908,21 @@ config ROCKCHIP_SARADC
->           To compile this driver as a module, choose M here: the
->           module will be called rockchip_saradc.
->
-> +config RICHTEK_RTQ6056
-> +       tristate "Richtek RTQ6056 Current and Power Monitor ADC"
-> +       depends on I2C
-> +       select REGMAP_I2C
-> +       select IIO_BUFFER
-> +       select IIO_TRIGGERED_BUFFER
-> +       help
-> +         Say yes here to enable RQT6056 ADC support.
-> +         RTQ6056 is a high accuracy current-sense monitor with I2C and S=
-MBus
-> +         compatible interface, and the device provides full information =
-for
-> +         system by reading out the load current and power.
-> +
-> +         This driver can also be built as a module. If so, the module wi=
-ll be
-> +         called rtq6056.
-> +
->  config RZG2L_ADC
->         tristate "Renesas RZ/G2L ADC driver"
->         depends on ARCH_RZG2L || COMPILE_TEST
-> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-> index 39d806f..cda7580 100644
-> --- a/drivers/iio/adc/Makefile
-> +++ b/drivers/iio/adc/Makefile
-> @@ -84,6 +84,7 @@ obj-$(CONFIG_QCOM_PM8XXX_XOADC) +=3D qcom-pm8xxx-xoadc.=
-o
->  obj-$(CONFIG_RCAR_GYRO_ADC) +=3D rcar-gyroadc.o
->  obj-$(CONFIG_RN5T618_ADC) +=3D rn5t618-adc.o
->  obj-$(CONFIG_ROCKCHIP_SARADC) +=3D rockchip_saradc.o
-> +obj-$(CONFIG_RICHTEK_RTQ6056) +=3D rtq6056.o
->  obj-$(CONFIG_RZG2L_ADC) +=3D rzg2l_adc.o
->  obj-$(CONFIG_SC27XX_ADC) +=3D sc27xx_adc.o
->  obj-$(CONFIG_SPEAR_ADC) +=3D spear_adc.o
-> diff --git a/drivers/iio/adc/rtq6056.c b/drivers/iio/adc/rtq6056.c
-> new file mode 100644
-> index 00000000..c1b2e8d
-> --- /dev/null
-> +++ b/drivers/iio/adc/rtq6056.c
-> @@ -0,0 +1,661 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Richtek Technology Corp.
-> + *
-> + * ChiYuan Huang <cy_huang@richtek.com>
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/delay.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/types.h>
-> +#include <linux/util_macros.h>
-> +
-> +#include <linux/iio/buffer.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/iio/sysfs.h>
-> +#include <linux/iio/trigger_consumer.h>
-> +#include <linux/iio/triggered_buffer.h>
-> +
-> +#define RTQ6056_REG_CONFIG     0x00
-> +#define RTQ6056_REG_SHUNTVOLT  0x01
-> +#define RTQ6056_REG_BUSVOLT    0x02
-> +#define RTQ6056_REG_POWER      0x03
-> +#define RTQ6056_REG_CURRENT    0x04
-> +#define RTQ6056_REG_CALIBRATION        0x05
-> +#define RTQ6056_REG_MASKENABLE 0x06
-> +#define RTQ6056_REG_ALERTLIMIT 0x07
-> +#define RTQ6056_REG_MANUFACTID 0xFE
-> +#define RTQ6056_REG_DIEID      0xFF
-> +
-> +#define RTQ6056_VENDOR_ID      0x1214
-> +#define RTQ6056_DEFAULT_CONFIG 0x4127
-> +#define RTQ6056_CONT_ALLON     7
-> +
-> +enum {
-> +       RTQ6056_CH_VSHUNT =3D 0,
-> +       RTQ6056_CH_VBUS,
-> +       RTQ6056_CH_POWER,
-> +       RTQ6056_CH_CURRENT,
-> +       RTQ6056_MAX_CHANNEL
-> +};
-> +
-> +enum {
-> +       F_OPMODE =3D 0,
-> +       F_VSHUNTCT,
-> +       F_VBUSCT,
-> +       F_AVG,
-> +       F_RESET,
-> +       F_MAX_FIELDS
-> +};
-> +
-> +struct rtq6056_priv {
-> +       struct device *dev;
-> +       struct regmap *regmap;
-> +       struct regmap_field *rm_fields[F_MAX_FIELDS];
-> +       u32 shunt_resistor_uohm;
-> +       int vshuntct_us;
-> +       int vbusct_us;
-> +       int avg_sample;
-> +};
-> +
-> +static const struct reg_field rtq6056_reg_fields[F_MAX_FIELDS] =3D {
-> +       [F_OPMODE] =3D REG_FIELD(RTQ6056_REG_CONFIG, 0, 2),
-> +       [F_VSHUNTCT] =3D REG_FIELD(RTQ6056_REG_CONFIG, 3, 5),
-> +       [F_VBUSCT] =3D REG_FIELD(RTQ6056_REG_CONFIG, 6, 8),
-> +       [F_AVG] =3D REG_FIELD(RTQ6056_REG_CONFIG, 9, 11),
-> +       [F_RESET] =3D REG_FIELD(RTQ6056_REG_CONFIG, 15, 15),
-> +};
-> +
-> +static const struct iio_chan_spec rtq6056_channels[RTQ6056_MAX_CHANNEL +=
- 1] =3D {
-> +       {
-> +               .type =3D IIO_VOLTAGE,
-> +               .indexed =3D 1,
-> +               .channel =3D 0,
-> +               .address =3D RTQ6056_REG_SHUNTVOLT,
-> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
-> +                                     BIT(IIO_CHAN_INFO_SCALE) |
-> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
-> +               .info_mask_separate_available =3D BIT(IIO_CHAN_INFO_SAMP_=
-FREQ),
-> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
-NG_RATIO),
-> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
-OVERSAMPLING_RATIO),
-> +               .scan_index =3D 0,
-> +               .scan_type =3D {
-> +                       .sign =3D 's',
-> +                       .realbits =3D 16,
-> +                       .storagebits =3D 16,
-> +                       .endianness =3D IIO_CPU,
-> +               },
-> +       },
-> +       {
-> +               .type =3D IIO_VOLTAGE,
-> +               .indexed =3D 1,
-> +               .channel =3D 1,
-> +               .address =3D RTQ6056_REG_BUSVOLT,
-> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
-> +                                     BIT(IIO_CHAN_INFO_SCALE) |
-> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
-> +               .info_mask_separate_available =3D BIT(IIO_CHAN_INFO_SAMP_=
-FREQ),
-> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
-NG_RATIO),
-> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
-OVERSAMPLING_RATIO),
-> +               .scan_index =3D 1,
-> +               .scan_type =3D {
-> +                       .sign =3D 'u',
-> +                       .realbits =3D 16,
-> +                       .storagebits =3D 16,
-> +                       .endianness =3D IIO_CPU,
-> +               },
-> +       },
-> +       {
-> +               .type =3D IIO_POWER,
-> +               .indexed =3D 1,
-> +               .channel =3D 2,
-> +               .address =3D RTQ6056_REG_POWER,
-> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
-> +                                     BIT(IIO_CHAN_INFO_SCALE) |
-> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
-> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
-NG_RATIO),
-> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
-OVERSAMPLING_RATIO),
-> +               .scan_index =3D 2,
-> +               .scan_type =3D {
-> +                       .sign =3D 'u',
-> +                       .realbits =3D 16,
-> +                       .storagebits =3D 16,
-> +                       .endianness =3D IIO_CPU,
-> +               },
-> +       },
-> +       {
-> +               .type =3D IIO_CURRENT,
-> +               .indexed =3D 1,
-> +               .channel =3D 3,
-> +               .address =3D RTQ6056_REG_CURRENT,
-> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |
-> +                                     BIT(IIO_CHAN_INFO_SAMP_FREQ),
-> +               .info_mask_shared_by_all =3D BIT(IIO_CHAN_INFO_OVERSAMPLI=
-NG_RATIO),
-> +               .info_mask_shared_by_all_available =3D BIT(IIO_CHAN_INFO_=
-OVERSAMPLING_RATIO),
-> +               .scan_index =3D 3,
-> +               .scan_type =3D {
-> +                       .sign =3D 's',
-> +                       .realbits =3D 16,
-> +                       .storagebits =3D 16,
-> +                       .endianness =3D IIO_CPU,
-> +               },
-> +       },
-> +       IIO_CHAN_SOFT_TIMESTAMP(RTQ6056_MAX_CHANNEL),
-> +};
-> +
-> +static int rtq6056_adc_read_channel(struct rtq6056_priv *priv,
-> +                                   struct iio_chan_spec const *ch,
-> +                                   int *val)
-> +{
-> +       struct device *dev =3D priv->dev;
-> +       unsigned int addr =3D ch->address;
-> +       unsigned int regval;
-> +       int ret;
-> +
-> +       pm_runtime_get_sync(dev);
-> +       ret =3D regmap_read(priv->regmap, addr, &regval);
-> +       pm_runtime_mark_last_busy(dev);
-> +       pm_runtime_put(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Power and VBUS is unsigned 16-bit, others are signed 16-bit */
-> +       if (addr =3D=3D RTQ6056_REG_BUSVOLT || addr =3D=3D RTQ6056_REG_PO=
-WER)
-> +               *val =3D regval;
-> +       else
-> +               *val =3D sign_extend32(regval, 16);
-> +
-> +       return IIO_VAL_INT;
-> +}
-> +
-> +static int rtq6056_adc_read_scale(struct iio_chan_spec const *ch, int *v=
-al,
-> +                                 int *val2)
-> +{
-> +       switch (ch->address) {
-> +       case RTQ6056_REG_SHUNTVOLT:
-> +               /* VSHUNT lsb  2.5uV */
-> +               *val =3D 2500;
-> +               *val2 =3D 1000000;
-> +               return IIO_VAL_FRACTIONAL;
-> +       case RTQ6056_REG_BUSVOLT:
-> +               /* VBUS lsb 1.25mV */
-> +               *val =3D 1250;
-> +               *val2 =3D 1000;
-> +               return IIO_VAL_FRACTIONAL;
-> +       case RTQ6056_REG_POWER:
-> +               /* Power lsb 25mW */
-> +               *val =3D 25;
-> +               return IIO_VAL_INT;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +/*
-> + * Sample frequency for channel VSHUNT and VBUS. The indices correspond
-> + * with the bit value expected by the chip. And it can be found at
-> + * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
-> + */
-> +static const int rtq6056_samp_freq_list[] =3D {
-> +       7194, 4926, 3717, 1904, 964, 485, 243, 122,
-> +};
-> +
-> +static int rtq6056_adc_set_samp_freq(struct rtq6056_priv *priv,
-> +                                    struct iio_chan_spec const *ch, int =
-val)
-> +{
-> +       struct regmap_field *rm_field;
-> +       unsigned int selector;
-> +       int *ct, ret;
-> +
-> +       if (val > 7194 || val < 122)
-> +               return -EINVAL;
-> +
-> +       if (ch->address =3D=3D RTQ6056_REG_SHUNTVOLT) {
-> +               rm_field =3D priv->rm_fields[F_VSHUNTCT];
-> +               ct =3D &priv->vshuntct_us;
-> +       } else if (ch->address =3D=3D RTQ6056_REG_BUSVOLT) {
-> +               rm_field =3D priv->rm_fields[F_VBUSCT];
-> +               ct =3D &priv->vbusct_us;
-> +       } else
-> +               return -EINVAL;
-> +
-> +       selector =3D find_closest_descending(val, rtq6056_samp_freq_list,
-> +                                          ARRAY_SIZE(rtq6056_samp_freq_l=
-ist));
-> +
-> +       ret =3D regmap_field_write(rm_field, selector);
-> +       if (ret)
-> +               return ret;
-> +
-> +       *ct =3D 1000000 / rtq6056_samp_freq_list[selector];
-> +
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Available averaging rate for rtq6056. The indices correspond with the=
- bit
-> + * value expected by the chip. And it can be found at
-> + * https://www.richtek.com/assets/product_file/RTQ6056/DSQ6056-00.pdf
-> + */
-> +static const int rtq6056_avg_sample_list[] =3D {
-> +       1, 4, 16, 64, 128, 256, 512, 1024,
-> +};
-> +
-> +static int rtq6056_adc_set_average(struct rtq6056_priv *priv, int val)
-> +{
-> +       unsigned int selector;
-> +       int ret;
-> +
-> +       if (val > 1024 || val < 1)
-> +               return -EINVAL;
-> +
-> +       selector =3D find_closest(val, rtq6056_avg_sample_list,
-> +                               ARRAY_SIZE(rtq6056_avg_sample_list));
-> +
-> +       ret =3D regmap_field_write(priv->rm_fields[F_AVG], selector);
-> +       if (ret)
-> +               return ret;
-> +
-> +       priv->avg_sample =3D rtq6056_avg_sample_list[selector];
-> +
-> +       return 0;
-> +}
-> +
-> +static int rtq6056_adc_get_sample_freq(struct rtq6056_priv *priv,
-> +                                      struct iio_chan_spec const *ch, in=
-t *val)
-> +{
-> +       int sample_time;
-> +
-> +       if (ch->address =3D=3D RTQ6056_REG_SHUNTVOLT)
-> +               sample_time =3D priv->vshuntct_us;
-> +       else if (ch->address =3D=3D RTQ6056_REG_BUSVOLT)
-> +               sample_time =3D priv->vbusct_us;
-> +       else {
-> +               sample_time =3D priv->vshuntct_us + priv->vbusct_us;
-> +               sample_time *=3D priv->avg_sample;
-> +       }
-> +
-> +       *val =3D 1000000 / sample_time;
-> +
-> +       return IIO_VAL_INT;
-> +}
-> +
-> +static int rtq6056_adc_read_raw(struct iio_dev *indio_dev,
-> +                               struct iio_chan_spec const *chan, int *va=
-l,
-> +                               int *val2, long mask)
-> +{
-> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
-> +
-> +       switch (mask) {
-> +       case IIO_CHAN_INFO_RAW:
-> +               return rtq6056_adc_read_channel(priv, chan, val);
-> +       case IIO_CHAN_INFO_SCALE:
-> +               return rtq6056_adc_read_scale(chan, val, val2);
-> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +               *val =3D priv->avg_sample;
-> +               return IIO_VAL_INT;
-> +       case IIO_CHAN_INFO_SAMP_FREQ:
-> +               return rtq6056_adc_get_sample_freq(priv, chan, val);
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +static int rtq6056_adc_read_avail(struct iio_dev *indio_dev,
-> +                                 struct iio_chan_spec const *chan,
-> +                                 const int **vals, int *type, int *lengt=
-h,
-> +                                 long mask)
-> +{
-> +       switch (mask) {
-> +       case IIO_CHAN_INFO_SAMP_FREQ:
-> +               *vals =3D rtq6056_samp_freq_list;
-> +               *type =3D IIO_VAL_INT;
-> +               *length =3D ARRAY_SIZE(rtq6056_samp_freq_list);
-> +               return IIO_AVAIL_LIST;
-> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +               *vals =3D rtq6056_avg_sample_list;
-> +               *type =3D IIO_VAL_INT;
-> +               *length =3D ARRAY_SIZE(rtq6056_avg_sample_list);
-> +               return IIO_AVAIL_LIST;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-> +
-> +static int rtq6056_adc_write_raw(struct iio_dev *indio_dev,
-> +                                struct iio_chan_spec const *chan, int va=
-l,
-> +                                int val2, long mask)
-> +{
-> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
-> +       int ret;
-> +
-> +       ret =3D iio_device_claim_direct_mode(indio_dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       switch (mask) {
-> +       case IIO_CHAN_INFO_SAMP_FREQ:
-> +               ret =3D rtq6056_adc_set_samp_freq(priv, chan, val);
-> +               break;
-> +       case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +               ret =3D rtq6056_adc_set_average(priv, val);
-> +               break;
-> +       default:
-> +               ret =3D -EINVAL;
-> +               break;
-> +       }
-> +
-> +       iio_device_release_direct_mode(indio_dev);
-> +
-> +       return ret;
-> +}
-> +
-> +static const char *rtq6056_channel_labels[RTQ6056_MAX_CHANNEL] =3D {
-> +       [RTQ6056_CH_VSHUNT] =3D "Vshunt",
-> +       [RTQ6056_CH_VBUS] =3D "Vbus",
-> +       [RTQ6056_CH_POWER] =3D "Power",
-> +       [RTQ6056_CH_CURRENT] =3D "Current",
-> +};
-> +
-> +static int rtq6056_adc_read_label(struct iio_dev *indio_dev,
-> +                                 struct iio_chan_spec const *chan,
-> +                                 char *label)
-> +{
-> +       return sysfs_emit(label, "%s\n", rtq6056_channel_labels[chan->cha=
-nnel]);
-> +}
-> +
-> +static int rtq6056_set_shunt_resistor(struct rtq6056_priv *priv,
-> +                                     int resistor_uohm)
-> +{
-> +       unsigned int calib_val;
-> +       int ret;
-> +
-> +       if (resistor_uohm <=3D 0) {
-> +               dev_err(priv->dev, "Invalid resistor [%d]\n", resistor_uo=
-hm);
-> +               return -EINVAL;
-> +       }
-> +
-> +       /* calibration =3D 5120000 / (Rshunt (uOhm) * current lsb (1mA)) =
-*/
-> +       calib_val =3D 5120000 / resistor_uohm;
-> +       ret =3D regmap_write(priv->regmap, RTQ6056_REG_CALIBRATION, calib=
-_val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       priv->shunt_resistor_uohm =3D resistor_uohm;
-> +
-> +       return 0;
-> +}
-> +
-> +static ssize_t shunt_resistor_show(struct device *dev,
-> +                                  struct device_attribute *attr, char *b=
-uf)
-> +{
-> +       struct rtq6056_priv *priv =3D iio_priv(dev_to_iio_dev(dev));
-> +       int vals[2] =3D { priv->shunt_resistor_uohm, 1000000 };
-> +
-> +       return iio_format_value(buf, IIO_VAL_FRACTIONAL, 1, vals);
-> +}
-> +
-> +static ssize_t shunt_resistor_store(struct device *dev,
-> +                                   struct device_attribute *attr,
-> +                                   const char *buf, size_t len)
-> +{
-> +       struct iio_dev *indio_dev =3D dev_to_iio_dev(dev);
-> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
-> +       int val, val_fract, ret;
-> +
-> +       ret =3D iio_device_claim_direct_mode(indio_dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D iio_str_to_fixpoint(buf, 100000, &val, &val_fract);
-> +       if (ret)
-> +               goto out_store;
-> +
-> +       ret =3D rtq6056_set_shunt_resistor(priv, val * 1000000 + val_frac=
-t);
-> +
-> +out_store:
-> +       iio_device_release_direct_mode(indio_dev);
-> +
-> +       return ret ?: len;
-> +}
-> +
-> +static IIO_DEVICE_ATTR_RW(shunt_resistor, 0);
-> +
-> +static struct attribute *rtq6056_attributes[] =3D {
-> +       &iio_dev_attr_shunt_resistor.dev_attr.attr,
-> +       NULL
-> +};
-> +
-> +static const struct attribute_group rtq6056_attribute_group =3D {
-> +       .attrs =3D rtq6056_attributes,
-> +};
-> +
-> +static const struct iio_info rtq6056_info =3D {
-> +       .attrs =3D &rtq6056_attribute_group,
-> +       .read_raw =3D rtq6056_adc_read_raw,
-> +       .read_avail =3D rtq6056_adc_read_avail,
-> +       .write_raw =3D rtq6056_adc_write_raw,
-> +       .read_label =3D rtq6056_adc_read_label,
-> +};
-> +
-> +static irqreturn_t rtq6056_buffer_trigger_handler(int irq, void *p)
-> +{
-> +       struct iio_poll_func *pf =3D p;
-> +       struct iio_dev *indio_dev =3D pf->indio_dev;
-> +       struct rtq6056_priv *priv =3D iio_priv(indio_dev);
-> +       struct device *dev =3D priv->dev;
-> +       struct {
-> +               u16 vals[RTQ6056_MAX_CHANNEL];
-> +               s64 timestamp __aligned(8);
-> +       } data;
-> +       unsigned int raw;
-> +       int i =3D 0, bit, ret;
-> +
-> +       memset(&data, 0, sizeof(data));
-> +
-> +       pm_runtime_get_sync(dev);
-> +
-> +       for_each_set_bit(bit, indio_dev->active_scan_mask, indio_dev->mas=
-klength) {
-> +               unsigned int addr =3D rtq6056_channels[bit].address;
-> +
-> +               ret =3D regmap_read(priv->regmap, addr, &raw);
-> +               if (ret)
-> +                       goto out;
-> +
-> +               data.vals[i++] =3D raw;
-> +       }
-> +
-> +       iio_push_to_buffers_with_timestamp(indio_dev, &data, iio_get_time=
-_ns(indio_dev));
-> +
-> +out:
-> +       pm_runtime_mark_last_busy(dev);
-> +       pm_runtime_put(dev);
-> +
-> +       iio_trigger_notify_done(indio_dev->trig);
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
-> +static void rtq6056_enter_shutdown_state(void *dev)
-> +{
-> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +       /* Enter shutdown state */
-> +       regmap_field_write(priv->rm_fields[F_OPMODE], 0);
-> +}
-> +
-> +static bool rtq6056_is_readable_reg(struct device *dev, unsigned int reg=
-)
-> +{
-> +       switch (reg) {
-> +       case RTQ6056_REG_CONFIG ... RTQ6056_REG_ALERTLIMIT:
-> +       case RTQ6056_REG_MANUFACTID ... RTQ6056_REG_DIEID:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +static bool rtq6056_is_writeable_reg(struct device *dev, unsigned int re=
-g)
-> +{
-> +       switch (reg) {
-> +       case RTQ6056_REG_CONFIG:
-> +       case RTQ6056_REG_CALIBRATION ... RTQ6056_REG_ALERTLIMIT:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +static const struct regmap_config rtq6056_regmap_config =3D {
-> +       .reg_bits =3D 8,
-> +       .val_bits =3D 16,
-> +       .val_format_endian =3D REGMAP_ENDIAN_BIG,
-> +       .max_register =3D RTQ6056_REG_DIEID,
-> +       .readable_reg =3D rtq6056_is_readable_reg,
-> +       .writeable_reg =3D rtq6056_is_writeable_reg,
-> +};
-> +
-> +static int rtq6056_probe(struct i2c_client *i2c)
-> +{
-> +       struct iio_dev *indio_dev;
-> +       struct rtq6056_priv *priv;
-> +       struct device *dev =3D &i2c->dev;
-> +       struct regmap *regmap;
-> +       unsigned int vendor_id, shunt_resistor_uohm;
-> +       int ret;
-> +
-> +       if (!i2c_check_functionality(i2c->adapter, I2C_FUNC_SMBUS_WORD_DA=
-TA))
-> +               return -EOPNOTSUPP;
-> +
-> +       indio_dev =3D devm_iio_device_alloc(dev, sizeof(*priv));
-> +       if (!indio_dev)
-> +               return -ENOMEM;
-> +
-> +       priv =3D iio_priv(indio_dev);
-> +       priv->dev =3D dev;
-> +       priv->vshuntct_us =3D priv->vbusct_us =3D 1037;
-> +       priv->avg_sample =3D 1;
-> +       i2c_set_clientdata(i2c, priv);
-> +
-> +       regmap =3D devm_regmap_init_i2c(i2c, &rtq6056_regmap_config);
-> +       if (IS_ERR(regmap))
-> +               return dev_err_probe(dev, PTR_ERR(regmap),
-> +                                    "Failed to init regmap\n");
-> +
-> +       priv->regmap =3D regmap;
-> +
-> +       ret =3D regmap_read(regmap, RTQ6056_REG_MANUFACTID, &vendor_id);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret,
-> +                                    "Failed to get manufacturer info\n")=
-;
-> +
-> +       if (vendor_id !=3D RTQ6056_VENDOR_ID)
-> +               return dev_err_probe(dev, -ENODEV,
-> +                                    "Invalid vendor id 0x%04x\n", vendor=
-_id);
-> +
-> +       ret =3D devm_regmap_field_bulk_alloc(dev, regmap, priv->rm_fields=
-,
-> +                                          rtq6056_reg_fields, F_MAX_FIEL=
-DS);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "Failed to init regmap fie=
-ld\n");
-> +
-> +       /*
-> +        * By default, configure average sample as 1, bus and shunt conve=
-rsion
-> +        * time as 1037 microsecond, and operating mode to all on.
-> +        */
-> +       ret =3D regmap_write(regmap, RTQ6056_REG_CONFIG, RTQ6056_DEFAULT_=
-CONFIG);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret,
-> +                                    "Failed to enable continuous sensing=
-\n");
-> +
-> +       ret =3D devm_add_action_or_reset(dev, rtq6056_enter_shutdown_stat=
-e, dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-> +       pm_runtime_use_autosuspend(dev);
-> +       pm_runtime_set_active(dev);
-> +       pm_runtime_mark_last_busy(dev);
-> +       ret =3D devm_pm_runtime_enable(dev);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "Failed to enable pm_runti=
-me\n");
-> +
-> +       /* By default, use 2000 micro-Ohm resistor */
-> +       shunt_resistor_uohm =3D 2000;
-> +       device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-> +                                &shunt_resistor_uohm);
-> +
-> +       ret =3D rtq6056_set_shunt_resistor(priv, shunt_resistor_uohm);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret,
-> +                                    "Failed to init shunt resistor\n");
-> +
-> +       indio_dev->name =3D "rtq6056";
-> +       indio_dev->modes =3D INDIO_DIRECT_MODE;
-> +       indio_dev->channels =3D rtq6056_channels;
-> +       indio_dev->num_channels =3D ARRAY_SIZE(rtq6056_channels);
-> +       indio_dev->info =3D &rtq6056_info;
-> +
-> +       ret =3D devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
-> +                                             rtq6056_buffer_trigger_hand=
-ler,
-> +                                             NULL);
-> +       if (ret)
-> +               return dev_err_probe(dev, ret,
-> +                                    "Failed to allocate iio trigger buff=
-er\n");
-> +
-> +       return devm_iio_device_register(dev, indio_dev);
-> +}
-> +
-> +static int rtq6056_runtime_suspend(struct device *dev)
-> +{
-> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
-> +
-> +       /* Configure to shutdown mode */
-> +       return regmap_field_write(priv->rm_fields[F_OPMODE], 0);
-> +}
-> +
-> +static int rtq6056_runtime_resume(struct device *dev)
-> +{
-> +       struct rtq6056_priv *priv =3D dev_get_drvdata(dev);
-> +       int sample_rdy_time_us, ret;
-> +
-> +       ret =3D regmap_field_write(priv->rm_fields[F_OPMODE], RTQ6056_CON=
-T_ALLON);
-> +       if (ret)
-> +               return ret;
-> +
-> +       sample_rdy_time_us =3D priv->vbusct_us + priv->vshuntct_us;
-> +       sample_rdy_time_us *=3D priv->avg_sample;
-> +
-> +       usleep_range(sample_rdy_time_us, sample_rdy_time_us + 100);
-> +
-> +       return 0;
-> +}
-> +
-> +static DEFINE_RUNTIME_DEV_PM_OPS(rtq6056_pm_ops, rtq6056_runtime_suspend=
-,
-> +                                rtq6056_runtime_resume, NULL);
-> +
-> +static const struct of_device_id rtq6056_device_match[] =3D {
-> +       { .compatible =3D "richtek,rtq6056" },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, rtq6056_device_match);
-> +
-> +static struct i2c_driver rtq6056_driver =3D {
-> +       .driver =3D {
-> +               .name =3D "rtq6056",
-> +               .of_match_table =3D rtq6056_device_match,
-> +               .pm =3D pm_ptr(&rtq6056_pm_ops),
-> +       },
-> +       .probe_new =3D rtq6056_probe,
-> +};
-> +module_i2c_driver(rtq6056_driver);
-> +
-> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> +MODULE_DESCRIPTION("Richtek RTQ6056 Driver");
-> +MODULE_LICENSE("GPL v2");
-> --
-> 2.7.4
->
+>> +{
+>> +	pmu->info.ops->config_axi_id(&pmu->info, axi_id, chann);
+>> +}
+>> +
+>> +static void aml_ddr_set_filter(struct perf_event *event, u8 axi_id)
+>> +{
+>> +	struct ddr_pmu *pmu = to_ddr_pmu(event->pmu);
+>> +	int chann;
+>> +
+>> +	if (event->attr.config > ALL_CHAN_COUNTER_ID &&
+>> +	    event->attr.config < COUNTER_MAX_ID) {
+>> +		chann = event->attr.config - CHAN1_COUNTER_ID;
+>> +
+>> +		aml_ddr_config_axi_id(pmu, axi_id, chann);
+>> +	}
+>> +}
+>> +
+>> +static void ddr_cnt_addition(struct dmc_counter *sum,
+>> +			     struct dmc_counter *add1,
+>> +			     struct dmc_counter *add2,
+>> +			     int chann_nr)
+>> +{
+>> +	int i;
+>> +	u64 cnt1, cnt2;
+>> +
+>> +	sum->all_cnt = add1->all_cnt + add2->all_cnt;
+>> +	sum->all_req = add1->all_req + add2->all_req;
+>> +	for (i = 0; i < chann_nr; i++) {
+>> +		cnt1 = add1->channel_cnt[i];
+>> +		cnt2 = add2->channel_cnt[i];
+>> +
+>> +		sum->channel_cnt[i] = cnt1 + cnt2;
+>> +	}
+>> +}
+>> +
+>> +static void aml_ddr_perf_event_update(struct perf_event *event)
+>> +{
+>> +	struct ddr_pmu *pmu = to_ddr_pmu(event->pmu);
+>> +	u64 new_raw_count = 0;
+>> +	struct dmc_counter dc = {0}, sum_dc = {0};
+>> +	int idx;
+>> +
+>> +	/* get the remain counters in register. */
+>> +	pmu->info.ops->get_counters(&pmu->info, &dc);
+>> +
+>> +	ddr_cnt_addition(&sum_dc, &pmu->counters, &dc, pmu->info.chann_nr);
+>> +
+>> +	switch (event->attr.config) {
+>> +	case ALL_CHAN_COUNTER_ID:
+>> +		new_raw_count = sum_dc.all_cnt;
+>> +		break;
+>> +	case CHAN1_COUNTER_ID:
+>> +	case CHAN2_COUNTER_ID:
+>> +	case CHAN3_COUNTER_ID:
+>> +	case CHAN4_COUNTER_ID:
+>> +	case CHAN5_COUNTER_ID:
+>> +	case CHAN6_COUNTER_ID:
+>> +	case CHAN7_COUNTER_ID:
+>> +	case CHAN8_COUNTER_ID:
+>> +		idx = event->attr.config - CHAN1_COUNTER_ID;
+>> +		new_raw_count = sum_dc.channel_cnt[idx];
+>> +		break;
+>> +	}
+>> +
+>> +	local64_set(&event->count, new_raw_count);
+>> +}
+>> +
+>> +static int aml_ddr_perf_event_init(struct perf_event *event)
+>> +{
+>> +	struct ddr_pmu *pmu = to_ddr_pmu(event->pmu);
+>> +	u64 config1 = event->attr.config1;
+>> +
+>> +	if (event->attr.type != event->pmu->type)
+>> +		return -ENOENT;
+>> +
+>> +	if (is_sampling_event(event) || event->attach_state & PERF_ATTACH_TASK)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	if (event->cpu < 0)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	/* check if the number of parameters is too much */
+>> +	if (event->attr.config != ALL_CHAN_COUNTER_ID &&
+>> +	    hweight64(config1) > MAX_AXI_PORTS_OF_CHANNEL)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	event->cpu = pmu->cpu;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void aml_ddr_perf_event_start(struct perf_event *event, int flags)
+>> +{
+>> +	struct ddr_pmu *pmu = to_ddr_pmu(event->pmu);
+>> +
+>> +	memset(&pmu->counters, 0, sizeof(pmu->counters));
+>> +	dmc_pmu_enable(pmu);
+>> +}
+>> +
+>> +static int aml_ddr_perf_event_add(struct perf_event *event, int flags)
+>> +{
+>> +	u64 config1 = event->attr.config1;
+>> +	int i;
+>> +
+>> +	for_each_set_bit(i, (const unsigned long *)&config1, sizeof(config1))
+>> +		aml_ddr_set_filter(event, i);
+>> +
+>> +	if (flags & PERF_EF_START)
+>> +		aml_ddr_perf_event_start(event, flags);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void aml_ddr_perf_event_stop(struct perf_event *event, int flags)
+>> +{
+>> +	struct ddr_pmu *pmu = to_ddr_pmu(event->pmu);
+>> +
+>> +	if (flags & PERF_EF_UPDATE)
+>> +		aml_ddr_perf_event_update(event);
+>> +
+>> +	dmc_pmu_disable(pmu);
+>> +}
+>> +
+>> +static void aml_ddr_perf_event_del(struct perf_event *event, int flags)
+>> +{
+>> +	aml_ddr_perf_event_stop(event, PERF_EF_UPDATE);
+>> +}
+>> +
+>> +static ssize_t aml_ddr_perf_cpumask_show(struct device *dev,
+>> +					 struct device_attribute *attr,
+>> +					 char *buf)
+>> +{
+>> +	struct ddr_pmu *pmu = dev_get_drvdata(dev);
+>> +
+>> +	return cpumap_print_to_pagebuf(true, buf, cpumask_of(pmu->cpu));
+>> +}
+>> +
+>> +static struct device_attribute aml_ddr_perf_cpumask_attr =
+>> +__ATTR(cpumask, 0444, aml_ddr_perf_cpumask_show, NULL);
+>> +
+>> +static struct attribute *aml_ddr_perf_cpumask_attrs[] = {
+>> +	&aml_ddr_perf_cpumask_attr.attr,
+>> +	NULL,
+>> +};
+>> +
+>> +static const struct attribute_group ddr_perf_cpumask_attr_group = {
+>> +	.attrs = aml_ddr_perf_cpumask_attrs,
+>> +};
+>> +
+>> +static ssize_t
+>> +pmu_event_show(struct device *dev, struct device_attribute *attr,
+>> +	       char *page)
+>> +{
+>> +	struct perf_pmu_events_attr *pmu_attr;
+>> +
+>> +	pmu_attr = container_of(attr, struct perf_pmu_events_attr, attr);
+>> +	return sysfs_emit(page, "event=0x%02llx\n", pmu_attr->id);
+>> +}
+>> +
+>> +static ssize_t
+>> +event_show_unit(struct device *dev, struct device_attribute *attr,
+>> +		char *page)
+>> +{
+>> +	struct perf_pmu_events_attr *pmu_attr;
+>> +
+>> +	pmu_attr = container_of(attr, struct perf_pmu_events_attr, attr);
+>> +	return sysfs_emit(page, "MB\n");
+>> +}
+>> +
+>> +static ssize_t
+>> +event_show_scale(struct device *dev, struct device_attribute *attr,
+>> +		 char *page)
+>> +{
+>> +	struct perf_pmu_events_attr *pmu_attr;
+>> +
+>> +	pmu_attr = container_of(attr, struct perf_pmu_events_attr, attr);
+>> +
+>> +	/* one count = 16byte = 1.52587890625e-05 MB */
+>> +	return sysfs_emit(page, "1.52587890625e-05\n");
+>> +}
+>> +
+>> +#define AML_DDR_PMU_EVENT_ATTR(_name, _id)				\
+>> +{									\
+>> +	.attr = __ATTR(_name, 0444, pmu_event_show, NULL),		\
+>> +	.id = _id,							\
+>> +}
+>> +
+>> +#define AML_DDR_PMU_EVENT_UNIT_ATTR(_name)				\
+>> +	__ATTR(_name.unit, 0444, event_show_unit, NULL)
+>> +
+>> +#define AML_DDR_PMU_EVENT_SCALE_ATTR(_name)				\
+>> +	__ATTR(_name.scale, 0444, event_show_scale, NULL)
+>> +
+>> +static struct device_attribute event_unit_attrs[] = {
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(total_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_1_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_2_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_3_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_4_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_5_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_6_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_7_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_UNIT_ATTR(chan_8_rw_bytes),
+>> +};
+>> +
+>> +static struct device_attribute event_scale_attrs[] = {
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(total_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_1_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_2_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_3_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_4_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_5_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_6_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_7_rw_bytes),
+>> +	AML_DDR_PMU_EVENT_SCALE_ATTR(chan_8_rw_bytes),
+>> +};
+>> +
+>> +static struct perf_pmu_events_attr event_attrs[] = {
+>> +	AML_DDR_PMU_EVENT_ATTR(total_rw_bytes, ALL_CHAN_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_1_rw_bytes, CHAN1_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_2_rw_bytes, CHAN2_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_3_rw_bytes, CHAN3_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_4_rw_bytes, CHAN4_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_5_rw_bytes, CHAN5_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_6_rw_bytes, CHAN6_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_7_rw_bytes, CHAN7_COUNTER_ID),
+>> +	AML_DDR_PMU_EVENT_ATTR(chan_8_rw_bytes, CHAN8_COUNTER_ID),
+>> +};
+>> +
+>> +/* three attrs are combined an event */
+>> +static struct attribute *ddr_perf_events_attrs[COUNTER_MAX_ID * 3];
+>> +
+>> +static struct attribute_group ddr_perf_events_attr_group = {
+>> +	.name = "events",
+>> +	.attrs = ddr_perf_events_attrs,
+>> +};
+>> +
+>> +/* an attr represents axi id, the max id is less than 256 */
+>> +static struct attribute *ddr_perf_format_attrs[256];
+>> +
+>> +static umode_t aml_ddr_perf_format_attr_visible(struct kobject *kobj,
+>> +						struct attribute *attr,
+>> +						int n)
+>> +{
+>> +	return attr->mode;
+>> +}
+>> +
+>> +static struct attribute_group ddr_perf_format_attr_group = {
+>> +	.name = "format",
+>> +	.attrs = ddr_perf_format_attrs,
+>> +	.is_visible = aml_ddr_perf_format_attr_visible,
+>> +};
+>> +
+>> +static ssize_t aml_ddr_perf_identifier_show(struct device *dev,
+>> +					    struct device_attribute *attr,
+>> +					    char *page)
+>> +{
+>> +	struct ddr_pmu *pmu = dev_get_drvdata(dev);
+>> +
+>> +	return sysfs_emit(page, "%s\n", pmu->name);
+>> +}
+>> +
+>> +static struct device_attribute aml_ddr_perf_identifier_attr =
+>> +__ATTR(identifier, 0444, aml_ddr_perf_identifier_show, NULL);
+>> +
+>> +static struct attribute *aml_ddr_perf_identifier_attrs[] = {
+>> +	&aml_ddr_perf_identifier_attr.attr,
+>> +	NULL,
+>> +};
+>> +
+>> +static const struct attribute_group ddr_perf_identifier_attr_group = {
+>> +	.attrs = aml_ddr_perf_identifier_attrs,
+>> +};
+>> +
+>> +static const struct attribute_group *attr_groups[] = {
+>> +	&ddr_perf_events_attr_group,
+>> +	&ddr_perf_format_attr_group,
+>> +	&ddr_perf_cpumask_attr_group,
+>> +	&ddr_perf_identifier_attr_group,
+>> +	NULL,
+>> +};
+>> +
+>> +static irqreturn_t dmc_irq_handler(int irq, void *dev_id)
+>> +{
+>> +	struct dmc_hw_info *info = dev_id;
+>> +	struct ddr_pmu *pmu;
+>> +	struct dmc_counter counters, *sum_cnter;
+>> +	int i;
+>> +
+>> +	pmu = hw_info_to_pmu(info);
+>> +
+>> +	if (info->ops->irq_handler(info, &counters) != 0)
+>> +		goto out;
+>> +
+>> +	sum_cnter = &pmu->counters;
+>> +	sum_cnter->all_cnt += counters.all_cnt;
+>> +	sum_cnter->all_req += counters.all_req;
+>> +
+>> +	for (i = 0; i < pmu->info.chann_nr; i++)
+>> +		sum_cnter->channel_cnt[i] += counters.channel_cnt[i];
+>> +
+>> +	if (pmu->pmu_enabled)
+>> +		/*
+>> +		 * the timer interrupt only supprt
+>> +		 * one shot mode, we have to re-enable
+>> +		 * it in ISR to support continue mode.
+>> +		 */
+>> +		info->ops->enable(info);
+>> +
+>> +	dev_dbg(pmu->dev, "counts: %llu %llu %llu, %llu, %llu, %llu\t\t"
+>> +			"sum: %llu %llu %llu, %llu, %llu, %llu\n",
+>> +			counters.all_req,
+>> +			counters.all_cnt,
+>> +			counters.channel_cnt[0],
+>> +			counters.channel_cnt[1],
+>> +			counters.channel_cnt[2],
+>> +			counters.channel_cnt[3],
+>> +
+>> +			pmu->counters.all_req,
+>> +			pmu->counters.all_cnt,
+>> +			pmu->counters.channel_cnt[0],
+>> +			pmu->counters.channel_cnt[1],
+>> +			pmu->counters.channel_cnt[2],
+>> +			pmu->counters.channel_cnt[3]);
+>> +out:
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+>> +static int ddr_perf_offline_cpu(unsigned int cpu, struct hlist_node *node)
+>> +{
+>> +	struct ddr_pmu *pmu = hlist_entry_safe(node, struct ddr_pmu, node);
+>> +	int target;
+>> +
+>> +	if (cpu != pmu->cpu)
+>> +		return 0;
+>> +
+>> +	target = cpumask_any_but(cpu_online_mask, cpu);
+>> +	if (target >= nr_cpu_ids)
+>> +		return 0;
+>> +
+>> +	perf_pmu_migrate_context(&pmu->pmu, cpu, target);
+>> +	pmu->cpu = target;
+>> +
+>> +	WARN_ON(irq_set_affinity(pmu->info.irq_num, cpumask_of(pmu->cpu)));
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void fill_event_attr(struct ddr_pmu *pmu)
+>> +{
+>> +	int i, j, k;
+>> +	struct attribute **dst = ddr_perf_events_attrs;
+>> +
+>> +	j = 0;
+>> +	k = 0;
+>> +
+>> +	/* fill ALL_CHAN_COUNTER_ID event */
+>> +	dst[j++] = &event_attrs[k].attr.attr;
+>> +	dst[j++] = &event_unit_attrs[k].attr;
+>> +	dst[j++] = &event_scale_attrs[k].attr;
+>> +
+>> +	k++;
+>> +
+>> +	/* fill each channel event */
+>> +	for (i = 0; i < pmu->info.chann_nr; i++, k++) {
+>> +		dst[j++] = &event_attrs[k].attr.attr;
+>> +		dst[j++] = &event_unit_attrs[k].attr;
+>> +		dst[j++] = &event_scale_attrs[k].attr;
+>> +	}
+>> +
+>> +	dst[j] = NULL; /* mark end */
+>> +}
+>> +
+>> +static void fmt_attr_fill(struct attribute **fmt_attr)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; fmt_attr[i]; i++)
+>> +		ddr_perf_format_attrs[i] = fmt_attr[i];
+>> +
+>> +	ddr_perf_format_attrs[i] = NULL;
+>> +}
+>> +
+>> +static int ddr_pmu_parse_dt(struct platform_device *pdev, struct dmc_hw_info *info)
+>> +{
+>> +	/*struct pinctrl *p;*/
+>> +	void __iomem *base;
+>> +	int i, ret = -EINVAL;
+>> +
+>> +	for (i = 0; i < info->dmc_nr; i++) {
+>> +		/* resource 0 for ddr register base */
+>> +		base = devm_platform_ioremap_resource(pdev, i);
+>> +		if (IS_ERR(base)) {
+>> +			dev_err(&pdev->dev, "couldn't ioremap ddr reg %d\n", i);
+>> +			return PTR_ERR(base);
+>> +		}
+>> +		info->ddr_reg[i] = base;
+>> +	}
+>> +
+>> +	/* resource i for pll register base */
+>> +	base = devm_platform_ioremap_resource(pdev, i);
+>> +	if (IS_ERR(base)) {
+>> +		dev_err(&pdev->dev, "couldn't ioremap for pll reg\n");
+>> +		return PTR_ERR(base);
+>> +	}
+>> +	info->pll_reg = base;
+>> +
+>> +	ret = platform_get_irq(pdev, 0);
+>> +	if (ret < 0) {
+>> +		dev_err(&pdev->dev, "couldn't get irq\n");
+>> +		return ret;
+>> +	}
+>> +	info->irq_num = ret;
+>> +
+>> +	ret = devm_request_irq(&pdev->dev, info->irq_num, dmc_irq_handler,
+>> +			       IRQF_NOBALANCING, dev_name(&pdev->dev),
+>> +			       (void *)info);
+>> +	if (ret < 0)
+>> +		dev_err(&pdev->dev, "ddr request irq failed\n");
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +int aml_ddr_pmu_create(struct platform_device *pdev, struct ddr_pmu *pmu)
+>> +{
+>> +	int ret;
+>> +	char *name;
+>> +	struct pmu tmp_pmu = {
+>> +		.module		= THIS_MODULE,
+>> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+>> +		.task_ctx_nr	= perf_invalid_context,
+>> +		.attr_groups	= attr_groups,
+>> +		.event_init	= aml_ddr_perf_event_init,
+>> +		.add		= aml_ddr_perf_event_add,
+>> +		.del		= aml_ddr_perf_event_del,
+>> +		.start		= aml_ddr_perf_event_start,
+>> +		.stop		= aml_ddr_perf_event_stop,
+>> +		.read		= aml_ddr_perf_event_update,
+>> +	};
+>> +
+>> +	pmu->pmu = tmp_pmu;
+>> +
+>> +	ret = ddr_pmu_parse_dt(pdev, &pmu->info);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	fmt_attr_fill(pmu->info.fmt_attr);
+>> +
+>> +	pmu->cpu = raw_smp_processor_id();
+>> +
+>> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, DDR_PERF_DEV_NAME);
+>> +	if (!name) {
+>> +		dev_err(&pdev->dev, "couldn't allocat name\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, name, NULL,
+>> +				      ddr_perf_offline_cpu);
+>> +	if (ret < 0) {
+>> +		dev_err(&pdev->dev, "cpuhp_setup_state_multi failed\n");
+>> +		return ret;
+>> +	}
+>> +	pmu->cpuhp_state = ret;
+>> +
+>> +	/* Register the pmu instance for cpu hotplug */
+>> +	ret = cpuhp_state_add_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Error %d registering hotplug\n", ret);
+>> +		goto cpuhp_instance_err;
+>> +	}
+>> +
+>> +	fill_event_attr(pmu);
+>> +
+>> +	ret = perf_pmu_register(&pmu->pmu, name, -1);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "perf pmu register failed\n");
+>> +		goto pmu_register_err;
+>> +	}
+>> +
+>> +	pmu->name = name;
+>> +	pmu->dev = &pdev->dev;
+>> +	pmu->pmu_enabled = false;
+>> +
+>> +	platform_set_drvdata(pdev, pmu);
+>> +
+>> +	return 0;
+>> +
+>> +pmu_register_err:
+>> +	cpuhp_state_remove_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +cpuhp_instance_err:
+>> +	cpuhp_remove_state(pmu->cpuhp_state);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(aml_ddr_pmu_create);
+>> +
+>> +int aml_ddr_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +	struct ddr_pmu *pmu = platform_get_drvdata(pdev);
+>> +
+>> +	perf_pmu_unregister(&pmu->pmu);
+>> +	cpuhp_state_remove_instance_nocalls(pmu->cpuhp_state, &pmu->node);
+>> +	cpuhp_remove_state(pmu->cpuhp_state);
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL(aml_ddr_pmu_remove);
+>> diff --git a/drivers/perf/amlogic/aml_ddr_pmu_g12.c b/drivers/perf/amlogic/aml_ddr_pmu_g12.c
+>> new file mode 100644
+>> index 000000000000..e98acdc72797
+>> --- /dev/null
+>> +++ b/drivers/perf/amlogic/aml_ddr_pmu_g12.c
+>> @@ -0,0 +1,388 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022 Amlogic, Inc. All rights reserved.
+>> + */
+>> +#include <linux/err.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/perf_event.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/printk.h>
+>> +#include <linux/types.h>
+>> +#include <linux/version.h>
+>> +
+>> +#include <soc/amlogic/aml_ddr_pmu.h>
+>> +
+>> +#define PORT_MAJOR		32
+>> +#define DEFAULT_XTAL_FREQ	24000000UL
+>> +
+>> +#define DMC_QOS_IRQ		BIT(30)
+>> +
+>> +/* DMC bandwidth monitor register address offset */
+>> +#define DMC_MON_G12_CTRL0		(0x20  << 2)
+>> +#define DMC_MON_G12_CTRL1		(0x21  << 2)
+>> +#define DMC_MON_G12_CTRL2		(0x22  << 2)
+>> +#define DMC_MON_G12_CTRL3		(0x23  << 2)
+>> +#define DMC_MON_G12_CTRL4		(0x24  << 2)
+>> +#define DMC_MON_G12_CTRL5		(0x25  << 2)
+>> +#define DMC_MON_G12_CTRL6		(0x26  << 2)
+>> +#define DMC_MON_G12_CTRL7		(0x27  << 2)
+>> +#define DMC_MON_G12_CTRL8		(0x28  << 2)
+>> +
+>> +#define DMC_MON_G12_ALL_REQ_CNT		(0x29  << 2)
+>> +#define DMC_MON_G12_ALL_GRANT_CNT	(0x2a  << 2)
+>> +#define DMC_MON_G12_ONE_GRANT_CNT	(0x2b  << 2)
+>> +#define DMC_MON_G12_SEC_GRANT_CNT	(0x2c  << 2)
+>> +#define DMC_MON_G12_THD_GRANT_CNT	(0x2d  << 2)
+>> +#define DMC_MON_G12_FOR_GRANT_CNT	(0x2e  << 2)
+>> +#define DMC_MON_G12_TIMER		(0x2f  << 2)
+>> +
+>> +/* Each bit represent a axi line */
+>> +PMU_FORMAT_ATTR(event, "config:0-7");
+>> +PMU_FORMAT_ATTR(arm, "config1:0");
+>> +PMU_FORMAT_ATTR(gpu, "config1:1");
+>> +PMU_FORMAT_ATTR(pcie, "config1:2");
+>> +PMU_FORMAT_ATTR(hdcp, "config1:3");
+>> +PMU_FORMAT_ATTR(hevc_front, "config1:4");
+>> +PMU_FORMAT_ATTR(usb3_0, "config1:6");
+>> +PMU_FORMAT_ATTR(device, "config1:7");
+>> +PMU_FORMAT_ATTR(hevc_back, "config1:8");
+>> +PMU_FORMAT_ATTR(h265enc, "config1:9");
+>> +PMU_FORMAT_ATTR(vpu_read1, "config1:16");
+>> +PMU_FORMAT_ATTR(vpu_read2, "config1:17");
+>> +PMU_FORMAT_ATTR(vpu_read3, "config1:18");
+>> +PMU_FORMAT_ATTR(vpu_write1, "config1:19");
+>> +PMU_FORMAT_ATTR(vpu_write2, "config1:20");
+>> +PMU_FORMAT_ATTR(vdec, "config1:21");
+>> +PMU_FORMAT_ATTR(hcodec, "config1:22");
+>> +PMU_FORMAT_ATTR(ge2d, "config1:23");
+>> +
+>> +PMU_FORMAT_ATTR(spicc1, "config1:32");
+>> +PMU_FORMAT_ATTR(usb0, "config1:33");
+>> +PMU_FORMAT_ATTR(dma, "config1:34");
+>> +PMU_FORMAT_ATTR(arb0, "config1:35");
+>> +PMU_FORMAT_ATTR(sd_emmc_b, "config1:36");
+>> +PMU_FORMAT_ATTR(usb1, "config1:37");
+>> +PMU_FORMAT_ATTR(audio, "config1:38");
+>> +PMU_FORMAT_ATTR(aififo, "config1:39");
+>> +PMU_FORMAT_ATTR(parser, "config1:41");
+>> +PMU_FORMAT_ATTR(ao_cpu, "config1:42");
+>> +PMU_FORMAT_ATTR(sd_emmc_c, "config1:43");
+>> +PMU_FORMAT_ATTR(spicc2, "config1:44");
+>> +PMU_FORMAT_ATTR(ethernet, "config1:45");
+>> +PMU_FORMAT_ATTR(sana, "config1:46");
+>> +
+>> +/* for sm1 and g12b */
+>> +PMU_FORMAT_ATTR(nna, "config1:10");
+>> +
+>> +/* for g12b only */
+>> +PMU_FORMAT_ATTR(gdc, "config1:11");
+>> +PMU_FORMAT_ATTR(mipi_isp, "config1:12");
+>> +PMU_FORMAT_ATTR(arm1, "config1:13");
+>> +PMU_FORMAT_ATTR(sd_emmc_a, "config1:40");
+>> +
+>> +static struct attribute *g12_pmu_format_attrs[] = {
+>> +	&format_attr_event.attr,
+>> +	&format_attr_arm.attr,
+>> +	&format_attr_gpu.attr,
+>> +	&format_attr_nna.attr,
+>> +	&format_attr_gdc.attr,
+>> +	&format_attr_arm1.attr,
+>> +	&format_attr_mipi_isp.attr,
+>> +	&format_attr_sd_emmc_a.attr,
+>> +	&format_attr_pcie.attr,
+>> +	&format_attr_hdcp.attr,
+>> +	&format_attr_hevc_front.attr,
+>> +	&format_attr_usb3_0.attr,
+>> +	&format_attr_device.attr,
+>> +	&format_attr_hevc_back.attr,
+>> +	&format_attr_h265enc.attr,
+>> +	&format_attr_vpu_read1.attr,
+>> +	&format_attr_vpu_read2.attr,
+>> +	&format_attr_vpu_read3.attr,
+>> +	&format_attr_vpu_write1.attr,
+>> +	&format_attr_vpu_write2.attr,
+>> +	&format_attr_vdec.attr,
+>> +	&format_attr_hcodec.attr,
+>> +	&format_attr_ge2d.attr,
+>> +	&format_attr_spicc1.attr,
+>> +	&format_attr_usb0.attr,
+>> +	&format_attr_dma.attr,
+>> +	&format_attr_arb0.attr,
+>> +	&format_attr_sd_emmc_b.attr,
+>> +	&format_attr_usb1.attr,
+>> +	&format_attr_audio.attr,
+>> +	&format_attr_aififo.attr,
+>> +	&format_attr_parser.attr,
+>> +	&format_attr_ao_cpu.attr,
+>> +	&format_attr_sd_emmc_c.attr,
+>> +	&format_attr_spicc2.attr,
+>> +	&format_attr_ethernet.attr,
+>> +	&format_attr_sana.attr,
+>> +	NULL,
+>> +};
+>> +
+>> +/* calculate ddr clock */
+>> +static unsigned long dmc_g12_get_freq_quick(struct dmc_hw_info *info)
+>> +{
+>> +	unsigned int val;
+>> +	unsigned int n, m, od1;
+>> +	unsigned int od_div = 0xfff;
+>> +	unsigned long freq = 0;
+>> +
+>> +	val = readl(info->pll_reg);
+>> +	val = val & 0xfffff;
+>> +	switch ((val >> 16) & 7) {
+>> +	case 0:
+>> +		od_div = 2;
+>> +		break;
+>> +
+>> +	case 1:
+>> +		od_div = 3;
+>> +		break;
+>> +
+>> +	case 2:
+>> +		od_div = 4;
+>> +		break;
+>> +
+>> +	case 3:
+>> +		od_div = 6;
+>> +		break;
+>> +
+>> +	case 4:
+>> +		od_div = 8;
+>> +		break;
+>> +
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	m = val & 0x1ff;
+>> +	n = ((val >> 10) & 0x1f);
+>> +	od1 = (((val >> 19) & 0x1)) == 1 ? 2 : 1;
+>> +	freq = DEFAULT_XTAL_FREQ / 1000;        /* avoid overflow */
+>> +	if (n)
+>> +		freq = ((((freq * m) / n) >> od1) / od_div) * 1000;
+>> +
+>> +	return freq;
+>> +}
+>> +
+>> +#ifdef DEBUG
+>> +static void g12_dump_reg(struct dmc_hw_info *db)
+>> +{
+>> +	int s = 0, i;
+>> +	unsigned int r;
+>> +
+>> +	for (i = 0; i < 9; i++) {
+>> +		r  = readl(db->ddr_reg[0] + (DMC_MON_G12_CTRL0 + (i << 2)));
+>> +		pr_notice("DMC_MON_CTRL%d:        %08x\n", i, r);
+>> +	}
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_ALL_REQ_CNT);
+>> +	pr_notice("DMC_MON_ALL_REQ_CNT:  %08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_ALL_GRANT_CNT);
+>> +	pr_notice("DMC_MON_ALL_GRANT_CNT:%08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_ONE_GRANT_CNT);
+>> +	pr_notice("DMC_MON_ONE_GRANT_CNT:%08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_SEC_GRANT_CNT);
+>> +	pr_notice("DMC_MON_SEC_GRANT_CNT:%08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_THD_GRANT_CNT);
+>> +	pr_notice("DMC_MON_THD_GRANT_CNT:%08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_FOR_GRANT_CNT);
+>> +	pr_notice("DMC_MON_FOR_GRANT_CNT:%08x\n", r);
+>> +	r  = readl(db->ddr_reg[0] + DMC_MON_G12_TIMER);
+>> +	pr_notice("DMC_MON_TIMER:        %08x\n", r);
+>> +}
+>> +#endif
+>> +
+>> +static void dmc_g12_counter_enable(struct dmc_hw_info *info)
+>> +{
+>> +	unsigned int val;
+>> +	unsigned long clock_count = dmc_g12_get_freq_quick(info) / 10; /* 100ms */
+>> +
+>> +	writel(clock_count, info->ddr_reg[0] + DMC_MON_G12_TIMER);
+>> +
+>> +	val = readl(info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +
+>> +	/* enable all channel */
+>> +	val =  BIT(31) |	/* enable bit */
+>> +	       BIT(20) |	/* use timer  */
+>> +	       0x0f;		/* 4 channels */
+>> +
+>> +	writel(val, info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +
+>> +#ifdef DEBUG
+>> +	g12_dump_reg(info);
+>> +#endif
+>> +}
+>> +
+>> +static void dmc_g12_config_fiter(struct dmc_hw_info *info,
+>> +				 int port, int channel)
+>> +{
+>> +	u32 val;
+>> +	u32 rp[MAX_CHANNEL_NUM] = {DMC_MON_G12_CTRL1, DMC_MON_G12_CTRL3,
+>> +					DMC_MON_G12_CTRL5, DMC_MON_G12_CTRL7};
+>> +	u32 rs[MAX_CHANNEL_NUM] = {DMC_MON_G12_CTRL2, DMC_MON_G12_CTRL4,
+>> +					DMC_MON_G12_CTRL6, DMC_MON_G12_CTRL8};
+>> +	int subport = -1;
+>> +
+>> +	/* clear all port mask */
+>> +	if (port < 0) {
+>> +		writel(0, info->ddr_reg[0] + rp[channel]);
+>> +		writel(0, info->ddr_reg[0] + rs[channel]);
+>> +		return;
+>> +	}
+>> +
+>> +	if (port >= PORT_MAJOR)
+>> +		subport = port - PORT_MAJOR;
+>> +
+>> +	if (subport < 0) {
+>> +		val = readl(info->ddr_reg[0] + rp[channel]);
+>> +		val |=  (1 << port);
+>> +		writel(val, info->ddr_reg[0] + rp[channel]);
+>> +		val = 0xffff;
+>> +		writel(val, info->ddr_reg[0] + rs[channel]);
+>> +	} else {
+>> +		val = BIT(23);		/* select device */
+>> +		writel(val, info->ddr_reg[0] + rp[channel]);
+>> +		val = readl(info->ddr_reg[0] + rs[channel]);
+>> +		val |= (1 << subport);
+>> +		writel(val, info->ddr_reg[0] + rs[channel]);
+>> +	}
+>> +}
+>> +
+>> +static void dmc_g12_config_axi_id(struct dmc_hw_info *info, int axi_id, int channel)
+>> +{
+>> +	if (channel > info->chann_nr)
+>> +		return;
+>> +
+>> +	dmc_g12_config_fiter(info, axi_id, channel);
+>> +}
+>> +
+>> +static void dmc_g12_counter_disable(struct dmc_hw_info *info)
+>> +{
+>> +	int i;
+>> +
+>> +	/* clear timer */
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_TIMER);
+>> +
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_ALL_REQ_CNT);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_ALL_GRANT_CNT);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_ONE_GRANT_CNT);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_SEC_GRANT_CNT);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_THD_GRANT_CNT);
+>> +	writel(0, info->ddr_reg[0] + DMC_MON_G12_FOR_GRANT_CNT);
+>> +
+>> +	/* clear port channel mapping */
+>> +	for (i = 0; i < info->chann_nr; i++)
+>> +		dmc_g12_config_fiter(info, -1, i);
+>> +}
+>> +
+>> +static void dmc_g12_get_counters(struct dmc_hw_info *info,
+>> +				 struct dmc_counter *counter)
+>> +{
+>> +	int i;
+>> +	unsigned int reg;
+>> +
+>> +	counter->all_cnt = readl(info->ddr_reg[0] + DMC_MON_G12_ALL_GRANT_CNT);
+>> +	counter->all_req   = readl(info->ddr_reg[0] + DMC_MON_G12_ALL_REQ_CNT);
+>> +
+>> +	for (i = 0; i < info->chann_nr; i++) {
+>> +		reg = DMC_MON_G12_ONE_GRANT_CNT + (i << 2);
+>> +		counter->channel_cnt[i] = readl(info->ddr_reg[0] + reg);
+>> +	}
+>> +}
+>> +
+>> +static int dmc_g12_irq_handler(struct dmc_hw_info *info,
+>> +			       struct dmc_counter *counter)
+>> +{
+>> +	unsigned int val;
+>> +	int ret = -EINVAL;
+>> +
+>> +	val = readl(info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +	if (val & DMC_QOS_IRQ) {
+>> +		dmc_g12_get_counters(info, counter);
+>> +		/* clear irq flags */
+>> +		writel(val, info->ddr_reg[0] + DMC_MON_G12_CTRL0);
+>> +		ret = 0;
+>> +	}
+>> +	return ret;
+>> +}
+>> +
+>> +static struct dmc_pmu_hw_ops g12_ops = {
+>> +	.enable		= dmc_g12_counter_enable,
+>> +	.disable	= dmc_g12_counter_disable,
+>> +	.irq_handler	= dmc_g12_irq_handler,
+>> +	.get_counters	= dmc_g12_get_counters,
+>> +	.config_axi_id	= dmc_g12_config_axi_id,
+>> +};
+>> +
+>> +static int __init g12_ddr_pmu_probe(struct platform_device *pdev)
+>> +{
+>> +	struct ddr_pmu *pmu;
+>> +
+>> +	if (of_device_is_compatible(pdev->dev.of_node,
+>> +				    "amlogic,g12a-ddr-pmu")) {
+>> +		format_attr_nna.attr.mode = 0;
+>> +		format_attr_gdc.attr.mode = 0;
+>> +		format_attr_arm1.attr.mode = 0;
+>> +		format_attr_mipi_isp.attr.mode = 0;
+>> +	} else if (of_device_is_compatible(pdev->dev.of_node,
+>> +					   "amlogic,sm1-ddr-pmu")) {
+>> +		format_attr_gdc.attr.mode = 0;
+>> +		format_attr_arm1.attr.mode = 0;
+>> +		format_attr_mipi_isp.attr.mode = 0;
+>> +	}
+>> +
+>> +	pmu = devm_kzalloc(&pdev->dev, sizeof(struct ddr_pmu), GFP_KERNEL);
+>> +	if (!pmu)
+>> +		return -ENOMEM;
+>> +
+>> +	/*
+>> +	 * G12 series Soc have single dmc controller and
+>> +	 * 4x ddr bandwidth monitor channels
+>> +	 */
+>> +	pmu->info.dmc_nr = 1;
+>> +	pmu->info.chann_nr = 4;
+>> +	pmu->info.ops = &g12_ops;
+>> +	pmu->info.fmt_attr = g12_pmu_format_attrs;
+>> +
+>> +	return aml_ddr_pmu_create(pdev, pmu);
+>> +}
+>> +
+>> +static int __exit g12_ddr_pmu_remove(struct platform_device *pdev)
+>> +{
+>> +	aml_ddr_pmu_remove(pdev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id aml_ddr_pmu_dt_match[] = {
+>> +	{
+>> +		.compatible = "amlogic,g12-ddr-pmu",
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,g12a-ddr-pmu",
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,g12b-ddr-pmu",
+>> +	},
+>> +	{
+>> +		.compatible = "amlogic,sm1-ddr-pmu",
+>> +	},
+>> +	{}
+>> +};
+>> +
+>> +static struct platform_driver g12_ddr_pmu_driver = {
+>> +	.driver = {
+>> +		.name = "amlogic,ddr-pmu",
+>> +		.of_match_table = aml_ddr_pmu_dt_match,
+>> +	},
+>> +	.remove = __exit_p(g12_ddr_pmu_remove),
+>> +};
+>> +
+>> +module_platform_driver_probe(g12_ddr_pmu_driver, g12_ddr_pmu_probe);
+>> +MODULE_AUTHOR("Jiucheng Xu");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Amlogic G12 series SoC DDR PMU");
+>> diff --git a/include/soc/amlogic/aml_ddr_pmu.h b/include/soc/amlogic/aml_ddr_pmu.h
+>> new file mode 100644
+>> index 000000000000..283f5773ecd1
+>> --- /dev/null
+>> +++ b/include/soc/amlogic/aml_ddr_pmu.h
+>> @@ -0,0 +1,76 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (c) 2022 Amlogic, Inc. All rights reserved.
+>> + */
+>> +
+>> +#ifndef __AML_DDR_PMU_H__
+>> +#define __AML_DDR_PMU_H__
+>> +
+>> +#define MAX_CHANNEL_NUM		8
+>> +
+>> +enum {
+>> +	ALL_CHAN_COUNTER_ID,
+>> +	CHAN1_COUNTER_ID,
+>> +	CHAN2_COUNTER_ID,
+>> +	CHAN3_COUNTER_ID,
+>> +	CHAN4_COUNTER_ID,
+>> +	CHAN5_COUNTER_ID,
+>> +	CHAN6_COUNTER_ID,
+>> +	CHAN7_COUNTER_ID,
+>> +	CHAN8_COUNTER_ID,
+>> +	COUNTER_MAX_ID,
+>> +};
+>> +
+>> +struct dmc_hw_info;
+>> +
+>> +struct dmc_counter {
+>> +	u64 all_cnt;	/* The count of all requests come in/out ddr controller */
+>> +	union {
+>> +		u64 all_req;
+>> +		struct {
+>> +			u64 all_idle_cnt;
+>> +			u64 all_16bit_cnt;
+>> +		};
+>> +	};
+>> +	u64 channel_cnt[MAX_CHANNEL_NUM]; /* To save a DMC bandwidth-monitor channel counter */
+>> +};
+>> +
+>> +struct dmc_pmu_hw_ops {
+>> +	void (*enable)(struct dmc_hw_info *info);
+>> +	void (*disable)(struct dmc_hw_info *info);
+>> +	/* Bind an axi line to a bandwidth-monitor channel */
+>> +	void (*config_axi_id)(struct dmc_hw_info *info, int axi_id, int chann);
+>> +	int (*irq_handler)(struct dmc_hw_info *info,
+>> +			   struct dmc_counter *counter);
+>> +	void (*get_counters)(struct dmc_hw_info *info,
+>> +			     struct dmc_counter *counter);
+>> +};
+>> +
+>> +struct dmc_hw_info {
+>> +	struct dmc_pmu_hw_ops *ops;
+>> +	void __iomem *ddr_reg[4];
+>> +	unsigned long timer_value;	/* Timer value in TIMER register */
+>> +	void __iomem *pll_reg;
+>> +	int irq_num;			/* irq vector number */
+>> +	int dmc_nr;			/* The number of dmc controller */
+>> +	int chann_nr;			/* The number of dmc bandwidth monitor channels */
+>> +	int id;				/* The number of supported channels */
+>> +	struct attribute **fmt_attr;
+>> +};
+>> +
+>> +struct ddr_pmu {
+>> +	struct pmu pmu;
+>> +	struct dmc_hw_info info;
+>> +	struct dmc_counter counters;	/* save counters from hw */
+>> +	bool pmu_enabled;
+>> +	struct device *dev;
+>> +	char *name;
+>> +	struct hlist_node node;
+>> +	enum cpuhp_state cpuhp_state;
+>> +	int cpu;			/* for cpu hotplug */
+>> +};
+>> +
+>> +int aml_ddr_pmu_create(struct platform_device *pdev, struct ddr_pmu *pmu);
+>> +int aml_ddr_pmu_remove(struct platform_device *pdev);
+>> +
+>> +#endif /* __AML_DDR_PMU_H__ */
+
+-- 
+Thanks,
+Jiucheng
+

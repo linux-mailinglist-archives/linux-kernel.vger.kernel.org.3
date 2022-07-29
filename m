@@ -2,186 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1E6585187
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BA858518A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 16:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiG2O0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 10:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S237049AbiG2O0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 10:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237038AbiG2OZw (ORCPT
+        with ESMTP id S237056AbiG2O0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 10:25:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579B07C183
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 07:25:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 29 Jul 2022 10:26:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94DC42ACA;
+        Fri, 29 Jul 2022 07:26:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 04EED2105E;
-        Fri, 29 Jul 2022 14:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659104747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=brxv0Il7aXuaoEfSMewGeVS/r64cW73YuICcYwVyi7I=;
-        b=SO9f3fOuAnftNQ8R8q2Cic7KqH+8EHRwWbJBZHLPMJgGCKNW4E6pyuN+jEF4N3HPy/jSFR
-        BOJvH9SRTbSVS8eTJCCBa6hb74D4chqQFkLrcU89mQcjlJBG+57e/VQl/egioC06bBfq2m
-        dUdwfeVIj510NLlX5tlseZVipnI3bTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659104747;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=brxv0Il7aXuaoEfSMewGeVS/r64cW73YuICcYwVyi7I=;
-        b=1WXFxXC/fpCEBNrNKBk8J9H2mFvWmwFkyPh0Jz8YW03D1SjPCm9S9ptcsCShPyAHyHeoWP
-        q6GLBhr/AKFQKcAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEACC13A1B;
-        Fri, 29 Jul 2022 14:25:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x26ELert42JQZQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 29 Jul 2022 14:25:46 +0000
-Message-ID: <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
-Date:   Fri, 29 Jul 2022 16:25:46 +0200
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5EEBBCE29C0;
+        Fri, 29 Jul 2022 14:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40456C433B5;
+        Fri, 29 Jul 2022 14:26:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659104772;
+        bh=+uMoBAWIxMSyXxcObfO5cph22nMVTb/iovwbfOaC60I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=thrMeuuK2VSrxm0ruqnTHhY8+hQZ4zpezH9G8rUOteC7blIg1D/tpQ2cfpPLhfRWE
+         DLyGP04+rju95e1Y5YIEjnQIVfMco+HTxdfUhU14PFmtQQh1g047x3kh0OD4f6GwrG
+         v9meh8C0T+sXUGmTl6+0qTbj6Q16GfWq/O4OhHZgMLklA8wGnx89N6RwGza6azMDJJ
+         pITNu7roK4QkuvIEuWJtaGAcxoUzho3Ee9weqB/uyMy0OvWXRpA0F0mNYyk2TDvzN2
+         Orfsr/0dJKcaRTJ1Ng3LwCtnvza8H6A9Iali8xH/wW6+//gl8L/8HlZHFEPI3KJLfd
+         Nk9WijSbKcf4g==
+Date:   Fri, 29 Jul 2022 19:56:05 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Qiang Yu <quic_qianyu@quicinc.com>
+Cc:     quic_hemantk@quicinc.com, loic.poulain@linaro.org,
+        quic_jhugo@quicinc.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_cang@quicinc.com
+Subject: Re: [PATCH v3 1/1] bus: mhi: host: Fix up null pointer access in
+ mhi_irq_handler
+Message-ID: <20220729142605.GB9937@thinkpad>
+References: <1658459838-30802-1-git-send-email-quic_qianyu@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
- kmb_plane_atomic_update()
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Zeng Jingxiang <zengjx95@gmail.com>, anitha.chrisanthus@intel.com,
-        edmund.j.dea@intel.com, airlied@linux.ie, daniel@ffwll.ch,
-        laurent.pinchart@ideasonboard.com, maxime@cerno.tech,
-        ville.syrjala@linux.intel.com
-Cc:     Zeng Jingxiang <linuszeng@tencent.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220729030711.2117849-1-zengjx95@gmail.com>
- <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
-In-Reply-To: <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------8XYdnNgb7h3hVjAfqSJlMFec"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1658459838-30802-1-git-send-email-quic_qianyu@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------8XYdnNgb7h3hVjAfqSJlMFec
-Content-Type: multipart/mixed; boundary="------------QsDYZ0Y0WtwqwbmmpqeTelLL";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Zeng Jingxiang <zengjx95@gmail.com>, anitha.chrisanthus@intel.com,
- edmund.j.dea@intel.com, airlied@linux.ie, daniel@ffwll.ch,
- laurent.pinchart@ideasonboard.com, maxime@cerno.tech,
- ville.syrjala@linux.intel.com
-Cc: Zeng Jingxiang <linuszeng@tencent.com>, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
-Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
- kmb_plane_atomic_update()
-References: <20220729030711.2117849-1-zengjx95@gmail.com>
- <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
-In-Reply-To: <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
+On Fri, Jul 22, 2022 at 11:17:18AM +0800, Qiang Yu wrote:
+> The irq handler for a shared IRQ ought to be prepared for running
+> even now it's being freed. So let's check the pointer used by
+> mhi_irq_handler to avoid null pointer access since it is probably
+> released before freeing IRQ.
+> 
+> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
 
---------------QsDYZ0Y0WtwqwbmmpqeTelLL
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Applied to mhi-next! This patch is targeted for v5.20-rcS.
 
-SGkNCg0KQW0gMjkuMDcuMjIgdW0gMTY6MjMgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
-Cj4gSGkNCj4gDQo+IEFtIDI5LjA3LjIyIHVtIDA1OjA3IHNjaHJpZWIgWmVuZyBKaW5neGlh
-bmc6DQo+PiBGcm9tOiBaZW5nIEppbmd4aWFuZyA8bGludXN6ZW5nQHRlbmNlbnQuY29tPg0K
-Pj4NCj4+IFRoZSAicGxhbmUiIHBvaW50ZXIgd2FzIGFjY2VzcyBiZWZvcmUgY2hlY2tpbmcg
-aWYgaXQgd2FzIE5VTEwuDQo+Pg0KPj4gVGhlIGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9z
-dGF0ZSgpIGZ1bmN0aW9uIHdpbGwgZGVyZWZlcmVuY2UNCj4+IHRoZSBwb2ludGVyICJwbGFu
-ZSIuDQo+PiAzNDXCoMKgwqAgc3RydWN0IGRybV9wbGFuZV9zdGF0ZSAqb2xkX3BsYW5lX3N0
-YXRlID0NCj4+IMKgwqDCoMKgwqDCoMKgIGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0
-ZShzdGF0ZSwgcGxhbmUpOw0KPj4gMzQ2wqDCoMKgIHN0cnVjdCBkcm1fcGxhbmVfc3RhdGUg
-Km5ld19wbGFuZV9zdGF0ZSA9DQo+PiDCoMKgwqDCoMKgwqDCoCBkcm1fYXRvbWljX2dldF9u
-ZXdfcGxhbmVfc3RhdGUoc3RhdGUsIHBsYW5lKTsNCj4+DQo+PiBBIE5VTEwgY2hlY2sgZm9y
-ICJwbGFuZSIgaW5kaWNhdGVzIHRoYXQgaXQgbWF5IGJlIE5VTEwNCj4+IDM2M8KgwqDCoCBp
-ZiAoIXBsYW5lIHx8ICFuZXdfcGxhbmVfc3RhdGUgfHwgIW9sZF9wbGFuZV9zdGF0ZSkNCj4g
-DQo+IElzIHRoaXMgYW4gYWN0dWFsIGJ1ZyB0aGF0IGhhcHBlbnM/DQo+IA0KPiBBbGwgcGxh
-bmVzIHNob3VsZCBhbHdheXMgaGF2ZSBhIHN0YXRlLiBUaGVyZWZvcmUgdGhlIHRlc3RzIGZv
-ciANCj4gIW5ld19wbGFuZV9zdGF0ZSBhbmQgIW9sZF9wbGFuZV9zdGF0ZSBjYW4gYmUgcmVt
-b3ZlZCwgSSdkIHNheS4NCg0KSnVzdCB0byBjbGFyaWZ5OiBtb3ZpbmcgdGhlIHRlc3QgZm9y
-ICFwbGFuZSBiZWZvcmUgdXNpbmcgb25lIG9mIHRoZSANCmdldF9wbGFuZV9zdGF0ZSBmdW5j
-dGlvbnMgaXMgYSBjb3JyZWN0IGJ1Z2ZpeC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
-PiANCj4gQmVzdCByZWdhcmRzDQo+IFRob21hcw0KPiANCj4+DQo+PiBGaXhlczogOTc3Njk3
-ZTIwYjNkICgiZHJtL2F0b21pYzogUGFzcyB0aGUgZnVsbCBzdGF0ZSB0byBwbGFuZXMgYXRv
-bWljIA0KPj4gZGlzYWJsZSBhbmQgdXBkYXRlIikNCj4+IEZpeGVzOiAzNzQxOGJmMTRjMTMg
-KCJkcm06IFVzZSBzdGF0ZSBoZWxwZXIgaW5zdGVhZCBvZiB0aGUgcGxhbmUgc3RhdGUgDQo+
-PiBwb2ludGVyIikNCj4+IFNpZ25lZC1vZmYtYnk6IFplbmcgSmluZ3hpYW5nIDxsaW51c3pl
-bmdAdGVuY2VudC5jb20+DQo+PiAtLS0NCj4+IMKgIGRyaXZlcnMvZ3B1L2RybS9rbWIva21i
-X3BsYW5lLmMgfCAxMyArKysrKysrKy0tLS0tDQo+PiDCoCAxIGZpbGUgY2hhbmdlZCwgOCBp
-bnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jIA0KPj4gYi9kcml2ZXJzL2dwdS9kcm0va21i
-L2ttYl9wbGFuZS5jDQo+PiBpbmRleCAyNzM1YjhlYjM1MzcuLmQyYmM5OThiNjVjZSAxMDA2
-NDQNCj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9rbWIva21iX3BsYW5lLmMNCj4+ICsrKyBi
-L2RyaXZlcnMvZ3B1L2RybS9rbWIva21iX3BsYW5lLmMNCj4+IEBAIC0zNDIsMTAgKzM0Miw3
-IEBAIHN0YXRpYyB2b2lkIGttYl9wbGFuZV9zZXRfYWxwaGEoc3RydWN0IA0KPj4ga21iX2Ry
-bV9wcml2YXRlICprbWIsDQo+PiDCoCBzdGF0aWMgdm9pZCBrbWJfcGxhbmVfYXRvbWljX3Vw
-ZGF0ZShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0ZSAqc3RhdGUp
-DQo+PiDCoCB7DQo+PiAtwqDCoMKgIHN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm9sZF9wbGFu
-ZV9zdGF0ZSA9IA0KPj4gZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRlKHN0YXRlLA0K
-Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBsYW5lKTsNCj4+IC3CoMKgwqAgc3Ry
-dWN0IGRybV9wbGFuZV9zdGF0ZSAqbmV3X3BsYW5lX3N0YXRlID0gDQo+PiBkcm1fYXRvbWlj
-X2dldF9uZXdfcGxhbmVfc3RhdGUoc3RhdGUsDQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgcGxhbmUpOw0KPj4gK8KgwqDCoCBzdHJ1Y3QgZHJtX3BsYW5lX3N0YXRlICpvbGRf
-cGxhbmVfc3RhdGUsICpuZXdfcGxhbmVfc3RhdGU7DQo+PiDCoMKgwqDCoMKgIHN0cnVjdCBk
-cm1fZnJhbWVidWZmZXIgKmZiOw0KPj4gwqDCoMKgwqDCoCBzdHJ1Y3Qga21iX2RybV9wcml2
-YXRlICprbWI7DQo+PiDCoMKgwqDCoMKgIHVuc2lnbmVkIGludCB3aWR0aDsNCj4+IEBAIC0z
-NjAsNyArMzU3LDEzIEBAIHN0YXRpYyB2b2lkIGttYl9wbGFuZV9hdG9taWNfdXBkYXRlKHN0
-cnVjdCANCj4+IGRybV9wbGFuZSAqcGxhbmUsDQo+PiDCoMKgwqDCoMKgIHN0YXRpYyBkbWFf
-YWRkcl90IGFkZHJbTUFYX1NVQl9QTEFORVNdOw0KPj4gwqDCoMKgwqDCoCBzdHJ1Y3QgZGlz
-cF9jZmcgKmluaXRfZGlzcF9jZmc7DQo+PiAtwqDCoMKgIGlmICghcGxhbmUgfHwgIW5ld19w
-bGFuZV9zdGF0ZSB8fCAhb2xkX3BsYW5lX3N0YXRlKQ0KPj4gK8KgwqDCoCBpZiAoIXBsYW5l
-KQ0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybjsNCj4+ICsNCj4+ICvCoMKgwqAgb2xkX3Bs
-YW5lX3N0YXRlID0gZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFu
-ZSk7DQo+PiArwqDCoMKgIG5ld19wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19w
-bGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUpOw0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoIW5ld19w
-bGFuZV9zdGF0ZSB8fCAhb2xkX3BsYW5lX3N0YXRlKQ0KPj4gwqDCoMKgwqDCoMKgwqDCoMKg
-IHJldHVybjsNCj4+IMKgwqDCoMKgwqAgZmIgPSBuZXdfcGxhbmVfc3RhdGUtPmZiOw0KPiAN
-Cg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0K
-U1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5
-MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdl
-c2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Thanks,
+Mani
 
---------------QsDYZ0Y0WtwqwbmmpqeTelLL--
+> ---
+> v2->v3: add comments
+> v1->v2: change dev_err to dev_dbg
+> 
+>  drivers/bus/mhi/host/main.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+> index f3aef77a..df0fbfe 100644
+> --- a/drivers/bus/mhi/host/main.c
+> +++ b/drivers/bus/mhi/host/main.c
+> @@ -430,12 +430,25 @@ irqreturn_t mhi_irq_handler(int irq_number, void *dev)
+>  {
+>  	struct mhi_event *mhi_event = dev;
+>  	struct mhi_controller *mhi_cntrl = mhi_event->mhi_cntrl;
+> -	struct mhi_event_ctxt *er_ctxt =
+> -		&mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
+> +	struct mhi_event_ctxt *er_ctxt;
+>  	struct mhi_ring *ev_ring = &mhi_event->ring;
+> -	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
+> +	dma_addr_t ptr;
+>  	void *dev_rp;
+>  
+> +	/*
+> +	 * If CONFIG_DEBUG_SHIRQ is set, the IRQ handler will get invoked during __free_irq()
+> +	 * and by that time mhi_ctxt() would've freed. So check for the existence of mhi_ctxt
+> +	 * before handling the IRQs.
+> +	 */
+> +	if (!mhi_cntrl->mhi_ctxt) {
+> +		dev_dbg(&mhi_cntrl->mhi_dev->dev,
+> +			"mhi_ctxt has been freed\n");
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	er_ctxt = &mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
+> +	ptr = le64_to_cpu(er_ctxt->rp);
+> +
+>  	if (!is_valid_ring_ptr(ev_ring, ptr)) {
+>  		dev_err(&mhi_cntrl->mhi_dev->dev,
+>  			"Event ring rp points outside of the event ring\n");
+> -- 
+> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+> 
 
---------------8XYdnNgb7h3hVjAfqSJlMFec
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLj7eoFAwAAAAAACgkQlh/E3EQov+CX
-ahAAsVg3sE20LkP7C2n34XDLir22oTldIpn7EwNbpONH1oEg/yOy3QjHZ+pt+rz6k4k7fsWqOlIk
-LG8LGFdhJX/cS5V/4uWv4QctHrT1w1QcU6l5GkgHyB7kSgtxOBCnbfY8wyO/NoZ5+Z8xJ2+/SDFn
-nFgkOdb2D14N7iNZvagD8l0gZB4WssQxXXwdjExZQEd2Uj+xiWyRnNf2crbrp1XmhV18p/zMtZ7t
-AvsSNM/ZfxrxZ1msdKJlT+G+roPSLcfDYyv5rLk9+rCRairK+hWH2TGxaBr8WV1Z28T6IWdQYAyV
-9urzlTlT7+Q2UZXkWTN7pZOWVyaGk4GObcwn4sWr3J5cUTVatSeLEVGGSZFzKRsmwDGp8JRCTsEj
-UGFHN4zqNIK6ZGHR/5rcigR3CZoxn+vT6bV/QiNXkghN0qUQVw6cz2+Ey8jOEDARoOkzTy28nUjP
-Ft9dB9f6YW6OioCN1w4yhyvph84Jy74B8AP5f6vcVkkLl8GYuQ22FNFnMW4V1PpBEl0Gx7tn1gJn
-MzReHC04J6bU77zUyFVcf9Z+zIZy6EMeyRRs5vwdQgGDrtfZ9XEUkOM87NcPOLo8DNZAyKc6OhDY
-XjWcUGPxUlgFVd/KoCWAv71OcFK4FDV5L2VwTKZ1QBqxJ4PZ8FWXF/mklE+CbyIwoVimd7qSWknO
-U7A=
-=YDPy
------END PGP SIGNATURE-----
-
---------------8XYdnNgb7h3hVjAfqSJlMFec--
+-- 
+மணிவண்ணன் சதாசிவம்

@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4959C5852AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D1E5852AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237486AbiG2P3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S237535AbiG2Pcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiG2P3k (ORCPT
+        with ESMTP id S229979AbiG2Pcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:29:40 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371DC85FA8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:29:37 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id u76so6140166oie.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:29:37 -0700 (PDT)
+        Fri, 29 Jul 2022 11:32:41 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C696FA0C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:32:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id fy29so9101451ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LUOI72qEDQxm1rvXFiN4dVLMwsuuFVOA2VC1CbACSkM=;
-        b=ROZ+R3K4RAhClh7B4NyFYoHqEhE84TrndAVBxDYXYiBcdgkTomNSXOZRoAdhT+gMBs
-         +QBNmoujMk5nr8B0lT+D/lOhPT98pMro2X0TWUiEVPSBP1PhluhN/EJwot4kF6TRZdSy
-         KI3syoXx2pvbMlvzPIHqvEm3r3dYDTgWjFo3I=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jmBIRMRQS/VgtMcMzm0Oe80Xtab0xlTKGKq4qVMd4kY=;
+        b=ZlQLOFKuTG5vgUQiyuXFtBbf6p1VnWLpTKhhUn8bD9oI97N5UwWofWf/jVXh+6FEI3
+         PsrYm8DSkIGvjUy6Fu+MYXsgMbiqP9ECFlJ1NYDkty/Tt9xK6EtUkaWcc/lIPnnnBJrT
+         SSwomT5XTaslGcRyymoPuanPAzQDSWB+Xonos7q4IqLOs7TX3pG/ewNHud2BZwCUFcXB
+         PvYO8+1rd3Ivlb1cCgo3FkA03JRCQ1XJVBS1uAU0EuUMh7/kFWcjMwulMFcpri8FXQzv
+         Sm+i3mWxDcq0FNDUiUq2Zkuixu5Jrsl3/+fyCQgTYHOdRPH/EEEDGgDNiXaGhCMpdfNx
+         gJEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LUOI72qEDQxm1rvXFiN4dVLMwsuuFVOA2VC1CbACSkM=;
-        b=rUqVDMXJ454uHmTr1FPDl5R+TgErQ1KkG4pUY943RA2Ja/b+dJZlGW6Ak4FwIGwC0W
-         9Z/907MTwykKuun+PLh6g6edyKvG7xeP8ePZzrrrvk9lnctAtXXyNIPPaeMAhrprEUrt
-         tE4LcdwaAp4/pV8f6kVZHKxMqbQtde70iP06hPYwCrmQTFejaLON3cf7PdeMi6vHxCaj
-         14BwBt8j2C2Z+PXZJLY8KDPCg6gCBeg6vQQrd9g7EtnIvchmJx5n+xD1gWTPFBz5UbGS
-         zC2m23SK36+qtGD3RdOqJwmaCWk6rmaGeq4LBnKiCKqcx2dpEOQ38Hhf9t+YrIeUjNTF
-         9O8Q==
-X-Gm-Message-State: AJIora8hgutx4HSemdVdQp5/OXYYngy2pwSKY+dqA4nKxDap/iJe5xoo
-        uhkTN0ajqBJnaWBNPyNjtj0W6n1z/6NH1RT+
-X-Google-Smtp-Source: AGRyM1uyxVrEmyUV0wJHweS5SV8xFQfE+l6ZeH6uwRIJZu4wB5OmGAnJBCePUoMV0LvlwQOid8f1Rg==
-X-Received: by 2002:a05:6808:1492:b0:33a:7448:8b98 with SMTP id e18-20020a056808149200b0033a74488b98mr1865351oiw.92.1659108576511;
-        Fri, 29 Jul 2022 08:29:36 -0700 (PDT)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id bj27-20020a056808199b00b0033b14822f48sm1195002oib.35.2022.07.29.08.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 08:29:32 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Fri, 29 Jul 2022 10:29:30 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/158] 5.18.15-rc1 review
-Message-ID: <YuP82nauCY0Ha2fe@fedora64.linuxtx.org>
-References: <20220727161021.428340041@linuxfoundation.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jmBIRMRQS/VgtMcMzm0Oe80Xtab0xlTKGKq4qVMd4kY=;
+        b=209EBJxwq/nban5H1w2kUkJX/k6g6/ifuYTCDAo+x67uK3/WNc821FIkaarF25nONj
+         Rb62+8gETHKnOCIW5iBTrf9KbbyhW5jvVr4TfGHOqcAICYBRw8oys5QUgc5NVi0m5J0K
+         pYDm17gwHDv1M+ngET1Hm+ZqPeH0B6v75vAkVGwV7zSnGM3qrLCSGdaAHVU2JZoDm19a
+         7Oi4xj+nNRFkoVhbnn+h31c7nQmIhrcHzVK/Bh0YrM4hMnI16SvYX6pddWaQr2dyyuGu
+         uO3obyHUjIO8O7qnLLwTFeAWB01EV0tklfHbsPGXYz5NrYtggHmkNbxcMFwTz64hIlOO
+         2rDg==
+X-Gm-Message-State: AJIora9hARR6b3sLcytGXQKYtQmyJLBYq6oXzchxSE/5NvodQvE3xMs8
+        9H9YxUSJiY03fmoz474iuYNkwmvlO/r3KmguZQ0=
+X-Google-Smtp-Source: AGRyM1vNISp+OeLGZrYIy7SfAY+GquNrF6kbAQH50eNQJ5t6bF8PfYsV9OfaunP6KrxX7eG9G6dp9UZnVijPuCqsW6I=
+X-Received: by 2002:a17:907:9706:b0:72b:4b0d:86a2 with SMTP id
+ jg6-20020a170907970600b0072b4b0d86a2mr3227461ejc.242.1659108759194; Fri, 29
+ Jul 2022 08:32:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727161021.428340041@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
+ <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com> <Yt605xj898VSAsA3@casper.infradead.org>
+ <YuPwLq+D8k53GZa3@smile.fi.intel.com> <YuP6Evijb2oZqD3D@localhost.localdomain>
+In-Reply-To: <YuP6Evijb2oZqD3D@localhost.localdomain>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 29 Jul 2022 17:32:01 +0200
+Message-ID: <CAHp75VcgRxFLY6ckgRxPxQtShTssgu__FyCER5yg5nASwmzmZw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to kstrtobool()
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, ying.huang@intel.com,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Petr Mladek <pmladek@suse.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 06:11:04PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.15 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 29 Jul 2022 16:09:50 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.15-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Fri, Jul 29, 2022 at 5:21 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> On Fri, Jul 29, 2022 at 05:35:26PM +0300, Andy Shevchenko wrote:
+> > On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
+> > > On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+...
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+> > > Well, that's going to break people who've started using the new option.
+> > > As a quick fix, how about only allowing either "f\0" or "fa"?
+> >
+> > I think we need to be more strict in kstrtobool(), i.e. 'f\0' ('t\0') and 'fal'
+> > ('tru') perhaps?
+>
+> lol what?
+>
+> the only way to be strict is to accept "0" and "1" with optional
+> newline and delete all the rubbish entirely.
+
+You have an anti-user mindset. Be more constructive, please.
+
+-- 
+With Best Regards,
+Andy Shevchenko

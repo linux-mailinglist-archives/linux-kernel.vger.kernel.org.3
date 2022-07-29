@@ -2,113 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73328585205
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFAA585206
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 17:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbiG2PDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 11:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S236607AbiG2PDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 11:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiG2PDh (ORCPT
+        with ESMTP id S229561AbiG2PDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 11:03:37 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3CE95A8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:03:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id r83-20020a1c4456000000b003a3a22178beso785861wma.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qLTFSrskQrti9akgcOE2SqCBtE6dVVYg8MzlEVx8mCs=;
-        b=SlwYP/S8pe1GMNTiked6ky3NS1yrgExEkZu0Y4j7YN6x2OhA+OeI37Kx7HWzkKa9ds
-         5v5UupwW/7vJK+vGaFxDxry5KzteHtDQwBNDfhX2Z6XOBwCvyw9ViwX8VPRyphWdtTe7
-         afge5SLEXkQP4ZBglaMZoSQT2b1B+pwX7zf5OVCYwzabnCl8ImN986DiPx6c8kpJ3xIn
-         r5zpFZp3jSxzIhv2/v0qy8pCdufW4YfZQ7Uze170ByRX41HPON8jI/7iZcpFzta6Xnxa
-         T9TfyNytf8tuwA8hsKIKmWr3En/2Q3kodzhm6bY3qRGx8sS3yq5s3H5iFR4wkMBydYqC
-         hUzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qLTFSrskQrti9akgcOE2SqCBtE6dVVYg8MzlEVx8mCs=;
-        b=y1z6KvgflTbOz9ejmEkkFBXp5nr15qXYcf+yJJbsT0EIQFeWCyZYv86A+GxCphxMwt
-         QK9bqbyqBQTiSGAJ00deV7HOnwIW9A0uDtf6ftjCh8ZG5FMj/19xhVsWyYSGlVeA8cwU
-         nKFtLxrvz4s13WrLAAvSKxDwZ2MkTAE1pfiUjy1fA1agXB9UhlItZ+Hb9NfPLzZ5YNDG
-         pEkckemmURw78JxIlByTgCcwSlCTkcRXX5fLCqMYALaNrUzoFydv7C44Zp7xUmZfrHn4
-         z7BGDiGQmXDwiOu6OWphPZLqRhU0h5lOFTMXG042DEbN3fUNDNbr1WLXCzJxqx/vJnQY
-         uXMg==
-X-Gm-Message-State: AJIora9eWzI0V8uSvdhQmNzIhZaa4D1iwA5QF5Z6Vp9khENahnQI2tMv
-        Ib5NnGi26mJPwwAh4yUnvReHWELQisJHUYuP3C968w==
-X-Google-Smtp-Source: AGRyM1u+s0zFw26fIdlAqeg6KuhGnaVQCCpNaNugIgWimXq9XGquAIiHIepjuQQNDb1Z/3Imc1kWxJV5JOsvNFW5hPE=
-X-Received: by 2002:a05:600c:19d2:b0:3a3:2cdb:cc02 with SMTP id
- u18-20020a05600c19d200b003a32cdbcc02mr3128443wmq.182.1659107012876; Fri, 29
- Jul 2022 08:03:32 -0700 (PDT)
+        Fri, 29 Jul 2022 11:03:45 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008F81582F;
+        Fri, 29 Jul 2022 08:03:41 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LvVyj4VRjz67PfY;
+        Fri, 29 Jul 2022 22:58:53 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Fri, 29 Jul 2022 17:03:38 +0200
+Received: from [10.195.35.4] (10.195.35.4) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Jul
+ 2022 16:03:37 +0100
+Message-ID: <d8356ddc-56e7-7324-5330-ff2bd54bcba4@huawei.com>
+Date:   Fri, 29 Jul 2022 16:03:36 +0100
 MIME-Version: 1.0
-References: <20220721065706.2886112-1-zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220721065706.2886112-1-zhengjun.xing@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 29 Jul 2022 08:03:20 -0700
-Message-ID: <CAP-5=fUJ2KaxLXwUhyTtAZhwQ=M=QEv4_tP6y5CU08tf_uKAnA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] Add perf stat default events for hybrid machines
-To:     zhengjun.xing@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 00/17] Compress the pmu_event tables
+To:     Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        "James Clark" <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Kan Liang" <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>
+CC:     Stephane Eranian <eranian@google.com>
+References: <20220729074351.138260-1-irogers@google.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220729074351.138260-1-irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.35.4]
+X-ClientProxiedBy: lhreml734-chm.china.huawei.com (10.201.108.85) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 11:56 PM <zhengjun.xing@linux.intel.com> wrote:
->
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->
-> The patch series is to clean up the existing perf stat default and support
-> the perf metrics Topdown for the p-core PMU in the perf stat default. The
-> first 4 patches are the clean-up patch and fixing the "--detailed" issue.
-> The last patch adds support for the perf metrics Topdown, the perf metrics
-> Topdown support for e-core PMU will be implemented later separately.
->
-> Kan Liang (4):
->   perf stat: Revert "perf stat: Add default hybrid events"
->   perf evsel: Add arch_evsel__hw_name()
->   perf evlist: Always use arch_evlist__add_default_attrs()
->   perf x86 evlist: Add default hybrid events for perf stat
->
-> Zhengjun Xing (1):
->   perf stat: Add topdown metrics in the default perf stat on the hybrid
->     machine
+On 29/07/2022 08:43, Ian Rogers wrote:
+> jevents.py creates a number of large arrays from the json events. The
+> arrays contain pointers to strings that need relocating. The
+> relocations have file size, run time and memory costs. These changes
+> refactor the pmu_events API so that the storage of the pmu_event
+> struct isn't exposed. The format is then changed to an offset within a
+> combined big string, with adjacent pmu_event struct variables being
+> next to each other in the string separated by \0 - meaning only the
+> first variable of the struct needs its offset recording.
+> 
+> Some related fixes are contained with the patches. The architecture
+> jevents.py creates tables for can now be set by the JEVENTS_ARCH make
+> variable, with a new 'all' that generates the events and metrics for
+> all architectures.
 
-Acked-by: Ian Rogers <irogers@google.com>
+Hi Ian,
+
+I am going through this series currently.
+
+But I just wanted to mention my idea again on how to compress the 
+tables. Maybe you thought that there was no value in my idea or didn't 
+get it, but I'll mention it again just in case...
+
+Background:
+There is much duplication in events between cores. And currently we have 
+something like this:
+
+pmu-events/pmu-events.c:
+struct pmu_event core0[] {
+{
+	.name = event0,
+	.event = "event=0x0",
+},
+{
+	.name = event1,
+	.event = "event=0x1",
+},
+{
+	.name = event2,
+	.event = "event=0x2",
+	.desc = "event2 common desc",
+},
+...
+};
+
+struct pmu_event core1[] {
+{
+	.name = event0,
+	.event = "event=0x0",
+},
+{
+	.name = event1,
+	.event = "event=0x1",
+},
+{
+	.name = event2,
+	.event = "event=0x2",
+	.desc = "event2 desc for core1",
+},
+...
+};
+
+
+struct pmu_evenets_map map[] = {
+{
+	.cpuid = "0000",
+	.table = core0,
+},
+{
+	.cpuid = "0001",
+	.table = core1,
+},
+...
+};
+
+If you check broadwell and broadwellde frontent.json you will notice 
+that they are identical, which is an extreme example of duplication.
+
+Proposal for change:
+Make each event in the per-core pmu event table point to common event. 
+Each common event is unique, and each event per-core will point to a 
+common event. So if 2x cores have same event but small difference, then 
+there would be still 2x common events.
+
+pmu-events/pmu-events.c:
+struct pmu_event common_events[] {
+{
+	.name = event0,
+	.event = "event=0x0",
+},
+{
+	.name = event1,
+	.event = "event=0x1",
+},
+{
+	.name = event2,
+	.event = "event=0x2",
+	.desc = "event2 common desc",
+},
+{
+	.name = event2,
+	.event = "event=0x2",
+	.desc = "event2 desc for core1",
+},
+...
+};
+
+struct pmu_event_ptr {
+	struct pmu_event *pmu_event;
+}
+
+struct pmu_event_ptr core0[] {
+{
+	.pmu_event = &common_events[0],
+},
+{
+	.pmu_event = &common_events[1],
+},
+{
+	.pmu_event = &common_events[2],
+},
+...
+};
+
+struct pmu_event_ptr core0[] {
+{
+	.pmu_event = &common_events[0],
+},
+{
+	.pmu_event = &common_events[1],
+},
+{
+	.pmu_event = &common_events[3],
+},
+...
+};
+
+struct pmu_evenets_map map[] = {
+{
+	.cpuid = "0000",
+	.table = core0,
+},
+{
+	.cpuid = "0001",
+	.table = core1,
+},
+...
+};
+
+For x86, first step in JSON parsing would be to go through the JSON 
+files and compile a list of unique events. Then second step is to 
+process each per-core JSON to create the pmu events table, using the 
+common events. Using a per common event hash would make the lookup quicker.
+
+I'm not sure what you think. From figures below you seem to be saving 
+~20% at best - I would guess (with a capital G) that my method could 
+save a lot more.
+
+This implementation would require core pmu.c to be changed, but there is 
+ways that this could be done without needing to change core pmu.c
 
 Thanks,
-Ian
+John
 
->  tools/perf/arch/x86/util/evlist.c  | 64 +++++++++++++++++++++++++-----
->  tools/perf/arch/x86/util/evsel.c   | 20 ++++++++++
->  tools/perf/arch/x86/util/topdown.c | 51 ++++++++++++++++++++++++
->  tools/perf/arch/x86/util/topdown.h |  1 +
->  tools/perf/builtin-stat.c          | 50 ++++-------------------
->  tools/perf/util/evlist.c           | 11 +++--
->  tools/perf/util/evlist.h           |  9 ++++-
->  tools/perf/util/evsel.c            |  7 +++-
->  tools/perf/util/evsel.h            |  1 +
->  tools/perf/util/stat-display.c     |  2 +-
->  tools/perf/util/topdown.c          |  7 ++++
->  tools/perf/util/topdown.h          |  3 +-
->  12 files changed, 166 insertions(+), 60 deletions(-)
->
-> --
-> 2.25.1
->
+> 
+> An example of the improvement to the file size on x86 is:
+> no jevents - the same 19,788,464bytes
+> x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
+> all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
+> default build options plus NO_LIBBFD=1.
+> 
+> I originally suggested fixing this problem in:
+> https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
+> 
+> v3. Fix an ARM build issue with a missed weak symbol. Perform some
+>      pytype clean up.
+> v2. Split the substring folding optimization to its own patch and
+>      comment tweaks as suggested by Namhyung Kim
+>      <namhyung@kernel.org>. Recompute the file size savings with the
+>      latest json events and metrics.
+> 
+> Ian Rogers (17):
+>    perf jevents: Clean up pytype warnings
+>    perf jevents: Simplify generation of C-string
+>    perf jevents: Add JEVENTS_ARCH make option
+>    perf jevent: Add an 'all' architecture argument
+>    perf jevents: Remove the type/version variables
+>    perf jevents: Provide path to json file on error
+>    perf jevents: Sort json files entries
+>    perf pmu-events: Hide pmu_sys_event_tables
+>    perf pmu-events: Avoid passing pmu_events_map
+>    perf pmu-events: Hide pmu_events_map
+>    perf test: Use full metric resolution
+>    perf pmu-events: Move test events/metrics to json
+>    perf pmu-events: Don't assume pmu_event is an array
+>    perf pmu-events: Hide the pmu_events
+>    perf metrics: Copy entire pmu_event in find metric
+>    perf jevents: Compress the pmu_events_table
+>    perf jevents: Fold strings optimization
+> 
+>   tools/perf/arch/arm64/util/pmu.c              |   4 +-
+>   tools/perf/pmu-events/Build                   |   6 +-
+>   .../arch/test/test_soc/cpu/metrics.json       |  64 +++
+>   tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
+>   tools/perf/pmu-events/jevents.py              | 495 ++++++++++++++----
+>   tools/perf/pmu-events/pmu-events.h            |  40 +-
+>   tools/perf/tests/expand-cgroup.c              |  25 +-
+>   tools/perf/tests/parse-metric.c               |  77 +--
+>   tools/perf/tests/pmu-events.c                 | 466 +++++++----------
+>   tools/perf/util/metricgroup.c                 | 275 ++++++----
+>   tools/perf/util/metricgroup.h                 |   5 +-
+>   tools/perf/util/pmu.c                         | 139 ++---
+>   tools/perf/util/pmu.h                         |   8 +-
+>   tools/perf/util/s390-sample-raw.c             |  50 +-
+>   14 files changed, 1140 insertions(+), 718 deletions(-)
+>   create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
+> 
+

@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890DC585403
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D40C585406
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 18:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbiG2Qxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 12:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S237958AbiG2Q5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 12:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiG2Qxq (ORCPT
+        with ESMTP id S236366AbiG2Q46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:53:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66B089A4B;
-        Fri, 29 Jul 2022 09:53:45 -0700 (PDT)
+        Fri, 29 Jul 2022 12:56:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30B189A51
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 09:56:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5152761EBA;
-        Fri, 29 Jul 2022 16:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86B7C433C1;
-        Fri, 29 Jul 2022 16:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659113624;
-        bh=dRgnIIdxVFBOGYWODaTIxnLssgHH3AEtGG4hzRR5xhs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LFgBsAc68I7/coX9CupBt4+uVTyL5a2q6I+m0/1cJmqZ4ibnaahXR2dLCK8NGLrvT
-         Vjbgf7o5/rrOrK5K3rMVqYdA2+GAJIyhUnnoYhmTgvD4F+MLA5DzFuvmWDSAJjzzF6
-         WZtCkg1AXSFcubVc1w2ZEY2bwRrvSBJZc2xIzhKfmlIMIO1P9oWZumeR6XeyzkosxI
-         itXRvX8PDioAbckn73JWSVl49bWuxWFAWoOXJcQIoaZOYuj8UnW2UTIBUZPVgkRB/R
-         2yug61uy9UjDCGzYgHtCdOyDtRRTkpQRNzXjupKdqiqcGD7kZ2++pR8wkLyKXw28EK
-         E/nXo15xrQQ6w==
-Date:   Fri, 29 Jul 2022 18:53:38 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: turris-omnia: convert to use dev_groups
-Message-ID: <20220729185338.2bba32f5@dellmb>
-In-Reply-To: <20220729140346.2313175-1-gregkh@linuxfoundation.org>
-References: <20220729140346.2313175-1-gregkh@linuxfoundation.org>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F317B828AB
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 16:56:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB712C433D6;
+        Fri, 29 Jul 2022 16:56:54 +0000 (UTC)
+Date:   Fri, 29 Jul 2022 12:56:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     liqiong <liqiong@nfschina.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        yuzhe@nfschina.com, renyu@nfschina.com, jiaming@nfschina.com
+Subject: Re: [PATCH] tracing: Do PTR_ERR() after IS_ERR()
+Message-ID: <20220729125647.746379e5@rorschach.local.home>
+In-Reply-To: <efce3a4c-4480-99f5-0229-a44009ebe9d8@nfschina.com>
+References: <20220727153519.6697-1-liqiong@nfschina.com>
+        <20220727122847.6b00e29d@rorschach.local.home>
+        <efce3a4c-4480-99f5-0229-a44009ebe9d8@nfschina.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Jul 2022 16:03:46 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Thu, 28 Jul 2022 08:28:08 +0800
+liqiong <liqiong@nfschina.com> wrote:
 
-> The driver core supports the ability to handle the creation and removal
-> of device-specific sysfs files in a race-free manner.  Take advantage of
-> that by converting this driver to use this by moving the sysfs
-> attributes into a group and assigning the dev_groups pointer to it.
->=20
-> Cc: "Marek Beh=C3=BAn" <kabel@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> It's all right, assign  PTR_ERR()  to 'ret'  anyway.
+> But this assignment is valid only at the "IS_ERR()" path.
+> Maybe it is better put "PTR_ERR()" at error path, keep the code clear.
 
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+No it does not. It adds unnecessary brackets.
+
+It is common in the kernel to have:
+
+	ret = ERROR;
+	if (some_condition())
+		goto out;
+
+	ret = ERROR1;
+	if (some_other_condition())
+		goto out;
+
+	ret = ERROR2;
+	if (some_new_condition())
+		goto out;
+
+	ret = 0;
+out:
+	return ret;
+
+And your change breaks this.
+
+-- Steve

@@ -2,329 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A582B584E6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076EB584E70
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 11:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbiG2J4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 05:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S235193AbiG2J6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 05:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiG2J4R (ORCPT
+        with ESMTP id S229572AbiG2J6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 05:56:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12E952FCF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 02:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659088576; x=1690624576;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ia8HQ8rB4EGWssYCOLWjWdr61nW4odN1zAqGVU+sAAY=;
-  b=Q6MzKbQSJxGduzWbE+lCYg1bKJzAXg0TOvYNRipoB7P/I6eVjwDP0FvB
-   UAGZENo+sAo1ylYtuQha5I5pAyAmK1j6HHSj/6rree8ODzlvwQGSUUFy6
-   QoDpZcRkxNj22fUgQJQYMBBENchQI5pWZai0G/Yf/hkh4X9g4RcC7QDtd
-   p6xGZ32wvDz36Wm2eB/2zrcEePy3dGrUuo+gPNWGu3BaM3vtVNynIRZYR
-   rxHkbRcjnNqWBLxWIh+zQNO93E+LejznC2tfn1RUBPmoKLFAF/QFbhyJp
-   y+0CJvkAVlhR51WwNJQaY37Vqep9NAZErUz7VEIe9lqpBUESGD+XfILiq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10422"; a="375037012"
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="375037012"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 02:56:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,201,1654585200"; 
-   d="scan'208";a="629315503"
-Received: from sunyi-station.sh.intel.com (HELO sunyi-station..) ([10.239.159.10])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2022 02:56:13 -0700
-From:   Yi Sun <yi.sun@intel.com>
-To:     dave.hansen@intel.com, sohil.mehta@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        david.laight@aculab.com
-Cc:     heng.su@intel.com, yi.sun@intel.com
-Subject: [PATCH v2 2/2] scripts/x86: Add script to consume trace log of xsave latency
-Date:   Fri, 29 Jul 2022 17:56:08 +0800
-Message-Id: <20220729095608.1475138-3-yi.sun@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220729095608.1475138-1-yi.sun@intel.com>
-References: <20220729095608.1475138-1-yi.sun@intel.com>
+        Fri, 29 Jul 2022 05:58:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584F739BBC;
+        Fri, 29 Jul 2022 02:58:16 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LvNDP3QxmzjXTx;
+        Fri, 29 Jul 2022 17:55:17 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Jul 2022 17:58:13 +0800
+CC:     <yangyicong@hisilicon.com>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>, <peterz@infradead.org>,
+        <corbet@lwn.net>, <mathieu.poirier@linaro.org>,
+        <mark.rutland@arm.com>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>, <helgaas@kernel.org>,
+        <lorenzo.pieralisi@arm.com>, <suzuki.poulose@arm.com>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <iommu@lists.linux.dev>,
+        <linux-doc@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, <bagasdotme@gmail.com>
+Subject: Re: [PATCH v11 2/8] hwtracing: hisi_ptt: Add trace function support
+ for HiSilicon PCIe Tune and Trace device
+To:     Greg KH <gregkh@linuxfoundation.org>
+References: <20220721130116.43366-1-yangyicong@huawei.com>
+ <20220721130116.43366-3-yangyicong@huawei.com> <YuKZKGKMz+UcbETM@kroah.com>
+ <33f372f6-36bf-f84e-bca0-86347fa4d579@huawei.com>
+ <YuOi3i0XHV++z1YI@kroah.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <db1beba9-8db8-b14a-9078-99750a9f49a3@huawei.com>
+Date:   Fri, 29 Jul 2022 17:58:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuOi3i0XHV++z1YI@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consume the trace log dumped by trace points x86_fpu_latency_xsave and
-x86_fpu_latency_xrstor, calculate latency ranges for each RFBM and
-XINUSE combination including min, max, average and 97% tail latency.
+[ reply again in plain text, sorry for the wrong format ]
 
-Add the average of 97% tail latency to remove the unreasonable
-data which is introduced by interrupts or other noise. By adding the
-experimental code disabling interrupts before the calculation of
-latency, it's obvious to get the 3% tail latency has been filtered.
+On 2022/7/29 17:05, Greg KH wrote:
+> On Fri, Jul 29, 2022 at 03:29:14PM +0800, Yicong Yang wrote:
+>>>> +	/*
+>>>> +	 * Handle the interrupt on the same cpu which starts the trace to avoid
+>>>> +	 * context mismatch. Otherwise we'll trigger the WARN from the perf
+>>>> +	 * core in event_function_local().
+>>>> +	 */
+>>>> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
+>>>> +				 cpumask_of(cpu)));
+>>>
+>>> If this hits, you just crashed the machine :(
+>>>
+>>
+>> We'll likely to have a calltrace here without crash the machine and reboot in
+>> most time, unless user has set panic_on_warn.
+> 
+> Again, please do not use WARN_ON for this, please read:
+> 	https://elixir.bootlin.com/linux/v5.19-rc8/source/include/asm-generic/bug.h#L74
+> 
+> If you want a traceback (what would you do with that?), then call the
+> function to give you that.  Don't crash people's boxes.
+> 
 
-Make use of sqlite3 to make the data statistics more efficient and
-concise. The output looks like following:
+ok, will change to a dev_warn/err() per documented.
 
-EVENTs                	RFBM   	XINUSE	lat_min	lat_max	lat_avg	lat_avg(97%)
-----------------------	-------	------	-------	-------	-------	------------
-x86_fpu_latency_xrstor	0x206e7	0x0   	364    	364    	364    	364
-x86_fpu_latency_xrstor	0x206e7	0x202 	112    	1152   	300    	276
-x86_fpu_latency_xsave 	0x206e7	0x202 	80     	278    	141    	137
-x86_fpu_latency_xsave 	0x206e7	0x246 	108    	234    	180    	177
+>>> Please properly recover from errors if you hit them, like this.  Don't
+>>> just give up and throw a message to userspace and watch the machine
+>>> reboot with all data lost.
+>>>
+>>> Same for the other WARN_ON() instances here.  Handle the error and
+>>> report it properly up the call chain.
+>>>
+>>
+>> The driver use WARN_ON() in two places, once in pmu::start() and another in cpu teardown's
+>> callback, both when the irq_set_affinity() failed. This is common to behave so when driver
+>> fails to set irq affinity in pmu::start() and cpu_teardown():
+> 
+> Don't repeat broken patterns please.
+> 
+>> yangyicong@ubuntu:~/mainline_linux/linux/drivers$ grep -rn WARN_ON ./ | grep irq_set_affinity
+>> ./perf/arm_smmuv3_pmu.c:649:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(target)));
+>> ./perf/arm_smmuv3_pmu.c:895:    WARN_ON(irq_set_affinity(smmu_pmu->irq, cpumask_of(smmu_pmu->on_cpu)));
+>> ./perf/arm-ccn.c:1214:          WARN_ON(irq_set_affinity(ccn->irq, cpumask_of(dt->cpu)));
+>> ./perf/qcom_l2_pmu.c:796:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(cpu)));
+>> ./perf/qcom_l2_pmu.c:834:       WARN_ON(irq_set_affinity(cluster->irq, cpumask_of(target)));
+>> ./perf/arm_dmc620_pmu.c:624:    WARN_ON(irq_set_affinity(irq->irq_num, cpumask_of(target)));
+>> ./perf/fsl_imx8_ddr_perf.c:674: WARN_ON(irq_set_affinity(pmu->irq, cpumask_of(pmu->cpu)));
+>> ./perf/xgene_pmu.c:1793:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
+>> ./perf/xgene_pmu.c:1826:        WARN_ON(irq_set_affinity(xgene_pmu->irq, &xgene_pmu->cpu));
+>> ./perf/hisilicon/hisi_pcie_pmu.c:658:           WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(cpu)));
+>> ./perf/hisilicon/hisi_pcie_pmu.c:684:   WARN_ON(irq_set_affinity(pcie_pmu->irq, cpumask_of(target)));
+>> ./perf/hisilicon/hisi_uncore_pmu.c:495: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(cpu)));
+>> ./perf/hisilicon/hisi_uncore_pmu.c:528: WARN_ON(irq_set_affinity(hisi_pmu->irq, cpumask_of(target)));
+> 
+> Great, you can fix all of these up as well any time :)
+> 
 
-The XSAVE/XRSTOR latency trace log can be got by two ways:
-1. Generated by Kernel debugfs
-  echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable
-  cat /sys/kernel/debug/tracing/trace_pipe > trace-log
+will have a look on this.
 
-2. Generated by helper tool like 'trace-cmd'
-   trace-cmd record -e x86_fpu -F <command>
-   trace-cmd report > trace-log
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Yi Sun <yi.sun@intel.com>
-
-diff --git a/scripts/x86/xsave-latency-trace.sh b/scripts/x86/xsave-latency-trace.sh
-new file mode 100755
-index 000000000000..d45563984fd6
---- /dev/null
-+++ b/scripts/x86/xsave-latency-trace.sh
-@@ -0,0 +1,227 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# (c) 2022 Yi Sun <yi.sun@intel.com>
-+
-+trace_log=$1
-+trace_lat_log=".trace_lat_log"
-+db_name="db_trace"
-+db_file="${db_name}.db"
-+table_raw="t_trace"
-+table_tail="t_trace_tail"
-+table_results="t_results"
-+events="x86_fpu_latency_xsave|x86_fpu_latency_xrstor"
-+
-+# The regex for the trace log. The rough pattern:
-+# (proc) (No.cpu) (flags) (timestamp): (tracepoint): latency:(123) RFBM:0x(123) XINUSE:0x(123)$
-+# Fold the regex into 3 parts making it easier to read.
-+regex1="([^\ ]*)[[:space:]]*\[([0-9]+)\][[:space:]]*(.....\ )?[[:space:]]*"
-+regex2="([0-9.]*):[[:space:]]*([^\ :]*):.*latency:([0-9]*)[[:space:]]*"
-+regex3="RFBM:(0x[0-9a-f]*)[[:space:]]*XINUSE:(0x[0-9a-f]*)$"
-+
-+function usage() {
-+	echo "This script consumes the tracepoint data, and dumps out the"
-+	echo "latency ranges for each RFBM combination."
-+	echo "Usage:"
-+	echo "$0 <trace-log>"
-+	echo "   trace-log:"
-+	echo "     Either generated by Kernel sysfs:"
-+	echo "       echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable"
-+	echo "       cat /sys/kernel/debug/tracing/trace_pipe > trace-log"
-+	echo ""
-+	echo "     Or generate by helper tool like 'trace-cmd':"
-+	echo "       trace-cmd record -e x86_fpu"
-+	echo "       trace-cmd report > trace-log"
-+}
-+
-+# Check the dependent tools
-+# {@}: a list of third-part tools
-+function check_packages() {
-+	for pack in "$@"; do
-+		which $pack >& /dev/null
-+		if [[ $? != 0 ]]; then
-+			echo "Please install $pack before running this script."
-+			exit 1
-+		fi
-+	done
-+}
-+
-+# Run SQL command with sqlite3
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD() {
-+	sqlite3 $db_file "$*"
-+}
-+
-+# Run SQL command with sqlite3 and format the output with headers and column.
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD_HEADER() {
-+	sqlite3 -column -header $db_file "$*"
-+}
-+
-+# Create a table in the DB
-+# ${1}： name of the table
-+function create_table() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "create table $1 (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		process TEXT,
-+		cpu INT,
-+		timestamp FLOAT,
-+		event_name TEXT,
-+		lat INT,
-+		RFBM INT,
-+		XINUSE INT);"
-+}
-+
-+# Round to the nearest whole number
-+# ${1}: a float number
-+# Output: integer
-+function round() {
-+	echo "scale=0; ($1+0.5)/1" | bc
-+}
-+
-+# Insert a record in the trace table
-+#
-+# process cpu  timestamp  event_name  lat  RFBM  XINUSE
-+# $2      $3   $4         $5          $6   $7    $8
-+
-+function insert_line() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "INSERT INTO $1 (process, cpu, timestamp, event_name, lat, RFBM, XINUSE)
-+		VALUES (\"$2\", $3, $4, \"$5\", $6, $7, $8);"
-+}
-+
-+# Show the results of the trace statistics
-+function get_latency_stat() {
-+	SQL_CMD "create table $table_results (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		event_name TEXT,
-+		RFBM INT,
-+		XINUSE INT,
-+		lat_min INT,
-+		lat_max INT,
-+		lat_avg INT,
-+		lat_tail_avg INT);"
-+
-+	for((i=0; i<$cnt; i++));do
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+		lat_min=`get_comb_item $table_raw $i min\(lat\)`
-+		lat_max=`get_comb_item $table_raw $i max\(lat\)`
-+		lat_avg=`get_comb_item $table_raw $i avg\(lat\)`
-+		lat_tail_avg=`get_comb_item $table_tail $i avg\(lat\)`
-+
-+		lat_avg=`round $lat_avg`
-+		lat_tail_avg=`round $lat_tail_avg`
-+
-+		SQL_CMD "INSERT INTO $table_results
-+			(event_name, RFBM,XINUSE, lat_min, lat_max, lat_avg, lat_tail_avg)
-+			VALUES (\"$event_name\", $RFBM, $XINUSE, $lat_min, $lat_max,
-+			$lat_avg, $lat_tail_avg);"
-+	done
-+
-+	SQL_CMD_HEADER "select event_name[EVENTs],printf('0x%x',RFBM)[RFBM],
-+			printf('0x%x',XINUSE)[XINUSE],lat_min,lat_max,lat_avg,
-+			lat_tail_avg[lat_avg(97%)]
-+			from $table_results;"
-+}
-+
-+# Get the count of the combination of event_name, RFBM, XINUSE amount all lat trace records
-+function get_combs_cnt() {
-+	SQL_CMD "SELECT event_name, RFBM, XINUSE from $table_raw
-+		group by event_name,RFBM,XINUSE;" | wc -l
-+}
-+
-+# Get a specified combination from a table
-+# ${1}: name of table
-+# ${2}: the order of the combination of event_name, RFBM, XINUSE
-+# ${3}: the items which are wanted to be shown
-+function get_comb_item() {
-+	table=$1
-+	cnt=$2
-+	col=$3
-+	SQL_CMD "SELECT $col from $table group by event_name,RFBM,XINUSE limit $cnt,1;"
-+}
-+
-+# Get count of the records in a given table
-+# ${1}: name of the table
-+function get_rows_cnt() {
-+	table=$1
-+	SQL_CMD "SELECT count(*) from $table;"
-+}
-+
-+# Generate a new table from the raw trace table removing 3% tail traces.
-+function gen_tail_lat() {
-+	cnt=`get_combs_cnt`
-+	create_table $table_tail
-+
-+	for((i=0; i<$cnt; i++));do
-+		create_table t$i
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+
-+		SQL_CMD "insert into t$i(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from $table_raw where event_name=\"$event_name\" and RFBM=$RFBM and
-+			XINUSE=$XINUSE ORDER BY lat ASC;"
-+
-+		row=`get_rows_cnt t$i`
-+		row=`echo "scale=0; ($row*0.97 + 0.5)/1" | bc`
-+
-+		SQL_CMD "insert into $table_tail
-+			(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from t$i limit 0,$row;"
-+	done
-+
-+}
-+
-+if [[ ! -e "$trace_log" || $# != 1 ]];then
-+	usage
-+	exit 1
-+fi
-+
-+# Check dependency
-+# Make sure having following packages
-+check_packages sqlite3 bc wc cut
-+
-+# Filter trace log keeping latency related lines only
-+grep -E "$events" $trace_log > $trace_lat_log
-+cnt_lines=`wc -l $trace_lat_log | cut -d' ' -f1`
-+# Remove the old db file if it existed before creating
-+[[ -f $db_file ]] && rm -rf $db_file
-+
-+create_table $table_raw
-+
-+# Read each line from the temp file and insert into the table
-+i=0
-+while IFS= read -r line;
-+do
-+	((i = i + 1))
-+	echo -ne "(${i}/$cnt_lines) Importing trace log into database!\r"
-+	if [[ "$line" =~ ${regex1}${regex2}${regex3} ]]; then
-+		pname=${BASH_REMATCH[1]}
-+		cpu=${BASH_REMATCH[2]}
-+		ts=${BASH_REMATCH[4]}
-+		ename=${BASH_REMATCH[5]}
-+		lat=${BASH_REMATCH[6]}
-+		((rfbm=${BASH_REMATCH[7]}))
-+		((xinuse=${BASH_REMATCH[8]}))
-+
-+		insert_line $table_raw $pname $cpu $ts $ename $lat $rfbm $xinuse
-+	fi
-+done < $trace_lat_log
-+
-+gen_tail_lat
-+get_latency_stat
-+
-+# Cleanup
-+rm -rf $trace_lat_log $db_file
--- 
-2.34.1
+Thanks.
 

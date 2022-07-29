@@ -2,91 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D39584D68
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB92584D6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiG2IcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S234987AbiG2Ie5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbiG2IcV (ORCPT
+        with ESMTP id S233362AbiG2Ie4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:32:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2857D1CC;
-        Fri, 29 Jul 2022 01:32:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 29 Jul 2022 04:34:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29C17D1CC;
+        Fri, 29 Jul 2022 01:34:55 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A342B826F0;
-        Fri, 29 Jul 2022 08:32:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00F8C433C1;
-        Fri, 29 Jul 2022 08:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659083537;
-        bh=9Q0MNhoqEt6iJgN9HLzuAyJsP2J06Va6Xapeha90OEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xS4QMSlqbD7bc5DHXuSuJuZwFWTvWRwgn6F5Wlfv71/TCKcuUSS18rPFwHHm/2mGF
-         FrN+NsyyLY3CStC5D9Nx5Ev4WaRFTGB52DPW8L9bhygzLSikAW6Qli6zPLuPRn4AM1
-         Q8XGpKUpV3/cnSJdaMSU9EtcFPYjsETPZMcTHlII=
-Date:   Fri, 29 Jul 2022 10:32:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] ufs: core: print UFSHCD capabilities in
- controller's sysfs node
-Message-ID: <YuObDu4fwPgpoWQn@kroah.com>
-References: <20220729020508.4147751-1-dlunev@chromium.org>
- <20220729120216.v3.2.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
- <YuOWV5uLVV2JYP1c@kroah.com>
- <CAONX=-cy_abLBw1uAEYk6pxmyuQQ4qeQRftZVi7byNuYnEsA+w@mail.gmail.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 63FF36601B38;
+        Fri, 29 Jul 2022 09:34:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659083694;
+        bh=JZHyz/nv/3f5KWb0VPaswGYeWHtAmTjncnJD7Dy6ybw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F2dfqoJV3UzCqw3OHj+c25OHr/eYsuxNUkpukVM8d6eqScVGjz2mAssU3L3Rc8CGh
+         j/9l/QPEMNq+Dya4C9Z/xsjj9aEJn/6R2vPrb1QSC3aF0ld+j/ffCHH0lFJH17p8qq
+         0bRUcggIus0xNMkK3TwqI04/wPlkr2ZWta7h1k5Glk71DOhNdwlXJaN8FuRnVIT+a8
+         9499D3e2058va4Bg5D+QitWUMwtBUvKcKipFc74Rys9YJodBI48YAx0KF323Sa0gfj
+         AO/x2Mm8qAKVH5VMsEyK+1+05MZOWcAeQtZ0+XTGtuJ19rCrYgH1chsA5Z9Lm2JKwC
+         FpT+Da0lFNHGw==
+Message-ID: <44dde534-769c-c456-c869-4e29213b3d56@collabora.com>
+Date:   Fri, 29 Jul 2022 10:34:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAONX=-cy_abLBw1uAEYk6pxmyuQQ4qeQRftZVi7byNuYnEsA+w@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [V12,1/7] dt-bindings: mediatek: Add mediatek, mt8195-jpgenc
+ compatible
+Content-Language: en-US
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        nicolas.dufresne@collabora.com, wenst@chromium.org,
+        kyrie wu <kyrie.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+References: <20220729062630.5592-1-irui.wang@mediatek.com>
+ <20220729062630.5592-2-irui.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220729062630.5592-2-irui.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 06:29:45PM +1000, Daniil Lunev wrote:
-> > >
-> > > +What:                /sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
-> >
-> > This shouldn't be linked to as a driver file, it's a device file.  So no
-> > need for this line.
-> >
-> > > +What:                /sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
-> >
-> > Since when are all ufs devices platform devices?  Do we not have UFS
-> > controllers on other types of busses?
+Il 29/07/22 08:26, Irui Wang ha scritto:
+> From: kyrie wu <kyrie.wu@mediatek.com>
 > 
-> I have pretty much copped the structure of the entries across this file. Nearly
-> all of the entries link both device and driver paths and nearly all of
-> the entries
-> mention the platform-based path (which you correctly mentioned is not
-> factually correct, since we do have controllers on the pci bus). Please advise
-> if it is ok to keep it like this for consistency or what would be the
-> appropriate
-> way to adjust the documentation?
+> Add mediatek,mt8195-jpgenc compatible to binding document.
+> 
+> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+> Signed-off-by: irui wang <irui.wang@mediatek.com>
+> ---
+>   .../media/mediatek,mt8195-jpegenc.yaml        | 139 ++++++++++++++++++
+>   1 file changed, 139 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+> new file mode 100644
+> index 000000000000..d9133e6a92f8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+> @@ -0,0 +1,139 @@
 
-Ah, ok, that's odd.  Let's just leave this as-is for now, hopefully
-someone else cleans this up later.
+..snip..
 
-thanks,
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/memory/mt8195-memory-port.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt8195-clk.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        jpgenc_master {
 
-greg k-h
+What about using ranges here? The binding would look way cleaner, like:
+
+         jpeg-encoder@1a030000 {
+                .... properties ....
+                ranges = <0x30000   0 0x1a030000 0x10000>, /* P.S.: Not tested! */
+                         <0x1030000 0 0x1b030000 0x10000>;
+
+                encoder-core@30000 {
+                         compatible = "mediatek,mt8195-jpgenc-hw";
+                         reg = <0 0x30000 0 0x10000>;
+                         .... properties ....
+                };
+
+                encoder-core@1030000 {
+                         compatible = "mediatek,mt8195-jpgenc-hw";
+                         reg = <0 0x1030000 0 0x10000>;
+                         .... properties ....
+                };
+         };
+
+P.S.: Added Krzysztof to the loop.
+
+Krzysztof, can you please give an opinion on that?
+
+Thanks,
+Angelo
+
+> +                compatible = "mediatek,mt8195-jpgenc";
+> +                power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
+> +                iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
+> +                <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
+> +                #address-cells = <2>;
+> +                #size-cells = <2>;
+> +
+> +                jpgenc@1a030000 {
+> +                        compatible = "mediatek,mt8195-jpgenc-hw";
+> +                        reg = <0 0x1a030000 0 0x10000>;
+> +                        iommus = <&iommu_vdo M4U_PORT_L19_JPGENC_Y_RDMA>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_C_RDMA>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_Q_TABLE>,
+> +                        <&iommu_vdo M4U_PORT_L19_JPGENC_BSDMA>;
+> +                        interrupts = <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                        clocks = <&vencsys CLK_VENC_JPGENC>;
+> +                        clock-names = "jpgenc";
+> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
+> +                };
+> +
+> +                jpgenc@1b030000 {
+> +                        compatible = "mediatek,mt8195-jpgenc-hw";
+> +                        reg = <0 0x1b030000 0 0x10000>;
+> +                        iommus = <&iommu_vpp M4U_PORT_L20_JPGENC_Y_RDMA>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
+> +                        <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
+> +                        interrupts = <GIC_SPI 347 IRQ_TYPE_LEVEL_HIGH 0>;
+> +                        clocks = <&vencsys_core1 CLK_VENC_CORE1_JPGENC>;
+> +                        clock-names = "jpgenc";
+> +                        power-domains = <&spm MT8195_POWER_DOMAIN_VENC_CORE1>;
+> +                };
+> +        };
+> +    };
+
+

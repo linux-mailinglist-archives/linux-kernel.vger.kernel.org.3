@@ -2,340 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33D5584DA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5AC584DA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Jul 2022 10:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbiG2Is5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 04:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S234705AbiG2IsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 04:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiG2Isw (ORCPT
+        with ESMTP id S234639AbiG2IsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 04:48:52 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F0080F47
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:48:51 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id q16so3516293pgq.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wgsqotyBOfZqy1W9KnKshpP046wKgYKrPJ2KCRawRzE=;
-        b=eGPLof6qAfDzxFOJCPcERm02FQ+hj43MXgSOA6Ib/cVIE6lu6+uuejwvmd+uTGGMaI
-         NXP29LbjnKT6uafpFas6wGtB6lOj9E1GTWjcrsoQhNNNboO/uiZcxyundIAZuqvmuDr1
-         lxHuk00U8pogYQYNq5AJUiwFuKah5ptzPaFLukmGtzBJQxTPQMyJUuhoBMnCDDUTYK1V
-         28ncmf/J4Y24KtF0XNMFwq9JPU/7JKTtMUyaaITcXMCD/1X4DnJ4+BfqJSn7o+SN0e7x
-         36GxhqbdLI9dLoSlUqIBlY0Gf9gIj4ZkEtzDMfVQ2VprMmKrI/zsNSoa39htsm9RyQl3
-         XAbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wgsqotyBOfZqy1W9KnKshpP046wKgYKrPJ2KCRawRzE=;
-        b=dn6burl6ggnTd6Dv7Smcq2SiYUT0mDCcp+do6LOaJzvHLuY7vCMmTB0wnjPf5v6BhZ
-         XuLbzweKSlo8eVgTwU//FEd06RMSAhE+l8NQN9kkndlMjOruv+YV78M2sTjmls0I+v92
-         iqgH2CT1qsAQriWBpwcrru4cSlGMzobFecnFS0F9dgFdEgmUwN+QE51+YfcfT6b5uvuG
-         pjRW9tdKwPW3ZjcAZ2TsJQAZylkS3qNBz45oXunDjGS89QvEZYXGk/d2y2hzwumz3d0R
-         wVu0unFgh272OOg3oFHkbz0u5zhTPzHad7mpG7kGf2wqHmzEka6XaPPWOcZX54j92iR5
-         KgXg==
-X-Gm-Message-State: AJIora/iN7Vph66km/XWQLmZBa/5k7gT6qq2EaV3DjZZ2iR5sw3GNx81
-        j08zeyTd7y75/0a8VSXW4FpZ0Ywm4LEi
-X-Google-Smtp-Source: AGRyM1tBddUjXNgNbie6OEGtgEB6z3OWa8S/Kr55dyHPzFPfG534mZPHiB4LDG2Y83J+mxIXAPujrw==
-X-Received: by 2002:a63:d14b:0:b0:419:57b9:d444 with SMTP id c11-20020a63d14b000000b0041957b9d444mr2129847pgj.619.1659084530521;
-        Fri, 29 Jul 2022 01:48:50 -0700 (PDT)
-Received: from localhost.localdomain ([120.239.75.76])
-        by smtp.gmail.com with ESMTPSA id w13-20020aa79a0d000000b0052b36de51cdsm2231977pfj.111.2022.07.29.01.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 01:48:50 -0700 (PDT)
-From:   Mingyi Kang <jerrykang026@gmail.com>
-To:     gregkh@linuxfoundation.org, martyn@welchs.me.uk,
-        manohar.vanga@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Cc:     Mingyi Kang <jerrykang026@gmail.com>
-Subject: [PATCH] staging: vme_user: Put quoted string in a single line
-Date:   Fri, 29 Jul 2022 16:48:06 +0800
-Message-Id: <20220729084806.22479-1-jerrykang026@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 29 Jul 2022 04:48:16 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FC267C82
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 01:48:13 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220729084811euoutp02ff283f5c2f906a6144ec7322a181ac7f~GQI4X0JMP0702707027euoutp02D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 08:48:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220729084811euoutp02ff283f5c2f906a6144ec7322a181ac7f~GQI4X0JMP0702707027euoutp02D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659084491;
+        bh=J7pf8l02sZv1evRPs/g74/E4T+W0WimSo4Amwk96bHc=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=runBe9DOjcJjKFbe4TBs6r3p6p1GXrjrRvv+v7bR9QSSOEChGy1dzsAmrbOUZPkD+
+         GDwAieVRhPb2e0MObsJqlPPIdyZ/ttHrU+7pCsD3w+5opko04b7tEzOSaotdQk/7g3
+         9zIiYjlaSwFKXC9v2PWp7qC/idCmjuU/gDOKJO2U=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220729084811eucas1p29c708be560495e380d2ba54446086657~GQI4AoB3p3148931489eucas1p2D;
+        Fri, 29 Jul 2022 08:48:11 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 16.90.10067.BCE93E26; Fri, 29
+        Jul 2022 09:48:11 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220729084810eucas1p1e495e9f4378f515ddc42e7fb54690c8c~GQI3oGuWO2521325213eucas1p1q;
+        Fri, 29 Jul 2022 08:48:10 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220729084810eusmtrp1fcf915da651f0bc849b5f10ce7b597ea~GQI3nRaJm3175431754eusmtrp17;
+        Fri, 29 Jul 2022 08:48:10 +0000 (GMT)
+X-AuditID: cbfec7f4-dc1ff70000002753-4b-62e39ecb5a6f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 30.AB.09095.ACE93E26; Fri, 29
+        Jul 2022 09:48:10 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220729084810eusmtip122adeb7211a38b2523b3a9e055ee2d0e~GQI3b6Uya1554515545eusmtip1y;
+        Fri, 29 Jul 2022 08:48:10 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.8) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Fri, 29 Jul 2022 09:48:08 +0100
+Message-ID: <7fe560c6-4078-f89a-892d-d79b52664045@samsung.com>
+Date:   Fri, 29 Jul 2022 10:48:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.11.0
+Subject: Re: [PATCH v8 10/11] dm: call dm_zone_endio after the target endio
+ callback for zoned devices
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, <hch@lst.de>,
+        <axboe@kernel.dk>, <snitzer@kernel.org>,
+        <Johannes.Thumshirn@wdc.com>
+CC:     <matias.bjorling@wdc.com>, <gost.dev@samsung.com>,
+        <linux-kernel@vger.kernel.org>, <hare@suse.de>,
+        <linux-block@vger.kernel.org>, <pankydev8@gmail.com>,
+        <bvanassche@acm.org>, <jaegeuk@kernel.org>, <dm-devel@redhat.com>,
+        <linux-nvme@lists.infradead.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <2b1ab4ac-a355-dfb4-6ca4-82fe36a38433@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.8]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsWy7djP87qn5z1OMth8XcBi9d1+NotpH34y
+        W/w+e57ZYu+72awWexZNYrJYufook8WT9bOYLf523WOy2HtL2+LyrjlsFvOXPWW3mND2ldli
+        zc2nLBYnbkk78HlcvuLtsXPWXXaPy2dLPTat6mTz2Lyk3mP3zQY2j52t91k93u+7ChQ6Xe3x
+        eZOcR/uBbqYA7igum5TUnMyy1CJ9uwSujHPb3zMXfOOsWNtxga2B8QV7FyMnh4SAicTCp8eB
+        bC4OIYEVjBJNnQ1sEM4XRolTr3czQjifGSXm/97OCtNyfuUhZhBbSGA5o8SZq6VwRTMfL2GD
+        SOwE6viZCmLzCthJXNy3nAXEZhFQlZjY2cUIEReUODnzCVhcVCBSYs3us2A3CQtkSByavhZs
+        AbOAuMStJ/OZQGwRgR5Gib8QFzELdDBJbNvUDJTg4GAT0JJo7ATr5RRwk2g8dY4doldTonX7
+        byhbXmL72znMEA8oSvR/38AGYddKrD12Bux/CYFbnBKzF0yCBoyLxOoHmxghbGGJV8e3QMVl
+        JE5P7mGBsKslnt74zQzR3MIo0b9zPRvIQRIC1hJ9Z3IgahwljjyaABXmk7jxVhDiHj6JSdum
+        M09gVJ2FFBSzkLw8C8kLs5C8sICRZRWjeGppcW56arFRXmq5XnFibnFpXrpecn7uJkZg8jv9
+        7/iXHYzLX33UO8TIxMF4iFGCg1lJhFcg4HGSEG9KYmVValF+fFFpTmrxIUZpDhYlcd7kzA2J
+        QgLpiSWp2ampBalFMFkmDk6pBqbqHz2zrgUJ2C+vmMl/oGaf9aozQg4mxkFz3t/hnPniUqis
+        oxG7hewlca4ya5ZbxyaJy/5QXh29NsJHhO1b/snbnxPWdwj1GGw+EfZ2f6GzWLWb793VuQVJ
+        NzYtOGDrsIHnzd1zHvurTv35vLU02OKCobVa5eqPriFvIp8736i7bTf5lB5jZ/gXp12vuIS+
+        VwVNSOXXXmbFoCK+fff/O2eCFh03dJ0vnCq6t5RNJbUydV7nVIWf8UIrL9RklP3yT9k+x2Z2
+        9eLHi9g2m+51lVDbnLM6cdrZ966Zds3rcw/tXLtgruNksYUZXqYrvm9t4/m3q/ehqkrYwezb
+        kgueHvefdzaAR9zmSozoZwYVA1UlluKMREMt5qLiRADsUhrO7QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIKsWRmVeSWpSXmKPExsVy+t/xu7qn5j1OMrjbYWqx+m4/m8W0Dz+Z
+        LX6fPc9ssffdbFaLPYsmMVmsXH2UyeLJ+lnMFn+77jFZ7L2lbXF51xw2i/nLnrJbTGj7ymyx
+        5uZTFosTt6Qd+DwuX/H22DnrLrvH5bOlHptWdbJ5bF5S77H7ZgObx87W+6we7/ddBQqdrvb4
+        vEnOo/1AN1MAd5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZ
+        apG+XYJexrnt75kLvnFWrO24wNbA+IK9i5GTQ0LAROL8ykPMXYxcHEICSxkllvWeZYRIyEh8
+        uvIRqkhY4s+1LjaIoo+MEh+6nrFAODsZJVb9m8UCUsUrYCdxcd9yMJtFQFViYmcXI0RcUOLk
+        zCdgcVGBSImHy5qYQGxhgQyJQ9PXMoPYzALiEreezAeLiwj0MEr83c0IsoBZoI1J4nzDRUaI
+        bX8YJb69mMzaxcjBwSagJdHYCXYep4CbROOpc+wQgzQlWrf/hrLlJba/ncMM8YKiRP/3DWwQ
+        dq3Eq/u7GScwis5Cct8sJHfMQjJqFpJRCxhZVjGKpJYW56bnFhvqFSfmFpfmpesl5+duYgSm
+        jW3Hfm7ewTjv1Ue9Q4xMHIyHGCU4mJVEeAUCHicJ8aYkVlalFuXHF5XmpBYfYjQFBtJEZinR
+        5Hxg4soriTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamCKMLSsb3QK
+        FPO8aeU1J0JnVqnUg1nyC1uZ27nTeXKf9spE8BXvqLn2tVRmQpfQuttaN8vvvLxt3q+26G7V
+        K6mW8Nmbnp9XvTfLQziy+/w+z+1uJV4X2A/wGotpywmd/mF9rEr3iHOU+9eQxIlv9lsn7zt1
+        PeTVBC2dA4kbN73bdPGzwqr/dzwOeH5+8kT+VbMy85YQsatMiu88vD9uj1k2/cz8t0/8NjEV
+        BKqENB1OsbjNbHX9ed5n6UnZ9iy7X5fPc3VdW3JuPeu7qQ7OE+M6Zfcdf7BUMEruGuNTy+YX
+        j23tGH+Zp9xfNe960lejC5NOrJonemeK7RRDx78BJQVMzOrC6cc/phuVlLpYHX6vxFKckWio
+        xVxUnAgAdiWloqQDAAA=
+X-CMS-MailID: 20220729084810eucas1p1e495e9f4378f515ddc42e7fb54690c8c
+X-Msg-Generator: CA
+X-RootMTR: 20220727162256eucas1p284a15532173cce3eca46eee0cee3acdd
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220727162256eucas1p284a15532173cce3eca46eee0cee3acdd
+References: <20220727162245.209794-1-p.raghav@samsung.com>
+        <CGME20220727162256eucas1p284a15532173cce3eca46eee0cee3acdd@eucas1p2.samsung.com>
+        <20220727162245.209794-11-p.raghav@samsung.com>
+        <2b1ab4ac-a355-dfb4-6ca4-82fe36a38433@opensource.wdc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch resolves the follwing checkpatch warnings:
+>>  	if (endio) {
+>>  		int r = endio(ti, bio, &error);
+>>  		switch (r) {
+>> @@ -1155,6 +1151,10 @@ static void clone_endio(struct bio *bio)
+>>  		}
+>>  	}
+>>  
+>> +	if (static_branch_unlikely(&zoned_enabled) &&
+>> +	    unlikely(bdev_is_zoned(bio->bi_bdev)))
+>> +		dm_zone_endio(io, bio);
+>> +
+>>  	if (static_branch_unlikely(&swap_bios_enabled) &&
+>>  	    unlikely(swap_bios_limit(ti, bio)))
+>>  		up(&md->swap_bios_semaphore);
+> 
+> This patch seems completely unrelated to the series topic. Is that a bug
+> fix ? How do you trigger it ? Our tests do not show any issues here...
+> If this triggers only with non power of 2 zone size devices, then this
+> should be squashed in patch 8. And patch 9 could also be squashed with
+> patch 8 too.
+> 
+The targets that support zoned devices such as dm-zoned, dm-linear, and
+dm-crypt do not have an endio function, and even if they do (such as
+dm-flakey), they don't modify the bio->bi_iter.bi_sector of the cloned
+bio that is used to update the orig_bio's bi_sector in dm_zone_endio
+function.
 
-WARNING: quoted string split across lines
-+			dev_err(tsi148_bridge->parent, "VME Mailbox %d received"
-+				": 0x%x\n", i, val);
-
-WARNING: quoted string split across lines
-+	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, "
-+		"attributes: %08x\n",
-
-WARNING: quoted string split across lines
-+	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split "
-+		"completion reg: %08x\n",
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow "
-+			"Occurred\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq "
-+			"vector %02X\n", pdev->irq);
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Failed to allocate mem "
-+			"resource for window %d size 0x%lx start 0x%lx\n",
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Invalid VME Window "
-+			"alignment\n");
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Size must be non-zero for "
-+			"enabled windows\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Unable to allocate memory for "
-+			"resource\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Invalid VME Offset "
-+			"alignment\n");
-
-WARNING: quoted string split across lines
-+		dev_warn(tsi148_bridge->parent, "Currently not setting "
-+			"Broadcast Select Registers\n");
-
-WARNING: quoted string split across lines
-+		dev_err(dev, "Currently not setting Broadcast Select "
-+			"Registers\n");
-
-WARNING: quoted string split across lines
-+		dev_err(dev, "Currently not setting Broadcast Select "
-+			"Registers\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 "
-+			"byte boundary as required: %p\n",
-
-warning: quoted string split across lines
-+			dev_err(tsi148_bridge->parent, "location monitor "
-+				"callback attached, can't reset\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Location monitor not properly "
-+			"configured\n");
-
-WARNING: quoted string split across lines
-+		dev_err(tsi148_bridge->parent, "Failed to allocate memory for "
-+			"CR/CSR image\n");
-
-WARNING: quoted string split across lines
-+			dev_err(tsi148_bridge->parent, "Configuring flush image"
-+				" failed\n");
-
-Signed-off-by: Mingyi Kang <jerrykang026@gmail.com>
----
- drivers/staging/vme_user/vme_tsi148.c | 57 +++++++++------------------
- 1 file changed, 19 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
-index 956476213241..40bb432861c8 100644
---- a/drivers/staging/vme_user/vme_tsi148.c
-+++ b/drivers/staging/vme_user/vme_tsi148.c
-@@ -125,8 +125,7 @@ static u32 tsi148_MB_irqhandler(struct vme_bridge *tsi148_bridge, u32 stat)
- 	for (i = 0; i < 4; i++) {
- 		if (stat & TSI148_LCSR_INTS_MBS[i]) {
- 			val = ioread32be(bridge->base +	TSI148_GCSR_MBOX[i]);
--			dev_err(tsi148_bridge->parent, "VME Mailbox %d received"
--				": 0x%x\n", i, val);
-+			dev_err(tsi148_bridge->parent, "VME Mailbox %d received: 0x%x\n", i, val);
- 			serviced |= TSI148_LCSR_INTC_MBC[i];
- 		}
- 	}
-@@ -143,14 +142,12 @@ static u32 tsi148_PERR_irqhandler(struct vme_bridge *tsi148_bridge)
- 
- 	bridge = tsi148_bridge->driver_priv;
- 
--	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, "
--		"attributes: %08x\n",
-+	dev_err(tsi148_bridge->parent, "PCI Exception at address: 0x%08x:%08x, attributes: %08x\n",
- 		ioread32be(bridge->base + TSI148_LCSR_EDPAU),
- 		ioread32be(bridge->base + TSI148_LCSR_EDPAL),
- 		ioread32be(bridge->base + TSI148_LCSR_EDPAT));
- 
--	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split "
--		"completion reg: %08x\n",
-+	dev_err(tsi148_bridge->parent, "PCI-X attribute reg: %08x, PCI-X split completion reg: %08x\n",
- 		ioread32be(bridge->base + TSI148_LCSR_EDPXA),
- 		ioread32be(bridge->base + TSI148_LCSR_EDPXS));
- 
-@@ -181,8 +178,7 @@ static u32 tsi148_VERR_irqhandler(struct vme_bridge *tsi148_bridge)
- 
- 	/* Check for exception register overflow (we have lost error data) */
- 	if (error_attrib & TSI148_LCSR_VEAT_VEOF) {
--		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow "
--			"Occurred\n");
-+		dev_err(tsi148_bridge->parent, "VME Bus Exception Overflow Occurred\n");
- 	}
- 
- 	if (err_chk)
-@@ -317,8 +313,7 @@ static int tsi148_irq_init(struct vme_bridge *tsi148_bridge)
- 			     IRQF_SHARED,
- 			     driver_name, tsi148_bridge);
- 	if (result) {
--		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq "
--			"vector %02X\n", pdev->irq);
-+		dev_err(tsi148_bridge->parent, "Can't get assigned pci irq vector %02X\n", pdev->irq);
- 		return result;
- 	}
- 
-@@ -529,8 +524,7 @@ static int tsi148_slave_set(struct vme_slave_resource *image, int enabled,
- 		return -EINVAL;
- 	}
- 	if (pci_offset_low & (granularity - 1)) {
--		dev_err(tsi148_bridge->parent, "Invalid PCI Offset "
--			"alignment\n");
-+		dev_err(tsi148_bridge->parent, "Invalid PCI Offset alignment\n");
- 		return -EINVAL;
- 	}
- 
-@@ -762,8 +756,7 @@ static int tsi148_alloc_resource(struct vme_master_resource *image,
- 		&image->bus_resource, size, 0x10000, PCIBIOS_MIN_MEM,
- 		0, NULL, NULL);
- 	if (retval) {
--		dev_err(tsi148_bridge->parent, "Failed to allocate mem "
--			"resource for window %d size 0x%lx start 0x%lx\n",
-+		dev_err(tsi148_bridge->parent, "Failed to allocate mem resource for window %d size 0x%lx start 0x%lx\n",
- 			image->number, (unsigned long)size,
- 			(unsigned long)image->bus_resource.start);
- 		goto err_resource;
-@@ -827,15 +820,13 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
- 
- 	/* Verify input data */
- 	if (vme_base & 0xFFFF) {
--		dev_err(tsi148_bridge->parent, "Invalid VME Window "
--			"alignment\n");
-+		dev_err(tsi148_bridge->parent, "Invalid VME Window alignment\n");
- 		retval = -EINVAL;
- 		goto err_window;
- 	}
- 
- 	if ((size == 0) && (enabled != 0)) {
--		dev_err(tsi148_bridge->parent, "Size must be non-zero for "
--			"enabled windows\n");
-+		dev_err(tsi148_bridge->parent, "Size must be non-zero for enabled windows\n");
- 		retval = -EINVAL;
- 		goto err_window;
- 	}
-@@ -849,8 +840,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
- 	retval = tsi148_alloc_resource(image, size);
- 	if (retval) {
- 		spin_unlock(&image->lock);
--		dev_err(tsi148_bridge->parent, "Unable to allocate memory for "
--			"resource\n");
-+		dev_err(tsi148_bridge->parent, "Unable to allocate memory for resource\n");
- 		goto err_res;
- 	}
- 
-@@ -890,8 +880,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
- 	}
- 	if (vme_offset_low & 0xFFFF) {
- 		spin_unlock(&image->lock);
--		dev_err(tsi148_bridge->parent, "Invalid VME Offset "
--			"alignment\n");
-+		dev_err(tsi148_bridge->parent, "Invalid VME Offset alignment\n");
- 		retval = -EINVAL;
- 		goto err_gran;
- 	}
-@@ -937,8 +926,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
- 		temp_ctl |= TSI148_LCSR_OTAT_TM_2eSST;
- 	}
- 	if (cycle & VME_2eSSTB) {
--		dev_warn(tsi148_bridge->parent, "Currently not setting "
--			"Broadcast Select Registers\n");
-+		dev_warn(tsi148_bridge->parent, "Currently not setting Broadcast Select Registers\n");
- 		temp_ctl &= ~TSI148_LCSR_OTAT_TM_M;
- 		temp_ctl |= TSI148_LCSR_OTAT_TM_2eSSTB;
- 	}
-@@ -1451,8 +1439,7 @@ static int tsi148_dma_set_vme_src_attributes(struct device *dev, __be32 *attr,
- 		val |= TSI148_LCSR_DSAT_TM_2eSST;
- 
- 	if (cycle & VME_2eSSTB) {
--		dev_err(dev, "Currently not setting Broadcast Select "
--			"Registers\n");
-+		dev_err(dev, "Currently not setting Broadcast Select Registers\n");
- 		val |= TSI148_LCSR_DSAT_TM_2eSSTB;
- 	}
- 
-@@ -1550,8 +1537,7 @@ static int tsi148_dma_set_vme_dest_attributes(struct device *dev, __be32 *attr,
- 		val |= TSI148_LCSR_DDAT_TM_2eSST;
- 
- 	if (cycle & VME_2eSSTB) {
--		dev_err(dev, "Currently not setting Broadcast Select "
--			"Registers\n");
-+		dev_err(dev, "Currently not setting Broadcast Select Registers\n");
- 		val |= TSI148_LCSR_DDAT_TM_2eSSTB;
- 	}
- 
-@@ -1639,8 +1625,7 @@ static int tsi148_dma_list_add(struct vme_dma_list *list,
- 
- 	/* Test descriptor alignment */
- 	if ((unsigned long)&entry->descriptor & 0x7) {
--		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 "
--			"byte boundary as required: %p\n",
-+		dev_err(tsi148_bridge->parent, "Descriptor not aligned to 8 byte boundary as required: %p\n",
- 			&entry->descriptor);
- 		retval = -EINVAL;
- 		goto err_align;
-@@ -1935,8 +1920,7 @@ static int tsi148_lm_set(struct vme_lm_resource *lm, unsigned long long lm_base,
- 	for (i = 0; i < lm->monitors; i++) {
- 		if (bridge->lm_callback[i]) {
- 			mutex_unlock(&lm->mtx);
--			dev_err(tsi148_bridge->parent, "Location monitor "
--				"callback attached, can't reset\n");
-+			dev_err(tsi148_bridge->parent, "Location monitor callback attached, can't reset\n");
- 			return -EBUSY;
- 		}
- 	}
-@@ -2051,8 +2035,7 @@ static int tsi148_lm_attach(struct vme_lm_resource *lm, int monitor,
- 	lm_ctl = ioread32be(bridge->base + TSI148_LCSR_LMAT);
- 	if ((lm_ctl & (TSI148_LCSR_LMAT_PGM | TSI148_LCSR_LMAT_DATA)) == 0) {
- 		mutex_unlock(&lm->mtx);
--		dev_err(tsi148_bridge->parent, "Location monitor not properly "
--			"configured\n");
-+		dev_err(tsi148_bridge->parent, "Location monitor not properly configured\n");
- 		return -EINVAL;
- 	}
- 
-@@ -2196,8 +2179,7 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
- 						  VME_CRCSR_BUF_SIZE,
- 						  &bridge->crcsr_bus, GFP_KERNEL);
- 	if (!bridge->crcsr_kernel) {
--		dev_err(tsi148_bridge->parent, "Failed to allocate memory for "
--			"CR/CSR image\n");
-+		dev_err(tsi148_bridge->parent, "Failed to allocate memory for CR/CSR image\n");
- 		return -ENOMEM;
- 	}
- 
-@@ -2237,8 +2219,7 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
- 			(vstat * 0x80000), 0x80000, VME_CRCSR, VME_SCT,
- 			VME_D16);
- 		if (retval)
--			dev_err(tsi148_bridge->parent, "Configuring flush image"
--				" failed\n");
-+			dev_err(tsi148_bridge->parent, "Configuring flush image failed\n");
- 	}
- 
- 	return 0;
--- 
-2.25.1
-
+This path is triggered only for the new target dm-po2zone and not for
+npo2 zone size devices in general. I will mention this is a prep patch
+for the new target because I wouldn't call it a bug per se.

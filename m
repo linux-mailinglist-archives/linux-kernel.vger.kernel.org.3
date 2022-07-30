@@ -2,221 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE1B585AF4
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A449585B04
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbiG3PVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 11:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S234894AbiG3P3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 11:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiG3PV1 (ORCPT
+        with ESMTP id S232942AbiG3P3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:21:27 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CCF13F8D
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:21:25 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id n185so3837887wmn.4
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oeJPSvj5hBBtzZgdZRdD8Nr7JBHHoqaGLY9X4WrPs+I=;
-        b=qNK17BQrdYn5ZTA3L1fqZvzzgHTzMNSnLmpanzWsdS9AiYsWcz3CP2Kw/iOIrMXHx7
-         QXOxliirIDdhwuHMKESMBqlKexCzESnFcQ+X61anRS3/UvCXGF4yP3HDryCv318emPQI
-         xScHsNKVnxPhCJW8tAdS8z6MOyjPFxy7f9xa9kdE0OFf/WnGdU+Fcx3QhQ5nMN0oyOSa
-         bTC/2MQfTfSY7CCy7q6COop1FH1AmCbuVprrpJFwd19DmBjt+zIUOzaI7c+O5UqoFNFS
-         T8AFWvRaJaZTvBowbz5Y0vP2ZH+tSEmwNdI1iOVo2zOuaAcLMGAj+TJmyyXQmamHPuV3
-         +zXA==
+        Sat, 30 Jul 2022 11:29:09 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CED712A94
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:29:08 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id g22-20020a056602249600b0067caba4f24bso2358514ioe.4
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:29:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oeJPSvj5hBBtzZgdZRdD8Nr7JBHHoqaGLY9X4WrPs+I=;
-        b=mZuV4Yt2dtVmKVeB8OlirSslqntggTNf/amo60ivqy5ItQXJWpC5OtwIVfJ7AQHrVc
-         ILAOGFTzOX37HnZn8V5aRZl8yRL2X9xd3ZZNgXCMOqLT1gYHgpFk8HyZGT9trR6c4RaM
-         CcCc3tRVfVlUDstPvJfbhlZfie32iA0ewktVh8CIuG4p16H3n9LS/M7q4DFOYRybTJbI
-         /uAN7XkCU3R/HoccwBPiz+fuXm7IyorBCfZ0h1Qi7xwPekTyk3gqoBL/kGQoyZezbK42
-         zVRJ90u+VzuJsZgRfi2/um9RvxZHeBdm46/QAS1VjC6FPKhQnjCdZoaZ0KZi1UI9/y0J
-         B8bg==
-X-Gm-Message-State: AJIora92qL7+Au+7noh0qf8BwXpvn8j1ibZN9KJWdpdA7tRMYI/uIuJI
-        8ROmNseejIIgi/48zXhmFPHq5SlvAe02UHLQypPqUw==
-X-Google-Smtp-Source: AGRyM1v9HReUSOdG7WurghjNT5BEL4pjfSC4V475aB2hHTv0gHjO3kSGpArGxEY5+vGaJpHiCGmg2bzE+Bc5B2o6SO4=
-X-Received: by 2002:a7b:ce13:0:b0:3a3:102c:23d3 with SMTP id
- m19-20020a7bce13000000b003a3102c23d3mr5881343wmc.67.1659194483562; Sat, 30
- Jul 2022 08:21:23 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=II+Aa/tU0GJSM8qD5KZ+GpXL4CeKTzOKGQZwx/nkqGY=;
+        b=ZNDunAb1KdYd6+yTfLEbIYzH7/MuKU5tqFX7oL6K/NceKxlHC+Usd/YnjnN5lWcZWT
+         1XV0vVjyTnn+xNeqjFuRsf0t8nYNIuBTC1PTO49SoFPfVlQqsNtHXD19RauMRxNPm9tr
+         A3sg/XTjiM+wEy9ViXLi3N9aXhUqvDtZ6QDTJIU5f7bQGQtwofq/dfW+H0+Bp6GArgyd
+         R0TYPHPG4HMYgsBleAz6Klik+mApWluM61SDyRezb8pzd0acU4dBzpk7ONOhh5huhBNF
+         AbwydGevC1rwwHtoInuW791yPGfD2QhuTaoVa47J53ocuY6K0EWP1WM7yi9ODDrUSYEt
+         J4Lg==
+X-Gm-Message-State: AJIora8eYmbMzMs6TyOH6OcvrvDLPhmeRlasf54hT+EkfCXfQ7s1dPgG
+        9UbhWsRqQO/uR45yikcHNJZB6rbWlkP9NxWMSR29jErnEpox
+X-Google-Smtp-Source: AGRyM1s8ndPR8qqa4U2xwRx/BQpTxBSZCbUk57W9WpeKxaEDkds+nZFfQ2MhYl/9K9uJapd7KjgdlA4Jf9JYCmcLMzGLRhsRkzYA
 MIME-Version: 1.0
-References: <20220724060013.171050-1-leo.yan@linaro.org> <20220724060013.171050-2-leo.yan@linaro.org>
- <CAP-5=fVY=_WUpke0sRMpvbJFu9JuYwqiwAmKdCS+=u7vEG-2uA@mail.gmail.com> <20220730093819.GA574473@leoy-ThinkPad-X240s>
-In-Reply-To: <20220730093819.GA574473@leoy-ThinkPad-X240s>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 30 Jul 2022 08:21:10 -0700
-Message-ID: <CAP-5=fWA8R9Ee5L9xgPtva9dvQ12uKqC1o4zgzPs0B9XWSMxhQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Chang Rui <changruinj@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6638:138f:b0:341:4711:4c2c with SMTP id
+ w15-20020a056638138f00b0034147114c2cmr3243200jad.178.1659194947694; Sat, 30
+ Jul 2022 08:29:07 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 08:29:07 -0700
+In-Reply-To: <20220730114424.1197-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007877f605e5076d0c@google.com>
+Subject: Re: [syzbot] INFO: rcu detected stall in net_tx_action
+From:   syzbot <syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 2:38 AM Leo Yan <leo.yan@linaro.org> wrote:
->
-> Hi Ian,
->
-> On Fri, Jul 29, 2022 at 10:13:04PM -0700, Ian Rogers wrote:
->
-> [...]
->
-> > I am seeing a problem with this patch with jvmti. To repro:
-> >
-> > 1) download a Java workload dacapo-9.12-MR1-bach.jar from
-> > https://sourceforge.net/projects/dacapobench/
-> > 2) build perf such as "make -C tools/perf O=/tmp/perf NO_LIBBFD=1" it
-> > should detect Java and create /tmp/perf/libperf-jvmti.so
-> > 3) run perf with the jvmti agent:
-> > /tmp/perf/perf record -k 1 java -agentpath:/tmp/perf/libperf-jvmti.so
-> > -jar dacapo-9.12-MR1-bach.jar -n 10 fop
-> > 4) run perf inject:
-> > /tmp/perf/perf inject -i perf.data -o perf-injected.data -j
-> > 5) run perf report
-> > /tmp/perf/perf report -i  perf-injected.data | grep org.apache.fop
-> >
-> > With this patch reverted I see lots of symbols like:
-> >      0.00%  java             jitted-388040-4656.so  [.]
-> > org.apache.fop.fo.FObj.bind(org.apache.fop.fo.PropertyList)
-> >
-> > With the patch I see lots of:
-> > dso__load_sym_internal: failed to find program header for symbol:
-> > Lorg/apache/fop/fo/FObj;bind(Lorg/apache/fop/fo/PropertyList;)V
-> > st_value: 0x40
->
-> Thanks for sharing the steps, I can reproduce the issue.
->
-> I tried to add more logs to dump and hope can find specific pattern for
-> these symbols, one thing I observed that if a symbol fails to find
-> program header, it has the same values for st_value, shdr.sh_addr and
-> shdr.sh_offset: all of them are 0x40.  So that means if with you
-> proposed change in below, then we will get the file address is:
->
->   file_addr = st_value - shdr.sh_addr + shdr.sh_offset = 0x40
->
-> Seems to me this is not reasonable: perf tries to add many symbols
-> with the same file address 0x40.
->
-> > Combining the old and new behaviors fixes the issue for me, wdyt?
->
-> So far we don't answer a question is what's the purpose for these JAVA
-> symbols.  I checked these symbols and concluded as:
->
-> - They are not label, this is because sym.st_info is 0x2, so its
->   symbol type is STT_FUNC;
-> - They are from ".text" section;
-> - Symbol visibility is STV_DEFAULT;
-> - Symbol's section index number is 0x1, which is different from some
->   special sections (STV_DEFAULT/SHN_COMMON/SHN_UNDEF/SHN_XINDEX).
->
-> This is a rough summary, these symbols are likewise the normal function
-> symbols, but they have special st_value (0x40) and has no matched the
-> program header for them.
->
-> If we rollback to use old offsets to calculate the symbol file address,
-> it still is incorrect.
->
-> I list all relevant symbols in: https://termbin.com/s0fb, for a reliable
-> fixing, could anyone with java experience shed some lights for handling
-> the symbols?
->
-> On the other hand, I can accept to simply change pr_warning() to
-> pr_debug4() to avoid warning flood, the log still can help us to find
-> potential symbol parsing issue, so far they are not false-positive
-> reporting.
+Hello,
 
-Thanks, I suspect the ELF that the Java agent has created isn't good.
-The Java agent is part of perf as and so is the ELF file generation
-code:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/genelf.c?h=perf/core#n367
-I took a quick look but most of the logic is in libelf - it seems less
-obvious the bug would be there rather than perf. Could you take a
-look? Ideally there'd be a quick fix that keeps all the benefits of
-your change and the jvmti code working.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in __hrtimer_run_queues
 
-Thanks,
-Ian
+------------[ cut here ]------------
+hrtimer hog tick_sched_timer ran longer than 2 ticks
+WARNING: CPU: 0 PID: 5792 at kernel/time/hrtimer.c:1690 __run_hrtimer kernel/time/hrtimer.c:1690 [inline]
+WARNING: CPU: 0 PID: 5792 at kernel/time/hrtimer.c:1690 __hrtimer_run_queues+0xbf5/0x1230 kernel/time/hrtimer.c:1757
+Modules linked in:
+CPU: 0 PID: 5792 Comm: udevd Not tainted 5.14.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:__run_hrtimer kernel/time/hrtimer.c:1690 [inline]
+RIP: 0010:__hrtimer_run_queues+0xbf5/0x1230 kernel/time/hrtimer.c:1757
+Code: 10 00 0f 0b e9 70 f6 ff ff bd 01 00 00 00 e8 b2 44 10 00 48 8b 34 24 48 c7 c7 a0 cd 8d 89 c6 05 0b 9e f2 0b 01 e8 75 c9 82 07 <0f> 0b e8 94 44 10 00 31 ff 89 ee e8 cb 4a 10 00 40 84 ed 0f 84 00
+RSP: 0018:ffffc90000007e20 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888017c79c40 RSI: ffffffff815d8865 RDI: fffff52000000fb6
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815d269e R11: 0000000000000000 R12: ffff8880b9c26d60
+R13: ffff8880b9c26488 R14: ffff8880b9c26440 R15: ffff8880b9c263c0
+FS:  00007f5a1a630840(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000051e370 CR3: 00000000182e0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1819
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1089 [inline]
+ __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1106
+ sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1100
+ </IRQ>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:check_kcov_mode kernel/kcov.c:163 [inline]
+RIP: 0010:__sanitizer_cov_trace_pc+0x7/0x60 kernel/kcov.c:197
+Code: fd ff ff b9 ff ff ff ff ba 08 00 00 00 4d 8b 03 48 0f bd ca 49 8b 45 00 48 63 c9 e9 64 ff ff ff 0f 1f 00 65 8b 05 59 33 8c 7e <89> c1 48 8b 34 24 81 e1 00 01 00 00 65 48 8b 14 25 00 f0 01 00 a9
+RSP: 0018:ffffc900016cf858 EFLAGS: 00000246
+RAX: 0000000080000000 RBX: 0000000000000007 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffff888017c79c40 RDI: 0000000000000003
+RBP: ffff8880190b8e00 R08: 0000000000000000 R09: 0000000000000007
+R10: ffffffff839f55d7 R11: 0000000000000010 R12: 0000000000000002
+R13: 000000000000024d R14: dffffc0000000000 R15: 0000000000000000
+ tomoyo_domain_quota_is_ok+0x31a/0x550 security/tomoyo/util.c:1092
+ tomoyo_supervisor+0x2f2/0xf00 security/tomoyo/common.c:2089
+ tomoyo_audit_path_log security/tomoyo/file.c:168 [inline]
+ tomoyo_path_permission security/tomoyo/file.c:587 [inline]
+ tomoyo_path_permission+0x270/0x3a0 security/tomoyo/file.c:573
+ tomoyo_path_perm+0x2f0/0x400 security/tomoyo/file.c:838
+ security_inode_getattr+0xcf/0x140 security/security.c:1332
+ vfs_getattr fs/stat.c:139 [inline]
+ vfs_statx+0x164/0x390 fs/stat.c:207
+ vfs_fstatat fs/stat.c:225 [inline]
+ __do_sys_newfstatat+0x96/0x120 fs/stat.c:394
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f5a1a7871da
+Code: 48 89 f2 b9 00 01 00 00 48 89 fe bf 9c ff ff ff e9 0b 00 00 00 66 2e 0f 1f 84 00 00 00 00 00 90 41 89 ca b8 06 01 00 00 0f 05 <3d> 00 f0 ff ff 77 07 31 c0 c3 0f 1f 40 00 48 8b 15 69 fc 0c 00 f7
+RSP: 002b:00007ffc16494b38 EFLAGS: 00000202 ORIG_RAX: 0000000000000106
+RAX: ffffffffffffffda RBX: 0000000000006180 RCX: 00007f5a1a7871da
+RDX: 00007ffc16494b68 RSI: 000055fa80fa7ba0 RDI: 00000000ffffff9c
+RBP: 000055fa80fc4060 R08: 0000000000000000 R09: 000055fa80fb2640
+R10: 0000000000000100 R11: 0000000000000202 R12: 000055fa80fa7ba0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000006180
+----------------
+Code disassembly (best guess), 3 bytes skipped:
+   0:	b9 ff ff ff ff       	mov    $0xffffffff,%ecx
+   5:	ba 08 00 00 00       	mov    $0x8,%edx
+   a:	4d 8b 03             	mov    (%r11),%r8
+   d:	48 0f bd ca          	bsr    %rdx,%rcx
+  11:	49 8b 45 00          	mov    0x0(%r13),%rax
+  15:	48 63 c9             	movslq %ecx,%rcx
+  18:	e9 64 ff ff ff       	jmpq   0xffffff81
+  1d:	0f 1f 00             	nopl   (%rax)
+  20:	65 8b 05 59 33 8c 7e 	mov    %gs:0x7e8c3359(%rip),%eax        # 0x7e8c3380
+* 27:	89 c1                	mov    %eax,%ecx <-- trapping instruction
+  29:	48 8b 34 24          	mov    (%rsp),%rsi
+  2d:	81 e1 00 01 00 00    	and    $0x100,%ecx
+  33:	65 48 8b 14 25 00 f0 	mov    %gs:0x1f000,%rdx
+  3a:	01 00
+  3c:	a9                   	.byte 0xa9
 
 
-> Thanks,
-> Leo
->
-> > ```
-> > --- a/tools/perf/util/symbol-elf.c
-> > +++ b/tools/perf/util/symbol-elf.c
-> > @@ -1305,16 +1305,21 @@ dso__load_sym_internal(struct dso *dso, struct
-> > map *map, struct symsrc *syms
-> > _ss,
-> >
-> >                        if (elf_read_program_header(syms_ss->elf,
-> >                                                    (u64)sym.st_value, &phdr)) {
-> > -                               pr_warning("%s: failed to find program
-> > header for "
-> > +                               pr_debug4("%s: failed to find program
-> > header for "
-> >                                           "symbol: %s st_value: %#" PRIx64 "\n",
-> >                                           __func__, elf_name,
-> > (u64)sym.st_value);
-> > -                               continue;
-> > +                               pr_debug4("%s: adjusting symbol:
-> > st_value: %#" PRIx64 " "
-> > +                                       "sh_addr: %#" PRIx64 "
-> > sh_offset: %#" PRIx64 "\n",
-> > +                                       __func__, (u64)sym.st_value,
-> > (u64)shdr.sh_addr,
-> > +                                       (u64)shdr.sh_offset);
-> > +                               sym.st_value -= shdr.sh_addr - shdr.sh_offset;
-> > +                       } else {
-> > +                               pr_debug4("%s: adjusting symbol:
-> > st_value: %#" PRIx64 " "
-> > +                                       "p_vaddr: %#" PRIx64 "
-> > p_offset: %#" PRIx64 "\n",
-> > +                                       __func__, (u64)sym.st_value,
-> > (u64)phdr.p_vaddr,
-> > +                                       (u64)phdr.p_offset);
-> > +                               sym.st_value -= phdr.p_vaddr - phdr.p_offset;
-> >                        }
-> > -                       pr_debug4("%s: adjusting symbol: st_value: %#"
-> > PRIx64 " "
-> > -                                 "p_vaddr: %#" PRIx64 " p_offset: %#"
-> > PRIx64 "\n",
-> > -                                 __func__, (u64)sym.st_value,
-> > (u64)phdr.p_vaddr,
-> > -                                 (u64)phdr.p_offset);
-> > -                       sym.st_value -= phdr.p_vaddr - phdr.p_offset;
-> >                }
-> >
-> >                demangled = demangle_sym(dso, kmodule, elf_name);
-> > ```
-> >
-> > Thanks,
-> > Ian
-> >
-> > >
-> > >                 demangled = demangle_sym(dso, kmodule, elf_name);
-> > > --
-> > > 2.25.1
-> > >
+Tested on:
+
+commit:         f80e2148 hrtimer: Unbreak hrtimer_force_reprogram()
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=14d81282080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=31eef52c6517a0c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ba0493d523d007b3819
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1756f322080000
+

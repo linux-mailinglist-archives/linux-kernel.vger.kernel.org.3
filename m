@@ -2,132 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56685585C95
+	by mail.lfdr.de (Postfix) with ESMTP id A31C0585C96
 	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 01:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbiG3XBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 19:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiG3XBy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235887AbiG3XBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 30 Jul 2022 19:01:54 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046EB14038
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230400AbiG3XBw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 30 Jul 2022 19:01:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A597114033
         for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 16:01:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1659222111; x=1690758111;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T8Gwb5eXQuxPfUXYvnUcxftAQQomSRR24x3wrRDUKSU=;
-  b=hw4yZnk8VEZFO39mIH7y8qQReJGFhxrNNWW2MFqGILiscpzTj2TkU+vF
-   IFkUPjNkmD1SXQHnY1FiCMvZlW7VaghLCy3owYaJ0HyFjhRAZ13yKkthY
-   +tuOYnvOO5pIw57R1Ie1Xlz5hoiiSAlkoU8UT1e2G34F/ggeC753Yn/P2
-   Ijtt0b3VzscVg+WRI7kpo+EqFLEAmnZB3v2d4TkZNObFSrv0yPekRSdYc
-   YDSq/z+QBG0c6q77wxLpsIfzoAep9diXlZj2PGWScvDisnX/xpv4zOyKu
-   8j5FfIbDhU4Yc1VbFWeTzlnSXr2Dc5NCuk9UEmrEznBnTcuF5HRN06KvR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269333511"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=U6Bvegd1tq+PskN4kPjFP0sVNRYkTabIdMjaluyKOHQ=;
+  b=HMrEPaLLeGuS1lzutcZmsapkZiMv16gBV3q6apOVoRS0QQFy2AXQnxi4
+   8ikbPLTtA/3idNOnTFyQjdSjvKXZtjJT6BulX1I1rTWhZ/M5SGdEbjrl+
+   XOgGMztvWv6jvd1aluMheKS7GIM4OJcki33rt6k5YqIqjfvC81GmTbS23
+   3q0mko5jNzrnu04mCPrC84/qt0ZqsEyspb4pXv4/mLOplQY3zeYtvWLg3
+   vq0EQwi7/mVeL3k3ON4FgPlraQ9DQZfjnIdDQBt2xfPWMmrfeBXdJh3SW
+   C8/ZzE5OXmt5gwRtxUUPFq8ARk2/VOmmge/Kf0jtpFXVdjxTyXjKj95U4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268717670"
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="269333511"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 16:01:51 -0700
+   d="scan'208";a="268717670"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 16:01:51 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="601641594"
+   d="scan'208";a="743886967"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 Jul 2022 16:01:50 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2022 16:01:50 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oHvSv-000DPr-2J;
+        id 1oHvSv-000DPt-2N;
         Sat, 30 Jul 2022 23:01:49 +0000
-Date:   Sun, 31 Jul 2022 07:01:38 +0800
+Date:   Sun, 31 Jul 2022 07:01:40 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dma-buf: Add ioctl to query mmap info
-Message-ID: <202207310607.RX5r6WRK-lkp@intel.com>
-References: <20220729170744.1301044-2-robdclark@gmail.com>
+To:     Karsten Graul <kgraul@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr'
+ is less than 4
+Message-ID: <202207310658.ERb14Td9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729170744.1301044-2-robdclark@gmail.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi Karsten,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc8]
-[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/dma-buf-map-info-support/20220730-010844
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 6e2c0490769ef8a95b61304389116ccc85c53e12
-config: hexagon-randconfig-r032-20220729 (https://download.01.org/0day-ci/archive/20220731/202207310607.RX5r6WRK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   620725263f4222b3c94d4ee19846835feec0ad69
+commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
+date:   10 months ago
+config: arm-randconfig-r036-20220731 (https://download.01.org/0day-ci/archive/20220731/202207310658.ERb14Td9-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/203f14a73a179d6c5fbfa4813e45fde2a9ae9860
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Clark/dma-buf-map-info-support/20220730-010844
-        git checkout 203f14a73a179d6c5fbfa4813e45fde2a9ae9860
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma-buf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/smc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/dma-buf/dma-buf.c:346:19: error: passing 'const void  btf_type_tag(user)*' (aka 'const void *') to parameter of type 'void  btf_type_tag(user)*' (aka 'void *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           if (copy_to_user(uarg, &arg, sizeof(arg)))
-                            ^~~~
-   include/linux/uaccess.h:157:27: note: passing argument to parameter 'to' here
-   copy_to_user(void __user *to, const void *from, unsigned long n)
-                             ^
-   1 error generated.
+   In file included from include/linux/gfp.h:6,
+                    from include/linux/xarray.h:14,
+                    from include/linux/radix-tree.h:19,
+                    from include/linux/fs.h:15,
+                    from include/linux/highmem.h:5,
+                    from include/linux/bvec.h:10,
+                    from include/linux/skbuff.h:17,
+                    from include/linux/tcp.h:17,
+                    from include/net/tcp.h:20,
+                    from net/smc/smc_llc.c:13:
+   include/linux/mmzone.h: In function '__nr_to_section':
+   include/linux/mmzone.h:1349:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
+    1349 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+         |             ^
+   include/linux/mmzone.h:1335:27: note: 'mem_section' declared here
+    1335 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+         |                           ^~~~~~~~~~~
+   net/smc/smc_llc.c: At top level:
+>> net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr' is less than 4 [-Wpacked-not-aligned]
+      40 | } __packed;             /* format defined in
+         | ^
+   In file included from <command-line>:
+   net/smc/smc_llc.c: In function 'smc_llc_add_pending_send':
+   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_564' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
+     303 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     409 |         BUILD_BUG_ON_MSG(
+         |         ^~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_565' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
+     303 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     412 |         BUILD_BUG_ON_MSG(
+         |         ^~~~~~~~~~~~~~~~
+   In function 'smc_llc_send_message_wait',
+       inlined from 'smc_llc_send_link_delete_all' at net/smc/smc_llc.c:1635:8:
+   net/smc/smc_llc.c:785:9: warning: 'memcpy' reading 60 bytes from a region of size 49 [-Wstringop-overread]
+     785 |         memcpy(wr_buf, llcbuf, sizeof(union smc_llc_msg));
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/smc/smc_llc.c: In function 'smc_llc_send_link_delete_all':
+   net/smc/smc_llc.c:1622:37: note: source object 'delllc' of size 49
+    1622 |         struct smc_llc_msg_del_link delllc = {};
+         |                                     ^~~~~~
 
 
-vim +346 drivers/dma-buf/dma-buf.c
+vim +40 net/smc/smc_llc.c
 
-   328	
-   329	static long dma_buf_info(struct dma_buf *dmabuf, const void __user *uarg)
-   330	{
-   331		struct dma_buf_info arg;
-   332	
-   333		if (copy_from_user(&arg, uarg, sizeof(arg)))
-   334			return -EFAULT;
-   335	
-   336		switch (arg.param) {
-   337		case DMA_BUF_INFO_VM_PROT:
-   338			if (!dmabuf->ops->mmap_info)
-   339				return -ENOSYS;
-   340			arg.value = dmabuf->ops->mmap_info(dmabuf);
-   341			break;
-   342		default:
-   343			return -EINVAL;
-   344		}
-   345	
- > 346		if (copy_to_user(uarg, &arg, sizeof(arg)))
-   347			return -EFAULT;
-   348	
-   349		return 0;
-   350	}
-   351	
+    23	
+    24	struct smc_llc_hdr {
+    25		struct smc_wr_rx_hdr common;
+    26		union {
+    27			struct {
+    28				u8 length;	/* 44 */
+    29		#if defined(__BIG_ENDIAN_BITFIELD)
+    30				u8 reserved:4,
+    31				   add_link_rej_rsn:4;
+    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
+    33				u8 add_link_rej_rsn:4,
+    34				   reserved:4;
+    35	#endif
+    36			};
+    37			u16 length_v2;	/* 44 - 8192*/
+    38		};
+    39		u8 flags;
+  > 40	} __packed;		/* format defined in
+    41				 * IBM Shared Memory Communications Version 2
+    42				 * (https://www.ibm.com/support/pages/node/6326337)
+    43				 */
+    44	
 
 -- 
 0-DAY CI Kernel Test Service

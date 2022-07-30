@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB402585A5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA7F585A67
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 14:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiG3MD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 08:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S234531AbiG3MXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 08:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiG3MDY (ORCPT
+        with ESMTP id S230135AbiG3MXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 08:03:24 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AD413DD8;
-        Sat, 30 Jul 2022 05:03:22 -0700 (PDT)
-Received: from mail-ed1-f52.google.com ([209.85.208.52]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MXGzQ-1nxTzb0neA-00YgxN; Sat, 30 Jul 2022 14:03:21 +0200
-Received: by mail-ed1-f52.google.com with SMTP id o13so8604554edc.0;
-        Sat, 30 Jul 2022 05:03:21 -0700 (PDT)
-X-Gm-Message-State: AJIora/OBC6tFrKuV2m5sj8LdpzPPbEWe2OXZbC259qQIOYNZ6guZ5wh
-        o7Ybpp+jQ+S4nfUSC44JcAccBErdJnud5HcDI2k=
-X-Google-Smtp-Source: AGRyM1vvvOA0nFdfHBjxY45zdeQVRdPjYgzS746B37qSIt9lT2WK8AZ9y3kgr9XwEPyH2FM5Fr62DOhaTCbVNO89/WM=
-X-Received: by 2002:a05:6402:26c2:b0:43b:e542:9f68 with SMTP id
- x2-20020a05640226c200b0043be5429f68mr7635118edd.227.1659182600838; Sat, 30
- Jul 2022 05:03:20 -0700 (PDT)
+        Sat, 30 Jul 2022 08:23:46 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F9913F9A;
+        Sat, 30 Jul 2022 05:23:45 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id a11so3705168wmq.3;
+        Sat, 30 Jul 2022 05:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7n8cZxwCZn/Qw/quWKlWrtEv2JQBFb0Bs9/SBswkjjY=;
+        b=kNlJPZ4C4juqjPRrEkoxhK2y+7GMOURfI+mffO0a1obz+7dg2pk7FvJd5E7p+qnGei
+         hmkZbHIwnKxfK2Xf+KfHSlvlm+FP8xCUIyQmIQwuaP6fEg4Qu1Ad0ypc8lut/r5VnOmL
+         c7wi3e0r3X+UZtcIScKBr+vF1x7L7kZbYY/i2k/78JMcH29Z82lKo0XuMB6u219uB0YW
+         yR18wc8ySnNVF0CyIB76DdGv+ir9eYhpBUhDwJqcZaf1nEbucBRIgDTK1zVV/9APRNeL
+         M4jZz5zFj4/8LTpHpu99pthjS8zxEoityxtdJJovfD+ebA+s1vPaeJsJ4YCnGSwecl06
+         nsbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7n8cZxwCZn/Qw/quWKlWrtEv2JQBFb0Bs9/SBswkjjY=;
+        b=e6YaRmpN9fPJnFg6CdPG2I05DQKWh80offPwzjYq8oOfH3cmAoOoMi2QhEjuak6vod
+         L1Py10oGRq5MeFHPNeg2/h8OaDZR36/6v4cccaWVQT/AZV1rNCF9uiH24EWp2cdqWLvk
+         4I9dIEoklWtBS95twRLMJdQqlrn0aLpCVh8yt0ZJZYOQqL1nDDuKOng5ekxizjrjyUHU
+         x64OPANJpfVASlBiTIko3AIuoC1H1F2Mi7n83p3sE+NcBBvRUQ4KyMsfr8kS5SB3kZVr
+         MoEKkuZelVD0TLjfuIvXMV0NOhxuxSaA+1/jVGtM8z45TQFEfGPvr4yN8SS+OGU2HmrG
+         ymhQ==
+X-Gm-Message-State: AJIora9eZwSTe3RTN4SgRL7l5TmdD1DgXNPPArOimoSV5+gSG1bBSgtl
+        L3ZfYrPpXUPh+aMKoVrwkUdjPzM7ouTgOQ==
+X-Google-Smtp-Source: AGRyM1vl7vLOjBRgfGQHvyC5ORaV/PWltLK0HQ9/OQugol//U+WpHbNX1iiBt9i49ReIbryqQFgRSg==
+X-Received: by 2002:a1c:f001:0:b0:3a3:7de3:1de8 with SMTP id a1-20020a1cf001000000b003a37de31de8mr5712393wmb.119.1659183824148;
+        Sat, 30 Jul 2022 05:23:44 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bp20-20020a5d5a94000000b002205a6aec0asm1132032wrb.86.2022.07.30.05.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jul 2022 05:23:43 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/userptr: remove redundation assignment to variable ret
+Date:   Sat, 30 Jul 2022 13:23:42 +0100
+Message-Id: <20220730122342.146475-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <1656894074-15751-1-git-send-email-hayashi.kunihiko@socionext.com> <0a0a64a7-60cc-e95d-c2e3-3c11a53a6527@socionext.com>
-In-Reply-To: <0a0a64a7-60cc-e95d-c2e3-3c11a53a6527@socionext.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Jul 2022 14:03:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0egd9dupLFid9CsSygQyTK3KopB8m5LVgnUW9L1cF6JA@mail.gmail.com>
-Message-ID: <CAK8P3a0egd9dupLFid9CsSygQyTK3KopB8m5LVgnUW9L1cF6JA@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Update UniPhier armv8 devicetree
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:W7BRPnTZLSHXM5/GhLwnKR9HHjCI7GgFX7IAQtlIHZmmCxDzPRU
- TxV4KTSWff+Cp+IbZQ7yK1jORiiIkYC1UBD23XaIibeP30ibQWMIBZt6Qu0ISUw8loBmOkj
- EqMXs/cV8dbn99nWI7sypZjXIqQCMEAPYDWQAAVdVPsp8HCEgNSMnPUcRjUfS8WoO3mEpje
- uKfSFbSmlEiGzwwItOljw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tTZBlMdTEvo=:bj0uFCr+8LeE6bPacduCCC
- 67t/Nn+BuqsybMmCR2waag4GZOcIiIAwy/ClB4tZ4/XGth8tOVzoyNMWR2IFRuWWMSnFMvhaN
- KDPSV71hMdp6js11cnHPJkt0/QdGG8AQ3hJESr2r7ABU6nqk0pgyLPThlSmmlhSx474b+hiXO
- lSv3EN5pvP+sexERLpjrROWl0wuE2u1Y7wQytHzCkEAOGxfGGTYxegYnKGdNWORWrOannMUp5
- uyEHJeMG5rgo8pc1wG85bMOPl7bnatEh69KO085jvtZuCyXpDqgY6ufYXLTPdTJUF5myzqxDK
- pKRdTJBCs6whOxgOgml5oIMOs5poeAa2zjsAT8ZkcgsJyb1YwGl4uoeWOmFKfaeVjanvp0tsW
- ZoxS936Ok2IvEvi19i3hW0iqdWiD5bKKuCW6UxnZ8eq78a4+bJWRctKZMmCYToiNwiSSXfy2J
- 7qzgA9MU9mWvr1BIIIGZo7hm3VeHLAh7DiU+ZF9Zk+ArNqVb+4xJF0e5glhHOeO6lY1nGyXXE
- PIo3l7MI3+Bq8dwVOPsjcCAckIuYp3N9WoDwFp6n8YEGU6fIT/ML3UbeNU/Jk8nY5js2ZL2rr
- 6gVYRnrEUKVxMgFa6uUjS1TXJ623cZwca6PW4Gh940J26uhrq/gkVqoJ1ugld+1+dv0oIPXTf
- wlnMx8ZSXYefZbQKD3bci9pAgM5lJ40XZ5frz4Ep8EavpEkLp7UZgoxLY65EbkZwSRhqNIVZ5
- 3RtJmE8D0hxdqc1eMUOq62G97QshpJfY+4J2l5prCIBSdrg2VdLCmWbp5vrrgoi5bgZDznjm4
- 1P/f7qLdYIcVX8+sNB6yGjFRzLXlS2QQGC+PG5msk0HBFMjicY68uMwAg6LFRfPaFoKegXJoO
- j8vhp1dLpnCQnZ1Na0oQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 11:52 AM Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
-> On 2022/07/04 9:21, Kunihiko Hayashi wrote:
-> > Update devicetree sources for UniPhier armv8 SoCs to remove dtschema
-> > warnings, add support existing features that haven't yet been
-> > described, and replace constants with macros.
->
-> If there is nothing wrong with this series and armv7 DT series,
-> I'd like to make a pull request.
-> If the request is late, carry it over to the next version.
->
-> How about that?
+Variable ret is assigned a value that is never read; it is either
+being re-assigned during the following while-loop or after the loop.
+The assignmnt is redundant and can be removed.
 
-The timing is not great, as normal updates should get merged as parts
-of the normal
-pull requests, which I have already sent.
+Cleans up clang scan build warning:
+drivers/gpu/drm/i915/gem/i915_gem_userptr.c:295:11: warning: Although
+the value stored to 'ret' is used in the enclosing expression, the
+value is never actually read from 'ret' [deadcode.DeadStores]
 
-A lot of the changes can be considered bugfixes, and I would still
-merge them if you
-think they are harmless and can fix things. In this case, also mark them as
-'Cc: stable@vger.kernel.org' to be backported into lts kernels. Anything that
-does not qualify as a bugfix should now go into the 5.21 merge window.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please send the bugfix pull request as soon as you can so we can merge that
-early. The other updates should be rebased onto v5.20-rc1 once that is
-released in about two weeks.
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+index 8423df021b71..075aef875a07 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+@@ -292,7 +292,7 @@ int i915_gem_object_userptr_submit_init(struct drm_i915_gem_object *obj)
+ 	if (!i915_gem_object_is_readonly(obj))
+ 		gup_flags |= FOLL_WRITE;
+ 
+-	pinned = ret = 0;
++	pinned = 0;
+ 	while (pinned < num_pages) {
+ 		ret = pin_user_pages_fast(obj->userptr.ptr + pinned * PAGE_SIZE,
+ 					  num_pages - pinned, gup_flags,
+-- 
+2.35.3
 
-        Arnd

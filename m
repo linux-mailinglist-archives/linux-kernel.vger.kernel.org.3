@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A18585AF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE1B585AF4
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiG3PQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 11:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S234758AbiG3PVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 11:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbiG3PQK (ORCPT
+        with ESMTP id S233238AbiG3PV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:16:10 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3D41056F
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:16:09 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id e15so8893418edj.2
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:16:09 -0700 (PDT)
+        Sat, 30 Jul 2022 11:21:27 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CCF13F8D
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:21:25 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n185so3837887wmn.4
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=6d+ycc7qXtxhS4npbdEsrK/vN/0sRNEBBmbeqlyXufg=;
-        b=P0TMiqwDhd8by8yvDd/Sz0r/VhC0ZH8Y7nekdOikJIUt5rZ35AI/5G630+FHsxqYYF
-         QzBQZhoUz8e9bkiAyH0Xf8bRv6nFXkr+J+t1tn9GvfLwEr4cWnu7oER/0YRDdipJVb1N
-         FA/p1e1wgCdtkNB8XQUb9jyCURnPtMvviYCqixNurn/hgeqbC/Io2nJ1ivku8H7mBART
-         Y5DnrIeCY67iMVU6IrN6dlMfrfoeORiveTDSzzS5YXwhM4L/Q6F2iC/mDrz5gYPLMMTQ
-         Faa/3clEgsMvYGw5+54tjh/6btSBroakweciOGlM+/aPu9gIg2IpPZ29YiLE2CmGsTm2
-         Nmog==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oeJPSvj5hBBtzZgdZRdD8Nr7JBHHoqaGLY9X4WrPs+I=;
+        b=qNK17BQrdYn5ZTA3L1fqZvzzgHTzMNSnLmpanzWsdS9AiYsWcz3CP2Kw/iOIrMXHx7
+         QXOxliirIDdhwuHMKESMBqlKexCzESnFcQ+X61anRS3/UvCXGF4yP3HDryCv318emPQI
+         xScHsNKVnxPhCJW8tAdS8z6MOyjPFxy7f9xa9kdE0OFf/WnGdU+Fcx3QhQ5nMN0oyOSa
+         bTC/2MQfTfSY7CCy7q6COop1FH1AmCbuVprrpJFwd19DmBjt+zIUOzaI7c+O5UqoFNFS
+         T8AFWvRaJaZTvBowbz5Y0vP2ZH+tSEmwNdI1iOVo2zOuaAcLMGAj+TJmyyXQmamHPuV3
+         +zXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=6d+ycc7qXtxhS4npbdEsrK/vN/0sRNEBBmbeqlyXufg=;
-        b=2ZyheXLkL+Pmlai1NezSYMAC5ejPrArEgHx4DRz9jEHUvUDUEaV3RCp4GqQTrEvqDv
-         wnJ41ozbkr/YPecm86AoFMhZ8/LFcJCZ073U6JWbsoB7f0omtzw3cRPqcoHE6ME8O/O+
-         9U1Sku/n9IsKV6VjoQEdO1IVUrwmnCqf6e7NQxTTLJEO4KvlTUqPn/xVDV5Fswb9KYFa
-         XTk5M3+GQeJsykih7PZbhHSjiAMLZE6foFE/HOq1SUN1KioRkAh5YgfZvGeYaCLkke3E
-         Ayr6S7D8eiz0UJBUkl65fziH+WA0HoazH7aXZiQzicgNIqC/OvDZOiMg6eIi8mfVZhi2
-         BrTQ==
-X-Gm-Message-State: ACgBeo0yhCZ/HP7moLJsWPHitK0GCSgvicVwp7FS+uqUKiLuXe9FLYJ4
-        KKKySnkOIpNzz1/xlasodiaxcgDKIIyWSO6cO58=
-X-Google-Smtp-Source: AA6agR50m5cLcwmzWZnTHbOke5eloAsFvg2RgpkIwddRz5csGWEmG2tLSCO8on2mbiFS79VU6AJxZ/XSFQeuSoyker8=
-X-Received: by 2002:a50:bace:0:b0:43d:370a:e1c1 with SMTP id
- x72-20020a50bace000000b0043d370ae1c1mr5244948ede.193.1659194167564; Sat, 30
- Jul 2022 08:16:07 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oeJPSvj5hBBtzZgdZRdD8Nr7JBHHoqaGLY9X4WrPs+I=;
+        b=mZuV4Yt2dtVmKVeB8OlirSslqntggTNf/amo60ivqy5ItQXJWpC5OtwIVfJ7AQHrVc
+         ILAOGFTzOX37HnZn8V5aRZl8yRL2X9xd3ZZNgXCMOqLT1gYHgpFk8HyZGT9trR6c4RaM
+         CcCc3tRVfVlUDstPvJfbhlZfie32iA0ewktVh8CIuG4p16H3n9LS/M7q4DFOYRybTJbI
+         /uAN7XkCU3R/HoccwBPiz+fuXm7IyorBCfZ0h1Qi7xwPekTyk3gqoBL/kGQoyZezbK42
+         zVRJ90u+VzuJsZgRfi2/um9RvxZHeBdm46/QAS1VjC6FPKhQnjCdZoaZ0KZi1UI9/y0J
+         B8bg==
+X-Gm-Message-State: AJIora92qL7+Au+7noh0qf8BwXpvn8j1ibZN9KJWdpdA7tRMYI/uIuJI
+        8ROmNseejIIgi/48zXhmFPHq5SlvAe02UHLQypPqUw==
+X-Google-Smtp-Source: AGRyM1v9HReUSOdG7WurghjNT5BEL4pjfSC4V475aB2hHTv0gHjO3kSGpArGxEY5+vGaJpHiCGmg2bzE+Bc5B2o6SO4=
+X-Received: by 2002:a7b:ce13:0:b0:3a3:102c:23d3 with SMTP id
+ m19-20020a7bce13000000b003a3102c23d3mr5881343wmc.67.1659194483562; Sat, 30
+ Jul 2022 08:21:23 -0700 (PDT)
 MIME-Version: 1.0
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 30 Jul 2022 10:15:56 -0500
-Message-ID: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
-Subject: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     dri-devel <dri-devel@lists.freedesktop.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>
+References: <20220724060013.171050-1-leo.yan@linaro.org> <20220724060013.171050-2-leo.yan@linaro.org>
+ <CAP-5=fVY=_WUpke0sRMpvbJFu9JuYwqiwAmKdCS+=u7vEG-2uA@mail.gmail.com> <20220730093819.GA574473@leoy-ThinkPad-X240s>
+In-Reply-To: <20220730093819.GA574473@leoy-ThinkPad-X240s>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 30 Jul 2022 08:21:10 -0700
+Message-ID: <CAP-5=fWA8R9Ee5L9xgPtva9dvQ12uKqC1o4zgzPs0B9XWSMxhQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Chang Rui <changruinj@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,184 +76,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey all,
+On Sat, Jul 30, 2022 at 2:38 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> Hi Ian,
+>
+> On Fri, Jul 29, 2022 at 10:13:04PM -0700, Ian Rogers wrote:
+>
+> [...]
+>
+> > I am seeing a problem with this patch with jvmti. To repro:
+> >
+> > 1) download a Java workload dacapo-9.12-MR1-bach.jar from
+> > https://sourceforge.net/projects/dacapobench/
+> > 2) build perf such as "make -C tools/perf O=/tmp/perf NO_LIBBFD=1" it
+> > should detect Java and create /tmp/perf/libperf-jvmti.so
+> > 3) run perf with the jvmti agent:
+> > /tmp/perf/perf record -k 1 java -agentpath:/tmp/perf/libperf-jvmti.so
+> > -jar dacapo-9.12-MR1-bach.jar -n 10 fop
+> > 4) run perf inject:
+> > /tmp/perf/perf inject -i perf.data -o perf-injected.data -j
+> > 5) run perf report
+> > /tmp/perf/perf report -i  perf-injected.data | grep org.apache.fop
+> >
+> > With this patch reverted I see lots of symbols like:
+> >      0.00%  java             jitted-388040-4656.so  [.]
+> > org.apache.fop.fo.FObj.bind(org.apache.fop.fo.PropertyList)
+> >
+> > With the patch I see lots of:
+> > dso__load_sym_internal: failed to find program header for symbol:
+> > Lorg/apache/fop/fo/FObj;bind(Lorg/apache/fop/fo/PropertyList;)V
+> > st_value: 0x40
+>
+> Thanks for sharing the steps, I can reproduce the issue.
+>
+> I tried to add more logs to dump and hope can find specific pattern for
+> these symbols, one thing I observed that if a symbol fails to find
+> program header, it has the same values for st_value, shdr.sh_addr and
+> shdr.sh_offset: all of them are 0x40.  So that means if with you
+> proposed change in below, then we will get the file address is:
+>
+>   file_addr = st_value - shdr.sh_addr + shdr.sh_offset = 0x40
+>
+> Seems to me this is not reasonable: perf tries to add many symbols
+> with the same file address 0x40.
+>
+> > Combining the old and new behaviors fixes the issue for me, wdyt?
+>
+> So far we don't answer a question is what's the purpose for these JAVA
+> symbols.  I checked these symbols and concluded as:
+>
+> - They are not label, this is because sym.st_info is 0x2, so its
+>   symbol type is STT_FUNC;
+> - They are from ".text" section;
+> - Symbol visibility is STV_DEFAULT;
+> - Symbol's section index number is 0x1, which is different from some
+>   special sections (STV_DEFAULT/SHN_COMMON/SHN_UNDEF/SHN_XINDEX).
+>
+> This is a rough summary, these symbols are likewise the normal function
+> symbols, but they have special st_value (0x40) and has no matched the
+> program header for them.
+>
+> If we rollback to use old offsets to calculate the symbol file address,
+> it still is incorrect.
+>
+> I list all relevant symbols in: https://termbin.com/s0fb, for a reliable
+> fixing, could anyone with java experience shed some lights for handling
+> the symbols?
+>
+> On the other hand, I can accept to simply change pr_warning() to
+> pr_debug4() to avoid warning flood, the log still can help us to find
+> potential symbol parsing issue, so far they are not false-positive
+> reporting.
 
-I am trying to test Jagan's patch series [1] to add support for the
-samsung dsim bridge which is used on the imx8mm to output DSI video.
-The DSIM gets the video from the mxsfb, and in my case, the DSI is
-sent to the adv7535 for connecting to HDMI.
+Thanks, I suspect the ELF that the Java agent has created isn't good.
+The Java agent is part of perf as and so is the ELF file generation
+code:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/genelf.c?h=perf/core#n367
+I took a quick look but most of the logic is in libelf - it seems less
+obvious the bug would be there rather than perf. Could you take a
+look? Ideally there'd be a quick fix that keeps all the benefits of
+your change and the jvmti code working.
 
-I have been able to get the device tree setup and I don't get any
-errors.  The Linux system appears to think the video is connected as
-determined by modetest:
+Thanks,
+Ian
 
-trying to open device 'mxsfb-drm'...done
-Encoders:
-id crtc type possible crtcs possible clones
-34 33 none 0x00000001 0x00000001
 
-Connectors:
-id encoder status name size (mm) modes encoders
-35 34 connected HDMI-A-1        620x340 29 34
-  modes:
-index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-flags: nhsync, nvsync; type: driver
-  #1 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-flags: phsync, pvsync; type: driver
-  #2 1920x1080 59.94 1920 2008 2052 2200 1080 1084 1089 1125 148352
-flags: phsync, pvsync; type: driver
-  #3 1920x1080 50.00 1920 2448 2492 2640 1080 1084 1089 1125 148500
-flags: phsync, pvsync; type: driver
-  #4 1680x1050 59.88 1680 1728 1760 1840 1050 1053 1059 1080 119000
-flags: phsync, nvsync; type: driver
-  #5 1280x1024 75.02 1280 1296 1440 1688 1024 1025 1028 1066 135000
-flags: phsync, pvsync; type: driver
-  #6 1280x1024 60.02 1280 1328 1440 1688 1024 1025 1028 1066 108000
-flags: phsync, pvsync; type: driver
-  #7 1440x900 59.90 1440 1488 1520 1600 900 903 909 926 88750 flags:
-phsync, nvsync; type: driver
-  #8 1280x960 60.00 1280 1376 1488 1800 960 961 964 1000 108000 flags:
-phsync, pvsync; type: driver
-  #9 1280x720 60.00 1280 1390 1430 1650 720 725 730 750 74250 flags:
-phsync, pvsync; type: driver
-  #10 1280x720 59.94 1280 1390 1430 1650 720 725 730 750 74176 flags:
-phsync, pvsync; type: driver
-  #11 1280x720 50.00 1280 1720 1760 1980 720 725 730 750 74250 flags:
-phsync, pvsync; type: driver
-  #12 1024x768 75.03 1024 1040 1136 1312 768 769 772 800 78750 flags:
-phsync, pvsync; type: driver
-  #13 1024x768 70.07 1024 1048 1184 1328 768 771 777 806 75000 flags:
-nhsync, nvsync; type: driver
-  #14 1024x768 60.00 1024 1048 1184 1344 768 771 777 806 65000 flags:
-nhsync, nvsync; type: driver
-  #15 832x624 74.55 832 864 928 1152 624 625 628 667 57284 flags:
-nhsync, nvsync; type: driver
-  #16 800x600 75.00 800 816 896 1056 600 601 604 625 49500 flags:
-phsync, pvsync; type: driver
-  #17 800x600 72.19 800 856 976 1040 600 637 643 666 50000 flags:
-phsync, pvsync; type: driver
-  #18 800x600 60.32 800 840 968 1056 600 601 605 628 40000 flags:
-phsync, pvsync; type: driver
-  #19 800x600 56.25 800 824 896 1024 600 601 603 625 36000 flags:
-phsync, pvsync; type: driver
-  #20 720x576 50.00 720 732 796 864 576 581 586 625 27000 flags:
-nhsync, nvsync; type: driver
-  #21 720x480 60.00 720 736 798 858 480 489 495 525 27027 flags:
-nhsync, nvsync; type: driver
-  #22 720x480 59.94 720 736 798 858 480 489 495 525 27000 flags:
-nhsync, nvsync; type: driver
-  #23 640x480 75.00 640 656 720 840 480 481 484 500 31500 flags:
-nhsync, nvsync; type: driver
-  #24 640x480 72.81 640 664 704 832 480 489 492 520 31500 flags:
-nhsync, nvsync; type: driver
-  #25 640x480 66.67 640 704 768 864 480 483 486 525 30240 flags:
-nhsync, nvsync; type: driver
-  #26 640x480 60.00 640 656 752 800 480 490 492 525 25200 flags:
-nhsync, nvsync; type: driver
-  #27 640x480 59.94 640 656 752 800 480 490 492 525 25175 flags:
-nhsync, nvsync; type: driver
-  #28 720x400 70.08 720 738 846 900 400 412 414 449 28320 flags:
-nhsync, pvsync; type: driver
-  props:
-1 EDID:
-flags: immutable blob
-blobs:
-
-value:
-00ffffffffffff0005e37928b1000000
-2b190103803e22782a08a5a2574fa228
-0f5054bfef00d1c0b300950081808140
-81c0010101014dd000a0f0703e803020
-35006d552100001aa36600a0f0701f80
-302035006d552100001a000000fc0055
-3238373947360a2020202020000000fd
-0017501e8c3c000a2020202020200114
-020333f14c9004031f1301125d5e5f60
-6123090707830100006d030c00100039
-7820006001020367d85dc401788003e3
-0f000c011d007251d01e206e2855006d
-552100001e8c0ad08a20e02d10103e96
-006d55210000184d6c80a070703e8030
-203a006d552100001aa36600a0f0701f
-80302035006d552100001a00000000ea
-2 DPMS:
-flags: enum
-enums: On=0 Standby=1 Suspend=2 Off=3
-value: 0
-5 link-status:
-flags: enum
-enums: Good=0 Bad=1
-value: 0
-6 non-desktop:
-flags: immutable range
-values: 0 1
-value: 0
-4 TILE:
-flags: immutable blob
-blobs:
-
-value:
-
-CRTCs:
-id fb pos size
-33 37 (0,0) (1920x1080)
-  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-flags: nhsync, nvsync; type: driver
-  props:
-24 VRR_ENABLED:
-flags: range
-values: 0 1
-value: 0
-
-Planes:
-id crtc fb CRTC x,y x,y gamma size possible crtcs
-31 33 37 0,0 0,0 0        0x00000001
-  formats: RG16 XR24
-  props:
-8 type:
-
-flags: immutable enum
-enums: Overlay=0 Primary=1 Cursor=2
-value: 1
-30 IN_FORMATS:
-flags: immutable blob
-blobs:
-
-value:
-01000000000000000200000018000000
-01000000200000005247313658523234
-03000000000000000000000000000000
-0000000000000000
-in_formats blob decoded:
-RG16:  LINEAR
-XR24:  LINEAR
-
-Frame buffers:
-id size pitch
-
-Unfortunately, there is no video in my monitor, and my monitor states
-there is no signal.
-
-If I use NXP's downstream kernel, this same hardware configuration
-works fine and I can see the video.
-
-I have checked the clk_summary, and the working and non-working
-conditions both have clock rates that are the same for DSI, LCDIF and
-related items.  The power domains connected to the lcdif and the dsi
-show they are active.
-
-Since I go no errors, and  Linux looks like it's happy, I was hoping
-someone from who better understands the interconnections between all
-these bridge layers might be able to offer a suggestion of something
-to investigate and/or try.
-
-The kernel repo I am using is from Jagan located here:
-
-[1] - https://github.com/openedev/kernel
-
-I am not convinced it's a device tree issue since I get no errors when
-the drivers enumerate, but I can provide my device tree updates if
-that helps.
-
-adam
+> Thanks,
+> Leo
+>
+> > ```
+> > --- a/tools/perf/util/symbol-elf.c
+> > +++ b/tools/perf/util/symbol-elf.c
+> > @@ -1305,16 +1305,21 @@ dso__load_sym_internal(struct dso *dso, struct
+> > map *map, struct symsrc *syms
+> > _ss,
+> >
+> >                        if (elf_read_program_header(syms_ss->elf,
+> >                                                    (u64)sym.st_value, &phdr)) {
+> > -                               pr_warning("%s: failed to find program
+> > header for "
+> > +                               pr_debug4("%s: failed to find program
+> > header for "
+> >                                           "symbol: %s st_value: %#" PRIx64 "\n",
+> >                                           __func__, elf_name,
+> > (u64)sym.st_value);
+> > -                               continue;
+> > +                               pr_debug4("%s: adjusting symbol:
+> > st_value: %#" PRIx64 " "
+> > +                                       "sh_addr: %#" PRIx64 "
+> > sh_offset: %#" PRIx64 "\n",
+> > +                                       __func__, (u64)sym.st_value,
+> > (u64)shdr.sh_addr,
+> > +                                       (u64)shdr.sh_offset);
+> > +                               sym.st_value -= shdr.sh_addr - shdr.sh_offset;
+> > +                       } else {
+> > +                               pr_debug4("%s: adjusting symbol:
+> > st_value: %#" PRIx64 " "
+> > +                                       "p_vaddr: %#" PRIx64 "
+> > p_offset: %#" PRIx64 "\n",
+> > +                                       __func__, (u64)sym.st_value,
+> > (u64)phdr.p_vaddr,
+> > +                                       (u64)phdr.p_offset);
+> > +                               sym.st_value -= phdr.p_vaddr - phdr.p_offset;
+> >                        }
+> > -                       pr_debug4("%s: adjusting symbol: st_value: %#"
+> > PRIx64 " "
+> > -                                 "p_vaddr: %#" PRIx64 " p_offset: %#"
+> > PRIx64 "\n",
+> > -                                 __func__, (u64)sym.st_value,
+> > (u64)phdr.p_vaddr,
+> > -                                 (u64)phdr.p_offset);
+> > -                       sym.st_value -= phdr.p_vaddr - phdr.p_offset;
+> >                }
+> >
+> >                demangled = demangle_sym(dso, kmodule, elf_name);
+> > ```
+> >
+> > Thanks,
+> > Ian
+> >
+> > >
+> > >                 demangled = demangle_sym(dso, kmodule, elf_name);
+> > > --
+> > > 2.25.1
+> > >

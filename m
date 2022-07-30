@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34139585786
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 02:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D160585792
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 02:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239410AbiG3AQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 20:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S233648AbiG3Akp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 20:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiG3AQG (ORCPT
+        with ESMTP id S231356AbiG3Akk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 20:16:06 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1525175A8;
-        Fri, 29 Jul 2022 17:16:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=s3aSkqR/dYUoO2LIxitiibTrasBdwNm6x5YaSCe1T4c=; b=WeIft9Zo2zESXHly8mhIsLVSGb
-        dbJQYDIHLnES8L5DoSiypKxWusG/dtS3icrixuN9xhE/A2NwJid2XZ8KZ1V9uhv8FI5UCrURGSDZ4
-        gily7+r3epBqZ+DUUpUivY/663gz7QJ2CgOJh6Pjl8c1kV1JquPn9T9ZB/HLwzKbQ5DRSVL+FxETG
-        KCINowQ73vq+HG5ma71zfHBS6dSbLYM3R8P4Pr8dEioZuV5xk5zA+VA/KqqeHWnXB7dPfmaWJqHDM
-        ZfwYkqjwvl16A7k9vKJNbZrncYMNdv/CKocEuuP7eIUq0MfIzd32sVTQV7tNkQnXYU1iOBPHxhEer
-        6qCOLrEQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oHa8v-00HD4Q-PH;
-        Sat, 30 Jul 2022 00:15:45 +0000
-Date:   Sat, 30 Jul 2022 01:15:45 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC][PATCH] fuse: In fuse_flush only wait if someone wants the
- return code
-Message-ID: <YuR4MRL8WxA88il+@ZenIV>
-References: <20220727191949.GD18822@redhat.com>
- <YuGUyayVWDB7R89i@tycho.pizza>
- <20220728091220.GA11207@redhat.com>
- <YuL9uc8WfiYlb2Hw@tycho.pizza>
- <87pmhofr1q.fsf@email.froward.int.ebiederm.org>
- <YuPlqp0jSvVu4WBK@tycho.pizza>
- <87v8rfevz3.fsf@email.froward.int.ebiederm.org>
- <YuQPc51yXhnBHjIx@tycho.pizza>
- <87h72zes14.fsf_-_@email.froward.int.ebiederm.org>
- <20220729204730.GA3625@redhat.com>
+        Fri, 29 Jul 2022 20:40:40 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 17:40:39 PDT
+Received: from alln-iport-3.cisco.com (alln-iport-3.cisco.com [173.37.142.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C99625C73
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 17:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=2106; q=dns/txt; s=iport;
+  t=1659141639; x=1660351239;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QYUIQiqKa5aMGkZG2v4BRtLfqtbRnJ1ee+zluUbrc1c=;
+  b=aSKobH8VmTz0bNouPIuwVSp5Q6IOvPiDm9HdAZAkM/280fS3T8bsVXiw
+   niaIPm8CBY6OI0pIK6jKcMc32JVZnQEp6ZDlaLPP2IkKdW8aIOiNbuF94
+   nz6FQMErGGl/Wdt8vU6rW78LuHv2hnGlUd9pi7ZGzNbsY9YBZ4LycXj3T
+   U=;
+X-IronPort-AV: E=Sophos;i="5.93,202,1654560000"; 
+   d="scan'208";a="916105308"
+Received: from alln-core-8.cisco.com ([173.36.13.141])
+  by alln-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 30 Jul 2022 00:39:36 +0000
+Received: from localhost.localdomain (sjc-balsup-nitro2.cisco.com [10.19.202.195])
+        (authenticated bits=0)
+        by alln-core-8.cisco.com (8.15.2/8.15.2) with ESMTPSA id 26U0dPCQ020109
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 30 Jul 2022 00:39:33 GMT
+From:   Billie Alsup <balsup@cisco.com>
+To:     balsup@cisco.com, linux@armlinux.org.uk, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+        linus.walleij@linaro.org, ardb@kernel.org,
+        rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
+        nick.hawkins@hpe.com, john@phrozen.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Allow configuration of ARCH_NR_GPIO
+Date:   Fri, 29 Jul 2022 17:38:46 -0700
+Message-Id: <20220730003846.1730265-1-balsup@cisco.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729204730.GA3625@redhat.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: balsup@cisco.com
+X-Outbound-SMTP-Client: 10.19.202.195, sjc-balsup-nitro2.cisco.com
+X-Outbound-Node: alln-core-8.cisco.com
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 10:47:32PM +0200, Oleg Nesterov wrote:
-> On 07/29, Eric W. Biederman wrote:
-> >
-> > +static int fuse_flush_async(struct file *file, fl_owner_t id)
-> > +{
-> > +	struct inode *inode = file_inode(file);
-> > +	struct fuse_mount *fm = get_fuse_mount(inode);
-> > +	struct fuse_file *ff = file->private_data;
-> > +	struct fuse_flush_args *fa;
-> > +	int err;
-> > +
-> > +	fa = kzalloc(sizeof(*fa), GFP_KERNEL);
-> > +	if (!fa)
-> > +		return -ENOMEM;
-> > +
-> > +	fa->inarg.fh = ff->fh;
-> > +	fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-> > +	fa->args.opcode = FUSE_FLUSH;
-> > +	fa->args.nodeid = get_node_id(inode);
-> > +	fa->args.in_numargs = 1;
-> > +	fa->args.in_args[0].size = sizeof(fa->inarg);
-> > +	fa->args.in_args[0].value = &fa->inarg;
-> > +	fa->args.force = true;
-> > +	fa->args.end = fuse_flush_end;
-> > +	fa->inode = inode;
-> > +	__iget(inode);
-> 
-> Hmm... who does iput() ?
+From: Billie R Alsup <balsup@cisco.com>
 
-... or holds ->i_lock as expected by __iget()...
+Problem: Some systems support a high number of GPIO pins.  Allow
+the kernel builder to configure the maximum number of pins, rather
+than forcing a large value on everyone.
+
+Impact: Once a .config is generated, the ARCH_NR_GPIO setting
+will persist.  To return to a default setting, the CONFIG_ARCH_NR_GPIO
+must be removed from .config file first.
+
+Trade-offs: It is possible to achieve similar via command line
+parameters, e.g.
+
+    make KBUILD_CFLAGS_KERNEL=-DARCH_NR_GPIOS=16384
+
+to the build. This is problematic because the setting does not
+show up in /proc/config.gz.  It is also problematic for out-of-tree
+module builds, which require similar if they invoke the API
+gpio_is_valid().  In both cases, one could envision one system
+working normally, and another failing, even though they both have
+the same kernel version and /proc/config.gz.  Therefore, it is
+better to have the setting available in .config
+
+Signed-off-by: Billie R Alsup <balsup@cisco.com>
+---
+ arch/arm/Kconfig | 2 +-
+ arch/x86/Kconfig | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 7630ba9cb6cc..7fc6e52d1d3c 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1226,7 +1226,7 @@ config ARM_PSCI
+ # a multiplatform kernel, we just want the highest value required by the
+ # selected platforms.
+ config ARCH_NR_GPIO
+-	int
++	int "Maximum number of GPIOs supported"
+ 	default 2048 if ARCH_INTEL_SOCFPGA
+ 	default 1024 if ARCH_BRCMSTB || ARCH_RENESAS || ARCH_TEGRA || \
+ 		ARCH_ZYNQ || ARCH_ASPEED
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 52a7f91527fe..a59cef517f56 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -347,9 +347,13 @@ config ARCH_HIBERNATION_POSSIBLE
+ 	def_bool y
+ 
+ config ARCH_NR_GPIO
+-	int
++	int "Maximum number of GPIOs supported"
+ 	default 1024 if X86_64
+ 	default 512
++	help
++	  Maximum number of GPIOs in the system.
++
++	  If unsure, leave the default value.
+ 
+ config ARCH_SUSPEND_POSSIBLE
+ 	def_bool y
+-- 
+2.27.0
+

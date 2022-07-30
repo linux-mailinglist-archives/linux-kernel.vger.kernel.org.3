@@ -2,168 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DEF585868
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD8658586A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiG3EPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 00:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S238817AbiG3EQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 00:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiG3EPk (ORCPT
+        with ESMTP id S229464AbiG3EQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 00:15:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32303255BD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659154540; x=1690690540;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OXRl7auwLX8zbgEKcclgRL9NhKxiMIq0itSmlkr58uY=;
-  b=i7eVNCwBpokgcrJbJwEAfe490osZOMoQ3gkKeLZ0uUOCE4GvbMeXF9DG
-   u+VjyIn8Os///LiR4ymVpScRBBARmfufR9sRcJpHvcOPkgddZ8JsVVQYl
-   B37GXIPv98JvMyo32Vc1IgDmGAispWYqLWux1bAG7JcTjntnaxeYqYn6a
-   WNXJJ/2/AVFEcddDwuRSn6NTgQJcV7wWYfWYDG3nnmZrRSJqlqAEIURtT
-   1xYo/EvSSbo398wFNNWCimzfe3q1EAjOKhZgLjaM0cietaPNEUppULpzO
-   AUb8CnRK9JjdsShrtUAyaDO0XTMBFDLNeZwmkeMo2NLOIs9pAguLmlxR3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="269272659"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="269272659"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 21:15:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="727931178"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Jul 2022 21:15:37 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHdt3-000CNx-09;
-        Sat, 30 Jul 2022 04:15:37 +0000
-Date:   Sat, 30 Jul 2022 12:15:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: [ammarfaizi2-block:tglx/devel/depthtracking 55/57]
- kernel/trace/trace_selftest.c:790:6: error: expected string literal in 'asm'
-Message-ID: <202207301202.Ka28efUu-lkp@intel.com>
+        Sat, 30 Jul 2022 00:16:06 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494C7255BD;
+        Fri, 29 Jul 2022 21:16:03 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31f443e276fso67866417b3.1;
+        Fri, 29 Jul 2022 21:16:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fFgeLGDEXPjOLoUZJYNTF+ABbc7/QLMmmIBC+Ua0eXw=;
+        b=mRVQ1C2qSFk38q8RHRGoly5s1xIrOa9l7Ae/vdguNp5Yme5JTZ2fnftV8/Rxp7aFP5
+         sA82Agx5h0BETSUyESNj7E3F7TsEfIcdYCEf0nGEm0/H/RTpWDocEpyoeLyG5yjbHjQb
+         WfLlgiadDQQx/+7ytlBxecyl2JkImTUx7DKUGjH2K9aFOmzSJ5wEw0jYA2DLVkEiquYD
+         cYcx/ngwPEjUw8N847RjlOTSeFvVhNMpKZQOPUTGfGSF2H3wmmMBZUXljZgqJ9QqcT53
+         DVfMkLFDZfrPqXzZhAakPZPK4lU62p4nyS/6zgVTU1BY4GMRTK044V5/LxyRiMeYd1d8
+         i7xw==
+X-Gm-Message-State: ACgBeo1OiycMSEH7ksAP6sME3iXNpiCH9gpOY1/m2iehGmfqa01m57p9
+        Gr7WqpjG1bqkWIAI5qTalYIPFcFFwvd2i66K4y4=
+X-Google-Smtp-Source: AA6agR5t6rI3A3K9sYbRqGT/vLTbTLQr/bzKrf5x7JfThTPsrmentR3RUNcsQOJ+3Ksbu1oMQT/d1tmHbkGkZvvKWyo=
+X-Received: by 2002:a0d:e682:0:b0:322:b5e1:5ed4 with SMTP id
+ p124-20020a0de682000000b00322b5e15ed4mr5561178ywe.220.1659154562409; Fri, 29
+ Jul 2022 21:16:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220729084533.54500-1-mailhol.vincent@wanadoo.fr> <YuQdhaUi0ur4l/zb@google.com>
+In-Reply-To: <YuQdhaUi0ur4l/zb@google.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 30 Jul 2022 13:15:51 +0900
+Message-ID: <CAMZ6RqJUtFDKZj9Wo8EjG3nefwM3RztW00FRwXct-KgFo-HSLw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: do not shadow apic global definition
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
-head:   f6f6bdabacc1d7c5fc82f3e0b1c1f80185332dc4
-commit: a7dde031ed574ce9d7eb18f8d737fdee06edd4d8 [55/57] x86/ftrace: Make it call depth tracking aware
-config: s390-buildonly-randconfig-r005-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301202.Ka28efUu-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/a7dde031ed574ce9d7eb18f8d737fdee06edd4d8
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
-        git checkout a7dde031ed574ce9d7eb18f8d737fdee06edd4d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
+On Sat. 30 Jul. 2022 at 02:48, Sean Christopherson <seanjc@google.com> wrote:
+> On Fri, Jul 29, 2022, Vincent Mailhol wrote:
+> > arch/x86/include/asm/apic.h declares a global variable named `apic'.
+> >
+> > Many function arguments from arch/x86/kvm/lapic.h also uses the same
+> > name and thus shadow the global declaration. For each case of
+> > shadowing, rename the function argument from `apic' to `lapic'.
+> >
+> > This patch silences below -Wshadow warnings:
+>
+> This is just the tip of the iceberg, nearly every KVM x86 .c file has at least one
+> "apic" variable.  arch/x86/kvm/lapic.c alone has nearly 100.  If this were the very
+> last step before a kernel-wide (or even KVM-wide) enabling of -Wshadow then maybe
+> it would be worth doing, but as it stands IMO it's unnecesary churn.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I would say the opposite: in terms of *volume*, warnings from apic.c
+would be the tip of the iceberg and apic.h is the submerged part.
 
-All errors (new ones prefixed by >>):
+When the warning occurs in a header from the include directory, it
+will spam some random files which include such header. This is
+annoying when trying to triage W=2 warnings because you get totally
+unrelated warning (and W=2 has some useful flags such as
+-Wmaybe-uninitialized so there are some insensitive to check it).
 
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/trace.c:53:
-   In file included from kernel/trace/trace.h:9:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from kernel/trace/trace.c:8672:
->> kernel/trace/trace_selftest.c:790:6: error: expected string literal in 'asm'
-           asm(CALL_DEPTH_ACCOUNT);
-               ^
-   12 warnings and 1 error generated.
+My intent is only to silence the headers. I do not really care about
+the -Wshadow on *.c files because it is local.
+
+> What I would really love is to not have the global (and exported!) "apic", but
+> properly solving that, i.e. not just a rename, would require a significant rework.
+
+I double agree. I would also like to rename the global "apic" but I do
+not think this is easily feasible.
 
 
-vim +/asm +790 kernel/trace/trace_selftest.c
-
-   786	
-   787	#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-   788	noinline __noclone static void trace_direct_tramp(void)
-   789	{
- > 790		asm(CALL_DEPTH_ACCOUNT);
-   791	}
-   792	#endif
-   793	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours sincerely,
+Vincent Mailhol

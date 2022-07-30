@@ -2,153 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49B758589A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908F858589D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbiG3E0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 00:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
+        id S233470AbiG3EdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 00:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234072AbiG3E0f (ORCPT
+        with ESMTP id S229991AbiG3EdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 00:26:35 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51567FD3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:26:34 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 141so11084742ybn.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:26:34 -0700 (PDT)
+        Sat, 30 Jul 2022 00:33:01 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E119C14
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:33:01 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id ha11so6385986pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TIooHcxORyJe2cY/zgHgodr2wpa9bd+BACMZC4ZSkew=;
+        b=BVtOc41O7wQuwfgBOGSueaK0EepGoq+9yLcn43+jgZhQAgs8e4LhPNY+Qn80pIQku2
+         CQET0Ykff8yJ3AoEpHGQXIrFrreNwf0s/tk9CPdCa9rtZsCL+YI6Y/Xiutg8f+0gqEu3
+         Zv23lE+nopl2gXfUfy3D3tyXNai4yhyWBt42UpAYvQbRt7ulA7jpkAJiABqsFvIjbJP+
+         Tg17rEenObUBXf61+FXwz3/IjGb46lxn4WNKIJ14vuIwO+/lIjyefPxCYkokx3E13D6D
+         itgBaEb2kPDaWgS0tLipGvFX8rkrttRev6fqVmeIrjWg8l2aA7wJpEswp04818nF2vS5
+         Yj2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gzsdefuadf9H+aE6G/CtU3WmTBAcp2YL8ABvJGwjcew=;
-        b=yzFdn6bauv5da3EBoeXs5JkVt5HMWnnNejbXxH85NjTw/jm163qZO5s6xWK4F7lKAy
-         gPpAjr+Z+ee1rIYepNqeo/DC8EQ3LbeF7E2/iGa/1raCoV0hyyoBq7f9ZMRofHEqzi4m
-         SUNDcjkizmNan97OhSyaCKlQkXox3YJGIskwmZktHlGyhs2lKXC75ZdxCSOi0C64Z//+
-         M8CAv9l6+aquSjPjpCExdKXH5KMzZepzfSH2I49JMP1S3Fm4oEUD2uBtTw9rcFn1tkyS
-         i+YZKpAWaKCcAEmWZNA53x1mTpiQiv1Ix/R2F5Qd3pQKc9nxib/t66zuvcpSICbjCAiW
-         s+Zw==
-X-Gm-Message-State: ACgBeo2RTlJGBM/bfyNXZsiPociWAxcUdXOyXBp9Fs5S4FepBSxRgm/a
-        mVKYQcYOXUgp3i7og3bQHkuwoqHIEgMc44CL9t2MkiUAb4M=
-X-Google-Smtp-Source: AA6agR6VvqFOzqGE3Lu3msGHcg0Y+gMjM66sP2CPciUiF8JyPyOKKuQUk2yBE8xveU9wv/5Q9wdu6N2NETlwSBVUNMs=
-X-Received: by 2002:a25:3789:0:b0:671:6d58:f242 with SMTP id
- e131-20020a253789000000b006716d58f242mr4770892yba.142.1659155193430; Fri, 29
- Jul 2022 21:26:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TIooHcxORyJe2cY/zgHgodr2wpa9bd+BACMZC4ZSkew=;
+        b=WlyLVTgQgv1Tjc6FDQfOz1UhiEc4xSlzu3YyXdCWK1yJDNpM658S3sDXj464+Q1WWg
+         Kbe5JjCF+4nTJcXB6SKCgy5tx/X8TP2nr9k9hT33w6fO0tiyyRNP+6g/MhUYOfhognik
+         Etpl2A/ntFzuNIIMFGmMuL3g0g9ICNr0NmKyV8T9qAmK169cu8HH8uQq5V5D7YkEsHGr
+         gx4+06A+Q1PBgoCsw62msz2NQ23ZVWGz5Z/578aJdc+EY+M3nJ9RCWZ4NymFUtOdeIs/
+         bW5KduZcDBkxGp9iRNL4jGUEsG5N+p0HtVIqsaxGX88bwJwO5QH2/hDnem3x5ZpsPeAH
+         JScg==
+X-Gm-Message-State: ACgBeo3zaIvksP5IHoT+17D2//KhA+cNdW8SXua4BjlAqtbqHoCkNu9A
+        UtcnVCY8U0KusF/CTI4UUi4VSLS2IqBZ6w==
+X-Google-Smtp-Source: AA6agR4XORAEEYLSON+6Yr8y42HYNauBvjO2bc6uPpXKLrpnaKmXUWALuU6zxRb/vpsU0tnocuTfTA==
+X-Received: by 2002:a17:902:e88c:b0:16d:4364:2c37 with SMTP id w12-20020a170902e88c00b0016d43642c37mr6827188plg.69.1659155580613;
+        Fri, 29 Jul 2022 21:33:00 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170902e74900b0016be527753bsm4557865plf.264.2022.07.29.21.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 21:33:00 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 13:32:58 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [stffrdhrn:or1k-virt-5 2/10] arch/x86/kernel/cpu/cyrix.c:277:17:
+ error: 'isa_dma_bridge_buggy' undeclared
+Message-ID: <YuS0euQVO1gc1Vnc@antec>
+References: <202207301158.ldOcpmVn-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220729090307.57905-1-mailhol.vincent@wanadoo.fr>
- <2e3ef1724d1d9acdbbf1a80487891a7f@kernel.org> <CAMZ6RqJbJCQOQVLvBGtfk7PsZeQtJdhhj3HJgiwZtf1XNFHZSA@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJbJCQOQVLvBGtfk7PsZeQtJdhhj3HJgiwZtf1XNFHZSA@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 30 Jul 2022 13:26:21 +0900
-Message-ID: <CAMZ6RqJ+-LA_oTNEqu+Z9jp7DwrbO3zQkbrPUYgdmbBPbMucrQ@mail.gmail.com>
-Subject: Re: [PATCH] irqdomain: do not shadow nr_irqs global definition
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202207301158.ldOcpmVn-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri. 29 Jul. 2022 at 20:12, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Fri. 29 juil. 2022 at 18:16, Marc Zyngier <maz@kernel.org> wrote:
-> > On 2022-07-29 10:03, Vincent Mailhol wrote:
-> > > include/linux/irqnr.h declares a global variable named `nr_irqs'.
-> > >
-> > > The inline function irq_domain_alloc_irqs() from
-> > > include/linux/irqdomain.h also uses the same name and thus shadow the
-> > > global declaration. Rename the function argument from `nr_irqs' to
-> > > `nbr_irqs'.
-> > >
-> > > This patch silences below -Wshadow warning:
-> > >
-> > > | In file included from ./arch/x86/include/asm/irqdomain.h:5,
-> > > |                  from ./arch/x86/include/asm/msi.h:5,
-> > > |                  from ./include/linux/msi.h:23,
-> > > |                  from ./include/linux/kvm_host.h:19,
-> > > |                  from arch/x86/kernel/../kvm/vmx/vmx.h:5,
-> > > |                  from arch/x86/kernel/asm-offsets.c:22:
-> > > | ./include/linux/irqdomain.h: In function 'irq_domain_alloc_irqs':
-> > > | ./include/linux/irqdomain.h:514:38: warning: declaration of
-> > > 'nr_irqs' shadows a global declaration [-Wshadow]
-> > > |   514 |                         unsigned int nr_irqs, int node, void
-> > > *arg)
-> > > |       |                         ~~~~~~~~~~~~~^~~~~~~
-> > > | In file included from ./include/linux/interrupt.h:10,
-> > > |                  from ./include/linux/kernel_stat.h:9,
-> > > |                  from ./include/linux/cgroup.h:26,
-> > > |                  from ./include/linux/memcontrol.h:13,
-> > > |                  from ./include/linux/swap.h:9,
-> > > |                  from ./include/linux/suspend.h:5,
-> > > |                  from arch/x86/kernel/asm-offsets.c:13:
-> > > | ./include/linux/irqnr.h:8:12: note: shadowed declaration is here
-> > > |     8 | extern int nr_irqs;
-> > > |       |            ^~~~~~~
-> > >
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > ---
-> > >  include/linux/irqdomain.h | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
-> > > index 00d577f90883..76949bb029b0 100644
-> > > --- a/include/linux/irqdomain.h
-> > > +++ b/include/linux/irqdomain.h
-> > > @@ -511,9 +511,9 @@ extern int irq_domain_activate_irq(struct irq_data
-> > > *irq_data, bool early);
-> > >  extern void irq_domain_deactivate_irq(struct irq_data *irq_data);
-> > >
-> > >  static inline int irq_domain_alloc_irqs(struct irq_domain *domain,
-> > > -                     unsigned int nr_irqs, int node, void *arg)
-> > > +                                     unsigned int nbr_irqs, int node, void *arg)
-> > >  {
-> > > -     return __irq_domain_alloc_irqs(domain, -1, nr_irqs, node, arg, false,
-> > > +     return __irq_domain_alloc_irqs(domain, -1, nbr_irqs, node, arg,
-> > > false,
-> > >                                      NULL);
-> > >  }
-> >
-> > I really don't think this is worth it. A function has its
-> > own namespace, and this warning is on the long list of
-> > "this is completely silly". Case in point:
-> >
-> > $ git grep 'unsigned int nr_irqs'| wc -l
-> > 207
-> >
-> > Is anything broken? Not as far as I can tell.
->
-> Nothing is broken, my only concern is that this occurs in a header
-> file and thus the warning will pop up in random files which include
-> this header.
->
-> | git grep "unsigned int nr_irqs" include/ arch/*/include | wc -l
-> | 17
-> (and all static inline function which trigger the warning are from
-> linux/irqdomain.h)
->
-> Time to time, I check the W=2 output and spam from the headers makes
-> it annoying to triage. I absolutely do not care of shadowing
-> everywhere else outside of the includes directory.
->
-> > If there was anything to fix, it is the top-level definition
-> > that should be more indicative of its global status. But again,
-> > there is nothing broken so far.
->
-> This is also feasible, but it will become a tree-wide patch. And I am
-> quite certain that it will be NACKed right away, so I will not try
-> this alternate solution.
+On Sat, Jul 30, 2022 at 11:54:41AM +0800, kernel test robot wrote:
+> tree:   https://github.com/stffrdhrn/linux.git or1k-virt-5
+> head:   2e5ced6dd3319303f0d6760a46e8b35e985c86b5
+> commit: db5cc35daef410a8a51d7c2e66d34195b82dcb50 [2/10] PCI: Move isa_dma_bridge_buggy out of dma.h
+> config: i386-randconfig-a014-20210930 (https://download.01.org/0day-ci/archive/20220730/202207301158.ldOcpmVn-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/stffrdhrn/linux/commit/db5cc35daef410a8a51d7c2e66d34195b82dcb50
+>         git remote add stffrdhrn https://github.com/stffrdhrn/linux.git
+>         git fetch --no-tags stffrdhrn or1k-virt-5
+>         git checkout db5cc35daef410a8a51d7c2e66d34195b82dcb50
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    arch/x86/kernel/cpu/cyrix.c: In function 'init_cyrix':
+> >> arch/x86/kernel/cpu/cyrix.c:277:17: error: 'isa_dma_bridge_buggy' undeclared (first use in this function)
+>      277 |                 isa_dma_bridge_buggy = 2;
+>          |                 ^~~~~~~~~~~~~~~~~~~~
+>    arch/x86/kernel/cpu/cyrix.c:277:17: note: each undeclared identifier is reported only once for each function it appears in
 
-To add some figures, on a "make allyesconfig" (linux-next branch,
-x86_64 build, gcc 12), there are in total 36005 -Wshadow and
-irqdomain.h accounts for 7094 of all these (i.e. this patch suppresses
-roughly one fifth of all -Wshadow warnings tree wide).
+I don't have the fix on the branch but this is fixed on the branch
+'pci/header-cleanup-immutable' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
 
+After the patches went into the PCI branch.
 
-Yours sincerely,
-Vincent Mailhol
+-Stafford

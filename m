@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D92585849
+	by mail.lfdr.de (Postfix) with ESMTP id 1D43F585847
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbiG3DeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 23:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S239932AbiG3DeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 23:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239714AbiG3DeD (ORCPT
+        with ESMTP id S239772AbiG3DeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 23:34:03 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94C86BD62
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:34:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id iw1so6121639plb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:34:02 -0700 (PDT)
+        Fri, 29 Jul 2022 23:34:15 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125BCEE2C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:34:14 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id w7so6097338ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=2Kumxoqs7AvCSJdhNcNxhF7BApmJfZRgV7qFRKrYcUE=;
-        b=hmXTRIA69MzhV74YEMUufK9wSgn3Edu17dSLeKTg60rUDBDPGw6WDGkCvrU6HA3Phg
-         gwajv/4uoyfPPZBsuwBW65VfdQyl9GAzy4Tanf/VmpXhMkcbpOz1Dfdhosx2FhSvPHBt
-         gjfdZ4ocXiyrsJIdgZ+uETLcucHUV7+GRTQXidxxFQQ79VI9yrBhwe4K3ZOwidKYppjH
-         leYx+zMrJsnt5F47O9SAoWd6XDgVsUkOUzUvsH2FK+9rvv9GdDeeDX9AZ9LKOQwWqSNV
-         knB/4dzKRtJyeJe4pqfwjy8gY/j/OqJwdgS8mtwuuKny/xLLw7IBz2UPOH76pC3rHuZk
-         mtlQ==
+         :message-id:date:subject:to:from:from:to:cc;
+        bh=qfp9FIRO2MT4/LBeOtSTUDAhXRBeZOjBM35FZKBzNM8=;
+        b=CxzJxM0SOi9lCYU129tpm0k5nmueVKzspaLrLmYUNwc1QlCzdoPhkyCIo5csqtHFAm
+         bs68KlpFH5N9lT6o7v4tQ49Xv6uEP/8ZjmbamdCrUf+RBro6i2f+sF4y9fnSqSE4m1rS
+         25rN8dKpJEyKrzCcz9G8ui3WBOpBI9dRhEftlS/ZFT6jgu1/ZjjZdwkpHAiVhyjUGfPZ
+         fsWsaj9qJ6ezxoav+NDFpz0NS/TLbu4wTR34DupwvCdbFRUJDq65BOwfKCn8NWcwagUw
+         BNVVqkGtJz/AMWVkXjF/v3LCDBvo96kb0tl9Hz337eWC51mmxZ1kQsSY6siXypaLC1JF
+         U8Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=2Kumxoqs7AvCSJdhNcNxhF7BApmJfZRgV7qFRKrYcUE=;
-        b=Jr9i8cSx6Xn0AGpwLf3iUY7KGAPBHXkwQhrgjtxkHkfVZiHn+f9k0FqcHahzcNsnJg
-         Q21wQPbJBa1JNz2c2FfIiJnTgFUTTkwLpUnk2dN8qGDIiYtHimWqnfazXaCPs+j/y1Og
-         eP/2Ii37MwHIcqX9mv+TAwJ3geposjenPWP50giEIWXZoFucxLZBhV2qKRI3TP6DAash
-         MhKEUZlKVi+CcPdyvoPd7FLR5XatUgQRGPVzHt85wFCRKMMpddJRaxBaIeQurHfBbKx6
-         o6wJMPxVH52pp3dQbXrz55emxBB417PMRVNaGb8WOYkkdgWU6z+qoJ/cGmiO/r4s/m2p
-         UC3g==
-X-Gm-Message-State: ACgBeo0PjF3zO/2Va5jDsGcd8bTCujgMYukF+fhN8oSjtGCE1Kjoj5ap
-        JamoZ/PkTLWLqPwIeyhoInE=
-X-Google-Smtp-Source: AA6agR6wabXPHPGmRpggvNsopcw/KJSlTV4qOHdg3UtL38sXWVKODrDtwk6vWpe4OJxwQo4NQelRTA==
-X-Received: by 2002:a17:90b:4b4f:b0:1f3:19ed:37b5 with SMTP id mi15-20020a17090b4b4f00b001f319ed37b5mr7913275pjb.108.1659152042180;
-        Fri, 29 Jul 2022 20:34:02 -0700 (PDT)
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc;
+        bh=qfp9FIRO2MT4/LBeOtSTUDAhXRBeZOjBM35FZKBzNM8=;
+        b=X2WT0lKt8fDYANxPVFO3mg1uUy7bmCo4xXJ097LExW5gv/KO9dVQ9r65gQuCbBGdaO
+         1wTYlHvkYD643ACxu73Jqgx+b259xeVZnymqDjW52rr4UzMShQrU2z7FSP4k/BIk2KBg
+         ILzLtIyn8rh/I7lHZW0NCllFULgWkMMKqAjDl0UH3acNo6JtVHIwx12klJ0/Hr6KNlJB
+         XzaJIfamB05HRpnEf7uWqav4uAqowp5jP6eqcJM/P5sVvDQOFG3n/OX809vVgXrrKnjL
+         ARG2zs2zETkqO9YBau3u8JRDE5s9KhzGP/r++GvmZ39+BaOxwxCvnLvewfxQg8mLK8r/
+         mr1g==
+X-Gm-Message-State: ACgBeo1U8/PBxwXkj08KGVpi5189Dcu0FvSgbYCk91OjuD6IXgu2Xz7p
+        g7/9H/qnVT5M9IDfkUhCgRk=
+X-Google-Smtp-Source: AA6agR5HspSEAcTvYhJn2VU8byqHAvXQX3aXUFwlQvRswXzR7+3Mf1DaAg1Hn4AzsqJywfVLvCY6Ug==
+X-Received: by 2002:a17:90b:4d88:b0:1f3:34aa:9167 with SMTP id oj8-20020a17090b4d8800b001f334aa9167mr6447950pjb.133.1659152053308;
+        Fri, 29 Jul 2022 20:34:13 -0700 (PDT)
 Received: from tong-desktop.local ([2600:1700:3ec7:421f:f0d:9a23:40c8:9423])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a170902f54300b0016a3248376esm4441555plf.181.2022.07.29.20.34.00
+        by smtp.googlemail.com with ESMTPSA id h3-20020a170902f54300b0016a3248376esm4441555plf.181.2022.07.29.20.34.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 20:34:01 -0700 (PDT)
+        Fri, 29 Jul 2022 20:34:13 -0700 (PDT)
 From:   Tong Zhang <ztong0001@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tong Zhang <ztong0001@gmail.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Colin Ian King <colin.king@intel.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev
-Cc:     Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH v4 0/4] staging: rtl8192u: fix rmmod warn when device is renamed
-Date:   Fri, 29 Jul 2022 20:33:20 -0700
-Message-Id: <20220730033335.74153-1-ztong0001@gmail.com>
+Subject: [PATCH v4 1/4] staging: rtl8192u: move debug stuff to its own file
+Date:   Fri, 29 Jul 2022 20:33:21 -0700
+Message-Id: <20220730033335.74153-2-ztong0001@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <YuOLybUZ8cBWntY/@kroah.com>
 References: <YuOLybUZ8cBWntY/@kroah.com>
@@ -77,50 +76,409 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 4 debug files created under /proc/net/[Devname] by
-rtl8192u_usb. Devname could be wlan0 initially, however it could be
-renamed later to e.g. enx00e04c000002. This will cause problem during
-debug file teardown since it uses netdev->name which is no longer wlan0.
-To solve this problem, add a notifier to handle device renaming.
+This is to prepare for moving them to debugfs and fix rmmod warn issue
+when wlan0 is renamed to something else.
 
-Also, due to this is purely for debuging as files are created read only,
-move this to debugfs like other NIC drivers do instead of using procfs.
-
-The directory structure after this patch set will be like the following
-
-  /sys/kernel/debug/r8192u_usb/wlan0/stats-rx
-  /sys/kernel/debug/r8192u_usb/wlan0/stats-rx
-  /sys/kernel/debug/r8192u_usb/wlan0/stats-ap
-  /sys/kernel/debug/r8192u_usb/wlan0/registers
-
-Also note that we cannot simply do debugfs_lookup to find out old dentry
-since by the time the notifier is called, netdev->name is already changed
-to new name. So here we still save the original dentry.
-
-
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
 Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ drivers/staging/rtl8192u/Makefile        |   1 +
+ drivers/staging/rtl8192u/r8192U.h        |   4 +
+ drivers/staging/rtl8192u/r8192U_core.c   | 173 ----------------------
+ drivers/staging/rtl8192u/r8192U_procfs.c | 175 +++++++++++++++++++++++
+ 4 files changed, 180 insertions(+), 173 deletions(-)
+ create mode 100644 drivers/staging/rtl8192u/r8192U_procfs.c
 
-v2: break down patch and fix pointer check
-v3: removed unnecessary checks, casts and move debug files under module's
-own directory, only minor change compared to v2
-v4: move cast fix to one commit. use KBUILD_MODNAME for debugfs dir name
-
-Tong Zhang (4):
-  staging: rtl8192u: move debug stuff to its own file
-  staging: rtl8192u: remove unnecessary cast
-  staging: rtl8192u: move debug files to debugfs
-  staging: rtl8192u: fix rmmod warn when device is renamed
-
- drivers/staging/rtl8192u/Makefile         |   1 +
- drivers/staging/rtl8192u/r8192U.h         |   9 +
- drivers/staging/rtl8192u/r8192U_core.c    | 226 ++++------------------
- drivers/staging/rtl8192u/r8192U_debugfs.c | 188 ++++++++++++++++++
- 4 files changed, 241 insertions(+), 183 deletions(-)
- create mode 100644 drivers/staging/rtl8192u/r8192U_debugfs.c
-
+diff --git a/drivers/staging/rtl8192u/Makefile b/drivers/staging/rtl8192u/Makefile
+index 0be7426b6ebc..5aef46cc90ef 100644
+--- a/drivers/staging/rtl8192u/Makefile
++++ b/drivers/staging/rtl8192u/Makefile
+@@ -8,6 +8,7 @@ ccflags-y += -DTHOMAS_BEACON -DTHOMAS_TASKLET -DTHOMAS_SKB -DTHOMAS_TURBO
+ r8192u_usb-y := r8192U_core.o r8180_93cx6.o r8192U_wx.o		\
+ 		  r8190_rtl8256.o r819xU_phy.o r819xU_firmware.o	\
+ 		  r819xU_cmdpkt.o r8192U_dm.o r819xU_firmware_img.o	\
++		  r8192U_procfs.o					\
+ 		  ieee80211/ieee80211_crypt.o				\
+ 		  ieee80211/ieee80211_crypt_tkip.o			\
+ 		  ieee80211/ieee80211_crypt_ccmp.o			\
+diff --git a/drivers/staging/rtl8192u/r8192U.h b/drivers/staging/rtl8192u/r8192U.h
+index 14ca00a2789b..e8b6da2adc4d 100644
+--- a/drivers/staging/rtl8192u/r8192U.h
++++ b/drivers/staging/rtl8192u/r8192U.h
+@@ -1117,4 +1117,8 @@ void EnableHWSecurityConfig8192(struct net_device *dev);
+ void setKey(struct net_device *dev, u8 EntryNo, u8 KeyIndex, u16 KeyType,
+ 	    const u8 *MacAddr, u8 DefaultKey, u32 *KeyContent);
+ 
++void rtl8192_proc_module_init(void);
++void rtl8192_proc_init_one(struct net_device *dev);
++void rtl8192_proc_remove_one(struct net_device *dev);
++
+ #endif
+diff --git a/drivers/staging/rtl8192u/r8192U_core.c b/drivers/staging/rtl8192u/r8192U_core.c
+index 2ca925f35830..9e0861fdc64e 100644
+--- a/drivers/staging/rtl8192u/r8192U_core.c
++++ b/drivers/staging/rtl8192u/r8192U_core.c
+@@ -452,179 +452,6 @@ static struct net_device_stats *rtl8192_stats(struct net_device *dev);
+ static void rtl8192_restart(struct work_struct *work);
+ static void watch_dog_timer_callback(struct timer_list *t);
+ 
+-/****************************************************************************
+- *   -----------------------------PROCFS STUFF-------------------------
+- ****************************************************************************/
+-
+-static struct proc_dir_entry *rtl8192_proc;
+-
+-static int __maybe_unused proc_get_stats_ap(struct seq_file *m, void *v)
+-{
+-	struct net_device *dev = m->private;
+-	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
+-	struct ieee80211_device *ieee = priv->ieee80211;
+-	struct ieee80211_network *target;
+-
+-	list_for_each_entry(target, &ieee->network_list, list) {
+-		const char *wpa = "non_WPA";
+-
+-		if (target->wpa_ie_len > 0 || target->rsn_ie_len > 0)
+-			wpa = "WPA";
+-
+-		seq_printf(m, "%s %s\n", target->ssid, wpa);
+-	}
+-
+-	return 0;
+-}
+-
+-static int __maybe_unused proc_get_registers(struct seq_file *m, void *v)
+-{
+-	struct net_device *dev = m->private;
+-	int i, n, max = 0xff;
+-	u8 byte_rd;
+-
+-	seq_puts(m, "\n####################page 0##################\n ");
+-
+-	for (n = 0; n <= max;) {
+-		seq_printf(m, "\nD:  %2x > ", n);
+-
+-		for (i = 0; i < 16 && n <= max; i++, n++) {
+-			read_nic_byte(dev, 0x000 | n, &byte_rd);
+-			seq_printf(m, "%2x ", byte_rd);
+-		}
+-	}
+-
+-	seq_puts(m, "\n####################page 1##################\n ");
+-	for (n = 0; n <= max;) {
+-		seq_printf(m, "\nD:  %2x > ", n);
+-
+-		for (i = 0; i < 16 && n <= max; i++, n++) {
+-			read_nic_byte(dev, 0x100 | n, &byte_rd);
+-			seq_printf(m, "%2x ", byte_rd);
+-		}
+-	}
+-
+-	seq_puts(m, "\n####################page 3##################\n ");
+-	for (n = 0; n <= max;) {
+-		seq_printf(m, "\nD:  %2x > ", n);
+-
+-		for (i = 0; i < 16 && n <= max; i++, n++) {
+-			read_nic_byte(dev, 0x300 | n, &byte_rd);
+-			seq_printf(m, "%2x ", byte_rd);
+-		}
+-	}
+-
+-	seq_putc(m, '\n');
+-	return 0;
+-}
+-
+-static int __maybe_unused proc_get_stats_tx(struct seq_file *m, void *v)
+-{
+-	struct net_device *dev = m->private;
+-	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
+-
+-	seq_printf(m,
+-		   "TX VI priority ok int: %lu\n"
+-		   "TX VI priority error int: %lu\n"
+-		   "TX VO priority ok int: %lu\n"
+-		   "TX VO priority error int: %lu\n"
+-		   "TX BE priority ok int: %lu\n"
+-		   "TX BE priority error int: %lu\n"
+-		   "TX BK priority ok int: %lu\n"
+-		   "TX BK priority error int: %lu\n"
+-		   "TX MANAGE priority ok int: %lu\n"
+-		   "TX MANAGE priority error int: %lu\n"
+-		   "TX BEACON priority ok int: %lu\n"
+-		   "TX BEACON priority error int: %lu\n"
+-		   "TX queue resume: %lu\n"
+-		   "TX queue stopped?: %d\n"
+-		   "TX fifo overflow: %lu\n"
+-		   "TX VI queue: %d\n"
+-		   "TX VO queue: %d\n"
+-		   "TX BE queue: %d\n"
+-		   "TX BK queue: %d\n"
+-		   "TX VI dropped: %lu\n"
+-		   "TX VO dropped: %lu\n"
+-		   "TX BE dropped: %lu\n"
+-		   "TX BK dropped: %lu\n"
+-		   "TX total data packets %lu\n",
+-		   priv->stats.txviokint,
+-		   priv->stats.txvierr,
+-		   priv->stats.txvookint,
+-		   priv->stats.txvoerr,
+-		   priv->stats.txbeokint,
+-		   priv->stats.txbeerr,
+-		   priv->stats.txbkokint,
+-		   priv->stats.txbkerr,
+-		   priv->stats.txmanageokint,
+-		   priv->stats.txmanageerr,
+-		   priv->stats.txbeaconokint,
+-		   priv->stats.txbeaconerr,
+-		   priv->stats.txresumed,
+-		   netif_queue_stopped(dev),
+-		   priv->stats.txoverflow,
+-		   atomic_read(&(priv->tx_pending[VI_PRIORITY])),
+-		   atomic_read(&(priv->tx_pending[VO_PRIORITY])),
+-		   atomic_read(&(priv->tx_pending[BE_PRIORITY])),
+-		   atomic_read(&(priv->tx_pending[BK_PRIORITY])),
+-		   priv->stats.txvidrop,
+-		   priv->stats.txvodrop,
+-		   priv->stats.txbedrop,
+-		   priv->stats.txbkdrop,
+-		   priv->stats.txdatapkt
+-		);
+-
+-	return 0;
+-}
+-
+-static int __maybe_unused proc_get_stats_rx(struct seq_file *m, void *v)
+-{
+-	struct net_device *dev = m->private;
+-	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
+-
+-	seq_printf(m,
+-		   "RX packets: %lu\n"
+-		   "RX urb status error: %lu\n"
+-		   "RX invalid urb error: %lu\n",
+-		   priv->stats.rxoktotal,
+-		   priv->stats.rxstaterr,
+-		   priv->stats.rxurberr);
+-
+-	return 0;
+-}
+-
+-static void rtl8192_proc_module_init(void)
+-{
+-	RT_TRACE(COMP_INIT, "Initializing proc filesystem");
+-	rtl8192_proc = proc_mkdir(RTL819XU_MODULE_NAME, init_net.proc_net);
+-}
+-
+-static void rtl8192_proc_init_one(struct net_device *dev)
+-{
+-	struct proc_dir_entry *dir;
+-
+-	if (!rtl8192_proc)
+-		return;
+-
+-	dir = proc_mkdir_data(dev->name, 0, rtl8192_proc, dev);
+-	if (!dir)
+-		return;
+-
+-	proc_create_single("stats-rx", S_IFREG | 0444, dir,
+-			   proc_get_stats_rx);
+-	proc_create_single("stats-tx", S_IFREG | 0444, dir,
+-			   proc_get_stats_tx);
+-	proc_create_single("stats-ap", S_IFREG | 0444, dir,
+-			   proc_get_stats_ap);
+-	proc_create_single("registers", S_IFREG | 0444, dir,
+-			   proc_get_registers);
+-}
+-
+-static void rtl8192_proc_remove_one(struct net_device *dev)
+-{
+-	remove_proc_subtree(dev->name, rtl8192_proc);
+-}
+-
+ /****************************************************************************
+  *  -----------------------------MISC STUFF-------------------------
+  *****************************************************************************/
+diff --git a/drivers/staging/rtl8192u/r8192U_procfs.c b/drivers/staging/rtl8192u/r8192U_procfs.c
+new file mode 100644
+index 000000000000..69cbafceecfe
+--- /dev/null
++++ b/drivers/staging/rtl8192u/r8192U_procfs.c
+@@ -0,0 +1,175 @@
++// SPDX-License-Identifier: GPL-2.0
++/****************************************************************************
++ *   -----------------------------PROCFS STUFF-------------------------
++ ****************************************************************************/
++#include <linux/proc_fs.h>
++#include <linux/seq_file.h>
++#include "r8192U.h"
++
++static struct proc_dir_entry *rtl8192_proc;
++static int __maybe_unused proc_get_stats_ap(struct seq_file *m, void *v)
++{
++	struct net_device *dev = m->private;
++	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
++	struct ieee80211_device *ieee = priv->ieee80211;
++	struct ieee80211_network *target;
++
++	list_for_each_entry(target, &ieee->network_list, list) {
++		const char *wpa = "non_WPA";
++
++		if (target->wpa_ie_len > 0 || target->rsn_ie_len > 0)
++			wpa = "WPA";
++
++		seq_printf(m, "%s %s\n", target->ssid, wpa);
++	}
++
++	return 0;
++}
++
++static int __maybe_unused proc_get_registers(struct seq_file *m, void *v)
++{
++	struct net_device *dev = m->private;
++	int i, n, max = 0xff;
++	u8 byte_rd;
++
++	seq_puts(m, "\n####################page 0##################\n ");
++
++	for (n = 0; n <= max;) {
++		seq_printf(m, "\nD:  %2x > ", n);
++
++		for (i = 0; i < 16 && n <= max; i++, n++) {
++			read_nic_byte(dev, 0x000 | n, &byte_rd);
++			seq_printf(m, "%2x ", byte_rd);
++		}
++	}
++
++	seq_puts(m, "\n####################page 1##################\n ");
++	for (n = 0; n <= max;) {
++		seq_printf(m, "\nD:  %2x > ", n);
++
++		for (i = 0; i < 16 && n <= max; i++, n++) {
++			read_nic_byte(dev, 0x100 | n, &byte_rd);
++			seq_printf(m, "%2x ", byte_rd);
++		}
++	}
++
++	seq_puts(m, "\n####################page 3##################\n ");
++	for (n = 0; n <= max;) {
++		seq_printf(m, "\nD:  %2x > ", n);
++
++		for (i = 0; i < 16 && n <= max; i++, n++) {
++			read_nic_byte(dev, 0x300 | n, &byte_rd);
++			seq_printf(m, "%2x ", byte_rd);
++		}
++	}
++
++	seq_putc(m, '\n');
++	return 0;
++}
++
++static int __maybe_unused proc_get_stats_tx(struct seq_file *m, void *v)
++{
++	struct net_device *dev = m->private;
++	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
++
++	seq_printf(m,
++		   "TX VI priority ok int: %lu\n"
++		   "TX VI priority error int: %lu\n"
++		   "TX VO priority ok int: %lu\n"
++		   "TX VO priority error int: %lu\n"
++		   "TX BE priority ok int: %lu\n"
++		   "TX BE priority error int: %lu\n"
++		   "TX BK priority ok int: %lu\n"
++		   "TX BK priority error int: %lu\n"
++		   "TX MANAGE priority ok int: %lu\n"
++		   "TX MANAGE priority error int: %lu\n"
++		   "TX BEACON priority ok int: %lu\n"
++		   "TX BEACON priority error int: %lu\n"
++		   "TX queue resume: %lu\n"
++		   "TX queue stopped?: %d\n"
++		   "TX fifo overflow: %lu\n"
++		   "TX VI queue: %d\n"
++		   "TX VO queue: %d\n"
++		   "TX BE queue: %d\n"
++		   "TX BK queue: %d\n"
++		   "TX VI dropped: %lu\n"
++		   "TX VO dropped: %lu\n"
++		   "TX BE dropped: %lu\n"
++		   "TX BK dropped: %lu\n"
++		   "TX total data packets %lu\n",
++		   priv->stats.txviokint,
++		   priv->stats.txvierr,
++		   priv->stats.txvookint,
++		   priv->stats.txvoerr,
++		   priv->stats.txbeokint,
++		   priv->stats.txbeerr,
++		   priv->stats.txbkokint,
++		   priv->stats.txbkerr,
++		   priv->stats.txmanageokint,
++		   priv->stats.txmanageerr,
++		   priv->stats.txbeaconokint,
++		   priv->stats.txbeaconerr,
++		   priv->stats.txresumed,
++		   netif_queue_stopped(dev),
++		   priv->stats.txoverflow,
++		   atomic_read(&(priv->tx_pending[VI_PRIORITY])),
++		   atomic_read(&(priv->tx_pending[VO_PRIORITY])),
++		   atomic_read(&(priv->tx_pending[BE_PRIORITY])),
++		   atomic_read(&(priv->tx_pending[BK_PRIORITY])),
++		   priv->stats.txvidrop,
++		   priv->stats.txvodrop,
++		   priv->stats.txbedrop,
++		   priv->stats.txbkdrop,
++		   priv->stats.txdatapkt
++		);
++
++	return 0;
++}
++
++static int __maybe_unused proc_get_stats_rx(struct seq_file *m, void *v)
++{
++	struct net_device *dev = m->private;
++	struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
++
++	seq_printf(m,
++		   "RX packets: %lu\n"
++		   "RX urb status error: %lu\n"
++		   "RX invalid urb error: %lu\n",
++		   priv->stats.rxoktotal,
++		   priv->stats.rxstaterr,
++		   priv->stats.rxurberr);
++
++	return 0;
++}
++
++void rtl8192_proc_module_init(void)
++{
++	RT_TRACE(COMP_INIT, "Initializing proc filesystem");
++	rtl8192_proc = proc_mkdir(RTL819XU_MODULE_NAME, init_net.proc_net);
++}
++
++void rtl8192_proc_init_one(struct net_device *dev)
++{
++	struct proc_dir_entry *dir;
++
++	if (!rtl8192_proc)
++		return;
++
++	dir = proc_mkdir_data(dev->name, 0, rtl8192_proc, dev);
++	if (!dir)
++		return;
++
++	proc_create_single("stats-rx", S_IFREG | 0444, dir,
++			   proc_get_stats_rx);
++	proc_create_single("stats-tx", S_IFREG | 0444, dir,
++			   proc_get_stats_tx);
++	proc_create_single("stats-ap", S_IFREG | 0444, dir,
++			   proc_get_stats_ap);
++	proc_create_single("registers", S_IFREG | 0444, dir,
++			   proc_get_registers);
++}
++
++void rtl8192_proc_remove_one(struct net_device *dev)
++{
++	remove_proc_subtree(dev->name, rtl8192_proc);
++}
 -- 
 2.25.1
 

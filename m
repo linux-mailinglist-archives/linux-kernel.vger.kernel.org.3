@@ -2,412 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61AC585822
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EC1585824
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239627AbiG3C7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 22:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S239734AbiG3DDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 23:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiG3C7M (ORCPT
+        with ESMTP id S230251AbiG3DDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 22:59:12 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B04481C3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:59:11 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id n13so3260853ilk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=55oLKkrP2swszPcawjd+fMgoHyAw1rVMal6LHnUSDsI=;
-        b=XAvlD61DjhYtCUw9NxYZDJ/2pzRCY5K8wCsrwQxRyPVE/EjMW6WU/xv9wI6+dUs7Me
-         LIwQJMCKXrskXg+QMVM19HfUqjqkZblOn0FJxyJhI85Rfo9CX6j17sRFv86eCRyMPHk8
-         pgvoyERlAOqptdhZHFUKF9SXhBlKtq0w8MAgM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=55oLKkrP2swszPcawjd+fMgoHyAw1rVMal6LHnUSDsI=;
-        b=LyyvJd24ygbcz55W6uR6fqdb2V99sEEkc8l8dDgtt3e+mg3vLDVWdlHwH8GIRnfzTz
-         nVLkgwG4WMDxEldyUlCW86qkKc0TCaUO9H0NwTnG2bvpn8FOtOq+CyQIFk7CsLGdG5zq
-         0VpBCM/UTrnSMtgZgPhT7/i5zRha+PTjCQbqjuGVZ6Wrbwjhj4cVFOD8co8saK3OPKSH
-         2MxCRp6Leh+rH7QSeSgWDRteOsKxgKwt8m91SRW6JbQiHIUhADSym81UdFHZ73GckDeq
-         5z1lWahi9tPqWOPvp8Yj2fn6FUpXPGNWDUsE1DNQ0v3hAm1tSa8/1X/d41JV5R2b03iN
-         j0ow==
-X-Gm-Message-State: AJIora944NJrL52Xeji4WKzsnjSSDTEnIEwLjp+A9fkgztJzDJyIcWLu
-        Bd9SGDBrfUFA+OA0/8CJC6CAl6kkEeftFw==
-X-Google-Smtp-Source: AGRyM1uglNE8+LFJmCQH5EMmltEry1RnzBxQTb3ldIVgBm/lunf9WPyBHJaig4Nu2lnSzV1e84Evng==
-X-Received: by 2002:a05:6e02:1b8f:b0:2dd:8f33:d8d6 with SMTP id h15-20020a056e021b8f00b002dd8f33d8d6mr2411272ili.81.1659149950378;
-        Fri, 29 Jul 2022 19:59:10 -0700 (PDT)
-Received: from jrosenth45.corp.google.com ([2601:285:8300:c23:c82a:e170:891f:5bf])
-        by smtp.gmail.com with ESMTPSA id v18-20020a056e020f9200b002dbfcfa3233sm2166420ilo.37.2022.07.29.19.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 19:59:09 -0700 (PDT)
-From:   Jack Rosenthal <jrosenth@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc:     Jack Rosenthal <jrosenth@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Julius Werner <jwerner@chromium.org>
-Subject: [PATCH v4] firmware: google: Implement cbmem in sysfs driver
-Date:   Fri, 29 Jul 2022 20:58:40 -0600
-Message-Id: <20220730025840.2624795-1-jrosenth@chromium.org>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-In-Reply-To: <CAODwPW-JzXXsEANaS+6n695YqriAQ0j0LXm31R2u1OP3MhX9Uw@mail.gmail.com>
-References: <CAODwPW-JzXXsEANaS+6n695YqriAQ0j0LXm31R2u1OP3MhX9Uw@mail.gmail.com>
+        Fri, 29 Jul 2022 23:03:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930EE25C6D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659150220; x=1690686220;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yWLJrWfiYOhP2GrDM/RfY8uWpLUU1KeC3w9W08D9/Mk=;
+  b=UFPg3Ng2thKGKYmOVUXsYTxU1cRd92KJzrRWmkowzxthBlrQJnmPc8MH
+   ZZiVrlnY43pSbHb8h2g3YPhdO6WyKJWVajReSzJkkcg1o74QBP/0b1+UK
+   1Dn/194xL3/TeJtYBK0HxYr5MjfXVNTPaMvmmK3+LrVX+3y8qPEUnKT4x
+   0335x3IKWzMjHn4HNVNWgy8rLMgMFTk9NIJ9L7zdzyHwHw6ODHbtyUvCp
+   KHuvYwswlt0nIsGvT93daZZj0tCsgIzQs49S7MeD9rzxaBlbiLRh/l+re
+   2Fo9JICgRxiK/UCH3VPCpmhr3VFGZZZe5ll029bkLZdLdhD5Pvu2sMIBf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="268653211"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="268653211"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 20:03:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="704389955"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 29 Jul 2022 20:03:35 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHclK-000CJh-1P;
+        Sat, 30 Jul 2022 03:03:34 +0000
+Date:   Sat, 30 Jul 2022 11:03:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 22/35] drm/vc4: vec: Use TV Reset implementation
+Message-ID: <202207301024.h3rifgQO-lkp@intel.com>
+References: <20220728-rpi-analog-tv-properties-v1-22-3d53ae722097@cerno.tech>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-22-3d53ae722097@cerno.tech>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cbmem entries can be read from coreboot table
-0x31 (LB_TAG_CBMEM_ENTRY).  This commit exports access to cbmem
-entries in sysfs under /sys/firmware/coreboot/cbmem-*.
+Hi Maxime,
 
-Link: https://issuetracker.google.com/239604743
-Cc: Stephen Boyd <swboyd@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Julius Werner <jwerner@chromium.org>
-Tested-by: Jack Rosenthal <jrosenth@chromium.org>
-Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
----
- .../ABI/testing/sysfs-firmware-coreboot       |  15 ++
- drivers/firmware/google/Kconfig               |   8 +
- drivers/firmware/google/Makefile              |   3 +
- drivers/firmware/google/cbmem.c               | 232 ++++++++++++++++++
- drivers/firmware/google/coreboot_table.h      |  11 +
- 5 files changed, 269 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-firmware-coreboot
- create mode 100644 drivers/firmware/google/cbmem.c
+I love your patch! Perhaps something to improve:
 
-diff --git a/Documentation/ABI/testing/sysfs-firmware-coreboot b/Documentation/ABI/testing/sysfs-firmware-coreboot
-new file mode 100644
-index 000000000000..b91477ee6198
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-firmware-coreboot
-@@ -0,0 +1,15 @@
-+What:		/sys/firmware/coreboot/
-+Date:		July 2022
-+Contact:	Jack Rosenthal <jrosenth@chromium.org>
-+Description:
-+		Coreboot-based BIOS firmware provides a variety of information
-+		in CBMEM.  Each CBMEM entry can be found via Coreboot tables.
-+		For each CBMEM entry, the following are exposed:
-+
-+		address: A hexidecimal value of the memory address the data for
-+			the entry begins at.
-+		size: The size of the data stored.
-+		id: The id corresponding to the entry. A list of ids known to
-+			coreboot can be found in the coreboot tree at
-+			src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h
-+		mem: A file exposing the raw memory for the entry.
-diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
-index 983e07dc022e..bf8316d1cb31 100644
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -19,6 +19,14 @@ config GOOGLE_SMI
- 	  driver provides an interface for reading and writing NVRAM
- 	  variables.
- 
-+config GOOGLE_CBMEM
-+	tristate "CBMEM entries in sysfs"
-+	depends on GOOGLE_COREBOOT_TABLE
-+	help
-+	  This option enables the kernel to search for Coreboot CBMEM
-+	  entries, and expose the memory for each entry in sysfs under
-+	  /sys/firmware/coreboot.
-+
- config GOOGLE_COREBOOT_TABLE
- 	tristate "Coreboot Table Access"
- 	depends on HAS_IOMEM && (ACPI || OF)
-diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
-index d17caded5d88..8151e323cc43 100644
---- a/drivers/firmware/google/Makefile
-+++ b/drivers/firmware/google/Makefile
-@@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
- obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
- 
-+# Must come after coreboot_table.o, as this driver depends on that bus type.
-+obj-$(CONFIG_GOOGLE_CBMEM)		+= cbmem.o
-+
- vpd-sysfs-y := vpd.o vpd_decode.o
- obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
-diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
-new file mode 100644
-index 000000000000..9646a8047742
---- /dev/null
-+++ b/drivers/firmware/google/cbmem.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * cbmem.c
-+ *
-+ * Driver for exporting cbmem entries in sysfs.
-+ *
-+ * Copyright 2022 Google LLC
-+ */
-+
-+#include <linux/ctype.h>
-+#include <linux/device.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/kobject.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+
-+#include "coreboot_table.h"
-+
-+#define LB_TAG_CBMEM_ENTRY 0x31
-+
-+static struct kobject *coreboot_kobj;
-+
-+struct cbmem_entry;
-+struct cbmem_entry_attr {
-+	struct kobj_attribute kobj_attr;
-+	struct cbmem_entry *entry;
-+};
-+
-+struct cbmem_entry {
-+	char *kobj_name;
-+	struct kobject *kobj;
-+	struct coreboot_device *dev;
-+	struct bin_attribute mem_file;
-+	char *mem_file_buf;
-+	struct cbmem_entry_attr address_file;
-+	struct cbmem_entry_attr size_file;
-+	struct cbmem_entry_attr id_file;
-+};
-+
-+static struct cbmem_entry_attr *to_cbmem_entry_attr(struct kobj_attribute *a)
-+{
-+	return container_of(a, struct cbmem_entry_attr, kobj_attr);
-+}
-+
-+static ssize_t cbmem_entry_mem_read(struct file *filp, struct kobject *kobp,
-+				    struct bin_attribute *bin_attr, char *buf,
-+				    loff_t pos, size_t count)
-+{
-+	struct cbmem_entry *entry = bin_attr->private;
-+
-+	return memory_read_from_buffer(buf, count, &pos, entry->mem_file_buf,
-+				       bin_attr->size);
-+}
-+
-+static ssize_t cbmem_entry_mem_write(struct file *filp, struct kobject *kobp,
-+				     struct bin_attribute *bin_attr, char *buf,
-+				     loff_t pos, size_t count)
-+{
-+	struct cbmem_entry *entry = bin_attr->private;
-+
-+	if (pos < 0 || pos >= bin_attr->size)
-+		return -EINVAL;
-+	if (count > bin_attr->size - pos)
-+		count = bin_attr->size - pos;
-+
-+	memcpy(entry->mem_file_buf + pos, buf, count);
-+	return count;
-+}
-+
-+static ssize_t cbmem_entry_address_show(struct kobject *kobj,
-+					struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%llx\n",
-+			  entry_attr->entry->dev->cbmem_entry.address);
-+}
-+
-+static ssize_t cbmem_entry_size_show(struct kobject *kobj,
-+				     struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%x\n",
-+			  entry_attr->entry->dev->cbmem_entry.entry_size);
-+}
-+
-+static ssize_t cbmem_entry_id_show(struct kobject *kobj,
-+				   struct kobj_attribute *a, char *buf)
-+{
-+	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
-+
-+	return sysfs_emit(buf, "0x%x\n",
-+			  entry_attr->entry->dev->cbmem_entry.id);
-+}
-+
-+static int cbmem_entry_setup(struct cbmem_entry *entry)
-+{
-+	int ret;
-+
-+	entry->mem_file_buf =
-+		devm_memremap(&entry->dev->dev, entry->dev->cbmem_entry.address,
-+			      entry->dev->cbmem_entry.entry_size, MEMREMAP_WB);
-+	if (!entry->mem_file_buf)
-+		return -ENOMEM;
-+
-+	entry->kobj_name = devm_kasprintf(&entry->dev->dev, GFP_KERNEL,
-+					  "cbmem-%08x",
-+					  entry->dev->cbmem_entry.id);
-+	if (!entry->kobj_name)
-+		return -ENOMEM;
-+
-+	entry->kobj = kobject_create_and_add(entry->kobj_name, coreboot_kobj);
-+	if (!entry->kobj)
-+		return -ENOMEM;
-+
-+	sysfs_bin_attr_init(&entry->mem_file);
-+	entry->mem_file.attr.name = "mem";
-+	entry->mem_file.attr.mode = 0664;
-+	entry->mem_file.size = entry->dev->cbmem_entry.entry_size;
-+	entry->mem_file.read = cbmem_entry_mem_read;
-+	entry->mem_file.write = cbmem_entry_mem_write;
-+	entry->mem_file.private = entry;
-+	ret = sysfs_create_bin_file(entry->kobj, &entry->mem_file);
-+	if (ret)
-+		goto free_kobj;
-+
-+	sysfs_attr_init(&entry->address_file.kobj_attr.attr);
-+	entry->address_file.kobj_attr.attr.name = "address";
-+	entry->address_file.kobj_attr.attr.mode = 0444;
-+	entry->address_file.kobj_attr.show = cbmem_entry_address_show;
-+	entry->address_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj,
-+				&entry->address_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_mem_file;
-+
-+	sysfs_attr_init(&entry->size_file.kobj_attr.attr);
-+	entry->size_file.kobj_attr.attr.name = "size";
-+	entry->size_file.kobj_attr.attr.mode = 0444;
-+	entry->size_file.kobj_attr.show = cbmem_entry_size_show;
-+	entry->size_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj, &entry->size_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_address_file;
-+
-+	sysfs_attr_init(&entry->id_file.kobj_attr.attr);
-+	entry->id_file.kobj_attr.attr.name = "id";
-+	entry->id_file.kobj_attr.attr.mode = 0444;
-+	entry->id_file.kobj_attr.show = cbmem_entry_id_show;
-+	entry->id_file.entry = entry;
-+	ret = sysfs_create_file(entry->kobj, &entry->id_file.kobj_attr.attr);
-+	if (ret)
-+		goto free_size_file;
-+
-+	return 0;
-+
-+free_size_file:
-+	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
-+free_address_file:
-+	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
-+free_mem_file:
-+	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
-+free_kobj:
-+	kobject_put(entry->kobj);
-+	return ret;
-+}
-+
-+static int cbmem_entry_probe(struct coreboot_device *dev)
-+{
-+	struct cbmem_entry *entry;
-+
-+	entry = devm_kzalloc(&dev->dev, sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	dev_set_drvdata(&dev->dev, entry);
-+	entry->dev = dev;
-+	return cbmem_entry_setup(entry);
-+}
-+
-+static void cbmem_entry_remove(struct coreboot_device *dev)
-+{
-+	struct cbmem_entry *entry = dev_get_drvdata(&dev->dev);
-+
-+	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
-+	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
-+	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
-+	sysfs_remove_file(entry->kobj, &entry->id_file.kobj_attr.attr);
-+	kobject_put(entry->kobj);
-+}
-+
-+static struct coreboot_driver cbmem_entry_driver = {
-+	.probe = cbmem_entry_probe,
-+	.remove = cbmem_entry_remove,
-+	.drv = {
-+		.name = "cbmem",
-+	},
-+	.tag = LB_TAG_CBMEM_ENTRY,
-+};
-+
-+static int __init cbmem_init(void)
-+{
-+	int ret;
-+
-+	coreboot_kobj = kobject_create_and_add("coreboot", firmware_kobj);
-+	if (!coreboot_kobj)
-+		return -ENOMEM;
-+
-+	ret = coreboot_driver_register(&cbmem_entry_driver);
-+	if (ret) {
-+		kobject_put(coreboot_kobj);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+module_init(cbmem_init);
-+
-+static void __exit cbmem_exit(void)
-+{
-+	kobject_put(coreboot_kobj);
-+	coreboot_driver_unregister(&cbmem_entry_driver);
-+}
-+module_exit(cbmem_exit);
-+
-+MODULE_AUTHOR("Jack Rosenthal <jrosenth@chromium.org>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
-index beb778674acd..6c03a8852d1b 100644
---- a/drivers/firmware/google/coreboot_table.h
-+++ b/drivers/firmware/google/coreboot_table.h
-@@ -39,6 +39,16 @@ struct lb_cbmem_ref {
- 	u64 cbmem_addr;
- };
- 
-+/* Corresponds to LB_TAG_CBMEM_ENTRY. */
-+struct lb_cbmem_entry {
-+	u32 tag;
-+	u32 size;
-+
-+	u64 address;
-+	u32 entry_size;
-+	u32 id;
-+};
-+
- /* Describes framebuffer setup by coreboot */
- struct lb_framebuffer {
- 	u32 tag;
-@@ -65,6 +75,7 @@ struct coreboot_device {
- 	union {
- 		struct coreboot_table_entry entry;
- 		struct lb_cbmem_ref cbmem_ref;
-+		struct lb_cbmem_entry cbmem_entry;
- 		struct lb_framebuffer framebuffer;
- 	};
- };
+[auto build test WARNING on 37b355fdaf31ee18bda9a93c2a438dc1cbf57ec9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-Analog-TV-Improvements/20220730-004859
+base:   37b355fdaf31ee18bda9a93c2a438dc1cbf57ec9
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220730/202207301024.h3rifgQO-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2f380bf85052b89ae0ffc6cfdf2dc91cdcde5a75
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maxime-Ripard/drm-Analog-TV-Improvements/20220730-004859
+        git checkout 2f380bf85052b89ae0ffc6cfdf2dc91cdcde5a75
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/vc4/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vc4/vc4_vec.c:257:6: warning: no previous prototype for 'vc4_vec_connector_reset' [-Wmissing-prototypes]
+     257 | void vc4_vec_connector_reset(struct drm_connector *connector)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/vc4_vec_connector_reset +257 drivers/gpu/drm/vc4/vc4_vec.c
+
+   256	
+ > 257	void vc4_vec_connector_reset(struct drm_connector *connector)
+   258	{
+   259		drm_atomic_helper_connector_reset(connector);
+   260		drm_atomic_helper_connector_tv_reset(connector);
+   261	}
+   262	
+
 -- 
-2.37.1.455.g008518b4e5-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

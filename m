@@ -2,155 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390E5585B4F
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 18:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192AB585B50
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 19:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbiG3Qs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 12:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S235180AbiG3RB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 13:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiG3QsY (ORCPT
+        with ESMTP id S230120AbiG3RBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 12:48:24 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401114029;
-        Sat, 30 Jul 2022 09:48:22 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id p22so8132457lji.10;
-        Sat, 30 Jul 2022 09:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lx39+48xs+QrEXdefGJWcbwB1k+hspd/NoATXGR9qyI=;
-        b=fQs7W0idr3E+3WnRUded1LPamtZKuryRCbirEjzF53u4oNcwPnOdogFKZgwQ7qg6NG
-         08QY1rjL0vxaz8VFy8CE02TvEcivR5iGGhpmWfSbsMaMbn0tHA0r/I0vRBPD7xbtpOeD
-         m5vnXXrVFqdh2PhurvMneZKfdWKmpWQOzyj1WyHsKTW0sD2J418llMShs9bed0+AAKDY
-         +UvBwo8knJjVWV37oijcua2rUkNyn2oH1yPaQ71142PJFx1gxdi6isXJ39btgaZNmalb
-         ukdU/sqkwznO5Z6rYrXmFFYFqQgMxPxXI4ROSU7T1bogsUAWtIzQeEAJk5pciUyWs9po
-         P2gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lx39+48xs+QrEXdefGJWcbwB1k+hspd/NoATXGR9qyI=;
-        b=r1MoKKQrduKCcC8LkeQdouTs+WcqV6wZ3iw7AiuYJPim6rT8WrOSbhs1w/M4vK95oX
-         eKp2Z4+6RN1sLM1BQ1g59M77eX3QecB4cUMShbgx4dGnjmCjz51Qr53aJ6xoczn0dWUg
-         df+zl2NRN5cOywvzn8xQ//WNc3HJu0b/guK99jcnNaIic6FOgEi+ssnGsj9BqbsDO4At
-         MLc9NrlyNEiooUBRSIfWRNRHy8m46gtXR2sMwgA1/BXmoKXnj+K6iJeZceP2UHSMe/ih
-         dBhe5j6SsJI7WDD+UibGtDfqu8S+eInC1a3qMSau7/FsOC5k2h5SPRTNFVTjR6ApAx6s
-         PlJw==
-X-Gm-Message-State: AJIora+3BZVZmjOicNz/t2Uc+g96LxasR8m0NeW6gUhryU3tRdavuZ6j
-        95zkmV+5+BTcj0sQJFPYZABpVxd0tm3Wozq/fNs=
-X-Google-Smtp-Source: AGRyM1uxJfWKpElfwIL6riCm9sX5RNmGf0gGkj8UNsfyjTrNaQPaLedh+OzCpZA1RpZyiMSWISzNy0MexrEgDqGW3FM=
-X-Received: by 2002:a05:651c:b23:b0:25e:e2d:9e40 with SMTP id
- b35-20020a05651c0b2300b0025e0e2d9e40mr2917219ljr.38.1659199700406; Sat, 30
- Jul 2022 09:48:20 -0700 (PDT)
+        Sat, 30 Jul 2022 13:01:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA531DDE;
+        Sat, 30 Jul 2022 10:01:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18C4960E9B;
+        Sat, 30 Jul 2022 17:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68CEC433D6;
+        Sat, 30 Jul 2022 17:01:51 +0000 (UTC)
+Date:   Sat, 30 Jul 2022 13:01:45 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V9 01/16] rv: Add Runtime Verification (RV) interface
+Message-ID: <20220730130145.46f0d57c@rorschach.local.home>
+In-Reply-To: <YuU7TGxm5pzmBFTx@geo.homenetwork>
+References: <cover.1659052063.git.bristot@kernel.org>
+        <a4bfe038f50cb047bfb343ad0e12b0e646ab308b.1659052063.git.bristot@kernel.org>
+        <YuU7TGxm5pzmBFTx@geo.homenetwork>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
- <f7ede054-f0b3-558a-091f-04b4f7139564@blackwall.org> <CAMWRUK5j4UAwjw4UGN=SVbbDbut0zWg5e03wupAXCPwT8K8zzQ@mail.gmail.com>
-In-Reply-To: <CAMWRUK5j4UAwjw4UGN=SVbbDbut0zWg5e03wupAXCPwT8K8zzQ@mail.gmail.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Sat, 30 Jul 2022 12:48:08 -0400
-Message-ID: <CAMWRUK5TZ5iZWZJO7Bbn-b43ZbT7mRzUDr4LdseLCne8qvG6pw@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/3] net: vlan: fix bridge binding behavior and
- add selftests
-To:     Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     aroulin@nvidia.com, sbrivio@redhat.com, roopa@nvidia.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Resending this because the first email was rejected due to being in HTML.)
+On Sat, 30 Jul 2022 22:08:12 +0800
+Tao Zhou <tao.zhou@linux.dev> wrote:
+
+> On Fri, Jul 29, 2022 at 11:38:40AM +0200, Daniel Bristot de Oliveira wrote:
+> 
+> > +static int __rv_disable_monitor(struct rv_monitor_def *mdef, bool sync)
+> > +{
+> > +	lockdep_assert_held(&rv_interface_lock);
+> > +
+> > +	if (mdef->monitor->enabled) {
+> > +		mdef->monitor->enabled = 0;
+> > +		mdef->monitor->disable();  
+> 
+> If call disable(), the @enabled is set 0 there.
+
+Perhaps that is not a given. I'm guessing that ->disable() can not fail.
+
+> 
+> > +
+> > +		/*
+> > +		 * Wait for the execution of all events to finish.
+> > +		 * Otherwise, the data used by the monitor could
+> > +		 * be inconsistent. i.e., if the monitor is re-enabled.
+> > +		 */
+> > +		if (sync)
+> > +			tracepoint_synchronize_unregister();
+> > +		return 1;  
+> 
+> Return 0 indicate the actually disabling and successed.
+
+negative is usually unsuccessful. 1 and 0 can be anything we really
+choose it to be. But should be commented at the top for clarification.
 
 
-On Sat, Jul 30, 2022 at 12:46 PM Sevinj Aghayeva
-<sevinj.aghayeva@gmail.com> wrote:
->
->
->
-> On Sat, Jul 30, 2022 at 12:22 PM Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>
->> On 7/30/22 19:03, Sevinj Aghayeva wrote:
->> > When bridge binding is enabled for a vlan interface, it is expected
->> > that the link state of the vlan interface will track the subset of the
->> > ports that are also members of the corresponding vlan, rather than
->> > that of all ports.
->> >
->> > Currently, this feature works as expected when a vlan interface is
->> > created with bridge binding enabled:
->> >
->> >    ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->> >          bridge_binding on
->> >
->> > However, the feature does not work when a vlan interface is created
->> > with bridge binding disabled, and then enabled later:
->> >
->> >    ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->> >          bridge_binding off
->> >    ip link set vlan10 type vlan bridge_binding on
->> >
->> > After these two commands, the link state of the vlan interface
->> > continues to track that of all ports, which is inconsistent and
->> > confusing to users. This series fixes this bug and introduces two
->> > tests for the valid behavior.
->> >
->> > Sevinj Aghayeva (3):
->> >    net: bridge: export br_vlan_upper_change
->> >    net: 8021q: fix bridge binding behavior for vlan interfaces
->> >    selftests: net: tests for bridge binding behavior
->> >
->> >   include/linux/if_bridge.h                     |   9 ++
->> >   net/8021q/vlan.h                              |   2 +-
->> >   net/8021q/vlan_dev.c                          |  21 ++-
->> >   net/bridge/br_vlan.c                          |   7 +-
->> >   tools/testing/selftests/net/Makefile          |   1 +
->> >   .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
->> >   6 files changed, 176 insertions(+), 7 deletions(-)
->> >   create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
->> >
->>
->> Hmm.. I don't like this and don't think this bridge function should be
->> exported at all.
->>
->> Calling bridge state changing functions from 8021q module is not the
->> proper way to solve this. The problem is that the bridge doesn't know
->> that the state has changed, so you can process NETDEV_CHANGE events and
->> check for the bridge vlan which got its state changed and react based on
->> it. I haven't checked in detail, but I think it should be doable. So all
->> the logic is kept inside the bridge.
->
->
-> Hi Nik,
->
-> Can please elaborate on where I should process NETDEV_CHANGE events? I'm doing this as part of outreachy project and this is my first kernel task, so I don't know the bridging code that well.
->
-> Thanks!
->
->>
->>
->> Cheers,
->>   Nik
->
->
->
-> --
->
-> Sevinj.Aghayeva
+> 
+> > +	}
+> > +	return 0;  
+> 
+> If disable a diabled monitor, return error(negative).
+> 
+> > +}
+> > +
+> > +/**
+> > + * rv_disable_monitor - disable a given runtime monitor
+> > + *
+> > + * Returns 0 on success.
+> > + */
+> > +int rv_disable_monitor(struct rv_monitor_def *mdef)
+> > +{
+> > +	__rv_disable_monitor(mdef, true);
+> > +	return 0;  
+> 
+> Always return 0 here, whatever the return value of __rv_disable_monitor().
+> And this enforce me to look more here, see below.
+
+As for now, disable can not fail. But OK to return a status in that
+case that changes in the future.
+
+> 
+> > +}  
+> 
+> > +static ssize_t enabled_monitors_write(struct file *filp, const char __user *user_buf,
+> > +				      size_t count, loff_t *ppos)
+> > +{
+> > +	char buff[MAX_RV_MONITOR_NAME_SIZE + 2];
+> > +	struct rv_monitor_def *mdef;
+> > +	int retval = -EINVAL;
+> > +	bool enable = true;
+> > +	char *ptr = buff;
+> > +	int len;
+> > +
+> > +	if (count < 1 || count > MAX_RV_MONITOR_NAME_SIZE + 1)
+> > +		return -EINVAL;
+> > +
+> > +	memset(buff, 0, sizeof(buff));
+> > +
+> > +	retval = simple_write_to_buffer(buff, sizeof(buff) - 1, ppos, user_buf, count);
+> > +	if (retval < 0)
+> > +		return -EFAULT;
+> > +
+> > +	ptr = strim(buff);
+> > +
+> > +	if (ptr[0] == '!') {
+> > +		enable = false;
+> > +		ptr++;
+> > +	}
+> > +
+> > +	len = strlen(ptr);
+> > +	if (!len)
+> > +		return count;
+> > +
+> > +	mutex_lock(&rv_interface_lock);
+> > +
+> > +	retval = -EINVAL;
+> > +
+> > +	list_for_each_entry(mdef, &rv_monitors_list, list) {
+> > +		if (strcmp(ptr, mdef->monitor->name) != 0)
+> > +			continue;
+> > +
+> > +		/*
+> > +		 * Monitor found!
+> > +		 */
+> > +		if (enable)
+> > +			retval = rv_enable_monitor(mdef);
+> > +		else
+> > +			retval = rv_disable_monitor(mdef);  
+> 
+> About the retval here. If count == 1 and retval == 0, then
+> `retval = count` --> retval == 1. This retval will be returned to 
+
+Both rv_enable_monitor() and rv_disable_monitor() return either 0 on
+success or negative on failure. Do not confuse the internal callers
+(that start with "__") as the return values of these.
+
+User space will only see 0 or negative.
+
+> user space and dedicate that how many character read and success
+> If retval is 1(it is not possiable, the return value of
+> da_monitor_init_*() called in enable callback in rv_enable_monitor()
+> will be 0, so that return value check is not needed, or any other functions
+> called in enable callback need to check the return value then, so I checked
+> the WARN_ONCE() called in macro rv_attach_trace_probe() which is called in
+> enable callback, if the WARN_ONCE is called, it means that something go wrong.
+> We need to check the return value of WARN_ONCE() in enable callback), the
+> return value will be returned to user space but actually the error(warn) happened.
+> User space do not know. They treat the two kind of return value 1 the same
+> but one is the write count value successed and another is the write error
+> value returned.
+> In enable callback, check rv_attach_trace_probe():
+
+Yes, the enable callbacks should return negative on error.
+
+> 
+> static int enable_wip(void)
+> {
+>       int retval = 1;
+
+Probably want this to be "retval = 0;"
+
+>  	  
+>       /* 
+>        * Delete the check of return value of da_monitor_init_wip()
+>        * because it is always 0
+>        */
+>       da_monitor_init_wip();
+> 
+>       retval &= rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
+>       retval &= rv_attach_trace_probe("wip", sched_waking, handle_sched_waking);
+>       retval &= rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
+
+And this to be "retval |= "
+
+where rv_attach_trace_probe() returns 0 on success and something else on error.
+
+> 
+>       /* 
+>        * If the retval is not 0, it mean at least one rv_attach_trace_probe()
+>        * is WARN_ONCE(). I am not sure that if the first WARN_ONCE() happened,
+>        * then return directly or at here after all rv_attach_trace_probe() is
+>        * called and check the retval is 0 or 1.
+
+Well, the above is not true. If any "succeed" and return zero, with the
+"&=" it will be zero if only one succeeds and then rest fail. That's
+why you want the "|=" and set the flag on error.
+
+We could change the macro to:
+
+#define rv_attach_trace_probe(monitor, tp, rv_handler)                                  \
+        ({                                                                            \
+                check_trace_callback_type_##tp(rv_handler);                             \
+                WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+                                "fail attaching " #monitor " " #tp "handler");          \
+        })
+
+Where the macro returns the result of the WARN_ONCE() which is zero on
+success (no warning) and non-zero otherwise.
 
 
+>        */
+>       if (retval)
+>              return -1;
+>       return retval;
+> }
+> 
+> > +
+> > +		if (!retval)
+> > +			retval = count;
+> > +
+> > +		break;
+> > +	}  
+> 
+> > +/**
+> > + * rv_register_monitor - register a rv monitor.
+> > + * @monitor:    The rv_monitor to be registered.
+> > + *
+> > + * Returns 0 if successful, error otherwise.
+> > + */
+> > +int rv_register_monitor(struct rv_monitor *monitor)
+> > +{
+> > +	struct rv_monitor_def *r;
+> > +	int retval = 0;
+> > +
+> > +	if (strlen(monitor->name) >= MAX_RV_MONITOR_NAME_SIZE) {  
+> 
+> s/>=/>/ no? The same check happened in patch 2. Thanks,  
 
--- 
+Correct. Because strlen() does not include the nul byte.
 
-Sevinj.Aghayeva
+> 
+> > +		pr_info("Monitor %s has a name longer than %d\n", monitor->name,
+> > +			MAX_RV_MONITOR_NAME_SIZE);  
+
+
+-- Steve

@@ -2,210 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC47585B7F
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 20:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD20585B7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 20:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbiG3SH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 14:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S235393AbiG3SHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 14:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiG3SHW (ORCPT
+        with ESMTP id S229742AbiG3SHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 14:07:22 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BD01572B;
-        Sat, 30 Jul 2022 11:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659204441; x=1690740441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GfUPPhycW67KQMvN9iRt1mPvqrm/d/0T+G/wECkqerA=;
-  b=UaMqhtHsRmTfceraarqP8LkwWqBRpH0bK6AuAKJZ6Dlv6EDtlQWSCqJq
-   RspOITB1nNIC5EOfrErxmEjeok8HPIra9b1xT3JTIQ6S9DOunkygUtvqY
-   XyEbP0VUIxtbrHp6w12gZ+GrfgFYYFkc/0zmZyYl9FdHAKO0y9KX1lRxC
-   zpVGf5zcV2MN6jsHh1DZPKPi1VgtTQwIEv3FtZIilOIRhV5oI+HHlh9In
-   Hby+kJPxJY6OIieKXbOfWzxhgWgzfTTpD7b8Hd4b5drR1WPn0NRSLeOnw
-   LHbj4+SYjZgJy26i16agy84xToQ5F7e/Lk44Q3DUQicP/6fZ/JufKNtRm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269318653"
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="269318653"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 11:07:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="552071485"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 11:07:17 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHqrs-000D3H-2h;
-        Sat, 30 Jul 2022 18:07:16 +0000
-Date:   Sun, 31 Jul 2022 02:06:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-media@vger.kernel.org, Yong Zhi <yong.zhi@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] media: ipu3-cio2: Don't dereference fwnode handle
-Message-ID: <202207310216.JtYAKodB-lkp@intel.com>
-References: <20220730154844.89556-1-andriy.shevchenko@linux.intel.com>
+        Sat, 30 Jul 2022 14:07:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C486815729;
+        Sat, 30 Jul 2022 11:07:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D773B80C87;
+        Sat, 30 Jul 2022 18:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E468CC433D6;
+        Sat, 30 Jul 2022 18:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659204436;
+        bh=NHayoJQJHFGVFFpyKSan0WTA5LlQNXHZWl5S2fn3mzc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XX0+qvt+ZWEIzfkuAmWhIh8NEWBvkk1HnUBnSVjnZvnHLv538WOClkIw1f9kKbdF0
+         iUdtXYTuUU/Rmbr208/p5pFMRvMn+/mq7WYM5TyAiCapDyJFucu2B/EiCb2TcK6V5p
+         Ic4sglKzCcuOSistIbWyMHZIPAtJjScZUbmnm2zHRIAJQRcS7Q0sVDLK54WMm5UHIQ
+         uLJ64qM8X/FxG/+T/4LRUieqtCln9MxKOilXPVdzdLCKA6OBKirFpzqUouuwK/6N9W
+         7dA9cXyfjwb0LnIlhMJLvxIGrOPuGBpi7x1w+FyDG2HOTl4EInhGY0gqUryCaR6Znt
+         GB2nOWEI9ssEA==
+Message-ID: <0197dd47-ea15-4d8b-5fc7-e466d8a501a7@kernel.org>
+Date:   Sat, 30 Jul 2022 20:07:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220730154844.89556-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V9 01/16] rv: Add Runtime Verification (RV) interface
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1659052063.git.bristot@kernel.org>
+ <a4bfe038f50cb047bfb343ad0e12b0e646ab308b.1659052063.git.bristot@kernel.org>
+ <YuU7TGxm5pzmBFTx@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YuU7TGxm5pzmBFTx@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 7/30/22 16:08, Tao Zhou wrote:
+> On Fri, Jul 29, 2022 at 11:38:40AM +0200, Daniel Bristot de Oliveira wrote:
+> 
+>> +static int __rv_disable_monitor(struct rv_monitor_def *mdef, bool sync)
+>> +{
+>> +	lockdep_assert_held(&rv_interface_lock);
+>> +
+>> +	if (mdef->monitor->enabled) {
+>> +		mdef->monitor->enabled = 0;
+>> +		mdef->monitor->disable();
+> 
+> If call disable(), the @enabled is set 0 there.
 
-I love your patch! Yet something to improve:
+Which is correct.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+>> +
+>> +		/*
+>> +		 * Wait for the execution of all events to finish.
+>> +		 * Otherwise, the data used by the monitor could
+>> +		 * be inconsistent. i.e., if the monitor is re-enabled.
+>> +		 */
+>> +		if (sync)
+>> +			tracepoint_synchronize_unregister();
+>> +		return 1;
+> 
+> Return 0 indicate the actually disabling and successed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/media-ipu3-cio2-Don-t-dereference-fwnode-handle/20220730-235023
-base:   git://linuxtv.org/media_tree.git master
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220731/202207310216.JtYAKodB-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a78ba0da9d77a8fa412604492f931b188e1114d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/media-ipu3-cio2-Don-t-dereference-fwnode-handle/20220730-235023
-        git checkout a78ba0da9d77a8fa412604492f931b188e1114d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/pci/intel/ipu3/
+No, 1 indicates that *disable was called, 0 did not call disable function.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>> +	}
+>> +	return 0;
+> 
+> If disable a diabled monitor, return error(negative).
 
-All errors (new ones prefixed by >>):
+This is a "static __function", which alerts for internal aspects.
 
->> drivers/media/pci/intel/ipu3/cio2-bridge.c:266:33: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-           struct fwnode_handle *fwnode, *current;
-                                          ^
-   arch/x86/include/asm/current.h:18:28: note: expanded from macro 'current'
-   #define current get_current()
-                              ^
->> drivers/media/pci/intel/ipu3/cio2-bridge.c:266:33: error: conflicting types for 'get_current'
-   arch/x86/include/asm/current.h:18:17: note: expanded from macro 'current'
-   #define current get_current()
-                   ^
-   arch/x86/include/asm/current.h:13:44: note: previous definition is here
-   static __always_inline struct task_struct *get_current(void)
-                                              ^
-   2 errors generated.
+It has a specific purpose of counting if the disable function
+was actually called.
 
+Disabling a disabled monitor is not a problem.
 
-vim +266 drivers/media/pci/intel/ipu3/cio2-bridge.c
+So all your argumentation based on this is not correct, and it is breaking
+other parts of the code... see where it is called.
 
-   261	
-   262	static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
-   263					      struct cio2_bridge *bridge,
-   264					      struct pci_dev *cio2)
-   265	{
- > 266		struct fwnode_handle *fwnode, *current;
-   267		struct cio2_sensor *sensor;
-   268		struct acpi_device *adev;
-   269		acpi_status status;
-   270		int ret;
-   271	
-   272		for_each_acpi_dev_match(adev, cfg->hid, NULL, -1) {
-   273			if (!adev->status.enabled)
-   274				continue;
-   275	
-   276			if (bridge->n_sensors >= CIO2_NUM_PORTS) {
-   277				acpi_dev_put(adev);
-   278				dev_err(&cio2->dev, "Exceeded available CIO2 ports\n");
-   279				return -EINVAL;
-   280			}
-   281	
-   282			sensor = &bridge->sensors[bridge->n_sensors];
-   283			strscpy(sensor->name, cfg->hid, sizeof(sensor->name));
-   284	
-   285			ret = cio2_bridge_read_acpi_buffer(adev, "SSDB",
-   286							   &sensor->ssdb,
-   287							   sizeof(sensor->ssdb));
-   288			if (ret)
-   289				goto err_put_adev;
-   290	
-   291			if (sensor->ssdb.vcmtype > ARRAY_SIZE(cio2_vcm_types)) {
-   292				dev_warn(&adev->dev, "Unknown VCM type %d\n",
-   293					 sensor->ssdb.vcmtype);
-   294				sensor->ssdb.vcmtype = 0;
-   295			}
-   296	
-   297			status = acpi_get_physical_device_location(adev->handle, &sensor->pld);
-   298			if (ACPI_FAILURE(status)) {
-   299				ret = -ENODEV;
-   300				goto err_put_adev;
-   301			}
-   302	
-   303			if (sensor->ssdb.lanes > CIO2_MAX_LANES) {
-   304				dev_err(&adev->dev,
-   305					"Number of lanes in SSDB is invalid\n");
-   306				ret = -EINVAL;
-   307				goto err_free_pld;
-   308			}
-   309	
-   310			cio2_bridge_create_fwnode_properties(sensor, bridge, cfg);
-   311			cio2_bridge_create_connection_swnodes(bridge, sensor);
-   312	
-   313			ret = software_node_register_nodes(sensor->swnodes);
-   314			if (ret)
-   315				goto err_free_pld;
-   316	
-   317			fwnode = software_node_fwnode(&sensor->swnodes[
-   318							      SWNODE_SENSOR_HID]);
-   319			if (!fwnode) {
-   320				ret = -ENODEV;
-   321				goto err_free_swnodes;
-   322			}
-   323	
-   324			sensor->adev = acpi_dev_get(adev);
-   325	
-   326			current = acpi_fwnode_handle(adev);
-   327			current->secondary = fwnode;
-   328	
-   329			cio2_bridge_instantiate_vcm_i2c_client(sensor);
-   330	
-   331			dev_info(&cio2->dev, "Found supported sensor %s\n",
-   332				 acpi_dev_name(adev));
-   333	
-   334			bridge->n_sensors++;
-   335		}
-   336	
-   337		return 0;
-   338	
-   339	err_free_swnodes:
-   340		software_node_unregister_nodes(sensor->swnodes);
-   341	err_free_pld:
-   342		ACPI_FREE(sensor->pld);
-   343	err_put_adev:
-   344		acpi_dev_put(adev);
-   345		return ret;
-   346	}
-   347	
+>> +}
+>> +
+>> +/**
+>> + * rv_disable_monitor - disable a given runtime monitor
+>> + *
+>> + * Returns 0 on success.
+>> + */
+>> +int rv_disable_monitor(struct rv_monitor_def *mdef)
+>> +{
+>> +	__rv_disable_monitor(mdef, true);
+>> +	return 0;
+> 
+> Always return 0 here, whatever the return value of __rv_disable_monitor().
+> And this enforce me to look more here, see below.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This is not a problem. Actually, disable functions often return void.
+I am keeping an int just in case.
+
+>> +}
+> 
+>> +static ssize_t enabled_monitors_write(struct file *filp, const char __user *user_buf,
+>> +				      size_t count, loff_t *ppos)
+>> +{
+>> +	char buff[MAX_RV_MONITOR_NAME_SIZE + 2];
+>> +	struct rv_monitor_def *mdef;
+>> +	int retval = -EINVAL;
+>> +	bool enable = true;
+>> +	char *ptr = buff;
+>> +	int len;
+>> +
+>> +	if (count < 1 || count > MAX_RV_MONITOR_NAME_SIZE + 1)
+>> +		return -EINVAL;
+>> +
+>> +	memset(buff, 0, sizeof(buff));
+>> +
+>> +	retval = simple_write_to_buffer(buff, sizeof(buff) - 1, ppos, user_buf, count);
+>> +	if (retval < 0)
+>> +		return -EFAULT;
+>> +
+>> +	ptr = strim(buff);
+>> +
+>> +	if (ptr[0] == '!') {
+>> +		enable = false;
+>> +		ptr++;
+>> +	}
+>> +
+>> +	len = strlen(ptr);
+>> +	if (!len)
+>> +		return count;
+>> +
+>> +	mutex_lock(&rv_interface_lock);
+>> +
+>> +	retval = -EINVAL;
+>> +
+>> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
+>> +		if (strcmp(ptr, mdef->monitor->name) != 0)
+>> +			continue;
+>> +
+>> +		/*
+>> +		 * Monitor found!
+>> +		 */
+>> +		if (enable)
+>> +			retval = rv_enable_monitor(mdef);
+>> +		else
+>> +			retval = rv_disable_monitor(mdef);
+> 
+> About the retval here. If count == 1 and retval == 0, then
+> `retval = count` --> retval == 1. This retval will be returned to 
+> user space and dedicate that how many character read and success
+> If retval is 1(it is not possiable, the return value of
+> da_monitor_init_*() called in enable callback in rv_enable_monitor()
+> will be 0, so that return value check is not needed, or any other functions
+> called in enable callback need to check the return value then,...
+
+All things above are misled by the first interpretation but,,,
+
+so I checked
+> the WARN_ONCE() called in macro rv_attach_trace_probe() which is called in
+> enable callback,if the WARN_ONCE is called, it means that something go wrong.
+
+The way that rv_attach_trace_probe() is attaching a probe is not different from the way
+other *in kernel* tracing does.
+
+> We need to check the return value of WARN_ONCE() in enable callback), the
+> return value will be returned to user space but actually the error(warn) happened.
+> User space do not know. They treat the two kind of return value 1 the same
+> but one is the write count value successed and another is the write error
+> value returned.
+> In enable callback, check rv_attach_trace_probe():
+> 
+> static int enable_wip(void)
+> {
+>       int retval = 1;
+>  	  
+>       /* 
+>        * Delete the check of return value of da_monitor_init_wip()
+>        * because it is always 0
+>        */
+>       da_monitor_init_wip();
+> 
+>       retval &= rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
+>       retval &= rv_attach_trace_probe("wip", sched_waking, handle_sched_waking);
+>       retval &= rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
+
+No, that is not the most robust way to do this. A better way is to do it like in the
+early versions of this patch set, where it was searching for the existence of the tracepoint
+from the module perspective, taking notes of the ones that were enabled, and then actually disabling
+all events that were enabled before the failure.
+
+> 
+>       /* 
+>        * If the retval is not 0, it mean at least one rv_attach_trace_probe()
+>        * is WARN_ONCE(). I am not sure that if the first WARN_ONCE() happened,
+>        * then return directly or at here after all rv_attach_trace_probe() is
+>        * called and check the retval is 0 or 1.
+>        */
+>       if (retval)
+>              return -1;
+
+and here the system state is even worse than WARNING and doing nothing: the monitor is
+disabled, but the tracepoints that were registered are still hooked to the system...
+and you cannot unhook them because the monitor is not enabled.
+
+You still can unhook in current implementation.
+
+So, for the in-kernel version, the current method is equivalent to the
+the way we do on other tracers, and the monitors only compile if the
+tracepoints exist, the callback has the correct signature and WARNs
+in case of problems in the tracepoint.
+
+There will be a more robust way to do this, and it will be included in the
+"add module support" patch set. But is its better to add it in a patch
+set because we can analyze change by change instead of adding on top
+of this initial implementation - which is quite large already.
+
+>       return retval;
+> }
+> 
+>> +
+>> +		if (!retval)
+>> +			retval = count;
+>> +
+>> +		break;
+>> +	}
+> 
+>> +/**
+>> + * rv_register_monitor - register a rv monitor.
+>> + * @monitor:    The rv_monitor to be registered.
+>> + *
+>> + * Returns 0 if successful, error otherwise.
+>> + */
+>> +int rv_register_monitor(struct rv_monitor *monitor)
+>> +{
+>> +	struct rv_monitor_def *r;
+>> +	int retval = 0;
+>> +
+>> +	if (strlen(monitor->name) >= MAX_RV_MONITOR_NAME_SIZE) {
+> 
+> s/>=/>/ no? The same check happened in patch 2. Thanks,
+
+Yep, this can be improved. But it is not a BUG, as it is allowing monitor
+ with (MAX_RV_MONITOR_NAME_SIZE - 1) size, which is safe.
+
+Given that neither 'wip' or 'wwnr' are >= MAX_RV_MONITOR_NAME_SIZE, this
+problem is not happening - and no other monitor can hit it because modules
+are not yet supported.
+
+I took note and will patch it.
+
+>> +		pr_info("Monitor %s has a name longer than %d\n", monitor->name,
+>> +			MAX_RV_MONITOR_NAME_SIZE);
+
+Thanks!
+-- Daniel

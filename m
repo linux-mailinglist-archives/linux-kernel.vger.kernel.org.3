@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A31585A47
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EC8585A49
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiG3LqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 07:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S234014AbiG3Lyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 07:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiG3LqK (ORCPT
+        with ESMTP id S230135AbiG3Lyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 07:46:10 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C89717E0F
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:46:09 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id bh13so5919480pgb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=styzkenOeqf5qc9bxBJ7dgDvmeZrbcokR+YC5je8YLc=;
-        b=oAPknW93Ck0yOHpxSeCkDGLraImV4G12racNx/YfFtTcNctn07zrj/W9FlLjYxP8xF
-         nf2H6UuZNbGJ17+ikYY6n7X5Slb5sGrr+RnvPEpKBCFhdbBevEhrf4t7dVEgu8lpqvFT
-         wjwnGReGu6TUFkhtHd17tBfCCxkqCeZbzquESWjq+/10WlFX0qdk+JouTmexKkjdfDBX
-         0X2T07R6MM6ku1zl7swuTwWTAAwLMkGdAZogm1czq3RdDpExBO8C5JbRHXPdG+ZIg8Jd
-         EQ36hhfxqhqtc7EKPioxThmEcIAWC5tZjw+EaH5T3ozOyA56o01yAbYTAI86CVHuR4NE
-         DZwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=styzkenOeqf5qc9bxBJ7dgDvmeZrbcokR+YC5je8YLc=;
-        b=ldYfKILm1RBiXa52sEahILefXZMjGfgC5G/1Uxs5iSSY3zespZuY8LZXkGuSb9biMM
-         8e/ES2tqZdXp+sOffKOEDPfRWBTlpAKaQmMXf3PUyMYF7OhRDsRU6wkXo5qhx62DDYrh
-         +dhrmq+7ffUfiRzTN5RAfGGHaY/E/gTs8P0GSfetibf4DqrCJ87h+3rvxdApbyjrKNnk
-         35cOtxizKtc+3xK1IkAmgB8t4otUiuvKqyX4BiKtc1xtdqT0ww0U3LAPoXFCwFYOJGYT
-         /eBLIstA/sBfmI6SevHWlpcsoZzI7+MrFH4athI5UnjTlP+DjtV6tIvN9C0pCpnPM6bG
-         Oy1A==
-X-Gm-Message-State: AJIora/Gij22gSsWgfl76UQ4h7a/450fbI8qWJFzdqOa2xWHleL1+kj2
-        RrHDH0tGZR2+gO/Ej801BFxSJuzApvE=
-X-Google-Smtp-Source: AGRyM1t180hITPVu7N3GJCw3O1RHTbLRqD7FM1XxJ+RJ1OvxD6zdUB23g1/5TZzmt0CZ7uGpH0IY1g==
-X-Received: by 2002:aa7:8e86:0:b0:528:c755:1d96 with SMTP id a6-20020aa78e86000000b00528c7551d96mr7832102pfr.30.1659181568842;
-        Sat, 30 Jul 2022 04:46:08 -0700 (PDT)
-Received: from fedora.. ([103.230.104.28])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa79a45000000b0052b4f4c6a8fsm4612336pfj.209.2022.07.30.04.46.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 04:46:08 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Khalid Masum <khalid.masum.92@gmail.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
-Date:   Sat, 30 Jul 2022 17:45:47 +0600
-Message-Id: <20220730114547.5790-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <000000000000bbdd0405d120c155@google.com>
-References: <000000000000bbdd0405d120c155@google.com>
+        Sat, 30 Jul 2022 07:54:36 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2177518B2B
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:54:34 -0700 (PDT)
+Received: from mail-ed1-f42.google.com ([209.85.208.42]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MHoZS-1oCpME3Xuw-00Es3c for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022
+ 13:54:32 +0200
+Received: by mail-ed1-f42.google.com with SMTP id r4so817881edi.8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:54:32 -0700 (PDT)
+X-Gm-Message-State: AJIora/ChvoK1zn6RzxuEs/kSx5gDrXw0BoNkCPXupmme6s6RskaZEJG
+        i7k5jH0KTxIKt5f/9Rv0UkMSO1I8H0z1GHAnbHo=
+X-Google-Smtp-Source: AGRyM1v73P0IyG3kqmzgVDCazo8lgE57ZZmN/ORamunHWGgkSZQ+skbnI0M/mTvwXJuXPxyFsQs6T3lvsJhtn84jgCU=
+X-Received: by 2002:a05:6402:1d4c:b0:43b:c85f:5c95 with SMTP id
+ dz12-20020a0564021d4c00b0043bc85f5c95mr7664097edb.213.1659182072510; Sat, 30
+ Jul 2022 04:54:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220730003846.1730265-1-balsup@cisco.com>
+In-Reply-To: <20220730003846.1730265-1-balsup@cisco.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 30 Jul 2022 13:54:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Bn9xKRX9z369zVCy6CuguTvNbtXOOPbf_OfS697cDyQ@mail.gmail.com>
+Message-ID: <CAK8P3a0Bn9xKRX9z369zVCy6CuguTvNbtXOOPbf_OfS697cDyQ@mail.gmail.com>
+Subject: Re: [PATCH] Allow configuration of ARCH_NR_GPIO
+To:     Billie Alsup <balsup@cisco.com>
+Cc:     linux@armlinux.org.uk, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, linus.walleij@linaro.org,
+        ardb@kernel.org, rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
+        nick.hawkins@hpe.com, john@phrozen.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:63ZTioqc0R2VZiKOVFpQ98JywFOoT+GsT+n5Uh03ZDGkJ4LHLBC
+ WQHZUWGzHWalwAUQZqSj1OCHIxmRJBV2rZ5V74oA2dmuLRRZcKvivebyk+IbijVJ/0EKj1c
+ 2d8gq6JkWsr0l5T6aNFVYvEks8V1IYOUGuaroKKhuW5SgCFAJuo9J0WuYZ6eTF0ir0tTAJp
+ mMumX1u+UwgEp6104gO2Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:U5peowXu7D4=:k65jIGMFF8C1JexY/hnxmx
+ CLySAjN6jlMLeHHEAobjC/PJuK8yCfOE/09SFOsZV1SJOFuQVY2WipFdsaVLUntbfSs9I6+OU
+ O9VQpfgfPBhRdIImpL8l0NcMldqGz45oG59ce0o61dSQiXSDAFROtDVHtfTgLINyRLTqTDlhD
+ m79hSQb+A6ZnDQZ14K7l+cy0VpqI9JgQz8ytw7G/7wGPtAD7Jr6ZeXE5ZM7gzJexi2WqjaCLC
+ UaxO1rMXd3cA+UHvto0dNcnmC88FoM7H1YQsONquL9j4pos3FB9ADtEEv5+BEfjAzV3tjMF/z
+ 2IE8JA1mvAQ3agdprsQ0EtCwZKAD0WMVIfikVAYR4Ufz7qKWGeCbqgud7yz3qunZPsOLsaYU9
+ xsC/s6CtEpiYHZUd7697UU/wN5FclBwymgIjWkOeia2s6XRzUkEA6Ej9vZ55tXqUkEAl0b9H2
+ 4fdWzUEvJL0HUV3GEkYC3sMFE0W5hDROF4DjO+Vkxcp1nfox+HFMViZoc0YqiEJJst1R2GtK4
+ 1MrNGqEN3wiRx9b4uNnv1lc9q3TTwxuFVyuo9pTK6RGhMIbOKaoHORFD2jgFZtUJfJ1PHbE+b
+ VWJ53dgCRV6SIzUSL96eh7RLqZbDqpwnAmlKjbZAwzCFwMmSBwPtnkI2rv4ohSoLQj8lPx0tK
+ onUMZUKn5O5MGpp5A1W0xxDd0eVG1Fs+ahWw3JJ3q3DiIB2SVA1K1Vi/BITEIiqg2+4UM5myi
+ fQZMLE4woRsuP2ONN2snYedGUR1gZjld5o4jEzcyg9ZsZujEkJ6KTKMuSGsH+Cq8+3ID4LH35
+ JV0Uv5spttFukerbVnxQ5pKJZF7Mf8xzDD4SYEyeyPJ9elAnatbLyB01qg2qFuCJLCeh1f49/
+ VN7bzenNnrqoo0c6gXYQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz-test: https://github.com/torvalds/linux.git e0dccc3b76fb 
+On Sat, Jul 30, 2022 at 2:38 AM Billie Alsup <balsup@cisco.com> wrote:
+>
+> From: Billie R Alsup <balsup@cisco.com>
+>
+> Problem: Some systems support a high number of GPIO pins.  Allow
+> the kernel builder to configure the maximum number of pins, rather
+> than forcing a large value on everyone.
+>
+> Impact: Once a .config is generated, the ARCH_NR_GPIO setting
+> will persist.  To return to a default setting, the CONFIG_ARCH_NR_GPIO
+> must be removed from .config file first.
+>
+> Trade-offs: It is possible to achieve similar via command line
+> parameters, e.g.
+>
+>     make KBUILD_CFLAGS_KERNEL=-DARCH_NR_GPIOS=16384
+>
+> to the build. This is problematic because the setting does not
+> show up in /proc/config.gz.  It is also problematic for out-of-tree
+> module builds, which require similar if they invoke the API
+> gpio_is_valid().  In both cases, one could envision one system
+> working normally, and another failing, even though they both have
+> the same kernel version and /proc/config.gz.  Therefore, it is
+> better to have the setting available in .config
+>
+> Signed-off-by: Billie R Alsup <balsup@cisco.com>
 
----
- drivers/video/fbdev/core/fbcon.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+What is the use case for manually setting this rather than deriving
+it from the selected platforms?
 
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index 1a9aa12cf886..d026f3845b60 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2591,14 +2591,13 @@ static unsigned long fbcon_getxy(struct vc_data *vc, unsigned long pos,
- {
- 	unsigned long ret;
- 	int x, y;
-+	unsigned long offset = (pos - vc->vc_origin) / 2;
-+	x = offset % vc->vc_cols;
-+	y = offset / vc->vc_cols;
-+	ret = pos + (vc->vc_cols - x) * 2;
- 
--	if (pos >= vc->vc_origin && pos < vc->vc_scr_end) {
--		unsigned long offset = (pos - vc->vc_origin) / 2;
--
--		x = offset % vc->vc_cols;
--		y = offset / vc->vc_cols;
--		ret = pos + (vc->vc_cols - x) * 2;
--	} else {
-+	if (!pos >= vc->vc_origin || !pos < vc->vc_scr_end ||
-+	    !ret >= vc->vc_origin || !ret < vc->vc_scr_end) {
- 		/* Should not happen */
- 		x = y = 0;
- 		ret = vc->vc_origin;
--- 
-2.36.1
+Have you tried to use both a platform-specific option for the minimum
+number of this setting, and then restictricting the CONFIG_ARCH_NR_GPIO
+setting with a 'range' statement?
 
+         Arnd

@@ -2,150 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC187585B66
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 19:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AD3585B67
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 19:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiG3R05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 13:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S235330AbiG3R3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 13:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbiG3R0z (ORCPT
+        with ESMTP id S233216AbiG3R3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 13:26:55 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAE26576;
-        Sat, 30 Jul 2022 10:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659202000;
-        bh=NHO94zdmagMHUsaDXQDJxauKZL4m2T37y8DaXk+oiBc=;
-        h=X-UI-Sender-Class:Date:To:References:From:Subject:In-Reply-To;
-        b=jFgm+bEdqMuhl1Zs4lJl96dRyYIWLgx8CrqS5eLJz2HK0s9qX6lIbxcinXUIWEqIR
-         1py8f8ma80kYmdqKFDYB0Z/WD4cN8mkE707PLR2o7+xLXItZoi7lxYgGIH5Lt31IMI
-         ohJQuq1cvd1pxgbTiFqqTkQCnFFs00Wusdz6lr4o=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.141.10]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MryT9-1nczZt1jbJ-00nx62; Sat, 30
- Jul 2022 19:26:40 +0200
-Message-ID: <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de>
-Date:   Sat, 30 Jul 2022 19:25:54 +0200
+        Sat, 30 Jul 2022 13:29:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D5117598
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 10:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jGFGvJoR+Jxr6T31gt4WNXR0yqCHEGj/HDLPrpa20+k=; b=VLEVdVRHYadFUc0e7jesIG6pe4
+        OxX+e1r0SeLDlMHk1aPTOqyMKW8Y/B6T2D9Agqf4KrITfeykv+XnCj5mW5I5Xh0u9os70ssvLQ/Fb
+        FRS358pnU9hnybW47PWlMomuDKoBhSfPLECbGJgxo82+S8i7zgt4AKJkKxUFwpzkx/bGZY5Io8z3P
+        EHygezyqVxIenfMYY7GGQG+1dq5ocq2EUYqlvG0F8kaZ6OZ1c5QezBpiZTI4wHKTd4ZNgl1f2/k3v
+        2kG7qr4Osagm84RYP6zt7VzU47DPIafLh2TSfSV337DV3eI6+q2K1zfvYwNOmpM8EoSAbNcoWVvNO
+        f86vyHrQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oHqHF-005j6b-Jw; Sat, 30 Jul 2022 17:29:25 +0000
+Date:   Sat, 30 Jul 2022 18:29:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Xin Hao <xhao@linux.alibaba.com>
+Cc:     adobriyan@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+Message-ID: <YuVqdcY8Ibib2LJa@casper.infradead.org>
+References: <20220730163528.48377-1-xhao@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Khalid Masum <khalid.masum.92@gmail.com>,
-        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-References: <000000000000bbdd0405d120c155@google.com>
- <20220729065139.6529-1-khalid.masum.92@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
-In-Reply-To: <20220729065139.6529-1-khalid.masum.92@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HGCv5+J9ExWMCvImsXbvpBDgH9cpBuokI7iRcT+dOsw/ko38cY9
- SauhNpWSWmZzKrt5xX6ITQ6sb6lWTkFiwQkvO+yzGOoyFWlfWy5XlbDyvOeWq3nRlFjpdhC
- ESNk6veDYuTCjd9wePfrPwAswVRaA/seIpRF4xZ9WqT1fmWSQNO4t/7TcxhDz534AcuoNsU
- 3BCm6PoXilYYBfZBeBmcA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aDU7BcE4hgI=:qfxsIq0NSZeQZEe8pA7/w/
- T9ytiztTMBThUU3DgPT2KMg59zNcAhp8y+rs58ym4kr7mtXkGKYoZYyk0jWElG+BeLDplwVmJ
- 5uR+kvfOLYY0AWSXRcAecWIBMaH6C/TQl4VRi5KDEdp1iHRFfc5g/YeI4Zj0rQJer0xWbJA4g
- u2D39D6T16h9KygS25A65lT9m3gzwVCufr/3+7bz2BYpsKr7+dZNXYs3InVQFzYvRfks9LQ8a
- /hTC7rRCIQK7Qqq9HtlTlQ2D1MuYV9ii9Rux/v3ZQJ7d4SDDy9OhiVzDbsAqBR/mgjLdk+5jp
- fnDX2WuIUeCJOzeCJsl+qgzk4jz6VV6qQnJLTnsRbMCuc18vsLk9DTpd5hDJ2Sb+Vi55s3dZZ
- qBhFt1GCWYbxLFcPfMvXdPuoDtz0GZdHUVtpv4/8DsGFZoxtUgZLiV0etVcVxN8cY4DWsP7kX
- 1dB4fsdz3Q8lPc8SHlhXZ5PnDtTCRH9YnSV7LkHuaYYykw+mqgBgR9O5u0q2rlGKWJ5Z0Nouq
- nh+mEMtci2A5RBspbkQlc5UaboG2VkapLP8dc69Cm3jgBmNtP5CE1+KPuOjiQlhHKaOSED39P
- 6JaNez5IL592syxGuOD/xSg/K98O5H9nfhcLKzwv+eQvLDFHIGU8v/3/sKh0q0VG5pTve7vJ0
- 8F3+eXCwtYq3BpHzuxF8e2uIrUt6N2UG3V5/zfvLgwWdwXJaO/McZLSVst/fNUUg2rHZj6U8E
- FTiFGC1qSJcoJjw2R7p0VwdUTsSetequo8Mf8DEIVRwVWSMwt7dMSfxLe7+8dfAzmSFzxjuYq
- HvEwqKgoBpIY//3HyNpZgGHm3Q2Xe5YDW/EMlxcojuXJvhBqcGDkWUdRy2FgSCE6/sArrHVG+
- rREMgRnFY5pk8VyqstwVQZLAlmjBvWvmi9sZytyAyfynlimkhEqf6kOXi/C+HI9x8uXRBsEmb
- AXanJSjg8+kT/wagQLnFCObzCAEHmVFYKWyPjGB5k7LGlvcuRw9Zonbaue4ed0fzvQ4hNzDOl
- fbHMdkjqfolBATOcmK8anKplX3YKSGHooQ0oXSLA1I8mmHf6T7fuliI5zisbaWInhKfxvLziZ
- +B9ED5iiXFCSfP53TMra3nbk2xR+0QnpMsnioh/G1h8AAk8LtG+pKuZ+A==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220730163528.48377-1-xhao@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 08:51, Khalid Masum wrote:
-> Here is a simplified reproducer for the issue:
->
-> https://gist.githubusercontent.com/Labnann/923d6b9b3a19848fc129637b839b8=
-a55/raw/a68271fcc724569735fe27f80817e561b3ff629a/reproducer.c
+On Sun, Jul 31, 2022 at 12:35:28AM +0800, Xin Hao wrote:
+> In many data center servers, the shared memory architectures is
+> Non-Uniform Memory Access (NUMA), remote numa node data access
+> often brings a high latency problem, but what we are easy to ignore
+> is that the page table remote numa access, It can also leads to a
+> performance degradation.
+> 
+> So there add a new interface in /proc, This will help developers to
+> get more info about performance issues if they are caused by cross-NUMA.
 
-The reproducer does this:
-ioctl(3, TIOCLINUX, TIOCL_SETSEL, selection: xs:3  ys:0  xe:0 ye:0 mode:0)=
-  =3D 0
--> sets the text selection area
-ioctl(4, KDFONTOP)  with op=3D0 (con_font_set), charcount=3D512  width=3D8=
-  height=3D32, 0x20000000) =3D 0
--> changes the font size.
+Interesting.  The implementation seems rather more complex than
+necessary though.
 
-It does not crash with current Linus' head (v5.19-rc8).
-Kernel v5.16, which was used by this KASAN report, hasn't received backpor=
-ts
-since months, so I tried stable kernel v5.15.58 instead, and this
-kernel crashed with the reproducer.
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 2d04e3470d4c..a51befb47ea8 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1999,4 +1999,133 @@ const struct file_operations proc_pid_numa_maps_operations = {
+>  	.release	= proc_map_release,
+>  };
+> 
+> +struct pgtable_numa_maps {
+> +	unsigned long node[MAX_NUMNODES];
+> +};
+> +
+> +struct pgtable_numa_private {
+> +	struct proc_maps_private proc_maps;
+> +	struct pgtable_numa_maps md;
+> +};
 
-The reproducer brings up two issues with current code:
-1. The reproducer uses ioctl(TIOCLINUX, TIOCL_SETSEL) and hands over (inva=
-lid)
-zero-values for ys and ye for the starting lines.
-This is wrong, since the API seems to expect a "1" as the very first line =
-for the selection.
-This can be easily fixed by adding checks for zero-values and return -EINV=
-AL if found.
+struct pgtable_numa_private {
+	struct proc_maps_private proc_maps;
+	unsigned long node[MAX_NUMNODES];
+};
 
-But this bug isn't critical itself and is not the reason for the kernel cr=
-ash.
-Without the checks, the ioctl handler simply wraps the coordinate values a=
-nd converts them
-from:
-input selection: xs:3  ys:0  xe:0   ye:0  mode:0    to the new:
-vc_selection =3D   xs:2  ys:23 xe:127 ye:23 mode:0
-which is the current maximum coordinates for the screen.
+> +static void gather_pgtable_stats(struct page *page, struct pgtable_numa_maps *md)
+> +{
+> +	md->node[page_to_nid(page)] += 1;
+> +}
+> +
+> +static struct page *can_gather_pgtable_numa_stats(pmd_t pmd, struct vm_area_struct *vma,
+> +		unsigned long addr)
+> +{
+> +	struct page *page;
+> +	int nid;
+> +
+> +	if (!pmd_present(pmd))
+> +		return NULL;
+> +
+> +	if (pmd_huge(pmd))
+> +		return NULL;
+> +
+> +	page = pmd_page(pmd);
+> +	nid = page_to_nid(page);
+> +	if (!node_isset(nid, node_states[N_MEMORY]))
+> +		return NULL;
+> +
+> +	return page;
+> +}
+> +
+> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+> +		unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pgtable_numa_maps *md = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	struct page *page;
+> +
+> +	if (pmd_huge(*pmd)) {
+> +		struct page *pmd_page;
+> +
+> +		pmd_page = virt_to_page(pmd);
+> +		if (!pmd_page)
+> +			return 0;
+> +
+> +		if (!node_isset(page_to_nid(pmd_page), node_states[N_MEMORY]))
+> +			return 0;
+> +
+> +		gather_pgtable_stats(pmd_page, md);
+> +		goto out;
+> +	}
+> +
+> +	page = can_gather_pgtable_numa_stats(*pmd, vma, addr);
+> +	if (!page)
+> +		return 0;
+> +
+> +	gather_pgtable_stats(page, md);
+> +
+> +out:
+> +	cond_resched();
+> +	return 0;
+> +}
 
-Those higher values now trigger issue #2:
-After the TIOCL_SETSEL the last line on the screen is now selected. The KD=
-FONTOP ioctl
-then sets a 8x32 console font, and replaces the former 8x16 console font.
-With the bigger font the current screen selection is now outside the visib=
-le screen
-and this finally triggeres this backtrace, because vc_do_resize() calls cl=
-ear_selection()
-to unhighlight the selection (which starts to render chars outside of the =
-screen):
+static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+		unsigned long end, struct mm_walk *walk)
+{
+	struct pgtable_numa_private *priv = walk->private;
+	struct vm_area_struct *vma = walk->vma;
+	struct page *page;
+	int nid;
 
- drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:794 [inline]
- drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2288
- bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:124 [inline]
- bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:173
- fbcon_putcs+0x353/0x440 drivers/video/fbdev/core/fbcon.c:1277
- do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
- invert_screen+0x1d4/0x600 drivers/tty/vt/vt.c:800
- highlight drivers/tty/vt/selection.c:57 [inline]
- clear_selection drivers/tty/vt/selection.c:84 [inline]
- clear_selection+0x55/0x70 drivers/tty/vt/selection.c:80
- vc_do_resize+0xe6e/0x1180 drivers/tty/vt/vt.c:1257
+	if (pmd_huge(*pmd)) {
+		page = virt_to_page(pmd);
+	} else {
+		page = pmd_page(*pmd);
+	}
 
-IMHO the easiest way to prevent this crash is to simply clear the
-selection before the various con_font_set() console handlers are called.
-Otherwise every console driver needs to add checks and verify if the curre=
-nt
-selection still fits with the selected font, which gets tricky because som=
-e
-of those drivers fiddle with the screen width&height before calling vc_do_=
-resize().
+	nid = page_to_nid(page);
+	priv->node[nid]++;
 
-I'll follow up to this mail with patches for both issues shortly.
+	return 0;
+}
 
-Helge

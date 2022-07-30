@@ -2,227 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1172585A2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 12:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51C2585A2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 12:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbiG3KsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 06:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S233957AbiG3KzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 06:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiG3KsE (ORCPT
+        with ESMTP id S230036AbiG3KzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 06:48:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFE0175B1
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 03:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659178083; x=1690714083;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0uByVVpR9BzdDWk8k2H2AaNl2DyQGlvcRdmOANw+V7c=;
-  b=l147bQGzgRqo1TZS4LfNq76P4YOawqqxuTTl3KevkQK8F2CX3m9vB4ax
-   LoZMzXs9kf78CoDqv6/PGl+DAVY9UrdpVvlWHs51Bguu1rWdGlk8XGTES
-   wPKOrmBgYifp/K1OiO26n7xj4izyJgvCmV+bSNMB0susdIGTIftIUoDa0
-   YlveZ1/5H+/N0KLZj85pIr9scj6lwHDlJz7iStooua1LOb27bmLs/n4kW
-   hK0vTYh4KFkOA9KmlGlyzS7mQns1rkPvtVaU2LltzitUCAmz+xDJEVwI1
-   cGMsfzTZdanAnTARUgX0KwCL+bcAcZKSofV3LlEADIyr5JILivafrOPLd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="350613256"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="350613256"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 03:48:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="629670761"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jul 2022 03:48:01 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHk0n-000CkN-0I;
-        Sat, 30 Jul 2022 10:48:01 +0000
-Date:   Sat, 30 Jul 2022 18:47:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chengming Gui <Jack.Gui@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [agd5f:amd-staging-drm-next 1247/1278]
- drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:23: error: implicit declaration
- of function 'vmalloc'; did you mean 'kvmalloc'?
-Message-ID: <202207301805.lGuXicPm-lkp@intel.com>
+        Sat, 30 Jul 2022 06:55:09 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2C7E5B
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 03:55:08 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z11-20020a05660217cb00b0067c63cf0236so2028777iox.13
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 03:55:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=yVUt1MHWau0W4HIl8atEFKLulnIS+DEjiG71SKLNuNo=;
+        b=hC8FcEVZtA2m4f0EFnqrgnu8pxQGm6pFFiZVC53vtb5IGPhkPgvftWERf1nXQ2JFi4
+         LSCUx0lVVONJauRC5EXLDoi5gEc9LxaA2KAYZkYWDnTdPTqjF2PaiqpONug33pkaYlPr
+         XeGwVZDN51WYaHJi8oWrvyrFzJU+wWVcqp1j+inVX1t/tGb6tuBIdWvDlA9wUDcnRahd
+         MwcATKXHUEInAOV0ttjQkd9GdBnG3IiQ82gATkKTveHm5vNAHaBnzjJv1vwnJ0bcDAqD
+         eoq6abnwX9vTZM+eHjMaBFpeOaPmEnY2wqTCnBmal4kvMywcoYiPsJN6i5Y3LC6eR7Qh
+         QrvA==
+X-Gm-Message-State: ACgBeo1QheciJQ2lntKAUMvesYk6oy/UHS9Y/8KiB5pI5hlyiZ5PipiK
+        7oR494Uia8knCfHGO8fp1Bkx73rxfU+AsOhaLrytWeLY8j9M
+X-Google-Smtp-Source: AA6agR46xVKA318RGC1nc9gORDZWawZAywzYJJIJAZGOdwW8YEg571Czoe0mApX9DWLi9bOMnd2peerZSBpkMJhhw+jR3OJ4onIL
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:19cd:b0:2de:2db4:e0d3 with SMTP id
+ r13-20020a056e0219cd00b002de2db4e0d3mr2252529ill.112.1659178508232; Sat, 30
+ Jul 2022 03:55:08 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 03:55:08 -0700
+In-Reply-To: <20220730081246.4567-1-khalid.masum.92@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a2f7105e5039940@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
+From:   syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>
+To:     khalid.masum.92@gmail.com, khalid.masum@aol.com,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
-head:   2305916dca043ed69bd464f74a886b0216780aa6
-commit: 8d1669d0090d25da9faf3d72c30ad57056bd3888 [1247/1278] drm/amd/amdgpu: add memory training support for PSP_V13
-config: alpha-buildonly-randconfig-r001-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301805.lGuXicPm-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f amd-staging-drm-next
-        git checkout 8d1669d0090d25da9faf3d72c30ad57056bd3888
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+Hello,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: vmalloc-out-of-bounds Write in imageblit
 
-All error/warnings (new ones prefixed by >>):
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
+Write of size 4 at addr ffffc90004301000 by task syz-executor.3/4204
 
-   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c: In function 'psp_v13_0_memory_training':
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:23: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
-     534 |                 buf = vmalloc(sz);
-         |                       ^~~~~~~
-         |                       kvmalloc
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:21: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     534 |                 buf = vmalloc(sz);
-         |                     ^
->> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:545:33: error: implicit declaration of function 'vfree'; did you mean 'kfree'? [-Werror=implicit-function-declaration]
-     545 |                                 vfree(buf);
-         |                                 ^~~~~
-         |                                 kfree
-   cc1: some warnings being treated as errors
+CPU: 1 PID: 4204 Comm: syz-executor.3 Not tainted 5.19.0-rc8-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
+ sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
+ drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:825 [inline]
+ drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2328
+ bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:139 [inline]
+ bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:188
+ fbcon_putcs+0x314/0x3e0 drivers/video/fbdev/core/fbcon.c:1285
+ do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
+ redraw_screen+0x61f/0x740 drivers/tty/vt/vt.c:1035
+ fbcon_do_set_font+0x5eb/0x6f0 drivers/video/fbdev/core/fbcon.c:2435
+ fbcon_set_font+0x89d/0xab0 drivers/video/fbdev/core/fbcon.c:2522
+ con_font_set drivers/tty/vt/vt.c:4666 [inline]
+ con_font_op+0x73a/0xc90 drivers/tty/vt/vt.c:4710
+ vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
+ vt_ioctl+0x1efa/0x2b20 drivers/tty/vt/vt_ioctl.c:752
+ tty_ioctl+0xbbd/0x15e0 drivers/tty/tty_io.c:2778
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f57f9089109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f57fa20f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f57f919bf60 RCX: 00007f57f9089109
+RDX: 0000000020000040 RSI: 0000000000004b72 RDI: 0000000000000004
+RBP: 00007f57fa20f1d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007fffa57859ef R14: 00007f57fa20f300 R15: 0000000000022000
+ </TASK>
+
+The buggy address belongs to the virtual mapping at
+ [ffffc90004001000, ffffc90004302000) created by:
+ drm_gem_shmem_vmap_locked drivers/gpu/drm/drm_gem_shmem_helper.c:319 [inline]
+ drm_gem_shmem_vmap+0x3d7/0x5a0 drivers/gpu/drm/drm_gem_shmem_helper.c:366
+
+Memory state around the buggy address:
+ ffffc90004300f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90004300f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc90004301000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                   ^
+ ffffc90004301080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90004301100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
 
-vim +534 drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
+Tested on:
 
-   457	
-   458	
-   459	static int psp_v13_0_memory_training(struct psp_context *psp, uint32_t ops)
-   460	{
-   461		struct psp_memory_training_context *ctx = &psp->mem_train_ctx;
-   462		uint32_t *pcache = (uint32_t *)ctx->sys_cache;
-   463		struct amdgpu_device *adev = psp->adev;
-   464		uint32_t p2c_header[4];
-   465		uint32_t sz;
-   466		void *buf;
-   467		int ret, idx;
-   468	
-   469		if (ctx->init == PSP_MEM_TRAIN_NOT_SUPPORT) {
-   470			dev_dbg(adev->dev, "Memory training is not supported.\n");
-   471			return 0;
-   472		} else if (ctx->init != PSP_MEM_TRAIN_INIT_SUCCESS) {
-   473			dev_err(adev->dev, "Memory training initialization failure.\n");
-   474			return -EINVAL;
-   475		}
-   476	
-   477		if (psp_v13_0_is_sos_alive(psp)) {
-   478			dev_dbg(adev->dev, "SOS is alive, skip memory training.\n");
-   479			return 0;
-   480		}
-   481	
-   482		amdgpu_device_vram_access(adev, ctx->p2c_train_data_offset, p2c_header, sizeof(p2c_header), false);
-   483		dev_dbg(adev->dev,"sys_cache[%08x,%08x,%08x,%08x] p2c_header[%08x,%08x,%08x,%08x]\n",
-   484			  pcache[0], pcache[1], pcache[2], pcache[3],
-   485			  p2c_header[0], p2c_header[1], p2c_header[2], p2c_header[3]);
-   486	
-   487		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
-   488			dev_dbg(adev->dev, "Short training depends on restore.\n");
-   489			ops |= PSP_MEM_TRAIN_RESTORE;
-   490		}
-   491	
-   492		if ((ops & PSP_MEM_TRAIN_RESTORE) &&
-   493		    pcache[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
-   494			dev_dbg(adev->dev, "sys_cache[0] is invalid, restore depends on save.\n");
-   495			ops |= PSP_MEM_TRAIN_SAVE;
-   496		}
-   497	
-   498		if (p2c_header[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
-   499		    !(pcache[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
-   500		      pcache[3] == p2c_header[3])) {
-   501			dev_dbg(adev->dev, "sys_cache is invalid or out-of-date, need save training data to sys_cache.\n");
-   502			ops |= PSP_MEM_TRAIN_SAVE;
-   503		}
-   504	
-   505		if ((ops & PSP_MEM_TRAIN_SAVE) &&
-   506		    p2c_header[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
-   507			dev_dbg(adev->dev, "p2c_header[0] is invalid, save depends on long training.\n");
-   508			ops |= PSP_MEM_TRAIN_SEND_LONG_MSG;
-   509		}
-   510	
-   511		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
-   512			ops &= ~PSP_MEM_TRAIN_SEND_SHORT_MSG;
-   513			ops |= PSP_MEM_TRAIN_SAVE;
-   514		}
-   515	
-   516		dev_dbg(adev->dev, "Memory training ops:%x.\n", ops);
-   517	
-   518		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
-   519			/*
-   520			 * Long training will encroach a certain amount on the bottom of VRAM;
-   521			 * save the content from the bottom of VRAM to system memory
-   522			 * before training, and restore it after training to avoid
-   523			 * VRAM corruption.
-   524			 */
-   525			sz = GDDR6_MEM_TRAINING_ENCROACHED_SIZE;
-   526	
-   527			if (adev->gmc.visible_vram_size < sz || !adev->mman.aper_base_kaddr) {
-   528				dev_err(adev->dev, "visible_vram_size %llx or aper_base_kaddr %p is not initialized.\n",
-   529					  adev->gmc.visible_vram_size,
-   530					  adev->mman.aper_base_kaddr);
-   531				return -EINVAL;
-   532			}
-   533	
- > 534			buf = vmalloc(sz);
-   535			if (!buf) {
-   536				dev_err(adev->dev, "failed to allocate system memory.\n");
-   537				return -ENOMEM;
-   538			}
-   539	
-   540			if (drm_dev_enter(adev_to_drm(adev), &idx)) {
-   541				memcpy_fromio(buf, adev->mman.aper_base_kaddr, sz);
-   542				ret = psp_v13_0_memory_training_send_msg(psp, PSP_BL__DRAM_LONG_TRAIN);
-   543				if (ret) {
-   544					DRM_ERROR("Send long training msg failed.\n");
- > 545					vfree(buf);
-   546					drm_dev_exit(idx);
-   547					return ret;
-   548				}
-   549	
-   550				memcpy_toio(adev->mman.aper_base_kaddr, buf, sz);
-   551				adev->hdp.funcs->flush_hdp(adev, NULL);
-   552				vfree(buf);
-   553				drm_dev_exit(idx);
-   554			} else {
-   555				vfree(buf);
-   556				return -ENODEV;
-   557			}
-   558		}
-   559	
-   560		if (ops & PSP_MEM_TRAIN_SAVE) {
-   561			amdgpu_device_vram_access(psp->adev, ctx->p2c_train_data_offset, ctx->sys_cache, ctx->train_data_size, false);
-   562		}
-   563	
-   564		if (ops & PSP_MEM_TRAIN_RESTORE) {
-   565			amdgpu_device_vram_access(psp->adev, ctx->c2p_train_data_offset, ctx->sys_cache, ctx->train_data_size, true);
-   566		}
-   567	
-   568		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
-   569			ret = psp_v13_0_memory_training_send_msg(psp, (amdgpu_force_long_training > 0) ?
-   570								 PSP_BL__DRAM_LONG_TRAIN : PSP_BL__DRAM_SHORT_TRAIN);
-   571			if (ret) {
-   572				dev_err(adev->dev, "send training msg failed.\n");
-   573				return ret;
-   574			}
-   575		}
-   576		ctx->training_cnt++;
-   577		return 0;
-   578	}
-   579	
+commit:         e0dccc3b Linux 5.19-rc8
+git tree:       https://github.com/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1156281e080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+dashboard link: https://syzkaller.appspot.com/bug?extid=14b0e8f3fd1612e35350
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1346ae16080000
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

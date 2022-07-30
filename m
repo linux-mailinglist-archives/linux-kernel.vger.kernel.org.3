@@ -2,143 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574B4585C18
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553B4585C1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiG3Uax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 16:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S235914AbiG3Ujd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 16:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiG3Uav (ORCPT
+        with ESMTP id S231281AbiG3Ujc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 16:30:51 -0400
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63A1EE1D
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:30:50 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id Ht6bo0sxd5V1hHt6bojkgf; Sat, 30 Jul 2022 22:30:49 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 30 Jul 2022 22:30:49 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <e5cbad07-f930-8a66-2579-42f993ca566a@wanadoo.fr>
-Date:   Sat, 30 Jul 2022 22:30:36 +0200
+        Sat, 30 Jul 2022 16:39:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C4E5FEA
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659213571; x=1690749571;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KvxAf4qju8TdniXwWPhW+k++yayht8UzKyk/cBl/fno=;
+  b=eNalnF/hh4Ks5uYvKto1nQ1kONValuN/7kTzyY3hlNxqOPYsUzQ0Oyap
+   9hKYEZdj9qJPCwaeT16yVyk+xLzeuJghJmoCLLr7MKG+4hxY7Gu4lAqJR
+   vk3Wt+XX14U7HptDqPK5SpQanlj3+iFDQ0MFBz5W5zSF6SS+EhKkzbIlC
+   Nx47Ig3Ef3dXNxo9OXU+c7t5eFlh6WJq3yxtNRb1Jne36BDk3Mr0PeUKs
+   BZJzJelK+Jmsdn7z+coy9vbBnEwHeSp4dhlIbx8PWIVoq3dY9Fusfhvv9
+   Hqy2jS0gHyvHqa5M+PlCfd2y7/FM6HYw6UL///Rpo61jNwojwz5oeBOMA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269327746"
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="269327746"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:39:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="552093013"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 13:39:29 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHtFA-000DJR-1p;
+        Sat, 30 Jul 2022 20:39:28 +0000
+Date:   Sun, 31 Jul 2022 04:38:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
+Subject: [atishp04:kvm_perf_rfc_snapshot 21/25]
+ arch/riscv/kvm/vcpu_sbi_pmu.c:66:15: warning: no previous prototype for
+ function 'kvm_sbi_ext_pmu_probe'
+Message-ID: <202207310426.hXMc5CaM-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
- call in intel_eth_pci_remove()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     vee.khee.wong@intel.com, weifeng.voon@intel.com,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Newsgroups: gmane.linux.kernel.janitors,gmane.linux.kernel,gmane.linux.network,gmane.linux.ports.arm.kernel
-References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
- <YuWR9I8y9cWlLG3O@smile.fi.intel.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <YuWR9I8y9cWlLG3O@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 30/07/2022 à 22:17, Andy Shevchenko a écrit :
-> On Sat, Jul 30, 2022 at 08:19:47PM +0200, Christophe JAILLET wrote:
->> Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
->> paths") removed this clk_disable_unprepare()
->>
->> This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
->> handling on remove path") which removed this clk_disable_unprepare()
->> because:
->> "
->>     While unloading the dwmac-intel driver, clk_disable_unprepare() is
->>     being called twice in stmmac_dvr_remove() and
->>     intel_eth_pci_remove(). This causes kernel panic on the second call.
->> "
->>
->> However later on, commit 5ec55823438e8 ("net: stmmac: add clocks management
->> for gmac driver") has updated stmmac_dvr_remove() which do not call
->> clk_disable_unprepare() anymore.
->>
->> So this call should now be called from intel_eth_pci_remove().
-> 
-> The correct way of fixing it (which might be very well end up functionally
-> the same as this patch), is to introduce ->quit() in struct stmmac_pci_info
-> and assign it correctly, because not all platforms enable clocks.
+tree:   https://github.com/atishp04/linux kvm_perf_rfc_snapshot
+head:   42182a0a79a8768e22fd70232c3aca2bc1a26a43
+commit: 657de0362946d389f50e8b65f72da5f5ba0be1da [21/25] RISC-V: KVM: Add SBI PMU extension support
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220731/202207310426.hXMc5CaM-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/atishp04/linux/commit/657de0362946d389f50e8b65f72da5f5ba0be1da
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 kvm_perf_rfc_snapshot
+        git checkout 657de0362946d389f50e8b65f72da5f5ba0be1da
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-I won't be able to propose anything like that.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-By the way, in the first sentence of my log, s/removed/added/.
-(I hope that it can be fixed when/if the patch is applied)
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kvm/vcpu_sbi_pmu.c:66:15: warning: no previous prototype for function 'kvm_sbi_ext_pmu_probe' [-Wmissing-prototypes]
+   unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
+                 ^
+   arch/riscv/kvm/vcpu_sbi_pmu.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
+   ^
+   static 
+   1 warning generated.
 
 
-Thanks for the review.
+vim +/kvm_sbi_ext_pmu_probe +66 arch/riscv/kvm/vcpu_sbi_pmu.c
 
-CJ
+    65	
+  > 66	unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
+    67	{
+    68		/*
+    69		 * PMU Extension is only available to guests if privilege mode filtering
+    70		 * is available. Otherwise, guest will always count events while the
+    71		 * execution is in hypervisor mode.
+    72		 */
+    73		return riscv_isa_extension_available(NULL, SSCOFPMF);
+    74	}
+    75	
 
-> 
-> Perhaps, we may leave this patch as is (for the sake of easy backporting) and
-> apply another one as I explained above to avoid similar mistakes in the future.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
->> Fixes: 5ec55823438e8 ("net: stmmac: add clocks management for gmac driver")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> /!\     This patch is HIGHLY speculative.     /!\
->>
->> The corresponding clk_disable_unprepare() is still called within the pm
->> related stmmac_bus_clks_config() function.
->>
->> However, with my limited understanding of the pm API, I think it that the
->> patch is valid.
->> (in other word, does the pm_runtime_put() and/or pm_runtime_disable()
->> and/or stmmac_dvr_remove() can end up calling .runtime_suspend())
->>
->> So please review with care, as I'm not able to test the change by myself.
->>
->>
->> If I'm wrong, maybe a comment explaining why it is safe to have this
->> call in the error handling path of the probe and not in the remove function
->> would avoid erroneous patches generated from static code analyzer to be
->> sent.
->> ---
->>   drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
->> index 52f9ed8db9c9..9f38642f86ce 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
->> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
->> @@ -1134,6 +1134,7 @@ static void intel_eth_pci_remove(struct pci_dev *pdev)
->>   
->>   	stmmac_dvr_remove(&pdev->dev);
->>   
->> +	clk_disable_unprepare(plat->stmmac_clk);
->>   	clk_unregister_fixed_rate(priv->plat->stmmac_clk);
->>   
->>   	pcim_iounmap_regions(pdev, BIT(0));
->> -- 
->> 2.34.1
->>
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

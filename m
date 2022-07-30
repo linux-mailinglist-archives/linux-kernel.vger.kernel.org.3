@@ -2,124 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07DC585B84
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 20:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5FB585B95
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 20:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235446AbiG3SPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 14:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S235424AbiG3SQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 14:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiG3SPI (ORCPT
+        with ESMTP id S233622AbiG3SQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 14:15:08 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284BA11C36
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 11:15:07 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10bd4812c29so9202222fac.11
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 11:15:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=AV37Ed7YOZ0S/U4KXZNq93kgcOKE/yFuDjXhB9YSKcw=;
-        b=Kof/HcsqvZZTkQVgMo8Tf2WaoBZ9fG9wPg0OYNNjp1ja6+Tk7/811P2Nh383pKjzZH
-         DhBgUH812AD2BvDRcL/oKG0em8X0j9pXPGLUyVTGe9L4ujdprC/FCYpao8YkfWTg5ym7
-         vvkFrvP9jQfoCKytfoT8j4smqNu2LNGy813Boj8ASnOGPgj44N3SG8zYF5rWxsaa/we1
-         7XBMgiMdWzY7Aroxp83ibd8mp61IblHERfc+sGcX5JWzZORy3sWnae+fUG1JVx9kC6ry
-         S+c1+ktomp84bkaYH9vriBtfKpCRLfrUUnIeepJKkwcps3WpFLJVozN47fW/0MpQYLGG
-         DH3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AV37Ed7YOZ0S/U4KXZNq93kgcOKE/yFuDjXhB9YSKcw=;
-        b=RDyjTXiuBxHTGZ+ld/CufIz2EmoLM4uO6cC2skLngui1pFbCeQCP9c2l2+PqMnJujh
-         c8UYnx4eEqVG8gDn7sH5RzCR0qyPg9GJjQz6h1YNFv2HwGyk8zGbq8Gd2by3Ct4Ok8Gj
-         O3MCxGCbXh9wcQgwCRHuWoYlvM6ASsi/lFJJDnlqZgpeOowyJm3UVImlmc6gKjtDAP9V
-         Q5xy47VJF4XflB5Y91HnXQkKKrToiKP2MhNV+W5Kf+IX5/bdbnnPqdfs01nTJj8SL8Po
-         hK3KmUvObFEagseO9LQhgFuTIRMt+RPkzqIyvcCs9XWSzDLQjBQAbDc2pe0LtKbdgAGA
-         bWXA==
-X-Gm-Message-State: AJIora9tgjNkgBPPDTAQocXP8fRchiserxXDpr16Lp9K6TM3E3CCH3BM
-        WUtBcp3tCbZA9u2Feqh5O3Y=
-X-Google-Smtp-Source: AGRyM1sxo3lcXMReFqFkSqYnWMS89g8jrlHFYvtQYBrEYrOJL9PWv6sobuwQhVdDBRT771uxFRAnDA==
-X-Received: by 2002:a05:6870:5489:b0:10e:7821:bf57 with SMTP id f9-20020a056870548900b0010e7821bf57mr4194760oan.167.1659204906446;
-        Sat, 30 Jul 2022 11:15:06 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id m15-20020a4ad50f000000b004320b0cc5acsm1864587oos.48.2022.07.30.11.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 11:15:05 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 11:15:03 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH v5 0/5] cpumask: fix invalid uniprocessor assumptions
-Message-ID: <YuV1J7Zt+NzkrWeV@yury-laptop>
-References: <cover.1659077534.git.sander@svanheule.net>
+        Sat, 30 Jul 2022 14:16:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2365D1583F;
+        Sat, 30 Jul 2022 11:16:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F4F860EEA;
+        Sat, 30 Jul 2022 18:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95708C433C1;
+        Sat, 30 Jul 2022 18:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659204999;
+        bh=YJXP6A7d+KZPrg8HQv8x+gqLEMy1sjVdzXnl/qX62uw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gJSpKVSsAKz8pom4RuAB5Je2VfXHGMhI5S8QuPgLw6sbq0QnDrcsB984Q3KCjMEP4
+         SYUjeqdnSm23czJoxrwT8/cSChg2wZ3j8oXxKHXQSMFJwdsOWYkZ8L3yHTrxHHHv/B
+         PCAYHs9Jnrby4wbTToGryEY6Ex3TIpS7AHVXuUJU6nS/OoMCgZLC69/yQVKdeU26z2
+         g1F1UjpLlSrDEHmQXbwyZ9oeANnc2U7/KwPArewe4hoBbjnHbzgEqXp6HAhF3f96Ro
+         rfGOh77ykaTrG15ZCImyvdTTA95ZiEUj+F32tOHQ6Prrb5v2smeceYH3zHnZYF0uH1
+         p/j3tMujFTrgw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3BA285C0266; Sat, 30 Jul 2022 11:16:39 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 11:16:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michel Lespinasse <michel@lespinasse.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org, rh0@fb.com
+Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Message-ID: <20220730181639.GS2860372@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.172460444@infradead.org>
+ <20220725194306.GA14746@lespinasse.org>
+ <20220728172053.GA3607379@paulmck-ThinkPad-P17-Gen-1>
+ <20220729102458.GA1695@lespinasse.org>
+ <20220729152622.GM2860372@paulmck-ThinkPad-P17-Gen-1>
+ <20220730094032.GA1587@lespinasse.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1659077534.git.sander@svanheule.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220730094032.GA1587@lespinasse.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 09:01:17AM +0200, Sander Vanheule wrote:
-> On uniprocessor builds, it is currently assumed that any cpumask will
-> contain the single CPU: cpu0. This assumption is used to provide
-> optimised implementations.
+On Sat, Jul 30, 2022 at 02:40:32AM -0700, Michel Lespinasse wrote:
+> On Fri, Jul 29, 2022 at 08:26:22AM -0700, Paul E. McKenney wrote:> Would you be willing to try another shot in the dark, but untested
+> > this time?  I freely admit that this is getting strange.
+> > 
+> > 							Thanx, Paul
 > 
-> The current assumption also appears to be wrong, by ignoring the fact
-> that users can provide empty cpumasks. This can result in bugs as
-> explained in [1] - for_each_cpu() will run one iteration of the loop
-> even when passed an empty cpumask.
-> 
-> This series introduces some basic tests, and updates the optimisations
-> for uniprocessor builds.
-> 
-> The x86 patch was written after the kernel test robot [2] ran into a
-> failed build. I have tried to list the files potentially affected by the
-> changes to cpumask.h, in an attempt to find any other cases that fail on
-> !SMP. I've gone through some of the files manually, and ran a few cross
-> builds, but nothing else popped up. I (build) checked about half of the
-> potientally affected files, but I do not have the resources to do them
-> all. I hope we can fix other issues if/when they pop up later.
-> 
-> [1] https://lore.kernel.org/all/20220530082552.46113-1-sander@svanheule.net/
-> [2] https://lore.kernel.org/all/202206060858.wA0FOzRy-lkp@intel.com/
- 
-Hi Sander,
+> Yes, adding this second change got rid of the boot time warning for me.
 
-I tried to apply it on top of bitmap-for next, and there are many conflicts
-with already pulled patches. There's nothing really scary, just functions
-changed their prototypes and locations. Can you try your series on top of
-bitmap-for-next from git@github.com:/norov/linux.git (or just -next)? 
+OK, I will make a real patch.  May I have your Tested-by?
 
-I'm asking you to do it instead of doing myself because I don't want to
-screwup your code accidentally and because many cpumask functions in -next
-are moved to the header, and it would be probably possible to avoid building 
-cpumask.o in UP case.
+							Thanx, Paul
 
-Briefly looking into the -next code, cpumask.c hosts  only cpumask_next_wrap() 
-that is not overwritten by UP code, and in UP case it can be simplified.
-
-Thanks,
-Yury
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
+> > index e374c0c923dae..279f557bf60bb 100644
+> > --- a/kernel/sched/clock.c
+> > +++ b/kernel/sched/clock.c
+> > @@ -394,7 +394,7 @@ notrace void sched_clock_tick(void)
+> >  	if (!static_branch_likely(&sched_clock_running))
+> >  		return;
+> >  
+> > -	lockdep_assert_irqs_disabled();
+> > +	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
+> >  
+> >  	scd = this_scd();
+> >  	__scd_stamp(scd);

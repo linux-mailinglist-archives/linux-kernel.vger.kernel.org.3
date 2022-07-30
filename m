@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0557D5857FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C67F585801
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239736AbiG3CZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 22:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S239744AbiG3C3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 22:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiG3CZe (ORCPT
+        with ESMTP id S233163AbiG3C3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 22:25:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F602186F7;
-        Fri, 29 Jul 2022 19:25:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA34961D96;
-        Sat, 30 Jul 2022 02:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1974CC433C1;
-        Sat, 30 Jul 2022 02:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659147933;
-        bh=EsersN85TttPaQcdVgjli1UBcGalAzLNzoI5+PJX7dM=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=B4+6uWnYV7ESdirnk7ZjgWGid8KnJI6m1JBH5aa0AERpBYWc5YSvyj63GgbXIJHu6
-         KFVTFuUJ2Asl0NdjuPGKjFUJQ0o4VsAqxulR3d+78OluLQYI+JnvIgSuHEMvaIvwon
-         wpl2pY3m2PjaUv/nU1Zl0G8RBD8nDYznCDESmclu/N+4mC4mtfIWGaKPEQvXniwk5A
-         uG98IJjh1LYDKXGV6rI2Ukcml2jJjxrajTJBucWOh6cWR7vUA5WnMfArM98ICarnmt
-         x76yt4QwANCleBOa2tCk4mKQ9MJ1QvT+ddlwncWT31DitJ3XS4A82P4SvxfdjD4amA
-         WkgB8qMacyB/w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A2F845C04B1; Fri, 29 Jul 2022 19:25:32 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 19:25:32 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux@roeck-us.net, alexander.deucher@amd.com, arnd@arndb.de,
-        sunpeng.li@amd.com, harry.wentland@amd.com
-Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Stack-frame warnings in display_mode_vba_32.c
-Message-ID: <20220730022532.GA1234397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Fri, 29 Jul 2022 22:29:03 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D34DFDF
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:29:03 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 206so1800379pgb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=D8nh9rddTt6L51ZbXbpeHlTuyQZ7jqEF8HhjNBeFMSo=;
+        b=J43v+iWR0ZHURNM5y3qQ9FP2G7QJNDpPf+aTs6ZD5S9y8mHMgOypQMzYFc0Q60UcBv
+         ZMC8qtqJU5OzrBazvtEopY1MQn7M8ObvQ7OmnhUn0CIuxKqWG0gn3VOXjuf/lDi6xY2q
+         VA1iZ9+pH7x4TgO3Seb5dJOnScqq3q4TPvz5q/auQuaPgUn/IlUImL9SalBfeVeF8O1C
+         J2V7W1eWFdtMuLCEq5K7Th3qvr1Blq3uEMolkTtRzAHA51xgkm6GEBJGSAcg6qOwzP1A
+         Cis90QOF/yXt918e3Vjgv+EEZ9UVn9jZzx3aQnmpOcYhPoS0OYFQYldqefXf6JGqQsCR
+         MxXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=D8nh9rddTt6L51ZbXbpeHlTuyQZ7jqEF8HhjNBeFMSo=;
+        b=VCqiq7B4uVUzLrIBPjXMZsMvCDWT7qZA93GGRdmulxt2aMkhRAcUDIABkm5rgb2+M4
+         Be6wtbXXQ31W3ptO6ZopmhXGw3RMA0diUtUfSCdGQ7ojdBMK4JE1wxWEd+mp/g3y3El6
+         YnS7E+qSCMEPWzTBCFfjMxuyZsVAmXsWBXEJHR2d22q7lTM6H7eqON6zug5SaWdM0NEi
+         lQe7Mi49n7NbKRYQccLbtth5+uiJPjhCfcr8bU7VcTAoRqi6sMfU98lhy1izP2U8lHa0
+         G4Ve0FTnDt/LGWqDpGlOvpPKQFrAlR7genOT5Wco8Fv3XeHjo+IVWFwJqW+UsSaEORvy
+         TMGQ==
+X-Gm-Message-State: AJIora+9m7t9GgUQ8XI0Sad/5PdCYOGz7ruXDdGwqBeNtkQ2y/4voGl8
+        Nubjjl3UOwNXdm7e095k1LGhtOpnN+QHQUdub/E=
+X-Google-Smtp-Source: AGRyM1tzLXxBW/OHVmYkOjGUsDptBkCU4EJjbbLqSOXbjCorpcuSYRiTQJ0HQMksd5CP+xzgTdzj4nQVog9zCTCTaqE=
+X-Received: by 2002:a65:49c8:0:b0:41a:eb36:d1a7 with SMTP id
+ t8-20020a6549c8000000b0041aeb36d1a7mr5103118pgs.66.1659148142504; Fri, 29 Jul
+ 2022 19:29:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220729004920.8544-1-quic_yingangl@quicinc.com>
+In-Reply-To: <20220729004920.8544-1-quic_yingangl@quicinc.com>
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+Date:   Sat, 30 Jul 2022 07:58:49 +0530
+Message-ID: <CAFqt6zaAFONhDtWcwBbTVM5LkT4v0uM0wLiAnVGpzNydHp_S0Q@mail.gmail.com>
+Subject: Re: [PATCH v3] mm/page_owner.c: add llseek for page_owner
+To:     Kassey Li <quic_yingangl@quicinc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, vbabka@kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Fri, Jul 29, 2022 at 6:19 AM Kassey Li <quic_yingangl@quicinc.com> wrote:
+>
+> There is usage to dump a given cma region page_owner
+> instead of all page's.
+>
+> This change allows to specify a ppos as start_pfn
+> by fseek.
+>
+> Any invalid ppos will be skipped, so it did not
+> broken the origin dump feature.
+>
 
-I am seeing the following in allmodconfig builds of recent -next on x86:
+I think a Suggested-by tag needs to be added.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1659:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
- 1659 | }
-      | ^
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘dml32_ModeSupportAndSystemConfigurationFull’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3799:1: error: the frame size of 2480 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
- 3799 | } // ModeSupportAndSystemConfigurationFull
-      | ^
 
-Bisection located the commit shown below.  Doing an allmodconfig build
-on this commit reproduces the error, its parent builds fine.
-
-Thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 3876a8b5e241081b2a519f848a65c00d8e6cd124
-Author: Guenter Roeck <linux@roeck-us.net>
-Date:   Tue Jul 12 15:42:47 2022 -0700
-
-    drm/amd/display: Enable building new display engine with KCOV enabled
-    
-    The new display engine uses floating point math, which is not supported
-    by KCOV. Commit 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov
-    is enabled") tried to work around the problem by disabling
-    CONFIG_DRM_AMD_DC_DCN if KCOV_INSTRUMENT_ALL and KCOV_ENABLE_COMPARISONS
-    are enabled. The result is that KCOV can not be enabled on systems which
-    require this display engine. A much simpler and less invasive solution is
-    to disable KCOV selectively when compiling the display enagine while
-    keeping it enabled for the rest of the kernel.
-    
-    Fixes: 9d1d02ff3678 ("drm/amd/display: Don't build DCN1 when kcov is enabled")
-    Cc: Arnd Bergmann <arnd@arndb.de>
-    Cc: Leo Li <sunpeng.li@amd.com>
-    Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-    Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-
-diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-index b4029c0d5d8c5..96cbc87f7b6b8 100644
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@ -6,7 +6,7 @@ config DRM_AMD_DC
- 	bool "AMD DC - Enable new display engine"
- 	default y
- 	select SND_HDA_COMPONENT if SND_HDA_CORE
--	select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-+	select DRM_AMD_DC_DCN if (X86 || PPC64)
- 	help
- 	  Choose this option if you want to use the new display engine
- 	  support for AMDGPU. This adds required support for Vega and
-diff --git a/drivers/gpu/drm/amd/display/dc/Makefile b/drivers/gpu/drm/amd/display/dc/Makefile
-index 273f8f2c8e020..b9effadfc4bb7 100644
---- a/drivers/gpu/drm/amd/display/dc/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/Makefile
-@@ -25,6 +25,9 @@
- DC_LIBS = basics bios dml clk_mgr dce gpio irq link virtual
- 
- ifdef CONFIG_DRM_AMD_DC_DCN
-+
-+KCOV_INSTRUMENT := n
-+
- DC_LIBS += dcn20
- DC_LIBS += dsc
- DC_LIBS += dcn10
+> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+> ---
+>  mm/page_owner.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index e4c6f3f1695b..231b1877af99 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -497,8 +497,8 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>                 return -EINVAL;
+>
+>         page = NULL;
+> -       pfn = min_low_pfn + *ppos;
+>
+> +       pfn = *ppos;
+>         /* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+>         while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+>                 pfn++;
+> @@ -561,7 +561,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>                         continue;
+>
+>                 /* Record the next PFN to read in the file offset */
+> -               *ppos = (pfn - min_low_pfn) + 1;
+> +               *ppos = pfn + 1;
+>
+>                 return print_page_owner(buf, count, pfn, page,
+>                                 page_owner, handle);
+> @@ -570,6 +570,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>         return 0;
+>  }
+>
+> +static loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
+> +{
+> +       loff_t retval = 0;
+> +       switch (whence) {
+> +               case SEEK_CUR:
+> +               case SEEK_SET:
+> +                       file->f_pos = offset;
+> +                       break;
+> +               default:
+> +                       retval = -ENXIO;
+> +       }
+> +
+> +       return retval;
+> +}
+> +
+>  static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
+>  {
+>         unsigned long pfn = zone->zone_start_pfn;
+> @@ -660,6 +675,7 @@ static void init_early_allocated_pages(void)
+>
+>  static const struct file_operations proc_page_owner_operations = {
+>         .read           = read_page_owner,
+> +       .llseek         = llseek_page_owner,
+>  };
+>
+>  static int __init pageowner_init(void)
+> --
+> 2.17.1
+>
+>

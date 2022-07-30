@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0E3585BBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA059585BB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiG3TUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 15:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
+        id S235801AbiG3TUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 15:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiG3TUf (ORCPT
+        with ESMTP id S235636AbiG3TUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 15:20:35 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CF110570
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:20:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ez10so13701087ejc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:20:34 -0700 (PDT)
+        Sat, 30 Jul 2022 15:20:43 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05F6101DF
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:20:42 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id m8so9278967edd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc;
-        bh=HUoAZomuVEY3gWZs5PRO+GGlcpFSS2IlF4vVoPzeVgo=;
-        b=HN2RwIDPEaVjNCV1XzPSUga1o1wtGNu7/UOLJgj5RnVjBNZl8cPif4Pxk1u6M9PH4/
-         Xu9ffrQZeQ+D/+BB4eGl9BYvWuSdr/ZUtsQvlGgNskCjhn71D/8auNidWLp6ciZ9kvXO
-         e52PgPCQw58BC7ngd6FnNKLujO0vTQvBkvu9wrWR/8tCB6tf5yuHY5S9/brMiDb+u9hL
-         cYE1OcJD8b93E9/4usiin2XhQSlusoK2Vd8f2dTyyc7bpSE10pwCIdjIixrniaQMixuU
-         UPgxLc2UHLjoalNv8BrGs3UvhvXlEBftUFZm2nRNdorbB9luhtO7kf3PYyPsnjoHAm7M
-         mI0A==
+        bh=zEv3y3d4lNBhF3QA9eeB4K5jO3MyXebCpviRLBi5Fd8=;
+        b=ETK2IwoiqFreK+LdBxvQp69R8sQXA7iT2jSauG/Go+LOLNvH2LrtrDW+QryRnXLqWu
+         vGLLEjprU1sZ+4pWM+PT4/ycb0IZON13ja8QO7rr5TLo1ETPZ7FgUp1G3PT3msHAwBDh
+         8AiiJ0nQuxnlhezW8En0tMLR5Whjs5nic7imP41lURhGnYAh27/JWhRsAVXyaLItboOY
+         MkhJofGZHNNiNM73eJYf7ylfBDzG+BdSq+YrCEgO3Hll2ErWRFW3xUjkCITfuiBFoWES
+         G6FRQZbp2mvLLaa+60IiL54E3Bxu4SsZXX2wqPGh5UkyDulYpnxOnO202ZripDjsVLUz
+         1IaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc;
-        bh=HUoAZomuVEY3gWZs5PRO+GGlcpFSS2IlF4vVoPzeVgo=;
-        b=Z4UOwvg3zgox289onb5bR6qGdzDdz07DRdfZBozc2a0r9ytzU509C6btt2L+szzxAs
-         U64T/kiklLPkXuBi7M1eHj2RLCHL+n8AFUqvm470cVFnVMBVgP0Zgpj+1uJDUMZ0h0yW
-         mct1zg6XxLJAX6+soSY3gDvEiqABS4GuX9uD5cHnCU35le/kKYKB7W4Tibv29wvTQlTh
-         vfKeq0LM+yrTOpnh9Ue0ZT0gokiBEoDC9dL1soNG5llszFKXGie/3bGYra/wjoPo3jnG
-         JlfDEQJwbhMFOmF/k2rk/65lzDtcIi9YoOkeIOWQBhxGtFw36cQawzfBYuONliplGdvk
-         emMw==
-X-Gm-Message-State: AJIora8bfhFTuXosFnDKdEwawR112sDdqGGL5tjBL1Rie8sghQ10KRJO
-        EHu0VfQdkJrb8mccVVgafFi7wRag2rU=
-X-Google-Smtp-Source: AGRyM1sJVck7k58kzPJmFKFcb8QhrXHG/kmie+BSgXBXqzStigwLX5UwwNgDAkLGbL4Ay+EMMYZu1A==
-X-Received: by 2002:a17:907:2cef:b0:72b:5b3e:3d7a with SMTP id hz15-20020a1709072cef00b0072b5b3e3d7amr6942572ejc.293.1659208832652;
-        Sat, 30 Jul 2022 12:20:32 -0700 (PDT)
+        bh=zEv3y3d4lNBhF3QA9eeB4K5jO3MyXebCpviRLBi5Fd8=;
+        b=Ko2KJvHiyQ9FavGclZeQsi1Vn4+rrdH2hvC3FgzoeF1zEt9u+IWDV9aWlK8d4J67hY
+         p94fC4GQKEeu+9Msnp8KQk69fCl8byarVZu5xcaOxz8Lo0IQyyCAU+m8PDW3JHPKR0b/
+         ipa9vDZJf+TWRfiNZFZa4rmuPUWxKZ7o8DNDXlwqSuD0/18a/TlFGltmKGn8g1cCl0rR
+         IvbB2NA5qXMdb+lS9nk8xhsRCKSYQXCwZZafBB6aasdPKy4ukM3/QMLouw1loH5YNdUh
+         sJpqWaVIh+Z1APjbXPna+9ehiQqk35kPpgztOBUnnsWoi/fHDdOkdh2IOinWwt1NbbGS
+         IlbA==
+X-Gm-Message-State: ACgBeo0DQKD+87psPuppnR7iUYq9+3qG0+ycDV9+KWuivfzN2HuLfbj8
+        f+kVUuL7pKZuCgJVma9cTyg=
+X-Google-Smtp-Source: AA6agR4JYUmtMB6i+qWDdcsOlKx+QbqKkxm1aWgSfzDHDl9XxBVV8Q6wZcvxCw/FMcTKb1ziFfB3+w==
+X-Received: by 2002:a50:bace:0:b0:43d:370a:e1c1 with SMTP id x72-20020a50bace000000b0043d370ae1c1mr5947702ede.193.1659208841143;
+        Sat, 30 Jul 2022 12:20:41 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id g10-20020a1709067c4a00b0072ab06bf296sm3282425ejp.23.2022.07.30.12.20.32
+        by smtp.gmail.com with ESMTPSA id p27-20020a056402501b00b0043bdd401cafsm4214506eda.47.2022.07.30.12.20.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 12:20:32 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 21:20:30 +0200
+        Sat, 30 Jul 2022 12:20:40 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 21:20:39 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] staging: vt6655: Create one function for four macros
-Message-ID: <d4768227a7ea10ccec6d08eb0c55f8790ef70379.1659192760.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 3/6] staging: vt6655: Rename function MACvEnableProtectMD
+Message-ID: <3e5edc9a6a0cefa5474d125321a8b6d6caf58e19.1659192760.git.philipp.g.hortmann@gmail.com>
 References: <cover.1659192760.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,59 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create function vt6655_mac_en_dis_bits_u32_reg with three parameters to
-cover functionality of four macros.
+Rename MACvEnableProtectMD function to vt6655_mac_en_protect_md to
+avoid CamelCase which is not accepted by checkpatch.pl and to clean up
+namespace.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/vt6655/device_main.c | 12 ++++++++++--
- drivers/staging/vt6655/mac.h         |  3 +++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ drivers/staging/vt6655/device_main.c | 4 ++--
+ drivers/staging/vt6655/mac.h         | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 3565aa53f007..5f64204dc312 100644
+index 5f64204dc312..7633602e47c1 100644
 --- a/drivers/staging/vt6655/device_main.c
 +++ b/drivers/staging/vt6655/device_main.c
-@@ -216,15 +216,23 @@ static void vt6655_mac_dma_ctl(void __iomem *iobase, u8 reg_index)
- 		iowrite32(DMACTL_RUN, iobase + reg_index);
- }
- 
--static void MACvEnableProtectMD(void __iomem *iobase)
-+static void vt6655_mac_en_dis_bits_u32_reg(void __iomem *iobase, bool en_not_dis, u32 bit_mask)
- {
- 	u32 reg_value;
- 
- 	reg_value = ioread32(iobase + MAC_REG_ENCFG);
--	reg_value = reg_value | ENCFG_PROTECTMD;
-+	if (en_not_dis)
-+		reg_value = reg_value | bit_mask;
-+	else
-+		reg_value = reg_value & ~bit_mask;
+@@ -228,7 +228,7 @@ static void vt6655_mac_en_dis_bits_u32_reg(void __iomem *iobase, bool en_not_dis
  	iowrite32(reg_value, iobase + MAC_REG_ENCFG);
  }
  
-+static void MACvEnableProtectMD(void __iomem *iobase)
-+{
-+	vt6655_mac_en_dis_bits_u32_reg(iobase, ENABLE, ENCFG_PROTECTMD);
-+}
-+
- /*
-  * Initialisation of MAC & BBP registers
-  */
+-static void MACvEnableProtectMD(void __iomem *iobase)
++static void vt6655_mac_en_protect_md(void __iomem *iobase)
+ {
+ 	vt6655_mac_en_dis_bits_u32_reg(iobase, ENABLE, ENCFG_PROTECTMD);
+ }
+@@ -1478,7 +1478,7 @@ static void vnt_bss_info_changed(struct ieee80211_hw *hw,
+ 
+ 	if (changed & BSS_CHANGED_ERP_CTS_PROT) {
+ 		if (conf->use_cts_prot)
+-			MACvEnableProtectMD(priv->port_offset);
++			vt6655_mac_en_protect_md(priv->port_offset);
+ 		else
+ 			MACvDisableProtectMD(priv->port_offset);
+ 	}
 diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index 84d203c56b1f..31e75df5f02f 100644
+index 31e75df5f02f..66e03e8173ea 100644
 --- a/drivers/staging/vt6655/mac.h
 +++ b/drivers/staging/vt6655/mac.h
-@@ -21,6 +21,9 @@
- #include "device.h"
+@@ -12,7 +12,7 @@
+  * Revision History:
+  *      07-01-2003 Bryan YC Fan:  Re-write codes to support VT3253 spec.
+  *      08-25-2003 Kyle Hsu:      Porting MAC functions from sim53.
+- *      09-03-2003 Bryan YC Fan:  Add MACvDisableProtectMD & MACvEnableProtectMD
++ *      09-03-2003 Bryan YC Fan:  Add MACvDisableProtectMD & vt6655_mac_en_protect_md
+  */
  
- /*---------------------  Export Definitions -------------------------*/
-+#define ENABLE 1
-+#define DISABLE 0
-+
- /* Registers in the MAC */
- #define MAC_MAX_CONTEXT_SIZE_PAGE0  256
- #define MAC_MAX_CONTEXT_SIZE_PAGE1  128
+ #ifndef __MAC_H__
 -- 
 2.37.1
 

@@ -2,79 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D9C585950
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5BE585952
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiG3JGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 05:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S233162AbiG3JIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 05:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiG3JGQ (ORCPT
+        with ESMTP id S229720AbiG3JIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 05:06:16 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF9933E27;
-        Sat, 30 Jul 2022 02:06:15 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso4820603otv.3;
-        Sat, 30 Jul 2022 02:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=4eVRrmQ+WXTUA655hJC7om/Fw3gm4iKU9b/x4bJL90A=;
-        b=J+r/cTKaC7sX+nLput/6FyeuQ2jWiikEwrwsmUBWQSWAqoIH9ZS3G7DyyVXhbIRWN3
-         t+a9Hfa9oBQfWBipeAqIiLzzpGQM307ARmC1mp5YtOuzbqMjDDrZk3Z7UGwdVGNlcf4Y
-         4ipwWMSRKRvYfUghdmPEmTl1iKi3aWv+YCV41Gn1FRwl7HSZTS6lcsrOIbbBMN+piQny
-         +IlU7zpmj/+iWY4bHv8Gq+1yBK4n1MsB0ryjip0UNWz/uiUCJazYDQhd1JlZt6+F4VBC
-         N0KhOvzQtZcTqbn3oamQFhbqygpDCE5wz/+3rNUAzqCL0uK1H6yEORWhRlEi+OJCbz1r
-         yRWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=4eVRrmQ+WXTUA655hJC7om/Fw3gm4iKU9b/x4bJL90A=;
-        b=ApW/PSOP8jfaEzrEWDGhVjAoXYhvupzf4qol2V845atCF515jq5LXe9BoDy5A7Qkn+
-         RyxwlQlIGdlNhpPdolTLDL59Eq4YHiEPocfw+FXgz0JqQ7sJUmiR6tS9a8wN/j5UFZDT
-         xMveAKeoHpLCuftZDVS32BypKXiBDSLsePBs5R4BZCuA6OO/A1HgypD2McJvSBdASZQC
-         2R2uN7Vf7cddX7uDWSV4GDXgkFu5ybGQq84nP8w6QmguwUNLAYS0043G2WbX+sIQRDsK
-         9eHQ0MPRBxfdLVlkcZGOdQEq94/4qGjFz77enKPRxCR8DUBybZzXbl8CfgRALovuadUq
-         8ffg==
-X-Gm-Message-State: AJIora+zT2JkBTok+5hJJ7VuIp8H6i1tkFEPEL8RLRB0m5V/nYNpbc1Y
-        Bsynz06gpn3HzOyj6AeVhRDzXWfg7DcLUQ==
-X-Google-Smtp-Source: AGRyM1tx2RCvf5THPT7g5vMumNDZwSgV7NHBp0eGgabTb6fToRvUbVhKrQcvmNq0qVoMOtPaq2NAeQ==
-X-Received: by 2002:a05:6830:d81:b0:616:abfa:796f with SMTP id bv1-20020a0568300d8100b00616abfa796fmr2849828otb.18.1659171974604;
-        Sat, 30 Jul 2022 02:06:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h4-20020a056830164400b0061c9c7813d4sm1658129otr.24.2022.07.30.02.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Jul 2022 02:06:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <80410e6e-838b-fa3d-1f87-710eb3c751c5@roeck-us.net>
-Date:   Sat, 30 Jul 2022 02:06:10 -0700
+        Sat, 30 Jul 2022 05:08:17 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 232EA357EF;
+        Sat, 30 Jul 2022 02:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tcP2m
+        m4DtplDocqbYqdu/vxCgy6tDyjtagLsytmyRzU=; b=mAAWN2NkWG2yssZj7wRN9
+        aI9lflNHtzfEyGGT2pdtaZRfvCioneh9p/yWasAMlddv//UONMQoI2cx19Vnh9PO
+        +Hpc0oUD8K/tDfOTM7pj2FsvZ1l/8taCrQu5Z3cNNNzDpCTGu27pZd3ojYmutHS8
+        cbnEOQgQfp5VbrgOpKmXIA=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp3 (Coremail) with SMTP id G9xpCgCHs1yL9ORimkc0SQ--.24840S2;
+        Sat, 30 Jul 2022 17:06:21 +0800 (CST)
+From:   studentxswpy@163.com
+To:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Xie Shaowen <studentxswpy@163.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH net-next] mptcp: Fix spelling mistakes and cleanup code
+Date:   Sat, 30 Jul 2022 17:06:17 +0800
+Message-Id: <20220730090617.3101386-1-studentxswpy@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: Stack-frame warnings in display_mode_vba_32.c
-Content-Language: en-US
-To:     paulmck@kernel.org,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-Cc:     sfr@canb.auug.org.au, harry.wentland@amd.com, sunpeng.li@amd.com,
-        arnd@arndb.de, alexander.deucher@amd.com,
-        linux-next@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220730022532.GA1234397@paulmck-ThinkPad-P17-Gen-1>
- <85a49b72-8bb7-b3b3-8a69-2c90cda8079d@igalia.com>
- <20220730051238.GR2860372@paulmck-ThinkPad-P17-Gen-1>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220730051238.GR2860372@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-CM-TRANSID: G9xpCgCHs1yL9ORimkc0SQ--.24840S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFW7Cr1DXr4kKw43Jr13Arb_yoW8WF1xpr
+        W7Ka93GFs7JFWxXr4kAF4kZr9ruan8WFnakFyj9w1fArs8uryaq345KFW5ZrWUCrs5XFZx
+        XrW2ga13Ca1DuaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j5Ma8UUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xvwxvv5qw024ls16il2tof0z/xtbBEQ1OJFaEJ33FQgAAs5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,53 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 22:12, Paul E. McKenney wrote:
-> On Fri, Jul 29, 2022 at 11:41:55PM -0300, André Almeida wrote:
->> Hi Paul,
->>
->> Às 23:25 de 29/07/22, Paul E. McKenney escreveu:
->>> Hello!
->>>
->>> I am seeing the following in allmodconfig builds of recent -next on x86:
->>>
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation’:
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1659:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
->>>   1659 | }
->>>        | ^
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘dml32_ModeSupportAndSystemConfigurationFull’:
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3799:1: error: the frame size of 2480 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
->>>   3799 | } // ModeSupportAndSystemConfigurationFull
->>>        | ^
->>
->> I think they are fixed at amd-staging-drm-next:
->>
->> git log --oneline amd/amd-staging-drm-next
->> drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
->> 953daa61981b drm/amd/display: Reduce stack size in the mode support function
->> 361e705e712d drm/amd/display: reduce stack for
->> dml32_CalculatePrefetchSchedule
->> f2dbf5a4dd1e drm/amd/display: reduce stack for
->> dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport
->> a0a68cda2ef8 drm/amd/display: reduce stack for dml32_CalculateVMRowAndSwath
->> ca6730ca0f01 drm/amd/display: reduce stack for
->> dml32_CalculateSwathAndDETConfiguration
->> 593eef8c1a5e drm/amd/display: reduce stack size in dcn32 dml (v2)
->>
->> https://gitlab.freedesktop.org/agd5f/linux/-/commits/amd-staging-drm-next/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> 
-> Very good, thank you!  I will test again on the next -next.
-> 
+From: Xie Shaowen <studentxswpy@163.com>
 
-Did you try next-20220728 ?
+fix follow spelling misktakes:
+	regarless ==> regardless
+	interaces ==> interfaces
 
-groeck@server:~/src/linux-next$ git describe
-next-20220728
-groeck@server:~/src/linux-next$ git log --oneline drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c
-1b54a0121dba drm/amd/display: Reduce stack size in the mode support function
-86e4863e67a9 drm/amd/display: reduce stack for dml32_CalculatePrefetchSchedule
-3c3abac60117 drm/amd/display: reduce stack for dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport
-c3b3f9ba25e6 drm/amd/display: reduce stack for dml32_CalculateVMRowAndSwath
-bac4b41d917a drm/amd/display: reduce stack for dml32_CalculateSwathAndDETConfiguration
-7acc487ab57e drm/amd/display: reduce stack size in dcn32 dml (v2)
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: Xie Shaowen <studentxswpy@163.com>
+---
+ net/mptcp/pm_netlink.c | 2 +-
+ net/mptcp/subflow.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Guenter
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index 7c7395b58944..5bdb559d5242 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -1134,7 +1134,7 @@ void mptcp_pm_nl_subflow_chk_stale(const struct mptcp_sock *msk, struct sock *ss
+ 			}
+ 			unlock_sock_fast(ssk, slow);
+ 
+-			/* always try to push the pending data regarless of re-injections:
++			/* always try to push the pending data regardless of re-injections:
+ 			 * we can possibly use backup subflows now, and subflow selection
+ 			 * is cheap under the msk socket lock
+ 			 */
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index af28f3b60389..901c763dcdbb 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1634,7 +1634,7 @@ int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
+ 	/* the newly created socket really belongs to the owning MPTCP master
+ 	 * socket, even if for additional subflows the allocation is performed
+ 	 * by a kernel workqueue. Adjust inode references, so that the
+-	 * procfs/diag interaces really show this one belonging to the correct
++	 * procfs/diag interfaces really show this one belonging to the correct
+ 	 * user.
+ 	 */
+ 	SOCK_INODE(sf)->i_ino = SOCK_INODE(sk->sk_socket)->i_ino;
+-- 
+2.25.1
+

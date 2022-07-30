@@ -2,184 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4D6585933
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FED8585932
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbiG3IgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 04:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S231509AbiG3Ie4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 04:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiG3IgB (ORCPT
+        with ESMTP id S229674AbiG3Iex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 04:36:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3832C13EB7
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 01:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659170160; x=1690706160;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q1yUwiF4wpL++puTylr9syqtyGC5KFVkzaS3swaErXE=;
-  b=BvXZmVa4vwFMlmR4EpfhfDpSeE/EEDL8lEjCSfnM6ovD+qDHpz4NDApU
-   BSpn7RlBc+YolC9uh6OXxJ1yZt6PYvDFJgOXYb7Ym63oGZUJPGfgjuurn
-   Oz243cYrFVE+mityZ2VeAuXzhIEmKVry+5Zuc1InrLeTJYxbBRLU4Ll5g
-   DHfHAFsLk0lPdricoJJ+s+ZBhPg8svsCrwBZMs9nV/rR6XlAQGffTS69T
-   uBhf7NfWDj8jdGH331INbNUWa9YQim/g9oXhHJ5Fiff25OtNb3Pw5BsSP
-   pEDUCff/4/a3HEinoHrr5nFac8WnC6xObZGoEe1dhjHn6QeuP7WAELfCN
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="287659703"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="287659703"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 01:35:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="551983376"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 01:35:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHhwz-000CeH-0e;
-        Sat, 30 Jul 2022 08:35:57 +0000
-Date:   Sat, 30 Jul 2022 16:35:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 6418/9999] cc1: error:
- arch/sh/include/mach-rsk: No such file or directory
-Message-ID: <202207301643.B4B5Etah-lkp@intel.com>
+        Sat, 30 Jul 2022 04:34:53 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FDF13E21;
+        Sat, 30 Jul 2022 01:34:51 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LvyMg50yHz6Pn3s;
+        Sat, 30 Jul 2022 16:33:35 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCH6mkn7eRi2T9yBQ--.5018S4;
+        Sat, 30 Jul 2022 16:34:49 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     stable@vger.kernel.org, ming.lei@redhat.com
+Cc:     jejb@linux.vnet.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH stable 4.19 0/1] fix io hung for scsi
+Date:   Sat, 30 Jul 2022 16:46:50 +0800
+Message-Id: <20220730084651.4093719-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCH6mkn7eRi2T9yBQ--.5018S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5E7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd [6418/9999] UPSTREAM: kbuild: add some extra warning flags unconditionally
-config: sh-rsk7201_defconfig (https://download.01.org/0day-ci/archive/20220730/202207301643.B4B5Etah-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
+From: Yu Kuai <yukuai3@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+One of our product reported a io hung problem, turns out the problem
+can be fixed by the patch.
 
-All errors (new ones prefixed by >>):
+I'm not sure why this patch is not backported yet, however, please
+consider it in 4.19 lts.
 
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/lib/lshrdi3.c:6:11: error: no previous prototype for '__lshrdi3' [-Werror=missing-prototypes]
-       6 | long long __lshrdi3(long long u, word_type b)
-         |           ^~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/lib/ashldi3.c:6:11: error: no previous prototype for '__ashldi3' [-Werror=missing-prototypes]
-       6 | long long __ashldi3(long long u, word_type b)
-         |           ^~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/lib/ashrdi3.c:6:11: error: no previous prototype for '__ashrdi3' [-Werror=missing-prototypes]
-       6 | long long __ashrdi3(long long u, word_type b)
-         |           ^~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/idle.c:35:6: error: no previous prototype for 'arch_cpu_idle_dead' [-Werror=missing-prototypes]
-      35 | void arch_cpu_idle_dead(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/sh/kernel/idle.c:40:6: error: no previous prototype for 'arch_cpu_idle' [-Werror=missing-prototypes]
-      40 | void arch_cpu_idle(void)
-         |      ^~~~~~~~~~~~~
-   arch/sh/kernel/idle.c:45:13: error: no previous prototype for 'select_idle_routine' [-Werror=missing-prototypes]
-      45 | void __init select_idle_routine(void)
-         |             ^~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/machvec.c: In function 'early_parse_mv':
-   arch/sh/kernel/machvec.c:46:15: error: variable 'mv_comma' set but not used [-Werror=unused-but-set-variable]
-      46 |         char *mv_comma;
-         |               ^~~~~~~~
-   arch/sh/kernel/machvec.c: In function 'sh_mv_setup':
-   arch/sh/kernel/machvec.c:107:33: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]
-     107 |                         sh_mv = *(struct sh_machine_vector *)&__machvec_start;
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/sh/kernel/machvec.c:16:
-   arch/sh/include/asm/sections.h:7:13: note: object '__machvec_start' of size 4
-       7 | extern long __machvec_start, __machvec_end;
-         |             ^~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/ptrace_32.c: In function 'arch_ptrace':
-   arch/sh/kernel/ptrace_32.c:383:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
-     383 |                 if ((addr & 3) || addr < 0 ||
-         |                                        ^
-   arch/sh/kernel/ptrace_32.c:423:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
-     423 |                 if ((addr & 3) || addr < 0 ||
-         |                                        ^
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/return_address.c:52:7: error: no previous prototype for 'return_address' [-Werror=missing-prototypes]
-      52 | void *return_address(unsigned int depth)
-         |       ^~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/sys_sh.c:58:16: error: no previous prototype for 'sys_cacheflush' [-Werror=missing-prototypes]
-      58 | asmlinkage int sys_cacheflush(unsigned long addr, unsigned long len, int op)
-         |                ^~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/traps.c: In function 'is_valid_bugaddr':
-   arch/sh/kernel/traps.c:119:18: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
-     119 |         if (addr < PAGE_OFFSET)
-         |                  ^
-   cc1: all warnings being treated as errors
---
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
->> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
-   arch/sh/kernel/traps_32.c:734:6: error: no previous prototype for 'per_cpu_trap_init' [-Werror=missing-prototypes]
-     734 | void per_cpu_trap_init(void)
-         |      ^~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-..
+Ming Lei (1):
+  scsi: core: Fix race between handling STS_RESOURCE and completion
+
+ drivers/scsi/scsi_lib.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

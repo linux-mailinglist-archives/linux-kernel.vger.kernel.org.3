@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA921585A3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8D7585A35
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiG3L3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 07:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S234191AbiG3LQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 07:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiG3L3G (ORCPT
+        with ESMTP id S234131AbiG3LQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 07:29:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597C193F9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659180545; x=1690716545;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VIIV6Is++EMkreYgqLsck7xPttucM7frNTgw2Au7VAo=;
-  b=fbX+jahlhZ6kuXcs7JTMzg/N+QRQ5EV4C55zXGKE6qVcbK/J9TYiH2RN
-   dgz5lsCSPJWuhPnVJPa1LciVAI7A6S32pStus1IieCuq0eAD2bO9u+W/a
-   Ie+bA0bKfq7VsGJzRR6/YmfTNNF8Vifmp79HSd1R8ApxLFu2uq8tlRmHw
-   6PhRAbe578zSr69XBQUvknFqbFUolmzgFrcV6Ab1NG5hCI+L1a4uwQk6B
-   IPRCBMpZfBx1pzh+bPEtfFm3OyltQFnzROhmWcERcYfq+K7VU//Ti9n5b
-   ucDqaJQXPiVliEZw+sv6/YPcRQjlc85kuV7P1fm3uF84jvZFPao/M74k/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="289679994"
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="289679994"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 04:29:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="577236560"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jul 2022 04:29:03 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHkeU-000CmB-23;
-        Sat, 30 Jul 2022 11:29:02 +0000
-Date:   Sat, 30 Jul 2022 19:28:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-Subject: [steev:sc8280xp-next-20220722 144/151]
- drivers/gpu/drm/msm/dp/dp_debug.c:192: undefined reference to
- `dp_panel_tpg_config'
-Message-ID: <202207301916.ecD9wbRq-lkp@intel.com>
+        Sat, 30 Jul 2022 07:16:41 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174871EC40
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:16:40 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lw1yN4yqkz9svc;
+        Sat, 30 Jul 2022 19:15:24 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 30 Jul 2022 19:16:38 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 30 Jul
+ 2022 19:16:37 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <zach.brown@ni.com>, <ben.shelton@ni.com>, <s.hauer@pengutronix.de>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH] ubi: Fix UAF wear-leveling entry in eraseblk_count_seq_show()
+Date:   Sat, 30 Jul 2022 19:28:37 +0800
+Message-ID: <20220730112837.51184-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux sc8280xp-next-20220722
-head:   70f72824f4018e98a9003c3c3107be71a1e5c88b
-commit: c1bc1580b0dd297b7749f6353834295155bfbb48 [144/151] drm/msm/dp: Make it possible to enable the test pattern
-config: xtensa-randconfig-m031-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301916.ecD9wbRq-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/steev/linux/commit/c1bc1580b0dd297b7749f6353834295155bfbb48
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev sc8280xp-next-20220722
-        git checkout c1bc1580b0dd297b7749f6353834295155bfbb48
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Wear-leveling entry could be freed in error path, which may be accessed
+again in eraseblk_count_seq_show(), for example:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+__erase_worker                eraseblk_count_seq_show
+                                wl = ubi->lookuptbl[*block_number]
+				if (wl)
+  wl_entry_destroy
+    ubi->lookuptbl[e->pnum] = NULL
+    kmem_cache_free(ubi_wl_entry_slab, e)
+		                   erase_count = wl->ec  // UAF!
 
-All errors (new ones prefixed by >>):
+Wear-leveling entry updating/accessing in ubi->lookuptbl should be
+protected by ubi->wl_lock, fix it by adding ubi->wl_lock to serialize
+wl entry accessing between wl_entry_destroy() and
+eraseblk_count_seq_show().
 
-   xtensa-linux-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_show':
->> drivers/gpu/drm/msm/dp/dp_debug.c:192: undefined reference to `dp_panel_tpg_config'
-   xtensa-linux-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_write':
-   drivers/gpu/drm/msm/dp/dp_debug.c:169: undefined reference to `dp_panel_tpg_config'
+Fetch a reproducer in [Link].
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
-   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
-   Selected by [y]:
-   - QCOM_RPMPD [=y] && PM [=y] && QCOM_SMD_RPM [=y]
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216305
+Fixes: 7bccd12d27b7e3 ("ubi: Add debugfs file for tracking PEB state")
+Fixes: 801c135ce73d5d ("UBI: Unsorted Block Images")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ drivers/mtd/ubi/wl.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-
-vim +192 drivers/gpu/drm/msm/dp/dp_debug.c
-
-de3ee25473ba49 Abhinav Kumar   2020-09-12  176  
-de3ee25473ba49 Abhinav Kumar   2020-09-12  177  static int dp_test_active_show(struct seq_file *m, void *data)
-de3ee25473ba49 Abhinav Kumar   2020-09-12  178  {
-de3ee25473ba49 Abhinav Kumar   2020-09-12  179  	struct dp_debug_private *debug = m->private;
-899b2608d8d4b6 Bjorn Andersson 2021-10-15  180  	struct drm_connector *connector = debug->connector;
-de3ee25473ba49 Abhinav Kumar   2020-09-12  181  
-de3ee25473ba49 Abhinav Kumar   2020-09-12  182  	if (connector->status == connector_status_connected) {
-de3ee25473ba49 Abhinav Kumar   2020-09-12  183  		if (debug->panel->video_test)
-de3ee25473ba49 Abhinav Kumar   2020-09-12  184  			seq_puts(m, "1");
-de3ee25473ba49 Abhinav Kumar   2020-09-12  185  		else
-de3ee25473ba49 Abhinav Kumar   2020-09-12  186  			seq_puts(m, "0");
-899b2608d8d4b6 Bjorn Andersson 2021-10-15  187  	} else {
-de3ee25473ba49 Abhinav Kumar   2020-09-12  188  		seq_puts(m, "0");
-de3ee25473ba49 Abhinav Kumar   2020-09-12  189  	}
-de3ee25473ba49 Abhinav Kumar   2020-09-12  190  
-de3ee25473ba49 Abhinav Kumar   2020-09-12  191  	return 0;
-de3ee25473ba49 Abhinav Kumar   2020-09-12 @192  }
-de3ee25473ba49 Abhinav Kumar   2020-09-12  193  
-
-:::::: The code at line 192 was first introduced by commit
-:::::: de3ee25473ba49f2e785e43b5db5e05cb35aad24 drm/msm/dp: add debugfs nodes for video pattern tests
-
-:::::: TO: Abhinav Kumar <abhinavk@codeaurora.org>
-:::::: CC: Rob Clark <robdclark@chromium.org>
-
+diff --git a/drivers/mtd/ubi/wl.c b/drivers/mtd/ubi/wl.c
+index ee0100740869..5218e6edde58 100644
+--- a/drivers/mtd/ubi/wl.c
++++ b/drivers/mtd/ubi/wl.c
+@@ -890,8 +890,11 @@ static int wear_leveling_worker(struct ubi_device *ubi, struct ubi_work *wrk,
+ 
+ 	err = do_sync_erase(ubi, e1, vol_id, lnum, 0);
+ 	if (err) {
+-		if (e2)
++		if (e2) {
++			spin_lock(&ubi->wl_lock);
+ 			wl_entry_destroy(ubi, e2);
++			spin_unlock(&ubi->wl_lock);
++		}
+ 		goto out_ro;
+ 	}
+ 
+@@ -1130,14 +1133,18 @@ static int __erase_worker(struct ubi_device *ubi, struct ubi_work *wl_wrk)
+ 		/* Re-schedule the LEB for erasure */
+ 		err1 = schedule_erase(ubi, e, vol_id, lnum, 0, false);
+ 		if (err1) {
++			spin_lock(&ubi->wl_lock);
+ 			wl_entry_destroy(ubi, e);
++			spin_unlock(&ubi->wl_lock);
+ 			err = err1;
+ 			goto out_ro;
+ 		}
+ 		return err;
+ 	}
+ 
++	spin_lock(&ubi->wl_lock);
+ 	wl_entry_destroy(ubi, e);
++	spin_unlock(&ubi->wl_lock);
+ 	if (err != -EIO)
+ 		/*
+ 		 * If this is not %-EIO, we have no idea what to do. Scheduling
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

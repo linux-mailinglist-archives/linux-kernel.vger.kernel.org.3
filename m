@@ -2,118 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C0B58581D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61AC585822
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiG3CxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 22:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S239627AbiG3C7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 22:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiG3Cw6 (ORCPT
+        with ESMTP id S230251AbiG3C7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 22:52:58 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1EA4A802
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1659149577;
-        bh=VGBnudRMFElu/73O1TFeffQmUXPA+FTQzL6ZDNaIZKM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Jx91mXR0MnejWrp4pOvDHyT7cN/+uLCgEDGoIILj0KOxI0WTuQz4E4+3LKDwU73Xx
-         7S6srtNT7XbVuLryAV8kn+UPFcM12M/+BisV8OV5/lkzEEBQnG1ZaVsonNbE6c9fq+
-         3V3fs4wqy648YV76iIhgZ5Gs796A3ug+RO2UbWKc=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384))
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 10E3865923;
-        Fri, 29 Jul 2022 22:52:55 -0400 (EDT)
-Message-ID: <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
-Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Youling Tang <tangyouling@loongson.cn>, loongarch@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Lulu Cheng <chenglulu@loongson.cn>
-Date:   Sat, 30 Jul 2022 10:52:54 +0800
-In-Reply-To: <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
-References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
-         <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn>
-         <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
-         <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
-         <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
-         <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn>
-         <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
-         <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 
+        Fri, 29 Jul 2022 22:59:12 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B04481C3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:59:11 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id n13so3260853ilk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=55oLKkrP2swszPcawjd+fMgoHyAw1rVMal6LHnUSDsI=;
+        b=XAvlD61DjhYtCUw9NxYZDJ/2pzRCY5K8wCsrwQxRyPVE/EjMW6WU/xv9wI6+dUs7Me
+         LIwQJMCKXrskXg+QMVM19HfUqjqkZblOn0FJxyJhI85Rfo9CX6j17sRFv86eCRyMPHk8
+         pgvoyERlAOqptdhZHFUKF9SXhBlKtq0w8MAgM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=55oLKkrP2swszPcawjd+fMgoHyAw1rVMal6LHnUSDsI=;
+        b=LyyvJd24ygbcz55W6uR6fqdb2V99sEEkc8l8dDgtt3e+mg3vLDVWdlHwH8GIRnfzTz
+         nVLkgwG4WMDxEldyUlCW86qkKc0TCaUO9H0NwTnG2bvpn8FOtOq+CyQIFk7CsLGdG5zq
+         0VpBCM/UTrnSMtgZgPhT7/i5zRha+PTjCQbqjuGVZ6Wrbwjhj4cVFOD8co8saK3OPKSH
+         2MxCRp6Leh+rH7QSeSgWDRteOsKxgKwt8m91SRW6JbQiHIUhADSym81UdFHZ73GckDeq
+         5z1lWahi9tPqWOPvp8Yj2fn6FUpXPGNWDUsE1DNQ0v3hAm1tSa8/1X/d41JV5R2b03iN
+         j0ow==
+X-Gm-Message-State: AJIora944NJrL52Xeji4WKzsnjSSDTEnIEwLjp+A9fkgztJzDJyIcWLu
+        Bd9SGDBrfUFA+OA0/8CJC6CAl6kkEeftFw==
+X-Google-Smtp-Source: AGRyM1uglNE8+LFJmCQH5EMmltEry1RnzBxQTb3ldIVgBm/lunf9WPyBHJaig4Nu2lnSzV1e84Evng==
+X-Received: by 2002:a05:6e02:1b8f:b0:2dd:8f33:d8d6 with SMTP id h15-20020a056e021b8f00b002dd8f33d8d6mr2411272ili.81.1659149950378;
+        Fri, 29 Jul 2022 19:59:10 -0700 (PDT)
+Received: from jrosenth45.corp.google.com ([2601:285:8300:c23:c82a:e170:891f:5bf])
+        by smtp.gmail.com with ESMTPSA id v18-20020a056e020f9200b002dbfcfa3233sm2166420ilo.37.2022.07.29.19.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 19:59:09 -0700 (PDT)
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: [PATCH v4] firmware: google: Implement cbmem in sysfs driver
+Date:   Fri, 29 Jul 2022 20:58:40 -0600
+Message-Id: <20220730025840.2624795-1-jrosenth@chromium.org>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+In-Reply-To: <CAODwPW-JzXXsEANaS+6n695YqriAQ0j0LXm31R2u1OP3MhX9Uw@mail.gmail.com>
+References: <CAODwPW-JzXXsEANaS+6n695YqriAQ0j0LXm31R2u1OP3MhX9Uw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-07-30 at 10:24 +0800, Xi Ruoyao wrote:
-> On Sat, 2022-07-30 at 01:55 +0800, Xi Ruoyao wrote:
-> > On Fri, 2022-07-29 at 20:19 +0800, Youling Tang wrote:
-> >=20
-> > > On 07/29/2022 07:45 PM, Xi Ruoyao wrote:
-> > > > Hmm... The problem is the "addresses" of per-cpu symbols are
-> > > > faked: they
-> > > > are actually offsets from $r21.=C2=A0 So we can't just load such an
-> > > > offset
-> > > > with PCALA addressing.
-> > > >=20
-> > > > It looks like we'll need to introduce an attribute for GCC to
-> > > > make
-> > > > an
-> > > > variable "must be addressed via GOT", and add the attribute into
-> > > > PER_CPU_ATTRIBUTES.
-> >=20
-> > > Yes, we need a GCC attribute to specify the per-cpu variable.
-> >=20
-> > GCC patch adding "addr_global" attribute for LoongArch:
-> > https://gcc.gnu.org/pipermail/gcc-patches/2022-July/599064.html
-> >=20
-> > An experiment to use it:
-> > https://github.com/xry111/linux/commit/c1d5d70
->=20
-> Correction: https://github.com/xry111/linux/commit/c1d5d708
->=20
-> It seems 7-bit SHA is not enough for kernel repo.
+cbmem entries can be read from coreboot table
+0x31 (LB_TAG_CBMEM_ENTRY).  This commit exports access to cbmem
+entries in sysfs under /sys/firmware/coreboot/cbmem-*.
 
-If addr_global is rejected or not implemented (for example, building the
-kernel with GCC 12), *I expect* the following hack to work (I've not
-tested it because I'm AFK now).  Using visibility in kernel seems
-strange, but I think it may make some sense because the modules are some
-sort of similar to an ELF shared object being dlopen()'ed, and our way
-to inject per-CPU symbols is analog to ELF interposition.
+Link: https://issuetracker.google.com/239604743
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Julius Werner <jwerner@chromium.org>
+Tested-by: Jack Rosenthal <jrosenth@chromium.org>
+Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
+---
+ .../ABI/testing/sysfs-firmware-coreboot       |  15 ++
+ drivers/firmware/google/Kconfig               |   8 +
+ drivers/firmware/google/Makefile              |   3 +
+ drivers/firmware/google/cbmem.c               | 232 ++++++++++++++++++
+ drivers/firmware/google/coreboot_table.h      |  11 +
+ 5 files changed, 269 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-coreboot
+ create mode 100644 drivers/firmware/google/cbmem.c
 
-arch/loongarch/include/asm/percpu.h:=20
+diff --git a/Documentation/ABI/testing/sysfs-firmware-coreboot b/Documentation/ABI/testing/sysfs-firmware-coreboot
+new file mode 100644
+index 000000000000..b91477ee6198
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-firmware-coreboot
+@@ -0,0 +1,15 @@
++What:		/sys/firmware/coreboot/
++Date:		July 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		Coreboot-based BIOS firmware provides a variety of information
++		in CBMEM.  Each CBMEM entry can be found via Coreboot tables.
++		For each CBMEM entry, the following are exposed:
++
++		address: A hexidecimal value of the memory address the data for
++			the entry begins at.
++		size: The size of the data stored.
++		id: The id corresponding to the entry. A list of ids known to
++			coreboot can be found in the coreboot tree at
++			src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h
++		mem: A file exposing the raw memory for the entry.
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 983e07dc022e..bf8316d1cb31 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -19,6 +19,14 @@ config GOOGLE_SMI
+ 	  driver provides an interface for reading and writing NVRAM
+ 	  variables.
+ 
++config GOOGLE_CBMEM
++	tristate "CBMEM entries in sysfs"
++	depends on GOOGLE_COREBOOT_TABLE
++	help
++	  This option enables the kernel to search for Coreboot CBMEM
++	  entries, and expose the memory for each entry in sysfs under
++	  /sys/firmware/coreboot.
++
+ config GOOGLE_COREBOOT_TABLE
+ 	tristate "Coreboot Table Access"
+ 	depends on HAS_IOMEM && (ACPI || OF)
+diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
+index d17caded5d88..8151e323cc43 100644
+--- a/drivers/firmware/google/Makefile
++++ b/drivers/firmware/google/Makefile
+@@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
+ 
++# Must come after coreboot_table.o, as this driver depends on that bus type.
++obj-$(CONFIG_GOOGLE_CBMEM)		+= cbmem.o
++
+ vpd-sysfs-y := vpd.o vpd_decode.o
+ obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
+diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
+new file mode 100644
+index 000000000000..9646a8047742
+--- /dev/null
++++ b/drivers/firmware/google/cbmem.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * cbmem.c
++ *
++ * Driver for exporting cbmem entries in sysfs.
++ *
++ * Copyright 2022 Google LLC
++ */
++
++#include <linux/ctype.h>
++#include <linux/device.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/kobject.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++
++#include "coreboot_table.h"
++
++#define LB_TAG_CBMEM_ENTRY 0x31
++
++static struct kobject *coreboot_kobj;
++
++struct cbmem_entry;
++struct cbmem_entry_attr {
++	struct kobj_attribute kobj_attr;
++	struct cbmem_entry *entry;
++};
++
++struct cbmem_entry {
++	char *kobj_name;
++	struct kobject *kobj;
++	struct coreboot_device *dev;
++	struct bin_attribute mem_file;
++	char *mem_file_buf;
++	struct cbmem_entry_attr address_file;
++	struct cbmem_entry_attr size_file;
++	struct cbmem_entry_attr id_file;
++};
++
++static struct cbmem_entry_attr *to_cbmem_entry_attr(struct kobj_attribute *a)
++{
++	return container_of(a, struct cbmem_entry_attr, kobj_attr);
++}
++
++static ssize_t cbmem_entry_mem_read(struct file *filp, struct kobject *kobp,
++				    struct bin_attribute *bin_attr, char *buf,
++				    loff_t pos, size_t count)
++{
++	struct cbmem_entry *entry = bin_attr->private;
++
++	return memory_read_from_buffer(buf, count, &pos, entry->mem_file_buf,
++				       bin_attr->size);
++}
++
++static ssize_t cbmem_entry_mem_write(struct file *filp, struct kobject *kobp,
++				     struct bin_attribute *bin_attr, char *buf,
++				     loff_t pos, size_t count)
++{
++	struct cbmem_entry *entry = bin_attr->private;
++
++	if (pos < 0 || pos >= bin_attr->size)
++		return -EINVAL;
++	if (count > bin_attr->size - pos)
++		count = bin_attr->size - pos;
++
++	memcpy(entry->mem_file_buf + pos, buf, count);
++	return count;
++}
++
++static ssize_t cbmem_entry_address_show(struct kobject *kobj,
++					struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%llx\n",
++			  entry_attr->entry->dev->cbmem_entry.address);
++}
++
++static ssize_t cbmem_entry_size_show(struct kobject *kobj,
++				     struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%x\n",
++			  entry_attr->entry->dev->cbmem_entry.entry_size);
++}
++
++static ssize_t cbmem_entry_id_show(struct kobject *kobj,
++				   struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%x\n",
++			  entry_attr->entry->dev->cbmem_entry.id);
++}
++
++static int cbmem_entry_setup(struct cbmem_entry *entry)
++{
++	int ret;
++
++	entry->mem_file_buf =
++		devm_memremap(&entry->dev->dev, entry->dev->cbmem_entry.address,
++			      entry->dev->cbmem_entry.entry_size, MEMREMAP_WB);
++	if (!entry->mem_file_buf)
++		return -ENOMEM;
++
++	entry->kobj_name = devm_kasprintf(&entry->dev->dev, GFP_KERNEL,
++					  "cbmem-%08x",
++					  entry->dev->cbmem_entry.id);
++	if (!entry->kobj_name)
++		return -ENOMEM;
++
++	entry->kobj = kobject_create_and_add(entry->kobj_name, coreboot_kobj);
++	if (!entry->kobj)
++		return -ENOMEM;
++
++	sysfs_bin_attr_init(&entry->mem_file);
++	entry->mem_file.attr.name = "mem";
++	entry->mem_file.attr.mode = 0664;
++	entry->mem_file.size = entry->dev->cbmem_entry.entry_size;
++	entry->mem_file.read = cbmem_entry_mem_read;
++	entry->mem_file.write = cbmem_entry_mem_write;
++	entry->mem_file.private = entry;
++	ret = sysfs_create_bin_file(entry->kobj, &entry->mem_file);
++	if (ret)
++		goto free_kobj;
++
++	sysfs_attr_init(&entry->address_file.kobj_attr.attr);
++	entry->address_file.kobj_attr.attr.name = "address";
++	entry->address_file.kobj_attr.attr.mode = 0444;
++	entry->address_file.kobj_attr.show = cbmem_entry_address_show;
++	entry->address_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj,
++				&entry->address_file.kobj_attr.attr);
++	if (ret)
++		goto free_mem_file;
++
++	sysfs_attr_init(&entry->size_file.kobj_attr.attr);
++	entry->size_file.kobj_attr.attr.name = "size";
++	entry->size_file.kobj_attr.attr.mode = 0444;
++	entry->size_file.kobj_attr.show = cbmem_entry_size_show;
++	entry->size_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++	if (ret)
++		goto free_address_file;
++
++	sysfs_attr_init(&entry->id_file.kobj_attr.attr);
++	entry->id_file.kobj_attr.attr.name = "id";
++	entry->id_file.kobj_attr.attr.mode = 0444;
++	entry->id_file.kobj_attr.show = cbmem_entry_id_show;
++	entry->id_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj, &entry->id_file.kobj_attr.attr);
++	if (ret)
++		goto free_size_file;
++
++	return 0;
++
++free_size_file:
++	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++free_address_file:
++	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
++free_mem_file:
++	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
++free_kobj:
++	kobject_put(entry->kobj);
++	return ret;
++}
++
++static int cbmem_entry_probe(struct coreboot_device *dev)
++{
++	struct cbmem_entry *entry;
++
++	entry = devm_kzalloc(&dev->dev, sizeof(*entry), GFP_KERNEL);
++	if (!entry)
++		return -ENOMEM;
++
++	dev_set_drvdata(&dev->dev, entry);
++	entry->dev = dev;
++	return cbmem_entry_setup(entry);
++}
++
++static void cbmem_entry_remove(struct coreboot_device *dev)
++{
++	struct cbmem_entry *entry = dev_get_drvdata(&dev->dev);
++
++	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
++	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
++	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++	sysfs_remove_file(entry->kobj, &entry->id_file.kobj_attr.attr);
++	kobject_put(entry->kobj);
++}
++
++static struct coreboot_driver cbmem_entry_driver = {
++	.probe = cbmem_entry_probe,
++	.remove = cbmem_entry_remove,
++	.drv = {
++		.name = "cbmem",
++	},
++	.tag = LB_TAG_CBMEM_ENTRY,
++};
++
++static int __init cbmem_init(void)
++{
++	int ret;
++
++	coreboot_kobj = kobject_create_and_add("coreboot", firmware_kobj);
++	if (!coreboot_kobj)
++		return -ENOMEM;
++
++	ret = coreboot_driver_register(&cbmem_entry_driver);
++	if (ret) {
++		kobject_put(coreboot_kobj);
++		return ret;
++	}
++
++	return 0;
++}
++module_init(cbmem_init);
++
++static void __exit cbmem_exit(void)
++{
++	kobject_put(coreboot_kobj);
++	coreboot_driver_unregister(&cbmem_entry_driver);
++}
++module_exit(cbmem_exit);
++
++MODULE_AUTHOR("Jack Rosenthal <jrosenth@chromium.org>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
+index beb778674acd..6c03a8852d1b 100644
+--- a/drivers/firmware/google/coreboot_table.h
++++ b/drivers/firmware/google/coreboot_table.h
+@@ -39,6 +39,16 @@ struct lb_cbmem_ref {
+ 	u64 cbmem_addr;
+ };
+ 
++/* Corresponds to LB_TAG_CBMEM_ENTRY. */
++struct lb_cbmem_entry {
++	u32 tag;
++	u32 size;
++
++	u64 address;
++	u32 entry_size;
++	u32 id;
++};
++
+ /* Describes framebuffer setup by coreboot */
+ struct lb_framebuffer {
+ 	u32 tag;
+@@ -65,6 +75,7 @@ struct coreboot_device {
+ 	union {
+ 		struct coreboot_table_entry entry;
+ 		struct lb_cbmem_ref cbmem_ref;
++		struct lb_cbmem_entry cbmem_entry;
+ 		struct lb_framebuffer framebuffer;
+ 	};
+ };
+-- 
+2.37.1.455.g008518b4e5-goog
 
-   #if !__has_attribute(__addr_global__) && defined(MODULE)
-   /* Magically remove "static" for per-CPU variables.  */
-   # define ARCH_NEEDS_WEAK_PER_CPU
-   /* Force GOT-relocation for per-CPU variables.  */
-   # define PER_CPU_ATTRIBUTES __attribute__((__visibility__("default")))
-   #endif
-  =20
-arch/loongarch/Makefile:
-
-   # Hack for per-CPU variables, see PER_CPU_ATTRIBUTES in
-   # include/asm/percpu.h
-   if (call gcc-does-not-support-addr-global)
-     KBUILD_CFLAGS_MODULE +=3D -fPIC -fvisibility=3Dhidden
-   endif
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University

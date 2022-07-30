@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F6E585B5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 19:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CF4585B5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 19:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbiG3RSS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 30 Jul 2022 13:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S235282AbiG3RUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 13:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiG3RSP (ORCPT
+        with ESMTP id S230120AbiG3RUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 13:18:15 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ECE167D4
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 10:18:14 -0700 (PDT)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id C2923C03F0;
-        Sat, 30 Jul 2022 17:18:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id A3BB220026;
-        Sat, 30 Jul 2022 17:18:11 +0000 (UTC)
-Message-ID: <d5f8d6b58a32cdbf6326ccef7d46a58ba753edc7.camel@perches.com>
-Subject: Re: [PATCH 2/2] Revert "MIPS: octeon: Remove vestiges of
- CONFIG_CAVIUM_RESERVE32"
-From:   Joe Perches <joe@perches.com>
-To:     Alexander A Sverdlin <alexander.sverdlin@nokia.com>,
-        linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 30 Jul 2022 10:18:10 -0700
-In-Reply-To: <20220725091740.28188-3-alexander.sverdlin@nokia.com>
-References: <20220725091740.28188-1-alexander.sverdlin@nokia.com>
-         <20220725091740.28188-3-alexander.sverdlin@nokia.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sat, 30 Jul 2022 13:20:52 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131A517588;
+        Sat, 30 Jul 2022 10:20:49 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 26UHKUAB027213;
+        Sun, 31 Jul 2022 02:20:31 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 26UHKUAB027213
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1659201631;
+        bh=JttvlRFg6A7a6IS9/qWvYj23vzeOPXItUhbK0OqnR88=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OA1rWReB+yU0ViAT+X2ZE2pzIcrKI2uvXQrXFXFnlaDCKWg79Qb900GmZZsks0mOp
+         2zqlk8PQRQQv0yTxafU+MMJSgHfuEMlFFNuBJE8A5y3o0UEJ0ilYfQftQ0eg63fbVZ
+         vjroVuAWuBWYh0v9+CRzRdP6EYi35XqVfBMutsD1iDQtJE1JNc4WBb7RHR0qP9jam4
+         F/1fUvxpOHWp5/OZBFKrmuHjBnYh4ctKd/yoh1RRXsQUzGSJmEbWXp7CxwP1pppaxl
+         e5IfI1uxHtQ3BKkkjPVZEb6TpU+HLKgxl2E6k00lHL+mPVaxGEVqaUdAKrDZ+fifQL
+         pRWEhIgZDBdLw==
+X-Nifty-SrcIP: [209.85.128.47]
+Received: by mail-wm1-f47.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso3786512wmq.3;
+        Sat, 30 Jul 2022 10:20:31 -0700 (PDT)
+X-Gm-Message-State: AJIora9Gkp/bQe4WCziq3B9LnYWMWv+LFJXUHLVP4/5i9bRvgGAGjAjY
+        aLfJn/c6mKhwvwvhbrbfj90YYYDSJMOiiRu2o+8=
+X-Google-Smtp-Source: AGRyM1uDfrzdG2MpOEaQMQhWUN572domreJD0fYw/Z9G/D4OnxReQJfSj1Ne7OzwKiTweGxMO35J8ylaPdNRnomBqUk=
+X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
+ r14-20020a05600c35ce00b003a31b7fbbd8mr5877386wmq.22.1659201629632; Sat, 30
+ Jul 2022 10:20:29 -0700 (PDT)
 MIME-Version: 1.0
-X-Stat-Signature: rn19oi8jdotm5gdjqopn8gwjh47nnmqc
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: A3BB220026
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX196ah4jm+vHIS1AIJE2N++tnRGDtQqDgT8=
-X-HE-Tag: 1659201491-502993
+References: <20220724095919.436126-1-masahiroy@kernel.org>
+In-Reply-To: <20220724095919.436126-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 31 Jul 2022 02:19:29 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ7rkSGBs0FLU=f54iAX58U3kkKJ25eT4-6u=W=aoA0nA@mail.gmail.com>
+Message-ID: <CAK7LNAQ7rkSGBs0FLU=f54iAX58U3kkKJ25eT4-6u=W=aoA0nA@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: add dtbs_prepare target
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Nicolas Schier <nicolas@fjasle.eu>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-25 at 11:17 +0200, Alexander A Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-> 
-> This reverts commit e98b461bb057aaea6fa766260788c08825213837.
-> 
-> We actually have been using the CONFIG_CAVIUM_RESERVE32 and previous patch
-> defined it in the corresponding Kconfig.
+On Sun, Jul 24, 2022 at 7:01 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Factor out the common prerequisites for DT compilation into the new
+> target, dtbs_prepare.
+>
+> Add comments to explain why include/config/kernel.release is the
+> prerequisite. Our policy is that installation targets must not rebuild
+> anything in the tree. If 'make modules_install' is executed as root,
+> include/config/kernel.release may be owned by root.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
 
-Perhaps all of the uses of
+Applied to linux-kbuild.
 
-#if defined(CONFIG_CAVIUM_RESERVE32)
+> Changes for v2:
+>  - rephase the comment more concise
+>
+>  Makefile | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index dee707c98bbe..a2a030f41e65 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1370,16 +1370,21 @@ endif
+>
+>  ifneq ($(dtstree),)
+>
+> -%.dtb: include/config/kernel.release scripts_dtc
+> +%.dtb: dtbs_prepare
+>         $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>
+> -%.dtbo: include/config/kernel.release scripts_dtc
+> +%.dtbo: dtbs_prepare
+>         $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>
+> -PHONY += dtbs dtbs_install dtbs_check
+> -dtbs: include/config/kernel.release scripts_dtc
+> +PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+> +dtbs: dtbs_prepare
+>         $(Q)$(MAKE) $(build)=$(dtstree)
+>
+> +# include/config/kernel.release is actually needed when installing DTBs because
+> +# INSTALL_DTBS_PATH contains $(KERNELRELEASE). However, we do not want to make
+> +# dtbs_install depend on it as dtbs_install may run as root.
+> +dtbs_prepare: include/config/kernel.release scripts_dtc
+> +
+>  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+>  export CHECK_DTBS=y
+>  dtbs: dt_binding_check
+> --
+> 2.34.1
+>
 
-should be
 
-#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
-
-> diff --git a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-[]
-> @@ -57,14 +57,27 @@ EXPORT_SYMBOL_GPL(__cvmx_cmd_queue_state_ptr);
->  static cvmx_cmd_queue_result_t __cvmx_cmd_queue_init_state_ptr(void)
->  {
->  	char *alloc_name = "cvmx_cmd_queues";
-> +#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
-> +	extern uint64_t octeon_reserve32_memory;
-> +#endif
-
-Like these
-
-> +#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
-> +	if (octeon_reserve32_memory)
-> +		__cvmx_cmd_queue_state_ptr =
-> +		    cvmx_bootmem_alloc_named_range(sizeof(*__cvmx_cmd_queue_state_ptr),
-> +						   octeon_reserve32_memory,
-> +						   octeon_reserve32_memory +
-> +						   (CONFIG_CAVIUM_RESERVE32 <<
-> +						    20) - 1, 128, alloc_name);
-> +	else
-> +#endif
-> +		__cvmx_cmd_queue_state_ptr =
-> +		    cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
-> +					    128,
-> +					    alloc_name);
-
-[]
-
-> diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-[]
-> @@ -284,6 +284,11 @@ void octeon_crash_smp_send_stop(void)
-[]
-> +#ifdef CONFIG_CAVIUM_RESERVE32
-
-here.
-
-> +uint64_t octeon_reserve32_memory;
-> +EXPORT_SYMBOL(octeon_reserve32_memory);
-> +#endif
-
-[]
-
-> @@ -661,7 +666,9 @@ void __init prom_init(void)
->  	int i;
->  	u64 t;
->  	int argc;
-> -
-> +#ifdef CONFIG_CAVIUM_RESERVE32
-> +	int64_t addr = -1;
-
-here
-
-> +#endif
->  	/*
->  	 * The bootloader passes a pointer to the boot descriptor in
->  	 * $a3, this is available as fw_arg3.
-> @@ -776,6 +783,25 @@ void __init prom_init(void)
->  		cvmx_write_csr(CVMX_LED_UDD_DATX(1), 0);
->  		cvmx_write_csr(CVMX_LED_EN, 1);
->  	}
-> +#ifdef CONFIG_CAVIUM_RESERVE32
-
-etc...
-
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5841F585C72
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 23:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDD1585C76
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 00:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbiG3Vu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 17:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S232013AbiG3WAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 18:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiG3Vuy (ORCPT
+        with ESMTP id S229562AbiG3WAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 17:50:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0170238;
-        Sat, 30 Jul 2022 14:50:53 -0700 (PDT)
+        Sat, 30 Jul 2022 18:00:51 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C343015A1B
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 15:00:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659217853; x=1690753853;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rND8XXV4IHwYTrk9ylOpb5YEXKqPDzYplKhRlcJ1akw=;
-  b=gmdSHBKDan74jpGsUH7NCLUZrzUo2XqELlJmqG5INO5rxtxWhrkoYNK0
-   e/Oi+cp2B2AgbiPV/tEfzPD5p421ahW1Iu8N0hjyf8TCaf4mOftJt71c7
-   zdB3zj449X9457/nyWB6XYnNK9hXAPqRQcH4Wud0MG2hv5xMjXGNDAQO+
-   ij4piwoyQQfoxzmq46c46rE1y2rGaVAo4BOZ3OvXqgihSJUnoxzERxsnT
-   POAsSNlRZYqqCUeHxW+yOI+t0vIeYVV/i4peIeyk0KVUAyj+y+bVTgwbZ
-   jYO5JnHvPKdEkW2iBrlY4aPs7CfOCVNDUauY0bm8rnUBpQgVR/VJkmJRi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="287704991"
+  t=1659218450; x=1690754450;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0KbOo47c6MO9HsT5NbdV6Em5xp1ZF+XPHCb7Qjg4AnY=;
+  b=i8DMQLNTGR1IV+akbLcJfeXa9Uo2EWdbdnwEytzvH82NKAUfUQVpazNR
+   3HRF1fpqSwIHYoA5e5su75NyaNHvSHAT8LzTgFc3fU/9J/iHm+/v1HXnm
+   wAWqsZNOmZavtTxjS/U0F1M7w1uUrBdklLKMmSvqS04k5T9vTYsLssSb2
+   Ettlp3O3nzzeuIZBOElQZnS2HR8nLPjzkk1Y1Nt4Id9GkfH2ZRgchPr4F
+   2ICZxjwJsXHiTJv7/WvrNVQgzvoEyn8xJfxpjl9zLGMAFhI9S2v0na3P7
+   +/ulpiLehqImOLDC8qPxF17B6EroKFeuIyG/VjTrDkk1dt4/2bX+EDM3l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="288962906"
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="287704991"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 14:50:53 -0700
+   d="scan'208";a="288962906"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 15:00:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="704554267"
+   d="scan'208";a="669624488"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Jul 2022 14:50:49 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jul 2022 15:00:49 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oHuMC-000DNX-1N;
-        Sat, 30 Jul 2022 21:50:48 +0000
-Date:   Sun, 31 Jul 2022 05:50:22 +0800
+        id 1oHuVs-000DNn-1m;
+        Sat, 30 Jul 2022 22:00:48 +0000
+Date:   Sun, 31 Jul 2022 06:00:39 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        andriy.shevchenko@linux.intel.com, vee.khee.wong@intel.com,
-        weifeng.voon@intel.com,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
- call in intel_eth_pci_remove()
-Message-ID: <202207310545.hHU5SagS-lkp@intel.com>
-References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_sbi_dbcn_v1 20/45]
+ drivers/clocksource/timer-clint.c:250:9: error: too few arguments to
+ function 'clint_clear_ipi'
+Message-ID: <202207310505.Bbec7lMz-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,65 +61,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 620725263f4222b3c94d4ee19846835feec0ad69
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220731/202207310545.hHU5SagS-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+tree:   https://github.com/avpatel/linux.git riscv_sbi_dbcn_v1
+head:   9d220d614f299a3841990e7890aba88262b29012
+commit: 3ab8ce4cbcd9f740c610e181649b1eb108bc7a05 [20/45] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220731/202207310505.Bbec7lMz-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2d1d09034cc62ee19f799b92bb67640ba86ca557
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
-        git checkout 2d1d09034cc62ee19f799b92bb67640ba86ca557
+        # https://github.com/avpatel/linux/commit/3ab8ce4cbcd9f740c610e181649b1eb108bc7a05
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_dbcn_v1
+        git checkout 3ab8ce4cbcd9f740c610e181649b1eb108bc7a05
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clocksource/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:1107:24: error: use of undeclared identifier 'plat'
-           clk_disable_unprepare(plat->stmmac_clk);
-                                 ^
-   1 error generated.
+   drivers/clocksource/timer-clint.c: In function 'clint_timer_init_dt':
+>> drivers/clocksource/timer-clint.c:250:9: error: too few arguments to function 'clint_clear_ipi'
+     250 |         clint_clear_ipi(clint_ipi_irq);
+         |         ^~~~~~~~~~~~~~~
+   drivers/clocksource/timer-clint.c:56:13: note: declared here
+      56 | static void clint_clear_ipi(unsigned int parent_virq, void *data)
+         |             ^~~~~~~~~~~~~~~
 
 
-vim +/plat +1107 drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+vim +/clint_clear_ipi +250 drivers/clocksource/timer-clint.c
 
-  1092	
-  1093	/**
-  1094	 * intel_eth_pci_remove
-  1095	 *
-  1096	 * @pdev: pci device pointer
-  1097	 * Description: this function calls the main to free the net resources
-  1098	 * and releases the PCI resources.
-  1099	 */
-  1100	static void intel_eth_pci_remove(struct pci_dev *pdev)
-  1101	{
-  1102		struct net_device *ndev = dev_get_drvdata(&pdev->dev);
-  1103		struct stmmac_priv *priv = netdev_priv(ndev);
-  1104	
-  1105		stmmac_dvr_remove(&pdev->dev);
-  1106	
-> 1107		clk_disable_unprepare(plat->stmmac_clk);
-  1108		clk_unregister_fixed_rate(priv->plat->stmmac_clk);
-  1109	
-  1110		pcim_iounmap_regions(pdev, BIT(0));
-  1111	}
-  1112	
+   214	
+   215		pr_info("%pOFP: timer running at %ld Hz\n", np, clint_timer_freq);
+   216	
+   217		rc = clocksource_register_hz(&clint_clocksource, clint_timer_freq);
+   218		if (rc) {
+   219			pr_err("%pOFP: clocksource register failed [%d]\n", np, rc);
+   220			goto fail_iounmap;
+   221		}
+   222	
+   223		sched_clock_register(clint_get_cycles64, 64, clint_timer_freq);
+   224	
+   225		rc = request_percpu_irq(clint_timer_irq, clint_timer_interrupt,
+   226					 "clint-timer", &clint_clock_event);
+   227		if (rc) {
+   228			pr_err("registering percpu irq failed [%d]\n", rc);
+   229			goto fail_iounmap;
+   230		}
+   231	
+   232		rc = cpuhp_setup_state(CPUHP_AP_CLINT_TIMER_STARTING,
+   233					"clockevents/clint/timer:starting",
+   234					clint_timer_starting_cpu,
+   235					clint_timer_dying_cpu);
+   236		if (rc) {
+   237			pr_err("%pOFP: cpuhp setup state failed [%d]\n", np, rc);
+   238			goto fail_free_irq;
+   239		}
+   240	
+   241		virq = ipi_mux_create(clint_ipi_irq, BITS_PER_BYTE,
+   242				      &clint_ipi_ops, NULL);
+   243		if (virq <= 0) {
+   244			pr_err("unable to create muxed IPIs\n");
+   245			rc = (virq < 0) ? virq : -ENODEV;
+   246			goto fail_remove_cpuhp;
+   247		}
+   248	
+   249		riscv_ipi_set_virq_range(virq, BITS_PER_BYTE);
+ > 250		clint_clear_ipi(clint_ipi_irq);
+   251	
+   252		return 0;
+   253	
+   254	fail_remove_cpuhp:
+   255		cpuhp_remove_state(CPUHP_AP_CLINT_TIMER_STARTING);
+   256	fail_free_irq:
+   257		free_irq(clint_timer_irq, &clint_clock_event);
+   258	fail_iounmap:
+   259		iounmap(base);
+   260		return rc;
+   261	}
+   262	
 
 -- 
 0-DAY CI Kernel Test Service

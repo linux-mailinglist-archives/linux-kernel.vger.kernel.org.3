@@ -2,329 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317B5585939
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4D6585933
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiG3Ijz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 04:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S231766AbiG3IgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 04:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiG3Ijt (ORCPT
+        with ESMTP id S230138AbiG3IgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 04:39:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190EF28E06;
-        Sat, 30 Jul 2022 01:39:48 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LvyRm4jjczlWC3;
-        Sat, 30 Jul 2022 16:37:08 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 30 Jul 2022 16:39:45 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 30 Jul
- 2022 16:39:45 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        <yekai13@huawei.com>
-Subject: [PATCH v6 3/3] crypto: hisilicon/qm - define the device isolation strategy
-Date:   Sat, 30 Jul 2022 16:32:46 +0800
-Message-ID: <20220730083246.55646-4-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220730083246.55646-1-yekai13@huawei.com>
-References: <20220730083246.55646-1-yekai13@huawei.com>
+        Sat, 30 Jul 2022 04:36:01 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3832C13EB7
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 01:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659170160; x=1690706160;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q1yUwiF4wpL++puTylr9syqtyGC5KFVkzaS3swaErXE=;
+  b=BvXZmVa4vwFMlmR4EpfhfDpSeE/EEDL8lEjCSfnM6ovD+qDHpz4NDApU
+   BSpn7RlBc+YolC9uh6OXxJ1yZt6PYvDFJgOXYb7Ym63oGZUJPGfgjuurn
+   Oz243cYrFVE+mityZ2VeAuXzhIEmKVry+5Zuc1InrLeTJYxbBRLU4Ll5g
+   DHfHAFsLk0lPdricoJJ+s+ZBhPg8svsCrwBZMs9nV/rR6XlAQGffTS69T
+   uBhf7NfWDj8jdGH331INbNUWa9YQim/g9oXhHJ5Fiff25OtNb3Pw5BsSP
+   pEDUCff/4/a3HEinoHrr5nFac8WnC6xObZGoEe1dhjHn6QeuP7WAELfCN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="287659703"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="287659703"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 01:35:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="551983376"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 01:35:57 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHhwz-000CeH-0e;
+        Sat, 30 Jul 2022 08:35:57 +0000
+Date:   Sat, 30 Jul 2022 16:35:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [jsarha:topic/chromeos-4.19-s0ix 6418/9999] cc1: error:
+ arch/sh/include/mach-rsk: No such file or directory
+Message-ID: <202207301643.B4B5Etah-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define the device isolation strategy by the device driver. The
-user configures a frequency value by uacce interface. If the
-slot reset frequency exceeds the value of setting for a certain
-period of time, the device will not be available in user space.
-The time window is one hour. The VF device use the PF device
-isolation strategy. All the hardware errors are processed by PF
-driver. This solution can be used for other drivers.
+tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
+head:   430bdaa0a8c38697780f45a148964d71951df11f
+commit: 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd [6418/9999] UPSTREAM: kbuild: add some extra warning flags unconditionally
+config: sh-rsk7201_defconfig (https://download.01.org/0day-ci/archive/20220730/202207301643.B4B5Etah-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
+        git checkout 4fae0a1dc645742f2ecd6238813b2d30d4fb31cd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 163 +++++++++++++++++++++++++++++++---
- include/linux/hisi_acc_qm.h   |   9 ++
- 2 files changed, 160 insertions(+), 12 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index ad83c194d664..a519ddad0af5 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -417,6 +417,16 @@ struct hisi_qm_resource {
- 	struct list_head list;
- };
- 
-+/**
-+ * struct qm_hw_err - Structure describing the device errors
-+ * @list: hardware error list
-+ * @timestamp: timestamp when the error occurred
-+ */
-+struct qm_hw_err {
-+	struct list_head list;
-+	unsigned long long timestamp;
-+};
-+
- struct hisi_qm_hw_ops {
- 	int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
- 	void (*qm_db)(struct hisi_qm *qm, u16 qn,
-@@ -3410,6 +3420,111 @@ static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
- 	return 0;
- }
- 
-+/**
-+ * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
-+ * according to user's configuration of isolation strategy. Warning: this
-+ * API should be called while there the users on this device are suspended
-+ * by slot resetting preparation of PCI AER.
-+ * @qm: the uacce device
-+ */
-+static int qm_hw_err_isolate(struct hisi_qm *qm)
-+{
-+	struct qm_hw_err *err, *tmp, *hw_err;
-+	struct qm_err_isolate *isolate;
-+	u32 count = 0;
-+
-+	isolate = &qm->isolate_data;
-+
-+#define SECONDS_PER_HOUR	3600
-+
-+	/* All the hw errs are processed by PF driver */
-+	if (qm->uacce->is_vf || isolate->is_isolate ||
-+	    !isolate->hw_err_isolate_hz)
-+		return 0;
-+
-+	hw_err = kzalloc(sizeof(*hw_err), GFP_KERNEL);
-+	if (!hw_err)
-+		return -ENOMEM;
-+
-+	mutex_lock(&isolate->isolate_lock);
-+	hw_err->timestamp = jiffies;
-+	list_for_each_entry_safe(err, tmp, &isolate->uacce_hw_errs, list) {
-+		if ((hw_err->timestamp - err->timestamp) / HZ >
-+		    SECONDS_PER_HOUR) {
-+			list_del(&err->list);
-+			kfree(err);
-+		} else {
-+			count++;
-+		}
-+	}
-+	list_add(&hw_err->list, &isolate->uacce_hw_errs);
-+	mutex_unlock(&isolate->isolate_lock);
-+
-+	if (count >= isolate->hw_err_isolate_hz)
-+		isolate->is_isolate = true;
-+
-+	return 0;
-+}
-+
-+static void qm_hw_err_destroy(struct hisi_qm *qm)
-+{
-+	struct qm_hw_err *err, *tmp;
-+
-+	mutex_lock(&qm->isolate_data.isolate_lock);
-+	list_for_each_entry_safe(err, tmp, &qm->isolate_data.uacce_hw_errs, list) {
-+		list_del(&err->list);
-+		kfree(err);
-+	}
-+	mutex_unlock(&qm->isolate_data.isolate_lock);
-+}
-+
-+static enum uacce_dev_state hisi_qm_get_isolate_state(struct uacce_device *uacce)
-+{
-+	struct hisi_qm *qm = uacce->priv;
-+	struct hisi_qm *pf_qm;
-+
-+	if (uacce->is_vf)
-+		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
-+	else
-+		pf_qm = qm;
-+
-+	return pf_qm->isolate_data.is_isolate ?
-+			UACCE_DEV_ISOLATE : UACCE_DEV_NORMAL;
-+}
-+
-+static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
-+					  u32 freq)
-+{
-+	struct hisi_qm *qm = uacce->priv;
-+
-+	/* Must be set by PF */
-+	if (uacce->is_vf)
-+		return -EPERM;
-+
-+	if (qm->isolate_data.is_isolate)
-+		return -EPERM;
-+
-+	qm->isolate_data.hw_err_isolate_hz = freq;
-+
-+	/* After the policy is updated, need to reset the hardware err list */
-+	qm_hw_err_destroy(qm);
-+
-+	return 0;
-+}
-+
-+static u32 hisi_qm_isolate_strategy_read(struct uacce_device *uacce)
-+{
-+	struct hisi_qm *qm = uacce->priv;
-+	struct hisi_qm *pf_qm;
-+
-+	if (uacce->is_vf) {
-+		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
-+		return pf_qm->isolate_data.hw_err_isolate_hz;
-+	} else {
-+		return qm->isolate_data.hw_err_isolate_hz;
-+	}
-+}
-+
- static const struct uacce_ops uacce_qm_ops = {
- 	.get_available_instances = hisi_qm_get_available_instances,
- 	.get_queue = hisi_qm_uacce_get_queue,
-@@ -3419,8 +3534,22 @@ static const struct uacce_ops uacce_qm_ops = {
- 	.mmap = hisi_qm_uacce_mmap,
- 	.ioctl = hisi_qm_uacce_ioctl,
- 	.is_q_updated = hisi_qm_is_q_updated,
-+	.get_isolate_state = hisi_qm_get_isolate_state,
-+	.isolate_strategy_write = hisi_qm_isolate_strategy_write,
-+	.isolate_strategy_read = hisi_qm_isolate_strategy_read,
- };
- 
-+static void qm_remove_uacce(struct hisi_qm *qm)
-+{
-+	struct uacce_device *uacce = qm->uacce;
-+
-+	if (qm->use_sva) {
-+		qm_hw_err_destroy(qm);
-+		uacce_remove(uacce);
-+		qm->uacce = NULL;
-+	}
-+}
-+
- static int qm_alloc_uacce(struct hisi_qm *qm)
- {
- 	struct pci_dev *pdev = qm->pdev;
-@@ -3446,8 +3575,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
- 		qm->use_sva = true;
- 	} else {
- 		/* only consider sva case */
--		uacce_remove(uacce);
--		qm->uacce = NULL;
-+		qm_remove_uacce(qm);
- 		return -EINVAL;
- 	}
- 
-@@ -3479,6 +3607,8 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
- 	uacce->qf_pg_num[UACCE_QFRT_DUS]  = dus_page_nr;
- 
- 	qm->uacce = uacce;
-+	INIT_LIST_HEAD(&qm->isolate_data.uacce_hw_errs);
-+	mutex_init(&qm->isolate_data.isolate_lock);
- 
- 	return 0;
- }
-@@ -5109,6 +5239,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
- 		return ret;
- 	}
- 
-+	if (qm->use_sva) {
-+		ret = qm_hw_err_isolate(qm);
-+		if (ret)
-+			pci_err(pdev, "failed to isolate hw err!\n");
-+	}
-+
- 	ret = qm_wait_vf_prepare_finish(qm);
- 	if (ret)
- 		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
-@@ -5436,19 +5572,25 @@ static int qm_controller_reset(struct hisi_qm *qm)
- 	ret = qm_soft_reset(qm);
- 	if (ret) {
- 		pci_err(pdev, "Controller reset failed (%d)\n", ret);
--		qm_reset_bit_clear(qm);
--		return ret;
-+		goto err_reset;
- 	}
- 
- 	ret = qm_controller_reset_done(qm);
--	if (ret) {
--		qm_reset_bit_clear(qm);
--		return ret;
--	}
-+	if (ret)
-+		goto err_reset;
- 
- 	pci_info(pdev, "Controller reset complete\n");
- 
- 	return 0;
-+
-+err_reset:
-+	pci_err(pdev, "Controller reset failed (%d)\n", ret);
-+	qm_reset_bit_clear(qm);
-+
-+	/* if resetting fails, isolate the device */
-+	if (qm->use_sva && !qm->uacce->is_vf)
-+		qm->isolate_data.is_isolate = true;
-+	return ret;
- }
- 
- /**
-@@ -6246,10 +6388,7 @@ int hisi_qm_init(struct hisi_qm *qm)
- err_free_qm_memory:
- 	hisi_qm_memory_uninit(qm);
- err_alloc_uacce:
--	if (qm->use_sva) {
--		uacce_remove(qm->uacce);
--		qm->uacce = NULL;
--	}
-+	qm_remove_uacce(qm);
- err_irq_register:
- 	qm_irq_unregister(qm);
- err_pci_init:
-diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-index 116e8bd68c99..e7aa6a451ec9 100644
---- a/include/linux/hisi_acc_qm.h
-+++ b/include/linux/hisi_acc_qm.h
-@@ -271,6 +271,14 @@ struct hisi_qm_poll_data {
- 	u16 *qp_finish_id;
- };
- 
-+struct qm_err_isolate {
-+	struct mutex isolate_lock;
-+	/* user cfg freq which triggers isolation */
-+	u32 hw_err_isolate_hz;
-+	bool is_isolate;
-+	struct list_head uacce_hw_errs;
-+};
-+
- struct hisi_qm {
- 	enum qm_hw_ver ver;
- 	enum qm_fun_type fun_type;
-@@ -335,6 +343,7 @@ struct hisi_qm {
- 	struct qm_shaper_factor *factor;
- 	u32 mb_qos;
- 	u32 type_rate;
-+	struct qm_err_isolate isolate_data;
- };
- 
- struct hisi_qp_status {
+All errors (new ones prefixed by >>):
+
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/lib/lshrdi3.c:6:11: error: no previous prototype for '__lshrdi3' [-Werror=missing-prototypes]
+       6 | long long __lshrdi3(long long u, word_type b)
+         |           ^~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/lib/ashldi3.c:6:11: error: no previous prototype for '__ashldi3' [-Werror=missing-prototypes]
+       6 | long long __ashldi3(long long u, word_type b)
+         |           ^~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/lib/ashrdi3.c:6:11: error: no previous prototype for '__ashrdi3' [-Werror=missing-prototypes]
+       6 | long long __ashrdi3(long long u, word_type b)
+         |           ^~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/idle.c:35:6: error: no previous prototype for 'arch_cpu_idle_dead' [-Werror=missing-prototypes]
+      35 | void arch_cpu_idle_dead(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/sh/kernel/idle.c:40:6: error: no previous prototype for 'arch_cpu_idle' [-Werror=missing-prototypes]
+      40 | void arch_cpu_idle(void)
+         |      ^~~~~~~~~~~~~
+   arch/sh/kernel/idle.c:45:13: error: no previous prototype for 'select_idle_routine' [-Werror=missing-prototypes]
+      45 | void __init select_idle_routine(void)
+         |             ^~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/machvec.c: In function 'early_parse_mv':
+   arch/sh/kernel/machvec.c:46:15: error: variable 'mv_comma' set but not used [-Werror=unused-but-set-variable]
+      46 |         char *mv_comma;
+         |               ^~~~~~~~
+   arch/sh/kernel/machvec.c: In function 'sh_mv_setup':
+   arch/sh/kernel/machvec.c:107:33: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]
+     107 |                         sh_mv = *(struct sh_machine_vector *)&__machvec_start;
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/sh/kernel/machvec.c:16:
+   arch/sh/include/asm/sections.h:7:13: note: object '__machvec_start' of size 4
+       7 | extern long __machvec_start, __machvec_end;
+         |             ^~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/ptrace_32.c: In function 'arch_ptrace':
+   arch/sh/kernel/ptrace_32.c:383:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
+     383 |                 if ((addr & 3) || addr < 0 ||
+         |                                        ^
+   arch/sh/kernel/ptrace_32.c:423:40: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
+     423 |                 if ((addr & 3) || addr < 0 ||
+         |                                        ^
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/return_address.c:52:7: error: no previous prototype for 'return_address' [-Werror=missing-prototypes]
+      52 | void *return_address(unsigned int depth)
+         |       ^~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/sys_sh.c:58:16: error: no previous prototype for 'sys_cacheflush' [-Werror=missing-prototypes]
+      58 | asmlinkage int sys_cacheflush(unsigned long addr, unsigned long len, int op)
+         |                ^~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/traps.c: In function 'is_valid_bugaddr':
+   arch/sh/kernel/traps.c:119:18: error: comparison of unsigned expression in '< 0' is always false [-Werror=type-limits]
+     119 |         if (addr < PAGE_OFFSET)
+         |                  ^
+   cc1: all warnings being treated as errors
+--
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+>> cc1: error: arch/sh/include/mach-rsk: No such file or directory [-Werror=missing-include-dirs]
+   arch/sh/kernel/traps_32.c:734:6: error: no previous prototype for 'per_cpu_trap_init' [-Werror=missing-prototypes]
+     734 | void per_cpu_trap_init(void)
+         |      ^~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+..
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

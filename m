@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC48585A50
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A90585A55
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiG3L6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 07:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S234584AbiG3L6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 07:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234531AbiG3L62 (ORCPT
+        with ESMTP id S234533AbiG3L62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 30 Jul 2022 07:58:28 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C533B286E9;
-        Sat, 30 Jul 2022 04:58:24 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26UBrdkf006040;
-        Sat, 30 Jul 2022 04:58:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=+BixbfkLRoEVSlMXKnuj4O4Z7KmNTMJZZpE1nhzCvQ0=;
- b=AUTLNNEjZSYgITUa5bqKLl/iIceC/KESeIrPa6Ei2av2KXmPlFt+nuiyzjwqiSOhyijQ
- k1JlylFOFkis6H7/m0F9QJIyGTXION7IeRmeyscRkFOXIFGXxEMmCnrRGETCM00b1BZN
- jK3oHE0JvPb45awG3kMTSSEOTPSU37CYXUXw1b9f9YHSdIyNFzNuRx4+yI1GbgdEVN4J
- Djm4Aq6JRGbPdYwPxSQL2dkYYUHO7Ghf9AKiRWnHoLEzVggVVe315+lF+v+Vi9VfrX/H
- wVKny3i7aIdYiVsaTgL8XkLTyk6TX05M5+YD5c6zyTX/ACcVJh3gnxZKzkUMA7Qj9U+Z /g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3hn45m0097-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sat, 30 Jul 2022 04:58:18 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 30 Jul
- 2022 04:58:16 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 30 Jul 2022 04:58:16 -0700
-Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
-        by maili.marvell.com (Postfix) with ESMTP id 816973F706A;
-        Sat, 30 Jul 2022 04:58:13 -0700 (PDT)
-From:   Naveen Mamindlapalli <naveenm@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sgoutham@marvell.com>
-CC:     Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: [net-next PATCH v2 4/4] octeontx2-af: Initialize PTP_SEC_ROLLOVER register properly
-Date:   Sat, 30 Jul 2022 17:27:58 +0530
-Message-ID: <20220730115758.16787-5-naveenm@marvell.com>
-X-Mailer: git-send-email 2.16.5
-In-Reply-To: <20220730115758.16787-1-naveenm@marvell.com>
-References: <20220730115758.16787-1-naveenm@marvell.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8920427FC2;
+        Sat, 30 Jul 2022 04:58:25 -0700 (PDT)
+Received: from mail-ej1-f52.google.com ([209.85.218.52]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Myb09-1nWMa23t4X-00yzje; Sat, 30 Jul 2022 13:58:23 +0200
+Received: by mail-ej1-f52.google.com with SMTP id os14so12589171ejb.4;
+        Sat, 30 Jul 2022 04:58:23 -0700 (PDT)
+X-Gm-Message-State: AJIora8V8G6AQK/3isvSN9H8arjxzdkSybJuis4c7Y/rbX+h3JEYP2HL
+        awsXbMJWQ22kHOnhwwKHOdQndwN23ogv5YEwYy8=
+X-Google-Smtp-Source: AGRyM1sNtDGiw6hf77/2a2P1cTuDqhVg3wEykZ7DCfJvtPr1QIJQXTq/XdL/6YVyMfp6GUhEWuszkC0FQNjog4Zv9Xw=
+X-Received: by 2002:a17:907:97cd:b0:72f:2df:274f with SMTP id
+ js13-20020a17090797cd00b0072f02df274fmr5985160ejc.766.1659182303585; Sat, 30
+ Jul 2022 04:58:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: j523dGBIezD0JI-3wxNTrDQ4uJEhjdcR
-X-Proofpoint-ORIG-GUID: j523dGBIezD0JI-3wxNTrDQ4uJEhjdcR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-30_07,2022-07-28_02,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1656894026-15707-1-git-send-email-hayashi.kunihiko@socionext.com> <1656894026-15707-10-git-send-email-hayashi.kunihiko@socionext.com>
+In-Reply-To: <1656894026-15707-10-git-send-email-hayashi.kunihiko@socionext.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 30 Jul 2022 13:58:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0D4CYqZipY30scDA=KkWR_Az_5i-8avkg6EeDs1nM62w@mail.gmail.com>
+Message-ID: <CAK8P3a0D4CYqZipY30scDA=KkWR_Az_5i-8avkg6EeDs1nM62w@mail.gmail.com>
+Subject: Re: [PATCH 9/9] ARM: dts: uniphier: Remove compatible
+ "snps,dw-pcie-ep" from Pro5 pcie-ep node
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:pKJPtwD9dFI4Wj8EfGjqY3UkXplbYTF+HW2fJWzotyGpudZt/Zk
+ mePKO+ztZ5k9aTOPgavXfKd3JnQBg8Ml/uKfCVJCD9gdttnY0DUKK3AuQA3HqzISUPudNSH
+ 3NU6Rpo+0ROavUqlX9EmnSUTAacYA72bX033etWyvr2nrADXb4/xMM2Iu/hxLsZSHSJuLeD
+ w5ftVy7N12GZJjfN9Ed9A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6Zsj7PGIRJ8=:INmDqUjDkFkNJDFWqQjVu4
+ /vuRLj7x0aYCpc8cpO7n99gW7EyUZ+SEGD2Npi6RZhR8QMePmfkbsfLQljKaqAjYtECHaHXVS
+ HP5vxkIjyYT4Q09WuRpFi5QRnDdwLkfgVG+kYK6bsjv9ZDtxDZwgW8s1siHdiHMoyKu3m007R
+ Z0neg4PwR+NjWP+i3gwjyFozvSpZjnqr7pZgjdwBBD0swFEg5VX1Mo/AKAV1tjzE5ZUFIJq76
+ YFEC9NaoApMI/W/yTscGd6JiVwhQF3RorgVDazTJ2VVQKG4r7UEORgXRb8dFxqNovxMcT446N
+ Xv6CCHDk9W5xR3x65SkRgIg41CL3IXbcq3AKZrabWNoamUipIkHy8v29BeXX3CVvdVIyoZG6O
+ xsb7HIujZkK32D6eLv97QYxmwY80L9J3y4LumpbNe4KnpSftwHRO1+hiVxQ7Sh0O14BSqHU1O
+ Y/Q8P/14ylpNc8JELwwSsSojw285NXew0iOjFAwc8IjmPXsENpCV1567GNV0BCDiNWmeNtXY9
+ qWBwPKW+dQAqvqPpnVnkNDr5Wsq+l5kpfs+XP2W6mwvPuA+QLJWWmxCJcip3Q8/v898wJo1X2
+ TyxvwKj5QUNhdwsTLBy/c4sRt7KJUPrOE93wLS9nR5RVw9rSzI+8EJ9ktezUIuHH44QYchl+f
+ 6UIYwbkhVzbzOp+7pP6p62S7AfNZdb7TICJhgz7LJLRRlExe/hLobBbEtGh7ZjzOjEl8df/WF
+ ADg+u24saHEwLTS3+ixd171EbtyKnXUiotdSCTejf5jYmHVdFtFw5dyHMQ6TcBfHm28r8EPb7
+ 9Nq6S1nF+ugog6V5LqZ1aT0rJlB8RplWBRDJU+TJiBtW9WLnMg/NrE8r5Zs4ztWMgGrR5i8g1
+ b/1bIy1Xa/7OHlwzw54w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the reset value of PTP_SEC_ROLLOVER is incorrect on
-CNF10KB silicon, the ptp timestamps are inaccurate. This
-patch initializes the PTP_SEC_ROLLOVER register properly
-for the CNF10KB silicon.
+On Mon, Jul 4, 2022 at 2:20 AM Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
+>
+> UniPhier PCIe endpoint controller doesn't use "snps,dw-pcie-ep" compatible,
+> so this is no longer needed. Remove the compatible string from the pcie-ep
+> node to fix the following warning.
+>
+>   uniphier-pro5-epcore.dtb: pcie@66000000: compatible: ['socionext,uniphier-pro5-pcie-ep', 'snps,dw-pcie-ep'] is too long
+>       From schema: Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
+>
 
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
-Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/ptp.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This sounds like a problem with the binding rather than the dt file. Is this not
+a designware pci endpoint? Should it be documented in that binding instead?
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-index 01f7dbad6b92..3411e2e47d46 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
-@@ -52,12 +52,18 @@
- #define PTP_CLOCK_COMP				0xF18ULL
- #define PTP_TIMESTAMP				0xF20ULL
- #define PTP_CLOCK_SEC				0xFD0ULL
-+#define PTP_SEC_ROLLOVER			0xFD8ULL
- 
- #define CYCLE_MULT				1000
- 
- static struct ptp *first_ptp_block;
- static const struct pci_device_id ptp_id_table[];
- 
-+static bool is_ptp_dev_cnf10kb(struct ptp *ptp)
-+{
-+	return (ptp->pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_B_PTP) ? true : false;
-+}
-+
- static bool is_ptp_dev_cn10k(struct ptp *ptp)
- {
- 	return (ptp->pdev->device == PCI_DEVID_CN10K_PTP) ? true : false;
-@@ -290,6 +296,10 @@ void ptp_start(struct ptp *ptp, u64 sclk, u32 ext_clk_freq, u32 extts)
- 	/* sclk is in MHz */
- 	ptp->clock_rate = sclk * 1000000;
- 
-+	/* Program the seconds rollover value to 1 second */
-+	if (is_ptp_dev_cnf10kb(ptp))
-+		writeq(0x3b9aca00, ptp->reg_base + PTP_SEC_ROLLOVER);
-+
- 	/* Enable PTP clock */
- 	clock_cfg = readq(ptp->reg_base + PTP_CLOCK_CFG);
- 
--- 
-2.16.5
-
+         Arnd

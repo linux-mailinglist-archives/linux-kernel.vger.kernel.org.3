@@ -2,211 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5BB585C5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 23:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 516F6585C62
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 23:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiG3VjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 17:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        id S236118AbiG3Vk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 17:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiG3VjQ (ORCPT
+        with ESMTP id S233617AbiG3Vky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 17:39:16 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB16140A9;
-        Sat, 30 Jul 2022 14:39:15 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 05CA81C0004; Sat, 30 Jul 2022 23:39:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1659217154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0daU3v2fIejze8e0Ia8wFFodJagNwi3O4A6fbhcoNFw=;
-        b=nvmXEkIlufuCuADE7W3fo3bh8pPJSwZYnNRkZhKGcWDMxTCfRq984x+KvTN4H6f2vlpyiM
-        /cnzn8y6rYglONMozthc08Q7DgYW5MQFWQOMQb0LPadgMByGYwFI0jcahYf/N6YmYq9WG9
-        fnDgsc1liVG/XbLM7PlQT0PH9N/UYDc=
-Date:   Sat, 30 Jul 2022 23:39:13 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [PATCH v6 11/13] leds: rgb: mt6370: Add MediaTek MT6370 current
- sink type LED Indicator support
-Message-ID: <20220730213913.GJ23307@duo.ucw.cz>
-References: <20220722102407.2205-1-peterwu.pub@gmail.com>
- <20220722102407.2205-12-peterwu.pub@gmail.com>
+        Sat, 30 Jul 2022 17:40:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AFC12A9F;
+        Sat, 30 Jul 2022 14:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659217253; x=1690753253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V5fo+ZjN6qVh2ehdMQ8scHgdijFwALwamZEruMT0vWg=;
+  b=R4QRzfnUwQq5gBBuZajMaNVxanjW0gIDATuLQfElk5604pR+L+RA2Gr5
+   BfGVmnYY/SVQJbkmyUE2wXp2+cJ7Xdwkc8FuB2OKWSaQPMJU/GOigkXXD
+   PeJrYxCtUAGvRjPR2HEe9lYy6mfiXijeMkC7D5zS9eU/nHRG/oShZKNJC
+   s+L/DSs0Unf7PBgplQTbB0uAnwNwTToG8hHjfxJvSs4IY1T2tkJGxb9Ku
+   L0wNoNMxKYVGAUlpRVyTX/4SHDzbffADWStxb9fFWx6ezfG/Mz8W6+0/l
+   Ft9Re3dJvClhNhVqQjur9jONXrAd34twWw3qZqNI4NUL6JZG/TwSW9ksI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="375251665"
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="375251665"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 14:40:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="605278720"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2022 14:40:49 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHuCW-000DN9-0o;
+        Sat, 30 Jul 2022 21:40:48 +0000
+Date:   Sun, 31 Jul 2022 05:40:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        andriy.shevchenko@linux.intel.com, vee.khee.wong@intel.com,
+        weifeng.voon@intel.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
+ call in intel_eth_pci_remove()
+Message-ID: <202207310531.48IGPx8Z-lkp@intel.com>
+References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="1y6imfT/xHuCvpN0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722102407.2205-12-peterwu.pub@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
 
---1y6imfT/xHuCvpN0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch! Yet something to improve:
 
-Hi!
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> From: ChiYuan Huang <cy_huang@richtek.com>
->=20
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->=20
-> In MediaTek MT6370, there are four channel current-sink RGB LEDs that
-> support hardware pattern for constant current, PWM, and breath mode.
-> Isink4 channel can also be used as a CHG_VIN power good indicator.
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 620725263f4222b3c94d4ee19846835feec0ad69
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220731/202207310531.48IGPx8Z-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2d1d09034cc62ee19f799b92bb67640ba86ca557
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
+        git checkout 2d1d09034cc62ee19f799b92bb67640ba86ca557
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
 
-> +config LEDS_MT6370_RGB
-> +	tristate "LED Support for MediaTek MT6370 PMIC"
-> +	depends on MFD_MT6370
-> +	select LINEAR_RANGE
-> +	help
-> +	  Say Y here to enable support for MT6370_RGB LED device.
-> +	  In MT6370, there are four channel current-sink LED drivers that
-> +	  support hardware pattern for constant current, PWM, and breath mode.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:1107:24: error: use of undeclared identifier 'plat'
+           clk_disable_unprepare(plat->stmmac_clk);
+                                 ^
+   1 error generated.
 
 
-> +	  Isink4 channel can also be used as a CHG_VIN power good  indicator.
+vim +/plat +1107 drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
 
-That does not really belong here.
+  1092	
+  1093	/**
+  1094	 * intel_eth_pci_remove
+  1095	 *
+  1096	 * @pdev: pci device pointer
+  1097	 * Description: this function calls the main to free the net resources
+  1098	 * and releases the PCI resources.
+  1099	 */
+  1100	static void intel_eth_pci_remove(struct pci_dev *pdev)
+  1101	{
+  1102		struct net_device *ndev = dev_get_drvdata(&pdev->dev);
+  1103		struct stmmac_priv *priv = netdev_priv(ndev);
+  1104	
+  1105		stmmac_dvr_remove(&pdev->dev);
+  1106	
+> 1107		clk_disable_unprepare(plat->stmmac_clk);
+  1108		clk_unregister_fixed_rate(priv->plat->stmmac_clk);
+  1109	
+  1110		pcim_iounmap_regions(pdev, BIT(0));
+  1111	}
+  1112	
 
-> +struct mt6370_priv {
-> +	/* Per LED access lock */
-> +	struct mutex lock;
-
-Do we really need per-led locking?
-
-> +static int mt6370_gen_breath_pattern(struct mt6370_priv *priv,
-> +				     struct led_pattern *pattern, u32 len,
-> +				     u8 *pattern_val, u32 val_len)
-> +{
-> +	enum mt6370_led_ranges sel_range;
-> +	struct led_pattern *curr;
-> +	unsigned int sel;
-> +	u8 val[P_MAX_PATTERNS / 2] =3D {};
-> +	int i;
-> +
-> +	if (len < P_MAX_PATTERNS && val_len < P_MAX_PATTERNS / 2)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Pattern list
-> +	 * tr1:	byte 0, b'[7: 4]
-> +	 * tr2:	byte 0, b'[3: 0]
-> +	 * tf1:	byte 1, b'[7: 4]
-> +	 * tf2:	byte 1, b'[3: 0]
-> +	 * ton:	byte 2, b'[7: 4]
-> +	 * toff: byte 2, b'[3: 0]
-> +	 */
-> +	for (i =3D 0; i < P_MAX_PATTERNS; i++) {
-> +		curr =3D pattern + i;
-> +
-> +		sel_range =3D i =3D=3D P_LED_TOFF ? R_LED_TOFF : R_LED_TRFON;
-> +
-> +		linear_range_get_selector_within(priv->ranges + sel_range,
-> +						 curr->delta_t, &sel);
-> +
-> +		val[i / 2] |=3D sel << (4 * ((i + 1) % 2));
-> +	}
-> +
-> +	memcpy(pattern_val, val, 3);
-> +
-> +	return 0;
-> +}
-
-I wonder how this works... you are not creating private sysfs
-interface, are you?
-
-> +static int mt6370_init_led_properties(struct mt6370_led *led,
-> +				      struct led_init_data *init_data)
-> +{
-> +	struct mt6370_priv *priv =3D led->priv;
-> +	struct device *dev =3D priv->dev;
-> +	struct led_classdev *lcdev;
-> +	struct fwnode_handle *child;
-> +	enum mt6370_led_ranges sel_range;
-> +	u32 max_uA, max_level;
-> +	const char * const states[] =3D { "off", "keep", "on" };
-
-We'd really preffer not to add "keep" / "on" support unless you need
-it.
-
-> +			if (ret)
-> +				return dev_err_probe(dev, ret,
-> +						     "led %d, no color specified\n",
-> +						     led->index);
-
-led->LED.
-
-> +		if (num_color < 2)
-> +			return dev_err_probe(dev, -EINVAL,
-> +					     "Multicolor must include
-> 2 or more led channel\n");
-
-"LED channels".
-
-> +static int mt6370_isnk_init_default_state(struct mt6370_led *led)
-> +{
-> +	struct mt6370_priv *priv =3D led->priv;
-> +	unsigned int enable, level;
-> +	int ret;
-> +
-> +	ret =3D mt6370_get_led_brightness(priv, led->index, &level);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D regmap_field_read(priv->fields[F_RGB_EN], &enable);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!(enable & MT6370_CHEN_BIT(led->index)))
-> +		level =3D LED_OFF;
-
-Just use 0 instead of LED_OFF.
-
-Best regards,
-							Pavel
-
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---1y6imfT/xHuCvpN0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYuWlAQAKCRAw5/Bqldv6
-8iZJAJ4qzsQ+kDbVr0DLe73XiNVWQLaLHACggNs2AFQVJvHz/l7A5pngOaUPVfo=
-=EXCb
------END PGP SIGNATURE-----
-
---1y6imfT/xHuCvpN0--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

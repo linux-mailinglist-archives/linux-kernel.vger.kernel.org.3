@@ -2,330 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C92585B08
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D3B585B0B
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiG3PaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 11:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S234375AbiG3PjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 11:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbiG3PaR (ORCPT
+        with ESMTP id S232125AbiG3PjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:30:17 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0178910BA
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:30:14 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id z25so11222489lfr.2
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:30:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Shasy3oM/UnNVI3MkMReNR3M/LSkhB3SgHfHS7qVxiE=;
-        b=R1q+yhnFk9WD3jHtTF9gau37yzpt6W/+NU6hqUgUvXFpNUjeyhAAtxAc7eE6un1D5K
-         986SjpabDCuABTTvg/N4dNQIr7rYsDyxnd59cEFNJ4/1PwDrVbtOQAtzgnsqAS0C4vo4
-         Rf9BxrtKIO4SYglaIjsQoC6DlQVjeNKDA21ODAikECjqBf4Cp+wH5Rn7RZfG30WEDgzi
-         wsyowNA8DZ2RcKA1EOHf+iKlBLaLv8CR/5gXOuia35HKa/hOUxxgqZb4vCY4I1JnuRBD
-         RA3CFAF+faf1kUgQl92s+vt7eBLGctyLQxms6N+mARbp+BVSUWudlygIulrn6zdkl22R
-         dpDw==
+        Sat, 30 Jul 2022 11:39:16 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDA60D5
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:39:15 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id m9-20020a6b7b49000000b0067c0331524cso2363754iop.21
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:39:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Shasy3oM/UnNVI3MkMReNR3M/LSkhB3SgHfHS7qVxiE=;
-        b=ZsPv8zIaza51skobZzTu764o6Ro6EgD4yCs1epfWdt2xiTjKEAi9aXnl8oa8KJ1GUX
-         SZousO8xuCwWYNcjZ7AdfSXyLF/26xqH9V7u6pdZm3cyMAwKQMDcwPuR74pjLWgFYBJq
-         p78DoHpdunox7XgznopiIlLTkWGC4DPK+F3Av+Xb4TCtgwson6cLgghFwXJBOcpiGmdH
-         WFkDCVVGW4bLeZM6Hc72o9DMZve97qNAsSbCiy2Inf4OaNjAeZooj3XKKJWIDGHQ09gv
-         +NNNOjO2DPaYUhSF7ORS6JI4gDF6ZHrBovNVgW+/eSHAD9RiQx9j/FnPLLIu5sRvheZh
-         oM8w==
-X-Gm-Message-State: AJIora8lNNxxfNNVy6Z81r35+aJ/Z9UJM/vx3HILAFNEM9NT+inPbQi6
-        YnEdKXCAv2rv0dBIBfzArxJ8zg==
-X-Google-Smtp-Source: AGRyM1uu0X/n7gE0GOUllHj7Si6tU/Zvf7+IuLYK1jIXUyQQ/oCCJj4m/N4F2vHP6tzPcxWT6xBCdg==
-X-Received: by 2002:a05:6512:2591:b0:48a:d133:66f3 with SMTP id bf17-20020a056512259100b0048ad13366f3mr3111959lfb.470.1659195013168;
-        Sat, 30 Jul 2022 08:30:13 -0700 (PDT)
-Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
-        by smtp.gmail.com with ESMTPSA id e6-20020a2ea546000000b0025dd6c8933csm1007503ljn.114.2022.07.30.08.30.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Jul 2022 08:30:12 -0700 (PDT)
-Subject: Re: [PATCH 3/3] KVM: irqfd: Postpone resamplefd notify for oneshot
- interrupts
-To:     "Liu, Rong L" <rong.l.liu@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>
-References: <20220715155928.26362-1-dmy@semihalf.com>
- <20220715155928.26362-4-dmy@semihalf.com>
- <MW3PR11MB45542DAB98E5A7AAAD38FE30C7999@MW3PR11MB4554.namprd11.prod.outlook.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-Message-ID: <9054d9f9-f41e-05c7-ce8d-628a6c827c40@semihalf.com>
-Date:   Sat, 30 Jul 2022 17:30:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=5ecUYpMaMp4UuRjS+LeCyelFgbZvF9R9lKRlidKNv8M=;
+        b=dnt64SPFhCS/OFNr0X1FNrSxlBWIKqqZpAEV/0w6b8z53dzyw50KGoSCTUI6NNieIf
+         bRm7fq2+c/6uAbY+f7dTMhqhj2pj5KVQVDjevYHXKb8y5m8YjSRF6TwWxgoJjV9znZMe
+         KJm25yijNRAPp5IlVQKlNr2wSr3K8GRIu6MQhIoN9D80VSPoyK1hn71D9ZHXHIZMevuc
+         lMs7JGCET6UujIDl8Ky+zKntIy/z+kSdiUhH0ybKbGaKsMZ4JgfwvxNMvYpED2OB9asH
+         iqfog7GruwpfbVLgVqs4h0I2sHXm95/PTUyOT3KWGT7PqQDVns6ZgfCtofZA47cgXo7a
+         VM1g==
+X-Gm-Message-State: AJIora+dTM9EMO7KfcA6JUFEb9RP1xq478vyaTtZIH6YeBdD8+/HJq8t
+        Xuvgkw9JYYyVeMfkt2ncTQXZ3jsIA3W+z//W0WxBN8nomepb
+X-Google-Smtp-Source: AGRyM1v+AI2E0V0hVg3LKHVoUWTUrbFZAWORimkHbV4SJSiGfMLnTss49xQFHm+M/yQBwwUpScLfYS4qRaNO+TrZnL+VnQqPt2bq
 MIME-Version: 1.0
-In-Reply-To: <MW3PR11MB45542DAB98E5A7AAAD38FE30C7999@MW3PR11MB4554.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c544:0:b0:2dc:f222:9fba with SMTP id
+ a4-20020a92c544000000b002dcf2229fbamr3324103ilj.270.1659195554796; Sat, 30
+ Jul 2022 08:39:14 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 08:39:14 -0700
+In-Reply-To: <20220730114547.5790-1-khalid.masum.92@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a81b9205e5079176@google.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
+From:   syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>
+To:     khalid.masum.92@gmail.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 11:21 PM, Liu, Rong L wrote:
-> Hi Dmytro,
-> 
->> -----Original Message-----
->> From: Dmytro Maluka <dmy@semihalf.com>
->> Sent: Friday, July 15, 2022 8:59 AM
->> To: Christopherson,, Sean <seanjc@google.com>; Paolo Bonzini
->> <pbonzini@redhat.com>; kvm@vger.kernel.org
->> Cc: Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar
->> <mingo@redhat.com>; Borislav Petkov <bp@alien8.de>; Dave Hansen
->> <dave.hansen@linux.intel.com>; x86@kernel.org; H. Peter Anvin
->> <hpa@zytor.com>; linux-kernel@vger.kernel.org; Eric Auger
->> <eric.auger@redhat.com>; Alex Williamson
->> <alex.williamson@redhat.com>; Liu, Rong L <rong.l.liu@intel.com>;
->> Zhenyu Wang <zhenyuw@linux.intel.com>; Tomasz Nowicki
->> <tn@semihalf.com>; Grzegorz Jaszczyk <jaz@semihalf.com>; Dmitry
->> Torokhov <dtor@google.com>; Dmytro Maluka <dmy@semihalf.com>
->> Subject: [PATCH 3/3] KVM: irqfd: Postpone resamplefd notify for oneshot
->> interrupts
->>
->> The existing KVM mechanism for forwarding of level-triggered interrupts
->> using resample eventfd doesn't work quite correctly in the case of
->> interrupts that are handled in a Linux guest as oneshot interrupts
->> (IRQF_ONESHOT). Such an interrupt is acked to the device in its
->> threaded irq handler, i.e. later than it is acked to the interrupt
->> controller (EOI at the end of hardirq), not earlier.
->>
->> Linux keeps such interrupt masked until its threaded handler finishes,
->> to prevent the EOI from re-asserting an unacknowledged interrupt.
->> However, with KVM + vfio (or whatever is listening on the resamplefd)
->> we don't check that the interrupt is still masked in the guest at the
->> moment of EOI. Resamplefd is notified regardless, so vfio prematurely
->> unmasks the host physical IRQ, thus a new (unwanted) physical interrupt
->> is generated in the host and queued for injection to the guest.
->>
->> The fact that the virtual IRQ is still masked doesn't prevent this new
->> physical IRQ from being propagated to the guest, because:
->>
->> 1. It is not guaranteed that the vIRQ will remain masked by the time
->>    when vfio signals the trigger eventfd.
->> 2. KVM marks this IRQ as pending (e.g. setting its bit in the virtual
->>    IRR register of IOAPIC on x86), so after the vIRQ is unmasked, this
->>    new pending interrupt is injected by KVM to the guest anyway.
->>
->> There are observed at least 2 user-visible issues caused by those
->> extra erroneous pending interrupts for oneshot irq in the guest:
->>
->> 1. System suspend aborted due to a pending wakeup interrupt from
->>    ChromeOS EC (drivers/platform/chrome/cros_ec.c).
->> 2. Annoying "invalid report id data" errors from ELAN0000 touchpad
->>    (drivers/input/mouse/elan_i2c_core.c), flooding the guest dmesg
->>    every time the touchpad is touched.
->>
->> This patch fixes the issue on x86 by checking if the interrupt is
->> unmasked when we receive irq ack (EOI) and, in case if it's masked,
->> postponing resamplefd notify until the guest unmasks it.
->>
->> Important notes:
->>
->> 1. It doesn't fix the issue for other archs yet, due to some missing
->>    KVM functionality needed by this patch:
->>      - calling mask notifiers is implemented for x86 only
->>      - irqchip ->is_masked() is implemented for x86 only
->>
->> 2. It introduces an additional spinlock locking in the resample notify
->>    path, since we are no longer just traversing an RCU list of irqfds
->>    but also updating the resampler state. Hopefully this locking won't
->>    noticeably slow down anything for anyone.
->>
->> Regarding #2, there may be an alternative solution worth considering:
->> extend KVM irqfd (userspace) API to send mask and unmask notifications
->> directly to vfio/whatever, in addition to resample notifications, to
->> let vfio check the irq state on its own. There is already locking on
->> vfio side (see e.g. vfio_platform_unmask()), so this way we would avoid
->> introducing any additional locking. Also such mask/unmask notifications
->> could be useful for other cases.
->>
->> Link: https://lore.kernel.org/kvm/31420943-8c5f-125c-a5ee-
->> d2fde2700083@semihalf.com/
->> Suggested-by: Sean Christopherson <seanjc@google.com>
->> Signed-off-by: Dmytro Maluka <dmy@semihalf.com>
->> ---
->>  include/linux/kvm_irqfd.h | 14 ++++++++++++
->>  virt/kvm/eventfd.c        | 45
->> +++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 59 insertions(+)
->>
->> diff --git a/include/linux/kvm_irqfd.h b/include/linux/kvm_irqfd.h
->> index dac047abdba7..01754a1abb9e 100644
->> --- a/include/linux/kvm_irqfd.h
->> +++ b/include/linux/kvm_irqfd.h
->> @@ -19,6 +19,16 @@
->>   * resamplefd.  All resamplers on the same gsi are de-asserted
->>   * together, so we don't need to track the state of each individual
->>   * user.  We can also therefore share the same irq source ID.
->> + *
->> + * A special case is when the interrupt is still masked at the moment
->> + * an irq ack is received. That likely means that the interrupt has
->> + * been acknowledged to the interrupt controller but not acknowledged
->> + * to the device yet, e.g. it might be a Linux guest's threaded
->> + * oneshot interrupt (IRQF_ONESHOT). In this case notifying through
->> + * resamplefd is postponed until the guest unmasks the interrupt,
->> + * which is detected through the irq mask notifier. This prevents
->> + * erroneous extra interrupts caused by premature re-assert of an
->> + * unacknowledged interrupt by the resamplefd listener.
->>   */
-> 
-> I don't really agree with above statement.  Please correct me if I am wrong.  In
-> all modern x86 interrupt infrastructure(lapic/ioapic), for level triggered
-> interrupt, the sequence is always EOI (LAPIC), which is called interrupt ack in
-> the context of this discussion, then unmask (IOAPIC).  Oneshot interrupt is
-> different only because the timing of above 2 events are different from a
-> "normal" level-triggered interrupt.  It is like for level interrupt:  Hardirq ->
-> EOI -> Unmask but for oneshot, it is like: hardirq->EOI, then sometime later
-> threadedirq->unmask.  So based on this, I don't think you need to keep track of
-> whether the interrupt is unmasked or not, just need to call the notifier at the
-> end of unmask, instead of EOI.  And calling notifier at the end of unmask,
-> instead of EOI won't break non-oneshot case.  The only caveat is guest ioapic
-> update (virq unmask) doesn't cause vmexit.  But the assumption is already made
-> that virq unmask causes vmexit.
+Hello,
 
-This doesn't seem true to me. For example, looking at how Linux handles
-level-triggered IOAPIC interrupts in handle_fasteoi_irq(), AFAICS
-normally it does EOI only, without masking or unmasking.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: vmalloc-out-of-bounds Write in imageblit
 
-I believe for regular level-triggered interrupts it's like:
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
+Write of size 4 at addr ffffc90004411000 by task syz-executor.5/4188
 
-    hardirq -> EOI
+CPU: 1 PID: 4188 Comm: syz-executor.5 Not tainted 5.19.0-rc8-syzkaller-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
+ sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
+ drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:825 [inline]
+ drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2328
+ bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:139 [inline]
+ bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:188
+ fbcon_putcs+0x314/0x3e0 drivers/video/fbdev/core/fbcon.c:1285
+ do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
+ redraw_screen+0x61f/0x740 drivers/tty/vt/vt.c:1035
+ fbcon_do_set_font+0x5eb/0x6f0 drivers/video/fbdev/core/fbcon.c:2435
+ fbcon_set_font+0x89d/0xab0 drivers/video/fbdev/core/fbcon.c:2522
+ con_font_set drivers/tty/vt/vt.c:4666 [inline]
+ con_font_op+0x73a/0xc90 drivers/tty/vt/vt.c:4710
+ vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
+ vt_ioctl+0x1efa/0x2b20 drivers/tty/vt/vt_ioctl.c:752
+ tty_ioctl+0xbbd/0x15e0 drivers/tty/tty_io.c:2778
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb2a0689109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb2a1830168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fb2a079bf60 RCX: 00007fb2a0689109
+RDX: 0000000020000040 RSI: 0000000000004b72 RDI: 0000000000000004
+RBP: 00007fb2a18301d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007ffca595479f R14: 00007fb2a1830300 R15: 0000000000022000
+ </TASK>
 
-while for oneshot interrupts:
+The buggy address belongs to the virtual mapping at
+ [ffffc90004111000, ffffc90004412000) created by:
+ drm_gem_shmem_vmap_locked drivers/gpu/drm/drm_gem_shmem_helper.c:319 [inline]
+ drm_gem_shmem_vmap+0x3d7/0x5a0 drivers/gpu/drm/drm_gem_shmem_helper.c:366
 
-    mask -> hardirq -> EOI -> threadedirq -> unmask
+Memory state around the buggy address:
+ ffffc90004410f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90004410f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc90004411000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                   ^
+ ffffc90004411080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90004411100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
-I don't quite get what would be the point of unmasking in addition to an
-EOI in the normal case (not in a special case like oneshot interrupt,
-where we mask the interrupt in the beginning of hardirq, so need to
-unmask it later on). Isn't the whole point of "fast EOI" to minimize
-latencies by using just one LAPIC write, no IOAPIC writes?
 
-Thanks,
-Dmytro
+Tested on:
 
-> 	
->>  struct kvm_kernel_irqfd_resampler {
->>  	struct kvm *kvm;
->> @@ -28,6 +38,10 @@ struct kvm_kernel_irqfd_resampler {
->>  	 */
->>  	struct list_head list;
->>  	struct kvm_irq_ack_notifier notifier;
->> +	struct kvm_irq_mask_notifier mask_notifier;
->> +	bool masked;
->> +	bool pending;
->> +	spinlock_t lock;
->>  	/*
->>  	 * Entry in list of kvm->irqfd.resampler_list.  Use for sharing
->>  	 * resamplers among irqfds on the same gsi.
->> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
->> index 50ddb1d1a7f0..9ff47ac33790 100644
->> --- a/virt/kvm/eventfd.c
->> +++ b/virt/kvm/eventfd.c
->> @@ -75,6 +75,44 @@ irqfd_resampler_ack(struct kvm_irq_ack_notifier
->> *kian)
->>  	kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
->>  		    resampler->notifier.gsi, 0, false);
->>
->> +	spin_lock(&resampler->lock);
->> +	if (resampler->masked) {
->> +		resampler->pending = true;
->> +		spin_unlock(&resampler->lock);
->> +		return;
->> +	}
->> +	spin_unlock(&resampler->lock);
->> +
->> +	idx = srcu_read_lock(&kvm->irq_srcu);
->> +
->> +	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
->> +	    srcu_read_lock_held(&kvm->irq_srcu))
->> +		eventfd_signal(irqfd->resamplefd, 1);
->> +
->> +	srcu_read_unlock(&kvm->irq_srcu, idx);
->> +}
->> +
->> +static void
->> +irqfd_resampler_mask(struct kvm_irq_mask_notifier *kimn, bool
->> masked)
->> +{
->> +	struct kvm_kernel_irqfd_resampler *resampler;
->> +	struct kvm *kvm;
->> +	struct kvm_kernel_irqfd *irqfd;
->> +	int idx;
->> +
->> +	resampler = container_of(kimn,
->> +			struct kvm_kernel_irqfd_resampler, mask_notifier);
->> +	kvm = resampler->kvm;
->> +
->> +	spin_lock(&resampler->lock);
->> +	resampler->masked = masked;
->> +	if (masked || !resampler->pending) {
->> +		spin_unlock(&resampler->lock);
->> +		return;
->> +	}
->> +	resampler->pending = false;
->> +	spin_unlock(&resampler->lock);
->> +
->>  	idx = srcu_read_lock(&kvm->irq_srcu);
->>
->>  	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
->> @@ -98,6 +136,8 @@ irqfd_resampler_shutdown(struct
->> kvm_kernel_irqfd *irqfd)
->>  	if (list_empty(&resampler->list)) {
->>  		list_del(&resampler->link);
->>  		kvm_unregister_irq_ack_notifier(kvm, &resampler->notifier);
->> +		kvm_unregister_irq_mask_notifier(kvm, resampler-
->>> mask_notifier.irq,
->> +						 &resampler->mask_notifier);
->>  		kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
->>  			    resampler->notifier.gsi, 0, false);
->>  		kfree(resampler);
->> @@ -367,11 +407,16 @@ kvm_irqfd_assign(struct kvm *kvm, struct
->> kvm_irqfd *args)
->>  			INIT_LIST_HEAD(&resampler->list);
->>  			resampler->notifier.gsi = irqfd->gsi;
->>  			resampler->notifier.irq_acked = irqfd_resampler_ack;
->> +			resampler->mask_notifier.func = irqfd_resampler_mask;
->> +			kvm_irq_is_masked(kvm, irqfd->gsi, &resampler-
->>> masked);
->> +			spin_lock_init(&resampler->lock);
->>  			INIT_LIST_HEAD(&resampler->link);
->>
->>  			list_add(&resampler->link, &kvm->irqfds.resampler_list);
->>  			kvm_register_irq_ack_notifier(kvm,
->>  						      &resampler->notifier);
->> +			kvm_register_irq_mask_notifier(kvm, irqfd->gsi,
->> +						       &resampler->mask_notifier);
->>  			irqfd->resampler = resampler;
->>  		}
->>
->> --
->> 2.37.0.170.g444d1eabd0-goog
-> 
+commit:         e0dccc3b Linux 5.19-rc8
+git tree:       https://github.com/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13963ed2080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+dashboard link: https://syzkaller.appspot.com/bug?extid=14b0e8f3fd1612e35350
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14d7b5da080000
+

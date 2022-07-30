@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C3585CB5
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 01:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A719C585CB9
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 02:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiG3XqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 19:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S235984AbiG3X7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 19:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236419AbiG3Xp5 (ORCPT
+        with ESMTP id S229895AbiG3X7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 19:45:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88BCFD3C;
-        Sat, 30 Jul 2022 16:45:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA4260C3F;
-        Sat, 30 Jul 2022 23:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74281C433C1;
-        Sat, 30 Jul 2022 23:45:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dO1re7dv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659224746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bwILLSCMqAC9yTKYmk9zI52N9kG+nfe/r+3/DhFdIhI=;
-        b=dO1re7dvN/hABg+89W1Rp8gEpTgrndh2YDPzlk+51ozhnja+DhyWXYBOoLT7yL8M1dWJ7D
-        iUPTj393k60Gxkm+VIhoQJN/HtEayKElIQWxB3qlx29lkLwBq2h3CkxLj3B1CEAnmIs7ah
-        ZqYVZgSMzFZIgCKwaUf7c97wRV/tT04=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5107785a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sat, 30 Jul 2022 23:45:45 +0000 (UTC)
-Date:   Sun, 31 Jul 2022 01:45:43 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        x86@kernel.org, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH RFC v1] random: implement getrandom() in vDSO
-Message-ID: <YuXCpyULk6jFgGV5@zx2c4.com>
-References: <20220729145525.1729066-1-Jason@zx2c4.com>
- <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
+        Sat, 30 Jul 2022 19:59:16 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9AB13DF2
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 16:59:15 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id b6so4155020wmq.5
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 16:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XFfl3fvUkStQAla+HkThz8i6u3worW0NuOmmJQ7dxFw=;
+        b=37z3F1S/xY9NRMXx+Dae4aV7GMpjcO73t8Jtw9OERy1UwzIbR9Hrqq8tmFBxWk+IeE
+         GYcaTxDNGpJYcDKe54QZ9R+kSzm/RZLQzYkx30/wDuQptp9ebg78bj1HpAPWVnZF0CSG
+         mvFmCNLwYkAaA2Q1RlV3cCdKbzoDV/ubv1+ZPcADJ0ACm95/Ds62H8pcNdh/vkySpy9T
+         igIUBVVl0APo31QgqYAMbrhxf4tJEWoZtTcC+H8ZWr6NpAXGXy8HG/0rOTWn0SqXumPu
+         RCJAtYngXCRY0jmhSybrqAMkQSbRI+S0LA14SKN0TkoTGTJWKQw8x94FnHGjSKy5yxyA
+         B04A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XFfl3fvUkStQAla+HkThz8i6u3worW0NuOmmJQ7dxFw=;
+        b=pUdT4+xpm6N/3Lo+wvj8KlsniO+zjz6BL3/EhlQCR+MbylUKQJkt235gmCJLZed9Yi
+         8l3TvaDBZ+6gYIbi+B55zHlVj2ZzAa9dGavPUYnI9oaunZQptMyG4OIH6/kECMV06q71
+         TTm8ZBm7wnklb4TqwJTYQeISGDUIcPDPWENxZ/m1Ktmkah7Ay3r8/XyXiDcglz+ivg9m
+         AMsWSoj4ZJ9hX3v5i9/z9NbQJGnnqueiBRzhzHQvGqQj157xRNywsmoWY2iTDUnG6ooE
+         YZegVWUEHqrv5XG9Vq6knke9aE06zeU5Somu+/6lR2fEjctPeIYSZ/d9c3DLmSzeIire
+         GaJg==
+X-Gm-Message-State: AJIora+3hTeaxFJ3/7w+iOvlKohjrOAbYEydGUVQU25MacnXBBqg+5lq
+        0VDJErSsJJUNLJVOf+Ks5uc47g==
+X-Google-Smtp-Source: AGRyM1vu7o/4YD4IwTcmD332Wl18Bit+6ay104U1SqYA3waYlygWwSrENiujo9W60UoBexOgnttAgA==
+X-Received: by 2002:a05:600c:3549:b0:3a3:16af:d280 with SMTP id i9-20020a05600c354900b003a316afd280mr6665993wmq.142.1659225553964;
+        Sat, 30 Jul 2022 16:59:13 -0700 (PDT)
+Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
+        by smtp.gmail.com with ESMTPSA id g9-20020adff3c9000000b0021eed2414c9sm7453595wrp.40.2022.07.30.16.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jul 2022 16:59:13 -0700 (PDT)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
+        paskripkin@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: fix potential uninitialised variable use in rtw_pwrctrl.c
+Date:   Sun, 31 Jul 2022 00:59:10 +0100
+Message-Id: <20220730235910.1145-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,96 +68,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+Set ret to 0 (success) before entering first if statement, thereby
+assuring that even if the device is not associated and further checks
+pass, we do not then end up returning the uninitialized value of ret.
+This assignment is deliberately now directly before the if statement, in
+order to keep it clear what is happening as opposed to having it as an
+initialization at the start of the function like it was originally.
 
-Thanks a bunch for chiming in. Indeed this whole thing is kind of crazy,
-so your input is particularly useful here.
+Also add a comment to make it clear this first if block is currently a
+success path. As a side note, smatch does not trigger warnings for this
+change, for me at least.
 
-On Sat, Jul 30, 2022 at 08:48:42AM -0700, Linus Torvalds wrote:
-> It's just too specialized, and the people who care about performance
-> can - and do - do special things anyway.
+Within core/rtw_pwrctrl.c in the rtw_pwr_wakeup function, I previously
+dropped the initialization of 'ret' (int ret = 0;) in favour of its
+assignment which happens inside the first if block directly before its
+corresponding goto. This was the cause of this bug, and was introduced
+by: commit f3a76018dd55 ("staging: r8188eu: remove initializer from ret
+in rtw_pwr_wakeup").
 
-I followed most of your email, but I just wanted to point out that the
-"can" part of this isn't quite right, though the "do" part is.
-Specifically, I don't think there's currently a good way for userspace
-to do this kind of thing and get the same kind of security guarantees
-that the syscall has. They "do" it anyway, though (openssl, libgcrypt,
-glibc's arc4random() implementation before I tamed it last week, etc),
-and this is somewhat concerning.
+Fixes: f3a76018dd55 ("staging: r8188eu: remove initializer from ret in rtw_pwr_wakeup")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+---
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So my larger intent is, assuming that people will continue to attempt
-such things, to just nip the issue in the bud by providing an actually
-safe way for it to be done.
+diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+index 75e655bae16a..10550bd2c16d 100644
+--- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
++++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+@@ -387,10 +387,10 @@ int rtw_pwr_wakeup(struct adapter *padapter)
+ 		msleep(10);
+ 
+ 	/* I think this should be check in IPS, LPS, autosuspend functions... */
+-	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
+-		ret = 0;
++	/* Below goto is a success path taken for already linked devices */
++	ret = 0;
++	if (check_fwstate(pmlmepriv, _FW_LINKED))
+ 		goto exit;
+-	}
+ 
+ 	if (pwrpriv->rf_pwrstate == rf_off && ips_leave(padapter) == _FAIL) {
+ 		ret = -ENOMEM;
+-- 
+2.36.1
 
-To be clear, I really would rather not do this. I'm not really looking
-for more stuff to do, and I don't tend to write (public) code "just
-'cuz". My worry is that by /not/ doing it, footguns will proliferate.
-The glibc thing was what finally motivated me to want to at least sketch
-out a potential action to make this kind of (apparently common) urge of
-writing a userspace RNG safer.
-
-(Actually coding it up didn't really take much time, which perhaps
-shows: that `if (!len)` check needs to be hoisted out of the inner
-block!)
-
-> So I'm really not convinced that this kind of thing is something the
-> kernel should work that hard to help.
-> 
-> Your patch fundamentally seems to be about "make it easy to not have
-> to care, and still get high performance", but that's _such_ a small
-> use-case (the intersection between "don't care" and "really really
-> need high performance" would seem to be basically NIL).
-
-So this is "statement (1)" stuff. Namely, userspace apparently wants
-faster random numbers. Is this desire justified? Has anybody aside from
-Phoronix even benchmarked getrandom() since I did the neat lockless
-stuff to it? Is this just for some artificial card shuffling unit tests,
-or is generating TLS CBC nonces at scale using getrandom() a real
-bottleneck for a real use case?
-
-I'm honestly not quite sure. But I do know that people are building
-these userspace RNGs anyway, and will keep building them, and that kind
-of worries me.
-
-So either this is a useful thing to have, and people are building it
-anyway, so maybe the kernel should get involved. Or it's not a useful
-thing to have, BUT people are building it anyway, so maybe the kernel
-should [not?] get involved? The latter case is a bit decisionally
-hairier.
-
-Anyway, onto the technical feedback:
-
-> And that state allocation in particular looks very random in all the
-> wrong ways, with various "if I run out of resources I'll just do a
-> system call" things.
-> 
-> Not to mention that I don't think your patch can work anyway, with
-> things like "cmpxchg()" not being something you can do in the vdso
-> because it might have the kernel instrumentation in it.
-
-Yea this sharding thing is somewhat faulty. In its current inception, it
-also falls over during fork, since the cmpxchg pseudo trylock is
-dropped, among other problems Andy and I discussed on IRC. Andy also
-suggested not doing the allocation inside of the same function. Florian
-brought up the difficulty of even determining the CPU number on arm64.
-And also that's a good point about instrumentation on cmpxchg.
-
-So, anyway, if I do muster a v2 of this (perhaps just to see the idea
-through), the API might split in two to something like:
-
-  void *getrandom_allocate_states([inout] size_t *number_of_states, [out] size_t *length_per_state);
-  ssize_t getrandom(void *state, void *buffer, size_t len, unsigned long flags);
-
-User code will call getrandom_allocate_state(), which will allocate
-enough pages to hold *number_of_states, and return the size of each one
-in length_per_state and the number actually allocated back in
-number_of_states. The result can then be sliced up by that size, and
-passed to getrandom(). So glibc or whatever would presumably allocate
-one per thread, and handle any reentrancy/locking around it.
-
-Or some other variation on that. I'm sure you hate those function
-signatures. Everybody loves to bikeshed APIs, right? There's plenty to
-be tweaked. But that's anyhow about where my thinking is for a potential
-v2.
-
-Jason

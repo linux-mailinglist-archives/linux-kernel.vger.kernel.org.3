@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7A15857EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804E95857F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239596AbiG3CPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 22:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S239677AbiG3CWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 22:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiG3CPg (ORCPT
+        with ESMTP id S231201AbiG3CWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 22:15:36 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B5737FA0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:15:35 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lvntx1n7gzWfQd;
-        Sat, 30 Jul 2022 10:11:37 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 30 Jul 2022 10:15:17 +0800
-Subject: Re: [RFC PATCH v4 7/8] hugetlb: create hugetlb_unmap_file_folio to
- unmap single file folio
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220706202347.95150-1-mike.kravetz@oracle.com>
- <20220706202347.95150-8-mike.kravetz@oracle.com>
- <3557d5a9-231c-4007-3e7e-5a7bf34ecaa8@huawei.com> <YuQi0obsC7x5krRs@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <9a4729f6-ca4d-0137-8d15-bbb1221bce52@huawei.com>
-Date:   Sat, 30 Jul 2022 10:15:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 29 Jul 2022 22:22:09 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0678DDC;
+        Fri, 29 Jul 2022 19:22:08 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso633330pjl.4;
+        Fri, 29 Jul 2022 19:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=qvlSFDuVcQPe2p0wkv4esqHUa+wl6CPqM/sYrzmNhGU=;
+        b=atcUj8Zj1KTXktZ9QtZDtVOMLD+wIgTB4dcVks8OTQpLNoj2QLy/fxRHkILV89lfeP
+         PrSFWciKs7bl/LHqA2g0sQFGsvevnle5vHPPZ/I27jRQmJ/jo1obg3D0RLGzsNElQw1n
+         Wa2zMYSh5fo47RBG++1V0apR0P2Hr10z6XY3OVCuYVJLlCOaNjCdNXp+w3e5z7/3Xi69
+         RnUhb+5R8yeh9SrcQahZmd2MczvKm1iOnukP6mGTutKsvpJlHg+jeUkMmRAEAKZtDfth
+         kCf4M9Vi3dXjYUoUZNyvGy6Iyeur04eipuY2RmJusxcUyuG3MArNYXZ9CaSFhxNY6gbT
+         aPcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=qvlSFDuVcQPe2p0wkv4esqHUa+wl6CPqM/sYrzmNhGU=;
+        b=Jw0Vwmn+reGpE0CBP7ABDRwJmueOy7x5PU/bcX0zZG1uK6k9geMdSzL8Ca5Tv8JMiX
+         s6IDRoU4avi4bFVTb42Tp6FzKSkGqnC+MbfbAlOy2+885zbn3UK+B3a9HeSCcxQEP8ch
+         9FL0VBR6/tk1KLMsYAjVXnzBmlebaxjgpnjir4gnZ6/JagVFdQMH/q4LCLuK0MSHz/d7
+         bvPWHiZIanSKnSvHrc3WJqvsjrpsKVM81Y06j0/nQqSNdxBBTBEBRUISg7EljWNIBAD/
+         j5xKAouQhjrE55iUNYCf14Vveluhp8p/uGbryj8V+aPQ65yVytOSNMtutGMRAQz7h6z3
+         NnDA==
+X-Gm-Message-State: ACgBeo0it89MyPkzbW6yu0FlZ2PO86MEYApn9ndN8ARdvg33Irl+EUok
+        UQoEU0KOSlL8Ov5YwL2nwvc=
+X-Google-Smtp-Source: AA6agR5/NqhgsA5YXYUibbZAKLuh8ntUvo92HXKUk6pLDvfnQJuY4Yohu25+jtwPDIQcUCz6V6Q8mg==
+X-Received: by 2002:a17:902:cccf:b0:168:c4c3:e8ca with SMTP id z15-20020a170902cccf00b00168c4c3e8camr6643718ple.40.1659147727930;
+        Fri, 29 Jul 2022 19:22:07 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-86.three.co.id. [180.214.233.86])
+        by smtp.gmail.com with ESMTPSA id o24-20020a170902779800b0016bd8f66ca0sm4283096pll.162.2022.07.29.19.22.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jul 2022 19:22:07 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1C9C210495F; Sat, 30 Jul 2022 09:21:13 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Andy Gospodarek <gospo@broadcom.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH net-next] Documentation: devlink: add add devlink-selftests to the table of contents
+Date:   Sat, 30 Jul 2022 09:20:57 +0700
+Message-Id: <20220730022058.16813-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <YuQi0obsC7x5krRs@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/30 2:11, Mike Kravetz wrote:
-> On 07/29/22 10:02, Miaohe Lin wrote:
->> On 2022/7/7 4:23, Mike Kravetz wrote:
->>> Create the new routine hugetlb_unmap_file_folio that will unmap a single
->>> file folio.  This is refactored code from hugetlb_vmdelete_list.  It is
->>> modified to do locking within the routine itself and check whether the
->>> page is mapped within a specific vma before unmapping.
->>>
->>> This refactoring will be put to use and expanded upon in a subsequent
->>> patch adding vma specific locking.
->>>
->>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
->>> ---
->>>  fs/hugetlbfs/inode.c | 124 +++++++++++++++++++++++++++++++++----------
->>>  1 file changed, 95 insertions(+), 29 deletions(-)
->>>
->>> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
->>> index 31bd4325fce5..0eac0ea2a245 100644
->>> --- a/fs/hugetlbfs/inode.c
->>> +++ b/fs/hugetlbfs/inode.c
->>> @@ -396,6 +396,94 @@ static int hugetlbfs_write_end(struct file *file, struct address_space *mapping,
->>>  	return -EINVAL;
->>>  }
->>>  
->>> +/*
->>> + * Called with i_mmap_rwsem held for inode based vma maps.  This makes
->>> + * sure vma (and vm_mm) will not go away.  We also hold the hugetlb fault
->>> + * mutex for the page in the mapping.  So, we can not race with page being
->>> + * faulted into the vma.
->>> + */
->>> +static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
->>> +				unsigned long addr, struct page *page)
->>> +{
->>> +	pte_t *ptep, pte;
->>> +
->>> +	ptep = huge_pte_offset(vma->vm_mm, addr,
->>> +			huge_page_size(hstate_vma(vma)));
->>> +
->>> +	if (!ptep)
->>> +		return false;
->>> +
->>> +	pte = huge_ptep_get(ptep);
->>> +	if (huge_pte_none(pte) || !pte_present(pte))
->>> +		return false;
->>> +
->>> +	if (pte_page(pte) == page)
->>> +		return true;
->>> +
->>> +	return false;	/* WTH??? */
->>
->> I'm sorry but what does WTH means? IIUC, this could happen if pte_page is a COW-ed private page?
->> vma_interval_tree_foreach doesn't exclude the private mapping even after cow?
-> 
-> My apologies, I left that comment in during development and should have removed
-> it.  WTH is an acronym for 'What the Heck?".  I added it because I did not
-> think we should ever get to this return statement.
-> 
+Commit 08f588fa301bef ("devlink: introduce framework for selftests") adds
+documentation for devlink selftests framework, but it is missing from
+table of contents.
 
-That's all right. Thanks for your hard work.
+Add it.
 
-> I am not sure if your COW of a private page would get us to this return
-> statement.  In any case, if we get there we need to return false.
-> 
-> Thank you for your analysis and comments!
-> 
+Link: https://lore.kernel.org/linux-doc/202207300406.CUBuyN5i-lkp@intel.com/
+Fixes: 08f588fa301bef ("devlink: introduce framework for selftests")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/networking/devlink/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/networking/devlink/index.rst b/Documentation/networking/devlink/index.rst
+index 85071551229362..e3a5f985673efd 100644
+--- a/Documentation/networking/devlink/index.rst
++++ b/Documentation/networking/devlink/index.rst
+@@ -38,6 +38,7 @@ general.
+    devlink-region
+    devlink-resource
+    devlink-reload
++   devlink-selftests
+    devlink-trap
+    devlink-linecard
+ 
+
+base-commit: 6957730e20389a63eb333afb6fcf38b45f549ea8
+-- 
+An old man doll... just what I always wanted! - Clara
 

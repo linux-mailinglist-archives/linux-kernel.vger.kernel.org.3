@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6869D5859A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604A35859A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiG3JdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 05:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S235389AbiG3JgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 05:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbiG3JdG (ORCPT
+        with ESMTP id S233597AbiG3JgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 05:33:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8463E773
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:33:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 12FF820898;
-        Sat, 30 Jul 2022 09:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659173584; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Lb9yZCabxMhizNdALgYsCx1Z50UiodZ1L7bHVlBBoM=;
-        b=t9yFOOEf3uz5UIrvNQthegCtPzKTUFZJBiHeDDX/N2pXIg16z9UjJstoBm2QgT9mtQEQRs
-        AnWsAkBsWNst/Vv+3NJr9LUa8a2SVefZr9VUVVA1T5B660FvJROGXtb7AVxtHPY1xuNLt+
-        2U/Kx6oBFNgRkNurAaXu7nBRl4ZylBg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659173584;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Lb9yZCabxMhizNdALgYsCx1Z50UiodZ1L7bHVlBBoM=;
-        b=AmhbWKgJVB8lpmYEVEBaSvf/XMLxj8tino+7plHi6Z7uD6NqmziMoDkiB8N9dOWJK81+oz
-        8w/njsH7cc5aupAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E45F91331F;
-        Sat, 30 Jul 2022 09:33:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FFP2Nc/65GKALwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Sat, 30 Jul 2022 09:33:03 +0000
-Date:   Sat, 30 Jul 2022 11:33:02 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] firmware: dmi: Don't take garbage into
- consideration in dmi_smbios3_present()
-Message-ID: <20220730113302.6215923d@endymion.delvare>
-In-Reply-To: <YuQljCM4LZXhSkbh@smile.fi.intel.com>
-References: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
-        <20220727102504.6bbefcf9@endymion.delvare>
-        <YuQljCM4LZXhSkbh@smile.fi.intel.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Sat, 30 Jul 2022 05:36:04 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ADC18E07;
+        Sat, 30 Jul 2022 02:36:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659173720; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=TKQQjb7ac+ivNU+QKoCKvumYFhO1f97PFAruFCysvTptSPQ6dFkyqCRwciVZTXi/B8WOptwq0eP2M5UzaQFPCVw5SVk3ZZV2hSRl2GX2iEzWLLbNUrZgO2v5NYRBdo5KiDEdiwYCoEyw70ttCCDM3/QJrNzZ5+HpXjMwuh0cgxI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1659173720; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=G7NscnYW6e9l+s6/WtNH8K8Pr07LMRM/ZHwEmfI4Dlo=; 
+        b=hZNWs04mn5LWF549DqyY8UPHDFtOKw4gT0tOtNjyJaNeY5jE1PsqP5C1WrORv84qbzeOfNBXUO23QAxkAsUWd2Ss/f2pu+166I1HOUn0gfC78iVv4aVhOD7EQBBWcM/Bc99MseFqyTEhmy9VIYpwLHlqFP34wRMlBIJKDjC3vkc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659173720;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=G7NscnYW6e9l+s6/WtNH8K8Pr07LMRM/ZHwEmfI4Dlo=;
+        b=Ds0+LL7pCTJA9a/mNbBXd3J2CvzZpPydkY33AzWiQj6Czso0og16N3sdeOxyPziI
+        1L+52f6RH7zrMsHsDg41ydBhKZaMfNUj0hmRqAEb3RasqZkclzJMYgjYKD9rZhRfZfy
+        JAzwY1Z9crbXVa+Co2OkB7fwI0WW0Hyki1QRJ+Bw=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1659173718691412.0344941538166; Sat, 30 Jul 2022 02:35:18 -0700 (PDT)
+Message-ID: <60be5351-8fd4-a7ae-9ff1-d336c2bcf391@arinc9.com>
+Date:   Sat, 30 Jul 2022 12:35:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH net-next] dt-bindings: net: dsa: mediatek,mt7530:
+ completely rework binding
+Content-Language: en-US
+To:     DENG Qingfang <dqfext@gmail.com>
+Cc:     Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220726122406.31043-1-arinc.unal@arinc9.com>
+ <YuK193gAQ+Rwe26s@makrotopia.org>
+ <980c9926-9199-9b6e-aa65-6b5276af5d70@arinc9.com>
+ <CALW65jYfcfND4QiD=8OhMCgW0LZMSBYmVZK5Ce8u3cMPh+8Rdg@mail.gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CALW65jYfcfND4QiD=8OhMCgW0LZMSBYmVZK5Ce8u3cMPh+8Rdg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-On Fri, 29 Jul 2022 21:23:08 +0300, Andy Shevchenko wrote:
-> On Wed, Jul 27, 2022 at 10:25:04AM +0200, Jean Delvare wrote:
-> > On Tue, 26 Jul 2022 12:43:29 +0300, Andy Shevchenko wrote:  
-> > > The byte at offset 6 represent length. Don't take it and drop it immediately
-> > > by using proper accessor, i.e. get_unaligned_be24().  
-> > 
-> > The subject sounds like you are fixing a bug, while this is only, at
-> > best, a minor optimization.  
+On 30.07.2022 12:30, DENG Qingfang wrote:
+> On Sat, Jul 30, 2022 at 5:15 PM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>> Thanks Daniel. To be precise, this is the case for MT7620AN, MT7620DA,
+>> MT7620DAN, MT7620NN, MT7628AN, MT7628DAN, MT7628DBN, MT7628KN, MT7628NN,
+>> MT7688AN and MT7688KN SoCs as all include a 5p FE switch according to
+>> Russia hosted WikiDevi.
 > 
-> I don't know how to improve it, but it kinda a bug in a logic for non-prepared
-> reader, esp. as specification suggests different thing about version offset.
+> MT76x8 series uses a different switch IP.
 
-I didn't consider that. Having code match the documentation is indeed
-valuable.
+Alrighty, only MT7620AN, MT7620DA, MT7620DAN and MT7620NN SoCs then. 
+Thanks Qingfang.
 
-> > > -		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
-> > > +		dmi_ver = get_unaligned_be24(buf + 7);  
-> 
-> > I admit I did not know about get_unaligned_be24(). While I agree that
-> > it makes the source code look better, one downside is that it actually
-> > increases the binary size on x86_64. The reason is that
-> > get_unaligned_be32() is optimized by assembly instruction bswapl, while
-> > get_unaligned_be24() is not. Situation appears to be the same on ia64
-> > and arm. Only arm64 would apparently benefit from your proposed
-> > change.  
-> 
-> Good to know!
-> But here it's not a hot path, right?
-
-True.
-
-> > I'm not too sure what is preferred in such situations.
-> 
-> For cold paths I think the correctness prevail the performance.
-
-You have a point.
-
-> Alternatively we might add a comment in the code explaining the trick,
-> although I won't like to do it.
-> 
-> Another way is to have a subset of 24-/48-bit unaligned accessors that
-> use the trick specifically for hot paths with a caveat that they may
-> access data out of the 24-/48-bit boundaries.
-
-I considered that, but that's too hackish for me and could easily cause
-confusion leading to improper use. Not worth it. Let's keep things
-simple and understandable.
-
-So I'll apply your patch, thanks for contributing it.
-
--- 
-Jean Delvare
-SUSE L3 Support
+Arınç

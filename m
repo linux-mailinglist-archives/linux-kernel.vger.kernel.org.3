@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F92585B0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EF0585B2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiG3Psm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 11:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S234720AbiG3Pzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 11:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiG3Psk (ORCPT
+        with ESMTP id S229742AbiG3Pzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:48:40 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A43915836;
-        Sat, 30 Jul 2022 08:48:39 -0700 (PDT)
+        Sat, 30 Jul 2022 11:55:38 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EE4EE0C
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 08:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659196119; x=1690732119;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/lkRKIKf5NUPYe0Arklh0YQ8Fp95nZE0357TMlZXoCw=;
-  b=D0YmyrevmNFfNisdSPANV9FT8GbkmVVhaAQYhRBBtEgRxF8ViBQM/DXk
-   nHDrK1p6VTrp+XNjuNy8rG4MqLFuB7J3mpTqt0eDeiY6/bB7Q524oBB8F
-   wuCLxVlVhXyJgr1nAwfCF78YccaPzoNjrHCnCuCObgtDv6ghZQJ61pARl
-   0vwfm9CuB/+opiX5SC14zaS64T4jCvPRZt7jagQf74HS1uTNfMrptPQhO
-   g+v//YTuzxMKBJUAXOlp9N6a8XAoK3RXso0848uJzDQjR2RSfH0hli3KQ
-   NH8+8YUYj8mJPXM07lnD0yymNwhUv96/d7Z+pSvNm8jf57r1RefzqMYOJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="289695187"
+  t=1659196536; x=1690732536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GH5Qn/oqgJv/KZAJ6M4hNx4oH+5v+S8EyuyVYp5QGtE=;
+  b=BFy4QVl7k7DXEzZYd+Imh3PFrS0hb7hcjhV3J1xjc5gJHIRsNBfQQwJ3
+   7BsgU799MGRxR83aBm4PUBTgp914nRHaPSy8m4C/dBQEhTP8IraeXNH+2
+   9xmJ1djye3mn9DGIE9NYKAJ9qvxpWOvioflBnJc34C9ZiuhZvHPH52hN3
+   vyuq4UUVLW+jRDQv1yQ88kVuKyTjlSx4dBT9RIKLbtTxK/X/bA+2eNxd6
+   6/0u+YON5k0fNKnS84J8dCFviluE5XIWldO31OwWkUOKtWh/jP7ui0fBR
+   0pIOb0F1Lp7QOu7RjBE/1JQZv6YfuJ4/udTE6bfD9taxYPuFoFfWL1i7q
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268691544"
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="289695187"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 08:48:39 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="268691544"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 08:55:36 -0700
 X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="660611414"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jul 2022 08:48:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E3A03F1; Sat, 30 Jul 2022 18:48:46 +0300 (EEST)
+   d="scan'208";a="629718847"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 08:55:35 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oHooO-001fM9-2t;
+        Sat, 30 Jul 2022 18:55:32 +0300
+Date:   Sat, 30 Jul 2022 18:55:32 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yong Zhi <yong.zhi@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-        Dan Scally <djrscally@gmail.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] media: ipu3-cio2: Don't dereference fwnode handle
-Date:   Sat, 30 Jul 2022 18:48:44 +0300
-Message-Id: <20220730154844.89556-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] firmware: dmi: Don't take garbage into
+ consideration in dmi_smbios3_present()
+Message-ID: <YuVUdOUl7zwE0QsV@smile.fi.intel.com>
+References: <20220726094329.1725-1-andriy.shevchenko@linux.intel.com>
+ <20220727102504.6bbefcf9@endymion.delvare>
+ <YuQljCM4LZXhSkbh@smile.fi.intel.com>
+ <20220730113302.6215923d@endymion.delvare>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220730113302.6215923d@endymion.delvare>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
-which is a better coding practice.
+On Sat, Jul 30, 2022 at 11:33:02AM +0200, Jean Delvare wrote:
+> On Fri, 29 Jul 2022 21:23:08 +0300, Andy Shevchenko wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/media/pci/intel/ipu3/cio2-bridge.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-index df6c94da2f6a..5998541d331c 100644
---- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
-+++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-@@ -263,7 +263,7 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
- 				      struct cio2_bridge *bridge,
- 				      struct pci_dev *cio2)
- {
--	struct fwnode_handle *fwnode;
-+	struct fwnode_handle *fwnode, *current;
- 	struct cio2_sensor *sensor;
- 	struct acpi_device *adev;
- 	acpi_status status;
-@@ -322,7 +322,9 @@ static int cio2_bridge_connect_sensor(const struct cio2_sensor_config *cfg,
- 		}
- 
- 		sensor->adev = acpi_dev_get(adev);
--		adev->fwnode.secondary = fwnode;
-+
-+		current = acpi_fwnode_handle(adev);
-+		current->secondary = fwnode;
- 
- 		cio2_bridge_instantiate_vcm_i2c_client(sensor);
- 
+> So I'll apply your patch, thanks for contributing it.
+
+Thanks for a nice discussion, I have learnt something new!
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 

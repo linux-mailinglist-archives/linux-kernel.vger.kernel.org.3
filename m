@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B983F585B32
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 17:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4EA9585B36
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 18:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiG3P7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 11:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S234991AbiG3QDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 12:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiG3P67 (ORCPT
+        with ESMTP id S229742AbiG3QDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 11:58:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85FADF55;
-        Sat, 30 Jul 2022 08:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659196738; x=1690732738;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9cKOU+81t6KkSi6zCm5L/gkHl9usaGGFPm85VfGl91U=;
-  b=Zm2CmG7c9OBLbshXPAXQ8CX98Gl1SjnM5qWfbzK0pezMEcplPCsZbKyp
-   foB4HDaVhxOA5wS5oPD5jukeyLdDvjUx1l4u5MzE+xKePLeuG/IMn/2hP
-   v5/XxpG7TZefCGQl9/BHx76RsZKdd1MqPZDFaeZBQZ5QMu3Mxm9zyFsUM
-   k5891SL1cwiWhDbfuy3AjD4JYwAFeqgRxBvm+2xxa7seBKKFA3KiXVqOq
-   nZbIi2YomMojqUtNCdMSnCDcb5kLWbPgyk7iPSS5sBgL1F+YWq6gHXVNp
-   MEqpnaBBXKw0DDiHaFs94ciJrBodP9/RLhKiumPqFPrnzbTKImUAOneA/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="288939832"
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="288939832"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 08:58:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="728024568"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 08:58:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9A9CAF1; Sat, 30 Jul 2022 18:59:06 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] media: atomisp_gmin_platform: Switch to use acpi_evaluate_dsm_typed()
-Date:   Sat, 30 Jul 2022 18:59:04 +0300
-Message-Id: <20220730155905.90091-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 30 Jul 2022 12:03:48 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D8AC32;
+        Sat, 30 Jul 2022 09:03:44 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id v2so5581335qvs.12;
+        Sat, 30 Jul 2022 09:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zgmGl0zOLMrX607mh9XkqEoaOPwjCXk2yDE13rCP8S4=;
+        b=brWrA3BHLdXgaMLYNPn15nUSgJ+ICxG8mg77/mh6pbRg07FjjG6pva4xRLwxB0eghG
+         Dfq+F+V+x1NOiHFkSbvx4tMx1QCHMIqqEBpB/oHd3QWHQqP92Z2xKTlHXFeP6Dx3NAZe
+         sgtPmxYbpV0bnJUMme0La5BDx5Cp7c0CaFwYJczWmdWyvrpFLdPNJzk0Yv4J8rFViFe4
+         ha3HU+A9U8BGTgtkjkQaBg7QnHTC3qfTulG7b6UZPbBImBZDyYVk72mOQ+V89AT2p5jo
+         KppSykFsfouzX7UG9IQw2bdyE/Zmw5sx5Xah/jVB5rKs+S/K+2cvEFj2Dk/rj+VK9YS0
+         4rog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zgmGl0zOLMrX607mh9XkqEoaOPwjCXk2yDE13rCP8S4=;
+        b=0/9/N1hS95GLmR3fB4Jm5sosyv1b8vijso0Poj3TCQ2uMJFpRxZg4pzk9Ui8t3P9AV
+         1dc0vbWu1A1wGfMcyZi87I9/isoj2svjfth1LlFLI8WoJFoInne2+kXAhHm79NhOlpn2
+         kl+hcKxTg67sxjNySsWZO8D8xadOy+qhaCaIc2V3/9Bxuwqe76DQo+LtL/KdSqCiy/op
+         l7SCPUezXzYH4oBSNkTXtqVCHYzRCS8ohFUrY9vbs6evoME8NrpcUOZWALSUSmCjEl5n
+         m+61qiQO7mOHYoih1hsmEdZjKeLbY8Gw7TBzUPxrdxporiH4m09DUqZ23XV0IalFxQ5F
+         ULUQ==
+X-Gm-Message-State: ACgBeo1M58s+o/RF5OJCd3WpVHlRkUqINijDPxAAtXYgu5bA2F5sIhYs
+        oXRGTCb7Gd9kFjkqn5jrHnhn5IW9K0Dr5g==
+X-Google-Smtp-Source: AA6agR7TvxAutxwqOLc1mZR6yYJ9ibyJ7OtPept/S/5Xwy40UMUhzGvKys6n5v2Fi0v3+PXvSzM4nQ==
+X-Received: by 2002:a05:6214:29c7:b0:473:7b25:f950 with SMTP id gh7-20020a05621429c700b004737b25f950mr7668120qvb.95.1659197023561;
+        Sat, 30 Jul 2022 09:03:43 -0700 (PDT)
+Received: from ada ([71.58.109.160])
+        by smtp.gmail.com with ESMTPSA id 206-20020a3703d7000000b006b5840f3eefsm4447103qkd.130.2022.07.30.09.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jul 2022 09:03:42 -0700 (PDT)
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+To:     aroulin@nvidia.com
+Cc:     sbrivio@redhat.com, roopa@nvidia.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org,
+        Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Subject: [PATCH net-next 0/3] net: vlan: fix bridge binding behavior and add selftests
+Date:   Sat, 30 Jul 2022 12:03:29 -0400
+Message-Id: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The acpi_evaluate_dsm_typed() provides a way to check the type of the
-object evaluated by _DSM call. Use it instead of open coded variant.
+When bridge binding is enabled for a vlan interface, it is expected
+that the link state of the vlan interface will track the subset of the
+ports that are also members of the corresponding vlan, rather than
+that of all ports.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed 80 character overgo (Sakari)
- drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Currently, this feature works as expected when a vlan interface is
+created with bridge binding enabled:
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index bf527b366ab3..f7fc5137199c 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -1207,16 +1207,14 @@ static int gmin_get_config_dsm_var(struct device *dev,
- 	if (!strcmp(var, "CamClk"))
- 		return -EINVAL;
- 
--	obj = acpi_evaluate_dsm(handle, &atomisp_dsm_guid, 0, 0, NULL);
-+	/* Return on unexpected object type */
-+	obj = acpi_evaluate_dsm_typed(handle, &atomisp_dsm_guid, 0, 0, NULL,
-+				      ACPI_TYPE_PACKAGE);
- 	if (!obj) {
- 		dev_info_once(dev, "Didn't find ACPI _DSM table.\n");
- 		return -EINVAL;
- 	}
- 
--	/* Return on unexpected object type */
--	if (obj->type != ACPI_TYPE_PACKAGE)
--		return -EINVAL;
--
- #if 0 /* Just for debugging purposes */
- 	for (i = 0; i < obj->package.count; i++) {
- 		union acpi_object *cur = &obj->package.elements[i];
+  ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+        bridge_binding on
+
+However, the feature does not work when a vlan interface is created
+with bridge binding disabled, and then enabled later:
+
+  ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+        bridge_binding off
+  ip link set vlan10 type vlan bridge_binding on
+
+After these two commands, the link state of the vlan interface
+continues to track that of all ports, which is inconsistent and
+confusing to users. This series fixes this bug and introduces two
+tests for the valid behavior.
+
+Sevinj Aghayeva (3):
+  net: bridge: export br_vlan_upper_change
+  net: 8021q: fix bridge binding behavior for vlan interfaces
+  selftests: net: tests for bridge binding behavior
+
+ include/linux/if_bridge.h                     |   9 ++
+ net/8021q/vlan.h                              |   2 +-
+ net/8021q/vlan_dev.c                          |  21 ++-
+ net/bridge/br_vlan.c                          |   7 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
+ 6 files changed, 176 insertions(+), 7 deletions(-)
+ create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+
 -- 
-2.35.1
+2.25.1
 

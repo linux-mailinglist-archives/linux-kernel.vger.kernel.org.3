@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24B35857C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 03:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501915857CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 03:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239548AbiG3B1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 21:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S239572AbiG3BiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 21:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiG3B1b (ORCPT
+        with ESMTP id S229599AbiG3BiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 21:27:31 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CC45D0C3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 18:27:30 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id e1so6185176pjl.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 18:27:30 -0700 (PDT)
+        Fri, 29 Jul 2022 21:38:23 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520C611C1A;
+        Fri, 29 Jul 2022 18:38:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id k15so12397pfh.1;
+        Fri, 29 Jul 2022 18:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jn4/LA7fxNt8iXGVssrYM+dajHtnWZvbUaOvrA1fJlQ=;
-        b=UherdjpeAiGSg3iy6gWENoRuu+eJVyt1yoSXDWVcALTCxNeCo9woucCva3GKjeCZGc
-         04mhRO9LuBK1m0Qur0gZE0zICckc0O0sVmn1pqdBybPI1oxHYTA42TYjTXAISgp4itEY
-         8A3JXLb9igc9E/SfMD8ZGmzbjDL23OXQU5ms7CFqSsSqjvTK9KatpPkrnpD0S6DvK6Je
-         qFg6iRtDxeTHR9yxylPrOh/Y9iE1HJpdU4TtQs/Fttyxq6c70qlIDUkBgoiyD57iBtlI
-         BYZGksjyQV0LW7yP6iHYnEC9qkifgGQDYZ4bE3o6fqx5IJvVvs7f2rmDM7NKdpK5uTMw
-         wE1w==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ovy+btOzOKwulLfDqtYLHAzCBX/GxmzMASWSRDQazIY=;
+        b=DhQjpg7pP6HTPyDeuulxs7XFXfj33z4fVYtdalLrMOLoF5FBpIVY3OoJ6QI+0H9fA/
+         sJKjqCISbhZSulvVRa40xuBQFit0ytCfQDsQEN9405BgKUg6Ip+1a0f8Q/YWX2X/0Vhp
+         EF8P7jLgWNKqJlUMqx3vY9ZqhehQ2h54QTpOsBmS/9eCsvtH92Bo77nSQic3wosX8iqL
+         yI+ue/EoYIKct604pk8TR2WqezbI2SUWbpZMyn9Q0XEiKMHNv5fw0Sp9Epn1wIZZBR+9
+         JFMfPwif3yBi9SKnRxi4NPt9/h+6ytM62xHrOQmsMMsIrCz2xew4zQSNTYsZvINLnlvV
+         gNqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jn4/LA7fxNt8iXGVssrYM+dajHtnWZvbUaOvrA1fJlQ=;
-        b=G+W5k7ESnGBXZumIqJPlngYn/+R1PGLYTphEbR6CmHmIMIa+26zHADe9X9mo4KbmC3
-         h8f35hLPmz70SYTlcMO/kt/2UT1kYLko0ulxt8ZVj7+QwePQdR5wn9STcDNWww96VqNt
-         UGb6zyXNBhQRtmO75lmgUSC3aq9Be6qIDH9faJEUX14G6x/dqybCirocAU4MzmwIGcxK
-         jruaC+ZyZbBck4sTstIN/kjE9NtBKEIXgn99EfuKiWhYZcVvvoCtxAtfUiGoMWZNzCvX
-         ANZ0+gdTlqVQJgT7Y4uKax4RIE+C1qAQJW2PjPvXPH5jkcCu/8fiVWDLjdQplgV6sseq
-         TIRA==
-X-Gm-Message-State: ACgBeo00OR9YT15HXyWFcCT9iwmuNX8S9C2R0Uluv8/9LvA3oOkL9oag
-        D+zmIqEBCiI9Ci5oG4Lq2Bw=
-X-Google-Smtp-Source: AA6agR7JDXm24wIBhiFmWsY1Z8pdIth3ZJyCwhmhZ3BrwBim+03Up78YuCPWc7TOoQPnbxX/3428cA==
-X-Received: by 2002:a17:90b:3c4a:b0:1f2:205d:dbac with SMTP id pm10-20020a17090b3c4a00b001f2205ddbacmr7012517pjb.110.1659144450067;
-        Fri, 29 Jul 2022 18:27:30 -0700 (PDT)
-Received: from localhost.localdomain ([175.195.128.78])
-        by smtp.gmail.com with ESMTPSA id m9-20020a17090a414900b001f251948ad6sm6518255pjg.35.2022.07.29.18.27.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 18:27:29 -0700 (PDT)
-From:   Sidong Yang <realwakka@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     Sidong Yang <realwakka@gmail.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: fix wrong debug message on rf69_write_fifo()
-Date:   Sat, 30 Jul 2022 02:27:24 +0100
-Message-Id: <20220730012724.1138-1-realwakka@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ovy+btOzOKwulLfDqtYLHAzCBX/GxmzMASWSRDQazIY=;
+        b=G76J23vBvzLvjBhfNPKvdN4/cLm/77/xyb7gypc+YvWPBESwZvXf2VB4bKmo7x2yHJ
+         YNiDuRDfzgb5CZV5eHr56viIpgBQxzbYBth4oS3yMIMtDBgWQsxOJvxhboG8LBUKnovj
+         qDFXNjibAvoNiY6xx1gs36pe+YCtmFDx21civKnAeNTCCs17yHpexjQ8vtiPWAG193Sj
+         VP4V8Ctmvc0mgJo6onjhrdFGq3QBuKVNSFvmy37UqBkPQ7xdW0KhYGrE4qloIJlN10EZ
+         jzBJgAhGW6nJL7Mkppy1X8UR0ax3j22KQ5LZ3dqQYQ+TccNy3mdq9u8hLjnMwe97m0gr
+         MjLw==
+X-Gm-Message-State: AJIora987u/TeN8Io23r7liyTiNMcclpimF3oDKQv84u1oCSJ8RYaW3c
+        Tk47Jvoy8W05nBtcsTQ93pJgTeg+D1S6p8lO7UI=
+X-Google-Smtp-Source: AGRyM1vOFkvS+zjURxCBbrk9p6gNNrG2//G5Qfx0s2IpKrnx9mB8JSCpqrL8DfNs7jrgpAgLFx5rH55K8wvFUvEJw1c=
+X-Received: by 2002:a05:6a02:313:b0:416:73c:507c with SMTP id
+ bn19-20020a056a02031300b00416073c507cmr4940522pgb.366.1659145102769; Fri, 29
+ Jul 2022 18:38:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220727025255.61232-1-jrdr.linux@gmail.com> <8275d40f7154c3a4e4acc4d3779af38abb061df5.camel@redhat.com>
+In-Reply-To: <8275d40f7154c3a4e4acc4d3779af38abb061df5.camel@redhat.com>
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+Date:   Sat, 30 Jul 2022 07:08:11 +0530
+Message-ID: <CAFqt6zbeDLvnAb=r+b5t3aCO1t=01hJ=SknT9ye_rdWCEy5brg@mail.gmail.com>
+Subject: Re: [PATCH] net: dsa: microchip: remove of_match_ptr() from ksz9477_dt_ids
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        Andrew Lunn <andrew@lunn.ch>, vivien.didelot@gmail.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,27 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The debug message should describe error when user calls rf69_write_fifo()
-not rf69_write_fifo().
+On Thu, Jul 28, 2022 at 6:45 PM Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> On Wed, 2022-07-27 at 08:22 +0530, Souptick Joarder wrote:
+> > From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
+> >
+> > > > drivers/net/dsa/microchip/ksz9477_i2c.c:89:34:
+> > warning: 'ksz9477_dt_ids' defined but not used [-Wunused-const-variable=]
+> >       89 | static const struct of_device_id ksz9477_dt_ids[] = {
+> >          |                                  ^~~~~~~~~~~~~~
+> >
+> > Removed of_match_ptr() from ksz9477_dt_ids.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+>
+> As this looks like a fix, could you please post a new revision of the
+> patch including into the commit message a proper 'Fixes' tag?
 
-Signed-off-by: Sidong Yang <realwakka@gmail.com>
----
- drivers/staging/pi433/rf69.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index 659c8c1b38fd..8c7fab6a46bb 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -816,7 +816,7 @@ int rf69_write_fifo(struct spi_device *spi, u8 *buffer, unsigned int size)
- 
- 	if (size > FIFO_SIZE) {
- 		dev_dbg(&spi->dev,
--			"read fifo: passed in buffer bigger then internal buffer\n");
-+			"write fifo: passed in buffer bigger then internal buffer\n");
- 		return -EMSGSIZE;
- 	}
- 
--- 
-2.30.2
-
+Sure.
+>
+> Thanks!
+>
+> Paolo
+>

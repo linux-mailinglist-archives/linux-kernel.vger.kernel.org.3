@@ -2,264 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD85B585B3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 18:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571F8585B3D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 18:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbiG3QEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 12:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S235304AbiG3QFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 12:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiG3QD4 (ORCPT
+        with ESMTP id S229742AbiG3QFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 12:03:56 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8D2175A5;
-        Sat, 30 Jul 2022 09:03:54 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id f14so5727758qkm.0;
-        Sat, 30 Jul 2022 09:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qLzw+p0S78/HSEdQ7LBwxStiGJCgHNO2kd5yQe6cZ1o=;
-        b=MKFggB8oiN4zKc2x0wkJ6tyvhwP2F+SpKt/g8ysZkswPoTRLd8TGnHZST9O1QdQUGP
-         5axm0ZkwMHkbAW94Fg4GCyM+iFetWv+6YNLrMIYiaNjAs2Gy6bRY8Ztot5v193jOn+Mz
-         sufiLomkHEpZM2ejntx+bcY1nTh8exS3sAZaR0hdRiMCfAvt/dyfx+T8x2x24Z1BjuUw
-         OPDbxlwlE7q9p/qVrTQ7s8urQkdTkLNS2LehHSNV9b3EyfBISqESwhEKyd1acvDOEwUd
-         A5EuzFTotFp3hqiFd3vGwYxLdk2Xr6Y/rnD20bgvzumT5ijD2fsyC4uFFfKX7ZagZN4s
-         xEqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qLzw+p0S78/HSEdQ7LBwxStiGJCgHNO2kd5yQe6cZ1o=;
-        b=W/3Gl17pmNU7opDzgEMPpeK9I8rHL+LOOypI3jX3LMqk2y4lNhY6WS6uUGFavXW6Ox
-         YYEDRoU4YOhtPoIYqAr/c4AMOWUWqTvkh1TAN9rUzpT9p7ID7c6jHceAdd7EXFWwFvXt
-         N+PArAmHBan0g50FWLYxi/SmZrWY1NI28COXbSqjYYS+TmYhMUXP90VTr/vVHWTZ7TP/
-         ndvQt9qBM7SLc2KpWIuGAZfxd7yvhHoZT8fjU+ImAoGK4VyrciROTxya65o3HpU/XRAF
-         C2bDlsgKLSfeMcvSy9TmoZWId6v6GbFazQ72znbgy3AOxDY0biirY0fjl3WkKm3tmc74
-         lnrQ==
-X-Gm-Message-State: AJIora84bqy2XUqNKOoV/CqJxRevFNDJCt5FwmF0cV2jpMXcdnyrKl/S
-        eVZ+ETYrdRii0Bo9EWzMXwo=
-X-Google-Smtp-Source: AGRyM1uDRcFu6F/JhirJPEqanfOY+Kduw/8YivoJYjVgn7Ihv3i41gAhQ7yaXEI2FLc3lzfqKa5pVw==
-X-Received: by 2002:a05:620a:290d:b0:6b5:cecc:1cab with SMTP id m13-20020a05620a290d00b006b5cecc1cabmr6446562qkp.465.1659197033916;
-        Sat, 30 Jul 2022 09:03:53 -0700 (PDT)
-Received: from ada ([71.58.109.160])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac85a83000000b0031ec83851ccsm4449728qtc.38.2022.07.30.09.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 09:03:53 -0700 (PDT)
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-To:     aroulin@nvidia.com
-Cc:     sbrivio@redhat.com, roopa@nvidia.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org,
-        Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Subject: [PATCH net-next 3/3] selftests: net: tests for bridge binding behavior
-Date:   Sat, 30 Jul 2022 12:03:32 -0400
-Message-Id: <222e04a7b4647a57afbad89447f239564af39d24.1659195179.git.sevinj.aghayeva@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
-References: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
+        Sat, 30 Jul 2022 12:05:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845EA60F4
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 09:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659197116; x=1690733116;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8vfdWxwDxynxpmmxMlbGFcJ0z/1sk9zIy3z7yvQA01I=;
+  b=nWbNk/6gtVQ5sdMI2U9FRmbTr6aphsxQxhnTtDVcyRm61/zUQTkD/VAc
+   7T6fMdtGzP9Ca+bi9TuGry/UVsV8PlSg4wuLDspZClO7KEzNT9qihOcAw
+   XNvsxCWuUE4ZH1RScWGjOI+Xb/pRcl70/ie2f5hTcScy+wA4/u5LxZ8cV
+   DyF2W4RBWGhM2FU+P5v7FK1oxN7d6T+dg8UrY5Dc8Vj4Dc9TPtXIQ+2q6
+   uipfPhGGDkmmlghlrkugNqsuZMmmbodSs0B2cyXjAVhfpEAiQeuEkeybZ
+   0LP2ea2UpQT7vgmf/VTHogCe1LZ3h9fFORNsnN8yU1bvO1fjmhv/3VVni
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="350631695"
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="350631695"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 09:05:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="634426724"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 30 Jul 2022 09:05:14 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHoxl-000Cxf-2B;
+        Sat, 30 Jul 2022 16:05:13 +0000
+Date:   Sun, 31 Jul 2022 00:04:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chengming Gui <Jack.Gui@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [agd5f:drm-next-5.20 37/54]
+ drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:9: error: call to undeclared
+ function 'vmalloc'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202207302311.0n5LnCGv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds two tests in a single file. The first of these is in
-function run_test_late_bridge_binding_set, which tests that when a
-vlan interface is created with bridge binding turned off, and later
-bridge binding is turned on (using ip link set... command), the vlan
-interface behaves accordingly, that is, it tracks the status of the
-ports in its vlan.
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next-5.20
+head:   64f991590ff4410041a70ee7ec2db079bc953929
+commit: 6fdd2077ec03f4b34d127a1713ca19248539d6e0 [37/54] drm/amd/amdgpu: add memory training support for PSP_V13
+config: mips-buildonly-randconfig-r005-20220729 (https://download.01.org/0day-ci/archive/20220730/202207302311.0n5LnCGv-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next-5.20
+        git checkout 6fdd2077ec03f4b34d127a1713ca19248539d6e0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
 
-The second test, which is in function run_test_multiple_vlan, tests
-that when there are two vlan interfaces with bridge binding turned on,
-turning off the bridge binding in one of the vlan interfaces does not
-affect the bridge binding on the other interface.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-Reviewed-by: Andy Roulin <aroulin@nvidia.com>
-Reviewed-by: Roopa Prabhu <roopa@nvidia.com>
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
- 2 files changed, 144 insertions(+)
- create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+All errors (new ones prefixed by >>):
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 80628bf8413a..f3ac4cb01695 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -40,6 +40,7 @@ TEST_PROGS += arp_ndisc_evict_nocarrier.sh
- TEST_PROGS += ndisc_unsolicited_na_test.sh
- TEST_PROGS += arp_ndisc_untracked_subnets.sh
- TEST_PROGS += stress_reuseport_listen.sh
-+TEST_PROGS += bridge_vlan_binding_test.sh
- TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
- TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
- TEST_GEN_FILES =  socket nettest
-diff --git a/tools/testing/selftests/net/bridge_vlan_binding_test.sh b/tools/testing/selftests/net/bridge_vlan_binding_test.sh
-new file mode 100755
-index 000000000000..d094d847800c
---- /dev/null
-+++ b/tools/testing/selftests/net/bridge_vlan_binding_test.sh
-@@ -0,0 +1,143 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+cleanup() {
-+	# Remove interfaces created by the previous run
-+	ip link delete veth10 2>/dev/null
-+	ip link delete veth20 2>/dev/null
-+	ip link delete veth30 2>/dev/null
-+	ip link delete br_default 2>/dev/null
-+}
-+
-+trap cleanup EXIT
-+
-+setup() {
-+	cleanup
-+
-+	# Create a bridge and add three ports to it.
-+	ip link add dev br_default type bridge
-+	ip link add dev veth10 type veth peer name veth11
-+	ip link add dev veth20 type veth peer name veth21
-+	ip link add dev veth30 type veth peer name veth31
-+	ip link set dev veth10 master br_default
-+	ip link set dev veth20 master br_default
-+	ip link set dev veth30 master br_default
-+
-+	# Create VLAN 10 and VLAN 20.
-+	bridge vlan add vid 10 dev br_default self
-+	bridge vlan add vid 20 dev br_default self
-+
-+	# Add veth10 to VLAN 10 and veth20 to VLAN 20.
-+	bridge vlan add vid 10 dev veth10
-+	bridge vlan add vid 20 dev veth20
-+
-+	# Bring up the ports and the bridge.
-+	ip link set veth10 up
-+	ip link set veth11 up
-+	ip link set veth20 up
-+	ip link set veth21 up
-+	ip link set veth30 up
-+	ip link set veth31 up
-+	ip link set br_default up
-+}
-+
-+# This test checks that when a vlan interface is created with bridge
-+# binding off, and then bridge binding turned on using "ip link set"
-+# command, bridge binding is actually turned on -- this hasn't been
-+# the case in the past.
-+run_test_late_bridge_binding_set() {
-+	setup
-+
-+	# Add VLAN interface vlan10 to VLAN 10 with bridge binding off.
-+	ip link add link br_default name vlan10 type vlan id 10 protocol \
-+		802.1q bridge_binding off
-+
-+	# Bring up  VLAN interface.
-+	ip link set vlan10 up
-+
-+	# Turn bridge binding on for vlan10.
-+	ip link set vlan10 type vlan bridge_binding on
-+
-+	# Bring down the port in vlan 10.
-+	ip link set veth10 down
-+
-+	# Since bridge binding is turned on for vlan10 interface, it
-+	# should be tracking only the port, veth10 in its vlan. Since
-+	# veth10 is down, vlan10 should be down as well.
-+	if ! ip link show vlan10 | grep -q 'state LOWERLAYERDOWN'; then
-+	    echo "FAIL - vlan10 should be LOWERLAYERDOWN but it is not"
-+	    exit 1
-+	fi
-+
-+	# Bringe the port back up.
-+	ip link set veth10 up
-+
-+	# The vlan 10 interface should be up now.
-+	if ! ip link show vlan10 | grep -q 'state UP'; then
-+	    echo "FAIL - vlan10 should be UP but it is not"
-+	    exit 1
-+	fi
-+
-+	echo "OK"
-+}
-+
-+# This test checks that when there are multiple vlan interfaces with
-+# bridge binding on, turning off bride binding in one of the vlan
-+# interfaces does not affect the bridge binding of the other
-+# interface.
-+run_test_multiple_vlan() {
-+	setup
-+
-+	# Add VLAN interface vlan10 to VLAN 10 with bridge binding on.
-+	ip link add link br_default name vlan10 type vlan id 10 protocol \
-+		802.1q bridge_binding on
-+	# Add VLAN interface vlan20 to VLAN 20 with bridge binding on.
-+	ip link add link br_default name vlan20 type vlan id 20 protocol \
-+		802.1q bridge_binding on
-+
-+	# Bring up  VLAN interfaces.
-+	ip link set vlan10 up
-+	ip link set vlan20 up
-+
-+	# Turn bridge binding off for vlan10.
-+	ip link set vlan10 type vlan bridge_binding off
-+
-+	# Bring down the ports in vlans 10 and 20.
-+	ip link set veth10 down
-+	ip link set veth20 down
-+
-+	# Since bridge binding is off for vlan10 interface, it should
-+	# be tracking all of the ports in the bridge; since veth30 is
-+	# still up, vlan10 should also be up.
-+	if ! ip link show vlan10 | grep -q 'state UP'; then
-+	    echo "FAIL - vlan10 should be UP but it is not"
-+	    exit 1
-+	fi
-+
-+	# Since bridge binding is on for vlan20 interface, it should
-+	# be tracking only the ports in its vlan. This port is veth20,
-+	# and it is down; therefore, vlan20 should be down as well.
-+	if ! ip link show vlan20 | grep -q 'state LOWERLAYERDOWN'; then
-+	    echo "FAIL - vlan20 should be LOWERLAYERDOWN but it is not"
-+	    exit 1
-+	fi
-+
-+	# Bring the ports back up.
-+	ip link set veth10 up
-+	ip link set veth20 up
-+
-+	# Both vlan interfaces should be up now.
-+	if ! ip link show vlan10 | grep -q 'state UP'; then
-+	    echo "FAIL - vlan10 should be UP but it is not"
-+	    exit 1
-+	fi
-+	if ! ip link show vlan20 | grep -q 'state UP' ; then
-+	    echo "FAIL - vlan20 should be UP but it is not"
-+	    exit 1
-+	fi
-+
-+	echo "OK"
-+}
-+
-+run_test_late_bridge_binding_set
-+run_test_multiple_vlan
+>> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:9: error: call to undeclared function 'vmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   buf = vmalloc(sz);
+                         ^
+>> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:534:7: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+                   buf = vmalloc(sz);
+                       ^ ~~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:545:5: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                   vfree(buf);
+                                   ^
+   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:552:4: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           vfree(buf);
+                           ^
+   drivers/gpu/drm/amd/amdgpu/psp_v13_0.c:555:4: error: call to undeclared function 'vfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           vfree(buf);
+                           ^
+   5 errors generated.
+
+
+vim +/vmalloc +534 drivers/gpu/drm/amd/amdgpu/psp_v13_0.c
+
+   457	
+   458	
+   459	static int psp_v13_0_memory_training(struct psp_context *psp, uint32_t ops)
+   460	{
+   461		struct psp_memory_training_context *ctx = &psp->mem_train_ctx;
+   462		uint32_t *pcache = (uint32_t *)ctx->sys_cache;
+   463		struct amdgpu_device *adev = psp->adev;
+   464		uint32_t p2c_header[4];
+   465		uint32_t sz;
+   466		void *buf;
+   467		int ret, idx;
+   468	
+   469		if (ctx->init == PSP_MEM_TRAIN_NOT_SUPPORT) {
+   470			dev_dbg(adev->dev, "Memory training is not supported.\n");
+   471			return 0;
+   472		} else if (ctx->init != PSP_MEM_TRAIN_INIT_SUCCESS) {
+   473			dev_err(adev->dev, "Memory training initialization failure.\n");
+   474			return -EINVAL;
+   475		}
+   476	
+   477		if (psp_v13_0_is_sos_alive(psp)) {
+   478			dev_dbg(adev->dev, "SOS is alive, skip memory training.\n");
+   479			return 0;
+   480		}
+   481	
+   482		amdgpu_device_vram_access(adev, ctx->p2c_train_data_offset, p2c_header, sizeof(p2c_header), false);
+   483		dev_dbg(adev->dev, "sys_cache[%08x,%08x,%08x,%08x] p2c_header[%08x,%08x,%08x,%08x]\n",
+   484			  pcache[0], pcache[1], pcache[2], pcache[3],
+   485			  p2c_header[0], p2c_header[1], p2c_header[2], p2c_header[3]);
+   486	
+   487		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
+   488			dev_dbg(adev->dev, "Short training depends on restore.\n");
+   489			ops |= PSP_MEM_TRAIN_RESTORE;
+   490		}
+   491	
+   492		if ((ops & PSP_MEM_TRAIN_RESTORE) &&
+   493		    pcache[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
+   494			dev_dbg(adev->dev, "sys_cache[0] is invalid, restore depends on save.\n");
+   495			ops |= PSP_MEM_TRAIN_SAVE;
+   496		}
+   497	
+   498		if (p2c_header[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
+   499		    !(pcache[0] == MEM_TRAIN_SYSTEM_SIGNATURE &&
+   500		      pcache[3] == p2c_header[3])) {
+   501			dev_dbg(adev->dev, "sys_cache is invalid or out-of-date, need save training data to sys_cache.\n");
+   502			ops |= PSP_MEM_TRAIN_SAVE;
+   503		}
+   504	
+   505		if ((ops & PSP_MEM_TRAIN_SAVE) &&
+   506		    p2c_header[0] != MEM_TRAIN_SYSTEM_SIGNATURE) {
+   507			dev_dbg(adev->dev, "p2c_header[0] is invalid, save depends on long training.\n");
+   508			ops |= PSP_MEM_TRAIN_SEND_LONG_MSG;
+   509		}
+   510	
+   511		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
+   512			ops &= ~PSP_MEM_TRAIN_SEND_SHORT_MSG;
+   513			ops |= PSP_MEM_TRAIN_SAVE;
+   514		}
+   515	
+   516		dev_dbg(adev->dev, "Memory training ops:%x.\n", ops);
+   517	
+   518		if (ops & PSP_MEM_TRAIN_SEND_LONG_MSG) {
+   519			/*
+   520			 * Long training will encroach a certain amount on the bottom of VRAM;
+   521			 * save the content from the bottom of VRAM to system memory
+   522			 * before training, and restore it after training to avoid
+   523			 * VRAM corruption.
+   524			 */
+   525			sz = GDDR6_MEM_TRAINING_ENCROACHED_SIZE;
+   526	
+   527			if (adev->gmc.visible_vram_size < sz || !adev->mman.aper_base_kaddr) {
+   528				dev_err(adev->dev, "visible_vram_size %llx or aper_base_kaddr %p is not initialized.\n",
+   529					  adev->gmc.visible_vram_size,
+   530					  adev->mman.aper_base_kaddr);
+   531				return -EINVAL;
+   532			}
+   533	
+ > 534			buf = vmalloc(sz);
+   535			if (!buf) {
+   536				dev_err(adev->dev, "failed to allocate system memory.\n");
+   537				return -ENOMEM;
+   538			}
+   539	
+   540			if (drm_dev_enter(adev_to_drm(adev), &idx)) {
+   541				memcpy_fromio(buf, adev->mman.aper_base_kaddr, sz);
+   542				ret = psp_v13_0_memory_training_send_msg(psp, PSP_BL__DRAM_LONG_TRAIN);
+   543				if (ret) {
+   544					DRM_ERROR("Send long training msg failed.\n");
+ > 545					vfree(buf);
+   546					drm_dev_exit(idx);
+   547					return ret;
+   548				}
+   549	
+   550				memcpy_toio(adev->mman.aper_base_kaddr, buf, sz);
+   551				adev->hdp.funcs->flush_hdp(adev, NULL);
+   552				vfree(buf);
+   553				drm_dev_exit(idx);
+   554			} else {
+   555				vfree(buf);
+   556				return -ENODEV;
+   557			}
+   558		}
+   559	
+   560		if (ops & PSP_MEM_TRAIN_SAVE) {
+   561			amdgpu_device_vram_access(psp->adev, ctx->p2c_train_data_offset, ctx->sys_cache, ctx->train_data_size, false);
+   562		}
+   563	
+   564		if (ops & PSP_MEM_TRAIN_RESTORE) {
+   565			amdgpu_device_vram_access(psp->adev, ctx->c2p_train_data_offset, ctx->sys_cache, ctx->train_data_size, true);
+   566		}
+   567	
+   568		if (ops & PSP_MEM_TRAIN_SEND_SHORT_MSG) {
+   569			ret = psp_v13_0_memory_training_send_msg(psp, (amdgpu_force_long_training > 0) ?
+   570								 PSP_BL__DRAM_LONG_TRAIN : PSP_BL__DRAM_SHORT_TRAIN);
+   571			if (ret) {
+   572				dev_err(adev->dev, "send training msg failed.\n");
+   573				return ret;
+   574			}
+   575		}
+   576		ctx->training_cnt++;
+   577		return 0;
+   578	}
+   579	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

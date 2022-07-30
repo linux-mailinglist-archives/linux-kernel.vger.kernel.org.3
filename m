@@ -2,270 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0333A5858AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 07:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BBC5858B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 07:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiG3FHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 01:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S231783AbiG3FLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 01:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiG3FHd (ORCPT
+        with ESMTP id S229799AbiG3FL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 01:07:33 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2F3743E0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 22:07:32 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id h188so7375664oia.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 22:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Y1zeaWamUJkQPoqw57iMcsEyqQJJUZsg7i2xpZ05Ko0=;
-        b=fNJI/cHBkBa3pX6EstDSm75+7LcYSyAkeZ43H3UfyXfRaOOsD0+RO7H8lSpoRRxNM7
-         6ox9cfohPCnm+f8KSRtrpKPZtrnLTies4I35P6DxwW2oZBIORY75RcmjqynGyZWOPy00
-         NRJFZN3zgjXOzguJZ7c0LdLUjb4pWC6671k0d7njClU3yBzLgJ9pgfSYnYdwbQj/Pi36
-         81k/4pT0xpEpepR5/OIgMbRhURhDRM9n84ZglXyjc+Np/6Gtz07OlcPng/YO1Sz1EGs3
-         Y12XfyHqtrmQi1YGm4k67FiGWQzNDUjTV9zecqudrI3M7UNwrCv1AobgCpbszHnIwyWQ
-         MexQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Y1zeaWamUJkQPoqw57iMcsEyqQJJUZsg7i2xpZ05Ko0=;
-        b=zObFO059w1szowOYLTbtje3lgTS2kX2LQkmmTZpp5I547LV5sYzcB44iJmUSoFujob
-         rZNX9ZVcHnNd43KL1N32YC8b++og7epFxRgniiB1j/5rrNLXMhtiAJnzqwiydV7ry1OL
-         1Pl0d1PBSP/EzEZWPK+HJ0R9I7u6pKfl8Ave5yQgk9mlRIqzf6dJ7Y83aIPmAmRBQRco
-         o38PaUlW+jjDCD//Y1vvXVVng27U9z9EUoSGiiTU+5pKa7j8X1PUmh95FFNULdW5wliW
-         k5Ny0kXFKRKqaihhfvfpcUXygdsyp9ejJeTUozLFtWKy3AOsH7nU2Q6sIOo8INNQ7dgS
-         ya8A==
-X-Gm-Message-State: AJIora/Pinqk5UrcYg9bwrKcDSx9oJmxpRO29IlwUvb8hRBLfHDPnssR
-        zl2OCa6s08ZWGaz46Y41jrNLtPC4cWs=
-X-Google-Smtp-Source: AGRyM1u46X8hqHHK4PcTNwz7kQxGLuDK/eah3EYPS46AsZGH92cjft0urTN3kUuKEpSWLiYHd5M97Q==
-X-Received: by 2002:a05:6808:7cb:b0:33a:84f4:a930 with SMTP id f11-20020a05680807cb00b0033a84f4a930mr3163630oij.295.1659157651567;
-        Fri, 29 Jul 2022 22:07:31 -0700 (PDT)
-Received: from bertie (072-190-140-095.res.spectrum.com. [72.190.140.95])
-        by smtp.gmail.com with ESMTPSA id bb7-20020a056820160700b00435f5744be3sm1596818oob.9.2022.07.29.22.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 22:07:31 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 00:07:29 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     shaoqin.huang@intel.com
-Cc:     rppt@kernel.org, Karolina Drobnik <karolinadrobnik@gmail.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memblock test: Add test to memblock_add() 129th region
-Message-ID: <YuS8kTgCBtdGy9XL@bertie>
-References: <20220728190051.237437-1-shaoqin.huang@intel.com>
+        Sat, 30 Jul 2022 01:11:28 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD064B0CE;
+        Fri, 29 Jul 2022 22:11:27 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:50274)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oHel4-007lNd-3m; Fri, 29 Jul 2022 23:11:26 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47520 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oHel3-00GJeY-2g; Fri, 29 Jul 2022 23:11:25 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20220727191949.GD18822@redhat.com> <YuGUyayVWDB7R89i@tycho.pizza>
+        <20220728091220.GA11207@redhat.com> <YuL9uc8WfiYlb2Hw@tycho.pizza>
+        <87pmhofr1q.fsf@email.froward.int.ebiederm.org>
+        <YuPlqp0jSvVu4WBK@tycho.pizza>
+        <87v8rfevz3.fsf@email.froward.int.ebiederm.org>
+        <YuQPc51yXhnBHjIx@tycho.pizza>
+        <87h72zes14.fsf_-_@email.froward.int.ebiederm.org>
+        <20220729204730.GA3625@redhat.com> <YuR4MRL8WxA88il+@ZenIV>
+Date:   Sat, 30 Jul 2022 00:10:33 -0500
+In-Reply-To: <YuR4MRL8WxA88il+@ZenIV> (Al Viro's message of "Sat, 30 Jul 2022
+        01:15:45 +0100")
+Message-ID: <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728190051.237437-1-shaoqin.huang@intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oHel3-00GJeY-2g;;;mid=<875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/LqhIvVPqMhw9lZ6gy83GJGTB7oURvop8=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 466 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 10 (2.2%), b_tie_ro: 9 (1.9%), parse: 0.98 (0.2%),
+         extract_message_metadata: 14 (3.0%), get_uri_detail_list: 2.1 (0.4%),
+        tests_pri_-1000: 16 (3.5%), tests_pri_-950: 1.20 (0.3%),
+        tests_pri_-900: 0.96 (0.2%), tests_pri_-90: 81 (17.5%), check_bayes:
+        80 (17.2%), b_tokenize: 9 (1.8%), b_tok_get_all: 9 (2.0%),
+        b_comp_prob: 2.6 (0.6%), b_tok_touch_all: 56 (11.9%), b_finish: 0.85
+        (0.2%), tests_pri_0: 324 (69.5%), check_dkim_signature: 0.65 (0.1%),
+        check_dkim_adsp: 3.3 (0.7%), poll_dns_idle: 1.54 (0.3%), tests_pri_10:
+        3.2 (0.7%), tests_pri_500: 10 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: [RFC][PATCH v2] fuse: In fuse_flush only wait if someone wants the
+ return code
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 01:00:47PM -0600, shaoqin.huang@intel.com wrote:
-> From: Shaoqin Huang <shaoqin.huang@intel.com>
-> 
-I tested this out, and everything is working well. I have a couple of
-suggestions for improvements.
 
-> Add 129th region into the memblock, and this will trigger the
-> memblock_double_array() function, this needs valid memory regions. So
-> using dummy_physical_memory_init() to allocate some valid memory, when
-> memblock_double_array() choose a new memory region from memory.regions,
-> it will always choose a valid memory region if we add all valid memory
-> region, so the memblock_double_array() must success.
-> 
-> Another thing should be done is to restore the memory.regions after
-> memblock_double_array(), due to now the memory.regions is pointing to a
-> memory region allocated by dummy_physical_memory_init(). And it will
-> affect the subsequent tests if we don't restore the memory region. So
-> Simply record the origin region, and restore it after the test.
-> 
-> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-> ---
->  tools/testing/memblock/tests/basic_api.c | 65 ++++++++++++++++++++++++
->  tools/testing/memblock/tests/common.c    |  9 ++--
->  tools/testing/memblock/tests/common.h    |  5 ++
->  3 files changed, 76 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> index 66f46f261e66..ded93f97d98e 100644
-> --- a/tools/testing/memblock/tests/basic_api.c
-> +++ b/tools/testing/memblock/tests/basic_api.c
-> @@ -326,6 +326,70 @@ static int memblock_add_twice_check(void)
->  	return 0;
->  }
->  
-> +static int memblock_add_many_check(void)
-> +{
-> +	int i;
-> +	void *base[INIT_MEMBLOCK_REGIONS + 1];
-> +	void *orig_region;
-> +	struct region r = {
-> +		.base = SZ_16K,
-> +		.size = MEM_SIZE,
-> +	};
-> +
-> +	PREFIX_PUSH();
-> +
-> +	reset_memblock_regions();
-> +	memblock_allow_resize();
-> +
-> +	for (i = 0; i < INIT_MEMBLOCK_REGIONS; i++) {
-> +		dummy_physical_memory_init();
-> +		append_memblock();
-> +		base[i] = memory_block.base;
-> +
-> +		assert(memblock.memory.cnt == i + 1);
+In my very light testing this resolves a hang where a thread of the
+fuse server was accessing the fuse filesystem (the fuse server is
+serving up), when the fuse server is killed.
 
-Maybe you could call the ASSERT_EQ() macro here instead of directly
-calling assert. That way, if the test fails in verbose mode, it will print
-out the test prefix. This applies to the other asserts as well.
+The practical problem is that the fuse server file descriptor was
+being closed after the file descriptor into the fuse filesystem so
+that the fuse filesystem operations were being blocked for instead of
+being aborted.  Simply skipping the unnecessary wait resolves this
+issue.
 
-> +		assert(memblock.memory.total_size == (i + 1) * MEM_SIZE);
-> +	}
-> +
-> +	orig_region = memblock.memory.regions;
-> +
-> +	/* This adds the 129 memory_region, and makes it double array. */
-> +	dummy_physical_memory_init();
-> +	append_memblock();
-> +	base[i] = memory_block.base;
-> +
-> +	assert(memblock.memory.cnt == INIT_MEMBLOCK_REGIONS + 1);
-> +	assert(memblock.memory.total_size == (INIT_MEMBLOCK_REGIONS + 1) * MEM_SIZE);
-> +	assert(memblock.memory.max == INIT_MEMBLOCK_REGIONS * 2);
-> +
-> +	/* The base is very small, so it should be insert to the first region. */
-> +	memblock_add(r.base, r.size);
-> +	assert(memblock.memory.regions[0].base == r.base);
-> +	assert(memblock.memory.regions[0].size == r.size);
-> +
-> +	assert(memblock.memory.cnt == INIT_MEMBLOCK_REGIONS + 2);
-> +	assert(memblock.memory.total_size == (INIT_MEMBLOCK_REGIONS + 2) * MEM_SIZE);
-> +	assert(memblock.memory.max == INIT_MEMBLOCK_REGIONS * 2);
-> +
-> +	/* Free these allocated memory. */
-> +	for (i = 0; i < INIT_MEMBLOCK_REGIONS + 1; i++) {
-> +		memory_block.base = base[i];
-> +		dummy_physical_memory_cleanup();
-> +	}
-> +
-This could be moved to a function in common.c since it may be useful if
-we write similar tests later. For example:
+This is just a proof of concept and someone should look to see if the
+fuse max_background limit could cause a problem with this approach.
 
-void dummy_physical_memory_many_cleanup(void *base[], int cnt)
-{
-	for (int i = 0; i < cnt; i++) {
-		memory_block.base = base[i];
-		dummy_physical_memory_cleanup();
-	}
-}
+Additionally testing PF_EXITING is a very crude way to tell if someone
+wants the return code from the vfs flush operation.  As such in the
+long run it probably makes sense to get some direct vfs support for
+knowing if flush needs to block until all of the flushing is complete
+and a status/return code can be returned.
 
-Since the other usages of memory_block in basic_api.c do not need to
-modify it, you could then replace those usages with a call to a function
-from common.c like:
+Unless I have missed something this is a generic optimization that can
+apply to many network filesystems.
 
-void *get_memory_block_base(void)
-{
-	return memory_block.base;
-}
+Al, vfs folks? (igrab/iput sorted so as not to be distractions).
 
-to avoid adding memory_block to common.h and changing to non-static in
-common.c.
+Perhaps a .flush_async method without a return code and a
+filp_close_async function without a return code to take advantage of
+this in the general sense.
 
-> +	/*
-> +	 * The current memory.regions is occupying a range of memory that
-> +	 * allocated from dummy_physical_memory_init(). After free the memory,
-> +	 * we must not use it. So restore the origin memory region to make sure
-> +	 * the tests can run as normal and not affected by the double array.
-> +	 */
-> +	memblock.memory.regions = orig_region;
-> +	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
-> +
-> +	test_pass_pop();
-> +
-> +	return 0;
-> +}
-> +
->  static int memblock_add_checks(void)
->  {
->  	prefix_reset();
-> @@ -339,6 +403,7 @@ static int memblock_add_checks(void)
->  	memblock_add_overlap_bottom_check();
->  	memblock_add_within_check();
->  	memblock_add_twice_check();
-> +	memblock_add_many_check();
->  
->  	prefix_pop();
->  
-> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-> index e43b2676af81..4741e860123a 100644
-> --- a/tools/testing/memblock/tests/common.c
-> +++ b/tools/testing/memblock/tests/common.c
-> @@ -5,12 +5,10 @@
->  #include <linux/memory_hotplug.h>
->  #include <linux/build_bug.h>
->  
-> -#define INIT_MEMBLOCK_REGIONS			128
-> -#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->  #define PREFIXES_MAX				15
->  #define DELIM					": "
->  
-> -static struct test_memory memory_block;
-> +struct test_memory memory_block;
->  static const char __maybe_unused *prefixes[PREFIXES_MAX];
->  static int __maybe_unused nr_prefixes;
->  
-> @@ -64,6 +62,11 @@ void setup_memblock(void)
->  	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
->  }
->  
-> +void append_memblock(void)
-> +{
-> +	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
-> +}
-> +
->  void dummy_physical_memory_init(void)
->  {
->  	memory_block.base = malloc(MEM_SIZE);
-> diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
-> index 3e7f23d341d7..8946a3b77f24 100644
-> --- a/tools/testing/memblock/tests/common.h
-> +++ b/tools/testing/memblock/tests/common.h
-> @@ -11,6 +11,8 @@
->  #include <../selftests/kselftest.h>
->  
->  #define MEM_SIZE SZ_16K
-> +#define INIT_MEMBLOCK_REGIONS			128
-> +#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->  
->  /**
->   * ASSERT_EQ():
-> @@ -65,9 +67,12 @@ struct region {
->  	phys_addr_t size;
->  };
->  
-> +extern struct test_memory memory_block;
-> +
->  void reset_memblock_regions(void);
->  void reset_memblock_attributes(void);
->  void setup_memblock(void);
-> +void append_memblock(void);
->  void dummy_physical_memory_init(void);
->  void dummy_physical_memory_cleanup(void);
->  void parse_args(int argc, char **argv);
-> -- 
-> 2.30.2
-> 
-Thanks,
-Rebecca
+Waiting potentially indefinitely for user space in do_exit seems like a
+bad idea.  Especially when all that the wait is for is to get a return
+code that will never be examined.
+
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ fs/fuse/file.c | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index 05caa2b9272e..2bd94acd761f 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -464,6 +464,62 @@ static void fuse_sync_writes(struct inode *inode)
+ 	fuse_release_nowrite(inode);
+ }
+ 
++struct fuse_flush_args {
++	struct fuse_args args;
++	struct fuse_flush_in inarg;
++	struct inode *inode;
++};
++
++static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
++{
++	struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
++
++	if (err == -ENOSYS) {
++		fm->fc->no_flush = 1;
++		err = 0;
++	}
++
++	/*
++	 * In memory i_blocks is not maintained by fuse, if writeback cache is
++	 * enabled, i_blocks from cached attr may not be accurate.
++	 */
++	if (!err && fm->fc->writeback_cache)
++		fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
++
++	iput(fa->inode);
++	kfree(fa);
++}
++
++static int fuse_flush_async(struct file *file, fl_owner_t id)
++{
++	struct inode *inode = file_inode(file);
++	struct fuse_mount *fm = get_fuse_mount(inode);
++	struct fuse_file *ff = file->private_data;
++	struct fuse_flush_args *fa;
++	int err;
++
++	fa = kzalloc(sizeof(*fa), GFP_KERNEL);
++	if (!fa)
++		return -ENOMEM;
++
++	fa->inarg.fh = ff->fh;
++	fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
++	fa->args.opcode = FUSE_FLUSH;
++	fa->args.nodeid = get_node_id(inode);
++	fa->args.in_numargs = 1;
++	fa->args.in_args[0].size = sizeof(fa->inarg);
++	fa->args.in_args[0].value = &fa->inarg;
++	fa->args.force = true;
++	fa->args.end = fuse_flush_end;
++	fa->inode = igrab(inode);
++
++	err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
++	if (err)
++		fuse_flush_end(fm, &fa->args, err);
++
++	return err;
++}
++
+ static int fuse_flush(struct file *file, fl_owner_t id)
+ {
+ 	struct inode *inode = file_inode(file);
+@@ -495,6 +551,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
+ 	if (fm->fc->no_flush)
+ 		goto inval_attr_out;
+ 
++	if (current->flags & PF_EXITING)
++		return fuse_flush_async(file, id);
++
+ 	memset(&inarg, 0, sizeof(inarg));
+ 	inarg.fh = ff->fh;
+ 	inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
+-- 
+2.35.3
+

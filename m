@@ -2,134 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF085857EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7A15857EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 04:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiG3CPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 22:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S239596AbiG3CPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 22:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiG3CPN (ORCPT
+        with ESMTP id S231201AbiG3CPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 22:15:13 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C553DAE;
-        Fri, 29 Jul 2022 19:15:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Lvnxm3GzGzl12M;
-        Sat, 30 Jul 2022 10:14:04 +0800 (CST)
-Received: from [10.174.176.103] (unknown [10.174.176.103])
-        by APP2 (Coremail) with SMTP id Syh0CgC3ui4qlORiRBZ9BQ--.53560S2;
-        Sat, 30 Jul 2022 10:15:07 +0800 (CST)
-Message-ID: <5b1e7489-df67-cbda-28f2-9d5442e48ce5@huaweicloud.com>
-Date:   Sat, 30 Jul 2022 10:15:06 +0800
+        Fri, 29 Jul 2022 22:15:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B5737FA0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 19:15:35 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lvntx1n7gzWfQd;
+        Sat, 30 Jul 2022 10:11:37 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 30 Jul 2022 10:15:17 +0800
+Subject: Re: [RFC PATCH v4 7/8] hugetlb: create hugetlb_unmap_file_folio to
+ unmap single file folio
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220706202347.95150-1-mike.kravetz@oracle.com>
+ <20220706202347.95150-8-mike.kravetz@oracle.com>
+ <3557d5a9-231c-4007-3e7e-5a7bf34ecaa8@huawei.com> <YuQi0obsC7x5krRs@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9a4729f6-ca4d-0137-8d15-bbb1221bce52@huawei.com>
+Date:   Sat, 30 Jul 2022 10:15:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Reply-To: zhangwensheng@huaweicloud.com
-Subject: Re: [PATCH -next] [RFC] block: fix null-deref in percpu_ref_put
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        yukuai3@huawei.com
-References: <20220729105036.2202791-1-zhangwensheng@huaweicloud.com>
- <YuPnjI8oHx4dO3nr@T590>
-From:   "zhangwensheng (E)" <zhangwensheng@huaweicloud.com>
-In-Reply-To: <YuPnjI8oHx4dO3nr@T590>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC3ui4qlORiRBZ9BQ--.53560S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1UGw48KF4rXrW3uF43Awb_yoW8uFy7pF
-        WUtF45KF48GFZrKas5Aw17Z348Xr4Yya4fGa4xGryayr13Wa4Fqw47Cr4YqFZ7Ars7Zw4Y
-        qrWDWFsFvayq9a7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU84xRDUUUUU==
-X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
+In-Reply-To: <YuQi0obsC7x5krRs@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi， Ming
+On 2022/7/30 2:11, Mike Kravetz wrote:
+> On 07/29/22 10:02, Miaohe Lin wrote:
+>> On 2022/7/7 4:23, Mike Kravetz wrote:
+>>> Create the new routine hugetlb_unmap_file_folio that will unmap a single
+>>> file folio.  This is refactored code from hugetlb_vmdelete_list.  It is
+>>> modified to do locking within the routine itself and check whether the
+>>> page is mapped within a specific vma before unmapping.
+>>>
+>>> This refactoring will be put to use and expanded upon in a subsequent
+>>> patch adding vma specific locking.
+>>>
+>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+>>> ---
+>>>  fs/hugetlbfs/inode.c | 124 +++++++++++++++++++++++++++++++++----------
+>>>  1 file changed, 95 insertions(+), 29 deletions(-)
+>>>
+>>> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+>>> index 31bd4325fce5..0eac0ea2a245 100644
+>>> --- a/fs/hugetlbfs/inode.c
+>>> +++ b/fs/hugetlbfs/inode.c
+>>> @@ -396,6 +396,94 @@ static int hugetlbfs_write_end(struct file *file, struct address_space *mapping,
+>>>  	return -EINVAL;
+>>>  }
+>>>  
+>>> +/*
+>>> + * Called with i_mmap_rwsem held for inode based vma maps.  This makes
+>>> + * sure vma (and vm_mm) will not go away.  We also hold the hugetlb fault
+>>> + * mutex for the page in the mapping.  So, we can not race with page being
+>>> + * faulted into the vma.
+>>> + */
+>>> +static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+>>> +				unsigned long addr, struct page *page)
+>>> +{
+>>> +	pte_t *ptep, pte;
+>>> +
+>>> +	ptep = huge_pte_offset(vma->vm_mm, addr,
+>>> +			huge_page_size(hstate_vma(vma)));
+>>> +
+>>> +	if (!ptep)
+>>> +		return false;
+>>> +
+>>> +	pte = huge_ptep_get(ptep);
+>>> +	if (huge_pte_none(pte) || !pte_present(pte))
+>>> +		return false;
+>>> +
+>>> +	if (pte_page(pte) == page)
+>>> +		return true;
+>>> +
+>>> +	return false;	/* WTH??? */
+>>
+>> I'm sorry but what does WTH means? IIUC, this could happen if pte_page is a COW-ed private page?
+>> vma_interval_tree_foreach doesn't exclude the private mapping even after cow?
+> 
+> My apologies, I left that comment in during development and should have removed
+> it.  WTH is an acronym for 'What the Heck?".  I added it because I did not
+> think we should ever get to this return statement.
+> 
 
-I don't think this is a generic issue in percpu_ref, I sort out some 
-processes
-using percpu_ref like "part->ref", "blkg->refcnt" and 
-"ctx->reqs/ctx->users",
-they all use percpu_ref_exit after "release" done which will not cause 
-problem.
-so I think it should not change it in api(percpu_ref_put_many), and user 
-should
-to guarantee it.
+That's all right. Thanks for your hard work.
 
-thanks！
-Wensheng
-
-在 2022/7/29 21:58, Ming Lei 写道:
-> On Fri, Jul 29, 2022 at 06:50:36PM +0800, Zhang Wensheng wrote:
->> From: Zhang Wensheng <zhangwensheng5@huawei.com>
->>
->> A problem was find in stable 5.10 and the root cause of it like below.
->>
->> In the use of q_usage_counter of request_queue, blk_cleanup_queue using
->> "wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter))"
->> to wait q_usage_counter becoming zero. however, if the q_usage_counter
->> becoming zero quickly, and percpu_ref_exit will execute and ref->data
->> will be freed, maybe another process will cause a null-defef problem
->> like below:
->>
->> 	CPU0                             CPU1
->> blk_cleanup_queue
->>   blk_freeze_queue
->>    blk_mq_freeze_queue_wait
->> 				scsi_end_request
->> 				 percpu_ref_get
->> 				 ...
->> 				 percpu_ref_put
->> 				  atomic_long_sub_and_test
->>    percpu_ref_exit
->>     ref->data -> NULL
->>     				   ref->data->release(ref) -> null-deref
->>
-> Looks it is one generic issue in percpu_ref, I think the following patch
-> should address it.
->
->
-> diff --git a/include/linux/percpu-refcount.h b/include/linux/percpu-refcount.h
-> index d73a1c08c3e3..07308bd36d83 100644
-> --- a/include/linux/percpu-refcount.h
-> +++ b/include/linux/percpu-refcount.h
-> @@ -331,8 +331,12 @@ static inline void percpu_ref_put_many(struct percpu_ref *ref, unsigned long nr)
->   
->   	if (__ref_is_percpu(ref, &percpu_count))
->   		this_cpu_sub(*percpu_count, nr);
-> -	else if (unlikely(atomic_long_sub_and_test(nr, &ref->data->count)))
-> -		ref->data->release(ref);
-> +	else {
-> +		percpu_ref_func_t	*release = ref->data->release;
-> +
-> +		if (unlikely(atomic_long_sub_and_test(nr, &ref->data->count)))
-> +			release(ref);
-> +	}
->   
->   	rcu_read_unlock();
->   }
->
->
-> Thanks,
-> Ming
+> I am not sure if your COW of a private page would get us to this return
+> statement.  In any case, if we get there we need to return false.
+> 
+> Thank you for your analysis and comments!
+> 
 

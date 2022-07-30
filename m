@@ -2,179 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31C0585C96
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 01:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8E9585C99
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 01:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbiG3XBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 19:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        id S235459AbiG3XQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 19:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiG3XBw (ORCPT
+        with ESMTP id S230432AbiG3XQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 19:01:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A597114033
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 16:01:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659222111; x=1690758111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U6Bvegd1tq+PskN4kPjFP0sVNRYkTabIdMjaluyKOHQ=;
-  b=HMrEPaLLeGuS1lzutcZmsapkZiMv16gBV3q6apOVoRS0QQFy2AXQnxi4
-   8ikbPLTtA/3idNOnTFyQjdSjvKXZtjJT6BulX1I1rTWhZ/M5SGdEbjrl+
-   XOgGMztvWv6jvd1aluMheKS7GIM4OJcki33rt6k5YqIqjfvC81GmTbS23
-   3q0mko5jNzrnu04mCPrC84/qt0ZqsEyspb4pXv4/mLOplQY3zeYtvWLg3
-   vq0EQwi7/mVeL3k3ON4FgPlraQ9DQZfjnIdDQBt2xfPWMmrfeBXdJh3SW
-   C8/ZzE5OXmt5gwRtxUUPFq8ARk2/VOmmge/Kf0jtpFXVdjxTyXjKj95U4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268717670"
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="268717670"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 16:01:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="743886967"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2022 16:01:50 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHvSv-000DPt-2N;
-        Sat, 30 Jul 2022 23:01:49 +0000
-Date:   Sun, 31 Jul 2022 07:01:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr'
- is less than 4
-Message-ID: <202207310658.ERb14Td9-lkp@intel.com>
+        Sat, 30 Jul 2022 19:16:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA6365F5
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 16:16:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7E3260FCB
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 23:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C887C433C1;
+        Sat, 30 Jul 2022 23:16:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SUdHm9Vd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1659222963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AzCdRPj05yjL8h85+6gig1pAniprat2lIv4CqlJ0538=;
+        b=SUdHm9VdcBySkgCGqKK/SvTxdxaNdVZYwa4T1eNvhkLbUlm7F3tOQ3EUNsh2phAGbQZx2K
+        VBQPiV/0m3zyeXpM22Lvzg5igCOEd8/snd4QY65ABaVLJjBe5TyR+HHiFg1q+GpSAmuq2k
+        zigzuYJno3uB5FW3QMZon4YKaeGjwMs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f4e515bd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 30 Jul 2022 23:16:03 +0000 (UTC)
+Date:   Sun, 31 Jul 2022 01:15:59 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
+ arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
+ 4.6 of GCC
+Message-ID: <YuW7r1pyBAeNKlPG@zx2c4.com>
+References: <202207250449.BYMZbIA2-lkp@intel.com>
+ <Yt3KObFVIUI2mFGt@zx2c4.com>
+ <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
+ <Yt5Y/cIKIDlyFWMQ@kroah.com>
+ <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+ <CAK8P3a0g4NT1oDW5gq7YO540Eo0UDoqbK1tmtb8QHteiDNXj5Q@mail.gmail.com>
+ <CAK8P3a2ZfEr+4OWWteZHpDYGw8U0dQgMfF_OFwQDEtY=GaTfQA@mail.gmail.com>
+ <YuVBOOrdoBDUhRxJ@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuVBOOrdoBDUhRxJ@kroah.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karsten,
+On Sat, Jul 30, 2022 at 04:33:28PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Jul 25, 2022 at 04:35:38PM +0200, Arnd Bergmann wrote:
+> > On Mon, Jul 25, 2022 at 2:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > 
+> > > The other easy workaround would be to just turn off the xor-neon code
+> > > when building with clang, e.g. using this Makefile hack:
+> > >
+> > > diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
+> > > index 6d2ba454f25b..8e4fe6421dd2 100644
+> > > --- a/arch/arm/lib/Makefile
+> > > +++ b/arch/arm/lib/Makefile
+> > > @@ -43,8 +43,10 @@ endif
+> > >  $(obj)/csumpartialcopy.o:      $(obj)/csumpartialcopygeneric.S
+> > >  $(obj)/csumpartialcopyuser.o:  $(obj)/csumpartialcopygeneric.S
+> > >
+> > > +ifdef CONFIG_CC_IS_CLANG
+> > >  ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
+> > >    NEON_FLAGS                   := -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+> > >    CFLAGS_xor-neon.o            += $(NEON_FLAGS)
+> > >    obj-$(CONFIG_XOR_BLOCKS)     += xor-neon.o
+> > >  endif
+> > > +endif
+> > 
+> > Nevermind, this does not actually work. Just turning off the warning
+> > is probably best then, as actually disabling this code would still
+> > be invasive not do much beyond saving a little bit of kernel .text size.
+> 
+> Ok, if it triggers again, and I get annoyed, I'll write a patch,
+> otherwise I'll just leave it alone unless someone else wants to send it
+> to me...
 
-FYI, the error/warning still remains.
+The patch is trivial, if your idea is just to remove the #warning,
+right? Might as well just do it now and get it over with.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   620725263f4222b3c94d4ee19846835feec0ad69
-commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
-date:   10 months ago
-config: arm-randconfig-r036-20220731 (https://download.01.org/0day-ci/archive/20220731/202207310658.ERb14Td9-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/smc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/gfp.h:6,
-                    from include/linux/xarray.h:14,
-                    from include/linux/radix-tree.h:19,
-                    from include/linux/fs.h:15,
-                    from include/linux/highmem.h:5,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from include/linux/tcp.h:17,
-                    from include/net/tcp.h:20,
-                    from net/smc/smc_llc.c:13:
-   include/linux/mmzone.h: In function '__nr_to_section':
-   include/linux/mmzone.h:1349:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
-    1349 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-         |             ^
-   include/linux/mmzone.h:1335:27: note: 'mem_section' declared here
-    1335 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-         |                           ^~~~~~~~~~~
-   net/smc/smc_llc.c: At top level:
->> net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr' is less than 4 [-Wpacked-not-aligned]
-      40 | } __packed;             /* format defined in
-         | ^
-   In file included from <command-line>:
-   net/smc/smc_llc.c: In function 'smc_llc_add_pending_send':
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_564' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_565' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_send_message_wait',
-       inlined from 'smc_llc_send_link_delete_all' at net/smc/smc_llc.c:1635:8:
-   net/smc/smc_llc.c:785:9: warning: 'memcpy' reading 60 bytes from a region of size 49 [-Wstringop-overread]
-     785 |         memcpy(wr_buf, llcbuf, sizeof(union smc_llc_msg));
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c: In function 'smc_llc_send_link_delete_all':
-   net/smc/smc_llc.c:1622:37: note: source object 'delllc' of size 49
-    1622 |         struct smc_llc_msg_del_link delllc = {};
-         |                                     ^~~~~~
-
-
-vim +40 net/smc/smc_llc.c
-
-    23	
-    24	struct smc_llc_hdr {
-    25		struct smc_wr_rx_hdr common;
-    26		union {
-    27			struct {
-    28				u8 length;	/* 44 */
-    29		#if defined(__BIG_ENDIAN_BITFIELD)
-    30				u8 reserved:4,
-    31				   add_link_rej_rsn:4;
-    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
-    33				u8 add_link_rej_rsn:4,
-    34				   reserved:4;
-    35	#endif
-    36			};
-    37			u16 length_v2;	/* 44 - 8192*/
-    38		};
-    39		u8 flags;
-  > 40	} __packed;		/* format defined in
-    41				 * IBM Shared Memory Communications Version 2
-    42				 * (https://www.ibm.com/support/pages/node/6326337)
-    43				 */
-    44	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jason

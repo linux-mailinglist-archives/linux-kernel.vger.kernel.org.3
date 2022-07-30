@@ -2,210 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C1B5859AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C9358599E
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiG3Jib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 05:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S234436AbiG3JcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 05:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiG3Ji2 (ORCPT
+        with ESMTP id S234401AbiG3JcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 05:38:28 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D53019003
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:38:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id j22so12255019ejs.2
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:38:27 -0700 (PDT)
+        Sat, 30 Jul 2022 05:32:06 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111A242AFC
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:32:05 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10e6bdbe218so8326773fac.10
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1QFiAl5mkhApEL9gxobGZqygkCmC9fEtDEUIIEoetyI=;
-        b=x9q8s+afLiAddh7OeVRthXZuuCg/l/9AxmeqgaKW8J2hje57V/KclrAgBV/DegMX5y
-         f+2vU8PqP2Uo5mwBYzs/rfFwptSe9XUZXoBmFRs4nbRMNMt4OiH8jCwHWr+xz0SEw+Bt
-         RNtverRMkCGF94QrZJt+P2zTiHmwW4Kf9434lMDuCCljXgU6g4cmKfPf2p68AFUkxtfw
-         +Z7/A2lMQhXaCTQJwbEhvKyI8nQD5gd7elo8q5w9kUMN3lbNCFIhDYzz9an0hvkBNIyx
-         Q22aNmT79O6iIlMPtDq0CAW2WHQwlqx8xGrvOictVv/JRcsNSd4wANg/Vd+92lBq3tMS
-         TL5g==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VQvaSdst3GlNtIz5gSEbzEWnw6iJp0dnfjX2/uw4Pi0=;
+        b=WwZeLQPHVZMv7Tf/yzouYMy/N8ncJHBvNxrLWXHyVtWxdZ1PxHorwX/QP+bQZFNbY1
+         rFwGJtpccThotO8bEaWew5690F3KBLjHib7+tV2wpgxvsFLNez3D6LNChyTXqofSjLSL
+         3t6mL4NZhitq1h4tRWJkYont7aB4p6WDw3W2nbHcvT//xibau8r6KMdHFoQnG+SQ/3rI
+         3j0ybuxX0FIf2CU4lpJxYEwnn2Qs8McUF9hZQ8kDHVp4HHibCyHITaH7wbRaDD6Z8BOI
+         nolUx7bNdTsURyp6dA0MSYRIyofqMVotGVXSojpI8bVNj+lPXZDKpcXfE/3CmYrakb10
+         Apmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1QFiAl5mkhApEL9gxobGZqygkCmC9fEtDEUIIEoetyI=;
-        b=S7WHSTHp4yQyNMLnBN9gdFTBv4XPxLHPVrZo7lzcxK+eSvaJ0e/3CEACce/nJxZfA3
-         5kOGf28e4CRAwLSV7lwIvXpTkPmUObox0MGCKENc1GlyZttNU/3Q3otocQao7cZws5fx
-         GbdXsvBfnbImOP6FfsuQzFOZxjI91rGvZZnseHwPFPtvNPpXMjhofkn5G7frc0qIarEn
-         m0SK7yLHkBvvu6/emVqsuR1RmCrGx21GaQDEP/IjuDwBxk0oIgqSW+z/IVoHA7/YDEqV
-         LT7Hspm3GI6eJQdBfvfq+FWoF6+8/bdYo4SfN2d9bIDMs+8JPV/+q4+iRLCco+VeR+av
-         Z7Wg==
-X-Gm-Message-State: AJIora/2TSHztEkkBhupOmwhQzAuLHVx3oL7SIGFPr70r1RGNxAFuVvV
-        i7RJOgLiiOepNGKAwmF5ZrRosA==
-X-Google-Smtp-Source: AGRyM1v04iFdelPx45SAFt0tcMSTFwbriOuRv91g919AH34DqD9g+YUbdIbEaJk9+a+SWrd7tGEUdg==
-X-Received: by 2002:a17:907:2bd3:b0:72b:44ed:6d6b with SMTP id gv19-20020a1709072bd300b0072b44ed6d6bmr5827662ejc.632.1659173905586;
-        Sat, 30 Jul 2022 02:38:25 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.98.208])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709064d4e00b007304d084c5esm464637ejv.166.2022.07.30.02.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 02:38:24 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 17:38:19 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Chang Rui <changruinj@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
-Message-ID: <20220730093819.GA574473@leoy-ThinkPad-X240s>
-References: <20220724060013.171050-1-leo.yan@linaro.org>
- <20220724060013.171050-2-leo.yan@linaro.org>
- <CAP-5=fVY=_WUpke0sRMpvbJFu9JuYwqiwAmKdCS+=u7vEG-2uA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VQvaSdst3GlNtIz5gSEbzEWnw6iJp0dnfjX2/uw4Pi0=;
+        b=EDvRyqQ+miLWinW/UtthWEA62j79YDyVnVkpWg44ek9SDlX8pxNmCeblpTWRaRvwqr
+         MzLGp58W2ZPaHJD19JHPOxGbj86/B2gH5hFe0ZVWj1AzZc7M3I59cDF6lGYqQgadZ860
+         UydXDaZuNSHqqh1P0NxY5ikuji1Xo8lz9siMSPbiTC6lEcoSCjoqOYmO0HDFnC26uhgm
+         z0pd4iEasVNY6UyJNU/BXSf9ZBUDksmS1czF4kg4u/mevgludEk6FrS+Kwz1VTmOLjit
+         1q9AA4HGLyst4EMP+HHZBWovGKCY4VguRdnNu33D477NEPE2yHQPdsIalRWd9TeCVJZk
+         lz9Q==
+X-Gm-Message-State: AJIora9svbpBPd5gakNXucEEYM9JGYfjIO7aIX20FMc1GteQ2lMWr3zz
+        T31Dt998cL8py9WMpCjto2Tw0w==
+X-Google-Smtp-Source: AGRyM1vlzdqQ1oG5qxelDaZGwViNeSWbgs5sytdvECpAolwn1LIlFKm9WBz+/JKkjdUAPx95t1xc6g==
+X-Received: by 2002:a05:6870:f2a0:b0:fe:29a0:4b48 with SMTP id u32-20020a056870f2a000b000fe29a04b48mr3309674oap.183.1659173524398;
+        Sat, 30 Jul 2022 02:32:04 -0700 (PDT)
+Received: from ?IPV6:2607:fb90:c2d4:35df:6680:99ff:fe6f:cb54? ([2607:fb90:c2d4:35df:6680:99ff:fe6f:cb54])
+        by smtp.gmail.com with ESMTPSA id q16-20020a05683033d000b0061c29a38b3bsm1633168ott.33.2022.07.30.02.32.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Jul 2022 02:32:03 -0700 (PDT)
+Message-ID: <e850477a-6dd8-0a76-cfa0-bf78951f7281@landley.net>
+Date:   Sat, 30 Jul 2022 04:39:13 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fVY=_WUpke0sRMpvbJFu9JuYwqiwAmKdCS+=u7vEG-2uA@mail.gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URI_HEX autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Content-Language: en-US
+To:     Jim Baxter <jim_baxter@mentor.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+ <4bc349a59e4042f7831b1190914851fe@huawei.com>
+ <20220615092712.GA4068@lxhi-065>
+ <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+ <f82d4961986547b28b6de066219ad08b@huawei.com>
+ <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+ <8e6a723874644449be99fcebb0905058@huawei.com>
+ <d6af7f7e-7f8c-a6a7-7a09-84928fd69774@mentor.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <d6af7f7e-7f8c-a6a7-7a09-84928fd69774@mentor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+On 7/29/22 05:37, Jim Baxter wrote:
+>>>> Uhm, I guess this could be solved with:
+>>>>
+>>>> https://github.com/openeuler-
+>>> mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
+>>>>
+>>>> and adding initramtmpfs to the kernel command line. You are
+>>>> probably using ramfs, which does not have xattr support.
+>>>>
 
-On Fri, Jul 29, 2022 at 10:13:04PM -0700, Ian Rogers wrote:
+Oh, here's the actual tested version of the patch wiring up rootfstype=tmpfs to
+force rootfs to be tmpfs even when you specify root=
 
-[...]
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index 7058e14ad5f7..dedf27fe9044 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -665,7 +665,7 @@ struct file_system_type rootfs_fs_type = {
 
-> I am seeing a problem with this patch with jvmti. To repro:
-> 
-> 1) download a Java workload dacapo-9.12-MR1-bach.jar from
-> https://sourceforge.net/projects/dacapobench/
-> 2) build perf such as "make -C tools/perf O=/tmp/perf NO_LIBBFD=1" it
-> should detect Java and create /tmp/perf/libperf-jvmti.so
-> 3) run perf with the jvmti agent:
-> /tmp/perf/perf record -k 1 java -agentpath:/tmp/perf/libperf-jvmti.so
-> -jar dacapo-9.12-MR1-bach.jar -n 10 fop
-> 4) run perf inject:
-> /tmp/perf/perf inject -i perf.data -o perf-injected.data -j
-> 5) run perf report
-> /tmp/perf/perf report -i  perf-injected.data | grep org.apache.fop
-> 
-> With this patch reverted I see lots of symbols like:
->      0.00%  java             jitted-388040-4656.so  [.]
-> org.apache.fop.fo.FObj.bind(org.apache.fop.fo.PropertyList)
-> 
-> With the patch I see lots of:
-> dso__load_sym_internal: failed to find program header for symbol:
-> Lorg/apache/fop/fo/FObj;bind(Lorg/apache/fop/fo/PropertyList;)V
-> st_value: 0x40
+ void __init init_rootfs(void)
+ {
+-	if (IS_ENABLED(CONFIG_TMPFS) && !saved_root_name[0] &&
+-		(!root_fs_names || strstr(root_fs_names, "tmpfs")))
++	if (IS_ENABLED(CONFIG_TMPFS) && (!root_fs_names ? !saved_root_name[0] :
++		!!strstr(root_fs_names, "tmpfs")))
+ 		is_tmpfs = true;
+ }
 
-Thanks for sharing the steps, I can reproduce the issue.
+Signed-in-triplicate-by: Rob Landley <rob@landley.net>
 
-I tried to add more logs to dump and hope can find specific pattern for
-these symbols, one thing I observed that if a symbol fails to find
-program header, it has the same values for st_value, shdr.sh_addr and
-shdr.sh_offset: all of them are 0x40.  So that means if with you
-proposed change in below, then we will get the file address is:
+No idea why nobody else has fixed that bug in the past 9 years, seems obvious?
 
-  file_addr = st_value - shdr.sh_addr + shdr.sh_offset = 0x40
+Anyway, here's the testing I did using mkroot (ala
+https://landley.net/toybox/faq.html#mkroot):
 
-Seems to me this is not reasonable: perf tries to add many symbols
-with the same file address 0x40.
+$ (cd root/x86_64; KARGS='quiet root=potato HANDOFF="/bin/head -n 1
+/proc/mounts"' ./run-qemu.sh) | tail -n 3
+rootfs / rootfs rw 0 0
+reboot: Restarting system
 
-> Combining the old and new behaviors fixes the issue for me, wdyt?
+$ (cd root/x86_64; KARGS='quiet HANDOFF="/bin/head -n 1 /proc/mounts"'
+./run-qemu.sh) | tail -n 3
+rootfs / rootfs rw,size=121828k,nr_inodes=30457 0 0
+reboot: Restarting system
 
-So far we don't answer a question is what's the purpose for these JAVA
-symbols.  I checked these symbols and concluded as:
+$ (cd root/x86_64; KARGS='quiet rootfstype=tmpfs root=potato HANDOFF="/bin/head
+-n 1 /proc/mounts"' ./run-qemu.sh) | tail -n 3
+rootfs / rootfs rw,size=121828k,nr_inodes=30457 0 0
+reboot: Restarting system
 
-- They are not label, this is because sym.st_info is 0x2, so its
-  symbol type is STT_FUNC;
-- They are from ".text" section;
-- Symbol visibility is STV_DEFAULT;
-- Symbol's section index number is 0x1, which is different from some
-  special sections (STV_DEFAULT/SHN_COMMON/SHN_UNDEF/SHN_XINDEX).
+I.E. rootfstype=tmpfs neutralized the root= so it was still tmpfs despite the
+kernel being explicitly told you weren't going to stay on initramfs (which is
+still what root= means). With just root= it's still ramfs, with all the "my log
+file got too big and the system livelocked" and "querying available space always
+returns zero" that entails.
 
-This is a rough summary, these symbols are likewise the normal function
-symbols, but they have special st_value (0x40) and has no matched the
-program header for them.
+> Can I clarify which filesystem type is supported with this patch series?
+> Is it tmpfs or perhaps a ramdisk?
 
-If we rollback to use old offsets to calculate the symbol file address,
-it still is incorrect.
+I believe both tmpfs and ramfs support xattrs? (I know tmpfs does, and
+fs/ramfs/file-mmu.c plugs simple_getattr() into ramfs_file_operations.setattr so
+it looks like that would too? Haven't tried it.)
 
-I list all relevant symbols in: https://termbin.com/s0fb, for a reliable
-fixing, could anyone with java experience shed some lights for handling
-the symbols?
+This isn't a modification to the filesystem code (ramfs/tmpfs), this is a
+modification to the boot-time loader (initramfs) that extracts a cpio.gz file
+into the filesystem.
 
-On the other hand, I can accept to simply change pr_warning() to
-pr_debug4() to avoid warning flood, the log still can help us to find
-potential symbol parsing issue, so far they are not false-positive
-reporting.
+Ramdisks have supported xattrs for years: they fake up a block device out of a
+chunk of memory and them format it and mount some other filesystem on it,
+meaning the driver for the other filesystem handles the xattr support.
 
-Thanks,
-Leo
+But ramdisks don't use initramfs, they load an image of the preformatted
+filesystem into the ramdisk block device. Completely separate mechanism, sharing
+no code with initramfs, depending on the block layer, etc.
 
-> ```
-> --- a/tools/perf/util/symbol-elf.c
-> +++ b/tools/perf/util/symbol-elf.c
-> @@ -1305,16 +1305,21 @@ dso__load_sym_internal(struct dso *dso, struct
-> map *map, struct symsrc *syms
-> _ss,
-> 
->                        if (elf_read_program_header(syms_ss->elf,
->                                                    (u64)sym.st_value, &phdr)) {
-> -                               pr_warning("%s: failed to find program
-> header for "
-> +                               pr_debug4("%s: failed to find program
-> header for "
->                                           "symbol: %s st_value: %#" PRIx64 "\n",
->                                           __func__, elf_name,
-> (u64)sym.st_value);
-> -                               continue;
-> +                               pr_debug4("%s: adjusting symbol:
-> st_value: %#" PRIx64 " "
-> +                                       "sh_addr: %#" PRIx64 "
-> sh_offset: %#" PRIx64 "\n",
-> +                                       __func__, (u64)sym.st_value,
-> (u64)shdr.sh_addr,
-> +                                       (u64)shdr.sh_offset);
-> +                               sym.st_value -= shdr.sh_addr - shdr.sh_offset;
-> +                       } else {
-> +                               pr_debug4("%s: adjusting symbol:
-> st_value: %#" PRIx64 " "
-> +                                       "p_vaddr: %#" PRIx64 "
-> p_offset: %#" PRIx64 "\n",
-> +                                       __func__, (u64)sym.st_value,
-> (u64)phdr.p_vaddr,
-> +                                       (u64)phdr.p_offset);
-> +                               sym.st_value -= phdr.p_vaddr - phdr.p_offset;
->                        }
-> -                       pr_debug4("%s: adjusting symbol: st_value: %#"
-> PRIx64 " "
-> -                                 "p_vaddr: %#" PRIx64 " p_offset: %#"
-> PRIx64 "\n",
-> -                                 __func__, (u64)sym.st_value,
-> (u64)phdr.p_vaddr,
-> -                                 (u64)phdr.p_offset);
-> -                       sym.st_value -= phdr.p_vaddr - phdr.p_offset;
->                }
-> 
->                demangled = demangle_sym(dso, kmodule, elf_name);
-> ```
-> 
-> Thanks,
-> Ian
-> 
-> >
-> >                 demangled = demangle_sym(dso, kmodule, elf_name);
-> > --
-> > 2.25.1
-> >
+>>> Thank you, I have tested that patch but the problem remained. Here is my
+>>> command line, I wonder if there is something wrong.
+>>>
+>>> Kernel command line: rw rootfstype=initramtmpfs root=/dev/ram0
+>>> initrd=0x500000000 rootwait
+>> 
+>> It is just initramtmpfs, without rootfstype=.
+
+The above patch does not go on top of that patch, it's instead of.
+
+Rob

@@ -2,304 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9501585899
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49B758589A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 06:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbiG3EZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 00:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S239903AbiG3E0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 00:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239995AbiG3EZl (ORCPT
+        with ESMTP id S234072AbiG3E0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 00:25:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECF613D67
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659155140; x=1690691140;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tE4gAhpT+5B9E8BBlS421Ai6+4cwUVd3aJta3K1N360=;
-  b=dm5XnjjWGqR87pzevT7g4rejIJvkk+V6eYgiVTOrPGB2Br2ripdX93TN
-   QXskSi/oK0xz2D6nvTr7eRB+wNVRSIgSlAcghXYtWuAl8J8XApsl4GMfk
-   R7Wd/z+50BstjXsSwYW9vG4KaVXas28ARX4O3+LVOosYcSJUS5k42WH5w
-   VKzfieUFPZ/MACz8ZH8sWXE/PjMPWb85zyMnEcVuU+Hvd9HsRV6J0GBYw
-   lnsWXwJS9qsPBMLoMjOh+9E3oCYQ2hgrn5LA/YcBCh5x1Fnoz2ORIez/S
-   5xvDVOXuns0Ai2pOcvrepgksVdRZHopxyXJC5/QDzrLBSh9SMf20s2SLm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="269273130"
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="269273130"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 21:25:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
-   d="scan'208";a="669470303"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Jul 2022 21:25:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHe2j-000COT-1g;
-        Sat, 30 Jul 2022 04:25:37 +0000
-Date:   Sat, 30 Jul 2022 12:25:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Kenny Ho <Kenny.Ho@amd.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [agd5f:amd-staging-drm-next 1241/1278]
- drivers/thunderbolt/test.c:799:2: error: call to undeclared function
- 'KUNIT_ASSERT_NULL'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202207301226.1DMFCdHt-lkp@intel.com>
+        Sat, 30 Jul 2022 00:26:35 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51567FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:26:34 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 141so11084742ybn.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 21:26:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gzsdefuadf9H+aE6G/CtU3WmTBAcp2YL8ABvJGwjcew=;
+        b=yzFdn6bauv5da3EBoeXs5JkVt5HMWnnNejbXxH85NjTw/jm163qZO5s6xWK4F7lKAy
+         gPpAjr+Z+ee1rIYepNqeo/DC8EQ3LbeF7E2/iGa/1raCoV0hyyoBq7f9ZMRofHEqzi4m
+         SUNDcjkizmNan97OhSyaCKlQkXox3YJGIskwmZktHlGyhs2lKXC75ZdxCSOi0C64Z//+
+         M8CAv9l6+aquSjPjpCExdKXH5KMzZepzfSH2I49JMP1S3Fm4oEUD2uBtTw9rcFn1tkyS
+         i+YZKpAWaKCcAEmWZNA53x1mTpiQiv1Ix/R2F5Qd3pQKc9nxib/t66zuvcpSICbjCAiW
+         s+Zw==
+X-Gm-Message-State: ACgBeo2RTlJGBM/bfyNXZsiPociWAxcUdXOyXBp9Fs5S4FepBSxRgm/a
+        mVKYQcYOXUgp3i7og3bQHkuwoqHIEgMc44CL9t2MkiUAb4M=
+X-Google-Smtp-Source: AA6agR6VvqFOzqGE3Lu3msGHcg0Y+gMjM66sP2CPciUiF8JyPyOKKuQUk2yBE8xveU9wv/5Q9wdu6N2NETlwSBVUNMs=
+X-Received: by 2002:a25:3789:0:b0:671:6d58:f242 with SMTP id
+ e131-20020a253789000000b006716d58f242mr4770892yba.142.1659155193430; Fri, 29
+ Jul 2022 21:26:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220729090307.57905-1-mailhol.vincent@wanadoo.fr>
+ <2e3ef1724d1d9acdbbf1a80487891a7f@kernel.org> <CAMZ6RqJbJCQOQVLvBGtfk7PsZeQtJdhhj3HJgiwZtf1XNFHZSA@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJbJCQOQVLvBGtfk7PsZeQtJdhhj3HJgiwZtf1XNFHZSA@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 30 Jul 2022 13:26:21 +0900
+Message-ID: <CAMZ6RqJ+-LA_oTNEqu+Z9jp7DwrbO3zQkbrPUYgdmbBPbMucrQ@mail.gmail.com>
+Subject: Re: [PATCH] irqdomain: do not shadow nr_irqs global definition
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next
-head:   2305916dca043ed69bd464f74a886b0216780aa6
-commit: 53069c3922842db6f01ca9008e6a45d0fd3a083e [1241/1278] thunderbolt: test: use NULL macros
-config: s390-randconfig-r044-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301226.1DMFCdHt-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f amd-staging-drm-next
-        git checkout 53069c3922842db6f01ca9008e6a45d0fd3a083e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
+On Fri. 29 Jul. 2022 at 20:12, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> On Fri. 29 juil. 2022 at 18:16, Marc Zyngier <maz@kernel.org> wrote:
+> > On 2022-07-29 10:03, Vincent Mailhol wrote:
+> > > include/linux/irqnr.h declares a global variable named `nr_irqs'.
+> > >
+> > > The inline function irq_domain_alloc_irqs() from
+> > > include/linux/irqdomain.h also uses the same name and thus shadow the
+> > > global declaration. Rename the function argument from `nr_irqs' to
+> > > `nbr_irqs'.
+> > >
+> > > This patch silences below -Wshadow warning:
+> > >
+> > > | In file included from ./arch/x86/include/asm/irqdomain.h:5,
+> > > |                  from ./arch/x86/include/asm/msi.h:5,
+> > > |                  from ./include/linux/msi.h:23,
+> > > |                  from ./include/linux/kvm_host.h:19,
+> > > |                  from arch/x86/kernel/../kvm/vmx/vmx.h:5,
+> > > |                  from arch/x86/kernel/asm-offsets.c:22:
+> > > | ./include/linux/irqdomain.h: In function 'irq_domain_alloc_irqs':
+> > > | ./include/linux/irqdomain.h:514:38: warning: declaration of
+> > > 'nr_irqs' shadows a global declaration [-Wshadow]
+> > > |   514 |                         unsigned int nr_irqs, int node, void
+> > > *arg)
+> > > |       |                         ~~~~~~~~~~~~~^~~~~~~
+> > > | In file included from ./include/linux/interrupt.h:10,
+> > > |                  from ./include/linux/kernel_stat.h:9,
+> > > |                  from ./include/linux/cgroup.h:26,
+> > > |                  from ./include/linux/memcontrol.h:13,
+> > > |                  from ./include/linux/swap.h:9,
+> > > |                  from ./include/linux/suspend.h:5,
+> > > |                  from arch/x86/kernel/asm-offsets.c:13:
+> > > | ./include/linux/irqnr.h:8:12: note: shadowed declaration is here
+> > > |     8 | extern int nr_irqs;
+> > > |       |            ^~~~~~~
+> > >
+> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > ---
+> > >  include/linux/irqdomain.h | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> > > index 00d577f90883..76949bb029b0 100644
+> > > --- a/include/linux/irqdomain.h
+> > > +++ b/include/linux/irqdomain.h
+> > > @@ -511,9 +511,9 @@ extern int irq_domain_activate_irq(struct irq_data
+> > > *irq_data, bool early);
+> > >  extern void irq_domain_deactivate_irq(struct irq_data *irq_data);
+> > >
+> > >  static inline int irq_domain_alloc_irqs(struct irq_domain *domain,
+> > > -                     unsigned int nr_irqs, int node, void *arg)
+> > > +                                     unsigned int nbr_irqs, int node, void *arg)
+> > >  {
+> > > -     return __irq_domain_alloc_irqs(domain, -1, nr_irqs, node, arg, false,
+> > > +     return __irq_domain_alloc_irqs(domain, -1, nbr_irqs, node, arg,
+> > > false,
+> > >                                      NULL);
+> > >  }
+> >
+> > I really don't think this is worth it. A function has its
+> > own namespace, and this warning is on the long list of
+> > "this is completely silly". Case in point:
+> >
+> > $ git grep 'unsigned int nr_irqs'| wc -l
+> > 207
+> >
+> > Is anything broken? Not as far as I can tell.
+>
+> Nothing is broken, my only concern is that this occurs in a header
+> file and thus the warning will pop up in random files which include
+> this header.
+>
+> | git grep "unsigned int nr_irqs" include/ arch/*/include | wc -l
+> | 17
+> (and all static inline function which trigger the warning are from
+> linux/irqdomain.h)
+>
+> Time to time, I check the W=2 output and spam from the headers makes
+> it annoying to triage. I absolutely do not care of shadowing
+> everywhere else outside of the includes directory.
+>
+> > If there was anything to fix, it is the top-level definition
+> > that should be more indicative of its global status. But again,
+> > there is nothing broken so far.
+>
+> This is also feasible, but it will become a tree-wide patch. And I am
+> quite certain that it will be NACKed right away, so I will not try
+> this alternate solution.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/thunderbolt/test.c:12:
-   In file included from drivers/thunderbolt/tb.h:13:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/thunderbolt/test.c:799:2: error: call to undeclared function 'KUNIT_ASSERT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NULL(test, path);
-           ^
->> drivers/thunderbolt/test.c:850:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:912:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:992:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1072:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1164:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1256:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, path);
-           ^
-   drivers/thunderbolt/test.c:1300:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel1);
-           ^
-   drivers/thunderbolt/test.c:1352:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1398:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1448:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1513:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1569:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel1);
-           ^
-   drivers/thunderbolt/test.c:1631:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, dp_tunnel);
-           ^
-   drivers/thunderbolt/test.c:1688:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1731:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1768:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1814:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   drivers/thunderbolt/test.c:1860:2: error: call to undeclared function 'KUNIT_ASSERT_NOT_NULL'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           KUNIT_ASSERT_NOT_NULL(test, tunnel);
-           ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   12 warnings and 20 errors generated.
+To add some figures, on a "make allyesconfig" (linux-next branch,
+x86_64 build, gcc 12), there are in total 36005 -Wshadow and
+irqdomain.h accounts for 7094 of all these (i.e. this patch suppresses
+roughly one fifth of all -Wshadow warnings tree wide).
 
 
-vim +/KUNIT_ASSERT_NULL +799 drivers/thunderbolt/test.c
-
-   783	
-   784	static void tb_test_path_not_connected(struct kunit *test)
-   785	{
-   786		struct tb_switch *host, *dev1, *dev2;
-   787		struct tb_port *down, *up;
-   788		struct tb_path *path;
-   789	
-   790		host = alloc_host(test);
-   791		dev1 = alloc_dev_default(test, host, 0x3, false);
-   792		/* Not connected to anything */
-   793		dev2 = alloc_dev_default(test, NULL, 0x303, false);
-   794	
-   795		down = &dev1->ports[10];
-   796		up = &dev2->ports[9];
-   797	
-   798		path = tb_path_alloc(NULL, down, 8, up, 8, 0, "PCIe Down");
- > 799		KUNIT_ASSERT_NULL(test, path);
-   800		path = tb_path_alloc(NULL, down, 8, up, 8, 1, "PCIe Down");
-   801		KUNIT_ASSERT_NULL(test, path);
-   802	}
-   803	
-   804	struct hop_expectation {
-   805		u64 route;
-   806		u8 in_port;
-   807		enum tb_port_type in_type;
-   808		u8 out_port;
-   809		enum tb_port_type out_type;
-   810	};
-   811	
-   812	static void tb_test_path_not_bonded_lane0(struct kunit *test)
-   813	{
-   814		/*
-   815		 * PCIe path from host to device using lane 0.
-   816		 *
-   817		 *   [Host]
-   818		 *   3 |: 4
-   819		 *   1 |: 2
-   820		 *  [Device]
-   821		 */
-   822		static const struct hop_expectation test_data[] = {
-   823			{
-   824				.route = 0x0,
-   825				.in_port = 9,
-   826				.in_type = TB_TYPE_PCIE_DOWN,
-   827				.out_port = 3,
-   828				.out_type = TB_TYPE_PORT,
-   829			},
-   830			{
-   831				.route = 0x3,
-   832				.in_port = 1,
-   833				.in_type = TB_TYPE_PORT,
-   834				.out_port = 9,
-   835				.out_type = TB_TYPE_PCIE_UP,
-   836			},
-   837		};
-   838		struct tb_switch *host, *dev;
-   839		struct tb_port *down, *up;
-   840		struct tb_path *path;
-   841		int i;
-   842	
-   843		host = alloc_host(test);
-   844		dev = alloc_dev_default(test, host, 0x3, false);
-   845	
-   846		down = &host->ports[9];
-   847		up = &dev->ports[9];
-   848	
-   849		path = tb_path_alloc(NULL, down, 8, up, 8, 0, "PCIe Down");
- > 850		KUNIT_ASSERT_NOT_NULL(test, path);
-   851		KUNIT_ASSERT_EQ(test, path->path_length, ARRAY_SIZE(test_data));
-   852		for (i = 0; i < ARRAY_SIZE(test_data); i++) {
-   853			const struct tb_port *in_port, *out_port;
-   854	
-   855			in_port = path->hops[i].in_port;
-   856			out_port = path->hops[i].out_port;
-   857	
-   858			KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
-   859			KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
-   860			KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-   861					test_data[i].in_type);
-   862			KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
-   863			KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
-   864			KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-   865					test_data[i].out_type);
-   866		}
-   867		tb_path_free(path);
-   868	}
-   869	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours sincerely,
+Vincent Mailhol

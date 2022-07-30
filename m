@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0759C585846
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8F5585848
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239904AbiG3DcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 23:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S239608AbiG3Ddr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 23:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiG3Dbz (ORCPT
+        with ESMTP id S232544AbiG3DdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 23:31:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414D1EE2C;
-        Fri, 29 Jul 2022 20:31:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFFE561DE5;
-        Sat, 30 Jul 2022 03:31:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E1EC433C1;
-        Sat, 30 Jul 2022 03:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659151913;
-        bh=T/qBos0C3RBWMkL5/pbGZ69/EtykuvP+aJ7ZH+m/CJY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B4Gb1PnPZFj0tkRvAJqIas1gkfdrW5R5t+gqum1lmq07F8YayHEoKFnVH5dp8pqbG
-         mCFr+g1oPJKEaE4UnxFoDzEDcXuTJFrVxLcz17c1g905SVwC+RlwC33nW9sbJKq/AA
-         /RI9QY7lXQcXN80AlpHoloDpTLBp9nPS8taP22w8cP5MeA69gxEalgwKiZZo4lcMig
-         wdgHV1vrOaXnMhJKUTErx1FCMfqOf6Gfri4ayAGRH3AhP772OI5sRLkc7YY48n+cDV
-         itCd42rt4wpA0mD6yOv25L/6LR4WgYNj6fBGPTAtB9QrWC4uROBRshKEL6pb43ca2L
-         Q/X+1mANjboHw==
-Date:   Fri, 29 Jul 2022 20:31:51 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mike Pattrick <mkp@redhat.com>
-Cc:     netdev@vger.kernel.org, pvalerio@redhat.com,
-        Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] openvswitch: Fix double reporting of drops
- in dropwatch
-Message-ID: <20220729203151.3e849337@kernel.org>
-In-Reply-To: <20220728161259.1088662-1-mkp@redhat.com>
-References: <20220728161259.1088662-1-mkp@redhat.com>
+        Fri, 29 Jul 2022 23:33:24 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8E8EE2C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:33:23 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31e7ca45091so67442777b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 20:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=z7ruzMhRmh2YgpYMQNik2P2JjiDQ9hsKGh9nOYZ9DAM=;
+        b=B3EmRh5qL/jgn/76GduSFcql8ABQv1rTAzqqT1T9oe5c/nHAnI/jMYvZX2uhnG2DEi
+         r1c0ce8tjx4f1jb6mw7oPROUmRmJooHT95UPkV2HhqcNKe/0E89CsKk2ZKQje7iDAZB0
+         aua7sgkaatxXCo7QUgBkCMuUGZPgNgPHbqniUia+65kAlYaZcLwHstGuzpS+VH7Zwx/o
+         miQdhMMzgtyRxF5Sjb9x7InHlB90KpRd10AvJoXNgjzt6bGT7MsAPysPpZiQLUtSl1Wv
+         S2LKY0ytm3DX4YDTjlbRqiZD/5cowPeXC8JTX3GzNZ1ZHo07vg33b638XU2EZg+uoY21
+         4lDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=z7ruzMhRmh2YgpYMQNik2P2JjiDQ9hsKGh9nOYZ9DAM=;
+        b=mv+Y0KF98jS/t8vgsl4whenpnbchEV9PnedajpJLUw8LrsJuqiHD1nPLjR//b7G/4N
+         qBRrllZg8UyvRdhVEEI02rkC664Yoyt1i33nvUEbmv+nnbe6dsBwaupstHxUqbeCg2JM
+         GIV6K+YUohul5EwqGMMModYD2uUH5jnahG5lxw6N8VDGX2szsSRoRsJY9VH6/dgs6qUR
+         u4E3AFCGZLSNRe7EVel3c455RvGzD1AOtW/ioIUCccVsb+d5kb53qojEzoiWyDB7UWwt
+         Ja5SWj43fs0QEmWEqoggVNChrses8rbzRVywrJgOSWuGqw0GLsdFlyZwM/NhzVlwie3D
+         23IA==
+X-Gm-Message-State: ACgBeo2Jq2qrsKR7aQMBWRuhXPGoo51xx5Nit7XiXZpod7uZrSu0SE6W
+        Ackx/SQnyDupBFMsG0kdOxesnZy0M13gPuFITp8=
+X-Google-Smtp-Source: AA6agR5jqXwkf+sodICjizbPOhaMY5XJ3r1zxT/JVi2kE+M6V4nzcMeGRanApNOS+9wjpil8ZM+9nOscib+mZrGHS7M=
+X-Received: by 2002:a81:5e42:0:b0:31b:6254:1c2b with SMTP id
+ s63-20020a815e42000000b0031b62541c2bmr5796260ywb.35.1659152002918; Fri, 29
+ Jul 2022 20:33:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <YuDdHMaB6jWARQzA@kroah.com> <20220729035230.226172-1-ztong0001@gmail.com>
+ <20220729035230.226172-4-ztong0001@gmail.com> <YuOLybUZ8cBWntY/@kroah.com>
+In-Reply-To: <YuOLybUZ8cBWntY/@kroah.com>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Fri, 29 Jul 2022 20:33:12 -0700
+Message-ID: <CAA5qM4B3eHt9BkPzvOuEA0_E5QanCWMzrqLJMaRDAnfAR4bw7A@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] staging: rtl8192u: fix rmmod warn when device is renamed
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-staging@lists.linux.dev, Zheyu Ma <zheyuma97@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 12:12:58 -0400 Mike Pattrick wrote:
-> Frames sent to userspace can be reported as dropped in
-> ovs_dp_process_packet, however, if they are dropped in the netlink code
-> then netlink_attachskb will report the same frame as dropped.
-> 
-> This patch checks for error codes which indicate that the frame has
-> already been freed.
-> 
-> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2109946
-
-Please remove the Bugzilla link, it doesn't seem to be public.
-If it is then it should be a Link: tag, not a custom tag for bz.
-
-> Signed-off-by: Mike Pattrick <mkp@redhat.com>
-> ---
->  net/openvswitch/datapath.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index 7e8a39a35627..029f9c3e1c28 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -252,10 +252,20 @@ void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
->  
->  		upcall.mru = OVS_CB(skb)->mru;
->  		error = ovs_dp_upcall(dp, skb, key, &upcall, 0);
-> -		if (unlikely(error))
-> -			kfree_skb(skb);
-> -		else
-> +		switch (error) {
-> +		case 0:
-> +			fallthrough;
-> +		case -EAGAIN:
-> +			fallthrough;
-> +		case -ERESTARTSYS:
-> +			fallthrough;
-
-No need to add the fallthrough;s between two case statements.
-
-> +		case -EINTR:
->  			consume_skb(skb);
-> +			break;
-> +		default:
-> +			kfree_skb(skb);
-> +			break;
-> +		}
->  		stats_counter = &stats->n_missed;
->  		goto out;
->  	}
-
+On Fri, Jul 29, 2022 at 12:27 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Jul 28, 2022 at 08:52:20PM -0700, Tong Zhang wrote:
+> > @@ -164,11 +164,19 @@ void rtl8192_debugfs_init_one(struct net_device *dev)
+> >
+> >  void rtl8192_debugfs_exit_one(struct net_device *dev)
+> >  {
+> > -     struct r8192_priv *priv = (struct r8192_priv *)ieee80211_priv(dev);
+> > +     struct r8192_priv *priv = ieee80211_priv(dev);
+>
+> This change is not relevant for this patch :(
+>
+Oh sorry sorry, my bad, I will move them to a separate commit.

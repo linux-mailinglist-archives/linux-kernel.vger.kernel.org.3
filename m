@@ -2,144 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717F65858EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 09:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA5C5858EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 09:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiG3HIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 03:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S230461AbiG3HM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 03:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiG3HIW (ORCPT
+        with ESMTP id S229573AbiG3HM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 03:08:22 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560D256BB6;
-        Sat, 30 Jul 2022 00:08:20 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s14so7266189ljh.0;
-        Sat, 30 Jul 2022 00:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=tIBM3YfgmPp7U8f9ccRVjiScdQ5ht2L/cW+n6qhI3xc=;
-        b=V6cWGzy9vo9bC1mYKdvD6nyEL8as9poBhoSM6xL/F42GmNlOiLQuW6o8GgVi6AavBn
-         q7RmkSALlud/LxIWHogkH73pdjhkuoboeuobzy8FIIPoUQxJW4T73SlAYEx4A/iqt1SI
-         TZ78tTt4SAMW0hKHS9hSb3vBuPJ+lJVAp4iZRqFPwV6TzciXfY1zZGKcysuHL5ap2ptM
-         9gctWFxVpfZAN1SO5iqN75vaNh+xJx+YnQiTAIzI3G4MCyJoYIXeVM2xsm88hIHT0QMl
-         IldU/hBUWbW71UWjx9ZXimOJw7LWx38Opz7Clb37jHTy19ysbaiEAi6LMppeh/afE/2Z
-         7+7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=tIBM3YfgmPp7U8f9ccRVjiScdQ5ht2L/cW+n6qhI3xc=;
-        b=NSlN7640J6J1AipgPrrEZ+LjiQNrzp0xNHaR6sUzJPmKo/4+VJsmv848Pk8KVWxOqY
-         W+M9mDIX8/CPEmQxJgLcHssNwfOCRVqZRzylWpyu1/4/auxaUH5HW9oOUO5fo8B1mgHn
-         ANEmrtXPrFI8EAMMoq9pmKOSGs12Ac9WhKyIDm0bYym3FiuOhLTR7N0sJ6xXR8pQtdfs
-         nU3bLSosAHf+sJTg5OtC+DmPWhj/A6HbWuZN7/cTEfn8Klyadts+HHFE5uVmigbJQUep
-         YzuWBU7a1X9mCXwqCPwmnI+spp5WhxXqIfVQ4FnLPpNcZyfIJC2fdpcNOZYqDsZWF8hE
-         ghrA==
-X-Gm-Message-State: AJIora9TXH4ht3/lLFOIq4C4Nu4IVE+BHkYygfX5/fjYAump6zK4Z+T0
-        bdwVKklLi2DVrILk6hK5oMa0uIBj19aDAVTB3Q==
-X-Google-Smtp-Source: AGRyM1uMbpWyeRPaYBKWgwfiN9eWE6DT9CoW3l+aLTwC6kJww0K6oQ9sU7MvSHntmxMdWn4Yb/6vYz0HC6Fa1qoqbMs=
-X-Received: by 2002:a05:651c:1796:b0:25d:7288:ed0b with SMTP id
- bn22-20020a05651c179600b0025d7288ed0bmr2142081ljb.228.1659164898266; Sat, 30
- Jul 2022 00:08:18 -0700 (PDT)
+        Sat, 30 Jul 2022 03:12:57 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88591057D
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 00:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659165176; x=1690701176;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BjTz33VUCpSWyNzU1m6MbUil6IHpSrNpZrg6F4zTKwU=;
+  b=Gyj52Ji08ZYENfO3H2Tidx3iLVKEfSfeutGF/JtVNhnZu6Ek1rkFB+vE
+   WeLZxzJSEg8aYQGWp2F29HEZEqqayakGKm/C7dFOgJV+Fm4wD/GxBrtV1
+   O2Y7vdtoiYMUXTM8LqCSbU8h//68kBQfAkaiEp9Rwz80SOfYLBS+0coDl
+   sZM0x/mi59ERgGbPSZAuDHS16BaYsblOvQPwzc+9brGPLvexZy9p1l/IZ
+   EjcLYJQNW7GvCJoRxV+paS6F7AGHwQR+hkx+3s8Y/LtB1XkKV+WoGiQVT
+   XmlrbdHjCcfK882DSqJYSGHi4VGwIpN6UZC1NBtQsle4tFMdvitx3jYPc
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="350602529"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="350602529"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 00:12:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="743760428"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jul 2022 00:12:55 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHgec-000CaD-2A;
+        Sat, 30 Jul 2022 07:12:54 +0000
+Date:   Sat, 30 Jul 2022 15:12:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ ea304a8b89fd0d6cf94ee30cb139dc23d9f1a62f
+Message-ID: <62e4d9f5.c6yiRVhprsJgCM+5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220729075519.4665-1-stanley.chu@mediatek.com> <7e8c58cf-64c1-8426-bf22-97d3df85ed38@acm.org>
-In-Reply-To: <7e8c58cf-64c1-8426-bf22-97d3df85ed38@acm.org>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Sat, 30 Jul 2022 15:08:05 +0800
-Message-ID: <CAGaU9a_G1kH8VezozhZ3-S6-GvMr=EUVc4btU8Dwdo+cCJDxUg@mail.gmail.com>
-Subject: Re: [PATCH v1] scsi: ufs: Fix ufshcd_scale_clks decision in recovery flow
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>, alim.akhtar@samsung.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        peter.wang@mediatek.com, Chun-Hung Wu <chun-hung.wu@mediatek.com>,
-        alice.chao@mediatek.com, powen.kao@mediatek.com,
-        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, eddie.huang@mediatek.com,
-        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: ea304a8b89fd0d6cf94ee30cb139dc23d9f1a62f  docs/kernel-parameters: Update descriptions for "mitigations=" param with retbleed
 
-On Sat, Jul 30, 2022 at 4:12 AM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 7/29/22 00:55, Stanley Chu wrote:
-> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> > index 581d88af07ab..dc57a7988023 100644
-> > --- a/drivers/ufs/core/ufshcd.c
-> > +++ b/drivers/ufs/core/ufshcd.c
-> > @@ -1574,8 +1574,6 @@ static ssize_t ufshcd_clkscale_enable_store(struc=
-t device *dev,
-> >       ufshcd_rpm_get_sync(hba);
-> >       ufshcd_hold(hba, false);
-> >
-> > -     hba->clk_scaling.is_enabled =3D value;
-> > -
-> >       if (value) {
-> >               ufshcd_resume_clkscaling(hba);
-> >       } else {
-> > @@ -1586,6 +1584,8 @@ static ssize_t ufshcd_clkscale_enable_store(struc=
-t device *dev,
-> >                                       __func__, err);
-> >       }
-> >
-> > +     hba->clk_scaling.is_enabled =3D value;
-> > +
-> >       ufshcd_release(hba);
-> >       ufshcd_rpm_put_sync(hba);
-> >   out:
-> > @@ -7259,7 +7259,8 @@ static int ufshcd_host_reset_and_restore(struct u=
-fs_hba *hba)
-> >       hba->silence_err_logs =3D false;
-> >
-> >       /* scale up clocks to max frequency before full reinitialization =
-*/
-> > -     ufshcd_scale_clks(hba, true);
-> > +     if (ufshcd_is_clkscaling_supported(hba) && hba->clk_scaling.is_en=
-abled)
-> > +             ufshcd_scale_clks(hba, true);
-> >
-> >       err =3D ufshcd_hba_enable(hba);
->
-> I see a race condition between the hba->clk_scaling.is_enabled check in
-> ufshcd_host_reset_and_restore() and the code that sets
-> ufshcd_clkscale_enable_store(). Shouldn't the code in
-> ufshcd_host_reset_and_restore() that scales up the clocks be serialized
-> against ufshcd_clkscale_enable_store()?
+elapsed time: 712m
 
-Both check and set paths are serialized by hba->host_sem currently.
+configs tested: 75
+configs skipped: 4
 
-Would I miss any other unserialized paths?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks,
-Stanley
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+i386                                defconfig
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+x86_64                           allyesconfig
+arc                  randconfig-r043-20220729
+i386                             allyesconfig
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a015
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a001
+x86_64                        randconfig-a004
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a002
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a013
+i386                          randconfig-a003
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a006
+arm                                 defconfig
+ia64                             allmodconfig
+arm                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+powerpc                      bamboo_defconfig
+m68k                          hp300_defconfig
+sh                              ul2_defconfig
+nios2                               defconfig
+sh                         ecovec24_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arm                         lpc18xx_defconfig
+powerpc                 mpc8540_ads_defconfig
+xtensa                    xip_kc705_defconfig
+i386                          randconfig-c001
+powerpc                      pcm030_defconfig
+m68k                                defconfig
+mips                         tb0226_defconfig
+sh                     sh7710voipgw_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
 
+clang tested configs:
+hexagon              randconfig-r041-20220729
+riscv                randconfig-r042-20220729
+s390                 randconfig-r044-20220729
+i386                          randconfig-a013
+x86_64                        randconfig-a014
+i386                          randconfig-a011
+i386                          randconfig-a015
+i386                          randconfig-a002
+x86_64                        randconfig-a005
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+hexagon              randconfig-r045-20220729
+x86_64                        randconfig-k001
+mips                     loongson1c_defconfig
+arm                         palmz72_defconfig
 
->
-> Thanks,
->
-> Bart.
-
-
-
---=20
-Yours truly,
-
-=E6=9C=B1=E5=8E=9F=E9=99=9E (Stanley Chu)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

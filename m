@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBD7585AB5
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 16:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32790585AC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 16:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234415AbiG3OXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 10:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S234800AbiG3O1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 10:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbiG3OXn (ORCPT
+        with ESMTP id S231912AbiG3O1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 10:23:43 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A013FA3;
-        Sat, 30 Jul 2022 07:23:42 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id y13so3619290ilv.5;
-        Sat, 30 Jul 2022 07:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Voqu6aJRMeEVOlwvE2Se+YOjP0roD05uM97alfr1h0Q=;
-        b=MX7F5L/LWJMPs2QHSwZwzmP4Y6xVwFQp8GJCkHXhb7CGqUJa7+vf8kRe4DXN0f62qU
-         a+g7LFZfWpWd7Xyq/BV2lvmBrpq6aoaE7hj+etBbwBk4WyceBQcdNtH301NfavcfY1c7
-         jFO8+eVuVeb0+snB8izWnwQpKIlBYF1GtKRXyQX6wl5WqBtgBzrVFHsoIwRtLTzpyc9l
-         ZkULh3EpTqRi+wmJUrvSeNgPuYboJy1p+X/xr3NrFEtWJ68y5F8SK6k1iAt7q6BEVH4i
-         azqGvDkB9fHhjPWC82oEQ5O97iM+SEwL0qGfqGC3k/nyJ8PYviGWUTVxUoYOEXdTvlvT
-         eG6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Voqu6aJRMeEVOlwvE2Se+YOjP0roD05uM97alfr1h0Q=;
-        b=uopa3dGFBt/AGvpki49oXINF6ihVRi98dYNJgxLA4ix/LpY+xEa0WCD56LQWwPb75w
-         9VanUjq1+pcipJ2YerPSwU/H2QQY5ecUhwxP03k6TB7Dq9XTFIGuNnpDKYYagH7jJ5ZV
-         YbWClFQXzutOcJM2K2oD84JL8DR657BZNJ/qlspRE8SQ1nxEbYyaEEssJjd2pOcGb594
-         kqtIrbZVHbm2Kxy7ClTe6xQt89v8Me9leWhjmLIQQ0tSFThxSL6je1iejQfuopCcd5Oh
-         vcm5id/QheWZlkKSFJTNCvSXzKJSIztSkM2vbuNkQPOmtGWvH3Ydox//yn2Miv1BDEMc
-         H7jg==
-X-Gm-Message-State: AJIora/h2mRfFurB3sLwJ1MnBMlDRi3lNWgXbWxUFOSMJnpX/T3qWC5H
-        gjAtPtpp6ElLD5LtjmnD2fyAJezyq0A=
-X-Google-Smtp-Source: AGRyM1sHoqCRGd+RA6qoOLRK20en+E/bcTFuyjB7xzm3eFF9tkeNeqofLeVur/DL9Sp8bhxqzCZYeg==
-X-Received: by 2002:a05:6e02:1ca5:b0:2dd:77a2:7d71 with SMTP id x5-20020a056e021ca500b002dd77a27d71mr3164913ill.256.1659191021792;
-        Sat, 30 Jul 2022 07:23:41 -0700 (PDT)
-Received: from localhost.localdomain (wnpgmb0311w-ds01-45-179-115.dynamic.bellmts.net. [206.45.179.115])
-        by smtp.gmail.com with ESMTPSA id q25-20020a05663810d900b00339c33df66bsm2991083jad.118.2022.07.30.07.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 07:23:40 -0700 (PDT)
-From:   jassisinghbrar@gmail.com
-To:     robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sudeep.holla@arm.com
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Jassi Brar <jaswinder.singh@linaro.org>
-Subject: [PATCH] arm64: dts: juno: Add missing MHU secure-irq
-Date:   Sat, 30 Jul 2022 09:23:36 -0500
-Message-Id: <20220730142336.484564-1-jassisinghbrar@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 30 Jul 2022 10:27:47 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B60CE06;
+        Sat, 30 Jul 2022 07:27:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659191212; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SAUGBqtTPPsBVHkBh7EoelJATuSg1N7cqwnqy5Z7YBLMdTcqdmzYarUFVC237VeFKLG8+AnxBZSkWjKTqYxYcJIWpaB0RzNHYLi6SxJIU0EON7ILGxexFbe2O7xHicsTFO8wgiWj6OIZqmDolmrLMpSMrdMZfnYiLJnitFQxJrk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1659191212; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=5UYaQfx7z0yBiGs6s5UW81nUMgZe1dH+iL0ZD0KuhhI=; 
+        b=cdKctPWY2yJQnzf2ZR02VVd9MfaZpUhZmEJQZpb9F7cwbSCS4ZrJrrk6H9piBMeNDyXAyq1XRcZ2PG7drihb1lY7/hVTBIsnYTQCOGEJgFS2q6oRAt5GMOkqEEyCsaxTu14d3y9bgngzlgJAS/nCngJcl80FvGoIPV8dmPThMSc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659191212;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=5UYaQfx7z0yBiGs6s5UW81nUMgZe1dH+iL0ZD0KuhhI=;
+        b=FY8DNQtUB587XaroZ04z2bQAOwuKA5Jm1EDr8xgbqfIdLV3aM8uccPhHU7Ae+D80
+        ShtvEobEDTvHWRDFoAsFnemNV6hPzdhdi4Fa30vuY9UeLaE4DoVG/5INj0cy9ezy/b/
+        iEqmGAsjjRjoo8JMtDoPZ786hfR0Vdd1pempKzqQ=
+Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1659191208836227.26789536942294; Sat, 30 Jul 2022 07:26:48 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH 0/4] completely rework mediatek,mt7530 binding
+Date:   Sat, 30 Jul 2022 17:26:23 +0300
+Message-Id: <20220730142627.29028-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jassi Brar <jaswinder.singh@linaro.org>
+Hello.
 
-The MHU secure interrupt exists physically but is missing in the DT node.
+This patch series brings complete rework of the mediatek,mt7530 binding.
 
-Specify the interrupt in DT node to fix a warning on Arm Juno board:
-   mhu@2b1f0000: interrupts: [[0, 36, 4], [0, 35, 4]] is too short
+The binding is checked with "make dt_binding_check
+DT_SCHEMA_FILES=mediatek,mt7530.yaml".
 
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
----
- arch/arm64/boot/dts/arm/juno-base.dtsi | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
+MT7623AI SoC, let me know. I'll add it to the examples.
 
-diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
-index f6c55877fbd94..3220a00e9500d 100644
---- a/arch/arm64/boot/dts/arm/juno-base.dtsi
-+++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
-@@ -26,9 +26,11 @@ mailbox: mhu@2b1f0000 {
- 		compatible = "arm,mhu", "arm,primecell";
- 		reg = <0x0 0x2b1f0000 0x0 0x1000>;
- 		interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-+			     <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
- 		interrupt-names = "mhu_lpri_rx",
--				  "mhu_hpri_rx";
-+				  "mhu_hpri_rx",
-+				  "mhu_secure_rx";
- 		#mbox-cells = <1>;
- 		clocks = <&soc_refclk100mhz>;
- 		clock-names = "apb_pclk";
--- 
-2.25.1
+If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
+
+Arınç ÜNAL (4):
+  dt-bindings: net: dsa: mediatek,mt7530: make trivial changes
+  dt-bindings: net: dsa: mediatek,mt7530: update examples
+  dt-bindings: net: dsa: mediatek,mt7530: update binding description
+  dt-bindings: net: dsa: mediatek,mt7530: update json-schema
+
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 1006 +++++++++++++-----
+ 1 file changed, 764 insertions(+), 242 deletions(-)
+
 

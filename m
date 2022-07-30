@@ -2,113 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553B4585C1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B916E585C27
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbiG3Ujd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 16:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S235945AbiG3Uvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 16:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiG3Ujc (ORCPT
+        with ESMTP id S232779AbiG3Uvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 16:39:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C4E5FEA
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659213571; x=1690749571;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KvxAf4qju8TdniXwWPhW+k++yayht8UzKyk/cBl/fno=;
-  b=eNalnF/hh4Ks5uYvKto1nQ1kONValuN/7kTzyY3hlNxqOPYsUzQ0Oyap
-   9hKYEZdj9qJPCwaeT16yVyk+xLzeuJghJmoCLLr7MKG+4hxY7Gu4lAqJR
-   vk3Wt+XX14U7HptDqPK5SpQanlj3+iFDQ0MFBz5W5zSF6SS+EhKkzbIlC
-   Nx47Ig3Ef3dXNxo9OXU+c7t5eFlh6WJq3yxtNRb1Jne36BDk3Mr0PeUKs
-   BZJzJelK+Jmsdn7z+coy9vbBnEwHeSp4dhlIbx8PWIVoq3dY9Fusfhvv9
-   Hqy2jS0gHyvHqa5M+PlCfd2y7/FM6HYw6UL///Rpo61jNwojwz5oeBOMA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269327746"
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="269327746"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:39:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="552093013"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 13:39:29 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHtFA-000DJR-1p;
-        Sat, 30 Jul 2022 20:39:28 +0000
-Date:   Sun, 31 Jul 2022 04:38:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
-Subject: [atishp04:kvm_perf_rfc_snapshot 21/25]
- arch/riscv/kvm/vcpu_sbi_pmu.c:66:15: warning: no previous prototype for
- function 'kvm_sbi_ext_pmu_probe'
-Message-ID: <202207310426.hXMc5CaM-lkp@intel.com>
+        Sat, 30 Jul 2022 16:51:48 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F85E15FF5
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:51:46 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id n133so9251479oib.0
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PfxXgTMaVS1zqBOtxdrAodGDk/WO8mfNukzFQAlkbhk=;
+        b=bFLTwariZNRkilzCw5raT6AzKzOsusiXV3i+15LhXJfcdkp7moS7eVfDi8czUIqSMD
+         q46pidbcp2sYbHkY49jtfkhS0BpFJc6+sMchHZ5Asf5mHQF3P53trVPoIu5LJC799eG3
+         +e4rMHjqU/2tZOiCixpqEA84rH4XlkWr4YgI7SIG8SUVrrEyL8XCIqKMfcC1xiPqVfjn
+         KptZxjKyJ1qIQKHzl3ZO6+LnTuzlfDwAB4YuWD67V3GukE8HSTc39HiVmy2rFhmH164W
+         X6fygSdB1Fa9TUF0AjmAP5fQ2AQK5n7ZZSrimT1R1+4/CkC6hes1Yom903JwjhnQqSgz
+         c/KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PfxXgTMaVS1zqBOtxdrAodGDk/WO8mfNukzFQAlkbhk=;
+        b=qEvnU4GLTQXxNoUdmg24x8gMZq1BNHYB8QafztirriGetyG2B+RKcybSsmItvvEBjm
+         E7ZUWBzZONZ/5zPaX+KDuBZTxQdpCrHFBbE+X8aolTK8A6RmgPWoUljq0UK8pSQv82oK
+         Y5N4fbOJ15v7z3Qyj/SS9NM7UzvpM8w484073iTBouGIPI0qFcI8+8YIMJ+vgHOeNrUF
+         kbLVFWXXR/7Y1sJ52nURtc9+tIwbUr567hTbJhspUTOuOX+WrE4tc5qeU/NzqM6+EYLN
+         YoSmTaZ8wmw0lzt+OFH1RemBbTCHi7G7Jj1Tpbh2wmMe8gIsmZCRnWJYnMarhu0evrSx
+         rUSA==
+X-Gm-Message-State: AJIora9xfoBlcm0BHC2EnTt0HN2XFCQ4dpJ09BIuAQYLHsc+ddne44oC
+        7Ibb1vzoZ7jPNlNbaksfpJj/RQ==
+X-Google-Smtp-Source: AGRyM1szfJX93ss/HfclQjRE1Hfq7DtLy6G+zPjwpChbPiKbGBSVK0Ip/q5VuGsl5gqcqQd+GaSH/g==
+X-Received: by 2002:aca:1103:0:b0:33a:c295:f483 with SMTP id 3-20020aca1103000000b0033ac295f483mr4503829oir.80.1659214305960;
+        Sat, 30 Jul 2022 13:51:45 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id v35-20020a056830092300b0061c9ccb051bsm1911249ott.37.2022.07.30.13.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Jul 2022 13:51:45 -0700 (PDT)
+Message-ID: <444b9cdc-c536-9f7d-1e80-31cb9b9a155f@kali.org>
+Date:   Sat, 30 Jul 2022 15:51:43 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: Add LID
+ switch
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220730193617.1688563-1-bjorn.andersson@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20220730193617.1688563-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux kvm_perf_rfc_snapshot
-head:   42182a0a79a8768e22fd70232c3aca2bc1a26a43
-commit: 657de0362946d389f50e8b65f72da5f5ba0be1da [21/25] RISC-V: KVM: Add SBI PMU extension support
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20220731/202207310426.hXMc5CaM-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/atishp04/linux/commit/657de0362946d389f50e8b65f72da5f5ba0be1da
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_perf_rfc_snapshot
-        git checkout 657de0362946d389f50e8b65f72da5f5ba0be1da
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 7/30/22 2:36 PM, Bjorn Andersson wrote:
+> Add gpio-keys for exposing the LID switch state.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 25 +++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 84dc92dda0b8..f3246cc13d15 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -7,6 +7,8 @@
+>   /dts-v1/;
+>   
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/gpio-keys.h>
+> +#include <dt-bindings/input/input.h>
+>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>   
+>   #include "sc8280xp.dtsi"
+> @@ -26,6 +28,21 @@ backlight {
+>   		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
+>   	};
+>   
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&hall_int_state>;
+> +
+> +		switch-lid {
+> +			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
+> +			linux,input-type = <EV_SW>;
+> +			linux,code = <SW_LID>;
+> +			wakeup-source;
+> +			wakeup-event-action = <EV_ACT_DEASSERTED>;
+> +		};
+> +	};
+> +
+>   	vreg_edp_bl: regulator-edp-bl {
+>   		compatible = "regulator-fixed";
+>   
+> @@ -347,6 +364,14 @@ reset {
+>   		};
+>   	};
+>   
+> +	hall_int_state: hall-int-state {
+> +		pins = "gpio107";
+> +		function = "gpio";
+> +
+> +		input-enable;
+> +		bias-disable;
+> +	};
+> +
+>   	qup0_i2c4_default: qup0-i2c4-default-state {
+>   		pins = "gpio171", "gpio172";
+>   		function = "qup4";
 
-All warnings (new ones prefixed by >>):
+Tested on the Lenovo Thinkpad X13s
 
->> arch/riscv/kvm/vcpu_sbi_pmu.c:66:15: warning: no previous prototype for function 'kvm_sbi_ext_pmu_probe' [-Wmissing-prototypes]
-   unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
-                 ^
-   arch/riscv/kvm/vcpu_sbi_pmu.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
-   ^
-   static 
-   1 warning generated.
+Tested-by: Steev Klimaszewski <steev@kali.org>
 
-
-vim +/kvm_sbi_ext_pmu_probe +66 arch/riscv/kvm/vcpu_sbi_pmu.c
-
-    65	
-  > 66	unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
-    67	{
-    68		/*
-    69		 * PMU Extension is only available to guests if privilege mode filtering
-    70		 * is available. Otherwise, guest will always count events while the
-    71		 * execution is in hypervisor mode.
-    72		 */
-    73		return riscv_isa_extension_available(NULL, SSCOFPMF);
-    74	}
-    75	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

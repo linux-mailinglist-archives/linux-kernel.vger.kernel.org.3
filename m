@@ -2,135 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9945858D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 08:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19F85858D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 08:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiG3GPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 02:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S230450AbiG3GRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 02:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiG3GPU (ORCPT
+        with ESMTP id S229534AbiG3GRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 02:15:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1130711818
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 23:15:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 520CDB81985
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 06:15:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDADDC433B5
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 06:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659161715;
-        bh=RHv7364h8RAOXghrt1coIfVoYhEmFs63PA0mfoezzCw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UEeXBUJGAwW5LJP3dcW25l7pM+EqiUYakxP9UBATmxJICe7qlBAkJ4zUUQS2yZSrv
-         /PTre8UKjlffm2hkg+NTlzK3QhhKR8+9uM1kZaVYFt+lYcy9NysUB8CFXjQa79Unuo
-         IA57EthVRQq7ISSf14hiMdiyVlzo0RdeoDI2ERevq8w43vPPfrIpW186CQn/JrEKOR
-         WtKmeJXmhoEpEPGJA6YkuLRyfRpuX4TElM8Nkk9mHkF3fwLFRVH9a7aq583LWKlXt8
-         ZFqQZZVhSwZI2tONOgtY1o+wHx/yNiw8PX+oEI4iPVj0M3i4UvIJRGkAx0qfRb+Gi7
-         T3GCybmMia0iA==
-Received: by mail-vk1-f181.google.com with SMTP id n15so3216551vkk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 23:15:15 -0700 (PDT)
-X-Gm-Message-State: AJIora//zJmtYFAnUb7WU9/jUGe9RGsEkDqeg+VozYp3l5gF519Zocy9
-        fTKp5AzmKAA3rHn/n4487Lrc8F7gQraO8WWloV8=
-X-Google-Smtp-Source: AGRyM1uPLeGWkU97cxykVCrWRZtBbraWV7ziZHlJYh+c6IqzKaMbvH4SpoLBUC6Jby/jXVKbdi5pCTRAx+JAIz7YljI=
-X-Received: by 2002:a1f:9b90:0:b0:374:f09c:876f with SMTP id
- d138-20020a1f9b90000000b00374f09c876fmr2842092vke.12.1659161714812; Fri, 29
- Jul 2022 23:15:14 -0700 (PDT)
+        Sat, 30 Jul 2022 02:17:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D443641D2F
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Jul 2022 23:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659161866; x=1690697866;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=oFW1VFvsvwUQ1O2ptLBiOxnNK5bxa7Wr2RcCeO0TdgM=;
+  b=ikles8eM3whUGVMDpjNmXqRSyEa7pDlOJxta68IgjWRXgAOz/x0jM51Y
+   hz04L57zc1yqADzZpPyiPt3DOYFDCl3X7Nr3kdPARcVzT3nm3GTn+5dwo
+   chUczu/UPuQSuheHsKVRq51Q9+pr5PnjWtOhf2EsMFNWljqJC2b8QBreP
+   U3YEuvkn5rZFclRtQREM/Xc75+3rs5uFtEtfgXH+vhDSXrXxLjMwVFtCG
+   91qlu7Ru3HfPe3zz7YWbNF0kqpVaPejeuWjC4uQVFJrn+gITz4+F2PPi/
+   FFyQu7SInaf9IfFh6w/Zh8+FNYC1Np6uqCekpV5KG+DJ1WasnTMCk+S51
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="286450692"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="286450692"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 23:17:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="660516517"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.210.174]) ([10.254.210.174])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 23:17:42 -0700
+Message-ID: <01a591dc-4918-3c8d-e3f4-b4b738919ee5@linux.intel.com>
+Date:   Sat, 30 Jul 2022 14:17:40 +0800
 MIME-Version: 1.0
-References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
- <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn> <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
- <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
- <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
- <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn> <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
- <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site> <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
-In-Reply-To: <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 30 Jul 2022 14:14:59 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7WxRp4u1iBs47LN1Sj3rDBdbLv1u7EpSt0Bt4QuhFSXQ@mail.gmail.com>
-Message-ID: <CAAhV-H7WxRp4u1iBs47LN1Sj3rDBdbLv1u7EpSt0Bt4QuhFSXQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Youling Tang <tangyouling@loongson.cn>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Lulu Cheng <chenglulu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        "Zhu, Tony" <tony.zhu@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
+ <20220705050710.2887204-5-baolu.lu@linux.intel.com>
+ <20220723141118.GD79279@nvidia.com>
+ <686b137f-232a-2a78-beb0-e4373bd20959@linux.intel.com>
+ <20220725144005.GE3747@nvidia.com>
+ <6da27a6b-b580-4ba4-24c8-ebdfb2d9345d@linux.intel.com>
+ <20220726135722.GC4438@nvidia.com>
+ <BN9PR11MB5276974ABA5981A7361953708C979@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220727115339.GM4438@nvidia.com>
+ <BN9PR11MB52766C3D37FA985DEBDC30C78C969@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <YuJ6MXoNTj0RKCb8@nvidia.com>
+ <78376ca4-9b55-7609-abf1-27a1a376a8e0@linux.intel.com>
+ <BN9PR11MB52761058CFCB9397F6A73A958C999@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <64667345-7f7f-74ec-215a-f2d36be0f9ce@linux.intel.com>
+ <BN9PR11MB5276ED7CE0C8CE192B4EACB68C999@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
+ interface
+In-Reply-To: <BN9PR11MB5276ED7CE0C8CE192B4EACB68C999@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+On 2022/7/29 12:22, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Friday, July 29, 2022 11:21 AM
+>>
+>> On 2022/7/29 10:56, Tian, Kevin wrote:
+>>>> +static bool iommu_group_device_pasid_viable(struct iommu_group
+>> *group,
+>>>> +					    struct device *dev)
+>>>> +{
+>>>> +	int count;
+>>>> +
+>>>> +	count = iommu_group_device_count(group);
+>>>> +	if (count != 1)
+>>>> +		return false;
+>>>> +
+>>>> +	/*
+>>>> +	 * Block PASID attachment in cases where the PCI fabric is
+>>>> +	 * routing based on address. PCI/ACS disables that.
+>>>> +	 */
+>>>> +	if (dev_is_pci(dev))
+>>>> +		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
+>>>> +					    REQ_ACS_FLAGS);
+>>> I think we are leaning toward doing above check in pci_enable_pasid().
+>>> Then no singleton check inside iommu core.
+>>
+>> The iommu grouping also considers other things, like PCI alias. There
+>> are many calls of pci_add_dma_alias() in drivers/pci/quirks.c.
+>> Therefore, I believe that pci_acs_path_enabled() returning true doesn't
+>> guarantees a singleton group.
+> 
+> Is there an actual problem of sharing PASID table between aliasing RIDs?
+> As long as ACS is enabled the device is isolated from other devices
+> in the fabric. DMA aliases don't change that fact and there is no p2p
+> between aliasing RIDs.
 
-On Sat, Jul 30, 2022 at 10:53 AM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Sat, 2022-07-30 at 10:24 +0800, Xi Ruoyao wrote:
-> > On Sat, 2022-07-30 at 01:55 +0800, Xi Ruoyao wrote:
-> > > On Fri, 2022-07-29 at 20:19 +0800, Youling Tang wrote:
-> > >
-> > > > On 07/29/2022 07:45 PM, Xi Ruoyao wrote:
-> > > > > Hmm... The problem is the "addresses" of per-cpu symbols are
-> > > > > faked: they
-> > > > > are actually offsets from $r21.  So we can't just load such an
-> > > > > offset
-> > > > > with PCALA addressing.
-> > > > >
-> > > > > It looks like we'll need to introduce an attribute for GCC to
-> > > > > make
-> > > > > an
-> > > > > variable "must be addressed via GOT", and add the attribute into
-> > > > > PER_CPU_ATTRIBUTES.
-> > >
-> > > > Yes, we need a GCC attribute to specify the per-cpu variable.
-> > >
-> > > GCC patch adding "addr_global" attribute for LoongArch:
-> > > https://gcc.gnu.org/pipermail/gcc-patches/2022-July/599064.html
-> > >
-> > > An experiment to use it:
-> > > https://github.com/xry111/linux/commit/c1d5d70
-> >
-> > Correction: https://github.com/xry111/linux/commit/c1d5d708
-> >
-> > It seems 7-bit SHA is not enough for kernel repo.
->
-> If addr_global is rejected or not implemented (for example, building the
-> kernel with GCC 12), *I expect* the following hack to work (I've not
-> tested it because I'm AFK now).  Using visibility in kernel seems
-> strange, but I think it may make some sense because the modules are some
-> sort of similar to an ELF shared object being dlopen()'ed, and our way
-> to inject per-CPU symbols is analog to ELF interposition.
-Sadly, I don't know what visibility is, does it have something to do
-with __visible in include/linux/compiler_attributes.h?
+Yes. Agreed.
 
-Huacai
->
-> arch/loongarch/include/asm/percpu.h:
->
->    #if !__has_attribute(__addr_global__) && defined(MODULE)
->    /* Magically remove "static" for per-CPU variables.  */
->    # define ARCH_NEEDS_WEAK_PER_CPU
->    /* Force GOT-relocation for per-CPU variables.  */
->    # define PER_CPU_ATTRIBUTES __attribute__((__visibility__("default")))
->    #endif
->
-> arch/loongarch/Makefile:
->
->    # Hack for per-CPU variables, see PER_CPU_ATTRIBUTES in
->    # include/asm/percpu.h
->    if (call gcc-does-not-support-addr-global)
->      KBUILD_CFLAGS_MODULE += -fPIC -fvisibility=hidden
->    endif
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
->
+At present, the visible PASID use cases only occur on the singleton
+groups, so we can start to support it from this simple situation. In the
+future, if the multi-device groups need to support pasid, we can simply
+apply the domain to the PASIDs of all device of the group.
+
+> 
+>>
+>>>
+>>> Presumably similar check can be done in DT/ACPI path of enabling pasid?
+>>>
+>>
+>> I can't find the pasid (or anything similar) enabling interfaces for
+>> DT or ACPI. They are device specific?
+>>
+> 
+> Looks only PCI PASID is supported so far. both in Intel/ARM/AMD
+> drivers. If other buses will support PASID one day, then ACS-equivalent
+> can be also checked in their PASID enabling APIs.
+
+Yes. Fair enough.
+
+Best regards,
+baolu

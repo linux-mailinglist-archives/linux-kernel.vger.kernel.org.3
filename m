@@ -2,234 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A93585825
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9F0585827
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 05:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239933AbiG3DHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Jul 2022 23:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S239825AbiG3DJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Jul 2022 23:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbiG3DG2 (ORCPT
+        with ESMTP id S230251AbiG3DJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Jul 2022 23:06:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C4B50182;
-        Fri, 29 Jul 2022 20:06:27 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lvq1d4rsSzWfNG;
-        Sat, 30 Jul 2022 11:02:29 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 30 Jul 2022 11:06:25 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 30 Jul 2022 11:06:24 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <colin.i.king@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>
-CC:     <pc@us.ibm.com>, <yhs@fb.com>, <andrii.nakryiko@gmail.com>,
-        <songliubraving@fb.com>, <yangjihong1@huawei.com>
-Subject: [PATCH v2 7/7] perf kwork: Add some {} for multiline for/if blocks
-Date:   Sat, 30 Jul 2022 11:03:35 +0800
-Message-ID: <20220730030335.78203-8-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20220730030335.78203-1-yangjihong1@huawei.com>
-References: <20220730030335.78203-1-yangjihong1@huawei.com>
+        Fri, 29 Jul 2022 23:09:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E74E50064;
+        Fri, 29 Jul 2022 20:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659150558; x=1690686558;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=k15e640Ac5kBV2qmOLkobhBC26rzlrHl47y6EDbeQTU=;
+  b=bpg02TieQr4xZRmsKBtyUrZ+8Gc1UlnJf6rPTRY9z9Z+GIqrebaTDx6M
+   zlwffe6ZIyKiGgMvKBvg9YXTqep9M1vlKXIy7K8Sp4VzOnOpZ+CNZL5SX
+   ZpQXVM4Izsjp8kaw6TccwXeV9xSwZtnlHhC2f5DgrTIcE+6BZdtJWrBDf
+   zXMbLFdSFvhs//rUI6vLe8TrLb4E9HHB6jPVfemsWypryRu8O7wzFGj4G
+   s08NaherMZWBbctLLRsPCuVGJwsxvVV9cDyK/3Nuc4fMu+JWhAinzV0DD
+   ePqaG02+ov9N5eu+aMc/SYfV5gEJBPiSE1JchvEkS/PCN7dwLt9AFDv6D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="288898755"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="288898755"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 20:09:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="928953118"
+Received: from abdulra4-mobl.gar.corp.intel.com ([10.214.159.26])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2022 20:09:15 -0700
+Message-ID: <9c1937c1d7ab7687412c15c26532aea258aec078.camel@intel.com>
+Subject: Re: [PATCH] thermal: intel: Add TCC cooling support for Alder
+ Lake-N and Raptor Lake-P
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Sat, 30 Jul 2022 11:09:59 +0800
+In-Reply-To: <20220728175456.2796-1-sumeet.r.pawnikar@intel.com>
+References: <20220728175456.2796-1-sumeet.r.pawnikar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suggested-by: Arnaldo Carvalho de Melo <acme@kernel.org>
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/builtin-kwork.c | 47 ++++++++++++++++++++++----------------
- 1 file changed, 27 insertions(+), 20 deletions(-)
+On Thu, 2022-07-28 at 23:24 +0530, Sumeet Pawnikar wrote:
+> Add Alder Lake-N and Raptor Lake-P to the list of processor models
+> supported by the Intel TCC cooling driver.
+>=20
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 
-diff --git a/tools/perf/builtin-kwork.c b/tools/perf/builtin-kwork.c
-index 33bcab2aafcd..f33666ca3ee6 100644
---- a/tools/perf/builtin-kwork.c
-+++ b/tools/perf/builtin-kwork.c
-@@ -177,9 +177,10 @@ static void setup_sorting(struct perf_kwork *kwork,
- 
- 	for (tok = strtok_r(str, ", ", &tmp);
- 	     tok; tok = strtok_r(NULL, ", ", &tmp)) {
--		if (sort_dimension__add(kwork, tok, &kwork->sort_list) < 0)
-+		if (sort_dimension__add(kwork, tok, &kwork->sort_list) < 0) {
- 			usage_with_options_msg(usage_msg, options,
- 					       "Unknown --sort key: `%s'", tok);
-+		}
- 	}
- 
- 	pr_debug("Sort order: %s\n", kwork->sort_order);
-@@ -656,8 +657,9 @@ static void timehist_print_event(struct perf_kwork *kwork,
- 		work->class->work_name(work, kwork_name,
- 				       PRINT_KWORK_NAME_WIDTH);
- 		printf(" %-*s ", PRINT_KWORK_NAME_WIDTH, kwork_name);
--	} else
-+	} else {
- 		printf(" %-*s ", PRINT_KWORK_NAME_WIDTH, "");
-+	}
- 
- 	/*
- 	 *runtime
-@@ -669,11 +671,12 @@ static void timehist_print_event(struct perf_kwork *kwork,
- 	/*
- 	 * delaytime
- 	 */
--	if (atom->prev != NULL)
-+	if (atom->prev != NULL) {
- 		printf(" %*.*f ", PRINT_LATENCY_WIDTH, RPINT_DECIMAL_WIDTH,
- 		       (double)(atom->time - atom->prev->time) / NSEC_PER_MSEC);
--	else
-+	} else {
- 		printf(" %*s ", PRINT_LATENCY_WIDTH, " ");
-+	}
- 
- 	/*
- 	 * callchain
-@@ -761,9 +764,10 @@ static int process_irq_handler_entry_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->entry_event)
-+	if (kwork->tp_handler->entry_event) {
- 		return kwork->tp_handler->entry_event(kwork, &kwork_irq,
- 						      evsel, sample, machine);
-+	}
- 	return 0;
- }
- 
-@@ -774,9 +778,10 @@ static int process_irq_handler_exit_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->exit_event)
-+	if (kwork->tp_handler->exit_event) {
- 		return kwork->tp_handler->exit_event(kwork, &kwork_irq,
- 						     evsel, sample, machine);
-+	}
- 	return 0;
- }
- 
-@@ -832,10 +837,10 @@ static int process_softirq_raise_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->raise_event)
-+	if (kwork->tp_handler->raise_event) {
- 		return kwork->tp_handler->raise_event(kwork, &kwork_softirq,
- 						      evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -846,10 +851,10 @@ static int process_softirq_entry_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->entry_event)
-+	if (kwork->tp_handler->entry_event) {
- 		return kwork->tp_handler->entry_event(kwork, &kwork_softirq,
- 						      evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -860,10 +865,10 @@ static int process_softirq_exit_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->exit_event)
-+	if (kwork->tp_handler->exit_event) {
- 		return kwork->tp_handler->exit_event(kwork, &kwork_softirq,
- 						     evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -953,10 +958,10 @@ static int process_workqueue_activate_work_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->raise_event)
-+	if (kwork->tp_handler->raise_event) {
- 		return kwork->tp_handler->raise_event(kwork, &kwork_workqueue,
- 						    evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -967,10 +972,10 @@ static int process_workqueue_execute_start_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->entry_event)
-+	if (kwork->tp_handler->entry_event) {
- 		return kwork->tp_handler->entry_event(kwork, &kwork_workqueue,
- 						    evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -981,10 +986,10 @@ static int process_workqueue_execute_end_event(struct perf_tool *tool,
- {
- 	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
- 
--	if (kwork->tp_handler->exit_event)
-+	if (kwork->tp_handler->exit_event) {
- 		return kwork->tp_handler->exit_event(kwork, &kwork_workqueue,
- 						   evsel, sample, machine);
--
-+	}
- 	return 0;
- }
- 
-@@ -1253,9 +1258,10 @@ static void print_skipped_events(struct perf_kwork *kwork)
- 		}
- 	}
- 
--	if (verbose > 0)
-+	if (verbose > 0) {
- 		printf("  INFO: use %lld atom pages\n",
- 		       nr_list_entry(&kwork->atom_page_list));
-+	}
- }
- 
- static void print_bad_events(struct perf_kwork *kwork)
-@@ -1332,10 +1338,11 @@ static int perf_kwork__check_config(struct perf_kwork *kwork,
- 		return -1;
- 	}
- 
--	list_for_each_entry(class, &kwork->class_list, list)
-+	list_for_each_entry(class, &kwork->class_list, list) {
- 		if ((class->class_init != NULL) &&
- 		    (class->class_init(class, session) != 0))
- 			return -1;
-+	}
- 
- 	if (kwork->cpu_list != NULL) {
- 		ret = perf_session__cpu_bitmap(session,
--- 
-2.30.GIT
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+
+> ---
+> =C2=A0drivers/thermal/intel/intel_tcc_cooling.c | 2 ++
+> =C2=A01 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c
+> b/drivers/thermal/intel/intel_tcc_cooling.c
+> index a9596e7562ea..95adac427b6f 100644
+> --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> @@ -81,7 +81,9 @@ static const struct x86_cpu_id tcc_ids[]
+> __initconst =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(COMETLAKE, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(ALDERLAKE, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(ALDERLAKE_L, NULL),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODEL(ALD=
+ERLAKE_N, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODE=
+L(RAPTORLAKE, NULL),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0X86_MATCH_INTEL_FAM6_MODEL(RAP=
+TORLAKE_P, NULL),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{}
+> =C2=A0};
+> =C2=A0
 

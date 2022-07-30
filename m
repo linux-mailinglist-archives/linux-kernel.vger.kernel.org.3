@@ -2,117 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56122585C6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 23:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5841F585C72
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 23:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbiG3VpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 17:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S236223AbiG3Vu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 17:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236125AbiG3VpK (ORCPT
+        with ESMTP id S232779AbiG3Vuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 17:45:10 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD8B9B;
-        Sat, 30 Jul 2022 14:45:08 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0D99B5C00AB;
-        Sat, 30 Jul 2022 17:45:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 30 Jul 2022 17:45:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1659217506; x=1659303906; bh=Eb5hutMmuL
-        E5GHhGStTcjZOsHjRPJtci8kgSP4tb0j8=; b=gONVT5kncx3PpM78LjSRH9xmkc
-        8mxKZtHi/l2tMiz1pQqQ+N2EtL2J8b14LRlWfvCu9TKSOgg09GTefNJSBoxDRmid
-        alEtIl/nJWGv8yXxfx/JQlNBhi6AhwzD+gNGpr4qnG98sns/6Kg5MZwaqjDW+I2z
-        X5GQzS1qseS9+Hu79a8wWDpyPUq5SYYgCTW0LqSZgUy9zTr9QXtzuU0LC8BZOn7C
-        ZIKNo3W4keTHhio3zgndjy5smgtUaC17P+uhu6mnhdZ/Z7QS1IrvQ7ZZGqZn1Xls
-        Qvx8EZ7ohuZAig+/y+ISNy848gAApRKdaxDIbqmknr5Z2tK2nlK34gsn6K1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659217506; x=1659303906; bh=Eb5hutMmuLE5GHhGStTcjZOsHjRP
-        Jtci8kgSP4tb0j8=; b=saYt9nd86EQA5jROmQfJjnJVf2pJhxFE/13xrGANymuJ
-        uDquLrZW/MNLY25F9opBq3Hdl2tMjRjkmSFksf0zn6tP734nZgbZEZLnTjjnv/Yt
-        UBX6v4t1Es/ZyP6lO6sPFxq6VUmNVEhHljJFNgQp+3uDcblz/SwSZA2slPpPuUzf
-        Ry/im9MhyCh54AjYUPXVpXAj5i4DFLX8F1YVmcLFhzqYwJCxzWk6apErqT2+9/up
-        o+wBwRp4F7sfdauY/shH7wBP3WnChwp7LqJ+68FWVvWqnOeysvGjjo6G9OUfHDED
-        NyTTcWAbuJuKgTS6Wh8e+XZK6PZPn84JEDtQU8UpFw==
-X-ME-Sender: <xms:YablYjrBFvFZEflRUaS6AEINBwspuiFFEoWqw3jFRPNSFHho9JUfaQ>
-    <xme:YablYtp9uM1GYT3yt4bbt-UB2rde8JCPctp7zVYIBAaKhDn4pVKJGNNTexSNjFpJi
-    pQr4ZMpTtzgvbBttw>
-X-ME-Received: <xmr:YablYgPK92DvB-3Cuvq7k-zcF90YWZ6rO5FI7gPAVI8b5QaIQWyQX_ianaKvdTQswqmIPzQatrmU4PW4YwhW131ZTtfZr--IU6huEBLVoSu_5JyQfLdbxe8m9Dez>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvtddgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
-    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
-    grthhtvghrnhepvdfffeevhfetveffgeeiteefhfdtvdffjeevhfeuteegleduheetvedu
-    ieettddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvghssegrnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:YablYm4hpwK90T3BZr7bdPNwb4XZ0rzXEMHlWfnjaSTIEETlf_BMHw>
-    <xmx:YablYi7U3bon--SBVtVy9jbdL_6CtLUTHgEzx6O_HxsTtfvnL824uw>
-    <xmx:YablYuhHY9wiV8cFR5vfiErt3EYbWGWgHpSD0yb5lud3W-F84p6DyA>
-    <xmx:YqblYpYyBWa7EjjFBoMlcgBp0Uio75htJje4KPvLapUGqD_K3WUqCw>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 30 Jul 2022 17:45:05 -0400 (EDT)
-Date:   Sat, 30 Jul 2022 14:45:04 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ben Hutchings <ben@decadent.org.uk>, sedat.dilek@gmail.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
- init_disassemble_info API changes
-Message-ID: <20220730214504.itq5cnypwpdpiwdn@awork3.anarazel.de>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220703212551.1114923-1-andres@anarazel.de>
- <CA+icZUVDzogiyG=8sCuxdW4aaby_kRwToit2tg-A4D3VorVKnA@mail.gmail.com>
- <5afd3b45e9b95fa5023790c24f8a1b0b4ce1ca7c.camel@decadent.org.uk>
- <20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de>
- <YuFeBEzSNMNwx47o@kernel.org>
+        Sat, 30 Jul 2022 17:50:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0170238;
+        Sat, 30 Jul 2022 14:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659217853; x=1690753853;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rND8XXV4IHwYTrk9ylOpb5YEXKqPDzYplKhRlcJ1akw=;
+  b=gmdSHBKDan74jpGsUH7NCLUZrzUo2XqELlJmqG5INO5rxtxWhrkoYNK0
+   e/Oi+cp2B2AgbiPV/tEfzPD5p421ahW1Iu8N0hjyf8TCaf4mOftJt71c7
+   zdB3zj449X9457/nyWB6XYnNK9hXAPqRQcH4Wud0MG2hv5xMjXGNDAQO+
+   ij4piwoyQQfoxzmq46c46rE1y2rGaVAo4BOZ3OvXqgihSJUnoxzERxsnT
+   POAsSNlRZYqqCUeHxW+yOI+t0vIeYVV/i4peIeyk0KVUAyj+y+bVTgwbZ
+   jYO5JnHvPKdEkW2iBrlY4aPs7CfOCVNDUauY0bm8rnUBpQgVR/VJkmJRi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="287704991"
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="287704991"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 14:50:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="704554267"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jul 2022 14:50:49 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHuMC-000DNX-1N;
+        Sat, 30 Jul 2022 21:50:48 +0000
+Date:   Sun, 31 Jul 2022 05:50:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        andriy.shevchenko@linux.intel.com, vee.khee.wong@intel.com,
+        weifeng.voon@intel.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
+ call in intel_eth_pci_remove()
+Message-ID: <202207310545.hHU5SagS-lkp@intel.com>
+References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuFeBEzSNMNwx47o@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Christophe,
 
-On 2022-07-27 12:47:16 -0300, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Jul 15, 2022 at 12:16:41PM -0700, Andres Freund escreveu:
-> > On 2022-07-14 15:25:44 +0200, Ben Hutchings wrote:
-> > > Thanks, I meant to send that fix upstream but got distracted.  It
-> > > should really be folded into "tools perf: Fix compilation error with
-> > > new binutils".
-> > 
-> > I'll try to send a new version out soon. I think the right process is to add
-> > Signed-off-by: Ben Hutchings <benh@debian.org>
-> > to the patch I squash it with?
-> 
-> Hi,
-> 
-> 	How is this going? Any new patch coming soon? :-)
+Thank you for the patch! Yet something to improve:
 
-Sorry - had hoped to finish sending it out before my vacation (and then on the
-flight, but wifi didn't work...). Now back, will work on it asap.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc8 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Greetings,
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 620725263f4222b3c94d4ee19846835feec0ad69
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220731/202207310545.hHU5SagS-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2d1d09034cc62ee19f799b92bb67640ba86ca557
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christophe-JAILLET/stmmac-intel-Add-a-missing-clk_disable_unprepare-call-in-intel_eth_pci_remove/20220731-022139
+        git checkout 2d1d09034cc62ee19f799b92bb67640ba86ca557
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Andres Freund
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:1107:24: error: use of undeclared identifier 'plat'
+           clk_disable_unprepare(plat->stmmac_clk);
+                                 ^
+   1 error generated.
+
+
+vim +/plat +1107 drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+
+  1092	
+  1093	/**
+  1094	 * intel_eth_pci_remove
+  1095	 *
+  1096	 * @pdev: pci device pointer
+  1097	 * Description: this function calls the main to free the net resources
+  1098	 * and releases the PCI resources.
+  1099	 */
+  1100	static void intel_eth_pci_remove(struct pci_dev *pdev)
+  1101	{
+  1102		struct net_device *ndev = dev_get_drvdata(&pdev->dev);
+  1103		struct stmmac_priv *priv = netdev_priv(ndev);
+  1104	
+  1105		stmmac_dvr_remove(&pdev->dev);
+  1106	
+> 1107		clk_disable_unprepare(plat->stmmac_clk);
+  1108		clk_unregister_fixed_rate(priv->plat->stmmac_clk);
+  1109	
+  1110		pcim_iounmap_regions(pdev, BIT(0));
+  1111	}
+  1112	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

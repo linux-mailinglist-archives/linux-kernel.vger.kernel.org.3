@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE1D585BC9
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E2C585BC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbiG3Tf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 15:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S235747AbiG3Tda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 15:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiG3Tf5 (ORCPT
+        with ESMTP id S235674AbiG3Td2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 15:35:57 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2950DBC34
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:35:56 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id uj29so635700ejc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:35:56 -0700 (PDT)
+        Sat, 30 Jul 2022 15:33:28 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B516591
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:33:27 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so4155644fac.7
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:33:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=znMiuLtPPIpLgWBCzArU4bLlFvXoiSKJfPgx/vuRq3Y=;
-        b=oGiQ19fmM36ySn6hnM/Kc3RBnM+VyBrBGURWcFUC3e1Xcky6/UxMxltKXyYK0QMHXC
-         DpxfY7NiRu9fFBkBtPmNB7qZkY9Yk2jDIIn96P9B4dhdZdXQzAuUMze6NlDfr9G1YNxE
-         ZbOFT8jStPcPqiENo1YFx9V+DwiqSoxz+tyLs4wahUCFaNhCI2hp+yCUzKccQzPc18Se
-         EYNL7DF2X1D4WCjLmraOcP0Z9sAZqus1fMWlzHcsmmnwIMURpkVXSvCwqSvCrCVZc66a
-         NuddmHClYUlKLWRZW2k11Not7djZIpEBmSkPjPWeN9fjDwHXtNFtnns+y7Q6Dls4cHm+
-         tBUQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=rqGLhmVFOAbKqEPv6Xo3EqzY1tZAYBu4Uvtx+5lA87o=;
+        b=ziNRbsmSPB0BIEpJqp+ksQ9mIW9j5Z8/Q7giHnqXwbAsCZW4iJ00NV/NHtNuZNacBU
+         zO7Y6TvrYNPtwsm8hh4x6iU96K/+rU2p7WXHPI0ZNJqyLHRc5oaOkGoVdS9DZI2gwnVR
+         DWIGlbnJPnsl7zcGwQFWVoEFIytI2Ph4M4CujeXwLMGtTpBMcp7Y73UFEZCnxX2QLDdh
+         xKSjbtOOfnHJ4gleq3NeJJbA0eP6ChqvgX5GMNHP5ZpacBIgKuKRL+bwXDzcutPUNQpO
+         JSQ1DTPrRW43l7oblWjGZq9nwPQ7P492jZsDO/ZYnu6LBrahjn0ZYiippy9zHj0lL12D
+         Jx6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=znMiuLtPPIpLgWBCzArU4bLlFvXoiSKJfPgx/vuRq3Y=;
-        b=lW1SmLwj+5AzNrESGTElBn90Ms4HBIVl1h17b5bqbVbklXHzCBehZQIbvGZmEpS8+o
-         lLILi7GbPrRYOJVsA5PpF0V1K57sAENKwG7u2v868SZO733IeKuVGIKtxQbfAsjgCAuq
-         cZ9RCZ6lwL1/p1wMaA+JMTkGYkTyDPs5ULm0exqYu20I7QFbKek8b7WzRiiYBZBi7iYp
-         UbPbUU3NfN84HRu8awAZSQkyqcxxd5CKHVTFz5MxTvUZWpSvOcqtKugymL5UvCph731M
-         gbXrtewTlG5ZNt3sbtUAokzxONQuLi4UCPI6rQFJWaOyWXFOTyKxkEgfB4movwo+7kVA
-         FbEQ==
-X-Gm-Message-State: AJIora/pnlSG+H0vyhWz6atd+Ba/7ozso2WtAWrF5YvZy6AMvTsG61UY
-        rLEnF9VzUrv5Ci0Nva5AKpE=
-X-Google-Smtp-Source: AGRyM1uHP719Ybc+4zG0bI975OB3+ZffJMtmMa47CoQveZhyDa8+b+XFiSDi+Jk35PLiRXZriKNiRQ==
-X-Received: by 2002:a17:906:ef8b:b0:72b:45a2:2232 with SMTP id ze11-20020a170906ef8b00b0072b45a22232mr6947078ejb.484.1659209754774;
-        Sat, 30 Jul 2022 12:35:54 -0700 (PDT)
-Received: from [192.168.1.102] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id e6-20020aa7d7c6000000b0043a61f6c389sm4265368eds.4.2022.07.30.12.35.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Jul 2022 12:35:54 -0700 (PDT)
-Message-ID: <749e2a31-cde9-ef80-f290-3a7a36c92636@gmail.com>
-Date:   Sat, 30 Jul 2022 21:35:53 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=rqGLhmVFOAbKqEPv6Xo3EqzY1tZAYBu4Uvtx+5lA87o=;
+        b=6gv/yRT97JyrifjhyRuT3dTpxx6nUulRa1dv94JFe11boU/rPPlu5N0tMzYdhDCycw
+         nkOmTq3sPw1m7vI2S6o5xKIcKq4MHl4fEx6M91T7oXzqpBuf1FXbZKjAOA/ztE3lGtQP
+         dB6LpnHouuD8iVYE6V82FOV5fl7/qjTXZyrVGE+fl7CIaPzgt2gEeei2HqzUICZr5iz2
+         N+RsVpUifH+intlgGiHFIISNcMScLhiXLLNuuOYsQYn64Yv2zFmYD4Ngo2c6L2cUqYrT
+         RVZgFt/WERRgnVLcv26cOAniU22txI6rybSpLM/oIKtBml7aJNiPdIpYJVdcYOamWOyS
+         FUwQ==
+X-Gm-Message-State: AJIora9UIh754qX9flz0d4fKMg15qKX4V4hY1X2VnDNATan0SPjlU3qr
+        sI/bB0dqtW+bd6kl8jcZiboGGH7lYMhSJA==
+X-Google-Smtp-Source: AGRyM1u7urvNawuHflhwp661DTolSORbH5K1L9cnAuZZyf9rhVTkBsXkFR+YCruuuwKk7c3XOchNOg==
+X-Received: by 2002:a05:6870:c8aa:b0:10d:d01d:438f with SMTP id er42-20020a056870c8aa00b0010dd01d438fmr4531413oab.266.1659209606167;
+        Sat, 30 Jul 2022 12:33:26 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id v20-20020a056870311400b000f32fb9d2bfsm2106981oaa.5.2022.07.30.12.33.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jul 2022 12:33:25 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: Add LID switch
+Date:   Sat, 30 Jul 2022 12:36:17 -0700
+Message-Id: <20220730193617.1688563-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] staging: r8188eu: report errors from
- ReadAdapterInfo8188EU
-Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220730143939.671951-1-martin@kaiser.cx>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220730143939.671951-1-martin@kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/30/22 16:39, Martin Kaiser wrote:
-> Update the ReadAdapterInfo8188EU to return an error code. Change the
-> calling function to relay these errors to the driver's probe function.
-> 
-> Martin Kaiser (3):
->    staging: r8188eu: handle errors from ReadAdapterInfo8188EU
->    staging: r8188eu: make rtw_handle_dualmac a void function
->    staging: r8188eu: return an error code in rtw_usb_if1_init
-> 
->   drivers/staging/r8188eu/core/rtw_wlan_util.c |  5 +-
->   drivers/staging/r8188eu/hal/usb_halinit.c    |  7 +--
->   drivers/staging/r8188eu/include/drv_types.h  |  2 +-
->   drivers/staging/r8188eu/include/hal_intf.h   |  2 +-
->   drivers/staging/r8188eu/os_dep/usb_intf.c    | 49 +++++++++++---------
->   5 files changed, 33 insertions(+), 32 deletions(-)
-> 
+Add gpio-keys for exposing the LID switch state.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index 84dc92dda0b8..f3246cc13d15 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -7,6 +7,8 @@
+ /dts-v1/;
+ 
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/gpio-keys.h>
++#include <dt-bindings/input/input.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ 
+ #include "sc8280xp.dtsi"
+@@ -26,6 +28,21 @@ backlight {
+ 		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
+ 	};
+ 
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&hall_int_state>;
++
++		switch-lid {
++			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_LID>;
++			wakeup-source;
++			wakeup-event-action = <EV_ACT_DEASSERTED>;
++		};
++	};
++
+ 	vreg_edp_bl: regulator-edp-bl {
+ 		compatible = "regulator-fixed";
+ 
+@@ -347,6 +364,14 @@ reset {
+ 		};
+ 	};
+ 
++	hall_int_state: hall-int-state {
++		pins = "gpio107";
++		function = "gpio";
++
++		input-enable;
++		bias-disable;
++	};
++
+ 	qup0_i2c4_default: qup0-i2c4-default-state {
+ 		pins = "gpio171", "gpio172";
+ 		function = "qup4";
+-- 
+2.35.1
+

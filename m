@@ -2,135 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06631585A39
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA921585A3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 13:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbiG3LRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 07:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S233795AbiG3L3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 07:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiG3LRx (ORCPT
+        with ESMTP id S231839AbiG3L3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 07:17:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 972201EC74
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:17:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659179871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ajeH2EPldj0oFW5NJlh68z51lwf7zGjC5FfPekouKAo=;
-        b=RYNufI7U/tOmpC2MM9pmTn6hzZe6E1oATlJcL08mj5GfVD0cIYvkpidYIAWsR0qyH2XyI+
-        y3t3/200vq1j1xV3Q8CsLHkGSCuS+fZ8yc4OUJ1akl9qS3dKWsuy9ee+094Lz6NOY9o53T
-        ADz8TVFwlo6bL85/DHZ5VGuPWzd+AdI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-Ok_HGvXdP6SII63yWAl8ww-1; Sat, 30 Jul 2022 07:17:50 -0400
-X-MC-Unique: Ok_HGvXdP6SII63yWAl8ww-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C008101A54E;
-        Sat, 30 Jul 2022 11:17:49 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CAC6A2026D07;
-        Sat, 30 Jul 2022 11:17:43 +0000 (UTC)
-Date:   Sat, 30 Jul 2022 19:17:38 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     syzbot <syzbot+934ebb67352c8a490bf3@syzkaller.appspotmail.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org, hdanton@sina.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org,
-        Yufen Yu <yuyufen@huawei.com>
-Subject: Re: [syzbot] possible deadlock in throtl_pending_timer_fn
-Message-ID: <YuUTUkxYFTKr6Ih3@T590>
-References: <000000000000921fd405db62096a@google.com>
- <0000000000004e96a405e4fd5051@google.com>
+        Sat, 30 Jul 2022 07:29:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597C193F9
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 04:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659180545; x=1690716545;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VIIV6Is++EMkreYgqLsck7xPttucM7frNTgw2Au7VAo=;
+  b=fbX+jahlhZ6kuXcs7JTMzg/N+QRQ5EV4C55zXGKE6qVcbK/J9TYiH2RN
+   dgz5lsCSPJWuhPnVJPa1LciVAI7A6S32pStus1IieCuq0eAD2bO9u+W/a
+   Ie+bA0bKfq7VsGJzRR6/YmfTNNF8Vifmp79HSd1R8ApxLFu2uq8tlRmHw
+   6PhRAbe578zSr69XBQUvknFqbFUolmzgFrcV6Ab1NG5hCI+L1a4uwQk6B
+   IPRCBMpZfBx1pzh+bPEtfFm3OyltQFnzROhmWcERcYfq+K7VU//Ti9n5b
+   ucDqaJQXPiVliEZw+sv6/YPcRQjlc85kuV7P1fm3uF84jvZFPao/M74k/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="289679994"
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="289679994"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 04:29:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
+   d="scan'208";a="577236560"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jul 2022 04:29:03 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHkeU-000CmB-23;
+        Sat, 30 Jul 2022 11:29:02 +0000
+Date:   Sat, 30 Jul 2022 19:28:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:sc8280xp-next-20220722 144/151]
+ drivers/gpu/drm/msm/dp/dp_debug.c:192: undefined reference to
+ `dp_panel_tpg_config'
+Message-ID: <202207301916.ecD9wbRq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000004e96a405e4fd5051@google.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 08:25:08PM -0700, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit 0a9a25ca78437b39e691bcc3dc8240455b803d8d
-> Author: Ming Lei <ming.lei@redhat.com>
-> Date:   Fri Mar 18 13:01:43 2022 +0000
-> 
->     block: let blkcg_gq grab request queue's refcnt
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16c3cfc2080000
-> start commit:   cb71b93c2dc3 Add linux-next specific files for 20220628
-> git tree:       linux-next
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=15c3cfc2080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11c3cfc2080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=934ebb67352c8a490bf3
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17713dee080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d24952080000
-> 
-> Reported-by: syzbot+934ebb67352c8a490bf3@syzkaller.appspotmail.com
-> Fixes: 0a9a25ca7843 ("block: let blkcg_gq grab request queue's refcnt")
+tree:   https://github.com/steev/linux sc8280xp-next-20220722
+head:   70f72824f4018e98a9003c3c3107be71a1e5c88b
+commit: c1bc1580b0dd297b7749f6353834295155bfbb48 [144/151] drm/msm/dp: Make it possible to enable the test pattern
+config: xtensa-randconfig-m031-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301916.ecD9wbRq-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/c1bc1580b0dd297b7749f6353834295155bfbb48
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev sc8280xp-next-20220722
+        git checkout c1bc1580b0dd297b7749f6353834295155bfbb48
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-No, this lockdep warning isn't related with the above commit, which
-caused another regression, but fixed by commit d578c770c852
-("block: avoid calling blkg_free() in atomic context"). Looks syzbot
-can't recognize difference between the two different issues.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This specific issue of '[syzbot] possible deadlock in throtl_pending_timer_fn',
-is actually introduced by commit ("27029b4b18aa blkcg: fix memleak for iolatency").
+All errors (new ones prefixed by >>):
 
-blk_throtl_exit() isn't safe to be called before blkg_destroy_all().
+   xtensa-linux-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_show':
+>> drivers/gpu/drm/msm/dp/dp_debug.c:192: undefined reference to `dp_panel_tpg_config'
+   xtensa-linux-ld: drivers/gpu/drm/msm/dp/dp_debug.o: in function `dp_test_active_write':
+   drivers/gpu/drm/msm/dp/dp_debug.c:169: undefined reference to `dp_panel_tpg_config'
 
-The following change should avoid the issue:
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
+   Selected by [y]:
+   - QCOM_RPMPD [=y] && PM [=y] && QCOM_SMD_RPM [=y]
 
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 869af9d72bcf..1606acb917fd 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1268,6 +1268,7 @@ static int blkcg_css_online(struct cgroup_subsys_state *css)
- int blkcg_init_queue(struct request_queue *q)
- {
- 	struct blkcg_gq *new_blkg, *blkg;
-+	bool need_exit_throtl = false;
- 	bool preloaded;
- 	int ret;
- 
-@@ -1301,7 +1302,7 @@ int blkcg_init_queue(struct request_queue *q)
- 
- 	ret = blk_iolatency_init(q);
- 	if (ret) {
--		blk_throtl_exit(q);
-+		need_exit_throtl = true;
- 		blk_ioprio_exit(q);
- 		goto err_destroy_all;
- 	}
-@@ -1310,6 +1311,8 @@ int blkcg_init_queue(struct request_queue *q)
- 
- err_destroy_all:
- 	blkg_destroy_all(q);
-+	if (need_exit_throtl)
-+		blk_throtl_exit(q);
- 	return ret;
- err_unlock:
- 	spin_unlock_irq(&q->queue_lock);
+vim +192 drivers/gpu/drm/msm/dp/dp_debug.c
 
+de3ee25473ba49 Abhinav Kumar   2020-09-12  176  
+de3ee25473ba49 Abhinav Kumar   2020-09-12  177  static int dp_test_active_show(struct seq_file *m, void *data)
+de3ee25473ba49 Abhinav Kumar   2020-09-12  178  {
+de3ee25473ba49 Abhinav Kumar   2020-09-12  179  	struct dp_debug_private *debug = m->private;
+899b2608d8d4b6 Bjorn Andersson 2021-10-15  180  	struct drm_connector *connector = debug->connector;
+de3ee25473ba49 Abhinav Kumar   2020-09-12  181  
+de3ee25473ba49 Abhinav Kumar   2020-09-12  182  	if (connector->status == connector_status_connected) {
+de3ee25473ba49 Abhinav Kumar   2020-09-12  183  		if (debug->panel->video_test)
+de3ee25473ba49 Abhinav Kumar   2020-09-12  184  			seq_puts(m, "1");
+de3ee25473ba49 Abhinav Kumar   2020-09-12  185  		else
+de3ee25473ba49 Abhinav Kumar   2020-09-12  186  			seq_puts(m, "0");
+899b2608d8d4b6 Bjorn Andersson 2021-10-15  187  	} else {
+de3ee25473ba49 Abhinav Kumar   2020-09-12  188  		seq_puts(m, "0");
+de3ee25473ba49 Abhinav Kumar   2020-09-12  189  	}
+de3ee25473ba49 Abhinav Kumar   2020-09-12  190  
+de3ee25473ba49 Abhinav Kumar   2020-09-12  191  	return 0;
+de3ee25473ba49 Abhinav Kumar   2020-09-12 @192  }
+de3ee25473ba49 Abhinav Kumar   2020-09-12  193  
 
+:::::: The code at line 192 was first introduced by commit
+:::::: de3ee25473ba49f2e785e43b5db5e05cb35aad24 drm/msm/dp: add debugfs nodes for video pattern tests
 
-Thanks,
-Ming
+:::::: TO: Abhinav Kumar <abhinavk@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

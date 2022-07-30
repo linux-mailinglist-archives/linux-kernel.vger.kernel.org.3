@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E2C585BC6
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7AB585BD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 21:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235747AbiG3Tda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 15:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
+        id S235644AbiG3Tkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 15:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbiG3Td2 (ORCPT
+        with ESMTP id S235695AbiG3Tko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 15:33:28 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B516591
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:33:27 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so4155644fac.7
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 12:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=rqGLhmVFOAbKqEPv6Xo3EqzY1tZAYBu4Uvtx+5lA87o=;
-        b=ziNRbsmSPB0BIEpJqp+ksQ9mIW9j5Z8/Q7giHnqXwbAsCZW4iJ00NV/NHtNuZNacBU
-         zO7Y6TvrYNPtwsm8hh4x6iU96K/+rU2p7WXHPI0ZNJqyLHRc5oaOkGoVdS9DZI2gwnVR
-         DWIGlbnJPnsl7zcGwQFWVoEFIytI2Ph4M4CujeXwLMGtTpBMcp7Y73UFEZCnxX2QLDdh
-         xKSjbtOOfnHJ4gleq3NeJJbA0eP6ChqvgX5GMNHP5ZpacBIgKuKRL+bwXDzcutPUNQpO
-         JSQ1DTPrRW43l7oblWjGZq9nwPQ7P492jZsDO/ZYnu6LBrahjn0ZYiippy9zHj0lL12D
-         Jx6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=rqGLhmVFOAbKqEPv6Xo3EqzY1tZAYBu4Uvtx+5lA87o=;
-        b=6gv/yRT97JyrifjhyRuT3dTpxx6nUulRa1dv94JFe11boU/rPPlu5N0tMzYdhDCycw
-         nkOmTq3sPw1m7vI2S6o5xKIcKq4MHl4fEx6M91T7oXzqpBuf1FXbZKjAOA/ztE3lGtQP
-         dB6LpnHouuD8iVYE6V82FOV5fl7/qjTXZyrVGE+fl7CIaPzgt2gEeei2HqzUICZr5iz2
-         N+RsVpUifH+intlgGiHFIISNcMScLhiXLLNuuOYsQYn64Yv2zFmYD4Ngo2c6L2cUqYrT
-         RVZgFt/WERRgnVLcv26cOAniU22txI6rybSpLM/oIKtBml7aJNiPdIpYJVdcYOamWOyS
-         FUwQ==
-X-Gm-Message-State: AJIora9UIh754qX9flz0d4fKMg15qKX4V4hY1X2VnDNATan0SPjlU3qr
-        sI/bB0dqtW+bd6kl8jcZiboGGH7lYMhSJA==
-X-Google-Smtp-Source: AGRyM1u7urvNawuHflhwp661DTolSORbH5K1L9cnAuZZyf9rhVTkBsXkFR+YCruuuwKk7c3XOchNOg==
-X-Received: by 2002:a05:6870:c8aa:b0:10d:d01d:438f with SMTP id er42-20020a056870c8aa00b0010dd01d438fmr4531413oab.266.1659209606167;
-        Sat, 30 Jul 2022 12:33:26 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id v20-20020a056870311400b000f32fb9d2bfsm2106981oaa.5.2022.07.30.12.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 12:33:25 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sc8280xp-lenovo-thinkpad-x13s: Add LID switch
-Date:   Sat, 30 Jul 2022 12:36:17 -0700
-Message-Id: <20220730193617.1688563-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Sat, 30 Jul 2022 15:40:44 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66485167EF;
+        Sat, 30 Jul 2022 12:40:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id F2F5A5C0095;
+        Sat, 30 Jul 2022 15:40:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 30 Jul 2022 15:40:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1659210039; x=1659296439; bh=xOBsPksCdqcov7JXxKD8topM8
+        +c6rpsTvLZgx6AhQ0s=; b=lbHDM+gtO+eqKdhMcQ2TK2stBTVaKgo5REnFwDBaz
+        wYTlVojJDT96vX3RSS69TuvZSmUe/qfaayngWhJkUw8a35+fpEifr9N8J1A/z7BW
+        GlZiCySZ9BhkcOtmAKoaOPhFZtMSMcLjWnuZmVnm36gh7R3EyT0wE3yO8Q2n1OxT
+        TwjsU/s5m1eMejjafbqb2eNOohMdxwfJOfxxXE59+wribqQjW81TcPj+tBK0/gep
+        KxB0lwv1NMkdAR5qhfwR+5frxGGvG7nEsun2jWMejtSPnjaBcWPA8kW95O9tJfuM
+        c9HL5gwLEOGk7TfRbBE9/0KMCPcwKFvvmsmJPfCMQgZTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1659210039; x=1659296439; bh=xOBsPksCdqcov7JXxKD8topM8+c6rpsTvLZ
+        gx6AhQ0s=; b=zL8KWZv4BMajxJCG+1mY/jjj99YJuqsuuu4qo9FD85NtuZQ66Np
+        jR2nYEYLp/Kmedp2dm7Dz7dwUn8p+Jmz4mxMg3PZLmC3SbxGUcVZ5GOAZ7rPwKh6
+        chvwoAWo7jbl8+EBCuRV20ylvcbm8MXuMYb5IJzPy3nBNXn9qcr847Rc4vOerxh6
+        F52nMvBkWxpv2WQXELQvxvKFRdQB3cIBR64aZ6DE4IbyCc0SZRt9c4revKmy6+4Z
+        jsifinUT/yJAgNIxiUSlBMi20uoIhxjvBX8qiioPrtlndq+gMX6t6HTCq8zZ32KS
+        BQQCO/timaM4aX8c9XWlSw+8kl1x4We+W3w==
+X-ME-Sender: <xms:N4nlYvtkxsJ3B-Ilkle6sJ0ha2hJO0McLpBy3lVTvXaukSsy25QfPw>
+    <xme:N4nlYgedjDY41wdBkF1hZqao6Dr4HJaHaAXbOOaAv-90HjdnjXpJM34c22KqoAA2k
+    srh_Gq3LlFgo7AkiQ>
+X-ME-Received: <xmr:N4nlYix-x1p2dytMk-O0W-OpOOa1WDUPIYkARgEcPlLlEMkj8bqsoyHxJu5rYNo465Hz4WM6vDx7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduledgudegudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvgefgtefgleehhfeufe
+    ekuddvgfeuvdfhgeeljeduudfffffgteeuudeiieekjeenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:N4nlYuOsv5-84pfZOjPG-Rm6HMJwaD001Dv91X16qyzYsUS7xZ0XPw>
+    <xmx:N4nlYv9SeLHtHhgxn0D4GmTchuEfAdKntyocF8Tp5fXk_y-BI4OCCg>
+    <xmx:N4nlYuUMx9Dy6cAcBdO3RfcYcQauv3c8MHjcYYs0sZrpMpYmHitnhg>
+    <xmx:N4nlYqn4Z8OfMOYSN8zGCXvO8HcKLd4RvtElYhkxcwj_GclyVlFo3A>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 30 Jul 2022 15:40:38 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] Add more bpf_*_ct_lookup() selftests
+Date:   Sat, 30 Jul 2022 14:40:28 -0500
+Message-Id: <cover.1659209738.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gpio-keys for exposing the LID switch state.
+This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
+interaction with netfilter subsystem as well as reading and writing from
+`struct nf_conn`. The first is important when migrating legacy systems
+towards bpf. The latter is important in general to take full advantage
+of connection tracking.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+This change will require two changes to BPF CI kconfig:
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index 84dc92dda0b8..f3246cc13d15 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -7,6 +7,8 @@
- /dts-v1/;
- 
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/gpio-keys.h>
-+#include <dt-bindings/input/input.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
- #include "sc8280xp.dtsi"
-@@ -26,6 +28,21 @@ backlight {
- 		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
- 	};
- 
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hall_int_state>;
-+
-+		switch-lid {
-+			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_LID>;
-+			wakeup-source;
-+			wakeup-event-action = <EV_ACT_DEASSERTED>;
-+		};
-+	};
-+
- 	vreg_edp_bl: regulator-edp-bl {
- 		compatible = "regulator-fixed";
- 
-@@ -347,6 +364,14 @@ reset {
- 		};
- 	};
- 
-+	hall_int_state: hall-int-state {
-+		pins = "gpio107";
-+		function = "gpio";
-+
-+		input-enable;
-+		bias-disable;
-+	};
-+
- 	qup0_i2c4_default: qup0-i2c4-default-state {
- 		pins = "gpio171", "gpio172";
- 		function = "qup4";
+* CONFIG_NF_CONNTRACK_MARK=y
+* CONFIG_NETFILTER_XT_CONNMARK=y
+
+I can put up the PR if this patchset looks good.
+
+Daniel Xu (2):
+  selftests/bpf: Add existing connection bpf_*_ct_lookup() test
+  selftests/bpf: Add connmark read/write test
+
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
+ 2 files changed, 81 insertions(+)
+
 -- 
-2.35.1
+2.37.1
 

@@ -2,143 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E269585916
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB8758591C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbiG3IOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 04:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S231888AbiG3IQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 04:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiG3IOj (ORCPT
+        with ESMTP id S231819AbiG3IQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 04:14:39 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B1D32D8D;
-        Sat, 30 Jul 2022 01:14:38 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id o13so8253259edc.0;
-        Sat, 30 Jul 2022 01:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0PsLPNnKs6iTnC1do3IWMEO8a4UGkJ3BffVfJlY4cSQ=;
-        b=oiQ75bJfuXDStnvurdOtLrtgayWaHMYfM65teAR6eLIaMTEqpRLZi9BpYwyZMDvPfO
-         tz9YUP9mrDbkSDQaw9iG72qgbmnGopNHTq/fKEO7mjyPaGckBEUYLWkE5LtoN4tJ/r+1
-         P/SYumcKSe+3hf0JqlU66c4T7Vd7PyOOAugdY8kcI1qcvrbUNRBkEvMx6Mj0+mTYR7Ii
-         6qm2skUkol8/95WiyJYgDVW5lloLUbaHdiziASgcDVqfqnrnYwFQwWsc/AHH3890j4z1
-         f5/6/5J/UG0Oszxp7pzBc4P1mvLuKBpTPUc5ChxpV0NeYribet+W7Y5t9uCAOzn2lMXu
-         Md0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0PsLPNnKs6iTnC1do3IWMEO8a4UGkJ3BffVfJlY4cSQ=;
-        b=m5ISUJQEXfxleFJpGaQnPipqHXnv0TAWbRoLUPxUp3lfSIRI19jNK78JkNn5HKwXwD
-         AE2P/a9+YL2rZLTtnh6IVySEF+rpiZ5xiloZ93uqY1AYZN1WGKNo2jF2NuRst8MJ19Ec
-         5RV2SkhGb4E6qFFsjRrgMIGUH1EqNQVrth3QQK0bvQQ6miN6j9iTb4xymWbTec5/9E4z
-         VVH5zRWZnIxkJDhCPYCv/l7oz36RQ80BvNwOIusBQSHlrJAmbneiAnWFYvcaPbi5IqnL
-         iZxfRd+G0v0gms0ApwMNKL/vsxAPUpUIJhhBRss5j02AQqmo34aQbUJL/x3rRiBd70Mo
-         n+RQ==
-X-Gm-Message-State: ACgBeo3OIWU+7nKQHMQmn6SsquXXgeGUVAzEABaMjOr4rc2ENq/PjkAK
-        M8X6RWQS5U0bD6EdZEIlWy8=
-X-Google-Smtp-Source: AA6agR6t+zre459vkhTc2LeCF987lVWwFc7CD+Bbj33yYWqgkDTS73qkQzGJDz10yr7alXluxU9+eg==
-X-Received: by 2002:aa7:cf13:0:b0:43d:603a:b736 with SMTP id a19-20020aa7cf13000000b0043d603ab736mr742196edy.20.1659168876936;
-        Sat, 30 Jul 2022 01:14:36 -0700 (PDT)
-Received: from ainazi.fritz.box (p200300d09725550031ca3b9b629d79a8.dip0.t-ipconnect.de. [2003:d0:9725:5500:31ca:3b9b:629d:79a8])
-        by smtp.gmail.com with ESMTPSA id u6-20020aa7d986000000b0043bb8023caesm3532584eds.62.2022.07.30.01.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Jul 2022 01:14:36 -0700 (PDT)
-From:   Shinjo Park <peremen@gmail.com>
-Cc:     peremen@gmail.com, David Heidelberg <david@ixit.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] ARM: dts: qcom: msm8960: add the device node of USB1
-Date:   Sat, 30 Jul 2022 10:14:12 +0200
-Message-Id: <20220730081412.14297-1-peremen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <76ed8999-c211-f8ea-c70c-21fddd75a896@linaro.org>
-References: <76ed8999-c211-f8ea-c70c-21fddd75a896@linaro.org>
+        Sat, 30 Jul 2022 04:16:01 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AC64D83A
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 01:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659168959; x=1690704959;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oMLBLUEV0c73UmvX+x0ng5G4mX/0i7sf3gVdg+mllL8=;
+  b=mamxE52/cumKe8xZS3IUWhI/GHZv8Lfmgk+j5APRLV7qyZznOegMIlPd
+   vn//h1canmfPetBjissp5bW5etdfJo383Kab4qtREHCLtuU7gGawIkKuv
+   LkkdNacFfn8JIc7i/jpLZaZvimjH2kTVVBZmAz7r/5rpAN9qRdx5kYSUa
+   i4sTa7DUp8fsg48qTMRGLPyX6yHhUzTV8QcSX5B8mX4rVarYOUuFc5eVu
+   M6SxBY4IDqCGZWcsm+iVOOxC6+VOjSg5ztDZP/EiyEyOqJ0Sv+PKDMbuq
+   oKUIF/1zdK5r3GKkDCuJVzwvcPgTLB3tHJYUQDnOcQjRz5IJ505HRIEMR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="375205947"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="375205947"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 01:15:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="727964734"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 01:15:57 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHhdc-000CdU-1v;
+        Sat, 30 Jul 2022 08:15:56 +0000
+Date:   Sat, 30 Jul 2022 16:14:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Phillip Potter <phil@philpotter.co.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [staging:staging-testing 54/54]
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <202207301623.BfMKLfhv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the same USB definition as qcom-apq8064.dtsi, tested on Casio GzOne.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
+head:   f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
+commit: f3a76018dd55d8ddcd28cb47049f46ae5c0ce557 [54/54] staging: r8188eu: remove initializer from ret in rtw_pwr_wakeup
+config: hexagon-randconfig-r015-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301623.BfMKLfhv-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?id=f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
+        git remote add staging https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+        git fetch --no-tags staging staging-testing
+        git checkout f3a76018dd55d8ddcd28cb47049f46ae5c0ce557
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/r8188eu/
 
-Signed-off-by: Shinjo Park <peremen@gmail.com>
-Reviewed-by: David Heidelberg <david@ixit.cz>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-v2:
- - Rewrite commit message
- - Reorder status line
+All warnings (new ones prefixed by >>):
 
- arch/arm/boot/dts/qcom-msm8960.dtsi | 32 +++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+>> drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/r8188eu/core/rtw_pwrctrl.c:409:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/staging/r8188eu/core/rtw_pwrctrl.c:400:2: note: remove the 'if' if its condition is always true
+           if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/r8188eu/core/rtw_pwrctrl.c:384:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index e1f010c9643e..4c8a67c0cc7b 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -4,6 +4,7 @@
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-msm8960.h>
- #include <dt-bindings/clock/qcom,lcc-msm8960.h>
-+#include <dt-bindings/reset/qcom,gcc-msm8960.h>
- #include <dt-bindings/mfd/qcom-rpm.h>
- #include <dt-bindings/soc/qcom,gsbi.h>
- 
-@@ -201,6 +202,37 @@ regulators {
- 			};
- 		};
- 
-+		usb1: usb@12500000 {
-+			compatible = "qcom,ci-hdrc";
-+			reg = <0x12500000 0x200>,
-+			      <0x12500200 0x200>;
-+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc USB_HS1_XCVR_CLK>, <&gcc USB_HS1_H_CLK>;
-+			clock-names = "core", "iface";
-+			assigned-clocks = <&gcc USB_HS1_XCVR_CLK>;
-+			assigned-clock-rates = <60000000>;
-+			resets = <&gcc USB_HS1_RESET>;
-+			reset-names = "core";
-+			phy_type = "ulpi";
-+			ahb-burst-config = <0>;
-+			phys = <&usb_hs1_phy>;
-+			phy-names = "usb-phy";
-+			#reset-cells = <1>;
-+			status = "disabled";
-+
-+			ulpi {
-+				usb_hs1_phy: phy {
-+					compatible = "qcom,usb-hs-phy-msm8960",
-+						     "qcom,usb-hs-phy";
-+					clocks = <&sleep_clk>, <&cxo_board>;
-+					clock-names = "sleep", "ref";
-+					resets = <&usb1 0>;
-+					reset-names = "por";
-+					#phy-cells = <0>;
-+				};
-+			};
-+		};
-+
- 		acc0: clock-controller@2088000 {
- 			compatible = "qcom,kpss-acc-v1";
- 			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
+
+vim +400 drivers/staging/r8188eu/core/rtw_pwrctrl.c
+
+15865124feed88 Phillip Potter  2021-07-28  376  
+57c27d38ff9379 Michael Straube 2022-04-03  377  /* Wake the NIC up from: 1)IPS 2)USB autosuspend */
+719cf66c8a2b06 Michael Straube 2022-04-03  378  int rtw_pwr_wakeup(struct adapter *padapter)
+15865124feed88 Phillip Potter  2021-07-28  379  {
+15865124feed88 Phillip Potter  2021-07-28  380  	struct pwrctrl_priv *pwrpriv = &padapter->pwrctrlpriv;
+15865124feed88 Phillip Potter  2021-07-28  381  	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+3b9d0da6aa08a3 Martin Kaiser   2022-04-13  382  	unsigned long timeout = jiffies + msecs_to_jiffies(3000);
+1dd0ac70494c1d Martin Kaiser   2022-04-13  383  	unsigned long deny_time;
+f3a76018dd55d8 Phillip Potter  2022-07-29  384  	int ret;
+15865124feed88 Phillip Potter  2021-07-28  385  
+3b9d0da6aa08a3 Martin Kaiser   2022-04-13  386  	while (pwrpriv->ps_processing && time_before(jiffies, timeout))
+d21edee5a4276b Larry Finger    2021-08-05  387  		msleep(10);
+15865124feed88 Phillip Potter  2021-07-28  388  
+15865124feed88 Phillip Potter  2021-07-28  389  	/* I think this should be check in IPS, LPS, autosuspend functions... */
+15865124feed88 Phillip Potter  2021-07-28  390  	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
+2b5002e2cc1483 Phillip Potter  2022-07-25  391  		ret = 0;
+15865124feed88 Phillip Potter  2021-07-28  392  		goto exit;
+15865124feed88 Phillip Potter  2021-07-28  393  	}
+294e69c69c4d4a Martin Kaiser   2022-04-13  394  
+294e69c69c4d4a Martin Kaiser   2022-04-13  395  	if (pwrpriv->rf_pwrstate == rf_off && ips_leave(padapter) == _FAIL) {
+2b5002e2cc1483 Phillip Potter  2022-07-25  396  		ret = -ENOMEM;
+15865124feed88 Phillip Potter  2021-07-28  397  		goto exit;
+15865124feed88 Phillip Potter  2021-07-28  398  	}
+15865124feed88 Phillip Potter  2021-07-28  399  
+a9f136fa7e67fd Martin Kaiser   2022-04-13 @400  	if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
+2b5002e2cc1483 Phillip Potter  2022-07-25  401  		ret = -EBUSY;
+15865124feed88 Phillip Potter  2021-07-28  402  		goto exit;
+15865124feed88 Phillip Potter  2021-07-28  403  	}
+15865124feed88 Phillip Potter  2021-07-28  404  
+15865124feed88 Phillip Potter  2021-07-28  405  exit:
+1dd0ac70494c1d Martin Kaiser   2022-04-13  406  	deny_time = jiffies + msecs_to_jiffies(RTW_PWR_STATE_CHK_INTERVAL);
+1dd0ac70494c1d Martin Kaiser   2022-04-13  407  	if (time_before(pwrpriv->ips_deny_time, deny_time))
+1dd0ac70494c1d Martin Kaiser   2022-04-13  408  		pwrpriv->ips_deny_time = deny_time;
+15865124feed88 Phillip Potter  2021-07-28  409  	return ret;
+15865124feed88 Phillip Potter  2021-07-28  410  }
+15865124feed88 Phillip Potter  2021-07-28  411  
+
+:::::: The code at line 400 was first introduced by commit
+:::::: a9f136fa7e67fdef97ad6c4be5f04f60ad78b5f3 staging: r8188eu: make return values consistent
+
+:::::: TO: Martin Kaiser <martin@kaiser.cx>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

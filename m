@@ -2,181 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC935859A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88355859AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 11:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiG3JgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 05:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
+        id S234433AbiG3JhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 05:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbiG3Jf7 (ORCPT
+        with ESMTP id S231717AbiG3JhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 05:35:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA618E37;
-        Sat, 30 Jul 2022 02:35:58 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 09:35:54 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659173756;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LeIxic/k3kF48XBgfzV0cYUall+6Yn4slRoomda4PTg=;
-        b=aAIHYto0xIDQBS47rBx1ch0qDHMbCk+kUJ64QaHf2yrDHT0pZSLO841oEkgzGFQkuyodmm
-        PMod66XwNiWSMDK8LFflP/9TdGEg1s15GEP2FD9ryvrNuN0x5lgumSbeYUOgU/uBHiJ/Gy
-        T1H5hwBVzImcaZPB+US2kNgx7AqRe+8Qh0Idehxs6fHn1XosbuuGEqQDJhye8NAb3VG2tx
-        aXJw40SYDe1TlO6lYFn1K0SUDTtFsO9EEHF0oAZ3dj4ykvQZL6Rr1MCeXVGfezQbRzvAL2
-        uJmjAdVJRTDVLfQS1gAKuVU4wROxwHllunj5DIR7atlqZAX7k1KrKuBqmkeCqw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659173756;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LeIxic/k3kF48XBgfzV0cYUall+6Yn4slRoomda4PTg=;
-        b=KRksxc8iwgZXbzqLZbfAF1Yr8rTMSPnvUiK0iIkqyWK3ChG7NhGj/x6K1oQ8FBIGTdkzXZ
-        LE3aTCe8ezyL5CAA==
-From:   "tip-bot2 for Waiman Long" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/urgent] locking/rwsem: Allow slowpath writer to ignore
- handoff bit if not set by first waiter
-Cc:     Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Mel Gorman <mgorman@techsingularity.net>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220622200419.778799-1-longman@redhat.com>
-References: <20220622200419.778799-1-longman@redhat.com>
+        Sat, 30 Jul 2022 05:37:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A9815FDA
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 02:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659173821; x=1690709821;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nnO2LEN/TsivdC6GGv8T0MR4Hvri7DBHRSIWe0glSTQ=;
+  b=M1T0VBlWIL5iQgH+VCsBiS90RzM8ST9pyv0/pAqXwgAXyCVnAa1fX5cI
+   hrMOnWmEIFQxUfUX9FUZyzfH1mGV1EEneEQ2lNoLMhrdqEL8zxSvwlAnz
+   ltuivEtw8GB9xeHmPaaKO8LBkxH/kK1x7Hpf3X01XkIhlwk5dWbYQNQ+n
+   PBPlmT6lwT67HE+VAshPVr3AAatZIsUK9xyxIJmrthsdDNgauQzwYNytK
+   Kwie9dCJ2ef2KYvTcOqRQfYta+VZTor4r3921ucKxtPdSqRj3zQXDlu52
+   HuvRy4iT0NMSJrZjhC9/8Rp+m2uG5D4/GoDtoviwsjXY6NU1wwKu8ttQL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10423"; a="352908989"
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="352908989"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 02:37:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,203,1654585200"; 
+   d="scan'208";a="551990976"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 Jul 2022 02:37:00 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHiu3-000Cgu-13;
+        Sat, 30 Jul 2022 09:36:59 +0000
+Date:   Sat, 30 Jul 2022 17:36:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [stable:linux-4.19.y 2019/3409] include/linux/sunrpc/xdr.h:512:17:
+ error: comparison is always false due to limited range of data type
+Message-ID: <202207301724.i0Djw2HL-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <165917375432.15455.2614303631221531501.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/urgent branch of tip:
+Hi Dan,
 
-Commit-ID:     6eebd5fb20838f5971ba17df9f55cc4f84a31053
-Gitweb:        https://git.kernel.org/tip/6eebd5fb20838f5971ba17df9f55cc4f84a31053
-Author:        Waiman Long <longman@redhat.com>
-AuthorDate:    Wed, 22 Jun 2022 16:04:19 -04:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 30 Jul 2022 10:58:28 +02:00
+FYI, the error/warning still remains.
 
-locking/rwsem: Allow slowpath writer to ignore handoff bit if not set by first waiter
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+head:   b275bfc9c2d385c7f7a66f9dcd0364e71cd8b864
+commit: 3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8 [2019/3409] NFSD: prevent integer overflow on 32 bit systems
+config: sparc64-randconfig-r015-20220729 (https://download.01.org/0day-ci/archive/20220730/202207301724.i0Djw2HL-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-4.19.y
+        git checkout 3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/kernel/
 
-With commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
-consistent"), the writer that sets the handoff bit can be interrupted
-out without clearing the bit if the wait queue isn't empty. This disables
-reader and writer optimistic lock spinning and stealing.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Now if a non-first writer in the queue is somehow woken up or a new
-waiter enters the slowpath, it can't acquire the lock.  This is not the
-case before commit d257cc8cb8d5 as the writer that set the handoff bit
-will clear it when exiting out via the out_nolock path. This is less
-efficient as the busy rwsem stays in an unlock state for a longer time.
+All errors (new ones prefixed by >>):
 
-In some cases, this new behavior may cause lockups as shown in [1] and
-[2].
+   In file included from include/linux/sunrpc/sched.h:19,
+                    from include/linux/sunrpc/auth.h:15,
+                    from include/linux/nfs_fs.h:31,
+                    from arch/sparc/kernel/sys_sparc32.c:25:
+   include/linux/sunrpc/xdr.h: In function 'xdr_stream_decode_uint32_array':
+>> include/linux/sunrpc/xdr.h:512:17: error: comparison is always false due to limited range of data type [-Werror=type-limits]
+     512 |         if (len > SIZE_MAX / sizeof(*p))
+         |                 ^
+   In file included from include/linux/ethtool.h:17,
+                    from include/linux/netdevice.h:41,
+                    from include/net/sock.h:51,
+                    from include/linux/tcp.h:23,
+                    from include/linux/ipv6.h:87,
+                    from include/net/ipv6.h:16,
+                    from include/linux/sunrpc/clnt.h:28,
+                    from include/linux/nfs_fs.h:32:
+   include/linux/compat.h: In function 'put_compat_sigset':
+   include/linux/compat.h:495:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     495 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/compat.h:496:9: note: here
+     496 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |         ^~~~
+   include/linux/compat.h:496:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     496 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
+         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/compat.h:497:9: note: here
+     497 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
+         |         ^~~~
+   include/linux/compat.h:497:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
+     497 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
+         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/compat.h:498:9: note: here
+     498 |         case 1: v.sig[1] = (set->sig[0] >> 32); v.sig[0] = set->sig[0];
+         |         ^~~~
+   cc1: all warnings being treated as errors
 
-This patch allows a non-first writer to ignore the handoff bit if it
-is not originally set or initiated by the first waiter. This patch is
-shown to be effective in fixing the lockup problem reported in [1].
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on [n]: DEBUG_KERNEL [=y] && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS [=n] || MCOUNT [=n]
+   Selected by [y]:
+   - LOCKDEP [=y] && DEBUG_KERNEL [=y] && LOCK_DEBUGGING_SUPPORT [=y] && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
 
-[1] https://lore.kernel.org/lkml/20220617134325.GC30825@techsingularity.net/
-[2] https://lore.kernel.org/lkml/3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com/
 
-Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more consistent")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: John Donnelly <john.p.donnelly@oracle.com>
-Tested-by: Mel Gorman <mgorman@techsingularity.net>
-Link: https://lore.kernel.org/r/20220622200419.778799-1-longman@redhat.com
----
- kernel/locking/rwsem.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+vim +512 include/linux/sunrpc/xdr.h
 
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 9d1db4a..65f0262 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -335,8 +335,6 @@ struct rwsem_waiter {
- 	struct task_struct *task;
- 	enum rwsem_waiter_type type;
- 	unsigned long timeout;
--
--	/* Writer only, not initialized in reader */
- 	bool handoff_set;
- };
- #define rwsem_first_waiter(sem) \
-@@ -459,10 +457,12 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
- 			 * to give up the lock), request a HANDOFF to
- 			 * force the issue.
- 			 */
--			if (!(oldcount & RWSEM_FLAG_HANDOFF) &&
--			    time_after(jiffies, waiter->timeout)) {
--				adjustment -= RWSEM_FLAG_HANDOFF;
--				lockevent_inc(rwsem_rlock_handoff);
-+			if (time_after(jiffies, waiter->timeout)) {
-+				if (!(oldcount & RWSEM_FLAG_HANDOFF)) {
-+					adjustment -= RWSEM_FLAG_HANDOFF;
-+					lockevent_inc(rwsem_rlock_handoff);
-+				}
-+				waiter->handoff_set = true;
- 			}
- 
- 			atomic_long_add(-adjustment, &sem->count);
-@@ -599,7 +599,7 @@ rwsem_del_wake_waiter(struct rw_semaphore *sem, struct rwsem_waiter *waiter,
- static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
- 					struct rwsem_waiter *waiter)
- {
--	bool first = rwsem_first_waiter(sem) == waiter;
-+	struct rwsem_waiter *first = rwsem_first_waiter(sem);
- 	long count, new;
- 
- 	lockdep_assert_held(&sem->wait_lock);
-@@ -609,11 +609,20 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
- 		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
- 
- 		if (has_handoff) {
--			if (!first)
-+			/*
-+			 * Honor handoff bit and yield only when the first
-+			 * waiter is the one that set it. Otherwisee, we
-+			 * still try to acquire the rwsem.
-+			 */
-+			if (first->handoff_set && (waiter != first))
- 				return false;
- 
--			/* First waiter inherits a previously set handoff bit */
--			waiter->handoff_set = true;
-+			/*
-+			 * First waiter can inherit a previously set handoff
-+			 * bit and spin on rwsem if lock acquisition fails.
-+			 */
-+			if (waiter == first)
-+				waiter->handoff_set = true;
- 		}
- 
- 		new = count;
-@@ -1027,6 +1036,7 @@ queue:
- 	waiter.task = current;
- 	waiter.type = RWSEM_WAITING_FOR_READ;
- 	waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
-+	waiter.handoff_set = false;
- 
- 	raw_spin_lock_irq(&sem->wait_lock);
- 	if (list_empty(&sem->wait_list)) {
+   490	
+   491	/**
+   492	 * xdr_stream_decode_uint32_array - Decode variable length array of integers
+   493	 * @xdr: pointer to xdr_stream
+   494	 * @array: location to store the integer array or NULL
+   495	 * @array_size: number of elements to store
+   496	 *
+   497	 * Return values:
+   498	 *   On success, returns number of elements stored in @array
+   499	 *   %-EBADMSG on XDR buffer overflow
+   500	 *   %-EMSGSIZE if the size of the array exceeds @array_size
+   501	 */
+   502	static inline ssize_t
+   503	xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
+   504			__u32 *array, size_t array_size)
+   505	{
+   506		__be32 *p;
+   507		__u32 len;
+   508		ssize_t retval;
+   509	
+   510		if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+   511			return -EBADMSG;
+ > 512		if (len > SIZE_MAX / sizeof(*p))
+   513			return -EBADMSG;
+   514		p = xdr_inline_decode(xdr, len * sizeof(*p));
+   515		if (unlikely(!p))
+   516			return -EBADMSG;
+   517		if (array == NULL)
+   518			return len;
+   519		if (len <= array_size) {
+   520			if (len < array_size)
+   521				memset(array+len, 0, (array_size-len)*sizeof(*array));
+   522			array_size = len;
+   523			retval = len;
+   524		} else
+   525			retval = -EMSGSIZE;
+   526		for (; array_size > 0; p++, array++, array_size--)
+   527			*array = be32_to_cpup(p);
+   528		return retval;
+   529	}
+   530	#endif /* __KERNEL__ */
+   531	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

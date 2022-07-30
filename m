@@ -2,233 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC75585C13
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574B4585C18
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Jul 2022 22:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbiG3Uac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 16:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S235737AbiG3Uax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 16:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiG3Uab (ORCPT
+        with ESMTP id S231281AbiG3Uav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 16:30:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECF4A1AE
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659213030; x=1690749030;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aRQy9hl3JlD65qGNWrsZf/MURh3NqQP5yudEaf4xjMc=;
-  b=VGMdSCDkkP9L3M1m4EzFeATHjIh5GbKvNttahWNhmlkEKjMUMC3GC0vF
-   TpHRnDKi67Rior6nYoFta26ZKHBCqO0Zk3Bl2OzOcoPtJzdO6A+lA1wB3
-   bj7Ny7KDqOurpvLtrHuAwkibPR93wXYr5niJkpglauh7ugqDRq7z3NBm0
-   caoDqvvPxB56ymPhBHjTRSJhsTX6RjUSttgSMJupJyRjB+MuhYkrzqmhl
-   8WZ82k8bqV6roDL0Kiiz9FdbFjp5gVUoX619EtHTHFSYd0pUMUDENVOVA
-   3obndGGdZ7TOa3i6akzb5uhcste9CeAjkYSvWAzd7KiinRDYUfObKnhap
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="288959234"
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="288959234"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 13:30:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,204,1654585200"; 
-   d="scan'208";a="634466465"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jul 2022 13:30:28 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHt6R-000DIv-2m;
-        Sat, 30 Jul 2022 20:30:27 +0000
-Date:   Sun, 31 Jul 2022 04:30:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 8da3d9b8590bc178752d4b72938745e9a6c4c416
-Message-ID: <62e594c8.naAlDGWy5tFmDCSY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 30 Jul 2022 16:30:51 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63A1EE1D
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 13:30:50 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Ht6bo0sxd5V1hHt6bojkgf; Sat, 30 Jul 2022 22:30:49 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 30 Jul 2022 22:30:49 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <e5cbad07-f930-8a66-2579-42f993ca566a@wanadoo.fr>
+Date:   Sat, 30 Jul 2022 22:30:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
+ call in intel_eth_pci_remove()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     vee.khee.wong@intel.com, weifeng.voon@intel.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Newsgroups: gmane.linux.kernel.janitors,gmane.linux.kernel,gmane.linux.network,gmane.linux.ports.arm.kernel
+References: <b5b44a0c025d0fdddd9b9d23153261363089a06a.1659204745.git.christophe.jaillet@wanadoo.fr>
+ <YuWR9I8y9cWlLG3O@smile.fi.intel.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YuWR9I8y9cWlLG3O@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 8da3d9b8590bc178752d4b72938745e9a6c4c416  rseq: Kill process when unknown flags are encountered in ABI structures
+Le 30/07/2022 à 22:17, Andy Shevchenko a écrit :
+> On Sat, Jul 30, 2022 at 08:19:47PM +0200, Christophe JAILLET wrote:
+>> Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
+>> paths") removed this clk_disable_unprepare()
+>>
+>> This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
+>> handling on remove path") which removed this clk_disable_unprepare()
+>> because:
+>> "
+>>     While unloading the dwmac-intel driver, clk_disable_unprepare() is
+>>     being called twice in stmmac_dvr_remove() and
+>>     intel_eth_pci_remove(). This causes kernel panic on the second call.
+>> "
+>>
+>> However later on, commit 5ec55823438e8 ("net: stmmac: add clocks management
+>> for gmac driver") has updated stmmac_dvr_remove() which do not call
+>> clk_disable_unprepare() anymore.
+>>
+>> So this call should now be called from intel_eth_pci_remove().
+> 
+> The correct way of fixing it (which might be very well end up functionally
+> the same as this patch), is to introduce ->quit() in struct stmmac_pci_info
+> and assign it correctly, because not all platforms enable clocks.
 
-elapsed time: 715m
+I won't be able to propose anything like that.
 
-configs tested: 150
-configs skipped: 4
+By the way, in the first sentence of my log, s/removed/added/.
+(I hope that it can be fixed when/if the patch is applied)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-i386                                defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                           allyesconfig
-i386                             allyesconfig
-x86_64                        randconfig-a006
-arm                                 defconfig
-i386                          randconfig-a005
-x86_64                          rhel-8.3-func
-arm                              allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a015
-m68k                             allmodconfig
-arm64                            allyesconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arc                  randconfig-r043-20220730
-arc                              allyesconfig
-x86_64                           rhel-8.3-kvm
-arc                  randconfig-r043-20220729
-powerpc                          allmodconfig
-x86_64                        randconfig-a013
-loongarch                           defconfig
-loongarch                         allnoconfig
-x86_64                    rhel-8.3-kselftests
-mips                             allyesconfig
-x86_64                           rhel-8.3-syz
-powerpc                           allnoconfig
-x86_64                        randconfig-a011
-alpha                            allyesconfig
-arm                         lpc18xx_defconfig
-powerpc                 mpc8540_ads_defconfig
-xtensa                    xip_kc705_defconfig
-ia64                             allmodconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-sh                          r7780mp_defconfig
-sh                         apsh4a3a_defconfig
-powerpc                      mgcoge_defconfig
-arm                        shmobile_defconfig
-m68k                                defconfig
-i386                          randconfig-c001
-xtensa                  audio_kc705_defconfig
-sh                          r7785rp_defconfig
-sh                            hp6xx_defconfig
-mips                       bmips_be_defconfig
-sh                           se7206_defconfig
-powerpc                       eiger_defconfig
-arm                           h3600_defconfig
-x86_64                           alldefconfig
-arm                             ezx_defconfig
-powerpc                        cell_defconfig
-sh                          kfr2r09_defconfig
-mips                          rb532_defconfig
-powerpc                      pcm030_defconfig
-mips                         tb0226_defconfig
-sh                     sh7710voipgw_defconfig
-sh                          rsk7201_defconfig
-sh                           se7619_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-xtensa                    smp_lx200_defconfig
-sh                            migor_defconfig
-sh                        sh7757lcr_defconfig
-mips                     decstation_defconfig
-m68k                         amcore_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                     pq2fads_defconfig
-arm                            qcom_defconfig
-mips                        vocore2_defconfig
-powerpc                      bamboo_defconfig
-m68k                          hp300_defconfig
-sh                              ul2_defconfig
-nios2                               defconfig
-sh                         ecovec24_defconfig
-arm                        clps711x_defconfig
-powerpc                  iss476-smp_defconfig
-ia64                             alldefconfig
-parisc                generic-64bit_defconfig
-microblaze                      mmu_defconfig
-sh                          rsk7203_defconfig
-riscv             nommu_k210_sdcard_defconfig
-i386                             alldefconfig
-sh                             sh03_defconfig
-powerpc                     rainier_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-sh                        dreamcast_defconfig
-sh                           se7722_defconfig
-arm                           sama5_defconfig
-xtensa                generic_kc705_defconfig
-arm                        trizeps4_defconfig
-sparc                       sparc32_defconfig
-openrisc                         alldefconfig
-nios2                            allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
+Thanks for the review.
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-hexagon              randconfig-r045-20220730
-x86_64                        randconfig-a005
-i386                          randconfig-a004
-hexagon              randconfig-r041-20220729
-riscv                randconfig-r042-20220730
-i386                          randconfig-a006
-riscv                randconfig-r042-20220729
-s390                 randconfig-r044-20220730
-hexagon              randconfig-r045-20220729
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220730
-x86_64                        randconfig-a012
-s390                 randconfig-r044-20220729
-arm                      tct_hammer_defconfig
-mips                        maltaup_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                      maltaaprp_defconfig
-x86_64                        randconfig-k001
-mips                          ath25_defconfig
-powerpc                    socrates_defconfig
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-arm                       imx_v4_v5_defconfig
-powerpc                      katmai_defconfig
-powerpc                          g5_defconfig
-mips                           mtx1_defconfig
-mips                           ip28_defconfig
-powerpc                  mpc866_ads_defconfig
-x86_64                           allyesconfig
-arm                       spear13xx_defconfig
-riscv                             allnoconfig
-powerpc                  mpc885_ads_defconfig
+CJ
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Perhaps, we may leave this patch as is (for the sake of easy backporting) and
+> apply another one as I explained above to avoid similar mistakes in the future.
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+>> Fixes: 5ec55823438e8 ("net: stmmac: add clocks management for gmac driver")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> /!\     This patch is HIGHLY speculative.     /!\
+>>
+>> The corresponding clk_disable_unprepare() is still called within the pm
+>> related stmmac_bus_clks_config() function.
+>>
+>> However, with my limited understanding of the pm API, I think it that the
+>> patch is valid.
+>> (in other word, does the pm_runtime_put() and/or pm_runtime_disable()
+>> and/or stmmac_dvr_remove() can end up calling .runtime_suspend())
+>>
+>> So please review with care, as I'm not able to test the change by myself.
+>>
+>>
+>> If I'm wrong, maybe a comment explaining why it is safe to have this
+>> call in the error handling path of the probe and not in the remove function
+>> would avoid erroneous patches generated from static code analyzer to be
+>> sent.
+>> ---
+>>   drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+>> index 52f9ed8db9c9..9f38642f86ce 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+>> @@ -1134,6 +1134,7 @@ static void intel_eth_pci_remove(struct pci_dev *pdev)
+>>   
+>>   	stmmac_dvr_remove(&pdev->dev);
+>>   
+>> +	clk_disable_unprepare(plat->stmmac_clk);
+>>   	clk_unregister_fixed_rate(priv->plat->stmmac_clk);
+>>   
+>>   	pcim_iounmap_regions(pdev, BIT(0));
+>> -- 
+>> 2.34.1
+>>
+> 
+

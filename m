@@ -2,92 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EA1585F3E
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC514585F45
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237169AbiGaOTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 10:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S237180AbiGaObS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 10:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGaOTg (ORCPT
+        with ESMTP id S229639AbiGaObQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 10:19:36 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3FEDEC9;
-        Sun, 31 Jul 2022 07:19:36 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id g1so6722409qki.7;
-        Sun, 31 Jul 2022 07:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjhOCEjtjLfjibZ6tVUb+knW39OSGuyczB8f45t6wRA=;
-        b=PN+B0TtFil8D6i80oaBJaEdn/j3r8FsfPz7APQycId4HQqUNBOCzbsFmakfxPSBvgQ
-         54TMcdXBeBwXf+bqYcklHsNWY9EzcWJbnt9V6T+hNFrU23jMWa68iVdkmQGZAzA0KMb3
-         uX8SnAbePvZIGcw6P9ri/4FhWe+MKY2SXUWFnJBJ9BupSHw6Ng/RkDmzsDQPcNreCaOG
-         RuJkTYrxZr7jWI4fDOfburSExNNJvVpp02v3Q7YF9dc8Me2lXIuiHdMvCPTMHrIjmu5a
-         EXbmoW2KbMLkSG+CxdW1rtQRORdLF1lhTEPrCxfYjDcpLuzs49GGet5cqHPq2KZoptDh
-         eoPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjhOCEjtjLfjibZ6tVUb+knW39OSGuyczB8f45t6wRA=;
-        b=OurM/Ck3RKP/17hlb2f6dcsHK4RPHBtFWkj9r7LoGOLGkeb5YVGjlNJ9kI9rc7P5IU
-         aXC9Y7uUDeQ9s26reLT9G/89aaWxrnwMtuB7vEk+jjRlwDaB6uNHgLlULuRHJbxeSfYy
-         pH7WzXfq9lgnvcIR1M/rA3kFeZ/DJRSOU0fI3kzJKanHRXL4Pu4nassH1/b7e5JMR4w6
-         XbiscztX9BsMNZ+W2/+3W0Jklf/nGuBKonBgHSt+WCv4vswVU/zL2F7pQU+Y3Du21l9g
-         xLG7f3gX63Fhoi6vSXarFnjbJ6rC2C+wFzlkdyGgxu4pWnXX7/aRH0lFv2Q3y+p63tuh
-         m8pA==
-X-Gm-Message-State: AJIora+QXTSgHWJAXaLWydAIIdt9xNffT/PSg/AubvOxJDKKrham2yjS
-        MynX9xFl+tLG/Zr62uK3zVGlV7aKgks=
-X-Google-Smtp-Source: AGRyM1uyz+9/NZ1MBJd9aAa2kRIkRe472vgZq8ZwlKubB7tQTZgg2ujqxVs8t7T56MryP8fmbaOw9Q==
-X-Received: by 2002:a05:620a:1929:b0:6b6:19c9:462f with SMTP id bj41-20020a05620a192900b006b619c9462fmr8600580qkb.688.1659277175066;
-        Sun, 31 Jul 2022 07:19:35 -0700 (PDT)
-Received: from spruce (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
-        by smtp.gmail.com with ESMTPSA id h23-20020ac85497000000b0031f229d4427sm5382488qtq.96.2022.07.31.07.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 07:19:34 -0700 (PDT)
-Date:   Sun, 31 Jul 2022 10:19:33 -0400
-From:   Joe Simmons-Talbott <joetalbott@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: Be consistent with allocation result tests.
-Message-ID: <YuaPdctDFDIIVn9x@spruce>
-References: <20220718020348.32047-1-joetalbott@gmail.com>
- <20220718174441.7967830c@jic23-huawei>
+        Sun, 31 Jul 2022 10:31:16 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF4765FB;
+        Sun, 31 Jul 2022 07:31:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=tC9r4oVZgcMaGiiUSFNsXQd1XmrYl3tfqTOi1U1v8R8=; b=Sfk7rQDkt5zbohJXnWs0UeLejw
+        0DnLZYTf+/12xv6rYD9jl9RlV5VLLLP7oO3jn7ZFCXms6d3U8kIrPXkdYpIsRxSn3iPDug5zKptS0
+        QQVzx5BBEz5YCBBYIsmz7XaEF0fuMb4+1P+u4jSBodfmlGI2IFXihgpDiBmhEEk/VCgw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oI9xq-00C5Ym-Mx; Sun, 31 Jul 2022 16:30:42 +0200
+Date:   Sun, 31 Jul 2022 16:30:42 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Frank <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] net: phy: Add driver for Motorcomm yt8521 gigabit
+ ethernet
+Message-ID: <YuaSEpglXWbxQbAy@lunn.ch>
+References: <20220727070827.1162-1-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718174441.7967830c@jic23-huawei>
+In-Reply-To: <20220727070827.1162-1-Frank.Sae@motor-comm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:44:41PM +0100, Jonathan Cameron wrote:
-> On Sun, 17 Jul 2022 22:03:48 -0400
-> Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
+On Wed, Jul 27, 2022 at 03:08:27PM +0800, Frank wrote:
+> patch v4:
+>  Hi Andrew,Jakub
+>  Thanks very much and based on your comments we modified the patch v4 as below.
 > 
-> > Make both allocation result tests use the same format
-> > 
-> >     if (!ptr)
-> > 
-> > Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
-> If you post two patches to the list that will cause each other to not
-> apply, please base one on top of the other and say so in the
-> patch description.
+>  We evaluated the Marvell 10G driver and at803x you suggested. The 2 drivers
+>  implement SFP module attach/detach functions and we think these functions do
+>  not help yt8521 to do UTP/Fiber register space arbitration which you may
+>  concern in previous patch.
 > 
-> Anyhow, fixed up and applied by hand.
+>  Yt8521 can detect utp/fiber media link status automatically. For the case of
+>  both media are connected, driver arbitrates the priority of the media (by
+>  default, driver takes fiber as higher priority) and report the media status
+>  to up layer(MAC).
+> 
+> patch v3:
+>  Hi Andrew
+>  Thanks and based on your comments we modified the patch as below.
+> 
+> > It is generally not that simple. Fibre, you probably want 1000BaseX,
+> > unless the fibre module is actually copper, and then you want
+> > SGMII. So you need something to talk to the fibre module and ask it
+> > what it is. That something is phylink. Phylink does not support both
+> > copper and fibre at the same time for one MAC.
+> 
+>  yes, you said it and for MAC, it does not support copper and Fiber at same time.
+>  but from Physical Layer, you know, sometimes both Copper and Fiber cables are
+>  connected. in this case, Phy driver should do arbitration and report to MAC
+>  which media should be used and Link-up.
+>  This is the reason that the driver has a "polling mode", and by default, also
+>  this driver takes fiber as first priority which matches phy chip default behavior.
+> 
+> 
+> patch v2:
+>  Hi Andrew, Russell King, Peter,
+>  Thanks and based on your comments we modified the patch as below.
+>  
+> > So there's only two possible pages that can be used in the extended
+> >register space?
+>  
+>  Yes,there is only two register space (utp and fiber).
+>  
+> > > +/* Extended Register's Data Register */
+> > > +#define YTPHY_PAGE_DATA                                0x1F
+> >
+> > These are defined exactly the same way as below. Please reuse code
+> > where possible.
+>  
+>  Yes, code will be reuse, but "YT8511_PAGE" need to be rename like
+>  "YTPHY_PAGE_DATA",as it is common register for yt phys.
+>  
+> 
+> patch v1:
+>  Add a driver for the motorcomm yt8521 gigabit ethernet phy. We have verified
+>  the driver on StarFive VisionFive development board, which is developed by
+>  Shanghai StarFive Technology Co., Ltd.. On the board, yt8521 gigabit ethernet
+>  phy works in utp mode, RGMII interface, supports 1000M/100M/10M speeds, and
+>  wol(magic package).
+> 
+> Signed-off-by: Frank <Frank.Sae@motor-comm.com>
+> ---
+>  MAINTAINERS                 |    1 +
+>  drivers/net/phy/Kconfig     |    2 +-
+>  drivers/net/phy/motorcomm.c | 1170 ++++++++++++++++++++++++++++++++++-
+>  3 files changed, 1170 insertions(+), 3 deletions(-)
 
-I'm sorry for neglecting that and for creating extra work.  Thank you
-for fixing it.
+This is not the correct way to format the commit message. All the text
+you have above will end up in the commit. Please put all discussion
+after the --- .
 
-Thanks,
-Joe
+
+> +	/* If it is reset, need to wait for the reset to complete */
+> +	if (set == BMCR_RESET) {
+> +		while (max_cnt--) {
+> +			/* unlock mdio bus during sleep */
+> +			phy_unlock_mdio_bus(phydev);
+> +			usleep_range(1000, 1100);
+> +			phy_lock_mdio_bus(phydev);
+> +
+> +			ret = __phy_read(phydev, MII_BMCR);
+> +			if (ret < 0)
+> +				goto err_restore_page;
+> +
+> +			if (!(ret & BMCR_RESET))
+> +				return phy_restore_page(phydev, old_page, 0);
+> +		}
+> +		if (max_cnt <= 0)
+> +			ret = -ETIME;
+
+ETIMEDOUT.
+
+	Andrew

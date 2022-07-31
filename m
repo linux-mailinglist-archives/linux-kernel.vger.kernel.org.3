@@ -2,97 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF71585E9B
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 13:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFDC585EA6
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 13:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiGaLUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 07:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S235027AbiGaLcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 07:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiGaLUb (ORCPT
+        with ESMTP id S232220AbiGaLct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 07:20:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B7D6428;
-        Sun, 31 Jul 2022 04:20:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE122B80D1D;
-        Sun, 31 Jul 2022 11:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B511C433D6;
-        Sun, 31 Jul 2022 11:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659266427;
-        bh=K8XMnjLrVWD4hf/TSjDR6ccL8BtOsnjvFMSZEJF/67Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lzL//zYodUHTGytXfvrpXUiDMZwS+emJlOHZ4IOBNn+zzSEpUy72POGAFWXIPXvgF
-         wGTNtID6YSbV4AW9KfkTx6Qs444rLO3VjwWoA9X0140p8P0bLVTiRl2iOiAqWtbJoG
-         cO3M9fApNzmD7qJKBpyQBF1gVT1SQuvJOwY0FQONvyi390ZzXEHaJ/KilrYpdrc0Zf
-         71HKqsYDKClaaK5kakwGNzKl3RmB3yIPDRbFkBJOoWF0/64CmN8dlf2kNYAGdMC15Y
-         N1AALLfxbOgc/UHEP1ajEu+FZA7HkqoMSqOvzab+LpQUPzsZ716MKNIjUeYNiMJxLq
-         JP1Dno34aCuGg==
-Date:   Sun, 31 Jul 2022 12:30:39 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Joe Simmons-Talbott <joetalbott@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: Use parens with sizeof
-Message-ID: <20220731123039.600347b0@jic23-huawei>
-In-Reply-To: <20220717153438.10800-1-joetalbott@gmail.com>
-References: <20220717153438.10800-1-joetalbott@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 31 Jul 2022 07:32:49 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A41DDFEE;
+        Sun, 31 Jul 2022 04:32:49 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id f11so7386509pgj.7;
+        Sun, 31 Jul 2022 04:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=9zxYvVb7b8LZLTBs71kugtnLomBjlBQUO9h/IsY7cyk=;
+        b=I/HBjugbuX1kfRW3rikYJwk4ncEkL69ipDZZhQV2ws5vwB+xXuHZLLJw6evWq77VQm
+         nuEJWV0PBIW/oG54TENBgeP7u3eWlbl7LPN+aLuhQ1vsrukH8hJn02xjvgR1tNRHTTW7
+         sIHUE49DeSdRzNuGFRx8lPCmZm/e56cjXw5rQ/Spa1m2ShXrSFhmfK/J9oHW8Xo95kEG
+         YcmBguqez2z0nLAaviwhhsNjJREcDOqKghZto3XjwtJRGk35YijN9dsMyAQ+rNVLjm5f
+         ouWrXflh1JfCfxPGJ5A4r1sc7FTXYP17gS+eX+Pn153HqcIBcj6i5gg7Wk8d0bJUBaHJ
+         j+vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9zxYvVb7b8LZLTBs71kugtnLomBjlBQUO9h/IsY7cyk=;
+        b=hYwdIFfakU3ej14/njXf6dCa3FTgYsVTjAjU14Y37nWF4Te4vMo23PODRKcvJypdQk
+         NSob0zEtoF81LfufnLSQgBIdh2Fmj43n6tX+Q0OCJme2KSyEqaDqtpnKnEwkTLeCXhGN
+         WpjBnwUjYZgUfYLChCFYaKNczdkzS0YidaiAvFxVN0iJEibYTZKXfcvwSBNJYQ7hE/ew
+         RZumVRcdN/6T0vR+9FiFF19oo8pPxLdkBmuDMo8OiyIZkBZL8J9msWkbYO5nbG5iiLGr
+         /kkgWqwlY9ZHlUZlIc8vEnzVOshWdgJJGgl9dm94KEMEDJp0T7ymHFu1pmx90DLCMdmT
+         +86g==
+X-Gm-Message-State: AJIora80/xPddePHGuvu5AeP4oH8y1k3uHaSai8VWglD8DfbgcdDhrzY
+        9qrMbyuKfwcHaxKCZEOBd/U=
+X-Google-Smtp-Source: AGRyM1u9NHvpHt5MchqETPsuNoKOmNKdCOuJGDsUH1Ao13fjbnfwEJmvsjIYwhFNGeGKRnGnQFmHnw==
+X-Received: by 2002:a63:121a:0:b0:41a:6792:31e5 with SMTP id h26-20020a63121a000000b0041a679231e5mr9432755pgl.69.1659267168467;
+        Sun, 31 Jul 2022 04:32:48 -0700 (PDT)
+Received: from [192.168.0.110] ([103.159.189.145])
+        by smtp.gmail.com with ESMTPSA id u14-20020a170902e5ce00b0016c4f0065b4sm7358652plf.84.2022.07.31.04.32.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 04:32:48 -0700 (PDT)
+Message-ID: <166886f8-eb9e-f779-cf57-1ea353adc446@gmail.com>
+Date:   Sun, 31 Jul 2022 17:32:41 +0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] vt: Clear selection before changing the font
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+References: <000000000000bbdd0405d120c155@google.com>
+ <20220729065139.6529-1-khalid.masum.92@gmail.com>
+ <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de> <YuV9apZGNmGfjcor@p100>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+In-Reply-To: <YuV9apZGNmGfjcor@p100>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 17 Jul 2022 11:34:38 -0400
-Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
-
-> Prefer 'sizeof(var)' over 'sizeof var' as reported by checkpatch.pl.
+On 7/31/22 00:50, Helge Deller wrote:
+> When changing the console font with ioctl(KDFONTOP) the new font size
+> can be bigger than the previous font. A previous selection may thus now
+> be outside of the new screen size and thus trigger out-of-bounds
+> accesses to graphics memory if the selection is removed in
+> vc_do_resize().
 > 
-> Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
-Applied to the togreg branch of iio.git and pushed out as testing
-to let 0-day take a poke at it.
-
-oops. Email got stuck in my outbox when I went away for a week.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/industrialio-trigger.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Prevent such out-of-memory accesses by dropping the selection before the
+> various con_font_set() console handlers are called.
 > 
-> diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-> index f504ed351b3e..88bccb0676c8 100644
-> --- a/drivers/iio/industrialio-trigger.c
-> +++ b/drivers/iio/industrialio-trigger.c
-> @@ -368,7 +368,7 @@ struct iio_poll_func
->  	va_list vargs;
->  	struct iio_poll_func *pf;
->  
-> -	pf = kmalloc(sizeof *pf, GFP_KERNEL);
-> +	pf = kmalloc(sizeof(*pf), GFP_KERNEL);
->  	if (pf == NULL)
->  		return NULL;
->  	va_start(vargs, fmt);
-> @@ -560,7 +560,7 @@ struct iio_trigger *viio_trigger_alloc(struct device *parent,
->  	struct iio_trigger *trig;
->  	int i;
->  
-> -	trig = kzalloc(sizeof *trig, GFP_KERNEL);
-> +	trig = kzalloc(sizeof(*trig), GFP_KERNEL);
->  	if (!trig)
->  		return NULL;
->  
+> Signed-off-by: Helge Deller <deller@gmx.de>
 
+Tested-by: Khalid Masum <khalid.masum.92@gmail.com>
+
+> Reported-by: syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index dfc1f4b445f3..3f09205185a4 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -4662,9 +4662,11 @@ static int con_font_set(struct vc_data *vc, struct console_font_op *op)
+>   	console_lock();
+>   	if (vc->vc_mode != KD_TEXT)
+>   		rc = -EINVAL;
+> -	else if (vc->vc_sw->con_font_set)
+> +	else if (vc->vc_sw->con_font_set) {
+> +		if (vc_is_sel(vc))
+> +			clear_selection();
+>   		rc = vc->vc_sw->con_font_set(vc, &font, op->flags);
+> -	else
+> +	} else
+>   		rc = -ENOSYS;
+>   	console_unlock();
+>   	kfree(font.data);
+> @@ -4691,9 +4693,11 @@ static int con_font_default(struct vc_data *vc, struct console_font_op *op)
+>   		console_unlock();
+>   		return -EINVAL;
+>   	}
+> -	if (vc->vc_sw->con_font_default)
+> +	if (vc->vc_sw->con_font_default) {
+> +		if (vc_is_sel(vc))
+> +			clear_selection();
+>   		rc = vc->vc_sw->con_font_default(vc, &font, s);
+> -	else
+> +	} else
+>   		rc = -ENOSYS;
+>   	console_unlock();
+>   	if (!rc) {

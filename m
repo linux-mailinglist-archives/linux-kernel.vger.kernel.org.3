@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E95D585EEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40828585EE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbiGaMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S236474AbiGaMdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 08:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiGaMjk (ORCPT
+        with ESMTP id S229745AbiGaMdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 08:39:40 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944F4DF8A;
-        Sun, 31 Jul 2022 05:39:39 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id i13so10609201edj.11;
-        Sun, 31 Jul 2022 05:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=j65sAOKYqI+Uxv1jBk/p69AEquNqVjyqeGyH/PlKGl8=;
-        b=QT7G8U6c2KAKqExmH16DbFOxqVACF96FT1etnfZAfBZRoPQqRi2oCom07LVhIxYtuT
-         Wv6i4E4sEjG32iqikZ5yEi/A8tKid6IETe7/q8y1Owd4pTGtWGc7ESXBJETppN3xESpc
-         2GPpeyHCGGMRvgppDMP+dKJ+aYc9nf4Z9uDNTg5ARUtrGs2cCC5SbeliplKXAFBDirkM
-         dESBNN18pyTMWZKNSTqJq8I4Abz95cgxfYJg1E1U4m8z6d8KjOkgxjh6imL7lsNioQ8U
-         ZMiL08M/0HlzNmAJmDbXSICE6QV+eUVZCQjD28EM+cY0qYM6+nUfzzCWzzrJKdc95H6E
-         cm+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=j65sAOKYqI+Uxv1jBk/p69AEquNqVjyqeGyH/PlKGl8=;
-        b=eklihG/jdlRygjR6cT4mUIXpvD5bcmZNb0kzloC/2n4rnVRgzIzE2YsZ9hCID+eZEi
-         YRetrDok8zT97vFnjZlm9Xp5Yg9gjw9weNwVe/koDGvt2o/WP/0VUYvRFKjEl0seNjlg
-         1c7zphQstuogKsIyoDT8dQBjKCrc7d/QrffTrzGXXyO9eQDjvII5JR1ul2ucHKpOlVqC
-         oXsVZuOY0n4g/5bW2hbAh3NMGPyatwBCQXCYpy3jhebCB08K8dcyu94LJ5BH1FRyk67n
-         bM2HZUGbazZo5VzxYPRHga8tLKHyo2PyRTF4XXbS37fzt2Msvz0SJmn077rhL2c3Jwuu
-         1JIQ==
-X-Gm-Message-State: AJIora+i+9MkNij18Jnb5kFpfywyW+yiZlcrOCE1oEc3LkC8FJziEyL3
-        O993DixvIq4ezpxQ+zMicp4=
-X-Google-Smtp-Source: AGRyM1uKxYs2rRscg8zn4DVKKdNeX1xhPibA8eIExfAl5Slk9njR0VsLOwgGlsD3DNinYFXH2rE7Mw==
-X-Received: by 2002:a05:6402:294c:b0:43a:91a9:a691 with SMTP id ed12-20020a056402294c00b0043a91a9a691mr11513929edb.182.1659271178098;
-        Sun, 31 Jul 2022 05:39:38 -0700 (PDT)
-Received: from krava ([83.240.61.175])
-        by smtp.gmail.com with ESMTPSA id u10-20020a17090626ca00b007262b7afa05sm3993497ejc.213.2022.07.31.05.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 05:39:37 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 31 Jul 2022 14:39:36 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 6/6] perf cpumap: Add range data encoding
-Message-ID: <YuZ4CEnken8U4HO5@krava>
-References: <20220614143353.1559597-1-irogers@google.com>
- <20220614143353.1559597-7-irogers@google.com>
+        Sun, 31 Jul 2022 08:33:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB993BE30;
+        Sun, 31 Jul 2022 05:33:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75829B80D12;
+        Sun, 31 Jul 2022 12:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02166C433D6;
+        Sun, 31 Jul 2022 12:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659270816;
+        bh=Cae8WTn1U5ue2ZooK/ujvkkFamJx/qU5ivCeIdOAFOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JWfDw6CcxwDzOUPkOLDtFJayTcqjmPA1ymQBktM/jTno3PKJ1N2ys17Wl/kgJBKyK
+         k0CIG1LG2vTzXUKSng2Bykzj/9vpWSALZ8CKRXq0rbpZwQzfj3RuMeKBNWYzwloYnS
+         mRqkwdIOxBrAbQvlxsZu48HSsQMsvQeEmzSrg+vkDVFnTtZJ+HkeKGX6VoR+VVkNVu
+         BI1Whrh4dV5xKZeJ6QunNXScIGY/GocujEaM1e5y+e2MAext1JM+fCmDkc1RMAB5kp
+         UYQJezSmib3Xwp7dCWCD7S829x/7csMbOoZBq4VDzH2teh+6yT+kU5lwjN/AXki0MX
+         /1+Bzm6baJ8fg==
+Date:   Sun, 31 Jul 2022 13:43:47 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio <linux-iio@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c: Use u8 type in i2c transfer calls
+Message-ID: <20220731134347.19fcfbe7@jic23-huawei>
+In-Reply-To: <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
+References: <202207190634.ToyhlXSz-lkp@intel.com>
+        <0551a3ad-8c42-78fe-5b50-ebbc003e55e6@intel.com>
+        <CANRwn3R48rvwnygdyKhmFE8wD+BCCHrTWa-M=uTvpnK5Jo3vww@mail.gmail.com>
+        <CANRwn3Tgumg-mZ9sV=8AXevag9z2s=mTF4qqZW2KenDmc9b1wQ@mail.gmail.com>
+        <CAHp75VfFrkDLOC2+5WUmVGBLfoxVbDzJKyLN0+Z+XrZzpkYDkQ@mail.gmail.com>
+        <CANRwn3SH2Z5n5so4FcymzgN-KAciHGo=tuXUheVttc2+vQeRqg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614143353.1559597-7-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 07:33:53AM -0700, Ian Rogers wrote:
+On Thu, 28 Jul 2022 15:48:59 -0700
+Jason Gerecke <killertofu@gmail.com> wrote:
 
-SNIP
-
-> +	event = cpu_map_data__alloc(&syn_data, sizeof(struct perf_event_header));
->  	if (!event)
->  		return NULL;
->  
-> +	syn_data.data = &event->data;
->  	event->header.type = PERF_RECORD_CPU_MAP;
-> -	event->header.size = size;
-> -	event->data.type   = type;
-> -
-> -	cpu_map_data__synthesize(&event->data, map, type, max);
-> +	event->header.size = syn_data.size;
-> +	cpu_map_data__synthesize(&syn_data);
->  	return event;
->  }
->  
-> +
->  int perf_event__synthesize_cpu_map(struct perf_tool *tool,
->  				   const struct perf_cpu_map *map,
->  				   perf_event__handler_t process,
-> @@ -1891,24 +1894,20 @@ int perf_event__synthesize_event_update_name(struct perf_tool *tool, struct evse
->  int perf_event__synthesize_event_update_cpus(struct perf_tool *tool, struct evsel *evsel,
->  					     perf_event__handler_t process)
->  {
-> -	size_t size = sizeof(struct perf_event_header) + sizeof(u64) + sizeof(u64);
-> +	struct synthesize_cpu_map_data syn_data = { .map = evsel->core.own_cpus };
->  	struct perf_record_event_update *ev;
-> -	int max, err;
-> -	u16 type;
-> -
-> -	if (!evsel->core.own_cpus)
-> -		return 0;
-
-all seems fine, just looks like we no longer do this check,
-might not be needed anymore, as that changed in past
-
-thanks,
-jirka
-
-> +	int err;
->  
-> -	ev = cpu_map_data__alloc(evsel->core.own_cpus, &size, &type, &max);
-> +	ev = cpu_map_data__alloc(&syn_data, sizeof(struct perf_event_header) + 2 * sizeof(u64));
->  	if (!ev)
->  		return -ENOMEM;
->  
-> +	syn_data.data = &ev->cpus.cpus;
->  	ev->header.type = PERF_RECORD_EVENT_UPDATE;
-> -	ev->header.size = (u16)size;
-> +	ev->header.size = (u16)syn_data.size;
->  	ev->type	= PERF_EVENT_UPDATE__CPUS;
->  	ev->id		= evsel->core.id[0];
-> -
-> -	cpu_map_data__synthesize(&ev->cpus.cpus, evsel->core.own_cpus, type, max);
-> +	cpu_map_data__synthesize(&syn_data);
->  
->  	err = process(tool, (union perf_event *)ev, NULL, NULL);
->  	free(ev);
-> -- 
-> 2.36.1.476.g0c4daa206d-goog
+> On Thu, Jul 28, 2022 at 1:48 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Thu, Jul 28, 2022 at 4:30 PM Jason Gerecke <killertofu@gmail.com> wrote:  
+> > > On Wed, Jul 20, 2022 at 12:01 PM Jason Gerecke <killertofu@gmail.com> wrote:  
+> > > > On Tue, Jul 19, 2022 at 5:21 PM kernel test robot <rong.a.chen@intel.com> wrote:  
+> >  
+> > > > Writing a patch to fix the new warnings generated by my I2C patch is
+> > > > simple enough, but I'd like some help coordinating getting both
+> > > > patches landed. Should I wait for the I2C patch to land in "for-next"
+> > > > before sending the IIO fix, or would it be preferred to send the IIO
+> > > > fix right now so that both patches can be reviewed simultaneously?  
+> > >
+> > > It's been pretty quiet, so asking again for any thoughts on how to
+> > > best address this tangle...  
+> >
+> > The rule of thumb is not to introduce an additional warning or compile error.
+> > I haven't looked deeply into this case, but it smells to me as if you need a new
+> > version of your initial patch that includes a fix to IIO.
+> >
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko  
 > 
+> Thanks! Since the patch would touch both IIO and I2C I assume I would
+> submit it to both mailinglists. And that whichever maintainer gets to
+> it first would just give their Reviewed-by (if all looks good) and the
+> second applies the Signed-off-by and handles the merge?
+> 
+> I'll work on the updated combined patch...
+
+I suspect this will be likely to create merge conflicts, so submit it like
+that and I'll probably ask Wolfram to do an immutable branch that I can
+then pull into IIO.  Hence we'll have exactly the same commits (IDs and all)
+in both IIO and I2C trees.
+
+Jonathan
+
+> 
+> Jason
+

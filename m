@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352CE585E37
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 10:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDEE585E3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 10:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbiGaIrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 04:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S236476AbiGaIyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 04:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGaIrV (ORCPT
+        with ESMTP id S229456AbiGaIyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 04:47:21 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FEC1274A
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 01:47:20 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id d12-20020a056e02214c00b002dd143bee38so4852199ilv.7
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 01:47:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=9ZWT2dG7kvlI+OPdAV7Z0A6SxXL1xkRWwFlgF6QVYQA=;
-        b=GQlbI4Ya4aL+Vqtx+ClH7T3gRmlptaU+jpYAvlhHZmb6+ezxdrq6FX+2Mh2WUvyHPA
-         wqTGB/soZjbe2M/j99eiHACw/yW+2EJ1ts68ompoMiW2Tj/PpJ7XjICnB+DovaO6zcqw
-         NDm4XKRLW/V+zX5gP9e9pnO36S9XptHXF6P26hyYX+GjSUZu9oorzc3n0TGdke0LajSv
-         WLiuYQpj5yj4xuwp6LVyU5hGaSrcADz3OJgy7dbbFZnPolrz1E6XNk0vDR79RLu9xrp7
-         BgKHf5Nvh81HhQJpy8GCPS8/32w4CcMH7wzr6D1KwlACINRvWwhj7R775IBCvdGn2Ox7
-         Qnbw==
-X-Gm-Message-State: AJIora8cxMl/BlsLy2xeQukHFfF9WFluhAAxRg/Am0Or4GreAGV//J5H
-        GchjvmKmK31x8mLxFzAAXWcOkFmFuBvRUyRWD7DFxnSAd4Of
-X-Google-Smtp-Source: AGRyM1uPo5QRcVHQHZHJ7aXnmx8jTKizYEPWYRJidTXk2aiv4M8TzKT4NNxDkEfomwYcf+6S1cOvw2nIEGlwSaduPdj0yfFgR8mr
+        Sun, 31 Jul 2022 04:54:07 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35AB1EF;
+        Sun, 31 Jul 2022 01:54:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659257594; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SwhoDV58nqvepP1FZQz3lBk58BugH67wtYS9Q533jp/uMQ95jx/de2mkaj+62SkIkjlgHeIiY+1xXVwbowtxMVQSMGIsLUPYArVtUwdofYo65L5mSbNliRl+N1c6lBRou/bwLNp/Ytm3XGj+hu8CzstSszG6zxYhvc7p9BAplD8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1659257594; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=e44jgZLP1HEmwyKrbQI6PjgpbbGNrnF9zlgtzzmI5E4=; 
+        b=W/wQbvX1Ka30D8KO87ltRJuydbjYfjuTCwKDkTfz61x/+Bl7XNmO5VIe/ZPzFfp7gacNR4CwLADFlnl3G+TWqQ5FTuiI14dUv89nH0lXKqTYtL3wyUjnc0+9O2SPGwJNJAN6BBQr704g0DC0syC8PvXe+4JMLB8qnOgir+yQkEw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659257594;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=e44jgZLP1HEmwyKrbQI6PjgpbbGNrnF9zlgtzzmI5E4=;
+        b=KjN7uqVX/myj83W3MyCfA25qyyvecseRVcrxkS1mx32RyHFQTbo8l9HQhAQFM/uO
+        Yq5+jpJp0R+wLCCPeQNp9x+6pCVOz3ZvrpT7MH5fY6uz8yWp8S1pk6FQTyM/rF5JUo5
+        IxTGXg/gzfU/JrU7Kwjzt3SF5UuUR/oCROgWLHRU=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1659257591946592.7858418300208; Sun, 31 Jul 2022 01:53:11 -0700 (PDT)
+Message-ID: <6b29e16c-d4b8-93af-ce0f-84d308a88089@arinc9.com>
+Date:   Sun, 31 Jul 2022 11:53:05 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a02:a890:0:b0:33f:22b8:cb0b with SMTP id
- l16-20020a02a890000000b0033f22b8cb0bmr4414472jam.136.1659257240140; Sun, 31
- Jul 2022 01:47:20 -0700 (PDT)
-Date:   Sun, 31 Jul 2022 01:47:20 -0700
-In-Reply-To: <20220731082711.724-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000063c6a105e515ee67@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in __hrtimer_run_queues
-From:   syzbot <syzbot+de9526ade17c659d8336@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/4] completely rework mediatek,mt7530 binding
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220730142627.29028-1-arinc.unal@arinc9.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20220730142627.29028-1-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is for net-next, I forgot to include it in the subject.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in __cfg80211_ibss_joined
+Arınç
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 8 at net/wireless/ibss.c:36 __cfg80211_ibss_joined+0x487/0x520 net/wireless/ibss.c:36
-Modules linked in:
-CPU: 1 PID: 8 Comm: kworker/u4:0 Not tainted 5.11.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: cfg80211 cfg80211_event_work
-RIP: 0010:__cfg80211_ibss_joined+0x487/0x520 net/wireless/ibss.c:36
-Code: 0f 0b e9 0c fe ff ff e8 87 19 75 f9 e9 41 fc ff ff e8 5d 19 75 f9 e9 7d fc ff ff e8 73 19 75 f9 e9 0d ff ff ff e8 79 51 32 f9 <0f> 0b e9 7e fc ff ff e8 6d 51 32 f9 0f 0b e8 66 19 75 f9 e9 e4 fb
-RSP: 0018:ffffc90000cd7bd8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888028288bd0 RCX: 0000000000000000
-RDX: ffff888010d25340 RSI: ffffffff88408257 RDI: 0000000000000000
-RBP: ffff888028288000 R08: 0000000000000001 R09: ffffffff8ee66807
-R10: fffffbfff1dccd00 R11: 0000000000000000 R12: 1ffff9200019af7d
-R13: ffff888011916918 R14: 0000000000000000 R15: 0000000000000006
-FS:  0000000000000000(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005680c0 CR3: 000000001aeb4000 CR4: 0000000000350ee0
-Call Trace:
- cfg80211_process_wdev_events+0x3de/0x5b0 net/wireless/util.c:977
- cfg80211_process_rdev_events+0x6e/0x100 net/wireless/util.c:1003
- cfg80211_event_work+0x1a/0x20 net/wireless/core.c:322
- process_one_work+0x98d/0x15f0 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x3b1/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-
-
-Tested on:
-
-commit:         f40ddce8 Linux 5.11
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16ff72fe080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3565439810a4d2e5
-dashboard link: https://syzkaller.appspot.com/bug?extid=de9526ade17c659d8336
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16978a82080000
-
+On 30.07.2022 17:26, Arınç ÜNAL wrote:
+> Hello.
+> 
+> This patch series brings complete rework of the mediatek,mt7530 binding.
+> 
+> The binding is checked with "make dt_binding_check
+> DT_SCHEMA_FILES=mediatek,mt7530.yaml".
+> 
+> If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
+> MT7623AI SoC, let me know. I'll add it to the examples.
+> 
+> If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
+> 
+> Arınç ÜNAL (4):
+>    dt-bindings: net: dsa: mediatek,mt7530: make trivial changes
+>    dt-bindings: net: dsa: mediatek,mt7530: update examples
+>    dt-bindings: net: dsa: mediatek,mt7530: update binding description
+>    dt-bindings: net: dsa: mediatek,mt7530: update json-schema
+> 
+>   .../bindings/net/dsa/mediatek,mt7530.yaml       | 1006 +++++++++++++-----
+>   1 file changed, 764 insertions(+), 242 deletions(-)
+> 
+> 

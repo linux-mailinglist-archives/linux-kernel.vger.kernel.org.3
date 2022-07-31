@@ -2,60 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FCE585F8D
+	by mail.lfdr.de (Postfix) with ESMTP id 25124585F8C
 	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237095AbiGaPlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 11:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S237250AbiGaPlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 11:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiGaPlf (ORCPT
+        with ESMTP id S233604AbiGaPlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 31 Jul 2022 11:41:35 -0400
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71F1E0B9
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 08:41:33 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id IB4IoW8sbLFqbIB4IoU93a; Sun, 31 Jul 2022 17:41:31 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 31 Jul 2022 17:41:31 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <e30925e7-56b7-48df-b287-094441f8c586@wanadoo.fr>
-Date:   Sun, 31 Jul 2022 17:41:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB48E0BE
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 08:41:34 -0700 (PDT)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+        (envelope-from <glk-linux-kernel-4@m.gmane-mx.org>)
+        id 1oIB4O-0001xM-M1
+        for linux-kernel@vger.kernel.org; Sun, 31 Jul 2022 17:41:32 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To:     linux-kernel@vger.kernel.org
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Subject: Re: [PATCH v1 3/3] ASoC: amd: acp: Add legacy audio driver support
  for Rembrandt platform
-Content-Language: fr
-To:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     Sunil-kumar.Dommati@amd.com,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        ssabakar@amd.com, Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        venkataprasad.potturu@amd.com, Meng Tang <tangmeng@uniontech.com>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Vijendar.Mukunda@amd.com,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Newsgroups: gmane.linux.alsa.devel,gmane.linux.kernel
+Date:   Sun, 31 Jul 2022 17:41:25 +0200
+Message-ID: <e30925e7-56b7-48df-b287-094441f8c586@wanadoo.fr>
 References: <20220707161142.491034-1-Vsujithkumar.Reddy@amd.com>
  <20220707161142.491034-4-Vsujithkumar.Reddy@amd.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220707161142.491034-4-Vsujithkumar.Reddy@amd.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     alsa-devel@alsa-project.org
+Content-Language: fr
+In-Reply-To: <20220707161142.491034-4-Vsujithkumar.Reddy@amd.com>
+Cc:     linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -204,4 +188,5 @@ fails, the probe will fail, right?
 > +}
 
 [...]
+
 

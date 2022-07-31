@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E085A58605E
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 20:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF475586058
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 20:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237698AbiGaS2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 14:28:32 -0400
+        id S237342AbiGaS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 14:28:13 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbiGaS2L (ORCPT
+        with ESMTP id S237195AbiGaS2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 14:28:11 -0400
-Received: from aer-iport-1.cisco.com (aer-iport-1.cisco.com [173.38.203.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70DBBE37
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 11:28:07 -0700 (PDT)
+        Sun, 31 Jul 2022 14:28:10 -0400
+Received: from aer-iport-3.cisco.com (aer-iport-3.cisco.com [173.38.203.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB19BBE30
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 11:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=3500; q=dns/txt; s=iport;
+  d=cisco.com; i=@cisco.com; l=1746; q=dns/txt; s=iport;
   t=1659292087; x=1660501687;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6Cdb2OQrgAvdR16JMhjiKU3mXiADfXmJC5nN3O18Blw=;
-  b=LLFO7RNrB0c0I+UW5QTaFC6UJCfy6VnefuF2nNDU8AH9nwsvv0DbecyU
-   FcsXbq5ihjjZkvWQVin9IO7PFcB31D6V7F9FHgchv60fIJP4yxwqK+Kr1
-   nLpoOYybxruflDjDOa1mBI9PA3OGgzI6+hFRnLjdR8XMRLwuE2p4utQVv
-   I=;
-X-IPAS-Result: =?us-ascii?q?A0ACAADAyOZilxbLJq1aGwEBAQEBAQEBBQEBARIBAQEDA?=
- =?us-ascii?q?wEBAYF7BgEBAQsBgyRWLBJFjG1fiA0DiyCRWYElA1QLAQEBDzcLBAEBhQYCh?=
- =?us-ascii?q?HUmNAkOAQIEAQEBAQMCAwEBAQEBAQMBAQUBAQECAQcEFAEBAQEBAQEBCRsGD?=
- =?us-ascii?q?AUQNYVoDYZDAwMyAUEFECAxITYZgn0BgmUDMgMQpl2CK4EBg08Bg1gNgkyBP?=
- =?us-ascii?q?QGGMoNGhSc9BoFJRIR9giCIXwSHHJBpAwkEBwVKRAMLLA8WBQgJFxIQEAIEE?=
- =?us-ascii?q?RoLBgMWPwkCBA4DQAgNAxEEAw8YCRIIEAQGAzEMJQsDFAwBBgMGBQMBAxsDF?=
- =?us-ascii?q?AMFJAcDHA8jDQ0EHx0DAwUlAwICGwcCAgMCBhUGAgI2GDkIBAgEKyMPBQIHL?=
- =?us-ascii?q?wUELwIeBAUGEQgCFgIGBAQEBBYCEAgCCCcXBxMzGQEFWRAJIRwOGhAFBhMDI?=
- =?us-ascii?q?G8FBz4PKDM1PCsfGwqBEiorFQMEBAMCBhgDAyICEC4xAxUGKRMSLQkqdQkCA?=
- =?us-ascii?q?yJtAwMEKi4DCSEfBwkwHZZEggUHUzsrUVCBKI8Jhk4BqlwsbINbiyKOd4VlG?=
- =?us-ascii?q?jGFRqMhlnyEeog+g1+WPYFhdYEgTSMVgyMJCj4ZD44sDQmIZIVMQjECATgCB?=
- =?us-ascii?q?gsBAQMJjwYBAQ?=
-IronPort-Data: A9a23:+Zjfp6wk14CNCZE19Zh6t+ehxirEfRIJ4+MujC+fZmUNrF6WrkUCm
- jQcXGuAb6qJNGqjLdh3b4ix/U9V6sPSndQ1QVRspFhgHilAwSbn6Xt1DatR0we6dJCroJdPt
- p1GAjX4BJloCCea/H9BC5C5xZVG/fngqoHUVaiVYUideSc+EH170U04wrZg6mJVqYHR7z2l6
- IuaT/L3YDdJ6xYsWo7Dw/vewP/HlK2aVAIw5jTSV9gS1LPtvyV94KYkGE2EByCQrr+4sQKNb
- 72rILmRpgs19vq2Yz+vuu6TnkYiGtY+MeUS45Zbc/DKv/RMmsA9+v1jBvpMeHl3sDLXw+FL7
- vUUkKD3TC58a8UgmMxFO/VZOyhzJ+hN/6XKZCH5us2IxEqAeHzpqxlsJBhpZstDqqAtWToIr
- 6ZwxDMlNnhvg8q2zb2nVORgmuwoLdLgO8UUvXQIITTxVq1/HM+dHs0m4/dFwygdlPJ1RsyAT
- JpAUTgxT0THfDBQbwJ/5JUWxbf02SaXnydjgE6Sv7Q+52TI5Ahw1qX9ddTSZ9qGTNlUmUDeo
- XjJl0zwAQkfHNiezyeVt3yrm+nDlD/6X4RUE6e3ntZshl67yWsUBxkbE1C8pJGRjkejQdtWA
- 0cT9icnsLI17kXtScPyNzWksWKfuTYZWsYWHuEngCmOx6fP6AGeBUAPTiRGbd07sYkxXzNC/
- luAldnuGSBHqrCZSXuBsLyTqFuaNSETLGIGYC4PRBot7NzqoYV1hRXKJv5sCqO6jd3dHTD23
- iCEqzU4i7wPjMkNkaKh8jjvhzOqu4iMTQMv4AjTdnyq4xk/Z4O/YYGsr1/B4p59wJ2xR1Sb+
- XkcnNKCqeYHEdeGlTeGR6MGG7TBC+u53CP02gZdH8kwyRSW/CD/TLp2wGhbGABsG5NREdP2W
- 3P7tQRU7Z5VGXKla65rfo68Y/gXIbjc+cfNDa+LM4IfCnRlXErWo3E0PB/4M3XFyRB0yckC1
- YGnndFA5Ev26JiLLhLrHo/xMpdymEjSIF8/orihlXyaPUK2PiL9dFv8GALmghoFxK2Fuh7J1
- N1UKtGHzR5SOMWnPHSGq9ZOfQxSdCZgbXwTlyCxXrDbSuaBMDxxY8I9PZt6E2CYt/0Pz7yRr
- i3VtrFwkQKg3xUr1jlmmlg6OO+wAv6TXFowPDcnOh6zymM/bIO0hJrzhLNpFYTLANdLlKYuJ
- 9FcIp3oKq0WGlzvpmRMBbGg/dcKXEn62mqz09+NPWFXk2hIHFeSpLcJv2LHqUEzM8ZAnZFm/
- eb7hl+CHctrqsYLJJ++Vc9DBmiZ5RA18N+elWORSjWPUC0AKLRXFhE=
-IronPort-HdrOrdr: A9a23:hcogSKBCwgw1v+nlHemp55DYdb4zR+YMi2TDGXocdfUzSL39qy
- nAppomPHPP4gr5HUtQ+uxoW5PwJE80i6QV3WB5B97LNzUO+lHYTr2KhrGM/9SPIUDDH5ZmtZ
- uJt8NFebvN5Z8Qt7ec3DWF
+  bh=LGqx0vejJuAYae6H+nUIyKHFgbeJ8fzoZTLoDvP57Sw=;
+  b=WNGw2C8KkZOcW1fui1yWGLxYdTqd+KaboIWNEhAdad9ejjzNnCiIxFLI
+   R9zt8de1otciGxN2qEE/wgirC2i+Ggb0bQLwf5mi9emCziN8J1jHsO1wj
+   QjqzxKKGhrt1DA0sIJP0CS7kDIqi4+TO3fpAhiBNECqnQbLjs8DL6MPB+
+   U=;
+X-IPAS-Result: =?us-ascii?q?A0AcAwDAyOZi/xbLJq1aHgEBCxIMggQLg3ssEkWNTIgQn?=
+ =?us-ascii?q?HmBfAsBAQEPQgQBAYUGAoR1JjQJDgECBAEBAQEDAgMBAQEBAQEDAQEFAQEBA?=
+ =?us-ascii?q?gEHBIEJE4V1hkMGMgFGECAxVxmCfYMbA6ZtgiuBAYRvhRKBPYl5hSc9BoFJR?=
+ =?us-ascii?q?IR9hRGFbgSYBQMJBAcFSkQDCywPFgUICRcSEBACBBEaCwYDFj8JAgQOA0AID?=
+ =?us-ascii?q?QMRBAMPGAkSCBAEBgMxDCULAxQMAQYDBgUDAQMbAxQDBSQHAxwPIw0NBB8dA?=
+ =?us-ascii?q?wMFJQMCAhsHAgIDAgYVBgICNhg5CAQIBCsjDwUCBy8FBC8CHgQFBhEIAhYCB?=
+ =?us-ascii?q?gQEBAQWAhAIAggnFwcTMxkBBVkQCSEcDhoQBQYTAyBvBQc+DygzNTwrHxsKg?=
+ =?us-ascii?q?RIqKxUDBAQDAgYYAwMiAhAuMQMVBikTEi0JKnUJAgMibQMDBCouAwkhHwcJM?=
+ =?us-ascii?q?B2YUIEOgmnBV4Nbn34aMadtei2WT6JQNIRQgWE8gVlNIxWDI1EZD44sFo4wQ?=
+ =?us-ascii?q?jE7AgYLAQEDCY8GAQE?=
+IronPort-Data: A9a23:FMw5DKu680jWOEndeo4iUFKzT+fnVDhfMUV32f8akzHdYApBsoF/q
+ tZmKWyBb/uNYmXzeNl/PN+zpkMC7ZLVnYJgTQZo/ixjQSJEgMeUXt7xwmUckM+xwmwvaGo9s
+ q3yv/GZdJhcokf0/0vraP65xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvQ/
+ 4KpyyHjEAX9gWQsbTlNs/vrRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dgJtb
+ 7+epF0R1jqxEyYFUrtJoJ6iGqE5auK60Ty1t5Zjc/PKbi6uCcAF+v1T2PI0MS+7gtgS9jx74
+ I0lWZeYEW/FMkBQ8QgQe0EwLs1wAUFJ0LSXLki1o5OC8xXfVlSv7LJiVRo7eoJNr46bAUkWn
+ RAZADkAdFWIgPi7hev9Qeh3jcNlJ87uVG8dkig/lneCXbB8GcuFGf+iCdxwhF/cguhOEPnCe
+ ccVdRJkbQ/LZFtEPVJ/5JcWx7343CCnLVW0rnqu+4MN3TWQ3jZYk77jN8jtdv2zV59ayxPwS
+ mXuuj6R7gshHMCO1SGC2netmqnCkT6TcIEfGaaz8flpqFaT3GsWCQATE1yhrpGRhVSzVNFfA
+ 0gV/Dc+o68v8kCiUtj6WVu/unHslhodXcdAVu438geAzoLK7AuDQGsJVDhMbJohrsBeeNAx/
+ laEhZboHTt1rPiTQG7b/baPpjT0Mi8QRYMfWRI5ocI+y4GLiOkOYtjnF76PzIbdYgXJJAzN
+IronPort-HdrOrdr: A9a23:B8SIO6iWmVNI9/yY+So2CmJlG3BQXt8ji2hC6mlwRA09TyVXra
+ yTdZMgpHvJYVkqNk3I9errBEDEewK+yXcX2/h1AV7dZmjbUQKTRekI0WKh+UyDJ8SUzIFgPM
+ lbHpSWcOeRMbC/5vyKhjVR1L0bsb66zJw=
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="5.93,206,1654560000"; 
-   d="scan'208";a="3315765"
+   d="scan'208";a="3282106"
 Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
-  by aer-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 31 Jul 2022 18:27:00 +0000
+  by aer-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 31 Jul 2022 18:27:00 +0000
 Received: from hce-anki.rd.cisco.com ([10.47.79.243])
-        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 26VIQpY1008219;
-        Sun, 31 Jul 2022 18:26:59 GMT
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 26VIQpY2008219;
+        Sun, 31 Jul 2022 18:27:00 GMT
 From:   Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Daniel Micay <danielmicay@gmail.com>,
-        Laura Abbott <labbott@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Laura Abbott <lauraa@codeaurora.org>,
-        Nick Kralevich <nnk@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [v4.9 PATCH 5/6] init/main.c: extract early boot entropy from the passed cmdline
-Date:   Sun, 31 Jul 2022 20:26:35 +0200
-Message-Id: <20220731182635.1910069-6-hegtvedt@cisco.com>
+Cc:     gregkh@linuxfoundation.org, Kees Cook <keescook@chromium.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Subject: [v4.9 PATCH 6/6] random: move rand_initialize() earlier
+Date:   Sun, 31 Jul 2022 20:26:36 +0200
+Message-Id: <20220731182635.1910069-7-hegtvedt@cisco.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220731182635.1910069-1-hegtvedt@cisco.com>
 References: <20220731182635.1910069-1-hegtvedt@cisco.com>
@@ -97,76 +81,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Micay <danielmicay@gmail.com>
+From: Kees Cook <keescook@chromium.org>
 
-Feed the boot command-line as to the /dev/random entropy pool
+Right now rand_initialize() is run as an early_initcall(), but it only
+depends on timekeeping_init() (for mixing ktime_get_real() into the
+pools). However, the call to boot_init_stack_canary() for stack canary
+initialization runs earlier, which triggers a warning at boot:
 
-Existing Android bootloaders usually pass data which may not be known by
-an external attacker on the kernel command-line.  It may also be the
-case on other embedded systems.  Sample command-line from a Google Pixel
-running CopperheadOS....
+random: get_random_bytes called from start_kernel+0x357/0x548 with crng_init=0
 
-    console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0
-    androidboot.hardware=sailfish user_debug=31 ehci-hcd.park=3
-    lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff buildvariant=user
-    veritykeyid=id:dfcb9db0089e5b3b4090a592415c28e1cb4545ab
-    androidboot.bootdevice=624000.ufshc androidboot.verifiedbootstate=yellow
-    androidboot.veritymode=enforcing androidboot.keymaster=1
-    androidboot.serialno=FA6CE0305299 androidboot.baseband=msm
-    mdss_mdp.panel=1:dsi:0:qcom,mdss_dsi_samsung_ea8064tg_1080p_cmd:1:none:cfg:single_dsi
-    androidboot.slot_suffix=_b fpsimd.fpsimd_settings=0
-    app_setting.use_app_setting=0 kernelflag=0x00000000 debugflag=0x00000000
-    androidboot.hardware.revision=PVT radioflag=0x00000000
-    radioflagex1=0x00000000 radioflagex2=0x00000000 cpumask=0x00000000
-    androidboot.hardware.ddr=4096MB,Hynix,LPDDR4 androidboot.ddrinfo=00000006
-    androidboot.ddrsize=4GB androidboot.hardware.color=GRA00
-    androidboot.hardware.ufs=32GB,Samsung androidboot.msm.hw_ver_id=268824801
-    androidboot.qf.st=2 androidboot.cid=11111111 androidboot.mid=G-2PW4100
-    androidboot.bootloader=8996-012001-1704121145
-    androidboot.oem_unlock_support=1 androidboot.fp_src=1
-    androidboot.htc.hrdump=detected androidboot.ramdump.opt=mem@2g:2g,mem@4g:2g
-    androidboot.bootreason=reboot androidboot.ramdump_enable=0 ro
-    root=/dev/dm-0 dm="system none ro,0 1 android-verity /dev/sda34"
-    rootwait skip_initramfs init=/init androidboot.wificountrycode=US
-    androidboot.boottime=1BLL:85,1BLE:669,2BLL:0,2BLE:1777,SW:6,KL:8136
+Instead, this moves rand_initialize() to after timekeeping_init(), and moves
+canary initialization here as well.
 
-Among other things, it contains a value unique to the device
-(androidboot.serialno=FA6CE0305299), unique to the OS builds for the
-device variant (veritykeyid=id:dfcb9db0089e5b3b4090a592415c28e1cb4545ab)
-and timings from the bootloader stages in milliseconds
-(androidboot.boottime=1BLL:85,1BLE:669,2BLL:0,2BLE:1777,SW:6,KL:8136).
+Note that this warning may still remain for machines that do not have
+UEFI RNG support (which initializes the RNG pools during setup_arch()),
+or for x86 machines without RDRAND (or booting without "random.trust=on"
+or CONFIG_RANDOM_TRUST_CPU=y).
 
-[tytso@mit.edu: changelog tweak]
-[labbott@redhat.com: line-wrapped command line]
-Link: http://lkml.kernel.org/r/20170816231458.2299-3-labbott@redhat.com
-Signed-off-by: Daniel Micay <danielmicay@gmail.com>
-Signed-off-by: Laura Abbott <labbott@redhat.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Laura Abbott <lauraa@codeaurora.org>
-Cc: Nick Kralevich <nnk@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-(cherry picked from commit 33d72f3822d7ff8a9e45bd7413c811085cb87aa5)
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+(cherry picked from commit d55535232c3dbde9a523a9d10d68670f5fe5dec3)
+
+Adjusted to fit on top of linux-4.9.y branch, suspecting a wrongly
+solved conflict when cherry picked earlier.
 ---
- init/main.c | 2 ++
- 1 file changed, 2 insertions(+)
+ init/main.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/init/main.c b/init/main.c
-index 67fa94c5967..6bc1a3fa152 100644
+index 6bc1a3fa152..6537f51a0ba 100644
 --- a/init/main.c
 +++ b/init/main.c
-@@ -502,8 +502,10 @@ asmlinkage __visible void __init start_kernel(void)
+@@ -500,13 +500,6 @@ asmlinkage __visible void __init start_kernel(void)
+ 	page_address_init();
+ 	pr_notice("%s", linux_banner);
  	setup_arch(&command_line);
- 	/*
- 	 * Set up the the initial canary and entropy after arch
-+	 * and after adding latent and command line entropy.
- 	 */
- 	add_latent_entropy();
-+	add_device_randomness(command_line, strlen(command_line));
- 	boot_init_stack_canary();
+-	/*
+-	 * Set up the the initial canary and entropy after arch
+-	 * and after adding latent and command line entropy.
+-	 */
+-	add_latent_entropy();
+-	add_device_randomness(command_line, strlen(command_line));
+-	boot_init_stack_canary();
  	mm_init_cpumask(&init_mm);
  	setup_command_line(command_line);
+ 	setup_nr_cpu_ids();
 -- 
 2.34.1
 

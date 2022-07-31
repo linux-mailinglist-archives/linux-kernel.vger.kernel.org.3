@@ -2,208 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73874585CD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 03:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7482C585CDA
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 03:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbiGaBzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 21:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        id S235346AbiGaB6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 21:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiGaBy6 (ORCPT
+        with ESMTP id S229807AbiGaB6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 21:54:58 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2042.outbound.protection.outlook.com [40.107.95.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850513D2C;
-        Sat, 30 Jul 2022 18:54:56 -0700 (PDT)
+        Sat, 30 Jul 2022 21:58:35 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA912AD5
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 18:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659232714; x=1690768714;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=H5H5/W6OQjHzsDGg4Bb2mG5+78Qf2xYRUiAkiOEsggU=;
+  b=YDqr/BWCy8lz9esJPA7//fBq67FJN/zj5Op979SRdMuMeoEvFMqKWtIm
+   F1pl5psHfMxoWirzGcX+MxVgfKEAGCeXpPGFozEopdw20skFycH2Rz2h2
+   kX/7dgjd9C++VMkS1MXGOXa/kxlWxOmAIgvWRMPDo+zf0X2RvXTTAxOUt
+   DF1drgk9tJ4xpY/FmzNJik9ca6fLXo5t24oLhzGfy9H9YG/HPCugHPJ6m
+   okUE5VAQyGKs0Bg5Vud/n9mSGNdbktqhwqlsYDPoQe5g3oDkmP/YfNpYb
+   iokVjccx4+ubcXY7xfU1zp5OYOpHVLXxRMiuxQDU86R5mqvodRuNgI/Vb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="269341627"
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="269341627"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 18:58:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="660712408"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jul 2022 18:58:33 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Sat, 30 Jul 2022 18:58:33 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Sat, 30 Jul 2022 18:58:33 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Sat, 30 Jul 2022 18:58:33 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Sat, 30 Jul 2022 18:58:32 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U7ru27KnmbVSL21D/vxUuMv/ubswHmt4QEb4rwurfWauUoWGNXQod4b9lCJRsJfhE32YHqj8p97qGq7RPf5R0JCY+g+clYFlUMRzKehyHukkthZ7Jh48RxciIrqCOqdqlbj73y9aiVidP4fSdRhYsgigMWtEWI9O1zxXlvkiEO/Y7tNdA755YECDySh2JJF77UqBAg5hsYrlZYy69qwFvU5lrnlclmiU4SwCG9/t/7j0BE1HDpQfn/6thj8P+3shUuDN+3ugFVAjBoe1XbhnpX5Q7W4uDsPL9F6xhIwyAA1zcMulm6LKOpXM8I9kAOG63+9Paw45IBz7Exh4Zj8A5w==
+ b=e3yKv7YTChKAH/JCVDZmqoAy3kqgeRIEUIo1GKYLGSaJhop5luH2W0JXNzIyQXV6cw7dfjS3t17GJMUh3z3V412uSTQqM/jQIboTHawts3JygOLz8c48OtZybYSUXwOdD9bJISrQdEuetTZjmG2abx86QAVtQdb3+UbsF2jgQpsrPhqI6o/KpexJx56lWpFMJOBWPpx2YCKYSBJLWLT5vIYcFA4hb9uOMZb/o3aUA+DOXHYGJQJ++hfyZ7pnmkVfeOLsa6cmybfXLO47z57jOQokcv9Q+EcpGFq5lM0LMMPLAzY7EoaZFFwVPpQnm1CNa98fsY+mV55E+OfVtqFJLw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2YgmbH5KE5e9qKEnqQ30NYf3rYr8hEa0TLzm7/pBtKo=;
- b=EspcQYAk5hKjQxXoMgbNitVwNILacj0plnlBYt7ISqLEA+/xGQIlUm0RyhEb4ajQgTYCS/VmVWxBy79WzO0PHIKfVeZxFkT6ZdJ8tF54xg3pjAijeHujw1PnkxGJaDGDs9RBc7YTRoEIYEf8VgftqSJfMRHLYza+RqVf/5q4/FAR23rCRffAIjKeZYLsDh9qv8zSCFl1OzB99sISUyzgh5QY974dpo0OdMMXu/LhyhUJOntZn0WxQ+z2J6Dv9Z8AatTOB77arTBeTPpIrfkV368QeuflDXVwdzDj6RBgeFLMsGe2H8m0aDYJ7GZ/uMLEVMpdvzQW6CNu41YQqx0C6Q==
+ bh=lFDnam7NCDi/uGtD0l73Xf7DRZgBXrdcYN9cbV+r2Wo=;
+ b=Z3sGw9wfctwbR6iCrP1AmhgjIav/beQYksn7MjDy39hIiON9bd7AmDuiyiE7zPLc5MXcYkDotn5bcwLl96H5HylRt4uLbly3iW0JKcYAr023G93nB0Q7oE7vsKIGUHVYuOaFawVT64qVB9amvTGi/QBy20HnylUjuSVUHF/fEeoO0R8iZrd2b3WHrAI+JX7UwbhZvH63yP17Rq9gfaJIEeGju4/Gk15DEw6oN6RTaeFNnSZFrlq38z2Wz26LlxHmv9S3J0lNZZVpJTh11les4H+oS8E8yDXqn7ADHjpIBEkd3MRWZAYh4GE0Ncm+IB4Ukwa0uBjvWk65/uDzwWFvMw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2YgmbH5KE5e9qKEnqQ30NYf3rYr8hEa0TLzm7/pBtKo=;
- b=pvTmxd79caN2M3SXXrbHsZmyR1SEvg56OWspn3m4arEPeTTqmXJbfofrjVC9g97tN6eDCW4woEAiHzhs7p1m1403stvGNpMevlBQSWzxY3FI+yb2lJY2pVvXboPyJ+e3uRFPuYdwgLRDLILmcDJ61PVtEz3YjM/wF0FnMxO7p4GMfu8y55ZUylkuiIevHjMbDljN5td2i0iNl9YIM/RLJ+LNpsLtB+BGgNIgJAq+TCpvK53RK2JU+K4DwZ/Tve3/YWJI0rInkC87TSXg23EeVTa0McWi/UbG+4qk/mtGsvXU7yq8aeJiemrFgK5bfp8cmAFwOB6lfyI8w8ka3rZMMQ==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com (2603:10b6:a03:3ad::24)
- by BN6PR12MB1716.namprd12.prod.outlook.com (2603:10b6:404:104::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Sun, 31 Jul
- 2022 01:54:54 +0000
-Received: from SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::c92d:eecd:812b:b40c]) by SJ0PR12MB5504.namprd12.prod.outlook.com
- ([fe80::c92d:eecd:812b:b40c%3]) with mapi id 15.20.5482.014; Sun, 31 Jul 2022
- 01:54:53 +0000
-Message-ID: <8e0a0ceb-5816-60a6-6219-7306e75ce006@nvidia.com>
-Date:   Sat, 30 Jul 2022 18:54:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next 0/3] net: vlan: fix bridge binding behavior and
- add selftests
-Content-Language: en-US
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     aroulin@nvidia.com, sbrivio@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
-References: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
- <f7ede054-f0b3-558a-091f-04b4f7139564@blackwall.org>
- <CAMWRUK5j4UAwjw4UGN=SVbbDbut0zWg5e03wupAXCPwT8K8zzQ@mail.gmail.com>
- <CAMWRUK5TZ5iZWZJO7Bbn-b43ZbT7mRzUDr4LdseLCne8qvG6pw@mail.gmail.com>
-From:   Roopa Prabhu <roopa@nvidia.com>
-In-Reply-To: <CAMWRUK5TZ5iZWZJO7Bbn-b43ZbT7mRzUDr4LdseLCne8qvG6pw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0250.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::15) To SJ0PR12MB5504.namprd12.prod.outlook.com
- (2603:10b6:a03:3ad::24)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
+ BYAPR11MB3655.namprd11.prod.outlook.com (2603:10b6:a03:f6::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.6; Sun, 31 Jul 2022 01:58:25 +0000
+Received: from DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::1168:74bf:ff5d:68db]) by DM4PR11MB6311.namprd11.prod.outlook.com
+ ([fe80::1168:74bf:ff5d:68db%7]) with mapi id 15.20.5458.025; Sun, 31 Jul 2022
+ 01:58:25 +0000
+Date:   Sat, 30 Jul 2022 18:58:21 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+CC:     Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] kexec: Replace kmap() with kmap_local_page()
+Message-ID: <YuXhvZPImkeCt5sN@iweiny-desk3>
+References: <20220707231550.1484-1-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220707231550.1484-1-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: BYAPR21CA0011.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::21) To DM4PR11MB6311.namprd11.prod.outlook.com
+ (2603:10b6:8:a6::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 265bfab0-9b6b-4ddf-2365-08da7297a998
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1716:EE_
+X-MS-Office365-Filtering-Correlation-Id: aff7b0a5-84af-435b-bca6-08da729827de
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3655:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GcI1WHxbBobb81EQEiK7xXtF3bYxFf06vsMFssjqInOIMKEDh9kQc4zwUv29aARd82Jk5fBvUTFQW4/USCF2nCB2gbr0ggB7UUjut4S8KnmCNRstF7sBK9yubPm+3QKK51OK68uVLDOD57Xu70iyzXDaOFjYGpJKwghZTQHs0MyXhAavKQzM73YfI7KXy5r/xzVlFLEuIkQSMo6CGvLdaP4+aHCSwP2qWgU/xU2W3RQvVrTB9BX8//Yo/+Ih414Wjtz07/cHAYU3bYkJx/3SeshDzHpnUtTCJgf513ChpPPPi6kvQ+/ejIvL8e1h9iZQNPyAyFaTdlMItTiQ5eUfRxyuLfbvOV2q96hZPO+ilSwTPNqBKhNp92exR0OZMjRlb60TsRY9QsbToiZdSaiUl3U6mMRqaHnfdxchjPA/w6UeNCBS5ie+2F3CMilt0UDP736kaTrbLytgArryOnCd/ydnqo2d3lzCqBGnIK5p2ZXo8A11LTe9tcmZCUDp1D5wFfCMLUyQKM7oWgC+/BX7jRUWKgpAw18kC9OL+eBGcK58aPfbaeHv+IxGKdCuvGGe7d9GEVsUZ1RKMrwpzf0aP9CZ2hCc2m9RDNnpwJadO3CXluesg3psId0x4vfjeqAo/ziHCl0Sml0MKCDsytslWtDExLtiCM1AGb1sbIPYRGkbsPZKnYXTOvqz1GAaup4Xg0+VFt6m0WkEeiBBzn6aZfCCLmDdVQNDQl4h9TrpdyjWZ60EH6KrvDFKNKjwVbihAmLGFtIZ2AmpdE+74uBaec1lMNGMvVnEJpfV95ElNXMcuYB1Xk4DUCNKWgx6C7+Row8ekZ4J0Wpj4CXDvFhomA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(2616005)(186003)(53546011)(38100700002)(83380400001)(66556008)(6512007)(5660300002)(8936002)(7416002)(66946007)(66476007)(8676002)(4326008)(2906002)(6486002)(6506007)(478600001)(41300700001)(316002)(54906003)(110136005)(31696002)(36756003)(31686004)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: hryTpIr4RltdBVYEXSS/8DghY0Ksx0UtTJm8GLy7DFzq39kvimTJNzsW149b5XXbHtM/Sidgao7JpC+Xk7yi7Qfp/vFOgDJ8m3+0ncYXQapwI41Tt8ZsQw59ArTESHcVWr3pHLy/MbVY23/AJh1UFMxCkxHi5gJITC/Q9vFn9LWpui043gv5nmhHkLXsKb6IkQaUVantGq+k320yDQ5rkz9CtgVUIh/zYvGz7EqZo+keSq+aQ1nzrhCD+iSUt1/u4S96iPnUkZOWxLWZrX8q7WSo4Y1bSCT7sodQElQZ1qQ9Wj53OzAMOzNXh6FhZHV0oYLQp9JtX1uVQo/Cu9ZKP/c1vlRkwewkU9Uy6Hq/vXJ3jfnoOrOSqcHBStmQZXsBjKBq15Wwsq1Hpidf220eCeqCRW94uhxILcYND8VE/ELsN1yBBjVPa36H+m4lDC9iggcIE+t4L+8a65G+650GLwFQSkLhp+1hZxEm07uptK4NomWY7YEg7Z209jR70/gUIcKGv/mq2JTAKvusohoMYN5B5Nhs5BF7/mdCVEv8miXFCBMxtiJYVaVgCzM39WzquA00SBZ80PQUGJKfvznAt6cQ7vE4wTKRtxQezJ43XCZJYqpSbqEwh9F9awpG612OsPhRVSpNhj6Cjc0pEl9nFBZ+I/mSzQXP2sQzi2RcFow+O0UMHkgGdigGBCCbjywcABUFfC98v1+quUdrKxPNyPJYWZy2QdZEn21z0JgjvxSO84mTUdn+gzP1T5bsYRYd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(136003)(39860400002)(396003)(366004)(376002)(41300700001)(86362001)(6666004)(38100700002)(478600001)(2906002)(6506007)(6486002)(33716001)(6916009)(5660300002)(44832011)(9686003)(26005)(6512007)(316002)(186003)(83380400001)(82960400001)(8936002)(66556008)(66946007)(66476007)(8676002)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0tYTGIzL1c3VG9FVzF5dlNlVldzcDNGdENaYlNJKzA5ZlZmaTNRMG5xRnNO?=
- =?utf-8?B?ak5KREN0MC9MTjNWZmpSNkw1NzJGZlljS1NIK2xQeTFWbC9MTTFrT1daNUVp?=
- =?utf-8?B?VXhWcGlML2g5VWVkcE9IVnZoZ3lBd3RNQUNGazB6NVdSVkJrWUczZVpUSFpH?=
- =?utf-8?B?WDVDRVU4MEwxM3ptYW5TOWcvK25MRDhQVTJxaGgwWlczRE85WitnNkNNQ213?=
- =?utf-8?B?VWR3RSttWGFDVWFWUmRCUDlLaktBeVErdDFsYWE0N3VnUmZCV3kvaTNVcGQv?=
- =?utf-8?B?SGRPRGNyMnF6NDd5alJsbEk3K3p4Z2d0SWJWTERPOGd6RGwwSlU5eExCVVFM?=
- =?utf-8?B?WmQwcHNSV3VPWXc1UzdvRm5XLzltN3JQQnpBcUdsRVBuM0orMDlGY0l6YXkr?=
- =?utf-8?B?UGo3amhDTkRVNnZDb2lHc0ZRVjJOcmpwcjZaQkVZeERyYUJSRjFGSGxXSmJ5?=
- =?utf-8?B?dm12TC9ObW5wYlo5SmtUYmYzSWhFSGNZRDVvWWpDcjBMU1VBV3ExR2xVdXJh?=
- =?utf-8?B?OXVkYzQwOXUxb0Y5UW5oWE05MThMSjFBWFU1ZGVFTFM2cTlYSW1zbzg3Y1da?=
- =?utf-8?B?aUI5M3d1NDVlenBMcXpINmRmcUtVY2lIVVdtTHVpeTF4L3JZaEJkdWpIZ2Vh?=
- =?utf-8?B?RDBxc29ZaDdVaVlwV3hmWkJiQjhEMGJ4Umx0SGo0cmlUVXpoY1U2RXd4WE9I?=
- =?utf-8?B?T0o3cVQ1M0hDWkdja21nWmhRckFHeWtrc0xCTEZHalNoeDhYTUk1Zk9YVGF3?=
- =?utf-8?B?K0c3WXUwMUFGRU1ydnl1b1hLV3A2TlZEMHp4bEdJeEFrcHBZNmpVbVBkMVNZ?=
- =?utf-8?B?ZnJNN3g1aDFPZElsTTQ2anh6cE9SeVpLS1hPWTB5M1Jtd3lDZTV4RTZPOW4r?=
- =?utf-8?B?NHNBWk11b3ovY2ZOaWIyZmNmc2d4QlluRXVIcG11Z1YzSXVtVzN1OENOdDNv?=
- =?utf-8?B?dFJ3VzRQSEhvTTFaVXhQY1FiN0FLZ1k4cElVYkJoZGtWYktJZ0R5aVBHc2E3?=
- =?utf-8?B?cDRkVTR3cWVib2svMUFVd3hlb0tpQVFnRjE1OVVZZGljWU5lTEg4bEJoWWtV?=
- =?utf-8?B?QjNwaXNZL1FDN1o4UHVpU3JrOTIrZWpKRkhaVHpkZDBQOGZiUnVjLzQvdTJK?=
- =?utf-8?B?SFZkRWtIK2hFS0dFeGdZL3A5MWVvSlNZajhLVVhLWXVoTDl2UVNRWEl5VEUw?=
- =?utf-8?B?cUJvckQ1cVdPRy9tOFpiVVVzc2ZaemkrZ3g2YUJtZ2U4ZEhVR3E3d2tKamRk?=
- =?utf-8?B?VU5DcW9OY0NMUlliSm1uK1hkZyszTmxITFNtUXN6aUFFUGNoNTVvTHRIWkIr?=
- =?utf-8?B?RC9lUWNUbmwzRkM5R0JLU25EdmdBYzlLVWxlaUNONHR5Y0wvbDl1YXFqVjQz?=
- =?utf-8?B?SkovZUJHRjE5SG1PT3l5MFYrNjlnK0MvV3gvdVhlWEpJT01tcXdmWHBMQ3Y3?=
- =?utf-8?B?Zk5sSFBuZkpKUnFibkYvaThmY08zMENRYTI2akpTTml5WDhFbFhVbzRHMTFN?=
- =?utf-8?B?VFFVZUdBOGQ2MG55MHdmZGlZSm5PWXhSb0Rlak1IYVhFNCtKbmxkK1RCV2c4?=
- =?utf-8?B?QnFiRUtkQTJHeHlsRDQ2ak1wTy9td21aNUdEQ2FCQXRRb3BQU2VOUlJZTXBZ?=
- =?utf-8?B?TVNlNXo0YWR0OVVCTFUrQWRTTlgxQW9xRFA3K1FLQm1xZkdPZ1JLUGwzdnRY?=
- =?utf-8?B?RjZUY0k0UnBsVG1vMUc3Zm9sMk1sQnRzOGdkdk5kZVBXZ0QwMU9EUjZEdmNq?=
- =?utf-8?B?blowVjdPa0JoaWRPd05TbDNSNFA3emNwV3drM0prcjVma3NUUTNDbGMrQ1J4?=
- =?utf-8?B?cC9za2x1bWNmVDR3dHBjdFFXSll2UkFOcjZkVSsxdGJzZDhIaUJDSWIyY1JT?=
- =?utf-8?B?QzJJZFlkcWZOc0lOV1ZlMzFJRkNCTkZRM0VEd0hPenAyR0M2VTh2VG9xZkVW?=
- =?utf-8?B?VGladXhzeWlUcEF4RE81WnVIOGlPbGdicEFXTXlCOXAwZzVqYkhxWXphSDEv?=
- =?utf-8?B?YWhvNFc3UStlRDc1cTlibTJwOTBTZ3c1R0RRaXRFVVBiNW1oQjZkdTNBbVRy?=
- =?utf-8?B?RWQ1RUh0NFlvNHZnKysrUm55c3hiblF0TnlGS25YZkxvS2RVOHRBeThxU0ZX?=
- =?utf-8?B?OWxEMDVZaWpWR21mS3Bqa2xPNkN2QngvTmx1MTVUZkIvdzhSZ2RlcXFrcnBW?=
- =?utf-8?Q?+rJJaa0b0FfPiEEarJ4jL4qLgt/NmOJo24euaPiSTj1B?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 265bfab0-9b6b-4ddf-2365-08da7297a998
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5504.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WgkZwWJ7mxbzmGip6R+ZT9RvPwZcMXsAJCAEx5Gl/O379gfeLUUlAwDQWkR4?=
+ =?us-ascii?Q?POZcqs8WcqUPXQTJQt+rB/9H+a1YrEl8igelsGffwryO4R+NASoM09T1LHPA?=
+ =?us-ascii?Q?zi/jgcBNweVik+bGK+g+gk9z152ybAnsXLvgJO+cp0YTe4j3G7Hod6+pwBG/?=
+ =?us-ascii?Q?5QNqdeLqa8a9Fn5i6e/lS/rtTwwS/26JcFnkl35OJWWRdzAdmyBommSjrIpG?=
+ =?us-ascii?Q?AVefl392PB78wz2enTiUWA0nir4Eib6XHeedwo/iZvM6+vQdlKUbs8RoPda0?=
+ =?us-ascii?Q?1aP1zyGklvEfgBLXdxrybSBtxwfp1iTKUM8O8Vroi9kcfdQg+egLEG6PVe3G?=
+ =?us-ascii?Q?xp9bH7dCo7POkUCqp9oVXUbGkoVAXZbYbMcsBXjcRHbhgILS1EYCklFHowAE?=
+ =?us-ascii?Q?tP3DZYI/SuIcUF6W+GEjV5YCQEgA4W/jBWOBI0vIPxx5e3dSmExZjuPN+U8L?=
+ =?us-ascii?Q?QBn2JEpf4e0b5sqCOA95VMn51RWeUceq8OdTj117RDXBY7RVVtz3xxDLk93r?=
+ =?us-ascii?Q?gNb9br/+/haRACxS9fgihKafByPhgPc35BPlYn851+dVhitHPBJP2iHl/fo7?=
+ =?us-ascii?Q?qXvbbcpQTOQwFUINn45wvSHHqvC/CXTDAzo8GhtXPBqi3KLDoyqv2AVa1m6U?=
+ =?us-ascii?Q?9vbQNk//qwwya4oRZ8pXpfp0gtbB/yCxrGtR/clmsVq5TZwNllYF42yttstA?=
+ =?us-ascii?Q?fXkhjlG1Gdx+hBHzmxYUBSq7IhAumHhamO2Z+lcW8ED5tsgGK8bYnqEZ0xf6?=
+ =?us-ascii?Q?JLwRCagFaojwydbQnEUqfd5UWm8a8WSuaWDCKe4evUoUeQM16JYxgYeEgu2d?=
+ =?us-ascii?Q?LMabBdBO4NW5zLkPf7QZu6c+1bYrchP+z3YvAfDql7rC7d9eHxntHG3OpHP7?=
+ =?us-ascii?Q?f70fAzoonuRduN8dQH9fo3xNQqOHx21S7bx4edeGTMHNqsSzWWNMqV77D02O?=
+ =?us-ascii?Q?oQ5UKu5I/kBeRy2Oej7RKaQAu/Qw0MR6o/LcFK/jRqSLo3j7NzgmrNpNlIRo?=
+ =?us-ascii?Q?a49org3WQS1UQ2HGATXMp0GwBw93FG8wV1NJ9yRgveOPO1Q6tl+1xh2xzYxO?=
+ =?us-ascii?Q?sKXqCyG7Kje2WmejMQQYieCe1tnW8aqREFovYuM/cxOPO9PvN0HrUQj4WfSG?=
+ =?us-ascii?Q?SwJ5/nyA8fLcHW1BgMCU50zGQqKLynPQqjhagrpZA7eApBY4VUy15rv8+2K+?=
+ =?us-ascii?Q?ttEu8wGm2f49VH4fKlA2mh0V0hC1pvCet8kSXlpqtL/dWGPEWDidSOtVgHFu?=
+ =?us-ascii?Q?nXO8+yndQUnJA4kxGJ3X39SOFbN+5O/vIAYSJy5WUHnWIvMzyDmXcwGZCSdM?=
+ =?us-ascii?Q?t0Ne5eoylAtB+qnaDhiGJIPH3L1WP85ukaagJf/lND4OFCKCrTuEpn9i+tBe?=
+ =?us-ascii?Q?q7kxonRZWyU5v+crGj2aeBMx7HCKU8BEsuKNW3ggF5Avrsr8elGWif1dZoZj?=
+ =?us-ascii?Q?hx6qypU5Bq9OPeSAj9KnpsnvPCKv6Kdip0NBo/A3pGqYIPO7uJOzufOQNmuH?=
+ =?us-ascii?Q?vKE0N/ijaEOy8aHGRKEtd+jjDr3CUZKO+4hY7uYdB+/w+IswBz2kDLpAG0F3?=
+ =?us-ascii?Q?tZEI7tvLt9TidO1O7boEo2L4OCmmm3Uos/wHEMpD?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: aff7b0a5-84af-435b-bca6-08da729827de
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2022 01:54:53.8700
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2022 01:58:25.7099
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bu3JVZsj2zU/xuNxPMaNq/DRpiSUjDo8a/sqecUEP7ZlpTSPg89CaiMx5wlKpzb2ED1hkAt5Y1t7Jb2cq+XAKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1716
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: jqHsjGsB6rC0cgP6GhO6XPLeSslcQAp5a5r5OGmjYrHAjiopYaEj1g/vOfA7odZPPqG/5yXgRHMBDTSb1M/YkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3655
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 08, 2022 at 01:15:50AM +0200, Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+> 
+> With kmap_local_page(), the mappings are per thread, CPU local and not
+> globally visible. Furthermore, the mappings can be acquired from any
+> context (including interrupts).
+> 
+> Therefore, use kmap_local_page() in kexec_core.c because these mappings are
+> per thread, CPU local, and not globally visible.
+> 
+> Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
+> enabled.
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-On 7/30/22 09:48, Sevinj Aghayeva wrote:
-> (Resending this because the first email was rejected due to being in HTML.)
->
->
-> On Sat, Jul 30, 2022 at 12:46 PM Sevinj Aghayeva
-> <sevinj.aghayeva@gmail.com> wrote:
->>
->>
->> On Sat, Jul 30, 2022 at 12:22 PM Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>> On 7/30/22 19:03, Sevinj Aghayeva wrote:
->>>> When bridge binding is enabled for a vlan interface, it is expected
->>>> that the link state of the vlan interface will track the subset of the
->>>> ports that are also members of the corresponding vlan, rather than
->>>> that of all ports.
->>>>
->>>> Currently, this feature works as expected when a vlan interface is
->>>> created with bridge binding enabled:
->>>>
->>>>     ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>>           bridge_binding on
->>>>
->>>> However, the feature does not work when a vlan interface is created
->>>> with bridge binding disabled, and then enabled later:
->>>>
->>>>     ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>>           bridge_binding off
->>>>     ip link set vlan10 type vlan bridge_binding on
->>>>
->>>> After these two commands, the link state of the vlan interface
->>>> continues to track that of all ports, which is inconsistent and
->>>> confusing to users. This series fixes this bug and introduces two
->>>> tests for the valid behavior.
->>>>
->>>> Sevinj Aghayeva (3):
->>>>     net: bridge: export br_vlan_upper_change
->>>>     net: 8021q: fix bridge binding behavior for vlan interfaces
->>>>     selftests: net: tests for bridge binding behavior
->>>>
->>>>    include/linux/if_bridge.h                     |   9 ++
->>>>    net/8021q/vlan.h                              |   2 +-
->>>>    net/8021q/vlan_dev.c                          |  21 ++-
->>>>    net/bridge/br_vlan.c                          |   7 +-
->>>>    tools/testing/selftests/net/Makefile          |   1 +
->>>>    .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
->>>>    6 files changed, 176 insertions(+), 7 deletions(-)
->>>>    create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
->>>>
->>> Hmm.. I don't like this and don't think this bridge function should be
->>> exported at all.
->>>
->>> Calling bridge state changing functions from 8021q module is not the
->>> proper way to solve this. The problem is that the bridge doesn't know
->>> that the state has changed, so you can process NETDEV_CHANGE events and
->>> check for the bridge vlan which got its state changed and react based on
->>> it. I haven't checked in detail, but I think it should be doable. So all
->>> the logic is kept inside the bridge.
->>
->> Hi Nik,
->>
->> Can please elaborate on where I should process NETDEV_CHANGE events? I'm doing this as part of outreachy project and this is my first kernel task, so I don't know the bridging code that well.
->>
->> Thanks!
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-good point Nikolay.
-
-Sevinj, see br_vlan_bridge_event and __vlan_device_event  for how both 
-drivers react to netdev change events.
-
-I have not looked at it in detail yet, but lets explore and discuss if 
-we can make use of events to achieve same results.
-
+> ---
+> 
+> v1->v2: A sentence of the commit message contained an error due to a
+> mistake in copy-pasting from a previous patch. Replace "aio.c" with
+> "kexec_core.c".
+> 
+>  kernel/kexec_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 4d34c78334ce..6f98274765d4 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+>  		if (result < 0)
+>  			goto out;
+>  
+> -		ptr = kmap(page);
+> +		ptr = kmap_local_page(page);
+>  		/* Start with a clear page */
+>  		clear_page(ptr);
+>  		ptr += maddr & ~PAGE_MASK;
+> @@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+>  			memcpy(ptr, kbuf, uchunk);
+>  		else
+>  			result = copy_from_user(ptr, buf, uchunk);
+> -		kunmap(page);
+> +		kunmap_local(ptr);
+>  		if (result) {
+>  			result = -EFAULT;
+>  			goto out;
+> @@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+>  			goto out;
+>  		}
+>  		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
+> -		ptr = kmap(page);
+> +		ptr = kmap_local_page(page);
+>  		ptr += maddr & ~PAGE_MASK;
+>  		mchunk = min_t(size_t, mbytes,
+>  				PAGE_SIZE - (maddr & ~PAGE_MASK));
+> @@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+>  		else
+>  			result = copy_from_user(ptr, buf, uchunk);
+>  		kexec_flush_icache_page(page);
+> -		kunmap(page);
+> +		kunmap_local(ptr);
+>  		arch_kexec_pre_free_pages(page_address(page), 1);
+>  		if (result) {
+>  			result = -EFAULT;
+> -- 
+> 2.36.1
+> 

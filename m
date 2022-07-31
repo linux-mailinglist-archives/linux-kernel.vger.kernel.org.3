@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7D0586141
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FF9586132
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237986AbiGaUPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 16:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S238027AbiGaUHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 16:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbiGaUOr (ORCPT
+        with ESMTP id S230351AbiGaUHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 16:14:47 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EF9E0F2;
-        Sun, 31 Jul 2022 13:14:30 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-322b5199358so89495427b3.6;
-        Sun, 31 Jul 2022 13:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OeGpJdxhfYfzpb5Uf9HD0YunEOMQCAiuTRKThZ+PwSo=;
-        b=fJG8A2loRJfa6x4e80+zN7Fvw3Pe/ZYExhC+mfCZ2iElsgf1KCNf1fsWPfMiy8YGmC
-         w+UH1PTagz5wAqhVJn+FQPFZWytCvSrniGNXqhaColRl/HYS5XEOARvusybmP1cZMtyY
-         wAC1Oe45/yiQ1hqVTmcwiokt8ih3tqwzdwmyet6unIjt/ONPI0qizoHdTxt9mMFtEKKT
-         s5a0PunUo4aDGknRnjlMOUsDOsjIJiHV4EL2gtV52I5mYdjv5Rs71NlmFX61bs5T28HI
-         Xm+pfpqHIY2QyuBEQEHvgRMfRsZtgAnGzt6oiaqU8YNFOxwL4XTCptdXIlf/IfZ7Z0of
-         YF/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OeGpJdxhfYfzpb5Uf9HD0YunEOMQCAiuTRKThZ+PwSo=;
-        b=vVRQEXbVwPdMruvoZqWB9svvQGJfQ5RlDvZQW6p6BW9mXc1wxuwvMNYDGj6QVzwAON
-         upl4v4GGX2D7xC+VpHaa1Npd//v05WEK9GSJxRyc2s/iovLEIhMVx5hO6EOZoasfHe6w
-         8I0M/yDYoOPjJZ4w41xGNV6uqjw31MG8LaeblUjXYyOyxd7YHa4ZGNC35a63ee6y0Ztj
-         ks84suu76uQcTr1v5XVDgfTNUUtq3sjqX2bzu58c5PN5lvxUHn/AaZOk3YKXxZnF0vbo
-         gWo/EOTCHJge8zxELUCZiV01t9BjiCN5T6fxE1fVHFWZ7xhUuACSXGUS4TlshTXYonlU
-         1jqg==
-X-Gm-Message-State: ACgBeo2FpPmwXlq63XB09tuQmCj7PAnfXXZjO0UTfp9fNH29JCqUGwAj
-        Z07yyM8tIyj22uuWqvYXreHEcPlh369cfS37xmcLi9aPoSs=
-X-Google-Smtp-Source: AA6agR50IYOKvjQ9URod6wvD3PZZ9Q8A9+2ExY/nwdWTW3eZksP2dZd9tvwpELBNjBE3lw7v6MEK+j+2xWCfSLIrsVM=
-X-Received: by 2002:a81:75d4:0:b0:324:7783:1e43 with SMTP id
- q203-20020a8175d4000000b0032477831e43mr5499748ywc.1.1659298470073; Sun, 31
- Jul 2022 13:14:30 -0700 (PDT)
+        Sun, 31 Jul 2022 16:07:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B01C65DC;
+        Sun, 31 Jul 2022 13:07:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7D966108F;
+        Sun, 31 Jul 2022 20:07:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E2AC433D6;
+        Sun, 31 Jul 2022 20:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659298052;
+        bh=+qfOhp/3423pXOH1mc2GCsLtY504nNGk6+866UHD/8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q/4PXuK6Rm1ZDU5zh+PHtVqkHDkeja0FxrqhVm6uZudzjJy+dN7y49IqpX3GLjOcV
+         8s7rEFRNCfdirL0JMqdTxaeQ/cBotEp7msPl0PDKI+3ainWh1VGy/sclLGnELfCHao
+         4BAI44Mu6iO+dCJhGBUYxIV3iE3Txleh1W0emyYFc/RnfD+UbUJiOQ5NB0IUZgyMgo
+         +wr+R4/MF+IBurVsqO3af7YGDruWmDvQtm34ibhZcfJlvR522/Glh324xNkWvXeDxk
+         aNWVpQAprEg99s2R+E9KYrrg/jzPg/BcP9FYCqsFVU4xeykTgs+ZWR2dHwW9XqWpIC
+         eDMN43OtAHrLA==
+Date:   Sun, 31 Jul 2022 21:17:43 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti =?UTF-8?B?TGVodGltw6RraQ==?= <matti.lehtimaki@gmail.com>
+Cc:     linux-iio@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: st_sensors: Retry ID verification on failure
+Message-ID: <20220731211743.6ab9264f@jic23-huawei>
+In-Reply-To: <6c839ba3-b671-76fb-95e1-94bf2f2da303@gmail.com>
+References: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
+        <20220731170057.2b8ac00e@jic23-huawei>
+        <6c839ba3-b671-76fb-95e1-94bf2f2da303@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
- <be60acab-7dfe-6841-b176-4bd1e875d52e@birger-koblitz.de> <CAFBinCB6bJbK2sx+oyCjo97Sv2=ywnCi_4v+E76f78DYMNqJkg@mail.gmail.com>
- <075b8d68-93e5-93a3-a247-6811152b35d1@birger-koblitz.de>
-In-Reply-To: <075b8d68-93e5-93a3-a247-6811152b35d1@birger-koblitz.de>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 31 Jul 2022 22:14:19 +0200
-Message-ID: <CAFBinCCorAkiBg+ZXOgKtNYfjr6PUmT2mN1OH7Q3SoMkY-yYhw@mail.gmail.com>
-Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
-To:     Birger Koblitz <mail@birger-koblitz.de>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bert@biot.com, sander@svanheule.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Birger,
+On Sun, 31 Jul 2022 21:51:55 +0300
+Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com> wrote:
 
-On Fri, Jul 29, 2022 at 10:20 AM Birger Koblitz <mail@birger-koblitz.de> wrote:
->
-> Hi Martin,
->
-> On 7/28/22 17:27, Martin Blumenstingl wrote:
-> > Your patch actually addresses an issue which I have seen with RTL_SPI_SFCSR_CS.
-> > Since you seem to have boards with these Realtek SoCs: could you
-> > please clean up your patch and upstream it (splitting into smaller
-> > patches if/where needed)? That would be a win-win: upstream gains
-> > improved SPI support and I won't be confused the next time I look at
-> > the spi-realtek-rtl driver.
->
-> Thanks for suggesting this! I will send a patch-set later today along
-> these lines, I first need to set up a linux dev environment as the
-> development so far was within OpenWRT.
-There's not a single right or wrong. The fewer patches a target has in
-OpenWrt the easier it gets in my experience. The most simple approach
-in my opinion is to make OpenWrt use an external kernel tree (using
-CONFIG_EXTERNAL_KERNEL_TREE).
+> On 31.7.2022 19.00, Jonathan Cameron wrote:
+> > On Sun, 24 Jul 2022 19:43:15 +0300
+> > Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com> wrote:
+> >  =20
+> >> Some sensors do not always start fast enough to read a valid ID from
+> >> registers at first attempt. Let's retry at most 3 times with short sle=
+ep
+> >> in between to fix random timing issues.
+> >>
+> >> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com> =20
+> > Hi Matti,
+> >=20
+> > My gut feeling is this isn't in a fast path, so why not just wait
+> > for whatever the documented power up time of the sensor is?
+> >=20
+> > I'd expect to see a sleep in st_sensors_power_enable() if one is
+> > required. =20
+>=20
+> In the specification for the sensor (lis2hh12) I have on my device I
+> found that the maximum boot time of the sensor (starting from Vdd power
+> on) is defined as 20 ms. Not sure if the other sensors supported by the
+> driver have different values but based on checking a couple of
+> specifications I didn't find any bigger values so far.
+>=20
+> >> +			msleep(20); =20
+> > How do we know 60msecs is long enough for all sensors? =20
+>=20
+> Based on the specification for the sensor I have and also driver used in
+> Android kernel for my device (it uses a 3 x 20 ms loop) I think 20 ms is
+> a good value but to be sure a slightly longer might make sense. As
+> suggested in the other review comment by changing the regmap_read to
+> regmap_read_poll_timeout the function doesn't always need to wait at
+> least 20 ms in case first read doesn't provide the correct value, if a
+> suitable shorter poll interval is used (something like 1-10 ms).
+>=20
+> However testing on my device has shown that I still need to have a loop
+> or at least a retry possibility because I have noticed a rare random
+> read error (-6, happens after some time not at first read) when reading
+> the id from the hardware. This could be due to for example internal
+> init failure of the sensor chip causing an internal reset. Because of
+> this read error regmap_read_poll_timeout returns with an error and
+> without retrying to read the id the sensor probe fails.
 
+Nasty. If you can get a confirmation that it's a possible failure on startup
+from the manufacturer then I'd be happier with that justification to retry
+rather than just sleep for say 30msec after power on.
 
-Best regards,
-Martin
+Jonathan
+
+>=20
+> -Matti
+

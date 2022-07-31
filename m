@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C785861AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696725861B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbiGaWdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S238566AbiGaWht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaWdR (ORCPT
+        with ESMTP id S229710AbiGaWhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:33:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953CEBE2F
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 15:33:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C93E061157
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B4DC433D7;
-        Sun, 31 Jul 2022 22:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659306795;
-        bh=U1tYY61xwY2E0whHYnaZvetVSFrW88QG1t3Zk2udQRc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=j1IvQrAmoEQ3reaLdmgeCCaNnI+9eawfthZ9rmmLQ9EXn3h390yA0aai5oIZkr6UV
-         9qRo9Wgxefgmt/I8iRVE1WLnmyEKf7ZoVRjvbYGABf4wMHxhTzuijhrZq2X7DVn1CY
-         rwyfzPfptMe2C2C9IzITbhor9nXxYTGZotOoQOv7JIk8QSSfMZ7qkxsXsiv3beHmkl
-         pTTc5e6DXaFdEUNzaJkpl6rSJ2/FpYzJMMH8UifehTa5L5sl0/fPJSIbma0ps1GrpX
-         4eVn3rukXIIV1IIzXFTXeso1LXSh7NDm1yzytLvfTQD9gR5z86B3uAWKaHnNMIzRCO
-         JhPHQnhGbHNZw==
-Date:   Mon, 1 Aug 2022 06:33:08 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Subject: [GIT PULL] erofs updates for 5.20-rc1
-Message-ID: <YucDJOcnlB7EOD8g@debian>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
+        Sun, 31 Jul 2022 18:37:46 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DAF11156;
+        Sun, 31 Jul 2022 15:37:45 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b16so4203877edd.4;
+        Sun, 31 Jul 2022 15:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=sUg3mbi85wkC20O/owxGcBmnSUP/JalL+pPQsthwix4=;
+        b=bB75wBM9YfHXfB9SaWTPbVuoO0448vuhmS1nuYb+3RvRKk5o/oYE28YZm6MhYwehJh
+         jsDQzsO5dmGRbz1HXmJb96WtbnyoE2aWPb2IgFHZ8AW3ryR9g4QsgotgQbmD/LB0Zs6G
+         izsHUSYjfxNY2Oei46E6qbw9SxkhJqrYwq4ZsPCWqYhYspcAqMXqW6oxdYmwcE8NbjEv
+         4rVPiZkmhLe6LvmlMYG/HUv66EIdz0LQbi27fn5YmeeMNwqQFh2IDMsEIqF4Pnw2pLr5
+         c7AI6XnVI+73Ms+lXHNXakQmkuinXCa/TEEvMNcg7Oxky+NRDt3uuLAvyJ0J7jw6cJlH
+         iSYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=sUg3mbi85wkC20O/owxGcBmnSUP/JalL+pPQsthwix4=;
+        b=DR2SZ4DenoOHHiydT5dJhAaH+HcwYDGzS1TkjqsTrv2ea4uQuXytPyYSE02jiFaC41
+         KCTQQYZyqNgwVHMyHMLsqyBYMoGpoDom5TQf/EG3L+yU0m4pXLi3kJ3hpGSkb882PO+y
+         QZ2I+Ad8dVNWnTDkjhoBeNOjSiP3cl/iBR9qjF4uv9nF0BxileZK1Vp0J8BIPx55/W9q
+         nHUYDawHuEV771JpbrBETr175JcpF8MA4MrUXZEHJEJKNZTnHfdYR2MhJ8jKOvMkGcns
+         Bn7UG+Q1oZjfu+qE/opuFsn69FBLIS6oQ84oCyqcEJXFO56Be5MwHHgzU5otPjmaXVne
+         GmTw==
+X-Gm-Message-State: AJIora+nsYa4Sd4KgSot+bnxwSLD2sHzjjLknCpN05hDXKKnmdl3Dom3
+        Y/3cl199FB8hvTfqmMqwN2I=
+X-Google-Smtp-Source: AGRyM1vW7wD9jdt0hSkZT/Dae8z4eop9k1bk1UppwK+nPRdwezYV3XUJZdN9PLobODHeJRjHPno8zg==
+X-Received: by 2002:a05:6402:4144:b0:431:6ef0:bef7 with SMTP id x4-20020a056402414400b004316ef0bef7mr12640724eda.151.1659307063871;
+        Sun, 31 Jul 2022 15:37:43 -0700 (PDT)
+Received: from localhost ([77.78.38.236])
+        by smtp.gmail.com with ESMTPSA id gw6-20020a170906f14600b0072b2cc08c48sm4485591ejb.63.2022.07.31.15.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 15:37:42 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH v3 00/13] PM6125 regulator support
+Date:   Mon,  1 Aug 2022 01:37:23 +0300
+Message-Id: <20220731223736.1036286-1-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This patch series adds SPMI and SMD regulator support for the PM6125 found on
+SM4250/SM6115 SoCs from QCom.
 
-Could you consider this pull request for 5.20-rc1?
+This code has been tested on:
+* OnePlus Nord N100 (oneplus,billie2, SoC sm4250)
+* Redmi 9T (redmi,lemon, SoC sm6115)
 
-First of all, we'd like to add Yue Hu and Jeffle Xu as two new
-reviewers.  Thank them for spending time working on EROFS!
+The main source used for this change is qpnp pm6125 support patch from caf [1]:
 
-There is no major feature outstanding in this cycle, mainly a patchset
-I worked on to prepare for rolling hash deduplication and folios for
-compressed data as the next big features.  It kills the unneeded
-PG_error flag dependency as well.
+[1]: https://source.codeaurora.org/quic/la/kernel/msm-5.4/commit/?h=kernel.lnx.5.4.r1-rel&id=d1220daeffaa440ffff0a8c47322eb0033bf54f5
 
-Apart from that, there are bugfixes and cleanups as always. Details are
-listed below.
+v2: https://lkml.org/lkml/2022/7/26/885
+v1: https://lkml.org/lkml/2021/8/28/144
 
-All commits have been in -next for a while and no potential merge
-conflict is observed.
+Changes from v2:
+- split spmi new regulator support in 2 patches
+- FTS and LDOs now have set_load and set_pull_down ops
+- add better commit messages on spmi patches
+- fix sob header order
+- fix tested device info (Redmi 9T, NOT Xiaomi 9T)
+- improve formatting in spmi binding docs
+- sort alphabetically in smd binding docs
+- sort alphabetically spmi pmics
+- sort alphabetically smd pmics
+Changes from v1:
+- add dt-bindings
+- split SPMI patch into new reg types and the new PMIC
+- add correct supply mapping
 
-Thanks,
-Gao Xiang
+Iskren Chernev (13):
+  dt-bindings: regulator: qcom_spmi: Improve formatting of if-then
+    blocks
+  dt-bindings: regulator: qcom_spmi: Document PM6125 PMIC
+  dt-bindings: regulator: qcom_smd: Sort compatibles alphabetically
+  dt-bindings: regulator: qcom_smd: Document PM6125 PMIC
+  regulator: qcom_spmi: Add support for new regulator types
+  regulator: qcom_spmi: Add support for HFSMPS regulator type
+  regulator: qcom_spmi: Sort pmics alphabetically (part 1)
+  regulator: qcom_spmi: Sort pmics alphabetically (part 2)
+  regulator: qcom_spmi: Add PM6125 PMIC support
+  regulator: qcom_smd: Sort pmics alphabetically (part 1)
+  regulator: qcom_smd: Sort pmics alphabetically (part 2)
+  regulator: qcom_smd: Sort pmics alphabetically (part 3)
+  regulator: qcom_smd: Add PM6125 regulators support
 
-The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+ .../regulator/qcom,smd-rpm-regulator.yaml     |  26 +-
+ .../regulator/qcom,spmi-regulator.yaml        |  32 ++
+ drivers/regulator/qcom_smd-regulator.c        | 400 ++++++++++--------
+ drivers/regulator/qcom_spmi-regulator.c       | 383 ++++++++++++-----
+ 4 files changed, 556 insertions(+), 285 deletions(-)
 
-  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+-- 
+2.37.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
-
-for you to fetch changes up to ecce9212d0fd7a2d4a4998f0c4623a66887e14c8:
-
-  erofs: update ctx->pos for every emitted dirent (2022-07-31 22:26:29 +0800)
-
-----------------------------------------------------------------
-Changes since last update:
-
- - Add Yue Hu and Jeffle Xu as reviewers;
-
- - Add the missing wake_up when updating lzma streams;
-
- - Avoid consecutive detection for Highmem memory;
-
- - Prepare for multi-reference pclusters and get rid of PG_error;
-
- - Fix ctx->pos update for NFS export;
-
- - minor cleanups.
-
-----------------------------------------------------------------
-Gao Xiang (19):
-      erofs: avoid consecutive detection for Highmem memory
-      erofs: get rid of unneeded `inode', `map' and `sb'
-      erofs: clean up z_erofs_collector_begin()
-      erofs: introduce `z_erofs_parse_out_bvecs()'
-      erofs: introduce bufvec to store decompressed buffers
-      erofs: drop the old pagevec approach
-      erofs: introduce `z_erofs_parse_in_bvecs'
-      erofs: switch compressed_pages[] to bufvec
-      erofs: rework online page handling
-      erofs: get rid of `enum z_erofs_page_type'
-      erofs: clean up `enum z_erofs_collectmode'
-      erofs: get rid of `z_pagemap_global'
-      erofs: introduce struct z_erofs_decompress_backend
-      erofs: try to leave (de)compressed_pages on stack if possible
-      erofs: introduce z_erofs_do_decompressed_bvec()
-      erofs: record the longest decompressed size in this round
-      erofs: introduce multi-reference pclusters (fully-referenced)
-      erofs: get rid of erofs_prepare_dio() helper
-      erofs: get rid of the leftover PAGE_SIZE in dir.c
-
-Hongnan Li (1):
-      erofs: update ctx->pos for every emitted dirent
-
-Jeffle Xu (1):
-      MAINTAINERS: erofs: add myself as reviewer
-
-Yue Hu (1):
-      MAINTAINERS: erofs: add myself as reviewer
-
-Yuwen Chen (1):
-      erofs: wake up all waiters after z_erofs_lzma_head ready
-
- MAINTAINERS                  |   2 +
- fs/erofs/compress.h          |   2 +-
- fs/erofs/data.c              |  39 +--
- fs/erofs/decompressor.c      |  18 +-
- fs/erofs/decompressor_lzma.c |   1 +
- fs/erofs/dir.c               |  20 +-
- fs/erofs/zdata.c             | 797 ++++++++++++++++++++++++-------------------
- fs/erofs/zdata.h             | 119 +++----
- fs/erofs/zpvec.h             | 159 ---------
- 9 files changed, 533 insertions(+), 624 deletions(-)
- delete mode 100644 fs/erofs/zpvec.h

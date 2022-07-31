@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90495585FAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622A6585FAF
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237382AbiGaQCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S237494AbiGaQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiGaQCn (ORCPT
+        with ESMTP id S231424AbiGaQC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:02:43 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F72BE0D;
-        Sun, 31 Jul 2022 09:02:42 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id n138so6774686iod.4;
-        Sun, 31 Jul 2022 09:02:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=1cJGXIDlYaNEYUvR2NRGrr9WocwvB3UiAWtCmIk18EA=;
-        b=IgL6urhRwztjARTh6xbochk4sEesPkyKAGgU869z69Iig6B/un6oVoA4CH0g9q03sa
-         CGcvlaxKQfDP5NyfqgydqnDCyBG1iFaLipamyAZFNH1kuaL4rf7iuzYPVg6UxgJNoBGG
-         uLF0MGRYBYklSfDsSgCyPY15jQJKJxDI26HxLg901stb98gYfxTNAIogBu4oWkoxJyev
-         GL80YJoZQoSm1NOFUTXQGYOChKM/V5OA0YwDIhUgBIyIUpEBHg8cH4OusGC8cVBtB/Q7
-         d0bsen19/B5OY7BZVAQaNBsk+5cQzeqC8IxyACmKjV/Kq7nnZbX+2CeVGICilWNOZeVg
-         o8pg==
-X-Gm-Message-State: AJIora9rIhhvfNWYZ1+jhFOp1txh8EGi3XdxqIbDjNtap8PNIM5C3ofZ
-        svNmIEE7J+0wcvvVXw5xsf66RUZZgw==
-X-Google-Smtp-Source: AGRyM1sYNl3f2m8lc+L6zGIH26tQMfzr0kEk09cofcdtvYk92Axw48a86G07BJTzHcMr9cde/FMepg==
-X-Received: by 2002:a05:6602:2ccb:b0:67c:3d7c:c896 with SMTP id j11-20020a0566022ccb00b0067c3d7cc896mr4263761iow.153.1659283361719;
-        Sun, 31 Jul 2022 09:02:41 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b71-20020a0295cd000000b00339df77c491sm4265856jai.114.2022.07.31.09.02.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 09:02:41 -0700 (PDT)
-Received: (nullmailer pid 3380583 invoked by uid 1000);
-        Sun, 31 Jul 2022 16:02:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ban Tao <fengzheng923@gmail.com>
-Cc:     jernej.skrabec@gmail.com, samuel@sholland.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        lgirdwood@gmail.com, linux-sunxi@lists.linux.dev,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        broonie@kernel.org, wens@csie.org
-In-Reply-To: <1659271861-3481-1-git-send-email-fengzheng923@gmail.com>
-References: <1659271861-3481-1-git-send-email-fengzheng923@gmail.com>
-Subject: Re: [PATCH v7 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings for DMIC controller
-Date:   Sun, 31 Jul 2022 10:02:39 -0600
-Message-Id: <1659283359.419677.3380582.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sun, 31 Jul 2022 12:02:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF44F5BC;
+        Sun, 31 Jul 2022 09:02:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DEEDB80D86;
+        Sun, 31 Jul 2022 16:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0BEC433D6;
+        Sun, 31 Jul 2022 16:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659283375;
+        bh=JnzgGcVBp807cZAqx6W/5ioAlDkM6Mambx7xHyw/NGw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gf80AnxnSXZmm4AIyKASiuPlDUxT/SDON7V0hl3ALuFUujbzgo2YFxTbuYxL+39Bd
+         8jGaY18welZMgukxZExsknB+zoFnuiujyTmRQXI5bH2OxkQ53U9S+TusP8Tpvia98z
+         9GDt4KdopGWTxHh7YcdNqKzM1dr6LR6Plqr5owuqROgfVzcVlwJIun3xqVsmSWzTlc
+         wmGWlQBQvFQT3XrVCEBZAOqRQ4LBBpIx1qvOLDX1XyosrODH0xsAOqkpeRwwvgUG64
+         VIGVEL8DDnLG+M9JDi+o51wijEb4E3+CIxM2qTER1qz/qa3xGvrL8kYuEkz3iVM/3j
+         l3eaIo3ZLOtmA==
+Message-ID: <7b3f7ec1-a479-f3ed-42b3-ddead0f9b427@kernel.org>
+Date:   Sun, 31 Jul 2022 18:02:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V9 03/16] rv/include: Add helper functions for
+ deterministic automata
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1659052063.git.bristot@kernel.org>
+ <563234f2bfa84b540f60cf9e39c2d9f0eea95a55.1659052063.git.bristot@kernel.org>
+ <YuacJsPya8PSE8qt@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YuacJsPya8PSE8qt@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 31 Jul 2022 05:51:01 -0700, Ban Tao wrote:
-> DT binding documentation for this new ASoC driver.
+On 7/31/22 17:13, Tao Zhou wrote:
+> On Fri, Jul 29, 2022 at 11:38:42AM +0200, Daniel Bristot de Oliveira wrote:
 > 
-> Signed-off-by: Ban Tao <fengzheng923@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Maxime Ripard <maxime@cerno.tech>
-> ---
-> v1->v2:
-> 1.Fix some build errors.
+> [...]
 > 
-> v2->v3:
-> 1.Fix some build errors.
+>> +static inline type model_get_next_state_##name(enum states_##name curr_state,	\
+>> +					       enum events_##name event)	\
+>> +{										\
+>> +	if ((curr_state < 0) || (curr_state >= state_max_##name))		\
+>> +		return INVALID_STATE;						\
+>> +										\
+>> +	if ((event < 0) || (event >= event_max_##name))				\
+>> +		return INVALID_STATE;						\
 > 
-> v3->v4:
-> 1.None.
-> 
-> v4->v5:
-> 1.Add interrupt.
-> 2.Keep clock and reset index.
-> 
-> v5->v6:
-> 1.None.
-> 
-> v6->v7:
-> 1.None.
-> ---
->  .../bindings/sound/allwinner,sun50i-h6-dmic.yaml   | 79 ++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-> 
+> Should define the INVALID_EVENT corresponding to event invalid case.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+no.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml:79:4: [error] no new line character at the end of file (new-line-at-end-of-file)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- Daniel

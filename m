@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD9B586157
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8F258615C
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237900AbiGaUik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 16:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S238363AbiGaUjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 16:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiGaUih (ORCPT
+        with ESMTP id S238200AbiGaUjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 16:38:37 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EB6A463
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 13:38:37 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id x125so9353079vsb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 13:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=YKokgaNBFzwRcXPgIXJHrC3hmjS4PtmpfoKAQSaSgfU=;
-        b=jaBSIUC87bQMCwuZqdS9BJLFJ7tuYrklWNRHpQs3RwinUkEzoiSv9PD0zI8faJtpVR
-         6X5m0NzIYFa7zg+CEfqFQOkPtU3n+gC/yx+si5oGYdhxBy1T7CMR7a3kKtzA1Co1nXr9
-         Upr4CaSjyU55ojViAlsVHT+6q2gfqzwv1jJhLYNY3NOk+tnyG5zZNr7kk2eXLOqGkcy8
-         MOKK/T2IrqxuQT5eialJey4IehIdF4p+BGFLTjcCQnsIWfWPNT6n2/XbsRul7JeSHAv/
-         RybHWbfQu7GrSGj7PyqIcYAfo9yMJgVmcrWSds56Od8I47Uzev+rDmoR21uv6M0MwytL
-         iBMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=YKokgaNBFzwRcXPgIXJHrC3hmjS4PtmpfoKAQSaSgfU=;
-        b=VtcX94PprZHLu5cOR05SdCV4VUWME1BsBWqyRoC6OP9oAG6llb3cajekBO8NJ4Mzio
-         OWMktfkkCf4HJbagFr8/nW+XOXFPCl5j4A4XuYHDCaDw/LSjtEwoE06tBAN0h0usS6AQ
-         lJ5ftuW2G230es/+szXe4Mh77DbRooAlbcicQb7T/M+QqcLSH7r9IRUg2TbfATe95gog
-         Uetsgi4X2ojEFZF0e/fuwIPNvcS8EAvb6VzpjgVDVWanTLpczx6x+QGZNJjGJEp+wN7c
-         mA1oXFeW6NcfSwpz1RqNhG9NlSI3iSfzFGR8dgftm+JcqqxgBtQyqpPyWrarBiJn7ci/
-         k2Pw==
-X-Gm-Message-State: AJIora8v3sb1CkXrM2iqTve32jEBDvIGg8dD4T+P8WRL+qcNmkHiC7YM
-        z/s0UuF+XLdBPExqSI/rM4elhupjHQ50q+dYuK8=
-X-Google-Smtp-Source: AGRyM1uy/sdJ7aIXpIztKD+xDnyMMzuII3Uh12ndvWYXoUHRYDpeGgVxCtiCtIWksJElJvlovBgAobMAoOtW7U5xEkc=
-X-Received: by 2002:a67:d882:0:b0:358:5a42:e8d4 with SMTP id
- f2-20020a67d882000000b003585a42e8d4mr4343110vsj.82.1659299915870; Sun, 31 Jul
- 2022 13:38:35 -0700 (PDT)
+        Sun, 31 Jul 2022 16:39:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12FF8A468
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 13:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659299975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r8N6mOR4eh4HYhZleYP/ElZD6zJ57nbHlhorHDpdL2o=;
+        b=HPQuR1f67Xxzb2vnYovm1AKwmrjZ4cuOW0xp3/O4YhKXlLbuZm+x1rB3ufZOcPokJsAcee
+        yghmHPLCqPZitYoj3Eo3PDioYXskUzQnK8vw/Sf17KN/z0RQ4GkR0bhvGdl8mdX4y9tW2o
+        VT29OCLkEpVkuqc1BIR3Ul9v2GRZsS8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-h-HHsLhWPmufZYIPa7O8ZA-1; Sun, 31 Jul 2022 16:39:28 -0400
+X-MC-Unique: h-HHsLhWPmufZYIPa7O8ZA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48C2285A581;
+        Sun, 31 Jul 2022 20:39:27 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 15871492C3B;
+        Sun, 31 Jul 2022 20:39:27 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 26VKdRbp006781;
+        Sun, 31 Jul 2022 16:39:27 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 26VKdQgX006778;
+        Sun, 31 Jul 2022 16:39:26 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sun, 31 Jul 2022 16:39:26 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+In-Reply-To: <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+Message-ID: <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Received: by 2002:ab0:2046:0:b0:384:6af8:a9a1 with HTTP; Sun, 31 Jul 2022
- 13:38:35 -0700 (PDT)
-Reply-To: xu.cn99@gmail.com
-From:   =?UTF-8?B?5b6Q5YWJ5ZWf?= <lauming2019@gmail.com>
-Date:   Sun, 31 Jul 2022 21:38:35 +0100
-Message-ID: <CAMg_Kzd_sOt8Yb0xkBO-sOqFqMs7O2OQHFHquwr6PwauC7KsPQ@mail.gmail.com>
-Subject: Mutual Benefits
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5025]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lauming2019[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [xu.cn99[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [lauming2019[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hi, am Xu from China, We are still  funding any pending project /
-business and if you are still interested in us, funding your project
-then let us know to enable us to give you the terms and conditions of
-funding your project for 2% interest rate yearly with a 2 year grace
-period through 15 years loan period.
+
+
+On Sun, 31 Jul 2022, Linus Torvalds wrote:
+
+> [ Will and Paul, question for you below ]
+> 
+> On Sun, Jul 31, 2022 at 8:08 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> >
+> > Also, there is this pattern present several times:
+> >         wait_on_buffer(bh);
+> >         if (!buffer_uptodate(bh))
+> >                 err = -EIO;
+> > It may be possible that buffer_uptodate is executed before wait_on_buffer
+> > and it may return spurious error.
+> 
+> I'm not convinced that's actually valid.
+> 
+> They are testing the same memory location, and I don't think our
+> memory ordering model allows for _that_ to be out-of-order. Memory
+> barriers are for accesses to different memory locations.
+
+You are right. And the bit tests are volatile, so the compiler can't 
+reorder them.
+
+But the compiler can reorder non-volatile accesses around volatile 
+accesses (gcc does this, clang afaik doesn't), so the bit tests need at 
+least a compiler barrier after them.
+
+> But the patch looks fine, though I agree that the ordering in
+> __wait_on_buffer should probably be moved into
+> wait_on_bit/wait_on_bit_io.
+
+Yes, there are more bugs where the code does wait_on_bit and then reads 
+some data without any barrier. Adding the barrier to wait_on_bit fixes 
+that.
+
+I'll send two patches, one for wait_on_bit and the other for 
+buffer_locked.
+
+Do you think that wait_event also needs a read memory barrier? It is 
+defined as:
+#define wait_event(wq_head, condition)                                          \
+do {                                                                            \
+        might_sleep();                                                          \
+        if (condition)                                                          \
+                break;                                                          \
+        __wait_event(wq_head, condition);                                       \
+} while (0)
+
+Mikulas
+
+> And would we perhaps want the bitops to have the different ordering
+> versions? Like "set_bit_release()" and "test_bit_acquire()"? That
+> would seem to be (a) cleaner and (b) possibly generate better code for
+> architectures where that makes a difference?
+> 
+>                Linus
+> 
+

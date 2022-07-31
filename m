@@ -2,101 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69F9585D19
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 05:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E62B585D98
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 07:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiGaDqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 23:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S231464AbiGaFDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 01:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiGaDqO (ORCPT
+        with ESMTP id S231156AbiGaFDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 23:46:14 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F13B1C6
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 20:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659239173; x=1690775173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=82rzporq48OWhtWa4az//AgXUoNPt/dqR4sBVxI6eBs=;
-  b=nI7CgiLoHIXzYBKaK/lGkFKOy6buAJgMT8hJvfoqpHpOjIvJJE0p6fK2
-   AD3OHPUBlIMOXT7G6ljqH+sPHqpTSCsRmeBEjvMpIVXGRF7c1B8UqtOIx
-   7YVou94MYMLrCiNRClvjWSD2WO0FarTuTiUJ25/2HoPOFCYpjM7OYIj4p
-   efjmvp/V2DwiCSN3M+PE17gYupuzix4z3Mtzc4MfC9Ggu9llEdUrtj1Fk
-   X0hZyc7916TCbio7I08GYkTPud+ooLZSME2ovCoqhnMUlOZmDsAsDwSgB
-   hCMVPxKLT5HcR3lXp0cmU18Uc/384VpKkaQu+ivu2Av5zrNGa556XyWME
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="289735872"
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="289735872"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 20:46:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="629828845"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jul 2022 20:46:11 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oHzu7-000Ddf-1H;
-        Sun, 31 Jul 2022 03:46:11 +0000
-Date:   Sun, 31 Jul 2022 11:46:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol
- 'sa1100dog_driver' was not declared. Should it be static?
-Message-ID: <202207311101.UT0Jnlfs-lkp@intel.com>
+        Sun, 31 Jul 2022 01:03:47 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2125A13DCC
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 22:03:45 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 206so3569548pgb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 22:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=LzB8XuGXprfZz0N1oF/7jRPSpf9FyZkTZ3frqXsBtnc=;
+        b=gEXYE/ZP3mN9LEHWIo967jESNWuZeLpX+BsRSQEr7/bTs5+csJDdmdlrquXNZzrHj8
+         yB1w1IDLEN/ReoNtW8GZbkvfXZUIF38jJA1qO+U4POMf+6YCF7TF1Ej5sEm8JrhSb69c
+         UzxWfCJWJB6ZZVxuK/DehOcqsr710h1ZHAZ9IVtCzvFzjfo7c/kdFoEmW7kFCX6jmfmz
+         sANy1OA3T4zYyEeyXQispCvWsuLjhF/GmeYbTMu3LzlOV5H7ORrLVF4UqyfhpP4nGEmE
+         OMgw3A8x6X5YS7Tsen2gx6V10i1ruSahUIMztiaXIB3mcy1Td+6gmwWEXgdeMoyRzU6P
+         GwrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=LzB8XuGXprfZz0N1oF/7jRPSpf9FyZkTZ3frqXsBtnc=;
+        b=BYzViS/Q49u+PJ601xgK59Y0rba2PHsCzm4kxB0YVvEzpxPW4Lh6fUyjQqbt3qKbOD
+         wghjL33NUxK/Q/8+kYMJOtU0S9y+3ypmxP4gZhpNvY/t7/epuUyJC+IHqWPkPhGE2U43
+         BgIh+dFkpDnLgaZ80ULvtc3XJ9t5QNwEE5dRgt3Vx1OCshuItofKbeht5BSZE8cJIqJZ
+         6HcjNPpQtsOoq6tVAruQs/iawXq8u5Qf/dkEQkD4Y3aHgWrkfjV/uMpmimFmAjfcoaRE
+         4mOeFTV7ntwurheIJB8zF7JNlfPBP3VnX4qY3ZKLk/HwGk44RBSQ/AKbzKBtshfEe40O
+         ii2w==
+X-Gm-Message-State: AJIora+g1fg3YyLBc/VMHyqZLxsS6EChf/xpsBa9qapDPvgDsEtgWyTF
+        TbeeLNE1yN8AnxJJ/NpQb93J9g==
+X-Google-Smtp-Source: AGRyM1sVdAH14sGSgUBwRYIjpmst+tPrJVkOlRxmDnDET70SUsJNKV30xDvo/M2GgAMKxtUtTr9iIQ==
+X-Received: by 2002:a05:6a00:bc5:b0:52b:49c9:d26c with SMTP id x5-20020a056a000bc500b0052b49c9d26cmr10487567pfu.73.1659243824487;
+        Sat, 30 Jul 2022 22:03:44 -0700 (PDT)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170902684e00b00162529828aesm6647811pln.109.2022.07.30.22.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Jul 2022 22:03:44 -0700 (PDT)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Kyle Huey <me@kylehuey.com>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Date:   Sat, 30 Jul 2022 22:03:42 -0700
+Message-Id: <20220731050342.56513-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a010258447d386186ca10cd374d888ac66ffe1a
-commit: e86bd43bcfc579cf8935c1913e92cb76b4ba81c2 watchdog: sa1100: use platform device registration
-date:   3 months ago
-config: arm-randconfig-s043-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311101.UT0Jnlfs-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e86bd43bcfc579cf8935c1913e92cb76b4ba81c2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e86bd43bcfc579cf8935c1913e92cb76b4ba81c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/watchdog/
+From: Kyle Huey <me@kylehuey.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+When management of the PKRU register was moved away from XSTATE, emulation
+of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+for APIs that write XSTATE. This can be seen by running gdb and executing
+`p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+write to the PKRU register (which gdb performs through ptrace) is ignored.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver' was not declared. Should it be static?
+There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+and sigreturn pass in pointers to the appropriate PKRU value.
 
-vim +/sa1100dog_driver +241 drivers/watchdog/sa1100_wdt.c
+This also adds code to initialize the PKRU value to the hardware init value
+(namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+This is a change to the current KVM_SET_XSAVE behavior.
 
-   240	
- > 241	struct platform_driver sa1100dog_driver = {
-   242		.driver.name = "sa1100_wdt",
-   243		.probe	  = sa1100dog_probe,
-   244		.remove	  = sa1100dog_remove,
-   245	};
-   246	module_platform_driver(sa1100dog_driver);
-   247	
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
+Cc: stable@vger.kernel.org # 5.14+
+Fixes: e84ba47e313dbc097bf859bb6e4f9219883d5f78
+---
+ arch/x86/kernel/fpu/core.c   | 11 +----------
+ arch/x86/kernel/fpu/regset.c |  2 +-
+ arch/x86/kernel/fpu/signal.c |  2 +-
+ arch/x86/kernel/fpu/xstate.c | 26 +++++++++++++++++++++-----
+ arch/x86/kernel/fpu/xstate.h |  4 ++--
+ 5 files changed, 26 insertions(+), 19 deletions(-)
 
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 0531d6a06df5..dfb79e2ee81f 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -406,16 +406,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ 	if (ustate->xsave.header.xfeatures & ~xcr0)
+ 		return -EINVAL;
+ 
+-	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+-	if (ret)
+-		return ret;
+-
+-	/* Retrieve PKRU if not in init state */
+-	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+-		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+-		*vpkru = xpkru->pkru;
+-	}
+-	return 0;
++	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+ }
+ EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+ #endif /* CONFIG_KVM */
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 75ffaef8c299..6d056b68f4ed 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	}
+ 
+ 	fpu_force_restore(fpu);
+-	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
++	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+ 
+ out:
+ 	vfree(tmpbuf);
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 91d4b6de58ab..558076dbde5b 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+ 
+ 	fpregs = &fpu->fpstate->regs;
+ 	if (use_xsave() && !fx_only) {
+-		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
++		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+ 			return false;
+ 	} else {
+ 		if (__copy_from_user(&fpregs->fxsave, buf_fx,
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c8340156bfd2..1eea7af4afd9 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+ 
+ 
+ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+-			       const void __user *ubuf)
++			       const void __user *ubuf, u32 *pkru)
+ {
+ 	struct xregs_state *xsave = &fpstate->regs.xsave;
+ 	unsigned int offset, size;
+@@ -1235,6 +1235,22 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 	for (i = 0; i < XFEATURE_MAX; i++) {
+ 		mask = BIT_ULL(i);
+ 
++		if (i == XFEATURE_PKRU) {
++			/*
++			 * Retrieve PKRU if not in init state, otherwise
++			 * initialize it.
++			 */
++			if (hdr.xfeatures & mask) {
++				struct pkru_state xpkru = {0};
++
++				copy_from_buffer(&xpkru, xstate_offsets[i],
++						 sizeof(xpkru), kbuf, ubuf);
++				*pkru = xpkru.pkru;
++			} else {
++				*pkru = 0;
++			}
++		}
++
+ 		if (hdr.xfeatures & mask) {
+ 			void *dst = __raw_xsave_addr(xsave, i);
+ 
+@@ -1264,9 +1280,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
+  * format and copy to the target thread. Used by ptrace and KVM.
+  */
+-int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
++int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
+ {
+-	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
++	return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
+ }
+ 
+ /*
+@@ -1274,10 +1290,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
+  * XSAVE[S] format and copy to the target thread. This is called from the
+  * sigreturn() and rt_sigreturn() system calls.
+  */
+-int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
++int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
+ 				      const void __user *ubuf)
+ {
+-	return copy_uabi_to_xstate(fpstate, NULL, ubuf);
++	return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
+ }
+ 
+ static bool validate_independent_components(u64 mask)
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index 5ad47031383b..a4ecb04d8d64 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
+ extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 				    enum xstate_copy_mode mode);
+-extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
+-extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
++extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
++extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
+ 
+ 
+ extern void fpu__init_cpu_xstate(void);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.0
+

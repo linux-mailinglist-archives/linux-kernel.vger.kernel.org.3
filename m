@@ -2,117 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594ED5861A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A875861A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbiGaWOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S238464AbiGaWPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaWOv (ORCPT
+        with ESMTP id S229710AbiGaWP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:14:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A69DEFE;
-        Sun, 31 Jul 2022 15:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+qm1vAmgi6sjZNEi6Z0fSdbuq7XPAQLGXeiD0XxIuOY=; b=HbUcOri3IfM8aEODm6uq0lPTlX
-        Td1B9C+jQvJNZeArAg9FQVsunSHEatuIuq2N4hLFVV56R06dLus5sIcgladiW9a/3h0XyQL6H7iNo
-        L0LOfaiVQYfU/O+lx0d7lkuOjE7JFd0Ax3x3qT5tMjObgECHRgA46V9Sz3IYsq5et9n6lzd3PcAJ4
-        /vrcYhhisOBYKQrwbs/mLmV8I43ORiM+qeBmov5NH857ExVaiQQ8SRxstAMTqsYx/WT8FDsbiCu9C
-        fdJoXt4jmHaH+VK2/NFg80oN4v84Ixb3zxlkmEwW9zVKtyo2T4QXjc9zucLWm09Ajl0MRzFHjhQ0a
-        5bWQXYvg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oIHCW-006bWs-A2; Sun, 31 Jul 2022 22:14:20 +0000
-Date:   Sun, 31 Jul 2022 23:14:20 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] make buffer_locked provide an acquire semantics
-Message-ID: <Yub+vPb53zt6dDpn@casper.infradead.org>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
+        Sun, 31 Jul 2022 18:15:27 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE628B2C;
+        Sun, 31 Jul 2022 15:15:26 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bq11so9574523lfb.5;
+        Sun, 31 Jul 2022 15:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JhTc/o85aa/gNSXM1E2WlhOm4hoCmf8aYbOpvTqzACg=;
+        b=IYcyUZylduzwRAWXYDunqrHsrpEt1tyMI6KfAyQj2u1aW7Jxfnw074RjZ9Qmkgdm3N
+         9RNJImzPJX4mezXXmy7NYqTkxLev4LQGq4gwOpL4LxjbKTvL5xpwFXGuW3nmAKTZdN96
+         7hXJ/isn1PiMCoP00zX+uiqg3sqESxr8CHhcLE/0yN/Cr0RkaK1uN5eQoX/J3pVkJs69
+         uMDj87BXk35CXEZ1qI1eb/G9Go4iJ61eNwBj1HEG//jZtfG9sCko1UejSMQ1BbQ1kXv/
+         3IBnG8u4PEJxwWklKhY4vEBZ8xRjuWwTC6QTwYH6/82yuqkV1rK83iA8RXDn186T1/cX
+         lOTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JhTc/o85aa/gNSXM1E2WlhOm4hoCmf8aYbOpvTqzACg=;
+        b=LDqq9bLuGJiWgsVHz/sYnLA+QCTickheA9adZ0Jhay+ILbrGWgKMFYYJMa6cpoF0VY
+         hZzMPY9aulbylADa2R7uX1oftQgoZVKebN39di9OTOLcMEqRffeVWdlAtqkJzTUdU4vO
+         wK0QmpuG7c/EYpTNEAxl+jO3dfnnIp4ptpBvLWfH4cEV9+34RpUPjifN89e5TU5n689M
+         Hups69LOBZ2LTapX4GhcwYk1Mi24u3A7KK5ArHr/ZsfuCstC6mNEDJirfcKxxHRY0QP2
+         ahGldPSXxLynhwbC6yY2LhQVRTCFIwpy7E4K7zPk7IfDdsEhP6xM5uKQVfNjj+97jSnm
+         5ceA==
+X-Gm-Message-State: AJIora8pBwL2CRzSHh2S8iXVwWWi+Wkx+AI2RbmsxEnVVOlOzdRETAL2
+        M5gl9sbc0hhuztW/MMYnX3ESJc1ocze4HpaqlJlPVcn1
+X-Google-Smtp-Source: AGRyM1tdLlKik2XqGE1EF+tHF1IzVO89f4sSViGTihMdIqiZb/1V9J01GjK3tML6KEdslkqSQ7uCw8J3NkhPN0aTXfU=
+X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
+ x7-20020a056512130700b0047fbaa452c5mr4437991lfu.103.1659305724920; Sun, 31
+ Jul 2022 15:15:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1659174051-27816-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220730150952.v3.2.Ifee853f6d8217a0fdacc459092bbc9e81a8a7ac7@changeid>
+ <CAF6AEGs7zKDoRY=ijxFQvaZig=UiSPgWkJFA-PY2MTxKWr5bpw@mail.gmail.com> <d7f95663-c0f7-8227-dbc0-fac43bdf6faa@quicinc.com>
+In-Reply-To: <d7f95663-c0f7-8227-dbc0-fac43bdf6faa@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sun, 31 Jul 2022 15:15:49 -0700
+Message-ID: <CAF6AEGt5H=T_0HOLrNqRHZOYNicfk74bgZrQH56k2bYpi5JsRA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] drm/msm: Take single rpm refcount on behalf of all submits
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 04:43:08PM -0400, Mikulas Patocka wrote:
-> Let's have a look at this piece of code in __bread_slow:
-> 	get_bh(bh);
-> 	bh->b_end_io = end_buffer_read_sync;
-> 	submit_bh(REQ_OP_READ, 0, bh);
-> 	wait_on_buffer(bh);
-> 	if (buffer_uptodate(bh))
-> 		return bh;
-> Neither wait_on_buffer nor buffer_uptodate contain a memory barrier.
-> Consequently, if someone calls sb_bread and then reads the buffer data,
-> the read of buffer data may be executed before wait_on_buffer(bh) on
-> architectures with weak memory ordering and it may return invalid data.
+On Sun, Jul 31, 2022 at 9:33 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> On 7/31/2022 9:26 PM, Rob Clark wrote:
+> > On Sat, Jul 30, 2022 at 2:41 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+> >> Instead of separate refcount for each submit, take single rpm refcount
+> >> on behalf of all the submits. This makes it easier to drop the rpm
+> >> refcount during recovery in an upcoming patch.
+> >>
+> >> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> >> ---
+> >>
+> >> (no changes since v1)
+> > I see no earlier version of this patch?
+> >
+> >>   drivers/gpu/drm/msm/msm_gpu.c | 12 ++++++++----
+> >>   1 file changed, 8 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> >> index c8cd9bf..e1dd3cc 100644
+> >> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> >> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> >> @@ -663,11 +663,12 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+> >>          mutex_lock(&gpu->active_lock);
+> >>          gpu->active_submits--;
+> >>          WARN_ON(gpu->active_submits < 0);
+> >> -       if (!gpu->active_submits)
+> >> +       if (!gpu->active_submits) {
+> >>                  msm_devfreq_idle(gpu);
+> >> -       mutex_unlock(&gpu->active_lock);
+> >> +               pm_runtime_put_autosuspend(&gpu->pdev->dev);
+> >> +       }
+> >>
+> >> -       pm_runtime_put_autosuspend(&gpu->pdev->dev);
+> >> +       mutex_unlock(&gpu->active_lock);
+> >>
+> >>          msm_gem_submit_put(submit);
+> >>   }
+> >> @@ -756,14 +757,17 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
+> >>
+> >>          /* Update devfreq on transition from idle->active: */
+> >>          mutex_lock(&gpu->active_lock);
+> >> -       if (!gpu->active_submits)
+> >> +       if (!gpu->active_submits) {
+> >> +               pm_runtime_get(&gpu->pdev->dev);
+> >>                  msm_devfreq_active(gpu);
+> >> +       }
+> >>          gpu->active_submits++;
+> >>          mutex_unlock(&gpu->active_lock);
+> >>
+> >>          gpu->funcs->submit(gpu, submit);
+> >>          gpu->cur_ctx_seqno = submit->queue->ctx->seqno;
+> >>
+> >> +       pm_runtime_put(&gpu->pdev->dev);
+> > this looks unbalanced?
+> There is another pm_runtime_get_sync at the top of this function. Just
+> before hw_init().
+> https://elixir.bootlin.com/linux/v5.19-rc8/source/drivers/gpu/drm/msm/msm_gpu.c#L737
 
-I think we should be consistent between PageUptodate() and
-buffer_uptodate().  Here's how it's done for pages currently:
+oh, right.. sorry, I was looking at my local stack of WIP patches
+which went the opposite direction and moved the runpm into just
+msm_job_run().. I'll drop that one
 
-static inline bool folio_test_uptodate(struct folio *folio)
-        bool ret = test_bit(PG_uptodate, folio_flags(folio, 0));
-        /*
-         * Must ensure that the data we read out of the folio is loaded
-         * _after_ we've loaded folio->flags to check the uptodate bit.
-         * We can skip the barrier if the folio is not uptodate, because
-         * we wouldn't be reading anything from it.
-         *
-         * See folio_mark_uptodate() for the other side of the story.
-         */
-        if (ret)
-                smp_rmb();
+BR,
+-R
 
-        return ret;
-
-...
-
-static __always_inline void folio_mark_uptodate(struct folio *folio)
-        /*
-         * Memory barrier must be issued before setting the PG_uptodate bit,
-         * so that all previous stores issued in order to bring the folio
-         * uptodate are actually visible before folio_test_uptodate becomes true.
-         */
-        smp_wmb();
-        set_bit(PG_uptodate, folio_flags(folio, 0));
-
-I'm happy for these to also be changed to use acquire/release; no
-attachment to the current code.  But bufferheads & pages should have the
-same semantics, or we'll be awfully confused.
+>
+> -Akhil.
+> >
+> > BR,
+> > -R
+> >
+> >>          hangcheck_timer_reset(gpu);
+> >>   }
+> >>
+> >> --
+> >> 2.7.4
+> >>
+>

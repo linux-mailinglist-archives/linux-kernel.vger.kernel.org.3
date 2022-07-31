@@ -2,131 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C775861F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 01:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FEF5861FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 01:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238586AbiGaXbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 19:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S238641AbiGaXkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 19:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaXbE (ORCPT
+        with ESMTP id S229710AbiGaXkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 19:31:04 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C6A11A0D
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 16:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659310261; x=1690846261;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yVHqvUoE5HERyWFBC98VpBqCS2cdtSxp50XlxNO/c30=;
-  b=QANo+JavC0TJmCdi9om6ncrQFvX6ZIInxRqgs0A7ojq8d6rV388Qfd0B
-   Zp6P5tcpNAI5ptfjcF1ku0eJ5McypVpbNfXM7Qib7w7SiO0CbJONWjMlA
-   PiZW5S7wSCA7GIfSNrfvTvUNj9k0KBPVxiG5uzJ0wr/q5cA1GGqxfy2No
-   BhVcIXw7fIFTT0toqN7X0vZx4iWUKGsT6NM79MbWiiSh9i4VSzKw8ev6z
-   Y7sQasYvNDWIprpJNFdOxGbwIHDVq9kHR/MdZ5w9iJPCzXR2QDKN5F66g
-   u9/KOZoKuahm3KtHLYIs0V3xd9BfWVK1td2ClJami00P/ZoUzzUgtY8Mj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="286592642"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="286592642"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 16:31:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634705046"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 16:30:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIIOg-000Ecv-1i;
-        Sun, 31 Jul 2022 23:30:58 +0000
-Date:   Mon, 1 Aug 2022 07:30:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [jic23-iio:testing 21/30] drivers/iio/adc/at91-sama5d2_adc.c:790:11:
- warning: variable 'nbits' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202208010745.QZRYCihu-lkp@intel.com>
+        Sun, 31 Jul 2022 19:40:31 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1203BCB1
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 16:40:28 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so4838526wmm.4
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 16:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=IniFjyVHQ6lWflzIsICmJ5JUtVB9MkE1WWkHF07cmBg=;
+        b=GbH6WS/PJ77Yxq1SFpTHzUn9b4A6DJyqFvexLdNvw9q/5uay9W+18FY3DrA3cnSIIb
+         pYM/4+XvU1aV1jLG0xh/sDb3WZY1rl5Msy3nXYJzpAIx9TL0Dk+rhRIn9WpZ2HEQ52Qv
+         92tksA3ZA1JyKPHK00SG0HmjbEnV7KJ7mAJF6a4zWlqjQ2REPE7bNfO/yZaVzKE4c7g9
+         hgbJIfH6UvtxjaITLnnxFiO4XX4xyeIBYKjcJCR10J1VNWwyRTpADZ7LcJCbzYwOU5Bi
+         OHdcGmtm/dJ54oSqXD5F+DS/vkDQSYtX24jOaayfVXzCrUkn0wwl1bwlzb2TmGMZ6mv7
+         jjBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=IniFjyVHQ6lWflzIsICmJ5JUtVB9MkE1WWkHF07cmBg=;
+        b=5WlzaX+S4S+OTcG7Q2yhjHIzezJnOUL66R1I+qPvaKcA3vOeZ4Kojz1ccJAHrpkybq
+         FhOsum8CjFqdvaTdmTBinGt6VRDqWaWWTW9U11KOo1k5hwvDOXUL/EWibUj32EwnzDmD
+         94+yfhZfPMWa/wNqZXJZ5FFHc+lHhSWniGmMveSPHXw/N7L/ymraAQFmCaWFHdAMKih5
+         S5gYeyr0oK8mlh6pyu+aeZoV8iiE8usjWjRkYzSiZ61YlfbkZAXY+Jqxvddxd4XyNOr0
+         PLBVIml4TuHI8cMXUDNfj/PHM93rQwdeYGmRq0r8eYVWEzVEBoPI4eFf62zU+rM9hgks
+         sMOg==
+X-Gm-Message-State: AJIora9Ey/ia2My7qrFUraKBYoWESH/SI6gm1PFYVLEOcCVPFgRJIuu0
+        NU+sxCzihrVe95+EG5NmxwXTHAMtNCF67HJUCAY=
+X-Google-Smtp-Source: AGRyM1tUL1PtMlYHh6W5KPFcZbApC9b96DH1UmZJNLPiW+c4yfeEmUfeQcZBM2z60acaT8XGUal/Sn/+dLCHvnrK1fs=
+X-Received: by 2002:a05:600c:6009:b0:3a3:1506:f60f with SMTP id
+ az9-20020a05600c600900b003a31506f60fmr9403719wmb.144.1659310827508; Sun, 31
+ Jul 2022 16:40:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6021:905:b0:1f2:7126:830c with HTTP; Sun, 31 Jul 2022
+ 16:40:26 -0700 (PDT)
+Reply-To: usdepartmenttreasury63@gmail.com
+From:   "U.S. DEPARTMENT TREASURY" <milleymilley325@gmail.com>
+Date:   Sun, 31 Jul 2022 23:40:26 +0000
+Message-ID: <CANf+LmtkG9FkKgntNC-fec-4h7O8Bh7Qf-EhNrp2FLuy_0KpJw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:335 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [milleymilley325[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [usdepartmenttreasury63[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [milleymilley325[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   e776e5ec0a21cc38f5e853d4dc98845d6e7f76b0
-commit: 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42 [21/30] iio: adc: at91-sama5d2_adc: adjust osr based on specific platform data
-config: arm-randconfig-r026-20220731 (https://download.01.org/0day-ci/archive/20220801/202208010745.QZRYCihu-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
-        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-        git fetch --no-tags jic23-iio testing
-        git checkout 1c890d33c115b6331d8df8c06e46d3fc4e4e9d42
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/adc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/adc/at91-sama5d2_adc.c:790:11: warning: variable 'nbits' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           else if (st->oversampling_ratio == 16)
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:797:48: note: uninitialized use occurs here
-           diff = st->soc_info.platform->chan_realbits - nbits;
-                                                         ^~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:790:7: note: remove the 'if' if its condition is always true
-           else if (st->oversampling_ratio == 16)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/at91-sama5d2_adc.c:784:11: note: initialize the variable 'nbits' to silence this warning
-           int nbits, diff;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +790 drivers/iio/adc/at91-sama5d2_adc.c
-
-   781	
-   782	static int at91_adc_adjust_val_osr(struct at91_adc_state *st, int *val)
-   783	{
-   784		int nbits, diff;
-   785	
-   786		if (st->oversampling_ratio == 1)
-   787			nbits = 12;
-   788		else if (st->oversampling_ratio == 4)
-   789			nbits = 13;
- > 790		else if (st->oversampling_ratio == 16)
-   791			nbits = 14;
-   792	
-   793		/*
-   794		 * We have nbits of real data and channel is registered as
-   795		 * st->soc_info.platform->chan_realbits, so shift left diff bits.
-   796		 */
-   797		diff = st->soc_info.platform->chan_realbits - nbits;
-   798		*val <<= diff;
-   799	
-   800		return IIO_VAL_INT;
-   801	}
-   802	
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello,
+
+You have an important message get back to me for more information.
+
+Mr. Marcus Hamlin
+Deputy U.S. Department of the Treasury

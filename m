@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39B9585ED5
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB83585ED9
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbiGaMU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 08:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S233184AbiGaMXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 08:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiGaMUZ (ORCPT
+        with ESMTP id S229640AbiGaMXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 08:20:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F22262A;
-        Sun, 31 Jul 2022 05:20:24 -0700 (PDT)
+        Sun, 31 Jul 2022 08:23:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4519095A0;
+        Sun, 31 Jul 2022 05:23:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E321B60D14;
-        Sun, 31 Jul 2022 12:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D96C433C1;
-        Sun, 31 Jul 2022 12:20:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC771B80D1D;
+        Sun, 31 Jul 2022 12:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3318CC433D6;
+        Sun, 31 Jul 2022 12:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659270023;
-        bh=qqBUdT0ndApF5SxwPM8tKLaDalw/gd4HkR2N2VLe8A0=;
+        s=k20201202; t=1659270225;
+        bh=/xtBcibcR1O/mDtgYXRCM38rkzxKP0vEboH12OrYl/Y=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o1HYkYrJ5mAuM/HSQd0kcsy1W7IKHhbYgvB57p5+FV0UnYoNdMbW2xzqVBBw+fBX+
-         R8BnDDA9+7mQFk5ZFVdgEl9UAHg78n8hDvfh6sUvUXslzvM+TQdURThQ+S2+YdlHM1
-         M/pY1fvJwFYMEGjFpjkAzNgoO0Ptf6oqx+siVpqCcnPUaAqFHD4p+cG0zTOY/hRPDS
-         EOP+t/A4oWcJYMNNSn24mS8nwXhlxKpyJyi4SdL/1+QwngRuvBm51IDrwo5Yx3u/pr
-         wqLBlmgwR9iG8bMafXzUFZvXH6tAeWZmpUomkxGFT/W0C1DitUd2nPlwHACRqxize+
-         bbUlb6ZyaeFgg==
-Date:   Sun, 31 Jul 2022 13:30:34 +0100
+        b=lcB2cZZx3vzEDtHd+pVcUVXfSGhO2Nb5JUOMkW9Xe2A9IoviKOIvFXelW1ob2o2rI
+         KKylV+qAbwZoRUxFaA5cza6t5mMBWHnhfkTLww/LEqg3OkQmtG1aTrxTTBsGwFDfPv
+         aBM4OnW2D8ZROPGa9xEi0V8N54P6Q39aZSFtoAMfqbu/nEMCaYbxtde86SMYN5kBBf
+         DSkkb5mQG/K2LlhqRd7PR2ygbEsBNTiwyAXexfdl7ghO4qS1NuAEivgLyfQCcm5AKl
+         DS1R20B3LauaEnTPVyC0AFbCETBPjS1a8F3CcFZ6/NPuNgWAgZ1NSPwhTjkQPHJ/Js
+         nBZT1kZ6zAA+A==
+Date:   Sun, 31 Jul 2022 13:33:57 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio: gyroscope: bosch,bmg160: correct
- number of pins
-Message-ID: <20220731133034.034dced1@jic23-huawei>
-In-Reply-To: <20220727140148.223508-1-krzysztof.kozlowski@linaro.org>
-References: <20220727140148.223508-1-krzysztof.kozlowski@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: pressure: dlhl60d: Don't take garbage into
+ consideration when reading data
+Message-ID: <20220731133357.5705df25@jic23-huawei>
+In-Reply-To: <20220726142048.4494-1-andriy.shevchenko@linux.intel.com>
+References: <20220726142048.4494-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,39 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 16:01:48 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Tue, 26 Jul 2022 17:20:48 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> BMG160 has two interrupt pins to which interrupts can be freely mapped.
-> Correct the schema to express such case and fix warnings like:
+> Both pressure and temperature are 24-bit long. Use proper accessors
+> instead of overlapping readings.
 > 
->   qcom/msm8916-alcatel-idol347.dtb: gyroscope@68: interrupts: [[97, 1], [98, 1]] is too long
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Looks correct to me, but it made me scratch my head just enough that I'd
+like Tomislav to take a look if possible.  So give me a poke if this
+hasn't progressed in a few weeks time.
 
-We may need more than this.  What if only INT2 is wired?  I'd expect such
-a device's binding to include interrupt-names to cover that case.
-We'd also need a bunch of driver code to route the resulting interrupts.
+Thanks,
 
-I think the snag is that adding such support will break existing bindings using the
-below.
+Jonathan
 
 > ---
->  .../devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml        | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/iio/pressure/dlhl60d.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> index b6bbc312a7cf..ebf98bc2eb7f 100644
-> --- a/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> +++ b/Documentation/devicetree/bindings/iio/gyroscope/bosch,bmg160.yaml
-> @@ -24,6 +24,9 @@ properties:
+> diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
+> index 5f6bb3603a8b..f0b0d198c6d4 100644
+> --- a/drivers/iio/pressure/dlhl60d.c
+> +++ b/drivers/iio/pressure/dlhl60d.c
+> @@ -129,9 +129,8 @@ static int dlh_read_direct(struct dlh_state *st,
+>  	if (ret)
+>  		return ret;
 >  
->    interrupts:
->      minItems: 1
-> +    items:
-> +      - description: INT1 pin
-> +      - description: INT2 pin
->      description:
->        Should be configured with type IRQ_TYPE_EDGE_RISING.
+> -	*pressure = get_unaligned_be32(&st->rx_buf[1]) >> 8;
+> -	*temperature = get_unaligned_be32(&st->rx_buf[3]) &
+> -		GENMASK(DLH_NUM_TEMP_BITS - 1, 0);
+> +	*pressure = get_unaligned_be24(&st->rx_buf[1]);
+> +	*temperature = get_unaligned_be24(&st->rx_buf[4]);
 >  
+>  	return 0;
+>  }
 

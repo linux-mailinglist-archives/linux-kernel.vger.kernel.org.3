@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B2A585CE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 04:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627B1585CF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 04:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiGaCVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 22:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S235170AbiGaCeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 22:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiGaCVM (ORCPT
+        with ESMTP id S229876AbiGaCea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 22:21:12 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B2111C16
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 19:21:11 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id o5-20020a056e02102500b002ddcc65029cso4501909ilj.8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 19:21:11 -0700 (PDT)
+        Sat, 30 Jul 2022 22:34:30 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0513E12;
+        Sat, 30 Jul 2022 19:34:29 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id z20so1785475ljq.3;
+        Sat, 30 Jul 2022 19:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=T481nvKuJ0ZTtRo/nf05qojcNx9GtNMP4sCJDBL+oLQ=;
+        b=DTGDdewi7Ruokf1EYnkRlH8lX3VbWOoeATFlk05uc3Gu1p63jpPWePHa8NrNOBo19M
+         Mi0jWpOVxA+dGf2JJtqijlJNDoAjLKLfuR0Vkp3oFO2sVLVrTXSv97Xw91kK+Rn54Kp6
+         O7UXGI4+zZ+WKmIyN6Vpj6SEQKPrT7VvFAdqsPG2d8UFp1H/aqqWkBqhUiCmsQG6UkCP
+         +cw9EN/tCIjt4wP5Opew/7l3npzALT0iQ9LNqswu016+FkHl09KNJYH86CGzIBKfc2zl
+         ufy6pPKD0qjes1XJMmx+ygJJHp7Z5jCCu/3YvHqbRl9EBfAK3GzeSvgpPt14jFYNtF3H
+         65Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=zo5fJoYQixEXYBbCGndUPC/ArvAVBHlw1k2WroOMkwM=;
-        b=4tLIBCsF+2p2ovBu2hsZ8AYSk/wYRXdN2aWELcSd5bMnM+hIIOKCKcb5ORogLgEkyE
-         IeOQRa6gIUO0FWrTek7ztOjb3+BweQIBhckxOqgN/Uol5RWateLEdmPvSNMPxio3ZIB5
-         sjkpC9q70p3Qq5XTdsvsI/4VZtnP93fBfK5aew4N0pn7jBwRtT85pnmu8Yo35BoE9D9h
-         Q7wgVYSzN15X2F+Tz+fSWnA7EZ28I8vBmcrRL9G1Kbwjcd4BHs5gvbO+j+CIktl4Onhb
-         y56Rqubsbk7CX6VeZsomo9AMpnxMtwoFQkAUBlapXNDvafQDs+jW/6oo275XvtDYIlVk
-         xaCQ==
-X-Gm-Message-State: AJIora9kb9QyFMwzQJnIOhiLTrMEC12LsNw/jwqPZIBGIz9/qiLK2JnB
-        4hAGGci91DHZ2e2a0ksm2cQt/y6omWVbg7X9FzcnwHgthLxq
-X-Google-Smtp-Source: AGRyM1vN87uoyVwxFW+oI/Up+ogSIJvwrDGrd7IY1Z5wRg18UdGYq1l6SI9Twd6VZpQCDAObOrDybKGKohwQUIBB385cHFtYGV9u
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T481nvKuJ0ZTtRo/nf05qojcNx9GtNMP4sCJDBL+oLQ=;
+        b=hTK6fJ3OBFT7jBmu1IgsFFLa3SBWWbjM/V45elpm5cbQCXd3B/0AeOxgc4fyV1cHrM
+         4oJi9TBjdLyL4+W8XfscRNIx2Qd5aBPiF2eFNzFWnpmyXBd1dWKFFEbv8HtBQeVEI4l+
+         QG47Hf/0jqo69ca2aubmD1y0mU28t1Gtq15L+ZgWjp6CQ63fcyRLpT6vXr5KHNhGp716
+         /URaBqTJzeTHNmJA7EVkUBwHb3x//9ii7r7ToxiLQzvky8Wl4keI8w+oq2qkpQ1OWebd
+         L2H1ziJrT9AuiQu7UIIUqJm3dLxp0NYUhuGn4W8ZECja1N7oEX3/wFfLA4tT7+oBjkOR
+         BY7A==
+X-Gm-Message-State: AJIora/2vOLp6+05lLFuC1Oqn+Sa5xEFaJ9noSBqbMdp+aEWe1jzjCXC
+        p952T5iN6PGTyuoNJEBoNHoUAi8N3OP2s9nHLI0=
+X-Google-Smtp-Source: AGRyM1s3ny6HptAiq4uyxyVpT08ei7svf8yVJNkvTVWiEdJMv6AYFkBq/Jvq+Af/WmrU6HvZ2Ut/afFXRzSz6EzXUJk=
+X-Received: by 2002:a05:651c:886:b0:25e:3440:9518 with SMTP id
+ d6-20020a05651c088600b0025e34409518mr3331600ljq.248.1659234867669; Sat, 30
+ Jul 2022 19:34:27 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2410:b0:33f:8518:659b with SMTP id
- z16-20020a056638241000b0033f8518659bmr3672140jat.253.1659234070386; Sat, 30
- Jul 2022 19:21:10 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 19:21:10 -0700
-In-Reply-To: <20220731020212.1439-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005d5df405e5108919@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in net_tx_action
-From:   syzbot <syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220725030605.1808710-1-klimov.linux@gmail.com>
+ <Yt5Zn9cXDe9/F9RJ@kroah.com> <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
+ <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
+In-Reply-To: <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
+From:   Alexey Klimov <klimov.linux@gmail.com>
+Date:   Sun, 31 Jul 2022 03:34:16 +0100
+Message-ID: <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        atishp@rivosinc.com, atishp@atishpatra.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
+>
+> On 26.07.22 02:21, Alexey Klimov wrote:
+> > On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >>
+> >> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
+> >
+> > [..]
+> >
+> >> Anyway, driver looks good to me, nice work!
+> >>
+> >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >
+> > Thanks, Greg. If you don't mind I'll use your tag in next version
+> > after making changes suggested by Guenter since there will be no
+> > significant functional changes. If code will change a lot, then the
+> > process (Documentation/process/submitting-patches.rst) will require me
+> > to drop the tag.
+>
+> Hi,
+>
+> while thinking about this a question arose. How does this
+> device react to a USB reset? A watchdog that can be disabled
+> by a simple reset does not like very reliable to me.
+> Do you need to implement pre/post_reset() ?
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+You're right. Upon reset the watchdog is disabled even if it was active before.
+Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
+looking at Documentation and other drivers it seems that I need to do:
+in pre_reset():
+mutex_lock() to block any other I/O to the usb device;
+__usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
+and do not unlock the mutex;
 
-Reported-and-tested-by: syzbot+3ba0493d523d007b3819@syzkaller.appspotmail.com
+in post_reset():
+if (watchdog_active())
+        __usb_streamlabs_wdt_cmd(START);
+mutex_unlock() to allow other's I/O to the usb deivce.
 
-Tested on:
+Seems right?
 
-commit:         f80e2148 hrtimer: Unbreak hrtimer_force_reprogram()
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15be83da080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=31eef52c6517a0c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ba0493d523d007b3819
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=155655de080000
-
-Note: testing is done by a robot and is best-effort only.
+Best regards,
+Alexey

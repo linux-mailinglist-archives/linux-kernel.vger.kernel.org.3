@@ -2,248 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19AC585E91
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9884B585E94
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiGaKzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 06:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S232533AbiGaK4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 06:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiGaKzE (ORCPT
+        with ESMTP id S229989AbiGaK4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 06:55:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC6A11A09;
-        Sun, 31 Jul 2022 03:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659264890;
-        bh=Uo/gJr9tPg/YDbLtn7ykCucdpVgwogtNjjvJCLlDUyM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=aIcIDt5vkRrTwKfCKUxBb4siwhGIBwkxoXiQOQu5SRgcH9ZOseJWzmCioww64kQQR
-         Sdnm0lRIOgXU2Q+3s0vPzXk3sh50CzqzMcBA/qE7kMqdcEibMHaZvOHD23RalNphCi
-         wL+AkvMOJaCL0L17mxlHxjIqqDGkPGQu5d4wHDNk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from p100 ([92.116.152.171]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAci-1nlEkT3PoW-00bf1V; Sun, 31
- Jul 2022 12:54:49 +0200
-Date:   Sun, 31 Jul 2022 12:54:48 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
-Message-ID: <YuZfeJm59UNrw6qE@p100>
-References: <000000000000bbdd0405d120c155@google.com>
- <20220729065139.6529-1-khalid.masum.92@gmail.com>
- <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de>
- <7c318150-a10e-e7d9-162f-cd5aaa49e616@gmail.com>
+        Sun, 31 Jul 2022 06:56:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D247669
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659264966; x=1690800966;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j67uCdV1x6jPf2RaRQCHqnMQXiIoU3lqe3S27XWqYd8=;
+  b=AYQ9u3SEjTpoDrowXIbROXznoV1tdt+ghgwoOQqkz96J9XI+D7VxazMB
+   2Rv9xktck0rcagjR5CfI4T2y0IsTcdYsm2B00hv+Tn6NS5gBcWIqxfNiM
+   5l8rgsVqzmr/Y61ceC53aXpSGWeuFqjZhqrTs9EE5enoOaMLODTWGbD9H
+   N4ULNhl2avLDE5th1LKpg8YWfwe0qmM9ZsgcZR3WDAjNHwbl7xKCyb7hg
+   1TOaHmvb8Gck5mx87dnQbuS2fcAuLLl7v6YW3zF+InJ8UNWjeZITLVXWZ
+   jUVL2sYr47gea/gvQKsR4EzheTW7+MNU2uytt7lnqF9EThbtYWzcSHQyw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="352990822"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="352990822"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 03:56:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="577459103"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Jul 2022 03:56:04 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oI6c7-000E3D-2g;
+        Sun, 31 Jul 2022 10:56:03 +0000
+Date:   Sun, 31 Jul 2022 18:55:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:linux-v5.19.0-rc8-tests 109/182]
+ drivers/interconnect/qcom/icc-rpm.c:378:30: error: 'src_qn' undeclared
+Message-ID: <202207311852.O8ROmInD-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7c318150-a10e-e7d9-162f-cd5aaa49e616@gmail.com>
-X-Provags-ID: V03:K1:D9kG7E9X/gVkcc3chDvJXC4opQ0eIxj3WKG9z+YAdOsqCdKJF3j
- 28X42T5Zp+gYgev8w2PRphdV9fj9kTmLm3Fa5kvbHwIElAS7psgn+7WUtbpTorl6Md5fnjp
- mQ/vKDU17L5oacJwN8G/iyep1JWY3FRYOjdtCbRDk9muozvS/yzaLFtPzgBTN2K0/OcbW/P
- /k/8xfSkGO52GkCuNJtaA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9yWgXvzMg/M=:5PfxS0EMhg+rG5ZjmLdzST
- j8lLgA3ruVj9NpH7SkZWWZEgItO2bMYeYB5mwT3QMi536smTEiUbq9QBaKggi3TNXNLQSDaXI
- u57rEyzOtxESa1hCxjuPAzWhr5rBs6VGqiz4UhY7159+dUzz7gyjBjsummWRtGlF17ZXPginR
- ih9y4xhmtnz9vDZMTugsKqLogDLAptFjR6wBbR6IsMUtkK14GdPyqzc9q9j8+Ao5NtvmmQvYS
- tFTBvYfiUApcfqEM5axMyM8c921Oz/k4YHubWOXUso6LS1OYgoZ+Gztzmq4eksfY5ilnIBtSF
- OIjh6Aihlqzvf4+umnmwI3ItxzwV7ZGGYweKfqgMvHlOb1l/m3+D9qpY+cZFWBar51WsmobTE
- OSnB+zAvIuWUPo9Gn6X57y/r3At0ejOLPPOMiBH5Lto56Pmp3FKxWzR+Ye7au3VRLtEuT1/Mv
- zxRMa3PmJYdwwAI9y0GN8giOPKbOLso6m5T8Qu+KSh+S4t7i7o4lqhsl3YyEbt3I0i7HZGLHa
- irQ6XSgAJRN5ARdsoDfQs88vuhNtLDiXmO/zr9SWXeIguJ3G2mfmchcLW5pVlUW8gjlVyv7Rs
- D+Mg2GvPnK+m1YXnh0sPYVJblEf7NvO2z346tvojm1VWsl3Ht2pmDJ8w78BdVH/vPkehi460/
- e9+CilzyVoKHoPoxWS0VOvrUBLZVN3lcZCBTA2vP0olHflyc6IjQw+7x2HxCptk3ZAqdHB9u6
- iBUllL4aud6Bbwcxopwy2fbwPwXO808Bhp4Y8ADd27QdGnTwemUD0xNmFfxSpJDxp6w1cNc1j
- zUB/4dRIEJYuCIGAPtSNQDEeT5OTLdlhY97ta0/U1+ldZ9BElTV4tBMc4wTzbIquguNSg5pKl
- 0Ns8svRCBs8SH30ubSprhc4AxbOugrzHFBlH2pkS10eAC+lQhh/vVsGT5ck1DsFwJePOezzsP
- 814nG9B4/bpNg5AVu2T3V3rjFdNpjCKjMiY68ykWjukqP8dcEJaK56khYxetCIs+CAj7rsgIP
- IFw4h8s/rIOfLcV7mp+ktzAN2tAaEJNyILvdRmCGopIC4yGjYbwD1KXwfLWaJYM5jBVhIRoe5
- c0k+B+RmX/JpjKZH91aj2CRCjHd5/2Fbi16OFXj/M83GjNvsps7HjxKLQ==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Khalid Masum <khalid.masum.92@gmail.com>:
-> On 7/30/22 23:25, Helge Deller wrote:
-> > On 7/29/22 08:51, Khalid Masum wrote:
-> > > Here is a simplified reproducer for the issue:
-> > >
-> > > https://gist.githubusercontent.com/Labnann/923d6b9b3a19848fc129637b8=
-39b8a55/raw/a68271fcc724569735fe27f80817e561b3ff629a/reproducer.c
-> >
-> > The reproducer does this:
->
-> Thanks for Looking into this. Being to this, so I have some questions.
-> > ioctl(3, TIOCLINUX, TIOCL_SETSEL, selection: xs:3  ys:0  xe:0 ye:0 mod=
-e:0)  =3D 0
->
-> How did you find out the selection values? From strace and man pages I k=
-now
-> the third argument is an address.
+tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
+head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
+commit: 20386c070c2d12a74092d72aef1c8be37a5f5177 [109/182] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220731/202207311852.O8ROmInD-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/20386c070c2d12a74092d72aef1c8be37a5f5177
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev linux-v5.19.0-rc8-tests
+        git checkout 20386c070c2d12a74092d72aef1c8be37a5f5177
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Right. It's a pointer into userspace.
-I simply added printk debug code to see what's happening.
-I've attached that patch below.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-> > -> sets the text selection area
-> > ioctl(4, KDFONTOP)  with op=3D0 (con_font_set), charcount=3D512  width=
-=3D8  height=3D32, 0x20000000) =3D 0
->
-> Same here, It would be very helpful if you could tell me how.
-
-See patch below.
-
-> > -> changes the font size.
-> >
-> > It does not crash with current Linus' head (v5.19-rc8).
->
-> I tested in 5.19-rc8 in Qemu x86_64 and it crashed for me.
-
-That's strange, since I tested the same. Maybe I did something wrong.
-Anyway, the patches I sent applies to all kernel versions.
-
-> > Kernel v5.16, which was used by this KASAN report, hasn't received bac=
-kports
-> > since months, so I tried stable kernel v5.15.58 instead, and this
-> > kernel crashed with the reproducer.
-> >
-> > The reproducer brings up two issues with current code:
-> > 1. The reproducer uses ioctl(TIOCLINUX, TIOCL_SETSEL) and hands over (=
-invalid)
-> > zero-values for ys and ye for the starting lines.
-> > This is wrong, since the API seems to expect a "1" as the very first l=
-ine for the selection.
-> > This can be easily fixed by adding checks for zero-values and return -=
-EINVAL if found.
-> >
-> > But this bug isn't critical itself and is not the reason for the kerne=
-l crash.
-> > Without the checks, the ioctl handler simply wraps the coordinate valu=
-es and converts them
-> > from:
-> > input selection: xs:3  ys:0  xe:0   ye:0  mode:0    to the new:
-> > vc_selection =3D   xs:2  ys:23 xe:127 ye:23 mode:0
-> > which is the current maximum coordinates for the screen.
-> >
-> > Those higher values now trigger issue #2:
-> > After the TIOCL_SETSEL the last line on the screen is now selected. Th=
-e KDFONTOP ioctl
-> > then sets a 8x32 console font, and replaces the former 8x16 console fo=
-nt.
-> > With the bigger font the current screen selection is now outside the v=
-isible screen
-> > and this finally triggeres this backtrace, because vc_do_resize() call=
-s clear_selection()
-> > to unhighlight the selection (which starts to render chars outside of =
-the screen):
->
-> That makes sense.
->
-> >   drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:794 [inl=
-ine]
-> >   drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2=
-288
-> >   bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:124 [inline]
-> >   bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:173
-> >   fbcon_putcs+0x353/0x440 drivers/video/fbdev/core/fbcon.c:1277
-> >   do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
-> >   invert_screen+0x1d4/0x600 drivers/tty/vt/vt.c:800
-> >   highlight drivers/tty/vt/selection.c:57 [inline]
-> >   clear_selection drivers/tty/vt/selection.c:84 [inline]
-> >   clear_selection+0x55/0x70 drivers/tty/vt/selection.c:80
-> >   vc_do_resize+0xe6e/0x1180 drivers/tty/vt/vt.c:1257
-> >
-> > IMHO the easiest way to prevent this crash is to simply clear the
-> > selection before the various con_font_set() console handlers are calle=
-d.
-> > Otherwise every console driver needs to add checks and verify if the c=
-urrent
-> > selection still fits with the selected font, which gets tricky because=
- some
-> > of those drivers fiddle with the screen width&height before calling vc=
-_do_resize().
-> >
-> > I'll follow up to this mail with patches for both issues shortly.
->
-> I tested the patches. The crash no longer occurs with the reproducer.
-
-Thanks for testing!
-Maybe you want to reply to the patches with a Tested-by: tag?
-
-Below is my debug code.
-
-Helge
+   In file included from arch/arm/include/asm/div64.h:107,
+                    from include/linux/math.h:6,
+                    from include/linux/kernel.h:25,
+                    from include/linux/clk.h:13,
+                    from drivers/interconnect/qcom/icc-rpm.c:6:
+   drivers/interconnect/qcom/icc-rpm.c: In function 'qcom_icc_set':
+>> drivers/interconnect/qcom/icc-rpm.c:378:30: error: 'src_qn' undeclared (first use in this function)
+     378 |                 do_div(rate, src_qn->buswidth);
+         |                              ^~~~~~
+   include/asm-generic/div64.h:220:28: note: in definition of macro 'do_div'
+     220 |         uint32_t __base = (base);                       \
+         |                            ^~~~
+   drivers/interconnect/qcom/icc-rpm.c:378:30: note: each undeclared identifier is reported only once for each function it appears in
+     378 |                 do_div(rate, src_qn->buswidth);
+         |                              ^~~~~~
+   include/asm-generic/div64.h:220:28: note: in definition of macro 'do_div'
+     220 |         uint32_t __base = (base);                       \
+         |                            ^~~~
+   drivers/interconnect/qcom/icc-rpm.c:335:13: warning: variable 'max_peak_bw' set but not used [-Wunused-but-set-variable]
+     335 |         u64 max_peak_bw;
+         |             ^~~~~~~~~~~
 
 
-diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
-index 58692a9b4097..0167b368a70f 100644
-=2D-- a/drivers/tty/vt/selection.c
-+++ b/drivers/tty/vt/selection.c
-@@ -333,6 +333,7 @@ static int vc_selection(struct vc_data *vc, struct tio=
-cl_selection *v,
- 	v->ys =3D min_t(u16, v->ys - 1, vc->vc_rows - 1);
- 	v->xe =3D min_t(u16, v->xe - 1, vc->vc_cols - 1);
- 	v->ye =3D min_t(u16, v->ye - 1, vc->vc_rows - 1);
-+	printk("vc_selection =3D   xs:%u  ys:%u  xe:%u ye:%u mode:%u\n", v->xs, =
-v->ys, v->xe, v->ye, v->sel_mode);
+vim +/src_qn +378 drivers/interconnect/qcom/icc-rpm.c
 
- 	if (mouse_reporting() && (v->sel_mode & TIOCL_SELMOUSEREPORT)) {
- 		mouse_report(tty, v->sel_mode & TIOCL_SELBUTTONMASK, v->xs,
-@@ -357,6 +358,7 @@ int set_selection_kernel(struct tiocl_selection *v, st=
-ruct tty_struct *tty)
- {
- 	int ret;
+   328	
+   329	static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+   330	{
+   331		struct qcom_icc_provider *qp;
+   332		struct qcom_icc_node *qn;
+   333		struct icc_provider *provider;
+   334		u64 sum_bw;
+   335		u64 max_peak_bw;
+   336		u64 rate;
+   337		u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
+   338		u64 max_agg_avg, max_agg_peak;
+   339		int ret, i;
+   340		int bucket;
+   341	
+   342		qn = src->data;
+   343		provider = src->provider;
+   344		qp = to_qcom_provider(provider);
+   345	
+   346		qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg,
+   347				       &max_agg_peak);
+   348	
+   349		sum_bw = icc_units_to_bps(max_agg_avg);
+   350		max_peak_bw = icc_units_to_bps(max_agg_peak);
+   351	
+   352		if (!qn->qos.ap_owned) {
+   353			/* send bandwidth request message to the RPM processor */
+   354			ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
+   355			if (ret)
+   356				return ret;
+   357		} else if (qn->qos.qos_mode != -1) {
+   358			/* set bandwidth directly from the AP */
+   359			ret = qcom_icc_qos_set(src, sum_bw);
+   360			if (ret)
+   361				return ret;
+   362		}
+   363	
+   364		for (i = 0; i < qp->num_clks; i++) {
+   365			/*
+   366			* Use WAKE bucket for active clock, otherwise, use SLEEP bucket
+   367			* for other clocks.  If a platform doesn't set interconnect
+   368			* path tags, by default use sleep bucket for all clocks.
+   369			*
+   370			* Note, AMC bucket is not supported yet.
+   371			*/
+   372			if (!strcmp(qp->bus_clks[i].id, "bus_a"))
+   373				bucket = QCOM_ICC_BUCKET_WAKE;
+   374			else
+   375				bucket = QCOM_ICC_BUCKET_SLEEP;
+   376	
+   377			rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
+ > 378			do_div(rate, src_qn->buswidth);
+   379			rate = min_t(u64, rate, LONG_MAX);
+   380	
+   381			if (qp->bus_clk_rate[i] == rate)
+   382				continue;
+   383	
+   384			ret = clk_set_rate(qp->bus_clks[i].clk, rate);
+   385			if (ret) {
+   386				pr_err("%s clk_set_rate error: %d\n",
+   387				       qp->bus_clks[i].id, ret);
+   388				return ret;
+   389			}
+   390			qp->bus_clk_rate[i] = rate;
+   391		}
+   392	
+   393		return 0;
+   394	}
+   395	
 
-+	printk("tiocl_selection =3D   xs:%u  ys:%u  xe:%u ye:%u mode:%u\n", v->x=
-s, v->ys, v->xe, v->ye, v->sel_mode);
- 	mutex_lock(&vc_sel.lock);
- 	console_lock();
- 	ret =3D vc_selection(vc_cons[fg_console].d, v, tty);
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 3f09205185a4..a0b4570c959a 100644
-=2D-- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3194,6 +3194,8 @@ int tioclinux(struct tty_struct *tty, unsigned long =
-arg)
- 		return -EFAULT;
- 	ret =3D 0;
-
-+	printk("tioclinux: type =3D %d\n", type);  // TIOCL_SETSEL
-+
- 	switch (type)
- 	{
- 		case TIOCL_SETSEL:
-@@ -4655,6 +4657,8 @@ static int con_font_set(struct vc_data *vc, struct c=
-onsole_font_op *op)
- 	if (IS_ERR(font.data))
- 		return PTR_ERR(font.data);
-
-+	pr_err("con_font_set   charcount %d   w:%d  h:%d\n", op->charcount, op->=
-width, op->height);
-+
- 	font.charcount =3D op->charcount;
- 	font.width =3D op->width;
- 	font.height =3D op->height;
-@@ -4709,6 +4713,7 @@ static int con_font_default(struct vc_data *vc, stru=
-ct console_font_op *op)
-
- int con_font_op(struct vc_data *vc, struct console_font_op *op)
- {
-+	pr_warn("con_font_op  op =3D %d\n", op->op);
- 	switch (op->op) {
- 	case KD_FONT_OP_SET:
- 		return con_font_set(vc, op);
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

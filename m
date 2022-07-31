@@ -2,97 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622A6585FAF
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E6C585FBC
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237494AbiGaQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S237425AbiGaQK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiGaQC6 (ORCPT
+        with ESMTP id S233341AbiGaQKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:02:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF44F5BC;
-        Sun, 31 Jul 2022 09:02:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DEEDB80D86;
-        Sun, 31 Jul 2022 16:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0BEC433D6;
-        Sun, 31 Jul 2022 16:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659283375;
-        bh=JnzgGcVBp807cZAqx6W/5ioAlDkM6Mambx7xHyw/NGw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Gf80AnxnSXZmm4AIyKASiuPlDUxT/SDON7V0hl3ALuFUujbzgo2YFxTbuYxL+39Bd
-         8jGaY18welZMgukxZExsknB+zoFnuiujyTmRQXI5bH2OxkQ53U9S+TusP8Tpvia98z
-         9GDt4KdopGWTxHh7YcdNqKzM1dr6LR6Plqr5owuqROgfVzcVlwJIun3xqVsmSWzTlc
-         wmGWlQBQvFQT3XrVCEBZAOqRQ4LBBpIx1qvOLDX1XyosrODH0xsAOqkpeRwwvgUG64
-         VIGVEL8DDnLG+M9JDi+o51wijEb4E3+CIxM2qTER1qz/qa3xGvrL8kYuEkz3iVM/3j
-         l3eaIo3ZLOtmA==
-Message-ID: <7b3f7ec1-a479-f3ed-42b3-ddead0f9b427@kernel.org>
-Date:   Sun, 31 Jul 2022 18:02:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V9 03/16] rv/include: Add helper functions for
- deterministic automata
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Sun, 31 Jul 2022 12:10:54 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9E32735
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:10:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659283776; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=fBYjmFwCARWWi4tqpjtYoddPlEA46q4WgK+ZVld86gtIFLtXSk4cb9GHwQw9zvc+p2HVLOz6z3HSV4hMQqEapg5sVkH0EXNgzfXgONkrrUx4T9FJXKYRJJs+o/V/WBWgAH8bTF5xoVWxJM3aIuzL/zq2Ct9OfneKoO/IhPEZwXk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1659283776; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=p+JGMZFOwhjpdzA/MfM1jeGfmv3RLCTVkm7iRbrSFBc=; 
+        b=VhlT7zCUN6qS/5OyWREUqDA9xHj9jid+qqB4nBbeDcwRH//xXqKrPVcIRHzFSVzoCNbgqNZdijuuaXOJjhugpvwmt4C9FyQCThBMzeuv1qW70OUOnLoJ3rSUroyO6OPVWg2hfUtgO8DewAL3UA/562TocDtwUEflY1VlLMB4+UU=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659283776;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=p+JGMZFOwhjpdzA/MfM1jeGfmv3RLCTVkm7iRbrSFBc=;
+        b=QCG+IqHTBXwjdGZ6SH4PHGn2+nV4YLtxp/xoOTOJ9pRCKnIia86MIRpoKx/Z+Uy+
+        EvNfhi0T5ow8XmBapjFlUzGO4k6S6KIh9KNjMrOWMzgwlbO5dNwwjOvvPeGLXkslzCe
+        BOmdR/GC8tPOGQeO//7Dhuwsb4ueTIVcyruKQeEY=
+Received: from localhost.localdomain (43.241.144.202 [43.241.144.202]) by mx.zoho.in
+        with SMTPS id 1659283774265240.75092323645038; Sun, 31 Jul 2022 21:39:34 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1659052063.git.bristot@kernel.org>
- <563234f2bfa84b540f60cf9e39c2d9f0eea95a55.1659052063.git.bristot@kernel.org>
- <YuacJsPya8PSE8qt@geo.homenetwork>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <YuacJsPya8PSE8qt@geo.homenetwork>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Message-ID: <20220731160913.632092-1-code@siddh.me>
+Subject: [PATCH] x86/numa: Use cpumask_available instead of hardcoded NULL check
+Date:   Sun, 31 Jul 2022 21:39:13 +0530
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/31/22 17:13, Tao Zhou wrote:
-> On Fri, Jul 29, 2022 at 11:38:42AM +0200, Daniel Bristot de Oliveira wrote:
-> 
-> [...]
-> 
->> +static inline type model_get_next_state_##name(enum states_##name curr_state,	\
->> +					       enum events_##name event)	\
->> +{										\
->> +	if ((curr_state < 0) || (curr_state >= state_max_##name))		\
->> +		return INVALID_STATE;						\
->> +										\
->> +	if ((event < 0) || (event >= event_max_##name))				\
->> +		return INVALID_STATE;						\
-> 
-> Should define the INVALID_EVENT corresponding to event invalid case.
+node_to_cpumask_map is of type cpumask_var_t[].
 
-no.
+When CONFIG_CPUMASK_OFFSTACK is set, cpumask_var_t is typedef'd to a
+pointer for dynamic allocation, else to an array of one element. The
+"wicked game" can be checked on line 700 of include/linux/cpumask.h.
 
--- Daniel
+The lines changed in this commit were probably written by the original
+authors with CONFIG_CPUMASK_OFFSTACK=3Dy (i.e. dynamic allocation) in mind,
+checking if the cpumask was available via a direct NULL check.
+
+When CONFIG_CPUMASK_OFFSTACK is not set, GCC gives the below given warning
+while compiling the kernel.
+
+Fix that by using cpumask_available(), which does the NULL check when
+CONFIG_CPUMASK_OFFSTACK is set, otherwise returns true. Use it wherever
+such checks are made.
+
+Conditional definitions of cpumask_available() can be found along with
+the definition of cpumask_var_t. Check the cpumask.h reference mentioned
+above.
+
+GCC warning log:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+arch/x86/mm/numa.c: In function =E2=80=98cpumask_of_node=E2=80=99:
+arch/x86/mm/numa.c:916:39: warning: the comparison will always evaluate as =
+=E2=80=98false=E2=80=99 for the address of =E2=80=98node_to_cpumask_map=E2=
+=80=99 will never be NULL [-Waddress]
+  916 |         if (node_to_cpumask_map[node] =3D=3D NULL) {
+      |                                       ^~
+In file included from ./include/linux/linkage.h:7,
+                 from ./include/linux/kernel.h:17,
+                 from ./arch/x86/include/asm/percpu.h:27,
+                 from ./arch/x86/include/asm/current.h:6,
+                 from ./include/linux/mutex.h:14,
+                 from ./include/linux/kernfs.h:11,
+                 from ./include/linux/sysfs.h:16,
+                 from ./include/linux/kobject.h:20,
+                 from ./include/linux/of.h:17,
+                 from ./include/linux/irqdomain.h:35,
+                 from ./include/linux/acpi.h:13,
+                 from arch/x86/mm/numa.c:3:
+arch/x86/mm/numa.c:67:15: note: =E2=80=98node_to_cpumask_map=E2=80=99 decla=
+red here
+   67 | EXPORT_SYMBOL(node_to_cpumask_map);
+      |               ^~~~~~~~~~~~~~~~~~~
+./include/linux/export.h:87:28: note: in definition of macro =E2=80=98___EX=
+PORT_SYMBOL=E2=80=99
+   87 |         extern typeof(sym) sym;                                    =
+             \
+      |                            ^~~
+./include/linux/export.h:147:41: note: in expansion of macro =E2=80=98__EXP=
+ORT_SYMBOL=E2=80=99
+  147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "=
+")
+      |                                         ^~~~~~~~~~~~~~~
+./include/linux/export.h:150:41: note: in expansion of macro =E2=80=98_EXPO=
+RT_SYMBOL=E2=80=99
+  150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+      |                                         ^~~~~~~~~~~~~~
+arch/x86/mm/numa.c:67:1: note: in expansion of macro =E2=80=98EXPORT_SYMBOL=
+=E2=80=99
+   67 | EXPORT_SYMBOL(node_to_cpumask_map);
+      | ^~~~~~~~~~~~~
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Fixes: c032ef60d1aa ("cpumask: convert node_to_cpumask_map[] to cpumask_var=
+_t")
+Fixes: de2d9445f162 ("x86: Unify node_to_cpumask_map handling between 32 an=
+d 64bit")
+
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
+---
+ arch/x86/mm/numa.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+index e8b061557887..2aadb2019b4f 100644
+--- a/arch/x86/mm/numa.c
++++ b/arch/x86/mm/numa.c
+@@ -867,7 +867,7 @@ void debug_cpumask_set_cpu(int cpu, int node, bool enab=
+le)
+ =09=09return;
+ =09}
+ =09mask =3D node_to_cpumask_map[node];
+-=09if (!mask) {
++=09if (!cpumask_available(mask)) {
+ =09=09pr_err("node_to_cpumask_map[%i] NULL\n", node);
+ =09=09dump_stack();
+ =09=09return;
+@@ -913,7 +913,7 @@ const struct cpumask *cpumask_of_node(int node)
+ =09=09dump_stack();
+ =09=09return cpu_none_mask;
+ =09}
+-=09if (node_to_cpumask_map[node] =3D=3D NULL) {
++=09if (!cpumask_available(node_to_cpumask_map[node])) {
+ =09=09printk(KERN_WARNING
+ =09=09=09"cpumask_of_node(%d): no node_to_cpumask_map!\n",
+ =09=09=09node);
+--=20
+2.35.1
+
+

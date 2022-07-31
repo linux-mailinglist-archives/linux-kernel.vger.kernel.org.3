@@ -2,80 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509045861AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C785861AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238524AbiGaWb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S238549AbiGaWdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaWbz (ORCPT
+        with ESMTP id S229710AbiGaWdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:31:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E398DBE2F;
-        Sun, 31 Jul 2022 15:31:54 -0700 (PDT)
+        Sun, 31 Jul 2022 18:33:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953CEBE2F
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 15:33:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C527B80E15;
-        Sun, 31 Jul 2022 22:31:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C71C433D6;
-        Sun, 31 Jul 2022 22:31:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C93E061157
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B4DC433D7;
+        Sun, 31 Jul 2022 22:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659306712;
-        bh=WuaY6aiROPqd6N4Vzb1DSESIWCf+1m2vEs30SnLxXCg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G+l1owlPCmSfokSC1EarW7HaBaUFfp+fb3hqXxEBGxx4mfDjQ7Rj3byOCkhbZ7ZLM
-         mzBaK250tvPNETCg+LsUblhh0pmW1iSBXdUp4qOUoBInY7wjAdHhFmz2qvNlDCZiX1
-         /tJq7azzpL5Px1A7N+9i+xhiv2LlFN37L/k+BalL1aAuJ2Wvn2Vws8ZSZhpdlWA4Wu
-         UHUCidhCsx08jWhO+vOdTrdVjGFRRmdSKvmmCdWN2k2pr5wL9wO2AJEh0AqMK+msDz
-         lOzNsNUsICYUx+su54lMfNiuQMiefptqRbhK9pVxpGbEf4DWjK7D7HPbift1ogjsx5
-         MRXrZ551h8BQw==
-Received: by mail-oi1-f182.google.com with SMTP id h188so10952163oia.13;
-        Sun, 31 Jul 2022 15:31:52 -0700 (PDT)
-X-Gm-Message-State: AJIora8cn9NmR3xtkMrY1RMQsc6tvBCbsRRQp0iV15Um9+NpQQGXcbSv
-        ahg3TwuhWUq0ctDSg//yGAptkm1u2N6ShNLsdEE=
-X-Google-Smtp-Source: AGRyM1sT6mWCwhi5cMK9ZBUkLWuCaaYbXcF29d6XiZ3m6PKo2ujOXyAErhp2f/yXKo2F31zt7al3WFPOcS+0oFq8gEo=
-X-Received: by 2002:a05:6808:1489:b0:33a:861c:838e with SMTP id
- e9-20020a056808148900b0033a861c838emr5336590oiw.228.1659306711425; Sun, 31
- Jul 2022 15:31:51 -0700 (PDT)
+        s=k20201202; t=1659306795;
+        bh=U1tYY61xwY2E0whHYnaZvetVSFrW88QG1t3Zk2udQRc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j1IvQrAmoEQ3reaLdmgeCCaNnI+9eawfthZ9rmmLQ9EXn3h390yA0aai5oIZkr6UV
+         9qRo9Wgxefgmt/I8iRVE1WLnmyEKf7ZoVRjvbYGABf4wMHxhTzuijhrZq2X7DVn1CY
+         rwyfzPfptMe2C2C9IzITbhor9nXxYTGZotOoQOv7JIk8QSSfMZ7qkxsXsiv3beHmkl
+         pTTc5e6DXaFdEUNzaJkpl6rSJ2/FpYzJMMH8UifehTa5L5sl0/fPJSIbma0ps1GrpX
+         4eVn3rukXIIV1IIzXFTXeso1LXSh7NDm1yzytLvfTQD9gR5z86B3uAWKaHnNMIzRCO
+         JhPHQnhGbHNZw==
+Date:   Mon, 1 Aug 2022 06:33:08 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>
+Subject: [GIT PULL] erofs updates for 5.20-rc1
+Message-ID: <YucDJOcnlB7EOD8g@debian>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
- <Yub+vPb53zt6dDpn@casper.infradead.org>
-In-Reply-To: <Yub+vPb53zt6dDpn@casper.infradead.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 1 Aug 2022 00:31:40 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
-Message-ID: <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] make buffer_locked provide an acquire semantics
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -85,63 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 at 00:14, Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Sun, Jul 31, 2022 at 04:43:08PM -0400, Mikulas Patocka wrote:
-> > Let's have a look at this piece of code in __bread_slow:
-> >       get_bh(bh);
-> >       bh->b_end_io = end_buffer_read_sync;
-> >       submit_bh(REQ_OP_READ, 0, bh);
-> >       wait_on_buffer(bh);
-> >       if (buffer_uptodate(bh))
-> >               return bh;
-> > Neither wait_on_buffer nor buffer_uptodate contain a memory barrier.
-> > Consequently, if someone calls sb_bread and then reads the buffer data,
-> > the read of buffer data may be executed before wait_on_buffer(bh) on
-> > architectures with weak memory ordering and it may return invalid data.
->
-> I think we should be consistent between PageUptodate() and
-> buffer_uptodate().  Here's how it's done for pages currently:
->
-> static inline bool folio_test_uptodate(struct folio *folio)
->         bool ret = test_bit(PG_uptodate, folio_flags(folio, 0));
->         /*
->          * Must ensure that the data we read out of the folio is loaded
->          * _after_ we've loaded folio->flags to check the uptodate bit.
->          * We can skip the barrier if the folio is not uptodate, because
->          * we wouldn't be reading anything from it.
->          *
->          * See folio_mark_uptodate() for the other side of the story.
->          */
->         if (ret)
->                 smp_rmb();
->
->         return ret;
->
-> ...
->
-> static __always_inline void folio_mark_uptodate(struct folio *folio)
->         /*
->          * Memory barrier must be issued before setting the PG_uptodate bit,
->          * so that all previous stores issued in order to bring the folio
->          * uptodate are actually visible before folio_test_uptodate becomes true.
->          */
->         smp_wmb();
->         set_bit(PG_uptodate, folio_flags(folio, 0));
->
-> I'm happy for these to also be changed to use acquire/release; no
-> attachment to the current code.  But bufferheads & pages should have the
-> same semantics, or we'll be awfully confused.
+Hi Linus,
 
-I suspect that adding acquire/release annotations at the bitops level
-is not going to get us anywhere, given that for the uptodate flag, it
-is the set operation that has release semantics, whereas for a lock
-flag, it will be the clear operation. Reverting to the legacy barrier
-instructions to try and avoid this ambiguity will likely only make
-things worse.
+Could you consider this pull request for 5.20-rc1?
 
-I was cc'ed only on patch #1 of your v3, so I'm not sure where this is
-headed, but I strongly +1 Matthew's point above that this should be
-done at the level that defines how the bit fields should be
-interpreted wrt to the contents of the data structure that they
-describe/guard.
+First of all, we'd like to add Yue Hu and Jeffle Xu as two new
+reviewers.  Thank them for spending time working on EROFS!
+
+There is no major feature outstanding in this cycle, mainly a patchset
+I worked on to prepare for rolling hash deduplication and folios for
+compressed data as the next big features.  It kills the unneeded
+PG_error flag dependency as well.
+
+Apart from that, there are bugfixes and cleanups as always. Details are
+listed below.
+
+All commits have been in -next for a while and no potential merge
+conflict is observed.
+
+Thanks,
+Gao Xiang
+
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
+
+for you to fetch changes up to ecce9212d0fd7a2d4a4998f0c4623a66887e14c8:
+
+  erofs: update ctx->pos for every emitted dirent (2022-07-31 22:26:29 +0800)
+
+----------------------------------------------------------------
+Changes since last update:
+
+ - Add Yue Hu and Jeffle Xu as reviewers;
+
+ - Add the missing wake_up when updating lzma streams;
+
+ - Avoid consecutive detection for Highmem memory;
+
+ - Prepare for multi-reference pclusters and get rid of PG_error;
+
+ - Fix ctx->pos update for NFS export;
+
+ - minor cleanups.
+
+----------------------------------------------------------------
+Gao Xiang (19):
+      erofs: avoid consecutive detection for Highmem memory
+      erofs: get rid of unneeded `inode', `map' and `sb'
+      erofs: clean up z_erofs_collector_begin()
+      erofs: introduce `z_erofs_parse_out_bvecs()'
+      erofs: introduce bufvec to store decompressed buffers
+      erofs: drop the old pagevec approach
+      erofs: introduce `z_erofs_parse_in_bvecs'
+      erofs: switch compressed_pages[] to bufvec
+      erofs: rework online page handling
+      erofs: get rid of `enum z_erofs_page_type'
+      erofs: clean up `enum z_erofs_collectmode'
+      erofs: get rid of `z_pagemap_global'
+      erofs: introduce struct z_erofs_decompress_backend
+      erofs: try to leave (de)compressed_pages on stack if possible
+      erofs: introduce z_erofs_do_decompressed_bvec()
+      erofs: record the longest decompressed size in this round
+      erofs: introduce multi-reference pclusters (fully-referenced)
+      erofs: get rid of erofs_prepare_dio() helper
+      erofs: get rid of the leftover PAGE_SIZE in dir.c
+
+Hongnan Li (1):
+      erofs: update ctx->pos for every emitted dirent
+
+Jeffle Xu (1):
+      MAINTAINERS: erofs: add myself as reviewer
+
+Yue Hu (1):
+      MAINTAINERS: erofs: add myself as reviewer
+
+Yuwen Chen (1):
+      erofs: wake up all waiters after z_erofs_lzma_head ready
+
+ MAINTAINERS                  |   2 +
+ fs/erofs/compress.h          |   2 +-
+ fs/erofs/data.c              |  39 +--
+ fs/erofs/decompressor.c      |  18 +-
+ fs/erofs/decompressor_lzma.c |   1 +
+ fs/erofs/dir.c               |  20 +-
+ fs/erofs/zdata.c             | 797 ++++++++++++++++++++++++-------------------
+ fs/erofs/zdata.h             | 119 +++----
+ fs/erofs/zpvec.h             | 159 ---------
+ 9 files changed, 533 insertions(+), 624 deletions(-)
+ delete mode 100644 fs/erofs/zpvec.h

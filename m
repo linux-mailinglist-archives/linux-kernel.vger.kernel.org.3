@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2285658606D
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 20:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505BF586071
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 20:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiGaSwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 14:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S237577AbiGaSwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 14:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGaSv7 (ORCPT
+        with ESMTP id S237563AbiGaSwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 14:51:59 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE496959A;
-        Sun, 31 Jul 2022 11:51:58 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bq11so9105401lfb.5;
-        Sun, 31 Jul 2022 11:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=BPufxihEl1ZxvR2qHTK7M69qWBoF8p5Z1If0kZuLz3c=;
-        b=adx9ZEid+lzU0z00DjYW4MNDq5wwJbRoO/2yx+nqJ9iBxfdBpqlZ9kCbuAm2N/zLn5
-         GqnCqXIPWUTOwau1JxKcBjavNYrFs3K2znfpEBNTNw9rMDl8ULAtZlP/wamHzmvMlvHd
-         98CFoNPMfnFzCQ/S1zH9VxRXnvp6YG4if/KwxnNe1n4vFNSXt+9aKC3kPA5BbS8qmmXh
-         26k5BnV/PDF7KuFRIt3XqPPVP73Cjg4ht0xZZP7ANwjka1b4GVC/WVFEdUmPZSrL0QGR
-         sm4xHRB+K6lB3xSYg0UsF2FgRxWD7KRTep+J2h12fEQCAFvNX1YWtQNaj1aeJLDldt3O
-         3Nwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=BPufxihEl1ZxvR2qHTK7M69qWBoF8p5Z1If0kZuLz3c=;
-        b=iqT7RUDUccpCXp75FSbUW7Tr5g8CrpdXRdGhy6oYNEpqNv1cST5QynmiOYoUpoDKNf
-         1UeiutQsYGeTmWdv87a73ELSNPSfTLKpDZO2WSMaxMMI7wccWu6SzYAFbjVV6156ZtRg
-         +or/3VT5/6lvFOo7s6Mxt/LZLbahFhOEFGnmu7lu819nN6URRZfyk5Os9IKSOMP+kJaO
-         JQD4a8LCUFj3NJgKAjrfBYsKCFkoDVif7PvdtMABBfIz8t5A9Yj+e0EAl0d31f2IfJOy
-         44qJ4TFpXk4+y2NDkG6ZXNAo2/5b7SLtkvXQWdJrg6hakbARzAvSbVULuNAtcp3T5iRN
-         87dg==
-X-Gm-Message-State: AJIora9I3xEzGvAc7X9F5Vyo3UsZ05ZOutyyKC4L4jnrg939neWRQhDz
-        FRhppYZWWemw2B6gjlLVdFM=
-X-Google-Smtp-Source: AGRyM1sdsLsoQ0rBhuEUsjIvk0l/hxioDbpNFKW38nE7+ArKMr3Wq6YACkVJCEE57ukhJSSp+3Nm8Q==
-X-Received: by 2002:a05:6512:3342:b0:48a:c0b4:75f2 with SMTP id y2-20020a056512334200b0048ac0b475f2mr4525038lfd.170.1659293517181;
-        Sun, 31 Jul 2022 11:51:57 -0700 (PDT)
-Received: from [192.168.0.108] (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.googlemail.com with ESMTPSA id h13-20020a05651211cd00b0048a828b6b2dsm1419119lfr.182.2022.07.31.11.51.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jul 2022 11:51:56 -0700 (PDT)
-Message-ID: <6c839ba3-b671-76fb-95e1-94bf2f2da303@gmail.com>
-Date:   Sun, 31 Jul 2022 21:51:55 +0300
+        Sun, 31 Jul 2022 14:52:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEE8959A
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 11:52:35 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oIE33-0004Iq-2x; Sun, 31 Jul 2022 20:52:21 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9038CBEBC3;
+        Sun, 31 Jul 2022 18:52:15 +0000 (UTC)
+Date:   Sun, 31 Jul 2022 20:52:13 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: can327: Fix a broken link to Documentation
+Message-ID: <20220731185213.gath5pgt4fcpttil@pengutronix.de>
+References: <6a54aff884ea4f84b661527d75aabd6632140715.1659249135.git.christophe.jaillet@wanadoo.fr>
+ <20220731104452.3bc2e76c.max@enpas.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] iio: st_sensors: Retry ID verification on failure
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-kernel@vger.kernel.org
-References: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
- <20220731170057.2b8ac00e@jic23-huawei>
-From:   =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
-In-Reply-To: <20220731170057.2b8ac00e@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="devh3drl6tdtjlei"
+Content-Disposition: inline
+In-Reply-To: <20220731104452.3bc2e76c.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.7.2022 19.00, Jonathan Cameron wrote:
-> On Sun, 24 Jul 2022 19:43:15 +0300
-> Matti Lehtimäki <matti.lehtimaki@gmail.com> wrote:
-> 
->> Some sensors do not always start fast enough to read a valid ID from
->> registers at first attempt. Let's retry at most 3 times with short sleep
->> in between to fix random timing issues.
->>
->> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> Hi Matti,
-> 
-> My gut feeling is this isn't in a fast path, so why not just wait
-> for whatever the documented power up time of the sensor is?
-> 
-> I'd expect to see a sleep in st_sensors_power_enable() if one is
-> required.
 
-In the specification for the sensor (lis2hh12) I have on my device I
-found that the maximum boot time of the sensor (starting from Vdd power
-on) is defined as 20 ms. Not sure if the other sensors supported by the
-driver have different values but based on checking a couple of
-specifications I didn't find any bigger values so far.
+--devh3drl6tdtjlei
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +			msleep(20);
-> How do we know 60msecs is long enough for all sensors?
+On 31.07.2022 10:44:52, Max Staudt wrote:
+> Thanks, Christophe!
 
-Based on the specification for the sensor I have and also driver used in
-Android kernel for my device (it uses a 3 x 20 ms loop) I think 20 ms is
-a good value but to be sure a slightly longer might make sense. As
-suggested in the other review comment by changing the regmap_read to
-regmap_read_poll_timeout the function doesn't always need to wait at
-least 20 ms in case first read doesn't provide the correct value, if a
-suitable shorter poll interval is used (something like 1-10 ms).
+If you think the patch is Ok, you can give an Acked-by: which is then
+recorded in the patch while applying it to the kernel.
 
-However testing on my device has shown that I still need to have a loop
-or at least a retry possibility because I have noticed a rare random
-read error (-6, happens after some time not at first read) when reading
-the id from the hardware. This could be due to for example internal
-init failure of the sensor chip causing an internal reset. Because of
-this read error regmap_read_poll_timeout returns with an error and
-without retrying to read the id the sensor probe fails.
+Marc
 
--Matti
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--devh3drl6tdtjlei
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLmz1gACgkQrX5LkNig
+011XuAf/dJQV1xIfOUXfQGFEHQrYynqCpHfZ47rPqwtBdrgzlx7+aTaF3DQUdP/l
+2ekPyU1mfWPxjkTwC9J/cF2rnWpouCgnOzO9jdkMdPUM3kn+6lRT2SSd1/bF5hqx
+NBTJbl2Hc/y/0PKSFx0AMT9cOywA2IEv8pbjDC3OFrVDMZNyBJUqHzdf1/NPndYL
+OOV+K00o8QnCzhlYTutwKhkvnyiUJawRRCgIysXQVNoKIcpI9N1xhfEN3u/Pnfb2
+wjI1zb9U0ytfp26JVChHXk3L636luYHPv/G4tISck4ceV8PlCvsyw5kuIrBUV4WW
+UiCw8cKohAvpxGqRSlZaLmDcPofxzQ==
+=X7vm
+-----END PGP SIGNATURE-----
+
+--devh3drl6tdtjlei--

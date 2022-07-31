@@ -2,111 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB155585DB2
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 08:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486F7585DBE
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 08:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbiGaF7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 01:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S236271AbiGaGSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 02:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiGaF7o (ORCPT
+        with ESMTP id S234916AbiGaGSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 01:59:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F6513CE9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 22:59:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B90460DBF
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 05:59:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E42AC433C1;
-        Sun, 31 Jul 2022 05:59:40 +0000 (UTC)
-Date:   Sun, 31 Jul 2022 01:59:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] tracing: Use a struct alignof to determine trace event
- field alignment
-Message-ID: <20220731015928.7ab3a154@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 31 Jul 2022 02:18:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE04613D6D
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 23:18:28 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id I2HRo3vdL5V1hI2HRokPDz; Sun, 31 Jul 2022 08:18:27 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 31 Jul 2022 08:18:27 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Wang Jianjian <wangjianjian3@huawei.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-ext4@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH] ext4, doc: Fix a broken layout
+Date:   Sun, 31 Jul 2022 08:18:24 +0200
+Message-Id: <d3ec14afe2396272da6353162b3081a0c92de313.1659248273.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+The commit in Fixes: has removed an escaping character without updating
+the layout of the table.
 
-alignof() gives an alignment of types as they would be as standalone
-variables. But alignment in structures might be different, and when
-building the fields of events, the alignment must be the actual
-alignment otherwise the field offsets may not match what they actually
-are.
+Add the missing space.
 
-This caused trace-cmd to crash, as libtraceevent did not check if the
-field offset was bigger than the event. The write_msr and read_msr
-events on 32 bit had their fields incorrect, because it had a u64 field
-between two ints. alignof(u64) would give 8, but the u64 field was at a
-4 byte alignment.
-
-Define a macro as:
-
-   ALIGN_STRUCTFIELD(type) ((int)(offsetof(struct {char a; type b;}, b)))
-
-which gives the actual alignment of types in a structure.
-
-Cc: stable@vger.kernel.org
-Fixes: 04ae87a52074e ("ftrace: Rework event_create_dir()")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 3103084afcf2 ("ext4, doc: remove unnecessary escaping")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- include/trace/stages/stage4_event_fields.h | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/filesystems/ext4/blockmap.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/trace/stages/stage4_event_fields.h b/include/trace/stages/stage4_event_fields.h
-index c3790ec7a453..80d34f396555 100644
---- a/include/trace/stages/stage4_event_fields.h
-+++ b/include/trace/stages/stage4_event_fields.h
-@@ -2,16 +2,18 @@
+diff --git a/Documentation/filesystems/ext4/blockmap.rst b/Documentation/filesystems/ext4/blockmap.rst
+index 2bd990402a5c..cc596541ce79 100644
+--- a/Documentation/filesystems/ext4/blockmap.rst
++++ b/Documentation/filesystems/ext4/blockmap.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- /* Stage 4 definitions for creating trace events */
- 
-+#define ALIGN_STRUCTFIELD(type) ((int)(offsetof(struct {char a; type b;}, b)))
-+
- #undef __field_ext
- #define __field_ext(_type, _item, _filter_type) {			\
- 	.type = #_type, .name = #_item,					\
--	.size = sizeof(_type), .align = __alignof__(_type),		\
-+	.size = sizeof(_type), .align = ALIGN_STRUCTFIELD(_type),	\
- 	.is_signed = is_signed_type(_type), .filter_type = _filter_type },
- 
- #undef __field_struct_ext
- #define __field_struct_ext(_type, _item, _filter_type) {		\
- 	.type = #_type, .name = #_item,					\
--	.size = sizeof(_type), .align = __alignof__(_type),		\
-+	.size = sizeof(_type), .align = ALIGN_STRUCTFIELD(_type),	\
- 	0, .filter_type = _filter_type },
- 
- #undef __field
-@@ -23,7 +25,7 @@
- #undef __array
- #define __array(_type, _item, _len) {					\
- 	.type = #_type"["__stringify(_len)"]", .name = #_item,		\
--	.size = sizeof(_type[_len]), .align = __alignof__(_type),	\
-+	.size = sizeof(_type[_len]), .align = ALIGN_STRUCTFIELD(_type),	\
- 	.is_signed = is_signed_type(_type), .filter_type = FILTER_OTHER },
- 
- #undef __dynamic_array
+ +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+-| i.i_block Offset   | Where It Points                                                                                                                                                                                                              |
++| i.i_block Offset    | Where It Points                                                                                                                                                                                                              |
+ +=====================+==============================================================================================================================================================================================================================+
+ | 0 to 11             | Direct map to file blocks 0 to 11.                                                                                                                                                                                           |
+ +---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 -- 
-2.35.1
+2.34.1
 

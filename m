@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB83585ED9
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D78B585EDC
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 14:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbiGaMXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 08:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        id S236807AbiGaMZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 08:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGaMXt (ORCPT
+        with ESMTP id S233019AbiGaMZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 08:23:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4519095A0;
-        Sun, 31 Jul 2022 05:23:48 -0700 (PDT)
+        Sun, 31 Jul 2022 08:25:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768A62DD2;
+        Sun, 31 Jul 2022 05:25:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC771B80D1D;
-        Sun, 31 Jul 2022 12:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3318CC433D6;
-        Sun, 31 Jul 2022 12:23:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1261460D17;
+        Sun, 31 Jul 2022 12:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1850DC433C1;
+        Sun, 31 Jul 2022 12:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659270225;
-        bh=/xtBcibcR1O/mDtgYXRCM38rkzxKP0vEboH12OrYl/Y=;
+        s=k20201202; t=1659270315;
+        bh=aJBSCZCKJ4tBgDgWlARQRxv+lVkfJRH7DAy3OuzHRDo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lcB2cZZx3vzEDtHd+pVcUVXfSGhO2Nb5JUOMkW9Xe2A9IoviKOIvFXelW1ob2o2rI
-         KKylV+qAbwZoRUxFaA5cza6t5mMBWHnhfkTLww/LEqg3OkQmtG1aTrxTTBsGwFDfPv
-         aBM4OnW2D8ZROPGa9xEi0V8N54P6Q39aZSFtoAMfqbu/nEMCaYbxtde86SMYN5kBBf
-         DSkkb5mQG/K2LlhqRd7PR2ygbEsBNTiwyAXexfdl7ghO4qS1NuAEivgLyfQCcm5AKl
-         DS1R20B3LauaEnTPVyC0AFbCETBPjS1a8F3CcFZ6/NPuNgWAgZ1NSPwhTjkQPHJ/Js
-         nBZT1kZ6zAA+A==
-Date:   Sun, 31 Jul 2022 13:33:57 +0100
+        b=GrPDz66c59Mq3cdJCsgFbrC93pnWhgxcEZ9rQH85F5igP2PxYdptfcHMBHEIgwe9Y
+         XDnJOLfMWpWP/IdCAdli61DhomE2ukeGup1u6ku8Lt58G0EyoVMaK5dgTdjkQIy3In
+         mjidBjo2S1dAQ87RV67bp+kclfXjq6Bt0ah8yyT7xiyzoMFWD/fV4jSp/WNYrrOlLu
+         guZdohuW/Hry76SKPZa6uerQB5nPh4rfmNBoNn6VQFyyTULUVyItBG64F3GGzsIE6Y
+         5OliWCEiGZOLOKlpf4Fr2QB7fPa91BJdNf7VKxts7hnG1eHV8pUMfyOlLlpTm7cPV1
+         mq53yCxTq49Nw==
+Date:   Sun, 31 Jul 2022 13:35:28 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: pressure: dlhl60d: Don't take garbage into
- consideration when reading data
-Message-ID: <20220731133357.5705df25@jic23-huawei>
-In-Reply-To: <20220726142048.4494-1-andriy.shevchenko@linux.intel.com>
-References: <20220726142048.4494-1-andriy.shevchenko@linux.intel.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Update Microchip MCP3911 to Maintained
+Message-ID: <20220731133528.64c51e0f@jic23-huawei>
+In-Reply-To: <20220723092030.260812-1-marcus.folkesson@gmail.com>
+References: <20220723092030.260812-1-marcus.folkesson@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -56,39 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 17:20:48 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Sat, 23 Jul 2022 11:20:30 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-> Both pressure and temperature are 24-bit long. Use proper accessors
-> instead of overlapping readings.
+> The actual status of the code is Maintained.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Looks correct to me, but it made me scratch my head just enough that I'd
-like Tomislav to take a look if possible.  So give me a poke if this
-hasn't progressed in a few weeks time.
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Cc: Kent Gustavsson <kent@minoris.se>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: linux-iio <linux-iio@vger.kernel.org>
+Applied to the togreg branch of iio.git which I'll rebase after rc1.
+In meantime pushed out as testing where 0-day will probably ignore this particular
+patch.
 
 Thanks,
 
 Jonathan
 
 > ---
->  drivers/iio/pressure/dlhl60d.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/iio/pressure/dlhl60d.c b/drivers/iio/pressure/dlhl60d.c
-> index 5f6bb3603a8b..f0b0d198c6d4 100644
-> --- a/drivers/iio/pressure/dlhl60d.c
-> +++ b/drivers/iio/pressure/dlhl60d.c
-> @@ -129,9 +129,8 @@ static int dlh_read_direct(struct dlh_state *st,
->  	if (ret)
->  		return ret;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 85147ee391d5..47dcbfabedf9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13085,7 +13085,7 @@ MICROCHIP MCP3911 ADC DRIVER
+>  M:	Marcus Folkesson <marcus.folkesson@gmail.com>
+>  M:	Kent Gustavsson <kent@minoris.se>
+>  L:	linux-iio@vger.kernel.org
+> -S:	Supported
+> +S:	Maintained
+>  F:	Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
+>  F:	drivers/iio/adc/mcp3911.c
 >  
-> -	*pressure = get_unaligned_be32(&st->rx_buf[1]) >> 8;
-> -	*temperature = get_unaligned_be32(&st->rx_buf[3]) &
-> -		GENMASK(DLH_NUM_TEMP_BITS - 1, 0);
-> +	*pressure = get_unaligned_be24(&st->rx_buf[1]);
-> +	*temperature = get_unaligned_be24(&st->rx_buf[4]);
->  
->  	return 0;
->  }
 

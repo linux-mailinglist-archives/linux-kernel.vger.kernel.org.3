@@ -2,209 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CE7585F8F
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07349585F92
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbiGaPmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 11:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S237321AbiGaPnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 11:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiGaPmL (ORCPT
+        with ESMTP id S231424AbiGaPnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 11:42:11 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F12E0B9
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 08:42:09 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id C72BB303F57;
-        Sun, 31 Jul 2022 17:42:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1659282126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDW87rzq7ro2FgSIprUGPHMmnXWSqtXOaM2kkRevn9s=;
-        b=7mDls5q4oHDOEttNS6eT19X+xsOOpHubgLsLZGOwJfMyBgLdyWMWLykAxnYy/Z5il9CaYG
-        T11MvGbSX2xzD72D6F3/jX9y2b64Hl2RiuGHR3JDYYkjJBYSz5w4r5NXsJZIggwZ2xtGZL
-        3J2PGbT9IC8RrP5NZZE7i2v43IGrSrPWEAu3Cqgzs4lQ9ocA3HpNQlE3g+v1yA6fxmyfX5
-        xNAGZ5vuWxHpRDNCm+EOzjmCg4DBfKxDxD3hmtl0YMczQYa0k8W9uwvTVo+XjOFY8hJlGs
-        2KGo29cGi+6N/ka414zcwV49ApUnfM5Vb81nod8I7cprkMR9o08ivYufNNjzIw==
-Message-ID: <1ad99cc0df85c932a7df18f67560930e37976e2b.camel@svanheule.net>
-Subject: Re: [PATCH v5 4/5] lib/test: introduce cpumask KUnit test suite
-From:   Sander Vanheule <sander@svanheule.net>
-To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>
-Date:   Sun, 31 Jul 2022 17:42:03 +0200
-In-Reply-To: <b6b20883-3fe7-9a5d-ab55-b5a61cef996c@riseup.net>
-References: <cover.1659077534.git.sander@svanheule.net>
-         <85217b5de6d62257313ad7fde3e1969421acad75.1659077534.git.sander@svanheule.net>
-         <b6b20883-3fe7-9a5d-ab55-b5a61cef996c@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Sun, 31 Jul 2022 11:43:45 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240C6EE31;
+        Sun, 31 Jul 2022 08:43:45 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id b7so5460624qvq.2;
+        Sun, 31 Jul 2022 08:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=O5fzJKCKvnX543t55GLgI6tA3O4NIA7ad+898Ffse3w=;
+        b=Etnt1m5zuKR7W4Ju2lEurqp8fzpduFBeky7nqg+H8/w99ulQw9mPGAZ88rMEYpUtvb
+         DsG0wi5u/PVmZdn9ThPe6VK1eHEW/hLFuSNvnrJuw5ZR/Z8VH8U5V34UaxFwuUoJSbjq
+         5ot5k1jShAufGKZn255i7BVZXCHmnGNlfbC4GzO0kOkEyQkXLLVKK840QbSB833fH0+B
+         JmpfOjY/w4k4dAe6n43y4gNc7pqipGhNRS1a6N9EWyknRMRVMB9nFJ1gbskQ7WzNkR+8
+         HJSg6zJy3/t7WBtS84D/VLLXp2CYZcg+KWhFKwn0XG2wmwYA0DdgXWGohm37kWU/Oem2
+         PZSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=O5fzJKCKvnX543t55GLgI6tA3O4NIA7ad+898Ffse3w=;
+        b=yjmY1xs3UpOiMbtWVVCpB6drG37AKpf4JphExPJwregTW1xUzzNH0LIZSs1zTKUF17
+         INcmnQMnttIbez2MyLjWctRjpCnYJfxBCHxF0uyJaH0sbS2WKz4YtJHkXoW1ei4Q/Lyr
+         X7SuPnNcDuLgI3eURKpSNce+beLLev1CKmRg/ulYnOikB1Vvj+PHrkayHiVC/bruX2JS
+         x6LJhY8IBHOjozXveJlTmUI3Ic9cxYW5mANa14A0m/qg51I5t0aewKJA1YXW+vqWCN8H
+         oJc89K58ZBr0QlyxHJ9Qe3B9wMPR7bX1HGQA0VGeRf3lqw1+5qmzk/L1jS+DbRoCFLg8
+         RLdA==
+X-Gm-Message-State: ACgBeo2LzVPEqJxa5hOi8bIPdoeD9MlvR0YICn2BXifNUdC8RMPz+dIT
+        EFWGDWAn+40RId5ZK/y3v3uZ1X/bOgM=
+X-Google-Smtp-Source: AA6agR7nm+uPqXgj2bad1CM22NDQbm1CSaTYIGyvrjFVHd9F581P1hgO8deF0JcPA9ncVixpciPiKw==
+X-Received: by 2002:ad4:5be6:0:b0:473:9831:541a with SMTP id k6-20020ad45be6000000b004739831541amr10912305qvc.118.1659282224233;
+        Sun, 31 Jul 2022 08:43:44 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:ac7a:fe76:f4fe:fa32])
+        by smtp.gmail.com with ESMTPSA id q22-20020a05620a0d9600b006b872b606b1sm5050082qkl.128.2022.07.31.08.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 08:43:43 -0700 (PDT)
+Date:   Sun, 31 Jul 2022 08:43:44 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        NeilBrown <neilb@suse.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 06/10] lib/cpumask: move trivial wrappers around find_bit
+ to the header
+Message-ID: <YuajMOuaGYBihRaK@yury-laptop>
+References: <20220706174253.4175492-1-yury.norov@gmail.com>
+ <20220706174253.4175492-7-yury.norov@gmail.com>
+ <9383b9b62a15ba6f91af5adb0b0b1dd90ac1a3df.camel@svanheule.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9383b9b62a15ba6f91af5adb0b0b1dd90ac1a3df.camel@svanheule.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-07-31 at 12:23 -0300, Ma=C3=ADra Canal wrote:
-> Hi Sander
->=20
-> On 7/29/22 04:01, Sander Vanheule wrote:
-> > Add a basic suite of tests for cpumask, providing some tests for empty =
-and
-> > completely filled cpumasks.
-> >=20
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Suggested-by: Yury Norov <yury.norov@gmail.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Brendan Higgins <brendanhiggins@google.com>
-> > Cc: David Gow <davidgow@google.com>
-> > Cc: Ma=C3=ADra Canal <mairacanal@riseup.net>
+On Sun, Jul 31, 2022 at 11:42:52AM +0200, Sander Vanheule wrote:
+> Hi Yury,
+> 
+> On Wed, 2022-07-06 at 10:42 -0700, Yury Norov wrote:
+> > To avoid circular dependencies, cpumask keeps simple (almost) one-line
+> > wrappers around find_bit() in a c-file.
+> > 
+> > Commit 47d8c15615c0a2 ("include: move find.h from asm_generic to linux")
+> > moved find.h header out of asm_generic include path, and it helped to fix
+> > many circular dependencies, including some in cpumask.h.
+> > 
+> > This patch moves those one-liners to header files.
+> > 
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
 > > ---
-> > Changes since v4:
-> > - Belated addition of Yury's Suggested-by:
-> > - Follow KUnit style more closely
-> > - Drop full check on cpu_possible_mask
-> > - Update last check on cpu_possible_mask
-> > - Log masks when starting test
-> > - Update commit message=20
-> > =C2=A0=20
-> > Changes since v3:
-> > - Test for_each_cpu*() over empty mask and cpu_possible_mask
-> > - Add Andy's Reviewed-by
-> > - Use num_{online,present,possible}_cpus() for builtin masks
-> > - Guard against CPU hotplugging during test for dynamic builtin CPU mas=
-ks
-> > =C2=A0
-> > Changes since v2:
-> > - Rework for_each_* test macros, as suggested by Yury
-> >=20
-> > Changes since v1:
-> > - New patch
-> >=20
-> > =C2=A0lib/Kconfig.debug=C2=A0 |=C2=A0 12 ++++
-> > =C2=A0lib/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 =
-+
-> > =C2=A0lib/cpumask_test.c | 147 ++++++++++++++++++++++++++++++++++++++++=
-+++++
-> > =C2=A03 files changed, 160 insertions(+)
-> > =C2=A0create mode 100644 lib/cpumask_test.c
-> >=20
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 2e24db4bff19..e85e74646178 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2021,6 +2021,18 @@ config LKDTM
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Documentation on how to=
- use the module can be found in
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Documentation/fault-inj=
-ection/provoke-crashes.rst
-> > =C2=A0
-> > +config CPUMASK_KUNIT_TEST
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "KUnit test for cpu=
-mask" if !KUNIT_ALL_TESTS
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on KUNIT
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default KUNIT_ALL_TESTS
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable to turn on cpu=
-mask tests, running at boot or module load
-> > time.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 For more information =
-on KUnit and unit tests in general, please
-> > refer
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to the KUnit document=
-ation in Documentation/dev-tools/kunit/.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If unsure, say N.
-> > +
-> > =C2=A0config TEST_LIST_SORT
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "Linked list s=
-orting test" if !KUNIT_ALL_TESTS
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on KUNIT
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index bcc7e8ea0cde..9f9db1376538 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -59,6 +59,7 @@ obj-$(CONFIG_TEST_BPF) +=3D test_bpf.o
-> > =C2=A0obj-$(CONFIG_TEST_FIRMWARE) +=3D test_firmware.o
-> > =C2=A0obj-$(CONFIG_TEST_BITOPS) +=3D test_bitops.o
-> > =C2=A0CFLAGS_test_bitops.o +=3D -Werror
-> > +obj-$(CONFIG_CPUMASK_KUNIT_TEST) +=3D cpumask_test.o
-> > =C2=A0obj-$(CONFIG_TEST_SYSCTL) +=3D test_sysctl.o
-> > =C2=A0obj-$(CONFIG_TEST_SIPHASH) +=3D test_siphash.o
-> > =C2=A0obj-$(CONFIG_HASH_KUNIT_TEST) +=3D test_hash.o
-> > diff --git a/lib/cpumask_test.c b/lib/cpumask_test.c
-> > new file mode 100644
-> > index 000000000000..0f8059a5e93b
-> > --- /dev/null
-> > +++ b/lib/cpumask_test.c
->=20
-> In order to make the tests at lib/ with more compliant naming, it would
-> make more sense to name it test_cpumask.c.
+> >  include/linux/cpumask.h | 57 ++++++++++++++++++++++++++++++++++++++---
+> >  lib/cpumask.c           | 55 ---------------------------------------
+> >  2 files changed, 54 insertions(+), 58 deletions(-)
+> > 
+> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> > index 760022bcb925..ea3de2c2c180 100644
+> > --- a/include/linux/cpumask.h
+> > +++ b/include/linux/cpumask.h
+> > @@ -241,7 +241,21 @@ static inline unsigned int cpumask_last(const struct
+> > cpumask *srcp)
+> >         return find_last_bit(cpumask_bits(srcp), nr_cpumask_bits);
+> >  }
+> >  
+> > -unsigned int __pure cpumask_next(int n, const struct cpumask *srcp);
+> > +/**
+> > + * cpumask_next - get the next cpu in a cpumask
+> > + * @n: the cpu prior to the place to search (ie. return will be > @n)
+> > + * @srcp: the cpumask pointer
+> > + *
+> > + * Returns >= nr_cpu_ids if no further cpus set.
+> > + */
+> > +static inline
+> > +unsigned int cpumask_next(int n, const struct cpumask *srcp)
+> 
+> This also drops the __pure speficier for these functions. Since I have a patch
+> that does the opposite for cpumask_next_wrap() [1], I was wondering what your
+> reasoning behind this is.
+> 
+> Since a cpumask like cpu_online_mask may change between subsequent calls, I'm
+> considering to drop my patch adding __pure, and to follow the changes you've
+> made here.
+> 
+> [1]
+> https://lore.kernel.org/all/06eebdc46cfb21eb437755a2a5a56d55c41400f5.1659077534.git.sander@svanheule.net/
+ 
+__pure is a promise to the compiler that the function will not modify
+system state (i.e. will not write into the memory). Now that the
+cpumask_next etc. became static inline, there's no reason for the hint
+because the compiler inlines the code, and there's no a real function.
 
-That's what I had originally, exactly because I copied the naming from othe=
-r
-files in lib/. That didn't match the style guide [1] which proposes the _te=
-st.c
-or _kunit.c suffix.
+Maybe then it's worth to propagate the __pure to find_bit() helpers...
 
-Most files in lib/ use the test_ prefix (45), but some use the  _test.c suf=
-fix
-(4), or _kunit.c suffix (6). Of the "test_" ones, only 8 are actually KUnit=
- test
-suites. I personally think the style guide makes a good argument to use a
-suffix, as that clearly places the test suite next to the relevant file in =
-an
-alphabetic listing.
+Would be great to get comments form compiler people. Rasmus?
 
-Based on the above, would you agree with using "cpumask_kunit.c" as the
-filename? That distinguishes it from the non-KUnit test files, and follows =
-the
-style guide.
+Thanks,
+Yury
 
-[1] https://docs.kernel.org/dev-tools/kunit/style.html#test-file-and-module=
--names
-
->=20
-> Thank you for the respin to the series! All tests are passing now.
->=20
-> Tested-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-
-Thank you for testing!
-
-Best,
-Sander

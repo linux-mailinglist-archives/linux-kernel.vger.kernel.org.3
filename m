@@ -2,160 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5D8585F51
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3682E585F5D
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237126AbiGaOvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 10:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
+        id S237253AbiGaPDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 11:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiGaOvC (ORCPT
+        with ESMTP id S237068AbiGaPDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 10:51:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179BE6261
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659279061; x=1690815061;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sOL0AJcJcFwSCQy+DP16oX7RS399Ed5f4pWBxXtz67g=;
-  b=f5cw7VgTwpEag9pFRlogw906Q9ll0n2c/8n2lpOL1H5+udUd9uGHR3ee
-   uRD5HFWHAlWBFcmnnCOfwf/ytp37qcJHx5DWoSpWakxBA8CpqLFhfJ4Uh
-   ptxEfhk7eJQM+EiUM7WqiaxGKRHFgfn4F2QbtB9TCep04DZtaYPtCoxVc
-   3LCJOVtZ+iYrVigA6pAaYJS7wE34p78QEttoEkVWymZdo2QVeqyUDEnKv
-   3tzc5xSZYpHkuJqSB5oF9pOYJgb9wGMv5veCf1HrsBQ4rvI11HspgoMKc
-   57Bqa+LpnBKUExxGaGGpdAKOoKa7GKZsqid9ORpwPfjOzm/pLs6snUf1C
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350708283"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350708283"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 07:51:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634626701"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 07:50:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIAHS-000ED9-2E;
-        Sun, 31 Jul 2022 14:50:58 +0000
-Date:   Sun, 31 Jul 2022 22:50:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202207312255.bPrNIfCh-lkp@intel.com>
+        Sun, 31 Jul 2022 11:03:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C960DEE4
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 08:03:33 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id x4so1906052pfr.8
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 08:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=CqarRD0qBma+nkDvEq8uD5MNW2b7at7eSJRZBX+iSRg=;
+        b=c+Lg4tTvxwhoOwnitw/8esS0JfRoc7588NH7ZMpcW3trPL7rLOUSI9E/7Fn9wyoTXR
+         iqvu1jS9uH0faNEStn9gcKsXTyKXNAgsmqpYhSSGq9GPLziCD8YhniqMqEL1C6pEj1Pc
+         x9DXY+9k/GIkN2xA3bfpjoUIqEL1v+nOIPfPx9A9YlQ8ZOTf+/wTMeWJr3nIvhmK/fud
+         w0zhCeQpGtOBIYB1QuxuCw0VwqqN8reqSThtHucdOm3MJ+N4+sE+KafHGvTugfal/DqZ
+         x1kOttY8idYKSHL64B/VsfAAZl6tTrvgoFWOsuvLGlEz36VhHp0nZOeUxRm7XFFOTKE3
+         96PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=CqarRD0qBma+nkDvEq8uD5MNW2b7at7eSJRZBX+iSRg=;
+        b=o/9qDTygV6Ze6LGdJdmyiPMHc2PQAh/Irvq8OPLxNDecPFgOq7wVlJSj9GDnzP3fYw
+         We/FdOkXHesn8J+cpfD+fmEJ4H3PsQNzyyiV3KmsoXL05ttrinbMK9j/w9IvW/TPFdfd
+         tegqY3TSKJpapxs3/IMDrPiMBSgdhdtQ6kbORlMS2SDdx9G/G8MLpE5Kfeoeyixd+ekO
+         PIHclr+ygKeYY0RboX0G9X5ejQLCuZnS2maZPXYAoFgHfNnipBGrTlBIqV46TOPTehnR
+         lbK/j05o1lCDo1yTW7Rhpn1x5nzff8wPLsv86ZagOo9p+jiIVaXd++Pph4SOY5E+b9mm
+         Zd5g==
+X-Gm-Message-State: AJIora/BEIibanNF+/o6FfeyJoWKGVNgveuWnffNWiPql0gZex0vv0dy
+        h7GKL0pymTtrBnBPEwxRAzWe8lhdBd/oMw==
+X-Google-Smtp-Source: AGRyM1sbh/JldyhtTyQMu6gVq6HNWLs7pK2HOedzv2yx6vukYAF9/lxIclfHNmb5/Hjseat7ThTgNA==
+X-Received: by 2002:a63:eb0d:0:b0:41b:7a15:1fbb with SMTP id t13-20020a63eb0d000000b0041b7a151fbbmr10085682pgh.511.1659279812442;
+        Sun, 31 Jul 2022 08:03:32 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u17-20020a170903125100b0016d33b8a231sm7582928plh.270.2022.07.31.08.03.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 08:03:32 -0700 (PDT)
+Message-ID: <c737af00-e879-fe01-380c-ba95b555f423@kernel.dk>
+Date:   Sun, 31 Jul 2022 09:03:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring support for buffered writes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     io-uring <io-uring@vger.kernel.org>, linux-xfs@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a010258447d386186ca10cd374d888ac66ffe1a
-commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
-date:   6 months ago
-config: arm64-randconfig-s031-20220731 (https://download.01.org/0day-ci/archive/20220731/202207312255.bPrNIfCh-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f68f2ff91512c199ec24883001245912afc17873
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/firmware/meson/
+Hi Linus,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On top of the core io_uring changes for 5.20, this pull request contains
+support for buffered writes, specifically for XFS. btrfs is in progress,
+will be coming in the next release.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/firmware/meson/meson_sm.c:85:24: sparse: sparse: Using plain integer as NULL pointer
-   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
-   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
-   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
-   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
->> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
->> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
-   drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *sm_shmem_in_base @@
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void *
-   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+io_uring does support buffered writes on any file type, but since the
+buffered write path just always -EAGAIN (or -EOPNOTSUPP) any attempt to
+do so if IOCB_NOWAIT is set, any buffered write will effectively be
+handled by io-wq offload. This isn't very efficient, and we even have
+specific code in io-wq to serialize buffered writes to the same inode to
+avoid further inefficiencies with thread offload.
 
-vim +206 drivers/firmware/meson/meson_sm.c
+This is particularly sad since most buffered writes don't block, they
+simply copy data to a page and dirty it. With this pull request, we can
+handle buffered writes a lot more effiently. If balance_dirty_pages()
+needs to block, we back off on writes as indicated.
 
-2c4ddb215521d5 Carlo Caione 2016-08-27  175  
-2c4ddb215521d5 Carlo Caione 2016-08-27  176  /**
-2c4ddb215521d5 Carlo Caione 2016-08-27  177   * meson_sm_call_write - send data to secure-monitor
-2c4ddb215521d5 Carlo Caione 2016-08-27  178   *
-8cde3c2153e8f5 Carlo Caione 2019-07-31  179   * @fw:		Pointer to secure-monitor firmware
-2c4ddb215521d5 Carlo Caione 2016-08-27  180   * @buffer:	Buffer containing data to send
-2c4ddb215521d5 Carlo Caione 2016-08-27  181   * @size:	Size of the data to send
-2c4ddb215521d5 Carlo Caione 2016-08-27  182   * @cmd_index:	Index of the SMC32 function ID
-2c4ddb215521d5 Carlo Caione 2016-08-27  183   * @arg0:	SMC32 Argument 0
-2c4ddb215521d5 Carlo Caione 2016-08-27  184   * @arg1:	SMC32 Argument 1
-2c4ddb215521d5 Carlo Caione 2016-08-27  185   * @arg2:	SMC32 Argument 2
-2c4ddb215521d5 Carlo Caione 2016-08-27  186   * @arg3:	SMC32 Argument 3
-2c4ddb215521d5 Carlo Caione 2016-08-27  187   * @arg4:	SMC32 Argument 4
-2c4ddb215521d5 Carlo Caione 2016-08-27  188   *
-2c4ddb215521d5 Carlo Caione 2016-08-27  189   * Return:	size of sent data on success, a negative value on error
-2c4ddb215521d5 Carlo Caione 2016-08-27  190   */
-8cde3c2153e8f5 Carlo Caione 2019-07-31  191  int meson_sm_call_write(struct meson_sm_firmware *fw, void *buffer,
-8cde3c2153e8f5 Carlo Caione 2019-07-31  192  			unsigned int size, unsigned int cmd_index, u32 arg0,
-8cde3c2153e8f5 Carlo Caione 2019-07-31  193  			u32 arg1, u32 arg2, u32 arg3, u32 arg4)
-2c4ddb215521d5 Carlo Caione 2016-08-27  194  {
-2c4ddb215521d5 Carlo Caione 2016-08-27  195  	u32 written;
-2c4ddb215521d5 Carlo Caione 2016-08-27  196  
-8cde3c2153e8f5 Carlo Caione 2019-07-31  197  	if (!fw->chip)
-2c4ddb215521d5 Carlo Caione 2016-08-27  198  		return -ENOENT;
-2c4ddb215521d5 Carlo Caione 2016-08-27  199  
-8cde3c2153e8f5 Carlo Caione 2019-07-31  200  	if (size > fw->chip->shmem_size)
-2c4ddb215521d5 Carlo Caione 2016-08-27  201  		return -EINVAL;
-2c4ddb215521d5 Carlo Caione 2016-08-27  202  
-8cde3c2153e8f5 Carlo Caione 2019-07-31  203  	if (!fw->chip->cmd_shmem_in_base)
-2c4ddb215521d5 Carlo Caione 2016-08-27  204  		return -EINVAL;
-2c4ddb215521d5 Carlo Caione 2016-08-27  205  
-8cde3c2153e8f5 Carlo Caione 2019-07-31 @206  	memcpy(fw->sm_shmem_in_base, buffer, size);
-2c4ddb215521d5 Carlo Caione 2016-08-27  207  
-8cde3c2153e8f5 Carlo Caione 2019-07-31  208  	if (meson_sm_call(fw, cmd_index, &written, arg0, arg1, arg2, arg3, arg4) < 0)
-2c4ddb215521d5 Carlo Caione 2016-08-27  209  		return -EINVAL;
-2c4ddb215521d5 Carlo Caione 2016-08-27  210  
-2c4ddb215521d5 Carlo Caione 2016-08-27  211  	if (!written)
-2c4ddb215521d5 Carlo Caione 2016-08-27  212  		return -EINVAL;
-2c4ddb215521d5 Carlo Caione 2016-08-27  213  
-2c4ddb215521d5 Carlo Caione 2016-08-27  214  	return written;
-2c4ddb215521d5 Carlo Caione 2016-08-27  215  }
-2c4ddb215521d5 Carlo Caione 2016-08-27  216  EXPORT_SYMBOL(meson_sm_call_write);
-2c4ddb215521d5 Carlo Caione 2016-08-27  217  
+This improves buffered write support by 2-3x.
 
-:::::: The code at line 206 was first introduced by commit
-:::::: 8cde3c2153e8f57be884c0e73f18bc4de150e870 firmware: meson_sm: Rework driver as a proper platform driver
+Jan Kara helped with the mm bits for this, and Stefan handled the
+fs/iomap/xfs/io_uring parts of it.
 
-:::::: TO: Carlo Caione <ccaione@baylibre.com>
-:::::: CC: Kevin Hilman <khilman@baylibre.com>
+Please pull!
+
+
+The following changes since commit f6b543fd03d347e8bf245cee4f2d54eb6ffd8fcb:
+
+  io_uring: ensure REQ_F_ISREG is set async offload (2022-07-24 18:39:18 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.dk/linux-block.git tags/for-5.20/io_uring-buffered-writes-2022-07-29
+
+for you to fetch changes up to 0dd316ba8692c2374fbb82cce57c0b23144f2977:
+
+  mm: honor FGP_NOWAIT for page cache page allocation (2022-07-24 18:39:32 -0600)
+
+----------------------------------------------------------------
+for-5.20/io_uring-buffered-writes-2022-07-29
+
+----------------------------------------------------------------
+Jan Kara (3):
+      mm: Move starting of background writeback into the main balancing loop
+      mm: Move updates of dirty_exceeded into one place
+      mm: Add balance_dirty_pages_ratelimited_flags() function
+
+Jens Axboe (2):
+      io_uring: fix issue with io_write() not always undoing sb_start_write()
+      mm: honor FGP_NOWAIT for page cache page allocation
+
+Stefan Roesch (11):
+      iomap: Add flags parameter to iomap_page_create()
+      iomap: Add async buffered write support
+      iomap: Return -EAGAIN from iomap_write_iter()
+      fs: add a FMODE_BUF_WASYNC flags for f_mode
+      fs: add __remove_file_privs() with flags parameter
+      fs: Split off inode_needs_update_time and __file_update_time
+      fs: Add async write file modification handling.
+      io_uring: Add support for async buffered writes
+      io_uring: Add tracepoint for short writes
+      xfs: Specify lockmode when calling xfs_ilock_for_iomap()
+      xfs: Add async buffered write support
+
+ fs/inode.c                      | 168 +++++++++++++++++++++++++++++-----------
+ fs/iomap/buffered-io.c          |  67 ++++++++++++----
+ fs/read_write.c                 |   4 +-
+ fs/xfs/xfs_file.c               |  11 ++-
+ fs/xfs/xfs_iomap.c              |  11 ++-
+ include/linux/fs.h              |   4 +
+ include/linux/writeback.h       |   7 ++
+ include/trace/events/io_uring.h |  25 ++++++
+ io_uring/rw.c                   |  41 ++++++++--
+ mm/filemap.c                    |   4 +
+ mm/page-writeback.c             |  89 +++++++++++++--------
+ 11 files changed, 323 insertions(+), 108 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+

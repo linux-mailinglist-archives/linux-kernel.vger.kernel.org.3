@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC82585F49
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61349585F4B
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiGaOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 10:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        id S237214AbiGaOhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 10:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGaOfs (ORCPT
+        with ESMTP id S229639AbiGaOhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 10:35:48 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19162F585;
-        Sun, 31 Jul 2022 07:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IuTVlloIOJRXiC5bMvv+29ddXC1np5Lf9kKXePRR13U=; b=vjEWo0wghmx5EFVLcWo9Oa2Mke
-        QGIIXA+jx/OG9BUtoceyFoNs7lBg+EJqRs1l49PAQdgkiViROEiWjXMGDUjtaPTX+P+w7UxQeW61f
-        2QZ32ZnTiXafCrZNOtJzD57NyjPTJ6Z9iie+YJWTU84GtXhPHF4JnYIyzchAD7oSiCik=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oIA2c-00C5ZZ-16; Sun, 31 Jul 2022 16:35:38 +0200
-Date:   Sun, 31 Jul 2022 16:35:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Frank <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, yinghong.zhang@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] net: phy: Add driver for Motorcomm yt8521 gigabit
- ethernet
-Message-ID: <YuaTOglYjfTEVYvX@lunn.ch>
-References: <20220727070827.1162-1-Frank.Sae@motor-comm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727070827.1162-1-Frank.Sae@motor-comm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 31 Jul 2022 10:37:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DBFF585
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:37:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BA55B80D60
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 14:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BDAC433C1;
+        Sun, 31 Jul 2022 14:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659278257;
+        bh=2+/VvW4FXQhZNTs7AE+JMbWDGKU62oUiFhqWYCH7hRs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dI29yFK92boTsZ/bRlXMcgoCMmBQBShmKXEjXqZ/pW4o0NkzSmqXp73OoFI5eGH4G
+         jW88q4LcBB/xrXib4zvM4ATPl8tzeQ/8cL2a8LUQkwD2K9EJ7Q6tWDtCJ+510eC4MR
+         8fTf9w3c6wQocRVh3LN0NUq+uppX3SOG7NauJkCGMryJfof4n2iG3l6Xxo4cHRlyE/
+         CT5LdhI5EUudvLECc9B8GNa4k/GlcYPHYKS7FZp0xP/2+CyXkm74ki9YMGuPItFj5v
+         6nTutqO+BkwVqQ6Df9iXJnVajnt///lEUn99ZPjT8RjpoWBWWC2U9PfifzDQFTA7SV
+         nQNoQKeo0qkMQ==
+Date:   Sun, 31 Jul 2022 23:37:32 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     zhangduo <zduo006@163.com>
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, zhangduo <zhangduo@kylinos.cn>
+Subject: Re: [PATCH 2/2] kprobes: fix the comments error
+Message-Id: <20220731233732.446610618f2f208f13b8e2a1@kernel.org>
+In-Reply-To: <20220722062505.20309-1-zduo006@163.com>
+References: <20220722062505.20309-1-zduo006@163.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +/* Interrupt enable Register */
-> +#define YTPHY_INTERRUPT_ENABLE_REG		0x12
-> +#define YTPHY_IER_AUTONEG_ERR			BIT(15)
-> +#define YTPHY_IER_SPEED_CHANGED			BIT(14)
-> +#define YTPHY_IER_DUPLEX_CHANGED		BIT(13)
-> +#define YTPHY_IER_PAGE_RECEIVED			BIT(12)
-> +#define YTPHY_IER_LINK_FAILED			BIT(11)
-> +#define YTPHY_IER_LINK_SUCCESSED		BIT(10)
-> +#define YTPHY_IER_WOL				BIT(6)
-> +#define YTPHY_IER_WIRESPEED_DOWNGRADE		BIT(5)
-> +#define YTPHY_IER_SERDES_LINK_FAILED		BIT(3)
-> +#define YTPHY_IER_SERDES_LINK_SUCCESSED		BIT(2)
-> +#define YTPHY_IER_POLARITY_CHANGED		BIT(1)
-> +#define YTPHY_IER_JABBER_HAPPENED		BIT(0)
-> +
-> +/* Interrupt Status Register */
-> +#define YTPHY_INTERRUPT_STATUS_REG		0x13
-> +#define YTPHY_ISR_AUTONEG_ERR			BIT(15)
-> +#define YTPHY_ISR_SPEED_CHANGED			BIT(14)
-> +#define YTPHY_ISR_DUPLEX_CHANGED		BIT(13)
-> +#define YTPHY_ISR_PAGE_RECEIVED			BIT(12)
-> +#define YTPHY_ISR_LINK_FAILED			BIT(11)
-> +#define YTPHY_ISR_LINK_SUCCESSED		BIT(10)
-> +#define YTPHY_ISR_WOL				BIT(6)
-> +#define YTPHY_ISR_WIRESPEED_DOWNGRADE		BIT(5)
-> +#define YTPHY_ISR_SERDES_LINK_FAILED		BIT(3)
-> +#define YTPHY_ISR_SERDES_LINK_SUCCESSED		BIT(2)
-> +#define YTPHY_ISR_POLARITY_CHANGED		BIT(1)
-> +#define YTPHY_ISR_JABBER_HAPPENED		BIT(0)
+On Fri, 22 Jul 2022 14:25:05 +0800
+zhangduo <zduo006@163.com> wrote:
 
-> + * ytphy_set_wol() - turn wake-on-lan on or off
-> + * @phydev: a pointer to a &struct phy_device
-> + * @wol: a pointer to a &struct ethtool_wolinfo
-> + *
-> + * NOTE: YTPHY_WOL_CONFIG_REG, YTPHY_WOL_MACADDR2_REG, YTPHY_WOL_MACADDR1_REG
-> + * and YTPHY_WOL_MACADDR0_REG are common ext reg. the YTPHY_INTERRUPT_ENABLE_REG
-> + * of UTP is special, fiber also use this register.
-> + *
-> + * returns 0 or negative errno code
-> + */
-> +static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
-> +{
-> +	struct net_device *p_attached_dev;
-> +	const u16 mac_addr_reg[] = {
-> +		YTPHY_WOL_MACADDR2_REG,
-> +		YTPHY_WOL_MACADDR1_REG,
-> +		YTPHY_WOL_MACADDR0_REG,
-> +	};
-> +	const u8 *mac_addr;
-> +	int old_page;
-> +	int ret = 0;
-> +	u16 mask;
-> +	u16 val;
-> +	u8 i;
-> +
-> +	if (wol->wolopts & WAKE_MAGIC) {
-> +		p_attached_dev = phydev->attached_dev;
-> +		if (!p_attached_dev)
-> +			return -ENODEV;
-> +
-> +		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-> +		if (!is_valid_ether_addr(mac_addr))
-> +			return -EINVAL;
-> +
-> +		/* lock mdio bus then switch to utp reg space */
-> +		old_page = phy_select_page(phydev, YT8521_RSSR_UTP_SPACE);
-> +		if (old_page < 0)
-> +			goto err_restore_page;
-> +
-> +		/* Store the device address for the magic packet */
-> +		for (i = 0; i < 3; i++) {
-> +			ret = ytphy_write_ext(phydev, mac_addr_reg[i],
-> +					      ((mac_addr[i * 2] << 8)) |
-> +						      (mac_addr[i * 2 + 1]));
-> +			if (ret < 0)
-> +				goto err_restore_page;
-> +		}
-> +
-> +		/* Enable WOL feature */
-> +		mask = YTPHY_WCR_PUSEL_WIDTH_MASK | YTPHY_WCR_INTR_SEL;
-> +		val = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-> +		val |= YTPHY_WCR_TYPE_PULSE | YTPHY_WCR_PUSEL_WIDTH_672MS;
-> +		ret = ytphy_modify_ext(phydev, YTPHY_WOL_CONFIG_REG, mask, val);
-> +		if (ret < 0)
-> +			goto err_restore_page;
-> +
-> +		/* Enable WOL interrupt */
-> +		ret = __phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG, 0,
-> +				   YTPHY_IER_WOL);
-> +		if (ret < 0)
-> +			goto err_restore_page;
+> From: zhangduo <zhangduo@kylinos.cn>
+> 
+> fix the comments 'Copy the insn slot of ap to p'
+> 
+> Signed-off-by: zhangduo <zhangduo@kylinos.cn>
 
-You have interrupt bits defined, you enable the WoL interrupt, but you
-don't have an interrupt handler. PHY interrupts are generally level
-interrupts, so on WoL, don't you end up with an interrupt storm,
-because you don't have anything clearing the WoL interrupt?
+Looks good to me. 
 
-	Andrew
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks, 
+
+> ---
+>  kernel/kprobes.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f1dddc8fe..8bcef7d3c 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1349,7 +1349,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+>  			    | KPROBE_FLAG_DISABLED;
+>  	}
+>  
+> -	/* Copy the insn slot of 'p' to 'ap'. */
+> +	/* Copy the insn slot of 'ap' to 'p'. */
+>  	copy_kprobe(ap, p);
+>  	ret = add_new_kprobe(ap, p);
+>  
+> -- 
+> 2.25.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

@@ -2,269 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7336585FE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A2585FFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiGaQlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S237479AbiGaQwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237175AbiGaQlO (ORCPT
+        with ESMTP id S232336AbiGaQwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:41:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E9860EE;
-        Sun, 31 Jul 2022 09:41:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE5CB80D18;
-        Sun, 31 Jul 2022 16:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFA0C433D6;
-        Sun, 31 Jul 2022 16:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659285670;
-        bh=jVIikIEAbW8a0Ip4W9QaUNGqtqgAj6jrVEjicyzVQQU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c04z/5s2oZyIXF/fqq/7T7G7k+BJIz0nBsuR6JdXLStYTxHReDdY4AhZQy7gK+0dP
-         hMPRmAanpTE6HDgvf9L3e8osyu25Y/3NcfHN2qMT6TxcQaZM4icfJTj4vha9TtNwDA
-         dnLzxtlbVXtRgK6lcybVI4ycssjl76H3upIsd71SSg1jYiDPgwtPp2N8/MZBJCdF8I
-         LAv4LUqQhPKmfJQHxg95w+z9PCXJfOx/qSI2NS8u4bAYskD2WXSiQmYy6K9pAXs9Zb
-         ungWZHN+BDcMOzVQK67Jxf0HqUWGN1Z7FpHyXLM7P005gdQ37sNiQwQRIQsMK34kZY
-         xLmGvM7/0CTAA==
-Date:   Sun, 31 Jul 2022 17:51:21 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] iio: adc: mcp3911: add support for buffers
-Message-ID: <20220731175121.5d9493a0@jic23-huawei>
-In-Reply-To: <20220722130726.7627-6-marcus.folkesson@gmail.com>
-References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
-        <20220722130726.7627-6-marcus.folkesson@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 31 Jul 2022 12:52:09 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A261BCA4
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:52:07 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id c12so11041058ede.3
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pxWZE128SOoi74e8JOBbhE84B0ZObg/+wPX7SefHUuA=;
+        b=iHWZ83fSPh2Igp333ox3FD6XSVbvS1kiY+Ie/NNBd/XQk3g85+GgNYG9Z0ZRD3p/GC
+         irAFizM3U/s/77M775f/0+JSV/wUM1t/WOnVmQsMkE0N+NljI0Pi3kCN/Bmo1+P/cfF4
+         eaQxDmePH9qtjS3M9tAmCUZW+vGGqj+vCOYjI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pxWZE128SOoi74e8JOBbhE84B0ZObg/+wPX7SefHUuA=;
+        b=o4nOK5TLqSgdJDLpLVnE0A3rjApCPNftl9Z2PuMF1gWkkJtF0na28zwHu4XqzqTxHD
+         z6MFm/PcHlzzhOy9D9R5ADpFUw0UIUXnsy9g0d2ujIf9MKQvwqFRzU2BXcStrEmvqogv
+         l++jf4v9PPFIvrNCHJfsLvXaIe9zn7tUzUrIEcUZHsKVHymFpDd1G6LBuzRKPRlKCYcX
+         MiYKKDe2eWnK26ikZbdr1xqnmzfWS9NtU1uSJ8M1JlgqqB8n6r111H3vPdpwxBsc6RI0
+         e2JK6jXPiKDFavZAoPQSXA57Ssd4shtuz3pbhBGhhzBAHOQdnCDI1AJKf5SPGR+MCbcS
+         J7Ew==
+X-Gm-Message-State: AJIora8zLO5Cz7qA+i2chz6uSlFFflXAm+xkltxzIHZJfoITg88RO/FA
+        0URXGuzhTFSmWZfGfcjL0P4zsnqnSXL/j9M2
+X-Google-Smtp-Source: AGRyM1vPgf1u3QxQcUu/borYMETxDPezKzg9bygJGuRA1QmrBGjPHIOzpPj0pElQFySci9dTFDM0KQ==
+X-Received: by 2002:a05:6402:484:b0:43b:6e02:71af with SMTP id k4-20020a056402048400b0043b6e0271afmr12276453edv.176.1659286325656;
+        Sun, 31 Jul 2022 09:52:05 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id d6-20020aa7ce06000000b0043ba24a26casm5524610edv.23.2022.07.31.09.52.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 09:52:04 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id z12so1268972wrs.9
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:52:04 -0700 (PDT)
+X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
+ m15-20020a5d56cf000000b0021ece64afe7mr7759766wrw.281.1659286323647; Sun, 31
+ Jul 2022 09:52:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 31 Jul 2022 09:51:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+Message-ID: <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+To:     Mikulas Patocka <mpatocka@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 15:07:22 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+[ Will and Paul, question for you below ]
 
-> Add support for buffers to make the driver fit for more usecases.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On Sun, Jul 31, 2022 at 8:08 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+>
+> Also, there is this pattern present several times:
+>         wait_on_buffer(bh);
+>         if (!buffer_uptodate(bh))
+>                 err = -EIO;
+> It may be possible that buffer_uptodate is executed before wait_on_buffer
+> and it may return spurious error.
 
-Assuming the Kconfig change from previous patch is pulled into this one...
+I'm not convinced that's actually valid.
 
-A few questions / comments inline.
+They are testing the same memory location, and I don't think our
+memory ordering model allows for _that_ to be out-of-order. Memory
+barriers are for accesses to different memory locations.
 
-Thanks,
+Even alpha is specified to be locally ordered wrt *one* memory
+location, including for reads (See table 5-1: "Processor issue order",
+and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
+new value, a subsequent read is not allowed to see an older one - even
+without a memory barrier.
 
-Jonathan
+Will, Paul? Maybe that's only for overlapping loads/stores, not for
+loads/loads. Because maybe alpha for once isn't the weakest possible
+ordering.
 
-> ---
->  drivers/iio/adc/mcp3911.c | 96 ++++++++++++++++++++++++++++++++++++---
->  1 file changed, 89 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-> index 00dadb1761dc..96c0a2a50c7c 100644
-> --- a/drivers/iio/adc/mcp3911.c
-> +++ b/drivers/iio/adc/mcp3911.c
-> @@ -5,15 +5,22 @@
->   * Copyright (C) 2018 Marcus Folkesson <marcus.folkesson@gmail.com>
->   * Copyright (C) 2018 Kent Gustavsson <kent@minoris.se>
->   */
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/iio/iio.h>
-> +#include <linux/iio/buffer.h>
-> +#include <linux/iio/triggered_buffer.h>
-> +#include <linux/iio/trigger_consumer.h>
-> +#include <linux/iio/trigger.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/property.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/spi/spi.h>
+I didn't find this actually in our documentation, so maybe other
+architectures allow it? Our docs talk about "overlapping loads and
+stores", and maybe that was meant to imply that "load overlaps with
+load" case, but it really reads like load-vs-store, not load-vs-load.
 
-Line break here to separate the 'chunks' of includes.
+But the patch looks fine, though I agree that the ordering in
+__wait_on_buffer should probably be moved into
+wait_on_bit/wait_on_bit_io.
 
-> +#include <asm/unaligned.h>
->  
->  #define MCP3911_REG_CHANNEL0		0x00
->  #define MCP3911_REG_CHANNEL1		0x03
-> @@ -22,6 +29,7 @@
->  #define MCP3911_REG_GAIN		0x09
->  
->  #define MCP3911_REG_STATUSCOM		0x0a
-> +#define MCP3911_STATUSCOM_READ		GENMASK(7, 6)
->  #define MCP3911_STATUSCOM_CH1_24WIDTH	BIT(4)
->  #define MCP3911_STATUSCOM_CH0_24WIDTH	BIT(3)
->  #define MCP3911_STATUSCOM_EN_OFFCAL	BIT(2)
-> @@ -54,6 +62,13 @@ struct mcp3911 {
->  	struct regulator *vref;
->  	struct clk *clki;
->  	u32 dev_addr;
-> +	struct {
-> +		u32 channels[MCP3911_NUM_CHANNELS];
-> +		s64 ts __aligned(8);
-> +	} scan;
-> +
-> +	u8 tx_buf[MCP3911_NUM_CHANNELS * 3] __aligned(IIO_DMA_MINALIGN);
-> +	u8 rx_buf[MCP3911_NUM_CHANNELS * 3];
->  };
->  
->  static int mcp3911_read(struct mcp3911 *adc, u8 reg, u32 *val, u8 len)
-> @@ -196,16 +211,63 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
->  		.type = IIO_VOLTAGE,				\
->  		.indexed = 1,					\
->  		.channel = idx,					\
-> +		.scan_index = idx,				\
->  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |	\
->  			BIT(IIO_CHAN_INFO_OFFSET) |		\
->  			BIT(IIO_CHAN_INFO_SCALE),		\
-> +		.scan_type = {					\
-> +			.sign = 's',				\
-> +			.realbits = 24,				\
-> +			.storagebits = 32,			\
-> +			.endianness = IIO_BE,			\
-> +		},						\
->  }
->  
->  static const struct iio_chan_spec mcp3911_channels[] = {
->  	MCP3911_CHAN(0),
->  	MCP3911_CHAN(1),
-> +	IIO_CHAN_SOFT_TIMESTAMP(2),
->  };
->  
-> +static irqreturn_t mcp3911_trigger_handler(int irq, void *p)
-> +{
-> +	struct iio_poll_func *pf = p;
-> +	struct iio_dev *indio_dev = pf->indio_dev;
-> +	struct mcp3911 *adc = iio_priv(indio_dev);
-> +	struct spi_transfer xfer = {
-> +		.tx_buf = adc->tx_buf,
-> +		.rx_buf = adc->rx_buf,
-> +		.len = sizeof(adc->rx_buf),
-> +	};
-> +	int scan_index;
-> +	int i = 0;
-> +	int ret;
-> +
-> +	mutex_lock(&adc->lock);
-> +	adc->tx_buf[0] = MCP3911_REG_READ(MCP3911_CHANNEL(0), adc->dev_addr);
-> +	ret = spi_sync_transfer(adc->spi, &xfer, 1);
-> +	if (ret < 0) {
-> +		dev_warn(&adc->spi->dev,
-> +				"failed to get conversion data\n");
-> +		goto out;
-> +	}
-> +
-> +	for_each_set_bit(scan_index, indio_dev->active_scan_mask,
-> +			indio_dev->masklength) {
-> +		const struct iio_chan_spec *scan_chan = &indio_dev->channels[scan_index];
-> +
-> +		adc->scan.channels[i] = get_unaligned_be24(&adc->rx_buf[scan_chan->channel * 3]);
+And would we perhaps want the bitops to have the different ordering
+versions? Like "set_bit_release()" and "test_bit_acquire()"? That
+would seem to be (a) cleaner and (b) possibly generate better code for
+architectures where that makes a difference?
 
-This has me a little curious.  It seems to be potentially reading from byte 0 which in the spi
-transfer is at the same time as the tx that tells the device what the command is.  I'd expect
-it to be one byte later.  Easiest way to do that being to have two transfers (though you could
-just add to the offset). I might be misremembering how the spi_transfer stuff works though.
-Been a while since I hacked anything SPI based...
-
-> +		i++;
-> +	}
-> +	iio_push_to_buffers_with_timestamp(indio_dev, &adc->scan,
-> +			iio_get_time_ns(indio_dev));
-> +out:
-> +	mutex_unlock(&adc->lock);
-> +	iio_trigger_notify_done(indio_dev->trig);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static const struct iio_info mcp3911_info = {
->  	.read_raw = mcp3911_read_raw,
->  	.write_raw = mcp3911_write_raw,
-> @@ -214,7 +276,7 @@ static const struct iio_info mcp3911_info = {
->  static int mcp3911_config(struct mcp3911 *adc)
->  {
->  	struct device *dev = &adc->spi->dev;
-> -	u32 configreg;
-> +	u32 regval;
->  	int ret;
->  
->  	ret = device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
-> @@ -233,29 +295,43 @@ static int mcp3911_config(struct mcp3911 *adc)
->  	}
->  	dev_dbg(&adc->spi->dev, "use device address %i\n", adc->dev_addr);
->  
-> -	ret = mcp3911_read(adc, MCP3911_REG_CONFIG, &configreg, 2);
-> +	ret = mcp3911_read(adc, MCP3911_REG_CONFIG, &regval, 2);
-
-If I was being fussy I'd ask you to pull the refactoring in here out as a precusor
-patch to simplify reviewing the new stuff a little.  However it's fairly minor
-so I'll let that go this time.
-
->  	if (ret)
->  		return ret;
->  
-> +	regval &= ~MCP3911_CONFIG_VREFEXT;
->  	if (adc->vref) {
->  		dev_dbg(&adc->spi->dev, "use external voltage reference\n");
-> -		configreg |= MCP3911_CONFIG_VREFEXT;
-> +		regval |= FIELD_PREP(MCP3911_CONFIG_VREFEXT, 1);
->  	} else {
->  		dev_dbg(&adc->spi->dev,
->  			"use internal voltage reference (1.2V)\n");
-> -		configreg &= ~MCP3911_CONFIG_VREFEXT;
-> +		regval |= FIELD_PREP(MCP3911_CONFIG_VREFEXT, 0);
->  	}
->  
-> +	regval &= ~MCP3911_CONFIG_CLKEXT;
->  	if (adc->clki) {
->  		dev_dbg(&adc->spi->dev, "use external clock as clocksource\n");
-> -		configreg |= MCP3911_CONFIG_CLKEXT;
-> +		regval |= FIELD_PREP(MCP3911_CONFIG_CLKEXT, 1);
->  	} else {
->  		dev_dbg(&adc->spi->dev,
->  			"use crystal oscillator as clocksource\n");
-> -		configreg &= ~MCP3911_CONFIG_CLKEXT;
-> +		regval |= FIELD_PREP(MCP3911_CONFIG_CLKEXT, 0);
->  	}
->  
-> -	return  mcp3911_write(adc, MCP3911_REG_CONFIG, configreg, 2);
-> +	ret = mcp3911_write(adc, MCP3911_REG_CONFIG, regval, 2);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = mcp3911_read(adc, MCP3911_REG_STATUSCOM, &regval, 2);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Address counter incremented, cycle through register types */
-> +	regval &= ~MCP3911_STATUSCOM_READ;
-> +	regval |= FIELD_PREP(MCP3911_STATUSCOM_READ, 0x02);
-> +
-> +	return  mcp3911_write(adc, MCP3911_REG_STATUSCOM, regval, 2);
->  }
->  
-
-
+               Linus

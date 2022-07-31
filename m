@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D586585E8A
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6653585E88
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiGaKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 06:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S236640AbiGaKvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 06:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiGaKuv (ORCPT
+        with ESMTP id S232596AbiGaKux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 06:50:51 -0400
+        Sun, 31 Jul 2022 06:50:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBA411820
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:50:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDEE11820
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:50:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCB7160B3D
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 10:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FCAC433C1
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 10:50:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A33160B3D
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 10:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ED2C433D6;
+        Sun, 31 Jul 2022 10:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659264650;
-        bh=pROq9rEzNTOI1fzW6NoVSP+vx6+vZTNKn/lRRqVRxgA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FnTXZbRacWQ4+KSG+v5QdlnsbS8TfdfrAof3aogUgVW+XACFbfEpnF92ea3csdfRw
-         LuQeGDVgu3WmdPM0URGn7e445szl9BUSyKG8MxtnYafbrRaiT+nNjmezVfl1prblwL
-         9PsORsEfIZUJpBxws9Um9XdE3GAdR2Z3G9lw/rxEOgBlAG7wQHTjKtmKOhlHOObT3i
-         mQH0PvZmKcC1r/L4BAIaW+Ax9A6CgOvBF50c0QXRRF0uFXJn5bo4pn35dIIbcxny70
-         C/DoPKeuBYBepYZZDVp+B5EPQj9mcbmpRpWuyl84J7iMqqCC+SVme5vLz4P2c7sMZV
-         qF9Q34U0cOMSw==
+        s=k20201202; t=1659264651;
+        bh=o2jV6fAFKmqXjRPOlg7RT13FJ43CCdZ5+VCYMCJss2o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LiTq3YHKdeFnnsK+j2b0rx2q66eea//OsQ4R5GtDE4lkOQq9YXC7vy0JGwxFQ9J7N
+         /7+TK40cot8oiXW1wpS0vG0lXx3B+N/RcmUVwPsdDyLY+lIYsb8XHeh2ny3EzGsvJF
+         JkPHn/zcqh8rnj3XhCgC1L7GxJ9Nijct4e09p2JQzZHvmChJZfQhl3p9KQ6FcgMda8
+         7SaoUIdVEKMDyOyefKLdDdSnoe8L3tWgDccvfFle7ic/r9SbYqXXBtBqAOM9Hw6nVX
+         dBA3A4e8yqjPxrrRg+1GseVVg0C2e69epqG2Kv1LC/h+CDMnaF2aPRhpcGuvHPfUUc
+         Iig8Cj7PAi6NA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] habanalabs/uapi: move defines to better place inside file
-Date:   Sun, 31 Jul 2022 13:50:36 +0300
-Message-Id: <20220731105037.545106-7-ogabbay@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>
+Subject: [PATCH 8/8] habanalabs: move common function out of debugfs.c
+Date:   Sun, 31 Jul 2022 13:50:37 +0300
+Message-Id: <20220731105037.545106-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220731105037.545106-1-ogabbay@kernel.org>
 References: <20220731105037.545106-1-ogabbay@kernel.org>
@@ -51,62 +52,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cosmetic change to move the eventfd events defines to a better
-location in the file, closer to other INFO IOCTL defines.
+A common function that is called from multiple places can't be
+located in degugfs.c because that file is only compiled if
+debugfs is enabled in the kernel config file.
 
+This can lead to undefined symbol compilation error.
+
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- include/uapi/misc/habanalabs.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/misc/habanalabs/common/debugfs.c | 25 ------------------------
+ drivers/misc/habanalabs/common/device.c  | 24 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 25 deletions(-)
 
-diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
-index 83ca6f40f4ba..0da8894ab94a 100644
---- a/include/uapi/misc/habanalabs.h
-+++ b/include/uapi/misc/habanalabs.h
-@@ -707,6 +707,21 @@ enum hl_server_type {
- 	HL_SERVER_GAUDI2_HLS2 = 5
- };
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index c297248748d3..69fd3ed7680a 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -586,31 +586,6 @@ static ssize_t mmu_ack_error_value_write(struct file *file,
+ 	return -EINVAL;
+ }
  
-+/*
-+ * Notifier event values - for the notification mechanism and the HL_INFO_GET_EVENTS command
-+ *
-+ * HL_NOTIFIER_EVENT_TPC_ASSERT		- Indicates TPC assert event
-+ * HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	- Indicates undefined operation code
-+ * HL_NOTIFIER_EVENT_DEVICE_RESET	- Indicates device requires a reset
-+ * HL_NOTIFIER_EVENT_CS_TIMEOUT		- Indicates CS timeout error
-+ * HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	- Indicates device is unavailable
-+ */
-+#define HL_NOTIFIER_EVENT_TPC_ASSERT		(1ULL << 0)
-+#define HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	(1ULL << 1)
-+#define HL_NOTIFIER_EVENT_DEVICE_RESET		(1ULL << 2)
-+#define HL_NOTIFIER_EVENT_CS_TIMEOUT		(1ULL << 3)
-+#define HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	(1ULL << 4)
-+
- /* Opcode for management ioctl
-  *
-  * HW_IP_INFO            - Receive information about different IP blocks in the
-@@ -1883,21 +1898,6 @@ struct hl_debug_args {
- 	__u32 ctx_id;
- };
- 
--/*
-- * Notifier event values - for the notification mechanism and the HL_INFO_GET_EVENTS command
-- *
-- * HL_NOTIFIER_EVENT_TPC_ASSERT		- Indicates TPC assert event
-- * HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	- Indicates undefined operation code
-- * HL_NOTIFIER_EVENT_DEVICE_RESET	- Indicates device requires a reset
-- * HL_NOTIFIER_EVENT_CS_TIMEOUT		- Indicates CS timeout error
-- * HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	- Indicates device is unavailable
-- */
--#define HL_NOTIFIER_EVENT_TPC_ASSERT		(1ULL << 0)
--#define HL_NOTIFIER_EVENT_UNDEFINED_OPCODE	(1ULL << 1)
--#define HL_NOTIFIER_EVENT_DEVICE_RESET		(1ULL << 2)
--#define HL_NOTIFIER_EVENT_CS_TIMEOUT		(1ULL << 3)
--#define HL_NOTIFIER_EVENT_DEVICE_UNAVAILABLE	(1ULL << 4)
+-void hl_engine_data_sprintf(struct engines_data *e, const char *fmt, ...)
+-{
+-	va_list args;
+-	int str_size;
 -
- /*
-  * Various information operations such as:
-  * - H/W IP information
+-	va_start(args, fmt);
+-	/* Calculate formatted string length. Assuming each string is null terminated, hence
+-	 * increment result by 1
+-	 */
+-	str_size = vsnprintf(NULL, 0, fmt, args) + 1;
+-	va_end(args);
+-
+-	if ((e->actual_size + str_size) < e->allocated_buf_size) {
+-		va_start(args, fmt);
+-		vsnprintf(e->buf + e->actual_size, str_size, fmt, args);
+-		va_end(args);
+-	}
+-
+-	/* Need to update the size even when not updating destination buffer to get the exact size
+-	 * of all input strings
+-	 */
+-	e->actual_size += str_size;
+-
+-}
+-
+ static int engines_show(struct seq_file *s, void *data)
+ {
+ 	struct hl_debugfs_entry *entry = s->private;
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 6a98aae90f49..ab2497b6d164 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -267,6 +267,30 @@ int hl_access_dev_mem(struct hl_device *hdev, enum pci_region region_type,
+ 	return 0;
+ }
+ 
++void hl_engine_data_sprintf(struct engines_data *e, const char *fmt, ...)
++{
++	va_list args;
++	int str_size;
++
++	va_start(args, fmt);
++	/* Calculate formatted string length. Assuming each string is null terminated, hence
++	 * increment result by 1
++	 */
++	str_size = vsnprintf(NULL, 0, fmt, args) + 1;
++	va_end(args);
++
++	if ((e->actual_size + str_size) < e->allocated_buf_size) {
++		va_start(args, fmt);
++		vsnprintf(e->buf + e->actual_size, str_size, fmt, args);
++		va_end(args);
++	}
++
++	/* Need to update the size even when not updating destination buffer to get the exact size
++	 * of all input strings
++	 */
++	e->actual_size += str_size;
++}
++
+ enum hl_device_status hl_device_status(struct hl_device *hdev)
+ {
+ 	enum hl_device_status status;
 -- 
 2.25.1
 

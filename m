@@ -2,146 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F37585F2E
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 15:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB3E585F36
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbiGaNzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 09:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S236503AbiGaOLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 10:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiGaNzU (ORCPT
+        with ESMTP id S229639AbiGaOLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 09:55:20 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC12617C;
-        Sun, 31 Jul 2022 06:55:18 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id h28so2022827pfq.11;
-        Sun, 31 Jul 2022 06:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=xNPBWOC/I43u3bImxvqM+yXOk51ZAfr3ljqZNNUlsi8=;
-        b=Mqicnhs+Neu29XxQM/6u6nW3nlCQlkJU5VqNkoqZtfhf1J8b0HIhIM6HN3MK0anGIk
-         z+KeKPiLOuFd/tQPMM/shhlkpQyeRBRmG9yRPEgsQCb6wqzWEfp10rdWUJdah0Z8Y4+t
-         7RNV87tZFcK0CzFpjlfhyANfQ06F0rfCKNyotPb5mrDR1cRxHSZaOUWF9etibS70oSb+
-         i0ekvNd9gy62NbRnjjMzvb3la38g93luZL2iO+97fdGllq/jcO8vNyL6P1dUGqOlIQX8
-         QX1UsIF8xBQX45dRPfYNlNlSH6FTRLgnd5zsoDT9nubgZTCAiF3lN0KWQZhHAZgmWdKZ
-         f25w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=xNPBWOC/I43u3bImxvqM+yXOk51ZAfr3ljqZNNUlsi8=;
-        b=QD5F8U3q737lje3ag4/i/hB/lHD7z9JDyqN2dxcCxA3CvHKux3Ju/7NP6dOvEGPv/k
-         6+AkjFegI9fKwhfzNP3piGA/KPVmulIh9udp0AQyJ+AKxVTkZRPTuK/WfIYDSkIaogva
-         5HYspYkrB7HbMkqMrb6Wfdn2ns3hOtyCNwQgRCm5+pWHilPlD5Y5zkD3367gunpNiPAl
-         g4a1sqX/9xgywohfaBLs4loQV2xpDIXu0/FHL1ycEMiDxy1pMKCka6ZcrCUXNx7itDkH
-         j9aCLiFhqSwQEJM3pFJKp9Jepsb21XnRDh1wcSkeOoTer8TWgMQuP/ACuYsow+/JQwE0
-         1uRg==
-X-Gm-Message-State: AJIora+OqSsIPtS7tFsHbYP//sblrPUROh7ii76MYhGkvA6jIzyF8mDo
-        5Pju660KAHzrSKnpcHJ+vi8=
-X-Google-Smtp-Source: AGRyM1tGp667SkT01YAGydsW3pteT/piJaiF0LFUYELdzJRYw5O/AyDU2F6/fTwhdtD6eduEyU8QWw==
-X-Received: by 2002:a63:6e82:0:b0:41a:1817:15d9 with SMTP id j124-20020a636e82000000b0041a181715d9mr10077049pgc.577.1659275718377;
-        Sun, 31 Jul 2022 06:55:18 -0700 (PDT)
-Received: from [192.168.0.110] ([103.159.189.149])
-        by smtp.gmail.com with ESMTPSA id d23-20020a17090ad99700b001ef87123615sm6701473pjv.37.2022.07.31.06.55.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jul 2022 06:55:17 -0700 (PDT)
-Message-ID: <7973ec94-75ad-c133-032e-b83beeb2d397@gmail.com>
-Date:   Sun, 31 Jul 2022 19:55:12 +0600
+        Sun, 31 Jul 2022 10:11:35 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355CDFCA
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:11:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VKwb5pz_1659276688;
+Received: from 30.30.99.227(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VKwb5pz_1659276688)
+          by smtp.aliyun-inc.com;
+          Sun, 31 Jul 2022 22:11:29 +0800
+Message-ID: <7a4d0960-c985-2b5f-bb5d-492542f9f087@linux.alibaba.com>
+Date:   Sun, 31 Jul 2022 22:11:26 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-References: <000000000000bbdd0405d120c155@google.com>
- <20220729065139.6529-1-khalid.masum.92@gmail.com>
- <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-In-Reply-To: <eb4a26aa-da30-ceee-7d27-c1e902dd4218@gmx.de>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [RFC PATCH] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     adobriyan@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, xhao@linux.alibaba.com
+References: <20220730163528.48377-1-xhao@linux.alibaba.com>
+ <YuVqdcY8Ibib2LJa@casper.infradead.org>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <YuVqdcY8Ibib2LJa@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/30/22 23:25, Helge Deller wrote:
-> On 7/29/22 08:51, Khalid Masum wrote:
->> Here is a simplified reproducer for the issue:
+
+在 2022/7/31 上午1:29, Matthew Wilcox 写道:
+> On Sun, Jul 31, 2022 at 12:35:28AM +0800, Xin Hao wrote:
+>> In many data center servers, the shared memory architectures is
+>> Non-Uniform Memory Access (NUMA), remote numa node data access
+>> often brings a high latency problem, but what we are easy to ignore
+>> is that the page table remote numa access, It can also leads to a
+>> performance degradation.
 >>
->> https://gist.githubusercontent.com/Labnann/923d6b9b3a19848fc129637b839b8a55/raw/a68271fcc724569735fe27f80817e561b3ff629a/reproducer.c
-> 
-> The reproducer does this:
-> ioctl(3, TIOCLINUX, TIOCL_SETSEL, selection: xs:3  ys:0  xe:0 ye:0 mode:0)  = 0
-> -> sets the text selection area
-> ioctl(4, KDFONTOP)  with op=0 (con_font_set), charcount=512  width=8  height=32, 0x20000000) = 0
-> -> changes the font size.
-> 
-> It does not crash with current Linus' head (v5.19-rc8).
-> Kernel v5.16, which was used by this KASAN report, hasn't received backports
-> since months, so I tried stable kernel v5.15.58 instead, and this
-> kernel crashed with the reproducer.
-> 
-> The reproducer brings up two issues with current code:
-> 1. The reproducer uses ioctl(TIOCLINUX, TIOCL_SETSEL) and hands over (invalid)
-> zero-values for ys and ye for the starting lines.
-> This is wrong, since the API seems to expect a "1" as the very first line for the selection.
-
-Why do you think that API expects a 1?
-
-> This can be easily fixed by adding checks for zero-values and return -EINVAL if found.
-> 
-> But this bug isn't critical itself and is not the reason for the kernel crash.
-> Without the checks, the ioctl handler simply wraps the coordinate values and converts them
-> from:
-> input selection: xs:3  ys:0  xe:0   ye:0  mode:0    to the new:
-> vc_selection =   xs:2  ys:23 xe:127 ye:23 mode:0
-> which is the current maximum coordinates for the screen.
-> 
-> Those higher values now trigger issue #2:
-> After the TIOCL_SETSEL the last line on the screen is now selected. The KDFONTOP ioctl
-> then sets a 8x32 console font, and replaces the former 8x16 console font.
-> With the bigger font the current screen selection is now outside the visible screen
-> and this finally triggeres this backtrace, because vc_do_resize() calls clear_selection()
-> to unhighlight the selection (which starts to render chars outside of the screen):
-> 
->   drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:794 [inline]
->   drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2288
->   bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:124 [inline]
->   bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:173
->   fbcon_putcs+0x353/0x440 drivers/video/fbdev/core/fbcon.c:1277
->   do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
->   invert_screen+0x1d4/0x600 drivers/tty/vt/vt.c:800
->   highlight drivers/tty/vt/selection.c:57 [inline]
->   clear_selection drivers/tty/vt/selection.c:84 [inline]
->   clear_selection+0x55/0x70 drivers/tty/vt/selection.c:80
->   vc_do_resize+0xe6e/0x1180 drivers/tty/vt/vt.c:1257
-> 
-> IMHO the easiest way to prevent this crash is to simply clear the
-> selection before the various con_font_set() console handlers are called.
-> Otherwise every console driver needs to add checks and verify if the current
-> selection still fits with the selected font, which gets tricky because some
-> of those drivers fiddle with the screen width&height before calling vc_do_resize().
-> 
-> I'll follow up to this mail with patches for both issues shortly.
-> 
-> Helge
-
-Thanks,
-   -- Khalid Masum
-
+>> So there add a new interface in /proc, This will help developers to
+>> get more info about performance issues if they are caused by cross-NUMA.
+> Interesting.  The implementation seems rather more complex than
+> necessary though.
+>
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 2d04e3470d4c..a51befb47ea8 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1999,4 +1999,133 @@ const struct file_operations proc_pid_numa_maps_operations = {
+>>   	.release	= proc_map_release,
+>>   };
+>>
+>> +struct pgtable_numa_maps {
+>> +	unsigned long node[MAX_NUMNODES];
+>> +};
+>> +
+>> +struct pgtable_numa_private {
+>> +	struct proc_maps_private proc_maps;
+>> +	struct pgtable_numa_maps md;
+>> +};
+> struct pgtable_numa_private {
+> 	struct proc_maps_private proc_maps;
+> 	unsigned long node[MAX_NUMNODES];
+> };
+>
+>> +static void gather_pgtable_stats(struct page *page, struct pgtable_numa_maps *md)
+>> +{
+>> +	md->node[page_to_nid(page)] += 1;
+>> +}
+>> +
+>> +static struct page *can_gather_pgtable_numa_stats(pmd_t pmd, struct vm_area_struct *vma,
+>> +		unsigned long addr)
+>> +{
+>> +	struct page *page;
+>> +	int nid;
+>> +
+>> +	if (!pmd_present(pmd))
+>> +		return NULL;
+>> +
+>> +	if (pmd_huge(pmd))
+>> +		return NULL;
+>> +
+>> +	page = pmd_page(pmd);
+>> +	nid = page_to_nid(page);
+>> +	if (!node_isset(nid, node_states[N_MEMORY]))
+>> +		return NULL;
+>> +
+>> +	return page;
+>> +}
+>> +
+>> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+>> +		unsigned long end, struct mm_walk *walk)
+>> +{
+>> +	struct pgtable_numa_maps *md = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	struct page *page;
+>> +
+>> +	if (pmd_huge(*pmd)) {
+>> +		struct page *pmd_page;
+>> +
+>> +		pmd_page = virt_to_page(pmd);
+>> +		if (!pmd_page)
+>> +			return 0;
+>> +
+>> +		if (!node_isset(page_to_nid(pmd_page), node_states[N_MEMORY]))
+>> +			return 0;
+>> +
+>> +		gather_pgtable_stats(pmd_page, md);
+>> +		goto out;
+>> +	}
+>> +
+>> +	page = can_gather_pgtable_numa_stats(*pmd, vma, addr);
+>> +	if (!page)
+>> +		return 0;
+>> +
+>> +	gather_pgtable_stats(page, md);
+>> +
+>> +out:
+>> +	cond_resched();
+>> +	return 0;
+>> +}
+> static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+> 		unsigned long end, struct mm_walk *walk)
+> {
+> 	struct pgtable_numa_private *priv = walk->private;
+> 	struct vm_area_struct *vma = walk->vma;
+> 	struct page *page;
+> 	int nid;
+>
+> 	if (pmd_huge(*pmd)) {
+> 		page = virt_to_page(pmd);
+> 	} else {
+> 		page = pmd_page(*pmd);
+> 	}
+>
+> 	nid = page_to_nid(page);
+> 	priv->node[nid]++;
+>
+> 	return 0;
+> }
+Oh,  Thank you for reviewing the code, i will fix it in the next version.

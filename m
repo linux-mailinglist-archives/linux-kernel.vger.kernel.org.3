@@ -2,111 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB13585DEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 09:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB5D585DEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 09:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236477AbiGaHU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 03:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S236494AbiGaHWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 03:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbiGaHU5 (ORCPT
+        with ESMTP id S236455AbiGaHWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 03:20:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8EB12D23
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 00:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659252057; x=1690788057;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1cRnKlpGfU+uJrkz6yLcjROXGrpyWa6oNa7zZF5wXmA=;
-  b=jVnLZzJ7+eStYwuf75Iph6L+4NWhADH92Rd7eGt/C9+Zqb9UiNZiInAz
-   zvW5wOuRrE6P9iW0rAIvAzqvz2q8IBfuvwEDZN9TnkHt5U8jnAneHo5Kr
-   kLBwBlR8UgytwjOCuwa5VhJ7fgS03xbYuD30NZedEPHwRbsUQBQcJiin9
-   ZRCAMyKeBxWlyusqYx0qRnTPrvQaTKwLtmZpF03VCD5e1GJvxmgsDWkcS
-   1LJlyiPEeRLAGCehSaKcNF8Lpm8bi1nQhLufwAShD+1xh3JQcakvjQ0Qt
-   10KeZd01uyu/gkA4P+gSbYnySMc3onfpxXuJuwH1a//gfkuKBFvZ/35lB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268741397"
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="268741397"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 00:20:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="691148107"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 Jul 2022 00:20:54 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oI3Fu-000DqR-0Q;
-        Sun, 31 Jul 2022 07:20:54 +0000
-Date:   Sun, 31 Jul 2022 15:20:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/vdso 9/9]
- arch/x86/entry/vdso/vgetrandom.c:11: undefined reference to `__fentry__'
-Message-ID: <202207311544.Ik8B39of-lkp@intel.com>
+        Sun, 31 Jul 2022 03:22:20 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E6412D23
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 00:22:19 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 40647425AB;
+        Sun, 31 Jul 2022 07:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1659252137; bh=+03uZQ7uzhbq0R4Yb43G4uX1y6g8wuj6rIgz/M6Bstc=;
+        h=From:To:Cc:Subject:Date;
+        b=txgEk3u9hmfDoCoqGbfOjrXORWysKtgF0zVxygqq26lGWXIeD8cFw/CLJ3T0eG63r
+         xNIq1ULd9weZJQY+vxvg+nQbPEDLfWxE3qfOzUeFUl9UobAUpYSHRytZeR8xe/Idik
+         db5tMVzcCdNzuoGHP52z18f0FZrrQKj/vSi6R18guBMR0uHzNMgHzUpAZQyrlZiy2h
+         RCW/CgzUF6P3gvsMe8bgPsuFv4UPVZ4WDe1W15I5EAEQE8g8Bk1o6G7r+7CgQgcjLa
+         hdiYC1JMzZP6JqwqXocxey50svOrkthrW9iV4Hs3WejoVW/gvBYrJJLXq9aKkjxYpD
+         l3drvgEuBEXbg==
+From:   Hector Martin <marcan@marcan.st>
+To:     Jacky Chou <jackychou@asix.com.tw>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [PATCH v4] net: usb: ax88179_178a: Bind only to vendor-specific interface
+Date:   Sun, 31 Jul 2022 16:22:09 +0900
+Message-Id: <20220731072209.45504-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
-head:   a216645bda19c97d0f68f9b83351696ecd251eb5
-commit: a216645bda19c97d0f68f9b83351696ecd251eb5 [9/9] random: implement getrandom() in vDSO
-config: x86_64-rhel-8.3-syz (https://download.01.org/0day-ci/archive/20220731/202207311544.Ik8B39of-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/a216645bda19c97d0f68f9b83351696ecd251eb5
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
-        git checkout a216645bda19c97d0f68f9b83351696ecd251eb5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
+chipset, but exposes CDC Ethernet configurations as well as the
+vendor specific one. This driver tries to bind by PID:VID
+unconditionally and ends up picking up the CDC configuration, which
+is supposed to be handled by the class driver. To make things even
+more confusing, it sees both of the CDC class interfaces and tries
+to bind twice, resulting in two broken Ethernet devices.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Change all the ID matches to specifically match the vendor-specific
+interface. By default the device comes up in CDC mode and is bound by
+that driver (which works fine); users may switch it to the vendor
+interface using sysfs to set bConfigurationValue, at which point the
+device actually goes through a reconnect cycle and comes back as a
+vendor specific only device, and then this driver binds and works too.
 
-All errors (new ones prefixed by >>):
+The affected device uses VID/PID 0b95:1790, but we might as well change
+all of them for good measure, since there is no good reason for this
+driver to bind to standard CDC Ethernet interfaces.
 
-   ld: arch/x86/entry/vdso/vgetrandom.o: warning: relocation in read-only section `__mcount_loc'
-   ld: arch/x86/entry/vdso/vgetrandom.o: in function `chacha_permute':
->> arch/x86/entry/vdso/../../../../lib/vdso/../crypto/chacha.c:17: undefined reference to `__fentry__'
-   ld: arch/x86/entry/vdso/vgetrandom.o: in function `chacha_block_generic':
-   arch/x86/entry/vdso/../../../../lib/vdso/../crypto/chacha.c:77: undefined reference to `__fentry__'
-   ld: arch/x86/entry/vdso/vgetrandom.o: in function `hchacha_block_generic':
-   arch/x86/entry/vdso/../../../../lib/vdso/../crypto/chacha.c:104: undefined reference to `__fentry__'
-   ld: arch/x86/entry/vdso/vgetrandom.o: in function `__vdso_getrandom':
->> arch/x86/entry/vdso/vgetrandom.c:11: undefined reference to `__fentry__'
-   ld: arch/x86/entry/vdso/vgetrandom.o: in function `__vdso_getrandom_alloc':
-   arch/x86/entry/vdso/vgetrandom.c:19: undefined reference to `__fentry__'
-   ld: warning: creating DT_TEXTREL in a shared object
->> objdump: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
---
->> objcopy: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
+v3: Added VID/PID info to commit message
 
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-vim +11 arch/x86/entry/vdso/vgetrandom.c
-
-     9	
-    10	ssize_t __vdso_getrandom(void *state, void *buffer, size_t len, unsigned int flags)
-  > 11	{
-    12		return __cvdso_getrandom(state, buffer, len, flags);
-    13	}
-    14	
-
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index e2fa56b92685..7c7c2f31d9f1 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
+ static const struct usb_device_id products[] = {
+ {
+ 	/* ASIX AX88179 10/100/1000 */
+-	USB_DEVICE(0x0b95, 0x1790),
++	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&ax88179_info,
+ }, {
+ 	/* ASIX AX88178A 10/100/1000 */
+-	USB_DEVICE(0x0b95, 0x178a),
++	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x178a, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&ax88178a_info,
+ }, {
+ 	/* Cypress GX3 SuperSpeed to Gigabit Ethernet Bridge Controller */
+-	USB_DEVICE(0x04b4, 0x3610),
++	USB_DEVICE_AND_INTERFACE_INFO(0x04b4, 0x3610, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&cypress_GX3_info,
+ }, {
+ 	/* D-Link DUB-1312 USB 3.0 to Gigabit Ethernet Adapter */
+-	USB_DEVICE(0x2001, 0x4a00),
++	USB_DEVICE_AND_INTERFACE_INFO(0x2001, 0x4a00, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&dlink_dub1312_info,
+ }, {
+ 	/* Sitecom USB 3.0 to Gigabit Adapter */
+-	USB_DEVICE(0x0df6, 0x0072),
++	USB_DEVICE_AND_INTERFACE_INFO(0x0df6, 0x0072, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&sitecom_info,
+ }, {
+ 	/* Samsung USB Ethernet Adapter */
+-	USB_DEVICE(0x04e8, 0xa100),
++	USB_DEVICE_AND_INTERFACE_INFO(0x04e8, 0xa100, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&samsung_info,
+ }, {
+ 	/* Lenovo OneLinkDock Gigabit LAN */
+-	USB_DEVICE(0x17ef, 0x304b),
++	USB_DEVICE_AND_INTERFACE_INFO(0x17ef, 0x304b, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&lenovo_info,
+ }, {
+ 	/* Belkin B2B128 USB 3.0 Hub + Gigabit Ethernet Adapter */
+-	USB_DEVICE(0x050d, 0x0128),
++	USB_DEVICE_AND_INTERFACE_INFO(0x050d, 0x0128, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&belkin_info,
+ }, {
+ 	/* Toshiba USB 3.0 GBit Ethernet Adapter */
+-	USB_DEVICE(0x0930, 0x0a13),
++	USB_DEVICE_AND_INTERFACE_INFO(0x0930, 0x0a13, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&toshiba_info,
+ }, {
+ 	/* Magic Control Technology U3-A9003 USB 3.0 Gigabit Ethernet Adapter */
+-	USB_DEVICE(0x0711, 0x0179),
++	USB_DEVICE_AND_INTERFACE_INFO(0x0711, 0x0179, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&mct_info,
+ }, {
+ 	/* Allied Telesis AT-UMC2000 USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
+-	USB_DEVICE(0x07c9, 0x000e),
++	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000e, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&at_umc2000_info,
+ }, {
+ 	/* Allied Telesis AT-UMC200 USB 3.0/USB 3.1 Gen 1 to Fast Ethernet Adapter */
+-	USB_DEVICE(0x07c9, 0x000f),
++	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x000f, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&at_umc200_info,
+ }, {
+ 	/* Allied Telesis AT-UMC2000/SP USB 3.0/USB 3.1 Gen 1 to Gigabit Ethernet Adapter */
+-	USB_DEVICE(0x07c9, 0x0010),
++	USB_DEVICE_AND_INTERFACE_INFO(0x07c9, 0x0010, 0xff, 0xff, 0),
+ 	.driver_info = (unsigned long)&at_umc2000sp_info,
+ },
+ 	{ },
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

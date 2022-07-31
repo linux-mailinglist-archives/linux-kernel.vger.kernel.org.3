@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9A2585FDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60889585FF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbiGaQbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S236863AbiGaQrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiGaQbF (ORCPT
+        with ESMTP id S229558AbiGaQrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:31:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F1662C8;
-        Sun, 31 Jul 2022 09:31:03 -0700 (PDT)
+        Sun, 31 Jul 2022 12:47:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B097DE011;
+        Sun, 31 Jul 2022 09:47:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30158B80DA7;
-        Sun, 31 Jul 2022 16:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68224C433C1;
-        Sun, 31 Jul 2022 16:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659285060;
-        bh=iEhFJD0Uh7t+0kHyZggEl1bybolK+40g8fFl/KgN6ko=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Z/Slht9nbTV3N6bk/OTKKa1e3XhwnQtIb7y5JrdR5qFA0anjPUxC7qEYtd//OO6fV
-         dvZTzt0JoAT50wWGQWQc0plX2TVymmEQAwGolhIMC8YMJvhqUR6XSSRO11Pt86iLvT
-         TfrdVZZ7uEVsRg025mqMSEbtMeHoz6RIwhACCeFjLbBrmWVLkAhzETMDKTh+3F1NAt
-         OGCI6A8RJSc59iTT+a6yc5+NJXfRx++O+37ZRVvU/kmOU4I0lgDz1t/HTGq0psx3sp
-         LdUveetYwsUzGrF+LbTDNJZVAA1gmrTsx+89Z02ZAmCSNojdFhIF+Or9PDxojXkxb0
-         xxCF1DsulLIJQ==
-Date:   Sun, 31 Jul 2022 17:41:12 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] Improve MCP3911 driver
-Message-ID: <20220731174112.072345e3@jic23-huawei>
-In-Reply-To: <20220722130726.7627-1-marcus.folkesson@gmail.com>
-References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A57360F68;
+        Sun, 31 Jul 2022 16:47:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4F1AC433C1;
+        Sun, 31 Jul 2022 16:47:36 +0000 (UTC)
+Date:   Sun, 31 Jul 2022 12:47:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V9 01/16] rv: Add Runtime Verification (RV) interface
+Message-ID: <20220731124730.311c8207@rorschach.local.home>
+In-Reply-To: <YuaadlzgSJLtzOUw@geo.homenetwork>
+References: <cover.1659052063.git.bristot@kernel.org>
+        <a4bfe038f50cb047bfb343ad0e12b0e646ab308b.1659052063.git.bristot@kernel.org>
+        <YuU7TGxm5pzmBFTx@geo.homenetwork>
+        <0197dd47-ea15-4d8b-5fc7-e466d8a501a7@kernel.org>
+        <YuaadlzgSJLtzOUw@geo.homenetwork>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 15:07:17 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+On Sun, 31 Jul 2022 23:06:31 +0800
+Tao Zhou <tao.zhou@linux.dev> wrote:
 
-> Hi,
+> > All things above are misled by the first interpretation but,,,  
 > 
-> This patch series intend to fix bugs and improve functionality of the
-> MCP3911 driver.
-> The main features added are
-> - Support for buffers
-> - Interrupt driven readings
-> - Support for oversampling ratio
-> - Support for set scale values (Gain)
-> 
-> Among the bug fixes, there are changes in the formula for calculate raw
-> value and a fix for mismatch in the devicetree property.
-> 
-> Another general improvement for the driver is to use managed resources
-> for all allocated resources.
-> 
-Hi Marcus,
+> Yeah, this is not that clear from my above words expression. I said the return
+> value of da_monitor_init_*() will be 0, but it is not right. Global and per-cpu
+> monitor will return 0, per-task monitor may return a positive value when the
+> slot is equal or greater than RV_PER_TASK_MONITOR_INIT(how possible this will
+> happen I do know yet). This is from reading the current code implementation.
+> I just want to say that there may be a bug here.
 
-The first 3 fixes look good to me.  Do you want me to pick those up to
-go in after rc1 via my togreg-fixes branch?  The side effect of doing
-that is it'll be a little while before they are upstream in the branch
-I'll want to pick the rest of the series on top of.
+Well, rv_get_monitor_slot() can currently only return 0 or negative.
+This is because PER_TASK_MONITORS is just 1 and we can not return that
+or greater.
 
-So it's a trade off between getting fixes in as soon as possible and
-slowing down other improvements a little.
+> If rv_enable_monitor() return a positive value and the error happened(as above
 
-Jonathan
+With the current code this can not happen, as we only allow for a
+single PER_TASK_MONITORS.
 
-> General changes for the series:
-> 
-> v3:
-> - Drop Phase patch
-> - Add Fixes tags for those patches that are fixes
-> - Move Fixes patches to the beginning of the patchset
-> 
-> v4:
-> - Split up devm-cleanup functions 
-> - Cosmetic cleanups
-> - Add
->     select IIO_BUFFER
->     select IIO_TRIGGERED_BUFFER
->     To Kconfig
-> - Add .endianness = IIO_BE
-> 
-> 
-> Best regards,
-> Marcus Folkesson
-> 
-> 
-> 
+But in the future, if we increment this, then you are correct. We can
+not just check retval, but need to check retval < 0.
 
+This does need to be fixed. But because it currently isn't an issue
+because we they can only return 0 or negative, I'm going to pull this
+series in.
+
+But Daniel, these checks do need to be updated. Please send patches on
+top of this series to address it.
+
+-- Steve
+
+
+> said), user space will not know this is a error return value, but regard it as a
+> right writing. Even if the return value(the slot value not in [0..RV_PER_TASK_MONITOR_INIT))
+> is equal to count of charaters that are writen to the file(the string length of monitor name),
+> it will still be not a right writing.
+> 

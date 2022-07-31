@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308FE586013
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 19:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887EE58601B
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 19:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237581AbiGaRL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 13:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S237608AbiGaRaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 13:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiGaRLz (ORCPT
+        with ESMTP id S230074AbiGaRaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 13:11:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D410B7EC;
-        Sun, 31 Jul 2022 10:11:54 -0700 (PDT)
+        Sun, 31 Jul 2022 13:30:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BFD5F8A;
+        Sun, 31 Jul 2022 10:30:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4840B80DA7;
-        Sun, 31 Jul 2022 17:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B07C433D6;
-        Sun, 31 Jul 2022 17:11:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3D260F1F;
+        Sun, 31 Jul 2022 17:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9DDC433C1;
+        Sun, 31 Jul 2022 17:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659287511;
-        bh=Eyb54P98ZxBTTy/p/CQm64vp3ep0RfhtJzwLsSC1dvI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Cj6BhG9AGIK886Adot7aslKv2OU9iqtb2a0aWALjbpyyZAbXq7z7fTgH8vp0rwb1/
-         zzD88suADqbU9L8WsZOWBZrKEbzRSE3uzpVm1aW5LOmQqpsuSQP9P3e99oa9KjyY8W
-         CqWZrPswAd0fXiozh06PAN8lbOla8Gc8HYHe2rXvX/G72/8iHkDzlLNeuzM20QvDJ4
-         mllGvQjs9tHfYtzGsqDhjzJrU4z/az0bxfiI7Mhe5BDWK1Xp1oR1G7YK3PqFJc99uW
-         A1IN24YEUcmUPszxKe2bjuAAlPI2KWN+O5fXrfnFRDrf2I/ftkmmRHCV2zCnEW6oes
-         4xQiQM1kfaLLw==
-Date:   Sun, 31 Jul 2022 18:22:04 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Lars-Peter Clausen <lars@metafoo.de>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] iio: core: Add support for IIO_AVAIL_LIST_WITH_TYPE
-Message-ID: <20220731182204.02459834@jic23-huawei>
-In-Reply-To: <20220721191526.374152-3-paul@crapouillou.net>
-References: <20220721191526.374152-1-paul@crapouillou.net>
-        <20220721191526.374152-3-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1659288611;
+        bh=FH0blCyVvfudwL8ce3BTQJUuYsbrfBaewHrHEz9SgsU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=P8416Z2Yh37otidwE8Z7NVDq7lcvqpRNoWfUOua9IveI8aEUOJ52Nlt/CNTT7wMF2
+         2IQ+XlCnziFRSmUT41WYd3b8Bf8aS6D61RTcDsydT8licqRQQVY5psT7Eg3Uc2+PP+
+         DajKlQ/1UwQyTEquO8QYUNvlJul+JwnzfQ0YVhO/jCDVnYpzNtH1TAFN3k+N+AAvHv
+         IPK1GKzuoTpiwZQuBThZkghdQUhwU6dTh8MWT/qTJy4jrQsVJprRkaEjcyaMVV1W1Y
+         1t2KGjeiV7vuhZZSLA5mRlcuQsrIMr2qCHYwlV75I97xPzWwNsInYkUMi6yBQnRWbW
+         On4VzjDbmLQbg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3CBD75C03E0; Sun, 31 Jul 2022 10:30:11 -0700 (PDT)
+Date:   Sun, 31 Jul 2022 10:30:11 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+Message-ID: <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,155 +76,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 20:15:24 +0100
-Paul Cercueil <paul@crapouillou.net> wrote:
-
-> The IIO_AVAIL_LIST_WITH_TYPE specifies that the array that corresponds
-> to the available values is composed by cells of 3 integers, the first
-> two representing the value itself (similar to what you would have with
-> IIO_AVAIL_LIST), and the third integer representing the encoding type of
-> the value.
+On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
+> [ Will and Paul, question for you below ]
 > 
-> This can be used for instance when a driver's .read_avail() callback
-> returns values which cannot be represented with an unique encoding type.
+> On Sun, Jul 31, 2022 at 8:08 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> >
+> > Also, there is this pattern present several times:
+> >         wait_on_buffer(bh);
+> >         if (!buffer_uptodate(bh))
+> >                 err = -EIO;
+> > It may be possible that buffer_uptodate is executed before wait_on_buffer
+> > and it may return spurious error.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
-Hi Paul,
-
-Generally looks good to me, but I'm not sure the overflow checks will work
-as expected.
-
-Jonathan
-
-> ---
->  drivers/iio/industrialio-core.c | 25 +++++++++++++++++++++++++
->  drivers/iio/inkern.c            | 23 +++++++++++++++++++++++
->  include/linux/iio/consumer.h    |  6 ++++--
->  include/linux/iio/types.h       |  1 +
->  4 files changed, 53 insertions(+), 2 deletions(-)
+> I'm not convinced that's actually valid.
 > 
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> index adf054c7a75e..99ced9eab069 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -838,6 +838,29 @@ static ssize_t iio_format_avail_range(char *buf, const int *vals, int type)
->  	return iio_format_list(buf, vals, type, 3, "[", "]");
->  }
->  
-> +static ssize_t iio_format_avail_list_with_type(char *buf, const int *vals,
-> +					       int length)
-> +{
-> +	ssize_t len = 0;
-> +	int i;
-> +
-> +	for (i = 0; i < length; i += 3) {
-> +		if (i != 0) {
-> +			len += sysfs_emit_at(buf, len, " ");
-> +			if (len >= PAGE_SIZE)
-I don't think this check will trigger if I read the sysfs_emit_at() docs right.
+> They are testing the same memory location, and I don't think our
+> memory ordering model allows for _that_ to be out-of-order. Memory
+> barriers are for accesses to different memory locations.
 
-> +				return -EFBIG;
-> +		}
-> +
-> +		len += __iio_format_value(buf, len, vals[i + 2], 2, &vals[i]);
-> +		if (len >= PAGE_SIZE)
+Yes, aligned same-sized marked accesses to a given location are always
+executed so as to be consistent with some global order.  Please note the
+"marked accesses".  The compiler can rearrange unmarked reads and in
+some cases can discard unmarked writes.  For more information, please
+see tools/memory-model/Documentation/recipes.txt's "Single CPU or single
+memory location" section.
 
-Can this trigger?  sysfs_emit_at() inside __iio_format_value() will only return
-characters written which I think is none if there isn't space left in the page...
+> Even alpha is specified to be locally ordered wrt *one* memory
+> location, including for reads (See table 5-1: "Processor issue order",
+> and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
+> new value, a subsequent read is not allowed to see an older one - even
+> without a memory barrier.
+> 
+> Will, Paul? Maybe that's only for overlapping loads/stores, not for
+> loads/loads. Because maybe alpha for once isn't the weakest possible
+> ordering.
 
-I think the normal thing to do is to just not handle the overflow if it occurs...
+The "bad boy" in this case is Itanium, which can do some VLIW reordering
+of accesses.  Or could, I am not sure that newer Itanium hardware
+does this.  But this is why Itanium compilers made volatile loads use
+the ld,acq instruction.
 
+Which means that aligned same-sized marked accesses to a single location
+really do execute consistently with some global ordering, even on Itanium.
 
+That said, I confess that I am having a hard time finding the
+buffer_locked() definition.  So if buffer_locked() uses normal C-language
+accesses to sample the BH_Lock bit of the ->b_state field, then yes,
+there could be a problem.  The compiler would then be free to reorder
+calls to buffer_locked() because it could then assume that no other
+thread was touching that ->b_state field.
 
-> +			return -EFBIG;
-> +	}
-> +
-> +	len += sysfs_emit_at(buf, len, "\n");
-> +
-> +	return len;
-> +}
-> +
->  static ssize_t iio_read_channel_info_avail(struct device *dev,
->  					   struct device_attribute *attr,
->  					   char *buf)
-> @@ -860,6 +883,8 @@ static ssize_t iio_read_channel_info_avail(struct device *dev,
->  		return iio_format_avail_list(buf, vals, type, length);
->  	case IIO_AVAIL_RANGE:
->  		return iio_format_avail_range(buf, vals, type);
-> +	case IIO_AVAIL_LIST_WITH_TYPE:
-> +		return iio_format_avail_list_with_type(buf, vals, length);
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> index e8a25852f0df..92d225f1ddd5 100644
-> --- a/drivers/iio/inkern.c
-> +++ b/drivers/iio/inkern.c
-> @@ -855,6 +855,29 @@ static int iio_channel_read_max(struct iio_channel *chan,
->  		}
->  		return 0;
->  
-> +	case IIO_AVAIL_LIST_WITH_TYPE:
-> +		if (length <= 0 || length % 3 != 0)
-> +			return -EINVAL;
-> +
-> +		if (vals[length - 1] != IIO_VAL_INT) {
-> +			/* FIXME: learn about max for other iio values */
-> +			return -EINVAL;
-> +		}
-> +
-> +		*val = vals[length - 3];
-> +		length -= 3;
-> +
-> +		for (; length; length -= 3) {
-> +			if (vals[length - 1] != IIO_VAL_INT) {
-> +				/* FIXME: learn about max for other iio values */
-> +				return -EINVAL;
-> +			}
-> +
-> +			if (vals[length - 3] > *val)
-> +				*val = vals[length - 3];
-> +		}
-> +		return 0;
-> +
->  	default:
->  		return ret;
->  	}
-> diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
-> index 5fa5957586cf..99dd12e10fb6 100644
-> --- a/include/linux/iio/consumer.h
-> +++ b/include/linux/iio/consumer.h
-> @@ -309,7 +309,8 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
->   * @vals:		Available values read back.
->   * @length:		Number of entries in vals.
->   *
-> - * Returns an error code, IIO_AVAIL_RANGE or IIO_AVAIL_LIST.
-> + * Returns an error code, IIO_AVAIL_RANGE, IIO_AVAIL_LIST or
-> + * IIO_AVAIL_LIST_WITH_TYPE.
->   *
->   * For ranges, three vals are always returned; min, step and max.
->   * For lists, all the possible values are enumerated.
-> @@ -328,7 +329,8 @@ int iio_read_avail_channel_raw(struct iio_channel *chan,
->   * @length:		Number of entries in vals.
->   * @attribute:		info attribute to be read back.
->   *
-> - * Returns an error code, IIO_AVAIL_RANGE or IIO_AVAIL_LIST.
-> + * Returns an error code, IIO_AVAIL_RANGE, IIO_AVAIL_LIST or
-> + * IIO_AVAIL_LIST_WITH_TYPE.
->   */
->  int iio_read_avail_channel_attribute(struct iio_channel *chan,
->  				     const int **vals, int *type, int *length,
-> diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
-> index a7aa91f3a8dc..9777d1357080 100644
-> --- a/include/linux/iio/types.h
-> +++ b/include/linux/iio/types.h
-> @@ -32,6 +32,7 @@ enum iio_event_info {
->  enum iio_available_type {
->  	IIO_AVAIL_LIST,
->  	IIO_AVAIL_RANGE,
-> +	IIO_AVAIL_LIST_WITH_TYPE,
->  };
->  
->  enum iio_chan_info_enum {
+> I didn't find this actually in our documentation, so maybe other
+> architectures allow it? Our docs talk about "overlapping loads and
+> stores", and maybe that was meant to imply that "load overlaps with
+> load" case, but it really reads like load-vs-store, not load-vs-load.
 
+I placed the relevant text from recipes.txt at the end of this email.
+
+> But the patch looks fine, though I agree that the ordering in
+> __wait_on_buffer should probably be moved into
+> wait_on_bit/wait_on_bit_io.
+> 
+> And would we perhaps want the bitops to have the different ordering
+> versions? Like "set_bit_release()" and "test_bit_acquire()"? That
+> would seem to be (a) cleaner and (b) possibly generate better code for
+> architectures where that makes a difference?
+
+As always, I defer to the architecture maintainers on this one.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+Single CPU or single memory location
+------------------------------------
+
+If there is only one CPU on the one hand or only one variable
+on the other, the code will execute in order.  There are (as
+usual) some things to be careful of:
+
+1.	Some aspects of the C language are unordered.  For example,
+	in the expression "f(x) + g(y)", the order in which f and g are
+	called is not defined; the object code is allowed to use either
+	order or even to interleave the computations.
+
+2.	Compilers are permitted to use the "as-if" rule.  That is, a
+	compiler can emit whatever code it likes for normal accesses,
+	as long as the results of a single-threaded execution appear
+	just as if the compiler had followed all the relevant rules.
+	To see this, compile with a high level of optimization and run
+	the debugger on the resulting binary.
+
+3.	If there is only one variable but multiple CPUs, that variable
+	must be properly aligned and all accesses to that variable must
+	be full sized.	Variables that straddle cachelines or pages void
+	your full-ordering warranty, as do undersized accesses that load
+	from or store to only part of the variable.
+
+4.	If there are multiple CPUs, accesses to shared variables should
+	use READ_ONCE() and WRITE_ONCE() or stronger to prevent load/store
+	tearing, load/store fusing, and invented loads and stores.
+	There are exceptions to this rule, including:
+
+	i.	When there is no possibility of a given shared variable
+		being updated by some other CPU, for example, while
+		holding the update-side lock, reads from that variable
+		need not use READ_ONCE().
+
+	ii.	When there is no possibility of a given shared variable
+		being either read or updated by other CPUs, for example,
+		when running during early boot, reads from that variable
+		need not use READ_ONCE() and writes to that variable
+		need not use WRITE_ONCE().

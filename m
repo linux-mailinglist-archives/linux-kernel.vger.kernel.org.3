@@ -2,152 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C893585F64
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5D8585F51
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbiGaPEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 11:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S237126AbiGaOvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 10:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiGaPEc (ORCPT
+        with ESMTP id S229530AbiGaOvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 11:04:32 -0400
-X-Greylist: delayed 1235 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 31 Jul 2022 08:04:30 PDT
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D577DEAB;
-        Sun, 31 Jul 2022 08:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=F0slf2YJCD3XvKv+dbnLCjFi/jGrdLYNNGrKXZecVsY=; b=Qax82oRkZ2/71XbaSpBsMQ8Zld
-        y9D2W0RdUt/juCpV/Jpt6J+EzOx5i3/VxLzA2RBkmhvS9PTfW6ycsm5OwG6kwnMP8O4yBpKs4SntD
-        9nfkPUyBCKhMiVIln0/23/YQkmoa0wQCccpJNugUbqjMrvsPL8RX0cL2IkwvtJqRyiV6MlNw1Yl5c
-        N7/9y/XycmIoQQzIv90iDOn9gKEdyLITUZESrCLR/w/B5qn8UGNy3Tw/KsoH9vHUgMassCnrFRJaE
-        y4n1i2enMLInlvVxB3Z8/ct6DJP/RHvJoODmIUb+ElxyIduFjLhmv7wH4QiEXBFiXnShA5MU5WYIW
-        N8BYM9sQ==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1oIAAU-009All-PW; Sun, 31 Jul 2022 15:43:46 +0100
-Date:   Sun, 31 Jul 2022 15:43:46 +0100
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     linux-kernel@vger.kernel.org, corbet@lwn.net, davem@davemloft.net,
-        jgg@ziepe.ca, linux-doc@vger.kernel.org
-Cc:     edumazet@google.com, dan.j.williams@intel.com
-Subject: Re: [PATCH] typos: Fix 'namespace' typos
-Message-ID: <YuaVIp1dug0tUSje@gallifrey>
-References: <20220709132830.9869-1-linux@treblig.org>
+        Sun, 31 Jul 2022 10:51:02 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179BE6261
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:51:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659279061; x=1690815061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sOL0AJcJcFwSCQy+DP16oX7RS399Ed5f4pWBxXtz67g=;
+  b=f5cw7VgTwpEag9pFRlogw906Q9ll0n2c/8n2lpOL1H5+udUd9uGHR3ee
+   uRD5HFWHAlWBFcmnnCOfwf/ytp37qcJHx5DWoSpWakxBA8CpqLFhfJ4Uh
+   ptxEfhk7eJQM+EiUM7WqiaxGKRHFgfn4F2QbtB9TCep04DZtaYPtCoxVc
+   3LCJOVtZ+iYrVigA6pAaYJS7wE34p78QEttoEkVWymZdo2QVeqyUDEnKv
+   3tzc5xSZYpHkuJqSB5oF9pOYJgb9wGMv5veCf1HrsBQ4rvI11HspgoMKc
+   57Bqa+LpnBKUExxGaGGpdAKOoKa7GKZsqid9ORpwPfjOzm/pLs6snUf1C
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350708283"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="350708283"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 07:51:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="634626701"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 07:50:59 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIAHS-000ED9-2E;
+        Sun, 31 Jul 2022 14:50:58 +0000
+Date:   Sun, 31 Jul 2022 22:50:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202207312255.bPrNIfCh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220709132830.9869-1-linux@treblig.org>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
-X-Uptime: 15:41:12 up 142 days,  1:06,  1 user,  load average: 0.00, 0.00,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* linux@treblig.org (linux@treblig.org) wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> 
-> 'namespace' is creatively typo'd in a few different places
-> 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6a010258447d386186ca10cd374d888ac66ffe1a
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   6 months ago
+config: arm64-randconfig-s031-20220731 (https://download.01.org/0day-ci/archive/20220731/202207312255.bPrNIfCh-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/ drivers/firmware/meson/
 
-Ping.
-(and added a couple more cc'c)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
-> I've added 'namesapce' to codespell: https://github.com/codespell-project/codespell/commit/cfe751aedb234e262d7e32c1d568939c2ccd4e36
-> I wasn't sure if it was worth splitting this into 3 patches given the
-> different areas; please advise.
-> ---
->  Documentation/driver-api/nvdimm/nvdimm.rst | 2 +-
->  Documentation/filesystems/proc.rst         | 2 +-
->  Documentation/networking/sysfs-tagging.rst | 2 +-
->  drivers/infiniband/core/device.c           | 2 +-
->  include/linux/nd.h                         | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/nvdimm/nvdimm.rst b/Documentation/driver-api/nvdimm/nvdimm.rst
-> index be8587a558e1e..ca16b5acbf30d 100644
-> --- a/Documentation/driver-api/nvdimm/nvdimm.rst
-> +++ b/Documentation/driver-api/nvdimm/nvdimm.rst
-> @@ -82,7 +82,7 @@ LABEL:
->    Metadata stored on a DIMM device that partitions and identifies
->    (persistently names) capacity allocated to different PMEM namespaces. It
->    also indicates whether an address abstraction like a BTT is applied to
-> -  the namepsace.  Note that traditional partition tables, GPT/MBR, are
-> +  the namespace.  Note that traditional partition tables, GPT/MBR, are
->    layered on top of a PMEM namespace, or an address abstraction like BTT
->    if present, but partition support is deprecated going forward.
->  
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index 1bc91fb8c321a..335d028752d45 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -2187,7 +2187,7 @@ are not related to tasks.
->  Chapter 5: Filesystem behavior
->  ==============================
->  
-> -Originally, before the advent of pid namepsace, procfs was a global file
-> +Originally, before the advent of pid namespace, procfs was a global file
->  system. It means that there was only one procfs instance in the system.
->  
->  When pid namespace was added, a separate procfs instance was mounted in
-> diff --git a/Documentation/networking/sysfs-tagging.rst b/Documentation/networking/sysfs-tagging.rst
-> index 83647e10c2078..65307130ab633 100644
-> --- a/Documentation/networking/sysfs-tagging.rst
-> +++ b/Documentation/networking/sysfs-tagging.rst
-> @@ -43,6 +43,6 @@ Users of this interface:
->  
->    - current_ns() which returns current's namespace
->    - netlink_ns() which returns a socket's namespace
-> -  - initial_ns() which returns the initial namesapce
-> +  - initial_ns() which returns the initial namespace
->  
->  - call kobj_ns_exit() when an individual tag is no longer valid
-> diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-> index d275db195f1a1..0af50a1f53418 100644
-> --- a/drivers/infiniband/core/device.c
-> +++ b/drivers/infiniband/core/device.c
-> @@ -132,7 +132,7 @@ MODULE_PARM_DESC(netns_mode,
->   * rdma_dev_access_netns() - Return whether an rdma device can be accessed
->   *			     from a specified net namespace or not.
->   * @dev:	Pointer to rdma device which needs to be checked
-> - * @net:	Pointer to net namesapce for which access to be checked
-> + * @net:	Pointer to net namespace for which access to be checked
->   *
->   * When the rdma device is in shared mode, it ignores the net namespace.
->   * When the rdma device is exclusive to a net namespace, rdma device net
-> diff --git a/include/linux/nd.h b/include/linux/nd.h
-> index b9771ba1ef879..7095faf4a0c85 100644
-> --- a/include/linux/nd.h
-> +++ b/include/linux/nd.h
-> @@ -179,7 +179,7 @@ static inline int nvdimm_read_bytes(struct nd_namespace_common *ndns,
->   * @buf: buffer to drain
->   * @size: transfer length
->   *
-> - * NVDIMM Namepaces disks do not implement sectors internally.  Depending on
-> + * NVDIMM Namespaces disks do not implement sectors internally.  Depending on
->   * the @ndns, the contents of @buf may be in cpu cache, platform buffers,
->   * or on backing memory media upon return from this routine.  Flushing
->   * to media is handled internal to the @ndns driver, if at all.
-> -- 
-> 2.36.1
-> 
+sparse warnings: (new ones prefixed by >>)
+   drivers/firmware/meson/meson_sm.c:85:24: sparse: sparse: Using plain integer as NULL pointer
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+   drivers/firmware/meson/meson_sm.c:170:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_out_base @@
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:170:17: sparse:     got void [noderef] __iomem *sm_shmem_out_base
+>> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+>> drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void const *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+   drivers/firmware/meson/meson_sm.c:206:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *sm_shmem_in_base @@
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     expected void *
+   drivers/firmware/meson/meson_sm.c:206:9: sparse:     got void [noderef] __iomem *sm_shmem_in_base
+
+vim +206 drivers/firmware/meson/meson_sm.c
+
+2c4ddb215521d5 Carlo Caione 2016-08-27  175  
+2c4ddb215521d5 Carlo Caione 2016-08-27  176  /**
+2c4ddb215521d5 Carlo Caione 2016-08-27  177   * meson_sm_call_write - send data to secure-monitor
+2c4ddb215521d5 Carlo Caione 2016-08-27  178   *
+8cde3c2153e8f5 Carlo Caione 2019-07-31  179   * @fw:		Pointer to secure-monitor firmware
+2c4ddb215521d5 Carlo Caione 2016-08-27  180   * @buffer:	Buffer containing data to send
+2c4ddb215521d5 Carlo Caione 2016-08-27  181   * @size:	Size of the data to send
+2c4ddb215521d5 Carlo Caione 2016-08-27  182   * @cmd_index:	Index of the SMC32 function ID
+2c4ddb215521d5 Carlo Caione 2016-08-27  183   * @arg0:	SMC32 Argument 0
+2c4ddb215521d5 Carlo Caione 2016-08-27  184   * @arg1:	SMC32 Argument 1
+2c4ddb215521d5 Carlo Caione 2016-08-27  185   * @arg2:	SMC32 Argument 2
+2c4ddb215521d5 Carlo Caione 2016-08-27  186   * @arg3:	SMC32 Argument 3
+2c4ddb215521d5 Carlo Caione 2016-08-27  187   * @arg4:	SMC32 Argument 4
+2c4ddb215521d5 Carlo Caione 2016-08-27  188   *
+2c4ddb215521d5 Carlo Caione 2016-08-27  189   * Return:	size of sent data on success, a negative value on error
+2c4ddb215521d5 Carlo Caione 2016-08-27  190   */
+8cde3c2153e8f5 Carlo Caione 2019-07-31  191  int meson_sm_call_write(struct meson_sm_firmware *fw, void *buffer,
+8cde3c2153e8f5 Carlo Caione 2019-07-31  192  			unsigned int size, unsigned int cmd_index, u32 arg0,
+8cde3c2153e8f5 Carlo Caione 2019-07-31  193  			u32 arg1, u32 arg2, u32 arg3, u32 arg4)
+2c4ddb215521d5 Carlo Caione 2016-08-27  194  {
+2c4ddb215521d5 Carlo Caione 2016-08-27  195  	u32 written;
+2c4ddb215521d5 Carlo Caione 2016-08-27  196  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  197  	if (!fw->chip)
+2c4ddb215521d5 Carlo Caione 2016-08-27  198  		return -ENOENT;
+2c4ddb215521d5 Carlo Caione 2016-08-27  199  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  200  	if (size > fw->chip->shmem_size)
+2c4ddb215521d5 Carlo Caione 2016-08-27  201  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  202  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  203  	if (!fw->chip->cmd_shmem_in_base)
+2c4ddb215521d5 Carlo Caione 2016-08-27  204  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  205  
+8cde3c2153e8f5 Carlo Caione 2019-07-31 @206  	memcpy(fw->sm_shmem_in_base, buffer, size);
+2c4ddb215521d5 Carlo Caione 2016-08-27  207  
+8cde3c2153e8f5 Carlo Caione 2019-07-31  208  	if (meson_sm_call(fw, cmd_index, &written, arg0, arg1, arg2, arg3, arg4) < 0)
+2c4ddb215521d5 Carlo Caione 2016-08-27  209  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  210  
+2c4ddb215521d5 Carlo Caione 2016-08-27  211  	if (!written)
+2c4ddb215521d5 Carlo Caione 2016-08-27  212  		return -EINVAL;
+2c4ddb215521d5 Carlo Caione 2016-08-27  213  
+2c4ddb215521d5 Carlo Caione 2016-08-27  214  	return written;
+2c4ddb215521d5 Carlo Caione 2016-08-27  215  }
+2c4ddb215521d5 Carlo Caione 2016-08-27  216  EXPORT_SYMBOL(meson_sm_call_write);
+2c4ddb215521d5 Carlo Caione 2016-08-27  217  
+
+:::::: The code at line 206 was first introduced by commit
+:::::: 8cde3c2153e8f57be884c0e73f18bc4de150e870 firmware: meson_sm: Rework driver as a proper platform driver
+
+:::::: TO: Carlo Caione <ccaione@baylibre.com>
+:::::: CC: Kevin Hilman <khilman@baylibre.com>
+
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+0-DAY CI Kernel Test Service
+https://01.org/lkp

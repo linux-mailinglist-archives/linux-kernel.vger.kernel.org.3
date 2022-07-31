@@ -2,130 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3975860B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BD1586107
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbiGaTQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 15:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S238482AbiGaTYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 15:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiGaTP6 (ORCPT
+        with ESMTP id S238454AbiGaTYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 15:15:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B64644D;
-        Sun, 31 Jul 2022 12:15:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B7BCB80D11;
-        Sun, 31 Jul 2022 19:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33937C433D7;
-        Sun, 31 Jul 2022 19:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659294954;
-        bh=wZPiOmb/8y3eGL/2h6/nS4c4cbBrC5BVAnNHwWdf0GU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T9jGZEBnUXLfaa8X7PKLziwJ0/gtSigoQGvVgA14bEv3XngpVWIXW8iksAjIMqSav
-         4WfoTj7ox8y9lP3t1dusu++r8cFwf/tf8PrbfwSPUAA07RjC+/uTe5h7uINWx6eP9m
-         czT313x97GQnnWiUz9oSONS3V1P5iqus9MVAr+VbYyB6+YJ27X56fsTF2Kx1mSfdh5
-         11eHqxXr4IDxrxksfrnc0A2YCNqabIB3vbZRK0GejO1qfVDJE7ezzxLQirWm2d6o1G
-         EKnfF0rHw4RHjqtNTXRHDkEgKAx4AwjERSjAybhUArQGdxXnWUBriayLi9pLhmdpOO
-         xx2EZNtgZDN7Q==
-Received: by pali.im (Postfix)
-        id 388B36E8; Sun, 31 Jul 2022 21:15:51 +0200 (CEST)
-Date:   Sun, 31 Jul 2022 21:15:51 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     netdev@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Juergen Gross <jgross@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Suma Hegde <suma.hegde@amd.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Scott Wood <oss@buserror.net>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@kernel.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        Benjamin Poirier <bpoirier@nvidia.com>,
-        Victor Erminpour <victor.erminpour@oracle.com>,
-        "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-Subject: Re: [RFC] Remove DECNET support from kernel
-Message-ID: <20220731191551.5m7ql3ysozi3owrl@pali>
-References: <20220731190646.97039-1-stephen@networkplumber.org>
+        Sun, 31 Jul 2022 15:24:17 -0400
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1305013E2E
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 12:22:49 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id IEWKoQwuRsL0zIEWKozPBu; Sun, 31 Jul 2022 21:22:41 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 31 Jul 2022 21:22:41 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH 1/2] media: sunxi: Fix some error handling path of sun8i_a83t_mipi_csi2_probe()
+Date:   Sun, 31 Jul 2022 21:22:35 +0200
+Message-Id: <62c0aef8d3b86d8f290bf6787f1b2b41efbb0b55.1659295329.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731190646.97039-1-stephen@networkplumber.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday 31 July 2022 12:06:10 Stephen Hemminger wrote:
-> diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-> index 805f2281e000..299d9c3407d3 100644
-> --- a/Documentation/admin-guide/sysctl/net.rst
-> +++ b/Documentation/admin-guide/sysctl/net.rst
-> @@ -39,7 +39,6 @@ Table : Subdirectories in /proc/sys/net
->   802       E802 protocol         ax25       AX25
->   ethernet  Ethernet protocol     rose       X.25 PLP layer
->   ipv4      IP version 4          x25        X.25 protocol
-> - bridge    Bridging              decnet     DEC net
->   ipv6      IP version 6          tipc       TIPC
->   ========= =================== = ========== ==================
->  
+Release some resources in the error handling path of the probe and of
+sun8i_a83t_mipi_csi2_resources_setup(), as already done in the remove
+function.
 
-Hello! You should remove only decnet from the list, not bridge.
-This is two columns table.
+Fixes: 576d196c522b ("media: sunxi: Add support for the A83T MIPI CSI-2 controller")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+I'm unsure about the phy_exit() call in
+sun8i_a83t_mipi_csi2_resources_cleanup() because no explicit phy_init()
+call is performed.
+
+The same code is in sun6i-mipi-csi2/sun6i_mipi_csi2.c, but in this driver
+phy_init() IS called.
+
+I leave it as-is because I don't if it is an issue or not.
+My feeling is that it is a copy'n'paste error and that it should be
+removed.
+---
+ .../sun8i_a83t_mipi_csi2.c                    | 21 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+index d052ee77ef0a..67c7475d5d10 100644
+--- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+@@ -719,13 +719,15 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83t_mipi_csi2_device *csi2_de
+ 	csi2_dev->clock_mipi = devm_clk_get(dev, "mipi");
+ 	if (IS_ERR(csi2_dev->clock_mipi)) {
+ 		dev_err(dev, "failed to acquire mipi clock\n");
+-		return PTR_ERR(csi2_dev->clock_mipi);
++		ret = PTR_ERR(csi2_dev->clock_mipi);
++		goto err_put_clk_rate;
+ 	}
+ 
+ 	csi2_dev->clock_misc = devm_clk_get(dev, "misc");
+ 	if (IS_ERR(csi2_dev->clock_misc)) {
+ 		dev_err(dev, "failed to acquire misc clock\n");
+-		return PTR_ERR(csi2_dev->clock_misc);
++		ret = PTR_ERR(csi2_dev->clock_misc);
++		goto err_put_clk_rate;
+ 	}
+ 
+ 	/* Reset */
+@@ -733,7 +735,8 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83t_mipi_csi2_device *csi2_de
+ 	csi2_dev->reset = devm_reset_control_get_shared(dev, NULL);
+ 	if (IS_ERR(csi2_dev->reset)) {
+ 		dev_err(dev, "failed to get reset controller\n");
+-		return PTR_ERR(csi2_dev->reset);
++		ret = PTR_ERR(csi2_dev->reset);
++		goto err_put_clk_rate;
+ 	}
+ 
+ 	/* D-PHY */
+@@ -741,7 +744,7 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83t_mipi_csi2_device *csi2_de
+ 	ret = sun8i_a83t_dphy_register(csi2_dev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to initialize MIPI D-PHY\n");
+-		return ret;
++		goto err_put_clk_rate;
+ 	}
+ 
+ 	/* Runtime PM */
+@@ -749,6 +752,10 @@ sun8i_a83t_mipi_csi2_resources_setup(struct sun8i_a83t_mipi_csi2_device *csi2_de
+ 	pm_runtime_enable(dev);
+ 
+ 	return 0;
++
++err_put_clk_rate:
++	clk_rate_exclusive_put(csi2_dev->clock_mod);
++	return ret;
+ }
+ 
+ static void
+@@ -778,9 +785,13 @@ static int sun8i_a83t_mipi_csi2_probe(struct platform_device *platform_dev)
+ 
+ 	ret = sun8i_a83t_mipi_csi2_bridge_setup(csi2_dev);
+ 	if (ret)
+-		return ret;
++		goto err_cleanup_resources;
+ 
+ 	return 0;
++
++err_cleanup_resources:
++	sun8i_a83t_mipi_csi2_resources_cleanup(csi2_dev);
++	return ret;
+ }
+ 
+ static int sun8i_a83t_mipi_csi2_remove(struct platform_device *platform_dev)
+-- 
+2.34.1
+

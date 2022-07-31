@@ -2,293 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9F1585CCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 03:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73874585CD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 03:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiGaBlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 21:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S233889AbiGaBzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 21:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiGaBlK (ORCPT
+        with ESMTP id S229807AbiGaBy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 21:41:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0246C13F44;
-        Sat, 30 Jul 2022 18:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659231668; x=1690767668;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=audiBCstPqMEsG0/vQrkFk6nQ5a4g5QuBEnDB3ZCOfw=;
-  b=JPO8t7Uh5HD3V98WcZluXFdLnZCip/XReDb1ENN2ff1wP/oisTNINIPR
-   kOaTC4WYoMs9yR5WxII0yf0RfmFFKrCJThCK8epdHfYuJ4knRhvRTU6eo
-   txffzux1ViWqrklZc8pj47bhXbOAT5GfPX+daf2KmbtFHb9sU9snq4htK
-   PbHM8v1531p3y8A6EFds7/kGZ+vPTe+yEQwUG8ed/E4lUdLkLVKcfWa3d
-   fzyyLSzuy+TiMRq46zXSIkGAdU5C+GTQDQB+F3jurPk84uBSwMSBl/0VU
-   qZ4q1+xKvuDQAaepDtGGlGuPNM8SK1dBCnPzusArKs5weO0vGfI7CimBE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="268725074"
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="268725074"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 18:41:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
-   d="scan'208";a="728098130"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2022 18:41:08 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sat, 30 Jul 2022 18:41:07 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sat, 30 Jul 2022 18:41:07 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Sat, 30 Jul 2022 18:41:07 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Sat, 30 Jul 2022 18:41:07 -0700
+        Sat, 30 Jul 2022 21:54:58 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2042.outbound.protection.outlook.com [40.107.95.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850513D2C;
+        Sat, 30 Jul 2022 18:54:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFfcU1lN8IMZ4WPpLxIzAycBCroEf7iX9XFQ4YY1k5LgH3SchBzTZKPU/NbQZRNUdkyP1zG3VD/E59JgqqZIwF4SMtcdZfxpXHygKyibveXnkPBbqWua5TWaGqpBf3VjiM5WDdpNX6xNwcN5ZOYc41XVPnEX5N9FLmUo6v1vL/PkFcBEUHTDKaBLSl1iWEfMvr5RSV05iaDPNrcVSs5zWwLonb0luxCk9ng3vEJhhFet9LoaXIYa/l2eMW2TwTiuru8M/ta7KT1t5TPVbeA4KRWPishmXI31JHnoinkyrem9FkHQA9AHg4hzRkoJrM4GQPw/DiOoSA6FPl3Qt0w1jA==
+ b=U7ru27KnmbVSL21D/vxUuMv/ubswHmt4QEb4rwurfWauUoWGNXQod4b9lCJRsJfhE32YHqj8p97qGq7RPf5R0JCY+g+clYFlUMRzKehyHukkthZ7Jh48RxciIrqCOqdqlbj73y9aiVidP4fSdRhYsgigMWtEWI9O1zxXlvkiEO/Y7tNdA755YECDySh2JJF77UqBAg5hsYrlZYy69qwFvU5lrnlclmiU4SwCG9/t/7j0BE1HDpQfn/6thj8P+3shUuDN+3ugFVAjBoe1XbhnpX5Q7W4uDsPL9F6xhIwyAA1zcMulm6LKOpXM8I9kAOG63+9Paw45IBz7Exh4Zj8A5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QuFAg/iB2fayqEJdy+121uKsI43jOGNzW9OGsXXQ3dI=;
- b=O9wu1rCPHfznpDiJoCAgwhykA0gLK49yFuG3TzGn3KqrmS4FpEAqlDonPLKy8NgQjVa1Gyt8bCesswgq8JXFpx9p4iaoCOioctdFxxA5+uc0iMp5/iGoTA7SqyWBRK6yOcWEpVbachpwAzzMYaD6GnuX+J0YLyspsj2chmYu95BDq3vCL3odWh97bpPu52QcDagoZBcvHeNLW1L/emUIprPUnMHpKfguiDqroudrCwBr7UN8x02i1hSALUwXh+FmCuRT255luT+WD9UMGPIpW8Hb3Pa5QN17cjHALPF9tZ7C5ey7sC1k5se0ANJG6BqWqxrxk67T4prW4Fng3KdjsA==
+ bh=2YgmbH5KE5e9qKEnqQ30NYf3rYr8hEa0TLzm7/pBtKo=;
+ b=EspcQYAk5hKjQxXoMgbNitVwNILacj0plnlBYt7ISqLEA+/xGQIlUm0RyhEb4ajQgTYCS/VmVWxBy79WzO0PHIKfVeZxFkT6ZdJ8tF54xg3pjAijeHujw1PnkxGJaDGDs9RBc7YTRoEIYEf8VgftqSJfMRHLYza+RqVf/5q4/FAR23rCRffAIjKeZYLsDh9qv8zSCFl1OzB99sISUyzgh5QY974dpo0OdMMXu/LhyhUJOntZn0WxQ+z2J6Dv9Z8AatTOB77arTBeTPpIrfkV368QeuflDXVwdzDj6RBgeFLMsGe2H8m0aDYJ7GZ/uMLEVMpdvzQW6CNu41YQqx0C6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2YgmbH5KE5e9qKEnqQ30NYf3rYr8hEa0TLzm7/pBtKo=;
+ b=pvTmxd79caN2M3SXXrbHsZmyR1SEvg56OWspn3m4arEPeTTqmXJbfofrjVC9g97tN6eDCW4woEAiHzhs7p1m1403stvGNpMevlBQSWzxY3FI+yb2lJY2pVvXboPyJ+e3uRFPuYdwgLRDLILmcDJ61PVtEz3YjM/wF0FnMxO7p4GMfu8y55ZUylkuiIevHjMbDljN5td2i0iNl9YIM/RLJ+LNpsLtB+BGgNIgJAq+TCpvK53RK2JU+K4DwZ/Tve3/YWJI0rInkC87TSXg23EeVTa0McWi/UbG+4qk/mtGsvXU7yq8aeJiemrFgK5bfp8cmAFwOB6lfyI8w8ka3rZMMQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- CH2PR11MB4392.namprd11.prod.outlook.com (2603:10b6:610:3e::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5482.6; Sun, 31 Jul 2022 01:40:59 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::1168:74bf:ff5d:68db]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::1168:74bf:ff5d:68db%7]) with mapi id 15.20.5458.025; Sun, 31 Jul 2022
- 01:40:59 +0000
-Date:   Sat, 30 Jul 2022 18:40:54 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-aio@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] aio: Replace kmap{,_atomic}() with kmap_local_page()
-Message-ID: <YuXdprlqIFF1uCUS@iweiny-desk3>
-References: <20220706233328.18582-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220706233328.18582-1-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: SJ0PR03CA0211.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::6) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ0PR12MB5504.namprd12.prod.outlook.com (2603:10b6:a03:3ad::24)
+ by BN6PR12MB1716.namprd12.prod.outlook.com (2603:10b6:404:104::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Sun, 31 Jul
+ 2022 01:54:54 +0000
+Received: from SJ0PR12MB5504.namprd12.prod.outlook.com
+ ([fe80::c92d:eecd:812b:b40c]) by SJ0PR12MB5504.namprd12.prod.outlook.com
+ ([fe80::c92d:eecd:812b:b40c%3]) with mapi id 15.20.5482.014; Sun, 31 Jul 2022
+ 01:54:53 +0000
+Message-ID: <8e0a0ceb-5816-60a6-6219-7306e75ce006@nvidia.com>
+Date:   Sat, 30 Jul 2022 18:54:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH net-next 0/3] net: vlan: fix bridge binding behavior and
+ add selftests
+Content-Language: en-US
+To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     aroulin@nvidia.com, sbrivio@redhat.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
+References: <cover.1659195179.git.sevinj.aghayeva@gmail.com>
+ <f7ede054-f0b3-558a-091f-04b4f7139564@blackwall.org>
+ <CAMWRUK5j4UAwjw4UGN=SVbbDbut0zWg5e03wupAXCPwT8K8zzQ@mail.gmail.com>
+ <CAMWRUK5TZ5iZWZJO7Bbn-b43ZbT7mRzUDr4LdseLCne8qvG6pw@mail.gmail.com>
+From:   Roopa Prabhu <roopa@nvidia.com>
+In-Reply-To: <CAMWRUK5TZ5iZWZJO7Bbn-b43ZbT7mRzUDr4LdseLCne8qvG6pw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0250.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a0::15) To SJ0PR12MB5504.namprd12.prod.outlook.com
+ (2603:10b6:a03:3ad::24)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 20d09680-500a-4e8e-2daf-08da7295b86e
-X-MS-TrafficTypeDiagnostic: CH2PR11MB4392:EE_
+X-MS-Office365-Filtering-Correlation-Id: 265bfab0-9b6b-4ddf-2365-08da7297a998
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1716:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NkGWcYaPAbkkGYaYhGkhWHFez5Dy1f2MjUdbAHWZS6B0pjT8yXhs5iP7ugzXt2iY8Mg6db9P0wQmE/nJJ/byNAOhA4P5OrhvjGzbEzjcadujYO8Otu/npG9pAWEjsyoh5ez42n6uAhAgV9blP8k1D5eqPEvt1u1/+0D0bNWrbW3FdHDSCgkpYtTxlz8vIL79ecD2ZrH53Gb8W9HKGOUqbyvhxqgLODOE7FwORbZomd2XG2qNSN7G96WzzTJ6pEgDxKwNvFDNRhelzJA/HwEVMHgqZu/IIbJXpKLtl36sqSApFXBP4HbCOS9DM4fSoh6c1v4fqBCMaduAXUK3/VCDy6lss20/oQ7BhbmeWQw+8815TrzbmSBL0ziS7T6EXYVjqAs2IKsd2qARs9JxXWfGoXG9uhs3gjR0t8sMhl0ZFwt6yG8HQvpYj9NjoirwUHn2V7BEN6+ELaFH1h8WW9ekjFLZN3y8Qp3opLFfNJpuJSOywg2jo1WYOicRy7bspbmCve+JcsEMK3l+svXPF++UQnSEKK1chd99gtCV4uaVC1JAunWoQH2yTvqgKnoGW2c3sSOMYfOnCbK1lSwf76E4j35TrIXXUW7L4PXQNaIMKD43AqIa4AR6fGlgjC9a7/c2Cgi2Xb+oyWl/Bt44sQkh5vO/tT//nFyYoSjQPakUeyZOSI5Bqt26U+CaOIVOZFcqC84JDgPp+OIEbn9h+0GKm1DL9/DuOmPWogSflsnyskM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(396003)(136003)(366004)(376002)(39860400002)(6486002)(8936002)(5660300002)(478600001)(26005)(2906002)(6506007)(44832011)(6666004)(41300700001)(82960400001)(9686003)(6512007)(38100700002)(33716001)(186003)(86362001)(83380400001)(8676002)(66946007)(316002)(66556008)(66476007)(6916009)(4326008)(54906003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: GcI1WHxbBobb81EQEiK7xXtF3bYxFf06vsMFssjqInOIMKEDh9kQc4zwUv29aARd82Jk5fBvUTFQW4/USCF2nCB2gbr0ggB7UUjut4S8KnmCNRstF7sBK9yubPm+3QKK51OK68uVLDOD57Xu70iyzXDaOFjYGpJKwghZTQHs0MyXhAavKQzM73YfI7KXy5r/xzVlFLEuIkQSMo6CGvLdaP4+aHCSwP2qWgU/xU2W3RQvVrTB9BX8//Yo/+Ih414Wjtz07/cHAYU3bYkJx/3SeshDzHpnUtTCJgf513ChpPPPi6kvQ+/ejIvL8e1h9iZQNPyAyFaTdlMItTiQ5eUfRxyuLfbvOV2q96hZPO+ilSwTPNqBKhNp92exR0OZMjRlb60TsRY9QsbToiZdSaiUl3U6mMRqaHnfdxchjPA/w6UeNCBS5ie+2F3CMilt0UDP736kaTrbLytgArryOnCd/ydnqo2d3lzCqBGnIK5p2ZXo8A11LTe9tcmZCUDp1D5wFfCMLUyQKM7oWgC+/BX7jRUWKgpAw18kC9OL+eBGcK58aPfbaeHv+IxGKdCuvGGe7d9GEVsUZ1RKMrwpzf0aP9CZ2hCc2m9RDNnpwJadO3CXluesg3psId0x4vfjeqAo/ziHCl0Sml0MKCDsytslWtDExLtiCM1AGb1sbIPYRGkbsPZKnYXTOvqz1GAaup4Xg0+VFt6m0WkEeiBBzn6aZfCCLmDdVQNDQl4h9TrpdyjWZ60EH6KrvDFKNKjwVbihAmLGFtIZ2AmpdE+74uBaec1lMNGMvVnEJpfV95ElNXMcuYB1Xk4DUCNKWgx6C7+Row8ekZ4J0Wpj4CXDvFhomA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(346002)(366004)(396003)(2616005)(186003)(53546011)(38100700002)(83380400001)(66556008)(6512007)(5660300002)(8936002)(7416002)(66946007)(66476007)(8676002)(4326008)(2906002)(6486002)(6506007)(478600001)(41300700001)(316002)(54906003)(110136005)(31696002)(36756003)(31686004)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5A4/A2wLHUqnm9DDXeFgauGOc/cWOVxKod6sJq8XHbGdmeE7Ll3L4baEOuIQ?=
- =?us-ascii?Q?bi99LJ6+fIgsjaEftvQLmxc9ho1GcKIAcD7pvX5Jh23Xq9ym4XdvR8mx1EuN?=
- =?us-ascii?Q?EFJGaccVIG+fr4wGURb4t4Y27XjpJ6eO48nRGfgIpoQtDfsDfpsjwr+G4ah7?=
- =?us-ascii?Q?PL6LsIvMnLSNBd9NXB+hZFDATi22gIyq4+EyT1Zd33NUG25i76/kVsdyZI9V?=
- =?us-ascii?Q?t3ZZEv2HJdj4iAok3z0PiyNgHh21b4sRiz57IOvSm/wKynjr+cZx8VxBNUxK?=
- =?us-ascii?Q?foBlkG4uKx29Gj8eInBNfZjahKyGnJAtjVYstZpYNaxWdtdlwB/ned7MHarM?=
- =?us-ascii?Q?/6mff+FaSvQQSEhbbv64Zi16T78Mhm4jZVvcAikQ+qkInpylciGCiDahyxCg?=
- =?us-ascii?Q?99D93ITuPGldQmCJorPYKTZKdwrzzLTui4TUysXQ482HRzD7axQZge6tXFcn?=
- =?us-ascii?Q?6e2WxZCtw0iXnZyW+ebhZ4whTBu1fJmMlWPQNPxHIqkgG3iv9DfpbwPBluVE?=
- =?us-ascii?Q?pqiNbnb+gycMXegmXXhWPN6c7VmFU2Q2QSff7PucjzIL7vUc7P/haD42uwB5?=
- =?us-ascii?Q?s3gMWy3r+/DnlGntJCfBeG8ejLOk4Uxa29xObb0IY1lE/ti+oOqx7H8ZlFjB?=
- =?us-ascii?Q?ePH5TcmrOXYRpV+tOQysxQl/5u5m7ZrRvD5g378aNRKOxzmwSRdym/kta9Zg?=
- =?us-ascii?Q?2S+Yv96x13HpXFhjrxgsBmNEaQorpc9s/WdtwaYKgIdhvCr6QZHUecg8xOjU?=
- =?us-ascii?Q?eXDlFjJNL1C6Ou6GlHZoWAjE+8ABq6PCVWC7lojfcnTmoZUbibfc6HQXMgx6?=
- =?us-ascii?Q?2wLnILaZSBvLy3DvAeBug04C/BtLbLZKpW7y30hXGgJsfPSS88yTBEQbdWSd?=
- =?us-ascii?Q?reNUNqS7NrB4LtFaad6MzqiCGGuEcpQnFkxZEBMZ2RaRjF9xYuxB7ybnfmJq?=
- =?us-ascii?Q?JscxatEBMn5YdAjJyD2QEwDjC97T2r5KOKsSWlORtfot1cUlSrzwQ3GuhYOT?=
- =?us-ascii?Q?66bfxDAhiYvKqTBUKDz14xWsT1hdp5C3aSfpsEXQ0QJy4N1kXju/QaHQJ67W?=
- =?us-ascii?Q?RoZXd4CLoo/dgYJmoCeX/N25OS72eSn/TeYwfl4X5B4a7b5nBqqecJGaQyZo?=
- =?us-ascii?Q?2LRbkoBAjgza1V/J3VfnOpo6i4kxDD28buYeUDqc6giBeHz3sDyuDqBoDNFN?=
- =?us-ascii?Q?eVgnOKZ6uz9QwTTnF0hkGTbQxVkJtgh2d+4r8CQsd99mTJ2FaJiXrRGfVRT4?=
- =?us-ascii?Q?osV8m0BcSUcD8rF5ryzNqm22dGqGnG663Hwsuz59ccWp//j/V9HZcPuE0uAE?=
- =?us-ascii?Q?Oru7EK7FwwSIePd5BegVruGdQ6JhE9/D1Z0tRwh6Sutt1q+vFtxyf2yVJOrS?=
- =?us-ascii?Q?LPtVffhZg0sdcWnh5XxRmsUbshQ/NZnhETut1jzy2dwskucQRDuVdYFi0E53?=
- =?us-ascii?Q?iGqvLrhXD60MIffBlVfj9QeVacVZYSvysstJenl1fZ/iJrkW5iPd5r6jZJFe?=
- =?us-ascii?Q?pgyWXpogZ+cwbSlLEMQrSVcoJW2nVE+CQZHHE3zq7onWyTmljyYSExyAB5bm?=
- =?us-ascii?Q?gUFNbuh5kVNpcs1GnHzfVpny1UJH9ODBdFJU33wH?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20d09680-500a-4e8e-2daf-08da7295b86e
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0tYTGIzL1c3VG9FVzF5dlNlVldzcDNGdENaYlNJKzA5ZlZmaTNRMG5xRnNO?=
+ =?utf-8?B?ak5KREN0MC9MTjNWZmpSNkw1NzJGZlljS1NIK2xQeTFWbC9MTTFrT1daNUVp?=
+ =?utf-8?B?VXhWcGlML2g5VWVkcE9IVnZoZ3lBd3RNQUNGazB6NVdSVkJrWUczZVpUSFpH?=
+ =?utf-8?B?WDVDRVU4MEwxM3ptYW5TOWcvK25MRDhQVTJxaGgwWlczRE85WitnNkNNQ213?=
+ =?utf-8?B?VWR3RSttWGFDVWFWUmRCUDlLaktBeVErdDFsYWE0N3VnUmZCV3kvaTNVcGQv?=
+ =?utf-8?B?SGRPRGNyMnF6NDd5alJsbEk3K3p4Z2d0SWJWTERPOGd6RGwwSlU5eExCVVFM?=
+ =?utf-8?B?WmQwcHNSV3VPWXc1UzdvRm5XLzltN3JQQnpBcUdsRVBuM0orMDlGY0l6YXkr?=
+ =?utf-8?B?UGo3amhDTkRVNnZDb2lHc0ZRVjJOcmpwcjZaQkVZeERyYUJSRjFGSGxXSmJ5?=
+ =?utf-8?B?dm12TC9ObW5wYlo5SmtUYmYzSWhFSGNZRDVvWWpDcjBMU1VBV3ExR2xVdXJh?=
+ =?utf-8?B?OXVkYzQwOXUxb0Y5UW5oWE05MThMSjFBWFU1ZGVFTFM2cTlYSW1zbzg3Y1da?=
+ =?utf-8?B?aUI5M3d1NDVlenBMcXpINmRmcUtVY2lIVVdtTHVpeTF4L3JZaEJkdWpIZ2Vh?=
+ =?utf-8?B?RDBxc29ZaDdVaVlwV3hmWkJiQjhEMGJ4Umx0SGo0cmlUVXpoY1U2RXd4WE9I?=
+ =?utf-8?B?T0o3cVQ1M0hDWkdja21nWmhRckFHeWtrc0xCTEZHalNoeDhYTUk1Zk9YVGF3?=
+ =?utf-8?B?K0c3WXUwMUFGRU1ydnl1b1hLV3A2TlZEMHp4bEdJeEFrcHBZNmpVbVBkMVNZ?=
+ =?utf-8?B?ZnJNN3g1aDFPZElsTTQ2anh6cE9SeVpLS1hPWTB5M1Jtd3lDZTV4RTZPOW4r?=
+ =?utf-8?B?NHNBWk11b3ovY2ZOaWIyZmNmc2d4QlluRXVIcG11Z1YzSXVtVzN1OENOdDNv?=
+ =?utf-8?B?dFJ3VzRQSEhvTTFaVXhQY1FiN0FLZ1k4cElVYkJoZGtWYktJZ0R5aVBHc2E3?=
+ =?utf-8?B?cDRkVTR3cWVib2svMUFVd3hlb0tpQVFnRjE1OVVZZGljWU5lTEg4bEJoWWtV?=
+ =?utf-8?B?QjNwaXNZL1FDN1o4UHVpU3JrOTIrZWpKRkhaVHpkZDBQOGZiUnVjLzQvdTJK?=
+ =?utf-8?B?SFZkRWtIK2hFS0dFeGdZL3A5MWVvSlNZajhLVVhLWXVoTDl2UVNRWEl5VEUw?=
+ =?utf-8?B?cUJvckQ1cVdPRy9tOFpiVVVzc2ZaemkrZ3g2YUJtZ2U4ZEhVR3E3d2tKamRk?=
+ =?utf-8?B?VU5DcW9OY0NMUlliSm1uK1hkZyszTmxITFNtUXN6aUFFUGNoNTVvTHRIWkIr?=
+ =?utf-8?B?RC9lUWNUbmwzRkM5R0JLU25EdmdBYzlLVWxlaUNONHR5Y0wvbDl1YXFqVjQz?=
+ =?utf-8?B?SkovZUJHRjE5SG1PT3l5MFYrNjlnK0MvV3gvdVhlWEpJT01tcXdmWHBMQ3Y3?=
+ =?utf-8?B?Zk5sSFBuZkpKUnFibkYvaThmY08zMENRYTI2akpTTml5WDhFbFhVbzRHMTFN?=
+ =?utf-8?B?VFFVZUdBOGQ2MG55MHdmZGlZSm5PWXhSb0Rlak1IYVhFNCtKbmxkK1RCV2c4?=
+ =?utf-8?B?QnFiRUtkQTJHeHlsRDQ2ak1wTy9td21aNUdEQ2FCQXRRb3BQU2VOUlJZTXBZ?=
+ =?utf-8?B?TVNlNXo0YWR0OVVCTFUrQWRTTlgxQW9xRFA3K1FLQm1xZkdPZ1JLUGwzdnRY?=
+ =?utf-8?B?RjZUY0k0UnBsVG1vMUc3Zm9sMk1sQnRzOGdkdk5kZVBXZ0QwMU9EUjZEdmNq?=
+ =?utf-8?B?blowVjdPa0JoaWRPd05TbDNSNFA3emNwV3drM0prcjVma3NUUTNDbGMrQ1J4?=
+ =?utf-8?B?cC9za2x1bWNmVDR3dHBjdFFXSll2UkFOcjZkVSsxdGJzZDhIaUJDSWIyY1JT?=
+ =?utf-8?B?QzJJZFlkcWZOc0lOV1ZlMzFJRkNCTkZRM0VEd0hPenAyR0M2VTh2VG9xZkVW?=
+ =?utf-8?B?VGladXhzeWlUcEF4RE81WnVIOGlPbGdicEFXTXlCOXAwZzVqYkhxWXphSDEv?=
+ =?utf-8?B?YWhvNFc3UStlRDc1cTlibTJwOTBTZ3c1R0RRaXRFVVBiNW1oQjZkdTNBbVRy?=
+ =?utf-8?B?RWQ1RUh0NFlvNHZnKysrUm55c3hiblF0TnlGS25YZkxvS2RVOHRBeThxU0ZX?=
+ =?utf-8?B?OWxEMDVZaWpWR21mS3Bqa2xPNkN2QngvTmx1MTVUZkIvdzhSZ2RlcXFrcnBW?=
+ =?utf-8?Q?+rJJaa0b0FfPiEEarJ4jL4qLgt/NmOJo24euaPiSTj1B?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 265bfab0-9b6b-4ddf-2365-08da7297a998
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2022 01:40:59.7518
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2022 01:54:53.8700
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fga5kkX63TfK6P6LCwq9/xkl4of2XrOplVXg5K6pZWYMBlgrsJqAPC1iQ8lL2muJNiy78LQPNJsw6hObijHglg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4392
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bu3JVZsj2zU/xuNxPMaNq/DRpiSUjDo8a/sqecUEP7ZlpTSPg89CaiMx5wlKpzb2ED1hkAt5Y1t7Jb2cq+XAKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1716
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 01:33:28AM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
-> 
-> With kmap_local_page(), the mappings are per thread, CPU local and not
-> globally visible. Furthermore, the mappings can be acquired from any
-> context (including interrupts).
-> 
-> Therefore, use kmap_local_page() in aio.c because these mappings are per
-> thread, CPU local, and not globally visible.
-> 
-> Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
-> HIGHMEM64GB enabled.
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-I'm not sure why this slipped by for so long.
+On 7/30/22 09:48, Sevinj Aghayeva wrote:
+> (Resending this because the first email was rejected due to being in HTML.)
+>
+>
+> On Sat, Jul 30, 2022 at 12:46 PM Sevinj Aghayeva
+> <sevinj.aghayeva@gmail.com> wrote:
+>>
+>>
+>> On Sat, Jul 30, 2022 at 12:22 PM Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>>> On 7/30/22 19:03, Sevinj Aghayeva wrote:
+>>>> When bridge binding is enabled for a vlan interface, it is expected
+>>>> that the link state of the vlan interface will track the subset of the
+>>>> ports that are also members of the corresponding vlan, rather than
+>>>> that of all ports.
+>>>>
+>>>> Currently, this feature works as expected when a vlan interface is
+>>>> created with bridge binding enabled:
+>>>>
+>>>>     ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>>>>           bridge_binding on
+>>>>
+>>>> However, the feature does not work when a vlan interface is created
+>>>> with bridge binding disabled, and then enabled later:
+>>>>
+>>>>     ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>>>>           bridge_binding off
+>>>>     ip link set vlan10 type vlan bridge_binding on
+>>>>
+>>>> After these two commands, the link state of the vlan interface
+>>>> continues to track that of all ports, which is inconsistent and
+>>>> confusing to users. This series fixes this bug and introduces two
+>>>> tests for the valid behavior.
+>>>>
+>>>> Sevinj Aghayeva (3):
+>>>>     net: bridge: export br_vlan_upper_change
+>>>>     net: 8021q: fix bridge binding behavior for vlan interfaces
+>>>>     selftests: net: tests for bridge binding behavior
+>>>>
+>>>>    include/linux/if_bridge.h                     |   9 ++
+>>>>    net/8021q/vlan.h                              |   2 +-
+>>>>    net/8021q/vlan_dev.c                          |  21 ++-
+>>>>    net/bridge/br_vlan.c                          |   7 +-
+>>>>    tools/testing/selftests/net/Makefile          |   1 +
+>>>>    .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
+>>>>    6 files changed, 176 insertions(+), 7 deletions(-)
+>>>>    create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+>>>>
+>>> Hmm.. I don't like this and don't think this bridge function should be
+>>> exported at all.
+>>>
+>>> Calling bridge state changing functions from 8021q module is not the
+>>> proper way to solve this. The problem is that the bridge doesn't know
+>>> that the state has changed, so you can process NETDEV_CHANGE events and
+>>> check for the bridge vlan which got its state changed and react based on
+>>> it. I haven't checked in detail, but I think it should be doable. So all
+>>> the logic is kept inside the bridge.
+>>
+>> Hi Nik,
+>>
+>> Can please elaborate on where I should process NETDEV_CHANGE events? I'm doing this as part of outreachy project and this is my first kernel task, so I don't know the bridging code that well.
+>>
+>> Thanks!
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+good point Nikolay.
 
-> ---
-> 
-> I've tested with "./check -g aio". The tests in this group fail 3/26
-> times, with and without my patch. Therefore, these changes don't introduce
-> further errors.
-> 
->  fs/aio.c | 32 ++++++++++++++++----------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 3c249b938632..343fea0c6d1a 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -567,7 +567,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
->  	ctx->user_id = ctx->mmap_base;
->  	ctx->nr_events = nr_events; /* trusted copy */
->  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	ring->nr = nr_events;	/* user copy */
->  	ring->id = ~0U;
->  	ring->head = ring->tail = 0;
-> @@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
->  	ring->compat_features = AIO_RING_COMPAT_FEATURES;
->  	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
->  	ring->header_length = sizeof(struct aio_ring);
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->  
->  	return 0;
-> @@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
->  					 * we are protected from page migration
->  					 * changes ring_pages by ->ring_lock.
->  					 */
-> -					ring = kmap_atomic(ctx->ring_pages[0]);
-> +					ring = kmap_local_page(ctx->ring_pages[0]);
->  					ring->id = ctx->id;
-> -					kunmap_atomic(ring);
-> +					kunmap_local(ring);
->  					return 0;
->  				}
->  
-> @@ -1024,9 +1024,9 @@ static void user_refill_reqs_available(struct kioctx *ctx)
->  		 * against ctx->completed_events below will make sure we do the
->  		 * safe/right thing.
->  		 */
-> -		ring = kmap_atomic(ctx->ring_pages[0]);
-> +		ring = kmap_local_page(ctx->ring_pages[0]);
->  		head = ring->head;
-> -		kunmap_atomic(ring);
-> +		kunmap_local(ring);
->  
->  		refill_reqs_available(ctx, head, ctx->tail);
->  	}
-> @@ -1132,12 +1132,12 @@ static void aio_complete(struct aio_kiocb *iocb)
->  	if (++tail >= ctx->nr_events)
->  		tail = 0;
->  
-> -	ev_page = kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
-> +	ev_page = kmap_local_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
->  	event = ev_page + pos % AIO_EVENTS_PER_PAGE;
->  
->  	*event = iocb->ki_res;
->  
-> -	kunmap_atomic(ev_page);
-> +	kunmap_local(ev_page);
->  	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
->  
->  	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
-> @@ -1151,10 +1151,10 @@ static void aio_complete(struct aio_kiocb *iocb)
->  
->  	ctx->tail = tail;
->  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	head = ring->head;
->  	ring->tail = tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->  
->  	ctx->completed_events++;
-> @@ -1214,10 +1214,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  	mutex_lock(&ctx->ring_lock);
->  
->  	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	head = ring->head;
->  	tail = ring->tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  
->  	/*
->  	 * Ensure that once we've read the current tail pointer, that
-> @@ -1249,10 +1249,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  		avail = min(avail, nr - ret);
->  		avail = min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
->  
-> -		ev = kmap(page);
-> +		ev = kmap_local_page(page);
->  		copy_ret = copy_to_user(event + ret, ev + pos,
->  					sizeof(*ev) * avail);
-> -		kunmap(page);
-> +		kunmap_local(ev);
->  
->  		if (unlikely(copy_ret)) {
->  			ret = -EFAULT;
-> @@ -1264,9 +1264,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  		head %= ctx->nr_events;
->  	}
->  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	ring->head = head;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->  
->  	pr_debug("%li  h%u t%u\n", ret, head, tail);
-> -- 
-> 2.36.1
-> 
+Sevinj, see br_vlan_bridge_event and __vlan_device_event  for how both 
+drivers react to netdev change events.
+
+I have not looked at it in detail yet, but lets explore and discuss if 
+we can make use of events to achieve same results.
+

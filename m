@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC305861C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83D05861C9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbiGaWiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
+        id S238638AbiGaWic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238664AbiGaWiJ (ORCPT
+        with ESMTP id S238747AbiGaWiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:38:09 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB0911C3C;
-        Sun, 31 Jul 2022 15:38:00 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id i13so11661108edj.11;
-        Sun, 31 Jul 2022 15:38:00 -0700 (PDT)
+        Sun, 31 Jul 2022 18:38:13 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55212A9B;
+        Sun, 31 Jul 2022 15:38:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ss3so17254587ejc.11;
+        Sun, 31 Jul 2022 15:38:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=LwdlcXAAjA7Q0eJQTvmHufANVoOrWU/uoysq72jiMcg=;
-        b=YZkuhIZ3+XRvbahfiApHIEBOQJkG/h8hKoY066XMYVHmHmcZ9ZzdH7tnSGbmhcd1bn
-         Nf6P2Cnt6s1sgWCFfmlAsNTsntX++yXBLRqeVew3T1GCrVKNIZGkaCGbD3BLxcb3WKAm
-         Hz8bCFQCFiJyLaSlTtYnzi3eZQGgCx7OdERuKM+FdDXfWGb8kqjFsZCgOrsOt4pKMtTh
-         9B5l1rWYE/J4dsTEM77Qi7T0/cfPizBPvYfBF/bAK1yYWr8AYpSjjeJAdXtOJCGOGo8a
-         gv34jkP8YbmpBBZrMqguk5SH6rJqUhgLEJYUrd/fUAbhiWTdZR4Bx76dDIcn9MkRt4N0
-         LYLA==
+        bh=S0B2Wpqg941y/P5XqiljbIJ0a4qEDSaqzoahCxJCdDQ=;
+        b=fWN9/FXVbpFKUD7ZUiX7ECI+kIDabk60dMXBVdkx6DZOBdPSULN6tonaZmn6YeE/vf
+         rXpe4KDYw4vOtP74L/QR8YyiTCH9TMEfGGt79uVhCCCj8Pyry11OcynIy2W3yfyZATmH
+         vNOq4ZfZ1O2WcCNie8c/G7ZfyxNFW44mlhq4U9JQrL+yi4rDfDLPfq84MKbHkpK1MN/2
+         1EY/xh2VfyI2fOHP9HGaGb2HOBnzTweJyX/NUYqsp7bmjAdzz9qZP3m4M3w5x/rHYQVC
+         fllxJ+0vm3ZrA/nZ4TGBfpWDiSv+IVJPg0sOBOs6fS4Osq81Lgqd+LyJhM2L2mS+w4vT
+         /Urw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=LwdlcXAAjA7Q0eJQTvmHufANVoOrWU/uoysq72jiMcg=;
-        b=USzcEufeAS2BsnJnkgl9Tk5TBsOvs7eMwYUh5E3Oekh06SkEocU80yImhQge9a/faI
-         vm+FBJjLE8WRsuRhziQ0oPKb6CekJsDqO4T8jf9sWHP1Z8ye2RH3x+NiEuHL9c5r1Dbx
-         tr8T+bHfVoqnbWFooSJm3kT/Xp33W/dZaa/B+wmElvOwScS1l3Ipb594Xp/LDvLjkgTe
-         sXx7oSiJY5upERH2nVT25cE7uNpGpg02T6nUtBRbORCd44V1qwJpUcCBs06MDLA3hpoy
-         N85JAmKCuUJhX5HuwctR01wwMQbQveXpdJ79jnmv4qrJLg090joA/Qlzs/pAejCHDMD9
-         UUbw==
-X-Gm-Message-State: ACgBeo3p7Um/3kNyrn4O82db8dvvhaRbVcN7+UYcoTFnCb35ATSq+bzq
-        M++ZGtfTNX64NP0Affa+XMI=
-X-Google-Smtp-Source: AA6agR5ZCAo+V0WePx70+TpfWbpeFeDo5pYrnNo4g1oGcJC8j+J9gF0jz48xlrydrfxmT7XJaxizaA==
-X-Received: by 2002:a05:6402:3326:b0:43d:4448:437c with SMTP id e38-20020a056402332600b0043d4448437cmr8842384eda.394.1659307078878;
-        Sun, 31 Jul 2022 15:37:58 -0700 (PDT)
+        bh=S0B2Wpqg941y/P5XqiljbIJ0a4qEDSaqzoahCxJCdDQ=;
+        b=G0NThTxF0WEoHg07e8TySN+owNFgh7N+mGghpqTJ5X/XH+OcdJ9XrnLZNkrAM8SstH
+         buTcwMZNVF6MkNF/U0oqA3y9xfKXoeY9ThKr4zzBLH6LriWRq1F9qrRP8v/34Za6Lqoa
+         8KJg5JEwK+ZAPV9i4oeMDmL8y+LeXwXKdlIRYHE3r5ZiEvswOscD9p7d/vlGi+S4KSal
+         QM2KVdgl+FMYOe1sg3ujGNKr49W5vvxsyPqgFsm3PhIo8FUKDJGekTPdMeSmzrQrWcId
+         Xuar0zefKwxg8r+xraH8N3g/4viGjLgUL92zOv7Q/MMngHlgH8gP9xLnklRFIuJRHkW+
+         TjXw==
+X-Gm-Message-State: AJIora8BJH6nLm2fFseu5Z3s/7KRUWwca0YxWFgVs2XKpDkR5SCa+OeZ
+        mVjQwI5lhwceZ8bPWP8fn+I=
+X-Google-Smtp-Source: AGRyM1uE7Ht91twAmx+3qPJ7FjJrtPoCCctJOpwHjhRs+1pZ6TJcf58eN/N8OPtJt4hCa8/P/GEurQ==
+X-Received: by 2002:a17:907:2887:b0:72b:68ce:2fff with SMTP id em7-20020a170907288700b0072b68ce2fffmr10311511ejc.423.1659307081369;
+        Sun, 31 Jul 2022 15:38:01 -0700 (PDT)
 Received: from localhost ([77.78.38.236])
-        by smtp.gmail.com with ESMTPSA id la20-20020a170907781400b0072b7d76211dsm4475487ejc.107.2022.07.31.15.37.57
+        by smtp.gmail.com with ESMTPSA id h5-20020a056402094500b0043c8ad3c38fsm5893514edz.58.2022.07.31.15.37.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jul 2022 15:37:58 -0700 (PDT)
+        Sun, 31 Jul 2022 15:38:00 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Iskren Chernev <iskren.chernev@gmail.com>
-Subject: [PATCH v3 06/13] regulator: qcom_spmi: Add support for HFSMPS regulator type
-Date:   Mon,  1 Aug 2022 01:37:29 +0300
-Message-Id: <20220731223736.1036286-7-iskren.chernev@gmail.com>
+Subject: [PATCH v3 07/13] regulator: qcom_spmi: Sort pmics alphabetically (part 1)
+Date:   Mon,  1 Aug 2022 01:37:30 +0300
+Message-Id: <20220731223736.1036286-8-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220731223736.1036286-1-iskren.chernev@gmail.com>
 References: <20220731223736.1036286-1-iskren.chernev@gmail.com>
@@ -78,77 +78,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is preparation for supporing PM6125.
-
-The HFSMPS is a BUCK type regulator with subtype 0x0a, same as the
-existing HFS430 regulator.
-
-Even though the HFSMPS and HFS430 share a register layout, the HFSMPS has
-different mode values (BYPASS, RETENTION and LPM are one lower).
-
-I'm expecting future regulators (higher revision) with the same type and
-subtype to share mode values of HFSMPS, so revisions 4 (found on pm6125)
-and up use the new ops.
-
-The inspiration of this is taken from [1].
-
-[1] https://source.codeaurora.org/quic/la/kernel/msm-5.4/commit/?h=kernel.lnx.5.4.r1-rel&id=d1220daeffaa440ffff0a8c47322eb0033bf54f5
+The sorting is split in multiple commits for easier reviewing.
 
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- drivers/regulator/qcom_spmi-regulator.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/regulator/qcom_spmi-regulator.c | 74 ++++++++++++-------------
+ 1 file changed, 37 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
-index 50c8ee01e0ad..19af294a6972 100644
+index 19af294a6972..bbb464717afa 100644
 --- a/drivers/regulator/qcom_spmi-regulator.c
 +++ b/drivers/regulator/qcom_spmi-regulator.c
-@@ -101,6 +101,7 @@ enum spmi_regulator_logical_type {
- 	SPMI_REGULATOR_LOGICAL_TYPE_HFS430,
- 	SPMI_REGULATOR_LOGICAL_TYPE_FTSMPS3,
- 	SPMI_REGULATOR_LOGICAL_TYPE_LDO_510,
-+	SPMI_REGULATOR_LOGICAL_TYPE_HFSMPS,
+@@ -2026,43 +2026,6 @@ static int spmi_regulator_of_parse(struct device_node *node,
+ 	return 0;
+ }
+ 
+-static const struct spmi_regulator_data pm8941_regulators[] = {
+-	{ "s1", 0x1400, "vdd_s1", },
+-	{ "s2", 0x1700, "vdd_s2", },
+-	{ "s3", 0x1a00, "vdd_s3", },
+-	{ "s4", 0xa000, },
+-	{ "l1", 0x4000, "vdd_l1_l3", },
+-	{ "l2", 0x4100, "vdd_l2_lvs_1_2_3", },
+-	{ "l3", 0x4200, "vdd_l1_l3", },
+-	{ "l4", 0x4300, "vdd_l4_l11", },
+-	{ "l5", 0x4400, "vdd_l5_l7", NULL, 0x0410 },
+-	{ "l6", 0x4500, "vdd_l6_l12_l14_l15", },
+-	{ "l7", 0x4600, "vdd_l5_l7", NULL, 0x0410 },
+-	{ "l8", 0x4700, "vdd_l8_l16_l18_19", },
+-	{ "l9", 0x4800, "vdd_l9_l10_l17_l22", },
+-	{ "l10", 0x4900, "vdd_l9_l10_l17_l22", },
+-	{ "l11", 0x4a00, "vdd_l4_l11", },
+-	{ "l12", 0x4b00, "vdd_l6_l12_l14_l15", },
+-	{ "l13", 0x4c00, "vdd_l13_l20_l23_l24", },
+-	{ "l14", 0x4d00, "vdd_l6_l12_l14_l15", },
+-	{ "l15", 0x4e00, "vdd_l6_l12_l14_l15", },
+-	{ "l16", 0x4f00, "vdd_l8_l16_l18_19", },
+-	{ "l17", 0x5000, "vdd_l9_l10_l17_l22", },
+-	{ "l18", 0x5100, "vdd_l8_l16_l18_19", },
+-	{ "l19", 0x5200, "vdd_l8_l16_l18_19", },
+-	{ "l20", 0x5300, "vdd_l13_l20_l23_l24", },
+-	{ "l21", 0x5400, "vdd_l21", },
+-	{ "l22", 0x5500, "vdd_l9_l10_l17_l22", },
+-	{ "l23", 0x5600, "vdd_l13_l20_l23_l24", },
+-	{ "l24", 0x5700, "vdd_l13_l20_l23_l24", },
+-	{ "lvs1", 0x8000, "vdd_l2_lvs_1_2_3", },
+-	{ "lvs2", 0x8100, "vdd_l2_lvs_1_2_3", },
+-	{ "lvs3", 0x8200, "vdd_l2_lvs_1_2_3", },
+-	{ "5vs1", 0x8300, "vin_5vs", "ocp-5vs1", },
+-	{ "5vs2", 0x8400, "vin_5vs", "ocp-5vs2", },
+-	{ }
+-};
+-
+ static const struct spmi_regulator_data pm8226_regulators[] = {
+ 	{ "s1", 0x1400, "vdd_s1", },
+ 	{ "s2", 0x1700, "vdd_s2", },
+@@ -2139,6 +2102,43 @@ static const struct spmi_regulator_data pm8916_regulators[] = {
+ 	{ }
  };
  
- enum spmi_regulator_type {
-@@ -168,6 +169,7 @@ enum spmi_regulator_subtype {
- 	SPMI_REGULATOR_SUBTYPE_HFS430		= 0x0a,
- 	SPMI_REGULATOR_SUBTYPE_HT_P150		= 0x35,
- 	SPMI_REGULATOR_SUBTYPE_HT_P600		= 0x3d,
-+	SPMI_REGULATOR_SUBTYPE_HFSMPS_510	= 0x0a,
- 	SPMI_REGULATOR_SUBTYPE_FTSMPS_510	= 0x0b,
- 	SPMI_REGULATOR_SUBTYPE_LV_P150_510	= 0x71,
- 	SPMI_REGULATOR_SUBTYPE_LV_P300_510	= 0x72,
-@@ -1567,6 +1569,19 @@ static const struct regulator_ops spmi_ftsmps3_ops = {
- 	.set_pull_down		= spmi_regulator_common_set_pull_down,
- };
- 
-+static const struct regulator_ops spmi_hfsmps_ops = {
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.set_voltage_sel	= spmi_regulator_ftsmps426_set_voltage,
-+	.set_voltage_time_sel	= spmi_regulator_set_voltage_time_sel,
-+	.get_voltage_sel	= spmi_regulator_ftsmps426_get_voltage,
-+	.map_voltage		= spmi_regulator_single_map_voltage,
-+	.list_voltage		= spmi_regulator_common_list_voltage,
-+	.set_mode		= spmi_regulator_ftsmps3_set_mode,
-+	.get_mode		= spmi_regulator_ftsmps3_get_mode,
++static const struct spmi_regulator_data pm8941_regulators[] = {
++	{ "s1", 0x1400, "vdd_s1", },
++	{ "s2", 0x1700, "vdd_s2", },
++	{ "s3", 0x1a00, "vdd_s3", },
++	{ "s4", 0xa000, },
++	{ "l1", 0x4000, "vdd_l1_l3", },
++	{ "l2", 0x4100, "vdd_l2_lvs_1_2_3", },
++	{ "l3", 0x4200, "vdd_l1_l3", },
++	{ "l4", 0x4300, "vdd_l4_l11", },
++	{ "l5", 0x4400, "vdd_l5_l7", NULL, 0x0410 },
++	{ "l6", 0x4500, "vdd_l6_l12_l14_l15", },
++	{ "l7", 0x4600, "vdd_l5_l7", NULL, 0x0410 },
++	{ "l8", 0x4700, "vdd_l8_l16_l18_19", },
++	{ "l9", 0x4800, "vdd_l9_l10_l17_l22", },
++	{ "l10", 0x4900, "vdd_l9_l10_l17_l22", },
++	{ "l11", 0x4a00, "vdd_l4_l11", },
++	{ "l12", 0x4b00, "vdd_l6_l12_l14_l15", },
++	{ "l13", 0x4c00, "vdd_l13_l20_l23_l24", },
++	{ "l14", 0x4d00, "vdd_l6_l12_l14_l15", },
++	{ "l15", 0x4e00, "vdd_l6_l12_l14_l15", },
++	{ "l16", 0x4f00, "vdd_l8_l16_l18_19", },
++	{ "l17", 0x5000, "vdd_l9_l10_l17_l22", },
++	{ "l18", 0x5100, "vdd_l8_l16_l18_19", },
++	{ "l19", 0x5200, "vdd_l8_l16_l18_19", },
++	{ "l20", 0x5300, "vdd_l13_l20_l23_l24", },
++	{ "l21", 0x5400, "vdd_l21", },
++	{ "l22", 0x5500, "vdd_l9_l10_l17_l22", },
++	{ "l23", 0x5600, "vdd_l13_l20_l23_l24", },
++	{ "l24", 0x5700, "vdd_l13_l20_l23_l24", },
++	{ "lvs1", 0x8000, "vdd_l2_lvs_1_2_3", },
++	{ "lvs2", 0x8100, "vdd_l2_lvs_1_2_3", },
++	{ "lvs3", 0x8200, "vdd_l2_lvs_1_2_3", },
++	{ "5vs1", 0x8300, "vin_5vs", "ocp-5vs1", },
++	{ "5vs2", 0x8400, "vin_5vs", "ocp-5vs2", },
++	{ }
 +};
 +
- /* Maximum possible digital major revision value */
- #define INF 0xFF
- 
-@@ -1575,7 +1590,8 @@ static const struct spmi_regulator_mapping supported_regulators[] = {
- 	SPMI_VREG(LDO,   HT_P600,  0, INF, HFS430, hfs430, ht_p600, 10000),
- 	SPMI_VREG(LDO,   HT_P150,  0, INF, HFS430, hfs430, ht_p150, 10000),
- 	SPMI_VREG(BUCK,  GP_CTL,   0, INF, SMPS,   smps,   smps,   100000),
--	SPMI_VREG(BUCK,  HFS430,   0, INF, HFS430, hfs430, hfs430,  10000),
-+	SPMI_VREG(BUCK,  HFS430,   0,   3, HFS430, hfs430, hfs430,  10000),
-+	SPMI_VREG(BUCK,  HFSMPS_510, 4, INF, HFSMPS, hfsmps, hfs430, 100000),
- 	SPMI_VREG(LDO,   N300,     0, INF, LDO,    ldo,    nldo1,   10000),
- 	SPMI_VREG(LDO,   N600,     0,   0, LDO,    ldo,    nldo2,   10000),
- 	SPMI_VREG(LDO,   N1200,    0,   0, LDO,    ldo,    nldo2,   10000),
+ static const struct spmi_regulator_data pm8950_regulators[] = {
+ 	{ "s1", 0x1400, "vdd_s1", },
+ 	{ "s2", 0x1700, "vdd_s2", },
 -- 
 2.37.1
 

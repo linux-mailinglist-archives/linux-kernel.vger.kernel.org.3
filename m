@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB3E585F36
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AA4585F3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 16:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236503AbiGaOLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 10:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S237093AbiGaORO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 10:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGaOLf (ORCPT
+        with ESMTP id S229639AbiGaORL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 10:11:35 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2355CDFCA
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:11:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VKwb5pz_1659276688;
-Received: from 30.30.99.227(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VKwb5pz_1659276688)
-          by smtp.aliyun-inc.com;
-          Sun, 31 Jul 2022 22:11:29 +0800
-Message-ID: <7a4d0960-c985-2b5f-bb5d-492542f9f087@linux.alibaba.com>
-Date:   Sun, 31 Jul 2022 22:11:26 +0800
+        Sun, 31 Jul 2022 10:17:11 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 91482DEC9
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 07:17:09 -0700 (PDT)
+Received: (qmail 544533 invoked by uid 1000); 31 Jul 2022 10:17:08 -0400
+Date:   Sun, 31 Jul 2022 10:17:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alexey Klimov <klimov.linux@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        atishp@rivosinc.com, atishp@atishpatra.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog
+ device
+Message-ID: <YuaO5Gx84zonjq7X@rowland.harvard.edu>
+References: <20220725030605.1808710-1-klimov.linux@gmail.com>
+ <Yt5Zn9cXDe9/F9RJ@kroah.com>
+ <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
+ <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
+ <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
+ <20220731082055.GA4008925@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [RFC PATCH] mm: add last level page table numa info to
- /proc/pid/numa_pgtable
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     adobriyan@gmail.com, akpm@linux-foundation.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xhao@linux.alibaba.com
-References: <20220730163528.48377-1-xhao@linux.alibaba.com>
- <YuVqdcY8Ibib2LJa@casper.infradead.org>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <YuVqdcY8Ibib2LJa@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731082055.GA4008925@roeck-us.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,114 +51,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jul 31, 2022 at 01:20:55AM -0700, Guenter Roeck wrote:
+> On Sun, Jul 31, 2022 at 03:34:16AM +0100, Alexey Klimov wrote:
+> > On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
+> > >
+> > > On 26.07.22 02:21, Alexey Klimov wrote:
+> > > > On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >>
+> > > >> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
+> > > >
+> > > > [..]
+> > > >
+> > > >> Anyway, driver looks good to me, nice work!
+> > > >>
+> > > >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > >
+> > > > Thanks, Greg. If you don't mind I'll use your tag in next version
+> > > > after making changes suggested by Guenter since there will be no
+> > > > significant functional changes. If code will change a lot, then the
+> > > > process (Documentation/process/submitting-patches.rst) will require me
+> > > > to drop the tag.
+> > >
+> > > Hi,
+> > >
+> > > while thinking about this a question arose. How does this
+> > > device react to a USB reset? A watchdog that can be disabled
+> > > by a simple reset does not like very reliable to me.
+> > > Do you need to implement pre/post_reset() ?
+> > 
+> > You're right. Upon reset the watchdog is disabled even if it was active before.
+> > Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
+> > looking at Documentation and other drivers it seems that I need to do:
+> > in pre_reset():
+> > mutex_lock() to block any other I/O to the usb device;
+> > __usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
+> > and do not unlock the mutex;
+> > 
+> > in post_reset():
+> > if (watchdog_active())
+> >         __usb_streamlabs_wdt_cmd(START);
+> > mutex_unlock() to allow other's I/O to the usb deivce.
+> > 
+> > Seems right?
+> > 
+> Not necessarily. Is other code doing something similar ?
+> Using a mutex like this creates the risk for hung tasks.
 
-在 2022/7/31 上午1:29, Matthew Wilcox 写道:
-> On Sun, Jul 31, 2022 at 12:35:28AM +0800, Xin Hao wrote:
->> In many data center servers, the shared memory architectures is
->> Non-Uniform Memory Access (NUMA), remote numa node data access
->> often brings a high latency problem, but what we are easy to ignore
->> is that the page table remote numa access, It can also leads to a
->> performance degradation.
->>
->> So there add a new interface in /proc, This will help developers to
->> get more info about performance issues if they are caused by cross-NUMA.
-> Interesting.  The implementation seems rather more complex than
-> necessary though.
->
->> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
->> index 2d04e3470d4c..a51befb47ea8 100644
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
->> @@ -1999,4 +1999,133 @@ const struct file_operations proc_pid_numa_maps_operations = {
->>   	.release	= proc_map_release,
->>   };
->>
->> +struct pgtable_numa_maps {
->> +	unsigned long node[MAX_NUMNODES];
->> +};
->> +
->> +struct pgtable_numa_private {
->> +	struct proc_maps_private proc_maps;
->> +	struct pgtable_numa_maps md;
->> +};
-> struct pgtable_numa_private {
-> 	struct proc_maps_private proc_maps;
-> 	unsigned long node[MAX_NUMNODES];
-> };
->
->> +static void gather_pgtable_stats(struct page *page, struct pgtable_numa_maps *md)
->> +{
->> +	md->node[page_to_nid(page)] += 1;
->> +}
->> +
->> +static struct page *can_gather_pgtable_numa_stats(pmd_t pmd, struct vm_area_struct *vma,
->> +		unsigned long addr)
->> +{
->> +	struct page *page;
->> +	int nid;
->> +
->> +	if (!pmd_present(pmd))
->> +		return NULL;
->> +
->> +	if (pmd_huge(pmd))
->> +		return NULL;
->> +
->> +	page = pmd_page(pmd);
->> +	nid = page_to_nid(page);
->> +	if (!node_isset(nid, node_states[N_MEMORY]))
->> +		return NULL;
->> +
->> +	return page;
->> +}
->> +
->> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
->> +		unsigned long end, struct mm_walk *walk)
->> +{
->> +	struct pgtable_numa_maps *md = walk->private;
->> +	struct vm_area_struct *vma = walk->vma;
->> +	struct page *page;
->> +
->> +	if (pmd_huge(*pmd)) {
->> +		struct page *pmd_page;
->> +
->> +		pmd_page = virt_to_page(pmd);
->> +		if (!pmd_page)
->> +			return 0;
->> +
->> +		if (!node_isset(page_to_nid(pmd_page), node_states[N_MEMORY]))
->> +			return 0;
->> +
->> +		gather_pgtable_stats(pmd_page, md);
->> +		goto out;
->> +	}
->> +
->> +	page = can_gather_pgtable_numa_stats(*pmd, vma, addr);
->> +	if (!page)
->> +		return 0;
->> +
->> +	gather_pgtable_stats(page, md);
->> +
->> +out:
->> +	cond_resched();
->> +	return 0;
->> +}
-> static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
-> 		unsigned long end, struct mm_walk *walk)
-> {
-> 	struct pgtable_numa_private *priv = walk->private;
-> 	struct vm_area_struct *vma = walk->vma;
-> 	struct page *page;
-> 	int nid;
->
-> 	if (pmd_huge(*pmd)) {
-> 		page = virt_to_page(pmd);
-> 	} else {
-> 		page = pmd_page(*pmd);
-> 	}
->
-> 	nid = page_to_nid(page);
-> 	priv->node[nid]++;
->
-> 	return 0;
-> }
-Oh,  Thank you for reviewing the code, i will fix it in the next version.
+Are mutexes intended to be used in situations where one function 
+acquires the lock, then returns, and then a different function releases 
+the lock?  I'm not sure about this.
+
+Perhaps a good old semaphore would be more appropriate.  But it's clear 
+that I/O to the device does need to be mutually exclusive with resets, 
+one way or another.
+
+Alan Stern

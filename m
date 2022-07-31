@@ -2,203 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075BE5861A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594ED5861A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238176AbiGaWLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
+        id S238378AbiGaWOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaWLo (ORCPT
+        with ESMTP id S229710AbiGaWOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:11:44 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962C29592
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 15:11:42 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4LwwT91fytz9tCs;
-        Sun, 31 Jul 2022 22:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659305501; bh=CsOI+E/4KnM+DdNjxS2fc/kMX0NafXZF+YchFal+Wlc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H8b51xMZadM+jdJxTvTOeaCF6P7Te8rpscjyTbBfxh/w3U3rzQQLdSdiiDJJYklE6
-         bjn3lBqk/yhy9xyGr/yHorkL6K/CSah0UWWBTE8HZNbYhf1jyMPr4fv6Nmx543N6WR
-         2/oikrstzi4t3I/+zLLuxg/VOGG23tX0/GkNeM1s=
-X-Riseup-User-ID: DF8F1D7C500EBDCCB3287F70C6FB765612C30DB837C4782BAB02E793DA1936E8
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4LwwT502Tsz1y9N;
-        Sun, 31 Jul 2022 22:11:36 +0000 (UTC)
-Message-ID: <613a3c17-1d76-0a21-5ce2-895f46c2247a@riseup.net>
-Date:   Sun, 31 Jul 2022 19:11:34 -0300
-MIME-Version: 1.0
-Subject: Re: [PATCH v5 4/5] lib/test: introduce cpumask KUnit test suite
-Content-Language: en-US
-To:     Sander Vanheule <sander@svanheule.net>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Gow <davidgow@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Marco Elver <elver@google.com>,
+        Sun, 31 Jul 2022 18:14:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A69DEFE;
+        Sun, 31 Jul 2022 15:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+qm1vAmgi6sjZNEi6Z0fSdbuq7XPAQLGXeiD0XxIuOY=; b=HbUcOri3IfM8aEODm6uq0lPTlX
+        Td1B9C+jQvJNZeArAg9FQVsunSHEatuIuq2N4hLFVV56R06dLus5sIcgladiW9a/3h0XyQL6H7iNo
+        L0LOfaiVQYfU/O+lx0d7lkuOjE7JFd0Ax3x3qT5tMjObgECHRgA46V9Sz3IYsq5et9n6lzd3PcAJ4
+        /vrcYhhisOBYKQrwbs/mLmV8I43ORiM+qeBmov5NH857ExVaiQQ8SRxstAMTqsYx/WT8FDsbiCu9C
+        fdJoXt4jmHaH+VK2/NFg80oN4v84Ixb3zxlkmEwW9zVKtyo2T4QXjc9zucLWm09Ajl0MRzFHjhQ0a
+        5bWQXYvg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oIHCW-006bWs-A2; Sun, 31 Jul 2022 22:14:20 +0000
+Date:   Sun, 31 Jul 2022 23:14:20 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>
-References: <cover.1659077534.git.sander@svanheule.net>
- <85217b5de6d62257313ad7fde3e1969421acad75.1659077534.git.sander@svanheule.net>
- <b6b20883-3fe7-9a5d-ab55-b5a61cef996c@riseup.net>
- <1ad99cc0df85c932a7df18f67560930e37976e2b.camel@svanheule.net>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <1ad99cc0df85c932a7df18f67560930e37976e2b.camel@svanheule.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] make buffer_locked provide an acquire semantics
+Message-ID: <Yub+vPb53zt6dDpn@casper.infradead.org>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jul 31, 2022 at 04:43:08PM -0400, Mikulas Patocka wrote:
+> Let's have a look at this piece of code in __bread_slow:
+> 	get_bh(bh);
+> 	bh->b_end_io = end_buffer_read_sync;
+> 	submit_bh(REQ_OP_READ, 0, bh);
+> 	wait_on_buffer(bh);
+> 	if (buffer_uptodate(bh))
+> 		return bh;
+> Neither wait_on_buffer nor buffer_uptodate contain a memory barrier.
+> Consequently, if someone calls sb_bread and then reads the buffer data,
+> the read of buffer data may be executed before wait_on_buffer(bh) on
+> architectures with weak memory ordering and it may return invalid data.
 
+I think we should be consistent between PageUptodate() and
+buffer_uptodate().  Here's how it's done for pages currently:
 
-On 7/31/22 12:42, Sander Vanheule wrote:
-> On Sun, 2022-07-31 at 12:23 -0300, Maíra Canal wrote:
->> Hi Sander
->>
->> On 7/29/22 04:01, Sander Vanheule wrote:
->>> Add a basic suite of tests for cpumask, providing some tests for empty and
->>> completely filled cpumasks.
->>>
->>> Signed-off-by: Sander Vanheule <sander@svanheule.net>
->>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->>> Suggested-by: Yury Norov <yury.norov@gmail.com>
->>> Cc: Borislav Petkov <bp@alien8.de>
->>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: "H. Peter Anvin" <hpa@zytor.com>
->>> Cc: Ingo Molnar <mingo@redhat.com>
->>> Cc: Marco Elver <elver@google.com>
->>> Cc: Peter Zijlstra <peterz@infradead.org>
->>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>> Cc: Valentin Schneider <vschneid@redhat.com>
->>> Cc: Brendan Higgins <brendanhiggins@google.com>
->>> Cc: David Gow <davidgow@google.com>
->>> Cc: Maíra Canal <mairacanal@riseup.net>
->>> ---
->>> Changes since v4:
->>> - Belated addition of Yury's Suggested-by:
->>> - Follow KUnit style more closely
->>> - Drop full check on cpu_possible_mask
->>> - Update last check on cpu_possible_mask
->>> - Log masks when starting test
->>> - Update commit message 
->>>   
->>> Changes since v3:
->>> - Test for_each_cpu*() over empty mask and cpu_possible_mask
->>> - Add Andy's Reviewed-by
->>> - Use num_{online,present,possible}_cpus() for builtin masks
->>> - Guard against CPU hotplugging during test for dynamic builtin CPU masks
->>>  
->>> Changes since v2:
->>> - Rework for_each_* test macros, as suggested by Yury
->>>
->>> Changes since v1:
->>> - New patch
->>>
->>>  lib/Kconfig.debug  |  12 ++++
->>>  lib/Makefile       |   1 +
->>>  lib/cpumask_test.c | 147 +++++++++++++++++++++++++++++++++++++++++++++
->>>  3 files changed, 160 insertions(+)
->>>  create mode 100644 lib/cpumask_test.c
->>>
->>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->>> index 2e24db4bff19..e85e74646178 100644
->>> --- a/lib/Kconfig.debug
->>> +++ b/lib/Kconfig.debug
->>> @@ -2021,6 +2021,18 @@ config LKDTM
->>>         Documentation on how to use the module can be found in
->>>         Documentation/fault-injection/provoke-crashes.rst
->>>  
->>> +config CPUMASK_KUNIT_TEST
->>> +       tristate "KUnit test for cpumask" if !KUNIT_ALL_TESTS
->>> +       depends on KUNIT
->>> +       default KUNIT_ALL_TESTS
->>> +       help
->>> +         Enable to turn on cpumask tests, running at boot or module load
->>> time.
->>> +
->>> +         For more information on KUnit and unit tests in general, please
->>> refer
->>> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
->>> +
->>> +         If unsure, say N.
->>> +
->>>  config TEST_LIST_SORT
->>>         tristate "Linked list sorting test" if !KUNIT_ALL_TESTS
->>>         depends on KUNIT
->>> diff --git a/lib/Makefile b/lib/Makefile
->>> index bcc7e8ea0cde..9f9db1376538 100644
->>> --- a/lib/Makefile
->>> +++ b/lib/Makefile
->>> @@ -59,6 +59,7 @@ obj-$(CONFIG_TEST_BPF) += test_bpf.o
->>>  obj-$(CONFIG_TEST_FIRMWARE) += test_firmware.o
->>>  obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
->>>  CFLAGS_test_bitops.o += -Werror
->>> +obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_test.o
->>>  obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
->>>  obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
->>>  obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
->>> diff --git a/lib/cpumask_test.c b/lib/cpumask_test.c
->>> new file mode 100644
->>> index 000000000000..0f8059a5e93b
->>> --- /dev/null
->>> +++ b/lib/cpumask_test.c
->>
->> In order to make the tests at lib/ with more compliant naming, it would
->> make more sense to name it test_cpumask.c.
-> 
-> That's what I had originally, exactly because I copied the naming from other
-> files in lib/. That didn't match the style guide [1] which proposes the _test.c
-> or _kunit.c suffix.
+static inline bool folio_test_uptodate(struct folio *folio)
+        bool ret = test_bit(PG_uptodate, folio_flags(folio, 0));
+        /*
+         * Must ensure that the data we read out of the folio is loaded
+         * _after_ we've loaded folio->flags to check the uptodate bit.
+         * We can skip the barrier if the folio is not uptodate, because
+         * we wouldn't be reading anything from it.
+         *
+         * See folio_mark_uptodate() for the other side of the story.
+         */
+        if (ret)
+                smp_rmb();
 
-My mistake!
+        return ret;
 
-> 
-> Most files in lib/ use the test_ prefix (45), but some use the  _test.c suffix
-> (4), or _kunit.c suffix (6). Of the "test_" ones, only 8 are actually KUnit test
-> suites. I personally think the style guide makes a good argument to use a
-> suffix, as that clearly places the test suite next to the relevant file in an
-> alphabetic listing.
-> 
-> Based on the above, would you agree with using "cpumask_kunit.c" as the
-> filename? That distinguishes it from the non-KUnit test files, and follows the
-> style guide.
+...
 
-I believe this would be the best option as well, as there is many
-different types of tests in this folder. Thank you for noticing this!
+static __always_inline void folio_mark_uptodate(struct folio *folio)
+        /*
+         * Memory barrier must be issued before setting the PG_uptodate bit,
+         * so that all previous stores issued in order to bring the folio
+         * uptodate are actually visible before folio_test_uptodate becomes true.
+         */
+        smp_wmb();
+        set_bit(PG_uptodate, folio_flags(folio, 0));
 
-Best Regards,
-- Maíra Canal
-
-> 
-> [1] https://docs.kernel.org/dev-tools/kunit/style.html#test-file-and-module-names
-> 
->>
->> Thank you for the respin to the series! All tests are passing now.
->>
->> Tested-by: Maíra Canal <mairacanal@riseup.net>
-> 
-> Thank you for testing!
-> 
-> Best,
-> Sander
+I'm happy for these to also be changed to use acquire/release; no
+attachment to the current code.  But bufferheads & pages should have the
+same semantics, or we'll be awfully confused.

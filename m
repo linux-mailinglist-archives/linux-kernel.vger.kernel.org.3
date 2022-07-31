@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92D1585E86
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EC3585E89
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbiGaKvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 06:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S236470AbiGaKu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 06:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234690AbiGaKuu (ORCPT
+        with ESMTP id S233191AbiGaKus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 06:50:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02FF11820
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:50:49 -0700 (PDT)
+        Sun, 31 Jul 2022 06:50:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5603F11820
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:50:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A97F2CE0E54
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E616060C01
         for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 10:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23808C433D6;
-        Sun, 31 Jul 2022 10:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7957FC433C1;
+        Sun, 31 Jul 2022 10:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659264645;
-        bh=VtEsSiV656Ya2AG7KrEC96VqMVryBOdbrqBclir5X1Q=;
+        s=k20201202; t=1659264646;
+        bh=VRI3vs/UoRRt7XIQQ4yCSp0v7mr3AjgRc8BdnSir5mE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aTzVNqIBIN8J+XRM1oyb8SToi0SJLDS7Epl7wKvVRMxWxXoRx4Xn1ubhT1Cxfn4mk
-         R/nGPwO2tqFEcegWZm8U2fsYZkx5RHZbzJhE1+Cb8a5teBQye5n/9xyq24hkfwow1r
-         fkaCquJ/Lrl1y1IQjvXXsnaCjDaArXxmw/wEWRwVHvD57rpQD07CwQqhgQFSVWnkPn
-         T0vAWnNt7Z4u3Au3Xo9WysjNDOqUZWdxtZ9msa2inq9yLTIhK0zbQnSxSRsO/ELROU
-         4nPftr404T2ZxZDEv26olRAaE0ZF40Nz9XAUlSpRqtFcQsm6yoWNKNIY8LNz+nglqE
-         D18nQUNXMUo1g==
+        b=nOLPHLvojvV6Q2/Cyata8YNiuAOLv2bNmMt0bIYKnglxQoktVeWMyk3pZZL4rRqUJ
+         YwDYL2bd7T2ALF0Y/E0EzGC5FZHTIlXaFkVdWm01uFfubbv4aao+aOo11RhUgsIrT3
+         /yLXyjieJbTt8v8optuB0DS3r9pMWHlSh/TSi3n7bgKdp04AeSoXe9sjl3iHbA3BGo
+         PmPv8i+IfTq/at1faQ8bS/geWPG8J7raRBu2d31T2Xxw3Tj3/GIG+Oq0qINwcl7Ahq
+         sl/26BI7rfGpO1PpoVaDZeN4t8ZFh+AC40VHo0PFeWS3exSkXSuOdF3tIIX/B9BuEy
+         Y9VCr5eItdC/w==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Tal Cohen <talcohen@habana.ai>
-Subject: [PATCH 3/8] habanalabs: fix command submission sanity check
-Date:   Sun, 31 Jul 2022 13:50:32 +0300
-Message-Id: <20220731105037.545106-3-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 4/8] habanalabs: avoid returning a valid handle if map_block() fails
+Date:   Sun, 31 Jul 2022 13:50:33 +0300
+Message-Id: <20220731105037.545106-4-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220731105037.545106-1-ogabbay@kernel.org>
 References: <20220731105037.545106-1-ogabbay@kernel.org>
@@ -52,66 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tal Cohen <talcohen@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-When a CS is submitted, the ioctl handler checks the CS
-flags and performs a sanity check, according to its value.
-As new CS flags are added, the sanity check needs to be updated
-according to the new flags.
+map_block() sets the block id handle even if get_hw_block_id() fails,
+and in this case it uses block id 0 which might be a valid id.
+Modify it to set the handle only if get_hw_block_id() succeeds.
 
-Signed-off-by: Tal Cohen <talcohen@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../misc/habanalabs/common/command_submission.c    | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/misc/habanalabs/common/memory.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
-index 90a4574cbe2d..304e4f3b0e7e 100644
---- a/drivers/misc/habanalabs/common/command_submission.c
-+++ b/drivers/misc/habanalabs/common/command_submission.c
-@@ -12,7 +12,9 @@
- #include <linux/slab.h>
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 61bc1bfe984a..0698c3c363bd 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1418,18 +1418,23 @@ static int unmap_device_va(struct hl_ctx *ctx, struct hl_mem_in *args,
+ 	return rc;
+ }
  
- #define HL_CS_FLAGS_TYPE_MASK	(HL_CS_FLAGS_SIGNAL | HL_CS_FLAGS_WAIT | \
--					HL_CS_FLAGS_COLLECTIVE_WAIT)
-+			HL_CS_FLAGS_COLLECTIVE_WAIT | HL_CS_FLAGS_RESERVE_SIGNALS_ONLY | \
-+			HL_CS_FLAGS_UNRESERVE_SIGNALS_ONLY)
+-static int map_block(struct hl_device *hdev, u64 address, u64 *handle,
+-			u32 *size)
++static int map_block(struct hl_device *hdev, u64 address, u64 *handle, u32 *size)
+ {
+-	u32 block_id = 0;
++	u32 block_id;
+ 	int rc;
+ 
++	*handle = 0;
++	if (size)
++		*size = 0;
 +
+ 	rc = hdev->asic_funcs->get_hw_block_id(hdev, address, size, &block_id);
++	if (rc)
++		return rc;
  
- #define MAX_TS_ITER_NUM 10
+ 	*handle = block_id | HL_MMAP_TYPE_BLOCK;
+ 	*handle <<= PAGE_SHIFT;
  
-@@ -1253,6 +1255,7 @@ static int hl_cs_sanity_checks(struct hl_fpriv *hpriv, union hl_cs_args *args)
- 	u32 cs_type_flags, num_chunks;
- 	enum hl_device_status status;
- 	enum hl_cs_type cs_type;
-+	bool is_sync_stream;
+-	return rc;
++	return 0;
+ }
  
- 	if (!hl_device_operational(hdev, &status)) {
- 		return -EBUSY;
-@@ -1276,9 +1279,10 @@ static int hl_cs_sanity_checks(struct hl_fpriv *hpriv, union hl_cs_args *args)
- 	cs_type = hl_cs_get_cs_type(cs_type_flags);
- 	num_chunks = args->in.num_chunks_execute;
- 
--	if (unlikely((cs_type == CS_TYPE_SIGNAL || cs_type == CS_TYPE_WAIT ||
--			cs_type == CS_TYPE_COLLECTIVE_WAIT) &&
--			!hdev->supports_sync_stream)) {
-+	is_sync_stream = (cs_type == CS_TYPE_SIGNAL || cs_type == CS_TYPE_WAIT ||
-+			cs_type == CS_TYPE_COLLECTIVE_WAIT);
-+
-+	if (unlikely(is_sync_stream && !hdev->supports_sync_stream)) {
- 		dev_err(hdev->dev, "Sync stream CS is not supported\n");
- 		return -EINVAL;
- 	}
-@@ -1288,7 +1292,7 @@ static int hl_cs_sanity_checks(struct hl_fpriv *hpriv, union hl_cs_args *args)
- 			dev_err(hdev->dev, "Got execute CS with 0 chunks, context %d\n", ctx->asid);
- 			return -EINVAL;
- 		}
--	} else if (num_chunks != 1) {
-+	} else if (is_sync_stream && num_chunks != 1) {
- 		dev_err(hdev->dev,
- 			"Sync stream CS mandates one chunk only, context %d\n",
- 			ctx->asid);
+ static void hw_block_vm_close(struct vm_area_struct *vma)
 -- 
 2.25.1
 

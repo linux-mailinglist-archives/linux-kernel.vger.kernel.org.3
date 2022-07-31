@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA46586187
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 23:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFF4586190
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 23:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbiGaVKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 17:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S238224AbiGaVk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 17:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238321AbiGaVJo (ORCPT
+        with ESMTP id S232236AbiGaVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 17:09:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9B0E017
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 14:09:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FE8AB80DD1
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD08C43143;
-        Sun, 31 Jul 2022 21:09:40 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oIGBv-007Gjw-2z;
-        Sun, 31 Jul 2022 17:09:39 -0400
-Message-ID: <20220731210939.761903601@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sun, 31 Jul 2022 17:09:22 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Andreas Schwab <schwab@suse.de>
-Subject: [for-next][PATCH 4/4] rtla: Define syscall numbers for riscv
-References: <20220731210918.097591536@goodmis.org>
+        Sun, 31 Jul 2022 17:40:26 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC1A6410;
+        Sun, 31 Jul 2022 14:40:25 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A43C0415;
+        Sun, 31 Jul 2022 23:40:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1659303623;
+        bh=97FHXxocgYc7SAGP4w3juXWQhbadxWYjWPVgSTocU8w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cKkDwYbR/7NE9aXrONa1+kbmGcIrzk5Xx+0gg9Qpv6nDChsXG49A22jEo08JlmXYY
+         xWUiFbFa7pbr0Px563FMmp9rvOvQPUWv4AgHu6oorCCwdk2lVL5Sm3jrNoV5GllVQH
+         CG9zj4TF0YFTIOxK6op5D8Swe611zIzpZBkYv8pg=
+Date:   Mon, 1 Aug 2022 00:40:19 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     prabhakar.csengg@gmail.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: platform: ti: Fix typo 'the the' in comment
+Message-ID: <Yub2w2GvCqgDI3w3@pendragon.ideasonboard.com>
+References: <20220722063341.69913-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220722063341.69913-1-slark_xiao@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,31 +46,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Schwab <schwab@suse.de>
+Hi Slark,
 
-RISC-V uses the same (generic) syscall numbers as ARM64.
+Thank you for the patch.
 
-Link: https://lkml.kernel.org/r/mvma68wl2ul.fsf@suse.de
+On Fri, Jul 22, 2022 at 02:33:41PM +0800, Slark Xiao wrote:
+> Replace 'the the' with 'the' in the comment.
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-Signed-off-by: Andreas Schwab <schwab@suse.de>
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/tracing/rtla/src/utils.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-index 5ae2fa96fde1..663a047f794d 100644
---- a/tools/tracing/rtla/src/utils.c
-+++ b/tools/tracing/rtla/src/utils.c
-@@ -225,7 +225,7 @@ long parse_ns_duration(char *val)
- #elif __arm__
- # define __NR_sched_setattr	380
- # define __NR_sched_getattr	381
--#elif __aarch64__
-+#elif __aarch64__ || __riscv
- # define __NR_sched_setattr	274
- # define __NR_sched_getattr	275
- #elif __powerpc__
+> ---
+>  drivers/media/platform/ti/davinci/vpbe.c | 2 +-
+>  drivers/media/platform/ti/omap3isp/isp.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
+> index 5f0aeb744e81..509ecc84624e 100644
+> --- a/drivers/media/platform/ti/davinci/vpbe.c
+> +++ b/drivers/media/platform/ti/davinci/vpbe.c
+> @@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
+>   * vpbe_get_output - Get output
+>   * @vpbe_dev: vpbe device ptr
+>   *
+> - * return current vpbe output to the the index
+> + * return current vpbe output to the index
+>   */
+>  static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
+>  {
+> diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+> index 4c937f3f323e..f99dda7337b9 100644
+> --- a/drivers/media/platform/ti/omap3isp/isp.c
+> +++ b/drivers/media/platform/ti/omap3isp/isp.c
+> @@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
+>   * To solve this problem power management support is split into prepare/complete
+>   * and suspend/resume operations. The pipelines are stopped in prepare() and the
+>   * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
+> - * resume(), and the the pipelines are restarted in complete().
+> + * resume(), and the pipelines are restarted in complete().
+>   *
+>   * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
+>   * yet.
+
 -- 
-2.35.1
+Regards,
+
+Laurent Pinchart

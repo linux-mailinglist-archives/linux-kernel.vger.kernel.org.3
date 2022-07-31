@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEB7585E7B
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B72F585E83
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 12:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiGaKqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 06:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S235208AbiGaKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 06:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiGaKqn (ORCPT
+        with ESMTP id S232596AbiGaKup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 06:46:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD41DFB6;
-        Sun, 31 Jul 2022 03:46:42 -0700 (PDT)
+        Sun, 31 Jul 2022 06:50:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF40011821
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 03:50:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3686E60A4B;
-        Sun, 31 Jul 2022 10:46:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B06C433D6;
-        Sun, 31 Jul 2022 10:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659264401;
-        bh=M3eRtF83kzIsIL0kR7hbVLVI7cGUhr79ISKJnJAQfMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uYy5RlrT/2DkzhiaFGLxK3fTTutR9oYyKvggsuq53z/M2HExyCZo94lnEw8S7/JxP
-         xsBvtMfvFs3MGk9KYtLZyUo9mcOdrl6YEsC+Z0kSZRCz3ih5nLiVv4MetFgv2D7MnQ
-         Gkk516xp6fNdvxP96Ep9bQAGLc3+lwRh1T/ZqSPM=
-Date:   Sun, 31 Jul 2022 12:46:39 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     stable@vger.kernel.org, ming.lei@redhat.com,
-        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Subject: Re: [PATCH stable 4.19 0/1] fix io hung for scsi
-Message-ID: <YuZdjxjYIo5N2qMw@kroah.com>
-References: <20220730084651.4093719-1-yukuai1@huaweicloud.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8843CB80CC5
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 10:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC69C433D6;
+        Sun, 31 Jul 2022 10:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659264642;
+        bh=Qm90ax5F/85o497xB98g0dIa3GOLg1AqvHKn/kB035o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ovpUhqhhAkqoNPthPEexCSVlkbTN8Z1hZXHZLBpqAbT1bo3dVgcv0XzGE7Ox4iHEO
+         RYlQw10BNQ42HoUYV9FxdUafQZ0RtwZSWF9UJePi/20AUM62gxEKW80Co15goak4s6
+         +GYaSOEBUuFrU/X90gFkFXsvvwMjRIP0X3QZwGeeQpa6ur8czHjLr+uZt3weuBNVPX
+         fjVJlVTk4pfnoaX4yvfhQM22oREcNGZBmQkJvzHMc9+wJ4lRDEggP+2GO6zwymcc+e
+         Qx3UM4x/UKfBweiLd43R14XFAlzuJFwwBpzH00I5x5CI0ie76EhhfNpBQbP8LoK4X7
+         0A4kmgZC9b2XQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ohad Sharabi <osharabi@habana.ai>
+Subject: [PATCH 1/8] habanalabs/gaudi: fix print format for div_sel
+Date:   Sun, 31 Jul 2022 13:50:30 +0300
+Message-Id: <20220731105037.545106-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220730084651.4093719-1-yukuai1@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,20 +50,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 04:46:50PM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> One of our product reported a io hung problem, turns out the problem
-> can be fixed by the patch.
-> 
-> I'm not sure why this patch is not backported yet, however, please
-> consider it in 4.19 lts.
+From: Ohad Sharabi <osharabi@habana.ai>
 
-It was not backported as it did not apply as-is.  Can you also provide a
-version for 5.4.y so that if someone were to upgrade to a newer kernel
-version, they would not have a regression?  Once we have that, then we
-can accept this 4.19.y version.
+Print format was for int (%d) while variable is u32.
 
-thanks,
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/gaudi/gaudi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-greg k-h
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 4d11efed3e64..866dc4b891d6 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -939,9 +939,7 @@ static int gaudi_fetch_psoc_frequency(struct hl_device *hdev)
+ 			else
+ 				freq = pll_clk / (div_fctr + 1);
+ 		} else {
+-			dev_warn(hdev->dev,
+-				"Received invalid div select value: %d",
+-				div_sel);
++			dev_warn(hdev->dev, "Received invalid div select value: %#x", div_sel);
+ 			freq = 0;
+ 		}
+ 	}
+-- 
+2.25.1
+

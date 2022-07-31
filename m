@@ -2,127 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98945585E47
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 11:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CEF585E4B
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 11:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiGaJYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 05:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S232474AbiGaJZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 05:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGaJYE (ORCPT
+        with ESMTP id S229456AbiGaJZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 05:24:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C786EE1A
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 02:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659259443; x=1690795443;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1zglDAHHWIbjrrkhX58teupHCItpkmyGYMQsU0QCkco=;
-  b=CWhfYWT7hV/xVynYz7jBWd9SBypjYfsK1ED1K+TLQYZIuB6NFBpJJdiq
-   sIAWytCkvRoRz9/p7Dpz4G/eMT2Dl1yKW49EAxzZLcTZGCQ5v0/DC503U
-   yyUvGgjDfGn46SwGiOCt2c9Ft8KoKx0WJjuhHn5WjOmhpeE3NwHk5yrTZ
-   EVx5mt3HnFEcwGRY5acJwzuEmwXyrZjjKHwnEuC+4R8XjfnVsO1UcE2I/
-   oDDiI/m6XGqsnePxz2pu7YwjE5dfcORQLNvY7nvVM2A72CL9lmqDvOHLw
-   j/TSmHbwLiLnH8PrUV8UOuQ38wWYozjG/k5khgjCyDfWe02sMz0N8VVyi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="350687611"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350687611"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 02:24:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="669728529"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Jul 2022 02:24:01 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oI5B2-000Dy9-2B;
-        Sun, 31 Jul 2022 09:24:00 +0000
-Date:   Sun, 31 Jul 2022 17:23:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
-Subject: [steev:linux-v5.19.0-rc8-tests 68/182]
- drivers/gpu/drm/msm/dp/dp_hpd.c:63:53: warning: converting the enum constant
- to a boolean
-Message-ID: <202207311753.OE9Jwsti-lkp@intel.com>
+        Sun, 31 Jul 2022 05:25:46 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC454B873;
+        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id k15so2108032pfh.1;
+        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fgm3Q++1bshM2vl04u7TMk9GX8r0/GgZjPpDoVpdNEw=;
+        b=nOYN6MEV8djhhHocvXe+hviriAisVPDKDjgJEmXQnC7GE3aIWE9Ofw/xhg2liiM82U
+         +KwO7/qekJpFxGJTcIQs6Ctl4GJ9n7x29rIcz+B4lWnbhR8/e/3AaZFRo8KHc1eoRael
+         X69jxEngBuKi3ivSukSnVKMM/JaZVdbWvwTwPK3t/I9QelyFY1ZC3lUHBLd4EA29jYwp
+         Db7keNveNxVLU8fBjzU7u0+K4F6xtZ+/Q8cAztfuOCffqEbLLomDQ45aApYY0HBpbPk2
+         SYHx7082vuAwMVHkTaOO5s83Pk9GFsL75hDgnJ/h/ctiqjRX+ZmWGCl9ZTaTKar4Kp6G
+         7KOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fgm3Q++1bshM2vl04u7TMk9GX8r0/GgZjPpDoVpdNEw=;
+        b=hdlrO4RmmUpZIPGFJUjH1Ha1ifA3gvyA3nVoaUIGISoI3tLQe6B2TCCJkS3j4Q6lj9
+         rH1Yf/jZiLoxFA3lnyVov8u+QmL9xVKF2jUhpXgiOcN1Ki/NmdhdqUK0z+GSzfQSKqlF
+         eDOly/4dovD/St4GBXM5ViH15jJtmAv6PZ/lYDn7E3IHri762h31kbFRIJomHqQI48Im
+         o2PM/mtNTXj7aAvoyu1zeQqMRVmAkYyURNpQd3fcpn8XLJJw9GrpuF/KYpCF3JMLqyUF
+         pThwSa7ON/kLIr/2Uwr9nOhuasDLkYc5BMfdbTf9WAF3GKz1IJ6juggDWaHcN7ytq3J7
+         4itg==
+X-Gm-Message-State: ACgBeo0CXPNGeM35IrskWHzi+zZX3YhuM4iPmTrkDrpRITF09ky1C45D
+        nI8FfrjBGZKIXIbsppv2dAU=
+X-Google-Smtp-Source: AA6agR7VU84e7l6aGVkbcFw+tkLywcnjeN6b4ZIQYsTlc3xYB3BhyXpmuUjM/Tsb71Wj1g6nvgb6AQ==
+X-Received: by 2002:a63:5425:0:b0:41b:a9e0:bfc1 with SMTP id i37-20020a635425000000b0041ba9e0bfc1mr6783924pgb.206.1659259545257;
+        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
+Received: from biggie.. ([103.230.148.186])
+        by smtp.gmail.com with ESMTPSA id t1-20020a170902e84100b0016d1b708729sm7147827plg.132.2022.07.31.02.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 02:25:44 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     keescook@chromium.org, shuah@kernel.org, brauner@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, guoren@kernel.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>, luto@amacapital.net,
+        wad@chromium.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bpf@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] selftests/seccomp: Check CAP_SYS_ADMIN capability in the test mode_filter_without_nnp
+Date:   Sun, 31 Jul 2022 14:55:29 +0530
+Message-Id: <20220731092529.28760-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
-head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
-commit: 69fde892d28706172f6cfa4ae11d81712521c84c [68/182] drm/msm/dp: Add typec_mux implementation
-config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311753.OE9Jwsti-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/steev/linux/commit/69fde892d28706172f6cfa4ae11d81712521c84c
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev linux-v5.19.0-rc8-tests
-        git checkout 69fde892d28706172f6cfa4ae11d81712521c84c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/interconnect/qcom/
+In the "mode_filter_without_nnp" test in seccomp_bpf, there is currently
+a TODO which asks to check the capability CAP_SYS_ADMIN instead of euid.
+This patch adds support to check if the calling process has the flag 
+CAP_SYS_ADMIN, and also if this flag has CAP_EFFECTIVE set.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/dp/dp_hpd.c:63:53: warning: converting the enum constant to a boolean [-Wint-in-bool-context]
-                   usbpd->multi_func = pin_assign == DP_PIN_ASSIGN_C || DP_PIN_ASSIGN_E;
-                                                                     ^
-   1 warning generated.
-
-
-vim +63 drivers/gpu/drm/msm/dp/dp_hpd.c
-
-    52	
-    53	static int dp_hpd_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
-    54	{
-    55		struct dp_hpd_private *dp_hpd = typec_mux_get_drvdata(mux);
-    56		struct dp_usbpd *usbpd = &dp_hpd->dp_usbpd;
-    57		struct typec_displayport_data *dp_data = state->data;
-    58		int pin_assign = 0;
-    59	
-    60		if (dp_data) {
-    61			pin_assign = DP_CONF_GET_PIN_ASSIGN(dp_data->conf);
-    62			usbpd->hpd_irq = !!(dp_data->status & DP_STATUS_IRQ_HPD);
-  > 63			usbpd->multi_func = pin_assign == DP_PIN_ASSIGN_C || DP_PIN_ASSIGN_E;
-    64		}
-    65	
-    66		if (!pin_assign) {
-    67			if (dp_hpd->connected) {
-    68				dp_hpd->connected = false;
-    69				dp_hpd->dp_cb->disconnect(dp_hpd->dev);
-    70			}
-    71		} else if (!dp_hpd->connected) {
-    72			dp_hpd->connected = true;
-    73			dp_hpd->dp_cb->configure(dp_hpd->dev);
-    74		} else {
-    75			dp_hpd->dp_cb->attention(dp_hpd->dev);
-    76		}
-    77	
-    78		return 0;
-    79	}
-    80	
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 136df5b76319..16b0edc520ef 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -392,6 +392,8 @@ TEST(mode_filter_without_nnp)
+ 		.filter = filter,
+ 	};
+ 	long ret;
++	cap_t cap = cap_get_proc();
++	cap_flag_value_t is_cap_sys_admin = 0;
+ 
+ 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, NULL, 0, 0);
+ 	ASSERT_LE(0, ret) {
+@@ -400,8 +402,8 @@ TEST(mode_filter_without_nnp)
+ 	errno = 0;
+ 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
+ 	/* Succeeds with CAP_SYS_ADMIN, fails without */
+-	/* TODO(wad) check caps not euid */
+-	if (geteuid()) {
++	cap_get_flag(cap, CAP_SYS_ADMIN, CAP_EFFECTIVE, &is_cap_sys_admin);
++	if (!is_cap_sys_admin) {
+ 		EXPECT_EQ(-1, ret);
+ 		EXPECT_EQ(EACCES, errno);
+ 	} else {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

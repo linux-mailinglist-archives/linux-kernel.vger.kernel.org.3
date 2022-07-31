@@ -2,192 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C0158607C
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E278586091
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbiGaTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 15:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S237865AbiGaTFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 15:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiGaTBP (ORCPT
+        with ESMTP id S237724AbiGaTEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 15:01:15 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D33DEE0E
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 12:01:14 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id z12so1525072wrs.9
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 12:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6pSG7mQOlq9VAm3mg0gHXQ/IXxt0kekrqZ6fENnFSV0=;
-        b=kEQFlBAG2kC97S15SIhVoN74Dvo3BXa8WVXfSXSWvptEu+ErgIusaSukMXVUU+4sU5
-         5dMjwhxEV8dI3afW2aH/7HNWh9RzHWv2NEMbxHCstPft0Bka1kgI2T1Cuq9OtNclXia/
-         3bvk0Gw9O9EGC/n3qoDWfwO+2uR+nokDDWGJqerTM5GyM2bP5B25uaQhOtf4IN2+2Z2Q
-         ozbJUFPrMPYYrlTvmw7Sj7hGXKvWpXs6mttFV5Y+pXLq/SMDQ7ZKfxRl8Rqyxw2sK/Ku
-         Ubmtx9nBEuvv5COeCRuE8KkyI3wHDBDJX1fwGTAvpb9FEI0xJhICjjbbnpXhUWALHrbr
-         AKDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6pSG7mQOlq9VAm3mg0gHXQ/IXxt0kekrqZ6fENnFSV0=;
-        b=QDTJ0JVhXgJyPw9BtCOnLLNHVgyMNVccKfmvpS0+W43RZ5kB72wCStqI/LXWvrRMeW
-         jSKQm6qj2p2LlBt24yS6shQ/XnE52OeW/Iyzmn5B/lf2vzBEm/600doNITEroL0PXLz8
-         fgfJXGzBhoHXFmOV+R8aWgofB1yaV2KewIZVfKEsd61JgR722WJ/M1+ndpbkDv4iK9bJ
-         6BPOlI1hAbCkvBxXaUpKtL2mgH4Zh7w037kdDKWs9NHiCcnsvXcfsF+xCZU3BSx1XmNu
-         e6MFVrvpJPVNfYbh6OMLaOxC4MM57qBapB2YN6RjcZ7EoPespzpA5bdD/L0WEcyFGP76
-         N1HA==
-X-Gm-Message-State: ACgBeo34SGWoSp9oxzRx1CUdO+/xP64nazX9KJ40lU+fJ4qQTZb4ShXn
-        G/77xpNTsk9dSwddfYg+d2s=
-X-Google-Smtp-Source: AA6agR6AdWGGfjQp3H0JIbnI25U2fIZ3wedUXiIvnq7oMSDCU0I0erX7/ySA7Y0oMOSdsqPi6kgaag==
-X-Received: by 2002:a5d:46ca:0:b0:220:5f9b:9a77 with SMTP id g10-20020a5d46ca000000b002205f9b9a77mr2531111wrs.622.1659294073003;
-        Sun, 31 Jul 2022 12:01:13 -0700 (PDT)
-Received: from localhost.localdomain (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
-        by smtp.gmail.com with ESMTPSA id bs18-20020a056000071200b0021dd08ad8d7sm1254280wrb.46.2022.07.31.12.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 12:01:11 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] fs/isofs: Replace kmap() with kmap_local_page()
-Date:   Sun, 31 Jul 2022 21:01:01 +0200
-Message-Id: <20220731190101.7928-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 31 Jul 2022 15:04:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA18EE0E
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 12:04:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D280B80DD0
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03833C433D6;
+        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oIEEp-007G1a-2v;
+        Sun, 31 Jul 2022 15:04:31 -0400
+Message-ID: <20220731190329.641602282@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Sun, 31 Jul 2022 15:03:29 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-next][PATCH 00/21] tracing: Updates for 5.20
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+Daniel Bristot de Oliveira (16):
+      rv: Add Runtime Verification (RV) interface
+      rv: Add runtime reactors interface
+      rv/include: Add helper functions for deterministic automata
+      rv/include: Add deterministic automata monitor definition via C macros
+      rv/include: Add instrumentation helper functions
+      Documentation/rv: Add a basic documentation
+      tools/rv: Add dot2c
+      Documentation/rv: Add deterministic automaton documentation
+      tools/rv: Add dot2k
+      Documentation/rv: Add deterministic automata monitor synthesis documentation
+      Documentation/rv: Add deterministic automata instrumentation documentation
+      rv/monitor: Add the wip monitor skeleton created by dot2k
+      rv/monitor: Add the wip monitor
+      rv/monitor: Add the wwnr monitor
+      rv/reactor: Add the printk reactor
+      rv/reactor: Add the panic reactor
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-Tasks can be preempted and, when scheduled to run again, the kernel
-virtual addresses are restored and still valid. It is faster than kmap()
-in kernels with HIGHMEM enabled.
+Steven Rostedt (Google) (5):
+      USB: mtu3: tracing: Use the new __vstring() helper
+      batman-adv: tracing: Use the new __vstring() helper
+      tracing: Use a copy of the va_list for __assign_vstr()
+      ftrace/x86: Add back ftrace_expected assignment
+      tracing: Use a struct alignof to determine trace event field alignment
 
-Since kmap_local_page() can be safely used in compress.c, it should be
-called everywhere instead of kmap().
-
-Therefore, replace kmap() with kmap_local_page() in compress.c. Where it
-is needed, use memzero_page() instead of open coding kmap_local_page()
-plus memset() to fill the pages with zeros. Delete the redundant
-flush_dcache_page() in the two call sites of memzero_page().
-
-Tested with mkisofs on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
-with HIGHMEM64GB enabled.
-
-Cc: Jan Kara <jack@suse.cz>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-Many thanks to Jan Kara for the comments and suggestions provided as
-reply to my previous RFC.[1] Furthermore, I want to thank Ira Weiny for
-the advice he provided privately, especially about how to use mkisofs to
-test that this patch works properly.
-
-[1] https://lore.kernel.org/lkml/20220726145024.rryvw7ot7j2c6tqv@quack3/ 
-
- fs/isofs/compress.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/fs/isofs/compress.c b/fs/isofs/compress.c
-index 95a19f25d61c..f17754484a75 100644
---- a/fs/isofs/compress.c
-+++ b/fs/isofs/compress.c
-@@ -67,8 +67,7 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 		for ( i = 0 ; i < pcount ; i++ ) {
- 			if (!pages[i])
- 				continue;
--			memset(page_address(pages[i]), 0, PAGE_SIZE);
--			flush_dcache_page(pages[i]);
-+			memzero_page(pages[i], 0, PAGE_SIZE);
- 			SetPageUptodate(pages[i]);
- 		}
- 		return ((loff_t)pcount) << PAGE_SHIFT;
-@@ -120,7 +119,7 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 	       zerr != Z_STREAM_END) {
- 		if (!stream.avail_out) {
- 			if (pages[curpage]) {
--				stream.next_out = page_address(pages[curpage])
-+				stream.next_out = kmap_local_page(pages[curpage])
- 						+ poffset;
- 				stream.avail_out = PAGE_SIZE - poffset;
- 				poffset = 0;
-@@ -176,6 +175,10 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 				flush_dcache_page(pages[curpage]);
- 				SetPageUptodate(pages[curpage]);
- 			}
-+			if (stream.next_out != (char *)zisofs_sink_page) {
-+				kunmap_local(stream.next_out);
-+				stream.next_out = NULL;
-+			}
- 			curpage++;
- 		}
- 		if (!stream.avail_in)
-@@ -183,6 +186,8 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 	}
- inflate_out:
- 	zlib_inflateEnd(&stream);
-+	if (stream.next_out && stream.next_out != (char *)zisofs_sink_page)
-+		kunmap_local(stream.next_out);
- 
- z_eio:
- 	mutex_unlock(&zisofs_zlib_lock);
-@@ -283,9 +288,7 @@ static int zisofs_fill_pages(struct inode *inode, int full_page, int pcount,
- 	}
- 
- 	if (poffset && *pages) {
--		memset(page_address(*pages) + poffset, 0,
--		       PAGE_SIZE - poffset);
--		flush_dcache_page(*pages);
-+		memzero_page(*pages, poffset, PAGE_SIZE - poffset);
- 		SetPageUptodate(*pages);
- 	}
- 	return 0;
-@@ -343,10 +346,8 @@ static int zisofs_read_folio(struct file *file, struct folio *folio)
- 	for (i = 0; i < pcount; i++, index++) {
- 		if (i != full_page)
- 			pages[i] = grab_cache_page_nowait(mapping, index);
--		if (pages[i]) {
-+		if (pages[i])
- 			ClearPageError(pages[i]);
--			kmap(pages[i]);
--		}
- 	}
- 
- 	err = zisofs_fill_pages(inode, full_page, pcount, pages);
-@@ -357,7 +358,6 @@ static int zisofs_read_folio(struct file *file, struct folio *folio)
- 			flush_dcache_page(pages[i]);
- 			if (i == full_page && err)
- 				SetPageError(pages[i]);
--			kunmap(pages[i]);
- 			unlock_page(pages[i]);
- 			if (i != full_page)
- 				put_page(pages[i]);
--- 
-2.37.1
-
+----
+ Documentation/trace/index.rst                      |   1 +
+ .../trace/rv/da_monitor_instrumentation.rst        | 171 +++++
+ Documentation/trace/rv/da_monitor_synthesis.rst    | 147 ++++
+ Documentation/trace/rv/deterministic_automata.rst  | 184 +++++
+ Documentation/trace/rv/index.rst                   |  14 +
+ Documentation/trace/rv/monitor_wip.rst             |  55 ++
+ Documentation/trace/rv/monitor_wwnr.rst            |  45 ++
+ Documentation/trace/rv/runtime-verification.rst    | 231 ++++++
+ arch/x86/kernel/ftrace.c                           |   1 +
+ drivers/usb/mtu3/mtu3_trace.h                      |   6 +-
+ include/linux/rv.h                                 |  70 ++
+ include/linux/sched.h                              |  11 +
+ include/rv/automata.h                              |  75 ++
+ include/rv/da_monitor.h                            | 544 ++++++++++++++
+ include/rv/instrumentation.h                       |  29 +
+ include/trace/events/rv.h                          | 142 ++++
+ include/trace/stages/stage4_event_fields.h         |   8 +-
+ include/trace/stages/stage6_event_callback.h       |   7 +-
+ kernel/fork.c                                      |  14 +
+ kernel/trace/Kconfig                               |   2 +
+ kernel/trace/Makefile                              |   1 +
+ kernel/trace/rv/Kconfig                            |  78 ++
+ kernel/trace/rv/Makefile                           |   8 +
+ kernel/trace/rv/monitors/wip/wip.c                 |  88 +++
+ kernel/trace/rv/monitors/wip/wip.h                 |  46 ++
+ kernel/trace/rv/monitors/wwnr/wwnr.c               |  87 +++
+ kernel/trace/rv/monitors/wwnr/wwnr.h               |  46 ++
+ kernel/trace/rv/reactor_panic.c                    |  43 ++
+ kernel/trace/rv/reactor_printk.c                   |  42 ++
+ kernel/trace/rv/rv.c                               | 799 +++++++++++++++++++++
+ kernel/trace/rv/rv.h                               |  68 ++
+ kernel/trace/rv/rv_reactors.c                      | 508 +++++++++++++
+ kernel/trace/trace.c                               |   2 +
+ kernel/trace/trace.h                               |   9 +
+ net/batman-adv/trace.h                             |   9 +-
+ tools/verification/dot2/Makefile                   |  26 +
+ tools/verification/dot2/automata.py                | 174 +++++
+ tools/verification/dot2/dot2c                      |  26 +
+ tools/verification/dot2/dot2c.py                   | 254 +++++++
+ tools/verification/dot2/dot2k                      |  47 ++
+ tools/verification/dot2/dot2k.py                   | 177 +++++
+ .../dot2/dot2k_templates/main_global.c             |  91 +++
+ .../dot2/dot2k_templates/main_per_cpu.c            |  91 +++
+ .../dot2/dot2k_templates/main_per_task.c           |  91 +++
+ tools/verification/models/wip.dot                  |  16 +
+ tools/verification/models/wwnr.dot                 |  16 +
+ 46 files changed, 4585 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
+ create mode 100644 Documentation/trace/rv/deterministic_automata.rst
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/monitor_wip.rst
+ create mode 100644 Documentation/trace/rv/monitor_wwnr.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ create mode 100644 include/linux/rv.h
+ create mode 100644 include/rv/automata.h
+ create mode 100644 include/rv/da_monitor.h
+ create mode 100644 include/rv/instrumentation.h
+ create mode 100644 include/trace/events/rv.h
+ create mode 100644 kernel/trace/rv/Kconfig
+ create mode 100644 kernel/trace/rv/Makefile
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.c
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.h
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
+ create mode 100644 kernel/trace/rv/reactor_panic.c
+ create mode 100644 kernel/trace/rv/reactor_printk.c
+ create mode 100644 kernel/trace/rv/rv.c
+ create mode 100644 kernel/trace/rv/rv.h
+ create mode 100644 kernel/trace/rv/rv_reactors.c
+ create mode 100644 tools/verification/dot2/Makefile
+ create mode 100644 tools/verification/dot2/automata.py
+ create mode 100644 tools/verification/dot2/dot2c
+ create mode 100644 tools/verification/dot2/dot2c.py
+ create mode 100644 tools/verification/dot2/dot2k
+ create mode 100644 tools/verification/dot2/dot2k.py
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
+ create mode 100644 tools/verification/models/wip.dot
+ create mode 100644 tools/verification/models/wwnr.dot

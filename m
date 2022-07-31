@@ -2,212 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA9E585FFC
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02E0585FEB
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbiGaQwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S237580AbiGaQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGaQwI (ORCPT
+        with ESMTP id S230244AbiGaQmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:52:08 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2737BC11
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:52:06 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so6335326wmb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z1WQwnH+vUxlQu9SIjMUORiE1pIB6GKovp797CtaNYY=;
-        b=GK+W5L3VdcugavZwk0SoDUmRg9mNxloRY59ml4fk+OiIArlIEgxhgehmr+jEr+dCha
-         W53vW4JWF9sXMus7ySClo1QPGScpIWT/SX2D3KgC2JdVJw91D5ikKgxGtlTUaKQ1pomu
-         /HALESqpmFJD1h7WmxJDJ/kGYlZJItNJb0dKSeRhRsCZOHRp2wz9Z7iJr/1bVRMMYCsg
-         DJhxUUxZL8mfhZ9OSs5SzS2qv4dCYTNTnVPNYs7Xw9hanP21LwuASvP7FpmgWnp4rOd3
-         OYVdKj/dZvaWf7AmnRPhClWgOgbySUcd4nH9/RA3wZ4N1cGRWgrYnHrIhSXmshrz1IA/
-         yu8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z1WQwnH+vUxlQu9SIjMUORiE1pIB6GKovp797CtaNYY=;
-        b=mPrS59cWgwvicVmA9yvnoF3oZhsHvpQOS3I0d/eThQYMQfsJtR7CcA0txgM4/RKt03
-         AA+sDCywoFNrjaWEUcn1ED1ycbXj4RLt3S5/xU06GaAHsFVdIaQjF6VAl9QSRk+j2lR/
-         JGJb+NUVpUUuO1rrLasxGTP/OOb70IhJcJHVXHZLRi0M0YtEa1A68k9aZa2sKV/Gw6W4
-         ZK9uzi1YvbDjpi71neVGts77fY0wdzozDnu3fRtmfAV2uqAeYzZk2dKhdQkP1wjYJ5Ci
-         vrysetr78U8fx17MFB5ad6+H1oF8aQsGDuwUC36d57nL94eD1LKLKAwI+aGXQD+WspDZ
-         TY+A==
-X-Gm-Message-State: AJIora/Oeb0Xp6CnA4LmmroMjM72njtGHbW4cpipGmwLk5RRm11EdzSs
-        DoOklky/5B18JNtGeWVdea5BoOy5vb0Qq6yq4PzaHg==
-X-Google-Smtp-Source: AGRyM1vHe6Iv2uRPLoSH6jtHqRgVzhI/OO7bpECxIb/3aG3FQonSmRDAbDjem7FdSDeQLKOL9U+l8eAqGLDY/VQR0/I=
-X-Received: by 2002:a05:600c:4e86:b0:3a3:417a:2fcd with SMTP id
- f6-20020a05600c4e8600b003a3417a2fcdmr8933328wmq.149.1659286325289; Sun, 31
- Jul 2022 09:52:05 -0700 (PDT)
+        Sun, 31 Jul 2022 12:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BED60EE;
+        Sun, 31 Jul 2022 09:42:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D3C560F5F;
+        Sun, 31 Jul 2022 16:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14789C433D6;
+        Sun, 31 Jul 2022 16:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659285729;
+        bh=FN1FeRRKXEtihsMgozwQ7+8M7oAV8pcnlJSWByizBMk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UfWhOf5FZI2vaxYB4S+34DX9TwX+nSJnyi0QOP2R13sYyH1yCUgelUlnB4bGoGRWm
+         yc42AV5RQ5B8fscvKKAWuny40QjyFh0YK4dr0ogUvF31r/xxlbfCY2wPRORbCHg2K+
+         /ulD476jdYkoX7CI5TYgGjIRhoxSIov0otqIpgopjJzmwm7GDGakmiXRI0nFoWxQML
+         5qlNN2HJiMA4X7pBenMbv2degU3i3Qa77JlG4ALfFS0PtCtRk2k4kmH7jTja8oEzbC
+         R9q/QLnJPJE698Y6kCU8opVgFMC9hyGyY0ZK74/oTo+sBLtSB8Vq7WhhZ1Lf8vTMnG
+         DPt3EtOCPklAw==
+Date:   Sun, 31 Jul 2022 17:52:21 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/9] iio: adc: mcp3911: add support for interrupts
+Message-ID: <20220731175221.4adbbfa6@jic23-huawei>
+In-Reply-To: <20220722130726.7627-7-marcus.folkesson@gmail.com>
+References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+        <20220722130726.7627-7-marcus.folkesson@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220724060013.171050-1-leo.yan@linaro.org> <20220724060013.171050-2-leo.yan@linaro.org>
- <CAP-5=fVY=_WUpke0sRMpvbJFu9JuYwqiwAmKdCS+=u7vEG-2uA@mail.gmail.com>
- <20220730093819.GA574473@leoy-ThinkPad-X240s> <CAP-5=fWA8R9Ee5L9xgPtva9dvQ12uKqC1o4zgzPs0B9XWSMxhQ@mail.gmail.com>
- <20220731123702.GA205142@leoy-ThinkPad-X240s>
-In-Reply-To: <20220731123702.GA205142@leoy-ThinkPad-X240s>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sun, 31 Jul 2022 09:51:53 -0700
-Message-ID: <CAP-5=fVKkd92FP9D2qccmRHMJHbYNNpVC-XAuh5i7jrrTWHg8g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Chang Rui <changruinj@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 5:37 AM Leo Yan <leo.yan@linaro.org> wrote:
->
-> On Sat, Jul 30, 2022 at 08:21:10AM -0700, Ian Rogers wrote:
->
-> [...]
->
-> > > On the other hand, I can accept to simply change pr_warning() to
-> > > pr_debug4() to avoid warning flood, the log still can help us to find
-> > > potential symbol parsing issue, so far they are not false-positive
-> > > reporting.
-> >
-> > Thanks, I suspect the ELF that the Java agent has created isn't good.
-> > The Java agent is part of perf as and so is the ELF file generation
-> > code:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/genelf.c?h=perf/core#n367
->
-> I think it's no need to change the function jit_write_elf(), please see
-> below comment.
->
-> > I took a quick look but most of the logic is in libelf - it seems less
-> > obvious the bug would be there rather than perf. Could you take a
-> > look? Ideally there'd be a quick fix that keeps all the benefits of
-> > your change and the jvmti code working.
->
-> A bit more finding for java JIT symbols.  Let's see below two samples:
->
->      6.72%  java             /home/leoy/.debug/jit/java-jit-20220731.XXKRpgmR/jitted-214330-29.so    0x5b54             B [.] Interpreter
->      0.90%  java             /home/leoy/.debug/jit/java-jit-20220731.XXKRpgmR/jitted-214330-3475.so  0x4fc              B [.] jdk.internal.math.FloatingDecimal$BinaryToASCIIBuffer.dtoa(int, long, int, boolean)
->
-> I can see the DSO "jitted-214330-29.so" only contains a java JIT symbol
-> "Interpreter", and I also observed the same behavior for other JIT
-> symbols, e.g. jitted-214330-3475.so only contains the symbol
-> "jdk.internal.math.FloatingDecimal$BinaryToASCIIBuffer.dtoa(int, long,
-> int, boolean)".
->
-> We always see these JIT symbols always have the consistent start file
-> address, but this would not introduce conflit since every JIT symbol has
-> its own DSO rather than share the same DSO.
->
-> I think now I understand your meaning, and your below change is fine for
-> me, I tested it and confirmed it can show up java JIT symbols properly.
-> Just a comment, it would be better to add a comment for why we need to
-> add symbols when failed to find program header, like:
->
->   if (elf_read_program_header(syms_ss->elf,
->                             (u64)sym.st_value, &phdr)) {
->         pr_debug4("%s: failed to find program header for "
->                   "symbol: %s\n", __func__, elf_name);
->         pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
->                   "sh_addr: %#" PRIx64 " sh_offset: %#" PRIx64 "\n",
->                   __func__, (u64)sym.st_value, (u64)shdr.sh_addr,
->                   (u64)shdr.sh_offset);
->         /*
->          * Fail to find program header, let's rollback to use shdr.sh_addr
->          * and shdr.sh_offset to calibrate symbol's file address, though
->          * this is not necessary for normal C ELF file, we still need to
->          * handle java JIT symbols in this case.
->          */
->         sym.st_value -= shdr.sh_addr - shdr.sh_offset;
->   } else {
->         ...
->   }
->
-> Could you send a formal patch for this?  Thanks!
+On Fri, 22 Jul 2022 15:07:23 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Done. Thanks for sanity checking all of this! Please double check and
-add the reviewed/acked-by:
-https://lore.kernel.org/lkml/20220731164923.691193-1-irogers@google.com/
+> Make it possible to read values upon interrupts.
+> Configure Data Ready Signal Output Pin to either HiZ or push-pull and
+> use it as interrupt source.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Looks good to me.
 
-Thanks,
-Ian
+J
 
-> Leo
->
-> > > Thanks,
-> > > Leo
-> > >
-> > > > ```
-> > > > --- a/tools/perf/util/symbol-elf.c
-> > > > +++ b/tools/perf/util/symbol-elf.c
-> > > > @@ -1305,16 +1305,21 @@ dso__load_sym_internal(struct dso *dso, struct
-> > > > map *map, struct symsrc *syms
-> > > > _ss,
-> > > >
-> > > >                        if (elf_read_program_header(syms_ss->elf,
-> > > >                                                    (u64)sym.st_value, &phdr)) {
-> > > > -                               pr_warning("%s: failed to find program
-> > > > header for "
-> > > > +                               pr_debug4("%s: failed to find program
-> > > > header for "
-> > > >                                           "symbol: %s st_value: %#" PRIx64 "\n",
-> > > >                                           __func__, elf_name,
-> > > > (u64)sym.st_value);
-> > > > -                               continue;
-> > > > +                               pr_debug4("%s: adjusting symbol:
-> > > > st_value: %#" PRIx64 " "
-> > > > +                                       "sh_addr: %#" PRIx64 "
-> > > > sh_offset: %#" PRIx64 "\n",
-> > > > +                                       __func__, (u64)sym.st_value,
-> > > > (u64)shdr.sh_addr,
-> > > > +                                       (u64)shdr.sh_offset);
-> > > > +                               sym.st_value -= shdr.sh_addr - shdr.sh_offset;
-> > > > +                       } else {
-> > > > +                               pr_debug4("%s: adjusting symbol:
-> > > > st_value: %#" PRIx64 " "
-> > > > +                                       "p_vaddr: %#" PRIx64 "
-> > > > p_offset: %#" PRIx64 "\n",
-> > > > +                                       __func__, (u64)sym.st_value,
-> > > > (u64)phdr.p_vaddr,
-> > > > +                                       (u64)phdr.p_offset);
-> > > > +                               sym.st_value -= phdr.p_vaddr - phdr.p_offset;
-> > > >                        }
-> > > > -                       pr_debug4("%s: adjusting symbol: st_value: %#"
-> > > > PRIx64 " "
-> > > > -                                 "p_vaddr: %#" PRIx64 " p_offset: %#"
-> > > > PRIx64 "\n",
-> > > > -                                 __func__, (u64)sym.st_value,
-> > > > (u64)phdr.p_vaddr,
-> > > > -                                 (u64)phdr.p_offset);
-> > > > -                       sym.st_value -= phdr.p_vaddr - phdr.p_offset;
-> > > >                }
-> > > >
-> > > >                demangled = demangle_sym(dso, kmodule, elf_name);
-> > > > ```
-> > > >
-> > > > Thanks,
-> > > > Ian
-> > > >
-> > > > >
-> > > > >                 demangled = demangle_sym(dso, kmodule, elf_name);
-> > > > > --
-> > > > > 2.25.1
-> > > > >
+> ---
+>  drivers/iio/adc/mcp3911.c | 53 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> index 96c0a2a50c7c..7db2c75da4ac 100644
+> --- a/drivers/iio/adc/mcp3911.c
+> +++ b/drivers/iio/adc/mcp3911.c
+> @@ -29,6 +29,7 @@
+>  #define MCP3911_REG_GAIN		0x09
+>  
+>  #define MCP3911_REG_STATUSCOM		0x0a
+> +#define MCP3911_STATUSCOM_DRHIZ         BIT(12)
+>  #define MCP3911_STATUSCOM_READ		GENMASK(7, 6)
+>  #define MCP3911_STATUSCOM_CH1_24WIDTH	BIT(4)
+>  #define MCP3911_STATUSCOM_CH0_24WIDTH	BIT(3)
+> @@ -62,6 +63,7 @@ struct mcp3911 {
+>  	struct regulator *vref;
+>  	struct clk *clki;
+>  	u32 dev_addr;
+> +	struct iio_trigger *trig;
+>  	struct {
+>  		u32 channels[MCP3911_NUM_CHANNELS];
+>  		s64 ts __aligned(8);
+> @@ -346,6 +348,23 @@ static void mcp3911_cleanup_regulator(void *_adc)
+>  	regulator_disable(adc->vref);
+>  }
+>  
+> +static int mcp3911_set_trigger_state(struct iio_trigger *trig, bool enable)
+> +{
+> +	struct mcp3911 *adc = iio_trigger_get_drvdata(trig);
+> +
+> +	if (enable)
+> +		enable_irq(adc->spi->irq);
+> +	else
+> +		disable_irq(adc->spi->irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct iio_trigger_ops mcp3911_trigger_ops = {
+> +	.validate_device = iio_trigger_validate_own_device,
+> +	.set_trigger_state = mcp3911_set_trigger_state,
+> +};
+> +
+>  static int mcp3911_probe(struct spi_device *spi)
+>  {
+>  	struct iio_dev *indio_dev;
+> @@ -409,6 +428,15 @@ static int mcp3911_probe(struct spi_device *spi)
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready-hiz"))
+> +		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
+> +				0, 2);
+> +	else
+> +		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
+> +				MCP3911_STATUSCOM_DRHIZ, 2);
+> +	if (ret)
+> +		return ret;
+> +
+>  	indio_dev->name = spi_get_device_id(spi)->name;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  	indio_dev->info = &mcp3911_info;
+> @@ -419,6 +447,31 @@ static int mcp3911_probe(struct spi_device *spi)
+>  
+>  	mutex_init(&adc->lock);
+>  
+> +	if (spi->irq > 0) {
+> +		adc->trig = devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
+> +				indio_dev->name,
+> +				iio_device_id(indio_dev));
+> +		if (!adc->trig)
+> +			return PTR_ERR(adc->trig);
+> +
+> +		adc->trig->ops = &mcp3911_trigger_ops;
+> +		iio_trigger_set_drvdata(adc->trig, adc);
+> +		ret = devm_iio_trigger_register(&spi->dev, adc->trig);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/*
+> +		 * The device generates interrupts as long as it is powered up.
+> +		 * Some platforms might not allow the option to power it down so
+> +		 * don't enable the interrupt to avoid extra load on the system.
+> +		 */
+> +		ret = devm_request_irq(&spi->dev, spi->irq,
+> +				&iio_trigger_generic_data_rdy_poll, IRQF_NO_AUTOEN | IRQF_ONESHOT,
+> +				indio_dev->name, adc->trig);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
+>  			NULL,
+>  			mcp3911_trigger_handler, NULL);
+

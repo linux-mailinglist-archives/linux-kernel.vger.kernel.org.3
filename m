@@ -2,285 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7915861AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509045861AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 00:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbiGaWUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 18:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S238524AbiGaWb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 18:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiGaWUC (ORCPT
+        with ESMTP id S229710AbiGaWbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 18:20:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAD810540
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 15:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659306001; x=1690842001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p4bRi8871G82SLgZMl5mZh7TvdfGyVkBGjPAY460NBQ=;
-  b=hQIw7DCU00l+BUZdgN4aqS7LXTZkqmfnX99ebUYLLQTVHuRGnx06E6Fx
-   J8oVd0cuEgWwnHFO/oPZrjJ0TovoNL9biFf8OaUN1/1au+Nij7hdID45R
-   VDbShNCDZl6NH18JFFWD5ZxnkDh2SIn95qCBK7UykqMCQia/Nm7TCJPZo
-   lOOI7cgAvzMGd1Jh/9/RdNxTJXoEFn3MkOc7TJS62X7QwHJVE0YZ4+JNC
-   CYvHz1oxtpC4CnZJCJuws4S+1vn/69PGv5vKpXrWgdvm0jQO3wE3pSIv3
-   EpWOl7U9ckv3Lg1XAgJ02r3wWrDDoxSa/V+9JgHI5DfdpAXq4cyf/zoGp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350737647"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350737647"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 15:20:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="634695067"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jul 2022 15:19:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIHHx-000Eax-0P;
-        Sun, 31 Jul 2022 22:19:57 +0000
-Date:   Mon, 1 Aug 2022 06:19:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH] fs/isofs: Replace kmap() with kmap_local_page()
-Message-ID: <202208010650.OP1Bigo2-lkp@intel.com>
-References: <20220731190101.7928-1-fmdefrancesco@gmail.com>
+        Sun, 31 Jul 2022 18:31:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E398DBE2F;
+        Sun, 31 Jul 2022 15:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C527B80E15;
+        Sun, 31 Jul 2022 22:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C71C433D6;
+        Sun, 31 Jul 2022 22:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659306712;
+        bh=WuaY6aiROPqd6N4Vzb1DSESIWCf+1m2vEs30SnLxXCg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G+l1owlPCmSfokSC1EarW7HaBaUFfp+fb3hqXxEBGxx4mfDjQ7Rj3byOCkhbZ7ZLM
+         mzBaK250tvPNETCg+LsUblhh0pmW1iSBXdUp4qOUoBInY7wjAdHhFmz2qvNlDCZiX1
+         /tJq7azzpL5Px1A7N+9i+xhiv2LlFN37L/k+BalL1aAuJ2Wvn2Vws8ZSZhpdlWA4Wu
+         UHUCidhCsx08jWhO+vOdTrdVjGFRRmdSKvmmCdWN2k2pr5wL9wO2AJEh0AqMK+msDz
+         lOzNsNUsICYUx+su54lMfNiuQMiefptqRbhK9pVxpGbEf4DWjK7D7HPbift1ogjsx5
+         MRXrZ551h8BQw==
+Received: by mail-oi1-f182.google.com with SMTP id h188so10952163oia.13;
+        Sun, 31 Jul 2022 15:31:52 -0700 (PDT)
+X-Gm-Message-State: AJIora8cn9NmR3xtkMrY1RMQsc6tvBCbsRRQp0iV15Um9+NpQQGXcbSv
+        ahg3TwuhWUq0ctDSg//yGAptkm1u2N6ShNLsdEE=
+X-Google-Smtp-Source: AGRyM1sT6mWCwhi5cMK9ZBUkLWuCaaYbXcF29d6XiZ3m6PKo2ujOXyAErhp2f/yXKo2F31zt7al3WFPOcS+0oFq8gEo=
+X-Received: by 2002:a05:6808:1489:b0:33a:861c:838e with SMTP id
+ e9-20020a056808148900b0033a861c838emr5336590oiw.228.1659306711425; Sun, 31
+ Jul 2022 15:31:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731190101.7928-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <Yub+vPb53zt6dDpn@casper.infradead.org>
+In-Reply-To: <Yub+vPb53zt6dDpn@casper.infradead.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 1 Aug 2022 00:31:40 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
+Message-ID: <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] make buffer_locked provide an acquire semantics
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Fabio,
+On Mon, 1 Aug 2022 at 00:14, Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Sun, Jul 31, 2022 at 04:43:08PM -0400, Mikulas Patocka wrote:
+> > Let's have a look at this piece of code in __bread_slow:
+> >       get_bh(bh);
+> >       bh->b_end_io = end_buffer_read_sync;
+> >       submit_bh(REQ_OP_READ, 0, bh);
+> >       wait_on_buffer(bh);
+> >       if (buffer_uptodate(bh))
+> >               return bh;
+> > Neither wait_on_buffer nor buffer_uptodate contain a memory barrier.
+> > Consequently, if someone calls sb_bread and then reads the buffer data,
+> > the read of buffer data may be executed before wait_on_buffer(bh) on
+> > architectures with weak memory ordering and it may return invalid data.
+>
+> I think we should be consistent between PageUptodate() and
+> buffer_uptodate().  Here's how it's done for pages currently:
+>
+> static inline bool folio_test_uptodate(struct folio *folio)
+>         bool ret = test_bit(PG_uptodate, folio_flags(folio, 0));
+>         /*
+>          * Must ensure that the data we read out of the folio is loaded
+>          * _after_ we've loaded folio->flags to check the uptodate bit.
+>          * We can skip the barrier if the folio is not uptodate, because
+>          * we wouldn't be reading anything from it.
+>          *
+>          * See folio_mark_uptodate() for the other side of the story.
+>          */
+>         if (ret)
+>                 smp_rmb();
+>
+>         return ret;
+>
+> ...
+>
+> static __always_inline void folio_mark_uptodate(struct folio *folio)
+>         /*
+>          * Memory barrier must be issued before setting the PG_uptodate bit,
+>          * so that all previous stores issued in order to bring the folio
+>          * uptodate are actually visible before folio_test_uptodate becomes true.
+>          */
+>         smp_wmb();
+>         set_bit(PG_uptodate, folio_flags(folio, 0));
+>
+> I'm happy for these to also be changed to use acquire/release; no
+> attachment to the current code.  But bufferheads & pages should have the
+> same semantics, or we'll be awfully confused.
 
-Thank you for the patch! Perhaps something to improve:
+I suspect that adding acquire/release annotations at the bitops level
+is not going to get us anywhere, given that for the uptodate flag, it
+is the set operation that has release semantics, whereas for a lock
+flag, it will be the clear operation. Reverting to the legacy barrier
+instructions to try and avoid this ambiguity will likely only make
+things worse.
 
-[auto build test WARNING on jack-fs/for_next]
-[also build test WARNING on akpm-mm/mm-everything linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/fs-isofs-Replace-kmap-with-kmap_local_page/20220801-030233
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
-config: hexagon-randconfig-r041-20220801 (https://download.01.org/0day-ci/archive/20220801/202208010650.OP1Bigo2-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7c25888be273e928336283deae5b57f8ffa78a50
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fabio-M-De-Francesco/fs-isofs-Replace-kmap-with-kmap_local_page/20220801-030233
-        git checkout 7c25888be273e928336283deae5b57f8ffa78a50
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/isofs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/isofs/compress.c:178:24: warning: comparison of distinct pointer types ('Byte *' (aka 'unsigned char *') and 'char *') [-Wcompare-distinct-pointer-types]
-                           if (stream.next_out != (char *)zisofs_sink_page) {
-                               ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/isofs/compress.c:189:41: warning: comparison of distinct pointer types ('Byte *' (aka 'unsigned char *') and 'char *') [-Wcompare-distinct-pointer-types]
-           if (stream.next_out && stream.next_out != (char *)zisofs_sink_page)
-                                  ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +178 fs/isofs/compress.c
-
-    34	
-    35	/*
-    36	 * Read data of @inode from @block_start to @block_end and uncompress
-    37	 * to one zisofs block. Store the data in the @pages array with @pcount
-    38	 * entries. Start storing at offset @poffset of the first page.
-    39	 */
-    40	static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
-    41					      loff_t block_end, int pcount,
-    42					      struct page **pages, unsigned poffset,
-    43					      int *errp)
-    44	{
-    45		unsigned int zisofs_block_shift = ISOFS_I(inode)->i_format_parm[1];
-    46		unsigned int bufsize = ISOFS_BUFFER_SIZE(inode);
-    47		unsigned int bufshift = ISOFS_BUFFER_BITS(inode);
-    48		unsigned int bufmask = bufsize - 1;
-    49		int i, block_size = block_end - block_start;
-    50		z_stream stream = { .total_out = 0,
-    51				    .avail_in = 0,
-    52				    .avail_out = 0, };
-    53		int zerr;
-    54		int needblocks = (block_size + (block_start & bufmask) + bufmask)
-    55					>> bufshift;
-    56		int haveblocks;
-    57		blkcnt_t blocknum;
-    58		struct buffer_head **bhs;
-    59		int curbh, curpage;
-    60	
-    61		if (block_size > deflateBound(1UL << zisofs_block_shift)) {
-    62			*errp = -EIO;
-    63			return 0;
-    64		}
-    65		/* Empty block? */
-    66		if (block_size == 0) {
-    67			for ( i = 0 ; i < pcount ; i++ ) {
-    68				if (!pages[i])
-    69					continue;
-    70				memzero_page(pages[i], 0, PAGE_SIZE);
-    71				SetPageUptodate(pages[i]);
-    72			}
-    73			return ((loff_t)pcount) << PAGE_SHIFT;
-    74		}
-    75	
-    76		/* Because zlib is not thread-safe, do all the I/O at the top. */
-    77		blocknum = block_start >> bufshift;
-    78		bhs = kcalloc(needblocks + 1, sizeof(*bhs), GFP_KERNEL);
-    79		if (!bhs) {
-    80			*errp = -ENOMEM;
-    81			return 0;
-    82		}
-    83		haveblocks = isofs_get_blocks(inode, blocknum, bhs, needblocks);
-    84		ll_rw_block(REQ_OP_READ, 0, haveblocks, bhs);
-    85	
-    86		curbh = 0;
-    87		curpage = 0;
-    88		/*
-    89		 * First block is special since it may be fractional.  We also wait for
-    90		 * it before grabbing the zlib mutex; odds are that the subsequent
-    91		 * blocks are going to come in in short order so we don't hold the zlib
-    92		 * mutex longer than necessary.
-    93		 */
-    94	
-    95		if (!bhs[0])
-    96			goto b_eio;
-    97	
-    98		wait_on_buffer(bhs[0]);
-    99		if (!buffer_uptodate(bhs[0])) {
-   100			*errp = -EIO;
-   101			goto b_eio;
-   102		}
-   103	
-   104		stream.workspace = zisofs_zlib_workspace;
-   105		mutex_lock(&zisofs_zlib_lock);
-   106			
-   107		zerr = zlib_inflateInit(&stream);
-   108		if (zerr != Z_OK) {
-   109			if (zerr == Z_MEM_ERROR)
-   110				*errp = -ENOMEM;
-   111			else
-   112				*errp = -EIO;
-   113			printk(KERN_DEBUG "zisofs: zisofs_inflateInit returned %d\n",
-   114				       zerr);
-   115			goto z_eio;
-   116		}
-   117	
-   118		while (curpage < pcount && curbh < haveblocks &&
-   119		       zerr != Z_STREAM_END) {
-   120			if (!stream.avail_out) {
-   121				if (pages[curpage]) {
-   122					stream.next_out = kmap_local_page(pages[curpage])
-   123							+ poffset;
-   124					stream.avail_out = PAGE_SIZE - poffset;
-   125					poffset = 0;
-   126				} else {
-   127					stream.next_out = (void *)&zisofs_sink_page;
-   128					stream.avail_out = PAGE_SIZE;
-   129				}
-   130			}
-   131			if (!stream.avail_in) {
-   132				wait_on_buffer(bhs[curbh]);
-   133				if (!buffer_uptodate(bhs[curbh])) {
-   134					*errp = -EIO;
-   135					break;
-   136				}
-   137				stream.next_in  = bhs[curbh]->b_data +
-   138							(block_start & bufmask);
-   139				stream.avail_in = min_t(unsigned, bufsize -
-   140							(block_start & bufmask),
-   141							block_size);
-   142				block_size -= stream.avail_in;
-   143				block_start = 0;
-   144			}
-   145	
-   146			while (stream.avail_out && stream.avail_in) {
-   147				zerr = zlib_inflate(&stream, Z_SYNC_FLUSH);
-   148				if (zerr == Z_BUF_ERROR && stream.avail_in == 0)
-   149					break;
-   150				if (zerr == Z_STREAM_END)
-   151					break;
-   152				if (zerr != Z_OK) {
-   153					/* EOF, error, or trying to read beyond end of input */
-   154					if (zerr == Z_MEM_ERROR)
-   155						*errp = -ENOMEM;
-   156					else {
-   157						printk(KERN_DEBUG
-   158						       "zisofs: zisofs_inflate returned"
-   159						       " %d, inode = %lu,"
-   160						       " page idx = %d, bh idx = %d,"
-   161						       " avail_in = %ld,"
-   162						       " avail_out = %ld\n",
-   163						       zerr, inode->i_ino, curpage,
-   164						       curbh, stream.avail_in,
-   165						       stream.avail_out);
-   166						*errp = -EIO;
-   167					}
-   168					goto inflate_out;
-   169				}
-   170			}
-   171	
-   172			if (!stream.avail_out) {
-   173				/* This page completed */
-   174				if (pages[curpage]) {
-   175					flush_dcache_page(pages[curpage]);
-   176					SetPageUptodate(pages[curpage]);
-   177				}
- > 178				if (stream.next_out != (char *)zisofs_sink_page) {
-   179					kunmap_local(stream.next_out);
-   180					stream.next_out = NULL;
-   181				}
-   182				curpage++;
-   183			}
-   184			if (!stream.avail_in)
-   185				curbh++;
-   186		}
-   187	inflate_out:
-   188		zlib_inflateEnd(&stream);
-   189		if (stream.next_out && stream.next_out != (char *)zisofs_sink_page)
-   190			kunmap_local(stream.next_out);
-   191	
-   192	z_eio:
-   193		mutex_unlock(&zisofs_zlib_lock);
-   194	
-   195	b_eio:
-   196		for (i = 0; i < haveblocks; i++)
-   197			brelse(bhs[i]);
-   198		kfree(bhs);
-   199		return stream.total_out;
-   200	}
-   201	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I was cc'ed only on patch #1 of your v3, so I'm not sure where this is
+headed, but I strongly +1 Matthew's point above that this should be
+done at the level that defines how the bit fields should be
+interpreted wrt to the contents of the data structure that they
+describe/guard.

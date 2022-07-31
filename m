@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384FB585FC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F31585FC8
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiGaQW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S237533AbiGaQXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiGaQW0 (ORCPT
+        with ESMTP id S235943AbiGaQXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:22:26 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50580DEEF
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 09:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659284545; x=1690820545;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m1mZiG8G2YBxeVkT/EYeTO7dWs34ZdOSH2Huuhy/TkY=;
-  b=ei/gzRmsHiCxUF7xQ1+9WUUKmBQWt5acrjUEp3o5vBVAwIcjjHwGRpDN
-   AlCTbSldS/Ov82iltVPsY/6khrN3T7kZw4sBX3HeuNxmF0ROdDmEkkaKx
-   9kBXg9tNgmRyzUlbGqr3Xe9coWFoeBR1STmJAx9WWlZaQOdQiJ+oFXqWI
-   b/3farEgMqgibaZ3WBvoNNPWURGMKlC87XMBCNxWhn9INAfRgY7kYKLeL
-   Dyk4UUU04sPwwtmqeMcu0N9/z9d5UF7gsZAOz2hIzCS7Xgzg89xaO8bg+
-   TeNPFKXwJVb0MqGzBAt7SbGr59wQbd3quYuShIHv/19fbRXYZE5aOnh36
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="353014283"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="353014283"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 09:22:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="669798559"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Jul 2022 09:22:23 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIBhu-000EHt-2i;
-        Sun, 31 Jul 2022 16:22:22 +0000
-Date:   Mon, 1 Aug 2022 00:22:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 11/15] sound/soc/apple/macaudio.c:290:3:
- sparse: sparse: symbol 'macaudio_fixed_kctls' was not declared. Should it be
- static?
-Message-ID: <202208010056.ESwV1wcB-lkp@intel.com>
+        Sun, 31 Jul 2022 12:23:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10899DEEF;
+        Sun, 31 Jul 2022 09:23:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A105060F42;
+        Sun, 31 Jul 2022 16:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D81C433D6;
+        Sun, 31 Jul 2022 16:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659284589;
+        bh=HsdsdEfTtmF6MTUSGc1t/9iW2TbWDia9Kl4W40DD3l8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UVbeyHcLklV8VT4PWo5qXVkgPOxgm0PcGNBx0Ko/ViBqgVmgG313mAe8a9Kpr8Fy/
+         0UqGMDY3cuREIySw0jyXiG5nw61MkrQNYgjzhS0gstDc+2eoKw0po88WXQRFVenPR6
+         XvnaX1I7UtZzJaHPiP3LV+3TCspQNBbUNs6R05BJg9JvCBZfI6W6uUF+sPa4iXqJMi
+         j7g9Bk/CbiF3NZ+9dcrANT9r9JCj/KcyEGTKVvK8l9zM7w8WAMljoDcLbCdFSNUGZ7
+         s8n1LMtK2yd93RMILc4hKr1OOmm52G2Ni2tDBlwIhVsDQY4p/UbtEheFe5XwP40P/X
+         cnGz4vNfZGSzQ==
+Date:   Sun, 31 Jul 2022 09:23:08 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     studentxswpy@163.com
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH -next] xfs: delete extra space and tab in blank line
+Message-ID: <YuasbFHWfWiXPUJM@magnolia>
+References: <20220730092959.3103627-1-studentxswpy@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220730092959.3103627-1-studentxswpy@163.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   f284fb1969531d5bcbc85cdaba483d954aafbb1f
-commit: 45d56de6798e69a32c1e7b529e7849fc74ed3e66 [11/15] ASoC: Add macaudio machine driver
-config: arm64-randconfig-s043-20220721 (https://download.01.org/0day-ci/archive/20220801/202208010056.ESwV1wcB-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/AsahiLinux/linux/commit/45d56de6798e69a32c1e7b529e7849fc74ed3e66
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout 45d56de6798e69a32c1e7b529e7849fc74ed3e66
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash sound/soc/apple/
+On Sat, Jul 30, 2022 at 05:29:59PM +0800, studentxswpy@163.com wrote:
+> From: Xie Shaowen <studentxswpy@163.com>
+> 
+> delete extra space and tab in blank line, there is no functional change.
+> 
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: Xie Shaowen <studentxswpy@163.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The last hunk doesn't apply, but fmeh, whatever.
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-sparse warnings: (new ones prefixed by >>)
->> sound/soc/apple/macaudio.c:290:3: sparse: sparse: symbol 'macaudio_fixed_kctls' was not declared. Should it be static?
+--D
 
-vim +/macaudio_fixed_kctls +290 sound/soc/apple/macaudio.c
-
-   286	
-   287	struct fixed_kctl {
-   288		char *name;
-   289		char *value;	
- > 290	} macaudio_fixed_kctls[] = {
-   291		{"ASI1 Sel", "Left"},
-   292		{"Left ASI1 Sel", "Left"},
-   293		{"Right ASI1 Sel", "Left"},
-   294		{"Left Front ASI1 Sel", "Left"},
-   295		{"Left Rear ASI1 Sel", "Left"},
-   296		{"Right Front ASI1 Sel", "Left"},
-   297		{"Right Rear ASI1 Sel", "Left"},
-   298		{"Left Tweeter ASI1 Sel", "Left"},
-   299		{"Left Woofer 1 ASI1 Sel", "Left"},
-   300		{"Left Woofer 2 ASI1 Sel", "Left"},
-   301		{"Right Tweeter ASI1 Sel", "Left"},
-   302		{"Right Woofer 1 ASI1 Sel", "Left"},
-   303		{"Right Woofer 2 ASI1 Sel", "Left"},
-   304		{"Left ISENSE Switch", "Off"},
-   305		{"Left VSENSE Switch", "Off"},
-   306		{"Right ISENSE Switch", "Off"},
-   307		{"Right VSENSE Switch", "Off"},
-   308		{"Jack Mixer Volume", "63"},
-   309		{ }
-   310	};
-   311	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  fs/xfs/xfs_extfree_item.c | 12 ++++++------
+>  fs/xfs/xfs_log.c          |  4 ++--
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_extfree_item.c b/fs/xfs/xfs_extfree_item.c
+> index 765be054dffe..08b0c8b553fc 100644
+> --- a/fs/xfs/xfs_extfree_item.c
+> +++ b/fs/xfs/xfs_extfree_item.c
+> @@ -187,12 +187,12 @@ xfs_efi_copy_format(xfs_log_iovec_t *buf, xfs_efi_log_format_t *dst_efi_fmt)
+>  {
+>  	xfs_efi_log_format_t *src_efi_fmt = buf->i_addr;
+>  	uint i;
+> -	uint len = sizeof(xfs_efi_log_format_t) + 
+> -		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_t);  
+> -	uint len32 = sizeof(xfs_efi_log_format_32_t) + 
+> -		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_32_t);  
+> -	uint len64 = sizeof(xfs_efi_log_format_64_t) + 
+> -		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_64_t);  
+> +	uint len = sizeof(xfs_efi_log_format_t) +
+> +		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_t);
+> +	uint len32 = sizeof(xfs_efi_log_format_32_t) +
+> +		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_32_t);
+> +	uint len64 = sizeof(xfs_efi_log_format_64_t) +
+> +		(src_efi_fmt->efi_nextents - 1) * sizeof(xfs_extent_64_t);
+>  
+>  	if (buf->i_len == len) {
+>  		memcpy((char *)dst_efi_fmt, (char*)src_efi_fmt, len);
+> diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+> index ae904b21e9cc..6f661fadb755 100644
+> --- a/fs/xfs/xfs_log.c
+> +++ b/fs/xfs/xfs_log.c
+> @@ -2000,7 +2000,7 @@ xlog_calc_iclog_size(
+>  }
+>  
+>  /*
+> - * Flush out the in-core log (iclog) to the on-disk log in an asynchronous 
+> + * Flush out the in-core log (iclog) to the on-disk log in an asynchronous
+>   * fashion.  Previously, we should have moved the current iclog
+>   * ptr in the log to point to the next available iclog.  This allows further
+>   * write to continue while this code syncs out an iclog ready to go.
+> @@ -2042,7 +2042,7 @@ xlog_sync(
+>  	xlog_grant_add_space(log, &log->l_write_head.grant, roundoff);
+>  
+>  	/* put cycle number in every block */
+> -	xlog_pack_data(log, iclog, roundoff); 
+> +	xlog_pack_data(log, iclog, roundoff);
+>  
+>  	/* real byte length */
+>  	size = iclog->ic_offset;
+> -- 
+> 2.25.1
+> 

@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91E4585E21
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 10:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD73585E26
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 10:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiGaIbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 04:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S236294AbiGaIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 04:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGaIbK (ORCPT
+        with ESMTP id S229456AbiGaIeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 04:31:10 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7912622
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 01:31:09 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id a17-20020a056e0208b100b002dc52b51d98so4898182ilt.0
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 01:31:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=zQvI4TiOA16DBzXYviHz1jz0WFrpEFdkix34ssD8V+E=;
-        b=E4fDpkmWrRM+2eFt0eThZruWI3Qieui2O9+kKIJlyyJFFXjVvmAOXVqn/tT8WDEmER
-         i0lQto4VkWB8UdZZ2ztuY4XtD2PMoWV0mGDSq2hD70ibSy5KwBYOk0t3QBHGIYCXs+8J
-         eit3mhSNsesl8gBsXe/p9vUxplGCBXrgLZ8UhJjcqGv8E8ur5of+DySD6J2HIHFMJJN1
-         pbCJ51LvQ8J2NsJBcaCHMeiJz2pNtVcPcP2qRqAr1qxK7OEuFltltmtl5b982ZKoSUQG
-         QHU72ePUWgpVTdboIlESJ2CYWBYpFqRka2nSSyJ2nw2DCrgHDdy3nmms5rtMpW6gkp8u
-         nfeg==
-X-Gm-Message-State: AJIora92GvdzCTczSnUjfGbabxN1516xEUNkfCTZ9fjp9uSjG7ayHilJ
-        WArLYEiqucjs+AZUJpTStc0OJZ6SMg5XByTwogL/fA2/etX9
-X-Google-Smtp-Source: AGRyM1sIxGZt8yFtWSRoFXwUmvMPMdFQM9xRXOuxurefWgECH5Raywdd9pP+RR/DZzLbTc+vfHuBDLDJdF07EgjqSxLlpZmwXKHd
+        Sun, 31 Jul 2022 04:34:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F74112627;
+        Sun, 31 Jul 2022 01:34:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E800A609D0;
+        Sun, 31 Jul 2022 08:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85C2C433C1;
+        Sun, 31 Jul 2022 08:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659256460;
+        bh=8QXXfpkC/0m1rjKafHxPZkNrxMHSchHUGWSCxb7xruc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooJLrlUlRPs3IpHjOPsggXTx/yuzdvtF5RthB1kTeMfdG6tIf1W7ijcO/cCSssv6V
+         Ge8ra+XpiNlVZJKVQg4bXk3H8DocDmA8ryEgL+qqnaD1/atwt6/0qJPwkbbqewui6C
+         yesuzSYeZ4evOiBk1hCl01ZL+sy2bw1455OMKl03qphswFXFXODXiEZQpisc1oCXg/
+         TQ1ZUe8JVK1IGhNWzfgmpqM/By2lvynyOARyRaaig9Zk+VXHj7SeTkbb37Ac47Ab1F
+         L4CnfqH0lZitlDTTB+6fWUcqsr7jqWek/uHs1yppBkjIBachPPVF8wldf82PFDBR/K
+         7M4wvBKv9IH4Q==
+Date:   Sun, 31 Jul 2022 11:34:16 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] RDMA/mlx5: unchecked return value
+Message-ID: <YuY+iGeu+jRJFGki@unreal>
+References: <20220730103242.48612-1-mailmesebin00@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2d12:b0:67c:3c33:4994 with SMTP id
- c18-20020a0566022d1200b0067c3c334994mr3634264iow.26.1659256268814; Sun, 31
- Jul 2022 01:31:08 -0700 (PDT)
-Date:   Sun, 31 Jul 2022 01:31:08 -0700
-In-Reply-To: <20220731081548.659-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007e808205e515b47d@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in gc_worker (3)
-From:   syzbot <syzbot+eec403943a2a2455adaa@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220730103242.48612-1-mailmesebin00@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Jul 30, 2022 at 04:02:42PM +0530, Sebin Sebastian wrote:
+> Unchecked return value warning as reported by Coverity static analyzer
+> tool. check the return value of mlx5_ib_ft_type_to_namespace().
+> 
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+> ---
+>  drivers/infiniband/hw/mlx5/fs.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Thanks, I had similar patch in my internal queue.
+https://lore.kernel.org/linux-rdma/7b9ceda217d9368a51dc47a46b769bad4af9ac92.1659256069.git.leonro@nvidia.com/T/#u
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 0-... } 2654 jiffies s: 2049 root: 0x1/.
-rcu: blocking rcu_node structures (internal RCU debug):
-Task dump for CPU 0:
-task:syz-executor.0  state:R  running task     stack:27224 pid: 4073 ppid:  4053 flags:0x0000400e
-Call Trace:
- <TASK>
- </TASK>
-
-
-Tested on:
-
-commit:         91265a6d Add linux-next specific files for 20220303
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11978a82080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
-dashboard link: https://syzkaller.appspot.com/bug?extid=eec403943a2a2455adaa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ff72fe080000
-
+> 
+> diff --git a/drivers/infiniband/hw/mlx5/fs.c b/drivers/infiniband/hw/mlx5/fs.c
+> index 691d00c89f33..617e0e9c0c8e 100644
+> --- a/drivers/infiniband/hw/mlx5/fs.c
+> +++ b/drivers/infiniband/hw/mlx5/fs.c
+> @@ -2079,9 +2079,12 @@ static int mlx5_ib_matcher_ns(struct uverbs_attr_bundle *attrs,
+>  			return err;
+>  
+>  		if (flags) {
+> -			mlx5_ib_ft_type_to_namespace(
+> +			err = mlx5_ib_ft_type_to_namespace(
+>  				MLX5_IB_UAPI_FLOW_TABLE_TYPE_NIC_TX,
+>  				&obj->ns_type);
+> +			if (err)
+> +				return err;
+> +
+>  			return 0;
+>  		}
+>  	}
+> -- 
+> 2.34.1
+> 

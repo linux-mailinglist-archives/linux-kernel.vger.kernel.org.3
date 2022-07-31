@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146A9585FCD
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926B2585FD5
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 18:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237554AbiGaQYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 12:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S237557AbiGaQ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 12:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235773AbiGaQYi (ORCPT
+        with ESMTP id S233769AbiGaQ1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 12:24:38 -0400
+        Sun, 31 Jul 2022 12:27:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CBBFD1B;
-        Sun, 31 Jul 2022 09:24:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E023EE1D;
+        Sun, 31 Jul 2022 09:27:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80F4FB80DA2;
-        Sun, 31 Jul 2022 16:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA57C433C1;
-        Sun, 31 Jul 2022 16:24:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45980B80DA4;
+        Sun, 31 Jul 2022 16:27:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FFBC433D6;
+        Sun, 31 Jul 2022 16:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659284675;
-        bh=zIfT12tnwJq/DHxO3JDHCrsfY6cAZhMxyMpQL4k8BlQ=;
+        s=k20201202; t=1659284869;
+        bh=9ZC34wAli/aaiEkK15JfWnC3zOSad40zrBFbrul0iFE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RHk92vJOFgnmG5gh1fBtXiDrUesy9CCx/dyDtAkatVjGDE38kWwdjK1Fda6hzMyrj
-         Yej741/bTVNdk76J0ZZ48AWj+bsPKLu54a97FYSkyUAJcN6CwV8/j2LGh9k22N8HAi
-         2wUzzTy74cass+mSMnsp2JAKBIWBYh/guGxtwx2vf9Cji+4T4D4GQ5FLgVOfVPXbxF
-         j9GHIBEFYnRa6hGh4Bn1LUA9ziSFHAwZUTmOrNfGxMl2uW2v8bRSOY+zzKqptqAQ+Q
-         bsQdKgCiRj84ztxkqwy23LXgny87CQsEwe3Na0Oe8+BdxCaVXLdBG98Mb4j9MvarGa
-         PMA7E2n+fcmWA==
-Date:   Sun, 31 Jul 2022 17:34:46 +0100
+        b=p1wgNzEcmc+3XI0X9qQVkfltQEsQOrzQUNCWhF3qmKAqxaUDyhY5dxrE++gNLHRSZ
+         MPeSq4te9jnNxxLd0nYH1835SlusNmtklXMfhPCWo6NQKYwHXwOG95abNxCZTOPD+C
+         9HfM0aEtnuai4P7Gw1jcWifyUdKHmAWlNlKTdULYnZo1x86QPWpJpPqY9FlYfKmMWg
+         IflLXh0C/eGHmWcYQU8yBS+NZ5Ouu939fKeYUFgRoaglqoBZglUjuWAX99jNql5I2P
+         yX/RFlQXpZu2tIQo8JI8b49Waa0sub2faRCnjZ9IIAD9wnm7Y7YB6I8ZzkDlN6q/vz
+         MrWsgP2DHyJXg==
+Date:   Sun, 31 Jul 2022 17:38:01 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        dmitry.osipenko@collabora.com, krisman@collabora.com,
-        andy.shevchenko@gmail.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com
-Subject: Re: [PATCH v10 0/2] Add LTRF216A Driver
-Message-ID: <20220731173446.7400bfa8@jic23-huawei>
-In-Reply-To: <20220725104050.491396-1-shreeya.patel@collabora.com>
-References: <20220725104050.491396-1-shreeya.patel@collabora.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/9] iio: adc: mcp3911: use resource-managed version
+ of iio_device_register
+Message-ID: <20220731173801.47585fbe@jic23-huawei>
+In-Reply-To: <20220722130726.7627-5-marcus.folkesson@gmail.com>
+References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+        <20220722130726.7627-5-marcus.folkesson@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,109 +61,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Jul 2022 16:10:48 +0530
-Shreeya Patel <shreeya.patel@collabora.com> wrote:
+On Fri, 22 Jul 2022 15:07:21 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-> This patchset adds support for ltrf216a Ambient Light Sensor
-> and documents the DT bindings for the same.
+> Keep using managed resources as much as possible.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Series applied to the togreg branch of iio.git and pushed out as testing
-for the autobuilders to see if they can find anything we missed.
+Hi Marcus,
 
-Thanks for persisting with this!  Note that it will be queued up for
-next cycle and that I'll rebase my tree on rc1 once available.
-I won't push out as togreg (which is picked up by linux-next) until
-after that rebase.
-
-Thanks,
+Not sure how I missed the below on previous versions :(
 
 Jonathan
 
+> ---
+>  drivers/iio/adc/Kconfig   |  2 ++
+>  drivers/iio/adc/mcp3911.c | 51 ++++++++++++++++++++-------------------
+>  2 files changed, 28 insertions(+), 25 deletions(-)
 > 
-> Changes in v10
->   - Handle !CONFIG_PM scenario similar to how other IIO drivers
->     do it.
->   - Fix kernel test robot warning.
-> 
-> Changes in v9
->   - Add LTRF216A_MAIN_STATUS register in volatile function.
->   - Update the datasheet link.
-> 
-> Changes in v8
->   - Add caching mechanism to restore register state after h/w resume.
->   - Add callback functions and disable locking in regmap config.
->   - Update mutex comment as per it's current scope in the driver.
->   - Add Shreeya as author of the driver.
->   - Make some minor cleanups.
-> 
-> Changes in v7
->   - Add regmap support.
->   - Fix runtime power management implementation.
->   - Fix the ordering of devm and non-devm functions.
->   - Use DEFINE_RUNTIME_DEV_PM_OPS macro
->   - Fix the error reported by kernel test robot for bindings.
-> 
-> Changes in v6
->   - Fix some errors reported by kernel test robot.
->   - Add protocol details for the datasheet link.
->   - Remove useless assignments.
->   - Add unit details for read data delay macro.
->   - Use pm_sleep_ptr().
-> 
-> Changes in v5
->   - Add power management support.
->   - Add reset functionality.
->   - Use readx_poll_timeout() to get data.
->   - Cleanup some of the redundant code.
->   - Update int_time_fac after I2C write is successful.
->   - Rename mutex to lock.
->   - Use Reverse Xmas tree pattern for all variable definitions.
->   - Improve error handling messages and add error codes.
->   - Add one more MODULE_AUTHOR.
->   - Remove cleardata which was reading data for infrared light.
->   - Remove patch for deprecated vendor prefix [PATCH v4 3/3].
->   - Remove deprecated string from DT binding document.
-> 
-> Changes in v4
->   - Add more descriptive comment for mutex lock
->   - Fix mutex locking in read_raw()
->   - Use i2c_smbus_read_i2c_block_data()
-> 
-> Changes in v3
->   - Use u16 instead of u8 for int_time_fac
->   - Reorder headers in ltrf216a.c file
->   - Remove int_time_mapping table and use int_time_available
->   - Fix indentation in the bindings file.
-> 
-> Changes in v2
->   - Add support for 25ms and 50ms integration time.
->   - Rename some of the macros as per names given in datasheet
->   - Add a comment for the mutex lock
->   - Use read_avail callback instead of attributes and set the
->     appropriate _available bit.
->   - Use FIELD_PREP() at appropriate places.
->   - Add a constant lookup table for integration time and reg val
->   - Use BIT() macro for magic numbers.
->   - Improve error handling at few places.
->   - Use get_unaligned_le24() and div_u64()
->   - Use probe_new() callback and devm functions
->   - Return errors in probe using dev_err_probe()
->   - Use DEFINE_SIMPLE_DEV_PM_OPS()
->   - Correct the formula for lux to use 0.45 instead of 0.8
->   - Add interrupt and power supply property in DT bindings
->   - Add vendor prefix name as per the alphabetical order.
-> 
-> 
-> Shreeya Patel (2):
->   dt-bindings: Document ltrf216a light sensor bindings
->   iio: light: Add support for ltrf216a sensor
-> 
->  .../bindings/iio/light/liteon,ltrf216a.yaml   |  49 ++
->  drivers/iio/light/Kconfig                     |  11 +
->  drivers/iio/light/Makefile                    |   1 +
->  drivers/iio/light/ltrf216a.c                  | 537 ++++++++++++++++++
->  4 files changed, 598 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/light/liteon,ltrf216a.yaml
->  create mode 100644 drivers/iio/light/ltrf216a.c
-> 
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 7fe5930891e0..3b5db59f3931 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -718,6 +718,8 @@ config MCP3422
+>  config MCP3911
+>  	tristate "Microchip Technology MCP3911 driver"
+>  	depends on SPI
+> +	select IIO_BUFFER
+> +	select IIO_TRIGGERED_BUFFER
+>  	help
+>  	  Say yes here to build support for Microchip Technology's MCP3911
+>  	  analog to digital converter.
+> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> index 890af7dca62d..00dadb1761dc 100644
+> --- a/drivers/iio/adc/mcp3911.c
+> +++ b/drivers/iio/adc/mcp3911.c
+> @@ -258,6 +258,18 @@ static int mcp3911_config(struct mcp3911 *adc)
+>  	return  mcp3911_write(adc, MCP3911_REG_CONFIG, configreg, 2);
+>  }
+>  
+> +static void mcp3911_cleanup_clock(void *_adc)
+> +{
+> +	struct mcp3911 *adc = _adc;
+> +	clk_disable_unprepare(adc->clki);
+> +}
+> +
+> +static void mcp3911_cleanup_regulator(void *_adc)
+> +{
+> +	struct mcp3911 *adc = _adc;
+> +	regulator_disable(adc->vref);
+> +}
+> +
+>  static int mcp3911_probe(struct spi_device *spi)
+>  {
+>  	struct iio_dev *indio_dev;
+> @@ -286,6 +298,11 @@ static int mcp3911_probe(struct spi_device *spi)
+>  		ret = regulator_enable(adc->vref);
+>  		if (ret)
+>  			return ret;
+> +
+> +		ret = devm_add_action_or_reset(&spi->dev,
+> +				mcp3911_cleanup_regulator, adc);
+> +		if (ret)
+> +			return ret;
+>  	}
+>  
+>  	adc->clki = devm_clk_get(&adc->spi->dev, NULL);
+> @@ -296,21 +313,25 @@ static int mcp3911_probe(struct spi_device *spi)
+>  			dev_err(&adc->spi->dev,
+>  				"failed to get adc clk (%ld)\n",
+>  				PTR_ERR(adc->clki));
+> -			ret = PTR_ERR(adc->clki);
+> -			goto reg_disable;
+> +			return PTR_ERR(adc->clki);
+>  		}
+>  	} else {
+>  		ret = clk_prepare_enable(adc->clki);
+>  		if (ret < 0) {
+>  			dev_err(&adc->spi->dev,
+>  				"Failed to enable clki: %d\n", ret);
+> -			goto reg_disable;
+> +			return ret;
+>  		}
+> +
+> +		ret = devm_add_action_or_reset(&spi->dev,
+> +				mcp3911_cleanup_clock, adc);
+> +		if (ret)
+> +			return ret;
+>  	}
+>  
+>  	ret = mcp3911_config(adc);
+>  	if (ret)
+> -		goto clk_disable;
+> +		return ret;
+>  
+>  	indio_dev->name = spi_get_device_id(spi)->name;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+> @@ -322,31 +343,11 @@ static int mcp3911_probe(struct spi_device *spi)
+>  
+>  	mutex_init(&adc->lock);
+>  
+> -	ret = iio_device_register(indio_dev);
+> -	if (ret)
+> -		goto clk_disable;
+> -
+> -	return ret;
+> -
+> -clk_disable:
+> -	clk_disable_unprepare(adc->clki);
+> -reg_disable:
+> -	if (adc->vref)
+> -		regulator_disable(adc->vref);
+> -
+> -	return ret;
+> +	return devm_iio_device_register(&adc->spi->dev, indio_dev);
+>  }
+>  
+>  static void mcp3911_remove(struct spi_device *spi)
+
+There is no requirement to provide a remove function.  So not it
+is empty get rid of it completely.
+
+>  {
+> -	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+> -	struct mcp3911 *adc = iio_priv(indio_dev);
+> -
+> -	iio_device_unregister(indio_dev);
+> -
+> -	clk_disable_unprepare(adc->clki);
+> -	if (adc->vref)
+> -		regulator_disable(adc->vref);
+>  }
+>  
+>  static const struct of_device_id mcp3911_dt_ids[] = {
 

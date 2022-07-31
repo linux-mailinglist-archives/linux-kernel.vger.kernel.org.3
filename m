@@ -2,119 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627B1585CF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 04:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A571E585CFB
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 05:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbiGaCeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Jul 2022 22:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S231299AbiGaDEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Jul 2022 23:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiGaCea (ORCPT
+        with ESMTP id S229626AbiGaDEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Jul 2022 22:34:30 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0513E12;
-        Sat, 30 Jul 2022 19:34:29 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id z20so1785475ljq.3;
-        Sat, 30 Jul 2022 19:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=T481nvKuJ0ZTtRo/nf05qojcNx9GtNMP4sCJDBL+oLQ=;
-        b=DTGDdewi7Ruokf1EYnkRlH8lX3VbWOoeATFlk05uc3Gu1p63jpPWePHa8NrNOBo19M
-         Mi0jWpOVxA+dGf2JJtqijlJNDoAjLKLfuR0Vkp3oFO2sVLVrTXSv97Xw91kK+Rn54Kp6
-         O7UXGI4+zZ+WKmIyN6Vpj6SEQKPrT7VvFAdqsPG2d8UFp1H/aqqWkBqhUiCmsQG6UkCP
-         +cw9EN/tCIjt4wP5Opew/7l3npzALT0iQ9LNqswu016+FkHl09KNJYH86CGzIBKfc2zl
-         ufy6pPKD0qjes1XJMmx+ygJJHp7Z5jCCu/3YvHqbRl9EBfAK3GzeSvgpPt14jFYNtF3H
-         65Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=T481nvKuJ0ZTtRo/nf05qojcNx9GtNMP4sCJDBL+oLQ=;
-        b=hTK6fJ3OBFT7jBmu1IgsFFLa3SBWWbjM/V45elpm5cbQCXd3B/0AeOxgc4fyV1cHrM
-         4oJi9TBjdLyL4+W8XfscRNIx2Qd5aBPiF2eFNzFWnpmyXBd1dWKFFEbv8HtBQeVEI4l+
-         QG47Hf/0jqo69ca2aubmD1y0mU28t1Gtq15L+ZgWjp6CQ63fcyRLpT6vXr5KHNhGp716
-         /URaBqTJzeTHNmJA7EVkUBwHb3x//9ii7r7ToxiLQzvky8Wl4keI8w+oq2qkpQ1OWebd
-         L2H1ziJrT9AuiQu7UIIUqJm3dLxp0NYUhuGn4W8ZECja1N7oEX3/wFfLA4tT7+oBjkOR
-         BY7A==
-X-Gm-Message-State: AJIora/2vOLp6+05lLFuC1Oqn+Sa5xEFaJ9noSBqbMdp+aEWe1jzjCXC
-        p952T5iN6PGTyuoNJEBoNHoUAi8N3OP2s9nHLI0=
-X-Google-Smtp-Source: AGRyM1s3ny6HptAiq4uyxyVpT08ei7svf8yVJNkvTVWiEdJMv6AYFkBq/Jvq+Af/WmrU6HvZ2Ut/afFXRzSz6EzXUJk=
-X-Received: by 2002:a05:651c:886:b0:25e:3440:9518 with SMTP id
- d6-20020a05651c088600b0025e34409518mr3331600ljq.248.1659234867669; Sat, 30
- Jul 2022 19:34:27 -0700 (PDT)
+        Sat, 30 Jul 2022 23:04:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D84313CE1
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Jul 2022 20:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659236647; x=1690772647;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7+1RD1Re9px7Auqkvldv6Epw4/8UOchTahNURBN9OkU=;
+  b=INQKjYZlFdMU+znR+bhrdUFcmCYxVloI5Zvqh6Ag0k524dFSv5kFW/3V
+   sm63JLuFLvGy2hZjjpr8d2wBqxIxFGkQzrnFbNwXgX1OovG3nkhS2OU4k
+   zfEsAumtyxl64ufQihZmpiNFpQrJrXTI2maa1JPx8SMAcSb3dKBFLDjD8
+   RSSx/Ad//Ugkl6If2VtmIsKLoSZZ2wJCwDJYQJyMwBCNjA9YA0PdAaieS
+   T6qKj9j+UeHgXCTDh/BqXmq7tGpluN2v+TXOxeCcwY7e0aXXlVSItNkwD
+   zSROL2OE15iNxlKr0WilF4EkjOtgpS6eJNuJRg73DjDoB0WmFpkmQceOt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10424"; a="288976700"
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="288976700"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2022 20:04:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,205,1654585200"; 
+   d="scan'208";a="577385581"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jul 2022 20:04:04 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oHzFM-000DbD-0u;
+        Sun, 31 Jul 2022 03:04:04 +0000
+Date:   Sun, 31 Jul 2022 11:03:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 58b0b6adb85450f988ca1d9ed05f1c82701ed64e
+Message-ID: <62e5f0f8.pnKQcPozz6Jml0Q+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220725030605.1808710-1-klimov.linux@gmail.com>
- <Yt5Zn9cXDe9/F9RJ@kroah.com> <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
- <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
-In-Reply-To: <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
-From:   Alexey Klimov <klimov.linux@gmail.com>
-Date:   Sun, 31 Jul 2022 03:34:16 +0100
-Message-ID: <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        atishp@rivosinc.com, atishp@atishpatra.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> On 26.07.22 02:21, Alexey Klimov wrote:
-> > On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
-> >
-> > [..]
-> >
-> >> Anyway, driver looks good to me, nice work!
-> >>
-> >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > Thanks, Greg. If you don't mind I'll use your tag in next version
-> > after making changes suggested by Guenter since there will be no
-> > significant functional changes. If code will change a lot, then the
-> > process (Documentation/process/submitting-patches.rst) will require me
-> > to drop the tag.
->
-> Hi,
->
-> while thinking about this a question arose. How does this
-> device react to a USB reset? A watchdog that can be disabled
-> by a simple reset does not like very reliable to me.
-> Do you need to implement pre/post_reset() ?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 58b0b6adb85450f988ca1d9ed05f1c82701ed64e  Merge branch into tip/master: 'sched/core'
 
-You're right. Upon reset the watchdog is disabled even if it was active before.
-Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
-looking at Documentation and other drivers it seems that I need to do:
-in pre_reset():
-mutex_lock() to block any other I/O to the usb device;
-__usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
-and do not unlock the mutex;
+elapsed time: 717m
 
-in post_reset():
-if (watchdog_active())
-        __usb_streamlabs_wdt_cmd(START);
-mutex_unlock() to allow other's I/O to the usb deivce.
+configs tested: 93
+configs skipped: 3
 
-Seems right?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Best regards,
-Alexey
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arm                                 defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                                defconfig
+x86_64                              defconfig
+x86_64                        randconfig-a015
+x86_64                        randconfig-a002
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+arm64                            allyesconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+arc                              allyesconfig
+x86_64                        randconfig-a006
+i386                          randconfig-a003
+x86_64                          rhel-8.3-func
+i386                          randconfig-a014
+powerpc                           allnoconfig
+alpha                            allyesconfig
+x86_64                         rhel-8.3-kunit
+powerpc                          allmodconfig
+arm                              allyesconfig
+x86_64                        randconfig-a004
+mips                             allyesconfig
+arc                  randconfig-r043-20220730
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                          randconfig-a005
+x86_64                           allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+sh                               allmodconfig
+arc                  randconfig-r043-20220729
+ia64                             allmodconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+arm                        clps711x_defconfig
+powerpc                  iss476-smp_defconfig
+nios2                         3c120_defconfig
+ia64                             alldefconfig
+sh                          kfr2r09_defconfig
+xtensa                  audio_kc705_defconfig
+sh                        dreamcast_defconfig
+sh                           se7722_defconfig
+arm                           sama5_defconfig
+xtensa                generic_kc705_defconfig
+arm                        trizeps4_defconfig
+sparc                       sparc32_defconfig
+powerpc                       eiger_defconfig
+openrisc                         alldefconfig
+powerpc                   currituck_defconfig
+parisc                generic-64bit_defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      pcm030_defconfig
+sh                          rsk7264_defconfig
+sh                         microdev_defconfig
+sh                          urquell_defconfig
+sh                            shmin_defconfig
+powerpc                     rainier_defconfig
+arm64                            alldefconfig
+arc                     haps_hs_smp_defconfig
+ia64                                defconfig
+openrisc                    or1ksim_defconfig
+
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220730
+x86_64                        randconfig-a005
+i386                          randconfig-a013
+x86_64                        randconfig-a001
+hexagon              randconfig-r041-20220729
+x86_64                        randconfig-a003
+riscv                randconfig-r042-20220730
+riscv                randconfig-r042-20220729
+s390                 randconfig-r044-20220730
+hexagon              randconfig-r045-20220729
+i386                          randconfig-a002
+i386                          randconfig-a011
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220730
+s390                 randconfig-r044-20220729
+arm                          ep93xx_defconfig
+riscv                          rv32_defconfig
+powerpc                 mpc8560_ads_defconfig
+powerpc                   microwatt_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

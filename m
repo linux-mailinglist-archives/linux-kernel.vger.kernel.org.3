@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24F158610A
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E8B58610F
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238036AbiGaTYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 15:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S237485AbiGaT3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 15:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238410AbiGaTY0 (ORCPT
+        with ESMTP id S230074AbiGaT33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 15:24:26 -0400
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E107B13E8D
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 12:23:02 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id IEWYoK0AjxFTAIEWYok3tY; Sun, 31 Jul 2022 21:22:53 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 31 Jul 2022 21:22:53 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 2/2] media: sunxi: Fix some error handling path of sun6i_mipi_csi2_probe()
-Date:   Sun, 31 Jul 2022 21:22:49 +0200
-Message-Id: <9999a30560d0ab8201734cbab0483c6f840402da.1659295329.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <62c0aef8d3b86d8f290bf6787f1b2b41efbb0b55.1659295329.git.christophe.jaillet@wanadoo.fr>
-References: <62c0aef8d3b86d8f290bf6787f1b2b41efbb0b55.1659295329.git.christophe.jaillet@wanadoo.fr>
+        Sun, 31 Jul 2022 15:29:29 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1866AE5B;
+        Sun, 31 Jul 2022 12:29:27 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id p5so11306785edi.12;
+        Sun, 31 Jul 2022 12:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Lw53LGjMYk2wKLkpCkMzhMU/ERzJG+2KOxxgSH1zgdU=;
+        b=gXJcNmTRLXg/V8KJAfyYmV8b/EUlRYeownvd/IMNCvFNgDUMdjWMQ47IKipedORKt3
+         KPm9oNNTQ72x7FrQlo3Sy02e3QYfZF1fEp9J121zyxI7wtvyjq7XqlEirBR1ny9GWGE7
+         N6R3ge4woduU2DwUjjyND3UO613tbNcj6EBzreM2yBLI66+yeXXbzkimbq6QgffMGyyI
+         kEF923EcPSoY7BXCvUZNbKUe9V3zSwbJhj+pfu+O5C0VM+p81FE6ix4mwpeTtIa2ToGJ
+         oCkzE19sWu6fIPKpO90qB0Ed54UWX7w4KkzS2le0nzOP8Ox6amRwEq8hkr8yqq9EI5su
+         D2qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Lw53LGjMYk2wKLkpCkMzhMU/ERzJG+2KOxxgSH1zgdU=;
+        b=JqD3P8dLZk7amgyeNhEEyxeHbdBdqy3MSu8njO0T8qKnmVk89dDJpAYCqPbeOrHF6h
+         Btf43dqtDg41gGbVwKjTvExdIGyVEo+oGexKziAoAYx+7WkTCJrOL2qXQI3aTEHlDFma
+         SVAIyzit2iPtKWJbHuP7rbfroQe5cRDaqn0JA+WIEn9BdnClPR4DgdynV194hspe9Pvt
+         W+9Wjeb5vt2rBDs+fwY43yjyjIesYGxZgJy4A6t/FrN+gAkPmxMPt4SwOdkM1C5TiQ8g
+         72ZO27++ishOtWdpsVIQXWDLk/qKB8gm17E+Am7nWozHoL197B8YkNVgZGPSZF3PHjuL
+         vjPA==
+X-Gm-Message-State: AJIora+0G9pf5/MLm7LKpLvQgO7LbIUfCMthHKsBIcb5g9LgCZ65AgVS
+        ZMhQE7DpKCUycgl/BDYcZxJOSnfLTdICtacArC8=
+X-Google-Smtp-Source: AGRyM1siBEDUKXsqCVV9//5tCubg3Fw94xh7Rjz+bbW/JNpAinjTAn3FAq+ICWEuaWlDhIQtOz/jrTFJpc6CcbvxVWs=
+X-Received: by 2002:a05:6402:40c3:b0:43b:d65a:cbf7 with SMTP id
+ z3-20020a05640240c300b0043bd65acbf7mr12887191edb.380.1659295766127; Sun, 31
+ Jul 2022 12:29:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220722081146.47262-1-jjhiblot@traphandler.com> <20220722081146.47262-3-jjhiblot@traphandler.com>
+In-Reply-To: <20220722081146.47262-3-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 31 Jul 2022 21:28:49 +0200
+Message-ID: <CAHp75Vdu-EJRRxkK7+TfuE=zEDkJye1QCXSB+cDLrqxuykJjkA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v6 2/3] leds: Add driver for the TLC5925 LED controller
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Release some resources in the error handling path of the probe and of
-sun6i_mipi_csi2_resources_setup(), as already done in the remove
-function.
+On Fri, Jul 22, 2022 at 10:14 AM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> The TLC5925 is a 16-channels constant-current LED sink driver.
+> It is controlled via SPI but doesn't offer a register-based interface.
+> Instead it contains a shift register and latches that convert the
+> serial input into a parallel output.
+>
+> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Fixes: af54b4f4c17f ("media: sunxi: Add support for the A31 MIPI CSI-2 controller")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c    | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+Sorry for my slowpokeness, but I just realized that this driver may
+not be needed. What is the difference to existing gpio-74x164?
 
-diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-index a4e3f9a6b2ff..1ee8501e25f6 100644
---- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-@@ -661,7 +661,8 @@ sun6i_mipi_csi2_resources_setup(struct sun6i_mipi_csi2_device *csi2_dev,
- 	csi2_dev->reset = devm_reset_control_get_shared(dev, NULL);
- 	if (IS_ERR(csi2_dev->reset)) {
- 		dev_err(dev, "failed to get reset controller\n");
--		return PTR_ERR(csi2_dev->reset);
-+		ret = PTR_ERR(csi2_dev->reset);
-+		goto err_put_clk_rate;
- 	}
- 
- 	/* D-PHY */
-@@ -669,13 +670,14 @@ sun6i_mipi_csi2_resources_setup(struct sun6i_mipi_csi2_device *csi2_dev,
- 	csi2_dev->dphy = devm_phy_get(dev, "dphy");
- 	if (IS_ERR(csi2_dev->dphy)) {
- 		dev_err(dev, "failed to get MIPI D-PHY\n");
--		return PTR_ERR(csi2_dev->dphy);
-+		ret = PTR_ERR(csi2_dev->dphy);
-+		goto err_put_clk_rate;
- 	}
- 
- 	ret = phy_init(csi2_dev->dphy);
- 	if (ret) {
- 		dev_err(dev, "failed to initialize MIPI D-PHY\n");
--		return ret;
-+		goto err_put_clk_rate;
- 	}
- 
- 	/* Runtime PM */
-@@ -683,6 +685,10 @@ sun6i_mipi_csi2_resources_setup(struct sun6i_mipi_csi2_device *csi2_dev,
- 	pm_runtime_enable(dev);
- 
- 	return 0;
-+
-+err_put_clk_rate:
-+	clk_rate_exclusive_put(csi2_dev->clock_mod);
-+	return ret;
- }
- 
- static void
-@@ -712,9 +718,13 @@ static int sun6i_mipi_csi2_probe(struct platform_device *platform_dev)
- 
- 	ret = sun6i_mipi_csi2_bridge_setup(csi2_dev);
- 	if (ret)
--		return ret;
-+		goto err_cleanup_resources;
- 
- 	return 0;
-+
-+err_cleanup_resources:
-+	sun6i_mipi_csi2_resources_cleanup(csi2_dev);
-+	return ret;
- }
- 
- static int sun6i_mipi_csi2_remove(struct platform_device *platform_dev)
 -- 
-2.34.1
-
+With Best Regards,
+Andy Shevchenko

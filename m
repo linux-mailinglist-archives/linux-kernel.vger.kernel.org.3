@@ -2,87 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07349585F92
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2DD585F94
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbiGaPnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 11:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S237319AbiGaPtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 11:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiGaPnp (ORCPT
+        with ESMTP id S231424AbiGaPtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 11:43:45 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240C6EE31;
-        Sun, 31 Jul 2022 08:43:45 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id b7so5460624qvq.2;
-        Sun, 31 Jul 2022 08:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=O5fzJKCKvnX543t55GLgI6tA3O4NIA7ad+898Ffse3w=;
-        b=Etnt1m5zuKR7W4Ju2lEurqp8fzpduFBeky7nqg+H8/w99ulQw9mPGAZ88rMEYpUtvb
-         DsG0wi5u/PVmZdn9ThPe6VK1eHEW/hLFuSNvnrJuw5ZR/Z8VH8U5V34UaxFwuUoJSbjq
-         5ot5k1jShAufGKZn255i7BVZXCHmnGNlfbC4GzO0kOkEyQkXLLVKK840QbSB833fH0+B
-         JmpfOjY/w4k4dAe6n43y4gNc7pqipGhNRS1a6N9EWyknRMRVMB9nFJ1gbskQ7WzNkR+8
-         HJSg6zJy3/t7WBtS84D/VLLXp2CYZcg+KWhFKwn0XG2wmwYA0DdgXWGohm37kWU/Oem2
-         PZSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=O5fzJKCKvnX543t55GLgI6tA3O4NIA7ad+898Ffse3w=;
-        b=yjmY1xs3UpOiMbtWVVCpB6drG37AKpf4JphExPJwregTW1xUzzNH0LIZSs1zTKUF17
-         INcmnQMnttIbez2MyLjWctRjpCnYJfxBCHxF0uyJaH0sbS2WKz4YtJHkXoW1ei4Q/Lyr
-         X7SuPnNcDuLgI3eURKpSNce+beLLev1CKmRg/ulYnOikB1Vvj+PHrkayHiVC/bruX2JS
-         x6LJhY8IBHOjozXveJlTmUI3Ic9cxYW5mANa14A0m/qg51I5t0aewKJA1YXW+vqWCN8H
-         oJc89K58ZBr0QlyxHJ9Qe3B9wMPR7bX1HGQA0VGeRf3lqw1+5qmzk/L1jS+DbRoCFLg8
-         RLdA==
-X-Gm-Message-State: ACgBeo2LzVPEqJxa5hOi8bIPdoeD9MlvR0YICn2BXifNUdC8RMPz+dIT
-        EFWGDWAn+40RId5ZK/y3v3uZ1X/bOgM=
-X-Google-Smtp-Source: AA6agR7nm+uPqXgj2bad1CM22NDQbm1CSaTYIGyvrjFVHd9F581P1hgO8deF0JcPA9ncVixpciPiKw==
-X-Received: by 2002:ad4:5be6:0:b0:473:9831:541a with SMTP id k6-20020ad45be6000000b004739831541amr10912305qvc.118.1659282224233;
-        Sun, 31 Jul 2022 08:43:44 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:ac7a:fe76:f4fe:fa32])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a0d9600b006b872b606b1sm5050082qkl.128.2022.07.31.08.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 08:43:43 -0700 (PDT)
-Date:   Sun, 31 Jul 2022 08:43:44 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 06/10] lib/cpumask: move trivial wrappers around find_bit
- to the header
-Message-ID: <YuajMOuaGYBihRaK@yury-laptop>
-References: <20220706174253.4175492-1-yury.norov@gmail.com>
- <20220706174253.4175492-7-yury.norov@gmail.com>
- <9383b9b62a15ba6f91af5adb0b0b1dd90ac1a3df.camel@svanheule.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Sun, 31 Jul 2022 11:49:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BED9E0DA;
+        Sun, 31 Jul 2022 08:48:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32C8860AE5;
+        Sun, 31 Jul 2022 15:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A855CC433D6;
+        Sun, 31 Jul 2022 15:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659282538;
+        bh=BpVa9XKiTUOgz9LsKONU0g8nIyCwFAdKHoQkKOfJZG0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ezrAupgkv1KT72574l5osh6l5yi3NzrFxWmQrBAx9UstB4YHCONW1fFz8yFAV0saC
+         B9+OERGYa+EPlvvjHFIUUbPQgPaoml64eG6icHsFPeU74HxsZ5izPdeuzzC2p/UKXx
+         /0rAyJevGiPvBiEajNnxgxELO3JUMD2APZdSXABzMkH8pMKLfqkfPPsSlXbFqw3nlZ
+         RXF2PfAjKLH0Vm9+wWVCXbpOPPkRpY2ESn47bvf+S82AJ8jOrJQ/OKJpH8YruFnmwF
+         7YLjnv8X5NFNoZq2U8x6xP51UPWsryFZCHI+CP+X4nGOwigZWWEjbw3ZSSeSCy7Svp
+         dREEN86bbTm5Q==
+Date:   Mon, 1 Aug 2022 00:48:54 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <mhiramat@kernel.org>
+Subject: Re: [PATCH] kprobes: Forbid probing on kprobe_insn_slot
+Message-Id: <20220801004854.9c2b36f38fe5ad19b2271196@kernel.org>
+In-Reply-To: <20220727032058.60444-1-chenzhongjin@huawei.com>
+References: <20220727032058.60444-1-chenzhongjin@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9383b9b62a15ba6f91af5adb0b0b1dd90ac1a3df.camel@svanheule.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,65 +57,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 11:42:52AM +0200, Sander Vanheule wrote:
-> Hi Yury,
-> 
-> On Wed, 2022-07-06 at 10:42 -0700, Yury Norov wrote:
-> > To avoid circular dependencies, cpumask keeps simple (almost) one-line
-> > wrappers around find_bit() in a c-file.
-> > 
-> > Commit 47d8c15615c0a2 ("include: move find.h from asm_generic to linux")
-> > moved find.h header out of asm_generic include path, and it helped to fix
-> > many circular dependencies, including some in cpumask.h.
-> > 
-> > This patch moves those one-liners to header files.
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  include/linux/cpumask.h | 57 ++++++++++++++++++++++++++++++++++++++---
-> >  lib/cpumask.c           | 55 ---------------------------------------
-> >  2 files changed, 54 insertions(+), 58 deletions(-)
-> > 
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index 760022bcb925..ea3de2c2c180 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -241,7 +241,21 @@ static inline unsigned int cpumask_last(const struct
-> > cpumask *srcp)
-> >         return find_last_bit(cpumask_bits(srcp), nr_cpumask_bits);
-> >  }
-> >  
-> > -unsigned int __pure cpumask_next(int n, const struct cpumask *srcp);
-> > +/**
-> > + * cpumask_next - get the next cpu in a cpumask
-> > + * @n: the cpu prior to the place to search (ie. return will be > @n)
-> > + * @srcp: the cpumask pointer
-> > + *
-> > + * Returns >= nr_cpu_ids if no further cpus set.
-> > + */
-> > +static inline
-> > +unsigned int cpumask_next(int n, const struct cpumask *srcp)
-> 
-> This also drops the __pure speficier for these functions. Since I have a patch
-> that does the opposite for cpumask_next_wrap() [1], I was wondering what your
-> reasoning behind this is.
-> 
-> Since a cpumask like cpu_online_mask may change between subsequent calls, I'm
-> considering to drop my patch adding __pure, and to follow the changes you've
-> made here.
-> 
-> [1]
-> https://lore.kernel.org/all/06eebdc46cfb21eb437755a2a5a56d55c41400f5.1659077534.git.sander@svanheule.net/
- 
-__pure is a promise to the compiler that the function will not modify
-system state (i.e. will not write into the memory). Now that the
-cpumask_next etc. became static inline, there's no reason for the hint
-because the compiler inlines the code, and there's no a real function.
+On Wed, 27 Jul 2022 11:20:58 +0800
+Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
-Maybe then it's worth to propagate the __pure to find_bit() helpers...
+> Syzkaller reported a BUG on arm64:
+> Unrecoverable kprobe detected.
+> Dumping kprobe:
+> Name: (null)
+> Offset: 0
+> Address: 0xffffa00010019000
+> ------------[ cut here ]------------
+> kernel BUG at arch/arm64/kernel/probes/kprobes.c:235!
+> Internal error: Oops - BUG: 0 [#1] SMP
+> Modules linked in:
+> CPU: 1 PID: 31060 Comm: syz-executor.6 Not tainted 5.10.0 #11
+> ...
+> Call trace:
+> Â reenter_kprobe arch/arm64/kernel/probes/kprobes.c:234 [inline]
+> Â kprobe_handler+0x23c/0x26c arch/arm64/kernel/probes/kprobes.c:339
+> Â kprobe_breakpoint_handler+0x24/0x34 arch/arm64/kernel/probes/kprobes.c:406
+> Â call_break_hook+0xf4/0x13c arch/arm64/kernel/debug-monitors.c:322
+> Â brk_handler+0x2c/0xa0 arch/arm64/kernel/debug-monitors.c:329
+> Â do_debug_exception+0x140/0x230 arch/arm64/mm/fault.c:867
+> Â el1_dbg+0x38/0x50 arch/arm64/kernel/entry-common.c:182
+> Â el1_sync_handler+0xf4/0x150 arch/arm64/kernel/entry-common.c:219
+> Â el1_sync+0x74/0x100 arch/arm64/kernel/entry.S:665
+> Â 0xffffa00010019000
+> Â do_futex+0x2f4/0x370 kernel/futex.c:3735
+> Â __do_sys_futex kernel/futex.c:3798 [inline]
+> Â __se_sys_futex kernel/futex.c:3764 [inline]
+> Â __arm64_sys_futex+0x168/0x3a0 kernel/futex.c:3764
+> Â __invoke_syscall arch/arm64/kernel/syscall.c:36 [inline]
+> Â invoke_syscall arch/arm64/kernel/syscall.c:48 [inline]
+> Â el0_svc_common.constprop.0+0xf4/0x414 arch/arm64/kernel/syscall.c:155
+> Â do_el0_svc+0x50/0x11c arch/arm64/kernel/syscall.c:217
+> Â el0_svc+0x20/0x30 arch/arm64/kernel/entry-common.c:353
+> Â el0_sync_handler+0xe4/0x1e0 arch/arm64/kernel/entry-common.c:369
+> Â el0_sync+0x148/0x180 arch/arm64/kernel/entry.S:683
+> Code: 91018360 97ff1838 aa1703e0 97ff1fdf (d4210000)
+> ---[ end trace 767503e946e01b15 ]---
+> 
+> Syzbot tried to porbe on a kprobe_insn_slot.
+> 
+> kprobe will replace instruciton with a break and store the origin one
+> on kprobe_insn_slot. However these slots are not in .kprobes.text and
+> exported by perf_event_ksymbol so can be probed by perf interface.
+> 
+> Probing these slots will triggers kprobe handler inside single step
+> process and for some architectures such as arm64 this will causes a
+> bug().
+> 
+> These slots are kprobe process so they should not be probed anyway.
+> Add kprobe_insn_slot check when register_kprobe to forbid probing on
+> these slots.
 
-Would be great to get comments form compiler people. Rasmus?
+Oops, good catch!
 
-Thanks,
-Yury
+Previously this was not counted as text area, but now the kernel_text_address()
+returns true for these trampoline buffers.
 
+In this case, I think kprobes should be limited to probe only
+core_kernel_text and module_text.
+Can you use is_module_text_address() and core_kernel_text() instead?
+Below can allow kprobes probing on other trampolines like ftrace and
+bpf.
+Also, you may need this tag;
+
+Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+
+Thank you,
+
+> 
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>  kernel/kprobes.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f214f8c088ed..3e798b62db70 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1562,6 +1562,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>  	/* Ensure it is not in reserved area nor out of text */
+>  	if (!kernel_text_address((unsigned long) p->addr) ||
+>  	    within_kprobe_blacklist((unsigned long) p->addr) ||
+> +	    is_kprobe_insn_slot((unsigned long) p->addr) ||
+> +	    is_kprobe_optinsn_slot((unsigned long) p->addr) ||
+>  	    jump_label_text_reserved(p->addr, p->addr) ||
+>  	    static_call_text_reserved(p->addr, p->addr) ||
+>  	    find_bug((unsigned long)p->addr)) {
+> -- 
+> 2.17.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

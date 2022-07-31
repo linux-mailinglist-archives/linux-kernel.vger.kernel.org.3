@@ -2,623 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D97586024
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 19:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093B6586043
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 19:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237512AbiGaRg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 13:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S237159AbiGaRtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 13:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237383AbiGaRg1 (ORCPT
+        with ESMTP id S229577AbiGaRth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 13:36:27 -0400
+        Sun, 31 Jul 2022 13:49:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FBEE0F4;
-        Sun, 31 Jul 2022 10:36:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7998DB4A9;
+        Sun, 31 Jul 2022 10:49:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D03DD60F1F;
-        Sun, 31 Jul 2022 17:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6A4C433B5;
-        Sun, 31 Jul 2022 17:36:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C697260FEB;
+        Sun, 31 Jul 2022 17:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7C1C433D6;
+        Sun, 31 Jul 2022 17:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659288983;
-        bh=OqNwzBhmxX6dCySjRRwiRk7M2ToU+sqEvLz6YZ7Jpxo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ts+5xQgT0Y3OEh+8cSush5Lm+ldZ+OyV5KO5bZJfO69o5nQsLd+9KuTn19S0Q6cAP
-         22P+HAB9WDkqYqk9gtazyJprfFcO+yQlPBlBgmsc+2PX03iZwu39c78KoKr/f3v7JG
-         GxQwKItkPFhTsiK+toDY7vnPCwNpvxtrgHyTBimtLjODfQHq+Sb7kBIxvMuVZLX9qN
-         xLO/Vrdu04aQs5gjC9sCYPtgJGpKeJb04YMtr9+wGicr/vOmODjKon++Jcpwb+qDH9
-         8rP168f3WzEDZiEb31SiocAaFHQDfSWI1u47KvcaAnDonlt5WB9ZW57HMpyCjPTuKp
-         o+2s9nS/GLWaQ==
-Date:   Sun, 31 Jul 2022 18:46:34 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v1 2/2] iio: accel: bma400: Add support for single and
- double tap events
-Message-ID: <20220731184634.739e2d7f@jic23-huawei>
-In-Reply-To: <CAM+2EuL=ysbaGpsjgrpJw9T3pw7NKxwZhf4HS5EEVrFZPjU23g@mail.gmail.com>
-References: <20220613191706.31239-1-jagathjog1996@gmail.com>
-        <20220613191706.31239-3-jagathjog1996@gmail.com>
-        <20220619141814.4b2b3dee@jic23-huawei>
-        <CAM+2Eu+n40_WiQFJDWDeJxoSLxEKjNY1_vGxC_86DX7+jquPeg@mail.gmail.com>
-        <20220716162001.054cd77f@jic23-huawei>
-        <CAM+2EuL=ysbaGpsjgrpJw9T3pw7NKxwZhf4HS5EEVrFZPjU23g@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        s=k20201202; t=1659289772;
+        bh=3A75P4su/8E8y0yASTst8ObkOtAbAvd6xg9cUj4Lnl0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FP5onuuDGImR7EX5M/M6q1jONwRdIgLbCc3URSda8B83ujN+FuZUBt896XxObyGat
+         Y3Zg0Oq/ZT4tKNn+DUDAfR37zHEtBtpCCnJI6xtdSRDQk8TdSIX9+tfwO9T6PM9ymw
+         JXHw6d7/kQsGlsUE1nCLFNhzyUewU3aykapVm9bC2xBgUanobR1trQajZsc2yL3Kh9
+         An/F1TQdq78gZw7YHPzIlFS8/V0CcdUSGkS+d4lmuc9subCB9j6Pyit9l3MXMNew/0
+         hXgsyiLBEd7dKXrAZM6QKHUhGyJ8A/oLkP5UMfaJhSnZHaAInKYgL6Ws/LizpNvhJz
+         E7aJzLObwjJQA==
+Message-ID: <5431c5e4-a8b0-738c-5143-3976cb904b9a@kernel.org>
+Date:   Sun, 31 Jul 2022 19:49:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V9 01/16] rv: Add Runtime Verification (RV) interface
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, Tao Zhou <tao.zhou@linux.dev>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+References: <cover.1659052063.git.bristot@kernel.org>
+ <a4bfe038f50cb047bfb343ad0e12b0e646ab308b.1659052063.git.bristot@kernel.org>
+ <YuU7TGxm5pzmBFTx@geo.homenetwork>
+ <0197dd47-ea15-4d8b-5fc7-e466d8a501a7@kernel.org>
+ <YuaadlzgSJLtzOUw@geo.homenetwork>
+ <20220731124730.311c8207@rorschach.local.home>
+ <20220731130144.26576a6a@rorschach.local.home>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220731130144.26576a6a@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Jul 2022 14:29:33 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
-
->  Hi Jonathan,
+On 7/31/22 19:01, Steven Rostedt wrote:
+> static int da_monitor_init_##name(void)                                                         \
+> {                                                                                               \
+>         int slot;                                                                               \
+>                                                                                                 \
+>         slot = rv_get_task_monitor_slot();  <- if this returns positive, things break           \
+>         if (slot < 0 || slot >= RV_PER_TASK_MONITOR_INIT)                                       \
 > 
-> On Sat, Jul 16, 2022 at 8:40 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> >
-> > On Sun, 26 Jun 2022 18:53:11 +0530
-> > Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >  
-> > > Hi Jonathan,
-> > >
-> > > On Sun, Jun 19, 2022 at 6:38 PM Jonathan Cameron <jic23@kernel.org> wrote:  
-> > > >
-> > > > On Tue, 14 Jun 2022 00:47:06 +0530
-> > > > Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> > > >  
-> > > > > Add support for single and double tap events based on the tap threshold
-> > > > > value and minimum quiet time value between the taps. The INT1 pin is used
-> > > > > to interrupt and event is pushed to userspace.
-> > > > >
-> > > > > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> > > > > ---
-> > > > >  drivers/iio/accel/bma400.h      |  11 ++
-> > > > >  drivers/iio/accel/bma400_core.c | 210 ++++++++++++++++++++++++++++++--
-> > > > >  2 files changed, 211 insertions(+), 10 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> > > > > index e8f802a82300..d05edd9b009a 100644
-> > > > > --- a/drivers/iio/accel/bma400.h
-> > > > > +++ b/drivers/iio/accel/bma400.h
-> > > > > @@ -40,6 +40,7 @@
-> > > > >  #define BMA400_INT_STAT1_REG        0x0f
-> > > > >  #define BMA400_INT_STAT2_REG        0x10
-> > > > >  #define BMA400_INT12_MAP_REG        0x23
-> > > > > +#define BMA400_INT_ENG_OVRUN_MSK    BIT(4)
-> > > > >
-> > > > >  /* Temperature register */
-> > > > >  #define BMA400_TEMP_DATA_REG        0x11
-> > > > > @@ -105,6 +106,16 @@
-> > > > >  #define BMA400_INT_GEN2_MSK         BIT(3)
-> > > > >  #define BMA400_GEN_HYST_MSK         GENMASK(1, 0)
-> > > > >
-> > > > > +/* TAP config registers */
-> > > > > +#define BMA400_TAP_CONFIG           0x57
-> > > > > +#define BMA400_TAP_CONFIG1          0x58
-> > > > > +#define BMA400_S_TAP_MSK            BIT(2)
-> > > > > +#define BMA400_D_TAP_MSK            BIT(3)
-> > > > > +#define BMA400_INT_S_TAP_MSK        BIT(10)
-> > > > > +#define BMA400_INT_D_TAP_MSK        BIT(11)
-> > > > > +#define BMA400_TAP_SEN_MSK          GENMASK(2, 0)
-> > > > > +#define BMA400_TAP_QUIET_MSK        GENMASK(3, 2)  
-> > > >
-> > > > So following up on the 'what is the maximum time between double taps
-> > > > question I took a look at the datasheet.
-> > > >
-> > > > What about quiet_dt and tics_th?  
-> > >
-> > > I kept both of them as default values since there is only _period attribute
-> > > which matches these values.  
-> >
-> > Understood.  Definitely feels like we are stretching that ABI too far.
-> >  
-> > >  
-> > > >
-> > > > quiet_dt seems to be min time between taps in a double tap, and tics_th
-> > > > is about the 'tap' algorithm itself.
-> > > >
-> > > > Interesting, tics_th is kind of the opposite of what we'd normally use period
-> > > > for.  We only get event if the max to min of tap occur closer together than
-> > > > this value.
-> > > >
-> > > > quiet_dt seems a closer fit to what you documented period for.  quiet
-> > > > controls min space between single taps.  So related but indirectly to
-> > > > double tap detection.
-> > > > If I have understood this correctly.
-> > > >
-> > > > * If two taps are more that quiet apart then we get 2 single taps.
-> > > > * If two taps are more than quiet_dt apart but less than quiet apart then
-> > > >   we get a double tap.
-> > > > * If two taps are less than quiet_dt apart, then we probably detect them
-> > > >   as a single tap, as long as the tics_th timing condition is met.
-> > > >
-> > > > Whilst quiet effects both single and double tap I think we would have
-> > > > to define it as controls on both of them (linked by changing value of
-> > > > one effecting the other).
-> > > >
-> > > > Period doesn't fit any of these but I'm struggling to come up with
-> > > > good ABI.
-> > > >
-> > > > Maybe use "holdoff" for single tap to indicate minimum time after
-> > > > first tap before we can have another one.  (lifted from naming of
-> > > > controls on oscilloscope triggers).
-> > > >
-> > > > What to call the same time for double taps (which it's a limit on how
-> > > > far apart they can be) isn't obvious.  Nor is what would map to quiet_dt
-> > > > a they are both very specific to double taps.
-> > > > Maybe "period" makes sense for quiet (not quiet_dt) when applied to a double
-> > > > tap as it's time within which the event must have completed (got 2 taps)
-> > > > but it's a stetch.
-> > > >
-> > > > Anyhow, this needs more thought.  All suggestions welcome!  
-> > >
-> > > Thanks for the suggestion,
-> > > For double-tap, the quiet value represents window time which means both taps
-> > > should occur within this period of time.
-> > >
-> > > Please give me suggestions for the name "pulse window" or only "window" for
-> > > double tap quiet value and "latency" for the quiet_dt.  
-> >
-> > Window doesn't really describe anything - it's too vague.
-> >  
-> > >
-> > > Most of the accelerometer sensors which support tap feature define
-> > > quite, quite_dt
-> > > register field with different names then, can I add these attributes in the core
-> > > with the final suggested name?  
-> >
-> > ABI definition is tricky.  Normal trick is to look at other similar sorts of things
-> > (like oscilloscope triggers). https://download.tek.com/document/55W_17291_6_0.pdf (1st
-> > hit in google)
-> > So, one option is to use the concept of triggers resetting.
-> >
-> > Hence quiet might work as
-> > gesture_singletap_resettimeout (in seconds)  Until this time has passed the
-> > detector is not reset to look for another event.  
+> And we probably need slot to be negative if it is greater or equal to RV_PER_TASK_MONITOR_INIT.
 > 
-> There is already IIO_EV_INFO_TIMEOUT defined which almost maps to the
-> given suggestion. Your thoughts on reusing the same for quiet
-> (gesture_singletap_timeout)?
+>                 return slot;                                                                    \
+>                                 
 
-Despite similar name, I'm not sure it's a similar concept.  That timeout is
-about reset of a tracking value (typically low pass filtered version of the
-data) used for dynamic thresholding.  Same concept of 'something being reset' but
-in that case reset just means set to the current _raw value which is rather different
-from reenabling the detector.
+ok, there will be a problem when RV_PER_TASK_MONITOR_INIT changes to > 1. This will need to be patched to
+return negative. So far we have only one because there is only one per task monitor.
 
-Probably shouldn't have used such a generic name for the existing _timeout, but
-that's been there a very long time IIRC :(
-
-> 
-> >
-> > It's a bit of a stretch to use this for quiet_dt. There is a similar concept
-> > in the above scope manual, but it's defined as AB triggers and that's complex
-> > and doesn't map great to simple naming.
-> > gesture_doubletap_tap2mindelay (in seconds)  
-> 
-> Thanks for the suggestions.
-> I will send v2 soon so that I can get more comments on this from others also.
-> 
-> > maybe?  Note these are only vague suggestions.  There are a various userspace
-> > folk who are often kind enough to give us feedback on things affecting ABI.
-> > So +CC
-> > Bastien Nocera <hadess@hadess.net>
-> > Hans de Goede <hdegoede@redhat.com>
-> >
-> > (for Bastien and Hans: the aim here is to finally add ABI to IIO for single and double
-> >  tap detection from accelerometers - in particular trying to come up with sensible tunables
-> >  that are suitable for the algorithms various devices implement).
-> >  
-> > >
-> > > Since tics_th is specific to bma400 can I define this by creating custom
-> > > attributes with the same name using IIO_DEVICE_ATTR_RW()?  
-> >
-> > No.  Custom ABI is fine for a driver if needed like here, but it needs to be inline with
-> > the standard ABI such that if we make it standard later, we can hopefully make
-> > use of it.   I'm not sure this will ever be standards, but let's aim for
-> > something readable(ish).
-> >
-> > _maxtomin_time  (in seconds)  might work perhaps?  
-> 
-> This tics_th (_maxtomin_time) in seconds is more specific to bma400 so I thought
-> of providing a custom ABI for this, but the values are in floating
-> point. How can
-> I decode these floating point values (string) in the custom *_show and *_store?
-
-Actual floating point or something we can map to fixed point?
-The IIO format extraction routines can be used for non standard ABI and take 
-IIO_VAL_INT_PLUS_MICRO etc which often have enough precision for this sort of thing.
-> 
-> To avoid floating point operations, is there any helper similar to kstrtoint()?
-Nope, just the ones in IIO that I know of. May be others hiding elsewhere in the
-kernel, but they will all map to some fixed point representation I think.
-
-> 
-> For other ABI like _tap2mindelay and _resettimeout are also floating
-> point values
-> but the core will convert into micro since they are added in core as
-> standard ABI.
-
-Yup, that ABI is used in a few non core IIO places though as not uncommon to
-need something similar for custom attributes. Look at iio_str_to_fixpoint()
-usage in drivers.  e.g. (picking at random)
-https://elixir.bootlin.com/linux/latest/source/drivers/iio/proximity/srf08.c#L300
-
-
-> 
-> >
-> > I've not looked at what the input subsystem does for touch screens. Feels like they'll
-> > have at least some of the same controls.  Perhaps there is something to be learnt
-> > from there?  
-> 
-> Input subsystem is using MT protocol for reporting multi-touch and events are
-> reported to userspace, but I didn't find attributes related to tap
-> configurations
-> that are being read or written from userspace.
-
-Curious.  I guess maybe for touchscreens it is mostly something device specific.
-There is probably some argument that these could be firmware things for IIO as well, but
-much like you can adjust things about mouse double click detection from userspace, it
-makes sense to provide the controls.  Maybe for touch screens it's all done in userspace
-(so there is no built in double tap detection?)
-
-Jonathan
-
-> 
-> There is an adxl34x accelerometer driver in the input subsystem which supports
-> tap but the configuration values for tap are hardcoded in the driver.
-> 
-> Thanks
-> Jagath
-> 
-> Jagath
-> >
-> > Jonathan
-> >
-> >  
-> > >
-> > > Thank you,
-> > > Jagath
-> > >
-> > >  
-> > > >
-> > > >
-> > > > A few trivial things inline as well.
-> > > >
-> > > >
-> > > >  
-> > > > > +
-> > > > >  /*
-> > > > >   * BMA400_SCALE_MIN macro value represents m/s^2 for 1 LSB before
-> > > > >   * converting to micro values for +-2g range.
-> > > > > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> > > > > index c31bdd9b168e..f8945dc0de04 100644
-> > > > > --- a/drivers/iio/accel/bma400_core.c
-> > > > > +++ b/drivers/iio/accel/bma400_core.c
-> > > > > @@ -29,6 +29,7 @@
-> > > > >  #include <linux/iio/trigger.h>
-> > > > >  #include <linux/iio/trigger_consumer.h>
-> > > > >  #include <linux/iio/triggered_buffer.h>
-> > > > > +#include <linux/iio/sysfs.h>
-> > > > >
-> > > > >  #include "bma400.h"
-> > > > >
-> > > > > @@ -88,6 +89,7 @@ struct bma400_data {
-> > > > >       bool step_event_en;
-> > > > >       bool activity_event_en;
-> > > > >       unsigned int generic_event_en;
-> > > > > +     unsigned int tap_event_en;
-> > > > >       /* Correct time stamp alignment */
-> > > > >       struct {
-> > > > >               __le16 buff[3];
-> > > > > @@ -216,6 +218,36 @@ static const struct iio_event_spec bma400_accel_event[] = {
-> > > > >                                      BIT(IIO_EV_INFO_HYSTERESIS) |
-> > > > >                                      BIT(IIO_EV_INFO_ENABLE),
-> > > > >       },
-> > > > > +     {
-> > > > > +             .type = IIO_EV_TYPE_GESTURE,
-> > > > > +             .dir = IIO_EV_DIR_SINGLETAP,
-> > > > > +             .mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
-> > > > > +                                    BIT(IIO_EV_INFO_ENABLE),
-> > > > > +     },
-> > > > > +     {
-> > > > > +             .type = IIO_EV_TYPE_GESTURE,
-> > > > > +             .dir = IIO_EV_DIR_DOUBLETAP,
-> > > > > +             .mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
-> > > > > +                                    BIT(IIO_EV_INFO_PERIOD) |
-> > > > > +                                    BIT(IIO_EV_INFO_ENABLE),
-> > > > > +     },
-> > > > > +};
-> > > > > +
-> > > > > +/* List of sensitivity values available to configure tap interrupts */
-> > > > > +static IIO_CONST_ATTR(in_accel_gesture_value_available, "0 1 2 3 4 5 6 7");
-> > > > > +
-> > > > > +/* List of minimum quiet time before and after double tap, in data samples. */
-> > > > > +static IIO_CONST_ATTR(in_accel_gesture_doubletap_period_available,
-> > > > > +                   "60 80 100 120");
-> > > > > +
-> > > > > +static struct attribute *bma400_event_attributes[] = {
-> > > > > +     &iio_const_attr_in_accel_gesture_value_available.dev_attr.attr,
-> > > > > +     &iio_const_attr_in_accel_gesture_doubletap_period_available.dev_attr.attr,
-> > > > > +     NULL
-> > > > > +};
-> > > > > +
-> > > > > +static const struct attribute_group bma400_event_attribute_group = {
-> > > > > +     .attrs = bma400_event_attributes,
-> > > > >  };
-> > > > >
-> > > > >  #define BMA400_ACC_CHANNEL(_index, _axis) { \
-> > > > > @@ -1012,6 +1044,10 @@ static int bma400_read_event_config(struct iio_dev *indio_dev,
-> > > > >               case IIO_EV_DIR_FALLING:
-> > > > >                       return FIELD_GET(BMA400_INT_GEN2_MSK,
-> > > > >                                        data->generic_event_en);
-> > > > > +             case IIO_EV_DIR_SINGLETAP:
-> > > > > +                     return FIELD_GET(BMA400_S_TAP_MSK, data->tap_event_en);
-> > > > > +             case IIO_EV_DIR_DOUBLETAP:
-> > > > > +                     return FIELD_GET(BMA400_D_TAP_MSK, data->tap_event_en);
-> > > > >               default:
-> > > > >                       return -EINVAL;
-> > > > >               }
-> > > > > @@ -1101,6 +1137,80 @@ static int bma400_activity_event_en(struct bma400_data *data,
-> > > > >       return 0;
-> > > > >  }
-> > > > >
-> > > > > +static int bma400_tap_event_en(struct bma400_data *data,
-> > > > > +                            enum iio_event_direction dir, int state)
-> > > > > +{
-> > > > > +     int ret;
-> > > > > +     unsigned int mask, field_value;
-> > > > > +
-> > > > > +     /*
-> > > > > +      * Tap interrupts can be configured only in normal mode.
-> > > > > +      * See table in section 4.3 "Power modes - performance modes" of
-> > > > > +      * datasheet v1.2.
-> > > > > +      */
-> > > > > +     if (data->power_mode != POWER_MODE_NORMAL)
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     /*
-> > > > > +      * Tap interrupts are operating with the data rate of 200Hz.
-> > > > > +      * See section 4.7 "Tap sensing interrupt" in datasheet v1.2.
-> > > > > +      */
-> > > > > +     if (data->sample_freq.hz != 200) {
-> > > > > +             dev_err(data->dev, "Invalid data rate for tap interrupts.\n");
-> > > > > +             return -EINVAL;
-> > > > > +     }
-> > > > > +
-> > > > > +     ret = regmap_update_bits(data->regmap, BMA400_INT12_MAP_REG,
-> > > > > +                              BMA400_S_TAP_MSK,
-> > > > > +                              FIELD_PREP(BMA400_S_TAP_MSK, state));
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     switch (dir) {
-> > > > > +     case IIO_EV_DIR_SINGLETAP:
-> > > > > +             mask = BMA400_S_TAP_MSK;
-> > > > > +             set_mask_bits(&field_value, BMA400_S_TAP_MSK,
-> > > > > +                           FIELD_PREP(BMA400_S_TAP_MSK, state));
-> > > > > +             break;
-> > > > > +     case IIO_EV_DIR_DOUBLETAP:
-> > > > > +             mask = BMA400_D_TAP_MSK;
-> > > > > +             set_mask_bits(&field_value, BMA400_D_TAP_MSK,
-> > > > > +                           FIELD_PREP(BMA400_D_TAP_MSK, state));
-> > > > > +             break;
-> > > > > +     default:
-> > > > > +             return -EINVAL;
-> > > > > +     }
-> > > > > +
-> > > > > +     ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG1_REG, mask,
-> > > > > +                              field_value);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     set_mask_bits(&data->tap_event_en, mask, field_value);
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int bma400_disable_adv_interrupt(struct bma400_data *data)
-> > > > > +{
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret = regmap_write(data->regmap, BMA400_INT_CONFIG0_REG, 0);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     ret = regmap_write(data->regmap, BMA400_INT_CONFIG1_REG, 0);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     data->tap_event_en = 0;
-> > > > > +     data->generic_event_en = 0;
-> > > > > +     data->step_event_en = 0;
-> > > > > +     data->activity_event_en = 0;
-> > > > > +
-> > > > > +     return 0;
-> > > > > +}
-> > > > > +
-> > > > >  static int bma400_write_event_config(struct iio_dev *indio_dev,
-> > > > >                                    const struct iio_chan_spec *chan,
-> > > > >                                    enum iio_event_type type,
-> > > > > @@ -1111,10 +1221,20 @@ static int bma400_write_event_config(struct iio_dev *indio_dev,
-> > > > >
-> > > > >       switch (chan->type) {
-> > > > >       case IIO_ACCEL:
-> > > > > -             mutex_lock(&data->mutex);
-> > > > > -             ret = bma400_activity_event_en(data, dir, state);
-> > > > > -             mutex_unlock(&data->mutex);
-> > > > > -             return ret;
-> > > > > +             switch (type) {
-> > > > > +             case IIO_EV_TYPE_MAG:
-> > > > > +                     mutex_lock(&data->mutex);
-> > > > > +                     ret = bma400_activity_event_en(data, dir, state);
-> > > > > +                     mutex_unlock(&data->mutex);
-> > > > > +                     return ret;
-> > > > > +             case IIO_EV_TYPE_GESTURE:
-> > > > > +                     mutex_lock(&data->mutex);
-> > > > > +                     ret = bma400_tap_event_en(data, dir, state);
-> > > > > +                     mutex_unlock(&data->mutex);
-> > > > > +                     return ret;
-> > > > > +             default:
-> > > > > +                     return -EINVAL;
-> > > > > +             }
-> > > > >       case IIO_STEPS:
-> > > > >               mutex_lock(&data->mutex);
-> > > > >               ret = bma400_steps_event_enable(data, state);
-> > > > > @@ -1159,8 +1279,8 @@ static int bma400_read_event_value(struct iio_dev *indio_dev,
-> > > > >       struct bma400_data *data = iio_priv(indio_dev);
-> > > > >       int ret, reg;
-> > > > >
-> > > > > -     switch (chan->type) {
-> > > > > -     case IIO_ACCEL:
-> > > > > +     switch (type) {
-> > > > > +     case IIO_EV_TYPE_MAG:
-> > > > >               reg = get_gen_config_reg(dir);
-> > > > >               if (reg < 0)
-> > > > >                       return -EINVAL;
-> > > > > @@ -1196,6 +1316,25 @@ static int bma400_read_event_value(struct iio_dev *indio_dev,
-> > > > >               default:
-> > > > >                       return -EINVAL;
-> > > > >               }
-> > > > > +     case IIO_EV_TYPE_GESTURE:
-> > > > > +             switch (info) {
-> > > > > +             case IIO_EV_INFO_VALUE:
-> > > > > +                     ret = regmap_read(data->regmap, BMA400_TAP_CONFIG,
-> > > > > +                                       val);
-> > > > > +                     if (ret)
-> > > > > +                             return ret;
-> > > > > +                     *val = FIELD_GET(BMA400_TAP_SEN_MSK, *val);  
-> > > >
-> > > > I'd prefer a local variable for regval into which the regmap_read goes.
-> > > >
-> > > > Slightly more readable that way as *val then only ever means one thing.
-> > > >  
-> > > > > +                     return IIO_VAL_INT;
-> > > > > +             case IIO_EV_INFO_PERIOD:
-> > > > > +                     ret = regmap_read(data->regmap, BMA400_TAP_CONFIG1,
-> > > > > +                                       val);
-> > > > > +                     if (ret)
-> > > > > +                             return ret;
-> > > > > +                     *val = FIELD_GET(BMA400_TAP_QUIET_MSK, *val);
-> > > > > +                     return IIO_VAL_INT;
-> > > > > +             default:
-> > > > > +                     return -EINVAL;
-> > > > > +             }
-> > > > >       default:
-> > > > >               return -EINVAL;
-> > > > >       }
-> > > > > @@ -1209,10 +1348,10 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > > > >                                   int val, int val2)
-> > > > >  {
-> > > > >       struct bma400_data *data = iio_priv(indio_dev);
-> > > > > -     int reg, ret;
-> > > > > +     int reg, ret, quiet_period;
-> > > > >
-> > > > > -     switch (chan->type) {
-> > > > > -     case IIO_ACCEL:
-> > > > > +     switch (type) {
-> > > > > +     case IIO_EV_TYPE_MAG:
-> > > > >               reg = get_gen_config_reg(dir);
-> > > > >               if (reg < 0)
-> > > > >                       return -EINVAL;
-> > > > > @@ -1228,7 +1367,6 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > > > >               case IIO_EV_INFO_PERIOD:
-> > > > >                       if (val < 1 || val > 65535)
-> > > > >                               return -EINVAL;
-> > > > > -  
-> > > >
-> > > > Clear out this noise.
-> > > >  
-> > > > >                       mutex_lock(&data->mutex);
-> > > > >                       put_unaligned_be16(val, &data->duration);
-> > > > >                       ret = regmap_bulk_write(data->regmap,
-> > > > > @@ -1248,6 +1386,31 @@ static int bma400_write_event_value(struct iio_dev *indio_dev,
-> > > > >               default:
-> > > > >                       return -EINVAL;
-> > > > >               }
-> > > > > +     case IIO_EV_TYPE_GESTURE:
-> > > > > +             switch (info) {
-> > > > > +             case IIO_EV_INFO_VALUE:
-> > > > > +                     if (val < 0 || val > 7)
-> > > > > +                             return -EINVAL;
-> > > > > +
-> > > > > +                     return regmap_update_bits(data->regmap,
-> > > > > +                                               BMA400_TAP_CONFIG,
-> > > > > +                                               BMA400_TAP_SEN_MSK,
-> > > > > +                                               FIELD_PREP(BMA400_TAP_SEN_MSK,
-> > > > > +                                                          val));
-> > > > > +
-> > > > > +             case IIO_EV_INFO_PERIOD:
-> > > > > +                     quiet_period = (val / 20) - 3;
-> > > > > +                     if (quiet_period < 0 || quiet_period > 3)
-> > > > > +                             return -EINVAL;
-> > > > > +
-> > > > > +                     return regmap_update_bits(data->regmap,
-> > > > > +                                               BMA400_TAP_CONFIG1,
-> > > > > +                                               BMA400_TAP_QUIET_MSK,
-> > > > > +                                               FIELD_PREP(BMA400_TAP_QUIET_MSK,
-> > > > > +                                                          quiet_period));
-> > > > > +             default:
-> > > > > +                     return -EINVAL;
-> > > > > +             }
-> > > > >       default:
-> > > > >               return -EINVAL;
-> > > > >       }
-> > > > > @@ -1287,6 +1450,7 @@ static const struct iio_info bma400_info = {
-> > > > >       .write_event_config = bma400_write_event_config,
-> > > > >       .write_event_value = bma400_write_event_value,
-> > > > >       .read_event_value = bma400_read_event_value,
-> > > > > +     .event_attrs = &bma400_event_attribute_group,
-> > > > >  };
-> > > > >
-> > > > >  static const struct iio_trigger_ops bma400_trigger_ops = {
-> > > > > @@ -1350,6 +1514,32 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
-> > > > >       if (ret || !data->status)
-> > > > >               goto unlock_err;
-> > > > >
-> > > > > +     /*
-> > > > > +      * Disable all advance interrupts if interrupt engine overrun occurs.
-> > > > > +      * See section 4.7 "Interrupt engine overrun" in datasheet v1.2.
-> > > > > +      */
-> > > > > +     if (FIELD_GET(BMA400_INT_ENG_OVRUN_MSK, le16_to_cpu(data->status))) {
-> > > > > +             bma400_disable_adv_interrupt(data);
-> > > > > +             dev_err(data->dev, "Interrupt engine overrun\n");
-> > > > > +             goto unlock_err;
-> > > > > +     }
-> > > > > +
-> > > > > +     if (FIELD_GET(BMA400_INT_S_TAP_MSK, le16_to_cpu(data->status)))
-> > > > > +             iio_push_event(indio_dev,
-> > > > > +                            IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,
-> > > > > +                                               IIO_MOD_X_OR_Y_OR_Z,
-> > > > > +                                               IIO_EV_TYPE_GESTURE,
-> > > > > +                                               IIO_EV_DIR_SINGLETAP),
-> > > > > +                            timestamp);
-> > > > > +
-> > > > > +     if (FIELD_GET(BMA400_INT_D_TAP_MSK, le16_to_cpu(data->status)))
-> > > > > +             iio_push_event(indio_dev,
-> > > > > +                            IIO_MOD_EVENT_CODE(IIO_ACCEL, 0,
-> > > > > +                                               IIO_MOD_X_OR_Y_OR_Z,
-> > > > > +                                               IIO_EV_TYPE_GESTURE,
-> > > > > +                                               IIO_EV_DIR_DOUBLETAP),
-> > > > > +                            timestamp);
-> > > > > +
-> > > > >       if (FIELD_GET(BMA400_INT_GEN1_MSK, le16_to_cpu(data->status)))
-> > > > >               ev_dir = IIO_EV_DIR_RISING;
-> > > > >  
-> > > >  
-> >  
-
+-- Daniel

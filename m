@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D113D586082
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136FF586098
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 21:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbiGaTEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 15:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S237882AbiGaTEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 15:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiGaTEf (ORCPT
+        with ESMTP id S237706AbiGaTEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 15:04:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33143EE0E;
-        Sun, 31 Jul 2022 12:04:34 -0700 (PDT)
+        Sun, 31 Jul 2022 15:04:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7250EE3D;
+        Sun, 31 Jul 2022 12:04:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A44A461031;
-        Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F59BC433D7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EAF2B80DC5;
+        Sun, 31 Jul 2022 19:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B02EC43470;
         Sun, 31 Jul 2022 19:04:33 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oIEEq-007G2B-0I;
+        id 1oIEEq-007G2j-0s;
         Sun, 31 Jul 2022 15:04:32 -0400
-Message-ID: <20220731190431.934571546@goodmis.org>
+Message-ID: <20220731190432.106094347@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sun, 31 Jul 2022 15:03:30 -0400
+Date:   Sun, 31 Jul 2022 15:03:31 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [for-next][PATCH 01/21] USB: mtu3: tracing: Use the new __vstring() helper
+        Marek Lindner <mareklindner@neomailbox.ch>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
+        Antonio Quartulli <a@unstable.cc>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
+        Sven Eckelmann <sven@narfation.org>
+Subject: [for-next][PATCH 02/21] batman-adv: tracing: Use the new __vstring() helper
 References: <20220731190329.641602282@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +62,56 @@ defeats the purpose of the dynamic array in the first place). Use the new
 __vstring() helper that will use a va_list and only write enough of the
 string into the ring buffer that is needed.
 
-Link: https://lkml.kernel.org/r/20220719112719.17e796c6@gandalf.local.home
+Link: https://lkml.kernel.org/r/20220724191650.236b1355@rorschach.local.home
 
+Cc: Marek Lindner <mareklindner@neomailbox.ch>
 Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Tested-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Simon Wunderlich <sw@simonwunderlich.de>
+Cc: Antonio Quartulli <a@unstable.cc>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: b.a.t.m.a.n@lists.open-mesh.org
+Cc: netdev@vger.kernel.org
+Acked-by: Sven Eckelmann <sven@narfation.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/usb/mtu3/mtu3_trace.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ net/batman-adv/trace.h | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/mtu3/mtu3_trace.h b/drivers/usb/mtu3/mtu3_trace.h
-index 1b897636daf2..a98fa012b729 100644
---- a/drivers/usb/mtu3/mtu3_trace.h
-+++ b/drivers/usb/mtu3/mtu3_trace.h
-@@ -18,18 +18,16 @@
+diff --git a/net/batman-adv/trace.h b/net/batman-adv/trace.h
+index d673ebdd0426..31c8f922651d 100644
+--- a/net/batman-adv/trace.h
++++ b/net/batman-adv/trace.h
+@@ -28,8 +28,6 @@
  
- #include "mtu3.h"
+ #endif /* CONFIG_BATMAN_ADV_TRACING */
  
--#define MTU3_MSG_MAX	256
+-#define BATADV_MAX_MSG_LEN	256
 -
- TRACE_EVENT(mtu3_log,
- 	TP_PROTO(struct device *dev, struct va_format *vaf),
- 	TP_ARGS(dev, vaf),
- 	TP_STRUCT__entry(
- 		__string(name, dev_name(dev))
--		__dynamic_array(char, msg, MTU3_MSG_MAX)
-+		__vstring(msg, vaf->fmt, vaf->va)
- 	),
- 	TP_fast_assign(
- 		__assign_str(name, dev_name(dev));
--		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf->va);
-+		__assign_vstr(msg, vaf->fmt, vaf->va);
- 	),
- 	TP_printk("%s: %s", __get_str(name), __get_str(msg))
- );
+ TRACE_EVENT(batadv_dbg,
+ 
+ 	    TP_PROTO(struct batadv_priv *bat_priv,
+@@ -40,16 +38,13 @@ TRACE_EVENT(batadv_dbg,
+ 	    TP_STRUCT__entry(
+ 		    __string(device, bat_priv->soft_iface->name)
+ 		    __string(driver, KBUILD_MODNAME)
+-		    __dynamic_array(char, msg, BATADV_MAX_MSG_LEN)
++		    __vstring(msg, vaf->fmt, vaf->va)
+ 	    ),
+ 
+ 	    TP_fast_assign(
+ 		    __assign_str(device, bat_priv->soft_iface->name);
+ 		    __assign_str(driver, KBUILD_MODNAME);
+-		    WARN_ON_ONCE(vsnprintf(__get_dynamic_array(msg),
+-					   BATADV_MAX_MSG_LEN,
+-					   vaf->fmt,
+-					   *vaf->va) >= BATADV_MAX_MSG_LEN);
++		    __assign_vstr(msg, vaf->fmt, vaf->va);
+ 	    ),
+ 
+ 	    TP_printk(
 -- 
 2.35.1

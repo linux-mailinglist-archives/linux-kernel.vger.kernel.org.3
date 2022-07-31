@@ -2,328 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB644585FA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D3B585F96
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 17:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237453AbiGaP4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 11:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S237351AbiGaPuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 11:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiGaP4j (ORCPT
+        with ESMTP id S233306AbiGaPuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 11:56:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2067EF5A8;
-        Sun, 31 Jul 2022 08:56:38 -0700 (PDT)
+        Sun, 31 Jul 2022 11:50:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D17FEE3E;
+        Sun, 31 Jul 2022 08:50:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4C4FB80D11;
-        Sun, 31 Jul 2022 15:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CE3C433C1;
-        Sun, 31 Jul 2022 15:56:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1BDCB80D11;
+        Sun, 31 Jul 2022 15:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC1DC433D6;
+        Sun, 31 Jul 2022 15:50:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659282995;
-        bh=tFQ2FdOHf6AKo9snr8OPx7hE6X/OPvq/Rwof3jPZ8Hg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b4j3PMw8WncsdsKlomHhx/t2bEH6vjqssCyFTDUFpYX+IGyecbFSRbsn7zNbwTcw5
-         9JCpE2Nv7jv4ZipuLfuwAFoyjayed9cfuk/CwKngS4Y0krOjPZxYuKdR3mB6AM/ut0
-         BOuELIsHpFAl0lQs3mJA0ayKwtHifXMjpoiGnfZadzKFSxgxx3bVyxRMjhMPipQ66M
-         8WcuDI9Xl5yXec3ZRUwcM50+i+jb0yW81wPvElfUcGWQE7YsTQXV+uFAa/1fxauYL0
-         wLd3vrXer3Yi8qs9v/IF7S9bIa1F+mm8Arnp8Yi0QFu08uU1ik/ljqdJBCw0bvm6dG
-         TBxxgP6ROs/bw==
-Message-ID: <e9c88889-3523-0466-cf52-71f04cb468b8@kernel.org>
-Date:   Sun, 31 Jul 2022 17:56:27 +0200
+        s=k20201202; t=1659282646;
+        bh=Nb8/KbRuMq0D5hB06qTzpFBgs5A+mZTRpBygcswuGTA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PhvD5DSlj7aX4WUCA135VaXQjtYC1xTVVc34bshN5hll6g4bAvI8RYVouxWma1LFX
+         +u7IW2KXKtbsZ4B27ywspeeKe6SlkjIrypDjYMI+adt5+zGEBcWdf71dwGdE0mQxww
+         MduQOqb4u5oZAYG6q6E/QdB1Z2AGNuOVkVQC6Wj+MR0uYelq5N5vOm5xv6eP5YJxZe
+         xwlHsplqrSzzQJ2rctOnev6MQ8Q3NZfKjAtJGZC1ruC3yLX0gJBUzmmZEHAu2ALa2V
+         YbpXMn7EeDfwplDb+IamyGti74Lq0TtvX+AZ0VDeZE/NpO1MTAoxmSCrvxvqcvaNx+
+         Bti9ND8Ahk3JA==
+Date:   Sun, 31 Jul 2022 17:00:57 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti =?UTF-8?B?TGVodGltw6RraQ==?= <matti.lehtimaki@gmail.com>
+Cc:     linux-iio@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: st_sensors: Retry ID verification on failure
+Message-ID: <20220731170057.2b8ac00e@jic23-huawei>
+In-Reply-To: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
+References: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V9 01/16] rv: Add Runtime Verification (RV) interface
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1659052063.git.bristot@kernel.org>
- <a4bfe038f50cb047bfb343ad0e12b0e646ab308b.1659052063.git.bristot@kernel.org>
- <YuU7TGxm5pzmBFTx@geo.homenetwork>
- <0197dd47-ea15-4d8b-5fc7-e466d8a501a7@kernel.org>
- <YuaadlzgSJLtzOUw@geo.homenetwork>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <YuaadlzgSJLtzOUw@geo.homenetwork>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/31/22 17:06, Tao Zhou wrote:
-> On Sat, Jul 30, 2022 at 08:07:07PM +0200, Daniel Bristot de Oliveira wrote:
->> On 7/30/22 16:08, Tao Zhou wrote:
->>> On Fri, Jul 29, 2022 at 11:38:40AM +0200, Daniel Bristot de Oliveira wrote:
->>>
->>>> +static int __rv_disable_monitor(struct rv_monitor_def *mdef, bool sync)
->>>> +{
->>>> +	lockdep_assert_held(&rv_interface_lock);
->>>> +
->>>> +	if (mdef->monitor->enabled) {
->>>> +		mdef->monitor->enabled = 0;
->>>> +		mdef->monitor->disable();
->>>
->>> If call disable(), the @enabled is set 0 there.
->>
->> Which is correct.
->>
->>>
->>>> +
->>>> +		/*
->>>> +		 * Wait for the execution of all events to finish.
->>>> +		 * Otherwise, the data used by the monitor could
->>>> +		 * be inconsistent. i.e., if the monitor is re-enabled.
->>>> +		 */
->>>> +		if (sync)
->>>> +			tracepoint_synchronize_unregister();
->>>> +		return 1;
->>>
->>> Return 0 indicate the actually disabling and successed.
->>
->> No, 1 indicates that *disable was called, 0 did not call disable function.
->>
->>>> +	}
->>>> +	return 0;
->>>
->>> If disable a diabled monitor, return error(negative).
->>
->> This is a "static __function", which alerts for internal aspects.
->>
->> It has a specific purpose of counting if the disable function
->> was actually called.
->>
->> Disabling a disabled monitor is not a problem.
->>
->> So all your argumentation based on this is not correct, and it is breaking
->> other parts of the code... see where it is called.
->>
->>>> +}
->>>> +
->>>> +/**
->>>> + * rv_disable_monitor - disable a given runtime monitor
->>>> + *
->>>> + * Returns 0 on success.
->>>> + */
->>>> +int rv_disable_monitor(struct rv_monitor_def *mdef)
->>>> +{
->>>> +	__rv_disable_monitor(mdef, true);
->>>> +	return 0;
->>>
->>> Always return 0 here, whatever the return value of __rv_disable_monitor().
->>> And this enforce me to look more here, see below.
->>
->> This is not a problem. Actually, disable functions often return void.
->> I am keeping an int just in case.
->>
->>>> +}
->>>
->>>> +static ssize_t enabled_monitors_write(struct file *filp, const char __user *user_buf,
->>>> +				      size_t count, loff_t *ppos)
->>>> +{
->>>> +	char buff[MAX_RV_MONITOR_NAME_SIZE + 2];
->>>> +	struct rv_monitor_def *mdef;
->>>> +	int retval = -EINVAL;
->>>> +	bool enable = true;
->>>> +	char *ptr = buff;
->>>> +	int len;
->>>> +
->>>> +	if (count < 1 || count > MAX_RV_MONITOR_NAME_SIZE + 1)
->>>> +		return -EINVAL;
->>>> +
->>>> +	memset(buff, 0, sizeof(buff));
->>>> +
->>>> +	retval = simple_write_to_buffer(buff, sizeof(buff) - 1, ppos, user_buf, count);
->>>> +	if (retval < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	ptr = strim(buff);
->>>> +
->>>> +	if (ptr[0] == '!') {
->>>> +		enable = false;
->>>> +		ptr++;
->>>> +	}
->>>> +
->>>> +	len = strlen(ptr);
->>>> +	if (!len)
->>>> +		return count;
->>>> +
->>>> +	mutex_lock(&rv_interface_lock);
->>>> +
->>>> +	retval = -EINVAL;
->>>> +
->>>> +	list_for_each_entry(mdef, &rv_monitors_list, list) {
->>>> +		if (strcmp(ptr, mdef->monitor->name) != 0)
->>>> +			continue;
->>>> +
->>>> +		/*
->>>> +		 * Monitor found!
->>>> +		 */
->>>> +		if (enable)
->>>> +			retval = rv_enable_monitor(mdef);
->>>> +		else
->>>> +			retval = rv_disable_monitor(mdef);
->>>
->>> About the retval here. If count == 1 and retval == 0, then
->>> `retval = count` --> retval == 1. This retval will be returned to 
->>> user space and dedicate that how many character read and success
->>> If retval is 1(it is not possiable, the return value of
->>> da_monitor_init_*() called in enable callback in rv_enable_monitor()
->>> will be 0, so that return value check is not needed, or any other functions
->>> called in enable callback need to check the return value then,...
->>
->> All things above are misled by the first interpretation but,,,
-> 
-> Yeah, this is not that clear from my above words expression. I said the return
-> value of da_monitor_init_*() will be 0, but it is not right. Global and per-cpu
-> monitor will return 0, per-task monitor may return a positive value when the
-> slot is equal or greater than RV_PER_TASK_MONITOR_INIT(how possible this will
-> happen I do know yet). This is from reading the current code implementation.
-> I just want to say that there may be a bug here.
+On Sun, 24 Jul 2022 19:43:15 +0300
+Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com> wrote:
 
-goto my previous email;
+> Some sensors do not always start fast enough to read a valid ID from
+> registers at first attempt. Let's retry at most 3 times with short sleep
+> in between to fix random timing issues.
+>=20
+> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+Hi Matti,
 
-> If rv_enable_monitor() return a positive value and the error happened(as above
-> said), user space will not know this is a error return value, but regard it as a
-> right writing. Even if the return value(the slot value not in [0..RV_PER_TASK_MONITOR_INIT))
-> is equal to count of charaters that are writen to the file(the string length of monitor name),
-> it will still be not a right writing.
-> 
->>
->> so I checked
->>> the WARN_ONCE() called in macro rv_attach_trace_probe() which is called in
->>> enable callback,if the WARN_ONCE is called, it means that something go wrong.
->>
->> The way that rv_attach_trace_probe() is attaching a probe is not different from the way
->> other *in kernel* tracing does.
->>
->>> We need to check the return value of WARN_ONCE() in enable callback), the
->>> return value will be returned to user space but actually the error(warn) happened.
->>> User space do not know. They treat the two kind of return value 1 the same
->>> but one is the write count value successed and another is the write error
->>> value returned.
->>> In enable callback, check rv_attach_trace_probe():
->>>
->>> static int enable_wip(void)
->>> {
->>>       int retval = 1;
->>>  	  
->>>       /* 
->>>        * Delete the check of return value of da_monitor_init_wip()
->>>        * because it is always 0
->>>        */
->>>       da_monitor_init_wip();
->>>
->>>       retval &= rv_attach_trace_probe("wip", preempt_enable, handle_preempt_enable);
->>>       retval &= rv_attach_trace_probe("wip", sched_waking, handle_sched_waking);
->>>       retval &= rv_attach_trace_probe("wip", preempt_disable, handle_preempt_disable);
->>
->> No, that is not the most robust way to do this. A better way is to do it like in the
->> early versions of this patch set, where it was searching for the existence of the tracepoint
-> 
-> Even if we check the return value of rv_attach_trace_probe() in current implementation,
-> once error happened from one register the previous trace pointers will not be unregistered.
+My gut feeling is this isn't in a fast path, so why not just wait
+for whatever the documented power up time of the sensor is?
 
-goto my previous email; see other tracers.
+I'd expect to see a sleep in st_sensors_power_enable() if one is
+required.
 
->> from the module perspective, taking notes of the ones that were enabled, and then actually disabling
->> all events that were enabled before the failure.
->>
->>>
->>>       /* 
->>>        * If the retval is not 0, it mean at least one rv_attach_trace_probe()
->>>        * is WARN_ONCE(). I am not sure that if the first WARN_ONCE() happened,
->>>        * then return directly or at here after all rv_attach_trace_probe() is
->>>        * called and check the retval is 0 or 1.
->>>        */
->>>       if (retval)
->>>              return -1;
->>
->> and here the system state is even worse than WARNING and doing nothing: the monitor is
->> disabled, but the tracepoints that were registered are still hooked to the system...
->> and you cannot unhook them because the monitor is not enabled.
->>
->> You still can unhook in current implementation.
-> 
-> Yes.
-> 
-> Thanks,
-> Tao
->>
->> So, for the in-kernel version, the current method is equivalent to the
->> the way we do on other tracers, and the monitors only compile if the
->> tracepoints exist, the callback has the correct signature and WARNs
->> in case of problems in the tracepoint.
->>
->> There will be a more robust way to do this, and it will be included in the
->> "add module support" patch set. But is its better to add it in a patch
->> set because we can analyze change by change instead of adding on top
->> of this initial implementation - which is quite large already.
->>
->>>       return retval;
->>> }
->>>
->>>> +
->>>> +		if (!retval)
->>>> +			retval = count;
->>>> +
->>>> +		break;
->>>> +	}
->>>
->>>> +/**
->>>> + * rv_register_monitor - register a rv monitor.
->>>> + * @monitor:    The rv_monitor to be registered.
->>>> + *
->>>> + * Returns 0 if successful, error otherwise.
->>>> + */
->>>> +int rv_register_monitor(struct rv_monitor *monitor)
->>>> +{
->>>> +	struct rv_monitor_def *r;
->>>> +	int retval = 0;
->>>> +
->>>> +	if (strlen(monitor->name) >= MAX_RV_MONITOR_NAME_SIZE) {
->>>
->>> s/>=/>/ no? The same check happened in patch 2. Thanks,
->>
->> Yep, this can be improved. But it is not a BUG, as it is allowing monitor
->>  with (MAX_RV_MONITOR_NAME_SIZE - 1) size, which is safe.
->>
->> Given that neither 'wip' or 'wwnr' are >= MAX_RV_MONITOR_NAME_SIZE, this
->> problem is not happening - and no other monitor can hit it because modules
->> are not yet supported.
->>
->> I took note and will patch it.
->>
->>>> +		pr_info("Monitor %s has a name longer than %d\n", monitor->name,
->>>> +			MAX_RV_MONITOR_NAME_SIZE);
->>
->> Thanks!
->> -- Daniel
+Jonathan
+
+> ---
+>  drivers/iio/common/st_sensors/st_sensors_core.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/iio/common/st_sensors/st_sensors_core.c b/drivers/ii=
+o/common/st_sensors/st_sensors_core.c
+> index 9910ba1da085..106f7953683e 100644
+> --- a/drivers/iio/common/st_sensors/st_sensors_core.c
+> +++ b/drivers/iio/common/st_sensors/st_sensors_core.c
+> @@ -21,6 +21,8 @@
+> =20
+>  #include "st_sensors_core.h"
+> =20
+> +#define VERIFY_ID_RETRY_COUNT 3
+> +
+>  int st_sensors_write_data_with_mask(struct iio_dev *indio_dev,
+>  				    u8 reg_addr, u8 mask, u8 data)
+>  {
+> @@ -619,11 +621,18 @@ EXPORT_SYMBOL_NS(st_sensors_get_settings_index, IIO=
+_ST_SENSORS);
+>  int st_sensors_verify_id(struct iio_dev *indio_dev)
+>  {
+>  	struct st_sensor_data *sdata =3D iio_priv(indio_dev);
+> -	int wai, err;
+> +	int wai, err, i;
+> =20
+>  	if (sdata->sensor_settings->wai_addr) {
+> -		err =3D regmap_read(sdata->regmap,
+> -				  sdata->sensor_settings->wai_addr, &wai);
+> +		for (i =3D 0; i < VERIFY_ID_RETRY_COUNT; i++) {
+> +			err =3D regmap_read(sdata->regmap,
+> +					  sdata->sensor_settings->wai_addr, &wai);
+> +
+> +			if (!err && sdata->sensor_settings->wai =3D=3D wai)
+> +				return 0;
+> +
+> +			msleep(20);
+How do we know 60msecs is long enough for all sensors?
+
+> +		}
+>  		if (err < 0) {
+>  			dev_err(&indio_dev->dev,
+>  				"failed to read Who-Am-I register.\n");
 

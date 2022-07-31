@@ -2,95 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA07C586137
-	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6635E586139
+	for <lists+linux-kernel@lfdr.de>; Sun, 31 Jul 2022 22:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238145AbiGaUNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 16:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S238297AbiGaUNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 16:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237944AbiGaUNA (ORCPT
+        with ESMTP id S238054AbiGaUNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 16:13:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19546E0F3
+        Sun, 31 Jul 2022 16:13:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372CBEE06
         for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 13:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1659298380; x=1690834380;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iS/WvWpNtmeUiDZfj9nj3YoDnEgHJ3SA5LrEl1d5afM=;
-  b=QrCT1YLWD2iPkTAdrtwgn0ybiVYrsf1Rato6UX00M5mj5Knu6bJmdkOE
-   jOM85x3Fgf9m0PIxyXO/5sQI80QPMI8dogCWtK0LzIjaA3h1xwAvlLoQR
-   ZnQ9/jk/nzlUaiBtNOgP3XZUsW0pgGK8MpLeZcyjm0locdiQKXnmpFndu
-   WkWn+h57t9bdJVoDxyEiE7yXzJxGMsCmd8jl5tWRq/KHTQt7NHKxD14YU
-   QQx45XrbgyiCnMVN8iV3KZ5lMVwTFEs3Nn3QvCmEFOQ8YpBGeFBplnImU
-   qlGiK/af7+wJz3DdKw3sOQwaPw86JwR4291H0gBpcSkradTodzSzbuCKs
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=n6oSdBeHQWFHnguusTQQawc5fYmkYSlxEsSYIkYrL+I=;
+  b=e6wuGpOjxTxD2Bo9MJyK0lBkkIfgh0gdITDcUVdrFXaLZ2WEbT3BXb8q
+   qtGLIU5dqfRMC82oixiybZvHgP7JKnB5a0ups1/6xrLa9AMmZSkJAt1u5
+   5CxtCVfUos/Sd0eClZGFFRwsFWVyrFOEOH41t5rjDu2uxaEysexLo5GxE
+   mh2rgecG4LodCBVL4GjnhT9QN8yydQGmXKLTpdV91KSoEVNSyRircbelw
+   K1fZNO+th2htCNtJKV8dGjpgvBlKxxTS6Frn7/RmLkn0FjjftzAV1YKaC
+   IrEWty+gvB+Q5WkbaWJjTHu4+BOdUvEFQB9c6O/sriCKVVEi63YCJZuXb
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="287779678"
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="275920770"
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="287779678"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 13:12:59 -0700
+   d="scan'208";a="275920770"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 13:12:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="929327769"
+   d="scan'208";a="847626695"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2022 13:12:57 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 31 Jul 2022 13:12:57 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3C05FF1; Sun, 31 Jul 2022 23:13:07 +0300 (EEST)
+        id 4B109CE; Sun, 31 Jul 2022 23:13:08 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Lee Jones <lee.jones@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2 01/10] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
-Date:   Sun, 31 Jul 2022 23:12:49 +0300
-Message-Id: <20220731201258.11262-1-andriy.shevchenko@linux.intel.com>
+Cc:     Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH v2 02/10] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to crc
+Date:   Sun, 31 Jul 2022 23:12:50 +0300
+Message-Id: <20220731201258.11262-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220731201258.11262-1-andriy.shevchenko@linux.intel.com>
+References: <20220731201258.11262-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+The core part is misleading since its only purpose to serve Crystal Cove PMIC,
+although for couple of different platforms. Merge core part into crc one.
 
-The commit in Fixes: has added a pwm_add_table() call in the probe() and
-a pwm_remove_table() call in the remove(), but forget to update the error
-handling path of the probe.
+Advantages among others are:
+- speed up a compilation and build
+- decreasing the code base
+- reducing noise in the namespace by making some data static and const
 
-Add the missing pwm_remove_table() call.
-
-Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 ---
-v2: new patch
+v2: added tags and rebased on top of new patch 1
 
- drivers/mfd/intel_soc_pmic_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mfd/Makefile              |   3 +-
+ drivers/mfd/intel_soc_pmic_core.h |  25 -----
+ drivers/mfd/intel_soc_pmic_crc.c  | 163 ++++++++++++++++++++++++++++--
+ 3 files changed, 158 insertions(+), 33 deletions(-)
+ delete mode 100644 drivers/mfd/intel_soc_pmic_core.h
 
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index 5e8c94e008ed..85d070bce0e2 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -77,6 +77,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	return 0;
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 858cacf659d6..61db669f864c 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -236,8 +236,7 @@ obj-$(CONFIG_MFD_RT4831)	+= rt4831.o
+ obj-$(CONFIG_MFD_RT5033)	+= rt5033.o
+ obj-$(CONFIG_MFD_SKY81452)	+= sky81452.o
  
- err_del_irq_chip:
+-intel-soc-pmic-objs		:= intel_soc_pmic_core.o intel_soc_pmic_crc.o
+-obj-$(CONFIG_INTEL_SOC_PMIC)	+= intel-soc-pmic.o
++obj-$(CONFIG_INTEL_SOC_PMIC)		+= intel_soc_pmic_crc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)	+= intel_soc_pmic_bxtwc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)	+= intel_soc_pmic_chtwc.o
+ obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)	+= intel_soc_pmic_chtdc_ti.o
+diff --git a/drivers/mfd/intel_soc_pmic_core.h b/drivers/mfd/intel_soc_pmic_core.h
+deleted file mode 100644
+index d490685845eb..000000000000
+--- a/drivers/mfd/intel_soc_pmic_core.h
++++ /dev/null
+@@ -1,25 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Intel SoC PMIC MFD Driver
+- *
+- * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
+- *
+- * Author: Yang, Bin <bin.yang@intel.com>
+- * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
+- */
+-
+-#ifndef __INTEL_SOC_PMIC_CORE_H__
+-#define __INTEL_SOC_PMIC_CORE_H__
+-
+-struct intel_soc_pmic_config {
+-	unsigned long irq_flags;
+-	struct mfd_cell *cell_dev;
+-	int n_cell_devs;
+-	const struct regmap_config *regmap_config;
+-	const struct regmap_irq_chip *irq_chip;
+-};
+-
+-extern struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc;
+-extern struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc;
+-
+-#endif	/* __INTEL_SOC_PMIC_CORE_H__ */
+diff --git a/drivers/mfd/intel_soc_pmic_crc.c b/drivers/mfd/intel_soc_pmic_crc.c
+index 5bb0367bd974..c4e6456976f5 100644
+--- a/drivers/mfd/intel_soc_pmic_crc.c
++++ b/drivers/mfd/intel_soc_pmic_crc.c
+@@ -2,18 +2,21 @@
+ /*
+  * Device access for Crystal Cove PMIC
+  *
+- * Copyright (C) 2013, 2014 Intel Corporation. All rights reserved.
++ * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
+  *
+  * Author: Yang, Bin <bin.yang@intel.com>
+  * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
+  */
+ 
++#include <linux/acpi.h>
++#include <linux/i2c.h>
+ #include <linux/interrupt.h>
+-#include <linux/regmap.h>
++#include <linux/module.h>
+ #include <linux/mfd/core.h>
+ #include <linux/mfd/intel_soc_pmic.h>
+-
+-#include "intel_soc_pmic_core.h"
++#include <linux/platform_data/x86/soc.h>
++#include <linux/pwm.h>
++#include <linux/regmap.h>
+ 
+ #define CRYSTAL_COVE_MAX_REGISTER	0xC6
+ 
+@@ -132,7 +135,20 @@ static const struct regmap_irq_chip crystal_cove_irq_chip = {
+ 	.mask_base = CRYSTAL_COVE_REG_MIRQLVL1,
+ };
+ 
+-struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
++/* PWM consumed by the Intel GFX */
++static struct pwm_lookup crc_pwm_lookup[] = {
++	PWM_LOOKUP("crystal_cove_pwm", 0, "0000:00:02.0", "pwm_pmic_backlight", 0, PWM_POLARITY_NORMAL),
++};
++
++struct intel_soc_pmic_config {
++	unsigned long irq_flags;
++	struct mfd_cell *cell_dev;
++	int n_cell_devs;
++	const struct regmap_config *regmap_config;
++	const struct regmap_irq_chip *irq_chip;
++};
++
++static const struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
+ 	.irq_flags = IRQF_TRIGGER_RISING,
+ 	.cell_dev = crystal_cove_byt_dev,
+ 	.n_cell_devs = ARRAY_SIZE(crystal_cove_byt_dev),
+@@ -140,10 +156,145 @@ struct intel_soc_pmic_config intel_soc_pmic_config_byt_crc = {
+ 	.irq_chip = &crystal_cove_irq_chip,
+ };
+ 
+-struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc = {
++static const struct intel_soc_pmic_config intel_soc_pmic_config_cht_crc = {
+ 	.irq_flags = IRQF_TRIGGER_RISING,
+ 	.cell_dev = crystal_cove_cht_dev,
+ 	.n_cell_devs = ARRAY_SIZE(crystal_cove_cht_dev),
+ 	.regmap_config = &crystal_cove_regmap_config,
+ 	.irq_chip = &crystal_cove_irq_chip,
+ };
++
++static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
++				    const struct i2c_device_id *i2c_id)
++{
++	const struct intel_soc_pmic_config *config;
++	struct device *dev = &i2c->dev;
++	struct intel_soc_pmic *pmic;
++	int ret;
++
++	if (soc_intel_is_byt())
++		config = &intel_soc_pmic_config_byt_crc;
++	else
++		config = &intel_soc_pmic_config_cht_crc;
++
++	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
++	if (!pmic)
++		return -ENOMEM;
++
++	dev_set_drvdata(dev, pmic);
++
++	pmic->regmap = devm_regmap_init_i2c(i2c, config->regmap_config);
++	if (IS_ERR(pmic->regmap))
++		return PTR_ERR(pmic->regmap);
++
++	pmic->irq = i2c->irq;
++
++	ret = regmap_add_irq_chip(pmic->regmap, pmic->irq,
++				  config->irq_flags | IRQF_ONESHOT,
++				  0, config->irq_chip,
++				  &pmic->irq_chip_data);
++	if (ret)
++		return ret;
++
++	ret = enable_irq_wake(pmic->irq);
++	if (ret)
++		dev_warn(dev, "Can't enable IRQ as wake source: %d\n", ret);
++
++	/* Add lookup table for crc-pwm */
++	pwm_add_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
++
++	/* To distuingish this domain from the GPIO/charger's irqchip domains */
++	irq_domain_update_bus_token(regmap_irq_get_domain(pmic->irq_chip_data),
++				    DOMAIN_BUS_NEXUS);
++
++	ret = mfd_add_devices(dev, -1, config->cell_dev,
++			      config->n_cell_devs, NULL, 0,
++			      regmap_irq_get_domain(pmic->irq_chip_data));
++	if (ret)
++		goto err_del_irq_chip;
++
++	return 0;
++
++err_del_irq_chip:
 +	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
- 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
- 	return ret;
- }
++	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
++	return ret;
++}
++
++static int intel_soc_pmic_i2c_remove(struct i2c_client *i2c)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
++
++	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
++
++	/* remove crc-pwm lookup table */
++	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
++
++	mfd_remove_devices(&i2c->dev);
++
++	return 0;
++}
++
++static void intel_soc_pmic_shutdown(struct i2c_client *i2c)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(&i2c->dev);
++
++	disable_irq(pmic->irq);
++
++	return;
++}
++
++#if defined(CONFIG_PM_SLEEP)
++static int intel_soc_pmic_suspend(struct device *dev)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
++
++	disable_irq(pmic->irq);
++
++	return 0;
++}
++
++static int intel_soc_pmic_resume(struct device *dev)
++{
++	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
++
++	enable_irq(pmic->irq);
++
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(intel_soc_pmic_pm_ops, intel_soc_pmic_suspend,
++			 intel_soc_pmic_resume);
++
++static const struct i2c_device_id intel_soc_pmic_i2c_id[] = {
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, intel_soc_pmic_i2c_id);
++
++#if defined(CONFIG_ACPI)
++static const struct acpi_device_id intel_soc_pmic_acpi_match[] = {
++	{ "INT33FD" },
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, intel_soc_pmic_acpi_match);
++#endif
++
++static struct i2c_driver intel_soc_pmic_i2c_driver = {
++	.driver = {
++		.name = "intel_soc_pmic_i2c",
++		.pm = &intel_soc_pmic_pm_ops,
++		.acpi_match_table = ACPI_PTR(intel_soc_pmic_acpi_match),
++	},
++	.probe = intel_soc_pmic_i2c_probe,
++	.remove = intel_soc_pmic_i2c_remove,
++	.id_table = intel_soc_pmic_i2c_id,
++	.shutdown = intel_soc_pmic_shutdown,
++};
++
++module_i2c_driver(intel_soc_pmic_i2c_driver);
++
++MODULE_DESCRIPTION("I2C driver for Intel SoC PMIC");
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Yang, Bin <bin.yang@intel.com>");
++MODULE_AUTHOR("Zhu, Lejun <lejun.zhu@linux.intel.com>");
 -- 
 2.35.1
 

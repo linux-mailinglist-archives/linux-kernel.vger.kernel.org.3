@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA16586CA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBAA586CA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiHAOLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S232390AbiHAOM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiHAOLQ (ORCPT
+        with ESMTP id S232106AbiHAOM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:11:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74041EEC8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:11:15 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id tk8so20581219ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 07:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=G2DQ2egNgOtIylD5rbuzBV+FmwbsVin8WsOAsQz97s0=;
-        b=KCaUpMc8QZnybgzBIcbTovL0LSzNf/4uNFbWVWm+dYvqkuRED32aaxQXIYWNzYd6K7
-         GAvAzFCE8soPckX9HTgltr+oPJ1Q2vbvc631JC3JCUKF+YaIhLKzJgfDnjzwWebVA7se
-         TtsnO9wgNxsCv2Suih6Ivd3dDAWmkzp2VchYMuC1SOiMNXrrMQsMXRCB/ANLtRkRrbnw
-         ky2VotGPKS0SgX1KC5o3KK5kOCAGInbh7nezQeWWf9l0RhmG2szAHMvtESVmGQYyItwD
-         ZheXoL59iS/E8FI0ax6ohAlgtLsvw/DrJtgVbp/QPH7i2p6JR2CJAZ1A/XRiQmXqU31L
-         tSOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=G2DQ2egNgOtIylD5rbuzBV+FmwbsVin8WsOAsQz97s0=;
-        b=kkosQof7FxcHXH7V5wzP5avIhj+BeJcoCHHw/nitEbHxteOMcy2GqNM8pFh6cIGF5i
-         v4L+7BRtdKLLwSt/MuC0IfhJl3HcnjZkCkBphiipigkISof4c1McX8XCJJ1/AK9ao0qq
-         1h3p9vMyYrPdQEPzeunCpqa63rGYfQ3COfJWHZQ6ceM53hDw6xnqsMf/Y6h6D9Bw0vEY
-         JCCDR1EwSJqoLjSFAoKGpO/gkCrY2Vs5TlOiUIAsXO9PvIQIwKKYnW3O6L8kGUvE7hoO
-         DyxVaH7SXQ8fGXpJ4d1Js662WXcbFaqiVOEf5qB2xwL1ldYU1j2HEMaNL6Y5JC93bEHM
-         KwFw==
-X-Gm-Message-State: ACgBeo05IvPJJk9zODxeOu2BtyX6fd6OXTag5OeqwIvy5czcLWgWWb2D
-        cFBxKq0r3iIglc8WvelNVEA=
-X-Google-Smtp-Source: AA6agR5BKwpLsTpwiTfUHxUJwuCXLcO7cPT5MQOQGmtVes62+TdYBVI9ICOtoXvp7ZYcoWdGlHdY4A==
-X-Received: by 2002:a17:906:9bc9:b0:730:6595:dfc8 with SMTP id de9-20020a1709069bc900b007306595dfc8mr6055637ejc.286.1659363074413;
-        Mon, 01 Aug 2022 07:11:14 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id v22-20020aa7dbd6000000b0043d06d80d27sm6235542edt.86.2022.08.01.07.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 07:11:13 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 1 Aug 2022 16:11:11 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] Locking updates for v6.0
-Message-ID: <Yufe/3UMD2f4WFZK@gmail.com>
+        Mon, 1 Aug 2022 10:12:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4551EEF5
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:12:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6AE6133A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 14:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D58C433D6;
+        Mon,  1 Aug 2022 14:12:53 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HWnxBrqw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1659363172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X4tKf6FgniCc1281GaudYPm1vPNCHThlMMWoY3WX4EU=;
+        b=HWnxBrqwDvyM28dg12VoWc5ev/cAHf0qjwQHfrU9H5ohbYvryE32t5d0bkS0/kiiOAnrkK
+        uGyeDcF2eykI+HMdwwIW6/HxD+yhaxgP3L4s7mdFuhPUBtnmJGTlEJNWyonL1eZ17JYYb9
+        DRq1w2QIKA/cqaIA6f1UsU1GMDAFUjg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1a84c9dc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 1 Aug 2022 14:12:51 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v5] lib/vsprintf: defer filling siphash key on RT
+Date:   Mon,  1 Aug 2022 16:12:45 +0200
+Message-Id: <20220801141245.124787-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9qP2ZR6oQY3bf8W42RHW+-DamrzT=Gh1XJ3O7f72NU_bQ@mail.gmail.com>
+References: <CAHmME9qP2ZR6oQY3bf8W42RHW+-DamrzT=Gh1XJ3O7f72NU_bQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On RT, we can't call get_random_bytes() from inside of the raw locks
+that callers of vsprintf might take, because get_random_bytes() takes
+normal spinlocks. So on those RT systems, defer the siphash key
+generation to a worker.
 
-Please pull the latest locking/core git tree from:
+We also do the deferal for CONFIG_PROVE_RAW_LOCK_NESTING systems, which
+catches RT issues on non-RT. Branching on CONFIG_PROVE_RAW_LOCK_NESTING
+is partly awful, as it basically defeats the purpose of lockdep. But in
+this case, it really generates incorrect splats.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking-core-2022-08-01
+Also, avoid using a static_branch, as this isn't the fast path.
 
-   # HEAD: eae6d58d67d9739be5f7ae2dbead1d0ef6528243 locking/lockdep: Fix lockdep_init_map_*() confusion
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reported-by: Mike Galbraith <efault@gmx.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Sebastian - again, feel free to take this and modify it as needed. Just
+posting ideas... -Jason
 
-This was a fairly quiet cycle for the locking subsystem:
+ lib/vsprintf.c | 36 +++++++++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 15 deletions(-)
 
- - lockdep: Fix a handful of the more complex lockdep_init_map_*() primitives
-   that can lose the lock_type & cause false reports. No such mishap was
-   observed in the wild.
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 3c1853a9d1c0..a2a61915eb6b 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -750,37 +750,43 @@ static int __init debug_boot_weak_hash_enable(char *str)
+ }
+ early_param("debug_boot_weak_hash", debug_boot_weak_hash_enable);
+ 
+-static DEFINE_STATIC_KEY_FALSE(filled_random_ptr_key);
++static bool filled_ptr_key __read_mostly;
++static siphash_key_t ptr_key __read_mostly;
+ 
+-static void enable_ptr_key_workfn(struct work_struct *work)
++static void fill_ptr_key_workfn(struct work_struct *work)
+ {
+-	static_branch_enable(&filled_random_ptr_key);
++	if (READ_ONCE(filled_ptr_key))
++		return;
++	get_random_bytes(&ptr_key, sizeof(ptr_key));
++	/* Pairs with smp_rmb() before reading ptr_key. */
++	smp_wmb();
++	WRITE_ONCE(filled_ptr_key, true);
+ }
+ 
+ /* Maps a pointer to a 32 bit unique identifier. */
+ static inline int __ptr_to_hashval(const void *ptr, unsigned long *hashval_out)
+ {
+-	static siphash_key_t ptr_key __read_mostly;
+ 	unsigned long hashval;
+ 
+-	if (!static_branch_likely(&filled_random_ptr_key)) {
+-		static bool filled = false;
++	if (!READ_ONCE(filled_ptr_key)) {
+ 		static DEFINE_SPINLOCK(filling);
+-		static DECLARE_WORK(enable_ptr_key_work, enable_ptr_key_workfn);
+ 		unsigned long flags;
+ 
+-		if (!system_unbound_wq || !rng_is_initialized() ||
+-		    !spin_trylock_irqsave(&filling, flags))
++		if ((IS_ENABLED(CONFIG_PREEMPT_RT) || IS_ENABLED(CONFIG_PROVE_RAW_LOCK_NESTING)) &&
++		    rng_is_initialized()) {
++			static DECLARE_WORK(fill_ptr_key_work, fill_ptr_key_workfn);
++			queue_work(system_unbound_wq, &fill_ptr_key_work);
+ 			return -EAGAIN;
+-
+-		if (!filled) {
+-			get_random_bytes(&ptr_key, sizeof(ptr_key));
+-			queue_work(system_unbound_wq, &enable_ptr_key_work);
+-			filled = true;
+ 		}
++
++		if (!rng_is_initialized() || !spin_trylock_irqsave(&filling, flags))
++			return -EAGAIN;
++
++		fill_ptr_key_workfn(NULL);
+ 		spin_unlock_irqrestore(&filling, flags);
+ 	}
+-
++	/* Pairs with smp_wmb() after writing ptr_key. */
++	smp_rmb();
+ 
+ #ifdef CONFIG_64BIT
+ 	hashval = (unsigned long)siphash_1u64((u64)ptr, &ptr_key);
+-- 
+2.35.1
 
- - jump_label improvements: simplify the cross-arch support of
-   initial NOP patching by making it arch-specific code (used on MIPS only),
-   and remove the s390 initial NOP patching that was superfluous.
-
- Thanks,
-
-	Ingo
-
------------------->
-Ard Biesheuvel (3):
-      jump_label: s390: avoid pointless initial NOP patching
-      jump_label: mips: move module NOP patching into arch code
-      jump_label: make initial NOP patching the special case
-
-Peter Zijlstra (1):
-      locking/lockdep: Fix lockdep_init_map_*() confusion
-
-
- Documentation/staging/static-keys.rst |  3 ---
- arch/arc/kernel/jump_label.c          | 13 -----------
- arch/arm/kernel/jump_label.c          |  6 -----
- arch/arm64/kernel/jump_label.c        | 11 ----------
- arch/mips/include/asm/jump_label.h    |  2 ++
- arch/mips/kernel/jump_label.c         | 19 ++++++++++++++++
- arch/mips/kernel/module.c             |  5 +++--
- arch/parisc/kernel/jump_label.c       | 11 ----------
- arch/riscv/kernel/jump_label.c        | 12 ----------
- arch/s390/include/asm/jump_label.h    |  5 ++---
- arch/s390/kernel/jump_label.c         | 28 +++++-------------------
- arch/s390/kernel/module.c             |  1 -
- arch/sparc/kernel/module.c            |  3 ---
- arch/x86/kernel/jump_label.c          | 13 -----------
- arch/x86/kernel/module.c              |  3 ---
- include/linux/jump_label.h            |  9 +-------
- include/linux/lockdep.h               | 30 ++++++++++++++-----------
- kernel/jump_label.c                   | 41 +++++------------------------------
- kernel/locking/lockdep.c              |  7 +++---
- 19 files changed, 59 insertions(+), 163 deletions(-)

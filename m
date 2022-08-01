@@ -2,150 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764645865CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB6B5865D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiHAHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S229815AbiHAHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiHAHk7 (ORCPT
+        with ESMTP id S229726AbiHAHq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 03:40:59 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93DEE59;
-        Mon,  1 Aug 2022 00:40:58 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b21so11367299ljk.8;
-        Mon, 01 Aug 2022 00:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3CySBFeUWN85aXoonRz+AZDirKDNsX9iBAr2bBqFmHU=;
-        b=eTu6j9zzaLbBPXTYLnqfHsSDrQNeiG8n4svWVAROvuNolOkayxxX1ArmqdYOJngEM7
-         tIGROr+VLARtg1ZJXR/u1A0AgkXu+iespBhq2+tZ3yDLJc4D6QCAo8TlEGeBkhwrZzPP
-         u0h913n4nfmLmAjmTbd4j6qvRppKi0/FfQsVB4tSRdp2H3LuJiI1Ss4fQRZ7XixxC9hg
-         j0zJjX+wTo6lFctiIOdL5jC+pZsjxrsF48GWU40kvkGGQZF3aUmnSyVjTQZFy+nqrQun
-         w3zzVXIhw6XYfsP+1/h4jlbocUhf8aTI7J7Axrk64rZE+yUPJzoqvNyqkGPQ1cae8x4d
-         5D/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3CySBFeUWN85aXoonRz+AZDirKDNsX9iBAr2bBqFmHU=;
-        b=cKAhqCypgNHvugMsCARBwtVlP0dwuVnkYA3/xg41tzAedZu0cFtxM9Ld5SrhjV1E2B
-         JA7N5SLAEYR6/LrBHWypohgGor7HBUChB96jd1uvUsS9TZW+iqZZjmZZfqssBrMTdzbO
-         CgmREcx2+JqB9b5doRPXFUt1FH2dvmANpDdtGPIdypx1h/gOxj4XF2O1bLldIDkqAegK
-         wTe93dxEq8cMM/mNh71926qcYn1KX7ON6wrs1YuEbqm3FqVoZlA87eXZ6+vUSC1SFMcj
-         Mcqzw651SBJOOEJVLhKuAtrB7HlVtNjhJYuuvmDA+2eCBbmGbNpDfhrxhRlfFA47R7TM
-         EmwA==
-X-Gm-Message-State: ACgBeo2haNHbmC89WEm1HKypK0d0LfByw/z4z6GqNcZxxoLVZL2Oc8zK
-        LACZkKwlk2tCT0phrvdPLwY=
-X-Google-Smtp-Source: AA6agR60lgw2vb7OWO93hjNB85sYnk9WjvegobksCPHLQnpGTAEzdAsDbc8DqH5esnhPzmHMNcUpLg==
-X-Received: by 2002:a2e:a168:0:b0:25e:4dbc:2ac0 with SMTP id u8-20020a2ea168000000b0025e4dbc2ac0mr1359949ljl.187.1659339657265;
-        Mon, 01 Aug 2022 00:40:57 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id v8-20020a2ea448000000b0025e2c5a12b6sm1511078ljn.129.2022.08.01.00.40.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 00:40:56 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 09:45:07 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] Improve MCP3911 driver
-Message-ID: <YueEg0tmKpc4kdLO@gmail.com>
-References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
- <20220731174112.072345e3@jic23-huawei>
+        Mon, 1 Aug 2022 03:46:27 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48C6C1209D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 00:46:26 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-405-Y1qdvxiGN3CazYPDeLT3AA-1; Mon, 01 Aug 2022 08:46:23 +0100
+X-MC-Unique: Y1qdvxiGN3CazYPDeLT3AA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 1 Aug 2022 08:46:22 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 1 Aug 2022 08:46:22 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Steven Rostedt' <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [for-next][PATCH 21/21] tracing: Use a struct alignof to
+ determine trace event field alignment
+Thread-Topic: [for-next][PATCH 21/21] tracing: Use a struct alignof to
+ determine trace event field alignment
+Thread-Index: AQHYpRCiiZXga/pkuEmpCjyvwUgeD62Zqvzg
+Date:   Mon, 1 Aug 2022 07:46:22 +0000
+Message-ID: <a7d202457150472588df0bd3b7334b3f@AcuMS.aculab.com>
+References: <20220731190329.641602282@goodmis.org>
+ <20220731190435.611455708@goodmis.org>
+In-Reply-To: <20220731190435.611455708@goodmis.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="W/hEucp5LQz60B6z"
-Content-Disposition: inline
-In-Reply-To: <20220731174112.072345e3@jic23-huawei>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RnJvbTogU3RldmVuIFJvc3RlZHQNCj4gU2VudDogMzEgSnVseSAyMDIyIDIwOjA0DQo+IA0KPiBh
+bGlnbm9mKCkgZ2l2ZXMgYW4gYWxpZ25tZW50IG9mIHR5cGVzIGFzIHRoZXkgd291bGQgYmUgYXMg
+c3RhbmRhbG9uZQ0KPiB2YXJpYWJsZXMuIEJ1dCBhbGlnbm1lbnQgaW4gc3RydWN0dXJlcyBtaWdo
+dCBiZSBkaWZmZXJlbnQsIGFuZCB3aGVuDQo+IGJ1aWxkaW5nIHRoZSBmaWVsZHMgb2YgZXZlbnRz
+LCB0aGUgYWxpZ25tZW50IG11c3QgYmUgdGhlIGFjdHVhbA0KPiBhbGlnbm1lbnQgb3RoZXJ3aXNl
+IHRoZSBmaWVsZCBvZmZzZXRzIG1heSBub3QgbWF0Y2ggd2hhdCB0aGV5IGFjdHVhbGx5DQo+IGFy
+ZS4NCj4gDQo+IFRoaXMgY2F1c2VkIHRyYWNlLWNtZCB0byBjcmFzaCwgYXMgbGlidHJhY2VldmVu
+dCBkaWQgbm90IGNoZWNrIGlmIHRoZQ0KPiBmaWVsZCBvZmZzZXQgd2FzIGJpZ2dlciB0aGFuIHRo
+ZSBldmVudC4gVGhlIHdyaXRlX21zciBhbmQgcmVhZF9tc3INCj4gZXZlbnRzIG9uIDMyIGJpdCBo
+YWQgdGhlaXIgZmllbGRzIGluY29ycmVjdCwgYmVjYXVzZSBpdCBoYWQgYSB1NjQgZmllbGQNCj4g
+YmV0d2VlbiB0d28gaW50cy4gYWxpZ25vZih1NjQpIHdvdWxkIGdpdmUgOCwgYnV0IHRoZSB1NjQg
+ZmllbGQgd2FzIGF0IGENCj4gNCBieXRlIGFsaWdubWVudC4NCj4gDQo+IERlZmluZSBhIG1hY3Jv
+IGFzOg0KPiANCj4gICAgQUxJR05fU1RSVUNURklFTEQodHlwZSkgKChpbnQpKG9mZnNldG9mKHN0
+cnVjdCB7Y2hhciBhOyB0eXBlIGI7fSwgYikpKQ0KPiANCj4gd2hpY2ggZ2l2ZXMgdGhlIGFjdHVh
+bCBhbGlnbm1lbnQgb2YgdHlwZXMgaW4gYSBzdHJ1Y3R1cmUuDQoNClRoZSBzaW1wbGVyOg0KCV9f
+YWxpZ25vZl9fKHN0cnVjdCB7dHlwZSBiO30pDQphbHNvIHdvcmtzLg0KDQoJRGF2aWQNCg0KLQ0K
+UmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1p
+bHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVz
+KQ0K
 
---W/hEucp5LQz60B6z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Jul 31, 2022 at 05:41:12PM +0100, Jonathan Cameron wrote:
-> On Fri, 22 Jul 2022 15:07:17 +0200
-> Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
->=20
-> > Hi,
-> >=20
-> > This patch series intend to fix bugs and improve functionality of the
-> > MCP3911 driver.
-> > The main features added are
-> > - Support for buffers
-> > - Interrupt driven readings
-> > - Support for oversampling ratio
-> > - Support for set scale values (Gain)
-> >=20
-> > Among the bug fixes, there are changes in the formula for calculate raw
-> > value and a fix for mismatch in the devicetree property.
-> >=20
-> > Another general improvement for the driver is to use managed resources
-> > for all allocated resources.
-> >=20
-> Hi Marcus,
->=20
-> The first 3 fixes look good to me.  Do you want me to pick those up to
-> go in after rc1 via my togreg-fixes branch?  The side effect of doing
-> that is it'll be a little while before they are upstream in the branch
-> I'll want to pick the rest of the series on top of.
->=20
-> So it's a trade off between getting fixes in as soon as possible and
-> slowing down other improvements a little.
-
-Both ways works for me.
-I guess it is preferable to get the fixes in as soon as possible?
-
-If so, do you want me to rebase the series on your togreg-fixes branch
-or wait to send v5 until the patches are upstream?
-
-Or simply keep sending the whole series?
-
-Thanks,
-Marcus Folkesson
-
->=20
-> Jonathan
->=20
-
---W/hEucp5LQz60B6z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmLnhH4ACgkQiIBOb1ld
-UjKmEg//cqbYKmFpcnaOrWMfyZOZHbWE7RbHs+5DupY019C250WBr+p/esK/vNJU
-IsY2r2eHswuxECGCAU4BytjWcNDqLLSOZbewyJC5Xc6KhFZ/jmpsBjPPvr0ifSgd
-H+kFkuNuXWAuXwekJHycgyveghSpP3GhqFUR435pDrQhaW7Vqt9yiGccwqYcaE2n
-DJc7xkjYXF2k+KoNRwZ4LaDqUX/4450+wlHgBI6FRFMDESCdui9wXPl/D5tULYo1
-kGogWuZtwjYXW+Fjn5zsIwoNwJPZixNQl1pXQFd2TSoCtWM90ZcVHqMSkvuvZYTb
-fAOuv60VOXGvbB6yNPKPnnGL0JEOFeKXxRulm/Cn2nOTD2483wdR80DYChMuaHUL
-Y+OE9DVTz1sUXhW9Oae4af7A7CS6T5zxX5a3TjbmgjzPCs5FlfHOqpXf5AR9AzSp
-vEvyXTmyagLrFsDcxaAmEog7zFafWi4hnl4dgKdHTa5SfbHC2ws14BiyHZuk4zyx
-2Xqk1picambN3kaL3TbTGMruWFrgRVhav9GM4PBZZyGnx37pcB7UqEGu6Yea8nm6
-/sib0CgxwSmyXmg3kr9HxtGOOo7bADe4JK2MvJ9tHhz4oR37ruxS2E2SUI75Mlaf
-dA1kvXTzu1MwOEvEyRcRpcH2B2A+Dodmqjn7BqHtcFi7Z9lAQ/k=
-=xvHz
------END PGP SIGNATURE-----
-
---W/hEucp5LQz60B6z--

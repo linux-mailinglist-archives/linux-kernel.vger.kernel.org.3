@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B8C5866A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582FC5866AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiHAI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S230101AbiHAJBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiHAI7Z (ORCPT
+        with ESMTP id S229623AbiHAJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:59:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E293D2AC71
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659344364; x=1690880364;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WLSob6WZRijo1r4X/QWSTUIvozlCXPaoJf/ZsfYxpKY=;
-  b=LXjEXE9BB4zFEbVbA2X9YZMta+EuxYv/tDCLag+DumoIbXtclw/BFkrq
-   KLAEkhsibeuXPyFs2zZ4XArKXOTOlN4t3hELrR3NPDfdSpgMbzWen08V9
-   cnoLLK+iYzXs7w66WCD0nqzn8kEj+kWM9gad9g1A40EPWxo9YcSV+jKKf
-   iRU8vsOk7cg2dO04zuDLdAHvq6NxQ+VENpGK6XjglgYE9SgtgjPMwt21Y
-   4rt85DqIEDl6nB18hAS1iyB1lqhGZ97m+p47Yh7bPHimFD9tt+7IzKnPt
-   XGRST+SERwQIKAW2UB4TXSeuqpMkieK6zlC9rpDXJTrkG7Zolef1qxp/L
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350806562"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350806562"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 01:59:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="630159734"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Aug 2022 01:59:23 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIRGk-000Eyh-27;
-        Mon, 01 Aug 2022 08:59:22 +0000
-Date:   Mon, 1 Aug 2022 16:58:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-5.19.y-rt-rebase 16/55] kernel/softirq.c:640:1:
- sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be
- static?
-Message-ID: <202208011628.5yMVdsg8-lkp@intel.com>
+        Mon, 1 Aug 2022 05:01:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49FBBC88
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:01:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 615AF6104D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:01:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F59CC433D6;
+        Mon,  1 Aug 2022 09:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659344505;
+        bh=9N4MP54pi+2YzqlyPQl/AO6H4XWIGSthRqofo9l0eek=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sXoKxt1uT3r9jg1/snWDbHd9R0DQ3gqMAjazuis+RmBHAFCbe6tjmpcrw2OB8WIes
+         5M9dxG1xrCGbujUgNlWsuIqz+w8Q8z/gXg6Dy7/FlR7j3U5q4p/n1vl0ZERyoHwBgg
+         cWLmW3eHXJba2A3L3NuT7pmOH3D5Sn03RfNxmrSk=
+Date:   Mon, 1 Aug 2022 11:01:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+        wangweiyang2@huawei.com
+Subject: Re: [PATCH] tty: moxa: Refine error handling in moxa_pci_probe
+Message-ID: <YueWdjtxvmmZAA9E@kroah.com>
+References: <20220801085356.1716756-1-gongruiqi1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220801085356.1716756-1-gongruiqi1@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.19.y-rt-rebase
-head:   4730816e7a6aab17945765fc82d47cdc9a05b8fa
-commit: 492b6c0790cc99809397f2daca10299efb6ed354 [16/55] rcutorture: Also force sched priority to timersd on boosting test.
-config: microblaze-randconfig-s041-20220731 (https://download.01.org/0day-ci/archive/20220801/202208011628.5yMVdsg8-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=492b6c0790cc99809397f2daca10299efb6ed354
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.19.y-rt-rebase
-        git checkout 492b6c0790cc99809397f2daca10299efb6ed354
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash
+On Mon, Aug 01, 2022 at 04:53:56PM +0800, GONG, Ruiqi wrote:
+> Add pci_disable_device() into the error handling, and therefore make the
+> function not jump to err if pci_enable_device() failed.
+> 
+> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+> ---
+>  drivers/tty/moxa.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
+> index f3c72ab1476c..4432a39331d3 100644
+> --- a/drivers/tty/moxa.c
+> +++ b/drivers/tty/moxa.c
+> @@ -1239,7 +1239,7 @@ static int moxa_pci_probe(struct pci_dev *pdev,
+>  	retval = pci_enable_device(pdev);
+>  	if (retval) {
+>  		dev_err(&pdev->dev, "can't enable pci device\n");
+> -		goto err;
+> +		return retval;
+>  	}
+>  
+>  	for (i = 0; i < MAX_BOARDS; i++)
+> @@ -1300,6 +1300,7 @@ static int moxa_pci_probe(struct pci_dev *pdev,
+>  err_reg:
+>  	pci_release_region(pdev, 2);
+>  err:
+> +	pci_disable_device(pdev);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Are you sure you want to do this?  What happens if this is a
+multi-function device, you just turned it off, right?
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
+How did you test this change?  Do you have the hardware for it?
 
-vim +/__pcpu_scope_timersd +640 kernel/softirq.c
+thanks,
 
-   639	
- > 640	DEFINE_PER_CPU(struct task_struct *, timersd);
-   641	static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
-   642	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

@@ -2,310 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E767F586C7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42B6586C81
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiHAOBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S232281AbiHAOCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232225AbiHAOBG (ORCPT
+        with ESMTP id S231886AbiHAOCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:01:06 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970E2958B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:01:05 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id t2so10533730ply.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 07:01:05 -0700 (PDT)
+        Mon, 1 Aug 2022 10:02:18 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509ED1FCD7
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:02:17 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id tl27so2688077ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 07:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=10hnu0IasiN9BMqs6lfBX/MGfOJQ01A5ZPmIP3RjdiA=;
-        b=XFVKymDj1uK88g1gcxObeXwCIZ6Yr4Up/ArU64JLn3M5aTEf72bufIr3mw4UMGIDYL
-         3B/d803ElBTwev4V9FxeUriNOsZp6lYv1zFI6Mwo0V9G8/wSBG687X9f8BIxAE7sxwTb
-         NrBcsKRhhFZyMdybaGDVJo8OKPRnsJctkUOCU3Gy9Yh12iSECFBeMFNl35oTxbchUcNP
-         +Ce5wXW7olKasXxeQ2A8Erfm8OrsCyBVbMUs3VpBbVpqLX0O0s7b5+eoQBVbFjUjZaOs
-         lQK6VqTkCTeT4FAxe2ec4lN/r+B901/0WrH+35JZDjZEIbi5M0Xf8AcpdsaMC11NtSgh
-         1eQw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=vvVvpZsdBf40xEdQdYY4cKcB9z//6gWP7EvRWgTvqEc=;
+        b=DalDtQb4s7/Elx5TCPwLEBgV0G5jSthN8imejZLtuteRWjOeceBaLUAuEvwF0vq35j
+         LqE1Uq0SZx6hIhHoNMl+b8T1xiGdNXNfMPk7mF2BNPQOg+yN+cS+DqrYBExPY7qENsri
+         qNGMYoKdYAA6sEa7g0O8k4idsKHvzaRyWSY1gnWqFZt7WMasWj89G5uDhrh+fcJduMsQ
+         kEn4KcgPuwWZW2hv/ztwrFLMGZsrvQbAkTaX/Ct+ES5Nc8EseFnxkx0OpzhDQL0YWQvB
+         3w41iTLIF6Igh0LXrt9a0hr9HUw6K6mBbdbR1saVtBY2sX8G05ZwSQBGtq6plIEHbo+u
+         fsDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=10hnu0IasiN9BMqs6lfBX/MGfOJQ01A5ZPmIP3RjdiA=;
-        b=oGpdOs9VSPSR+euUxcHBMhLEWRmsgRiZaTOr0JutEMVQfVaS31PgunewmQAG0gqI1P
-         XK2s+PbJAgtQwfQ14rHkxeT5sspx91SwZIHgps0CWeq8Ycp7PIH7KzEpKIRwb1cGJAEX
-         xa/aJ59kTZjmhO/XXbGCcfuBISxPSWJNRvJpqU7filUFPy6HFSxQdVPoWzJeupdtTPw2
-         laTjwCjRImXxsGWCc/f+MtAbgUbJvCibEMaL4EorsrUQlKOE9uc26NLzkGlIy2WEJveQ
-         KlLPqgFNkccalXA/J8QoSl3XGcveCiD1Vrod2bU0ZC8AL2u5Mj4plGnQIX1ZUVvk8frd
-         RVgA==
-X-Gm-Message-State: ACgBeo1++A2me9aT7FKznKyba3c36PzvtbySkmzjjc4/Sluo+y0vvspp
-        simqHYcguCfBjBTG9VvOtdOq
-X-Google-Smtp-Source: AA6agR5bLnIlnkdC5IzeE4M/ebptF5K9ZMzZMXbU4ybXtDQKYYnaKe1eGBv76a5dZfDe292f/jHH2A==
-X-Received: by 2002:a17:903:18f:b0:16d:6e7a:44c with SMTP id z15-20020a170903018f00b0016d6e7a044cmr16815752plg.91.1659362464970;
-        Mon, 01 Aug 2022 07:01:04 -0700 (PDT)
-Received: from thinkpad ([117.217.185.73])
-        by smtp.gmail.com with ESMTPSA id t2-20020aa79462000000b0052abc2438f1sm2607185pfq.55.2022.08.01.07.00.53
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:content-transfer-encoding;
+        bh=vvVvpZsdBf40xEdQdYY4cKcB9z//6gWP7EvRWgTvqEc=;
+        b=YbPXj2LHlxtGfu6G4vNB7QtT82bRBV7AD7n1pWZOGaaRU+More9w6SwJbTVc+Yu6op
+         dH6OYwLaK9VU49CSz7zwG2YMUSJTn72624b4bS8kvUrRDlEwjmg63tcFQnvRExL2pRyn
+         ADvRLSaTNMxNfn3vcZKexOY6f36MZdpIj8GIleJRdfPAEJFT/WumUg46uE1+zAJ0gQvE
+         LnUv233zSEzCgoeS47p0PHv4KbB8CeCZJdEzDvxxHX4OBV8tS2hhK7y3DeTqVgmvPBob
+         esBQorrZe7ossq8ST+oXKjUNoj1l/v/2jhgfzdYXuZKzEC7RRHtBlo6DIo5nLiNgJHwG
+         9oig==
+X-Gm-Message-State: ACgBeo0WdwFig+ySKAIFtiEXO4+KKCBajb+MnhmOAkFCeGQqwReCbBR1
+        XASBUkG1FNUfQGOa+caj8yw=
+X-Google-Smtp-Source: AA6agR5ocueEeozrtB76cvDlQynZ/s/VNBRi/VMZwYmDm6hDNKynPEC7K9eCJFKs42m7uch0R5VXXw==
+X-Received: by 2002:a17:907:6930:b0:730:5f89:d144 with SMTP id rb48-20020a170907693000b007305f89d144mr6874716ejc.134.1659362535818;
+        Mon, 01 Aug 2022 07:02:15 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id i13-20020a056402054d00b0043ca6fb7e7dsm6764751edx.68.2022.08.01.07.02.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 07:00:58 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 19:30:47 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 15/15] PCI: dwc: Introduce dma-ranges property
- support for RC-host
-Message-ID: <20220801140047.GO93763@thinkpad>
-References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
- <20220624143947.8991-16-Sergey.Semin@baikalelectronics.ru>
+        Mon, 01 Aug 2022 07:02:14 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 1 Aug 2022 16:02:12 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [GIT PULL] Scheduler updates for v6.0
+Message-ID: <Yufc5Mq1aqLVV/Ov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624143947.8991-16-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:39:47PM +0300, Serge Semin wrote:
-> In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-> property has the same format as the "ranges" property. The only difference
-> is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-> memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-> property. Even though the DW PCIe controllers are normally equipped with
-> the internal Address Translation Unit which inbound and outbound tables
-> can be used to implement both properties semantics, it was surprising for
-> me to discover that the host-related part of the DW PCIe driver currently
-> supports the "ranges" property only while the "dma-ranges" windows are
-> just ignored. Having the "dma-ranges" supported in the driver would be
-> very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-> mapping and require a customized PCIe memory layout. So let's fix that by
-> introducing the "dma-ranges" property support.
-> 
-> First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
-> dw_pcie_prog_ep_inbound_atu() and create a new version of the
-> dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for the
-> RC and EP controllers respectively in the same way as it has been
-> developed for the outbound ATU setup methods.
-> 
-> Secondly aside with the memory window index and type the new
-> dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
-> and size as its arguments. These parameters define the PCIe and CPU memory
-> ranges which will be used to setup the respective inbound ATU mapping. The
-> passed parameters need to be verified against the ATU ranges constraints
-> in the same way as it is done for the outbound ranges.
-> 
-> Finally the DMA-ranges detected for the PCIe controller need to be
-> converted to the inbound ATU entries during the host controller
-> initialization procedure. It will be done in the framework of the
-> dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
-> need to disable all the inbound ATU entries in order to prevent unexpected
-> PCIe TLPs translations defined by some third party software like
-> bootloaders.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Linus,
 
-Small nitpick below,
+Please pull the latest sched/core git tree from:
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-core-2022-08-01
 
-Thanks,
-Mani
+   # HEAD: c17a6ff9321355487d7d5ccaa7d406a0ea06b6c4 rseq: Kill process when unknown flags are encountered in ABI structures
 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> ---
-> 
-> Changelog v3:
-> - Drop inbound iATU window size alignment constraint. (@Manivannan)
-> ---
->  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
->  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
->  drivers/pci/controller/dwc/pcie-designware.c  | 56 ++++++++++++++++++-
->  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
->  4 files changed, 89 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> index 627c4b69878c..441feff1917a 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> @@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
->  		return -EINVAL;
->  	}
->  
-> -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
-> -				       cpu_addr, bar);
-> +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
-> +					  cpu_addr, bar);
->  	if (ret < 0) {
->  		dev_err(pci->dev, "Failed to program IB window\n");
->  		return ret;
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 6993ce9e856d..2fbe9dc11634 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -581,12 +581,15 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
->  	}
->  
->  	/*
-> -	 * Ensure all outbound windows are disabled before proceeding with
-> -	 * the MEM/IO ranges setups.
-> +	 * Ensure all out/inbound windows are disabled before proceeding with
-> +	 * the MEM/IO (dma-)ranges setups.
->  	 */
->  	for (i = 0; i < pci->num_ob_windows; i++)
->  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
->  
-> +	for (i = 0; i < pci->num_ib_windows; i++)
-> +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
-> +
->  	i = 0;
->  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
->  		if (resource_type(entry->res) != IORESOURCE_MEM)
-> @@ -623,9 +626,32 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
->  	}
->  
->  	if (pci->num_ob_windows <= i)
-> -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-> +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
->  			 pci->num_ob_windows);
->  
+This cycle's scheduler updates for v6.0 are:
 
-I think a comment here explaining what's going on below would be helpful in the
-future.
+Load-balancing improvements:
+============================
 
-> +	i = 0;
-> +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
-> +		if (resource_type(entry->res) != IORESOURCE_MEM)
-> +			continue;
-> +
-> +		if (pci->num_ib_windows <= i)
-> +			break;
-> +
-> +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
-> +					       entry->res->start,
-> +					       entry->res->start - entry->offset,
-> +					       resource_size(entry->res));
-> +		if (ret) {
-> +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
-> +				entry->res);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (pci->num_ib_windows <= i)
-> +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
+- Improve NUMA balancing on AMD Zen systems for affine workloads.
 
-"dma-ranges"
+- Improve the handling of reduced-capacity CPUs in load-balancing.
 
-> +			 pci->num_ib_windows);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 9c622b635fdd..7a5be3c4f8e0 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -396,8 +396,60 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
->  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
->  }
->  
-> -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> -			     int type, u64 cpu_addr, u8 bar)
-> +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> +			     u64 cpu_addr, u64 pci_addr, u64 size)
-> +{
-> +	u64 limit_addr = pci_addr + size - 1;
-> +	u32 retries, val;
-> +
-> +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
-> +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
-> +	    !IS_ALIGNED(pci_addr, pci->region_align) || !size) {
-> +		return -EINVAL;
-> +	}
-> +
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_BASE,
-> +			      lower_32_bits(pci_addr));
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_BASE,
-> +			      upper_32_bits(pci_addr));
-> +
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LIMIT,
-> +			      lower_32_bits(limit_addr));
-> +	if (dw_pcie_ver_is_ge(pci, 460A))
-> +		dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_LIMIT,
-> +				      upper_32_bits(limit_addr));
-> +
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_TARGET,
-> +			      lower_32_bits(cpu_addr));
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_TARGET,
-> +			      upper_32_bits(cpu_addr));
-> +
-> +	val = type;
-> +	if (upper_32_bits(limit_addr) > upper_32_bits(pci_addr) &&
-> +	    dw_pcie_ver_is_ge(pci, 460A))
-> +		val |= PCIE_ATU_INCREASE_REGION_SIZE;
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL1, val);
-> +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2, PCIE_ATU_ENABLE);
-> +
-> +	/*
-> +	 * Make sure ATU enable takes effect before any subsequent config
-> +	 * and I/O accesses.
-> +	 */
-> +	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> +		val = dw_pcie_readl_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2);
-> +		if (val & PCIE_ATU_ENABLE)
-> +			return 0;
-> +
-> +		mdelay(LINK_WAIT_IATU);
-> +	}
-> +
-> +	dev_err(pci->dev, "Inbound iATU is not being enabled\n");
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> +				int type, u64 cpu_addr, u8 bar)
->  {
->  	u32 retries, val;
->  
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index c3e73ed9aff5..5954e8cf9eec 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -308,8 +308,10 @@ int dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
->  			      u64 cpu_addr, u64 pci_addr, u64 size);
->  int dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
->  				 int type, u64 cpu_addr, u64 pci_addr, u64 size);
-> -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> -			     int type, u64 cpu_addr, u8 bar);
-> +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> +			     u64 cpu_addr, u64 pci_addr, u64 size);
-> +int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> +				int type, u64 cpu_addr, u8 bar);
->  void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index);
->  void dw_pcie_setup(struct dw_pcie *pci);
->  void dw_pcie_iatu_detect(struct dw_pcie *pci);
-> -- 
-> 2.35.1
-> 
+- Energy Model improvements: fix & refine all the energy fairness metrics (PELT),
+  and remove the conservative threshold requiring 6% energy savings to
+  migrate a task. Doing this improves power efficiency for most workloads,
+  and also increases the reliability of energy-efficiency scheduling.
 
--- 
-மணிவண்ணன் சதாசிவம்
+- Optimize/tweak select_idle_cpu() to spend (much) less time searching
+  for an idle CPU on overloaded systems. There's reports of several
+  milliseconds spent there on large systems with large workloads ...
+
+  [ Since the search logic changed, there might be behavioral side effects. ]
+
+- Improve NUMA imbalance behavior. On certain systems
+  with spare capacity, initial placement of tasks is non-deterministic,
+  and such an artificial placement imbalance can persist for a long time,
+  hurting (and sometimes helping) performance.
+
+  The fix is to make fork-time task placement consistent with runtime
+  NUMA balancing placement.
+
+  Note that some performance regressions were reported against this,
+  caused by workloads that are not memory bandwith limited, which benefit
+  from the artificial locality of the placement bug(s). Mel Gorman's
+  conclusion, with which we concur, was that consistency is better than
+  random workload benefits from non-deterministic bugs:
+
+     "Given there is no crystal ball and it's a tradeoff, I think it's
+      better to be consistent and use similar logic at both fork time
+      and runtime even if it doesn't have universal benefit."
+
+- Improve core scheduling by fixing a bug in sched_core_update_cookie() that
+  caused unnecessary forced idling.
+
+- Improve wakeup-balancing by allowing same-LLC wakeup of idle CPUs for newly
+  woken tasks.
+
+- Fix a newidle balancing bug that introduced unnecessary wakeup latencies.
+
+ABI improvements/fixes:
+=======================
+
+- Do not check capabilities and do not issue capability check denial messages
+  when a scheduler syscall doesn't require privileges. (Such as increasing niceness.)
+
+- Add forced-idle accounting to cgroups too.
+
+- Fix/improve the RSEQ ABI to not just silently accept unknown flags.
+  (No existing tooling is known to have learned to rely on the previous behavior.)
+
+- Depreciate the (unused) RSEQ_CS_FLAG_NO_RESTART_ON_* flags.
+
+Optimizations:
+==============
+
+- Optimize & simplify leaf_cfs_rq_list()
+
+- Micro-optimize set_nr_{and_not,if}_polling() via try_cmpxchg().
+
+Misc fixes & cleanups:
+======================
+
+- Fix the RSEQ self-tests on RISC-V and Glibc 2.35 systems.
+
+- Fix a full-NOHZ bug that can in some cases result in the tick not being
+  re-enabled when the last SCHED_RT task is gone from a runqueue but there's
+  still SCHED_OTHER tasks around.
+
+- Various PREEMPT_RT related fixes.
+
+- Misc cleanups & smaller fixes.
+
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+ Thanks,
+
+	Ingo
+
+------------------>
+Chen Yu (1):
+      sched/fair: Introduce SIS_UTIL to search idle CPU based on sum of util_avg
+
+Chengming Zhou (1):
+      sched/fair: Optimize and simplify rq leaf_cfs_rq_list
+
+Christian G�ttsche (1):
+      sched: only perform capability check on privileged operation
+
+Cruz Zhao (1):
+      sched/core: Fix the bug that task won't enqueue into core tree when update cookie
+
+Dietmar Eggemann (3):
+      sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
+      sched/fair: Rename select_idle_mask to select_rq_mask
+      sched/fair: Use the same cpumask per-PD throughout find_energy_efficient_cpu()
+
+John Keeping (1):
+      sched/core: Always flush pending blk_plug
+
+Josh Don (2):
+      sched: Allow newidle balancing to bail out of load_balance
+      sched/core: add forced idle accounting for cgroups
+
+K Prateek Nayak (1):
+      sched/fair: Consider CPU affinity when allowing NUMA imbalance in find_idlest_group()
+
+Mathieu Desnoyers (2):
+      rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags
+      rseq: Kill process when unknown flags are encountered in ABI structures
+
+Mel Gorman (4):
+      sched/numa: Initialise numa_migrate_retry
+      sched/numa: Do not swap tasks between nodes when spare capacity is available
+      sched/numa: Apply imbalance limitations consistently
+      sched/numa: Adjust imb_numa_nr to a better approximation of memory channels
+
+Michael Jeanson (3):
+      selftests/rseq: riscv: use rseq_get_abi() helper
+      selftests/rseq: riscv: fix 'literal-suffix' warning
+      selftests/rseq: check if libc rseq support is registered
+
+Nicolas Saenz Julienne (1):
+      nohz/full, sched/rt: Fix missed tick-reenabling bug in dequeue_task_rt()
+
+Tianchen Ding (2):
+      sched: Fix the check of nr_running at queue wakelist
+      sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle
+
+Uros Bizjak (1):
+      sched/core: Use try_cmpxchg in set_nr_{and_not,if}_polling
+
+Vincent Donnefort (4):
+      sched/fair: Provide u64 read for 32-bits arch helper
+      sched/fair: Decay task PELT values during wakeup migration
+      sched/fair: Remove task_util from effective utilization in feec()
+      sched/fair: Remove the energy margin in feec()
+
+Vincent Guittot (1):
+      sched/fair: fix case with reduced capacity CPU
+
+Yajun Deng (1):
+      sched/deadline: Use proc_douintvec_minmax() limit minimum value
+
+Zhang Qiao (2):
+      sched/fair: Remove redundant word " *"
+      sched: Remove unused function group_first_cpu()
+
+
+ drivers/powercap/dtpm_cpu.c               |  33 +-
+ drivers/thermal/cpufreq_cooling.c         |   6 +-
+ include/linux/cgroup-defs.h               |   4 +
+ include/linux/kernel_stat.h               |   7 +
+ include/linux/sched.h                     |   2 +-
+ include/linux/sched/rt.h                  |   8 -
+ include/linux/sched/topology.h            |   1 +
+ kernel/cgroup/rstat.c                     |  44 +-
+ kernel/rseq.c                             |  23 +-
+ kernel/sched/core.c                       | 215 ++++----
+ kernel/sched/core_sched.c                 |  15 +-
+ kernel/sched/cpufreq_schedutil.c          |   5 +-
+ kernel/sched/cputime.c                    |  15 +
+ kernel/sched/deadline.c                   |   6 +-
+ kernel/sched/fair.c                       | 818 +++++++++++++++++++-----------
+ kernel/sched/features.h                   |   3 +-
+ kernel/sched/pelt.h                       |  40 +-
+ kernel/sched/rt.c                         |  15 +-
+ kernel/sched/sched.h                      |  63 ++-
+ kernel/sched/topology.c                   |  23 +-
+ tools/testing/selftests/rseq/rseq-riscv.h |  50 +-
+ tools/testing/selftests/rseq/rseq.c       |   3 +-
+ 22 files changed, 888 insertions(+), 511 deletions(-)

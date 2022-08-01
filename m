@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62294587274
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11961587277
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbiHAUtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S234247AbiHAUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiHAUtI (ORCPT
+        with ESMTP id S233921AbiHAUuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:49:08 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8D7A2A277;
-        Mon,  1 Aug 2022 13:49:07 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-20-138.pa.nsw.optusnet.com.au [49.195.20.138])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 3268362CD71;
-        Tue,  2 Aug 2022 06:49:04 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oIcLW-0081My-9Q; Tue, 02 Aug 2022 06:49:02 +1000
-Date:   Tue, 2 Aug 2022 06:49:02 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Sherry Yang <sherry.yang@oracle.com>
-Cc:     djwong@kernel.org, dchinner@redhat.com,
-        allison.henderson@oracle.com, chandanrlinux@gmail.com,
-        bfoster@redhat.com, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] xfs: initialize error in xfs_defer_finish_one
-Message-ID: <20220801204902.GA3600936@dread.disaster.area>
-References: <20220801190311.65703-1-sherry.yang@oracle.com>
+        Mon, 1 Aug 2022 16:50:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52D5FA7;
+        Mon,  1 Aug 2022 13:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68D10B81693;
+        Mon,  1 Aug 2022 20:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1987AC433D6;
+        Mon,  1 Aug 2022 20:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659387017;
+        bh=GWDH/MBhC6DxM10eEHhv53g9zopJp+n1XzbvYqNJv64=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qgMCGfwMbs4NN5jXIPFLlTw4ZwYnhSJG0xmiuoxmGDBgr23o8iuoNqhk4c5WrKTTA
+         A39CGcWflw45LSo5iyWPIcvpymhcs13lKKKpmypj2QxltzlK9HVhvi9SFgHHqxaJOe
+         lbCA7IayxKQrUqY4LoZ3k1i+5RSuGnaDlZcpCF4DHY1YqhHO6GolNmdDbO/1uwenoc
+         ItI58dACX5ADrbMRKgQQADrZLVFXfupe53s0kYxx0Cg0BbgM87Mph2shO/rNH/Apek
+         Ea9+a3m2Zdx8tdW9R2BO5TYVCCJm0COzBiM8mmqzyjonY0MG4m6AaXcq/7wS4m5lzr
+         r4u5I0eyxgRlA==
+Received: by mail-yb1-f182.google.com with SMTP id p71so2538971yba.9;
+        Mon, 01 Aug 2022 13:50:17 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3bv5QBTtdRLxsUvn7EyMmhuH21IYe+QK/rTpEYYJCklrI4NqEz
+        yvDAwsSF2oJdJhtrOPc/s6airBH0dcK+RZmrj90=
+X-Google-Smtp-Source: AA6agR7B6n3bppA2HMcAG6qZsy2SmmbwUqOUZsgCGNONeZWpvlLQcK+GIhNAJZP9GYQGu9RZjET6Vke3Tshg+xpZOAo=
+X-Received: by 2002:a25:8b92:0:b0:66d:553a:f309 with SMTP id
+ j18-20020a258b92000000b0066d553af309mr12901013ybl.322.1659387016079; Mon, 01
+ Aug 2022 13:50:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801190311.65703-1-sherry.yang@oracle.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62e83c41
-        a=cxZHBGNDieHvTKNp/pucQQ==:117 a=cxZHBGNDieHvTKNp/pucQQ==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=7-415B0cAAAA:8
-        a=uhNI-8COEOrwEqbXutoA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727210600.120221-1-logang@deltatee.com> <20220727210600.120221-2-logang@deltatee.com>
+ <YuKZmloAcZWY5of8@infradead.org> <CAPhsuW4jtiuNPzC2aK-Jo80X15AWdYi7HQ2n7YWqVP6Uux3hYg@mail.gmail.com>
+ <215E9FEF-69F9-44AB-A5B0-FD3C8335E985@deltatee.com> <CAPhsuW4r2nz3Q62Q9CpouHmy2JNwgJZsn=ZHT3q82DE6ddhXtA@mail.gmail.com>
+ <YugKGLvbnvSeJfRg@infradead.org>
+In-Reply-To: <YugKGLvbnvSeJfRg@infradead.org>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 1 Aug 2022 13:50:05 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4Lsj5TxBxbqsWfHid_n3x=H=CwuPaFBJ0KbQ3XkgA3vQ@mail.gmail.com>
+Message-ID: <CAPhsuW4Lsj5TxBxbqsWfHid_n3x=H=CwuPaFBJ0KbQ3XkgA3vQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] md/raid5: Refactor raid5_get_active_stripe()
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:03:11PM -0700, Sherry Yang wrote:
-> Path through non-void function 'xfs_defer_finish_one' may return error
-> uninitialized if no iteration of 'list_for_each_safe' occurs. Fix this
-> by initializing error.
+On Mon, Aug 1, 2022 at 10:15 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Mon, Aug 01, 2022 at 09:49:38AM -0700, Song Liu wrote:
+> > We are in the merge window right now. So the timing is a little tricky. I will
+> > try to send pull requests with this set as-is. Then we can do follow-ups.
+>
+> I can send the patch.  I don't think it's anywhere near critical enought to
+> rush it into the current merge window, though.
 
-I didn't think this situation was possible - how do we get deferred
-work queued with no work items on it?
+Agreed. Let's improve it in 6.0.
 
-If we can return an uninitialised error from xfs_defer_finish_one()
-because of an empty queued work, then something else has gone wrong
-earlier in the work deferral process. If this can actually happen,
-then we need to fix whatever is creating the empty work rather than
-paper over it by initialising the error being returned for empty
-works...
+Thanks!
 
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Song

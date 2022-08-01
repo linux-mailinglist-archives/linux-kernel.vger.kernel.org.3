@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F007858668D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C2C58668F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiHAIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S230243AbiHAIra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHAIrP (ORCPT
+        with ESMTP id S230237AbiHAIr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:47:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E98432D81
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:47:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 1 Aug 2022 04:47:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB5032DB5;
+        Mon,  1 Aug 2022 01:47:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DCEDA60FB9;
-        Mon,  1 Aug 2022 08:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659343630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i3plC4gDCirp0/qEelmSAUkiw7vjt0l7z6WMBswDQpA=;
-        b=kvjC6SkQ2jq0/pIqyrMLbUusGyMzDJgTpRqcOZB+GQy53XYapOoF+xKlAXR4Cyre0whHO2
-        oSKg3XevIukFCA/b4rkpJf9TIrsNdY5/MYcIMnyXCFW5abcsX72PGY8p+f9yCohFEDD15M
-        idBdYfxPiuLIiCsrGQZWAWRAVXkS5/4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6ED113A72;
-        Mon,  1 Aug 2022 08:47:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nPMLKg6T52IMMwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 01 Aug 2022 08:47:10 +0000
-Date:   Mon, 1 Aug 2022 10:47:10 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com,
-        quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_ext: remove unused variable in offline_page_ext
-Message-ID: <YueTDphOhJgvB58e@dhcp22.suse.cz>
-References: <1659330397-11817-1-git-send-email-quic_charante@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C80B61008;
+        Mon,  1 Aug 2022 08:47:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E94C433D6;
+        Mon,  1 Aug 2022 08:47:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659343646;
+        bh=xbJSzaTJLqf/iz1sUggkR2WIMbRuPaCeSIwGgeDNNw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dEZ3ZGt7IBgk3rFNv6L+SpJp9GAYTM2u17D05UdDWVsQpSAQ+t6TkEM/juvVJLwBT
+         YlBVqOlMJN8w4yn+p5K0j4SpZDcqRQellWTl2iFQM40T2SXcZEVIJfUWs4lXMuTCb6
+         CSR1l9mRovyfJWAfhe4BuHHhPoQMXSOxUhs7RnXQ=
+Date:   Mon, 1 Aug 2022 10:47:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Dipanjan Das <mail.dipanjan.das@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-security-modules <linux-security-module@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        syzbot+c70d87ac1d001f29a058 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
+        Marius Fleischer <fleischermarius@googlemail.com>,
+        Priyanka Bose <its.priyanka.bose@gmail.com>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
+ watch_queue
+Message-ID: <YueTG6Nla1pMcW/1@kroah.com>
+References: <1822b768504.1d4e377e236061.5518350412857967240@siddh.me>
+ <20220723135447.199557-1-code@siddh.me>
+ <Ytv/4Tljvlt0PJ2r@kroah.com>
+ <3558070.1658933200@warthog.procyon.org.uk>
+ <182407602ce.190e58816827.7904364186178466266@siddh.me>
+ <20220731181131.GB3569921@berlinger>
+ <1825594fdb6.52eb2a02235647.5426665702277259900@siddh.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1659330397-11817-1-git-send-email-quic_charante@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1825594fdb6.52eb2a02235647.5426665702277259900@siddh.me>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 01-08-22 10:36:37, Charan Teja Kalla wrote:
-> Remove unused variable 'nid' in offline_page_ext(). This is not used
-> since the page_ext code inception.
+On Mon, Aug 01, 2022 at 12:16:43AM +0530, Siddh Raman Pant wrote:
+> On Sun, 31 Jul 2022 23:41:31 +0530  Dipanjan Das <mail.dipanjan.das@gmail.com> wrote:
+> > On Wed, Jul 27, 2022 at 09:50:52PM +0530, Siddh Raman Pant wrote:
+> > > Thank you for explaining it!
+> > > 
+> > > I will send a v3. Should I add a Suggested-by tag mentioning you?
+> > 
+> > Sorry for jumping in.
+> > 
+> > We have reported the same bug in kernel v5.10.131 [https://lore.kernel.org/all/CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com]. We have been suggested to join this discussion so that we can have appropriate meta-information injected in this patch’s commit message to make sure that it gets backported to v5.10.y.  Therefore, we would like to be in the loop so that we can offer help in the process, if needed.
+> > 
 > 
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> As you are suggesting for backporting, I should CC the stable list, or mail
+> after it gets merged. You have reproduced it on v5.10, but the change seems to
+> be introduced by c73be61cede5 ("pipe: Add general notification queue support"),
+> which got in at v5.8. So should it be backported till v5.8 instead?
 
-Acked-by: Michal Hocko <mhocko@suse.com>
-Thanks
+There are no active supported kernels other than the ones listed on
+kernel.org, so 5.8 doesn't make much sense here, only 5.10 and 5.15 and
+5.18 at the moment.
 
-> ---
->  mm/page_ext.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/page_ext.c b/mm/page_ext.c
-> index 3dc715d..e22a928 100644
-> --- a/mm/page_ext.c
-> +++ b/mm/page_ext.c
-> @@ -336,7 +336,7 @@ static int __meminit online_page_ext(unsigned long start_pfn,
->  }
->  
->  static int __meminit offline_page_ext(unsigned long start_pfn,
-> -				unsigned long nr_pages, int nid)
-> +				unsigned long nr_pages)
->  {
->  	unsigned long start, end, pfn;
->  
-> @@ -362,11 +362,11 @@ static int __meminit page_ext_callback(struct notifier_block *self,
->  		break;
->  	case MEM_OFFLINE:
->  		offline_page_ext(mn->start_pfn,
-> -				mn->nr_pages, mn->status_change_nid);
-> +				mn->nr_pages);
->  		break;
->  	case MEM_CANCEL_ONLINE:
->  		offline_page_ext(mn->start_pfn,
-> -				mn->nr_pages, mn->status_change_nid);
-> +				mn->nr_pages);
->  		break;
->  	case MEM_GOING_OFFLINE:
->  		break;
-> -- 
-> 2.7.4
+thanks,
 
--- 
-Michal Hocko
-SUSE Labs
+greg k-h

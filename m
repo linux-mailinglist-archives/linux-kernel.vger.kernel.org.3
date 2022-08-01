@@ -2,95 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA77587051
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5891587055
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiHASUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S233478AbiHASXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiHASUP (ORCPT
+        with ESMTP id S232984AbiHASXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44F1EA2;
-        Mon,  1 Aug 2022 11:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BBE1611D9;
-        Mon,  1 Aug 2022 18:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F1D5C433D7;
-        Mon,  1 Aug 2022 18:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659378013;
-        bh=6HWYllLmgRs5KqJx5yU+86jW6FFp3/t4drX/nhaRq1E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X9tr+H0K5WedmTT/8uH/PNi5aVhBDDB1sblyEmn/oyUlFrlofFudvMODX6EiF1WT2
-         bWkOhHJRxpK3Xz0JsjgKF+dlezdLws5rtKGrUszQ/x+w/hQMavPHx4yj5yROyXLfsB
-         vWd+oFfsfJkbt45OZHOhTSczQNcF9MDQFv0qNuOyTSuz+hURJUrOFfc8GTNz5NKYoM
-         4PJdzE0UvTs9H0tM9GkOQBHd7UFs7zNtarB/s+pJCf3dOT4iBI9Pas/OhUQJqZGM57
-         OkYGE/F1ACjXVn6frxJ8/tv1u+cI0mPTPptND06GkFZ3x4BydYt3BOkE1pazNuY190
-         zriGnPabeRIiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86BE7C43143;
-        Mon,  1 Aug 2022 18:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 1 Aug 2022 14:23:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8947A2870F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 11:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gPdrcUpLAcK6oYiMvTryLalqWjaKI86cW7a7OxyjYBc=; b=B5vl6MV01f/2wsZuU83jCIsej1
+        U299QIo1COaVF7aXM9uJlLZiiGM0UvF8xSkDc7PnV0FKYOwLUtgucDSqkdxayzPd66P0kl8xXWV3G
+        pz/AKuSK30hVgEO8cqKR5A7M1zGlUADU2IvkTOSiILaS+avAYlubQ+41FXmq5ILrVNK6q2BtlPd6e
+        3OIbmSDROAXhg/b+u1xyQw2UKzpjtB5XuLvzeC5P+UTmJ3CkKSwl9zI61UMd+CYrroe+CGN9TOugy
+        otP9rE4j0YeT5fkj99FRn3tNsPQkCyU3BXtGNOYxXCA5y2FHKMiF8vGFaH5LvsvHZ9hwSUYVOUjyc
+        XWNbuFlA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oIa4E-008sGW-NW; Mon, 01 Aug 2022 18:23:02 +0000
+Date:   Mon, 1 Aug 2022 11:23:02 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     studentxswpy@163.com
+Cc:     jaegeuk@kernel.org, chao@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH -next] f2fs: Replace kmalloc() with f2fs_kmalloc
+Message-ID: <YugaBtQcoR4XhXiQ@infradead.org>
+References: <20220801092202.3134668-1-studentxswpy@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V4 0/3] Add the fec node on i.MX8ULP platform
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165937801354.26429.3502205053569932269.git-patchwork-notify@kernel.org>
-Date:   Mon, 01 Aug 2022 18:20:13 +0000
-References: <20220726143853.23709-1-wei.fang@nxp.com>
-In-Reply-To: <20220726143853.23709-1-wei.fang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801092202.3134668-1-studentxswpy@163.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 27 Jul 2022 00:38:50 +1000 you wrote:
-> From: Wei Fang <wei.fang@nxp.com>
+On Mon, Aug 01, 2022 at 05:22:02PM +0800, studentxswpy@163.com wrote:
+> From: Xie Shaowen <studentxswpy@163.com>
 > 
-> Add the fec node on i.MX8ULP platfroms.
-> And enable the fec support on i.MX8ULP EVK boards.
-> 
-> Wei Fang (3):
->   dt-bindings: net: fsl,fec: Add i.MX8ULP FEC items
->   arm64: dts: imx8ulp: Add the fec support
->   arm64: dts: imx8ulp-evk: Add the fec support
-> 
-> [...]
+> replace kmalloc with f2fs_kmalloc to keep f2fs code consistency.
 
-Here is the summary with links:
-  - [V4,1/3] dt-bindings: net: fsl,fec: Add i.MX8ULP FEC items
-    https://git.kernel.org/netdev/net-next/c/ad3564ccc367
-  - [V4,2/3] arm64: dts: imx8ulp: Add the fec support
-    (no matching commit)
-  - [V4,3/3] arm64: dts: imx8ulp-evk: Add the fec support
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+For that removing f2fs_kmalloc entirely would be way better.

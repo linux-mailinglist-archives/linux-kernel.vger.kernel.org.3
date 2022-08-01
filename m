@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F419586A8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064EE586A92
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbiHAMST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S234620AbiHAMSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbiHAMRx (ORCPT
+        with ESMTP id S234563AbiHAMRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:17:53 -0400
+        Mon, 1 Aug 2022 08:17:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA255491E9;
-        Mon,  1 Aug 2022 04:59:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D056E785B1;
+        Mon,  1 Aug 2022 04:59:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 803D0B81177;
-        Mon,  1 Aug 2022 11:59:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EBAC433C1;
-        Mon,  1 Aug 2022 11:59:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E949B81163;
+        Mon,  1 Aug 2022 11:59:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B42C433C1;
+        Mon,  1 Aug 2022 11:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355146;
-        bh=c6jwXhG8ZaugPYMKXI6+L6tNkj+voJ6779qrSNNKXZo=;
+        s=korg; t=1659355149;
+        bh=R8xRDyc8IDTC5wOZ0hqq+pKX1t9BRLJ7EvV+0yyX6Ec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oXN+vbrson9Yol4v8NP/0ObQ8kyto5q4ZSVBpUlEI1EKXvhRP9wYqhegSU/G/QZgz
-         xlZcibfz9JI8ErHg/tqYxgDSDRGWLc+gUzq6c1bsMphKNO0KAdpzsXUqNtj4xzEsab
-         HdXJAcOJU2QiLH/FYb1SemZs/SBzQ/2ZG2gBV42U=
+        b=uZuE6Q1wasWUGZRcVG9ZnjQnehOBaU/zlrsfv7WdRINFkW4yN8o2Qtn9DTTSBxuny
+         zanZQfE2UBBqA6k+pGfrfIJUMZK5bxK7Xa7jcErKTtjAmL5tNHA6sMzK5FSBxFNbvb
+         DS1tYRy4q9cCGJgFNQ0dc8L/1vA2eSIh+RJwVNU8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ralph Campbell <rcampbell@nvidia.com>,
-        Felix Kuehling <felix.kuehling@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Jaewon Kim <jaewon31.kim@samsung.com>,
+        GyeongHwan Hong <gh21.hong@samsung.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Minchan Kim <minchan@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Yong-Taek Lee <ytk.lee@samsung.com>, stable@vger.kerenl.org,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.18 79/88] mm/hmm: fault non-owner device private entries
-Date:   Mon,  1 Aug 2022 13:47:33 +0200
-Message-Id: <20220801114141.616100115@linuxfoundation.org>
+Subject: [PATCH 5.18 80/88] page_alloc: fix invalid watermark check on a negative value
+Date:   Mon,  1 Aug 2022 13:47:34 +0200
+Message-Id: <20220801114141.657732633@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
 References: <20220801114138.041018499@linuxfoundation.org>
@@ -57,79 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ralph Campbell <rcampbell@nvidia.com>
+From: Jaewon Kim <jaewon31.kim@samsung.com>
 
-commit 8a295dbbaf7292c582a40ce469c326f472d51f66 upstream.
+commit 9282012fc0aa248b77a69f5eb802b67c5a16bb13 upstream.
 
-If hmm_range_fault() is called with the HMM_PFN_REQ_FAULT flag and a
-device private PTE is found, the hmm_range::dev_private_owner page is used
-to determine if the device private page should not be faulted in.
-However, if the device private page is not owned by the caller,
-hmm_range_fault() returns an error instead of calling migrate_to_ram() to
-fault in the page.
+There was a report that a task is waiting at the
+throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
+increasing.
 
-For example, if a page is migrated to GPU private memory and a RDMA fault
-capable NIC tries to read the migrated page, without this patch it will
-get an error.  With this patch, the page will be migrated back to system
-memory and the NIC will be able to read the data.
+This is a bug where zone_watermark_fast returns true even when the free
+is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
+reserve in watermark fast") changed the watermark fast to consider
+highatomic reserve. But it did not handle a negative value case which
+can be happened when reserved_highatomic pageblock is bigger than the
+actual free.
 
-Link: https://lkml.kernel.org/r/20220727000837.4128709-2-rcampbell@nvidia.com
-Link: https://lkml.kernel.org/r/20220725183615.4118795-2-rcampbell@nvidia.com
-Fixes: 08ddddda667b ("mm/hmm: check the device private page owner in hmm_range_fault()")
-Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-Reported-by: Felix Kuehling <felix.kuehling@amd.com>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-Cc: Philip Yang <Philip.Yang@amd.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: <stable@vger.kernel.org>
+If watermark is considered as ok for the negative value, allocating
+contexts for order-0 will consume all free pages without direct reclaim,
+and finally free page may become depleted except highatomic free.
+
+Then allocating contexts may fall into throttle_direct_reclaim. This
+symptom may easily happen in a system where wmark min is low and other
+reclaimers like kswapd does not make free pages quickly.
+
+Handle the negative case by using MIN.
+
+Link: https://lkml.kernel.org/r/20220725095212.25388-1-jaewon31.kim@samsung.com
+Fixes: f27ce0e14088 ("page_alloc: consider highatomic reserve in watermark fast")
+Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+Reported-by: GyeongHwan Hong <gh21.hong@samsung.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Yong-Taek Lee <ytk.lee@samsung.com>
+Cc: <stable@vger.kerenl.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/hmm.c |   19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ mm/page_alloc.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -212,14 +212,6 @@ int hmm_vma_handle_pmd(struct mm_walk *w
- 		unsigned long end, unsigned long hmm_pfns[], pmd_t pmd);
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3953,11 +3953,15 @@ static inline bool zone_watermark_fast(s
+ 	 * need to be calculated.
+ 	 */
+ 	if (!order) {
+-		long fast_free;
++		long usable_free;
++		long reserved;
  
--static inline bool hmm_is_device_private_entry(struct hmm_range *range,
--		swp_entry_t entry)
--{
--	return is_device_private_entry(entry) &&
--		pfn_swap_entry_to_page(entry)->pgmap->owner ==
--		range->dev_private_owner;
--}
--
- static inline unsigned long pte_to_hmm_pfn_flags(struct hmm_range *range,
- 						 pte_t pte)
- {
-@@ -252,10 +244,12 @@ static int hmm_vma_handle_pte(struct mm_
- 		swp_entry_t entry = pte_to_swp_entry(pte);
- 
- 		/*
--		 * Never fault in device private pages, but just report
--		 * the PFN even if not present.
-+		 * Don't fault in device private pages owned by the caller,
-+		 * just report the PFN.
- 		 */
--		if (hmm_is_device_private_entry(range, entry)) {
-+		if (is_device_private_entry(entry) &&
-+		    pfn_swap_entry_to_page(entry)->pgmap->owner ==
-+		    range->dev_private_owner) {
- 			cpu_flags = HMM_PFN_VALID;
- 			if (is_writable_device_private_entry(entry))
- 				cpu_flags |= HMM_PFN_WRITE;
-@@ -273,6 +267,9 @@ static int hmm_vma_handle_pte(struct mm_
- 		if (!non_swap_entry(entry))
- 			goto fault;
- 
-+		if (is_device_private_entry(entry))
-+			goto fault;
+-		fast_free = free_pages;
+-		fast_free -= __zone_watermark_unusable_free(z, 0, alloc_flags);
+-		if (fast_free > mark + z->lowmem_reserve[highest_zoneidx])
++		usable_free = free_pages;
++		reserved = __zone_watermark_unusable_free(z, 0, alloc_flags);
 +
- 		if (is_device_exclusive_entry(entry))
- 			goto fault;
++		/* reserved may over estimate high-atomic reserves. */
++		usable_free -= min(usable_free, reserved);
++		if (usable_free > mark + z->lowmem_reserve[highest_zoneidx])
+ 			return true;
+ 	}
  
 
 

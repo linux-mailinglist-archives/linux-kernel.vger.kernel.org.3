@@ -2,35 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD0E586AC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8626586AC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiHAM23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S231986AbiHAM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiHAM16 (ORCPT
+        with ESMTP id S231689AbiHAM16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 Aug 2022 08:27:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC16577;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4FC33A25;
         Mon,  1 Aug 2022 05:07:24 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LxGzy3MSFzGpJg;
-        Mon,  1 Aug 2022 20:06:06 +0800 (CST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxGyL3qRHzlVvX;
+        Mon,  1 Aug 2022 20:04:42 +0800 (CST)
 Received: from huawei.com (10.175.112.208) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 1 Aug
- 2022 20:07:21 +0800
+ 2022 20:07:22 +0800
 From:   Xu Qiang <xuqiang36@huawei.com>
 To:     <robh+dt@kernel.org>, <frowand.list@gmail.com>
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <guohanjun@huawei.com>, <weiyongjun1@huawei.com>,
         <xuqiang36@huawei.com>
 Subject: [PATCH -next] of/fdt: declared return type does not match actual return type
-Date:   Mon, 1 Aug 2022 12:05:05 +0000
-Message-ID: <20220801120506.11461-1-xuqiang36@huawei.com>
+Date:   Mon, 1 Aug 2022 12:05:06 +0000
+Message-ID: <20220801120506.11461-2-xuqiang36@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220801120506.11461-1-xuqiang36@huawei.com>
+References: <20220801120506.11461-1-xuqiang36@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit

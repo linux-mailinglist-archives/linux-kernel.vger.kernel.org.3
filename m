@@ -2,206 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97348586805
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650E658681C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiHALTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S230232AbiHAL2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiHALTm (ORCPT
+        with ESMTP id S229935AbiHAL2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:19:42 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3502A734;
-        Mon,  1 Aug 2022 04:19:41 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id r14so11950336ljp.2;
-        Mon, 01 Aug 2022 04:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=cVKCQmfhIvkGCVTm3lz/sFT/n7O8Mosh0c/OeiuxeuM=;
-        b=ZwSXnv4x7nD0q4YM9Sf53WgSKUUU1y4YcMxtQAW8j8LHmpeQm1MWU1nnMPD9hkwqHt
-         6cqjtB+K3kdi8gWXHXWAmTo+iYDqKKU/jWLUhShPeKYcLJmzQOML6EDhDm7Hp4o2ISGI
-         6ESwLaWDJhbivekjI+lr9t4+D644d2N6ij/25lzBSofxwYl/EgnsyFqIOI2t+BAOpBgr
-         S6+BCslx0UP+JLS3jQKgmb2N82YnthbaWZ4sWuDm1DmMB6phkDJTrZ+UhWMuZo4BE2Pg
-         2yzv5ufvzPoHxY3eoqF7xSakVggsF9ANNe023T+KdmJUd55FakCKEKYeR9k8SnPKVFN0
-         9eBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=cVKCQmfhIvkGCVTm3lz/sFT/n7O8Mosh0c/OeiuxeuM=;
-        b=sCsM4LFRNGzxXnuDn0LCGJxuP6AYM87j67Vx2WJoVaqff9aT81PJTA0euNGHoZwTDv
-         iXfs9gQOMx7CdWjp8861Z1ruu0U6CWh6xVZSLWlV6P4ZWRtMrL6MLn8lPCgz0PYsuvBA
-         BoWKtyIAqqsC6L4kppioF0VJJuO2rR+yNDSmTrT7ulRkg5RWvlSO3zZiuZHWiLg/SXNy
-         UtQyeZTxW3PqqcDQ4nvKixduV9o2MtzChd89rHlsAvZulJw1PEGWx193tB9QRFp75uQv
-         x3VFd24Ng35Y3ZdjwVW5GMHzbwkPjYG60CLmau18tqnfebwYiyE08FVMRyYgGZQkiwL5
-         XrTg==
-X-Gm-Message-State: AJIora+bw8BNGBXpY1Ow7d5erQWlEssoUs3n0yU0wiO3U8vowvtU6pJS
-        vrlK3bFDEUi7dlrlEf1iRzFlIDewClVF6A==
-X-Google-Smtp-Source: AGRyM1uxPvfE5Rt9VBSRXdBOXDP+CUfxTeH3fU5XELqwu1eT30Hjgdra+1ZRsxkpVweWZvWzG7lq9Q==
-X-Received: by 2002:a2e:b525:0:b0:25e:115c:9021 with SMTP id z5-20020a2eb525000000b0025e115c9021mr5045505ljm.452.1659352778636;
-        Mon, 01 Aug 2022 04:19:38 -0700 (PDT)
-Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id z5-20020a2eb525000000b0025dc0adf38csm1510685ljm.61.2022.08.01.04.19.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 04:19:37 -0700 (PDT)
-Message-ID: <3776eba2-0f36-7ba6-d49a-0f896754612e@gmail.com>
-Date:   Mon, 1 Aug 2022 14:27:41 +0300
+        Mon, 1 Aug 2022 07:28:48 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1B63226
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:28:46 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxAM_ruOdiVSoAAA--.951S3;
+        Mon, 01 Aug 2022 19:28:44 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
+To:     Jinyang He <hejinyang@loongson.cn>
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+ <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn>
+ <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
+ <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
+ <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
+ <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn>
+ <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
+ <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
+ <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
+ <7512ae16-b171-d072-674f-a6b9a5e764d6@loongson.cn>
+ <CAAhV-H5wSJZ2X46ySqoaJd7Z2soGcYKRNixnghmE3f3zEzyS+w@mail.gmail.com>
+ <10751c9af5d45fea741e0bbed6c818ddb9db3ac3.camel@xry111.site>
+ <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Lulu Cheng <chenglulu@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <ba5e99de-0719-af88-4d94-8860787a4251@loongson.cn>
+Date:   Mon, 1 Aug 2022 19:28:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     nm@ti.com, vigneshr@ti.com, p.yadav@ti.com, j-keerthy@ti.com,
-        m-khayami@ti.com, stanley_liu@ti.com
-References: <20220727140837.25877-1-vaishnav.a@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH v2] dmaengine: ti: k3-udma: Reset UDMA_CHAN_RT byte
- counters to prevent overflow
-In-Reply-To: <20220727140837.25877-1-vaishnav.a@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxAM_ruOdiVSoAAA--.951S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF43Jr4ktF1kJry3CrW8tFb_yoWrAw4rpF
+        ZrGFWUKr4DJr1Fyanrtw1Uua4jvws8JryxXw15tryUZFyqvrn3Kr47tw45uFy7Xr1kG3WU
+        ZrWUA34xXrW5ZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6r4kMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfU0PEfUUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Jinyang
 
+On 08/01/2022 06:08 PM, Jinyang He wrote:
+> On 08/01/2022 05:55 PM, Xi Ruoyao wrote:
+>
+>> On Mon, 2022-08-01 at 10:34 +0800, Huacai Chen wrote:
+>>> Hi, all,
+>>>
+>>> On Mon, Aug 1, 2022 at 10:16 AM Youling Tang <tangyouling@loongson.cn>
+>>> wrote:
+>>>> Hi, Ruoyao
+>>>>
+>>>> On 07/30/2022 10:52 AM, Xi Ruoyao wrote:
+>>>>> On Sat, 2022-07-30 at 10:24 +0800, Xi Ruoyao wrote:
+>>>>>> On Sat, 2022-07-30 at 01:55 +0800, Xi Ruoyao wrote:
+>>>>>>> On Fri, 2022-07-29 at 20:19 +0800, Youling Tang wrote:
+>>>>>>>
+>>>>>>>> On 07/29/2022 07:45 PM, Xi Ruoyao wrote:
+>>>>>>>>> Hmm... The problem is the "addresses" of per-cpu symbols
+>>>>>>>>> are
+>>>>>>>>> faked: they
+>>>>>>>>> are actually offsets from $r21.  So we can't just load
+>>>>>>>>> such an
+>>>>>>>>> offset
+>>>>>>>>> with PCALA addressing.
+>>>>>>>>>
+>>>>>>>>> It looks like we'll need to introduce an attribute for GCC
+>>>>>>>>> to
+>>>>>>>>> make
+>>>>>>>>> an
+>>>>>>>>> variable "must be addressed via GOT", and add the
+>>>>>>>>> attribute into
+>>>>>>>>> PER_CPU_ATTRIBUTES.
+>>>>>>>> Yes, we need a GCC attribute to specify the per-cpu
+>>>>>>>> variable.
+>>>>>>> GCC patch adding "addr_global" attribute for LoongArch:
+>>>>>>> https://gcc.gnu.org/pipermail/gcc-patches/2022-July/599064.html
+>>>>>>>
+>>>>>>> An experiment to use it:
+>>>>>>> https://github.com/xry111/linux/commit/c1d5d70
+>>>>>> Correction: https://github.com/xry111/linux/commit/c1d5d708
+>>>>>>
+>>>>>> It seems 7-bit SHA is not enough for kernel repo.
+>>>>> If addr_global is rejected or not implemented (for example,
+>>>>> building the
+>>>>> kernel with GCC 12), *I expect* the following hack to work (I've
+>>>>> not
+>>>>> tested it because I'm AFK now).  Using visibility in kernel seems
+>>>>> strange, but I think it may make some sense because the modules
+>>>>> are some
+>>>>> sort of similar to an ELF shared object being dlopen()'ed, and our
+>>>>> way
+>>>>> to inject per-CPU symbols is analog to ELF interposition.
+>>>>>
+>>>>> arch/loongarch/include/asm/percpu.h:
+>>>>>
+>>>>>     #if !__has_attribute(__addr_global__) && defined(MODULE)
+>>>>>     /* Magically remove "static" for per-CPU variables.  */
+>>>>>     # define ARCH_NEEDS_WEAK_PER_CPU
+>>>>>     /* Force GOT-relocation for per-CPU variables.  */
+>>>>>     # define PER_CPU_ATTRIBUTES
+>>>>> __attribute__((__visibility__("default")))
+>>>>>     #endif
+>>>>>
+>>>>> arch/loongarch/Makefile:
+>>>>>
+>>>>>     # Hack for per-CPU variables, see PER_CPU_ATTRIBUTES in
+>>>>>     # include/asm/percpu.h
+>>>>>     if (call gcc-does-not-support-addr-global)
+>>>>>       KBUILD_CFLAGS_MODULE += -fPIC -fvisibility=hidden
+>>>>>     endif
+>>>>>
+>>>> Using the old toolchain (GCC 12) can successfully load the
+>>>> nf_tables.ko
+>>>> module after applying the above patch.
+>>> I don't like such a hack..., can we consider using old relocation
+>>> types when building by old toolchains?
+>>
+>> I don't like the hack too.  I only developed it as an intellectual game.
+>>
+>> We need to consider multiple combinations:
+>>
+>> (1) Old GCC + old Binutils.  We need -mla-local-with-abs for
+>> KBUILD_CFLAGS_MODULE.
+>>
+>> (2) Old GCC + new Binutils.  We need -mla-local-with-abs for
+>> KBUILD_CFLAGS_MODULE, *and* adding the support for
+>> R_LARCH_ABS{_HI20,_LO12,64_LO20,64_HI12} in the kernel module loader.
+>>
+>> (3) New GCC + old Binutils.  As new GCC should support our new attribute
+>> (I now intend to send V2 patch to gcc-patches using "movable" as the
+>> attribute name), no special action is needed.
+>>
+>> Basically, we need:
+>>
+>> (1) Handle R_LARCH_ABS{_HI20,_LO12,64_LO20,64_HI12} in the kernel module
+>> loader.
+>> (2) Add -Wa,-mla-local-with-abs into KBUILD_CFLAGS_MODULE if GCC version
+>> is <= 12.
+>
+> Actually, I really hope kernel image is in the XKVRANGE, rather
+> than being in XKPRANGE. So that we can limit kernel and modules
+> be in 4GB range. I think it will make all work normally. :-(
+>
 
-On 7/27/22 17:08, Vaishnav Achath wrote:
-> UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
-> These registers are 32-bit hardware counters and the driver uses these
-> counters to monitor the operational progress status for a channel, when
-> transferring more than 4GB of data it was observed that these counters
-> overflow and completion calculation of a operation gets affected and the
-> transfer hangs indefinitely.
-> 
-> This commit adds changes to decrease the byte count for every complete
-> transaction so that these registers never overflow and the proper byte
-> count statistics is maintained for ongoing transaction by the RT counters.
-> 
-> Earlier uc->bcnt used to maintain a count of the completed bytes at driver
-> side, since the RT counters maintain the statistics of current transaction
-> now, the maintenance of uc->bcnt is not necessary.
-> 
-> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-> ---
-> V1->V2 :
->         * Update bcnt reset based on uc->desc->dir
->         * change order of udma_decrement_byte_counters() to before udma_start()
->         * update subsystem tag
-> 
->  drivers/dma/ti/k3-udma.c | 25 +++++++++++++++++--------
->  1 file changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index 2f0d2c68c93c..39b330ada200 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -300,8 +300,6 @@ struct udma_chan {
->  
->  	struct udma_tx_drain tx_drain;
->  
-> -	u32 bcnt; /* number of bytes completed since the start of the channel */
-> -
->  	/* Channel configuration parameters */
->  	struct udma_chan_config config;
->  
-> @@ -757,6 +755,20 @@ static void udma_reset_rings(struct udma_chan *uc)
->  	}
->  }
->  
-> +static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
-> +{
-> +	if (uc->desc->dir == DMA_DEV_TO_MEM && uc->rchan) {
+Assuming that the kernel and modules are limited to 4G, the external
+symbols will be accessed through pcrel32, which means that there is no
+need to pass the GOT table entry, and there is no need for got support,
+so there will be no percpu problem, and it will make all work normally?
 
-if the dir is DMA_DEV_TO_MEM then we have rchan, no need for checking it.
+Youling.
 
-> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-> +	} else if (uc->tchan) {
-
-in other directions (MEM_TO_DEV, MEM_TO_MEM) we have tchan.
-
-> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-> +		if (!uc->bchan)
-> +			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-> +	}
-> +}
-
-Thus we only need this type of decision:
-
-if (uc->desc->dir == DMA_DEV_TO_MEM) {
-	udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-	udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-	udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-} else {
-	udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
-	udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
-	if (!uc->bchan)
-		udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
-}
-
-> +
->  static void udma_reset_counters(struct udma_chan *uc)
->  {
->  	u32 val;
-> @@ -790,8 +802,6 @@ static void udma_reset_counters(struct udma_chan *uc)
->  		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
->  		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
->  	}
-> -
-> -	uc->bcnt = 0;
->  }
->  
->  static int udma_reset_chan(struct udma_chan *uc, bool hard)
-> @@ -1115,7 +1125,7 @@ static void udma_check_tx_completion(struct work_struct *work)
->  		if (uc->desc) {
->  			struct udma_desc *d = uc->desc;
->  
-> -			uc->bcnt += d->residue;
-> +			udma_decrement_byte_counters(uc, d->residue);
->  			udma_start(uc);
->  			vchan_cookie_complete(&d->vd);
->  			break;
-> @@ -1168,7 +1178,7 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
->  				vchan_cyclic_callback(&d->vd);
->  			} else {
->  				if (udma_is_desc_really_done(uc, d)) {
-> -					uc->bcnt += d->residue;
-> +					udma_decrement_byte_counters(uc, d->residue);
->  					udma_start(uc);
->  					vchan_cookie_complete(&d->vd);
->  				} else {
-> @@ -1204,7 +1214,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
->  			vchan_cyclic_callback(&d->vd);
->  		} else {
->  			/* TODO: figure out the real amount of data */
-> -			uc->bcnt += d->residue;
-> +			udma_decrement_byte_counters(uc, d->residue);
->  			udma_start(uc);
->  			vchan_cookie_complete(&d->vd);
->  		}
-> @@ -3809,7 +3819,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
->  			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
->  		}
->  
-> -		bcnt -= uc->bcnt;
->  		if (bcnt && !(bcnt % uc->desc->residue))
->  			residue = 0;
->  		else
-
--- 
-Péter

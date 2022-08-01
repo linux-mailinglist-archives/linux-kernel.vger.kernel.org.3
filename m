@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514A586E38
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3EA586E3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiHAQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S232099AbiHAQEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiHAQDn (ORCPT
+        with ESMTP id S231270AbiHAQEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:03:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E838028724;
-        Mon,  1 Aug 2022 09:03:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B4F3B80FA1;
-        Mon,  1 Aug 2022 16:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945BEC433D6;
-        Mon,  1 Aug 2022 16:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659369820;
-        bh=K8PZRhgkYG3cNsoiyYsSqxmzC5S5rbdYFqDxKPBWgag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=idMcUm3VwOTAalLuTRvxJl4kr1d7Jpt26SetaJhhkPVQ8BX0HxfeHwJTeCGOIPKpX
-         Bt9vOq8TcQE2pnaecmKNy75kxJeSE8b9fHP9CKFQFq8V/djjMlP9b8zkiG4lr7hKp2
-         2fmsL4OT3uC6S9iQ1q5TfK0ifvwq3Xi/G2VgvmnLQTkXaDMnUGHwT+jJleJYXaI6Fi
-         ohXxmEQMCgarm5SE6ZP70fF7/6QY75dkRAs4wiQmkYm2/vMVGjqhBS7py2eIVhF3sL
-         23N3q4BYQRmJxZXZftGX+kvzp2ptWQDi6eIaH2Bp5yvwH6wt50eiI4EsCJfKDXfPX+
-         d+1rLe++PThoQ==
-Date:   Mon, 1 Aug 2022 17:03:33 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mon, 1 Aug 2022 12:04:14 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892BC3CBEF;
+        Mon,  1 Aug 2022 09:04:12 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id D0EB828062BF5;
+        Mon,  1 Aug 2022 18:04:10 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id BDAB52F03FD; Mon,  1 Aug 2022 18:04:10 +0200 (CEST)
+Date:   Mon, 1 Aug 2022 18:04:10 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 2/2] regulator: sun20i: Add support for Allwinner D1 LDOs
-Message-ID: <Yuf5VQNrBHi7xG81@sirena.org.uk>
-References: <20220801044758.12679-1-samuel@sholland.org>
- <20220801044758.12679-2-samuel@sholland.org>
+        Lucas Stankus <lucas.p.stankus@gmail.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Dragos Bogdan <dragos.bogdan@analog.com>,
+        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Stefan Popa <stefan.popa@analog.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Joachim Eastwood <manabian@gmail.com>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Beniamin Bia <beniamin.bia@analog.com>,
+        Patrick Vasseur <patrick.vasseur@c-s.fr>,
+        Charles-Antoine Couret <charles-antoine.couret@essensium.com>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Philippe Reynes <tremyfr@yahoo.fr>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Alexandru Lazar <alazar@startmail.com>,
+        Oskar Andero <oskar.andero@gmail.com>,
+        =?iso-8859-1?Q?M=E5rten?= Lindahl <martenli@axis.com>,
+        Bogdan Pricop <bogdan.pricop@emutex.com>,
+        Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Phil Reid <preid@electromag.com.au>,
+        Michael Welling <mwelling@ieee.org>,
+        Robert Jones <rjones@gateworks.com>,
+        Chris Coffey <cmc@babblebit.net>,
+        Slawomir Stepien <sst@poczta.fm>,
+        Sankar Velliangiri <navin@linumiz.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] dt-bindings: iio: use spi-peripheral-props.yaml
+Message-ID: <20220801160410.GA6059@wunner.de>
+References: <20220727164646.387541-1-krzysztof.kozlowski@linaro.org>
+ <20220730224643.GB11662@wunner.de>
+ <bd829586-f052-03c3-aa68-e5a2be84b6bb@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yUJqW8Kc38GtV6bu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801044758.12679-2-samuel@sholland.org>
-X-Cookie: Dieters live life in the fasting lane.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bd829586-f052-03c3-aa68-e5a2be84b6bb@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 01, 2022 at 05:45:07PM +0200, Krzysztof Kozlowski wrote:
+> On 31/07/2022 00:46, Lukas Wunner wrote:
+> > On Wed, Jul 27, 2022 at 06:46:36PM +0200, Krzysztof Kozlowski wrote:
+> >>  78 files changed, 324 insertions(+), 249 deletions(-)
+> > 
+> > Pardon me for being dense, but what is the benefit of this series
+> > that justifies inflating the schema definitions by a total of 75 lines?
+> 
+> The commits were explaining rationale, so let me bring it here. The
+> benefits are:
+> This allows using all properties typical for SPI-connected devices, even
+> these which device bindings author did not tried yet.
 
---yUJqW8Kc38GtV6bu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+How do you know these untested properties work with the devices to which
+you're adding them?
 
-On Sun, Jul 31, 2022 at 11:47:58PM -0500, Samuel Holland wrote:
+Thanks,
 
-> +static const struct regulator_desc sun20i_d1_analog_ldo_descs[] = {
-> +	{
-> +		.name		= "aldo",
-> +		.supply_name	= "vdd33",
-> +		.of_match	= "aldo",
-> +		.ops		= &sun20i_d1_analog_ldo_ops,
-> +		.type		= REGULATOR_VOLTAGE,
-> +		.owner		= THIS_MODULE,
-> +		.n_voltages	= BIT(3),
-
-I'm really unconvinced that using BIT() is clearer than just writing the
-number of voltages directly as a number.
-
---yUJqW8Kc38GtV6bu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLn+VQACgkQJNaLcl1U
-h9BlqQf/VyorEumLx9DM246SpPg5dho5RS+QCt5MT3miehmIayT0RTVcEQzLPx0P
-BrxsBsvfEMpglkiW/NjFZ5aQ5nsqRNOe5f67MMt1gLXhps0tU/4szWEIzrtyoN8Z
-lCOeUmVhd5+savX5s1DdAHg+YvbKZ9idn0xUY+Bm85R+vttFj8zB56i3tLP5proz
-w/+jgHUD0VCu+1yYTXpxHEHdwzxKMh0aWsDWFzC6C+bvbf5smqucs2lhc75Vc/CS
-EPPiFY9/7uhX7TjqqaePvChkKpBlF5NShk59rmjawuiNVHowAMQW74OtP1VtA3WO
-KPyaTH1QC3JrujzDBEKK026dd6Artw==
-=TkpN
------END PGP SIGNATURE-----
-
---yUJqW8Kc38GtV6bu--
+Lukas

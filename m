@@ -2,191 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F207586B39
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA4E586B3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbiHAMr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S235039AbiHAMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiHAMrA (ORCPT
+        with ESMTP id S234740AbiHAMro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:47:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655CDFA5;
-        Mon,  1 Aug 2022 05:38:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99CD161187;
-        Mon,  1 Aug 2022 12:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D09C433D6;
-        Mon,  1 Aug 2022 12:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659357506;
-        bh=ajvGSPHi7s/PBQgVUp/8yoUUDSIpjZEtd1Glw97tgok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZqIFqp6ijlSg1qyppx2Fo88DBX5AjZ8nURUeKSHoMpq21YlZ1unVYRHs7SLgghi1
-         i8NPoy2+GfVXxEy8Je4XK6rvIHbAia+NerbUIhE8fskKOWgCT95WWTjpKyGHwrhib+
-         1n8m1iPVNHelMtDPev6Pm9hNeGzB4dEbSkgYCBaYMV2sPUp/G0Fxzi4IB6pj+d0VLj
-         azCA2DC00t9SAU+UsLOf5+UNJjO9O8eMFwe2AFCiGpZ+4inWPaKOKlcxArl1/S/njJ
-         A00YT4u4N3ggjt44jFO3IiW7snAZwBWLTtnce9I05gXNz4pQAnWelMekkVx+LWv/1A
-         ZASDM6VztVdTw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 523AB40736; Mon,  1 Aug 2022 09:38:23 -0300 (-03)
-Date:   Mon, 1 Aug 2022 09:38:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf symbol: Fail to read phdr workaround
-Message-ID: <YufJP5YqeEBM51HL@kernel.org>
-References: <20220731164923.691193-1-irogers@google.com>
- <20220801015259.GA101027@leoy-ThinkPad-X240s>
- <CAP-5=fVSjCQ4jeAeyP5THnQVyXDpKd6Ob33C7PDwFB_6+YSXuw@mail.gmail.com>
+        Mon, 1 Aug 2022 08:47:44 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C818250181;
+        Mon,  1 Aug 2022 05:38:51 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 271A12YR031410;
+        Mon, 1 Aug 2022 05:38:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=AH3eQitAxYvhy4/RzAP+//HGTXu655O4Xsd9zGjJRZU=;
+ b=HVFdXMKhCP7o4jUKI4O5FY1YtlHTXb/eAqu2ZnTZLDgauPEwfY14AHiYOu6yMrUAR1gq
+ Ugz576RlMScn9iq+An/HTgHdTJ+2ULstYL52gHVTqpyQivJYYyxptyOjC0bkV7qbP2yS
+ fr8whjxWoxKplVvRM+OUY7MZ28chUIHIgp+Rlm16e7h92XhFWEYTz5+bPi/Lx+sLbYVu
+ Xs0HzMnPohm1ubsdh9P0DN5rWR8olE5+dw+34qUTeOp4YVebTSGgV7ewO4w50MXrUQF1
+ qMR2xhGTJ+ov23tNJ2oULw2cqyZWeSfHjlhtdm3cJ83ZsIfH1lp2WnYaMu0eL76jnmUG hw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3hn45m6j2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 05:38:39 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 1 Aug
+ 2022 05:38:37 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 1 Aug 2022 05:38:37 -0700
+Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
+        by maili.marvell.com (Postfix) with ESMTP id EF6173F70A1;
+        Mon,  1 Aug 2022 05:38:34 -0700 (PDT)
+From:   Naveen Mamindlapalli <naveenm@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: [net PATCH v2] octeontx2-pf: Fix NIX_AF_TL3_TL2X_LINKX_CFG register configuration
+Date:   Mon, 1 Aug 2022 18:08:31 +0530
+Message-ID: <20220801123831.9370-1-naveenm@marvell.com>
+X-Mailer: git-send-email 2.16.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fVSjCQ4jeAeyP5THnQVyXDpKd6Ob33C7PDwFB_6+YSXuw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URI_HEX autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: 0hIy8DYg4P1hoWGWyO0HKR9NYw6czMHh
+X-Proofpoint-ORIG-GUID: 0hIy8DYg4P1hoWGWyO0HKR9NYw6czMHh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_07,2022-08-01_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Jul 31, 2022 at 11:19:15PM -0700, Ian Rogers escreveu:
-> On Sun, Jul 31, 2022, 6:53 PM Leo Yan <leo.yan@linaro.org> wrote:
-> 
-> > On Sun, Jul 31, 2022 at 09:49:23AM -0700, Ian Rogers wrote:
-> > > The perf jvmti agent doesn't create program headers, in this case
-> > > fallback on section headers as happened previously.
-> > >
-> > > Fixes: 882528d2e776 ("perf symbol: Skip symbols if SHF_ALLOC flag is not
-> > set")
-> >
-> > It's good to change fix tag as:
-> > Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
-> >
-> 
-> Doh! I was rushing this morning. Thanks for catching and reviewing!
+For packets scheduled to RPM and LBK, NIX_AF_PSE_CHANNEL_LEVEL[BP_LEVEL]
+selects the TL3 or TL2 scheduling level as the one used for link/channel
+selection and backpressure. For each scheduling queue at the selected
+level: Setting NIX_AF_TL3_TL2(0..255)_LINK(0..12)_CFG[ENA] = 1 allows
+the TL3/TL2 queue to schedule packets to a specified RPM or LBK link
+and channel.
 
-I made the adjustments and added a note with the repro, to help in the
-future when trying to test this area.
+There is an issue in the code where NIX_AF_PSE_CHANNEL_LEVEL[BP_LEVEL]
+is set to TL3 where as the NIX_AF_TL3_TL2(0..255)_LINK(0..12)_CFG is
+configured for TL2 queue in some cases. As a result packets will not
+transmit on that link/channel. This patch fixes the issue by configuring
+the NIX_AF_TL3_TL2(0..255)_LINK(0..12)_CFG register depending on the
+NIX_AF_PSE_CHANNEL_LEVEL[BP_LEVEL] value.
 
-I also think we could have something like a 'perf test' mode where, when
-asked to, it would enable tests that involve downloading such files to
-perform tests, such as this dacapo benchmark, and then would test if the
-output matches expectations.
+Fixes: 5d9b976d4480 ("octeontx2-af: Support fixed transmit scheduler topology")
+Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+---
+v2:
+  - Added more details about the fix in commit message.
+  - Added fixes Tag.
 
-- Arnaldo
+---
+ .../net/ethernet/marvell/octeontx2/nic/otx2_common.c  | 19 ++++++++++++++-----
+ .../net/ethernet/marvell/octeontx2/nic/otx2_common.h  |  1 +
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-commit 6d518ac7be6223811ab947897273b1bbef846180
-Author: Ian Rogers <irogers@google.com>
-Date:   Sun Jul 31 09:49:23 2022 -0700
-
-    perf symbol: Fail to read phdr workaround
-    
-    The perf jvmti agent doesn't create program headers, in this case
-    fallback on section headers as happened previously.
-    
-    Committer notes:
-    
-    To test this, from a public post by Ian:
-    
-    1) download a Java workload dacapo-9.12-MR1-bach.jar from
-    https://sourceforge.net/projects/dacapobench/
-    
-    2) build perf such as "make -C tools/perf O=/tmp/perf NO_LIBBFD=1" it
-    should detect Java and create /tmp/perf/libperf-jvmti.so
-    
-    3) run perf with the jvmti agent:
-    
-      perf record -k 1 java -agentpath:/tmp/perf/libperf-jvmti.so -jar dacapo-9.12-MR1-bach.jar -n 10 fop
-    
-    4) run perf inject:
-    
-      perf inject -i perf.data -o perf-injected.data -j
-    
-    5) run perf report
-    
-      perf report -i perf-injected.data | grep org.apache.fop
-    
-    With this patch reverted I see lots of symbols like:
-    
-         0.00%  java             jitted-388040-4656.so  [.] org.apache.fop.fo.FObj.bind(org.apache.fop.fo.PropertyList)
-    
-    With the patch (2d86612aacb7805f ("perf symbol: Correct address for bss
-    symbols")) I see lots of:
-    
-      dso__load_sym_internal: failed to find program header for symbol:
-      Lorg/apache/fop/fo/FObj;bind(Lorg/apache/fop/fo/PropertyList;)V
-      st_value: 0x40
-    
-    Fixes: 2d86612aacb7805f ("perf symbol: Correct address for bss symbols")
-    Reviewed-by: Leo Yan <leo.yan@linaro.org>
-    Signed-off-by: Ian Rogers <irogers@google.com>
-    Tested-by: Leo Yan <leo.yan@linaro.org>
-    Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-    Cc: Jiri Olsa <jolsa@kernel.org>
-    Cc: Leo Yan <leo.yan@linaro.org>
-    Cc: Mark Rutland <mark.rutland@arm.com>
-    Cc: Namhyung Kim <namhyung@kernel.org>
-    Cc: Peter Zijlstra <peterz@infradead.org>
-    Cc: Stephane Eranian <eranian@google.com>
-    Link: http://lore.kernel.org/lkml/20220731164923.691193-1-irogers@google.com
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index b3be5b1d9dbb00bc..75bec32d4f571319 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1305,16 +1305,29 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index fb8db5888d2f..d686c7b6252f 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -632,6 +632,12 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->num_regs++;
+ 		req->reg[1] = NIX_AF_TL3X_SCHEDULE(schq);
+ 		req->regval[1] = dwrr_val;
++		if (lvl == hw->txschq_link_cfg_lvl) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
++			/* Enable this queue and backpressure */
++			req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL2) {
+ 		parent =  hw->txschq_list[NIX_TXSCH_LVL_TL1][0];
+ 		req->reg[0] = NIX_AF_TL2X_PARENT(schq);
+@@ -641,11 +647,12 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->reg[1] = NIX_AF_TL2X_SCHEDULE(schq);
+ 		req->regval[1] = TXSCH_TL1_DFLT_RR_PRIO << 24 | dwrr_val;
  
- 			if (elf_read_program_header(syms_ss->elf,
- 						    (u64)sym.st_value, &phdr)) {
--				pr_warning("%s: failed to find program header for "
-+				pr_debug4("%s: failed to find program header for "
- 					   "symbol: %s st_value: %#" PRIx64 "\n",
- 					   __func__, elf_name, (u64)sym.st_value);
--				continue;
-+				pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
-+					"sh_addr: %#" PRIx64 " sh_offset: %#" PRIx64 "\n",
-+					__func__, (u64)sym.st_value, (u64)shdr.sh_addr,
-+					(u64)shdr.sh_offset);
-+				/*
-+				 * Fail to find program header, let's rollback
-+				 * to use shdr.sh_addr and shdr.sh_offset to
-+				 * calibrate symbol's file address, though this
-+				 * is not necessary for normal C ELF file, we
-+				 * still need to handle java JIT symbols in this
-+				 * case.
-+				 */
-+				sym.st_value -= shdr.sh_addr - shdr.sh_offset;
-+			} else {
-+				pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
-+					"p_vaddr: %#" PRIx64 " p_offset: %#" PRIx64 "\n",
-+					__func__, (u64)sym.st_value, (u64)phdr.p_vaddr,
-+					(u64)phdr.p_offset);
-+				sym.st_value -= phdr.p_vaddr - phdr.p_offset;
- 			}
--			pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
--				  "p_vaddr: %#" PRIx64 " p_offset: %#" PRIx64 "\n",
--				  __func__, (u64)sym.st_value, (u64)phdr.p_vaddr,
--				  (u64)phdr.p_offset);
--			sym.st_value -= phdr.p_vaddr - phdr.p_offset;
- 		}
+-		req->num_regs++;
+-		req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
+-		/* Enable this queue and backpressure */
+-		req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
+-
++		if (lvl == hw->txschq_link_cfg_lvl) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
++			/* Enable this queue and backpressure */
++			req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL1) {
+ 		/* Default config for TL1.
+ 		 * For VF this is always ignored.
+@@ -1591,6 +1598,8 @@ void mbox_handler_nix_txsch_alloc(struct otx2_nic *pf,
+ 		for (schq = 0; schq < rsp->schq[lvl]; schq++)
+ 			pf->hw.txschq_list[lvl][schq] =
+ 				rsp->schq_list[lvl][schq];
++
++	pf->hw.txschq_link_cfg_lvl = rsp->link_cfg_lvl;
+ }
+ EXPORT_SYMBOL(mbox_handler_nix_txsch_alloc);
  
- 		demangled = demangle_sym(dso, kmodule, elf_name);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index ce2766317c0b..f9c0d2f08e87 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -195,6 +195,7 @@ struct otx2_hw {
+ 	u16			sqb_size;
+ 
+ 	/* NIX */
++	u8			txschq_link_cfg_lvl;
+ 	u16		txschq_list[NIX_TXSCH_LVL_CNT][MAX_TXSCHQ_PER_FUNC];
+ 	u16			matchall_ipolicer;
+ 	u32			dwrr_mtu;
+-- 
+2.16.5
+

@@ -2,190 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8599586AF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F846586AF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234681AbiHAMit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S234686AbiHAMj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiHAMiV (ORCPT
+        with ESMTP id S234594AbiHAMjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:38:21 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BCA9EC6E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:17:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VL6DdJj_1659356251;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VL6DdJj_1659356251)
-          by smtp.aliyun-inc.com;
-          Mon, 01 Aug 2022 20:17:31 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     willy@infradead.org
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        keescook@chromium.org, xhao@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [RFC PATCH V4 1/1] mm: add last level page table numa info to /proc/pid/numa_pgtable
-Date:   Mon,  1 Aug 2022 20:17:27 +0800
-Message-Id: <20220801121727.76186-2-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220801121727.76186-1-xhao@linux.alibaba.com>
-References: <20220801121727.76186-1-xhao@linux.alibaba.com>
+        Mon, 1 Aug 2022 08:39:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA377E002;
+        Mon,  1 Aug 2022 05:18:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFE906102A;
+        Mon,  1 Aug 2022 12:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE70C43142;
+        Mon,  1 Aug 2022 12:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659356279;
+        bh=fwQmGYNAwnwhmTNS6sohSMaV1Xzon+6Fu2cbg6wDZdo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gj2vL+hWAQcyAOIPJ422UhRsPi++CbwD9SLnTploLfWmwSuUSq5hWQAET7Jll5zGS
+         KZE7IfkxppcrHgDenW4WAyK2Uh69jPPcrTNVdu1+QBM3eJRm7Pcf6717Wneqd/zi2u
+         t1f3VkVa9+qp6orCRk4Na6GGrRWeaI1iO0mfhVo53i4APrGAndJX78vcZqPuBF/GFT
+         mbBPqAfx0292gWntUJNBZyl9ErXrv2Nfo+xH5NTYgypd2eGiy7IoGxzQsrsbxCuqJk
+         u3OXjskuRwgEC1Fb5U8ZqkymqOXnixNLCFPiUYbA3fjkAFVQQrZG/h0zjyR3cIvizg
+         J3R9UFRSluLAg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B0F5B40736; Mon,  1 Aug 2022 09:17:55 -0300 (-03)
+Date:   Mon, 1 Aug 2022 09:17:55 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v3 1/3] perf: Align user space counter reading with code
+Message-ID: <YufEc1i32OOa+6u8@kernel.org>
+References: <20220719223946.176299-1-irogers@google.com>
+ <20220719223946.176299-2-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719223946.176299-2-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In many data center servers, the shared memory architectures is
-Non-Uniform Memory Access (NUMA), remote numa node data access
-often brings a high latency problem, but what we are easy to ignore
-is that the page table remote numa access, It can also leads to a
-performance degradation.
+Em Tue, Jul 19, 2022 at 03:39:44PM -0700, Ian Rogers escreveu:
+> Align the user space counter reading documentation with the code in
+> perf_mmap__read_self. Previously the documentation was based on the perf
+> rdpmc test, but now general purpose code is provided by libperf.
 
-So there add a new interface in /proc, This will help developers to
-get more info about performance issues if they are caused by cross-NUMA.
+Peter, can you merge this so as not to make Linus raise eyebrows with me
+processing things outside tools/perf/ when asking him to pull perf
+userspace?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
----
- fs/proc/base.c     |  2 ++
- fs/proc/internal.h |  1 +
- fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 90 insertions(+)
+- Arnaldo
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  include/uapi/linux/perf_event.h       | 35 +++++++++++++++++----------
+>  tools/include/uapi/linux/perf_event.h | 35 +++++++++++++++++----------
+>  2 files changed, 44 insertions(+), 26 deletions(-)
+> 
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index d37629dbad72..6826dabb7e03 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+>  	 *
+>  	 *     if (pc->cap_usr_time && enabled != running) {
+>  	 *       cyc = rdtsc();
+> -	 *       time_offset = pc->time_offset;
+>  	 *       time_mult   = pc->time_mult;
+>  	 *       time_shift  = pc->time_shift;
+> +	 *       time_offset = pc->time_offset;
+> +	 *       if (pc->cap_user_time_short) {
+> +	 *         time_cycles = pc->time_cycles;
+> +	 *         time_mask = pc->time_mask;
+> +	 *       }
+>  	 *     }
+>  	 *
+>  	 *     index = pc->index;
+> @@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+>  	 *     if (pc->cap_user_rdpmc && index) {
+>  	 *       width = pc->pmc_width;
+>  	 *       pmc = rdpmc(index - 1);
+> +	 *       pmc <<= 64 - width;
+> +	 *       pmc >>= 64 - width;
+> +	 *       count += pmc;
+>  	 *     }
+>  	 *
+>  	 *     barrier();
+> @@ -590,25 +597,27 @@ struct perf_event_mmap_page {
+>  	 * If cap_usr_time the below fields can be used to compute the time
+>  	 * delta since time_enabled (in ns) using rdtsc or similar.
+>  	 *
+> -	 *   u64 quot, rem;
+> -	 *   u64 delta;
+> -	 *
+> -	 *   quot = (cyc >> time_shift);
+> -	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+> -	 *   delta = time_offset + quot * time_mult +
+> -	 *              ((rem * time_mult) >> time_shift);
+> +	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
+> +	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+>  	 *
+>  	 * Where time_offset,time_mult,time_shift and cyc are read in the
+> -	 * seqcount loop described above. This delta can then be added to
+> -	 * enabled and possible running (if index), improving the scaling:
+> +	 * seqcount loop described above. mul_u64_u32_shr will compute:
+> +	 *
+> +	 *   (u64)(((unsigned __int128)cyc * time_mult) >> time_shift)
+> +	 *
+> +	 * This delta can then be added to enabled and possible running (if
+> +	 * index) to improve the scaling. Due to event multiplexing, running
+> +	 * may be zero and so care is needed to avoid division by zero.
+>  	 *
+>  	 *   enabled += delta;
+>  	 *   if (index)
+>  	 *     running += delta;
+>  	 *
+> -	 *   quot = count / running;
+> -	 *   rem  = count % running;
+> -	 *   count = quot * enabled + (rem * enabled) / running;
+> +	 *   if (running != 0) {
+> +	 *     quot = count / running;
+> +	 *     rem  = count % running;
+> +	 *     count = quot * enabled + (rem * enabled) / running;
+> +	 *   }
+>  	 */
+>  	__u16	time_shift;
+>  	__u32	time_mult;
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+> index d37629dbad72..6826dabb7e03 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+> @@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+>  	 *
+>  	 *     if (pc->cap_usr_time && enabled != running) {
+>  	 *       cyc = rdtsc();
+> -	 *       time_offset = pc->time_offset;
+>  	 *       time_mult   = pc->time_mult;
+>  	 *       time_shift  = pc->time_shift;
+> +	 *       time_offset = pc->time_offset;
+> +	 *       if (pc->cap_user_time_short) {
+> +	 *         time_cycles = pc->time_cycles;
+> +	 *         time_mask = pc->time_mask;
+> +	 *       }
+>  	 *     }
+>  	 *
+>  	 *     index = pc->index;
+> @@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+>  	 *     if (pc->cap_user_rdpmc && index) {
+>  	 *       width = pc->pmc_width;
+>  	 *       pmc = rdpmc(index - 1);
+> +	 *       pmc <<= 64 - width;
+> +	 *       pmc >>= 64 - width;
+> +	 *       count += pmc;
+>  	 *     }
+>  	 *
+>  	 *     barrier();
+> @@ -590,25 +597,27 @@ struct perf_event_mmap_page {
+>  	 * If cap_usr_time the below fields can be used to compute the time
+>  	 * delta since time_enabled (in ns) using rdtsc or similar.
+>  	 *
+> -	 *   u64 quot, rem;
+> -	 *   u64 delta;
+> -	 *
+> -	 *   quot = (cyc >> time_shift);
+> -	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+> -	 *   delta = time_offset + quot * time_mult +
+> -	 *              ((rem * time_mult) >> time_shift);
+> +	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
+> +	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+>  	 *
+>  	 * Where time_offset,time_mult,time_shift and cyc are read in the
+> -	 * seqcount loop described above. This delta can then be added to
+> -	 * enabled and possible running (if index), improving the scaling:
+> +	 * seqcount loop described above. mul_u64_u32_shr will compute:
+> +	 *
+> +	 *   (u64)(((unsigned __int128)cyc * time_mult) >> time_shift)
+> +	 *
+> +	 * This delta can then be added to enabled and possible running (if
+> +	 * index) to improve the scaling. Due to event multiplexing, running
+> +	 * may be zero and so care is needed to avoid division by zero.
+>  	 *
+>  	 *   enabled += delta;
+>  	 *   if (index)
+>  	 *     running += delta;
+>  	 *
+> -	 *   quot = count / running;
+> -	 *   rem  = count % running;
+> -	 *   count = quot * enabled + (rem * enabled) / running;
+> +	 *   if (running != 0) {
+> +	 *     quot = count / running;
+> +	 *     rem  = count % running;
+> +	 *     count = quot * enabled + (rem * enabled) / running;
+> +	 *   }
+>  	 */
+>  	__u16	time_shift;
+>  	__u32	time_mult;
+> -- 
+> 2.37.0.170.g444d1eabd0-goog
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 8dfa36a99c74..487e82dd3275 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] = {
- 	REG("maps",       S_IRUGO, proc_pid_maps_operations),
- #ifdef CONFIG_NUMA
- 	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
-+	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
- #endif
- 	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
- 	LNK("cwd",        proc_cwd_link),
-@@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
- #endif
- #ifdef CONFIG_NUMA
- 	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
-+	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
- #endif
- 	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
- 	LNK("cwd",       proc_cwd_link),
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index 06a80f78433d..e7ed9ef097b6 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
+-- 
 
- extern const struct file_operations proc_pid_maps_operations;
- extern const struct file_operations proc_pid_numa_maps_operations;
-+extern const struct file_operations proc_pid_numa_pgtable_operations;
- extern const struct file_operations proc_pid_smaps_operations;
- extern const struct file_operations proc_pid_smaps_rollup_operations;
- extern const struct file_operations proc_clear_refs_operations;
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 2d04e3470d4c..77b7a49757f5 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1999,4 +1999,91 @@ const struct file_operations proc_pid_numa_maps_operations = {
- 	.release	= proc_map_release,
- };
-
-+struct pgtable_numa_private {
-+	struct proc_maps_private proc_maps;
-+	unsigned long node[MAX_NUMNODES];
-+};
-+
-+static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
-+				     unsigned long end, struct mm_walk *walk)
-+{
-+	struct pgtable_numa_private *priv = walk->private;
-+	struct page *page;
-+	int nid;
-+
-+	if (pmd_huge(*pmd)) {
-+		page = virt_to_page(pmd);
-+	} else {
-+		page = pmd_page(*pmd);
-+	}
-+
-+	nid = page_to_nid(page);
-+	priv->node[nid]++;
-+
-+	return 0;
-+}
-+
-+static const struct mm_walk_ops show_numa_pgtable_ops = {
-+	.pmd_entry = gather_pgtable_numa_stats,
-+};
-+
-+/*
-+ * Display the page talbe allocated per node via /proc.
-+ */
-+static int show_numa_pgtable(struct seq_file *m, void *v)
-+{
-+	struct pgtable_numa_private *numa_priv = m->private;
-+	struct vm_area_struct *vma = v;
-+	struct mm_struct *mm = vma->vm_mm;
-+	struct file *file = vma->vm_file;
-+	int nid;
-+
-+	if (!mm)
-+		return 0;
-+
-+	memset(numa_priv->node, 0, sizeof(numa_priv->node));
-+
-+	seq_printf(m, "%08lx ", vma->vm_start);
-+
-+	if (file) {
-+		seq_puts(m, " file=");
-+		seq_file_path(m, file, "\n\t= ");
-+	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
-+		seq_puts(m, " heap");
-+	} else if (is_stack(vma)) {
-+		seq_puts(m, " stack");
-+	}
-+
-+	/* mmap_lock is held by m_start */
-+	walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
-+
-+	for_each_node_state(nid, N_MEMORY) {
-+		if (numa_priv->node[nid])
-+			seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
-+	}
-+	seq_putc(m, '\n');
-+
-+	return 0;
-+}
-+
-+static const struct seq_operations proc_pid_numa_pgtable_op = {
-+	.start  = m_start,
-+	.next   = m_next,
-+	.stop   = m_stop,
-+	.show   = show_numa_pgtable,
-+};
-+
-+static int pid_numa_pgtable_open(struct inode *inode, struct file *file)
-+{
-+	return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
-+			sizeof(struct pgtable_numa_private));
-+}
-+
-+const struct file_operations proc_pid_numa_pgtable_operations = {
-+	.open		= pid_numa_pgtable_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= proc_map_release,
-+};
-+
- #endif /* CONFIG_NUMA */
---
-2.31.0
+- Arnaldo

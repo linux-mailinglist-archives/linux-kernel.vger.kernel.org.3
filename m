@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C555871F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587FC5871FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbiHAUGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        id S233703AbiHAUHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiHAUGL (ORCPT
+        with ESMTP id S229901AbiHAUH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:06:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978C527B00;
-        Mon,  1 Aug 2022 13:06:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C431B8168A;
-        Mon,  1 Aug 2022 20:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BCCC433D6;
-        Mon,  1 Aug 2022 20:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659384367;
-        bh=WEfadwtwz1ZbDqKtLh/CEmqHOJQ2a2CMdD1ufn/kk+A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sIfw4sa5IQatyQgEjM6DSnnr6BY9jgW7F9hxQxRPoVhZ4kRT3AHxD3HdZIQZ2kSxm
-         eeFlGhAhQ3YtiZEHX8kHJyQrsfRIBNnQ7tKcqiK9uSiXuqqPxl+NCKRuWbT9CrgMgW
-         K4lhnu3x00yaIjB6upiUJeNYNvElcI0R9TVH0NdZyxB5G6Bv3rwYB3aCGqcGc8+2fx
-         inSGq3c2asCQ7OMXTU7SJVTyG7Cd4QX5Z10b5FHvZ7XcX8BFhOl0o+SiZ/r1p035U1
-         Q//HjPiIRxk7pbjW1O8ruaExBRaqR75vz9QPuhqFjnJkOFuPul+jsnDErYnT9IB1BC
-         T0q0tBRFEjmIQ==
-Date:   Mon, 1 Aug 2022 15:06:06 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 04/15] PCI: dwc: Add IP-core version detection
- procedure
-Message-ID: <20220801200606.GA622066@bhelgaas>
+        Mon, 1 Aug 2022 16:07:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8A3275F6
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:07:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id y13so8366307ejp.13
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=dM75XEwFU5CbiGRXcEpaIYQB6b03v9H4wzpeMmKaTgk=;
+        b=LYlztePAEJ2AR3JYWDBFtZ3dDQRZSbMAj+XFcthBsl3pBXZqprQFMOHZwwbFTGLOKx
+         Kcc5sHUB2ovvR1uPTOKjlEKx4fAHAfeDxvzpuG1rxkxvLqeODXbWDMxaO8kT6TXyGXKp
+         nelGiqXplCHeWya10cSQlxq30U76m08sgRAaXBd+mSp97UcJxSQEQ+YAuDAYXkPMcQZJ
+         QWofxAa7sdyEA4SoI9RKrfTc6287QDZGBAmDinTsSHGhp7lIIVEHwGPok8xr7p9JNqse
+         dinisRZYsfERxKgNA1olrNs9Ds8FbKWw2pvKlAzoW/yXKMSYqy/lt61xttNLi4ytim2p
+         9J2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=dM75XEwFU5CbiGRXcEpaIYQB6b03v9H4wzpeMmKaTgk=;
+        b=aDWnZ4FW9Ctu6qzF2OEhHAuXjPsSs82eyyeOkmETk6bjOpb4zq9c2HDW1UdZpByOip
+         QD5amzbEjmjp+Dk1wFyQ80zVq56WCLktmmHFLKKiCAhKiSOtaXMr9tL37EipfHp3r7Mb
+         ZtMFEjd2S2hDqcyDxrbEy5eRlrLu4vPUzXOjErsbihHIBMKHgGNlheI1069N1rCQrDUD
+         aBwxzj8K5/a2gEigDeGwGNK7fJwEBeOJy/G5bAwKswxQKtpgs5w3YAAhafX+ZUhoQU6m
+         zl2C4paCxVyv5OUXBAW2jpibBXejXyFRSwzIQIv4yyD4pmEVZ69Xk+WlRZKtJeEHXdq5
+         t73g==
+X-Gm-Message-State: AJIora+/TxLyRuFlO6/pt1WkGUHJl0TA1yhKnbd+DF9qfgLCQ5Wza7pF
+        Nlk+lw7OBckMV/4dixthZh8C/ryUJJEXMApM1iE=
+X-Google-Smtp-Source: AGRyM1uexHlNzjAEWlTkuhlfGVVKV9MRLa+HenftvIKqi3rwguQ7/nrBYx0l41AbyHlSKpZlsYS3aD9ELhcedZFNS2k=
+X-Received: by 2002:a17:907:2724:b0:72b:496c:568a with SMTP id
+ d4-20020a170907272400b0072b496c568amr13821421ejl.305.1659384446832; Mon, 01
+ Aug 2022 13:07:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801131219.GD93763@thinkpad>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+In-Reply-To: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 1 Aug 2022 15:07:15 -0500
+Message-ID: <CAHCN7xLDPvQ__WJPeCptvq7mFtF3v3TGAG_vyDBxSdoqWwoO8A@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 06:42:19PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jun 24, 2022 at 05:39:36PM +0300, Serge Semin wrote:
-> > Since DWC PCIe v4.70a the controller version and version type can be read
-> > from the PORT_LOGIC.PCIE_VERSION_OFF and PORT_LOGIC.PCIE_VERSION_TYPE_OFF
-> > registers respectively. Seeing the generic code has got version-dependent
-> > parts let's use these registers to find out the controller version.  The
-> > detection procedure is executed for both RC and EP modes right after the
-> > platform-specific initialization. We can't do that earlier since the
-> > glue-drivers can perform the DBI-related setups there including the bus
-> > reference clocks activation, without which the CSRs just can't be read.
-> > 
-> > Note the CSRs content is zero on the older DWC PCIe controller. In that
-> > case we have no choice but to rely on the platform setup.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
+On Mon, Aug 1, 2022 at 2:33 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Adam,
+>
+> On Sat, Jul 30, 2022 at 12:16 PM Adam Ford <aford173@gmail.com> wrote:
+> >
+> > Hey all,
+> >
+> > I am trying to test Jagan's patch series [1] to add support for the
+> > samsung dsim bridge which is used on the imx8mm to output DSI video.
+> > The DSIM gets the video from the mxsfb, and in my case, the DSI is
+> > sent to the adv7535 for connecting to HDMI.
+>
+> I had to add some extra patches on top of Jagan's imx8mm-dsi-v3 to get
+> HDMI output functional on a imx8mm-evk via ADV7535:
+>
+> https://github.com/fabioestevam/kernel/commits/imx8mm-dsi-v3
+>
+> Does it work on your board?
 
-> > @@ -711,6 +711,8 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  	ep->phys_base = res->start;
-> >  	ep->addr_size = resource_size(res);
-> >  
-> > +	dw_pcie_version_detect(pci);
-> > +
-> 
-> There is still an ongoing debate about moving all DBI accesses to
-> init_complete. But this is fine atm.
+I'll give them a try tonight.  I managed to get a hold of an adv7535
+user manual, and there are some items that it appears NXP did in their
+downstream kernel that never got pushed upstream. Based on my review
+of some of the changes, some of the NXP changes seem reasonable to me.
+If/when I can get it working, I'll try to report back some of my
+findings and push driver changes to the adv7535 as I find them.
 
-Well, if I understand it correctly, e966f7390da9 ("PCI: dwc: Refactor
-core initialization code for EP mode") claims that all DBI accesses
-should be in dw_pcie_ep_init_complete(), so it's not so much a debate
-as a discussion about how best to achieve that.
-
-But you're right, we can fix that up later if necessary.
-
-> >  	dw_pcie_iatu_detect(pci);
+adam

@@ -2,125 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26560586FFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEBA58700E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbiHAR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S233939AbiHASCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbiHAR7K (ORCPT
+        with ESMTP id S233527AbiHASCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:59:10 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B6BDFC2
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:59:00 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w15so18469644lft.11
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:59:00 -0700 (PDT)
+        Mon, 1 Aug 2022 14:02:17 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F9325C5F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 11:02:15 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10dc1b16c12so14583347fac.6
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 11:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7yJue3wpE46mqMp6WfUlVgKTJyxRggT/HsVWQliUjAA=;
-        b=baZtFM+E8jy0urk7ZQ/53EmacTrKbsBnvC4gnQsFSE4Xor6gw+u3FxpwZ3oOBhnwpW
-         rLj/pVIQZC4/vYyFqDZQCnOTkDIUNeHUIinm/xvmU1t+cJbC6QjCDmIgcBM9yuAehGeR
-         z3jZkpzc/sjT3iR4N5Kw9qPzwsgeSvm3VXBF5sj6kzz7wWaj1kT4oH42lixMmwWy3cEp
-         0hwtc+ML4IqNE5y8J0JxkRWe++b8jbXAvp50q/q4jQmV0JNcSUNY9oI19wEMddsPC7u1
-         aseeDg5zh5jGKprMt726AzYUEB3oc+hRmMHVQwelMzX/IItZKahz9+UTzSCXghGppvNL
-         4FGw==
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=neYCRoMJHZhrkPomT+D8lBoa9lWbM2Zjq7tdhg++BD8=;
+        b=Mhxk6WOQ1kBwvZATBE/fUmbfdcWPONvbLqPeeFwjgpXx30ZOq9K8e9XiO+heooXplM
+         yIxZGuPYi6Y3upntqiTXP/fp9FqKCw4yfTan+k9O5EO5dpK1xku83lnqrHR4EC2zmuYi
+         1Wtv13AgwXk1J74t2M0Zv22JEVrbvaw3bB9ww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7yJue3wpE46mqMp6WfUlVgKTJyxRggT/HsVWQliUjAA=;
-        b=b3CFhcwyH7pkkgnwzSaUsaDySz8KE319yuAKfVj0DPMzLiXJySYhWves/xftBiXf6Y
-         Fc20smHpkq0eerC7ChRNETQDevhbWhOFpyMiSxAHuDszbGpDXJrR7YKTyGKSnIxiSmWS
-         faY6H733X+/1xXyQi8fENGRmRfND/yCRyWVIaF7tEWa+ESddBcWkaRmdDE1lmTxow2GO
-         iud4N45oYOByQu5sHJDvoq0JykkxDrDNN1va/lvGmdXp+mCf9+HsLpG5zLp6zIOwtWWC
-         dljSVn5GPkmqO+8O0dYwmlJxfyaOSN7EWqRPlrYYValKXndSxX512a/rzLoIA6rBZBxX
-         NP1w==
-X-Gm-Message-State: AJIora8lVitumUIK/TdGJplEKfJ6nF99mAdmPN8mxIEdOmO0YQvYVjeB
-        CaPS0KA2JQD5zz3jJE2SeXXJ0qqdPL1hyB5++dcc+w==
-X-Google-Smtp-Source: AGRyM1tGJjG6mSt41oFvvwn+SA1Zafr1raTgRq9oDWlEyv2VYmo1Yqq8O7EFhbioIhMWJ4CIBLfi7iGbUSCW3bHKpwY=
-X-Received: by 2002:a19:7902:0:b0:48a:6872:68ab with SMTP id
- u2-20020a197902000000b0048a687268abmr5702496lfc.626.1659376738622; Mon, 01
- Aug 2022 10:58:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=neYCRoMJHZhrkPomT+D8lBoa9lWbM2Zjq7tdhg++BD8=;
+        b=hIcYSzthHHtvp3NSM0owgaLNnloFI7H8//vYLTGYf9zncf5KzfvtGJmbPXpxhiJ5Yw
+         FinFqKLKNBo6KVe7ng0n0iKElrmZLAlzEzEnWWXkgEzDLd0eBh75/Ut88uY9sMVT/QfU
+         cdqywVy8tcEFruxtqEImCXJCmVW3TMXpSBCq/RKi1RXNsQepwNunMDOeFIyWQYWROJnN
+         XyLzqSeswnVojbi0WEMX89gaXkEo61ZFDGWUzybCJo2fz5D3NTxf+jrROGAzp/xbHscr
+         8jlenvLJk9VJl9zLgRNWdDJS5maVIG2fpSIvi0UxLtR+y76/EHUhJPGavSoOgli4HhJ7
+         wajA==
+X-Gm-Message-State: AJIora8iVYPptkOHWIkCABfHq/SG1wGSObT5oZpnH7BtawfeSlB01Olm
+        Hcy7GoQgwajmrkraRawRlc26sg==
+X-Google-Smtp-Source: AGRyM1s00uyA5RxFeoJiOwnWUCMdS5VnKo6fHkNTdsQVmzGj5TtMhEcfqeGl5rB5c+kZha+7htuYfg==
+X-Received: by 2002:a05:6870:4302:b0:10d:c587:d30e with SMTP id w2-20020a056870430200b0010dc587d30emr7992216oah.28.1659376935129;
+        Mon, 01 Aug 2022 11:02:15 -0700 (PDT)
+Received: from localhost.localdomain ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 11:02:14 -0700 (PDT)
+From:   Frederick Lawler <fred@cloudflare.com>
+To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v4 0/4] Introduce security_create_user_ns()
+Date:   Mon,  1 Aug 2022 13:01:42 -0500
+Message-Id: <20220801180146.1157914-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220728161208.865420-1-yury.norov@gmail.com> <CAHk-=wiFJboHXZEXtMhDcHbEYXujTiDxkGbpONC=DJA7dJG6nw@mail.gmail.com>
- <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgga5hrg5qgm4UwuOCjgBrobhZcdKTr1AFU7WSWgVKKZQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 1 Aug 2022 10:58:46 -0700
-Message-ID: <CAKwvOdkigxQUF399-WoWwsg-W2dbMj-mx4sOx91hb9RDodqHmw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] lib/find: optimize find_bit() functions
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 2:49 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Jul 28, 2022 at 11:49 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > It builds for me and seems to generate reasonable code, although I
-> > notice that clang messes up the "__ffs()" inline asm and forces the
-> > source into memory.
->
-> I have created a llvm issue for this at
->
->         https://github.com/llvm/llvm-project/issues/56789
+While creating a LSM BPF MAC policy to block user namespace creation, we
+used the LSM cred_prepare hook because that is the closest hook to prevent
+a call to create_user_ns().
 
-Thanks for the report.  I left a response there (in case you have
-notification emails from github filtered; following up here).
-https://github.com/llvm/llvm-project/issues/56789#issuecomment-1201525395
+The calls look something like this:
 
-So it looks like at least 3 things we can clean up:
-1. https://github.com/llvm/llvm-project/issues/20571
-2. https://github.com/llvm/llvm-project/issues/34191
-3. https://github.com/llvm/llvm-project/issues/33216
+    cred = prepare_creds()
+        security_prepare_creds()
+            call_int_hook(cred_prepare, ...
+    if (cred)
+        create_user_ns(cred)
 
->
-> and while I noticed this while looking at the rather odd code
-> generation for the bit finding functions, it seems to be a general
-> issue with clang inline asm.
->
-> It looks like any instruction that takes a mod/rm input (so a register
-> or memory) will always force the thing to be in memory. Which is very
-> pointless in itself, but it actually causes some functions to have a
-> stack frame that they wouldn't otherwise need or want. So it actually
-> has secondary downsides too.
->
-> And yes, that particular case could be solved with __builtin_ctzl(),
-> which seems to DTRT. But that uses plain bsf, and we seem to really
-> want tzcnt ("rep bsf") here, although I didn't check why (the comment
-> explicitly says "Undefined if no bit exists", which is the main
-> difference between bsf and tzcnt).
->
-> I _think_ it's because tzcnt is faster when it exists exactly because
-> it always writes the destination, so 'bsf' is actually the inferior
-> op, and clang shouldn't generate it.
->
-> But the "rm" thing exists elsewhere too, and I just checked - this
-> same issue seems to happen with "g" too (ie "any general integer
-> input").
->
->                       Linus
+We noticed that error codes were not propagated from this hook and
+introduced a patch [1] to propagate those errors.
 
+The discussion notes that security_prepare_creds()
+is not appropriate for MAC policies, and instead the hook is
+meant for LSM authors to prepare credentials for mutation. [2]
 
+Ultimately, we concluded that a better course of action is to introduce
+a new security hook for LSM authors. [3]
+
+This patch set first introduces a new security_create_user_ns() function
+and userns_create LSM hook, then marks the hook as sleepable in BPF.
+
+Links:
+1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+
+Past discussions:
+V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
+V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+
+Changes since v3:
+- Explicitly set CAP_SYS_ADMIN to test namespace is created given
+  permission
+- Simplify BPF test to use sleepable hook only
+- Prefer unshare() over clone() for tests
+Changes since v2:
+- Rename create_user_ns hook to userns_create
+- Use user_namespace as an object opposed to a generic namespace object
+- s/domB_t/domA_t in commit message
+Changes since v1:
+- Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+- Add selinux: Implement create_user_ns hook patch
+- Change function signature of security_create_user_ns() to only take
+  struct cred
+- Move security_create_user_ns() call after id mapping check in
+  create_user_ns()
+- Update documentation to reflect changes
+
+Frederick Lawler (4):
+  security, lsm: Introduce security_create_user_ns()
+  bpf-lsm: Make bpf_lsm_userns_create() sleepable
+  selftests/bpf: Add tests verifying bpf lsm userns_create hook
+  selinux: Implement userns_create hook
+
+ include/linux/lsm_hook_defs.h                 |   1 +
+ include/linux/lsm_hooks.h                     |   4 +
+ include/linux/security.h                      |   6 ++
+ kernel/bpf/bpf_lsm.c                          |   1 +
+ kernel/user_namespace.c                       |   5 +
+ security/security.c                           |   5 +
+ security/selinux/hooks.c                      |   9 ++
+ security/selinux/include/classmap.h           |   2 +
+ .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+ 10 files changed, 168 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.30.2
+

@@ -2,143 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623235863DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3008E5863DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239109AbiHAGBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 02:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S238804AbiHAGGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 02:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239739AbiHAGBG (ORCPT
+        with ESMTP id S229681AbiHAGGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 02:01:06 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FBC1057B;
-        Sun, 31 Jul 2022 23:01:05 -0700 (PDT)
-Received: from droid01-xa.amlogic.com (10.88.11.200) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.9; Mon, 1 Aug 2022
- 14:00:57 +0800
-From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
-To:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>
-Subject: [PATCH v3 4/4] dt-binding: perf: Add Amlogic DDR PMU
-Date:   Mon, 1 Aug 2022 14:00:49 +0800
-Message-ID: <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801060049.1655177-1-jiucheng.xu@amlogic.com>
-References: <20220801060049.1655177-1-jiucheng.xu@amlogic.com>
+        Mon, 1 Aug 2022 02:06:12 -0400
+Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF976329
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 23:06:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VL1DdLW_1659333965;
+Received: from 30.97.48.40(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VL1DdLW_1659333965)
+          by smtp.aliyun-inc.com;
+          Mon, 01 Aug 2022 14:06:06 +0800
+Message-ID: <f4f9c5be-a5ce-9e82-56ff-89d1aeee4d98@linux.alibaba.com>
+Date:   Mon, 1 Aug 2022 14:06:13 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.88.11.200]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC V3 PATCH] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+To:     Xin Hao <xhao@linux.alibaba.com>, willy@infradead.org
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220801032704.64356-1-xhao@linux.alibaba.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220801032704.64356-1-xhao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding documentation for the Amlogic G12 series DDR
-performance monitor unit.
+Hi Xin,
 
-Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
----
-Changes v2 -> v3:
-  - Remove oneOf
-  - Add descriptions
-  - Fix compiling warning
+On 8/1/2022 11:27 AM, Xin Hao wrote:
+> In many data center servers, the shared memory architectures is
+> Non-Uniform Memory Access (NUMA), remote numa node data access
+> often brings a high latency problem, but what we are easy to ignore
+> is that the page table remote numa access, It can also leads to a
+> performance degradation.
+> 
+> So there add a new interface in /proc, This will help developers to
+> get more info about performance issues if they are caused by cross-NUMA.
+> 
+> V2 -> V3
+> 1, Fix compile warning bug.
+> 
+> V1 -> V2
+> 1, As Matthew Wilcox advise, Simplify the code.
+> 2, Do some codes format fix.
 
-Changes v1 -> v2:
-  - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
-  - Delete "model", "dmc_nr", "chann_nr" new properties
-  - Fix compiling error
----
- .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 51 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+Please move the changes history under your 'Signed-off-by' with '---'.
 
-diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
-new file mode 100644
-index 000000000000..961656d4db6e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic G12 DDR performance monitor
-+
-+maintainers:
-+  - Jiucheng Xu <jiucheng.xu@amlogic.com>
-+
-+description: |
-+  Amlogic G12 series SoC integrate DDR bandwidth monitor.
-+  A timer is inside and can generate interrupt when timeout.
-+  The bandwidth is counted in the timer ISR.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - amlogic,g12b-ddr-pmu
-+          - amlogic,g12a-ddr-pmu
-+          - amlogic,sm1-ddr-pmu
-+
-+  reg:
-+    items:
-+      - description: Physical address of DMC bandwidth register
-+          and size of the configuration address space.
-+      - description: Physical address of DMC PLL register and
-+          size of the configuration address space.
-+
-+  interrupts:
-+    items:
-+      - description: The IRQ of the inside timer timeout.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    ddr_pmu@ff638000 {
-+        compatible = "amlogic,g12a-ddr-pmu";
-+        reg = <0xff638000 0x100
-+               0xff638c00 0x100>;
-+        interrupts = <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8ee68e699e6d..67c2c9e8c4ea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1055,6 +1055,7 @@ M:	Jiucheng Xu <jiucheng.xu@amlogic.com>
- S:	Supported
- W:	http://www.amlogic.com
- F:	Documentation/admin-guide/perf/meson-ddr-pmu.rst
-+F:	Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
- F:	drivers/perf/amlogic/
- F:	include/soc/amlogic/
- 
--- 
-2.25.1
+> 
+> V2: https://lore.kernel.org/linux-mm/20220731155223.60238-1-xhao@linux.alibaba.com/
+> V1: https://lore.kernel.org/linux-mm/YuVqdcY8Ibib2LJa@casper.infradead.org/T/
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> ---
+>   fs/proc/base.c     |  2 ++
+>   fs/proc/internal.h |  1 +
+>   fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 90 insertions(+)
+> 
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 8dfa36a99c74..487e82dd3275 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] = {
+>   	REG("maps",       S_IRUGO, proc_pid_maps_operations),
+>   #ifdef CONFIG_NUMA
+>   	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
+> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
+>   #endif
+>   	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
+>   	LNK("cwd",        proc_cwd_link),
+> @@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
+>   #endif
+>   #ifdef CONFIG_NUMA
+>   	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
+> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
+>   #endif
+>   	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
+>   	LNK("cwd",       proc_cwd_link),
+> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+> index 06a80f78433d..e7ed9ef097b6 100644
+> --- a/fs/proc/internal.h
+> +++ b/fs/proc/internal.h
+> @@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
+> 
+>   extern const struct file_operations proc_pid_maps_operations;
+>   extern const struct file_operations proc_pid_numa_maps_operations;
+> +extern const struct file_operations proc_pid_numa_pgtable_operations;
+>   extern const struct file_operations proc_pid_smaps_operations;
+>   extern const struct file_operations proc_pid_smaps_rollup_operations;
+>   extern const struct file_operations proc_clear_refs_operations;
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 2d04e3470d4c..77b7a49757f5 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1999,4 +1999,91 @@ const struct file_operations proc_pid_numa_maps_operations = {
+>   	.release	= proc_map_release,
+>   };
+> 
+> +struct pgtable_numa_private {
+> +	struct proc_maps_private proc_maps;
+> +	unsigned long node[MAX_NUMNODES];
+> +};
+> +
+> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+> +				     unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pgtable_numa_private *priv = walk->private;
+> +	struct page *page;
+> +	int nid;
+> +
+> +	if (pmd_huge(*pmd)) {
+> +		page = virt_to_page(pmd);
+> +	} else {
+> +		page = pmd_page(*pmd);
 
+You should validate if the pmd is valid or present before getting the 
+pagetable page.
+
+if (pmd_none(*pmd) || !pmd_present(*pmd))
+
+Another issue is I think you should hold the pmd lock to call 
+pmd_page(), since after the validation of pmd_huge(), the pmd entry can 
+be modified by other threads if you did not hold the pmd lock.
+
+> +	}
+> +
+> +	nid = page_to_nid(page);
+> +	priv->node[nid]++;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct mm_walk_ops show_numa_pgtable_ops = {
+> +	.pmd_entry = gather_pgtable_numa_stats,
+> +};
+> +
+> +/*
+> + * Display the page talbe allocated per node via /proc.
+> + */
+> +static int show_numa_pgtable(struct seq_file *m, void *v)
+> +{
+> +	struct pgtable_numa_private *numa_priv = m->private;
+> +	struct vm_area_struct *vma = v;
+> +	struct mm_struct *mm = vma->vm_mm;
+> +	struct file *file = vma->vm_file;
+> +	int nid;
+> +
+> +	if (!mm)
+> +		return 0;
+> +
+> +	memset(numa_priv->node, 0, sizeof(numa_priv->node));
+> +
+> +	seq_printf(m, "%08lx ", vma->vm_start);
+> +
+> +	if (file) {
+> +		seq_puts(m, " file=");
+> +		seq_file_path(m, file, "\n\t= ");
+> +	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
+> +		seq_puts(m, " heap");
+> +	} else if (is_stack(vma)) {
+> +		seq_puts(m, " stack");
+> +	}
+> +
+> +	/* mmap_lock is held by m_start */
+> +	walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
+> +
+> +	for_each_node_state(nid, N_MEMORY) {
+> +		if (numa_priv->node[nid])
+> +			seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
+> +	}
+> +	seq_putc(m, '\n');
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct seq_operations proc_pid_numa_pgtable_op = {
+> +	.start  = m_start,
+> +	.next   = m_next,
+> +	.stop   = m_stop,
+> +	.show   = show_numa_pgtable,
+> +};
+> +
+> +static int pid_numa_pgtable_open(struct inode *inode, struct file *file)
+> +{
+> +	return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
+> +			sizeof(struct pgtable_numa_private));
+> +}
+> +
+> +const struct file_operations proc_pid_numa_pgtable_operations = {
+> +	.open		= pid_numa_pgtable_open,
+> +	.read		= seq_read,
+> +	.llseek		= seq_lseek,
+> +	.release	= proc_map_release,
+> +};
+> +
+>   #endif /* CONFIG_NUMA */
+> --
+> 2.31.0

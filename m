@@ -2,87 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582FC5866AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48375866AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiHAJBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S230227AbiHAJDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiHAJBr (ORCPT
+        with ESMTP id S230088AbiHAJDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:01:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49FBBC88
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:01:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 615AF6104D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F59CC433D6;
-        Mon,  1 Aug 2022 09:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659344505;
-        bh=9N4MP54pi+2YzqlyPQl/AO6H4XWIGSthRqofo9l0eek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sXoKxt1uT3r9jg1/snWDbHd9R0DQ3gqMAjazuis+RmBHAFCbe6tjmpcrw2OB8WIes
-         5M9dxG1xrCGbujUgNlWsuIqz+w8Q8z/gXg6Dy7/FlR7j3U5q4p/n1vl0ZERyoHwBgg
-         cWLmW3eHXJba2A3L3NuT7pmOH3D5Sn03RfNxmrSk=
-Date:   Mon, 1 Aug 2022 11:01:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
-        wangweiyang2@huawei.com
-Subject: Re: [PATCH] tty: moxa: Refine error handling in moxa_pci_probe
-Message-ID: <YueWdjtxvmmZAA9E@kroah.com>
-References: <20220801085356.1716756-1-gongruiqi1@huawei.com>
+        Mon, 1 Aug 2022 05:03:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2219F17A87
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659344584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ncyaFYJzP9g8NKrBs3wrk9j01RRn6jvYie2crlUdCG0=;
+        b=dp1aIyUpcvUAq8TO3PxXMBeK+ml6P+xyNt5h5VxrsTEBsH9wuTfSnlDYbk+ZuGBgFnTwgS
+        KUNCYsePf6djVhTc2q21H0EK7M0JCXHeSaTVblaXk8JMvkrPyFWUOhTor02dnNXO0w6m8a
+        ZkOmr9OcmNePNu6CId2ivGBqFUNg+iE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-IgxGZJwSPBSc6yjc8mXu1w-1; Mon, 01 Aug 2022 05:03:02 -0400
+X-MC-Unique: IgxGZJwSPBSc6yjc8mXu1w-1
+Received: by mail-wr1-f69.google.com with SMTP id m7-20020adfa3c7000000b0021ef71807e3so2363417wrb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 02:03:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ncyaFYJzP9g8NKrBs3wrk9j01RRn6jvYie2crlUdCG0=;
+        b=GUvsicUB5X/sb/vsYmm1WP3xknMeo+uuHvJ/KQiMtKPybiY3g7QJruhhrRIoFUZ9Fm
+         AakWfeqU7rhG+ghdeWLcPz1TWkdQ3C1uZEV2SyBKk+Urnyqh/NzA/EYWWBa7+Vsh/q0K
+         Q4NxYg7wlK76+yTn0wu4MQo/Vc3RzvXNOOSo8d8FQjuCIdVUTQiVrw4CSxPFi5gWtpAg
+         cJFZn4RKC3NL0VSSvYRn+oLJ7UZiU4tcFRrNAfGFLygkn9HXpKlQa3v5ZVbNy7oOJQTJ
+         g2mfN4frXwlIhK6nGPynBAwtCVx70CmjTjpu7yvdLf4gwjlw9+pwo8GK0G9hYVVCTcDm
+         6LCA==
+X-Gm-Message-State: AJIora+hSXw1srTU6JzvHrnXtQVyBFxaCUUGS+GSGUdVZ4tH1tKARK98
+        ix+kT0rduwaPc8fYuJBQiKrqxSpToQacj+d92HGMZaDW+74CX25D+1eExrnQGZJ37t5239BH2jK
+        ME2uJZtala12Pwj0Vr/7MsQuU
+X-Received: by 2002:a05:600c:284a:b0:3a2:ffb7:b56f with SMTP id r10-20020a05600c284a00b003a2ffb7b56fmr10682181wmb.134.1659344581576;
+        Mon, 01 Aug 2022 02:03:01 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tsckfo/c3O5sXcoRGktHAw/KB2X00NMz3NhlP5jTXkDvcRrwwoAZMoB8u/IniTRLvnw9ZwPQ==
+X-Received: by 2002:a05:600c:284a:b0:3a2:ffb7:b56f with SMTP id r10-20020a05600c284a00b003a2ffb7b56fmr10682148wmb.134.1659344581267;
+        Mon, 01 Aug 2022 02:03:01 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id h15-20020a05600c414f00b003a49e4e7dd6sm12130606wmm.36.2022.08.01.02.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 02:03:00 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [linux-stable-rc:linux-5.15.y 5373/8464]
+ arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds
+ limit (1024) in 'kvm_hv_hypercall'
+In-Reply-To: <202207161843.WnHPjB0l-lkp@intel.com>
+References: <202207161843.WnHPjB0l-lkp@intel.com>
+Date:   Mon, 01 Aug 2022 11:03:00 +0200
+Message-ID: <874jyw2v5n.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801085356.1716756-1-gongruiqi1@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 04:53:56PM +0800, GONG, Ruiqi wrote:
-> Add pci_disable_device() into the error handling, and therefore make the
-> function not jump to err if pci_enable_device() failed.
-> 
-> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
-> ---
->  drivers/tty/moxa.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
-> index f3c72ab1476c..4432a39331d3 100644
-> --- a/drivers/tty/moxa.c
-> +++ b/drivers/tty/moxa.c
-> @@ -1239,7 +1239,7 @@ static int moxa_pci_probe(struct pci_dev *pdev,
->  	retval = pci_enable_device(pdev);
->  	if (retval) {
->  		dev_err(&pdev->dev, "can't enable pci device\n");
-> -		goto err;
-> +		return retval;
->  	}
->  
->  	for (i = 0; i < MAX_BOARDS; i++)
-> @@ -1300,6 +1300,7 @@ static int moxa_pci_probe(struct pci_dev *pdev,
->  err_reg:
->  	pci_release_region(pdev, 2);
->  err:
-> +	pci_disable_device(pdev);
+kernel test robot <lkp@intel.com> writes:
 
-Are you sure you want to do this?  What happens if this is a
-multi-function device, you just turned it off, right?
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> head:   baefa2315cb1371486f6661a628e96fa3336f573
+> commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/8464] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220716/202207161843.WnHPjB0l-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+>         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>         git fetch --no-tags linux-stable-rc linux-5.15.y
+>         git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+>    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>        ^
+>    1 warning generated.
+>
+>
+> vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
+>
+> 4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
+> e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
+> 4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
+> bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
 
-How did you test this change?  Do you have the hardware for it?
+That's a bit weird: struct kvm_hv_hcall is 144 bytes only so this is
+very, very far from 1024. The referred commit (cb188e07105f) also
+doesn't add any on-stack allocations to kvm_hv_hypercall() directly,
+however, it leaves only once call site for kvm_hv_send_ipi() and the
+compiler may have switched to inlining it. Assuming that's the case, I'm
+completely clueless about why such potentially dangerous 'optimization'
+make any sense.
 
-thanks,
+In any case, there's a pending patch:
 
-greg k-h
+https://lore.kernel.org/kvm/20220714134929.1125828-13-vkuznets@redhat.com/
+
+which is supposed to help here.
+
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
+> b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
+> 0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
+> e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
+>
+> :::::: The code at line 2185 was first introduced by commit
+> :::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
+>
+> :::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
+> :::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+-- 
+Vitaly
+

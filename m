@@ -2,105 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD7C586C0F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0CF586C12
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiHANgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S231771AbiHANhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiHANgm (ORCPT
+        with ESMTP id S231213AbiHANgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:36:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAF813D55
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:36:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31B7DB811FB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C40C433D6;
-        Mon,  1 Aug 2022 13:36:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Zvkwfwps"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659360995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ysxOkDhymz7u9kRO4ZaPVcVUPLbdmdvZGeLVSG5TLe4=;
-        b=ZvkwfwpsQXq15iYKuInkgk4cZmbtSFchACwUNtuo1GuW6Iy71OWGHjswhrDlpj693LCUV5
-        YfFonJ0x+S+kBMUG/xZTbdA/s7d5Br1MjVeKbliqEHIa1iM//U761zNJUwqEE2duvjKIl8
-        YpeDUc32pYDdZ9qCrEevf1oM0dYoc7o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 21156af6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 13:36:35 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 15:36:32 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4] lib/vsprintf: defer filling siphash key on RT
-Message-ID: <YufW4G/A3eQKpdjj@zx2c4.com>
-References: <YufHN7fF0dROMETj@zx2c4.com>
- <20220801123945.43081-1-Jason@zx2c4.com>
- <YufLK6hio/v1gfmq@linutronix.de>
+        Mon, 1 Aug 2022 09:36:53 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4AD3DBF4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:36:52 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y141so10613721pfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=mJeVa4PBK70aWRppyHLGuCIpxqLQYXbh93oMjdhkXTc=;
+        b=RkCxSo/gAU9PuX6oKcjeW2ExvtydKC4/+47raRDMMcivmMcgyw60ZSIsIsekTmLK4m
+         pjDjl4+neNwwQG8w+oXSFoucXlLNIKEfsQlxyKShY2+oGi6k0mW0YiC1eta683BZqXuY
+         +jNaMOfGahKTUUonPwobkp3Odiz98DUqBBzFhlus6MdFoKYw8gfLG8D2nUyYjIHD+2PX
+         gXRx9Y7QsfgIsuJIRzV1kMURVyU0hWM7E5YdZJrU5gx+M8hzANsECNj3QYvMg9GdK8R2
+         U1ewkdBS9jnsPaf02bKT68s7kw8aMLVGKh2V7Z2n3aKLpJ+wqmkL4G6RkBUORnqWfwEi
+         FiPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=mJeVa4PBK70aWRppyHLGuCIpxqLQYXbh93oMjdhkXTc=;
+        b=ww9b/FKaDWNBRjb+L24q6hggBKY00if+2om2GbQSsq38Kk/7ampv0T2N2jxiHkSBjw
+         w/vuvgc0SqXlu+D60q+eKH5ZZgFsmBQdE7ZnPcphVM9tyZ4u6pUIX1FS3oI6PQc1Q2+4
+         XG7nW4Vip7q0B5tNXY1ooNN+J23jzMz3XJaW/RMlUjqATVlGpWfisInxmDOMNg4gz1tg
+         YDvHHex8GvVc/jxiAwQyYs3QxZplTNfb3myi3E/es6UllLC4arLg2+LzIXEKxJINGjUy
+         H9FcmZ9k2MOAI3UBe01ECRECzlwforS+FGCTY5vrJREFr5MTROj0jkeq9wfxMNhhgism
+         Azzw==
+X-Gm-Message-State: ACgBeo1rmgeuMAuXDG+skrpSPeenEWa6v4motb60HFzTv8yFLkk29Hcx
+        U6ZvQDoLGNF5uZyW7C0ORPlmkzFGS/vX
+X-Google-Smtp-Source: AA6agR6qHwDnWg+PU610GtsaoLrgz6F2w9ki1uIKRjnJCQpW0pzlwjm08EXKDrKvi6po0Hd0Tt/OYw==
+X-Received: by 2002:a05:6a00:e1a:b0:52d:9c84:24c1 with SMTP id bq26-20020a056a000e1a00b0052d9c8424c1mr2586853pfb.13.1659361011759;
+        Mon, 01 Aug 2022 06:36:51 -0700 (PDT)
+Received: from thinkpad ([117.217.185.73])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b0016d6c939332sm9637057plh.279.2022.08.01.06.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 06:36:51 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 19:06:41 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 09/15] PCI: dwc: Drop inbound iATU types
+ enumeration - dw_pcie_as_type
+Message-ID: <20220801133641.GI93763@thinkpad>
+References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143947.8991-10-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YufLK6hio/v1gfmq@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143947.8991-10-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
-
-On Mon, Aug 01, 2022 at 02:46:35PM +0200, Sebastian Andrzej Siewior wrote:
-> On 2022-08-01 14:39:46 [+0200], Jason A. Donenfeld wrote:
-> > On RT, we can't call get_random_bytes() from inside of the raw locks
-> > that callers of vsprintf might take, because get_random_bytes() takes
-> > normal spinlocks. So on those RT systems, defer the siphash key
-> > generation to a worker.
-> > 
-> > Also, avoid using a static_branch, as this isn't the fast path.
-> > Using static_branch_likely() to signal that ptr_key has been filled is a
-> > bit much given that it is not a fast path.
-> > 
-> > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Reported-by: Mike Galbraith <efault@gmx.de>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> > Sebastian - feel free to take this and tweak it as needed. Sending this
-> > mostly as something illustrative of what the "simpler" thing would be
-> > that I had in mind. -Jason
+On Fri, Jun 24, 2022 at 05:39:41PM +0300, Serge Semin wrote:
+> There is no point in having an enumeration declared in the driver for the
+> PCIe end-point. First of all it's redundant since the driver already has a
+> set of macro declared which describe the available in/out iATU types, thus
+> having an addition abstraction just needlessly complicates the code.
+> Secondly checking the passed iATU type for validity within a single driver
+> is pointless since the driver is supposed to be consistent by its nature.
+> Finally the outbound iATU type isn't encoded by the denoted enumeration,
+> thus giving a false impression that the in and out iATU types are
+> unrelated while they are the same. So to speak let's drop the redundant
+> dw_pcie_as_type enumeration replacing it with the direct iATU type usage.
 > 
-> Can have the same behaviour regardless of CONFIG_PREEMPT_RT? Here
-> lockdep _may_ yell with !RT because it is broken for RT.
-> If we agree that we drop the first %p print here, can we do this on
-> both (regardless of CONFIG_PREEMPT_RT)?
+> While at it, since we are touching the iATU inbound regions config methods
+> anyway, let's fix the arguments order so the type would be followed by the
+> address-related parameters. Thus the inbound and outbound iATU setup
+> methods will look alike. That shall improve the code readability a bit.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-"Lockdep may yell" -- but this would be when lockdep is turned on to
-catch RT bugs, not to catch non-RT bugs. The actual bug only exists on
-RT. This is an RT problem. Stop pretending that this is a real issue
-outside of RT. It isn't. This is *only* an RT issue. So why would we
-make things worse for an issue that doesn't actually exist on non-RT?
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-I too generally prefer having only one code path and not two. But the
-way this patch is written, the worker function just gets reused with a
-straight call on the non-RT case, so it doesn't actually require
-duplicating code.
+Thanks,
+Mani
 
-Jason
+> ---
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 21 +++++------
+>  drivers/pci/controller/dwc/pcie-designware.c  | 35 +++----------------
+>  drivers/pci/controller/dwc/pcie-designware.h  |  9 +----
+>  3 files changed, 15 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index ffbd3af6d65a..5a158813f687 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -154,9 +154,8 @@ static int dw_pcie_ep_write_header(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
+>  	return 0;
+>  }
+>  
+> -static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no,
+> -				  enum pci_barno bar, dma_addr_t cpu_addr,
+> -				  enum dw_pcie_as_type as_type)
+> +static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
+> +				  dma_addr_t cpu_addr, enum pci_barno bar)
+>  {
+>  	int ret;
+>  	u32 free_win;
+> @@ -168,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no,
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, bar, cpu_addr,
+> -				       as_type);
+> +	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
+> +				       cpu_addr, bar);
+>  	if (ret < 0) {
+>  		dev_err(pci->dev, "Failed to program IB window\n");
+>  		return ret;
+> @@ -221,27 +220,25 @@ static void dw_pcie_ep_clear_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
+>  static int dw_pcie_ep_set_bar(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
+>  			      struct pci_epf_bar *epf_bar)
+>  {
+> -	int ret;
+>  	struct dw_pcie_ep *ep = epc_get_drvdata(epc);
+>  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+>  	enum pci_barno bar = epf_bar->barno;
+>  	size_t size = epf_bar->size;
+>  	int flags = epf_bar->flags;
+> -	enum dw_pcie_as_type as_type;
+> -	u32 reg;
+>  	unsigned int func_offset = 0;
+> +	int ret, type;
+> +	u32 reg;
+>  
+>  	func_offset = dw_pcie_ep_func_select(ep, func_no);
+>  
+>  	reg = PCI_BASE_ADDRESS_0 + (4 * bar) + func_offset;
+>  
+>  	if (!(flags & PCI_BASE_ADDRESS_SPACE))
+> -		as_type = DW_PCIE_AS_MEM;
+> +		type = PCIE_ATU_TYPE_MEM;
+>  	else
+> -		as_type = DW_PCIE_AS_IO;
+> +		type = PCIE_ATU_TYPE_IO;
+>  
+> -	ret = dw_pcie_ep_inbound_atu(ep, func_no, bar,
+> -				     epf_bar->phys_addr, as_type);
+> +	ret = dw_pcie_ep_inbound_atu(ep, func_no, type, epf_bar->phys_addr, bar);
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index bd575ad32bc4..330575182712 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -421,10 +421,9 @@ static void dw_pcie_writel_ib_unroll(struct dw_pcie *pci, u32 index, u32 reg,
+>  }
+>  
+>  static int dw_pcie_prog_inbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
+> -					   int index, int bar, u64 cpu_addr,
+> -					   enum dw_pcie_as_type as_type)
+> +					   int index, int type,
+> +					   u64 cpu_addr, u8 bar)
+>  {
+> -	int type;
+>  	u32 retries, val;
+>  
+>  	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_LOWER_TARGET,
+> @@ -432,17 +431,6 @@ static int dw_pcie_prog_inbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
+>  	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_UPPER_TARGET,
+>  				 upper_32_bits(cpu_addr));
+>  
+> -	switch (as_type) {
+> -	case DW_PCIE_AS_MEM:
+> -		type = PCIE_ATU_TYPE_MEM;
+> -		break;
+> -	case DW_PCIE_AS_IO:
+> -		type = PCIE_ATU_TYPE_IO;
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> -	}
+> -
+>  	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL1, type |
+>  				 PCIE_ATU_FUNC_NUM(func_no));
+>  	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
+> @@ -468,32 +456,19 @@ static int dw_pcie_prog_inbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
+>  }
+>  
+>  int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> -			     int bar, u64 cpu_addr,
+> -			     enum dw_pcie_as_type as_type)
+> +			     int type, u64 cpu_addr, u8 bar)
+>  {
+> -	int type;
+>  	u32 retries, val;
+>  
+>  	if (pci->iatu_unroll_enabled)
+> -		return dw_pcie_prog_inbound_atu_unroll(pci, func_no, index, bar,
+> -						       cpu_addr, as_type);
+> +		return dw_pcie_prog_inbound_atu_unroll(pci, func_no, index, type,
+> +						       cpu_addr, bar);
+>  
+>  	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, PCIE_ATU_REGION_INBOUND |
+>  			   index);
+>  	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET, lower_32_bits(cpu_addr));
+>  	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_TARGET, upper_32_bits(cpu_addr));
+>  
+> -	switch (as_type) {
+> -	case DW_PCIE_AS_MEM:
+> -		type = PCIE_ATU_TYPE_MEM;
+> -		break;
+> -	case DW_PCIE_AS_IO:
+> -		type = PCIE_ATU_TYPE_IO;
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> -	}
+> -
+>  	dw_pcie_writel_dbi(pci, PCIE_ATU_CR1, type |
+>  			   PCIE_ATU_FUNC_NUM(func_no));
+>  	dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, PCIE_ATU_ENABLE |
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 7f1c00fa084d..c63ace3c3f25 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -228,12 +228,6 @@ struct dw_pcie_rp {
+>  	DECLARE_BITMAP(msi_irq_in_use, MAX_MSI_IRQS);
+>  };
+>  
+> -enum dw_pcie_as_type {
+> -	DW_PCIE_AS_UNKNOWN,
+> -	DW_PCIE_AS_MEM,
+> -	DW_PCIE_AS_IO,
+> -};
+> -
+>  struct dw_pcie_ep_ops {
+>  	void	(*ep_init)(struct dw_pcie_ep *ep);
+>  	int	(*raise_irq)(struct dw_pcie_ep *ep, u8 func_no,
+> @@ -331,8 +325,7 @@ void dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+>  				  int type, u64 cpu_addr, u64 pci_addr,
+>  				  u64 size);
+>  int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> -			     int bar, u64 cpu_addr,
+> -			     enum dw_pcie_as_type as_type);
+> +			     int type, u64 cpu_addr, u8 bar);
+>  void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
+>  			 enum dw_pcie_region_type type);
+>  void dw_pcie_setup(struct dw_pcie *pci);
+> -- 
+> 2.35.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்

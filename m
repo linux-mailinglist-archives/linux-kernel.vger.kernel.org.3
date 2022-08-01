@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C2C5869C7
+	by mail.lfdr.de (Postfix) with ESMTP id 892BC5869C6
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiHAMHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S233544AbiHAMGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiHAMGI (ORCPT
+        with ESMTP id S233782AbiHAMGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:06:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2995C94C;
-        Mon,  1 Aug 2022 04:55:08 -0700 (PDT)
+        Mon, 1 Aug 2022 08:06:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43210C8;
+        Mon,  1 Aug 2022 04:55:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D898B8117D;
-        Mon,  1 Aug 2022 11:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB0EC433C1;
-        Mon,  1 Aug 2022 11:55:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66533612E9;
+        Mon,  1 Aug 2022 11:55:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D682C433D6;
+        Mon,  1 Aug 2022 11:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354905;
-        bh=ovaRUObMAvZXzLI3pFsi8aRPVpgULcDH1zTnBrKal/Q=;
+        s=korg; t=1659354907;
+        bh=c6jwXhG8ZaugPYMKXI6+L6tNkj+voJ6779qrSNNKXZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UOWcQD83Yk3LYxSfqH/nNnKwW4eTw3quYuKaAT6l6m1GFM4tSHqxrf5O1/3f3HM9a
-         uqJr5HpSOE0X5qvFigMHM0mw1pWUJLQp6F6bnvIlf4NXlRaF1puE4U+84yWN6Saxbr
-         gJJyb1RSS+dbWYegieACDtfcLbAyYcxWohiB6fq0=
+        b=xNg+Xj3+mAJdN/7kO2Sq3lMExkVVJjY/VaK5ein6htluOKiRZAR8Rwq3UYh1qKmSu
+         TmI/f51jQFsHVExX68Q6q6xA8Z1X3EkGcwjefdPkVU31i/HE5O+TEdI3ztI73SRl4S
+         5cJK04MbcwnpfaKfOT8evrAjmlF7RpxuprlU4GKQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Nicolas Pitre <nico@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5.15 62/69] ARM: crypto: comment out gcc warning that breaks clang builds
-Date:   Mon,  1 Aug 2022 13:47:26 +0200
-Message-Id: <20220801114136.985467005@linuxfoundation.org>
+        stable@vger.kernel.org, Ralph Campbell <rcampbell@nvidia.com>,
+        Felix Kuehling <felix.kuehling@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 63/69] mm/hmm: fault non-owner device private entries
+Date:   Mon,  1 Aug 2022 13:47:27 +0200
+Message-Id: <20220801114137.017061618@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
 References: <20220801114134.468284027@linuxfoundation.org>
@@ -57,38 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Ralph Campbell <rcampbell@nvidia.com>
 
-The gcc build warning prevents all clang-built kernels from working
-properly, so comment it out to fix the build.
+commit 8a295dbbaf7292c582a40ce469c326f472d51f66 upstream.
 
-This is a -stable kernel only patch for now, it will be resolved
-differently in mainline releases in the future.
+If hmm_range_fault() is called with the HMM_PFN_REQ_FAULT flag and a
+device private PTE is found, the hmm_range::dev_private_owner page is used
+to determine if the device private page should not be faulted in.
+However, if the device private page is not owned by the caller,
+hmm_range_fault() returns an error instead of calling migrate_to_ram() to
+fault in the page.
 
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: "Justin M. Forbes" <jforbes@fedoraproject.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Nicolas Pitre <nico@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
+For example, if a page is migrated to GPU private memory and a RDMA fault
+capable NIC tries to read the migrated page, without this patch it will
+get an error.  With this patch, the page will be migrated back to system
+memory and the NIC will be able to read the data.
+
+Link: https://lkml.kernel.org/r/20220727000837.4128709-2-rcampbell@nvidia.com
+Link: https://lkml.kernel.org/r/20220725183615.4118795-2-rcampbell@nvidia.com
+Fixes: 08ddddda667b ("mm/hmm: check the device private page owner in hmm_range_fault()")
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+Reported-by: Felix Kuehling <felix.kuehling@amd.com>
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
+Cc: Philip Yang <Philip.Yang@amd.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/lib/xor-neon.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ mm/hmm.c |   19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
---- a/arch/arm/lib/xor-neon.c
-+++ b/arch/arm/lib/xor-neon.c
-@@ -26,8 +26,9 @@ MODULE_LICENSE("GPL");
-  * While older versions of GCC do not generate incorrect code, they fail to
-  * recognize the parallel nature of these functions, and emit plain ARM code,
-  * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-+ *
-+ * #warning This code requires at least version 4.6 of GCC
-  */
--#warning This code requires at least version 4.6 of GCC
- #endif
+--- a/mm/hmm.c
++++ b/mm/hmm.c
+@@ -212,14 +212,6 @@ int hmm_vma_handle_pmd(struct mm_walk *w
+ 		unsigned long end, unsigned long hmm_pfns[], pmd_t pmd);
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
  
- #pragma GCC diagnostic ignored "-Wunused-variable"
+-static inline bool hmm_is_device_private_entry(struct hmm_range *range,
+-		swp_entry_t entry)
+-{
+-	return is_device_private_entry(entry) &&
+-		pfn_swap_entry_to_page(entry)->pgmap->owner ==
+-		range->dev_private_owner;
+-}
+-
+ static inline unsigned long pte_to_hmm_pfn_flags(struct hmm_range *range,
+ 						 pte_t pte)
+ {
+@@ -252,10 +244,12 @@ static int hmm_vma_handle_pte(struct mm_
+ 		swp_entry_t entry = pte_to_swp_entry(pte);
+ 
+ 		/*
+-		 * Never fault in device private pages, but just report
+-		 * the PFN even if not present.
++		 * Don't fault in device private pages owned by the caller,
++		 * just report the PFN.
+ 		 */
+-		if (hmm_is_device_private_entry(range, entry)) {
++		if (is_device_private_entry(entry) &&
++		    pfn_swap_entry_to_page(entry)->pgmap->owner ==
++		    range->dev_private_owner) {
+ 			cpu_flags = HMM_PFN_VALID;
+ 			if (is_writable_device_private_entry(entry))
+ 				cpu_flags |= HMM_PFN_WRITE;
+@@ -273,6 +267,9 @@ static int hmm_vma_handle_pte(struct mm_
+ 		if (!non_swap_entry(entry))
+ 			goto fault;
+ 
++		if (is_device_private_entry(entry))
++			goto fault;
++
+ 		if (is_device_exclusive_entry(entry))
+ 			goto fault;
+ 
 
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862DA5869F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 557F85869FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiHAMJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S233932AbiHAMJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbiHAMJI (ORCPT
+        with ESMTP id S233876AbiHAMJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:09:08 -0400
+        Mon, 1 Aug 2022 08:09:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEB3474D7;
-        Mon,  1 Aug 2022 04:56:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919AD474DD;
+        Mon,  1 Aug 2022 04:56:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 864ECB81163;
-        Mon,  1 Aug 2022 11:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D871BC433D6;
-        Mon,  1 Aug 2022 11:56:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C2D1B81163;
+        Mon,  1 Aug 2022 11:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B36DC433C1;
+        Mon,  1 Aug 2022 11:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354967;
-        bh=iqE2JW/78bOCVNZntrMXW5Fn3YTkZZzUUxcreeokXRs=;
+        s=korg; t=1659354969;
+        bh=IsG/U4fQGUPODCf0APL5nFn0a24AgCa9PiGN+MZTaxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NN8il6tEtqmCiBkNnY6M9D/JOo33cqcHGIZ/UOKAoAOC3YelDmI+4JT2tIOJgfaSg
-         duurPFqPCeKBuEC06QmMYYF7AcT8HnvpdAQDnaApfS3+FT53FLkBnqkJ1vRHlIiFHs
-         Cb3u49Uum7KtTfOVrkx3ZQR3+4XdpuRn859ucojk=
+        b=aJF3C9bXFocTdWeNBCnzskm5NX4HvqlmysbYN94MJrSl2TMGzRc0EpygopNUClZXl
+         7oRsbxAyyXeOvgVvqSFY5M395Yg/cqkrMb/uwyEeD8faWenVml6L42/uv1kmN129pn
+         vcmiurik9eTVaG54IZeDMkAp+5ihT9yKDwdQMN6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.18 15/88] intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
-Date:   Mon,  1 Aug 2022 13:46:29 +0200
-Message-Id: <20220801114138.753846490@linuxfoundation.org>
+        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.18 16/88] nouveau/svm: Fix to migrate all requested pages
+Date:   Mon,  1 Aug 2022 13:46:30 +0200
+Message-Id: <20220801114138.794214738@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
 References: <20220801114138.041018499@linuxfoundation.org>
@@ -53,53 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Waiman Long <longman@redhat.com>
+From: Alistair Popple <apopple@nvidia.com>
 
-commit d295ad34f236c3518634fb6403d4c0160456e470 upstream.
+commit 66cee9097e2b74ff3c8cc040ce5717c521a0c3fa upstream.
 
-Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-uses raw_local_irq_enable/local_irq_disable() around call to
-__intel_idle() in intel_idle_irq().
+Users may request that pages from an OpenCL SVM allocation be migrated
+to the GPU with clEnqueueSVMMigrateMem(). In Nouveau this will call into
+nouveau_dmem_migrate_vma() to do the migration. If the total range to be
+migrated exceeds SG_MAX_SINGLE_ALLOC the pages will be migrated in
+chunks of size SG_MAX_SINGLE_ALLOC. However a typo in updating the
+starting address means that only the first chunk will get migrated.
 
-With interrupt enabled, timer tick interrupt can happen and a
-subsequently call to __do_softirq() may change the lockdep hardirqs state
-of a debug kernel back to 'on'. This will result in a mismatch between
-the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
-a number of false positive "WARNING: suspicious RCU usage" splats.
+Fix the calculation so that the entire range will get migrated if
+possible.
 
-Fix that by using local_irq_disable() to disable interrupt in
-intel_idle_irq().
-
-Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Fixes: e3d8b0890469 ("drm/nouveau/svm: map pages after migration")
+Reviewed-by: Ralph Campbell <rcampbell@nvidia.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220720062745.960701-1-apopple@nvidia.com
+Cc: <stable@vger.kernel.org> # v5.8+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/idle/intel_idle.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/nouveau/nouveau_dmem.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index f5c6802aa6c3..907700d1e78e 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+--- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
++++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+@@ -680,7 +680,11 @@ nouveau_dmem_migrate_vma(struct nouveau_
+ 		goto out_free_dma;
  
- 	raw_local_irq_enable();
- 	ret = __intel_idle(dev, drv, index);
--	raw_local_irq_disable();
+ 	for (i = 0; i < npages; i += max) {
+-		args.end = start + (max << PAGE_SHIFT);
++		if (args.start + (max << PAGE_SHIFT) > end)
++			args.end = end;
++		else
++			args.end = args.start + (max << PAGE_SHIFT);
 +
-+	/*
-+	 * The lockdep hardirqs state may be changed to 'on' with timer
-+	 * tick interrupt followed by __do_softirq(). Use local_irq_disable()
-+	 * to keep the hardirqs state correct.
-+	 */
-+	local_irq_disable();
- 
- 	return ret;
- }
--- 
-2.37.1
-
+ 		ret = migrate_vma_setup(&args);
+ 		if (ret)
+ 			goto out_free_pfns;
 
 

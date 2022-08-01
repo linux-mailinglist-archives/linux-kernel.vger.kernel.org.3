@@ -2,139 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D389586B03
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC7C586B06
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiHAMmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        id S230362AbiHAMnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234841AbiHAMmT (ORCPT
+        with ESMTP id S234786AbiHAMmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:42:19 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919B2B1E1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:20:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ss3so19938656ejc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hKODFjWKz18z//+0bYIp+DNibtoqLeqcY5uwUnn/wX8=;
-        b=O9qyvyo1A15bIG2D4Q6YtOGekPzpr15IaV7tjs8+IuxT5Fb1erc4U3WXQnbwIm6guW
-         3JBREcLr3QxGSAGL/M5WZxQ/joqw/dnpZOyKjgf+dnb+yUiS3H/01H2C94ZQzItpeW5g
-         vL8QBmcRtcdvTBmHM/wu0YaXeP65LvQSVjjbM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hKODFjWKz18z//+0bYIp+DNibtoqLeqcY5uwUnn/wX8=;
-        b=dNoHhxr55KK8tdPfHNYwvEruxSkscSED6sDlkCWoJg1rnZQRRuROQT3G7INHBdD7/O
-         vqdzfC2BH6qzf/P2a5hjPaf4nuhHSMhoypHB/H+kYFYRLJEiMBPKrEH+7nDTOENBnX0i
-         Vi8qUO8UREyjB9eW/Ah97vD3P1HIV9gM7pMIEwbmHqHT+BZpsfJK/pgIRitbqIkTjK67
-         3+dgX5R7Aq5K9hE2zUHy/RKvAZYsQ4n9BvC2idiPQrV4xcsRSxYRYRRnzQ4Hb3PU10S2
-         HPqMitOENjwSzl8zXtBuTDqjJSKZzO17QK5JRHP9M3HNJCmdR3htOVJrhmqD6EFPAiWY
-         zVwA==
-X-Gm-Message-State: AJIora8IU5Mpb+swu/8Zu/D2jYWgeyxTee0BP18YP2jKl++OtFY9kHqk
-        udN6YAyzw0ZtV0Y3ILE1H/H4+UjG4NiD/2gCiT55Bg==
-X-Google-Smtp-Source: AGRyM1u5heZFAPEHD8eBUI8/c302XJxQSVoi2SW0DyFizv5U/QC+DVZDbgBZl8aylVPe5gaJudxteft3RHjrHSebHWY=
-X-Received: by 2002:a17:907:2855:b0:72b:700e:21eb with SMTP id
- el21-20020a170907285500b0072b700e21ebmr12643849ejc.270.1659356440144; Mon, 01
- Aug 2022 05:20:40 -0700 (PDT)
+        Mon, 1 Aug 2022 08:42:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A734B493;
+        Mon,  1 Aug 2022 05:23:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D59F0CE13B6;
+        Mon,  1 Aug 2022 12:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98276C433D6;
+        Mon,  1 Aug 2022 12:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659356598;
+        bh=DxjdDw3En4qFuOqWhLneEyFYNcSQm9VdlV/1jaOa144=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZEFLiqHito8NFeCy4MfSdZ3niQlWcswl0Xo97Tt5+of1YzYx64Pv6IvHK1vu8VHrs
+         kWXvHbwz2C13qwCRhkwed8pbuYApNKXB2HyC3NCviT5tFoLVhel6MBPd1CL4yo2ISZ
+         Vmmb/Apn+scKkPGPh74k8JySvvgiSI2cHPuU+ZrD5Ocy+0oye3Ax22+ys57+kNmcDK
+         qHMyCbGDFdcAPRdhHyoPWVLhXscTZRaH6lHwAN0AsRMLVKdtTs2Xec+LuyagmOILen
+         cxA5O8asGzHsRaL9rgzA9Rh2rL/EzRKIvDqzRhL4C2CVeKa/05Mr+q2CkCsPjRv0C/
+         MN6RXRGavShfQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1E4C440736; Mon,  1 Aug 2022 09:23:15 -0300 (-03)
+Date:   Mon, 1 Aug 2022 09:23:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v3 3/3] perf test: Add user space counter reading tests
+Message-ID: <YufFs0yZvUc+9wbp@kernel.org>
+References: <20220719223946.176299-1-irogers@google.com>
+ <20220719223946.176299-4-irogers@google.com>
 MIME-Version: 1.0
-References: <000000000000bdee330594070441@google.com> <000000000000b901a205e51b4f46@google.com>
-In-Reply-To: <000000000000b901a205e51b4f46@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 1 Aug 2022 14:20:29 +0200
-Message-ID: <CAJfpegvAPDA-kqCZ8OAqScwfgSoyh5RNQu3rg=LBh6+dFh0hEw@mail.gmail.com>
-Subject: Re: [syzbot] memory leak in cap_inode_getsecurity
-To:     syzbot <syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marka@mediation.com, phind.uet@gmail.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: multipart/mixed; boundary="0000000000002beb1f05e52d073f"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719223946.176299-4-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002beb1f05e52d073f
-Content-Type: text/plain; charset="UTF-8"
+Em Tue, Jul 19, 2022 at 03:39:46PM -0700, Ian Rogers escreveu:
+> These tests are based on test_stat_user_read in
+> tools/lib/perf/tests/test-evsel.c. The tests are modified to skip if
+> perf_event_open fails or rdpmc isn't supported.
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-master
+Thanks, tested and applied.
 
-On Sun, 31 Jul 2022 at 17:13, syzbot
-<syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com> wrote:
->
-> syzbot has found a reproducer for the following issue on:
->
-> HEAD commit:    6a010258447d Merge tag 'for-linus' of git://git.armlinux.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15883fee080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2a1dcc1942e30704
-> dashboard link: https://syzkaller.appspot.com/bug?extid=942d5390db2d9624ced8
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1568846a080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f5e536080000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com
->
-> executing program
-> BUG: memory leak
-> unreferenced object 0xffff88810f0ac060 (size 32):
->   comm "syz-executor240", pid 3622, jiffies 4294961303 (age 14.040s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff814c6ecd>] __do_krealloc mm/slab_common.c:1185 [inline]
->     [<ffffffff814c6ecd>] krealloc+0x4d/0xb0 mm/slab_common.c:1218
->     [<ffffffff8162625c>] vfs_getxattr_alloc+0x13c/0x1c0 fs/xattr.c:379
->     [<ffffffff822374b2>] cap_inode_getsecurity+0xb2/0x500 security/commoncap.c:400
->     [<ffffffff8223d88c>] security_inode_getsecurity+0x7c/0xb0 security/security.c:1441
->     [<ffffffff81625a0a>] xattr_getsecurity fs/xattr.c:327 [inline]
->     [<ffffffff81625a0a>] vfs_getxattr+0x22a/0x290 fs/xattr.c:423
->     [<ffffffff81c0ab02>] ovl_xattr_get+0x62/0xa0 fs/overlayfs/inode.c:404
->     [<ffffffff81624742>] __vfs_getxattr+0x72/0xa0 fs/xattr.c:401
->     [<ffffffff82236f52>] cap_inode_need_killpriv+0x22/0x40 security/commoncap.c:301
->     [<ffffffff8223d773>] security_inode_need_killpriv+0x23/0x60 security/security.c:1419
->     [<ffffffff8161074e>] dentry_needs_remove_privs fs/inode.c:1992 [inline]
->     [<ffffffff8161074e>] dentry_needs_remove_privs+0x4e/0xa0 fs/inode.c:1982
->     [<ffffffff815cfead>] do_truncate+0x7d/0x130 fs/open.c:57
->     [<ffffffff815d0169>] vfs_truncate+0x209/0x240 fs/open.c:111
->     [<ffffffff815d0268>] do_sys_truncate.part.0+0xc8/0xe0 fs/open.c:134
->     [<ffffffff815d0303>] do_sys_truncate fs/open.c:128 [inline]
->     [<ffffffff815d0303>] __do_sys_truncate fs/open.c:146 [inline]
->     [<ffffffff815d0303>] __se_sys_truncate fs/open.c:144 [inline]
->     [<ffffffff815d0303>] __x64_sys_truncate+0x33/0x50 fs/open.c:144
->     [<ffffffff845b1955>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->     [<ffffffff845b1955>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->     [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
->
+- Arnaldo
 
---0000000000002beb1f05e52d073f
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="vfs_getxattr_alloc-dont-allocate-buf-on-failure.patch"
-Content-Disposition: attachment; 
-	filename="vfs_getxattr_alloc-dont-allocate-buf-on-failure.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l6apyd3r0>
-X-Attachment-Id: f_l6apyd3r0
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/mmap-basic.c | 127 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 126 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
+> index 30bbe144648a..dfb6173b2a82 100644
+> --- a/tools/perf/tests/mmap-basic.c
+> +++ b/tools/perf/tests/mmap-basic.c
+> @@ -170,14 +170,139 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
+>  	return err;
+>  }
+>  
+> +static int test_stat_user_read(int event)
+> +{
+> +	struct perf_counts_values counts = { .val = 0 };
+> +	struct perf_thread_map *threads;
+> +	struct perf_evsel *evsel;
+> +	struct perf_event_mmap_page *pc;
+> +	struct perf_event_attr attr = {
+> +		.type	= PERF_TYPE_HARDWARE,
+> +		.config	= event,
+> +#ifdef __aarch64__
+> +		.config1 = 0x2,		/* Request user access */
+> +#endif
+> +	};
+> +	int err, i, ret = TEST_FAIL;
+> +	bool opened = false, mapped = false;
+> +
+> +	threads = perf_thread_map__new_dummy();
+> +	TEST_ASSERT_VAL("failed to create threads", threads);
+> +
+> +	perf_thread_map__set_pid(threads, 0, 0);
+> +
+> +	evsel = perf_evsel__new(&attr);
+> +	TEST_ASSERT_VAL("failed to create evsel", evsel);
+> +
+> +	err = perf_evsel__open(evsel, NULL, threads);
+> +	if (err) {
+> +		pr_err("failed to open evsel: %s\n", strerror(-err));
+> +		ret = TEST_SKIP;
+> +		goto out;
+> +	}
+> +	opened = true;
+> +
+> +	err = perf_evsel__mmap(evsel, 0);
+> +	if (err) {
+> +		pr_err("failed to mmap evsel: %s\n", strerror(-err));
+> +		goto out;
+> +	}
+> +	mapped = true;
+> +
+> +	pc = perf_evsel__mmap_base(evsel, 0, 0);
+> +	if (!pc) {
+> +		pr_err("failed to get mmapped address\n");
+> +		goto out;
+> +	}
+> +
+> +	if (!pc->cap_user_rdpmc || !pc->index) {
+> +		pr_err("userspace counter access not %s\n",
+> +			!pc->cap_user_rdpmc ? "supported" : "enabled");
+> +		ret = TEST_SKIP;
+> +		goto out;
+> +	}
+> +	if (pc->pmc_width < 32) {
+> +		pr_err("userspace counter width not set (%d)\n", pc->pmc_width);
+> +		goto out;
+> +	}
+> +
+> +	perf_evsel__read(evsel, 0, 0, &counts);
+> +	if (counts.val == 0) {
+> +		pr_err("failed to read value for evsel\n");
+> +		goto out;
+> +	}
+> +
+> +	for (i = 0; i < 5; i++) {
+> +		volatile int count = 0x10000 << i;
+> +		__u64 start, end, last = 0;
+> +
+> +		pr_debug("\tloop = %u, ", count);
+> +
+> +		perf_evsel__read(evsel, 0, 0, &counts);
+> +		start = counts.val;
+> +
+> +		while (count--) ;
+> +
+> +		perf_evsel__read(evsel, 0, 0, &counts);
+> +		end = counts.val;
+> +
+> +		if ((end - start) < last) {
+> +			pr_err("invalid counter data: end=%llu start=%llu last= %llu\n",
+> +				end, start, last);
+> +			goto out;
+> +		}
+> +		last = end - start;
+> +		pr_debug("count = %llu\n", end - start);
+> +	}
+> +	ret = TEST_OK;
+> +
+> +out:
+> +	if (mapped)
+> +		perf_evsel__munmap(evsel);
+> +	if (opened)
+> +		perf_evsel__close(evsel);
+> +	perf_evsel__delete(evsel);
+> +
+> +	perf_thread_map__put(threads);
+> +	return ret;
+> +}
+> +
+> +static int test__mmap_user_read_instr(struct test_suite *test __maybe_unused,
+> +				      int subtest __maybe_unused)
+> +{
+> +	return test_stat_user_read(PERF_COUNT_HW_INSTRUCTIONS);
+> +}
+> +
+> +static int test__mmap_user_read_cycles(struct test_suite *test __maybe_unused,
+> +				       int subtest __maybe_unused)
+> +{
+> +	return test_stat_user_read(PERF_COUNT_HW_CPU_CYCLES);
+> +}
+> +
+>  static struct test_case tests__basic_mmap[] = {
+>  	TEST_CASE_REASON("Read samples using the mmap interface",
+>  			 basic_mmap,
+>  			 "permissions"),
+> +	TEST_CASE_REASON("User space counter reading of instructions",
+> +			 mmap_user_read_instr,
+> +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+> +			 "permissions"
+> +#else
+> +			 "unsupported"
+> +#endif
+> +		),
+> +	TEST_CASE_REASON("User space counter reading of cycles",
+> +			 mmap_user_read_cycles,
+> +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+> +			 "permissions"
+> +#else
+> +			 "unsupported"
+> +#endif
+> +		),
+>  	{	.name = NULL, }
+>  };
+>  
+>  struct test_suite suite__basic_mmap = {
+> -	.desc = "Read samples using the mmap interface",
+> +	.desc = "mmap interface tests",
+>  	.test_cases = tests__basic_mmap,
+>  };
+> -- 
+> 2.37.0.170.g444d1eabd0-goog
 
-LS0tCiBmcy94YXR0ci5jIHwgICAgNSArKysrLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
-cygrKSwgMSBkZWxldGlvbigtKQoKLS0tIGEvZnMveGF0dHIuYworKysgYi9mcy94YXR0ci5jCkBA
-IC0zODMsNyArMzgzLDEwIEBAIHZmc19nZXR4YXR0cl9hbGxvYyhzdHJ1Y3QgdXNlcl9uYW1lc3Bh
-Y2UKIAl9CiAKIAllcnJvciA9IGhhbmRsZXItPmdldChoYW5kbGVyLCBkZW50cnksIGlub2RlLCBu
-YW1lLCB2YWx1ZSwgZXJyb3IpOwotCSp4YXR0cl92YWx1ZSA9IHZhbHVlOworCWlmIChlcnJvciA8
-IDAgJiYgdmFsdWUgIT0gKnhhdHRyX3ZhbHVlKQorCQlrZnJlZSh2YWx1ZSk7CisJZWxzZQorCQkq
-eGF0dHJfdmFsdWUgPSB2YWx1ZTsKIAlyZXR1cm4gZXJyb3I7CiB9CiAK
---0000000000002beb1f05e52d073f--
+-- 
+
+- Arnaldo

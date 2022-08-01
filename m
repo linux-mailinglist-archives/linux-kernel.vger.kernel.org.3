@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BED5870A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4431C5870B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiHAS6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S232503AbiHATC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbiHAS6o (ORCPT
+        with ESMTP id S230258AbiHATC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:58:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EBA26568
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 11:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659380324; x=1690916324;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q9OfXtbNXN0omVmu1roF+hahKAFgpQhJ7fggdE8Xz5g=;
-  b=n3/GnbQOTsXaXYWs4nfF/cE8jHSjYl/w+wKkOR3VGkQcZ25PKmcRkN9F
-   9FtpeHgvPpcsh6BblghXeDCw4Z4/ubN3hWPiMrSDUNukldcbEhsygE6CF
-   dTNLA/HfKbUSP7tqb2K4+I1syEz0fMleuUA2W9jEn2VAxGomLaBUGDamt
-   Ejrc4XLqxmEtuRjjcS3k7H94W53X7bxkFXMD7upT0J1iYSuKicg86PjB8
-   QI2WQaJfxNI3knE5y/vpVnnkXfISuPvAVE/nSSa2NbPOlaH1t2E4t5SYK
-   meKSu3hXM46nzynl2xyUIh5n5pqy/s+wsz4SBGiTDx8TDFmMklURgovK4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="289235043"
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="289235043"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 11:58:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="630366487"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Aug 2022 11:58:42 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIack-000FEN-0o;
-        Mon, 01 Aug 2022 18:58:42 +0000
-Date:   Tue, 2 Aug 2022 02:58:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol
- 'sa1100dog_driver' was not declared. Should it be static?
-Message-ID: <202208020222.fEWtlI3i-lkp@intel.com>
+        Mon, 1 Aug 2022 15:02:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567251FCFC;
+        Mon,  1 Aug 2022 12:02:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7D0761172;
+        Mon,  1 Aug 2022 19:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D54EC433D6;
+        Mon,  1 Aug 2022 19:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659380545;
+        bh=3ujAZeKEOLhx37OJc1LDzbpYlVYHE67f9O0jS+7wG8I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HsP4r3Ln3vt2goo9zcUkJ1vASCI45SDeemX3/vbk38fhAoTrLfXCNq/I0ldce7qiQ
+         NNBMzZCZIJjiDpczUoyA9jm9er1MeIzhPV0qCm1raO8I26cFQOp3umyzOVVifa/5tf
+         0jynWXe/GsTjv4e3PaQdp0g4P2SdnwM0ZZu5PGL5Fud4Pzfacen07zic9g9XDzjjlX
+         OUbMPVNcBq1gkkb1InM/2KdkrU73OLzRpENBk2ZLDXFOp0aQPEPryO2cBL6RQRxNZn
+         DiyjhlMyv/qv7cb98vVD7w9Q3syzXQkoCpLrqJkwKHiEnpHw9UyxPFWB1tZZzvV52p
+         77ALmPr2CHhuA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mario Limonciello <mario.limonciello@amd.com>, madcatx@atlas.cz,
+        jwrdegoede@fedoraproject.org, Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-gpio@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 01/10] pinctrl: Don't allow PINCTRL_AMD to be a module
+Date:   Mon,  1 Aug 2022 15:02:13 -0400
+Message-Id: <20220801190222.3818378-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0cec3f24a7cedc726f8790d693aaff2c535dc4ce
-commit: e86bd43bcfc579cf8935c1913e92cb76b4ba81c2 watchdog: sa1100: use platform device registration
-date:   3 months ago
-config: arm-randconfig-s051-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020222.fEWtlI3i-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e86bd43bcfc579cf8935c1913e92cb76b4ba81c2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e86bd43bcfc579cf8935c1913e92cb76b4ba81c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/watchdog/
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[ Upstream commit 41ef3c1a6bb0fd4a3f81170dd17de3adbff80783 ]
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver' was not declared. Should it be static?
+It was observed that by allowing pinctrl_amd to be loaded
+later in the boot process that interrupts sent to the GPIO
+controller early in the boot are not serviced.  The kernel treats
+these as a spurious IRQ and disables the IRQ.
 
-vim +/sa1100dog_driver +241 drivers/watchdog/sa1100_wdt.c
+This problem was exacerbated because it happened on a system with
+an encrypted partition so the kernel object was not accesssible for
+an extended period of time while waiting for a passphrase.
 
-   240	
- > 241	struct platform_driver sa1100dog_driver = {
-   242		.driver.name = "sa1100_wdt",
-   243		.probe	  = sa1100dog_probe,
-   244		.remove	  = sa1100dog_remove,
-   245	};
-   246	module_platform_driver(sa1100dog_driver);
-   247	
+To avoid this situation from occurring, stop allowing pinctrl-amd
+from being built as a module and instead require it to be built-in
+or disabled.
 
+Reported-by: madcatx@atlas.cz
+Suggested-by: jwrdegoede@fedoraproject.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216230
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220713175950.964-1-mario.limonciello@amd.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/pinctrl/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index f52960d2dfbe..bff144c97e66 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -32,7 +32,7 @@ config DEBUG_PINCTRL
+ 	  Say Y here to add some extra checks and diagnostics to PINCTRL calls.
+ 
+ config PINCTRL_AMD
+-	tristate "AMD GPIO pin control"
++	bool "AMD GPIO pin control"
+ 	depends on HAS_IOMEM
+ 	depends on ACPI || COMPILE_TEST
+ 	select GPIOLIB
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

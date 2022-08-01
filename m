@@ -2,122 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA98586C49
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3E3586C4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiHANxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S232072AbiHANxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiHANxf (ORCPT
+        with ESMTP id S232067AbiHANxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:53:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFEE15FE8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659362013; x=1690898013;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0hpQu1uu9wINrJW93x5kqQTFZzRyJzoFTQayCb226CU=;
-  b=ICNp2nY0QoI9/22UFdMUzULG3jgGgFuNyTD0fbwmgINE4ivYtPvqMvjo
-   IgTpXRZ2x5DRNLzCflWzJe59c/9shC5f1HK1AlBZtTtRzHUJAllJug+h+
-   R22Fyt44QARgV0pNgM2kUtqqZOHBevXgcqoQssCXLdo6fjykYMXYWAmrX
-   qcX4grqSVF1CkjJ6LPkB8NJA9k7P48QCPD5xtt701bwK4nbi027oKADrY
-   bHG7cbDzG0jGmf+o0+agb9V248+VkCFi+4RyhtNHTdBlU6haJoCupegBM
-   SRaSjLz1R0WWkgUjB1LFIXmzjmqr5cVq4GnPVjFYxgwHFFEdA2X4UYlQT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290359786"
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="290359786"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 06:53:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="634894002"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Aug 2022 06:53:31 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIVrP-000F5r-0K;
-        Mon, 01 Aug 2022 13:53:31 +0000
-Date:   Mon, 1 Aug 2022 21:53:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/engleder/tsnep_main.c:1254:34: warning:
- 'tsnep_of_match' defined but not used
-Message-ID: <202208012104.Xlxe8EYV-lkp@intel.com>
+        Mon, 1 Aug 2022 09:53:51 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCFC32064
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:53:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso12491795pjq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xR8LvYyXz7qqwbCnjpKvvI2My3wyvnoE7ZWZRZnvwHo=;
+        b=CBvdoxOjhUXoiX1VZzdP4G0RsJ9cXBiL5FHEOgawKcLpzAb+NWONtJUjIgy4X/+KXy
+         IxbVh2fef7cs5RNBMTbMLe8kgJDcdsJF6/nnATBB9I2KI9CnWjl0ssiesza/gZeguY7o
+         UUkO8DrLmzT0QrKau3LcwsElRrGiMLIMUCgaj/K8UTddL7gs/hAl7jOVSSZBOGnub7LK
+         E0QYYAcLIXB4ykTUzYz3npL8AMpFvXt5FMvFGwevR9eQIJP3xHHhKff5sj3EUj5W7iEQ
+         jXGK1cZ7yTW7A/T5mBS6/LOdpTRQAan8bI34mTZ9oa9gbF9gARN7Jsg4O3ZzGsp02hlY
+         58nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xR8LvYyXz7qqwbCnjpKvvI2My3wyvnoE7ZWZRZnvwHo=;
+        b=5ruiq7FgDpdhhO6qgmgHloOzPIJy/mSHZhMOF1KRcXCed/jerBlpGDzfClPEwGlAGJ
+         +UPHEL6ayb4flyUlKUhVDN4TnilFf9g2rp3/EsOfsJxoy0mZhMyNbFPwCSdlqZgjpdfQ
+         UiPpLlnciYwWLL5y78m7ntuPboW/LFKTs/NVY4kjvEnw2r29cIvzYZuBrRqRIVg2+bXy
+         ynjuCCMegxXEtlXj8n9No3iVELg/LkmB0vGhF/8l8RSyQV2QVU3p/D+z6A6f+nZpfRiO
+         6QeY26jWJP7sR0zin/iiIMimeXBFHpbLNMFb2yx1dyZONz5lzMVijHmAkskM3whUUKaN
+         VP8w==
+X-Gm-Message-State: ACgBeo0wHi5kxSEN/YM0gOFzPoaiJ4cwpo+BrMj8HAVXJYWje/LLzUrn
+        n9KIbZ8f0OYuGlj0+TpDbke9
+X-Google-Smtp-Source: AA6agR6QY+fI2mZLspfLJOKR9w2tiTFOH0UN1n5DFx1CLPS0Wk0YB33lYfiNoniEVmWpcVpG6GLUaA==
+X-Received: by 2002:a17:90b:1c8e:b0:1f1:b5a9:20c3 with SMTP id oo14-20020a17090b1c8e00b001f1b5a920c3mr19656346pjb.47.1659362026423;
+        Mon, 01 Aug 2022 06:53:46 -0700 (PDT)
+Received: from thinkpad ([117.217.185.73])
+        by smtp.gmail.com with ESMTPSA id b29-20020aa7951d000000b0052d0a93f6d5sm710423pfp.116.2022.08.01.06.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 06:53:46 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 19:23:38 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 13/15] PCI: dwc: Verify in/out regions against
+ iATU constraints
+Message-ID: <20220801135338.GM93763@thinkpad>
+References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143947.8991-14-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143947.8991-14-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gerhard,
+On Fri, Jun 24, 2022 at 05:39:45PM +0300, Serge Semin wrote:
+> Since the DWC PCIe driver private data now contains the iATU inbound and
+> outbound regions constraints info like alignment, minimum and maximum
+> limits, we can use them to make the in- and outbound iATU regions setup
+> methods more strict to the ranges a callee tries to specify.  That will
+> give us the safer dw_pcie_prog_outbound_atu(),
+> dw_pcie_prog_ep_outbound_atu() and dw_pcie_prog_inbound_atu() functions.
+> 
+> First of all let's update the outbound ATU entries setup methods to
+> returning the operation status. The methods will fail either in case if
+> the range is failed to be activated or the passed region doesn't fulfill
+> iATU constraints. Secondly the passed to the
+> dw_pcie_prog_{ep_}outbound_atu() methods region-related parameters are
+> verified against the detected iATU regions constraints. In particular the
+> region limit address must not overflow the lower/upper limit CSR RW-fields
+> otherwise the specified range will be just silently clamped. That
+> verification will also protect the code from having u64 type overflow.
+> Secondly let's make sure base address (CPU-address), target address
+> (PCI-address) and size are properly aligned. Unaligned ranges will be
+> silently aligned down (addresses) and up (limit) on writing the values to
+> the corresponding registers, which in it turn may lead to unpredictable
+> results like ranges virtual overlap. Finally the CPU-address alignment
+> needs to be verified in the dw_pcie_prog_inbound_atu() method too as the
+> DWC PCIe RC/EP registers manual demands seeing the lower bits of the in-
+> and outbound iATU base address are always zeros.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-FYI, the error/warning still remains.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3d7cb6b04c3f3115719235cc6866b10326de34cd
-commit: 403f69bbdbadb2e601f725be2d00b4ccc7b61c9d tsnep: Add TSN endpoint Ethernet MAC driver
-date:   8 months ago
-config: x86_64-randconfig-r012-20220801 (https://download.01.org/0day-ci/archive/20220801/202208012104.Xlxe8EYV-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=403f69bbdbadb2e601f725be2d00b4ccc7b61c9d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 403f69bbdbadb2e601f725be2d00b4ccc7b61c9d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/engleder/
+Thanks,
+Mani
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/engleder/tsnep_main.c: In function 'tsnep_netdev_set_mac_address':
-   drivers/net/ethernet/engleder/tsnep_main.c:1007:31: warning: passing argument 1 of 'ether_addr_copy' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-    1007 |         ether_addr_copy(netdev->dev_addr, sock_addr->sa_data);
-         |                         ~~~~~~^~~~~~~~~~
-   In file included from drivers/net/ethernet/engleder/tsnep.h:11,
-                    from drivers/net/ethernet/engleder/tsnep_main.c:18:
-   include/linux/etherdevice.h:295:40: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
-     295 | static inline void ether_addr_copy(u8 *dst, const u8 *src)
-         |                                    ~~~~^~~
-   drivers/net/ethernet/engleder/tsnep_main.c: In function 'tsnep_mac_init':
-   drivers/net/ethernet/engleder/tsnep_main.c:1054:40: warning: passing argument 1 of 'ether_addr_copy' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-    1054 |         ether_addr_copy(adapter->netdev->dev_addr, adapter->mac_address);
-         |                         ~~~~~~~~~~~~~~~^~~~~~~~~~
-   In file included from drivers/net/ethernet/engleder/tsnep.h:11,
-                    from drivers/net/ethernet/engleder/tsnep_main.c:18:
-   include/linux/etherdevice.h:295:40: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
-     295 | static inline void ether_addr_copy(u8 *dst, const u8 *src)
-         |                                    ~~~~^~~
-   At top level:
->> drivers/net/ethernet/engleder/tsnep_main.c:1254:34: warning: 'tsnep_of_match' defined but not used [-Wunused-const-variable=]
-    1254 | static const struct of_device_id tsnep_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~
-
-
-vim +/tsnep_of_match +1254 drivers/net/ethernet/engleder/tsnep_main.c
-
-  1253	
-> 1254	static const struct of_device_id tsnep_of_match[] = {
-  1255		{ .compatible = "engleder,tsnep", },
-  1256	{ },
-  1257	};
-  1258	MODULE_DEVICE_TABLE(of, tsnep_of_match);
-  1259	
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+> 
+> Changelog v3:
+> - Drop outbound iATU window size alignment constraint. (@Manivannan)
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 38 +++++++++++++-------
+>  drivers/pci/controller/dwc/pcie-designware.h | 10 +++---
+>  2 files changed, 29 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 776752891d11..9c622b635fdd 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -8,6 +8,7 @@
+>   * Author: Jingoo Han <jg1.han@samsung.com>
+>   */
+>  
+> +#include <linux/align.h>
+>  #include <linux/bitops.h>
+>  #include <linux/delay.h>
+>  #include <linux/of.h>
+> @@ -308,9 +309,9 @@ static inline u32 dw_pcie_enable_ecrc(u32 val)
+>  	return val | PCIE_ATU_TD;
+>  }
+>  
+> -static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+> -					int index, int type, u64 cpu_addr,
+> -					u64 pci_addr, u64 size)
+> +static int __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+> +				       int index, int type, u64 cpu_addr,
+> +				       u64 pci_addr, u64 size)
+>  {
+>  	u32 retries, val;
+>  	u64 limit_addr;
+> @@ -320,6 +321,12 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+>  
+>  	limit_addr = cpu_addr + size - 1;
+>  
+> +	if ((limit_addr & ~pci->region_limit) != (cpu_addr & ~pci->region_limit) ||
+> +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
+> +	    !IS_ALIGNED(pci_addr, pci->region_align) || !size) {
+> +		return -EINVAL;
+> +	}
+> +
+>  	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_LOWER_BASE,
+>  			      lower_32_bits(cpu_addr));
+>  	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_UPPER_BASE,
+> @@ -353,27 +360,29 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
+>  	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
+>  		val = dw_pcie_readl_atu_ob(pci, index, PCIE_ATU_REGION_CTRL2);
+>  		if (val & PCIE_ATU_ENABLE)
+> -			return;
+> +			return 0;
+>  
+>  		mdelay(LINK_WAIT_IATU);
+>  	}
+>  
+>  	dev_err(pci->dev, "Outbound iATU is not being enabled\n");
+> +
+> +	return -ETIMEDOUT;
+>  }
+>  
+> -void dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
+> -			       u64 cpu_addr, u64 pci_addr, u64 size)
+> +int dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
+> +			      u64 cpu_addr, u64 pci_addr, u64 size)
+>  {
+> -	__dw_pcie_prog_outbound_atu(pci, 0, index, type,
+> -				    cpu_addr, pci_addr, size);
+> +	return __dw_pcie_prog_outbound_atu(pci, 0, index, type,
+> +					   cpu_addr, pci_addr, size);
+>  }
+>  
+> -void dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> -				  int type, u64 cpu_addr, u64 pci_addr,
+> -				  u64 size)
+> +int dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> +				 int type, u64 cpu_addr, u64 pci_addr,
+> +				 u64 size)
+>  {
+> -	__dw_pcie_prog_outbound_atu(pci, func_no, index, type,
+> -				    cpu_addr, pci_addr, size);
+> +	return __dw_pcie_prog_outbound_atu(pci, func_no, index, type,
+> +					   cpu_addr, pci_addr, size);
+>  }
+>  
+>  static inline u32 dw_pcie_readl_atu_ib(struct dw_pcie *pci, u32 index, u32 reg)
+> @@ -392,6 +401,9 @@ int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+>  {
+>  	u32 retries, val;
+>  
+> +	if (!IS_ALIGNED(cpu_addr, pci->region_align))
+> +		return -EINVAL;
+> +
+>  	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_TARGET,
+>  			      lower_32_bits(cpu_addr));
+>  	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_TARGET,
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 25c86771c810..60f1ddc54933 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -304,12 +304,10 @@ void dw_pcie_write_dbi2(struct dw_pcie *pci, u32 reg, size_t size, u32 val);
+>  int dw_pcie_link_up(struct dw_pcie *pci);
+>  void dw_pcie_upconfig_setup(struct dw_pcie *pci);
+>  int dw_pcie_wait_for_link(struct dw_pcie *pci);
+> -void dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index,
+> -			       int type, u64 cpu_addr, u64 pci_addr,
+> -			       u64 size);
+> -void dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> -				  int type, u64 cpu_addr, u64 pci_addr,
+> -				  u64 size);
+> +int dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
+> +			      u64 cpu_addr, u64 pci_addr, u64 size);
+> +int dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> +				 int type, u64 cpu_addr, u64 pci_addr, u64 size);
+>  int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+>  			     int type, u64 cpu_addr, u8 bar);
+>  void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index);
+> -- 
+> 2.35.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+மணிவண்ணன் சதாசிவம்

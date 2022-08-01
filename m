@@ -2,128 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4426C58663F
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0E8586640
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiHAIUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S230157AbiHAIUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiHAIUh (ORCPT
+        with ESMTP id S230149AbiHAIUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:20:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92C08193CF
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659342035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pJH07x8QvE4r/0Wcvdf2EaLzPedOQZnkWNurVPoZ0fI=;
-        b=LdlnI3b8f5bBfuAEYQ4tWKoljG+xFkR/ldTBe+Yu40sxWNZAaIVFpF/S3YhUFchxIxXDmF
-        XQDLcRDqhHiGIKcqyHETnlW4tU2iqzPs1FvbwqQlSjapLF0yZIhYFzyc/hb7niA/4iRdz4
-        ziwfyB3WwOf4MYPnCqDU8/ozrBHVWKo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-wsEDCQC2NEKteI_g3du0kQ-1; Mon, 01 Aug 2022 04:20:32 -0400
-X-MC-Unique: wsEDCQC2NEKteI_g3du0kQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9434B1C14488;
-        Mon,  1 Aug 2022 08:20:31 +0000 (UTC)
-Received: from localhost (ovpn-12-103.pek2.redhat.com [10.72.12.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 10BDE492C3B;
-        Mon,  1 Aug 2022 08:20:29 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 16:20:25 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Dave Young <dyoung@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v3 0/2] arm64: kdump: Function supplement and performance
- optimization
-Message-ID: <YueMyUqannVg7l9v@MiWiFi-R3L-srv>
-References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+        Mon, 1 Aug 2022 04:20:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 866B62FFF1;
+        Mon,  1 Aug 2022 01:20:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F3921515;
+        Mon,  1 Aug 2022 01:20:42 -0700 (PDT)
+Received: from [10.57.41.53] (unknown [10.57.41.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 773AE3F67D;
+        Mon,  1 Aug 2022 01:20:39 -0700 (PDT)
+Message-ID: <e3e123db-5321-c96e-1753-27059c729640@arm.com>
+Date:   Mon, 1 Aug 2022 09:20:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711090319.1604-1-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] perf stat: fix unexpected delay behaviour
+Content-Language: en-US
+To:     =?UTF-8?Q?Adri=c3=a1n_Herrera_Arcila?= <adrian.herrera@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, leo.yan@linaro.org, songliubraving@fb.com
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org
+References: <20220729161244.10522-1-adrian.herrera@arm.com>
+ <20220729161244.10522-2-adrian.herrera@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220729161244.10522-2-adrian.herrera@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
 
-On 07/11/22 at 05:03pm, Zhen Lei wrote:
-> v2 --> v3:
-> 1. Discard patch 3 in v2, a cleanup patch.
+
+On 29/07/2022 17:12, Adrián Herrera Arcila wrote:
+> The described --delay behaviour is to delay the enablement of events, but
+> not the execution of the command, if one is passed, which is incorrectly
+> the current behaviour.
 > 
-> v1 --> v2:
-> 1. Update the commit message of Patch 1, explicitly indicates that "crashkernel=X,high"
->    is specified but "crashkernel=Y,low" is not specified.
-> 2. Drop Patch 4-5. Currently, focus on function integrity, performance optimization
->    will be considered in later versions.
-> 3. Patch 3 is not mandatory, it's just a cleanup now, although it is a must for patch 4-5.
->    But to avoid subsequent duplication of effort, I'm glad it was accepted.
+> This patch decouples the enablement from the delay, and enables events
+> before or after launching the workload dependent on the options passed
+> by the user. This code structure is inspired by that in perf-record, and
+> tries to be consistent with it.
 > 
-> 
-> v1:
-> After the basic functions of "support reserving crashkernel above 4G on arm64
-> kdump"(see https://lkml.org/lkml/2022/5/6/428) are implemented, we still have
-> three features to be improved.
-> 1. When crashkernel=X,high is specified but crashkernel=Y,low is not specified,
->    the default crash low memory size is provided.
-> 2. For crashkernel=X without '@offset', if the low memory fails to be allocated,
->    fall back to reserve region from high memory(above DMA zones).
-> 3. If crashkernel=X,high is used, page mapping is performed only for the crash
->    high memory, and block mapping is still used for other linear address spaces.
->    Compared to the previous version:
->    (1) For crashkernel=X[@offset], the memory above 4G is not changed to block
->        mapping, leave it to the next time.
->    (2) The implementation method is modified. Now the implementation is simpler
->        and clearer.
+> Link: https://lore.kernel.org/linux-perf-users/7BFD066E-B0A8-49D4-B635-379328F0CF4C@fb.com
+> Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+> Signed-off-by: Adrián Herrera Arcila <adrian.herrera@arm.com>
+> ---
+>  tools/perf/builtin-stat.c | 56 ++++++++++++++++++++++-----------------
+>  1 file changed, 32 insertions(+), 24 deletions(-)
 
-Do you have plan to pick this series so that it can be taken into 5.20
-rc-1~3?
+Looks good to me. Fixes the counter delay issue and the code is pretty
+similar to perf record now. Although I would wait for Leo's or Song's
+comment as well because they were involved.
 
-We have back ported the basic crashkernel=high, low, support into our
-distros and have taken wide testing on arm64 servers, need this patchset
-to back port for more testing. 
-
-Thanks
-Baoquan
+Reviewed-by: James Clark <james.clark@arm.com>
 
 > 
-> Zhen Lei (2):
->   arm64: kdump: Provide default size when crashkernel=Y,low is not
->     specified
->   arm64: kdump: Support crashkernel=X fall back to reserve region above
->     DMA zones
-> 
->  .../admin-guide/kernel-parameters.txt         | 10 ++-----
->  arch/arm64/mm/init.c                          | 28 +++++++++++++++++--
->  2 files changed, 28 insertions(+), 10 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 318ffd119dad..f98c823b16dd 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -559,7 +559,7 @@ static bool handle_interval(unsigned int interval, int *times)
+>  	return false;
+>  }
+>  
+> -static int enable_counters(void)
+> +static int enable_bpf_counters(void)
+>  {
+>  	struct evsel *evsel;
+>  	int err;
+> @@ -572,28 +572,6 @@ static int enable_counters(void)
+>  		if (err)
+>  			return err;
+>  	}
+> -
+> -	if (stat_config.initial_delay < 0) {
+> -		pr_info(EVLIST_DISABLED_MSG);
+> -		return 0;
+> -	}
+> -
+> -	if (stat_config.initial_delay > 0) {
+> -		pr_info(EVLIST_DISABLED_MSG);
+> -		usleep(stat_config.initial_delay * USEC_PER_MSEC);
+> -	}
+> -
+> -	/*
+> -	 * We need to enable counters only if:
+> -	 * - we don't have tracee (attaching to task or cpu)
+> -	 * - we have initial delay configured
+> -	 */
+> -	if (!target__none(&target) || stat_config.initial_delay) {
+> -		if (!all_counters_use_bpf)
+> -			evlist__enable(evsel_list);
+> -		if (stat_config.initial_delay > 0)
+> -			pr_info(EVLIST_ENABLED_MSG);
+> -	}
+>  	return 0;
+>  }
+>  
+> @@ -966,10 +944,24 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>  			return err;
+>  	}
+>  
+> -	err = enable_counters();
+> +	err = enable_bpf_counters();
+>  	if (err)
+>  		return -1;
+>  
+> +	/*
+> +	 * Enable events manually here if perf-stat is run:
+> +	 * 1. with a target (any of --all-cpus, --cpu, --pid or --tid)
+> +	 * 2. without measurement delay (no --delay)
+> +	 * 3. without all events associated to BPF
+> +	 *
+> +	 * This is because if run with a target, events are not enabled
+> +	 * on exec if a workload is passed, and because there is no delay
+> +	 * we ensure to enable them before the workload starts
+> +	 */
+> +	if (!target__none(&target) && !stat_config.initial_delay &&
+> +	    !all_counters_use_bpf)
+> +		evlist__enable(evsel_list);
+> +
+>  	/* Exec the command, if any */
+>  	if (forks)
+>  		evlist__start_workload(evsel_list);
+> @@ -977,6 +969,22 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>  	t0 = rdclock();
+>  	clock_gettime(CLOCK_MONOTONIC, &ref_time);
+>  
+> +	/*
+> +	 * If a measurement delay was specified, start it, and if positive,
+> +	 * enable events manually after. We respect the delay even if all
+> +	 * events are associated to BPF
+> +	 */
+> +	if (stat_config.initial_delay) {
+> +		/* At this point, events are guaranteed disabled */
+> +		pr_info(EVLIST_DISABLED_MSG);
+> +		if (stat_config.initial_delay > 0) {
+> +			usleep(stat_config.initial_delay * USEC_PER_MSEC);
+> +			if (!all_counters_use_bpf)
+> +				evlist__enable(evsel_list);
+> +			pr_info(EVLIST_ENABLED_MSG);
+> +		}
+> +	}
+> +
+>  	if (forks) {
+>  		if (interval || timeout || evlist__ctlfd_initialized(evsel_list))
+>  			status = dispatch_events(forks, timeout, interval, &times);

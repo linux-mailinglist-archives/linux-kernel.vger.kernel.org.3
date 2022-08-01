@@ -2,68 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5966D586E12
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4473586E29
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbiHAPux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S232047AbiHAP6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiHAPum (ORCPT
+        with ESMTP id S231325AbiHAP6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:50:42 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6304137FB7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:50:40 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g12so10996976pfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xDVffGBJScwkOd+9hsMyXStFZyBJcuy4eeJPA0O+mYE=;
-        b=jMmbhYHIQdhHEsYbYCTMWkE+N1oR2+4UIsO935pssDIUKV24yYBYURTemf+naJm91J
-         +9BPjXvfoOiYx9oigoCYE3NmVM8Jcdx+neZJCJkl+xHlmLz7Cw3EWQ11Q2GLWVxga4Hq
-         c0kegNzqCTkBQDxScnsZzfUCJB29phKYzgaYc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xDVffGBJScwkOd+9hsMyXStFZyBJcuy4eeJPA0O+mYE=;
-        b=5cX9FDUB2CK9RTW3esyncbV7RX9jvQZE0W/mK58q7+JtwDN5v2jS3XYKPlleVlrWOI
-         xp5D+1K8jUp/q9P2HkR4i0xmUzswbtrPaiiDmHx5Z0JOEr44OWqrjAkZisseyEsEfODI
-         58Wj+BoMHo/Qor2sn8d0ZjN3IJkOBRj/+BfoS5oOLkl4yqG6ZrH/SS5CLj6bZyAKIuAX
-         tF2kk7nWVtcrJMAgri52qSu18TdSKKk6XhHgBAovoloXwy/gKGkhzuS1nyZ6XMtNJ8Po
-         Chg806rkhpu/mAEyYSjbCYgNOD81XXxlVT65Xu5Nr90Nu1dfgT/5s7khuXmDiXAvkyPM
-         0biA==
-X-Gm-Message-State: AJIora+85p+B5e1qLD1HhfiXwvb0jeOWcZa4pOd/uT18cbIy6OHZkXZE
-        4+23qCJEHKXQydNNNn6dIO83gQ==
-X-Google-Smtp-Source: AGRyM1u2007IRXIHyLfdUffsTUR4Bx46Z3b0fr1ICpvciP22E+MaQbIIln+XTvg0vFD0yi4DQA4iGQ==
-X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr13491063pgw.223.1659369039877;
-        Mon, 01 Aug 2022 08:50:39 -0700 (PDT)
-Received: from khazhy-linux.svl.corp.google.com ([2620:15c:2d4:203:8277:7816:dd6b:eadc])
-        by smtp.gmail.com with ESMTPSA id lx7-20020a17090b4b0700b001f4dd3b7d7fsm5132323pjb.9.2022.08.01.08.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 08:50:39 -0700 (PDT)
-From:   Khazhismel Kumykov <khazhy@chromium.org>
-X-Google-Original-From: Khazhismel Kumykov <khazhy@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Khazhismel Kumykov <khazhy@google.com>
-Subject: [PATCH v2] writeback: avoid use-after-free after removing device
-Date:   Mon,  1 Aug 2022 08:50:34 -0700
-Message-Id: <20220801155034.3772543-1-khazhy@google.com>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-In-Reply-To: <20220729215123.1998585-1-khazhy@google.com>
-References: <20220729215123.1998585-1-khazhy@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Mon, 1 Aug 2022 11:58:10 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 Aug 2022 08:58:06 PDT
+Received: from sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF69333416;
+        Mon,  1 Aug 2022 08:58:06 -0700 (PDT)
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id cd18dc5e;
+        Mon, 1 Aug 2022 17:51:24 +0200 (CEST)
+Date:   Mon, 1 Aug 2022 17:51:23 +0200 (CEST)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Rob Herring <robh@kernel.org>
+Cc:     sven@svenpeter.dev, marcel@holtmann.org, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, marcan@marcan.st, alyssa@rosenzweig.io,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220801153921.GC1031441-robh@kernel.org> (message from Rob
+        Herring on Mon, 1 Aug 2022 09:39:21 -0600)
+Subject: Re: [PATCH 2/5] dt-bindings: net: Add Broadcom BCM4377 family PCI
+ Bluetooth
+References: <20220801103633.27772-1-sven@svenpeter.dev>
+ <20220801103633.27772-3-sven@svenpeter.dev> <20220801153921.GC1031441-robh@kernel.org>
+Message-ID: <d3ce6343fdaaf127@bloch.sibelius.xs4all.nl>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,136 +45,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a disk is removed, bdi_unregister gets called to stop further
-writeback and wait for associated delayed work to complete. However,
-wb_inode_writeback_end() may schedule bandwidth estimation dwork after
-this has completed, which can result in the timer attempting to access
-the just freed bdi_writeback.
+> Date: Mon, 1 Aug 2022 09:39:21 -0600
+> From: Rob Herring <robh@kernel.org>
+> 
+> On Mon, Aug 01, 2022 at 12:36:30PM +0200, Sven Peter wrote:
+> > These chips are combined Wi-Fi/Bluetooth radios which expose a
+> > PCI subfunction for the Bluetooth part.
+> > They are found in Apple machines such as the x86 models with the T2
+> > chip or the arm64 models with the M1 or M2 chips.
+> > 
+> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > ---
+> >  .../bindings/net/brcm,bcm4377-bluetooth.yaml  | 77 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 78 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > new file mode 100644
+> > index 000000000000..afe6ecebd939
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > @@ -0,0 +1,77 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/brcm,bcm4377-bluetooth.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom BCM4377 family PCI Bluetooth Chips
+> > +
+> > +allOf:
+> > +  - $ref: bluetooth-controller.yaml#
+> > +
+> > +maintainers:
+> > +  - Sven Peter <sven@svenpeter.dev>
+> > +
+> > +description:
+> > +  This binding describes Broadcom BCM4377 family PCI-attached bluetooth chips
+> 
+> s/PCI/PCIe/
+> 
+> > +  usually found in Apple machines. The Wi-Fi part of the chip is described in
+> > +  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - pci14e4,5fa0 # BCM4377
+> > +      - pci14e4,5f69 # BCM4378
+> > +      - pci14e4,5f71 # BCM4387
+> > +
+> > +  reg:
+> > +    description: PCI device identifier.
+> > +
+> > +  brcm,board-type:
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    description: Board type of the Bluetooth chip. This is used to decouple
+> > +      the overall system board from the Bluetooth module and used to construct
+> > +      firmware and calibration data filenames.
+> > +      On Apple platforms, this should be the Apple module-instance codename
+> > +      prefixed by "apple,", e.g. "apple,atlantisb".
+> 
+> pattern: '^apple,.*'
+> 
+> And when there's other known vendors we can add them.
+> 
+> Really, I'm not all that crazy about this property. 'firmware-name' 
+> doesn't work? Or perhaps this should just be a more specific compatible 
+> string.
 
-Fix this by checking if the bdi_writeback is alive, similar to when
-scheduling writeback work.
+This matches the property proposed here:
 
-Since this requires wb->work_lock, and wb_inode_writeback_end() may get
-called from interrupt, switch wb->work_lock to an irqsafe lock.
+  https://patchwork.kernel.org/project/linux-wireless/patch/20220104072658.69756-2-marcan@marcan.st/
 
-Fixes: 45a2966fd641 ("writeback: fix bandwidth estimate for spiky workload")
-Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
----
- fs/fs-writeback.c   | 12 ++++++------
- mm/backing-dev.c    | 10 +++++-----
- mm/page-writeback.c |  6 +++++-
- 3 files changed, 16 insertions(+), 12 deletions(-)
+Unfortunately that series didn't make progress for other reasons...
 
-v2: made changelog a bit more verbose
+There was some significant bikeshedding in the original version of that series already:
 
-diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-index 05221366a16d..08a1993ab7fd 100644
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -134,10 +134,10 @@ static bool inode_io_list_move_locked(struct inode *inode,
- 
- static void wb_wakeup(struct bdi_writeback *wb)
- {
--	spin_lock_bh(&wb->work_lock);
-+	spin_lock_irq(&wb->work_lock);
- 	if (test_bit(WB_registered, &wb->state))
- 		mod_delayed_work(bdi_wq, &wb->dwork, 0);
--	spin_unlock_bh(&wb->work_lock);
-+	spin_unlock_irq(&wb->work_lock);
- }
- 
- static void finish_writeback_work(struct bdi_writeback *wb,
-@@ -164,7 +164,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
- 	if (work->done)
- 		atomic_inc(&work->done->cnt);
- 
--	spin_lock_bh(&wb->work_lock);
-+	spin_lock_irq(&wb->work_lock);
- 
- 	if (test_bit(WB_registered, &wb->state)) {
- 		list_add_tail(&work->list, &wb->work_list);
-@@ -172,7 +172,7 @@ static void wb_queue_work(struct bdi_writeback *wb,
- 	} else
- 		finish_writeback_work(wb, work);
- 
--	spin_unlock_bh(&wb->work_lock);
-+	spin_unlock_irq(&wb->work_lock);
- }
- 
- /**
-@@ -2082,13 +2082,13 @@ static struct wb_writeback_work *get_next_work_item(struct bdi_writeback *wb)
- {
- 	struct wb_writeback_work *work = NULL;
- 
--	spin_lock_bh(&wb->work_lock);
-+	spin_lock_irq(&wb->work_lock);
- 	if (!list_empty(&wb->work_list)) {
- 		work = list_entry(wb->work_list.next,
- 				  struct wb_writeback_work, list);
- 		list_del_init(&work->list);
- 	}
--	spin_unlock_bh(&wb->work_lock);
-+	spin_unlock_irq(&wb->work_lock);
- 	return work;
- }
- 
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index 95550b8fa7fe..de65cb1e5f76 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -260,10 +260,10 @@ void wb_wakeup_delayed(struct bdi_writeback *wb)
- 	unsigned long timeout;
- 
- 	timeout = msecs_to_jiffies(dirty_writeback_interval * 10);
--	spin_lock_bh(&wb->work_lock);
-+	spin_lock_irq(&wb->work_lock);
- 	if (test_bit(WB_registered, &wb->state))
- 		queue_delayed_work(bdi_wq, &wb->dwork, timeout);
--	spin_unlock_bh(&wb->work_lock);
-+	spin_unlock_irq(&wb->work_lock);
- }
- 
- static void wb_update_bandwidth_workfn(struct work_struct *work)
-@@ -334,12 +334,12 @@ static void cgwb_remove_from_bdi_list(struct bdi_writeback *wb);
- static void wb_shutdown(struct bdi_writeback *wb)
- {
- 	/* Make sure nobody queues further work */
--	spin_lock_bh(&wb->work_lock);
-+	spin_lock_irq(&wb->work_lock);
- 	if (!test_and_clear_bit(WB_registered, &wb->state)) {
--		spin_unlock_bh(&wb->work_lock);
-+		spin_unlock_irq(&wb->work_lock);
- 		return;
- 	}
--	spin_unlock_bh(&wb->work_lock);
-+	spin_unlock_irq(&wb->work_lock);
- 
- 	cgwb_remove_from_bdi_list(wb);
- 	/*
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 55c2776ae699..3c34db15cf70 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2867,6 +2867,7 @@ static void wb_inode_writeback_start(struct bdi_writeback *wb)
- 
- static void wb_inode_writeback_end(struct bdi_writeback *wb)
- {
-+	unsigned long flags;
- 	atomic_dec(&wb->writeback_inodes);
- 	/*
- 	 * Make sure estimate of writeback throughput gets updated after
-@@ -2875,7 +2876,10 @@ static void wb_inode_writeback_end(struct bdi_writeback *wb)
- 	 * that if multiple inodes end writeback at a similar time, they get
- 	 * batched into one bandwidth update.
- 	 */
--	queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
-+	spin_lock_irqsave(&wb->work_lock, flags);
-+	if (test_bit(WB_registered, &wb->state))
-+		queue_delayed_work(bdi_wq, &wb->bw_dwork, BANDWIDTH_INTERVAL);
-+	spin_unlock_irqrestore(&wb->work_lock, flags);
- }
- 
- bool __folio_end_writeback(struct folio *folio)
--- 
-2.37.1.455.g008518b4e5-goog
+  https://patchwork.kernel.org/project/linux-wireless/patch/20211226153624.162281-2-marcan@marcan.st/
 
+Are you sure you want to repeat that? ;)
+
+> > +
+> > +  brcm,taurus-cal-blob:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    description: A per-device calibration blob for the Bluetooth radio. This
+> > +      should be filled in by the bootloader from platform configuration
+> > +      data, if necessary, and will be uploaded to the device.
+> > +      This blob is used if the chip stepping of the Bluetooth module does not
+> > +      support beamforming.
+> > +
+> > +  brcm,taurus-bf-cal-blob:
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    description: A per-device calibration blob for the Bluetooth radio. This
+> > +      should be filled in by the bootloader from platform configuration
+> > +      data, if necessary, and will be uploaded to the device.
+> > +      This blob is used if the chip stepping of the Bluetooth module supports
+> > +      beamforming.
+> > +
+> > +  local-bd-address: true
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - local-bd-address
+> > +  - brcm,board-type
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pci0 {
+> 
+> pcie {
+> 
+> > +      #address-cells = <3>;
+> > +      #size-cells = <2>;
+> > +
+> > +      bluetooth@0,1 {
+> > +        compatible = "pci14e4,5f69";
+> > +        reg = <0x10100 0x0 0x0 0x0 0x0>;
+> 
+> reg should not have the bus number here as that is dynamic. So 0x100 for 
+> the 1st cell.
+> 
+> > +        brcm,board-type = "apple,honshu";
+> > +        /* To be filled by the bootloader */
+> > +        local-bd-address = [00 00 00 00 00 00];
+> > +      };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index a6d3bd9d2a8d..8965556bace8 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -1837,6 +1837,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+> >  F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> >  F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
+> >  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+> > +F:	Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> >  F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
+> >  F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+> >  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+> > -- 
+> > 2.25.1
+> > 
+> > 
+> 
+> 

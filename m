@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334E758727E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC592587288
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiHAUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S234071AbiHAUxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234425AbiHAUvv (ORCPT
+        with ESMTP id S234232AbiHAUxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:51:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2774BE3D;
-        Mon,  1 Aug 2022 13:51:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62399611C5;
-        Mon,  1 Aug 2022 20:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B779C433D6;
-        Mon,  1 Aug 2022 20:51:48 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 16:51:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, mhiramat@kernel.org, peterz@infradead.org,
-        mingo@kernel.org, ast@kernel.org, daniel@iogearbox.net
-Subject: Re: [PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
-Message-ID: <20220801165146.26fdeca2@gandalf.local.home>
-In-Reply-To: <Yug6bx7T4GzqUf2a@krava>
-References: <20220801033719.228248-1-chenzhongjin@huawei.com>
-        <Yug6bx7T4GzqUf2a@krava>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 1 Aug 2022 16:53:30 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0DC32452;
+        Mon,  1 Aug 2022 13:53:29 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e132so10688984pgc.5;
+        Mon, 01 Aug 2022 13:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=DrRt3rmkEQEdaQFsMHB+bUVmGYUs4qBKiZq/F5t4yF8=;
+        b=DPXa5ugFMKmBlYHqheM6/Cm121QkqcXN7HtFQM7SxU6XFGoZbVCXj5v7mm+tlA8Xgv
+         KpjRpwcAIfAbyKcUODigw3bcYi3WCx2dp5c3GvcnxMGJq1rC4zhVLNBjF8Zn2K8YRJuH
+         iwdhD4s78oz9nCtvZ3HE3g7RK2xZVvY6rxPELylwTZnAOhEzUiJvIFvSL9/VPKy2Yrpz
+         lyyKs21XViNQDL+cPZPDfm7dcBg8uaiQPS5Xj1qHUmqpDwaSXKjSjX1HTmlmfFwxYKiz
+         kvBGpwzcUThr47iaOs6x2AlujAohYuFuQbMZRF3utLVIzCHKq5r2Ev5t2cB85rkp4K9+
+         ZrKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=DrRt3rmkEQEdaQFsMHB+bUVmGYUs4qBKiZq/F5t4yF8=;
+        b=vafmFN2jDTnwzPly9cyuIn2W+dOc/XO7Ek1klLl0a1QES7sXbV6jKBF17tXJnMH2lN
+         XJxQzMPRDN3xSchv3TRTiTBnDbEZBBY56rSXByQwyg04EmYCSzTJlrylHrj6kWnqgojc
+         qaN5bjh+vZBMCA14rLztdBCniakiPmshzcrWH/Owipk1hpA4aXNOl4zhwsGV55uW4woX
+         oX3kVZ9rDoYJGVn8CPJhSaQs29vAzqbE55od1i4rpwMmJkMicecEy/tm3zwQdmtdt/fh
+         hcYHCwF7zDfo/k+ZJH2ByBWINfwtg4HichUnaWUkNJMhDhx9ELfHoy2JAYnklv2WS/BW
+         YL5A==
+X-Gm-Message-State: ACgBeo154hgw3Xdz3XcXf6nwUHIkv7i/pYj1mfxIenZ5LdBn4xGc8xyp
+        VLkKbItw4E4yIRNnAS9v4Bv5Exx+218=
+X-Google-Smtp-Source: AA6agR7GVr8r6zvwk7Ol6bNWawTHTSq6eMQTyAL5PDXZ6Warkjm3D4t8Juc7os34NcNXYEGTqHGqGw==
+X-Received: by 2002:a05:6a00:2386:b0:52d:7472:208 with SMTP id f6-20020a056a00238600b0052d74720208mr6565937pfc.8.1659387209254;
+        Mon, 01 Aug 2022 13:53:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x16-20020aa79410000000b0052d543b72cdsm3586319pfo.189.2022.08.01.13.53.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 13:53:28 -0700 (PDT)
+Message-ID: <dd216056-def1-695c-028b-47a2f45ae13c@gmail.com>
+Date:   Mon, 1 Aug 2022 13:53:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.10 00/65] 5.10.135-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220801114133.641770326@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 22:41:19 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
-
-> LGTM cc-ing Steven because it affects ftrace as well
-
-Thanks for the Cc, but I don't quite see how it affects ftrace.
-
-Unless you are just saying how it can affect kprobe_events?
-
--- Steve
-
-
+On 8/1/22 04:46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.135 release.
+> There are 65 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> jirka
+> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
+> Anything received after that time might be too late.
 > 
-> > 
-> > v1 -> v2:
-> > Check core_kernel_text and is_module_text_address rather than
-> > only kprobe_insn.
-> > Also fix title and commit message for this. See old patch at [1].
-> > ---
-> >  kernel/kprobes.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> > index f214f8c088ed..80697e5e03e4 100644
-> > --- a/kernel/kprobes.c
-> > +++ b/kernel/kprobes.c
-> > @@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
-> >  	preempt_disable();
-> >  
-> >  	/* Ensure it is not in reserved area nor out of text */
-> > -	if (!kernel_text_address((unsigned long) p->addr) ||
-> > +	if (!(core_kernel_text((unsigned long) p->addr) ||
-> > +	    is_module_text_address((unsigned long) p->addr)) ||
-> >  	    within_kprobe_blacklist((unsigned long) p->addr) ||
-> >  	    jump_label_text_reserved(p->addr, p->addr) ||
-> >  	    static_call_text_reserved(p->addr, p->addr) ||
-> > -- 
-> > 2.17.1
-> >   
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.135-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

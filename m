@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA8D586B4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CBA586B52
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiHAMtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S234921AbiHAMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiHAMtY (ORCPT
+        with ESMTP id S234910AbiHAMuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:49:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3774C103
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:42:26 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 14:42:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659357744;
+        Mon, 1 Aug 2022 08:50:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F171F558E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659357814;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sJsPGtEi3Iln+558Jldw3Iv4IN5TJ47fe8SK6ZlLY5o=;
-        b=hD2gkX1P3hPSkoAxHscnXMw9Blj33qs2rY4PFw5WWLWLQBU2eN+1e0OtjHs+NYKTJmrySW
-        9KorD0yljbYci65tOrxyQY6gE4bUgAgrreO3Mv3Z9l203EvW5LxHMQhftUQ8V5ElpWDnKP
-        g4Ol+zcejI3vAyZYVibTKxTC+iZ5IVK+wa+Ib/e1APgS2bLvdwrkZgQ/PEAAohIRInbZPQ
-        RnEiDY9o4mFurFlh8JXMHLMdJH2DKgXYvaK8xIvysRLsxaPzJz0VkiEtfKTCspuKVwvwnI
-        UP7qBD2YxcKb3j64i0ICsnxvRua6+rkCfaoVna+yV2d+1ZPgOYM/a6M9L3VDiQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659357744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sJsPGtEi3Iln+558Jldw3Iv4IN5TJ47fe8SK6ZlLY5o=;
-        b=QukwVvpQ1UUF1WTBE1R7OAo/WYfuWlvmwgV5o6jbwxQNaFNE/xC0bXWyoR0JQ3tg+HbgzP
-        jfKHSWNcMRtUQwBA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 1/2 v2] lib/vsprintf: Remove static_branch_likely() from
- __ptr_to_hashval().
-Message-ID: <YufKL+3AKhLmlAcK@linutronix.de>
-References: <20220729154716.429964-1-bigeasy@linutronix.de>
- <20220729154716.429964-2-bigeasy@linutronix.de>
- <YufDcPfth9JH6SaV@zx2c4.com>
+        bh=WS+3ThxPSCx9TTKskcZREuLQziOp6sjXVWQAmlUDQSk=;
+        b=FVCJsevcROy29U55TBRUGiycjdi0KJYWwt+/8lQ8bolc01BRsqvBDKMCRd+Rv3Vsg7ASl/
+        XHAzUCEim1XZiDYLatJt6JWA6JBhphn6tqkF4Vryy9tLEeLFeT5Us0FEx1ZeTp+N961f8f
+        2umEBCY1WC1VFOuw4BV8j4zloaRMD6o=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-Ttfj_AOqNlyJTgT90NU3Sg-1; Mon, 01 Aug 2022 08:43:33 -0400
+X-MC-Unique: Ttfj_AOqNlyJTgT90NU3Sg-1
+Received: by mail-ej1-f70.google.com with SMTP id ne36-20020a1709077ba400b0072b64ce28aaso2946670ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:43:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=WS+3ThxPSCx9TTKskcZREuLQziOp6sjXVWQAmlUDQSk=;
+        b=3/DlgOcXNveZ5kOC4bKBJNqhIf2pNR2LlSVLl0BzWj7Mtf6HnH9sBqdXtzzNp2sKTb
+         GKW/AIOs7VOCKyIVqFoUyhdyzq0pLwFN1kyg1949NmUvq3EBT47KF4TdfPUyYKpbedBv
+         BMlcMn2ByOQVkaVzb/j4WI0+dKFIErxj2OFGNVtY6QfXBn1cuRba0NJ85DYXw99Nqyt6
+         eakMllBVuD3T6Pma9zWu/4gMkOmFTmISfPR4QI/VjBF3m5EMznDDUcaO6XAqbhfdirZE
+         8ktOrajcrm/KN72debwRAkN6lZ9NZQ+KWf51nmrAFMdHtmQnfwEY258lr4La4TOk/Kwv
+         xFfQ==
+X-Gm-Message-State: AJIora/FGUoO1D4ku1Rnzs9dOq6ma2WYLV+ERTjW5cWkgjq4OHChTyPO
+        CDkxwr0++pRDqQXdwi5rv2qdNIkg4VF9PAco82ELsn9Ovhfj2q8W++5KI7OgAlI5K74APDrYmpd
+        tv5cbdWrhCScMf4WANB1JN3sR
+X-Received: by 2002:a05:6402:430a:b0:43b:ea0d:dc59 with SMTP id m10-20020a056402430a00b0043bea0ddc59mr15559107edc.387.1659357812824;
+        Mon, 01 Aug 2022 05:43:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vOjWj0y3iMX53pyz5V46T+O5+5Aq6q+J+CKRYTdzRlJRudv67mcAECsSA+HsYERrnBrII1gA==
+X-Received: by 2002:a05:6402:430a:b0:43b:ea0d:dc59 with SMTP id m10-20020a056402430a00b0043bea0ddc59mr15559087edc.387.1659357812628;
+        Mon, 01 Aug 2022 05:43:32 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id d27-20020a056402517b00b0043577da51f1sm6740601ede.81.2022.08.01.05.43.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 05:43:31 -0700 (PDT)
+Message-ID: <54fbb1e1-c9b1-db59-6388-1aab74eb5b11@redhat.com>
+Date:   Mon, 1 Aug 2022 14:43:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YufDcPfth9JH6SaV@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/5] selftests/kvm/x86_64: set rax before vmcall
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrei Vagin <avagin@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jianfeng Tan <henry.tjf@antfin.com>,
+        Adin Scannell <ascannell@google.com>,
+        Konstantin Bogomolov <bogomolov@google.com>,
+        Etienne Perot <eperot@google.com>
+References: <20220722230241.1944655-1-avagin@google.com>
+ <20220722230241.1944655-5-avagin@google.com> <87y1w819o7.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87y1w819o7.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-01 14:13:36 [+0200], Jason A. Donenfeld wrote:
-> Also,
-> 
-> On Fri, Jul 29, 2022 at 05:47:15PM +0200, Sebastian Andrzej Siewior wrote:
-> >  		if (!filled) {
-> >  			get_random_bytes(&ptr_key, sizeof(ptr_key));
-> > -			queue_work(system_unbound_wq, &enable_ptr_key_work);
-> > +			/* Pairs with smp_rmb() before reading ptr_key. */
-> > +			smp_wmb();
-> > +			WRITE_ONCE(filled_random_ptr_key, true);
-> >  			filled = true;
-> 
-> Also, should `filled` be changed there?
+On 8/1/22 13:32, Vitaly Kuznetsov wrote:
+> Fixes: ac4a4d6de22e ("selftests: kvm: test enforcement of paravirtual cpuid features")
 
-you change `filled` as in read_mostly?
+Queued, thanks.
 
-> Jason
+Paolo
 
-Sebastian

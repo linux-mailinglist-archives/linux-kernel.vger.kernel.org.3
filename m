@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7500586D5A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F62586D5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiHAPAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S233088AbiHAPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiHAPAc (ORCPT
+        with ESMTP id S231876AbiHAPBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:00:32 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE43647B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:00:31 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id y11so8616463qvn.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VH9MjgED0AWITndim501l1CH8RMaZNy1yKl/Ru3+vOI=;
-        b=nvKz/XHSj68KdSTanByg6d4KCigA8S6DVIxtXtNsB5E82D3aY43nigcQSYITM3ssP3
-         O3oy90WdaMCut5i1JVBixoB329/SGYXcJ13oGCeYYYrXe32Gu8QIaOPA3XFfLA9pbqfp
-         YTDyaCEcMIp7VcnWdFzu0lLahnmMWB9Um2hUiKVbRngfc+lPFKyw1stelQPkVCogZj0k
-         iYsKXpEjYQ4om1eovrnOo7R0/gPU3mFPtAwK+4TmWKgVQMuXredBqnQt0GsWxFCGT6iz
-         mz8rdrAcVf7XSWYY0TfMXjygKYwRbwI3L2Sfp2/l8NdjfMzp81N0Wc5JZGToQhc19bkZ
-         WFYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VH9MjgED0AWITndim501l1CH8RMaZNy1yKl/Ru3+vOI=;
-        b=Nvz2egIC3e223iW1zW5M3hWmc2jHmSJdkeKlOILhX8doljmSS/GNiqBIHpbp1eR8Vb
-         OQ71YmYefDL+iygT3yEbbJ7QRHkbimq3cS8ZqT9JMsycZ8PvUzILtOLdu6BTQnQabtxE
-         6fnta7ypAStCXD14Yb9a+gtsuS3NGE+kYXSjgVocYlAnJ+ESzYg3ECovVT9KSeMpfAar
-         Hw+eEdp/TobXlcILh/RtnBQGxHMQxBGpd6cAXgIrOgW7Rya20LRnmJlAHDwdCyEhH28U
-         3KSRddK3+mkR1sHcDZigPOMREHiERyzqkwaBk5juGZ13oK7mmcuvm0mohxkFsIMJNPNC
-         NP9A==
-X-Gm-Message-State: ACgBeo2cNTib870UegNvFhN3r3vUazyuptIgsmKyvHWPePgvNL3k7U/g
-        Tti3H1OvwfJg4CKomkCgQBg1NVwNbvLC2BW46Z/trg==
-X-Google-Smtp-Source: AA6agR48bKZ7gnfltlVl1dBF4hEAWGRSmEMqBE3ThX5K1gCRT1iMR2DjmeVyYc+nbfG0UAL9FyuoK2Qs9LxAp3tY+Z4=
-X-Received: by 2002:a0c:8ecc:0:b0:473:2fa4:df7c with SMTP id
- y12-20020a0c8ecc000000b004732fa4df7cmr14424536qvb.55.1659366030428; Mon, 01
- Aug 2022 08:00:30 -0700 (PDT)
+        Mon, 1 Aug 2022 11:01:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C3A424955
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659366111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iiba4+W7jZLYO1ySi5qFdgb2HBH/IsPBRLKYnq1fXIY=;
+        b=E/9uFwkjVi1U4SKMJ21bEGHNlvd8piJUUjxtp/nkv3fxJP++YJEbz5BOQDIIknWcnYmr7Y
+        J61F7V7Cj/MrRu058FtthTiZQ6xf4mheYkpQ8jVE7JXe8R0SZWZpkA1kGfflDvRGL8HPwn
+        z4QyIvZN1jYVQE4Ob9zVXUoircMqRyM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399--nIrmDyMNk-h82Qyrwe4lQ-1; Mon, 01 Aug 2022 11:01:47 -0400
+X-MC-Unique: -nIrmDyMNk-h82Qyrwe4lQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B02F801585;
+        Mon,  1 Aug 2022 15:01:41 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 257C1C27D95;
+        Mon,  1 Aug 2022 15:01:41 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 271F1f8v028288;
+        Mon, 1 Aug 2022 11:01:41 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 271F1eJk028270;
+        Mon, 1 Aug 2022 11:01:40 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Mon, 1 Aug 2022 11:01:40 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] change buffer_locked, so that it has acquire
+ semantics
+In-Reply-To: <YuflGG60pHiXp2z/@casper.infradead.org>
+Message-ID: <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com> <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com> <YuflGG60pHiXp2z/@casper.infradead.org>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-References: <BY5PR02MB70099020AC1D181D15909F64EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
- <BY5PR02MB700972E09CC9D8ED6EFBA59AEA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
-In-Reply-To: <BY5PR02MB700972E09CC9D8ED6EFBA59AEA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 1 Aug 2022 18:00:19 +0300
-Message-ID: <CAA8EJpqBVaPt6dc+=u1YZwxEo9i4Y6+QFK5ko0Gd3091pKYXjw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add support for Xiaomi Poco F1 EBBG variant
-To:     Joel Selvaraj <joel.selvaraj@outlook.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, 1 Aug 2022 at 14:44, Joel Selvaraj <joel.selvaraj@outlook.com> wrote:
->
-> To be honest, I have no idea why my patch series doesn't get linked
-> properly. I think there is some issue in my OS. I use git format-patch
-> and git send-mail to send patches. It used to work fine. But it doesn't
-> want to work anymore :/ Is there a mailing list for sending test mails?
-> or how do I debug this? Kindly let me know if anyone has any
-> suggestions.
 
-Judging from the following headers, it's not your OS, it is M$
-rewriting the headers.
+On Mon, 1 Aug 2022, Matthew Wilcox wrote:
 
-Message-ID: <BY5PR02MB70099020AC1D181D15909F64EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
-X-Microsoft-Original-Message-ID:
-<20220801112512.209047-1-joel.selvaraj@outlook.com>
+> On Mon, Aug 01, 2022 at 06:43:55AM -0400, Mikulas Patocka wrote:
+> > Let's have a look at this piece of code in __bread_slow:
+> > 	get_bh(bh);
+> > 	bh->b_end_io = end_buffer_read_sync;
+> > 	submit_bh(REQ_OP_READ, 0, bh);
+> > 	wait_on_buffer(bh);
+> > 	if (buffer_uptodate(bh))
+> > 		return bh;
+> > Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
+> > Consequently, if someone calls sb_bread and then reads the buffer data,
+> > the read of buffer data may be executed before wait_on_buffer(bh) on
+> > architectures with weak memory ordering and it may return invalid data.
+> > 
+> > Fix this bug by changing the function buffer_locked to have the acquire
+> > semantics - so that code that follows buffer_locked cannot be moved before
+> > it.
+> 
+> I think this is the wrong approach.  Instead, buffer_set_uptodate()
+> should have the smp_wmb() and buffer_uptodate should have the smp_rmb().
+> Just like the page flags.  As I said last night.
 
-According to some mentions on the Internet, M$ relies on headers
-rewriting and will not change this behaviour.
+Linus said that he prefers acquire/release to smp_rmb/smp_wmb. So, sort it 
+out with him :)
 
-I'd suggest switching to another SMTP submission host. I think it
-should be e.g. possible to tell GMail to send mails with @outlook.com
-addresses. However this might confuse some of the mail clients into
-believing it is spam since the email will SOFTFAIL the SPF check.
+In most cases, the buffer is set uptodate while it is locked, so that 
+there is no race on the uptodate flag (the race exists on the locked 
+flag). Are there any cases where the uptodate flag is modified on unlocked 
+buffer, so that it needs special treatment too?
 
-Switching to another mail provider might be an option too.
+Mikulas
 
--- 
-With best wishes
-Dmitry

@@ -2,119 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7BE586FC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF279586FC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiHARsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S233592AbiHARtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiHARsu (ORCPT
+        with ESMTP id S232650AbiHARtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:48:50 -0400
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0A2F01F;
-        Mon,  1 Aug 2022 10:48:49 -0700 (PDT)
-Received: by mail-pg1-f170.google.com with SMTP id 206so6819275pgb.0;
-        Mon, 01 Aug 2022 10:48:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=EN6VLRMLyX8Pe8pUfOBoTSaSGWWPYWCDNxOmZN2qUZE=;
-        b=S057YlMtKhdK+oTVpluP7EEfNOjUEHHvz2V2yxfoLxtaEc6Fs+XJjvtjDCGKlbWxIA
-         zeDMAGPdy4SgbS6aWKWVFJV5f6BiDcypuoL+pqYy5wPvFwAcFWC18LmxpVqgIxCTU0PD
-         uB0ad5cLEqLjYEMwgqCsvkmaBzqelcHzatUxTpj8F+VSCCREO+K6alAVFMzPYgRWsMcD
-         Oqu+9SC1Ap+Xbc07X1X9NblbR3rJyndIsGhv2AgN3k+YVwTYHSzcvKF61xKAnmxqGVUT
-         G9wqFHd4pGxeOvo0+9raynPZhvXvT8BiwtDZSHzsCHI7N5OoDXw8o0XPu/Kg3Iio18fK
-         R+0g==
-X-Gm-Message-State: AJIora/2DKaVPNlIAZ/0jBCpUzurOMUXCArwvxJpYpbuGMgHlUerFirJ
-        pa4SGZ+SoLgcaBSrq49WOi4=
-X-Google-Smtp-Source: AGRyM1s3sQEiFccWVLANXwiDQ2eLWBsm42X5+Q5P4fg5LoKgu+s9ID24Gf8TXPj2PzKAUWypLGgOLw==
-X-Received: by 2002:a65:6c05:0:b0:41a:d13f:f0fb with SMTP id y5-20020a656c05000000b0041ad13ff0fbmr14358372pgu.393.1659376128957;
-        Mon, 01 Aug 2022 10:48:48 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:6496:b2a7:616f:954d? ([2620:15c:211:201:6496:b2a7:616f:954d])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0016d1e2a240dsm9832596plk.202.2022.08.01.10.48.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 10:48:47 -0700 (PDT)
-Message-ID: <1ca16b27-21e5-3537-400a-25cdae52396e@acm.org>
-Date:   Mon, 1 Aug 2022 10:48:45 -0700
+        Mon, 1 Aug 2022 13:49:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1FB2DAAB
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659376184; x=1690912184;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+d6jxagz6nPCDxYu6Ow7W2Ev5jlGEPwhsUzneKE5yEI=;
+  b=Jrl5tAKJuSLYmveY+t6vH+Rsu8mBIhddldCNyFvfFt6sjc7zgZgcH4uN
+   /xY/NKReNH731aKpREEX6FOsTZHwHAbMrdybyujTV4Pldaq/xzPj8cv7X
+   C2Q5UpeoedfX4mawjvMEdtxhmtw9knuBhDuQ5YcOn/BlXP9ztWQwu8DJp
+   V1a5m5aqZYq8quLhzlIjNMIw0P9CKX5/2aOdhmwEY0HOomKxi4d7eqkCG
+   JY7UU5HF+4IsRr5rmm5ZnfvSuoJWpfVanzMpLWSmMAeoHe8TCO6OUDF8/
+   6idP7s7ahMrdujeJmCBMnvvASAkPNJY8VI8qGJs1nsiKCOp58//gHLqgZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269589486"
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="269589486"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 10:49:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="705057376"
+Received: from jrluquin-mobl.amr.corp.intel.com (HELO [10.212.184.211]) ([10.212.184.211])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 10:49:44 -0700
+Message-ID: <2d5e6b7f-c499-aaa1-a308-cb17b5500c84@linux.intel.com>
+Date:   Mon, 1 Aug 2022 10:49:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v9 2/6] selftests: tdx: Test GetReport TDX attestation
+ feature
 Content-Language: en-US
-To:     Daniil Lunev <dlunev@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220729151301.v4.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220729151301.v4.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220728034420.648314-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <03c6c9cecd281d64d0efd48cb40135092dc2d0df.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <03c6c9cecd281d64d0efd48cb40135092dc2d0df.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/28/22 22:13, Daniil Lunev wrote:
-> Allows userspace to check if Clock Scaling, Write Booster functionality
-> status.
 
-The above sentence is not complete. Did you perhaps want to write "are 
-supported by the host controller" instead of "status"?
 
-> +What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
-> +What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
-> +Date:		July 2022
-> +Contact:	Daniil Lunev <dlunev@chromium.org>
-> +Description:	Indicates status of clock scaling.
-> +
-> +		== ============================
-> +		0  Clock scaling is not enabled.
-> +		1  Clock scaling is enabled.
-> +		== ============================
-> +
-> +		The file is read only.
+On 7/28/22 3:32 AM, Kai Huang wrote:
+> On Wed, 2022-07-27 at 20:44 -0700, Kuppuswamy Sathyanarayanan wrote:
+>> In TDX guest, attestation is used to verify the trustworthiness of a
+>> TD. During the TD bring-up, Intel TDX module measures and records the
+>> initial contents and configuration of TD, and at runtime, TD software
+>> uses runtime measurement registers (RMTRs) to measure and record
+>> details related to kernel image, command line params, ACPI tables,
+>> initrd, etc. At TD runtime, Intel SGX attestation infrastructure is
+>> re-used to attest to these measurement data.
+>>
+>> First step in the TDX attestation process is to get the TDREPORT data.
+>> It is fixed size data structure generated by the TDX module which
+>> includes the above mentioned measurements data, a MAC to protect the
+>> integerity of the TDREPORT, and a 64-Byte of user specified data passed
+>> during TDREPORT request which can uniquely identify the TDREPORT.
+>>
+>> Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
+>> get the TDREPORT from the user space.
+>>
+>> Add a kernel selftest module to test this ABI and verify the validity
+>> of generated TDREPORT.
+>>
+>> Reviewed-by: Tony Luck <tony.luck@intel.com>
+>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+>> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+>> ---
+>>  tools/testing/selftests/Makefile              |   1 +
+>>  tools/testing/selftests/tdx/Makefile          |   7 +
+>>  tools/testing/selftests/tdx/tdx_attest_test.c | 160 ++++++++++++++++++
+>>  3 files changed, 168 insertions(+)
+>>  create mode 100644 tools/testing/selftests/tdx/Makefile
+>>  create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index de11992dc577..807a839d69c4 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -69,6 +69,7 @@ TARGETS += sync
+>>  TARGETS += syscall_user_dispatch
+>>  TARGETS += sysctl
+>>  TARGETS += tc-testing
+>> +TARGETS += tdx
+>>  TARGETS += timens
+>>  ifneq (1, $(quicktest))
+>>  TARGETS += timers
+>> diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
+>> new file mode 100644
+>> index 000000000000..281db209f9d6
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/tdx/Makefile
+>> @@ -0,0 +1,7 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
+>> +
+>> +TEST_GEN_PROGS := tdx_attest_test
+>> +
+>> +include ../lib.mk
+>> diff --git a/tools/testing/selftests/tdx/tdx_attest_test.c b/tools/testing/selftests/tdx/tdx_attest_test.c
+>> new file mode 100644
+>> index 000000000000..7155cc751eaa
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/tdx/tdx_attest_test.c
+>> @@ -0,0 +1,160 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Test TDX attestation feature
+>> + *
+>> + * Copyright (C) 2022 Intel Corporation. All rights reserved.
+>> + *
+>> + * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+>> + */
+>> +
+>> +
+>> +#include <errno.h>
+>> +#include <fcntl.h>
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <sys/ioctl.h>
+>> +#include <sys/time.h>
+>> +#include <sys/types.h>
+>> +#include <time.h>
+>> +#include <unistd.h>
+>> +
+>> +#include "../kselftest_harness.h"
+>> +#include "../../../../arch/x86/include/uapi/asm/tdx.h"
+>> +
+>> +#define devname         "/dev/tdx-guest"
+>> +#define HEX_DUMP_SIZE	8
+>> +
+>> +/*
+>> + * struct td_info - It contains the measurements and initial configuration of
+>> + * the TD that was locked at initialization and a set of measurement
+>> + * registers that are run-time extendable. These values are copied from the
+>> + * TDCS by the TDG.MR.REPORT function.
+>> + */
+>> +struct td_info {
+>> +	/* TD attributes (like debug, spet_disable, etc) */
+>> +	__u8 attr[8];
+>> +	__u64 xfam;
+>> +	/* Measurement registers */
+>> +	__u64 mrtd[6];
+>> +	__u64 mrconfigid[6];
+>> +	__u64 mrowner[6];
+>> +	__u64 mrownerconfig[6];
+>> +	/* Runtime measurement registers */
+>> +	__u64 rtmr[24];
+>> +	__u64 reserved[14];
+>> +};
+>> +
+>> +/*
+>> + * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
+>> + * sub type and version..
+>> + */
+>> +struct tdreport_type {
+>> +	/* 0 - SGX, 81 -TDX, rest are reserved */
+>> +	__u8 type;
+>> +	/* Default value is 0 */
+>> +	__u8 sub_type;
+>> +	/* Default value is 0 */
+>> +	__u8 version;
+>> +	__u8 reserved;
+>> +};
+>> +
+>> +/*
+>> + * struct reportmac - First field in the TEE report structure
+>> + * (TRDREPORT_STRUCT). It is common to Intel’s TEE's e.g., SGX and TDX.
+>> + * It is MAC-protected and contains hashes of the remainder of the report
+>> + * structure which includes the TEE’s measurements, and where applicable,
+>> + * the measurements of additional TCB elements not reflected in CPUSVN –
+>> + * e.g., a SEAM’s measurements.
+>> + */
+>> +struct reportmac {
+>> +	struct tdreport_type type;
+>> +	__u8 reserved1[12];
+>> +	/* CPU security version */
+>> +	__u8 cpu_svn[16];
+>> +	/* SHA384 hash of TEE TCB INFO */
+>> +	__u8 tee_tcb_info_hash[48];
+>> +	/* SHA384 hash of TDINFO_STRUCT */
+>> +	__u8 tee_td_info_hash[48];
+>> +	/* User defined unique data passed in TDG.MR.REPORT request */
+>> +	__u8 reportdata[64];
+>> +	__u8 reserved2[32];
+>> +	__u8 mac[32];
+>> +};
+>> +
+>> +struct tee_tcb_info {
+>> +	__u8 data[239];
+>> +};
+>> +
+>> +struct tdreport_data {
+>> +	struct reportmac _reportmac;
+>> +	struct tee_tcb_info _tcb_info;
+>> +	__u8 reserved[17];
+>> +	struct td_info _tdinfo;
+>> +};
+> 
+> I think 'struct tdreport' is enough.  The _data postfix only causes it to be
+> more confusing.
 
-I don't think the above documentation is correct. My understanding is 
-that the UFSHCD_CAP_CLK_SCALING flag indicates whether or not the host 
-controller supports clock scaling. It does not indicate whether or not 
-clock scaling is enabled.
+Ok.
 
-> +What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/write_booster
-> +What:		/sys/bus/platform/devices/*.ufs/capabilities/write_booster
-> +Date:		July 2022
-> +Contact:	Daniil Lunev <dlunev@chromium.org>
-> +Description:	Indicates status of Write Booster.
-> +
-> +		== ============================
-> +		0  Write Booster can not be enabled.
-> +		1  Write Booster can be enabled.
-> +		== ============================
-> +
-> +		The file is read only.
+> 
+> Btw, as it appears you only verified reportdata below, is it worth to have all
+> those data structures (and they are used by hardware but not __packed)?  Perhaps
+> a macro to define REPORTDATA offset in TDREPORT is good enough?  Or maybe I am
+> missing something.
 
-Please change "can not / can be enabled" into "is not supported by the 
-host controller / is supported by the host controller".
-
-Thanks,
-
-Bart.
+I have added these data structs to make it easier for readers to understand
+the contents of the TDREPORT. I thought a simple offset based check would look
+like a magic number. If the maintainers are fine with offset based comparison,
+I am ok with it.
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

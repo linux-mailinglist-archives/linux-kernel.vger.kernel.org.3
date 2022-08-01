@@ -2,182 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F53758624D
+	by mail.lfdr.de (Postfix) with ESMTP id CAA4558624E
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 03:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiHABkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 21:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S238986AbiHABku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 21:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239055AbiHABkX (ORCPT
+        with ESMTP id S238949AbiHABkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 21:40:23 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5CB13E98;
-        Sun, 31 Jul 2022 18:39:31 -0700 (PDT)
-X-UUID: 213dae2b2dec447c8b97c3e895659d9e-20220801
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:ae1fe426-8d54-41d4-b68e-b743b9e7b799,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:b6fbe4cf-a6cf-4fb6-be1b-c60094821ca2,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 213dae2b2dec447c8b97c3e895659d9e-20220801
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 754513474; Mon, 01 Aug 2022 09:39:24 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 1 Aug 2022 09:39:23 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 1 Aug 2022 09:39:22 +0800
-Message-ID: <989faa34506ab4db8b8ce6eae5457ad07b1a2dee.camel@mediatek.com>
-Subject: Re: [PATCH v2] dt-bindings: PCI: mediatek-gen3: Add support for
- MT8188 and MT8195
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Ryder Lee" <ryder.lee@mediatek.com>, <Rex-BC.Chen@mediatek.com>,
-        <TingHan.Shen@mediatek.com>, <Liju-clr.Chen@mediatek.com>,
-        <Jian.Yang@mediatek.com>
-Date:   Mon, 1 Aug 2022 09:39:22 +0800
-In-Reply-To: <20220729225320.GA82746-robh@kernel.org>
-References: <20220729033331.3075-1-jianjun.wang@mediatek.com>
-         <20220729225320.GA82746-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 31 Jul 2022 21:40:45 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93898120A6;
+        Sun, 31 Jul 2022 18:40:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 42D0C3200645;
+        Sun, 31 Jul 2022 21:40:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 31 Jul 2022 21:40:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1659318042; x=1659404442; bh=npawDv71rl
+        ZnJaxeFA6Ei4jvOJ58BYEfIDxUEn4gES0=; b=dzeidag36qYQQ75ErjaJGKWcJI
+        nT+Ua5mwJxEijSODxBWHWj0iJYBam5yGOHbwOB3y3qepqctMbQeSb4gc5VzSjrPn
+        v7PsBSr9zClGybsO0cDsuPp8knHtS0c3Bjv8mISSWHDNXSPaf0zoqmdSolXv9CMZ
+        NW9ir5TpT1JxbGwm4djrm86ITrXPMGzwuh+GELrJDoWSK78iusLRHP7o2CM9pbBw
+        qckbvUN2NAD87CXzLSP762moiqBN4H9PhLNGidMNiZ0qrvnBiihUqZ+nTFEu5u9g
+        CNj0XQAEngqkZvMNqKvQcvRjulQkeKcqi8tIpvKWy9NBpXo6sBnRNpWpwR4w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659318042; x=1659404442; bh=npawDv71rlZnJaxeFA6Ei4jvOJ58
+        BYEfIDxUEn4gES0=; b=f6RMUcIz2ark+IhAivBbuFB0nLWO4w1T2+R/KPHLm/qG
+        pmeXPcDcvyvE6vAKx4qfljfGZuZpeVnD7n+XdoXyDx2z7q8PcIeM3ElxSOvBON3V
+        TyxYSjyaHngVndYxXmLbmPCc3AZGIjY0p9ok2wdADNYbZrj/6xpS7C0uk2Ddkp81
+        grLBujrt3PfIS/asedAOR/i0bVraUoDQ9JUdxDlacT6kxsLdb0mfXRTuGF9xeB4e
+        rDv8jUISu1hhfAsbpmkv9PEOm1UfX8y4hymOP++yr88Nhju3bqIbgOkg1QkN1vIg
+        0QH4LtExM58+ZzITPBqPhB0xcRFXFhH4El24Abf+yg==
+X-ME-Sender: <xms:Gi_nYj1D2Dpd1vxL-N_pKCRExbw1QJMTy78SAG7mDk6QJ3njisgtig>
+    <xme:Gi_nYiGLr4T7Qjm7ohVLWzeH2ipuUd2HTEehnpGnMcFIWYh4wwg_Bnxxl1CTvEAJu
+    kyX8m9rfJoKK9RsDQ>
+X-ME-Received: <xmr:Gi_nYj47ig3iqxrHPHswwcAC9d-KitKFl8CFhHRs6L6ec1E3dudkYOjiZ33ldkZzRZ9kRhYDuD6gUdGSfEs-1gJonLDJBDqKmKwi6jHWdzBq7Jo8lxB91c5rvIWt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
+    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
+    grthhtvghrnhepleehhfelgfeggfejhedvtdfggeehgfevveetteegkefgteegffekkeev
+    jedufefhnecuffhomhgrihhnpehfvggrthhurhgvrdhinhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
+    rdguvg
+X-ME-Proxy: <xmx:Gi_nYo1ZIJuCcBgAZ5NaR6X-ilTp4d3bs6rAgNHYeP9Qy_DfrZ0_6A>
+    <xmx:Gi_nYmGTei3pSggwbq_sXcyri3_6SHGyUYA7dgvNWUefGiuI6fA6gw>
+    <xmx:Gi_nYp-C7PnLYycSmZhwKeZzAI4KmForuqV0xpltlg3oGvsk0po7tw>
+    <xmx:Gi_nYjMlY2KfzTzrRSAkP4yNMu6xwArHkvAS6oNN_A9Ua6ZUdV-g_w>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 31 Jul 2022 21:40:42 -0400 (EDT)
+Date:   Sun, 31 Jul 2022 18:40:41 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v2 0/5] tools: fix compilation failure caused by
+ init_disassemble_info API changes
+Message-ID: <20220801014041.24jvobsooyyddvjb@awork3.anarazel.de>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220703212551.1114923-1-andres@anarazel.de>
+ <YsKvPW+1RkVvq8aX@krava>
+ <20220704201922.pvrh4cmmjxjn4mkx@awork3.anarazel.de>
+ <YsNl1XdEuxvqb3vx@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsNl1XdEuxvqb3vx@krava>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-Thanks for your comment.
+On 2022-07-05 00:12:37 +0200, Jiri Olsa wrote:
+> On Mon, Jul 04, 2022 at 01:19:22PM -0700, Andres Freund wrote:
+> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > > index ee417c321adb..2aa0bad11f05 100644
+> > > --- a/tools/perf/Makefile.config
+> > > +++ b/tools/perf/Makefile.config
+> > > @@ -914,8 +914,6 @@ ifndef NO_LIBBFD
+> > >          FEATURE_CHECK_LDFLAGS-disassembler-init-styled += -liberty -lz -ldl
+> > >        endif
+> > >      endif
+> > > -    $(call feature_check,disassembler-four-args)
+> > > -    $(call feature_check,disassembler-init-styled)
+> > >    endif
+> > >
+> > >    ifeq ($(feature-libbfd-buildid), 1)
+> > > @@ -1025,6 +1023,9 @@ ifdef HAVE_KVM_STAT_SUPPORT
+> > >      CFLAGS += -DHAVE_KVM_STAT_SUPPORT
+> > >  endif
+> > >
+> > > +$(call feature_check,disassembler-four-args)
+> > > +$(call feature_check,disassembler-init-styled)
+> > > +
+> > >  ifeq ($(feature-disassembler-four-args), 1)
+> > >      CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+> > >  endif
+> >
+> > This I don't understand - why do we want these to run under NO_LIBBFD etc?
+>
+> when I was quickly testing that I did not have any of them detected
+> and got compile fail.. so I moved it to safe place ;-) it might be
+> placed in smarter place
 
-On Fri, 2022-07-29 at 16:53 -0600, Rob Herring wrote:
-> On Fri, Jul 29, 2022 at 11:33:31AM +0800, Jianjun Wang wrote:
-> > MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as
-> > MT8192.
-> > 
-> > Also add new clock name "peri_mem" since the MT8188 and MT8195 use
-> > clock
-> > "peri_mem" instead of "top_133m".
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > ---
-> > Changes in v2:
-> > Merge two patches into one.
-> > ---
-> >  .../bindings/pci/mediatek-pcie-gen3.yaml      | 51
-> > +++++++++++++++----
-> >  1 file changed, 40 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-
-> > gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-
-> > gen3.yaml
-> > index 0499b94627ae..038e25ae0be7 100644
-> > --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> > @@ -43,12 +43,16 @@ description: |+
-> >    each set has its own address for MSI message, and supports 32
-> > MSI vectors
-> >    to generate interrupt.
-> >  
-> > -allOf:
-> > -  - $ref: /schemas/pci/pci-bus.yaml#
-> > -
-> >  properties:
-> >    compatible:
-> > -    const: mediatek,mt8192-pcie
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - mediatek,mt8188-pcie
-> > +              - mediatek,mt8195-pcie
-> > +          - const: mediatek,mt8192-pcie
-> > +      - items:
-> > +          - const: mediatek,mt8192-pcie
-> >  
-> >    reg:
-> >      maxItems: 1
-> > @@ -78,13 +82,7 @@ properties:
-> >      maxItems: 6
-> >  
-> >    clock-names:
-> > -    items:
-> > -      - const: pl_250m
-> > -      - const: tl_26m
-> > -      - const: tl_96m
-> > -      - const: tl_32k
-> > -      - const: peri_26m
-> > -      - const: top_133m
-> > +    maxItems: 6
-> >  
-> >    assigned-clocks:
-> >      maxItems: 1
-> > @@ -126,9 +124,40 @@ required:
-> >    - interrupts
-> >    - ranges
-> >    - clocks
-> > +  - clock-names
-> >    - '#interrupt-cells'
-> >    - interrupt-controller
-> >  
-> > +allOf:
-> > +  - $ref: /schemas/pci/pci-bus.yaml#
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - mediatek,mt8188-pcie
-> > +              - mediatek,mt8195-pcie
-> > +    then:
-> > +      properties:
-> > +        clock-names:
-> > +          items:
-> > +            - const: pl_250m
-> > +            - const: tl_26m
-> > +            - const: tl_96m
-> > +            - const: tl_32k
-> > +            - const: peri_26m
-> > +            - const: peri_mem
-> > +    else:
-> > +      properties:
-> > +        clock-names:
-> > +          items:
-> > +            - const: pl_250m
-> > +            - const: tl_26m
-> > +            - const: tl_96m
-> > +            - const: tl_32k
-> > +            - const: peri_26m
-> > +            - const: top_133m
-> 
-> I'm not sure it's worth enforcing just the last clock name. Just do:
-> 
-> enum: [ peri_mem, top_133m ]
-> 
-> And key in the top level.
-OK, I'll use "enum" to add the new clock name in the next version.
+I think that's because you'd removed them from FEATURE_TESTS_BASIC in
+Makefile.feature. In v3 I just sent out I just removed them from
+FEATURE_DISPLAY, without any more "structural" changes in
+tools/perf/Makefile.config. 
 
-Thanks.
-> 
-> Rob
+Greetings,
 
+Andres Freund

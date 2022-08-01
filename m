@@ -2,209 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926FB586268
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07971586269
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiHACGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S237625AbiHACG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233109AbiHACGA (ORCPT
+        with ESMTP id S233109AbiHACGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:06:00 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2CEB4A8;
-        Sun, 31 Jul 2022 19:05:58 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lx1c15BKxz1M7tv;
-        Mon,  1 Aug 2022 10:02:57 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 10:05:56 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 10:05:56 +0800
-Subject: Re: [PATCH RESEND] chardev: fix error handling in cdev_device_add()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <logang@deltatee.com>, <dan.j.williams@intel.com>,
-        <hans.verkuil@cisco.com>, <alexandre.belloni@free-electrons.com>,
-        <viro@zeniv.linux.org.uk>
-References: <20220714092355.991306-1-yangyingliang@huawei.com>
- <Ys/i3EBk2nZea8Hy@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <0705d0a6-7897-c8eb-666f-711ea8be1cd6@huawei.com>
-Date:   Mon, 1 Aug 2022 10:05:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 31 Jul 2022 22:06:53 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E3DF77
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659319612; x=1690855612;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=z3o9XhM+vgD3t9N8cNdE+UfIUMTL5F3Mmc63kX4QpwU=;
+  b=HrR21sum+nTzOxu7oU+qDTUP8AAAXHAkxsaBdg/icuBytZYRVyW3ATI/
+   VnVQI8sj0JmXF1ilqbzCKlEBcluMS1WaMX1UP/1ULFM4DMq1WIlwf+bsa
+   aiGDx74ISncqWuk+iZtjimJoFoQ76iLE7rPXcLF0ODuvIy4Knmnek4Tn4
+   z2XImQwFachuivu58Ejlk8d9h3a0NAcXRzcSWCM7ocfVLmsGKPU0xo/I6
+   RGZdCu0wqQQZte8NKhnVT9UvAEywnr0lh0zwCyBFs7hjOrQNq9YAgCaQg
+   gHy8+nva/jSKD9Y/iatlkje+WeKpF5lLrWsw6ZDJlVYn5G2nD/7/o/mqq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="290254398"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="290254398"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 19:06:51 -0700
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="577612599"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 19:06:48 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_ADISTANCE_PMEM
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+        <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
+        <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <87bkt8s7w9.fsf@linux.ibm.com>
+Date:   Mon, 01 Aug 2022 10:06:44 +0800
+In-Reply-To: <87bkt8s7w9.fsf@linux.ibm.com> (Aneesh Kumar K. V.'s message of
+        "Fri, 29 Jul 2022 12:49:34 +0530")
+Message-ID: <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <Ys/i3EBk2nZea8Hy@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Greg
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-On 2022/7/14 17:33, Greg KH wrote:
-> On Thu, Jul 14, 2022 at 05:23:55PM +0800, Yang Yingliang wrote:
->> If dev->devt is not set, cdev_add() will not be called, so if device_add()
->> fails, cdev_del() is not needed. Fix this by checking dev->devt in error
->> case.
->>
->> Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   fs/char_dev.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/char_dev.c b/fs/char_dev.c
->> index ba0ded7842a7..3f667292608c 100644
->> --- a/fs/char_dev.c
->> +++ b/fs/char_dev.c
->> @@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
->>   	}
->>   
->>   	rc = device_add(dev);
->> -	if (rc)
->> +	if (rc && dev->devt)
->>   		cdev_del(cdev);
->>   
->>   	return rc;
->> -- 
->> 2.25.1
->>
-> Please see https://lore.kernel.org/r/YsLtXYa4kRYEEaX/@kroah.com for why
-> I will no longer accept patches from Huawei with the "hulk robot" claim
-> without the required information.
-I found this bug by fault injection test and it can be reproduced in the 
-5.19.0-rc6.
-When inject error in device_add(), it triggers the bug.
-
-The FAULT_INJECTION stack is:
-[   90.246918][ T1527] FAULT_INJECTION: forcing a failure.
-[   90.246918][ T1527] name failslab, interval 1, probability 0, space 
-0, times 0
-[   90.248546][ T1527] CPU: 3 PID: 1527 Comm: 63 Not tainted 
-5.19.0-rc6-00276-g187506bb1928-dirty #668 
-3b1a4a46ce78a2173f0a10415bb4c4ff7194a867
-[   90.249993][ T1527] Hardware name: QEMU Standard PC (i440FX + PIIX, 
-1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[   90.251114][ T1527] Call Trace:
-[   90.251500][ T1527]  <TASK>
-[   90.251889][ T1527]  dump_stack_lvl+0xe4/0x156
-[   90.252661][ T1527]  should_fail.cold.3+0x5/0x1f
-[   90.253242][ T1527]  ? device_add+0x10cd/0x1de0
-[   90.253835][ T1527]  ? device_add+0x10cd/0x1de0
-[   90.254391][ T1527]  should_failslab+0xa/0x20
-[   90.254902][ T1527]  kmem_cache_alloc_trace+0x5a/0x2e0
-[   90.255496][ T1527]  device_add+0x10cd/0x1de0
-[   90.256100][ T1527]  ? rcu_read_lock_held_common+0xe/0xb0
-[   90.256951][ T1527]  ? rcu_read_lock_sched_held+0x62/0xf0
-[   90.257811][ T1527]  ? rcu_read_lock_bh_held+0xd0/0xd0
-[   90.258627][ T1527]  ? iio_dev_release+0x161/0x1c0 [industrialio]
-[   90.260110][ T1527]  ? __fw_devlink_link_to_suppliers+0x2c0/0x2c0
-[   90.260818][ T1527]  ? write_comp_data+0x2a/0x90
-[   90.261366][ T1527]  ? __sanitizer_cov_trace_pc+0x1d/0x50
-[   90.262003][ T1527]  ? iio_device_register_eventset+0x6f6/0xea0 
-[industrialio]
-[   90.263365][ T1527]  cdev_device_add+0x130/0x1b0
-[   90.263923][ T1527]  __iio_device_register+0x1392/0x1ac0 [industrialio]
-[   90.265218][ T1527]  __devm_iio_device_register+0x22/0x90 [industrialio]
-[   90.266502][ T1527]  max517_probe+0x3d8/0x6b4 [max517]
-[   90.267456][ T1527]  ? max517_write_raw+0x1e0/0x1e0 [max517]
-[   90.268472][ T1527]  i2c_device_probe+0x974/0xae0
-[   90.269016][ T1527]  ? i2c_device_match+0x120/0x120
-[   90.269577][ T1527]  really_probe+0x44a/0xaf0
-
-The kernel reported this warning:
-[   90.309159][ T1527] ------------[ cut here ]------------
-[   90.309981][ T1527] kobject: '(null)' (000000008ab24cf9): is not 
-initialized, yet kobject_put() is being called.
-[   90.311910][ T1527] WARNING: CPU: 3 PID: 1527 at kobject_put+0x24c/0x540
-[   90.312975][ T1527] Modules linked in: max517 industrialio spi_stub 
-i2c_stub i2c_dev joydev mousedev intel_rapl_msr input_leds led_class 
-nfit edac_core libnvdimm intel_rapl_common intel_uncore_frequency_common 
-isst_if_common ppdev serio_raw psmouse atkbd kvm_intel libps2 
-vivaldi_fmap kvm irqbypass crct10dif_pclmul crc32_pclmul crc32c_intel 
-ghash_clmulni_intel aesni_intel crypto_simd cryptd bochs drm_vram_helper 
-drm_ttm_helper ttm sr_mod evdev drm_kms_helper cdrom mac_hid drm sg 
-drm_panel_orientation_quirks cfbfillrect cfbimgblt parport_pc 
-cfbcopyarea parport rtc_cmos fb_sys_fops floppy syscopyarea sysfillrect 
-i8042 serio sysimgblt ata_generic fb pata_acpi fbdev i2c_piix4 backlight 
-intel_agp tiny_power_button intel_gtt agpgart qemu_fw_cfg button 
-ip_tables x_tables ipv6 crc_ccitt autofs4
-[   90.324844][ T1527] CPU: 3 PID: 1527 Comm: 63 Not tainted 
-5.19.0-rc6-00276-g187506bb1928-dirty #668 
-3b1a4a46ce78a2173f0a10415bb4c4ff7194a867
-[   90.326763][ T1527] Hardware name: QEMU Standard PC (i440FX + PIIX, 
-1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[   90.328285][ T1527] RIP: 0010:kobject_put+0x24c/0x540
-[   90.329113][ T1527] Code: e8 c9 21 e5 fe 90 48 89 d8 48 c1 e8 03 80 
-3c 28 00 0f 85 7a 02 00 00 48 8b 33 48 89 da 48 c7 c7 a0 73 ff 88 e8 22 
-83 ff 00 90 <0f> 0b 90 90 e9 1c fe ff ff e8 96 21 e5 fe 4c 8b 0c 24 48 
-89 d9 4c
-[   90.331985][ T1527] RSP: 0018:ffffc9000496f508 EFLAGS: 00010286
-[   90.332902][ T1527] RAX: 0000000000000000 RBX: ffff88800c1b2788 RCX: 
-ffffffff861ac93a
-[   90.334079][ T1527] RDX: 0000000000000000 RSI: ffff888005608000 RDI: 
-0000000000000002
-[   90.335248][ T1527] RBP: dffffc0000000000 R08: ffffed1021240346 R09: 
-ffffed1021240346
-[   90.336464][ T1527] R10: ffff888109201a2b R11: ffffed1021240345 R12: 
-ffff88800c1b27c4
-[   90.337640][ T1527] R13: 0000000000000000 R14: 00000000ffffffff R15: 
-0000000000000000
-[   90.338827][ T1527] FS:  00007fe80c499500(0000) 
-GS:ffff888109000000(0000) knlGS:0000000000000000
-[   90.340190][ T1527] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   90.341173][ T1527] CR2: 000055837fa23708 CR3: 0000000005c36001 CR4: 
-0000000000770ee0
-[   90.342307][ T1527] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
-0000000000000000
-[   90.343140][ T1527] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
-0000000000000400
-[   90.344024][ T1527] PKRU: 55555554
-[   90.344562][ T1527] Call Trace:
-[   90.345063][ T1527]  <TASK>
-[   90.345529][ T1527]  cdev_device_add+0x15e/0x1b0
-[   90.346214][ T1527]  __iio_device_register+0x1392/0x1ac0 [industrialio]
-[   90.347509][ T1527]  __devm_iio_device_register+0x22/0x90 [industrialio]
-[   90.348840][ T1527]  max517_probe+0x3d8/0x6b4 [max517]
-[   90.350091][ T1527]  ? max517_write_raw+0x1e0/0x1e0 [max517]
-[   90.351093][ T1527]  i2c_device_probe+0x974/0xae0
-[   90.351633][ T1527]  ? i2c_device_match+0x120/0x120
-[   90.352255][ T1527]  really_probe+0x44a/0xaf0
-
-If attached_buffers_cnt and event_interface of iio_dev_opaque is not 
-set, the 'cdev' is not initialized and the
-dev->devt is not set, but cdev_del() is called in error path, then it 
-triggers this bug.
+> "Huang, Ying" <ying.huang@intel.com> writes:
 >
-> Also, you did not state why this was a RESEND.
-https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/ 
-
-This patch has been sent last year, and the bug can be reproduced, so I 
-tried to resend to fix it.
-
-Thanks,
-Yang
+>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>
+>>> By default, all nodes are assigned to the default memory tier which
+>>> is the memory tier designated for nodes with DRAM
+>>>
+>>> Set dax kmem device node's tier to slower memory tier by assigning
+>>> abstract distance to MEMTIER_ADISTANCE_PMEM. PMEM tier
+>>> appears below the default memory tier in demotion order.
+>>>
+>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>> ---
+>>>  drivers/dax/kmem.c           |  9 +++++++++
+>>>  include/linux/memory-tiers.h | 19 ++++++++++++++++++-
+>>>  mm/memory-tiers.c            | 28 ++++++++++++++++------------
+>>>  3 files changed, 43 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+>>> index a37622060fff..6b0d5de9a3e9 100644
+>>> --- a/drivers/dax/kmem.c
+>>> +++ b/drivers/dax/kmem.c
+>>> @@ -11,6 +11,7 @@
+>>>  #include <linux/fs.h>
+>>>  #include <linux/mm.h>
+>>>  #include <linux/mman.h>
+>>> +#include <linux/memory-tiers.h>
+>>>  #include "dax-private.h"
+>>>  #include "bus.h"
+>>>  
+>>> @@ -41,6 +42,12 @@ struct dax_kmem_data {
+>>>  	struct resource *res[];
+>>>  };
+>>>  
+>>> +static struct memory_dev_type default_pmem_type  = {
+>>
+>> Why is this named as default_pmem_type?  We will not change the memory
+>> type of a node usually.
+>>
 >
-> Now dropped from my review queue,
+> Any other suggestion? pmem_dev_type? 
+
+Or dax_pmem_type?
+
+DAX is used to enumerate the memory device.
+
 >
-> greg k-h
-> .
+>>> +	.adistance = MEMTIER_ADISTANCE_PMEM,
+>>> +	.tier_sibiling = LIST_HEAD_INIT(default_pmem_type.tier_sibiling),
+>>> +	.nodes  = NODE_MASK_NONE,
+>>> +};
+>>> +
+>>>  static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>  {
+>>>  	struct device *dev = &dev_dax->dev;
+>>> @@ -62,6 +69,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>  		return -EINVAL;
+>>>  	}
+>>>  
+>>> +	init_node_memory_type(numa_node, &default_pmem_type);
+>>> +
+>>
+>> The memory hot-add below may fail.  So the error handling needs to be
+>> added.
+>>
+>> And, it appears that the memory type and memory tier of a node may be
+>> fully initialized here before NUMA hot-adding started.  So I suggest to
+>> set node_memory_types[] here only.  And set memory_dev_type->nodes in
+>> node hot-add callback.  I think there is the proper place to complete
+>> the initialization.
+>>
+>> And, in theory dax/kmem.c can be unloaded.  So we need to clear
+>> node_memory_types[] for nodes somewhere.
+>>
+>
+> I guess by module exit we can be sure that all the memory managed
+> by dax/kmem is hotplugged out. How about something like below?
+
+Because we set node_memorty_types[] in dev_dax_kmem_probe(), it's
+natural to clear it in dev_dax_kmem_remove().
+
+Best Regards,
+Huang, Ying
+
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 6b0d5de9a3e9..eb4e158012a9 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -248,6 +248,7 @@ static void __exit dax_kmem_exit(void)
+>  	dax_driver_unregister(&device_dax_kmem_driver);
+>  	if (!any_hotremove_failed)
+>  		kfree_const(kmem_name);
+> +	unregister_memory_type(&default_pmem_type);
+>  }
+>  
+>  MODULE_AUTHOR("Intel Corporation");
+> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+> index fc6b7a14da51..8355baf5b8b4 100644
+> --- a/include/linux/memory-tiers.h
+> +++ b/include/linux/memory-tiers.h
+> @@ -31,6 +31,7 @@ struct memory_dev_type {
+>  #ifdef CONFIG_NUMA
+>  extern bool numa_demotion_enabled;
+>  void init_node_memory_type(int node, struct memory_dev_type *default_type);
+> +void unregister_memory_type(struct memory_dev_type *memtype);
+>  #ifdef CONFIG_MIGRATION
+>  int next_demotion_node(int node);
+>  void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets);
+> @@ -57,6 +58,10 @@ static inline bool node_is_toptier(int node)
+>  #define numa_demotion_enabled	false
+>  static inline void init_node_memory_type(int node, struct memory_dev_type *default_type)
+>  {
+> +}
+> +
+> +static inline void unregister_memory_type(struct memory_dev_type *memtype)
+> +{
+>  
+>  }
+>  
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index 064e0f932795..4d29ebd4c4f3 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -500,6 +500,28 @@ void init_node_memory_type(int node, struct memory_dev_type *default_type)
+>  	mutex_unlock(&memory_tier_lock);
+>  }
+>  
+> +void unregister_memory_type(struct memory_dev_type *memtype)
+> +{
+> +	int node;
+> +	struct memory_tier *memtier = memtype->memtier;
+> +
+> +	mutex_lock(&memory_tier_lock);
+> +	for(node = 0; node < MAX_NUMNODES; node++) {
+> +		if (node_memory_types[node] == memtype) {
+> +			if (!nodes_empty(memtype->nodes))
+> +				WARN_ON(1);
+> +			node_memory_types[node] = NULL;
+> +		}
+> +	}
+> +
+> +	list_del(&memtype->tier_sibiling);
+> +	memtype->memtier = NULL;
+> +	if (list_empty(&memtier->memory_types))
+> +		destroy_memory_tier(memtier);
+> +
+> +	mutex_unlock(&memory_tier_lock);
+> +}
+> +
+>  void update_node_adistance(int node, struct memory_dev_type *memtype)
+>  {
+>  	pg_data_t *pgdat;

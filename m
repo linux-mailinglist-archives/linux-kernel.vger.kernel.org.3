@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4A058724A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D708758724E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiHAUYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S234258AbiHAU1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiHAUYr (ORCPT
+        with ESMTP id S229901AbiHAU07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:24:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FB93ED4F;
-        Mon,  1 Aug 2022 13:24:45 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y13so8435835ejp.13;
-        Mon, 01 Aug 2022 13:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=VGHWLnPOuI0iW4HF+EMCDJDCZmTKff3mWYUEzLkNfiw=;
-        b=dAzPq79++vwSq3w9xA+4dohDcZvqi0e0ZQ0sY20qPIv0KLftLe3e63OzidprZpDuoI
-         dUcHn7uiB6ShtYIQEPH3oA23MVDDdQc/IBZUvm+nLbF8YFnVOdvokA/6adhir8ew94VV
-         jDnADahwtP6A6hkTmXRV0krv2F+5BjZ04OB12O1eB8CqKY4ebhE2Kz4CJTajnzEBIQVe
-         QYUcHbGs2Dw2OG8HsnIy7x/e9DC2Z6IVTYVomM5jdVsgUeXjHI/8mcJ+22uYBuQBIQaW
-         cHcpGZp1pKi9mFeyMF1yuAFgwasQMxksaltwAlZc8QXa29StcOgY+ok9GDdvczOC8pej
-         m6fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=VGHWLnPOuI0iW4HF+EMCDJDCZmTKff3mWYUEzLkNfiw=;
-        b=DPcbn64dLvy3IhLUDK59FIUKJMC3rM1umU6ElIeGrdNdsNhUfoo4KK9au73+D8ArrH
-         nAUqwWZiDqS7HrNDncCa19Vwm7vB6S/G/i0ZqLJlLpSvlOPr4FKuPDErPdvFXmLKunnJ
-         +iHv8tx429P5JWnb8cav9rM+/AgHngvB2x1mLuK8XuuBQ+C70RwIUmHvIf6NQw/EN7N/
-         Sy/LL9R8OHls4PyKLxo4rZBw7puC7uyhvFUJLhqybUMFigvcaTM1Xtf21XIcIb1wDGPj
-         1ByMe6Pe2ew7SerCtSmAJbhyix2agnE/S8UMGH57OCRO6peREy+bKZ/7epdx50Rqip29
-         2wRA==
-X-Gm-Message-State: AJIora/yzCshTgfDxIozmIOFZAqRXJ3WU8aNBGVCMigZONxRWoEuLg1D
-        h20QmlHZ/sNqHrFmq4sRY5U=
-X-Google-Smtp-Source: AGRyM1t3kp3muaqngGlm0Nz2Rmtd9ZP/PZxNvexVuNje+xgIsmXZMoTPLIjVHEmigwBTkt2r3eWYUw==
-X-Received: by 2002:a17:907:2d90:b0:72f:5bb:1f32 with SMTP id gt16-20020a1709072d9000b0072f05bb1f32mr14043465ejc.758.1659385483943;
-        Mon, 01 Aug 2022 13:24:43 -0700 (PDT)
-Received: from krava ([83.240.62.89])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170906301300b006fef0c7072esm5579555ejz.144.2022.08.01.13.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 13:24:43 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 1 Aug 2022 22:24:41 +0200
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Faust <david.faust@oracle.com>
-Subject: Re: [PATCH] libbpf: skip empty sections in
- bpf_object__init_global_data_maps
-Message-ID: <Yug2iYQyd0TNlnHW@krava>
-References: <20220731232649.4668-1-james.hilliard1@gmail.com>
+        Mon, 1 Aug 2022 16:26:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B3E2980E;
+        Mon,  1 Aug 2022 13:26:58 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA93A6601B2B;
+        Mon,  1 Aug 2022 21:26:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659385617;
+        bh=qlDRiXQtVbqNkSmU8Cnqt3nNqlrAXRi8L9E+dfgRTgw=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=T6C413GV9u9auBKBUGPwrUqFub8g8kd4CuR1LPJpWJvYr19sZmMv4B5vMoWJ4FHQF
+         4qa3OBtA4YizFC4Kcfzdty7oaMMi4EtASju5M0z9qI0qyYrXkavVRc1pzU4508/z4N
+         Cfph7BTAnZoJfh99KQQESKatS1P5Ieosqe5udCGdFpOjf5oFcXUp2gkLz/TwE6DgWT
+         a58nEzUsPhD4Jj5dPciHvife+/zM7oBRfSTazPXG1XC/zXNGNGtq4vFMh0K17HOh87
+         XtShsIO4NZrHw/TycCFI4aOql8Eq5EG2A1H/F8lQ2bZbVQHQiMJWIAb4zazEudLtpo
+         Oj8HWXnrCGy/Q==
+Message-ID: <88576d7a-da5f-753d-51cf-08ed22f7c81e@collabora.com>
+Date:   Mon, 1 Aug 2022 23:26:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731232649.4668-1-james.hilliard1@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 09/15] drm/gem: Add LRU/shrinker helper
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220726175043.1027731-1-robdclark@gmail.com>
+ <20220726175043.1027731-10-robdclark@gmail.com>
+ <def8e47c-067e-0841-4ae4-1eb90244cd50@collabora.com>
+ <CAF6AEGtV4GY6=PmQh0wrKxjxk_baRCzOo=s=Uz-uKBNEn7SBBg@mail.gmail.com>
+ <6b35b912-68e5-e722-0b5a-0f7bd06c22c2@collabora.com>
+ <733f5d3f-293e-f951-a00b-fcd3052f68e7@collabora.com>
+In-Reply-To: <733f5d3f-293e-f951-a00b-fcd3052f68e7@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 05:26:49PM -0600, James Hilliard wrote:
-> The GNU assembler generates an empty .bss section. This is a well
-> established behavior in GAS that happens in all supported targets.
+On 8/1/22 23:13, Dmitry Osipenko wrote:
+> On 8/1/22 23:11, Dmitry Osipenko wrote:
+>> On 8/1/22 23:00, Rob Clark wrote:
+>>> On Mon, Aug 1, 2022 at 12:41 PM Dmitry Osipenko
+>>> <dmitry.osipenko@collabora.com> wrote:
+>>>>
+>>>> On 7/26/22 20:50, Rob Clark wrote:
+>>>>> +/**
+>>>>> + * drm_gem_lru_remove - remove object from whatever LRU it is in
+>>>>> + *
+>>>>> + * If the object is currently in any LRU, remove it.
+>>>>> + *
+>>>>> + * @obj: The GEM object to remove from current LRU
+>>>>> + */
+>>>>> +void
+>>>>> +drm_gem_lru_remove(struct drm_gem_object *obj)
+>>>>> +{
+>>>>> +     struct drm_gem_lru *lru = obj->lru;
+>>>>> +
+>>>>> +     if (!lru)
+>>>>> +             return;
+>>>>> +
+>>>>> +     mutex_lock(lru->lock);
+>>>>> +     lru_remove(obj);
+>>>>> +     mutex_unlock(lru->lock);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL(drm_gem_lru_remove);
+>>>>
+>>>> I made a preliminary port of the DRM-SHMEM shrinker on top of the the
+>>>> latest version of dma-buf locking convention and yours LRU patches. It
+>>>> all works good, the only thing that is missing for the DRM-SHMEM
+>>>> shrinker is the drm_gem_lru_remove_locked().
+>>>>
+>>>> What about to add a locked variant of drm_gem_lru_remove()?
+>>>
+>>> Sounds fine to me.. the only reason it didn't exist yet was because it
+>>> wasn't needed yet..
+>>
+>> There is no use for the drm_gem_lru_move_tail_locked() as well, you're
+>> not using it in the MSM driver. Hence I thought it might be good to add
+>> the drm_gem_lru_remove_locked(), or maybe the
+>> drm_gem_lru_move_tail_locked() should be dropped then?
+>>
+>>> I can respin w/ an addition of a _locked() version, or you can add it
+>>> on top in your patchset.  Either is fine by me
+>>
+>> The either option is fine by me too. If you'll keep the unused
+>> drm_gem_lru_move_tail_locked(), then will be nice to add
+>> drm_gem_lru_remove_locked().
+>>
 > 
-> The LLVM assembler doesn't generate an empty .bss section.
-> 
-> bpftool chokes on the empty .bss section.
-> 
-> Additionally in bpf_object__elf_collect the sec_desc->data is not
-> initialized when a section is not recognized. In this case, this
-> happens with .comment.
-> 
-> So we must check that sec_desc->data is initialized before checking
-> if the size is 0.
+> The drm_gem_lru_move_tail_locked() will be needed by DRM-SHMEM shrinker,
+> BTW.
 
-oops David send same change but I asked him to move the check
-to bpf_object__elf_collect [1] .. but with your explanation this
-fix actualy looks fine to me
+On the other hand, I see now that DRM-SHMEM shrinker can use the
+unlocked versions only. Hence both drm_gem_lru_move_tail_locked() and
+drm_gem_lru_remove_locked() aren't needed.
 
-jirka
-
-
-[1] https://lore.kernel.org/bpf/YuKaFiZ+ksB5f0Ye@krava/
-
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
-> ---
->  tools/lib/bpf/libbpf.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 50d41815f431..77e3797cf75a 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -1642,6 +1642,10 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
->  	for (sec_idx = 1; sec_idx < obj->efile.sec_cnt; sec_idx++) {
->  		sec_desc = &obj->efile.secs[sec_idx];
->  
-> +		/* Skip recognized sections with size 0. */
-> +		if (sec_desc->data && sec_desc->data->d_size == 0)
-> +			continue;
-> +
->  		switch (sec_desc->sec_type) {
->  		case SEC_DATA:
->  			sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
-> -- 
-> 2.34.1
-> 
+-- 
+Best regards,
+Dmitry

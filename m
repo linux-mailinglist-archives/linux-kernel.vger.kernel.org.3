@@ -2,130 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E443A586D92
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C803586D9D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiHAPTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S233488AbiHAPUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiHAPTs (ORCPT
+        with ESMTP id S233436AbiHAPUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:19:48 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D3F3337D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:19:46 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so8421673otb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4KphHhaoyXc371JKTPQphkPCqA2NS8jh1IIkyTneq4o=;
-        b=62EB/TFA4EuJYasg0ku1Dzr9dF033+9r1gXM0z+QJ7j/FuTK5jhbf38GBxyKpAP1ji
-         7Drz7ejxjN9DxPHD/ANUEK6L3cZPI9kd1/4JsiNCkcd8r0EE7Y31h8eUk8Q4T4JCYL3I
-         wG9l4kSHTD9SNnUXEVcwOcs77YOob6wKHSNIg0dih6qNHzqlFov+sSv9NIQMHsPnI7y5
-         H4PYESNlKNYjX61q+2qeK+YdhaBuvc/wNy56XLdYm/ndygfjSy8HPh0I7D2XR9miZcy5
-         E6TRQoilJz8V5YJiz//4+CWH/Ith4r/ncRDxeHNXkGgVVHLxKgv/rSkb4eGyDgYXYkRb
-         1VlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4KphHhaoyXc371JKTPQphkPCqA2NS8jh1IIkyTneq4o=;
-        b=EptLstm7YvRjCJUxA5dk1N/DlhVPw+Pdftl1u3GsCGUzESMz6IcqeFgS66I5GNaCKA
-         2B+QEHVzu0rPxKZxo3aGsMWNPNyizg758BjWoFAGAHJfQhc61bKlQqI7eF26TVH7l7aW
-         37oli6XwV7hhwTynacCIXPPvDfL9K9MnLBxrSyYcGvQhH6f7gXoE43jAEDY3YK3s6DTw
-         4cl6JyxTdjJtQGd3b2xHbriy9ach+xdRIz4PUWzqTBJ47HUGHKrofM/22hlRaEh6nuTF
-         Eurd5PLJ/71keGjHA/CCwo2+RevelG3qs0RKa/G64KLPK0YboMTpO8aJFuxr1W6zr+Uf
-         s0+g==
-X-Gm-Message-State: ACgBeo02MXW0016Djhj8koQYvmh9S9WP//qpfHI24reFNh24YDJMcVn1
-        woDZ5XGDmVhg+ymprHiIzTq7j1PJZtYnR4w4nFtR
-X-Google-Smtp-Source: AA6agR58TUz+jQfBltCbxRg6WZrQY7oenMMZ6MBjbTUxC7EEAw7vmQXEqpFoYsjefFs4nmqFahyuv4TBVZlaC3y3xi4=
-X-Received: by 2002:a9d:7a99:0:b0:629:805:bca4 with SMTP id
- l25-20020a9d7a99000000b006290805bca4mr2748972otn.26.1659367185883; Mon, 01
- Aug 2022 08:19:45 -0700 (PDT)
+        Mon, 1 Aug 2022 11:20:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5166564C7;
+        Mon,  1 Aug 2022 08:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659367217;
+        bh=pmPjh/lA87Z5W2nyaW7ihvFXNYv9bkrPbRGc5PPQH8A=;
+        h=X-UI-Sender-Class:From:To:Subject:Date;
+        b=lE549N2gSiLnnfNA1wunzQTZ+ah4tpEP5Bky62c5DTnXldiU1lPMBHJrBwe3+9Qnu
+         J5RxSVvWxIULnM47pbVjyQ5x7+9wS4ZGdM31tFENgA3SCUZ3OFBhf4EfpqK84u9ISp
+         RF+X9JScAdU/5u1cu9wPuwY0+39At0MaOJZFm5AI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100.fritz.box ([92.116.150.19]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1McYCl-1nk0kP3d8P-00d1GX; Mon, 01
+ Aug 2022 17:20:16 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Dump command line of faulting process to syslog
+Date:   Mon,  1 Aug 2022 17:20:13 +0200
+Message-Id: <20220801152016.36498-1-deller@gmx.de>
+X-Mailer: git-send-email 2.37.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com> <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
-In-Reply-To: <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 1 Aug 2022 11:19:35 -0400
-Message-ID: <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org
-Cc:     Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:W8hcioovE+Z+4+5r9LvNT3xnxYPDcNyVIT36mxBOBAsVYnianR1
+ Fk0uyBo+lIsSbJ/nZIXitqJA1/uzvLwohmND4IIR7ZWkVtOugqDY0npB7Dnkx+e/nAS0Fp8
+ k1Hfd6gXQglgB2oTxS83+hzgwJEHFCC+fOLLODfL84+hBXHNLAtD5moH83E/9ukNtflxtjF
+ bphXKtzcRjuE9otnQSFWw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1Oq5XVvyQtI=:QCeDmdf+soI5wZ/NjoG3tL
+ OEWeTxDe5F0McjEZSPiLyG2dbFOr/wIeNlbJpB24bAi4kPMl1jqhnEWALm48vaYp1Q7t7NvIw
+ nd8zS4fO7GYDTWSEbx/pligOafIk+tcGJ4Kwx5eRlkO4VwqK6OttsfzOrD7ZHpMvteGCcvaAd
+ bdf35qmgowe0LpIPpfsVolhHl0AspewS6RBAY0R38GmVe9xhJ/L4Vv5FyY/hYTwv7S0LcIJ3N
+ x673oHs1Cr0y/oSrC/+zS5DLzo3qztivG40vur3UHxTN7rCSrV8f+iVaNmGXyRt4p/F3K9Qlp
+ I1n5/s+rs5vSbWXc0k7twGmtoflnud5YhO7PF2eA2OldYpMus6LH8xa2wYPLzMATZI9sQmX1k
+ 8/RSGTzLv2Q2HOrG4gAdWL4O/iUqHuNz5btRBa11rzU3pd1rLfROt0RdZ9+JESZdI5/tbh6aJ
+ woB/lYFsAzZWpgvT3Kft19m8amaNLWoa7Hy5s+IZ7kRLSMwgwI2y0oK1A1RHHnrM/USl9n3bP
+ 1hHvAZFpJbh95ytPkzpZFOMrPg+g5XlTfUvHBVBn7796m8lHELmDy8S9MtY1UiyCj+KaHr2LC
+ cwGC5HbpDbW823pjTv9uooQ6sOO70J9W06SqSQS4P08Mllq52Pg78rMxdxf3wSPEALNgD76jt
+ Z2OnIKsyT92n4eStQSgpIgOdAzWXnl6m5q3/IDm1v2qiT4rj6To4EFqjnYs4kuelMaSISNhNu
+ YlP8yf3DQ+nYNdb4RfWK5N5RVir/EvsJ1uZMIHjy+HHIAlf1NjeT6wNgAI/Uw6YZb3HTdm4t1
+ 2NYtLBGhH2jRA8vChuUxmnrpyqj4GbNmbzUjzTa3iDhzqQtg1piHjjqrFc63maGdKMJa31pxH
+ pKhZZGyihhCnYBVKuGu7kQt8D6iNLyOKNi/8bIWWE5/IwjJtLQJCvRf2nfi8l5yKRkMMtSRUL
+ 3Vv+WyLKDZ2iFFf6WisdHeAN48jPPbzIJDMWd7Ya/OoXDxkCdfY1prFycUxLNp+F/7BngSeZp
+ uQRr7JidIoxduuLgNmwPrp6DV88i+33vY0sZbHZkE7VWkJKEJSK+chpf/alnwAn73VwK+tq9j
+ Q/JF/neJOyTw1m2WGCgDHzYR9v29Cpd56toBn5g5ayRE6VlcXXlD9RD6g==
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 9:13 AM Frederick Lawler <fred@cloudflare.com> wrote:
-> On 7/22/22 7:20 AM, Paul Moore wrote:
-> > On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> >
-> >> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
-> >>> While creating a LSM BPF MAC policy to block user namespace creation, we
-> >>> used the LSM cred_prepare hook because that is the closest hook to prevent
-> >>> a call to create_user_ns().
-> >>>
-> >>> The calls look something like this:
-> >>>
-> >>> cred = prepare_creds()
-> >>> security_prepare_creds()
-> >>> call_int_hook(cred_prepare, ...
-> >>> if (cred)
-> >>> create_user_ns(cred)
-> >>>
-> >>> We noticed that error codes were not propagated from this hook and
-> >>> introduced a patch [1] to propagate those errors.
-> >>>
-> >>> The discussion notes that security_prepare_creds()
-> >>> is not appropriate for MAC policies, and instead the hook is
-> >>> meant for LSM authors to prepare credentials for mutation. [2]
-> >>>
-> >>> Ultimately, we concluded that a better course of action is to introduce
-> >>> a new security hook for LSM authors. [3]
-> >>>
-> >>> This patch set first introduces a new security_create_user_ns() function
-> >>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
-> >> Patch 1 and 4 still need review from the lsm/security side.
-> >
-> > This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
-> >
-> > I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
->
-> Based on last weeks comments, should I go ahead and put up v4 for
-> 5.20-rc1 when that drops, or do I need to wait for more feedback?
+This patch series allows the arch-specific kernel fault handlers to dump
+in addition to the typical info (IP address, fault type, backtrace and so =
+on)
+the command line of the faulting process.
 
-In general it rarely hurts to make another revision, and I think
-you've gotten some decent feedback on this draft, especially around
-the BPF LSM tests; I think rebasing on Linus tree after the upcoming
-io_uring changes are merged would be a good idea.  Although as a
-reminder to the BPF LSM folks - I'm looking at you KP Singh :) - I
-need an ACK from you guys before I merge the BPF related patches
-(patches {2,3}/4).  For the record, I think the SELinux portion of
-this patchset (path 4/4) is fine.
+The motivation for this patch is that it's sometimes quite hard to find ou=
+t and
+annoying to not know which program *exactly* faulted when looking at the s=
+yslog.
 
-There is the issue of Eric's NACK, but I believe the responses that
-followed his comment sufficiently addressed those concerns and it has
-now been a week with no further comment from Eric; we should continue
-to move forward with this.
+Some examples from the syslog are:
 
--- 
-paul-moore.com
+On parisc:
+   do_page_fault() command=3D'cc1' type=3D15 address=3D0x00000000 in libc-=
+2.33.so[f6abb000+184000]
+   CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
+   Hardware name: 9000/785/C8000
+
+-> We see the "cc1" compiler crashed, but it would be useful to know which=
+ file was compiled.
+
+With this patch series, the kernel now prints in addition:
+   cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccR=
+kFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO=
+_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0=
+.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -qu=
+iet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wim=
+plicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413=
+_0/ghc_5.s
+
+-> now we know that cc1 crashed while compiling some haskell code.
+
+Another parisc example:
+   do_page_fault() command=3D'ld.so.1' type=3D15 address=3D0x565921d8 in l=
+ibc.so[f7339000+1bb000]
+   CPU: 1 PID: 1151 Comm: cc1 Tainted: G            E     5.10.133+ #45
+   Hardware name: 9000/785/C8000
+
+-> apparently here a program from the glibc testsuite segfaulted.
+
+With this patch we now additionally get:
+   ld.so.1[1151] cmdline: /home/gnu/glibc/objdir/elf/ld.so.1 --library-pat=
+h /home/gnu/glibc/objdir:/home/gnu/glibc/objdir/math:/home/gnu/
+        /home/gnu/glibc/objdir/malloc/tst-safe-linking-malloc-hugetlb1
+
+-> it was the tst-safe-linking-malloc-hugetlb1 testcase which faulted.
+
+An example of a typical x86 fault shows up as:
+   crash[2326]: segfault at 0 ip 0000561a7969c12e sp 00007ffe97a05630 erro=
+r 6 in crash[561a7969c000+1000]
+   Code: 68 ff ff ff c6 05 19 2f 00 00 01 5d c3 0f 1f 80 00 00 00 00 c3 0f=
+ 1f 80 00 00 00 00 e9 7b ff ff ff 55 48 89 e5 b8 00 00 00 00 <c7> 00 01 00=
+ 00 00 b8 00 00 00 00 5d c3 0f 1f 44 00 00 41 57 4c 8d
+
+-> with this patch we now will see the whole command line:
+   crash[2326] cmdline: ./crash test_write_to_page_0
+
+The patches are relatively small, and reuses functions which are used
+to create the output for the /proc/<pid>/cmdline files.
+
+This is the version 1 of the patch series.
+I'm interested if people find this useful too, and if so, I'm
+happy for any feedback on those patches.
+
+Thanks!
+Helge
+
+Helge Deller (3):
+  proc: Add get_task_cmdline_kernel() function
+  lib/dump_stack: Add dump_stack_print_cmdline() and wire up in
+    dump_stack_print_info()
+  x86/fault: Dump command line of faulting process to syslog
+
+ arch/x86/mm/fault.c     |  2 ++
+ fs/proc/base.c          | 68 +++++++++++++++++++++++++++--------------
+ include/linux/printk.h  |  5 +++
+ include/linux/proc_fs.h |  5 +++
+ lib/dump_stack.c        | 17 +++++++++++
+ 5 files changed, 74 insertions(+), 23 deletions(-)
+
+=2D-
+2.37.1
+

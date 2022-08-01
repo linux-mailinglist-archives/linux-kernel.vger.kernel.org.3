@@ -2,84 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E455F587239
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E22158723B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234008AbiHAURT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S234432AbiHAURa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiHAURP (ORCPT
+        with ESMTP id S232218AbiHAUR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:17:15 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCA3F3;
-        Mon,  1 Aug 2022 13:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=MihrIX9xxvINQlzJRyOqidEAph+Kwa/bRg0s8UIamnE=; b=mxhnwtvgx+0+syKlnHdO8Z3zpr
-        VNwIanjB6XZoSEYWbltm6x08K41JRuPBN5YzAEr6gsnYu/omqIUDHE4xeF6tFixGgGX//IdDO8CM2
-        gt0Ph7VCZz/2RqENLfJSGfFQtMco7AkcfRoZif0SRHVXhAOQbb37NCxWRWWHLn5KAR96AiuVw6j9U
-        CqwUGpGOfGqWtNBx4iDNDKbZx/bCkepbnFJ0Y7R/oN00KkeHUWxk83nM6vi9bDidXMSyegQ7IHPQQ
-        qIurF0EpHxm8RHdHWJb5TxHQfTdFPNhuiNyEvg2dNUAQZYD8E1+kYhzSPfo1FuEtTXE+jxWgx05Ze
-        zN0iLC7w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oIbqh-000P26-2F;
-        Mon, 01 Aug 2022 20:17:11 +0000
-Date:   Mon, 1 Aug 2022 21:17:11 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [git pull] vfs.git pile 1 - namei stuff
-Message-ID: <Yug0x5GvaInf3opV@ZenIV>
+        Mon, 1 Aug 2022 16:17:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F3EE28;
+        Mon,  1 Aug 2022 13:17:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7C0760DE0;
+        Mon,  1 Aug 2022 20:17:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CEEC433C1;
+        Mon,  1 Aug 2022 20:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659385046;
+        bh=M+j27qm/eqYXOx+0SN58kDy+Y1kSwRBfbfwHO+ZoT4Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lweoCUD89dSDGh4QQEEk9UAtlAYyEjTVeGPzNkZj5f9dbKAZR71H3NRQi1zUE3teX
+         WunQBYk/OimeVfHPLIK7jkkbCq5VAJNXBnzdQcZQJwiPExoZJjzwRNIKZCCFwkv5RA
+         4P56Hee7LtoaFccn0BYEhom87MkIqGcMstaPC8hzd5xbgjHByQ6VptNWEqgYJFMBmp
+         AYrKKwwBBUalM2ZeDwou2RPGJCe2Zv+S1r6Gz9r90IjJe3R4E42ePi0k/moQaxQcgX
+         EjZgvZE6uBmwGyChK8w0XI/ag6KxzrG183QpPJHOEbGLmkGHIjeHRzLL5ev4Sz3l0j
+         ZtnKgBPB8GZ7w==
+Date:   Mon, 1 Aug 2022 15:17:24 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 14/15] PCI: dwc: Check iATU in/outbound ranges
+ setup methods status
+Message-ID: <20220801201724.GA623582@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220801135457.GN93763@thinkpad>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+On Mon, Aug 01, 2022 at 07:24:57PM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jun 24, 2022 at 05:39:46PM +0300, Serge Semin wrote:
+> > Let's make the DWC PCIe RC/EP safer and more verbose for the invalid or
+> > failed inbound and outbound iATU windows setups. Needless to say that
+> > silently ignoring iATU regions setup errors may cause unpredictable
+> > errors. For instance if for some reason a cfg or IO window fails to be
+> > activated, then any CFG/IO requested won't reach target PCIe devices and
+> > the corresponding accessors will return platform-specific random values.
+> > 
+> > First of all we need to convert dw_pcie_ep_outbound_atu() method to check
+> > whether the specified outbound iATU range is successfully setup. That
+> > method is called by the pci_epc_ops.map_addr callback. Thus we'll make the
+> > EP-specific CPU->PCIe memory mappings saver.
+> > 
+> > Secondly since the iATU outbound range programming method now returns the
+> > operation status, it will be handy to take that status into account in the
+> > pci_ops.{map_bus,read,write} methods. Thus any failed mapping will be
+> > immediately noticeable by the PCIe CFG operations requesters.
+> > 
+> > Finally we need to convert the dw_pcie_setup_rc() method to returning the
+> > operation status, since the iATU outbound ranges setup procedure may now
+> > fail. It will be especially handy in case if the DW PCIe RC DT-node has
+> > invalid/unsupported (dma-)ranges property. Note since the suggested
+> > modification causes having too wide code indentation, it is reasonable
+> > from maintainability and readability points of view to move the outbound
+> > ranges setup procedure in the separate function.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-work.namei
-
-for you to fetch changes up to 3bd8bc897161730042051cd5f9c6ed1e94cb5453:
-
-  step_into(): move fetching ->d_inode past handle_mounts() (2022-07-06 13:16:07 -0400)
-
-----------------------------------------------------------------
-	RCU pathwalk cleanups.  Storing sampled ->d_seq of
-the next dentry in nameidata simplifies life considerably,
-especially if we delay fetching ->d_inode until step_into().
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-
-----------------------------------------------------------------
-Al Viro (10):
-      __follow_mount_rcu(): verify that mount_lock remains unchanged
-      namei: get rid of pointless unlikely(read_seqcount_retry(...))
-      follow_dotdot{,_rcu}(): change calling conventions
-      switch try_to_unlazy_next() to __legitimize_mnt()
-      namei: move clearing LOOKUP_RCU towards rcu_read_unlock()
-      namei: stash the sampled ->d_seq into nameidata
-      step_into(): lose inode argument
-      follow_dotdot{,_rcu}(): don't bother with inode
-      lookup_fast(): don't bother with inode
-      step_into(): move fetching ->d_inode past handle_mounts()
-
- fs/mount.h     |   1 -
- fs/namei.c     | 191 +++++++++++++++++++++++++--------------------------------
- fs/namespace.c |   2 +-
- 3 files changed, 86 insertions(+), 108 deletions(-)
+Thank you very much for all your reviews, Manivannan!  I added your
+reviewed-by to the appropriate commits.

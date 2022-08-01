@@ -2,162 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07431587482
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFC5587485
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiHAXmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S235246AbiHAXnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbiHAXmG (ORCPT
+        with ESMTP id S232802AbiHAXnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:42:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6036B27FCC;
-        Mon,  1 Aug 2022 16:42:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E75C660F53;
-        Mon,  1 Aug 2022 23:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4A6C433C1;
-        Mon,  1 Aug 2022 23:42:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A0JD2hrr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659397321;
+        Mon, 1 Aug 2022 19:43:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A3EB3F32A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659397382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KE+Z7Xz+ouZT/080HMVULCy2dY3YczC2NNCozWYJR8I=;
-        b=A0JD2hrroEZQ99dno6fb2bsPEwYCXv/PrThhRgvDjtOafeIecPw37bISnI9LF10F1IzXkR
-        6P4J/aJvBByBE7Ine8vQ3uvGXUHpTrZyN7oie6iI25EYAMLAWDFkfKnZLOrCFwUUW4k9Mm
-        +fQxz9WFw3xGRkxwxrI13mTM2UlUhmg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bd202276 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 23:42:01 +0000 (UTC)
-Date:   Tue, 2 Aug 2022 01:41:58 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        x86@kernel.org, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH RFC v2] random: implement getrandom() in vDSO
-Message-ID: <YuhkxqBIflCVo23l@zx2c4.com>
-References: <YuXLlUZ8EzvZB43U@zx2c4.com>
- <20220731013125.2103601-1-Jason@zx2c4.com>
- <87v8rbsn9j.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jfqNi+DY8PkwtU2AAu87TXHxJiOE1cjOeONbpekhqHU=;
+        b=DlffhG7k57FrZYDv70wypzydql+bXPH/GTQDOevyhISg85H0see43iPs4dfhQS+5rzv/DE
+        ZcG+QODf0tGIpOkbHrPgK94jku5edsE74+1ULU5Vz/JZJGf38VtdRyRq1ZO47PAKpv6beP
+        FDMHLicZTR0lmgHPl5qqRz/gDv5Mru0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-214-YhmwgAPjNe6ab8sGBYWeSg-1; Mon, 01 Aug 2022 19:43:01 -0400
+X-MC-Unique: YhmwgAPjNe6ab8sGBYWeSg-1
+Received: by mail-wm1-f69.google.com with SMTP id r10-20020a05600c284a00b003a2ff6c9d6aso8751953wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:43:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=jfqNi+DY8PkwtU2AAu87TXHxJiOE1cjOeONbpekhqHU=;
+        b=I3tCIqgi7WD/U3+5pwQvLRbDCakYHZFOYCWbR/fVr0zb4Eeh6ubHRqJRgHAmsLXYK5
+         PKg2dmPC/bzwaL9dCSfPaZBZjmRoKky2ue9Pghc8a82VF043aZC7LNjx0ApfhICJ4f2i
+         u1Xqitjj/LZE/YrFd+W3JLDwWD7hCpWz265+q9K9bkJflwVbZLzoFVUKQCZQG+fheDK2
+         RU9sWY/6Bdgl5ZR4Ohu12eEBWovxDyOFRSFQaDU4um+5uU7TaCzrv+3kQVxYa5eDL5BF
+         AJp5RBJKX/NBUmd+Ep76yZ9Ro/bf3EUgBm66ZF19ABJ6/BwpJPjlLYPlFJ57LeprDddT
+         gPcg==
+X-Gm-Message-State: ACgBeo2Dxg9MuXfwlBkR7Wb/jfEFDrfO49+BNHiEWr4dJihRTjQvWfmy
+        s2SxDs1d2IZQLceqE9z/K448Xm/RCZN01RYgu2ZvfKo64ebeQPIim/Qq1Ky1X7K5uG45uNKnnsu
+        Pv9af+3JchSvyCz6JDDdTM78=
+X-Received: by 2002:a05:6000:1883:b0:205:c0cb:33c6 with SMTP id a3-20020a056000188300b00205c0cb33c6mr12098323wri.39.1659397380501;
+        Mon, 01 Aug 2022 16:43:00 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7O2Blv6a5d+fZUpDwHl4b6r+O4Z+ZYMVadmiJlLS0twAx4POCD1EP9wSqa2Ty2SEcZST+jpg==
+X-Received: by 2002:a05:6000:1883:b0:205:c0cb:33c6 with SMTP id a3-20020a056000188300b00205c0cb33c6mr12098304wri.39.1659397380249;
+        Mon, 01 Aug 2022 16:43:00 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id i18-20020a1c5412000000b003a4c6e67f01sm7887488wmb.6.2022.08.01.16.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 16:42:59 -0700 (PDT)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     frederic@kernel.org, mtosatti@redhat.com
+Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
+        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
+        oleksandr@natalenko.name, atomlin@atomlin.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v5 0/2] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
+Date:   Tue,  2 Aug 2022 00:42:56 +0100
+Message-Id: <20220801234258.134609-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87v8rbsn9j.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Hi Frederic and Marcelo,
 
-On Mon, Aug 01, 2022 at 10:48:56PM +0200, Thomas Gleixner wrote:
-> On Sun, Jul 31 2022 at 03:31, Jason A. Donenfeld wrote:
-> You clearly forgot to tell people that they need a special config to
-> make this compile.
+I have incorporated an idea from Marcelo's patch [1] where a CPU-specific
+variable is used to indicate if a vmstat differential/or imbalance is
+present for a given CPU. So, at the appropriate time, vmstat processing can
+be initiated. The hope is that this particular approach is "cheaper" when
+compared to need_update() - used currently; in the context of nohz_full and
+the scheduling-clock tick being stopped, we would now with this patch,
+check if a CPU-specific vmstat imbalance is present before exiting
+user-mode (see tick_nohz_user_enter_prepare()).
 
-As I wrote in my patch body:
+This trivial test program [2] was used to determine the somewhat impact
+under vanilla and with the proposed changes; mlock(2) and munlock(2) was
+used solely to modify vmstat item 'NR_MLOCK'. The following is an average
+count of CPU-cycles across the aforementioned system calls and the idle
+loop, respectively. I believe these results are negligible:
 
-| The actual place that has the most work to do is in all of the other
-| files. Most of the vDSO shared page infrastructure is centered around
-| gettimeofday, and so the main structs are all in arrays for different
-| timestamp types, and attached to time namespaces, and so forth. I've
-| done the best I could to add onto this in an unintrusive way, but you'll
-| notice almost immediately from glancing at the code that it still needs
-| some untangling work. This also only works on x86 at the moment. I could
-| certainly use a hand with this part.
+	  Modified		   |  		Vanilla
+                                   |
+  cycles per syscall: 7399         | 	cycles per syscall: 4150
+  cycles per idle loop: 141048     |	cycles per idle loop: 144730
+                                   |
 
-So I'm not surprised other things are screwed up. This works well in my
-test harness, indeed, but I imagine there are lots of fiddly bits like
-that to work out. I wanted to send an RFC to elicit comments on the idea
-and API before moving forward, as I have a strong sense this is one of
-those "90% 10%" things, where 10% of the details take 90% of the time.
 
-Also, I haven't hooked up vdso32 yet.
+Any feedback would be appreciated. Thanks.
 
-> > +vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o
-> 
-> I don't even have to try to see that this cannot build with a defconfig:
-> 
-> Lacks -pg for that file and the included chacha.c contains
-> EXPORT_SYMBOL() which is not really working in the VDSO.
+Changes since v4 [3]:
 
-Thanks, I'll address this if I do a v3. You meant the removal of -pg,
-right? For the EXPORT_SYMBOL() stuff (and other symbols), I'm not sure
-whether I'll add an #ifdef maze, hoist a static function into a .h file,
-or just make another minier implementation of the necessary functions.
-Each approach has a pitfall.
+ - Moved vmstat_dirty specific changes into a separate patch
+   (Marcelo Tosatti)
 
-> > +DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-> ...
-> > +#define __vdso_rng_data (VVAR(_vdso_rng_data))
-> > +
-> > +static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
-> > +{
-> > +	return &__vdso_rng_data;
-> > +}
-> 
-> That's not working with time name spaces.
+Changes since v3 [4]:
 
-> > +static __always_inline ssize_t
-> > +__cvdso_getrandom(void *opaque_state, void *buffer, size_t len, unsigned int flags)
-> > +{
-> > +	struct getrandom_state *state = opaque_state;
-> > +	const struct vdso_rng_data *rng_info = __arch_get_vdso_rng_data();
-> 
-> This gives you vvar__vdso_rng_data and that points to the VVAR page at
-> offset 640. That works up to the point where a task is part of a
-> non-root time name space.
-> 
-> The kernel side mapping (the one which is updated) looks like this:
-> 
->     VVAR_PAGE
->     VIRT_CLOCK_PAGE[S]
->     TIMENS_PAGE
-> 
-> If time namespaces are disabled or the task is in the root time
-> namespace then the user mapping is in the same order.
-> 
-> If the task is in the non-root time namespace, then the user mapping is:
-> 
->     TIMENS_PAGE
->     VIRT_CLOCK_PAGE[S]
->     VVAR_PAGE
-> 
-> So your user space looks at offset 640 in the TIMENS_PAGE, which has
-> rand_data->ready and rand_data->generation == 0 forever.
-> 
-> See the comment above timens_setup_vdso_data() and look at the way how
-> e.g. __cvdso_time_data() deals with that.
+ - Used EXPORT_SYMBOL() on tick_nohz_user_enter_prepare()
+ - Replaced need_update()
+ - Introduced CPU-specific variable namely vmstat_dirty
+   and mark_vmstat_dirty()
 
-Ahhh, bingo! Thanks a lot for that. I couldn't quite grok before what
-was happening with the timens stuff, but I think I get it now. When a
-process is made in a timens, these pages are mapped differently, so that
-the timens is in the same place as the init ns page would be. That's
-clever. So I need to figure out some way to make __arch_get_vdso_rng_
-data() always return the address of VVAR_PAGE, even when it's been
-scooted down... I guess this means checking a bit in what's normally in
-the vvar slot, and if it's a timens one, then loading the one that it's
-in the timens slot, since that'll be the vvar one. Maybe that'll do it.
+[1]: https://lore.kernel.org/lkml/20220204173554.763888172@fedora.localdomain/
+[2]: https://pastebin.com/8AtzSAuK
+[3]: https://lore.kernel.org/lkml/20220621172207.1501641-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220422193647.3808657-1-atomlin@redhat.com/
 
-> VDSO hacking is special and not a sunday evening project. :)
 
-While initially a somewhat bewildering maze, it's a rather fun puzzle.
+Aaron Tomlin (2):
+  mm/vmstat: Use per cpu variable to track a vmstat discrepancy
+  tick/sched: Ensure quiet_vmstat() is called when the idle tick was
+    stopped too
 
-Jason
+ include/linux/tick.h     |  9 ++------
+ kernel/time/tick-sched.c | 19 ++++++++++++++++-
+ mm/vmstat.c              | 46 +++++++++++++---------------------------
+ 3 files changed, 35 insertions(+), 39 deletions(-)
+
+-- 
+2.37.1
+

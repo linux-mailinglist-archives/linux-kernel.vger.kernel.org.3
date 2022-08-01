@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD642586EC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF62586ED0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiHAQky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S233814AbiHAQlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbiHAQkt (ORCPT
+        with ESMTP id S233166AbiHAQlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:40:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6E5F3D;
-        Mon,  1 Aug 2022 09:40:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E304BCE176D;
-        Mon,  1 Aug 2022 16:40:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6C2C433C1;
-        Mon,  1 Aug 2022 16:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659372045;
-        bh=ka1KQO7g3lQa9qYWoLj3EEBCib4PxRY+082o/dfbQnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RbUUsyqEbREZcwQQd4MNED4pvd9uUOw9s1xkvRGamu+tggUC1xVk0kIMXXDP8eCf2
-         1LN6zOo0ruIlNH5/cAsC9SSRhtD9DXgAyZLoIusS/0BPCoJ0vGfWWn+X2OxYPaofwN
-         2aXvRYo1ttZ7E/EwGJDwL1+HoXhr0gozy5v3C6p3H2aFIWN18lm6Z6181zB8tGaEbz
-         aHc4Co+z5UM3pjQy9H9/cocliBrRKAieTWzd9JCJvlAZcwpkZsMI5KA4mU1VbKiS0/
-         lwoNDnEZgEM85LX6r9albcAiEpaoHMhzTmEt+euWry54yqMuJae//xfrYLkc5E8NeQ
-         Rb8/+18wmPlvg==
-Date:   Mon, 1 Aug 2022 19:40:39 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-sgx@vger.kernel.org
-Subject: Re: [PATCH] x86/sgx: Improve comments for
- sgx_encl_lookup/alloc_backing()
-Message-ID: <YugCB3yj630goNhu@kernel.org>
-References: <20220720182120.1160956-1-kristen@linux.intel.com>
- <YuJBjq/4dALm//rf@kernel.org>
- <fbf213f2-f118-ccfa-3faa-ec8b2182595b@intel.com>
+        Mon, 1 Aug 2022 12:41:24 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92236BCB0
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:41:18 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id bq11so13090120lfb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 09:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
+        b=Bxl5axUsg9q1jblhPn/sD0+XJcBD3bAcmC9Aes5ip1ahcImMEHBlh+Er+rhf8FIO5i
+         +XJNmIRVpjVrbiySb5O5JjfIYrlkw/mOOo1qLRe9SX6sdqO1Rz2KXY4WbugpN4fJWRij
+         CC78UfV1dMZkmuojiTGc3RQBuAg37lvfWIZxpBN7oIZ+TFFhJCkZYKmkXCGO1XSk++os
+         BEc9uqs1UR2e1JE6FJCIOTKylSGKLi8i6iImu/1NRs2zwpfONk1G3Sx/5wm/96rkxk/n
+         idBjkyW5OxynxwIdfLGjdySuoKDi/2Cx+yQ5t/sygpVds2zaObagHbRvikV7OatiZuWO
+         7vpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
+        b=r21r/6zRD/1yR4WEL7sG7FhWC4/CLQRfWZKsoF4RC6BhvZjhiPTJtfJi8qgdFjqeko
+         fqkIiKefllyeMrY01+GoHAXYaeUy0AtgFiZ5dDaqV7Hgvcgpo3jHeK6B3E2HcIp32SvN
+         JRn0X1ZuVRBuGddfcVYE/ejofe8t5FsAwdDJqHJnzmjHZ0DmPcukG/75wZMAXqO4pBVl
+         oi2trDpuOdexZnHzB4z/staieYjAzQSMmdMU4F1xDkTcSVpUTg7G/yPV3pImDJ1/V47u
+         aauMsndDLSlVCXUB9rzbiEAJzqhU8gJ06E5NB/Oapvq6Fr4hwSIvTXnow0B+DjnAB1r1
+         mvPw==
+X-Gm-Message-State: ACgBeo3e9E8tqeReRNmn9so9Y61PvKfPQvodWoTAY3uzCSZUC6SHYKqo
+        2DJs7FhsuEUFhKUL6YukoPdw0W8w3nLXe9LwJYk=
+X-Google-Smtp-Source: AA6agR7hKhHIm3F/ejmSJp6d9SbrPg4lDvobGmT+31j9yOEF5/lXFTH1cRKmZ7l8KWQdcnShwsngG5SjR8Fu/Me3Bwc=
+X-Received: by 2002:a05:6512:2c8a:b0:48a:f7e9:973f with SMTP id
+ dw10-20020a0565122c8a00b0048af7e9973fmr2082578lfb.5.1659372076778; Mon, 01
+ Aug 2022 09:41:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fbf213f2-f118-ccfa-3faa-ec8b2182595b@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
+ 09:41:16 -0700 (PDT)
+From:   Bright Gawayn <gben68387@gmail.com>
+Date:   Mon, 1 Aug 2022 22:11:16 +0530
+Message-ID: <CAG1+V0wE_akdUeEq+pYde2NDn1FBw6gG03M1=wDyPkOui2q5Hw@mail.gmail.com>
+Subject: Lucrative business proposal very urgent!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:142 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gben68387[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [gben68387[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 06:47:01AM -0700, Dave Hansen wrote:
-> On 7/28/22 00:58, Jarkko Sakkinen wrote:
-> > On Wed, Jul 20, 2022 at 11:21:19AM -0700, Kristen Carlson Accardi wrote:
-> >> Modify the comments for sgx_encl_lookup_backing() and for
-> >> sgx_encl_alloc_backing() to indicate that they take a reference
-> >> which must be dropped with a call to sgx_encl_put_backing().
-> >> Make sgx_encl_lookup_backing() static for now, and change the
-> >> name of sgx_encl_get_backing() to __sgx_encl_get_backing() to
-> >> make it more clear that sgx_encl_get_backing() is an internal
-> >> function.
-> >>
-> >> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > The rename is unnecessary.
-> 
-> Well, it was done to address some reviewer confusion:
-> 
-> 	https://lore.kernel.org/all/YtUs3MKLzFg+rqEV@zn.tnic/
-> 
-> I wouldn't call it unnecessary.  Heck, I'd argue that the one of the
-> main reasons that this code leaked memory in the first place was the
-> naming and lack of comments.
+Hello dear My name is Mr Bright Gawayn,  It's my pleasure to contact you today.
 
-Maybe the rename should be its own patch with this tag in the commit:
+We use a certain raw material in our pharmaceutical firm for the
+manufacture of animal vaccines and many more.
 
-Link: https://lore.kernel.org/all/YtUs3MKLzFg+rqEV@zn.tnic/
+My intention is to give you the new contact information of the local
+manufacturer of this raw material in India and every details regarding
+how to supply the material to my company if you're interested, my
+company pays in advance for this material.
 
-BR, Jarkko
+Due to some reasons, which I will explain in my next email, I cannot
+procure this material and supply it to my company myself due to the
+fact that I am a staff in the company.
 
+Please get back to me as soon as possible for full detail if you are interested.
+
+Thanks and regards
+Bright.

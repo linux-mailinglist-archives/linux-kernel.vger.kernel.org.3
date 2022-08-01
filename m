@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31157586A2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A01586973
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiHAMNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S232644AbiHAMCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbiHAMLl (ORCPT
+        with ESMTP id S232308AbiHAMAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:11:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7576FA32;
-        Mon,  1 Aug 2022 04:57:11 -0700 (PDT)
+        Mon, 1 Aug 2022 08:00:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D58A4E61A;
+        Mon,  1 Aug 2022 04:52:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89E58B81170;
-        Mon,  1 Aug 2022 11:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E590BC433D6;
-        Mon,  1 Aug 2022 11:57:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F970612C6;
+        Mon,  1 Aug 2022 11:52:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1F9C433C1;
+        Mon,  1 Aug 2022 11:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355022;
-        bh=KwPQhO7TU6/iLNAcx6NoF3WPVIN8mKMpEzoii8Yvj9U=;
+        s=korg; t=1659354778;
+        bh=TV9or4cVvHCFAXczizAjkTsOYTGZ/NNgwRCztI24QcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RxCTwdbFK56CjkPJpEojQnjs7nEO8Zn66kbwGc/CJJR6jycjU1KPKxFcoSFkeBL/7
-         agHz4Qlg57j3aDemAZsmyME9kHJDyjPABJ+Al+VYIStrmNo/I7HW6qEaHv6BHYl4Gm
-         IDV44cGl591tTmkXia2j4GpUnS1cdQa1Og4bX+Wo=
+        b=W30yFdZF0Ut5kU7gWtARFOjGXJKrcQ0NzRU9Nyk9E8nLusFbq7uU9Aq1ACvViTf0v
+         YJnvoJjorUYcP+oiGEvto5nPYzr889a3829saNszQX78VWxcRJtUHmhxk1kfwlBs8N
+         oIZfq7hqoKzL3uyGEJL5lBjvyn5a9nmcYq+DyH3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Marek Szlosek <marek.szlosek@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.18 27/88] ice: Fix max VLANs available for VF
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 17/69] tcp: Fix a data-race around sysctl_tcp_frto.
 Date:   Mon,  1 Aug 2022 13:46:41 +0200
-Message-Id: <20220801114139.265301380@linuxfoundation.org>
+Message-Id: <20220801114135.185605997@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 1e308c6fb7127371f48a0fb9770ea0b30a6b5698 upstream.
+commit 706c6202a3589f290e1ef9be0584a8f4a3cc0507 upstream.
 
-Legacy VLAN implementation allows for untrusted VF to have 8 VLAN
-filters, not counting VLAN 0 filters. Current VLAN_V2 implementation
-lowers available filters for VF, by counting in VLAN 0 filter for both
-TPIDs.
-Fix this by counting only non zero VLAN filters.
-Without this patch, untrusted VF would not be able to access 8 VLAN
-filters.
+While reading sysctl_tcp_frto, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: cc71de8fa133 ("ice: Add support for VIRTCHNL_VF_OFFLOAD_VLAN_V2")
-Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Marek Szlosek <marek.szlosek@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_virtchnl.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv4/tcp_input.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl.c
-@@ -2966,7 +2966,8 @@ ice_vc_validate_add_vlan_filter_list(str
- 				     struct virtchnl_vlan_filtering_caps *vfc,
- 				     struct virtchnl_vlan_filter_list_v2 *vfl)
- {
--	u16 num_requested_filters = vsi->num_vlan + vfl->num_elements;
-+	u16 num_requested_filters = ice_vsi_num_non_zero_vlans(vsi) +
-+		vfl->num_elements;
- 
- 	if (num_requested_filters > vfc->max_filters)
- 		return false;
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -2167,7 +2167,7 @@ void tcp_enter_loss(struct sock *sk)
+ 	 * loss recovery is underway except recurring timeout(s) on
+ 	 * the same SND.UNA (sec 3.2). Disable F-RTO on path MTU probing
+ 	 */
+-	tp->frto = net->ipv4.sysctl_tcp_frto &&
++	tp->frto = READ_ONCE(net->ipv4.sysctl_tcp_frto) &&
+ 		   (new_recovery || icsk->icsk_retransmits) &&
+ 		   !inet_csk(sk)->icsk_mtup.probe_size;
+ }
 
 

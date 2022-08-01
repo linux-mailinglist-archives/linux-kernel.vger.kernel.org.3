@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76BF58699F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B824A586A78
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbiHAMEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S234125AbiHAMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiHAMEP (ORCPT
+        with ESMTP id S234422AbiHAMPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:04:15 -0400
+        Mon, 1 Aug 2022 08:15:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783CB20F74;
-        Mon,  1 Aug 2022 04:54:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6814D7AC17;
+        Mon,  1 Aug 2022 04:58:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B701AB80E8F;
-        Mon,  1 Aug 2022 11:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CF6C433C1;
-        Mon,  1 Aug 2022 11:54:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDA0AB81171;
+        Mon,  1 Aug 2022 11:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422B2C433C1;
+        Mon,  1 Aug 2022 11:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354858;
-        bh=SA4mr/GOqmBjYbqizDfuGgHUp55u4FM5kuYkl1VLvSQ=;
+        s=korg; t=1659355110;
+        bh=eJKRV90rG1YYkyI0zQh3lPHiACffaEECIn1A0+30NFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aUEE1F8Ne7abkIyxxkN9r1PwawUlE1jTB2UbUR+dxnQuOEgeMiJ2a3sr0wTOSNAcE
-         8K5qm2Y4jfWQHiIp0FC/gBbcEbUEslB2OudL83GfJARw5wfQNroLxWzDGqGsvxnqbi
-         vQVuPSQecQ9RTbgZO28sd3L6w2s6uYqmAnvK3ryg=
+        b=hFNowBi6OWKyMFe1Yc1XRpzRcfZrp1NJfFGyfb7b/24T2fCCstY139t3uKaxa6lbt
+         oOp1/Cs165Z32tCYsOCmnWrzP+L6ssStveMn41QXpBWIJ8se9qx0E4Pu3+wtSpoGvD
+         BdZY8z6wAE6c5hsYPb4IsBpmWQMdWVc3pt+N9Fps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 15/69] tcp: Fix a data-race around sysctl_tcp_app_win.
-Date:   Mon,  1 Aug 2022 13:46:39 +0200
-Message-Id: <20220801114135.101281639@linuxfoundation.org>
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.18 26/88] bridge: Do not send empty IFLA_AF_SPEC attribute
+Date:   Mon,  1 Aug 2022 13:46:40 +0200
+Message-Id: <20220801114139.231282517@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-commit 02ca527ac5581cf56749db9fd03d854e842253dd upstream.
+commit 9b134b1694ec8926926ba6b7b80884ea829245a0 upstream.
 
-While reading sysctl_tcp_app_win, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+After commit b6c02ef54913 ("bridge: Netlink interface fix."),
+br_fill_ifinfo() started to send an empty IFLA_AF_SPEC attribute when a
+bridge vlan dump is requested but an interface does not have any vlans
+configured.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+iproute2 ignores such an empty attribute since commit b262a9becbcb
+("bridge: Fix output with empty vlan lists") but older iproute2 versions as
+well as other utilities have their output changed by the cited kernel
+commit, resulting in failed test cases. Regardless, emitting an empty
+attribute is pointless and inefficient.
+
+Avoid this change by canceling the attribute if no AF_SPEC data was added.
+
+Fixes: b6c02ef54913 ("bridge: Netlink interface fix.")
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Link: https://lore.kernel.org/r/20220725001236.95062-1-bpoirier@nvidia.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/bridge/br_netlink.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -526,7 +526,7 @@ static void tcp_grow_window(struct sock
-  */
- static void tcp_init_buffer_space(struct sock *sk)
- {
--	int tcp_app_win = sock_net(sk)->ipv4.sysctl_tcp_app_win;
-+	int tcp_app_win = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_app_win);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	int maxwin;
+--- a/net/bridge/br_netlink.c
++++ b/net/bridge/br_netlink.c
+@@ -589,9 +589,13 @@ static int br_fill_ifinfo(struct sk_buff
+ 	}
+ 
+ done:
++	if (af) {
++		if (nlmsg_get_pos(skb) - (void *)af > nla_attr_size(0))
++			nla_nest_end(skb, af);
++		else
++			nla_nest_cancel(skb, af);
++	}
+ 
+-	if (af)
+-		nla_nest_end(skb, af);
+ 	nlmsg_end(skb, nlh);
+ 	return 0;
  
 
 

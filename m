@@ -2,137 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940CA5867BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE5F5867C5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiHAKoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S231285AbiHAKoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiHAKoB (ORCPT
+        with ESMTP id S231187AbiHAKog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:44:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2A683B2
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659350640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AlQxFUH0VbGf7ysRiP07rHbskpU3q3i2vOryL8lB/2Y=;
-        b=gqraY9b/R5YieidW+Q0pv6UDfUxW21D2nPf9Ii6T/HSGIjSeS2swlngwqVB3bG/CrRrPy+
-        1pf6O6L2sxcTIciqjo0o2Xv+CZhMTwYW5M7sQC9YDWMnVmsUaYVdvWREagp9ODoeH9Dtp4
-        /G0zOPFsB2W9foowaXcWEAeW8vWaZ1w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-_iSCFO_uOoWLL4Vb4FS1ug-1; Mon, 01 Aug 2022 06:43:57 -0400
-X-MC-Unique: _iSCFO_uOoWLL4Vb4FS1ug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 1 Aug 2022 06:44:36 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E95CD88
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1659350669; bh=1EJPgP5q2q4V6iN2Gc8k3q+T6sP+TuI5mAZxt56oEQs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=v9H4tKDdubqQVOdqaUwRK8QP0jXaMIWtxKlvyIiTLreQbdA/IBUpyp9xVApCdYE31
+         qnwe8Onyel1WcDO1/+4Z0XsEul2UA6IJTyRB4/XKeAd93kZdLHfvvUrLFMEZHsQ/z8
+         l48EYuJEuTFwWCnGyEkFelCf7Y43U5Iq8m6M3BtM=
+Received: from [100.100.57.219] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0105C85A581;
-        Mon,  1 Aug 2022 10:43:56 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9F48492C3B;
-        Mon,  1 Aug 2022 10:43:55 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 271AhtU7024246;
-        Mon, 1 Aug 2022 06:43:55 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 271Ahtdk024242;
-        Mon, 1 Aug 2022 06:43:55 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 1 Aug 2022 06:43:55 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v4 2/2] change buffer_locked, so that it has acquire
- semantics
-In-Reply-To: <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
-Message-ID: <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com> <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2590B60103;
+        Mon,  1 Aug 2022 18:44:29 +0800 (CST)
+Message-ID: <a9777679-ff44-daac-57bb-ea3c52c6907f@xen0n.name>
+Date:   Mon, 1 Aug 2022 18:44:28 +0800
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0)
+ Gecko/20100101 Thunderbird/105.0a1
+Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
+Content-Language: en-US
+To:     Jinyang He <hejinyang@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Lulu Cheng <chenglulu@loongson.cn>
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+ <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn>
+ <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
+ <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
+ <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
+ <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn>
+ <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
+ <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
+ <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
+ <7512ae16-b171-d072-674f-a6b9a5e764d6@loongson.cn>
+ <CAAhV-H5wSJZ2X46ySqoaJd7Z2soGcYKRNixnghmE3f3zEzyS+w@mail.gmail.com>
+ <10751c9af5d45fea741e0bbed6c818ddb9db3ac3.camel@xry111.site>
+ <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's have a look at this piece of code in __bread_slow:
-	get_bh(bh);
-	bh->b_end_io = end_buffer_read_sync;
-	submit_bh(REQ_OP_READ, 0, bh);
-	wait_on_buffer(bh);
-	if (buffer_uptodate(bh))
-		return bh;
-Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-Consequently, if someone calls sb_bread and then reads the buffer data,
-the read of buffer data may be executed before wait_on_buffer(bh) on
-architectures with weak memory ordering and it may return invalid data.
+On 2022/8/1 18:08, Jinyang He wrote:
+> [snip]
+> 
+> Actually, I really hope kernel image is in the XKVRANGE, rather
+> than being in XKPRANGE. So that we can limit kernel and modules
+> be in 4GB range. I think it will make all work normally. :-(
 
-Fix this bug by changing the function buffer_locked to have the acquire
-semantics - so that code that follows buffer_locked cannot be moved before
-it.
+Just my 2c. I'd prefer any scheme in which memfd_secret is possible. The 
+current design makes it impossible to carve out memory regions from 
+kernel's view, IIUC, which is of course something to improve...
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
+-- 
+WANG "xen0n" Xuerui
 
-Index: linux-2.6/include/linux/buffer_head.h
-===================================================================
---- linux-2.6.orig/include/linux/buffer_head.h
-+++ linux-2.6/include/linux/buffer_head.h
-@@ -120,7 +120,6 @@ static __always_inline int test_clear_bu
- BUFFER_FNS(Uptodate, uptodate)
- BUFFER_FNS(Dirty, dirty)
- TAS_BUFFER_FNS(Dirty, dirty)
--BUFFER_FNS(Lock, locked)
- BUFFER_FNS(Req, req)
- TAS_BUFFER_FNS(Req, req)
- BUFFER_FNS(Mapped, mapped)
-@@ -135,6 +134,17 @@ BUFFER_FNS(Meta, meta)
- BUFFER_FNS(Prio, prio)
- BUFFER_FNS(Defer_Completion, defer_completion)
- 
-+static __always_inline void set_buffer_locked(struct buffer_head *bh)
-+{
-+	set_bit(BH_Lock, &bh->b_state);
-+}
-+
-+static __always_inline int buffer_locked(const struct buffer_head *bh)
-+{
-+	/* pairs with smp_mb__after_atomic() in unlock_buffer() */
-+	return test_bit_acquire(BH_Lock, &bh->b_state);
-+}
-+
- #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
- 
- /* If we *know* page->private refers to buffer_heads */
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 

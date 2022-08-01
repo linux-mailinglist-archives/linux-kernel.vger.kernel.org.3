@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8446E5862C7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919925862CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiHACm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S239348AbiHACoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239316AbiHACms (ORCPT
+        with ESMTP id S239301AbiHACoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:42:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E565A13D2D;
-        Sun, 31 Jul 2022 19:42:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 791E6B80DCC;
-        Mon,  1 Aug 2022 02:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03BBC433D7;
-        Mon,  1 Aug 2022 02:42:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659321764;
-        bh=Jgmay4Wp8fySBQ0xkLEHDoGHR4fdNJxu7+B9UiG4oaU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nfyTwg3NjIeYyCPXBgJ5BwOJ5/w+uUN/llI5m0HgbVwuWNr1MzKRo0kZipx5dyZLx
-         eNq55CIfq8YrntsPldAaV8InUntvko66Dhmw61capP2X97kliqUX2/FW/PhUwEbj9j
-         J6RtUqPHYLaM7gfgkNCvHes6ADZjJRW1jwVkjD8gxlATnQ9cQDwNyPS1KeO6PB9V8j
-         1CnLXZad1p+KyY2ui5vqtoNq39Jst/Scx28h9nnv7LbRtRD8/OaKJKAZhNCiizSwqr
-         koDRr6OK0z9+6HhAxaVJD5D0Lnk1yAJBE6DjES/MOmvhTHyFVfWj80YOlSuiyOXW5u
-         0+xzgKXT1BvgA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] csky: abiv1: Fixup compile error
-Date:   Sun, 31 Jul 2022 22:42:29 -0400
-Message-Id: <20220801024229.567397-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220801024229.567397-1-guoren@kernel.org>
-References: <20220801024229.567397-1-guoren@kernel.org>
+        Sun, 31 Jul 2022 22:44:10 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3770613D09;
+        Sun, 31 Jul 2022 19:44:09 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lx2V371dpz9t05;
+        Mon,  1 Aug 2022 10:42:51 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 10:44:01 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 10:44:00 +0800
+Subject: Re: [PATCH -next] video: fbdev: imxfb: fix return value check in
+ imxfb_probe()
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <deller@gmx.de>
+References: <20220729024134.159942-1-yangyingliang@huawei.com>
+ <20220730231815.dzuscf2x2sgj66bg@pengutronix.de>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <b1487b74-cbc1-013b-f734-c78319d76894@huawei.com>
+Date:   Mon, 1 Aug 2022 10:43:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20220730231815.dzuscf2x2sgj66bg@pengutronix.de>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi,
 
-  LD      vmlinux.o
-arch/csky/lib/string.o: In function `memmove':
-string.c:(.text+0x108): multiple definition of `memmove'
-lib/string.o:string.c:(.text+0x7e8): first defined here
-arch/csky/lib/string.o: In function `memset':
-string.c:(.text+0x148): multiple definition of `memset'
-lib/string.o:string.c:(.text+0x2ac): first defined here
-scripts/Makefile.vmlinux_o:68: recipe for target 'vmlinux.o' failed
-make[4]: *** [vmlinux.o] Error 1
+On 2022/7/31 7:18, Uwe Kleine-König wrote:
+> Hello,
+>
+> On Fri, Jul 29, 2022 at 10:41:34AM +0800, Yang Yingliang wrote:
+>> If devm_ioremap_resource() fails, it never return NULL, replace
+>> NULL test with IS_ERR().
+> Oh, thanks for cleanup up behind me. Did you find this using some static
+> analysis tool? I would consider it interesting and fair to mention this
+> in the commit log.
+I found it by coccicheck like this:
 
-Fixes: e4df2d5e852a ("csky: Add C based string functions")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: <stable@vger.kernel.org>
----
- arch/csky/abiv1/inc/abi/string.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+@@
+expression ret, E;
+@@
+ret = \(devm_ioremap_resource\)(...);
+... when != ret = E
+     when != IS_ERR(ret)
+(
+  ret == NULL || IS_ERR(ret)
+|
+  IS_ERR(ret) || ret == NULL
+|
+  ret != NULL && !IS_ERR(ret)
+|
+  !IS_ERR(ret) && ret != NULL
+|
+- ret == NULL
++ IS_ERR(ret)
+|
+- ret != NULL
++ !IS_ERR(ret)
+)
 
-diff --git a/arch/csky/abiv1/inc/abi/string.h b/arch/csky/abiv1/inc/abi/string.h
-index 9d95594b0feb..de50117b904d 100644
---- a/arch/csky/abiv1/inc/abi/string.h
-+++ b/arch/csky/abiv1/inc/abi/string.h
-@@ -6,4 +6,10 @@
- #define __HAVE_ARCH_MEMCPY
- extern void *memcpy(void *, const void *, __kernel_size_t);
- 
-+#define __HAVE_ARCH_MEMMOVE
-+extern void *memmove(void *, const void *, __kernel_size_t);
-+
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *, int,  __kernel_size_t);
-+
- #endif /* __ABI_CSKY_STRING_H */
--- 
-2.36.1
-
+Thanks,
+Yang
+>
+> Best regards
+> Uwe
+>
+>

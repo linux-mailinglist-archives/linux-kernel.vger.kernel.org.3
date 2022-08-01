@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B187D586A76
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2310658697D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiHAMQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S233017AbiHAMCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbiHAMP2 (ORCPT
+        with ESMTP id S233236AbiHAMA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:15:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F8979EC0;
-        Mon,  1 Aug 2022 04:58:20 -0700 (PDT)
+        Mon, 1 Aug 2022 08:00:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC7D3F320;
+        Mon,  1 Aug 2022 04:53:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F9CF601C3;
-        Mon,  1 Aug 2022 11:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FAFC433D6;
-        Mon,  1 Aug 2022 11:58:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9251CCE13B9;
+        Mon,  1 Aug 2022 11:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B84C433B5;
+        Mon,  1 Aug 2022 11:53:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355099;
-        bh=5N9uNsQ0SJ0Qf0HCAEwVojCgpDfmLRr/FMEiPYEn17Y=;
+        s=korg; t=1659354794;
+        bh=nqV3ctI8R4gm+NFiE/4YFYzcg/9Je9bkXrypLSXOWMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cVVezDBNsdhi+6plUeMK75V25SxyxgrUuuCFiAHjNsKGwHUo5hNgvlGcjK0zocrP3
-         ir9PWoau/lIjYm6kEEcyEE2rC2FApPMYb2+TRqzQeOK8rV0bOV9XuMTO5P2O0CWHa+
-         OpEJ2MHfzHXe7ujKwwKyKM/hDbEsJo/T8S8IYvnw=
+        b=imO2OKuh1IYH39+szr+TXfrouz0nM+M20QDIDdg1D2h9rxr59uhR9GJLXNnGn4EkF
+         Nk0dEXreB0kXNPHaqi+dq4sygTVH3yweaEvQ6s8eEuZadl+8OsLaZx1eDi/f6dMPGy
+         Mj0SuFhH2Q9p0LNBX/xb/9iU8QHyTxQgsmFeIzl4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wei Wang <weiwan@google.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.18 32/88] Revert "tcp: change pingpong threshold to 3"
-Date:   Mon,  1 Aug 2022 13:46:46 +0200
-Message-Id: <20220801114139.498415881@linuxfoundation.org>
+Subject: [PATCH 5.15 23/69] Revert "tcp: change pingpong threshold to 3"
+Date:   Mon,  1 Aug 2022 13:46:47 +0200
+Message-Id: <20220801114135.460691563@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,7 +86,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/include/net/inet_connection_sock.h
 +++ b/include/net/inet_connection_sock.h
-@@ -323,7 +323,7 @@ void inet_csk_update_fastreuse(struct in
+@@ -315,7 +315,7 @@ void inet_csk_update_fastreuse(struct in
  
  struct dst_entry *inet_csk_update_pmtu(struct sock *sk, u32 mtu);
  
@@ -95,7 +95,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  static inline void inet_csk_enter_pingpong_mode(struct sock *sk)
  {
-@@ -340,14 +340,6 @@ static inline bool inet_csk_in_pingpong_
+@@ -332,14 +332,6 @@ static inline bool inet_csk_in_pingpong_
  	return inet_csk(sk)->icsk_ack.pingpong >= TCP_PINGPONG_THRESH;
  }
  

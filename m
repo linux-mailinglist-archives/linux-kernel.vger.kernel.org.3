@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EAA5862D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1AD5862D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239402AbiHACvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S239414AbiHACwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239324AbiHACvU (ORCPT
+        with ESMTP id S233331AbiHACwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:51:20 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA81A7671;
-        Sun, 31 Jul 2022 19:51:18 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id q19so44014pfg.8;
-        Sun, 31 Jul 2022 19:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=E5/3EPPmTChoHJEmcg7iZTYAVeMR8tAQMUhwyuotXUs=;
-        b=biEgmbwdEA6v7Wkbp8qvSR0KX5HVzyDXwGAA7hr4BP7zacsvJsElUKIJ5VraGv+f3L
-         PX32CeZGzTD6wzCRr4uxTis8ijaiz+86HM70pUYAToWN9toVKYgV1xu0SVBUYqJWQCle
-         aD3Bh+O21nm5RycgkhHCfD+EN5SGyGZ868y6EAQVb4mfG7ALdEWtwxC/MvY1ebRFgCsD
-         roEiC+uJ2HPWfzJAKy3yLQzmQ/QOM/rlZiRURDB+6oGqSfKRPr1aLYLXtfMFX2ZBsVvY
-         7jDw9cnnuUsSffV8Gr3625pc/k3FQZFadoGzD6DcSbV2vKVzXNysHkIC3zz1Tbue/slD
-         rBYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=E5/3EPPmTChoHJEmcg7iZTYAVeMR8tAQMUhwyuotXUs=;
-        b=iznhs9VP4+w28zJuqaaseiLRHJqbVaPvgGfliKnXGJrrxN6EnFRkGUW8ZJ6sScdcfR
-         rFq69aszanOeefIDwz916MqvG0DYrDN69BWipeSY6e8Q7O5R8aF4NrjRgr8wP25RGkFj
-         QWtrW1vji6Zxfmo6ZakM7m+QwvZsk6IuMKccalCWcz95+7bY4QFjE3USKKkFt3lIYv/+
-         VQzwnEq96oHRFhDDRFW5I3WcXN1bZb5w1MM5g6uGvlbNqgRc+JeaY4eV0T/uEkC+L3zi
-         xU/5pV7fWCYnOXh0+Ws48lIH1JP1mIVb5Rq5bUg9tUr87WDTRYmj4LR5qOQ0vRIPHn15
-         7A9Q==
-X-Gm-Message-State: AJIora86uYrEk5xNQVN+v+y0poetPW2D2/FnIGTf4wtz0z6KSFUQfSWi
-        Ju6lg74Vm15Aj7CvdqZSbSrkN0x4XAI=
-X-Google-Smtp-Source: AGRyM1twLh8IBKzqyutsuxfScf0IEDrFAw3nFuNWWijoLXoDfCSoEtWBgCPNGzPNGbiUUWxi1TBm9Q==
-X-Received: by 2002:a63:f207:0:b0:41b:6137:2b6d with SMTP id v7-20020a63f207000000b0041b61372b6dmr11651724pgh.397.1659322278084;
-        Sun, 31 Jul 2022 19:51:18 -0700 (PDT)
-Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0016db7f49cc2sm8132666plg.115.2022.07.31.19.51.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:51:17 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] libbpf: Initialize err in probe_map_create
-Date:   Sun, 31 Jul 2022 19:51:09 -0700
-Message-Id: <20220801025109.1206633-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 31 Jul 2022 22:52:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C9AAE7B;
+        Sun, 31 Jul 2022 19:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=s8ez/7VBHWxgBY5IeBuqe1BKoB7CELG95CXU6zGOg1o=; b=jWAn3xKJGIL6pGz3sLsDFipQK2
+        hW2UVrS44R9I+JxXFYC05STHuAuTfUe1M9v0PXF0dqLgpDksiFU/4IdEZCph11K4/m2kV4r2o1MGB
+        pm4HEcZczeXYMEt2Fj+ThLloem4rSL/LKIkTQS04MBu6+wz3pCBu9zlv1ya/igZ1q5jdoQCiSsc/4
+        Wu7wjkRpeNgELPsCEPtftpj1FI1mJkc/evaTkdO+EoUMzBerNpDMZz9RD9FP5ubncpqRzZmJzPnrl
+        9L02k/rn0nDIacuhsYBOfPZ/TqZHH9B3UoKQOKPMVOVeEV0I6obXJMVDRF0LarRpNE5VOU7+uu4d5
+        iNjmGS3g==;
+Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oILXQ-006ltP-68; Mon, 01 Aug 2022 02:52:13 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] Documentation/ABI: correct possessive "its" typos
+Date:   Sun, 31 Jul 2022 19:52:07 -0700
+Message-Id: <20220801025207.29971-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC-11 warns about the possibly unitialized err variable in
-probe_map_create:
+Correct all uses of "it's" that are meant to be possessive "its".
 
-libbpf_probes.c: In function 'probe_map_create':
-libbpf_probes.c:361:38: error: 'err' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-  361 |                 return fd < 0 && err == exp_err ? 1 : 0;
-      |                                  ~~~~^~~~~~~~~~
-
-Fixes: 878d8def0603 ("libbpf: Rework feature-probing APIs")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/lib/bpf/libbpf_probes.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-bus-bcma           |    2 +-
+ Documentation/ABI/testing/sysfs-bus-fcoe           |    2 +-
+ Documentation/ABI/testing/sysfs-bus-iio-proximity  |    2 +-
+ Documentation/ABI/testing/sysfs-devices-system-cpu |    2 +-
+ Documentation/ABI/testing/sysfs-power              |    2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 97b06cede56f..6cf44e61815d 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -247,7 +247,7 @@ static int probe_map_create(enum bpf_map_type map_type, __u32 ifindex)
- 	LIBBPF_OPTS(bpf_map_create_opts, opts);
- 	int key_size, value_size, max_entries;
- 	__u32 btf_key_type_id = 0, btf_value_type_id = 0;
--	int fd = -1, btf_fd = -1, fd_inner = -1, exp_err = 0, err;
-+	int fd = -1, btf_fd = -1, fd_inner = -1, exp_err = 0, err = 0;
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -296,7 +296,7 @@ Description:	Processor frequency boostin
  
- 	opts.map_ifindex = ifindex;
+ 		This switch controls the boost setting for the whole system.
+ 		Boosting allows the CPU and the firmware to run at a frequency
+-		beyond it's nominal limit.
++		beyond its nominal limit.
  
--- 
-2.25.1
-
+ 		More details can be found in
+ 		Documentation/admin-guide/pm/cpufreq.rst
+--- a/Documentation/ABI/testing/sysfs-bus-fcoe
++++ b/Documentation/ABI/testing/sysfs-bus-fcoe
+@@ -31,7 +31,7 @@ Description:	'FCoE Controller' instances
+ 		1) Write interface name to ctlr_create 2) Configure the FCoE
+ 		Controller (ctlr_X) 3) Enable the FCoE Controller to begin
+ 		discovery and login. The FCoE Controller is destroyed by
+-		writing it's name, i.e. ctlr_X to the ctlr_delete file.
++		writing its name, i.e. ctlr_X to the ctlr_delete file.
+ 
+ Attributes:
+ 
+--- a/Documentation/ABI/testing/sysfs-bus-bcma
++++ b/Documentation/ABI/testing/sysfs-bus-bcma
+@@ -3,7 +3,7 @@ Date:		May 2011
+ KernelVersion:	3.0
+ Contact:	Rafał Miłecki <zajec5@gmail.com>
+ Description:
+-		Each BCMA core has it's manufacturer id. See
++		Each BCMA core has its manufacturer id. See
+ 		include/linux/bcma/bcma.h for possible values.
+ 
+ What:		/sys/bus/bcma/devices/.../id
+--- a/Documentation/ABI/testing/sysfs-bus-iio-proximity
++++ b/Documentation/ABI/testing/sysfs-bus-iio-proximity
+@@ -18,7 +18,7 @@ Description:
+ 		on the signal from which time of flight measurements are
+ 		taken.
+ 		The appropriate values to take is dependent on both the
+-		sensor and it's operating environment:
++		sensor and its operating environment:
+ 		* as3935 (0-31 range)
+ 		18 = indoors (default)
+ 		14 = outdoors
+--- a/Documentation/ABI/testing/sysfs-power
++++ b/Documentation/ABI/testing/sysfs-power
+@@ -152,7 +152,7 @@ Description:
+ 		case further investigation is required to determine which
+ 		device is causing the problem.  Note that genuine RTC clock
+ 		values (such as when pm_trace has not been used), can still
+-		match a device and output it's name here.
++		match a device and output its name here.
+ 
+ What:		/sys/power/pm_async
+ Date:		January 2009

@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01738586ED9
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0466586EE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbiHAQmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S234120AbiHAQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbiHAQmu (ORCPT
+        with ESMTP id S234067AbiHAQnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:42:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D985B90;
-        Mon,  1 Aug 2022 09:42:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C02660F6E;
-        Mon,  1 Aug 2022 16:42:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988D3C433D6;
-        Mon,  1 Aug 2022 16:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659372169;
-        bh=DQ4noSUQRPScorU8fDb3IKwYMG7ZdcugAbAWD3extDo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ic5eUIVwgaLfNSKjaUBrgSbP0o312UCTFo6eVANI5XwPJJMXOUNSLsBczeuVR/JJo
-         16VDwx5WiBl4Akcn//oRARv6kF7dpZBgQpnhjn+6uogmg7h6YtV4B9bFVsqB4XMYc3
-         we+mT0s7PPnvjhAUljRlA09F/S9cz1qMRcL4rtP4cyYIRsoyb4zBGoHvfP1ncAOnU3
-         hUcFMJveamEKiGbfoRIA64HlFKlQTjEBiSS+sWisvPALVq2NdvRbxqI4GrcxYyvUg5
-         YYAvsOZBccHe0imctXLxY8FuktcEbq0mlvqvQnX30F6BJYHSqA6DAuUGenmR5mFGeG
-         UiwgfE40BdUnA==
-Date:   Mon, 1 Aug 2022 19:42:43 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v7 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Message-ID: <YugCg5s8I5GIRWls@kernel.org>
-References: <20220629232653.1306735-1-LinoSanfilippo@gmx.de>
- <20220629232653.1306735-8-LinoSanfilippo@gmx.de>
- <Yr4x6KRSvzlXNdH2@kernel.org>
- <f0e33bc4-335c-322a-9295-18d6bc0b8286@gmx.de>
- <570976c3-8292-092d-5e0c-25eef63f7f3c@kunbus.com>
+        Mon, 1 Aug 2022 12:43:35 -0400
+Received: from aer-iport-7.cisco.com (aer-iport-7.cisco.com [173.38.203.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF72F18B29
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=3003; q=dns/txt; s=iport;
+  t=1659372213; x=1660581813;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aIAK846sIpxUUs2d60/tr8U/J7UlBFB97uLmPz10M+M=;
+  b=QGvilqvLM+fXK504u8rBofSlY7j+w2Z9fyqYWoCF57UAg3t6O1gaUpna
+   Gc7UKFL/tNQ68f9d7YoO7fK8zR89G6J6iSwLe84JazxueK/5ASj77PVhs
+   xNBAUt9hN4CJnhuzuT93uu53OVe6KPZvBBo/la5AsUc4soU5kBzbgWjPM
+   I=;
+X-IronPort-AV: E=Sophos;i="5.93,208,1654560000"; 
+   d="scan'208";a="664572"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
+  by aer-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 01 Aug 2022 16:43:30 +0000
+Received: from hce-anki.rd.cisco.com ([10.47.79.243])
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 271GhT0Q012552;
+        Mon, 1 Aug 2022 16:43:30 GMT
+From:   Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Allison Randal <allison@lohutok.net>,
+        Joe Perches <joe@perches.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Torsten Hilbrich <torsten.hilbrich@secunet.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+Subject: [v4.9 PATCH v2 1/6] include/uapi/linux/swab.h: fix userspace breakage, use __BITS_PER_LONG for swap
+Date:   Mon,  1 Aug 2022 18:43:23 +0200
+Message-Id: <20220801164328.2205839-1-hegtvedt@cisco.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <570976c3-8292-092d-5e0c-25eef63f7f3c@kunbus.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.79.243, [10.47.79.243]
+X-Outbound-Node: aer-core-1.cisco.com
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 07:36:19PM +0200, Lino Sanfilippo wrote:
-> 
-> 
-> On 04.07.22 19:45, Lino Sanfilippo wrote:
-> > 
-> > 
-> > On 01.07.22 01:29, Jarkko Sakkinen wrote:
-> > 
-> >>
-> >> I'm kind of thinking that should tpm_tis_data have a lock for its
-> >> contents?
-> > 
-> > Most of the tpm_tis_data structure elements are set once during init and
-> > then never changed but only read. So no need for locking for these. The
-> > exceptions I see are
-> > 
-> > - flags
-> > - locality_count
-> > - locality
-> > 
-> > 
-> > whereby "flags" is accessed by atomic bit manipulating functions and thus
-> > does not need extra locking. "locality_count" is protected by the locality_count_mutex.
-> > "locality" is only set in check_locality() which is called from tpm_tis_request_locality_locked()
-> > which holds the locality_count_mutex. So check_locality() is also protected by the locality_count_mutex
-> > (which for this reason should probably rather be called locality_mutex since it protects both the "locality_count"
-> > and the "locality" variable).
-> > 
-> > There is one other place check_locality() is called from, namely the interrupt handler. This is also the only
-> > place in which "locality" could be assigned another value than 0 (aka the default). In this case there
-> > is no lock, so this could indeed by racy.
-> > 
-> > The solution I see for this is:
-> > 1. remove the entire loop that checks for the current locality, i.e. this code:
-> > 
-> > 	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
-> > 		for (i = 0; i < 5; i++)
-> > 			if (check_locality(chip, i))
-> > 				break;
-> > 
-> > So we avoid "locality" from being changed to something that is not the default.
-> > 
-> > 
-> 
-> I wonder if we need tpm_tis_data->locality at all: the claimed locality is already tracked in
-> chip->locality and in TPM TIS we never use anything else than locality 0 so it never changes.
-> 
-> Is there any good reason not to remove it?
+From: Christian Borntraeger <borntraeger@de.ibm.com>
 
-I think it would be a great idea to unify them.
+QEMU has a funny new build error message when I use the upstream kernel
+headers:
 
-BR, Jarkko
+      CC      block/file-posix.o
+    In file included from /home/cborntra/REPOS/qemu/include/qemu/timer.h:4,
+                     from /home/cborntra/REPOS/qemu/include/qemu/timed-average.h:29,
+                     from /home/cborntra/REPOS/qemu/include/block/accounting.h:28,
+                     from /home/cborntra/REPOS/qemu/include/block/block_int.h:27,
+                     from /home/cborntra/REPOS/qemu/block/file-posix.c:30:
+    /usr/include/linux/swab.h: In function `__swab':
+    /home/cborntra/REPOS/qemu/include/qemu/bitops.h:20:34: error: "sizeof" is not defined, evaluates to 0 [-Werror=undef]
+       20 | #define BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)
+          |                                  ^~~~~~
+    /home/cborntra/REPOS/qemu/include/qemu/bitops.h:20:41: error: missing binary operator before token "("
+       20 | #define BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)
+          |                                         ^
+    cc1: all warnings being treated as errors
+    make: *** [/home/cborntra/REPOS/qemu/rules.mak:69: block/file-posix.o] Error 1
+    rm tests/qemu-iotests/socket_scm_helper.o
+
+This was triggered by commit d5767057c9a ("uapi: rename ext2_swab() to
+swab() and share globally in swab.h").  That patch is doing
+
+  #include <asm/bitsperlong.h>
+
+but it uses BITS_PER_LONG.
+
+The kernel file asm/bitsperlong.h provide only __BITS_PER_LONG.
+
+Let us use the __ variant in swap.h
+
+Link: http://lkml.kernel.org/r/20200213142147.17604-1-borntraeger@de.ibm.com
+Fixes: d5767057c9a ("uapi: rename ext2_swab() to swab() and share globally in swab.h")
+Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: Allison Randal <allison@lohutok.net>
+Cc: Joe Perches <joe@perches.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc: Torsten Hilbrich <torsten.hilbrich@secunet.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+(cherry picked from commit 467d12f5c7842896d2de3ced74e4147ee29e97c8)
+Signed-off-by: Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+---
+ include/uapi/linux/swab.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+index 1f42d110987..51502eabdb0 100644
+--- a/include/uapi/linux/swab.h
++++ b/include/uapi/linux/swab.h
+@@ -134,9 +134,9 @@ static inline __attribute_const__ __u32 __fswahb32(__u32 val)
+ 
+ static __always_inline unsigned long __swab(const unsigned long y)
+ {
+-#if BITS_PER_LONG == 64
++#if __BITS_PER_LONG == 64
+ 	return __swab64(y);
+-#else /* BITS_PER_LONG == 32 */
++#else /* __BITS_PER_LONG == 32 */
+ 	return __swab32(y);
+ #endif
+ }
+-- 
+2.34.1
+

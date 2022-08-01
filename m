@@ -2,69 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78CF587070
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44066587072
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbiHAShX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
+        id S232845AbiHASlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiHAShV (ORCPT
+        with ESMTP id S231634AbiHASlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:37:21 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486D1056C;
-        Mon,  1 Aug 2022 11:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659379016;
-        bh=XpvW2KGm+7Eri6BgmGU4YVNAdPx/qqDZZ5a0Ia/rFD8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Fw3fVD2WM08K/0HVTLZ2V7MVgR2Oxb4McHFcPbv0GxYM4G1R1tRSZTJjzg1GGaYpi
-         dduj2WkceGMMkRN6Jy1Enbc69ErIgIbEyxn7SpubI/dD0RqLAKprDNTRo8j1Fgko74
-         TV1jJSRvWjgzUJAMC9UAZL/53YdCe31soLgJ0hOg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.146.18] ([217.61.146.18]) by web-mail.gmx.net
- (3c-app-gmx-bap33.server.lan [172.19.172.103]) (via HTTP); Mon, 1 Aug 2022
- 20:36:56 +0200
+        Mon, 1 Aug 2022 14:41:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668BC65C0;
+        Mon,  1 Aug 2022 11:41:14 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id EDAA75C012F;
+        Mon,  1 Aug 2022 14:41:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 01 Aug 2022 14:41:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1659379271; x=
+        1659465671; bh=2KlCnkBZVyv2RtFsxMYINbCq6hQOqBhQcvfqziW3UYY=; b=k
+        bcRPibTVijeTEjbozDTit/pwUYaNoUmMH9NQYxvYUHU3WUI3PhhTO6Y4/mZ5pm0m
+        zidcs8qZWM0Wutqt5xz5/CYVD7je0Hj18bpn9HaD+2Np3DEDOdDUgUd+UZcZieRJ
+        vDJP5I9vahcGTInJmD9+ztDioazDuOnp0GmH/smh5qlRSWdfwkWLJXVRvk9n6IpU
+        dN4epuMRKS0wpvyp8pILSdbZ/GDrTB8/UfbCWsqNgFTEJWHMlR1nGA8ity9b/Fq5
+        wx+uDaz4r2VT2t4fapoUhWYMarXL8nSRgnmwmU/GEfHLrQTYKugt/xKkY/VfyqmY
+        U39rrifHeRr0fvayDPqAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1659379271; x=
+        1659465671; bh=2KlCnkBZVyv2RtFsxMYINbCq6hQOqBhQcvfqziW3UYY=; b=p
+        MGgccIgoiEt6CaIC0b0HoeF9Dm/MxlyISI4HtBqyygjyg95T638mhT7BwmQv11RA
+        QlfCT8PDhVxm+u98Ef/UVxlBPUJ0at+zymYQog/m/NWC+jNSWGUt4Ock3Bgk0HsZ
+        u0/JVnGgQd5YL1MiuPRfYsthwRruyfy+9odat6tevMcZ1IJLuOFqZToSuIfkGenK
+        GfuM3HUhjxIUMgEGe94Y8C/2nJqxE9AH/J1N1wgMsaerrydidzJ4upfQPHEV8A63
+        TQF45YTTxyibI0EDq7bl/NMFzUerSYRxOuyNkYIpbIPkrLuQhnGq8OrCOa5onOuo
+        rvH24f4cZRmkq7lVJUi3g==
+X-ME-Sender: <xms:Rx7oYkpRIPgOzJdZLb205a0x1pYV3OfPb9vJ0Z2RD8zxd37fLKOnGg>
+    <xme:Rx7oYqo0-RKdqpOX3vM8VeonkkaL_WPv6GDgXFReKy84xfTJAsJFpAtPkBOfCl9g6
+    yD3XmYrCXbrLLHv6A>
+X-ME-Received: <xmr:Rx7oYpOAhOkWwF6x1BX-7GWAlx3EvgZfwwqnWM3Wn6fpxkcLBD6_heYyz5SiNWYTLxUwgw8gWjU0-_-TWRZWZhxaiuhDCFMDz5toQ9AKUPO9G1pvUyQF98ERtn4F>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheptehn
+    ughrvghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecugg
+    ftrfgrthhtvghrnhephfeitefgleevtedtffejvedujeekjedugfdtveffjeelvddtfeek
+    gefgjefhgfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnughrvghssegrnhgrrhgriigvlhdruggv
+X-ME-Proxy: <xmx:Rx7oYr48Vr8tZJWuszOD_0LG25TMHKuMkhzOyUfytFUsH4vk9jdqXA>
+    <xmx:Rx7oYj5VtvGUOHIizk34pXBuBdO2bH7_NJiwL0wHvKLAtOK168_sMQ>
+    <xmx:Rx7oYribRpUkxNMz6evGvDGqRgHObjUc0zFhsG8oNoh7rmKBlwwQ4A>
+    <xmx:Rx7oYtuz8O0xTIQTddL-MbMJQ2cH4MstFQ6CpJOyyytuQ0t0M-QNOw>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 1 Aug 2022 14:41:11 -0400 (EDT)
+Date:   Mon, 1 Aug 2022 11:41:10 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Ben Hutchings <benh@debian.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH v3 6/8] tools bpf_jit_disasm: Don't display
+ disassembler-four-args feature test
+Message-ID: <20220801184110.7wjntnjy65xwxsu6@awork3.anarazel.de>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220801013834.156015-1-andres@anarazel.de>
+ <20220801013834.156015-7-andres@anarazel.de>
+ <YugbCvWlwSap23UB@kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-851eda2a-519f-4ef6-ad2b-6870b3b682ff-1659379016837@3c-app-gmx-bap33>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Aw: [PATCH v4 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 1 Aug 2022 20:36:56 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220619082605.7935-2-linux@fw-web.de>
-References: <20220619082605.7935-1-linux@fw-web.de>
- <20220619082605.7935-2-linux@fw-web.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:INYgd8sb5GwLhiYt1Oy6FRHG6fA+Q6hpN6/UBzkegZzsjpAhCC2fjEQUPhCW1MT5tuFLM
- 2OYlXf415NJLSTb83XzGlZnZjaF5yD0W3Xk+cIaYwpwz4DKbaxeDwJDSl2N2kXBNEwcqPHYFAmIW
- NbaX2eO4Kqq2j5CTMBF5CmcFcW+YcNQiy3BDBQx1Liiebh3s/R48dnMX3AzVIkMFegBM5GIzTBTS
- /JB/AVB9L7Ld9wQCnuHu/vJzFiNThZz4xi3gZAJZXZpNtYoZMWOPza8Lbo4x5/3/LzJIIuvymiyn
- j4=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Fx+Jw1pgeQ4=:D0VKvQE83yj6hlucNV3ytP
- lEOHz4WpPymLe7+Hpg56BICeU/8a5CB+EJ7TOzVImKqHq+nLP4BcVzzFynNAlUbuw7M+FiCXL
- G39E7XO1+3apzT+/7F5LJ/asHhKSAQgSTrYmWCV3bE64aZTmM9COoGmHeovmXxnyH1FldmlQM
- jkweOFPbR2osMbMD700ODlbhDFv3WbvIcD8p3SRSRL9qUpOl+vzrPnq/P92k2dgs/Znq+lj5x
- 1+DbcRvLX9zuLb0PbZomlqBf5vkW/SP9m24cqB7fQIYG2F1CzaKk4KrW++xcbwPRRh/hHsyaQ
- YkTZ7/U+zWGzX5NqesQVhYyY3tueJ+B67Ts/hDOBVzyaYTqbB0QlwIHZoI4i+QWzP6j8iEuaC
- 75MFF7CCPcxJuvdEI+wL0Ql0svnp5xlAx3TlPWaK6e0tKMgPkCouT+eVE7iZk2ZMfkbfsBP7j
- 27a4b+Ft/IEnMuPgqk1ckXVwltUdy3rf7v2xWEOpEuVNnwOT8U0Ptc/xI5GJaaRgvuuOvOlRY
- 9gZajBU/5H/hjs7H9rOC6g9jZHwPc1IVgc9CvvZ2Sq6a68N0A6OTvhz/xcOhCyAjnSKdkLTj7
- FFmNx7/bPDUBTGQu5cHup21HtP6y818kYS5vMdqjJtIyLyRIDvZwALAsc/myONlISlJJUlcRm
- 54bfo93kBSNSI9F56nnhpiFGysNc6KGqPIcQGeGc28OWN5XQGatlw6IfdDxnd1zCkdASx2jRp
- 1qkqmE3jI1sBpKVKp8WXeXmfw6lo7xTb4LIS0OO7JCZtV8cC2sBJ2i/r5FJkEakEf6/row2Zb
- Qds8BZb
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YugbCvWlwSap23UB@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,19 +96,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-this (and the other bindings) part is marked as "not applicable", but with=
-out comment...it is not clear
-to me why it is not yet applied or how to proceed.
+On 2022-08-01 15:27:22 -0300, Arnaldo Carvalho de Melo wrote:
+> ⬢[acme@toolbox perf]$ git log --oneline -7
+> cebe4f3a4a0af5bf (HEAD) tools bpf_jit_disasm: Don't display disassembler-four-args feature test
+> 7f62593e5582cb27 tools bpf_jit_disasm: Fix compilation error with new binutils
+> ee4dc290ee5c09b7 tools perf: Fix compilation error with new binutils
+> 335f8d183a609793 tools include: add dis-asm-compat.h to handle version differences
+> f2f95e8d0def9c5f tools build: Don't display disassembler-four-args feature test
+> ede0fece841bb743 tools build: Add feature test for init_disassemble_info API changes
+> 00b32625982e0c79 perf test: Add ARM SPE system wide test
+> ⬢[acme@toolbox perf]$
+> 
+> ⬢[acme@toolbox perf]$ make -C tools/bpf/bpftool/ clean
+> make: Entering directory '/var/home/acme/git/perf/tools/bpf/bpftool'
+>   CLEAN   libbpf
+>   CLEAN   libbpf-bootstrap
+>   CLEAN   feature-detect
+>   CLEAN   bpftool
+>   CLEAN   core-gen
+> make: Leaving directory '/var/home/acme/git/perf/tools/bpf/bpftool'
+> ⬢[acme@toolbox perf]$ make -C tools/bpf/bpftool/
+> make: Entering directory '/var/home/acme/git/perf/tools/bpf/bpftool'
+> 
+> Auto-detecting system features:
+> ...                        libbfd: [ on  ]
+> ...        disassembler-four-args: [ on  ]
+> ...                          zlib: [ on  ]
+> ...                        libcap: [ on  ]
+> ...               clang-bpf-co-re: [ on  ]
+> <SNIP>
+> 
+> It is still there, we need the hunk below, that I folded into your patch, to
+> disable it, please ack :-)
 
-https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220619082=
-605.7935-2-linux@fw-web.de/
+This commit just removed disassembler-four-args display for bpf_jit_disasm,
+not bpftool. That should be in a later commit.
 
-Do you expect driver-changes which will change binding too?
+Greetings,
 
-should i resend it unchanged in v5 (when 5.20-rc1 is out)? or do you try t=
-o move the data-lanes into
-phy-provider which i have not got working?
-
-regards Frank
+Andres Freund

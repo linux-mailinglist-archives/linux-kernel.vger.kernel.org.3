@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD605868A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7582A5868A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiHALvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231874AbiHALvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiHALue (ORCPT
+        with ESMTP id S231934AbiHALul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:50:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A73AE47;
-        Mon,  1 Aug 2022 04:49:14 -0700 (PDT)
+        Mon, 1 Aug 2022 07:50:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD52402DC;
+        Mon,  1 Aug 2022 04:49:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D982B612C6;
-        Mon,  1 Aug 2022 11:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4D69C433C1;
-        Mon,  1 Aug 2022 11:49:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90952612C5;
+        Mon,  1 Aug 2022 11:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994CEC433C1;
+        Mon,  1 Aug 2022 11:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354553;
-        bh=LIcRHKYKYlzajg/YMOhVk1Ufpco9mjpW0QZrPm6QgCA=;
+        s=korg; t=1659354556;
+        bh=bZ79vMwd6lZjbx+kr4CrkCQzjZarKgGBb2BuBwBdQ20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2i5j0mPavSthhlaoNalmxQjvvgO5qfKi3MfbmAiR2C7Rl/6NYXRp3NoBeO2yomCHW
-         /895wjX8WwezCiNnaQ5ysnvJjGGKUNfX6H3Ra0+NxIt6/to6g0KQ7T3i4KIxExYwso
-         HAAQhCwSDhA9JZL4L1xUT2rBrrBf+jipg8xKfEC8=
+        b=wttkDDwk9K0Eo70cW77PWIwqsNurDOyXvoNpVM7ZiEyX/tCg8rX7R1jYBTYWhK/xD
+         Qp0YlvfpUTUs83u+6stc5acrAHLm9qBCDc+hjsHWLuRvbQ1J970p80j5btr19/WYP8
+         pQ03QxWmc/cDennJF9FgJT317eqgny6fvlbNTQmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 06/34] tcp: Fix a data-race around sysctl_tcp_adv_win_scale.
-Date:   Mon,  1 Aug 2022 13:46:46 +0200
-Message-Id: <20220801114128.304976802@linuxfoundation.org>
+Subject: [PATCH 5.4 07/34] tcp: Fix a data-race around sysctl_tcp_frto.
+Date:   Mon,  1 Aug 2022 13:46:47 +0200
+Message-Id: <20220801114128.334090136@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
 References: <20220801114128.025615151@linuxfoundation.org>
@@ -55,9 +55,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 36eeee75ef0157e42fb6593dcc65daab289b559e upstream.
+commit 706c6202a3589f290e1ef9be0584a8f4a3cc0507 upstream.
 
-While reading sysctl_tcp_adv_win_scale, it can be changed concurrently.
+While reading sysctl_tcp_frto, it can be changed concurrently.
 Thus, we need to add READ_ONCE() to its reader.
 
 Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
@@ -65,19 +65,19 @@ Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/tcp.h |    2 +-
+ net/ipv4/tcp_input.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1389,7 +1389,7 @@ void tcp_select_initial_window(const str
- 
- static inline int tcp_win_from_space(const struct sock *sk, int space)
- {
--	int tcp_adv_win_scale = sock_net(sk)->ipv4.sysctl_tcp_adv_win_scale;
-+	int tcp_adv_win_scale = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_adv_win_scale);
- 
- 	return tcp_adv_win_scale <= 0 ?
- 		(space>>(-tcp_adv_win_scale)) :
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -2030,7 +2030,7 @@ void tcp_enter_loss(struct sock *sk)
+ 	 * loss recovery is underway except recurring timeout(s) on
+ 	 * the same SND.UNA (sec 3.2). Disable F-RTO on path MTU probing
+ 	 */
+-	tp->frto = net->ipv4.sysctl_tcp_frto &&
++	tp->frto = READ_ONCE(net->ipv4.sysctl_tcp_frto) &&
+ 		   (new_recovery || icsk->icsk_retransmits) &&
+ 		   !inet_csk(sk)->icsk_mtup.probe_size;
+ }
 
 

@@ -2,146 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9362D586788
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C85586782
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbiHAKbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S230470AbiHAK3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiHAKam (ORCPT
+        with ESMTP id S230399AbiHAK3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:30:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508402B61D;
-        Mon,  1 Aug 2022 03:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659349833; x=1690885833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eGo0V8fFrWREYTwhr5/rcZuEs8MyHDPd7UAYMxVJyHY=;
-  b=ax+iUAh/dAM0BaCpP8FLGn0pR55ML8BISXJWj+hUUcwFGrsg6aHP1T6s
-   +8w8/g59E/sn3RAN1RMLpwVdypf8r/wpXoQ71BWrla6C1jviDLaIeCMbM
-   SPKuAksycfDcxE+szAVB8RajmPGhu9QCgzx/bO8h/cXKvRdxgNUEBIlrQ
-   Tbz6L0xZsAt540oXrU/rEN84WnQ2okG4or/wc54QE631eRFMcxukCoaAZ
-   JC5zlspFrLV6RQ9ZVk4X+KA3UThmjaGY4JJPCvV6eZT9ZLs+5guFdyZOM
-   66bffWghbrqLDkqqHS9ANmNI6sSKlaDl0H6tozSNtY93vfbAzB004qig2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="289125299"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="289125299"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 03:30:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="552469679"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Aug 2022 03:30:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oISgs-000F1v-1U;
-        Mon, 01 Aug 2022 10:30:26 +0000
-Date:   Mon, 1 Aug 2022 18:29:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniil Lunev <dlunev@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Stanley Chu <chu.stanley@gmail.com>
-Cc:     kbuild-all@lists.01.org, Daniil Lunev <dlunev@chromium.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] ufs: core: ufshcd: use local_clock() for debugging
- timestamps
-Message-ID: <202208011814.gx9OZFDF-lkp@intel.com>
-References: <20220801142931.v2.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
+        Mon, 1 Aug 2022 06:29:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA16D19C1F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:29:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 65C1661283;
+        Mon,  1 Aug 2022 10:29:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659349789; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qZ6j1nmBD+W4ZKl17RN0uYk8u3C+SzxzDwEjh+4og4o=;
+        b=EqCglx56IH6khyQ7Wft7VWPsjs6ruBMW5q6zjngKXlfP50bcwncFLIzLXPvpR0aj77Lx94
+        3CrsbMM3Ffti+rodGCYGmpLxWkG5zCfULVXQ0ZOPtgC+f2IQSbjc1hz00FAvis5siegvI6
+        NkOSJCVAKigjDvVR7+hRlK011hxeH2Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659349789;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qZ6j1nmBD+W4ZKl17RN0uYk8u3C+SzxzDwEjh+4og4o=;
+        b=rOVuV4UsAEplI/ZOz5MWJtev30XifUfQOwMdcq2bXlJ7hk26S9g0UKFdw4gZBXX5dDUhgC
+        06OU+NvuTi04YFDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 403D613A72;
+        Mon,  1 Aug 2022 10:29:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fQ8MDx2r52LFZgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 01 Aug 2022 10:29:49 +0000
+Message-ID: <9a5df89d-e27a-22b4-faae-be65f6c7f54d@suse.cz>
+Date:   Mon, 1 Aug 2022 12:29:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801142931.v2.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: [GIT PULL] slab for 5.20/6.0
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniil,
+Linus,
 
-Thank you for the patch! Yet something to improve:
+please pull the latest slab changes from
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v5.19 next-20220728]
-[cannot apply to bvanassche/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.20_or_6.0
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220801-123157
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220801/202208011814.gx9OZFDF-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/45a46347597e5c368c27a9fe01e400af675eb5e9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220801-123157
-        git checkout 45a46347597e5c368c27a9fe01e400af675eb5e9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/core/
+======================================
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+- An addition of 'accounted' flag to slab allocation tracepoints to indicate
+  memcg_kmem accounting, by Vasily.
 
-All errors (new ones prefixed by >>):
+- An optimization of memcg handling in freeing paths, by Muchun.
 
-   drivers/ufs/core/ufshcd.c: In function 'ufshcd_send_command':
->> drivers/ufs/core/ufshcd.c:2143:46: error: implicit declaration of function 'local_clock'; did you mean 'local_lock'? [-Werror=implicit-function-declaration]
-    2143 |         lrbp->issue_time_stamp_local_clock = local_clock();
-         |                                              ^~~~~~~~~~~
-         |                                              local_lock
-   cc1: some warnings being treated as errors
+- Various smaller fixes and cleanups.
 
+Thanks,
+Vlastimil
 
-vim +2143 drivers/ufs/core/ufshcd.c
+----------------------------------------------------------------
+Hyeonggon Yoo (2):
+      mm/sl[au]b: use own bulk free function when bulk alloc failed
+      mm/slab_common: move generic bulk alloc/free functions to SLOB
 
-  2130	
-  2131	/**
-  2132	 * ufshcd_send_command - Send SCSI or device management commands
-  2133	 * @hba: per adapter instance
-  2134	 * @task_tag: Task tag of the command
-  2135	 */
-  2136	static inline
-  2137	void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
-  2138	{
-  2139		struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
-  2140		unsigned long flags;
-  2141	
-  2142		lrbp->issue_time_stamp = ktime_get();
-> 2143		lrbp->issue_time_stamp_local_clock = local_clock();
-  2144		lrbp->compl_time_stamp = ktime_set(0, 0);
-  2145		lrbp->compl_time_stamp_local_clock = 0;
-  2146		ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
-  2147		ufshcd_clk_scaling_start_busy(hba);
-  2148		if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
-  2149			ufshcd_start_monitor(hba, lrbp);
-  2150	
-  2151		spin_lock_irqsave(&hba->outstanding_lock, flags);
-  2152		if (hba->vops && hba->vops->setup_xfer_req)
-  2153			hba->vops->setup_xfer_req(hba, task_tag, !!lrbp->cmd);
-  2154		__set_bit(task_tag, &hba->outstanding_reqs);
-  2155		ufshcd_writel(hba, 1 << task_tag, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-  2156		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-  2157	}
-  2158	
+Jiapeng Chong (1):
+      mm, slab: fix bad alignments
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Muchun Song (1):
+      mm: slab: optimize memcg_slab_free_hook()
+
+Stéphane Graber (1):
+      tools/vm/slabinfo: Handle files in debugfs
+
+Vasily Averin (1):
+      mm/tracing: add 'accounted' entry into output of allocation tracepoints
+
+Xiongwei Song (1):
+      mm/slub: Simplify __kmem_cache_alias()
+
+ include/trace/events/kmem.h | 40 +++++++++++-------
+ mm/slab.c                   | 20 ++++-----
+ mm/slab.h                   | 39 ++++--------------
+ mm/slab_common.c            | 36 ++---------------
+ mm/slob.c                   | 33 +++++++++++----
+ mm/slub.c                   | 98 +++++++++++++++++----------------------------
+ tools/vm/slabinfo.c         | 26 +++++++++++-
+ 7 files changed, 134 insertions(+), 158 deletions(-)

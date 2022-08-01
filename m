@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CADC586EE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1C9586EEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiHAQnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S234183AbiHAQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiHAQn3 (ORCPT
+        with ESMTP id S233980AbiHAQnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:43:29 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CAF1CB2E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:43:26 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id m9so12917541ljp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 09:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=bf7kmBr/SgfZ1wV4nI5vTAndNdYUbiAGmhGqIym6rX1OX0IxSa121QCCLjtfPTtP/q
-         Ji+y0OXbVSONjuLK/7HvTPJ0m6T7C2i8zva8hRhi9PAc4NLMf2QcGCMsVKAR/4SoxG8P
-         QCVBFNb+TBSE6hOTyUwwlUWtblNmcAsvavL/vwkHJhwxC5HKcnSuNdd2JaoddtOnq0f2
-         l8L1cTnZHt01Ad2nR5db4ZRgjujP4vZ5Nbd+R/n0bCKSy+6DchnTG1m2WXhoILL//vjC
-         4hQ2rR4QddBHqcFb8uNfmIzBTiaeke8T1siffGxdfn9eTO7JBIN070YbQDUKkrumHKo5
-         1fZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
-        b=T2jQuGYaSh+sYe3f15Veu4D2E1W78CrixNa9KTj8jb5uBQIVjVdiTUSltbN+jniujS
-         zmbkdWuz8YmAg4/oF9uD0lxGP5aEV3nV5VP93FL80nAQvrb8z4JGgbE1RcTB0YYM7wQg
-         LOiE1OoPeIWWwU7yoAC8/DUQUGoAgxGz8zUt9TIU9K7qIkfoi/mJ9BgOJglNzavIyvU3
-         +75LPoGxmUX/lKil+KjOK/9+a3MLhVsjeLw7l6QzJCh7c4DEyftD2DULp3gpWNidb/bZ
-         wSBjCGMtN6cDQsUpfkxaDsog3rJXhLeukeC/hrEpXFCfPDXfta5IFEXd5Cxgs6x3N1iO
-         VAUA==
-X-Gm-Message-State: ACgBeo127nojanfxKVIS+CmFx33bCrCMfZ2dCn9uwOyD8LvpGuBI6vT0
-        Ghjv/EfPzR0y0ts8Peq/f/hVjoPjYs8ig3B6HLc=
-X-Google-Smtp-Source: AA6agR515/n1OMi0vRWF0LCNYzDsADnnMxK25Yt6CRjhyA+ZrhMbjmB0DBADjlTnR+ktgvNpDDCS04nHCVe1WUuUnWY=
-X-Received: by 2002:a2e:3806:0:b0:25e:48ff:a218 with SMTP id
- f6-20020a2e3806000000b0025e48ffa218mr3294471lja.292.1659372205210; Mon, 01
- Aug 2022 09:43:25 -0700 (PDT)
+        Mon, 1 Aug 2022 12:43:37 -0400
+Received: from aer-iport-4.cisco.com (aer-iport-4.cisco.com [173.38.203.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16D51EC73
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=990; q=dns/txt; s=iport;
+  t=1659372214; x=1660581814;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=F+lH4pP/y3g/TAamKgOUQCpvYguFUQgzVOy+l7vRKxY=;
+  b=TDI3iQkfVgqza0MhQc4ESUNNF2lPjyaqjIoTJDjoDipDvW8uTARChcWX
+   ae7asjr5QXlaQNGPdRJQTp2aO412OrDxo0Cv1+RchoVhOvmEocuGOhqz9
+   /fDYaaBgNR/N5lCaK7hSEjOzAZHtBSP5fX0lUO7k7Rtkw0cy9px3n852l
+   M=;
+X-IronPort-AV: E=Sophos;i="5.93,208,1654560000"; 
+   d="scan'208";a="3295290"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
+  by aer-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 01 Aug 2022 16:43:32 +0000
+Received: from hce-anki.rd.cisco.com ([10.47.79.243])
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 271GhT0S012552;
+        Mon, 1 Aug 2022 16:43:32 GMT
+From:   Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+Subject: [v4.9 PATCH v2 3/6] init/main: properly align the multi-line comment
+Date:   Mon,  1 Aug 2022 18:43:25 +0200
+Message-Id: <20220801164328.2205839-3-hegtvedt@cisco.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220801164328.2205839-1-hegtvedt@cisco.com>
+References: <20220801164328.2205839-1-hegtvedt@cisco.com>
 MIME-Version: 1.0
-Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
- 09:43:24 -0700 (PDT)
-From:   Bright Gawayn <gben68387@gmail.com>
-Date:   Mon, 1 Aug 2022 22:13:24 +0530
-Message-ID: <CAG1+V0xy74Pa_JLx+ze1qhQfmiuJXdNJ4_AvNnskoiwRCHFd=g@mail.gmail.com>
-Subject: Lucrative business proposal very urgent!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:241 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5156]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gben68387[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [gben68387[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.79.243, [10.47.79.243]
+X-Outbound-Node: aer-core-1.cisco.com
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello dear My name is Mr Bright Gawayn,  It's my pleasure to contact you today.
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-We use a certain raw material in our pharmaceutical firm for the
-manufacture of animal vaccines and many more.
+Add a tab before it to follow standard practices. Also add the missing
+full stop '.'.
 
-My intention is to give you the new contact information of the local
-manufacturer of this raw material in India and every details regarding
-how to supply the material to my company if you're interested, my
-company pays in advance for this material.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+(cherry picked from commit 1b3b3b49b9961401331a1b496db5bec5c7b41ae6)
+Signed-off-by: Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+---
+ init/main.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Due to some reasons, which I will explain in my next email, I cannot
-procure this material and supply it to my company myself due to the
-fact that I am a staff in the company.
+diff --git a/init/main.c b/init/main.c
+index a6ecdd492ed..8b803078d7b 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -498,10 +498,10 @@ asmlinkage __visible void __init start_kernel(void)
+ 	local_irq_disable();
+ 	early_boot_irqs_disabled = true;
+ 
+-/*
+- * Interrupts are still disabled. Do necessary setups, then
+- * enable them
+- */
++	/*
++	 * Interrupts are still disabled. Do necessary setups, then
++	 * enable them.
++	 */
+ 	boot_cpu_init();
+ 	page_address_init();
+ 	pr_notice("%s", linux_banner);
+-- 
+2.34.1
 
-Please get back to me as soon as possible for full detail if you are interested.
-
-Thanks and regards
-Bright.

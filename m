@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC4158715E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98277587164
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiHATZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
+        id S233574AbiHAT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiHATZE (ORCPT
+        with ESMTP id S233302AbiHAT2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:25:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E27A2B260;
-        Mon,  1 Aug 2022 12:25:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D257B8165B;
-        Mon,  1 Aug 2022 19:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D33BC433C1;
-        Mon,  1 Aug 2022 19:25:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659381900;
-        bh=EkphSiEPzZcfk1if8b0j8p5iyfVhuflocYAWfz/z4jI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oLk/fb5Z4LqluhUn1lzqmrUPZhINv+0erHHu2lr2aBqjlzCs8KYabeefJUDajb9ot
-         2GsUuYcob+13QutflZnujP5bAxLMOzdAJN4egobeOkRNJrle6al3NKc4WaVcS6ECdC
-         sc+GipKrf4QP+tAFSENHJuCyhzRHB2injSWWm3B4PLkvsQ/T3hd44gLoKd/bKO9vez
-         PcNcTvtQZIFjh5OBogxYMKxjqmtwAye81cipadY4M7nDUfvZfWl6HMxPyF/+P1I2Oi
-         vnJ+g4H4+TLiphqQvyxwm4BJ+zm+AhsRyxfyK5COHptwWSSH7547i1oo/Zx9Y/zTvH
-         +qwYyPjnsRlHQ==
-Date:   Mon, 1 Aug 2022 12:24:59 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] tls: rx: Fix less than zero check on unsigned
- variable sz
-Message-ID: <20220801122459.57b7df02@kernel.org>
-In-Reply-To: <20220730114027.142376-1-colin.i.king@gmail.com>
-References: <20220730114027.142376-1-colin.i.king@gmail.com>
+        Mon, 1 Aug 2022 15:28:16 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB74B71
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:28:13 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Ib5Fo6JKAGWJJIb5FoUmw3; Mon, 01 Aug 2022 21:28:11 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Mon, 01 Aug 2022 21:28:11 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] irqchip/loongson-liointc: Fix an error handling path in liointc_init()
+Date:   Mon,  1 Aug 2022 21:28:07 +0200
+Message-Id: <1a6d74ab70712279023aa7bdbd31bd3aec103bc0.1659382063.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Jul 2022 12:40:27 +0100 Colin Ian King wrote:
-> Variable sz is declared as an unsigned size_t and is being checked
-> for an less than zero error return on a call to tls_rx_msg_size.
-> Fix this by making sz an int.
-> 
-> Fixes: 84c61fe1a75b ("tls: rx: do not use the standard strparser")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  net/tls/tls_strp.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+All errors lead to the error handling path, except this one.
+Fix it and release some resources before returning if this test fails.
 
-Already fixed 2 days before you posted, I guess linux-next lagged.
+Fixes: 0858ed035a85 ("irqchip/loongson-liointc: Add ACPI init support")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/irqchip/irq-loongson-liointc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-commit 8fd1e151779285b211e7184e9237bba69bd74386
-Author:     Yang Li <yang.lee@linux.alibaba.com>
-AuthorDate: Wed Jul 27 20:10:19 2022
-Commit:     Jakub Kicinski <kuba@kernel.org>
-CommitDate: Thu Jul 28 21:50:39 2022
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index c4f3c886ad61..8ab59b658913 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -207,7 +207,7 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
+ 					"reg-names", core_reg_names[i]);
+ 
+ 			if (index < 0)
+-				return -EINVAL;
++				goto out_iounmap;
+ 
+ 			priv->core_isr[i] = of_iomap(node, index);
+ 		}
+-- 
+2.34.1
 
-    tls: rx: Fix unsigned comparison with less than zero

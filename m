@@ -2,130 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3990A586F9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D4B586F9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiHARe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S231208AbiHARgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiHARe5 (ORCPT
+        with ESMTP id S232249AbiHARgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:34:57 -0400
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FFCE3D;
-        Mon,  1 Aug 2022 10:34:56 -0700 (PDT)
-Received: by mail-pg1-f177.google.com with SMTP id s206so10298690pgs.3;
-        Mon, 01 Aug 2022 10:34:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=h6Q/0U5LlsxmlACtV60jOLJAoajkWvRfWYOnNrrKuSM=;
-        b=aWX69LaN9RUtZBjdlAIOYhZdICUDPM0wPpnJKeM6WlzNMtPCLwyXV2u1goaAL6EPLY
-         Z6+8XdsYCqt0aZCMgAXRjMqTBdKkh6BjamX3+rFNFkfMbjw0SunlDYKxf1g9kske/nRa
-         I5NX7WwcUJfSdunT2w0rZSNa26HX7ZeKeQ7R/3fr41iXfZqyqut5Nh8Zw2UjezXuPnfK
-         4+7Ifw5YCkU5sbzf9dYTK7c5Ts8rmDcIBQFFLqWNI+9w0Lb3nDcBXabWpbY4uiFbAcug
-         WFetkbi91pwbZntYNj757Ur585msnNwSVUyc+6pfsiaCHZJfm+zuPZrnKajEsncX52tD
-         xnvA==
-X-Gm-Message-State: ACgBeo029KHyuC8+YKB1XadP7Dn3DPIt5Z5F8Sc0fql9zmskXqwSZ/V4
-        aZ3oATG7Wlq9+cpgt2g2nUw=
-X-Google-Smtp-Source: AGRyM1sIK/8muQ4Rxp0DlRlTENq5tuXZdvMcOlwbp1uhmYTSsCxPhCXmxBPkQwTFYTHqEVF7wuycJA==
-X-Received: by 2002:a05:6a00:f85:b0:52a:c718:ff9 with SMTP id ct5-20020a056a000f8500b0052ac7180ff9mr16950033pfb.85.1659375295785;
-        Mon, 01 Aug 2022 10:34:55 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:6496:b2a7:616f:954d? ([2620:15c:211:201:6496:b2a7:616f:954d])
-        by smtp.gmail.com with ESMTPSA id f4-20020a62db04000000b005251fc16ff8sm8737517pfg.220.2022.08.01.10.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 10:34:54 -0700 (PDT)
-Message-ID: <b92ef74c-1068-b86e-c3c2-a95f057e2494@acm.org>
-Date:   Mon, 1 Aug 2022 10:34:51 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1] scsi: ufs: Fix ufshcd_scale_clks decision in recovery
- flow
-Content-Language: en-US
-To:     Stanley Chu <chu.stanley@gmail.com>
-Cc:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>, alim.akhtar@samsung.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        peter.wang@mediatek.com, Chun-Hung Wu <chun-hung.wu@mediatek.com>,
-        alice.chao@mediatek.com, powen.kao@mediatek.com,
-        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, eddie.huang@mediatek.com,
-        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-References: <20220729075519.4665-1-stanley.chu@mediatek.com>
- <7e8c58cf-64c1-8426-bf22-97d3df85ed38@acm.org>
- <CAGaU9a_G1kH8VezozhZ3-S6-GvMr=EUVc4btU8Dwdo+cCJDxUg@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAGaU9a_G1kH8VezozhZ3-S6-GvMr=EUVc4btU8Dwdo+cCJDxUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 13:36:16 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861E12ADB;
+        Mon,  1 Aug 2022 10:36:14 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 491585C00FC;
+        Mon,  1 Aug 2022 13:36:12 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 01 Aug 2022 13:36:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1659375372; x=1659461772; bh=Y2
+        57L4d6b5CFZRcEy4JTormzanQNT+CLmxVCxY4oXZQ=; b=g4bHXidTEQtZid/MiU
+        Km2uU51ckhpdCCymYl9CZnQTKMlvu+uJpr/P5nW4iTzjl1vl2e8ieXlyrpXfYsrE
+        i2ewUMNKuXi9h7fs6I8OyyJk0qdyz0Xk640DgQBehTA/5dbT41tICmzo3pwl4MJN
+        4qpe3+T99uf2uQ4MKBtHYokvje5dVU2sSDThBGjByO5035SFXneWI6lJ+FF/Uc0+
+        1bVfqKYJYBDnBiLDN/qochGDy/GLy5ca1FNe/dS5xehVIrakomdfjcE8K1fLkmu5
+        O0Ef9GaLpCJATqeso3YDjcXku+INE8xh2w+SFu+u2YVr9qEXvP/A8H1fH6uqeXa7
+        yM4A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659375372; x=1659461772; bh=Y257L4d6b5CFZRcEy4JTormzanQN
+        T+CLmxVCxY4oXZQ=; b=W/FfjJ0eKIl/DnkCsoGQA8BXCbnS7+/bgS4IsH8VkUFc
+        WEFgOu9seVvV32WdW8BXLdISTVnxmC7NrzewMn2cYqTWjICiGUdQkYwPmfDDM9i6
+        7Q9OboAhiF4ugSPkxFtpJEzhhVL0L7qXDjAz4fKoZ5N74QHCR5ADne85PHBYZuHX
+        BIwdNSA3kFt0PxjnvkCZoPIgcWYeEkzlLR/ILAHup3SzdbJrjeUUEzXobCU59M7L
+        cEgRBI1hmwIPsAYi7F5pxUir5Azv8ZuckuDCSO0hGSl02LvCw0cOCwMpVXeYWJMi
+        5YSILl8MsCgPKBAh1bKy42hWCyICXQYdT4jbAZaG+A==
+X-ME-Sender: <xms:Cw_oYrr_5aCcl7cEE8iaunfu4F_D1TAzOMyG-iKFo2s8kzoT5W2JBQ>
+    <xme:Cw_oYloaHXmrllphGVNjks4ob5Q4icuVgL8s2XahiBUYr-vwpeoE8npb7JMYNE4HD
+    whi1wwhU0Gvmdg9Agc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
+    frrghtthgvrhhnpeefgedugffhjedvfffggfektedutdetueehudeitdfgudefvdduiedt
+    vdeliedvgfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhp
+    vghtvghrrdguvghv
+X-ME-Proxy: <xmx:Cw_oYoNsaQXZJY3jgsO6geqeaJyaheDOg96WD6T7KWUkt0bAAZh1uw>
+    <xmx:Cw_oYu5RCO3SfaN-QC5_LwJh_uAEw1PVWJfcaW1L1IN4YHElfs-mOQ>
+    <xmx:Cw_oYq560o3pp4JroCLxPVfRfAWjZK-k7L6lRy59B9UN7S__p0weBw>
+    <xmx:DA_oYpQDEz816y26wyIy4v7InNIcT-9QSPcwrFPOFJfMwpZdBzLJTQ>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5A72EA6007C; Mon,  1 Aug 2022 13:36:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
+Mime-Version: 1.0
+Message-Id: <de5f9eb8-9328-4c1c-a57c-a06d40ec203e@www.fastmail.com>
+In-Reply-To: <20220801152338.GB1031441-robh@kernel.org>
+References: <20220801103633.27772-1-sven@svenpeter.dev>
+ <20220801103633.27772-2-sven@svenpeter.dev>
+ <20220801152338.GB1031441-robh@kernel.org>
+Date:   Mon, 01 Aug 2022 19:35:51 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Marcel Holtmann" <marcel@holtmann.org>,
+        "Johan Hedberg" <johan.hedberg@gmail.com>,
+        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: net: Add generic Bluetooth controller
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/30/22 00:08, Stanley Chu wrote:
-> Hi Bart,
-> 
-> On Sat, Jul 30, 2022 at 4:12 AM Bart Van Assche <bvanassche@acm.org> wrote:
->>
->> On 7/29/22 00:55, Stanley Chu wrote:
->>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
->>> index 581d88af07ab..dc57a7988023 100644
->>> --- a/drivers/ufs/core/ufshcd.c
->>> +++ b/drivers/ufs/core/ufshcd.c
->>> @@ -1574,8 +1574,6 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
->>>        ufshcd_rpm_get_sync(hba);
->>>        ufshcd_hold(hba, false);
->>>
->>> -     hba->clk_scaling.is_enabled = value;
->>> -
->>>        if (value) {
->>>                ufshcd_resume_clkscaling(hba);
->>>        } else {
->>> @@ -1586,6 +1584,8 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
->>>                                        __func__, err);
->>>        }
->>>
->>> +     hba->clk_scaling.is_enabled = value;
->>> +
->>>        ufshcd_release(hba);
->>>        ufshcd_rpm_put_sync(hba);
->>>    out:
->>> @@ -7259,7 +7259,8 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
->>>        hba->silence_err_logs = false;
->>>
->>>        /* scale up clocks to max frequency before full reinitialization */
->>> -     ufshcd_scale_clks(hba, true);
->>> +     if (ufshcd_is_clkscaling_supported(hba) && hba->clk_scaling.is_enabled)
->>> +             ufshcd_scale_clks(hba, true);
->>>
->>>        err = ufshcd_hba_enable(hba);
->>
->> I see a race condition between the hba->clk_scaling.is_enabled check in
->> ufshcd_host_reset_and_restore() and the code that sets
->> ufshcd_clkscale_enable_store(). Shouldn't the code in
->> ufshcd_host_reset_and_restore() that scales up the clocks be serialized
->> against ufshcd_clkscale_enable_store()?
-> 
-> Both check and set paths are serialized by hba->host_sem currently.
-> 
-> Would I miss any other unserialized paths?
+Hi,
 
-Where in ufshcd_host_reset_and_restore() or in its callers is 
-hba->host_sem obtained? I don't see it. Am I perhaps overlooking something?
+On Mon, Aug 1, 2022, at 17:23, Rob Herring wrote:
+> On Mon, Aug 01, 2022 at 12:36:29PM +0200, Sven Peter wrote:
+>> Bluetooth controllers share the common local-bd-address property.
+>> Add a generic YAML schema to replace bluetooth.txt for those.
+>> 
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>> I hope it's fine to list the current Bluetooth maintainers in here
+>> as well.
+>> 
+>>  .../bindings/net/bluetooth-controller.yaml    | 30 +++++++++++++++++++
+>>  .../devicetree/bindings/net/bluetooth.txt     |  6 +---
+>>  2 files changed, 31 insertions(+), 5 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/net/bluetooth-controller.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/net/bluetooth-controller.yaml b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
+>> new file mode 100644
+>> index 000000000000..0ea8a20e30f9
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
+>> @@ -0,0 +1,30 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/bluetooth-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bluetooth Controller Generic Binding
+>> +
+>> +maintainers:
+>> +  - Marcel Holtmann <marcel@holtmann.org>
+>> +  - Johan Hedberg <johan.hedberg@gmail.com>
+>> +  - Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^bluetooth(@.*)?$"
+>> +
+>> +  local-bd-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>> +    minItems: 6
+>> +    maxItems: 6
+>> +    description:
+>> +      Specifies the BD address that was uniquely assigned to the Bluetooth
+>> +      device. Formatted with least significant byte first (little-endian), e.g.
+>> +      in order to assign the address 00:11:22:33:44:55 this property must have
+>> +      the value [55 44 33 22 11 00].
+>> +
+>> +additionalProperties: true
+>> +
+>> +...
+>> diff --git a/Documentation/devicetree/bindings/net/bluetooth.txt b/Documentation/devicetree/bindings/net/bluetooth.txt
+>> index 94797df751b8..3cb5a7b8e5ad 100644
+>> --- a/Documentation/devicetree/bindings/net/bluetooth.txt
+>> +++ b/Documentation/devicetree/bindings/net/bluetooth.txt
+>> @@ -1,5 +1 @@
+>> -The following properties are common to the Bluetooth controllers:
+>> -
+>> -- local-bd-address: array of 6 bytes, specifies the BD address that was
+>> -  uniquely assigned to the Bluetooth device, formatted with least significant
+>> -  byte first (little-endian).
+>> +This file has been moved to bluetooth-controller.yaml.
+>
+> There's one reference to bluetooth.txt. Update it and remove this file.
+
+Sure, I've just checked and found Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
+and Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml and will
+update both for v2 and remove bluetooth.txt.
+
 
 Thanks,
 
-Bart.
+
+Sven

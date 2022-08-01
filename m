@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D830586893
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9C5586915
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiHALuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S232571AbiHAL4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiHALt3 (ORCPT
+        with ESMTP id S232654AbiHALzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:49:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72443AB16;
-        Mon,  1 Aug 2022 04:48:46 -0700 (PDT)
+        Mon, 1 Aug 2022 07:55:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D0A474D5;
+        Mon,  1 Aug 2022 04:51:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8856161210;
-        Mon,  1 Aug 2022 11:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B9DC433C1;
-        Mon,  1 Aug 2022 11:48:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD90AB80E8F;
+        Mon,  1 Aug 2022 11:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017FCC433C1;
+        Mon,  1 Aug 2022 11:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354526;
-        bh=eQkHLvuFiQC4fCGZQxZG6VEon3kkOfjQUOYlGs5oa7k=;
+        s=korg; t=1659354685;
+        bh=Kr1Yx27AWLh+1gvT8gaFpSOhnROqSVu0uXH2DRg+H2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NlniTQ6DvIj9NArk1xqExSKMG3GumIRJBLD21cZaBKofiGBQtAgU79LAj0D8pnuCX
-         U8Io1k9gOERSi+6K3qeC7uMy/4y5P1jjUTuBvhb+hgJLHw4C7Exu5WQ6FGlIyDW3kn
-         5565//9JmTuddrs0on7eOIbVgKlZeTEPW+QNo0xA=
+        b=ntPdekIEo4TkTj2xXGMf0a087Il0MXsI2k5Pe1t+n5kaJEX5tccKrCv03X/fb7fbT
+         goU3EVwmPTFkeHvWkLoV+TVUu3K09GxMbPm9xWMQkDnGQfFiUJyKyn8FV8KDoNo33W
+         74M6Qw76OcexeF30d+bRlcc9T+UMq4DkE+3ZFWCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 26/34] sctp: fix sleep in atomic context bug in timer handlers
-Date:   Mon,  1 Aug 2022 13:47:06 +0200
-Message-Id: <20220801114129.017510453@linuxfoundation.org>
+Subject: [PATCH 5.10 50/65] ARM: 9216/1: Fix MAX_DMA_ADDRESS overflow
+Date:   Mon,  1 Aug 2022 13:47:07 +0200
+Message-Id: <20220801114135.797039713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
-References: <20220801114128.025615151@linuxfoundation.org>
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+References: <20220801114133.641770326@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit b89fc26f741d9f9efb51cba3e9b241cf1380ec5a ]
+[ Upstream commit fb0fd3469ead5b937293c213daa1f589b4b7ce46 ]
 
-There are sleep in atomic context bugs in timer handlers of sctp
-such as sctp_generate_t3_rtx_event(), sctp_generate_probe_event(),
-sctp_generate_t1_init_event(), sctp_generate_timeout_event(),
-sctp_generate_t3_rtx_event() and so on.
+Commit 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
+added a check to determine whether arm_dma_zone_size is exceeding the
+amount of kernel virtual address space available between the upper 4GB
+virtual address limit and PAGE_OFFSET in order to provide a suitable
+definition of MAX_DMA_ADDRESS that should fit within the 32-bit virtual
+address space. The quantity used for comparison was off by a missing
+trailing 0, leading to MAX_DMA_ADDRESS to be overflowing a 32-bit
+quantity.
 
-The root cause is sctp_sched_prio_init_sid() with GFP_KERNEL parameter
-that may sleep could be called by different timer handlers which is in
-interrupt context.
+This was caught thanks to CONFIG_DEBUG_VIRTUAL on the bcm2711 platform
+where we define a dma_zone_size of 1GB and we have a PAGE_OFFSET value
+of 0xc000_0000 (CONFIG_VMSPLIT_3G) leading to MAX_DMA_ADDRESS being
+0x1_0000_0000 which overflows the unsigned long type used throughout
+__pa() and then __virt_addr_valid(). Because the virtual address passed
+to __virt_addr_valid() would now be 0, the function would loudly warn
+and flood the kernel log, thus making the platform unable to boot
+properly.
 
-One of the call paths that could trigger bug is shown below:
-
-      (interrupt context)
-sctp_generate_probe_event
-  sctp_do_sm
-    sctp_side_effects
-      sctp_cmd_interpreter
-        sctp_outq_teardown
-          sctp_outq_init
-            sctp_sched_set_sched
-              n->init_sid(..,GFP_KERNEL)
-                sctp_sched_prio_init_sid //may sleep
-
-This patch changes gfp_t parameter of init_sid in sctp_sched_set_sched()
-from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
-context bugs.
-
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Link: https://lore.kernel.org/r/20220723015809.11553-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 26f09e9b3a06 ("mm/memblock: add memblock memory allocation apis")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/stream_sched.c | 2 +-
+ arch/arm/include/asm/dma.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-index 99e5f69fbb74..a2e1d34f52c5 100644
---- a/net/sctp/stream_sched.c
-+++ b/net/sctp/stream_sched.c
-@@ -163,7 +163,7 @@ int sctp_sched_set_sched(struct sctp_association *asoc,
- 		if (!SCTP_SO(&asoc->stream, i)->ext)
- 			continue;
+diff --git a/arch/arm/include/asm/dma.h b/arch/arm/include/asm/dma.h
+index a81dda65c576..45180a2cc47c 100644
+--- a/arch/arm/include/asm/dma.h
++++ b/arch/arm/include/asm/dma.h
+@@ -10,7 +10,7 @@
+ #else
+ #define MAX_DMA_ADDRESS	({ \
+ 	extern phys_addr_t arm_dma_zone_size; \
+-	arm_dma_zone_size && arm_dma_zone_size < (0x10000000 - PAGE_OFFSET) ? \
++	arm_dma_zone_size && arm_dma_zone_size < (0x100000000ULL - PAGE_OFFSET) ? \
+ 		(PAGE_OFFSET + arm_dma_zone_size) : 0xffffffffUL; })
+ #endif
  
--		ret = n->init_sid(&asoc->stream, i, GFP_KERNEL);
-+		ret = n->init_sid(&asoc->stream, i, GFP_ATOMIC);
- 		if (ret)
- 			goto err;
- 	}
 -- 
 2.35.1
 

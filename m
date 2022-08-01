@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712E1586A7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F425869CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbiHAMR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S233653AbiHAMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234665AbiHAMQO (ORCPT
+        with ESMTP id S233618AbiHAMHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:16:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA63E779;
-        Mon,  1 Aug 2022 04:58:48 -0700 (PDT)
+        Mon, 1 Aug 2022 08:07:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84BB272A;
+        Mon,  1 Aug 2022 04:55:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA66E6023B;
-        Mon,  1 Aug 2022 11:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA128C433D6;
-        Mon,  1 Aug 2022 11:58:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB3ADB81163;
+        Mon,  1 Aug 2022 11:55:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12322C433D6;
+        Mon,  1 Aug 2022 11:55:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355127;
-        bh=MSU+wIZy6YkLdrzUgPvd6S2garQUL9V0rYkYpyfa7mI=;
+        s=korg; t=1659354910;
+        bh=tuaWM0RS08UKYD1ZGPzHKRoYPvP0Ao/9TYJpx7LX5Ek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbeiOraKXhU8YL/MPBJhzG/i5JgPStTRY+eM9quDMJ+GSzx4zMCFiL4C+1RXtOHVO
-         wj+vw0QYWOpQQSdjYbMN/RSIYAqfmYFhNtTlhiKpzE6G6qJAY0nF5AR6Glq0Fe9h7C
-         qVFBAgetTnUPGnE+rgzlT3zOljwQKbg1WQtpEbac=
+        b=csvEaXXIQyJk1ld5u7w9NIm0iu3n4cl98KW5peDREWCGDYqVQBS0gfpEzuy8dQiKR
+         JSrgvEKffI0s+d64vZcl1aMVCXENH98hrLDqRgAhkzDjlx51jIN1cm2qSbFc7FwQ9g
+         lS8JPfsNgUPAp0O2GKaPj1wfuYOFTPoDU59ROTLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 73/88] virtio-net: fix the race between refill work and close
-Date:   Mon,  1 Aug 2022 13:47:27 +0200
-Message-Id: <20220801114141.369132581@linuxfoundation.org>
+        stable@vger.kernel.org, Jaewon Kim <jaewon31.kim@samsung.com>,
+        GyeongHwan Hong <gh21.hong@samsung.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Minchan Kim <minchan@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Yong-Taek Lee <ytk.lee@samsung.com>, stable@vger.kerenl.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 64/69] page_alloc: fix invalid watermark check on a negative value
+Date:   Mon,  1 Aug 2022 13:47:28 +0200
+Message-Id: <20220801114137.047337783@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,151 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Jaewon Kim <jaewon31.kim@samsung.com>
 
-[ Upstream commit 5a159128faff151b7fe5f4eb0f310b1e0a2d56bf ]
+commit 9282012fc0aa248b77a69f5eb802b67c5a16bb13 upstream.
 
-We try using cancel_delayed_work_sync() to prevent the work from
-enabling NAPI. This is insufficient since we don't disable the source
-of the refill work scheduling. This means an NAPI poll callback after
-cancel_delayed_work_sync() can schedule the refill work then can
-re-enable the NAPI that leads to use-after-free [1].
+There was a report that a task is waiting at the
+throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
+increasing.
 
-Since the work can enable NAPI, we can't simply disable NAPI before
-calling cancel_delayed_work_sync(). So fix this by introducing a
-dedicated boolean to control whether or not the work could be
-scheduled from NAPI.
+This is a bug where zone_watermark_fast returns true even when the free
+is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
+reserve in watermark fast") changed the watermark fast to consider
+highatomic reserve. But it did not handle a negative value case which
+can be happened when reserved_highatomic pageblock is bigger than the
+actual free.
 
-[1]
-==================================================================
-BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+If watermark is considered as ok for the negative value, allocating
+contexts for order-0 will consume all free pages without direct reclaim,
+and finally free page may become depleted except highatomic free.
 
-CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Workqueue: events refill_work
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0xbb/0x6ac
- ? _printk+0xad/0xde
- ? refill_work+0x43/0xd4
- kasan_report+0xa8/0x130
- ? refill_work+0x43/0xd4
- refill_work+0x43/0xd4
- process_one_work+0x43d/0x780
- worker_thread+0x2a0/0x6f0
- ? process_one_work+0x780/0x780
- kthread+0x167/0x1a0
- ? kthread_exit+0x50/0x50
- ret_from_fork+0x22/0x30
- </TASK>
-...
+Then allocating contexts may fall into throttle_direct_reclaim. This
+symptom may easily happen in a system where wmark min is low and other
+reclaimers like kswapd does not make free pages quickly.
 
-Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Handle the negative case by using MIN.
+
+Link: https://lkml.kernel.org/r/20220725095212.25388-1-jaewon31.kim@samsung.com
+Fixes: f27ce0e14088 ("page_alloc: consider highatomic reserve in watermark fast")
+Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+Reported-by: GyeongHwan Hong <gh21.hong@samsung.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Yong-Taek Lee <ytk.lee@samsung.com>
+Cc: <stable@vger.kerenl.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/virtio_net.c | 37 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ mm/page_alloc.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index c7804fce204c..206904e60784 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -242,9 +242,15 @@ struct virtnet_info {
- 	/* Packet virtio header size */
- 	u8 hdr_len;
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3928,11 +3928,15 @@ static inline bool zone_watermark_fast(s
+ 	 * need to be calculated.
+ 	 */
+ 	if (!order) {
+-		long fast_free;
++		long usable_free;
++		long reserved;
  
--	/* Work struct for refilling if we run low on memory. */
-+	/* Work struct for delayed refilling if we run low on memory. */
- 	struct delayed_work refill;
- 
-+	/* Is delayed refill enabled? */
-+	bool refill_enabled;
+-		fast_free = free_pages;
+-		fast_free -= __zone_watermark_unusable_free(z, 0, alloc_flags);
+-		if (fast_free > mark + z->lowmem_reserve[highest_zoneidx])
++		usable_free = free_pages;
++		reserved = __zone_watermark_unusable_free(z, 0, alloc_flags);
 +
-+	/* The lock to synchronize the access to refill_enabled */
-+	spinlock_t refill_lock;
-+
- 	/* Work struct for config space updates */
- 	struct work_struct config_work;
- 
-@@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
- 	return p;
- }
- 
-+static void enable_delayed_refill(struct virtnet_info *vi)
-+{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_enabled = true;
-+	spin_unlock_bh(&vi->refill_lock);
-+}
-+
-+static void disable_delayed_refill(struct virtnet_info *vi)
-+{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_enabled = false;
-+	spin_unlock_bh(&vi->refill_lock);
-+}
-+
- static void virtqueue_napi_schedule(struct napi_struct *napi,
- 				    struct virtqueue *vq)
- {
-@@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
++		/* reserved may over estimate high-atomic reserves. */
++		usable_free -= min(usable_free, reserved);
++		if (usable_free > mark + z->lowmem_reserve[highest_zoneidx])
+ 			return true;
  	}
  
- 	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
--		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
--			schedule_delayed_work(&vi->refill, 0);
-+		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-+			spin_lock(&vi->refill_lock);
-+			if (vi->refill_enabled)
-+				schedule_delayed_work(&vi->refill, 0);
-+			spin_unlock(&vi->refill_lock);
-+		}
- 	}
- 
- 	u64_stats_update_begin(&rq->stats.syncp);
-@@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i, err;
- 
-+	enable_delayed_refill(vi);
-+
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		if (i < vi->curr_queue_pairs)
- 			/* Make sure we have some buffers: if oom use wq. */
-@@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i;
- 
-+	/* Make sure NAPI doesn't schedule refill work */
-+	disable_delayed_refill(vi);
- 	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
-@@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 
- 	virtio_device_ready(vdev);
- 
-+	enable_delayed_refill(vi);
-+
- 	if (netif_running(vi->dev)) {
- 		err = virtnet_open(vi->dev);
- 		if (err)
-@@ -3534,6 +3564,7 @@ static int virtnet_probe(struct virtio_device *vdev)
- 	vdev->priv = vi;
- 
- 	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-+	spin_lock_init(&vi->refill_lock);
- 
- 	/* If we can receive ANY GSO packets, we must allocate large ones. */
- 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
--- 
-2.35.1
-
 
 

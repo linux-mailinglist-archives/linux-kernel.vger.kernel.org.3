@@ -2,132 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805CC586283
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD34E586285
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238370AbiHACUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S238616AbiHACVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238437AbiHACUm (ORCPT
+        with ESMTP id S238834AbiHACU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:20:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1F912ABB;
-        Sun, 31 Jul 2022 19:20:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 038D8CE0F0E;
-        Mon,  1 Aug 2022 02:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6678CC433D6;
-        Mon,  1 Aug 2022 02:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659320435;
-        bh=8+H9rIFxtVXMLizyjzjdfAN5H4rrg+kZwIAaizE2yzQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qbHrryCgLDT40La7RvFNZvpswRq37MotxkwMrnSgvThg10C5P0Wuvbhb+kgAW2IV/
-         7l9AinfPyV+s0mp74V/lgRfNNWtXpVcoBhJZq6nNU0+Y+uztq9mnx8qZUNJtGfOmBy
-         z9E4MQQrlRBjePrgwRm5wkSRkYp1eh67rIz1eWdsjiCrWjEg7KPlp9UuuRYFvVdF4H
-         AG5ozENZQdt/UaSewznbAtfMQ42eqJ8Aijum4zvDsoNX31z1VJqC3WWFB8VpixZRdN
-         eZ7vzT+qAn+vAnbV2YEMFy6M4I4SzFXOjvGZzYicWbyrhI6mijE08eH8oBJNpMbil5
-         HrwTfHKih8DWg==
-Message-ID: <65fb5e26-2000-ffa5-5a3b-21db87da9e3b@kernel.org>
-Date:   Sun, 31 Jul 2022 20:20:31 -0600
+        Sun, 31 Jul 2022 22:20:58 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D1812AE8
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:20:56 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m8so12013616edd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FL6269pemMpnmRW6a2WYgw7o9Iwarc5gVNQUemen3CE=;
+        b=oQByfmNI24pr79uSmxZ4AT7q3m2Hn0A/YId5eEqPCiLFH2zaHVflt5Ol7XxkurYUCv
+         Ly24dX+8zNf6lOHXfQwCRfempBk6LI+G/WpAXHb+Jj0OHHMQVhmXJS8G8ef7537KfRQv
+         8jNVnZXFzK/AfocAkGq0QUehKQE7l0rDT09GV0zBcyDcbER60JVG667TWNOobDdrmqEA
+         mS3QpSJJH8QiqGM225F4OtIUnuprDyoieZTSeakpBEPZ3l8PlmgY9fJcEcP+tB2Y56sB
+         4x3YQT2CTp6ZVLAO8WU1jmcPXW6+r4CrolqHW7jB/Qj8YME+QhQ6k8yi9W3s3UtYNCbp
+         xfLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FL6269pemMpnmRW6a2WYgw7o9Iwarc5gVNQUemen3CE=;
+        b=O2ug4m9TfR3Tu5aPGBcYAHthU+bw5xL9JK+RTNT+3XodHgeRKEJGtNroyeFhVnBkG5
+         rsXXsXGvNMJJ/xJHbaLJj9e9TtCcM4uUz9kpCk7F8JBFrv4JO8xldHQr+eJaxohNP1AU
+         Y4eN7a2ROpj1SBm5ITMklkJi5NjbpHwboUeMhVCp57TjpZYAqscIRWSWNURTCcIIKuiu
+         K6OYWvTeo3Rwrxq4Wt5gzpL5+LtR0V8v+f7Q9L6Q2ATbjAnCsnxVVV7dRIjzvipG3wpn
+         ChjHD0SSJsDGG5EeIGY9HzRqw+9gYfLn1/3W696kAyo3SYhnOvgTDi7Klqnap9QeV/cH
+         Vz0Q==
+X-Gm-Message-State: ACgBeo2gVTx6TA43Mn+GxOQl4uI0rTyMQRdPt39ocQPPjrN9QdJc8kPq
+        TIw31Me/ckCv3wHDUuXR3U8zrA==
+X-Google-Smtp-Source: AA6agR4KoEUwwcnlwJzKF6MF312WPGfuGy0TVRtge9Kvx1ilRchqSMgHzbNyGUj2IgAlR16VcDySjw==
+X-Received: by 2002:a05:6402:34cf:b0:43d:96fd:bdfa with SMTP id w15-20020a05640234cf00b0043d96fdbdfamr3905237edc.40.1659320454535;
+        Sun, 31 Jul 2022 19:20:54 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.98.208])
+        by smtp.gmail.com with ESMTPSA id 22-20020a170906311600b0072b13ac9ca3sm4659207ejx.183.2022.07.31.19.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 19:20:54 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 10:20:50 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: Re: [steev:linux-v5.19.0-rc8-tests 109/182]
+ drivers/interconnect/qcom/icc-rpm.c:378:16: error: use of undeclared
+ identifier 'src_qn'
+Message-ID: <20220801022050.GC101027@leoy-ThinkPad-X240s>
+References: <202207311834.fM0dvTaU-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [RFC] Remove DECNET support from kernel
-Content-Language: en-US
-To:     Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Juergen Gross <jgross@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Suma Hegde <suma.hegde@amd.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Scott Wood <oss@buserror.net>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        Benjamin Poirier <bpoirier@nvidia.com>,
-        Victor Erminpour <victor.erminpour@oracle.com>,
-        "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-References: <20220731190646.97039-1-stephen@networkplumber.org>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220731190646.97039-1-stephen@networkplumber.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202207311834.fM0dvTaU-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/31/22 1:06 PM, Stephen Hemminger wrote:
-> Decnet is an obsolete network protocol that receives more attention
-> from kernel janitors than users. It belongs in computer protocol
-> history museum not in Linux kernel.
+On Sun, Jul 31, 2022 at 06:04:38PM +0800, kernel test robot wrote:
+> tree:   https://github.com/steev/linux linux-v5.19.0-rc8-tests
+> head:   171125613e081f0d0d9aeb710dc7469ce2c6a219
+> commit: 20386c070c2d12a74092d72aef1c8be37a5f5177 [109/182] interconnect: qcom: icc-rpm: Set bandwidth and clock for bucket values
+> config: arm64-buildonly-randconfig-r005-20220731 (https://download.01.org/0day-ci/archive/20220731/202207311834.fM0dvTaU-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/steev/linux/commit/20386c070c2d12a74092d72aef1c8be37a5f5177
+>         git remote add steev https://github.com/steev/linux
+>         git fetch --no-tags steev linux-v5.19.0-rc8-tests
+>         git checkout 20386c070c2d12a74092d72aef1c8be37a5f5177
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/interconnect/qcom/
 > 
-> It has been Orphaned in kernel since 2010.
-> And the documentation link on Sourceforge says it is abandoned there.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Leave the UAPI alone to keep userspace programs compiling.
+> All errors (new ones prefixed by >>):
 > 
-> Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-> ---
+> >> drivers/interconnect/qcom/icc-rpm.c:378:16: error: use of undeclared identifier 'src_qn'
+>                    do_div(rate, src_qn->buswidth);
+>                                 ^
+>    1 error generated.
 
-Acked-by: David Ahern <dsahern@kernel.org>
+This is the same issue that merged old version patches on the repo
+https://github.com/steev/linux, branch "linux-v5.19.0-rc8-tests", as I
+described in:
+https://lore.kernel.org/lkml/20220801020945.GB101027@leoy-ThinkPad-X240s/T/#t
 
-
+Thanks,
+Leo

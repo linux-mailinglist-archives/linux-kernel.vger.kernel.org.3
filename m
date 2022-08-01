@@ -2,114 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1368B586B35
+	by mail.lfdr.de (Postfix) with ESMTP id 823E8586B36
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiHAMrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S235020AbiHAMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234961AbiHAMq7 (ORCPT
+        with ESMTP id S234594AbiHAMrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:46:59 -0400
+        Mon, 1 Aug 2022 08:47:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB8BCA2
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:37:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9ABF47
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:38:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D27661176
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82E9C433D6;
-        Mon,  1 Aug 2022 12:37:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76A1761128
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:38:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8404FC433D6;
+        Mon,  1 Aug 2022 12:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659357478;
-        bh=B0zmon3+6pgQcGh5p86krRiiw/IqUKvcIuyfjb97Lns=;
+        s=k20201202; t=1659357496;
+        bh=YbiPaRADfaZdOZqXAevhYBvKljj3zyXSlE1baUc/s0Y=;
         h=From:To:Cc:Subject:Date:From;
-        b=fEWhn+yGMGXoRmfqL/5MAbfLpqxtS4GW4VKn6acZmNMnXKfeI2llSLVvRVmZEoW1g
-         o2m2O9HiI0p/SDz4bdqDW8cqG08FLTtyZfpuxfFcvufEjXGE1fwzOTbS42ZrliDCOz
-         MIQ3jX6bB3VEK+pivOIn/UUnpgK7bEDEZCHFe6GFEmWGad1diL1YS6PACJ62BBhnLM
-         YTbDAkq7cKvQlRA8o+6OfkY6XaE3IrtsbQ2BMRKHqamrv32GJAcU8IaerohuTrM8xF
-         s7vMus7dditpW9VDP4mGXtJJiiRZ5l6sUSDExBnkGySFmVswRUqKUErIsqhWiPjExr
-         m9v3hGyaLzjOA==
+        b=tet6769k0e/Q6sRLmiByELahRfoTrDi4EtkD8RqCLuGivE40Ve231b15VPzA4q8cf
+         Ut7x+PBD1XPhTRKFR2XNiF3L0gLZ/woCpf2zqD92xOqwhQgittod0rgBCNnVnxDqFx
+         XPQyiGUI3G6mEfvbHgNdOnstcMa9YdCfv2Vr6WjHx852y1qNx4bjh9RXqlNRHtT6aT
+         zI6p75N06HlSIHdL7vkUi6Jq3GbuBwhIHnmhbbw4HJMZGNBTPTFqIC5iMqzsFpTn0q
+         LEDuE5LZYrthBf9k4SCovWY4JsvqPxooYvMJLmjU/kQAnDy3mXeIE/QHqxpmKvDwfO
+         fYX0dJC6GUGcw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regmap updates for v5.20
-Date:   Mon, 01 Aug 2022 13:37:40 +0100
-Message-Id: <20220801123757.A82E9C433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator updates for v5.20
+Date:   Mon, 01 Aug 2022 13:38:03 +0100
+Message-Id: <20220801123816.8404FC433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3f05010f243be06478a9b11cfce0ce994f5a0890:
+The following changes since commit 122e951eb8045338089b086c8bd9b0b9afb04a92:
 
-  regmap-irq: Fix offset/index mismatch in read_sub_irq_data() (2022-06-22 11:59:52 +0100)
+  regulator: qcom_smd: correct MP5496 ranges (2022-06-07 20:38:09 +0100)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-v5.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v5.20
 
-for you to fetch changes up to 739f872e48d47c97fa17a86a7b3356771b75240c:
+for you to fetch changes up to efc93392960cb9c3534e7aed15481ca7bcfdf15c:
 
-  regmap: permit to set reg_update_bits with bulk implementation (2022-07-18 13:45:28 +0100)
-
-----------------------------------------------------------------
-regmap: Updates for v5.20
-
-The big thing this release is a big cleanup of the interrupt code from
-Aidan MacDonald, plus a few new API updates:
-
- - Rework of the interrupt code, making it much simpler and easier to
-   extend.
- - Support for device specific update bits operations with devices that
-   otherwise use bitstream interfaces.
- - Support for bit operations on fields as well as whole registers.
+  regulator: Consumer load management improvements (2022-07-28 00:01:30 +0100)
 
 ----------------------------------------------------------------
-Aidan MacDonald (13):
-      regmap-irq: Convert bool bitfields to unsigned int
-      regmap-irq: Remove unused type_reg_stride field
-      regmap-irq: Cleanup sizeof(...) use in memory allocation
-      regmap-irq: Remove an unnecessary restriction on type_in_mask
-      regmap-irq: Remove inappropriate uses of regmap_irq_update_bits()
-      regmap-irq: Remove mask_writeonly and regmap_irq_update_bits()
-      regmap-irq: Refactor checks for status bulk read support
-      regmap-irq: Introduce config registers for irq types
-      regmap-irq: Deprecate type registers and virtual registers
-      regmap-irq: Fix inverted handling of unmask registers
-      regmap-irq: Add get_irq_reg() callback
-      regmap-irq: Deprecate the not_fixed_stride flag
-      regmap-irq: Fix bug in regmap_irq_get_irq_reg_linear()
+regulator: Updates for v5.20
 
-Christian Marangi (1):
-      regmap: permit to set reg_update_bits with bulk implementation
+This has been a fairly quiet release for the regulator API, a few new
+drivers and a small API update:
 
-Li Chen (1):
-      regmap: provide regmap_field helpers for simple bit operations
+ - Support for specifying an initial load as part of requesting
+   regulators through the bulk API.
+ - Support for Maxim MAX597x, Qualcomm PM8074, PM8909 and Realtek RT5120
+   devices.
 
-Mark Brown (4):
-      Merge tag 'regmap-field-bit-helpers' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap into regmap-5.20
-      regmap: Don't warn about cache only mode for devices with no cache
-      regmap: Merge up fixes
-      regmap-irq cleanups and refactoring
+----------------------------------------------------------------
+Axel Lin (1):
+      regulator: max597x: Don't return uninitialized variable in .probe
 
-Matt Ranostay (1):
-      regmap: add WARN_ONCE when invalid mask is provided to regmap_field_init()
+ChiYuan Huang (5):
+      regulator: rt5190a: check if init_data is NULL, bypass rt5190a_of_parse_cb
+      regulator: rt5120: Add PMIC regulator support
+      regulator: mt6370: Add mt6370 DisplayBias and VibLDO support
+      regulator: mt6370: Use 'fwnode_gpiod_get_index' to fix gpio parsing
+      regulator: mt6370: Use the correct header for platform_device_id
 
-Schspa Shi (1):
-      regmap: cache: Add extra parameter check in regcache_init
+Christian Kohlschütter (1):
+      regulator: core: Fix off-on-delay-us for always-on/boot-on regulators
 
-Xiang wangx (1):
-      regmap: cache: Fix syntax errors in comments
+Douglas Anderson (2):
+      regulator: core: Allow specifying an initial load w/ the bulk API
+      regulator: core: Allow drivers to define their init data as const
 
- drivers/base/regmap/regcache.c   |  11 +-
- drivers/base/regmap/regmap-irq.c | 432 ++++++++++++++++++++++++++-------------
- drivers/base/regmap/regmap.c     |  27 +++
- include/linux/regmap.h           | 141 ++++++++++---
- 4 files changed, 440 insertions(+), 171 deletions(-)
+Jean Delvare (1):
+      regulator: mt6380: Fix unused array warning
+
+Jiapeng Chong (1):
+      regulator: max597x: Remove unused including <linux/version.h>
+
+Lee Jones (1):
+      regulator: pwm: Update Lee Jones' email address
+
+Liang He (2):
+      regulator: scmi: Add missing of_node_get()
+      regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
+
+Mark Brown (3):
+      regulator: qcom_smd: Add PM8909 and fix pm8916_pldo range
+      regulator: Fix MFD_MAX597X dependency
+      regulator: Consumer load management improvements
+
+Mauro Carvalho Chehab (1):
+      regulator: fix a kernel-doc warning
+
+Patrick Rudolph (1):
+      regulator: max597x: Add support for max597x regulator
+
+Rob Herring (2):
+      regulator: dt-bindings: Convert pwm-regulator to DT schema
+      regulator: Add missing type for 'regulator-microvolt-offset'
+
+Robert Marko (11):
+      regulator: dt-bindings: mps,mp5416: add MP5496 compatible
+      regulator: mp5416: alphabetically sort header includes
+      regulator: mp5416: use OF match data
+      regulator: mp5416: add support for MP5496
+      regulator: mp5416: remove kernel.h include
+      regulator: qcom_smd: add get_voltage to MP5496
+      regulator: qcom_spmi: add support for HT_P150
+      regulator: qcom_spmi: add support for HT_P600
+      regulator: qcom_spmi: add support for PMP8074 regulators
+      regulator: qcom,spmi-regulator: Convert to dtschema
+      regulator: qcom,spmi-regulator: add PMP8074 PMIC
+
+Stephan Gerhold (3):
+      regulator: qcom_smd: Fix pm8916_pldo range
+      regulator: dt-bindings: qcom,smd-rpm: Add PM8909
+      regulator: qcom_smd: Add PM8909 RPM regulators
+
+Stephen Kitt (1):
+      regulator: rpi-panel-attiny: Use backlight helper
+
+Zhang Jiaming (1):
+      regulator: Fix parameter declaration and spelling mistake.
+
+ .../devicetree/bindings/regulator/mps,mp5416.yaml  |   1 +
+ .../bindings/regulator/pwm-regulator.txt           |  92 ----
+ .../bindings/regulator/pwm-regulator.yaml          | 126 ++++++
+ .../bindings/regulator/qcom,smd-rpm-regulator.yaml |   4 +
+ .../bindings/regulator/qcom,spmi-regulator.txt     | 347 --------------
+ .../bindings/regulator/qcom,spmi-regulator.yaml    | 323 +++++++++++++
+ .../devicetree/bindings/regulator/regulator.yaml   |   1 +
+ drivers/regulator/Kconfig                          |  28 ++
+ drivers/regulator/Makefile                         |   3 +
+ drivers/regulator/core.c                           |  25 +-
+ drivers/regulator/devres.c                         |  28 ++
+ drivers/regulator/max597x-regulator.c              | 502 +++++++++++++++++++++
+ drivers/regulator/mp5416.c                         |  30 +-
+ drivers/regulator/mt6370-regulator.c               | 390 ++++++++++++++++
+ drivers/regulator/mt6380-regulator.c               |   2 +-
+ drivers/regulator/of_regulator.c                   |   6 +-
+ drivers/regulator/qcom_smd-regulator.c             |  29 +-
+ drivers/regulator/qcom_spmi-regulator.c            |  37 ++
+ drivers/regulator/rpi-panel-attiny-regulator.c     |   6 +-
+ drivers/regulator/rt5120-regulator.c               | 420 +++++++++++++++++
+ drivers/regulator/rt5190a-regulator.c              |   3 +
+ drivers/regulator/scmi-regulator.c                 |   1 +
+ drivers/regulator/ti-abb-regulator.c               |   4 +-
+ include/linux/regulator/consumer.h                 |  16 +-
+ include/linux/regulator/driver.h                   |   1 +
+ 25 files changed, 1955 insertions(+), 470 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+ delete mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+ create mode 100644 drivers/regulator/max597x-regulator.c
+ create mode 100644 drivers/regulator/mt6370-regulator.c
+ create mode 100644 drivers/regulator/rt5120-regulator.c

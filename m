@@ -2,60 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA57E5866FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD57586706
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiHAJnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S230405AbiHAJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbiHAJnP (ORCPT
+        with ESMTP id S230149AbiHAJoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:43:15 -0400
+        Mon, 1 Aug 2022 05:44:37 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224C3C155;
-        Mon,  1 Aug 2022 02:43:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8276937190;
+        Mon,  1 Aug 2022 02:44:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659346993; x=1690882993;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Iyjq7pdQUkQPUBQPftF4Bfn2Vwp4b9bw8k5PsgN6+D0=;
-  b=G2w+KZe/JEjZfO6rsXcrLXYM6+fz4AGGK1EDRtPbcdPnwYh/rz2qmn+o
-   hKEoS8+Fsdqgh0ZSGB4n9JiTerChMsAOxmDCxAuh3iOvEh27BZcJKfOgA
-   orzzAKU3jSM+/yCaeDinAvIcypxz+O6e3ib8orDg5Wr0iFQP4I3NKFQnd
-   eEnzLx7nfZtgzHPJ5iYTf0EPiI9HgtnqkI8/TM2isQ7oELeuaWoYaza1I
-   +JSDt4Y4/51vNP8LTaM1lbcAd/uw/tL9nJpLffV6kC21uuVaT9HF3iHCD
-   Isg9Co1z7yV9QKeGuexEN55fC7JRFThsrcKO/pcLp5Y10tt6qKpKVZ61l
+  t=1659347076; x=1690883076;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
+  b=bfbnPYZCyhVuLaSebBFDf+KJqGsjZozZjH/r6SnQJu2RftzstnxtCX/f
+   gDLehZbbpbesXZae7Y9e7e3xkftAkDD68FHgGEolueY6G4/G7A7JvOzA/
+   lQsxWCEfsNFO0nLyPr/MOUcnAaZ4CUy5WaH3P7s6HHksWE5FhqWXS4k1v
+   wFcp/5gH24yH+jszg3t/dQl721TTRz8Y8x1pM6gBbACsHFE7uDQ9piUt0
+   Xv74Y9Hv/RUkDp1dJQOFou0SzewmeYH3ttVk4INl4t6TzpdBhKmwgKMZO
+   vkdGpb58MLceQqoetb+rlvt/gZBezI+8qD9iBA87kP2Pivc1SquIP7FLy
    Q==;
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="170369245"
+   d="scan'208";a="106989123"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Aug 2022 02:43:09 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Aug 2022 02:44:35 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 1 Aug 2022 02:43:06 -0700
-Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Mon, 1 Aug 2022 02:43:03 -0700
-From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Subject: [PATCH 2/2] spi: microchip-core-qspi: Add support for microchip fpga qspi controllers
-Date:   Mon, 1 Aug 2022 15:12:55 +0530
-Message-ID: <20220801094255.664548-3-nagasuresh.relli@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
+ 15.1.2375.28; Mon, 1 Aug 2022 02:44:34 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 1 Aug 2022 02:44:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nZCGQ7KW6HPsxoQacZNGrnw/zr9BfB6IBGfd6DCW/zOwbJappbFXYmQD4SJSoHiDZ9VIbFwvxIJ0ZhTR0RDIOhusbNB/z9UzvOMAxRx7IExkML3W9SwcAk7hw0KoI/R7PhDrur3gLLYDAdKS91yB153kH7Oxj22+SiZCNnN4+QDKP9jSWOcTSO+f5AhlZq0xonW2Hz29hpGS+LHeJGlQvjOHzNIGzZxrvUvHKF8fudFBNi2Q7f0bMM2vI2SHn51b4XvOwgVYGqDs/9WKp2eV/2tZCk7ztjnewvpmmEsld9ulcB6omvAnVjSgzZUFnKzFi6aix90hHbAKMj49cviMQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
+ b=A6IoldUW1DyrkzpSWej8pEzwblQCjkwKtbCEtWJfMoApDV7KO9bCR3eku4Odb0B8bGXsB39CUSKiy9hQt5gJBoDrT6AhzbJctMHIVGJdHX1rvJSdpyUog4e/jJW3vlm2gXOBZszSsRHvWHq+sVFMbs61S9iYSA5uvUxgkRjvJL2lYRHeKPu+j1S2Onk0YBzylbygc46zjbUnzEYtcJS+ba6SlPAj6uL69CnETQfyT40C4nKLotf1n66uAGkNz3d9KYd+BMnQUSW/zKXpIAYMevo+UsXfHpDh6/iJNEpRDdphc8Xy0/uQjQpv5AfptX9Jjq7kcSnIUBybQ3mTCQFDMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
+ b=CobN6T2bUr2PBR6JWf5dlzJgLt4feTleIiAMwSixDbIieYbVj6cL+9yYs6FQf3ULA/8OgDayiP/i3XoI3pKkxu693UEfeqQBMwAk5FblVwln1QnDwfFEeT/22og1+qnn64foX/ZdoiVMZgY104MCVuX8mQ2tLWQyjOPwe3+66Yc=
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
+ by SJ0PR11MB5615.namprd11.prod.outlook.com (2603:10b6:a03:305::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Mon, 1 Aug
+ 2022 09:44:30 +0000
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
+ 09:44:29 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <jic23@kernel.org>
+CC:     <Eugen.Hristev@microchip.com>, <lars@metafoo.de>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 19/19] iio: adc: at91-sama5d2_adc: add runtime pm
+ support
+Thread-Topic: [PATCH v2 19/19] iio: adc: at91-sama5d2_adc: add runtime pm
+ support
+Thread-Index: AQHYpYtLkpQs06VmrEudrSLpXJCwXg==
+Date:   Mon, 1 Aug 2022 09:44:29 +0000
+Message-ID: <dcdbed32-bf81-3e28-6f68-21bfc8e3f57d@microchip.com>
+References: <20220628151631.3116454-1-claudiu.beznea@microchip.com>
+ <20220628151631.3116454-20-claudiu.beznea@microchip.com>
+ <20220731211101.2ca0ab1b@jic23-huawei>
+In-Reply-To: <20220731211101.2ca0ab1b@jic23-huawei>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c4d69d04-146c-484a-65ca-08da73a26e16
+x-ms-traffictypediagnostic: SJ0PR11MB5615:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bWvFyNILDDQQBn+CkXpwIUW4tpW6DShSSBfPoy2Evo02w2yKzS5p/HOxGDLCIS5NLmfcbCJAIhzefX7nfHGBtLq9pllX6qbcERo4JedNUQJ5tNv+l48oSlxTQvQq3PfkwEJSqJorqzaL4OsjeuDhSYamE3s4YAACMUoQvCwvE8XmJzxILCGR6LWnsWSafFGEyNC4dx3amdg6KTUI2fPF7qjzSlr+boS7FKS17koWNYR8s5rpsAd/6czNUGLvwXN9A6P+Kasto2AJgvT/c/fj09VKJdjLO+qQBro5ryUOLob+u6aPv8Ykmd3EJyK6ws2J3iLbNGKA9dz6cSLuof+G2NHSs1IqMKN06kUNUEB/JRkrB2SuboXjy/BJJC2tAjttS5iUAAWhDZGGDRKRP1c6OUxRrgX6xxDkpnzsvlj26lyqNF3mOZbDj2Q1nr15Il6kqXFFI0XZtkT5CXhq5UbaGnKciV0GSAE5GDU8nTG0huV2M0ixF8b3E13Slr5W7lgY/p8IQ23ZLGfFGT369gTWpHrpH/pNNk+wbmo6eD35JunAwI4dpHxmVWWYtxKyUF/3grvUnn2JqWU+/5MF3wo2qNipWgXuNoz6twmPJr7tMfSbxKZS0Tpb1XNR7pZTs4wOJ201lMQfSdpAFoexYjM2xR4tGgwffynPfduE/AW/bysHrz+0mJPsnED1WQ810bIBrnVrZxnuETTBJCqw9C3OOkxZkG0VM4WAcdIs7cP9LEyXhqiyQZ4DSLDCAhiEyN/UFVGS8+mvyUWBRGO+9TBBiCkRtkhGOjS5ijonmadbyYaKXo4fbnH2jlMouXcGOofLaP4btOq05xhw35jXB0YhzlNHF4yYD+irmIaVYuCpxYoNQZpSS6N8eIrKsLLKNUdU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(39860400002)(136003)(346002)(396003)(376002)(5660300002)(36756003)(8936002)(64756008)(8676002)(66556008)(66476007)(2906002)(76116006)(41300700001)(66946007)(91956017)(66446008)(31686004)(316002)(4326008)(53546011)(54906003)(71200400001)(6916009)(478600001)(6486002)(122000001)(6506007)(38070700005)(6512007)(2616005)(186003)(38100700002)(86362001)(31696002)(26005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TU9MZlRQcndHOGRCek5wZ0dJMzdybms3YmxwalNpUnNldEphR2dYVkZqRjdE?=
+ =?utf-8?B?cVZOMUNZaFdqaGpKbVVpWUQvV3RHVldjUFE1VnpsNFhyblNSdkZDWE1lcDdQ?=
+ =?utf-8?B?NzJUdS9UZ2FFeHVMbW9LaHVybGsxK1JvV29oMnFyVmIxWVhZdjVIZU1najl2?=
+ =?utf-8?B?N3JmdnhOSmJ4UVdIdnlDb2JZR040UGRhazJzOEp6aitMN1M3WlpjYlllbytX?=
+ =?utf-8?B?OUViN2NsT1BTYVV5Sk54SXhUd2d5RjJ3aEhEVXVSczFldDZiYkR3YzFGRVA1?=
+ =?utf-8?B?OWE5Y0pVUXh6dnRhNnd5N0xMN2VoeVdvNEYwcURwbEdxYVFwbDBqSXZXNU9q?=
+ =?utf-8?B?dXNFbTZieUhSQ005aUpnVUJFMm84dWhwVldETGZUN1k3N0wvUFUyYlFjWEkr?=
+ =?utf-8?B?cEhadnVQaGNnNmR3c0JlSkNtOUM4OUNWVHJhS0hrOHZCTGRpNFpqY093bnNH?=
+ =?utf-8?B?SUhSdjRRNWpyL3k0YUlXUFlCMUpkaERxUE9QYm13MTk2b1Aza3JMcklCd1k1?=
+ =?utf-8?B?WFk1RWFZYkdSd216U0RiaTFHL1Q4ejhFUkhoU0diaUtRWEhUdEtsK2U1TUZj?=
+ =?utf-8?B?NHBNN0w0VlZMblhyTFFwUDgyQ1J3ekM5aVJKN0gvQkJKZzdLOXVudVRNdllI?=
+ =?utf-8?B?djlvbEJXS3BMWGZhZFE3UnFLekJGbXNUNm1qbjZjTWxLbFc4SmIrUjBtM3Bp?=
+ =?utf-8?B?bStlTk5teFVLVm1DZ3lxcHFHeUdOamlIdWdWaTROMVhrTi96c1crUVV0ZEFu?=
+ =?utf-8?B?MzdLSFBjdEViNXJ0R0U0U0NtbldIWkFobis4UitkdDhBOTBSVmU2TktqNE9M?=
+ =?utf-8?B?WXJNUmlQS2QwWnRIeDVoM1ZhTkNkaDVYdSs0eXRuRnd1MmM5UjUvbjhITC9D?=
+ =?utf-8?B?NHl2WDg3L2VZeE5YbkRoeFFLbGNReFNCcG1sdmZRbnJGdTJOdjRvNUZWQkxU?=
+ =?utf-8?B?UmFOZDlCcFZDWm5ETkJEVHp6TitFalpTWVk5UGE4TWM5U2pWdUFobm93MEY2?=
+ =?utf-8?B?U2NJdHJYTStHYXI2cnJQdG5UL3ZKZzVhcWtIUXNJUWpBc0VOanhYRHRKWUJl?=
+ =?utf-8?B?THcwRnhINEpqaTI2U0dJeXRUaXhYeGFDSFI1ZWkxNUE1QXZzNnowNUJmUTd1?=
+ =?utf-8?B?OVpEcjlsNkJwYzRsM2hjOTdsK2svMmQyV29LS2tFQU8yaXdLQUk2eHo2U1BG?=
+ =?utf-8?B?S3MxZHUrQUtySFEydlIzWVorZE1FOUd6NTFpUXNIanpnTndXQVludDRBSVNV?=
+ =?utf-8?B?RkdhbWlSdlVDNGtGRnN3WlNaS2lLZm02cCtpbFA3VUNtNDRpRWJlYUcxRWJy?=
+ =?utf-8?B?cy92RVYrMzNCSEQxN29UOUl0ZWtONmNsWjBPTzcvWkMxbFZpNS9mOHZPK3oz?=
+ =?utf-8?B?OUVRYndnWDNpQ2dISzNLS2U2MHkrYldOeTJVK3NJalpES2FVOGR0Um5FQnI2?=
+ =?utf-8?B?UVdNbytydi9QejF5YVExLzVXblpUSjhCK2dLUXh0dEp2a095QlE4akVyYXFl?=
+ =?utf-8?B?VndndkxXNGwwT3VhT1NqMG9BTWVrbmZTM3FUbmVqb1FaNDBiekswTEJtNHln?=
+ =?utf-8?B?SDNaZ0FSRDlQS2d2aEJ0Y1ZIKzRlUW40ekg4RCtzZHBQcmplUVN6VUcvOXRj?=
+ =?utf-8?B?RU5RVjRTYWhlNis5UUVqTzA3VTZlcnBoUjZlZTFGalMvTEhURzdselc5dEk3?=
+ =?utf-8?B?TmpXZGc5MEZIdU0vNjgxTThnUloyNkFsVGhEMnFNNmVPa0FFUDJyS285bXpX?=
+ =?utf-8?B?NWtxNVhjYzJjTW5kY1oyZXNPd0IzMC9qUkNKNWtNb0x2S1c2RHdRWW5SRFZX?=
+ =?utf-8?B?a1M3SlBUa1ZCWmZFNXo0RGRrZnJaeFBFWWpNUDNzdFg5WmR1N3YySHoveWF2?=
+ =?utf-8?B?UE1FZ0xaQmQwbHBnYTVwb0JNaVZPTEVTb01JWWdoY0gwems1R1o5OEdwZjZ1?=
+ =?utf-8?B?aUZOcXNOdDdjanZtSFp2VEtObHBUdmgwemhqczlaQWZGa3RPRDlyMzNkcDFj?=
+ =?utf-8?B?NlRRb1AvVlMrS3JPRDdXSitVNzZ4ME1hOWlOeFJzNU44cThYMXB2VUk1OGdu?=
+ =?utf-8?B?SlBhM3FtaFR0bE5GUm1XTjJ1VjVQcTdzSW9zcXlkOU56VGN3d2NzdjBYZ2xx?=
+ =?utf-8?B?ck1uMHF0NWFGUisyZ1pxdW43cGFCOW40alpTRmMyT3VnblNjcXFianJXMHV1?=
+ =?utf-8?B?dXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5BD7E8FFFC1E8648B72AC83E657FCA33@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4d69d04-146c-484a-65ca-08da73a26e16
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 09:44:29.4735
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ekgDQMExf34QXacV5x4dVwXa+epOuXzqTXvSjt7r4nK9ed2qIx4p28lKuqTbexq1c1A6ePFNbPz2cIXlkk64vihXSipHx92wgyWbomJW+4Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5615
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,659 +162,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a driver for Microchip FPGA QSPI controllers. This driver also
-supports "hard" QSPI controllers on Polarfire SoC.
-
-Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
----
- drivers/spi/Kconfig                   |   9 +
- drivers/spi/Makefile                  |   1 +
- drivers/spi/spi-microchip-core-qspi.c | 604 ++++++++++++++++++++++++++
- 3 files changed, 614 insertions(+)
- create mode 100644 drivers/spi/spi-microchip-core-qspi.c
-
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 9987c3f2bd1c..78e447327cc4 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -591,6 +591,15 @@ config SPI_MICROCHIP_CORE
- 	  PolarFire SoC.
- 	  If built as a module, it will be called spi-microchip-core.
- 
-+config SPI_MICROCHIP_CORE_QSPI
-+	tristate "Microchip FPGA QSPI controllers"
-+	depends on SPI_MASTER
-+	help
-+	  This enables the QSPI driver for Microchip FPGA QSPI controllers.
-+	  Say Y or M here if you want to use the QSPI controllers on
-+	  PolarFire SoC.
-+	  If built as a module, it will be called spi-microchip-core-qspi.
-+
- config SPI_MT65XX
- 	tristate "MediaTek SPI controller"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 15d2f3835e45..4b34e855c841 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -73,6 +73,7 @@ obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
- obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
- obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
- obj-$(CONFIG_SPI_MICROCHIP_CORE)	+= spi-microchip-core.o
-+obj-$(CONFIG_SPI_MICROCHIP_CORE_QSPI)	+= spi-microchip-core-qspi.o
- obj-$(CONFIG_SPI_MPC512x_PSC)		+= spi-mpc512x-psc.o
- obj-$(CONFIG_SPI_MPC52xx_PSC)		+= spi-mpc52xx-psc.o
- obj-$(CONFIG_SPI_MPC52xx)		+= spi-mpc52xx.o
-diff --git a/drivers/spi/spi-microchip-core-qspi.c b/drivers/spi/spi-microchip-core-qspi.c
-new file mode 100644
-index 000000000000..7091b272f5e7
---- /dev/null
-+++ b/drivers/spi/spi-microchip-core-qspi.c
-@@ -0,0 +1,604 @@
-+// SPDX-License-Identifier: (GPL-2.0)
-+/*
-+ * Microchip coreQSPI QSPI controller driver
-+ *
-+ * Copyright (C) 2018-2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_irq.h>
-+#include <linux/platform_device.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/spi-mem.h>
-+
-+/*
-+ * QSPI Control register mask defines
-+ */
-+#define CONTROL_ENABLE		BIT(0)
-+#define CONTROL_MASTER		BIT(1)
-+#define CONTROL_XIP		BIT(2)
-+#define CONTROL_XIPADDR		BIT(3)
-+#define CONTROL_CLKIDLE		BIT(10)
-+#define CONTROL_SAMPLE_MASK	GENMASK(12, 11)
-+#define CONTROL_MODE0		BIT(13)
-+#define CONTROL_MODE12_MASK	GENMASK(15, 14)
-+#define CONTROL_MODE12_EX_RO	BIT(14)
-+#define CONTROL_MODE12_EX_RW	BIT(15)
-+#define CONTROL_MODE12_FULL	GENMASK(15, 14)
-+#define CONTROL_FLAGSX4		BIT(16)
-+#define CONTROL_CLKRATE_MASK	GENMASK(27, 24)
-+#define CONTROL_CLKRATE_SHIFT	24
-+
-+/*
-+ * QSPI Frames register mask defines
-+ */
-+#define FRAMES_TOTALBYTES_MASK	GENMASK(15, 0)
-+#define FRAMES_CMDBYTES_MASK	GENMASK(24, 16)
-+#define FRAMES_CMDBYTES_SHIFT	16
-+#define FRAMES_SHIFT		25
-+#define FRAMES_IDLE_MASK	GENMASK(29, 26)
-+#define FRAMES_IDLE_SHIFT	26
-+#define FRAMES_FLAGBYTE		BIT(30)
-+#define FRAMES_FLAGWORD		BIT(31)
-+
-+/*
-+ * QSPI Interrupt Enable register mask defines
-+ */
-+#define IEN_TXDONE		BIT(0)
-+#define IEN_RXDONE		BIT(1)
-+#define IEN_RXAVAILABLE		BIT(2)
-+#define IEN_TXAVAILABLE		BIT(3)
-+#define IEN_RXFIFOEMPTY		BIT(4)
-+#define IEN_TXFIFOFULL		BIT(5)
-+
-+/*
-+ * QSPI Status register mask defines
-+ */
-+#define STATUS_TXDONE		BIT(0)
-+#define STATUS_RXDONE		BIT(1)
-+#define STATUS_RXAVAILABLE	BIT(2)
-+#define STATUS_TXAVAILABLE	BIT(3)
-+#define STATUS_RXFIFOEMPTY	BIT(4)
-+#define STATUS_TXFIFOFULL	BIT(5)
-+#define STATUS_READY		BIT(7)
-+#define STATUS_FLAGSX4		BIT(8)
-+#define STATUS_MASK		GENMASK(8, 0)
-+
-+#define BYTESUPPER_MASK		GENMASK(31, 16)
-+#define BYTESLOWER_MASK		GENMASK(15, 0)
-+
-+#define MAX_DIVIDER		16
-+#define MIN_DIVIDER		0
-+#define MAX_DATA_CMD_LEN	256
-+
-+/* QSPI ready time out value */
-+#define TIMEOUT_MS		500
-+
-+/*
-+ * QSPI Register offsets.
-+ */
-+#define REG_CONTROL		(0x00)
-+#define REG_FRAMES		(0x04)
-+#define REG_IEN			(0x0c)
-+#define REG_STATUS		(0x10)
-+#define REG_DIRECT_ACCESS	(0x14)
-+#define REG_UPPER_ACCESS	(0x18)
-+#define REG_RX_DATA		(0x40)
-+#define REG_TX_DATA		(0x44)
-+#define REG_X4_RX_DATA		(0x48)
-+#define REG_X4_TX_DATA		(0x4c)
-+#define REG_FRAMESUP		(0x50)
-+
-+/**
-+ * struct mchp_coreqspi - Defines qspi driver instance
-+ * @regs:              Virtual address of the QSPI controller registers
-+ * @clk:               QSPI Operating clock
-+ * @data_completion:   completion structure
-+ * @op_lock:           lock access to the device
-+ * @txbuf:             TX buffer
-+ * @rxbuf:             RX buffer
-+ * @irq:               IRQ number
-+ * @tx_len:            Number of bytes left to transfer
-+ * @rx_len:            Number of bytes left to receive
-+ */
-+struct mchp_coreqspi {
-+	void __iomem *regs;
-+	struct clk *clk;
-+	struct completion data_completion;
-+	struct mutex op_lock; /* lock access to the device */
-+	u8 *txbuf;
-+	u8 *rxbuf;
-+	int irq;
-+	int tx_len;
-+	int rx_len;
-+};
-+
-+static int mchp_coreqspi_set_mode(struct mchp_coreqspi *qspi, const struct spi_mem_op *op)
-+{
-+	u32 control = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	/*
-+	 * The operating mode can be configured based on the command that needs to be send.
-+	 * bits[15:14]: Sets whether multiple bit SPI operates in normal, extended or full modes.
-+	 *		00: Normal (single DQ0 TX and single DQ1 RX lines)
-+	 *		01: Extended RO (command and address bytes on DQ0 only)
-+	 *		10: Extended RW (command byte on DQ0 only)
-+	 *		11: Full. (command and address are on all DQ lines)
-+	 * bit[13]:	Sets whether multiple bit SPI uses 2 or 4 bits of data
-+	 *		0: 2-bits (BSPI)
-+	 *		1: 4-bits (QSPI)
-+	 */
-+	if (op->data.buswidth == 4 || op->data.buswidth == 2) {
-+		control &= ~CONTROL_MODE12_MASK;
-+		if (op->cmd.buswidth == 1 && (op->addr.buswidth == 1 || op->addr.buswidth == 0))
-+			control |= CONTROL_MODE12_EX_RO;
-+		else if (op->cmd.buswidth == 1)
-+			control |= CONTROL_MODE12_EX_RW;
-+		else
-+			control |= CONTROL_MODE12_FULL;
-+
-+		control |= CONTROL_MODE0;
-+	} else {
-+		control &= ~(CONTROL_MODE12_MASK |
-+			     CONTROL_MODE0);
-+	}
-+
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	return 0;
-+}
-+
-+static inline void mchp_coreqspi_read_op(struct mchp_coreqspi *qspi)
-+{
-+	u32 control, data;
-+
-+	if (!qspi->rx_len)
-+		return;
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	/*
-+	 * Read 4-bytes from the SPI FIFO in single transaction and then read
-+	 * the reamaining data byte wise.
-+	 */
-+	control |= CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->rx_len >= 4 &&
-+	       !(readl_relaxed(qspi->regs + REG_STATUS) & STATUS_RXFIFOEMPTY)) {
-+		data = readl_relaxed(qspi->regs + REG_X4_RX_DATA);
-+		*(u32 *)qspi->rxbuf = data;
-+		qspi->rxbuf += 4;
-+		qspi->rx_len -= 4;
-+	}
-+
-+	control &= ~CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->rx_len-- &&
-+	       !(readl_relaxed(qspi->regs + REG_STATUS) & STATUS_RXFIFOEMPTY)) {
-+		data = readl_relaxed(qspi->regs + REG_RX_DATA);
-+		*qspi->rxbuf++ = (data & 0xFF);
-+	}
-+}
-+
-+static inline void mchp_coreqspi_write_op(struct mchp_coreqspi *qspi, bool word)
-+{
-+	u32 control, data;
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	control |= CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->tx_len >= 4 &&
-+	       !(readl_relaxed(qspi->regs + REG_STATUS) & STATUS_TXFIFOFULL)) {
-+		data = *(u32 *)qspi->txbuf;
-+		qspi->txbuf += 4;
-+		qspi->tx_len -= 4;
-+		writel_relaxed(data, qspi->regs + REG_X4_TX_DATA);
-+	}
-+
-+	control &= ~CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->tx_len-- &&
-+	       !(readl_relaxed(qspi->regs + REG_STATUS) & STATUS_TXFIFOFULL)) {
-+		data =  *qspi->txbuf++;
-+		writel_relaxed(data, qspi->regs + REG_TX_DATA);
-+	}
-+}
-+
-+static void mchp_coreqspi_enable_ints(struct mchp_coreqspi *qspi)
-+{
-+	u32 mask = IEN_TXDONE |
-+		   IEN_RXDONE |
-+		   IEN_RXAVAILABLE;
-+
-+	writel_relaxed(mask, qspi->regs + REG_IEN);
-+}
-+
-+static void mchp_coreqspi_disable_ints(struct mchp_coreqspi *qspi)
-+{
-+	writel_relaxed(0, qspi->regs + REG_IEN);
-+}
-+
-+static irqreturn_t mchp_coreqspi_isr(int irq, void *dev_id)
-+{
-+	struct mchp_coreqspi *qspi = (struct mchp_coreqspi *)dev_id;
-+	irqreturn_t ret = IRQ_NONE;
-+	int intfield = readl_relaxed(qspi->regs + REG_STATUS) & STATUS_MASK;
-+
-+	if (intfield == 0)
-+		return ret;
-+
-+	if (intfield & IEN_TXDONE) {
-+		writel_relaxed(IEN_TXDONE, qspi->regs + REG_STATUS);
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (intfield & IEN_RXAVAILABLE) {
-+		writel_relaxed(IEN_RXAVAILABLE, qspi->regs + REG_STATUS);
-+		mchp_coreqspi_read_op(qspi);
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	if (intfield & IEN_RXDONE) {
-+		writel_relaxed(IEN_RXDONE, qspi->regs + REG_STATUS);
-+		complete(&qspi->data_completion);
-+		ret = IRQ_HANDLED;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mchp_coreqspi_setup_clock(struct mchp_coreqspi *qspi, struct spi_device *spi)
-+{
-+	unsigned long clk_hz;
-+	u32 control, baud_rate_val = 0;
-+
-+	clk_hz = clk_get_rate(qspi->clk);
-+	if (!clk_hz)
-+		return -EINVAL;
-+
-+	baud_rate_val = DIV_ROUND_UP(clk_hz, 2 * spi->max_speed_hz);
-+	if (baud_rate_val > MAX_DIVIDER || baud_rate_val < MIN_DIVIDER) {
-+		dev_err(&spi->dev,
-+			"could not configure the clock for spi clock %d Hz & system clock %ld Hz\n",
-+			spi->max_speed_hz, clk_hz);
-+		return -EINVAL;
-+	}
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	control |= baud_rate_val << CONTROL_CLKRATE_SHIFT;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	if ((spi->mode & SPI_CPOL) && (spi->mode & SPI_CPHA))
-+		control |= CONTROL_CLKIDLE;
-+	else
-+		control &= ~CONTROL_CLKIDLE;
-+
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	return 0;
-+}
-+
-+static int mchp_coreqspi_setup_op(struct spi_device *spi_dev)
-+{
-+	struct spi_controller *ctlr = spi_dev->master;
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata(ctlr);
-+	u32 control = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	control |= (CONTROL_MASTER | CONTROL_ENABLE);
-+	control &= ~CONTROL_CLKIDLE;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	return 0;
-+}
-+
-+static inline void mchp_coreqspi_config_op(struct mchp_coreqspi *qspi, const struct spi_mem_op *op)
-+{
-+	u32 idle_cycles = 0;
-+	int total_bytes, cmd_bytes, frames, ctrl;
-+
-+	cmd_bytes = op->cmd.nbytes + op->addr.nbytes;
-+	total_bytes = cmd_bytes + op->data.nbytes;
-+
-+	/*
-+	 * As per the coreQSPI IP spec,the number of command and data bytes are
-+	 * controlled by the frames register for each SPI sequence. This supports
-+	 * the SPI flash memory read and writes sequences as below. so configure
-+	 * the cmd and total bytes accordingly.
-+	 * ---------------------------------------------------------------------
-+	 * TOTAL BYTES  |  CMD BYTES | What happens                             |
-+	 * ______________________________________________________________________
-+	 *              |            |                                          |
-+	 *     1        |   1        | The SPI core will transmit a single byte |
-+	 *              |            | and receive data is discarded            |
-+	 *              |            |                                          |
-+	 *     1        |   0        | The SPI core will transmit a single byte |
-+	 *              |            | and return a single byte                 |
-+	 *              |            |                                          |
-+	 *     10       |   4        | The SPI core will transmit 4 command     |
-+	 *              |            | bytes discarding the receive data and    |
-+	 *              |            | transmits 6 dummy bytes returning the 6  |
-+	 *              |            | received bytes and return a single byte  |
-+	 *              |            |                                          |
-+	 *     10       |   10       | The SPI core will transmit 10 command    |
-+	 *              |            |                                          |
-+	 *     10       |    0       | The SPI core will transmit 10 command    |
-+	 *              |            | bytes and returning 10 received bytes    |
-+	 * ______________________________________________________________________
-+	 */
-+	if (!(op->data.dir == SPI_MEM_DATA_IN))
-+		cmd_bytes = total_bytes;
-+
-+	frames = total_bytes & BYTESUPPER_MASK;
-+	writel_relaxed(frames, qspi->regs + REG_FRAMESUP);
-+	frames = total_bytes & BYTESLOWER_MASK;
-+	frames |= cmd_bytes << FRAMES_CMDBYTES_SHIFT;
-+
-+	if (op->dummy.buswidth)
-+		idle_cycles = op->dummy.nbytes * 8 / op->dummy.buswidth;
-+
-+	frames |= idle_cycles << FRAMES_IDLE_SHIFT;
-+	ctrl = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	if (ctrl & CONTROL_MODE12_MASK)
-+		frames |= (1 << FRAMES_SHIFT);
-+
-+	frames |= FRAMES_FLAGWORD;
-+	writel_relaxed(frames, qspi->regs + REG_FRAMES);
-+}
-+
-+static int mchp_qspi_wait_for_ready(struct spi_mem *mem)
-+{
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata
-+				    (mem->spi->master);
-+	u32 status;
-+	int ret;
-+
-+	ret = readl_poll_timeout(qspi->regs + REG_STATUS, status,
-+				 (status & STATUS_READY), 0,
-+				 TIMEOUT_MS);
-+	if (ret) {
-+		dev_err(&mem->spi->dev,
-+			"Timeout waiting on QSPI ready.\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mchp_coreqspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
-+{
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata
-+				    (mem->spi->master);
-+	u32 address = op->addr.val;
-+	u8 opcode = op->cmd.opcode;
-+	u8 opaddr[5];
-+	int err, i;
-+
-+	mutex_lock(&qspi->op_lock);
-+	err = mchp_qspi_wait_for_ready(mem);
-+	if (err)
-+		goto error;
-+
-+	err = mchp_coreqspi_setup_clock(qspi, mem->spi);
-+	if (err)
-+		goto error;
-+
-+	err = mchp_coreqspi_set_mode(qspi, op);
-+	if (err)
-+		goto error;
-+
-+	reinit_completion(&qspi->data_completion);
-+	mchp_coreqspi_config_op(qspi, op);
-+	if (op->cmd.opcode) {
-+		qspi->txbuf = &opcode;
-+		qspi->rxbuf = NULL;
-+		qspi->tx_len = op->cmd.nbytes;
-+		qspi->rx_len = 0;
-+		mchp_coreqspi_write_op(qspi, false);
-+	}
-+
-+	qspi->txbuf = &opaddr[0];
-+	if (op->addr.nbytes) {
-+		for (i = 0; i < op->addr.nbytes; i++)
-+			qspi->txbuf[i] = address >> (8 * (op->addr.nbytes - i - 1));
-+
-+		qspi->rxbuf = NULL;
-+		qspi->tx_len = op->addr.nbytes;
-+		qspi->rx_len = 0;
-+		mchp_coreqspi_write_op(qspi, false);
-+	}
-+
-+	if (op->data.nbytes) {
-+		if (op->data.dir == SPI_MEM_DATA_OUT) {
-+			qspi->txbuf = (u8 *)op->data.buf.out;
-+			qspi->rxbuf = NULL;
-+			qspi->rx_len = 0;
-+			qspi->tx_len = op->data.nbytes;
-+			mchp_coreqspi_write_op(qspi, true);
-+		} else {
-+			qspi->txbuf = NULL;
-+			qspi->rxbuf = (u8 *)op->data.buf.in;
-+			qspi->rx_len = op->data.nbytes;
-+			qspi->tx_len = 0;
-+		}
-+	}
-+
-+	mchp_coreqspi_enable_ints(qspi);
-+
-+	if (!wait_for_completion_timeout(&qspi->data_completion, msecs_to_jiffies(1000)))
-+		err = -ETIMEDOUT;
-+
-+error:
-+	mutex_unlock(&qspi->op_lock);
-+	mchp_coreqspi_disable_ints(qspi);
-+
-+	return err;
-+}
-+
-+static bool mchp_coreqspi_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
-+{
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+
-+	if ((op->data.buswidth == 4 || op->data.buswidth == 2) &&
-+	    (op->cmd.buswidth == 1 && (op->addr.buswidth == 1 || op->addr.buswidth == 0))) {
-+		/*
-+		 * If the command and address are on DQ0 only, then this
-+		 * controller doesn't support sending data on dual and
-+		 * quad lines. but it supports reading data on dual and
-+		 * quad lines with same configuration as command and
-+		 * address on DQ0.
-+		 * i.e. The control register[15:13] :EX_RO(read only) is
-+		 * meant only for the command and address are on DQ0 but
-+		 * not to write data, it is just to read.
-+		 * Ex: 0x34h is Quad Load Program Data which is not
-+		 * supported. Then the spi-mem layer will iterate over
-+		 * each command and it will chose the supported one.
-+		 */
-+		if (op->data.dir == SPI_MEM_DATA_OUT)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+static int mchp_coreqspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
-+{
-+	if (op->data.dir == SPI_MEM_DATA_OUT || op->data.dir == SPI_MEM_DATA_IN) {
-+		if (op->data.nbytes > MAX_DATA_CMD_LEN)
-+			op->data.nbytes = MAX_DATA_CMD_LEN;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct spi_controller_mem_ops mchp_coreqspi_mem_ops = {
-+	.adjust_op_size = mchp_coreqspi_adjust_op_size,
-+	.supports_op = mchp_coreqspi_supports_op,
-+	.exec_op = mchp_coreqspi_exec_op,
-+};
-+
-+static int mchp_coreqspi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *ctlr;
-+	struct mchp_coreqspi *qspi;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	int ret;
-+
-+	ctlr = spi_alloc_master(&pdev->dev, sizeof(*qspi));
-+	if (!ctlr)
-+		return -ENOMEM;
-+
-+	qspi = spi_controller_get_devdata(ctlr);
-+	platform_set_drvdata(pdev, qspi);
-+
-+	qspi->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(qspi->regs)) {
-+		ret = PTR_ERR(qspi->regs);
-+		goto remove_master;
-+	}
-+
-+	qspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(qspi->clk)) {
-+		dev_err(&pdev->dev, "clock not found.\n");
-+		ret = PTR_ERR(qspi->clk);
-+		goto remove_master;
-+	}
-+
-+	ret = clk_prepare_enable(qspi->clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to enable clock\n");
-+		goto remove_master;
-+	}
-+
-+	init_completion(&qspi->data_completion);
-+	mutex_init(&qspi->op_lock);
-+
-+	qspi->irq = platform_get_irq(pdev, 0);
-+	if (qspi->irq <= 0) {
-+		ret = qspi->irq;
-+		goto clk_dis_all;
-+	}
-+
-+	ret = devm_request_irq(&pdev->dev, qspi->irq, mchp_coreqspi_isr,
-+			       0, pdev->name, qspi);
-+	if (ret != 0) {
-+		dev_err(&pdev->dev, "request_irq failed %d\n", ret);
-+		goto clk_dis_all;
-+	}
-+
-+	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
-+	ctlr->mem_ops = &mchp_coreqspi_mem_ops;
-+	ctlr->setup = mchp_coreqspi_setup_op;
-+	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
-+			  SPI_TX_DUAL | SPI_TX_QUAD;
-+	ctlr->dev.of_node = np;
-+
-+	ret = devm_spi_register_controller(&pdev->dev, ctlr);
-+	if (ret) {
-+		dev_err(&pdev->dev, "spi_register_controller failed\n");
-+		goto clk_dis_all;
-+	}
-+
-+	return 0;
-+
-+clk_dis_all:
-+	clk_disable_unprepare(qspi->clk);
-+remove_master:
-+	spi_controller_put(ctlr);
-+
-+	return ret;
-+}
-+
-+static int mchp_coreqspi_remove(struct platform_device *pdev)
-+{
-+	struct mchp_coreqspi *qspi = platform_get_drvdata(pdev);
-+	u32 control = readl_relaxed(qspi->regs + REG_CONTROL);
-+
-+	mchp_coreqspi_disable_ints(qspi);
-+	control &= ~CONTROL_ENABLE;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+	clk_disable_unprepare(qspi->clk);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Platform driver data structure
-+ */
-+static const struct of_device_id mchp_coreqspi_of_match[] = {
-+	{ .compatible = "microchip,mpfs-qspi" },
-+	{ .compatible = "microchip,coreqspi-rtl-v2" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, mchp_coreqspi_of_match);
-+
-+static struct platform_driver mchp_coreqspi_driver = {
-+	.probe = mchp_coreqspi_probe,
-+	.driver = {
-+		.name = "microchip,mpfs-qspi",
-+		.of_match_table = mchp_coreqspi_of_match,
-+	},
-+	.remove = mchp_coreqspi_remove,
-+};
-+module_platform_driver(mchp_coreqspi_driver);
-+
-+MODULE_AUTHOR("Naga Sureshkumar Relli <nagasuresh.relli@microchip.com");
-+MODULE_DESCRIPTION("Microchip coreQSPI QSPI controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
-
+T24gMzEuMDcuMjAyMiAyMzoxMSwgSm9uYXRoYW4gQ2FtZXJvbiB3cm90ZToNCj4gRVhURVJOQUwg
+RU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Ug
+a25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBUdWUsIDI4IEp1biAyMDIyIDE4OjE2
+OjMxICswMzAwDQo+IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29t
+PiB3cm90ZToNCj4gDQo+PiBBZGQgcnVudGltZSBQTSBzdXBwb3J0IGJ5IGRpc2FibGluZy9lbmFi
+bGluZyBBREMncyBwZXJpcGhlcmFsIGNsb2NrLg0KPj4gT24gc2ltcGxlIGNvbnZlcnNpb24gdGhl
+IEFEQydzIGNsb2NrIGlzIGtlcHQgZW5hYmxlZCBqdXN0IHdoaWxlIHRoZQ0KPj4gY29udmVyc2lv
+biBpcyBpbiBwcm9ncmVzcy4gVGhpcyBpbmNsdWRlcyBhbHNvIHRlbXBlcmF0dXJlIGNvbnZlcnNp
+b24uDQo+PiBGb3IgdHJpZ2dlcmVkIGJ1ZmZlcnMgYW5kIHRvdWNoIGNvbnZlcnNpb25zIHRoZSBB
+REMgY2xvY2sgaXMga2VwdCBlbmFibGVkDQo+PiB3aGlsZSB0aGUgdHJpZ2dlcmVkIGJ1ZmZlcnMg
+b3IgdG91Y2ggYXJlIGVuYWJsZWQuIEFsb25nIHdpdGggaXQgcmVtb3ZlZA0KPj4gdGhlIF9fbWF5
+YmVfdW51c2VkIG9uIHN1c3BlbmQoKSBhbmQgcmVzdW1lKCkgb3BzIGFzIHRoZSBkZXZfcG1fb3Bz
+DQo+PiBvYmplY3QgbWVtYmVycyBhcmUgbm93IGZpbGxlZCB3aXRoIFNZU1RFTV9TTEVFUF9QTV9P
+UFMoKS4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpu
+ZWFAbWljcm9jaGlwLmNvbT4NCj4gDQo+IEhpIENsYXVkaWEsDQo+IA0KPiBUaGlzIHBhdGNoIGNy
+b3NzZWQgd2l0aCBhIG1hc3MgY29udmVyc2lvbiBzZXJpZXMgdGFraW5nIGxvdHMgb2YgZHJpdmVy
+cw0KPiBvdmVyIHRvIHRoZSBuZXcgUE0gb3BzIG1hY3Jvcy4gVGhhdCBjb3ZlcmVkIHNvbWUgb2Yg
+dGhlIGNoYW5nZXMgaW4gaGVyZS4NCj4gSSd2ZSBoYW5kIGFwcGxpZWQgdGhpcyBidXQgcGxlYXNl
+IGNoZWNrIEkgZGlkbid0IG1lc3MgaXQgdXAuDQoNCkhpLCBKb25hdGhhbiwNCg0KSSd2ZSB0ZXN0
+ZWQgaXQgb24gYSBTQU1BNUQyIGFuZCBpdCB3YXMgZ29vZC4NCg0KVGhhbmsgeW91IGZvciB0YWtp
+bmcgY2FyZSBvZiBpdC4NCkNsYXVkaXUgQmV6bmVhDQoNCj4gDQo+IFRoYW5rcywNCj4gDQo+IEpv
+bmF0aGFuDQoNCg==

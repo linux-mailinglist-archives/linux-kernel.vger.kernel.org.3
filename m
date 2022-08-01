@@ -2,198 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A17586ADD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD0B586AE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiHAMez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S231269AbiHAMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiHAMeg (ORCPT
+        with ESMTP id S234350AbiHAMgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:34:36 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2091.outbound.protection.outlook.com [40.107.104.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145C740BEC;
-        Mon,  1 Aug 2022 05:14:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lV9br0gmkUFuWcmxFTleciPxKffYYLEprpksL6oKzKxbs6sRpCrhSDf3EDVkx5pjEwqhaRceQdd3lxvhLpaxK+reuELCEuSqYDbOUZeic8S/Da/WV6ZDJLbW6s8XPPg4lUYZcAZgQ7BfzS9oFdFkai49PceJJdq5TEl2Az/qgFQSe/9HuN0s2FUaT+rvKuZouUqS2PZf9qdzqCTw9BQIqiSR9dSjZAi080nkQ/1dXF3fREqVzeWzS3HI8MAzkarN0ivVv647h7OtQThlSlziBS6zBIfp0PgVxZrfI7C3VPBxkwy5aa9l1TyIBCu/KZw8ba6u7IJZC+dweVjHJhykOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xoViaoT4lMWPOQeq0nHE371KtFD/bh5S8sSMM2zIg3w=;
- b=ncJLeCyqWyWDbOksFaicUxm6ebgsjQdnFKlmo5OaUhziHcpC7x8m7EMxLCLDexCa5IxDgDtlFw5fFW67iFPLNsK3SgosWclMN+HapR/1HerGYT9kybyhiUWLEn6wCNbJkc7c1FdG39wN1SMRtsVWlm0xJUvF3Plzrb4+f1XgLGJRlF1uNdfWX6CcHS3IDLRUgINRckdc7Pv0JGqg66wt66RDqg2tnI80lNXm3dLjAwmg0oVzqhEqb7siOagPw5c38VRyFRf1o6hgpo9YGCciDr9RH6//K2ZfxsGfXrn0kZa99WQCDHPgHn8VpzuPtMZhmlKUNhrQsASSPDXkvVp3eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xoViaoT4lMWPOQeq0nHE371KtFD/bh5S8sSMM2zIg3w=;
- b=aayFlvQrs4P9DN3nSB7Pu0PfA9wMb+7Lzb5Afji+sOebVONqE31mwiIhuN9u/NNLdA/YfgWJ2q5OlCCaT8LIceZNPuI/SvMym6+q0d139spdnEdpqm6N/qtcqprdYGGjnf7hn1zse67vVQV2Z338VPQYdCX40cqx66a8hNXvUdM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by VI1PR10MB1997.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:36::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Mon, 1 Aug
- 2022 12:14:16 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8cd6:567b:46d0:a1a8]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8cd6:567b:46d0:a1a8%8]) with mapi id 15.20.5482.014; Mon, 1 Aug 2022
- 12:14:16 +0000
-Message-ID: <7ef6812e-5732-e8c7-e796-f568de4eef62@kontron.de>
-Date:   Mon, 1 Aug 2022 14:14:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
-Content-Language: en-US
-To:     Philippe Schenker <dev@pschenker.ch>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        Jacky Bai <ping.bai@nxp.com>, Jun Li <jun.li@nxp.com>
-References: <20220722075600.10943-1-dev@pschenker.ch>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <20220722075600.10943-1-dev@pschenker.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P191CA0014.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d5::20) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+        Mon, 1 Aug 2022 08:36:09 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013BDBF40
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:15:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b96so3156468edf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=CVzfo9DdvisneyDXyobtn/e72u2h3ldYCnBHERW/QDg=;
+        b=AzXDGT8PxyvKO2GDmJBHBhkMSyIE+rqMegJ1iSeOWOptSdPzzCOkEv4KXhKyW2pd0C
+         aWS1EOIVCL6Nl5X22R7fZkmVLgSsLMagBd/pGJ2vV6udhZa8NraikeHKLRGLVNORIDUm
+         qS2YsL1gUA+i4jhZy61a44KqSvY1eXMvdVgPNSEHQa8niAJK8pz9y14DwgktEKBdyp1x
+         g0XCgLBvbJfX3WocJDHQu07L2SFQZeyyGXt7l9GIE06i+ykTumxKcZ6AStmkS9jj4WRP
+         kUjGKyCNvtGXpVH0GanQ6LKUUv3chImjv3h5WPZSYMg24Py/tKGrepMsQ9y402jH8Rvl
+         CV8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CVzfo9DdvisneyDXyobtn/e72u2h3ldYCnBHERW/QDg=;
+        b=o2dHUdi1VcdceX6zbwfg/bUh4QCHxEFTPf1tKtrJGog+sXTuoYCck2DTw0Wik4wbT4
+         uXb+nVhDmRAHDQMTzivSaL1/THbgEJDTVgZHE7OIlFrl7cvwswfsFQsp9wlSTXeDI54g
+         M3GUR1EiXou1XMpxtbCXJetiFiKP9SE5L/u1JSsHVEC5UouZ5q3OhJ5Mzx+ggR5/4BZm
+         SkyhfHSHfP1U8LKBtjmF6bZNRdRN1abrBsJDlZXtHu4v84OwvkNSpDGgKBvMm4BCRwD/
+         eD+hYZMANvGHABjix6GbBWyOjC6cZkr5CeqoTBvN8mi402gFy3KiXuK1f/E+JL9IPpv4
+         op0Q==
+X-Gm-Message-State: ACgBeo2ea+G2S5aZcqdPnGJwA38DYtCxjftS+4FGs0sC6PrD1Jfhg2Me
+        HfOwlntTTG2ckFLwo1mjpIQV6LIaoyeLuPfea8IwdkJ7CgmNbQ==
+X-Google-Smtp-Source: AA6agR526khjrrpLYsW1IgG91hYvV5KATrbamHAryv/kbSTBgGUs6YndPqhMLeLaGOlrgw5dvWh8puw+QSBPyXScJgI=
+X-Received: by 2002:a50:bace:0:b0:43d:370a:e1c1 with SMTP id
+ x72-20020a50bace000000b0043d370ae1c1mr12778947ede.193.1659356118908; Mon, 01
+ Aug 2022 05:15:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 63a271ae-faa7-4664-47bb-08da73b75a97
-X-MS-TrafficTypeDiagnostic: VI1PR10MB1997:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B4GXdEMxgyo5/DEQcLKvvkHGSBWf+6DILGQQEXMtH+sNtOZdQ3sbBtD72VYElYx0TAeucy2sVvlssnOgM51xhC2FUAt+JZKhJZ6fGS5pocu8BOcTScuX7nt/AFNVCG7pTkzwD5rCSCunVY8nqd4ZOfVBURAblVDJwGXye9w5M7ePAVLaeRtQE2ntRX4qD0O76fpvdUVYh/aePBHsqML6JJzX2NTh+xGLbdzlP82vt4WDmdk0ds4KiMGVI+aGCADQAfOeEvR198Qy5E2MJTUqMbwjPgp5jlpnYcEugTmF/ae37wqMgHpolSvF8/bYJtp8Fjhp34+3ENv9T6ZabwhVI4A9AGGBP1YTz9mYdcO4pJf11qyCWF4XgE0q4WQBdr49ApgalvSAn3hI+zdylOePZK8NuNaxsYt4BTu2KiiTT1SKAJFjsdhg+dZ4YZ3qlWGRkVNY/UYm8VT38270cEsNtmpbdt9S74e4aZI7jKjegp4eV5pxPYGJ91A3VKJNJ4L/8XFzvp8XkT9ZurFXL2XLsKoZjO/yFGjfYhR0BOtf7EmcMR7LeNDWhCnEjxq+0MVAvc2fsn8m2qy8oExpPdiWDw0/D9hdWKlXBug/eBq9kQIV8Q30BFXuhHCb1pV+eajjjCdjRbqivSf3cH3pYoN6tK50rYoeIlnKsaxhrOKQ5AlNt3ejhCn6CtnBB4WB7fayTj3jL0vpztgwY3dtlHhR1cDH8XZJsf5cbZrJzeXZ8x/rEtatwh18sZhfFKcpjuHYfkz06l7+xhiaH1BK4EWv1pDBd7pUgJIVsjBpEOenhQ3tGXye4YWYY5eraU0Ilr44sy7z/KF5PZuNSNKAb9mEG+NZqz/MyYHnK8Eucq3QMdmURF0muQygU27hnLgxTI5U
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(6506007)(6512007)(186003)(66476007)(4326008)(66556008)(26005)(8676002)(66946007)(31696002)(2906002)(8936002)(478600001)(41300700001)(86362001)(44832011)(966005)(2616005)(6486002)(7416002)(5660300002)(38100700002)(31686004)(54906003)(316002)(83380400001)(36756003)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bytjNkoxZlRiN21nQ3FiSnhudW9KS3hxNG41ekV1NHZRQktKa2VaeHZGRXFU?=
- =?utf-8?B?T2l1T3RIUFIwZlk2SnRLcVNlcS9FRWhRMVV0aXd2ZFYzTGxBa0ZSSmNIeHpN?=
- =?utf-8?B?OHZSbjdIbEFKS21YUE5IUzRhZGlYT25MNURMTnpwV1RuUVREQkFmVlhxZTdY?=
- =?utf-8?B?SlhBaTNWNVdwdzJaYm9GWUNDWTRUY2E1d0xTMHN2R2czZ3hBblpVWHU3eVB4?=
- =?utf-8?B?c0wvV3E4UzJadEFOb0NVNkJjTEtxZlVHdEdRT3J6dTRmdmIwc0w5eXdqWXlU?=
- =?utf-8?B?ZEJYZ0N2Vk51SnBvWUYvTXQwbXZxYm1DK015L0tkMVJMMXpnaEFTYWFIK3M5?=
- =?utf-8?B?NGxsaWdENjVvUU9MLzNZTEdyMGtYNVVPTDB0NWhoOWdQRlcrWXlhWmN5MHp0?=
- =?utf-8?B?VEJ1Tk40bTlseVo2Qkp3WHUxTXlpbG1WYm84all1UWdRU0ZDSkhPd1dlbEdV?=
- =?utf-8?B?Zm5WWVljTHluYkRVVXU5c21WNTd1K1M3VGhpQ1FUWEJvenV2ZG5ybytDOTVp?=
- =?utf-8?B?R3RQbmJWei9MSEZDUmNSQWtOdHRiMENMK2VhUjIzbjlaSXpIOStuR3Z3TzBr?=
- =?utf-8?B?NUt5LzhkQW1SYWZpM0tKWmN1ZktzS1BnR1djblBRWGdBTGh2b01EZkhkeFZF?=
- =?utf-8?B?dy9JejdzZC9Ibk1XYmI3M1BoL0d5bFNZdXoyNEZRamxaZjNQM1ZWSndIaGEr?=
- =?utf-8?B?RmhQR25NekFLLzN2TStiOCtqVkFkQUhFeDQ5cytHRUxER1lEQzUzVmpBQS9S?=
- =?utf-8?B?YkVVekxwVVVRTWwxdTdBcG96QmdyYTYyYk1vbmdvVnk3eHRTemlmTDZZeVBE?=
- =?utf-8?B?eFNNclo5ZXFCaGdzR1E0cTFnUHkrejNMYVNjUVI4VDZEZGU3OHBtMEtYWW8w?=
- =?utf-8?B?SjljejRsS21HcWV4TGxSSVBRWUY5cERuQ01RWStGb3hIWmR3T3BsWFpVTnlQ?=
- =?utf-8?B?a0RWSnBpL3huWlZRWWtSZmVpSDZWNlNva0ZvQ0NzWDUrNUxyanNTQlJCaHo3?=
- =?utf-8?B?R00yaDFQczlhLyttWW1FSytuTnJQS3RUeGlPY2l1Z0JvVmpyUHRTZ3BLM1pN?=
- =?utf-8?B?dFdQVmc2NGh1a0N6L2RrR3M2Zk4xU2tZM21UUDlNb0dnZEtUNU5WR1NRVC9T?=
- =?utf-8?B?cGtablE3T2dTOGwvZkdpbXF5VkQrQ0NBaWlVQVY1ams4aXFqQzVLSTA2Sm83?=
- =?utf-8?B?cGVLTkZjb2FNd0cvWmdoV0dVTDBqZVk1MEluS3czNnZTNHZUZW5oc0RqbFpD?=
- =?utf-8?B?TXlUYjZxWWd2bVNHb2tOWE8vQTFhSEtvVTRFK1NOSzJGbC94ZS80YmdVWUJC?=
- =?utf-8?B?cEV1cW5qTlhjcjB5OTIrN3BoZTJ5SUVCaWt6SmRXR2N2S1RGclVtaE11ZTRQ?=
- =?utf-8?B?TTJyUGtTak4rQytUcTR6TU5UdEZVSGlsT1ZWMjkzUWhGbS8ycEY5Y1BzSDFy?=
- =?utf-8?B?aUJZbGtSaElrTDlXUkM3cEpadVN3RVhCUS9WZEg1a2ZKNFhlREFFeVg3MXRY?=
- =?utf-8?B?eUowc1JmMnJSMFVQWjNZdWFBU1R4QnVwN0Z3SDZTVlhQN3hwRjU1c3pkU0cr?=
- =?utf-8?B?VGFwOVhJVHV6a1Q1L0IrZHRNOEovc243SC96Qm9lTTVFNW8vRXpEWUxDNGRT?=
- =?utf-8?B?MnhUeVZFUUtQQzVxWE5lWFVEM2hOWGFLVlpQT3c4bUVScTFwYndUYlZRd2Fv?=
- =?utf-8?B?Skt2QVAwZXJIZUpmZ2VGU2YraHNKcExKYzhHSFVtNHVFYzBWVUdwelU1Z3Y1?=
- =?utf-8?B?VGRmN3lwM0tZY0tUWXZIRXVQRnhmdVZNNGViYndmVHJSZ09NSjRPMnJjTnlx?=
- =?utf-8?B?QUhpdjBqZjlkNCtpMzA0QUlWNktmREdUc0gvcXp6SG0xVUdBbGhsd3BnK3M3?=
- =?utf-8?B?N1hGYnZFSmIvUzVrYW5qZE00NHdVWEZBK2FOVUZvMk9ENldWbG5yczhwYWRo?=
- =?utf-8?B?MjNCR08xK1lIOVE4aFZONVZDRVhDR2VtcEtnV21DTDZKT2xja0hnUjh4OEgr?=
- =?utf-8?B?aUhxeHIzVmtuZ2xUY0NLam80WDRJVjdqK2gxMDc1Vk5WNWdRZy9jOXhVWTNK?=
- =?utf-8?B?MlY3cjgyMUFCYmtLSko4SzkzSUlzWUpNeFZQQUI5TmxrUkEwdVM2bDNkVVJV?=
- =?utf-8?B?OWd1ZytoMVlqbElMWVdPWVZqM2p3WEF0NU1FT3FpSW9mNGp4dEYvQ3p2Z3di?=
- =?utf-8?B?OWc9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a271ae-faa7-4664-47bb-08da73b75a97
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 12:14:16.3981
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FzjaQF2vkidwf/9phvSUuLPnIIa2+eWCUTflqlrcvM4XCa2uyJH83tFkJpNQCSl7s1y1YVj1Y/oGSFMY2uwskD8HX5frB8lHTt+nE7X4/QE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB1997
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <20220801061956.3wkakhwatvqlngff@pengutronix.de> <CAHCN7xLSqyGHZwo=brm4xrj0jVi6R43wE8EJmWrYF72qDtYV0g@mail.gmail.com>
+In-Reply-To: <CAHCN7xLSqyGHZwo=brm4xrj0jVi6R43wE8EJmWrYF72qDtYV0g@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 1 Aug 2022 07:15:07 -0500
+Message-ID: <CAHCN7xJ3deUnYMN5-NVmdknHZeFc-YOePVsGKNPb_XKqAFYLOQ@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC: Li Jun, Jacky Bai, Lucas Stach
+On Mon, Aug 1, 2022 at 5:54 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> On Mon, Aug 1, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> >
+> > Hi Adam,
+> >
+> > On 22-07-30, Adam Ford wrote:
+> > > Hey all,
+> > >
+> > > I am trying to test Jagan's patch series [1] to add support for the
+> > > samsung dsim bridge which is used on the imx8mm to output DSI video.
+> > > The DSIM gets the video from the mxsfb, and in my case, the DSI is
+> > > sent to the adv7535 for connecting to HDMI.
+> >
+> > So you're using the NXP recommended evalboard setup :)
+>
+> Yes and no.  Our design also adds audio to theADV7535 in addition to
+> the video signal.
+> For the 8M Plus design, we're looking to see if there are any 4K
+> DSI->HDMI bridge chips available.
+>
+> >
+> > > I have been able to get the device tree setup and I don't get any
+> > > errors.  The Linux system appears to think the video is connected as
+> > > determined by modetest:
+> >
+> > ...
+> >
+> > > Unfortunately, there is no video in my monitor, and my monitor states
+> > > there is no signal.
+> >
+> > This is pretty much known, at least on our side. We also have a few more
+> > patches on top of the series [1] for fixing the horizontal porches.  Our
+> > current status is that we can get only one mode out of the ADV7535 which
+> > is 1080P. Our assumption is that the ADV7535 needs some attentions
+> > (fixes) but we can't verify that since the documentation is under NDA.
+>
+> I am glad I am not alone.   Thanks for the tip.  That gives me
+> something to investigate.
+> >
+> > > If I use NXP's downstream kernel, this same hardware configuration
+> > > works fine and I can see the video.
+> >
+> > This is because of the NXP downstream kernel porch 'calculation' and
+> > workarounds. The values they are using for calculation don't take any
+> > mode values into account and instead they are using a table. We don't
+> > know where those values come from.
+>
+> I would think the VESA group would have something like these published.
+> >
+> > > I have checked the clk_summary, and the working and non-working
+> > > conditions both have clock rates that are the same for DSI, LCDIF and
+> > > related items.  The power domains connected to the lcdif and the dsi
+> > > show they are active.
+> > >
+> > > Since I go no errors, and  Linux looks like it's happy, I was hoping
+> > > someone from who better understands the interconnections between all
+> > > these bridge layers might be able to offer a suggestion of something
+> > > to investigate and/or try.
+> > >
+> > > The kernel repo I am using is from Jagan located here:
+> > >
+> > > [1] - https://github.com/openedev/kernel
+> > >
+> > > I am not convinced it's a device tree issue since I get no errors when
+> > > the drivers enumerate, but I can provide my device tree updates if
+> > > that helps.
+> >
+> > Please see above. Our debugging showed that there is a strange behaviour
+> > of the ADV7535 but we don't have any documentation.
+> Thanks for the comments.
+>
+> I'll look to see what I have for documentation.  I know my company
+> signed a bunch of NDA stuff and we have an HDMI license.  I'll go
+> through NXP's patches to their kernel and compare with whatever
+> documentation I can find to see if I can make any improvements.
 
-Hi Philippe,
+I checked our datasheet vault and I found no programming guide for the
+ADV7535.  :-(
+I've put in a request to see if we can get one.
 
-Am 22.07.22 um 09:55 schrieb Philippe Schenker:
-> From: Philippe Schenker <philippe.schenker@toradex.com>
-> 
-> The Verdin iMX8M Mini System on Module does not have VBUS signal
-> connected on Verdin USB_2 (usbotg2). On Verdin Development board this is
-> no problem, as we have connected a USB-Hub that is always connected.
-> 
-> However, if Verdin USB_2 is desired to be used as a single USB-Host port
-> the chipidea driver does not detect if a USB device is plugged into this
-> port, due to runtime pm shutting down the PHY.
-> 
-> Add the power-domain &pgc_otg2 to &usbphynop2 in order to detect
-> plugging events and enumerate the usb device.
-> 
-> Fixes: 6a57f224f734 ("arm64: dts: freescale: add initial support for verdin imx8m mini")
-> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+I found one for the adv7511 on Analog Device's web site:
+https://www.analog.com/media/en/technical-documentation/user-guides/ADV7511_Programming_Guide.pdf
 
-I'm probably having the same issue on our hardware. There was a previous
-attempt to fix this globally for all the i.MX8MM boards here: [1].
+They have a table of values for the different resolutions.  I am
+guessing they might be the same or similar for 7535.
+I'm going to look into NXP's alterations to this driver when I have more time.
 
-Unfortunately this didn't seem to work as intended in my case (see
-discussion for that patch). Looking at your patch I wonder if not having
-the vcc-supply for the usbphynop causes problems in my case. Do you
-happen to know the effect of adding the regulator here? I don't see this
-in any other i.MX8MM board devicetree.
-
-Could you test Li's patch instead of this board specific fix and see if
-it works for you? On your hardware, do you have an always-on device on
-the usbotg1 port? If yes, does the detection on the usbotg2 port still
-work if the usbotg1 port is disabled in the devicetree?
-
-Thanks
-Frieder
-
-[1]
-https://lore.kernel.org/linux-arm-kernel/f4879eed-79a7-3a1a-8dd0-c1a6ed367f34@kontron.de
-
-> 
-> ---
-> 
->  arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> index eafa88d980b3..197da74837ca 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> @@ -737,6 +737,7 @@ &usbphynop1 {
->  };
->  
->  &usbphynop2 {
-> +	power-domains = <&pgc_otg2>;
->  	vcc-supply = <&reg_vdd_3v3>;
->  };
->  
+adam
+>
+> adam
+> >
+> > Regards,
+> >   Marco

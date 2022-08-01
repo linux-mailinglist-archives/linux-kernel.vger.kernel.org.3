@@ -2,129 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244BA5863C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 07:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15235863C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 07:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239610AbiHAFf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 01:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S239626AbiHAFjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 01:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiHAFfy (ORCPT
+        with ESMTP id S229681AbiHAFjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 01:35:54 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0FF9FF5
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:35:52 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220801053551epoutp014e251a465a67537242a2f9d0bc09a7df~HIczHhExp1465314653epoutp01v
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:35:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220801053551epoutp014e251a465a67537242a2f9d0bc09a7df~HIczHhExp1465314653epoutp01v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659332151;
-        bh=zNra2Ieju11CQ/z1mTVbBscSXhxWJKuVmYMhiJEc1VI=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=IpsVet8I1YZoCJZKMjU4QDeXc0cjOPhXbTSYZG49ijjGdGzgEeZGAqMNybKkWyg6p
-         72hGJ4p81ENMSAxjIqCcbHODyweKqIf2+EsAB9IDRmpv1rP1imSMJjqCuUDj4z3T1U
-         rzwsF5sE4ZwcYoBstZliR+Js8LWI5K6A6rbRJ834=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220801053550epcas2p411ecf73e8c08cafab99011e2c4d76965~HIcynvz3l1219812198epcas2p4T;
-        Mon,  1 Aug 2022 05:35:50 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lx6Kf17fNz4x9Pr; Mon,  1 Aug
-        2022 05:35:50 +0000 (GMT)
-X-AuditID: b6c32a47-5e1ff700000025aa-ed-62e766360a09
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        38.A2.09642.63667E26; Mon,  1 Aug 2022 14:35:50 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v5 5/6] scsi: ufs: wb: Modify messages
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <0fccbbcf-2eb0-56b0-8334-0952a03308b3@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220801053549epcms2p34b374c5256cdecab72882cf9e4f55279@epcms2p3>
-Date:   Mon, 01 Aug 2022 14:35:49 +0900
-X-CMS-MailID: 20220801053549epcms2p34b374c5256cdecab72882cf9e4f55279
+        Mon, 1 Aug 2022 01:39:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3356CDF5B
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:39:00 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2712r7Z4012091;
+        Mon, 1 Aug 2022 05:38:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+XUJq65YQ6YJFY/baYu7z8L7TVBrcbxPxGAQCqKq4N0=;
+ b=UH/kKAT0kO9HxYX2lCOblR5A7yES9onVPXvVNInB0kXAE03f29oGBMm1gwGI9o/XxiWP
+ oqYcZhw8V2ESA4rPSt89P/dcaNZFWu7EAnQZ+5TgPJCKFoiQp2JjiCll6N8AVRSqlV5a
+ h8MW8Nd9RxOkmDWOaXxOlvfb/jbihs/0zmD1SreE5/kz8N4MgQA2ToT9KoyO65uo+v9q
+ g3Ee59XVbrf8gwuSsnPieymOfaJE0583opWof2sfsg/yZyXXJbkYUQV16dsbsyqH110H
+ JzGi61ERnmj5E15FU7Qm4J5gswFYxT68Rz0ckrb5s3F1kIHDefIrTxMQAdbSxCbEo3ee wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp6efufq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 05:38:30 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2715OP37022803;
+        Mon, 1 Aug 2022 05:38:30 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp6efufpg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 05:38:30 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2715Zhls009428;
+        Mon, 1 Aug 2022 05:38:27 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3hmv98h9w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 05:38:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2715cPls12255620
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Aug 2022 05:38:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29134AE04D;
+        Mon,  1 Aug 2022 05:38:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8199CAE045;
+        Mon,  1 Aug 2022 05:38:21 +0000 (GMT)
+Received: from [9.43.22.209] (unknown [9.43.22.209])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Aug 2022 05:38:21 +0000 (GMT)
+Message-ID: <826fbdbc-219f-8f4a-7373-41c718287533@linux.ibm.com>
+Date:   Mon, 1 Aug 2022 11:08:20 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_ADISTANCE_PMEM
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+ <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
+ <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <87bkt8s7w9.fsf@linux.ibm.com>
+ <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <e5545c90-9595-d08c-8a1c-1c15e3b94999@linux.ibm.com>
+ <87tu6wk0q5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87tu6wk0q5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmma5Z2vMkg72vWS1OPlnDZvFg3jY2
-        i5c/r7JZHHzYyWIx7cNPZouXhzQtFt3YxmRxedccNovu6zvYLJYf/8fkwOVx+Yq3x+I9L5k8
-        Jiw6wOjxfX0Hm8fHp7dYPPq2rGL0+LxJzqP9QDdTAEdUtk1GamJKapFCal5yfkpmXrqtkndw
-        vHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0IlKCmWJOaVAoYDE4mIlfTubovzSklSFjPzi
-        Elul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMi/9WMhV0s1TcvPqKvYFxInMXIyeH
-        hICJxKdnj4BsLg4hgR2MEv/nL2PpYuTg4BUQlPi7QxikRljAVuLwrV5WEFtIQEni3JpZjCAl
-        wgIGErd6zUHCbAJ6Ej+XzGADGSMicIJZYvuRJ4wQ83klZrQ/ZYGwpSW2L98KFucUsJa48/wV
-        G0RcQ+LHsl6oe0Qlbq5+yw5jvz82H2qOiETrvbNQNYISD37uhopLShw69JUN5B4JgXyJDQcC
-        IcI1Em+XH4Aq0Ze41rER7AReAV+JG/c+gI1hEVCVePBrDtQJLhLrJjeB1TMLyEtsfzuHGWQk
-        s4CmxPpd+hDTlSWO3GKBeaph4292dDazAJ9Ex+G/cPEd854wQbSqSSxqMoIIy0h8PTyffQKj
-        0ixEKM9CsnYWwtoFjMyrGMVSC4pz01OLjQqM4RGbnJ+7iRGcUrXcdzDOePtB7xAjEwfjIUYJ
-        DmYlEd47Ls+ThHhTEiurUovy44tKc1KLDzGaAj08kVlKNDkfmNTzSuINTSwNTMzMDM2NTA3M
-        lcR5vVI2JAoJpCeWpGanphakFsH0MXFwSjUwpTDxOycUn9i/PeCI3p+YqN6NHzMXH7DmeaVm
-        HXaiyUh80+xIi3UKL76vLmu0fWMgGLNYZaKRdbyU4ZYLW1UWnxLk/Z34xuttkcuyOa8nzD99
-        S6skLnZR0pn1Ge4cFUbytho/f2zTluiv9pt8e8KrRbtrVt4x/xvD/zHfX4Ip//Z9bXbP7Rs4
-        jN+6T2uV/XGFP/Lar5nHRVLD43b+epkzoSK8Xu1pzx8b6aJJMdfLArR//5H0CH/8KrH/9nLl
-        1IL1+xosm5pT287tD5ouc2nmSv1riZU2b788TJ3ZX/ZT4Pk/juarVbIPtsRPaHOMWLDs4aFd
-        b4JUZIu8V9/Q3vEk/P6yFK6Zcf5fKkpVFBe1KrEUZyQaajEXFScCAPyyMvkyBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368
-References: <0fccbbcf-2eb0-56b0-8334-0952a03308b3@acm.org>
-        <20220729045656epcms2p1e6912ae09ca2122d4d04854878e19b2c@epcms2p1>
-        <20220729045600epcms2p45c0f8a5a0a76c7fe85b0961570de89ce@epcms2p4>
-        <20220729045433epcms2p77ff2cdde6ddffd9ab0b0810ebe84f0e5@epcms2p7>
-        <20220729045252epcms2p7fee5c1cdca5e4bef02a833e40f80649b@epcms2p7>
-        <20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p8>
-        <20220729045756epcms2p40a1baa2c6bf17772023ccec20aef3f0a@epcms2p4>
-        <CGME20220729045045epcms2p8caf00317889ed4da8531b7466ec6e368@epcms2p3>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DZr36wxaqANDjFspu4dHOdyjpdUCTGpE
+X-Proofpoint-GUID: ax0mn281_lu61-Cld190YjwgofvW9kXE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_01,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ lowpriorityscore=0 impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208010028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 7/28/22 21:57, Jinyoung CHOI wrote:
->>   	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
->>   	if (ret) {
->> -		dev_err(hba->dev, "%s Write Booster %s failed %d\n",
->> +		dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
->>   			__func__, enable ? "enable" : "disable", ret);
->>   		return ret;
->>   	}
->
->Please also fix the grammar (enable -> enabling; disable -> disabling).
->
->Otherwise this patch looks good to me.
->
->Thanks,
->
->Bart.
+On 8/1/22 10:40 AM, Huang, Ying wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> On 8/1/22 7:36 AM, Huang, Ying wrote:
+>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>
+>>>> "Huang, Ying" <ying.huang@intel.com> writes:
+>>>>
+>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>>>
+>>>>>> By default, all nodes are assigned to the default memory tier which
+>>>>>> is the memory tier designated for nodes with DRAM
+>>>>>>
+>>>>>> Set dax kmem device node's tier to slower memory tier by assigning
+>>>>>> abstract distance to MEMTIER_ADISTANCE_PMEM. PMEM tier
+>>>>>> appears below the default memory tier in demotion order.
+>>>>>>
+>>>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>>>> ---
+>>>>>>  drivers/dax/kmem.c           |  9 +++++++++
+>>>>>>  include/linux/memory-tiers.h | 19 ++++++++++++++++++-
+>>>>>>  mm/memory-tiers.c            | 28 ++++++++++++++++------------
+>>>>>>  3 files changed, 43 insertions(+), 13 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+>>>>>> index a37622060fff..6b0d5de9a3e9 100644
+>>>>>> --- a/drivers/dax/kmem.c
+>>>>>> +++ b/drivers/dax/kmem.c
+>>>>>> @@ -11,6 +11,7 @@
+>>>>>>  #include <linux/fs.h>
+>>>>>>  #include <linux/mm.h>
+>>>>>>  #include <linux/mman.h>
+>>>>>> +#include <linux/memory-tiers.h>
+>>>>>>  #include "dax-private.h"
+>>>>>>  #include "bus.h"
+>>>>>>  
+>>>>>> @@ -41,6 +42,12 @@ struct dax_kmem_data {
+>>>>>>  	struct resource *res[];
+>>>>>>  };
+>>>>>>  
+>>>>>> +static struct memory_dev_type default_pmem_type  = {
+>>>>>
+>>>>> Why is this named as default_pmem_type?  We will not change the memory
+>>>>> type of a node usually.
+>>>>>
+>>>>
+>>>> Any other suggestion? pmem_dev_type? 
+>>>
+>>> Or dax_pmem_type?
+>>>
+>>> DAX is used to enumerate the memory device.
+>>>
+>>>>
+>>>>>> +	.adistance = MEMTIER_ADISTANCE_PMEM,
+>>>>>> +	.tier_sibiling = LIST_HEAD_INIT(default_pmem_type.tier_sibiling),
+>>>>>> +	.nodes  = NODE_MASK_NONE,
+>>>>>> +};
+>>>>>> +
+>>>>>>  static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>>>>  {
+>>>>>>  	struct device *dev = &dev_dax->dev;
+>>>>>> @@ -62,6 +69,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>>>>  		return -EINVAL;
+>>>>>>  	}
+>>>>>>  
+>>>>>> +	init_node_memory_type(numa_node, &default_pmem_type);
+>>>>>> +
+>>>>>
+>>>>> The memory hot-add below may fail.  So the error handling needs to be
+>>>>> added.
+>>>>>
+>>>>> And, it appears that the memory type and memory tier of a node may be
+>>>>> fully initialized here before NUMA hot-adding started.  So I suggest to
+>>>>> set node_memory_types[] here only.  And set memory_dev_type->nodes in
+>>>>> node hot-add callback.  I think there is the proper place to complete
+>>>>> the initialization.
+>>>>>
+>>>>> And, in theory dax/kmem.c can be unloaded.  So we need to clear
+>>>>> node_memory_types[] for nodes somewhere.
+>>>>>
+>>>>
+>>>> I guess by module exit we can be sure that all the memory managed
+>>>> by dax/kmem is hotplugged out. How about something like below?
+>>>
+>>> Because we set node_memorty_types[] in dev_dax_kmem_probe(), it's
+>>> natural to clear it in dev_dax_kmem_remove().
+>>>
+>>
+>> Most of required reset/clear is done as part of memory hotunplug. So
+>> if we did manage to successfully unplug the memory, everything except
+>> node_memory_types[node] should be reset. That makes the clear_node_memory_type
+>> the below. 
+>>
+>> void clear_node_memory_type(int node, struct memory_dev_type *memtype)
+>> {
+>>
+>> 	mutex_lock(&memory_tier_lock);
+>> 	/*
+>> 	 * memory unplug did clear the node from the memtype and
+>> 	 * dax/kem did initialize this node's memory type.
+>> 	 */
+>> 	if (!node_isset(node, memtype->nodes) && node_memory_types[node]  == memtype){
+>> 		node_memory_types[node] = NULL;
+>> 	}
+>> 	mutex_unlock(&memory_tier_lock);
+>> }
+>>
+>> With the module unload, it is kind of force removing the usage of the specific memtype.
+>> Considering module unload will remove the usage of specific memtype from other parts
+>> of the kernel and we already do all the required reset in memory hot unplug, do we
+>> need to do the clear_node_memory_type above? 
+> 
+> Per my understanding, we need to call clear_node_memory_type() in
+> dev_dax_kmem_remove().  After that, we have nothing to do in
+> dax_kmem_exit().
+> 
 
-OK, I will fix it. 
+Ok, I guess you are suggesting to do the clear_node_memory_type even if we fail the memory remove. 
+Should we also rebuild demotion order? On a successful memory remove we do rebuild demotion order.
+This is what i ended up with.
 
-Thanks,
-Jinyoung.
+modified   drivers/dax/kmem.c
+@@ -171,6 +171,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+ static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+ {
+ 	int i, success = 0;
++	int node = dev_dax->target_node;
+ 	struct device *dev = &dev_dax->dev;
+ 	struct dax_kmem_data *data = dev_get_drvdata(dev);
+ 
+@@ -208,6 +209,12 @@ static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+ 		kfree(data);
+ 		dev_set_drvdata(dev, NULL);
+ 	}
++	/*
++	 * Clear the memtype association, even if the memory
++	 * remove failed.
++	 */
++	clear_node_memory_type(node, dax_pmem_type);
++
+ }
+ #else
+ static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
+modified   include/linux/memory-tiers.h
+@@ -31,6 +31,7 @@ struct memory_dev_type {
+ #ifdef CONFIG_NUMA
+ extern bool numa_demotion_enabled;
+ void init_node_memory_type(int node, struct memory_dev_type *default_type);
++void clear_node_memory_type(int node, struct memory_dev_type *memtype);
+ #ifdef CONFIG_MIGRATION
+ int next_demotion_node(int node);
+ void node_get_allowed_targets(pg_data_t *pgdat, nodemask_t *targets);
+@@ -57,6 +58,10 @@ static inline bool node_is_toptier(int node)
+ #define numa_demotion_enabled	false
+ static inline void init_node_memory_type(int node, struct memory_dev_type *default_type)
+ {
++}
++
++static inline void unregister_memory_type(struct memory_dev_type *memtype)
++{
+ 
+ }
+ 
+modified   mm/memory-tiers.c
+@@ -501,6 +501,36 @@ void init_node_memory_type(int node, struct memory_dev_type *default_type)
+ }
+ EXPORT_SYMBOL_GPL(init_node_memory_type);
+ 
++void clear_node_memory_type(int node, struct memory_dev_type *memtype)
++{
++	struct memory_tier *memtier;
++
++	mutex_lock(&memory_tier_lock);
++	/*
++	 * Even if we fail to unplug memory, clear the association of
++	 * this node to this specific memory type.
++	 */
++	if (node_memory_types[node] == memtype) {
++
++		memtier = __node_get_memory_tier(node);
++		if (memtier) {
++			rcu_assign_pointer(pgdat->memtier, NULL);
++			synchronize_rcu();
++		}
++		node_clear(node, memtype->nodes);
++		if (nodes_empty(memtype->nodes)) {
++			list_del(&memtype->tier_sibiling);
++			memtype->memtier = NULL;
++			if (current_memtier && list_empty(&current_memtier->memory_types))
++				destroy_memory_tier(current_memtier);
++
++		}
++		node_memory_types[node] = NULL;
++	}
++	mutex_unlock(&memory_tier_lock);
++}
++EXPORT_SYMBOL_GPL(init_node_memory_type);
++
+ void update_node_adistance(int node, struct memory_dev_type *memtype)
+ {
+ 	pg_data_t *pgdat;
+
+[back
+
+

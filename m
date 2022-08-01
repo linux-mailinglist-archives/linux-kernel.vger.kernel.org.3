@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B60586AAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D059E5869BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiHAMUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S233511AbiHAMGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiHAMTH (ORCPT
+        with ESMTP id S232874AbiHAMFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:19:07 -0400
+        Mon, 1 Aug 2022 08:05:25 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32764AD49;
-        Mon,  1 Aug 2022 04:59:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E4C5A3C6;
+        Mon,  1 Aug 2022 04:54:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 251ACCE13B9;
-        Mon,  1 Aug 2022 11:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13536C433C1;
-        Mon,  1 Aug 2022 11:59:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 40812CE1157;
+        Mon,  1 Aug 2022 11:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B51C433C1;
+        Mon,  1 Aug 2022 11:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355187;
-        bh=eQkHLvuFiQC4fCGZQxZG6VEon3kkOfjQUOYlGs5oa7k=;
+        s=korg; t=1659354888;
+        bh=COGnvKI3TA8NxmZ6PUaCgjEEP6RaalfNvTdWi+lFvrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QRkyJMwBfmvFrq5r11+DkAe+4DKmMWFAPVgy+y5a2UIo1itfy4DaqNy91WSjytUy5
-         /lOR3BNBGSldu9OaGWThGrVPha1OV24P+e2N64K0twC8wg31YUuZ50J70wxj4mQMBh
-         iqo6bEtyN9GeIuptI+O7ixfesIJUjxYQR8HRwyhc=
+        b=k1a/wB85YDuEC123SWDy94T1LyFTFSiJMwgbKJnxCbdjW/wWMu0GfCIY9joljF5QL
+         T3SWLsFaspnYL5c7BqpD8BOjsU/k+hkBIi2X5KSvD6q8e6h424gALJbzApEGNukpWD
+         mDKSzr3SM/p2Gx4PeBTW98ZsFBM9ZmjUuZy795Hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Domingo Dirutigliano <pwnzer0tt1@proton.me>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 67/88] sctp: fix sleep in atomic context bug in timer handlers
+Subject: [PATCH 5.15 57/69] netfilter: nf_queue: do not allow packet truncation below transport header offset
 Date:   Mon,  1 Aug 2022 13:47:21 +0200
-Message-Id: <20220801114141.107321082@linuxfoundation.org>
+Message-Id: <20220801114136.780889603@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit b89fc26f741d9f9efb51cba3e9b241cf1380ec5a ]
+[ Upstream commit 99a63d36cb3ed5ca3aa6fcb64cffbeaf3b0fb164 ]
 
-There are sleep in atomic context bugs in timer handlers of sctp
-such as sctp_generate_t3_rtx_event(), sctp_generate_probe_event(),
-sctp_generate_t1_init_event(), sctp_generate_timeout_event(),
-sctp_generate_t3_rtx_event() and so on.
+Domingo Dirutigliano and Nicola Guerrera report kernel panic when
+sending nf_queue verdict with 1-byte nfta_payload attribute.
 
-The root cause is sctp_sched_prio_init_sid() with GFP_KERNEL parameter
-that may sleep could be called by different timer handlers which is in
-interrupt context.
+The IP/IPv6 stack pulls the IP(v6) header from the packet after the
+input hook.
 
-One of the call paths that could trigger bug is shown below:
+If user truncates the packet below the header size, this skb_pull() will
+result in a malformed skb (skb->len < 0).
 
-      (interrupt context)
-sctp_generate_probe_event
-  sctp_do_sm
-    sctp_side_effects
-      sctp_cmd_interpreter
-        sctp_outq_teardown
-          sctp_outq_init
-            sctp_sched_set_sched
-              n->init_sid(..,GFP_KERNEL)
-                sctp_sched_prio_init_sid //may sleep
-
-This patch changes gfp_t parameter of init_sid in sctp_sched_set_sched()
-from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
-context bugs.
-
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Link: https://lore.kernel.org/r/20220723015809.11553-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 7af4cc3fa158 ("[NETFILTER]: Add "nfnetlink_queue" netfilter queue handler over nfnetlink")
+Reported-by: Domingo Dirutigliano <pwnzer0tt1@proton.me>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Reviewed-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/stream_sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nfnetlink_queue.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/net/sctp/stream_sched.c b/net/sctp/stream_sched.c
-index 99e5f69fbb74..a2e1d34f52c5 100644
---- a/net/sctp/stream_sched.c
-+++ b/net/sctp/stream_sched.c
-@@ -163,7 +163,7 @@ int sctp_sched_set_sched(struct sctp_association *asoc,
- 		if (!SCTP_SO(&asoc->stream, i)->ext)
- 			continue;
+diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+index 8787d0613ad8..5329ebf19a18 100644
+--- a/net/netfilter/nfnetlink_queue.c
++++ b/net/netfilter/nfnetlink_queue.c
+@@ -836,11 +836,16 @@ nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
+ }
  
--		ret = n->init_sid(&asoc->stream, i, GFP_KERNEL);
-+		ret = n->init_sid(&asoc->stream, i, GFP_ATOMIC);
- 		if (ret)
- 			goto err;
- 	}
+ static int
+-nfqnl_mangle(void *data, int data_len, struct nf_queue_entry *e, int diff)
++nfqnl_mangle(void *data, unsigned int data_len, struct nf_queue_entry *e, int diff)
+ {
+ 	struct sk_buff *nskb;
+ 
+ 	if (diff < 0) {
++		unsigned int min_len = skb_transport_offset(e->skb);
++
++		if (data_len < min_len)
++			return -EINVAL;
++
+ 		if (pskb_trim(e->skb, data_len))
+ 			return -ENOMEM;
+ 	} else if (diff > 0) {
 -- 
 2.35.1
 

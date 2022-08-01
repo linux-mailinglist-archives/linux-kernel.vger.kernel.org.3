@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BB65869AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A66586A52
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiHAMFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
+        id S233899AbiHAMPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbiHAMEc (ORCPT
+        with ESMTP id S234171AbiHAMOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:04:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64D758B61;
-        Mon,  1 Aug 2022 04:54:29 -0700 (PDT)
+        Mon, 1 Aug 2022 08:14:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B9648CAD;
+        Mon,  1 Aug 2022 04:57:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D6AEB8117D;
-        Mon,  1 Aug 2022 11:54:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76252C433C1;
-        Mon,  1 Aug 2022 11:54:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE89DB81171;
+        Mon,  1 Aug 2022 11:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15405C433D6;
+        Mon,  1 Aug 2022 11:57:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354866;
-        bh=GhmHgnQuSSZFRH6+PxWJAB/jWxMQMeFLSElGzZXSxMQ=;
+        s=korg; t=1659355072;
+        bh=Pjt9arz70V3SkAfZi0jUYYdS/BqTVgwJMR24cK/ZAFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fhY5PdSsxOWktjz9/6yl9cROPlohuhMPWdWOn8NeQqhVOlf8OBEG4rmZPpKlEObfM
-         eRhytN03wV56hYtmWrVB9V7AQ9mzEi1dQajnh/kGeV1e9nTSxexGT/eg929aIQQo07
-         ucZhW74Nv/CgGNDBqUSqu/UVgks+jGmk4y2kLehE=
+        b=ooQ7hbvh+3VeMbAT08BakWYozKOFLZA+ZzMAm7Vw0jrbZkMTJOpT81mtzrpufGDmo
+         S7v6DK39+Rb7H5vdvRWSOUDl8LGs4/fOZHucpugOJ11P67CAP7EmMSe4CtfX+XQN2x
+         FSi0Ov7ETXZkswysX3PdagCuBlIEWGbxfJyLGSyQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sabrina Dubroca <sd@queasysnail.net>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 41/69] macsec: fix NULL deref in macsec_add_rxsa
-Date:   Mon,  1 Aug 2022 13:47:05 +0200
-Message-Id: <20220801114136.135923920@linuxfoundation.org>
+Subject: [PATCH 5.18 52/88] macsec: fix NULL deref in macsec_add_rxsa
+Date:   Mon,  1 Aug 2022 13:47:06 +0200
+Message-Id: <20220801114140.404494468@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index e53b40359fd1..f72d4380374d 100644
+index 817577e713d7..769a1eca6bd8 100644
 --- a/drivers/net/macsec.c
 +++ b/drivers/net/macsec.c
-@@ -1751,7 +1751,8 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
+@@ -1753,7 +1753,8 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
  	}
  
  	pn_len = secy->xpn ? MACSEC_XPN_PN_LEN : MACSEC_DEFAULT_PN_LEN;

@@ -2,188 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AD258719D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60535871A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbiHATpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S235032AbiHATq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234935AbiHATpu (ORCPT
+        with ESMTP id S235000AbiHATqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:45:50 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BF61408E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:45:48 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id p132so14211169oif.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:45:48 -0700 (PDT)
+        Mon, 1 Aug 2022 15:46:12 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025102F652
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:46:11 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id u9so14189067oiv.12
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=zTO5z1b2HBi2MHvoO0VDCQa4JcalTm7DQj8Wt/tBQgU=;
-        b=gwOcIWDnx/oz5Jund5U+0j32WTTBpWogDpXxD0OMEDpt/pD7rfetrivW9TjnfW+0po
-         iL9MShgxX938M0rQmfpYWhsLeAqmXvjkvbZ0f+QLrgAOW1KH4/SVQOQ5heSKbSQTqk19
-         JuNDGFYOnIjZkAK9IwmX/Mhf0mc1Vzu5Hg/cvJNiRHPl6qTS54DHAjOkWvOu3b3hd3Ru
-         Qsp3qRJLUDK+WYoC87BMrohHVl0uRJZC8ENtdYo6dqSbkAMFYmUxmUllUyYRuj14TaLV
-         RbBJiZrxGyd/e/DPzjcYc6CBfbuaemupx2Bmk+cDxIut1iFWm/JWYMY+6tqZNRv5hscU
-         ziRA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc;
+        bh=ID6xmj0jlQ+oDOkE/7Q+FgRKVEA9FMrNbK3ElhVYCyA=;
+        b=WA3I28VBvO79DMJm4m2+mr3Opk1D6B6L5OOH178VBhJ6JhiF+KQaV8/JHywUOFkjSg
+         mkSTIiUt8Wwp5xjuOIT36Y9wSS0qC0cZA5XMUgK9onfDswF1u1taSm1zzQlYydDsn6x2
+         DLEAZDDwVSGEpCis0ATBMv5rSGFMycluutowFHPIGDRQrSeNVBZ8pCmwaRtsZN63wFpg
+         uURcrumXrv863wspRQIRTsCrwOI18ed1bjGnBDFuwONQSOUQh8ChsM3RcINn2ydJ18BE
+         AEK3V0MPw4a2Svwt4G5HzJfIlXJ1mOzCEOzDAJ/HwrNnhWl6ZaytSJKHETnKmlpSxs38
+         4wIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=zTO5z1b2HBi2MHvoO0VDCQa4JcalTm7DQj8Wt/tBQgU=;
-        b=re0vBUE4NSCm7YsyI99lW+oFUhSJPlC3x0QZHrS7CmyqNAwvresTCbDoGofrGWFPQQ
-         v1bRRQeGOl/zbEzNdLoM8u2x5zC6wBJK0SKQWyk2ppOugpKvr/QupsubweCJsXxWQ0Kh
-         pHg9XjJ3a4WpSt9zrin0KT1R2dIkfSomym/3NLJJiPt64XRFvoHY/hoV5eutXRMLwqqt
-         hGt8qjuHrOb19xe7N6VMI47f2baXr291jZiZBtA61wMbzSx2T3gUkcJCDeYoBX0i/dMe
-         nCGKMKbIqDUeFKNakYeS0V78aiQxWkxfNyWQWih+wGuDUCgFE2s6E0WrobZ8Ravj/YAl
-         yhXA==
-X-Gm-Message-State: AJIora/qYATCSoma9rCZxVZOs7Q7D24ma08oOJIUpv2JT3JC7WDrLx+1
-        w36xBzwbOu73uFD63mNX72AgUEZ/GWZJDsf+
-X-Google-Smtp-Source: AGRyM1vmfNmmRu2L6std5nKqLGzLUJ78DCnrLH8a8WRpHZdEaUrrpKMDmO6fEkjUPTAwEi1LkE1btQ==
-X-Received: by 2002:a05:6808:2099:b0:33a:aa4f:25e6 with SMTP id s25-20020a056808209900b0033aaa4f25e6mr6993997oiw.129.1659383148107;
-        Mon, 01 Aug 2022 12:45:48 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.211])
-        by smtp.gmail.com with ESMTPSA id m14-20020a9d73ce000000b0061c34994238sm2994807otk.40.2022.08.01.12.45.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 12:45:46 -0700 (PDT)
-Message-ID: <be23477d-7c17-1e65-d9cb-d2331b4ce8fe@linaro.org>
-Date:   Mon, 1 Aug 2022 14:45:44 -0500
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ID6xmj0jlQ+oDOkE/7Q+FgRKVEA9FMrNbK3ElhVYCyA=;
+        b=PhL0TKtdX9UASZSj1ki6hzcWHqzqW66prSyaoTn61o0eywP2Fow9m0yemMYYVxWHSQ
+         Q7q8XJI6PjGNlcWCdKDmFm/isGkynYVdEbqZnVL3P6JQxTZ/7ijLifgc4qYrOqQvSj4O
+         2qFNebWZH7mZC9plDDIrOkkjI1iTHaynSzPW635GiRN7VMJ1raVEmzJ0aBoRkjnVs52W
+         +iJDf52VeFBUgFMUPfyBxC2HPThYzmhsxnmq/nhADnKNsrSQX340ieHYgzmtf+bAjRc0
+         tEtW/IDJndO3vbN3cQpBWv2TZGcKPNMVoY4OLWeorgcI3tJ+Ra+pXfzTGLectY6xATYE
+         OwjA==
+X-Gm-Message-State: AJIora+H4BFEQibH1aXucR23/uN02xw0EU8/Abm0vJFTfDLsUo2wQdaN
+        Wrh8fopwJN5uwih43uxjnspS4ym6wRXMJ8+QSnJf
+X-Google-Smtp-Source: AGRyM1sCm+BGsavzuU8R7OvhrIHNa9EHD+2j1SMH6Vhp8e1AMfpfusSn/nZoPJDZj6e8JwRGFrYGuEDZYg6hOUspwe8=
+X-Received: by 2002:a05:6808:3087:b0:33a:a6ae:7bf7 with SMTP id
+ bl7-20020a056808308700b0033aa6ae7bf7mr7521566oib.41.1659383170306; Mon, 01
+ Aug 2022 12:46:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 1 Aug 2022 15:45:59 -0400
+Message-ID: <CAHC9VhQtBZg1_V7yuzSZzzAB5A3gZB1KTHjx0ZBrc9yCA98f-Q@mail.gmail.com>
+Subject: [GIT PULL] SELinux patches for v6.0
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220801114138.041018499@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Linus,
 
-On 01/08/22 06:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.16 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.16-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+A relatively small set of patches for SELinux this time, eight patches
+in total with really only one significant change.  The highlights are
+below:
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+- Add support for proper labeling of memfd_secret anonymous inodes.
+This will allow LSMs that implement the anonymous inode hooks to apply
+security policy to memfd_secret() fds.
 
-## Build
-* kernel: 5.18.16-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.18.y
-* git commit: 7e8a7b1c98057a3014222a505c28c6bd43ed5666
-* git describe: v5.18.14-248-g7e8a7b1c9805
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18.14-248-g7e8a7b1c9805
+- Various small improvements to memory management: fixed leaks, freed
+memory when needed, boundary checks.
 
-## No test regressions (compared to v5.18.14-159-g63d1be154edd)
+- Hardened the selinux_audit_data struct with __randomize_layout.
 
-## No metric regressions (compared to v5.18.14-159-g63d1be154edd)
+- A minor documentation tweak to fix a formatting/style issue.
 
-## No test fixes (compared to v5.18.14-159-g63d1be154edd)
+Everything applies cleanly to your tree as of a few minutes ago,
+please merge for v6.0.
+-Paul
 
-## No metric fixes (compared to v5.18.14-159-g63d1be154edd)
+--
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56=
+:
 
-## Test result summary
-total: 136635, pass: 122379, fail: 825, skip: 12686, xfail: 745
+ Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 311 total, 308 passed, 3 failed
-* arm64: 68 total, 66 passed, 2 failed
-* i386: 57 total, 51 passed, 6 failed
-* mips: 50 total, 47 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 23 total, 20 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 61 total, 59 passed, 2 failed
+are available in the Git repository at:
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+   tags/selinux-pr-20220801
 
+for you to fetch changes up to ef54ccb61616d8293bc68220d88a8e74271141b5:
 
-Greetings!
+ selinux: selinux_add_opt() callers free memory
+   (2022-06-20 21:05:40 -0400)
 
-Daniel Díaz
-daniel.diaz@linaro.org
+----------------------------------------------------------------
+selinux/stable-6.0 PR 20220801
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+----------------------------------------------------------------
+Christian G=C3=B6ttsche (2):
+     selinux: drop unnecessary NULL check
+     mm: create security context for memfd_secret inodes
+
+GONG, Ruiqi (1):
+     selinux: add __randomize_layout to selinux_audit_data
+
+Jonas Lindner (1):
+     selinux: fix typos in comments
+
+Randy Dunlap (1):
+     docs: selinux: add '=3D' signs to kernel boot options
+
+Xiu Jianfeng (3):
+     selinux: fix memleak in security_read_state_kernel()
+     selinux: Add boundary check in put_entry()
+     selinux: selinux_add_opt() callers free memory
+
+Documentation/admin-guide/kernel-parameters.txt |  4 ++--
+mm/secretmem.c                                  |  9 +++++++++
+security/selinux/hooks.c                        | 17 +++++++----------
+security/selinux/include/audit.h                |  2 +-
+security/selinux/include/avc.h                  |  2 +-
+security/selinux/ss/policydb.h                  |  2 ++
+security/selinux/ss/services.c                  |  9 ++++++++-
+7 files changed, 30 insertions(+), 15 deletions(-)
+
+--=20
+paul-moore.com

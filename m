@@ -2,177 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226F15873F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4BF5873F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiHAWdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S235406AbiHAWde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235403AbiHAWdb (ORCPT
+        with ESMTP id S234773AbiHAWd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:33:31 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF66325EB7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:33:29 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id k25-20020a056830169900b0061c6f68f451so9189182otr.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LI7JfBTHXcIfr/9UgMaMzqcZcXHkE1NiQIHzTU9OMbY=;
-        b=cF+PM2YAd/AUT5qzQ0nJgW7ok1vFg9j5ZWOyJvGxFUYr7Zvy6AanzGkLbB529Gl+Qc
-         YO0AcazHdcSnFyDrtq047WoUQLzvGI1DZh5TKK7xC0VpxBOn4CICGP0cnP5x/zklP9Qi
-         99CZwd4H+SfwuCwqCcvmMHs1IXVcieCMIfit0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LI7JfBTHXcIfr/9UgMaMzqcZcXHkE1NiQIHzTU9OMbY=;
-        b=aXV7G/Ue2SFinj3i9lHIyYH1o8PdMKzNbSuJLdz0IDreGgC3jXFylCE9dY+7oaC0iu
-         tW3TWtbnpl5WcWb+l405kXE+WqYkcezWKRN34mt6MlAQxjS0ljHkxln4mRsoqcZ8FHhq
-         M9FI5Y/HXJJRvfJNR6/+CEQFx9SP8v6Lbxt3ozJo/S7bM7Xod4k2XtmRl8HuYYb0WxKg
-         rEtRVbf8DVxVcczfaj7AE5fBvwXCG34LnH1bJrjFwApPuW9fQmtkRqUkROEJt9J/STUa
-         +/qk3fDXceYEyxE3CHH4n76CvSPD78YuMAdQ2N3OKHK9Slc415Er6ifM3xEl/6+yzc3c
-         GZww==
-X-Gm-Message-State: AJIora+uCnexrOgED9PG00Scf/Xf84Eg+TwkAtLjs0svO5bDZpV1Xmyn
-        hr4V+CWAeESRssZ8gwytlI7paNqN3MgvTg==
-X-Google-Smtp-Source: AGRyM1uD22299VF8u/W8u2GYtL78jALP5c8qdJx6l4mP1moZnqlvmXKsS/lQK4ZeTQJI9WWYNF89+g==
-X-Received: by 2002:a05:6830:d81:b0:616:c424:6f22 with SMTP id bv1-20020a0568300d8100b00616c4246f22mr6734679otb.77.1659393208815;
-        Mon, 01 Aug 2022 15:33:28 -0700 (PDT)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
-        by smtp.gmail.com with ESMTPSA id a15-20020aca1a0f000000b00339c8aab320sm2700726oia.3.2022.08.01.15.33.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 15:33:27 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id h188so14270719oia.13
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:33:27 -0700 (PDT)
-X-Received: by 2002:a05:6808:14d4:b0:33b:1489:8752 with SMTP id
- f20-20020a05680814d400b0033b14898752mr7607300oiw.174.1659393206929; Mon, 01
- Aug 2022 15:33:26 -0700 (PDT)
+        Mon, 1 Aug 2022 18:33:29 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2F72228E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:33:26 -0700 (PDT)
+Received: from [192.168.1.206] (unknown [109.252.119.247])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 6979540D403E;
+        Mon,  1 Aug 2022 22:33:21 +0000 (UTC)
+Subject: Re: [POSSIBLE BUG] iommu/io-pgtable-arm: possible dereferencing of
+ NULL pointer
+To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        Subkhankulov Rustam <subkhankulov@ispras.ru>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+References: <28df50012344fb1c925a7ceaf55ae400152ffb48.camel@ispras.ru>
+ <20220719173610.GA14526@willie-the-truck>
+ <71774d67-6c7f-ea42-2911-a3eb1955777d@arm.com>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <39d8ceb6-6982-f4b9-1ed6-c2daea051386@ispras.ru>
+Date:   Tue, 2 Aug 2022 01:33:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com> <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
-In-Reply-To: <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 1 Aug 2022 15:32:50 -0700
-X-Gmail-Original-Message-ID: <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-Message-ID: <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <71774d67-6c7f-ea42-2911-a3eb1955777d@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 8:42 AM Evan Green <evgreen@chromium.org> wrote:
->
-> On Tue, May 17, 2022 at 10:34 AM Evan Green <evgreen@chromium.org> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Tue, May 17, 2022 at 9:06 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
-> > > >
-> > > > On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
-> > > > >
-> > > > > Hi!
-> > > > >
-> > > > > > We are exploring enabling hibernation in some new scenarios. However,
-> > > > > > our security team has a few requirements, listed below:
-> > > > > > 1. The hibernate image must be encrypted with protection derived from
-> > > > > >    both the platform (eg TPM) and user authentication data (eg
-> > > > > >    password).
-> > > > > > 2. Hibernation must not be a vector by which a malicious userspace can
-> > > > > >    escalate to the kernel.
-> > > > >
-> > > > > Can you (or your security team) explain why requirement 2. is needed?
-> > > > >
-> > > > > On normal systems, trusted userspace handles kernel upgrades (for example),
-> > > > > so it can escalate to kernel priviledges.
-> > > > >
-> > > >
-> > > > Our systems are a little more sealed up than a normal distro, we use
-> > > > Verified Boot [1]. To summarize, RO firmware with an embedded public
-> > > > key verifies that the kernel+commandline was signed by Google. The
-> > > > commandline includes the root hash of the rootfs as well (where the
-> > > > modules live). So when an update is applied (A/B style, including the
-> > > > whole rootfs), assuming the RO firmware stayed RO (which requires
-> > > > physical measures to defeat), we can guarantee that the kernel,
-> > > > commandline, and rootfs have not been tampered with.
-> > > >
-> > > > Verified boot gives us confidence that on each boot, we're at least
-> > > > starting from known code. This makes it more challenging for an
-> > > > attacker to persist an exploit across reboot. With the kernel and
-> > > > modules verified, we try to make it non-trivial for someone who does
-> > > > manage to gain root execution once from escalating to kernel
-> > > > execution. Hibernation would be one obvious escalation route, so we're
-> > > > hoping to find a way to enable it without handing out that easy
-> > > > primitive.
-> > > >
-> > > > [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
-> > >
-> > > So I guess this really is an RFC.
-> >
-> > Yes, I suppose it is.
-> >
-> > >
-> > > Honestly, I need more time to go through this and there are pieces of
-> > > it that need to be looked at other people (like the TPM-related
-> > > changes).
-> >
-> > No problem, thanks for the reply to let me know. I expect some back
-> > and forth in terms of what should be hidden behind abstractions and
-> > where exactly things should live. But I wanted to get this out to
-> > upstream as early as I could, just to get initial reactions on the
-> > overall concept and design. Looking forward to hearing your thoughts
-> > when you get a chance, and let me know if there are others I should be
-> > adding that I've missed.
->
-> Gentle bump in case this dropped off of radars, I'd still appreciate
-> any feedback folks had on this series.
+On 01.08.2022 14:06, Robin Murphy wrote:
+> On 2022-07-19 18:36, Will Deacon wrote:
+>> On Mon, Jul 18, 2022 at 12:20:06PM +0300, Subkhankulov Rustam wrote:
+>>> Version: 5-19-rc6
+>>>
+>>> In function '__arm_lpae_alloc_pages' pointer 'dev' is compared with
+>>> NULL at [drivers/iommu/io-pgtable-arm.c: 203]. This means that the
+>>> pointer can be NULL.
+>>>
+>>> -----------------------------------------------------------------------
+>>> 203     p = alloc_pages_node(dev ? dev_to_node(dev) : NUMA_NO_NODE,
+>>> 204                  gfp | __GFP_ZERO, order);
+>>> -----------------------------------------------------------------------
+>>>
+>>> Then, if cfg->coherent_walk == 0 at [drivers/iommu/io-pgtable-arm.c:
+>>> 209], function 'dma_map_single', which is defined as
+>>> 'dma_map_single_attrs', is called and pointer dev is passed as
+>>> first parameter.
+>>>
+>>> -----------------------------------------------------------------------
+>>> 209     if (!cfg->coherent_walk) {
+>>> 208         dma = dma_map_single(dev, pages, size, DMA_TO_DEVICE);
+>>> -----------------------------------------------------------------------
+>>>
+>>> Therefore, pointer 'dev' passed to function 'dev_driver_string'
+>>> in macro 'dev_WARN_ONCE' at [include/linux/dma-mapping.h: 326],
+>>> where it is dereferenced at [drivers/base/core.c: 2091].
+>>>
+>>> -----------------------------------------------------------------------
+>>> 2083    const char *dev_driver_string(const struct device *dev)
+>>> 2084    {
+>>> 2085        struct device_driver *drv;
+>>> 2086
+>>> ---
+>>> 2091        drv = READ_ONCE(dev->driver);
+>>> -----------------------------------------------------------------------
+>>>
+>>> Thus, if it is possible that 'dev' is null at the same time
+>>> that flag 'coherent_walk' is 0, then NULL pointer will be
+>>> dereferenced.
+>>>
+>>> Should we somehow avoid NULL pointer dereference or is this
+>>> situation impossible and we should remove comparison with NULL?
+>>
+>> I think 'dev' is only null in the case of the selftest initcall
+>> (see arm_lpae_do_selftests()), and 'coherent_walk' is always true there.
+> 
+> Indeed, the intent is that cfg->iommu_dev == NULL is a special case for
+> the selftest, which must always claim coherency as well for this reason.
+> I suppose we could add an explicit assertion along those lines in
+> alloc_pgtable if anyone really thinks it matters.
 
-One more bump here, as we'd really love to get encrypted hibernation
-to a form upstream would accept if at all possible. We were
-considering landing this in our Chrome OS tree for now, then coming
-back in a couple months with a "we've been baking this ourselves and
-it's going so great, oooh yeah". I'm not sure if upstream would find
-that compelling or not. But in any case, some guidance towards making
-this more upstream friendly would be well appreciated.
+Yes, we believe it make sense. It will help to document the intention
+and to avoid future questions.
 
-One thing I realized in attempting to pick this myself is that the
-trusted key blob format has moved to ASN.1. So I should really move
-the creation ticket to the new ASN.1 format (if I can figure out the
-right OID for that piece), which would allow me to drop a lot of the
-ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-I'll work on that and resend.
+Thank you,
+Alexey
 
--Evan

@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DB0586E9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C003586EA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbiHAQfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S233755AbiHAQfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbiHAQfH (ORCPT
+        with ESMTP id S232888AbiHAQfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:35:07 -0400
+        Mon, 1 Aug 2022 12:35:08 -0400
 Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5543E74E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765693E755
         for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:35:06 -0700 (PDT)
 Received: from localhost.localdomain (unknown [92.49.173.143])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 28D5E40737C1;
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8F49E407624C;
         Mon,  1 Aug 2022 16:35:04 +0000 (UTC)
 From:   Evgeniy Baskov <baskov@ispras.ru>
 To:     Borislav Petkov <bp@alien8.de>
@@ -26,9 +26,9 @@ Cc:     Baskov Evgeniy <baskov@ispras.ru>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, x86@kernel.org,
         Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH v5 1/5] x86/boot: Add strlcat() and strscpy() to compressed kernel
-Date:   Mon,  1 Aug 2022 19:34:57 +0300
-Message-Id: <f6e0adc2ffad4431649026b948c08e43ddcb2a49.1658843651.git.baskov@ispras.ru>
+Subject: [PATCH v5 2/5] x86: Add resolve_cmdline() helper
+Date:   Mon,  1 Aug 2022 19:34:58 +0300
+Message-Id: <68009748361af670dffffb99b817ccb3b98bfbd1.1658843651.git.baskov@ispras.ru>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1658843651.git.baskov@ispras.ru>
 References: <cover.1658843651.git.baskov@ispras.ru>
@@ -44,84 +44,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Baskov Evgeniy <baskov@ispras.ru>
 
-These functions simplify the code of command line concatenation
-helper and reduce the probability of mistakes.
+Command line needs to be combined in both compressed and uncompressed
+kernel from built-in and boot command line strings, which requires
+non-trivial logic depending on CONFIG_CMDLINE_BOOL and
+CONFIG_CMDLINE_OVERRIDE.
 
-Use simpler implementation of strscpy than used in it kernel itself
-to avoid code bloat in compressed kernel.
+Add a helper function to avoid code duplication.
 
 Signed-off-by: Baskov Evgeniy <baskov@ispras.ru>
 
-diff --git a/arch/x86/boot/compressed/string.c b/arch/x86/boot/compressed/string.c
-index 81fc1eaa3229..5c193fa0a09b 100644
---- a/arch/x86/boot/compressed/string.c
-+++ b/arch/x86/boot/compressed/string.c
-@@ -40,6 +40,56 @@ static void *____memcpy(void *dest, const void *src, size_t n)
- }
- #endif
- 
-+size_t strlcat(char *dest, const char *src, size_t count)
+ create mode 100644 arch/x86/include/asm/shared/setup-cmdline.h
+
+diff --git a/arch/x86/include/asm/shared/setup-cmdline.h b/arch/x86/include/asm/shared/setup-cmdline.h
+new file mode 100644
+index 000000000000..b8bb19e63ec2
+--- /dev/null
++++ b/arch/x86/include/asm/shared/setup-cmdline.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _ASM_X86_SETUP_CMDLINE_H
++#define _ASM_X86_SETUP_CMDLINE_H
++
++#define _SETUP
++#include <asm/setup.h> /* For COMMAND_LINE_SIZE */
++#undef _SETUP
++
++#include <linux/string.h>
++
++#ifdef CONFIG_CMDLINE_BOOL
++#define COMMAND_LINE_INIT CONFIG_CMDLINE
++#else
++#define COMMAND_LINE_INIT ""
++#endif
++
++/*
++ * command_line and boot_command_line are expected to be at most
++ * COMMAND_LINE_SIZE length. command_line needs to be initialized
++ * with COMMAND_LINE_INIT.
++ */
++
++static inline void resolve_cmdline(char *command_line,
++				   const char *boot_command_line)
 +{
-+	size_t dsize = strlen(dest);
-+	size_t len = strlen(src);
-+	size_t res = dsize + len;
-+
-+	/* This would be a bug */
-+	if (dsize >= count)
-+		error("strlcat(): destination too big\n");
-+
-+	dest += dsize;
-+	count -= dsize;
-+	if (len >= count)
-+		len = count-1;
-+	memcpy(dest, src, len);
-+	dest[len] = 0;
-+	return res;
++#ifdef CONFIG_CMDLINE_BOOL
++	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
++		/* Append boot loader cmdline to builtin */
++		strlcat(command_line, " ", COMMAND_LINE_SIZE);
++		strlcat(command_line, boot_command_line, COMMAND_LINE_SIZE);
++	}
++#else
++	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
++#endif
 +}
 +
-+/* Don't include word-at-a-time code path in compressed kernel for simplicity */
-+size_t strscpy(char *dest, const char *src, size_t count)
-+{
-+	long res = 0;
-+
-+	if (count == 0)
-+		return -E2BIG;
-+
-+	if (count > INT_MAX) {
-+		warn("strscpy(): Count is too big");
-+		return -E2BIG;
-+	}
-+
-+	while (count) {
-+		char c;
-+
-+		c = src[res];
-+		dest[res] = c;
-+		if (!c)
-+			return res;
-+		res++;
-+		count--;
-+	}
-+
-+	/* Hit buffer length without finding a NUL; force NUL-termination. */
-+	if (res)
-+		dest[res-1] = '\0';
-+
-+	return -E2BIG;
-+}
-+
- void *memset(void *s, int c, size_t n)
- {
- 	int i;
-diff --git a/arch/x86/purgatory/purgatory.c b/arch/x86/purgatory/purgatory.c
-index 7558139920f8..65f0cedb65ae 100644
---- a/arch/x86/purgatory/purgatory.c
-+++ b/arch/x86/purgatory/purgatory.c
-@@ -57,3 +57,4 @@ void purgatory(void)
-  * arch/x86/boot/compressed/string.c
-  */
- void warn(const char *msg) {}
-+void error(char *m) {}
++#endif /* _ASM_X86_SETUP_CMDLINE_H */
 -- 
 2.35.1
 

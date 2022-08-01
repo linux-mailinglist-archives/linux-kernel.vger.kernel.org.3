@@ -2,83 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F11158742E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB49587436
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbiHAXAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S235331AbiHAXBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiHAXAI (ORCPT
+        with ESMTP id S235098AbiHAXAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:00:08 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A5630565
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:00:06 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id l3so9526963qkl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:00:05 -0700 (PDT)
+        Mon, 1 Aug 2022 19:00:38 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90A63D6;
+        Mon,  1 Aug 2022 16:00:35 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id z19so11834654plb.1;
+        Mon, 01 Aug 2022 16:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OxoisoQrWhay6j5BeHUyCyZC1z5Zrwne8z9v746EFLw=;
-        b=Td76G3pnsEYGodHWDyS8pYp3VYOSNNolQqHodrjcKrfGuCz09VlTpgXFTBJ88tTB5f
-         ooUAyTdMrZP0qqPKFs23MUPcBr/KK9rAy+yax8oE/jpzxL3HVqO4PUqEQMAp9Ef0U1ii
-         eysLCB+yXBbieXnwtHXatx31+diSavqEdO79TY3G+dzuIDL3YA8z5CLCt07mBy4AuMYh
-         G+yUHSggy2s8+1Z09ocdEQyAAuS/nZQCjPa2WRf8OJtCtiXr3uQH18iaUPtBHwuAJ/U6
-         1CopX5v6ID0F4wsjpl5MfehLuOjiW67kbhz3V1frJGh4jduTU6ARRbr12hIqyWPSm5jH
-         fizw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YL23/hoAvzZlOos/Qg6i+1wu9EdaWZsaI3xrm+6DO6Q=;
+        b=P8F59PpCHknKeqciDKWmGNWVwW1uJoxcuQU8SnYQWKlORzxTaETX9UO9+eRlyB93zD
+         7tWrE9Boh9AYaXJEbmmRn9omJRDbZUJYYein05vcRe/smG6Ha6UmrVe9lehRl3B8nDOD
+         pJx2okyyMTUFFJvoruJHTeQvU7YnlkdTi6uVsF74RspUHfS0VhCfai5Wlp749kN2shYd
+         yZLR+CjUHSrg7jj40gm/KCbKFmViyftS3xlFAHFeMYraE/BbY1XAQHSbON4nTvS5JARr
+         MxcftlrPZ443Rx/3enzUb1Lcf+hYONClDf/q78byMAi9+eiynsyxbZF3KqUd/rUA1U2n
+         Y4YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OxoisoQrWhay6j5BeHUyCyZC1z5Zrwne8z9v746EFLw=;
-        b=b7UPQQqQw2P4jcgl0E/FL2YHucGh7ZpuDhkbjduC4W1gQGXYTcsNSy9I5md1FKq9HK
-         AdMkBxfzCgZ4492N4renOEFqcIPgIaUBjYl2b14t/tIKOQKSqB6EqZb4VgV0oi3fAcpc
-         i9Dwfrws+5h01nw8C4cE6H1TDnh9hQdFndcd/6ooiZE2ZeLBwu9a7BLQ529b5Py8cF4X
-         aqMKltflK5LMmMaiK1SWc1S+3qJCwjwtANCeS+o7jq1TvVWDGoOQh4szFMAIjjCxgI1d
-         lWORCCnRqoNiKm1v4mwTs+HG6TZMQYhZhrfEhPTzVdh6QI96JQBauVYagYby4Dh/ZVWa
-         AAPw==
-X-Gm-Message-State: AJIora9NZpHttIplnHuB4Sdg/8NWNEtt7RF3PQ6pqOz64gD7UXZ8mHHv
-        Q0OskCySLok9t0o5ik5yEmPy+CuvTdZIV1IGcMLGNw==
-X-Google-Smtp-Source: AGRyM1t+1ZUxzKRxT13ygiAgkfs/P8HsXxLsVBttZ+GEHBI63/MsNU0EG66EW+Ys82VZgEJ9cw3nCIE6gryEGey2i9w=
-X-Received: by 2002:a05:620a:f0e:b0:6b5:48f6:91da with SMTP id
- v14-20020a05620a0f0e00b006b548f691damr13315101qkl.446.1659394804965; Mon, 01
- Aug 2022 16:00:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YL23/hoAvzZlOos/Qg6i+1wu9EdaWZsaI3xrm+6DO6Q=;
+        b=KvAsHRPLFeLwthtfcTnl3WF51ysr1NeklO+QlrR6Rk93AvQ3R87B/q6ROwtfFpvZTY
+         XxO1agDR3gy+XnMaEA7154D0VICQpODdLNDIT9EM6DndMl5qZs+im9wmgffk75k/WMZs
+         cEx5GzuYeCaSLa1RzHuiOHgmjtHJIxsWYG9A8eFgH8eSMmG/7YpahOF+FP8OUDwdvn4v
+         NGDu1PosqDehPL0qEom6IoVDDjcBlCiEr/lp9ThxS/w2Ai+YeIYGzciWsYnb4JLiF2ag
+         AM14TwTBBcnnrKpNPoV7/qoJjR93Bfx2iivR9Etb7sf5dYymdJQ81Tbz0u7ohdMRhQK8
+         FnMQ==
+X-Gm-Message-State: ACgBeo2Swh4mEeLtnLyo94QgNy/lrPDus50EOXSxKuCXzCIRQkNmlZ61
+        Xn90kXuXoyJe8t/gE1YU8TMnJHzvark=
+X-Google-Smtp-Source: AA6agR4BZy7lu7xerf1px822n7fdIKzcqc0wI6kmt2nBVxXflYkwF07DEqfBt7RN1eHJotIi5MghsQ==
+X-Received: by 2002:a17:902:ce84:b0:16d:9a19:570c with SMTP id f4-20020a170902ce8400b0016d9a19570cmr19064333plg.132.1659394834871;
+        Mon, 01 Aug 2022 16:00:34 -0700 (PDT)
+Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:f128])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902d18c00b0016d1d1c376fsm9972159plb.287.2022.08.01.16.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 16:00:34 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 16:00:30 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Subject: Re: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
+Message-ID: <20220801230030.w4rgzlncgdrcz7q2@macbook-pro-3.dhcp.thefacebook.com>
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <20220801180146.1157914-3-fred@cloudflare.com>
 MIME-Version: 1.0
-References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-9-haoluo@google.com>
- <CAEf4Bza0BzW1urrDghOw2oynftOQ6jP7_k4VvEq-UgyBHp6D8g@mail.gmail.com>
-In-Reply-To: <CAEf4Bza0BzW1urrDghOw2oynftOQ6jP7_k4VvEq-UgyBHp6D8g@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 1 Aug 2022 15:59:54 -0700
-Message-ID: <CA+khW7iQiK0nqtpyc4CRjLkoaL5-w_mPqJ19mn6+7tHDMz4gew@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 8/8] selftests/bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801180146.1157914-3-fred@cloudflare.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,48 +80,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 3:00 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Aug 1, 2022 at 10:54 AM Hao Luo <haoluo@google.com> wrote:
-> >
-[...]
-> > ---
-> >  .../prog_tests/cgroup_hierarchical_stats.c    | 358 ++++++++++++++++++
-> >  .../bpf/progs/cgroup_hierarchical_stats.c     | 218 +++++++++++
-> >  2 files changed, 576 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> >
->
-> [...]
->
-> > +extern void cgroup_rstat_updated(struct cgroup *cgrp, int cpu) __ksym;
-> > +extern void cgroup_rstat_flush(struct cgroup *cgrp) __ksym;
-> > +
-> > +static struct cgroup *task_memcg(struct task_struct *task)
-> > +{
-> > +       return task->cgroups->subsys[memory_cgrp_id]->cgroup;
->
-> memory_cgrp_id is kernel-defined internal enum which actually can
-> change based on kernel configuration (i.e., which cgroup subsystems
-> are enabled or not), is that right?
->
-> In practice you wouldn't hard-code it, it's better to use
-> bpf_core_enum_value() to capture enum's value in CO-RE-relocatable
-> way.
->
-> So it might be a good idea to demonstrate that here.
->
+On Mon, Aug 01, 2022 at 01:01:44PM -0500, Frederick Lawler wrote:
+> Users may want to audit calls to security_create_user_ns() and access
+> user space memory. Also create_user_ns() runs without
+> pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
+> for mandatory access control policies.
+> 
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-Makes sense. Will use bpf_core_enum_value. Thanks!
+We can take this set through bpf-next tree if it's easier.
 
-> > +}
-> > +
-> > +static uint64_t cgroup_id(struct cgroup *cgrp)
-> > +{
-> > +       return cgrp->kn->id;
-> > +}
-> > +
->
-> [...]
+Or if it goes through other trees:
+Acked-by: Alexei Starovoitov <ast@kernel.org>

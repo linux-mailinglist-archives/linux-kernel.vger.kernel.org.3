@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE64358628C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BF358628E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiHACZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S238815AbiHAC0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbiHACZ3 (ORCPT
+        with ESMTP id S233040AbiHAC0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:25:29 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F3B2AE6
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:25:26 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso10852829pjq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:25:26 -0700 (PDT)
+        Sun, 31 Jul 2022 22:26:11 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B89E62F7
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:26:10 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id e132so8513313pgc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=EVBoyRWZigkccBsvB4uh5xlF3s1rJUHBaQVZeXyiy68=;
-        b=ftsjD0vsSTdUSAtjICFc5VLtK0DuMYkrCipIK+3xEfRxuyD1Ft8rbDG6h7znNIGZEO
-         WoJEJhUexPRnABkElPICbvzjXRskN321/XNAg23r+B39jp80ez3MokGqdQQtJck9iZ4K
-         eDBDmVgYaewLCsen0tyj/lArm+ARV7m5VG2aIHI8EMdV0Uc3n+8AH0xeA/aGZgMCE5ZX
-         akdSIHJybpWhvQpgpUqrdqIkWcx8eSvPO/F/ZZlmP3zJwlAdQ0MD19iZhLapgnMd6/1J
-         jBibAJdg61wUlTdjjAhXqErmpEbjAkqwUYx7t/oPSCgh7YrB9JY3J2o5XKhWksFs0XNo
-         reFg==
+        bh=PGPoTv6GaSJYTcgwkkWLngBLJeUf2HiIpsOYTiH2aGU=;
+        b=SGBayujYFMPCcUgLpNiZr2DJqiC4+TXReE+bspZvK+ulRheGN/G4r7AV5jIsRdyyI3
+         K19mif/g/TiqROFkwTPk3YHXZmhU2Vn91Muk+88OC9Rgk3wKuf9XszUuXfLlHRWYDTy9
+         FI/DkwIkrIoA/noXJrIGRXJBx9QZ+hH1VqTt0OHyhAYjxtm1ETAaN3aEzyBtwOecQ0Hu
+         iaz9jd7WrK1xH/CxdSpkmaGmi4HKSjKtDE4XfCNwmqXjwh5covjK5aToXkrCy7v5DW5Y
+         bqEPbEY2gRmK54LCj3++fF0eQ9QVEiZsQDC7EtHFb8p+zrATNqO3jodIcmySTtA5IgQe
+         T47A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=EVBoyRWZigkccBsvB4uh5xlF3s1rJUHBaQVZeXyiy68=;
-        b=kos8E4X8J8MS2DXVB2SXvG1HLEdeAIuwErFjN/3QCz5vGHPdye2AArqIskZZBBvNNu
-         iimZK6+U6CYAC3hwUyjkjskZQDPDdnuZG5lAqFeBuN3cuwtPKRMP3pEFOqrUIceocv93
-         5JlpjLiWystk0m5Vd4oporlxI5iYg04U+XhSp1U7cPbAlXkF2cP/ojFW0heH9u2jSmfh
-         3e/sFDV0riBcyMb8DHesYmVGNu6tG4jrAkLLzQpwLyKL3CUYt3+LmXO2ILvmtREp/yht
-         SbbQW41zkC4Mbl5RaeIRGLbbfNqua8Kj//iyMJlm164hlY+4frx2zaLxYodig+HSWwiS
-         MCuA==
-X-Gm-Message-State: ACgBeo1NXNpVlLuRIhtvjYesqyrDf7bUEjO2Xr8a6ph8oUv2M00IamGz
-        nV7ilIvJd87uHu2C729ZE76R213lXS8=
-X-Google-Smtp-Source: AA6agR7aNyMg2Wo2Fkh9Ql/YgG/B+msUN4m1xsfJUklb5q1MqEExamxbZAzRou9ZYayAxJPO6Dikrw==
-X-Received: by 2002:a17:902:8502:b0:16c:c5c5:a198 with SMTP id bj2-20020a170902850200b0016cc5c5a198mr14528236plb.88.1659320725884;
-        Sun, 31 Jul 2022 19:25:25 -0700 (PDT)
+        bh=PGPoTv6GaSJYTcgwkkWLngBLJeUf2HiIpsOYTiH2aGU=;
+        b=oTgrYbBvwIz6NOLUw97RueHc5OXqJblcNcoHzR93Fjj0R9tmEzXkxttOH39fNE+tgh
+         FbXqK5m85t5pmg8qY4fxmZJO9HHIMvaGNK5NsUlvbledIGHkG6/e92aPosfk4Sn4FJ9g
+         XA4ZsMgba33vOVP20uOae8AruR+nTEr3vVu67RC8SS14mAVR102g2Z9OnTna/gczY6e4
+         s4fehglXgoGDJmanapSiQt9tcYTbK5kjIPBwy5T+jZ8HncERIiY0Qyphvxlp8daIg6P3
+         xW+95r9IZBjXJvY+Lna+IS6tUurVIuspidtoFC+Gc0Z16U7000SgOod0ZuhVmDO920v0
+         2T2g==
+X-Gm-Message-State: ACgBeo3tha4BlF2Kut05ipV6kcDuYUDnvFXmN+PRtTx3bCtTjLkVL/3Y
+        gwEqq2m2OhyLuku0O94cdOWD8EwSiMM=
+X-Google-Smtp-Source: AA6agR4BOEC0xZ6gi11S4Xf5izXQTd8uFKyCfgN3GZxsslVpi8gOnpm303h+0/wDALDLqOyNMoArPQ==
+X-Received: by 2002:a62:1808:0:b0:52d:9eeb:8853 with SMTP id 8-20020a621808000000b0052d9eeb8853mr193350pfy.45.1659320769935;
+        Sun, 31 Jul 2022 19:26:09 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090a950300b001f21a8f7f14sm7431098pjo.9.2022.07.31.19.25.24
+        by smtp.gmail.com with ESMTPSA id y38-20020a631826000000b0040caab35e5bsm6347339pgl.89.2022.07.31.19.26.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:25:25 -0700 (PDT)
+        Sun, 31 Jul 2022 19:26:09 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: ye.xingchen@zte.com.cn
 To:     linux-kernel@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org,
+Cc:     dri-devel@lists.freedesktop.org,
         ye xingchen <ye.xingchen@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] macintosh:adb:recordmcount:use !E in conditional statements
-Date:   Mon,  1 Aug 2022 02:25:21 +0000
-Message-Id: <20220801022521.1594464-1-ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] drm:amd:Remove the unused conditional statements
+Date:   Mon,  1 Aug 2022 02:26:06 +0000
+Message-Id: <20220801022606.1594526-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,27 +72,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Use !E to replace the type of x == 0. This change is just to 
-simplify the code, no actual functional changes.
+Conditional statements have no effect to next process.So remove it.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/macintosh/adb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
-index 1bbb9ca08d40..368ab25db234 100644
---- a/drivers/macintosh/adb.c
-+++ b/drivers/macintosh/adb.c
-@@ -673,7 +673,7 @@ static int adb_open(struct inode *inode, struct file *file)
- 		goto out;
- 	}
- 	state = kmalloc(sizeof(struct adbdev_state), GFP_KERNEL);
--	if (state == 0) {
-+	if (!state) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
+index 63861cdfb09f..84c66ce44da4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
+@@ -2132,8 +2132,6 @@ static bool dcn314_resource_construct(
+ 
+ 	if (dc->ctx->dce_environment == DCE_ENV_PRODUCTION_DRV)
+ 		dc->debug = debug_defaults_drv;
+-	else if (dc->ctx->dce_environment == DCE_ENV_FPGA_MAXIMUS)
+-		dc->debug = debug_defaults_diags;
+ 	else
+ 		dc->debug = debug_defaults_diags;
+ 	// Init the vm_helper
 -- 
 2.25.1

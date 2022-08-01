@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242D5586322
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2E058631F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238976AbiHADkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 23:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S238960AbiHADin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 23:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbiHADkM (ORCPT
+        with ESMTP id S235200AbiHADim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 23:40:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F78279;
-        Sun, 31 Jul 2022 20:40:10 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lx3jy1hffzmVSf;
-        Mon,  1 Aug 2022 11:38:14 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 11:40:08 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 11:40:08 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
-        <davem@davemloft.net>, <mhiramat@kernel.org>,
-        <peterz@infradead.org>, <mingo@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <chenzhongjin@huawei.com>
-Subject: [PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
-Date:   Mon, 1 Aug 2022 11:37:19 +0800
-Message-ID: <20220801033719.228248-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 31 Jul 2022 23:38:42 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC9A10FF0
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 20:38:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lx3kN1zBNz4x1S;
+        Mon,  1 Aug 2022 13:38:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659325116;
+        bh=a6rojnADEQz4YaXLUNDgDgnJraQcyq4lfTUzba9isA8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=nmtXVlTJeDidpXmsU/j+3ucJNxrzRKUeJQRe8pZVaJ0HQ51/vNAoFjPqblu3ThgPG
+         AZZH3vioqUl9prqZkTQMvrMJpvaC6FjO850uPILuAG7Hq386q2ZN3Ol9d5W/53Rt7j
+         5cy5hu0yse14NuKB4xfznYYIaysk0yciTDZbVzEzuMnYCEb/6uiWeZwIgoTs/gvl5Y
+         q4H9/tCS6DCD56ehJEw48UyxI/F8gIFrOfhDmEXWD7ep8zbGvW4anDaNdlsQ42+Bz4
+         6zphYwPGc9Zj9ZVPYM1nW8N/lnohYmLV3HzUJNuDzxfMNLhglzlWrQKw6sghhpvw19
+         JzyM3TvEJXtXA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Michael Ellerman <patch-notifications@ellerman.id.au>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/85xx: P2020: Add law_trgt_if property to PCIe
+ DT nodes
+In-Reply-To: <CAL_JsqJZ6s4qU+Yt4CCj3q-Fk_MKEddx5aLKu15NLnTbgMyRGA@mail.gmail.com>
+References: <20220504180822.29782-1-pali@kernel.org>
+ <165909977761.253830.2305727219055135050.b4-ty@ellerman.id.au>
+ <CAL_JsqJZ6s4qU+Yt4CCj3q-Fk_MKEddx5aLKu15NLnTbgMyRGA@mail.gmail.com>
+Date:   Mon, 01 Aug 2022 13:38:32 +1000
+Message-ID: <87k07sbpl3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel_text_address returns ftrace_trampoline, kprobe_insn_slot
-and bpf_text_address as kprobe legal address.
+Rob Herring <robh+dt@kernel.org> writes:
+> On Fri, Jul 29, 2022 at 7:17 AM Michael Ellerman
+> <patch-notifications@ellerman.id.au> wrote:
+>>
+>> On Wed, 4 May 2022 20:08:22 +0200, Pali Roh=C3=A1r wrote:
+>> > DT law_trgt_if property defines Local Access Window Target Interface.
+>> >
+>> > Local Access Window Target Interface is used for identifying individual
+>> > peripheral and mapping its memory to CPU. Interface id is defined by
+>> > hardware itself.
+>> >
+>> > U-Boot uses law_trgt_if DT property in PCIe nodes for configuring memo=
+ry
+>> > mapping of individual PCIe controllers.
+>> >
+>> > [...]
+>>
+>> Applied to powerpc/next.
+>>
+>> [1/1] powerpc/85xx: P2020: Add law_trgt_if property to PCIe DT nodes
+>>       https://git.kernel.org/powerpc/c/1f00b5ab992c122c51bc37662b3b4df59=
+63462f3
+>
+> Why? Minimally, it needs a vendor prefix and s/_/-/ as I commented.
 
-These text are removable and changeable without any notifier to
-kprobes. Probing on them can trigger some unexpected behavior[1].
+OK. I misread your "maybe that's fine" as approval.
 
-Considering that jump_label and static_call text are already be
-forbiden to probe, kernel_text_address should be replaced with
-core_kernel_text and is_module_text_address to check other text
-which is unsafe to kprobe.
+Pali can you send a fixup patch please?
 
-[1] https://lkml.org/lkml/2022/7/26/1148
-
-Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
-Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
-v2 -> v3:
-Remove '-next' carelessly added in title.
-
-v1 -> v2:
-Check core_kernel_text and is_module_text_address rather than
-only kprobe_insn.
-Also fix title and commit message for this. See old patch at [1].
----
- kernel/kprobes.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index f214f8c088ed..80697e5e03e4 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 	preempt_disable();
- 
- 	/* Ensure it is not in reserved area nor out of text */
--	if (!kernel_text_address((unsigned long) p->addr) ||
-+	if (!(core_kernel_text((unsigned long) p->addr) ||
-+	    is_module_text_address((unsigned long) p->addr)) ||
- 	    within_kprobe_blacklist((unsigned long) p->addr) ||
- 	    jump_label_text_reserved(p->addr, p->addr) ||
- 	    static_call_text_reserved(p->addr, p->addr) ||
--- 
-2.17.1
-
+cheers

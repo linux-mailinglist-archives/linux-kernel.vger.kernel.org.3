@@ -2,190 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F755873CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF065873CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiHAWOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S233646AbiHAWPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiHAWOG (ORCPT
+        with ESMTP id S234297AbiHAWPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:14:06 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31A343329
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:14:05 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso9180987otv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:14:05 -0700 (PDT)
+        Mon, 1 Aug 2022 18:15:13 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8CF267
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:15:12 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id c22so6410736wmr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=VO1h1WtFFizo349bKXWFQiRecuOqllov6Z6FSAAqqIw=;
-        b=jHo5LbtOOCc01OaoANW6nlyRvAMmVM8TmPWXASfWIMUGP5kGh2ChDIKiIuYEdDjap6
-         lAQLCTLEP2wQcmU4wprW7ackRdpNzMERTu7cIL9BCcYux5Z7ZLEPuKsfMDHJ98CTYXbY
-         KBpyKboVoKnl0/w/dJuHvPuNN/8BbBWOguo2GMDomS+vDP6JBoO/Cr79YQuXfljuq3Iv
-         Ra1zOyt8KrY3Efc35jAcL7PGLDBdZtgSoFhbTdCAob4qoTFvaDjAbaQR+jzTuVyvzz3A
-         UWGEtkdCQzW6otc1x6M5cGwFzBz+MRfkoDCA/ndfD4/c8TB7EXwZnX0QL9Z6AVfPfPy0
-         oj5g==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=eb3sWwf5IKoZQzOvkPaaI1IVQ2HjKkCnRKRFnGOH6+c=;
+        b=KkS9Qo1VRpPLirdZBp9VDugwC30AD643a3KZCtTbTTDZ2iNVscA62kiy0dD3sT/JA+
+         7ktfkcoT8qRyRUqJX6hl51/je061gXw/lQ5tQwM9iGVRFUd0gwFkUT3u8oFIo7TZtLjf
+         Hzp820QgI96oq4m8izWoEwEeHz+f1SPSAyggY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VO1h1WtFFizo349bKXWFQiRecuOqllov6Z6FSAAqqIw=;
-        b=oeaQIU673Tptfr0m59K8r0mZY7AKvCsqos2u2Q1S7rcnw44tzJ2bxxL0GNfUiuhJM4
-         LU9hJfpQGAt9dNvJc8C8Sp6hnih4CKMYcASxgoOvzbE0iqW57GAbfB+tJEo9oeNKGcQi
-         /hpjW22bRHkelnOQ42P5st4jkh5NOG6eL/IoT2QffQnZO2eV/RoEXxMP2HEg1m428BTP
-         IeTWKZJxbxN+b3W5v30h7oQn4V1yS9a0zENcjseYnUcf+0EzZHKTDE3y6BFSouuP47yj
-         wTQnNjRxavzShoVeYS5/KkUdl1dboOl9/pHWBVXssWvIDtF0pYzCPRQF6zYQMAlkh3nu
-         lsJA==
-X-Gm-Message-State: AJIora958gg17STgKTB48ZyqmytB9Q4Le4k7Y82dBkG3bkas34PnLZFO
-        47vJ3GaL3OtfW1nKIJNpSjdSY1x2TEq7ipah
-X-Google-Smtp-Source: AGRyM1s/O+lyyuFgWPXj14rNm0vftcU0ZJ62CmmaK96wA9KWz5RL7LS6GAmA3+cMOymbUDnuJLcUEw==
-X-Received: by 2002:a05:6830:6385:b0:61d:357:2077 with SMTP id ch5-20020a056830638500b0061d03572077mr6483436otb.359.1659392044909;
-        Mon, 01 Aug 2022 15:14:04 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.211])
-        by smtp.gmail.com with ESMTPSA id y17-20020a4ad651000000b0035eb4e5a6b6sm3000724oos.12.2022.08.01.15.14.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 15:14:04 -0700 (PDT)
-Message-ID: <c5b9cc02-c754-6d0e-996b-bf996eca36e6@linaro.org>
-Date:   Mon, 1 Aug 2022 17:14:03 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=eb3sWwf5IKoZQzOvkPaaI1IVQ2HjKkCnRKRFnGOH6+c=;
+        b=qJrFNbdmfmiGBT/faBkKD4/mswlZ+lmc1NzromNwUGaH6PqYq8QLt3Ou2+tu2UXxgm
+         P6S0vVaPyMqDvqMDDOwMywB9Sgl7effPaIMzZ2rFjL1rPJC1umRp1JEzW2bWhwGEv2/p
+         5fAqXRgXBVIdXn8505QM0wJmxJl9P9PQilmY7STZfReaVdhGZhQuQH9KcQac2uMvbslN
+         87Mde5/h4mZDbSJDRrp+IK90Xm/QNHHo2F7NPu0FrWHK35d8eOsMds4/8QFDFnWW5J+8
+         LaBrLE4sT8WEsmVzAm4wXDxhbR6d1VrdEm94TdXQ7eYLDlGdCHP2JlsvU/JKliDgWO0n
+         iOww==
+X-Gm-Message-State: AJIora/ft+BVd4314FiY8621Q2qQkzAdtD+Rk36SJiPBEiKQWJQVIEnx
+        idLpk2s4euqqbvaBR4WpR8SwB+FcYilkVMrVlWZphOVLMU8=
+X-Google-Smtp-Source: AGRyM1uQtrzzjUTojOce9U1oX4IsLxvEDUtIv9q2DYoehp2Cz8DNp/0ZgjDCAXuc2VNtxvwbNE2CcUP0j7S41z9MIjg=
+X-Received: by 2002:a05:600c:3b29:b0:3a3:1fa6:768 with SMTP id
+ m41-20020a05600c3b2900b003a31fa60768mr12078307wms.193.1659392110731; Mon, 01
+ Aug 2022 15:15:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5.10 00/65] 5.10.135-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220801114133.641770326@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202207301713.q4988FIe-lkp@intel.com> <20220801152612.3064269-1-jrosenth@chromium.org>
+In-Reply-To: <20220801152612.3064269-1-jrosenth@chromium.org>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Mon, 1 Aug 2022 15:14:58 -0700
+Message-ID: <CAODwPW-eQ-dYvfCGZ13tOzh4gPdLU9ZoFg9joWpRTX22OXa4Ow@mail.gmail.com>
+Subject: Re: [PATCH v5] firmware: google: Implement cbmem in sysfs driver
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 01/08/22 06:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.135 release.
-> There are 65 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.135-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.135-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 4f874431e68c8a1cf6c0d0c8353e404f9e2b6e02
-* git describe: v5.10.133-168-g4f874431e68c
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.133-168-g4f874431e68c
-
-## No test regressions (compared to v5.10.134)
-
-## No metric regressions (compared to v5.10.134)
-
-## No test fixes (compared to v5.10.134)
-
-## No metric fixes (compared to v5.10.134)
-
-## Test result summary
-total: 122810, pass: 108952, fail: 547, skip: 12594, xfail: 717
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 306 total, 306 passed, 0 failed
-* arm64: 62 total, 60 passed, 2 failed
-* i386: 52 total, 50 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 53 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Reviewed-by: Julius Werner <jwerner@chromium.org>

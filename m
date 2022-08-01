@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F6A586699
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ABC58669D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiHAIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S229798AbiHAIyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiHAIwB (ORCPT
+        with ESMTP id S229709AbiHAIyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:52:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008832F679;
-        Mon,  1 Aug 2022 01:52:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D6961029;
-        Mon,  1 Aug 2022 08:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A4CC433D7;
-        Mon,  1 Aug 2022 08:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659343920;
-        bh=UUSSE82nxVKqS27Phsx9M3lpwwky5qxW8QBahnQN8CY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wc1KsCtvcrXj53L9zyFkW5vKlphg/qkmDzlYmFQU+uLm3BoWShweV4g9AWySb24Ot
-         LJIFH71xc3n3qWK9zGuimNeNatfGpTgAnSuX2L8V9aaXo8AMEvJM1GK8elvH/JNLox
-         nYjFPmJYxL5drt+PSjL+sZiDC8fXX0+TXKhPxTxM=
-Date:   Mon, 1 Aug 2022 10:51:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tianchen Ding <dtcccc@linux.alibaba.com>
-Cc:     Sasha Levin <sashal@kernel.org>, Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 0/3] fix build error in bpf selftests
-Message-ID: <YueUJqQUUbr9n8wn@kroah.com>
-References: <20220801072916.29586-1-dtcccc@linux.alibaba.com>
+        Mon, 1 Aug 2022 04:54:04 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8FE3AE60;
+        Mon,  1 Aug 2022 01:54:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659344010; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=M0r0JCXgGx9pjQ/ydIjoSm+85Ug+MekmokoXdbPUmjwzAaZCuhBHOvH/y1PbTP4y47VYZICgIihZU/TXeSGmhjiPQYCnOwvjqFCKMurktVsbeJ6bD1GVr2P1VeHY6xeFxLksz6hQ9/c5g1V2H5FolCJeFj90C+zV43LcOvMQfHA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1659344010; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9KIdphyCYOH/4OA0LAvAgOPow7h5ET3rK7jn+N74c4E=; 
+        b=B4XOwHd4TerCqbXXjmKDYUCdC0TYlzBLpxCrl9PRCDy2n++lxb7/7PUBi2B2te2AEsfMCEzdj+0XeGz5DguoriRMOIYLBa5ty56cHV0u4R0oydM40nezBliRnaYeQt8hUkI1i4YheG9FTgz860fL1EhzuXpsPNNw/BoAtOVQLUs=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659344010;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9KIdphyCYOH/4OA0LAvAgOPow7h5ET3rK7jn+N74c4E=;
+        b=HWPQpzixnc+vQQ4haylmY3BafaioQvZvIoH1nf2bIU7rkyKLDyGlAFSNZdVGTBjU
+        oJAVJQvrBPHE62jnYyVfyw5qb95aKnrePHhtXFhMYlCIYiSJU9KmVX3MWMsGRKka/OA
+        yLoLOK9m6+3Lik5jScYafBn5XPeafkVqgzBTbNwE=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1659343997151238.53429778420264; Mon, 1 Aug 2022 14:23:17 +0530 (IST)
+Date:   Mon, 01 Aug 2022 14:23:17 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     "Dipanjan Das" <mail.dipanjan.das@gmail.com>,
+        "David Howells" <dhowells@redhat.com>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "linux-security-modules" <linux-security-module@vger.kernel.org>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+c70d87ac1d001f29a058" 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
+        "Marius Fleischer" <fleischermarius@googlemail.com>,
+        "Priyanka Bose" <its.priyanka.bose@gmail.com>
+Message-ID: <182589c08c8.3f58696e264303.1478535037206263797@siddh.me>
+In-Reply-To: <YueTG6Nla1pMcW/1@kroah.com>
+References: <1822b768504.1d4e377e236061.5518350412857967240@siddh.me>
+ <20220723135447.199557-1-code@siddh.me>
+ <Ytv/4Tljvlt0PJ2r@kroah.com>
+ <3558070.1658933200@warthog.procyon.org.uk>
+ <182407602ce.190e58816827.7904364186178466266@siddh.me>
+ <20220731181131.GB3569921@berlinger>
+ <1825594fdb6.52eb2a02235647.5426665702277259900@siddh.me> <YueTG6Nla1pMcW/1@kroah.com>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
+ watch_queue
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801072916.29586-1-dtcccc@linux.alibaba.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 03:29:13PM +0800, Tianchen Ding wrote:
-> We found a compile error when building tools/testing/selftests/bpf/ on 5.10.y.
-> tools/testing/selftests/bpf/prog_tests/sk_lookup.c:1092:15: error: 'struct bpf_sk_lookup' has no member named 'cookie'
->  1092 |  if (CHECK(ctx.cookie == 0, "ctx.cookie", "no socket selected\n"))
->       |               ^
+On Mon, 01 Aug 2022 14:17:23 +0530  Greg KH <gregkh@linuxfoundation.org> wrote:
+> There are no active supported kernels other than the ones listed on
+> kernel.org, so 5.8 doesn't make much sense here, only 5.10 and 5.15 and
+> 5.18 at the moment.
 > 
-> To fix this bug, this patchset backports three patches from upstream:
-> https://lore.kernel.org/bpf/20210303101816.36774-1-lmb@cloudflare.com/
+> thanks,
 > 
-> Patch 1 and 2 are necessary for bpf selftests build pass on 5.10.y.
-> Patch 3 does not impact building stage, but can avoid a test case
-> failure (by skipping it).
+> greg k-h
 
-Now queued up, thanks.
+Okay, thanks for correcting me.
 
-greg k-h
+-- Siddh

@@ -2,80 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14EB586B82
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DC4586B89
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiHANBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S235009AbiHANCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiHANBo (ORCPT
+        with ESMTP id S231950AbiHANCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:01:44 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFAB65F7;
-        Mon,  1 Aug 2022 06:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659358869; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=M2npo+8rvf2mQf9u6Grt4ErfFGR/2ZHMYR8rCOrdB8348R+FuXI2qwKOqsrH5wg81pChgmd/yUZIjgpggaEl21qJDPaDemkWPD6NQQBMbliqzlrZia9SUY66zNTmiWd/zJ09E7HFcZNQ8W5XxP/t0FeB85/MTngZViQetdsZJMs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659358869; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=SQ0v85mLbFdTasT7Xfcj7jIsYFQii/2HWb8VZtzXjyM=; 
-        b=Eoc/U40ZXnlz6FMuqeRxVjZqLbkWIBczvDc/QkvA2ACTtXyKk2bQt/keZlOgcG48LisE9Llyry9OIBpmUGQqr7B0NRtkZ55x7BmM+XgOpKK2kJAo23ASSF6ZAL3p2VKgBYq/Ip6+HSP8GPtPmIdakiiApnvcN1o9l1YDgu+mvwc=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659358869;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=SQ0v85mLbFdTasT7Xfcj7jIsYFQii/2HWb8VZtzXjyM=;
-        b=NJZfe/IX8tF8KFHUNwwJfRldlrpua714VbMxQqn+B8og+4rGW33ux2jDIe0di8xB
-        C7ORSZ/7CR5NjkF8SzC0O13KI1CxqZAMMjxofVBal/jSLxO0fBaFBspKwFBkOUNnS7v
-        Mv2zm0Tn9mqyuDyd6t8eMK0QVHEnzN8DSY9iVMdE=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1659358858473203.14224248901678; Mon, 1 Aug 2022 18:30:58 +0530 (IST)
-Date:   Mon, 01 Aug 2022 18:30:58 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     "Dipanjan Das" <mail.dipanjan.das@gmail.com>,
-        "syzbot+c70d87ac1d001f29a058" 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-security-modules" <linux-security-module@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Message-ID: <182597eccd3.14cac6a4293987.1730526835854998440@siddh.me>
-In-Reply-To: <182597c78f6.70a93066293735.4741894763116073008@siddh.me>
-References: <20220728155121.12145-1-code@siddh.me>
- <18258c1d370.6c4bec7a269297.4170944235031209431@siddh.me> <Yuepw21SyLbWt9F+@kroah.com> <182597c78f6.70a93066293735.4741894763116073008@siddh.me>
-Subject: Re: [PATCH v3] kernel/watch_queue: Make pipe NULL while clearing
- watch_queue
+        Mon, 1 Aug 2022 09:02:41 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A34205D6;
+        Mon,  1 Aug 2022 06:02:38 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 9E84F5FD18;
+        Mon,  1 Aug 2022 16:02:35 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1659358955;
+        bh=ltfa8vCGViX0X05znzT7k8Dpx3ILLRGYQ6OuPvZNc/E=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=GPi38vX0eAJ70L+h70wKbHM+TChQmTTkwVdr6y0h9GSlZtBiAMPwzMZUfpwYSIT/u
+         rc5Qa/qS/9Xm2bkS18z+1YRaeZ1gEXuMvKWjyKyafRwtffokj7FFcBbFHikRqurREA
+         dFiapTaSnIgABvTPFZ6vY0/SEi+9b6QWCwOLiN6dk6lD83jXgOe/ltnRu+6rofxKlg
+         slCTtJl28I3x03pZg7Oh22F4BTvSvZOU8PDV9IDFC6kRxc38qG7prCAb8EkQx3ms/H
+         Ii2P66M/NINl9PR48rVasvExku0tMskC+zvG4w4Bwr0405egMS7sUOOPDuMAwA8gFr
+         8a22AsCfyPTVg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Mon,  1 Aug 2022 16:02:31 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     Jonathan Cameron <jic23@kernel.org>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] units: complement the set of Hz units
+Thread-Topic: [PATCH v2 1/3] units: complement the set of Hz units
+Thread-Index: AQHYo2/exMPEjcXGek6GXlZKNuELJ62VcaEAgAK6RYCAAajVgA==
+Date:   Mon, 1 Aug 2022 13:01:40 +0000
+Message-ID: <20220801130227.htocnkpkwiscpxur@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220729172332.19118-1-ddrokosov@sberdevices.ru>
+ <20220729172332.19118-2-ddrokosov@sberdevices.ru>
+ <CAHp75VfGEPVBWbZ16widVCjgCnYAoUurjDj+-2pgC2oBQR12ZQ@mail.gmail.com>
+ <20220731124140.777ddd05@jic23-huawei>
+In-Reply-To: <20220731124140.777ddd05@jic23-huawei>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D0C9721DA8A8F448B1C2C7C296701CEA@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/01 10:27:00 #20025860
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 Aug 2022 18:28:25 +0530  Siddh Raman Pant <code@siddh.me> wrote:
-> I now tried the 5.10.y branch of stable (which has v5.10.134), but the
-> reproducer isn't triggering the bug for me. 
+Hello Jonathan,
 
-By this, I mean without the patches. I should have been clear.
+Thank you for the review. Please find my comments below.
 
-Thanks,
-Siddh
+On Sun, Jul 31, 2022 at 12:41:55PM +0100, Jonathan Cameron wrote:
+> On Fri, 29 Jul 2022 20:02:42 +0200
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>=20
+> > On Fri, Jul 29, 2022 at 7:23 PM Dmitry Rokosov <DDRokosov@sberdevices.r=
+u> wrote:
+> > >
+> > > Currently, Hz units do not have milli, micro and nano Hz coefficients=
+.
+> > > Some drivers (IIO especially) use their analogues to calculate
+> > > appropriate Hz values. This patch includes them to units.h definition=
+s,
+> > > so they can be used from different kernel places. =20
+> >=20
+> > ...
+> >=20
+> > > +#define NHZ_PER_HZ             1000000000UL
+> > > +#define UHZ_PER_HZ             1000000UL
+> > > +#define MILLIHZ_PER_HZ         1000UL =20
+> >=20
+> > Oh, but then a bit of consistency?
+> >=20
+> > MICRO
+> > NANO
+> Tricky given existing items, but I agree we shouldn't make
+> it worse.
+
+Okay, agree. I'll change them to MILLI/MICRO/NANO in the next version.
+
+>=20
+> However, I'm not 100% sold on why we need these conversions relative to H=
+Z.
+> What's wrong with using MILLI / NANO etc as already defined?  I guess
+> there is a 'documentation' like effect of making it clear these are frequ=
+ency
+> unit conversions, but I don't think it makes sense to add it for all the =
+other
+> types of unit, so why is Hz special?
+
+Yes, you are totally right, it has some 'documenation' effect from
+a physics theory perspective. Kernel already has some units for HZ, so I
+think it's a bad idea when sometimes we have to use *HZ for KILO and
+MEGA units, but sometimes we have to use abstract MILLI/MICRO/NANO
+coefficients. In other words, I suppose the right way is to choose one
+option from the following list:
+   - remove all *HZ units and use abstract units instead
+   - complement *HZ units and use them
+
+In my opinion, the second one is better, because *HZ units are good
+opposite to *SEC units (from time64.h).
+
+>=20
+> I'm not sure why we have the existing ones for HZ with the
+> exception of KHZ_PER_MEGAHZ.
+>=20
+> Jonathan
+>=20
+> >=20
+>=20
+
+--=20
+Thank you,
+Dmitry=

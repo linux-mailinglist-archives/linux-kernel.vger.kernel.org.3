@@ -2,178 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD795863C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 07:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC575863C5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 07:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbiHAFdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 01:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
+        id S239515AbiHAFfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 01:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiHAFdo (ORCPT
+        with ESMTP id S229681AbiHAFfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 01:33:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4899FE3
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:33:43 -0700 (PDT)
+        Mon, 1 Aug 2022 01:35:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A7F658C
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659332023; x=1690868023;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=6D3wr+/VNs174wNAHGv2JVNTAzL/t7bNU9UZbvU6p4o=;
-  b=ILBnLpx0fyDzNfpsBVybEkTxEqfcmHntfjsB/Kt0TZTNzKpUnV5GZYhn
-   XEvz0rcARaZ41H7z2b5jiiAl2Hytao0ZYA8nOtov65gneyLktnJVC1gwE
-   PRGyc1R+7t+P7CLf+ia3YXw5doQxHUFILZVHQQCFJjo/cpYct4G4jT+Hs
-   1SEKt/JyIcBUJfTAQH119x+NJvaZUfnPDZwrKGnE9j/C1aH75EOg/sW4B
-   DrNV7a/iC+aMLCVyJXwDnnDY9UIrMa12RZIeaA/xOJhc78vRrC91sJKZ6
-   c/On3nDQ/fZcjDONEvtHrCgXz94Vkyu0mRW4sdHUX/f1ccknrrnP6BfxN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350774130"
+  t=1659332118; x=1690868118;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1/iKmCkIFOQ0dYoXXS8AZYAS8nYULrvaRFqzGxjODqM=;
+  b=d43ZV4yVlzjWWRdlscqd4tZWKJOzip1OdKn6N3udIfEdVZ4GjUjnKPTW
+   hQqMVZJGe3pmrc/8nDXwkvV1MHs8b0nOBRVbJ6XKVqVKH/xP/b4GY+CZs
+   cMG0Br55iYNJyVZ/eNvmP6DXxddjsfXVHRlor9aVVPIwBtPoVxz/qqG/d
+   0ryzRtiVAQ3yTlNUc4Kytd7YBiqNKSEf9oGZ4DCOUjkmUC+tNhbZjV5dH
+   u2NGHiw0h2zgCimCiqP3RVUsNlbliLRjME9Wx0i2ejKv9MPNKmVDyPyqz
+   9JQ/Kv9WMxopopxl4H7P45zC7vZw6sjPSvs4jgxc+hN8bUwaRQBXzX9Pr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="375369999"
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="350774130"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 22:33:43 -0700
+   d="scan'208";a="375369999"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 22:35:17 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="577656386"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 22:33:40 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <andi.kleen@intel.com>
-Subject: Re: [PATCH RFC 0/4] mm: Remember young bit for migration entries
-References: <20220729014041.21292-1-peterx@redhat.com>
-Date:   Mon, 01 Aug 2022 13:33:28 +0800
-In-Reply-To: <20220729014041.21292-1-peterx@redhat.com> (Peter Xu's message of
-        "Thu, 28 Jul 2022 21:40:37 -0400")
-Message-ID: <87pmhkjzo7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="929423711"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2022 22:35:16 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIO5D-000Eop-2D;
+        Mon, 01 Aug 2022 05:35:15 +0000
+Date:   Mon, 1 Aug 2022 13:35:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [thermal:thermal/linux-next 68/68]
+ drivers/thermal/rcar_thermal.c:532:49: error: passing argument 4 of
+ 'devm_thermal_of_zone_register' from incompatible pointer type
+Message-ID: <202208011342.io34XfQd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Xu <peterx@redhat.com> writes:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git thermal/linux-next
+head:   f0105ae57fe7c05fb82b7c0a6416a34051d29a34
+commit: f0105ae57fe7c05fb82b7c0a6416a34051d29a34 [68/68] thermal/of: Remove old OF code
+config: microblaze-randconfig-s033-20220731 (https://download.01.org/0day-ci/archive/20220801/202208011342.io34XfQd-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?id=f0105ae57fe7c05fb82b7c0a6416a34051d29a34
+        git remote add thermal git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+        git fetch --no-tags thermal thermal/linux-next
+        git checkout f0105ae57fe7c05fb82b7c0a6416a34051d29a34
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/thermal/
 
-> [Marking as RFC; only x86 is supported for now, plan to add a few more
->  archs when there's a formal version]
->
-> Problem
-> =======
->
-> When migrate a page, right now we always mark the migrated page as old.
-> The reason could be that we don't really know whether the page is hot or
-> cold, so we could have taken it a default negative assuming that's safer.
->
-> However that could lead to at least two problems:
->
->   (1) We lost the real hot/cold information while we could have persisted.
->       That information shouldn't change even if the backing page is changed
->       after the migration,
->
->   (2) There can be always extra overhead on the immediate next access to
->       any migrated page, because hardware MMU needs cycles to set the young
->       bit again (as long as the MMU supports).
->
-> Many of the recent upstream works showed that (2) is not something trivial
-> and actually very measurable.  In my test case, reading 1G chunk of memory
-> - jumping in page size intervals - could take 99ms just because of the
-> extra setting on the young bit on a generic x86_64 system, comparing to 4ms
-> if young set.
->
-> This issue is originally reported by Andrea Arcangeli.
->
-> Solution
-> ========
->
-> To solve this problem, this patchset tries to remember the young bit in the
-> migration entries and carry it over when recovering the ptes.
->
-> We have the chance to do so because in many systems the swap offset is not
-> really fully used.  Migration entries use swp offset to store PFN only,
-> while the PFN is normally not as large as swp offset and normally smaller.
-> It means we do have some free bits in swp offset that we can use to store
-> things like young, and that's how this series tried to approach this
-> problem.
->
-> One tricky thing here is even though we're embedding the information into
-> swap entry which seems to be a very generic data structure, the number of
-> bits that are free is still arch dependent.  Not only because the size of
-> swp_entry_t differs, but also due to the different layouts of swap ptes on
-> different archs.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If my understanding were correct, max_swapfile_size() provides a
-mechanism to identify the available bits with swp_entry_t and swap PTE
-considered.  We may take advantage of that?
+All errors (new ones prefixed by >>):
 
-And according to commit 377eeaa8e11f ("x86/speculation/l1tf: Limit swap
-file size to MAX_PA/2"), the highest bit of swap offset needs to be 0 if
-L1TF mitigation is enabled.
+   In file included from drivers/thermal/rcar_thermal.c:20:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/rcar_thermal.c: In function 'rcar_thermal_probe':
+>> drivers/thermal/rcar_thermal.c:532:49: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     532 |                                                 &rcar_thermal_zone_of_ops);
+         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                 |
+         |                                                 struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/rcar_gen3_thermal.c:18:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/rcar_gen3_thermal.c: In function 'rcar_gen3_thermal_probe':
+>> drivers/thermal/rcar_gen3_thermal.c:508:54: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     508 |                                                      &rcar_gen3_tz_of_ops);
+         |                                                      ^~~~~~~~~~~~~~~~~~~~
+         |                                                      |
+         |                                                      struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/armada_thermal.c:16:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/armada_thermal.c: In function 'armada_thermal_probe':
+>> drivers/thermal/armada_thermal.c:933:52: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     933 |                                                    &of_ops);
+         |                                                    ^~~~~~~
+         |                                                    |
+         |                                                    const struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'const struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/max77620_thermal.c:19:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/max77620_thermal.c: In function 'max77620_thermal_probe':
+>> drivers/thermal/max77620_thermal.c:118:41: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     118 |                                 mtherm, &max77620_thermal_ops);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~
+         |                                         |
+         |                                         const struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'const struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/thermal_core.h:13,
+                    from drivers/thermal/hisi_thermal.c:28:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/hisi_thermal.c: In function 'hisi_thermal_register_sensor':
+>> drivers/thermal/hisi_thermal.c:497:53: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     497 |                                                     &hisi_of_thermal_ops);
+         |                                                     ^~~~~~~~~~~~~~~~~~~~
+         |                                                     |
+         |                                                     const struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'const struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/broadcom/ns-thermal.c:9:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/broadcom/ns-thermal.c: In function 'ns_thermal_probe':
+>> drivers/thermal/broadcom/ns-thermal.c:57:44: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+      57 |                                            &ns_thermal_ops);
+         |                                            ^~~~~~~~~~~~~~~
+         |                                            |
+         |                                            const struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'const struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from drivers/thermal/broadcom/sr-thermal.c:9:
+   include/linux/thermal.h:319:73: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     319 |                                                      void *data, struct thermal_sensor_ops *ops)
+         |                                                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:326:78: warning: 'struct thermal_sensor_ops' declared inside parameter list will not be visible outside of this definition or declaration
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:335:20: error: redefinition of 'thermal_of_zone_unregister'
+     335 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:331:20: note: previous definition of 'thermal_of_zone_unregister' with type 'void(struct thermal_zone_device *)'
+     331 | static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:343:20: error: redefinition of 'devm_thermal_of_zone_unregister'
+     343 | static inline void devm_thermal_of_zone_unregister(struct device *dev,
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/thermal.h:339:20: note: previous definition of 'devm_thermal_of_zone_unregister' with type 'void(struct device *, struct thermal_zone_device *)'
+     339 | static inline void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/broadcom/sr-thermal.c: In function 'sr_thermal_probe':
+>> drivers/thermal/broadcom/sr-thermal.c:88:52: error: passing argument 4 of 'devm_thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+      88 |                                                    &sr_tz_ops);
+         |                                                    ^~~~~~~~~~
+         |                                                    |
+         |                                                    const struct thermal_zone_device_ops *
+   include/linux/thermal.h:326:98: note: expected 'struct thermal_sensor_ops *' but argument is of type 'const struct thermal_zone_device_ops *'
+     326 |                                                           void *data, struct thermal_sensor_ops *ops)
+         |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
 
-Cced Andi for confirmation.
 
-Best Regards,
-Huang, Ying
+vim +/devm_thermal_of_zone_register +532 drivers/thermal/rcar_thermal.c
 
-> Here, this series requires specific arch to define an extra macro called
-> __ARCH_SWP_OFFSET_BITS represents the size of swp offset.  With this
-> information, the swap logic can know whether there's extra bits to use,
-> then it'll remember the young bits when possible.  By default, it'll keep
-> the old behavior of keeping all migrated pages cold.
->
-> Tests
-> =====
->
-> After the patchset applied, the immediate read access test [1] of above 1G
-> chunk after migration can shrink from 99ms to 4ms.  The test is done by
-> moving 1G pages from node 0->1->0 then read it in page size jumps.
->
-> Currently __ARCH_SWP_OFFSET_BITS is only defined on x86 for this series and
-> only tested on x86_64 with Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz.
->
-> Patch Layout
-> ============
->
-> Patch 1:  Add swp_offset_pfn() and apply to all pfn swap entries, we should
->           also stop treating swp_offset() as PFN anymore because it can
->           contain more information starting from next patch.
-> Patch 2:  The core patch to remember young bit in swap offsets.
-> Patch 3:  A cleanup for x86 32 bits pgtable.h.
-> Patch 4:  Define __ARCH_SWP_OFFSET_BITS on x86, enable young bit for migration
->
-> Please review, thanks.
->
-> [1] https://github.com/xzpeter/clibs/blob/master/misc/swap-young.c
->
-> Peter Xu (4):
->   mm/swap: Add swp_offset_pfn() to fetch PFN from swap entry
->   mm: Remember young bit for page migrations
->   mm/x86: Use SWP_TYPE_BITS in 3-level swap macros
->   mm/x86: Define __ARCH_SWP_OFFSET_BITS
->
->  arch/arm64/mm/hugetlbpage.c           |  2 +-
->  arch/x86/include/asm/pgtable-2level.h |  6 ++
->  arch/x86/include/asm/pgtable-3level.h | 15 +++--
->  arch/x86/include/asm/pgtable_64.h     |  5 ++
->  include/linux/swapops.h               | 85 +++++++++++++++++++++++++--
->  mm/hmm.c                              |  2 +-
->  mm/huge_memory.c                      | 10 +++-
->  mm/memory-failure.c                   |  2 +-
->  mm/migrate.c                          |  4 +-
->  mm/migrate_device.c                   |  2 +
->  mm/page_vma_mapped.c                  |  6 +-
->  mm/rmap.c                             |  3 +-
->  12 files changed, 122 insertions(+), 20 deletions(-)
+84f0e490bee068 Kuninori Morimoto     2015-11-10  435  
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  436  static int rcar_thermal_probe(struct platform_device *pdev)
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  437  {
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  438  	struct rcar_thermal_common *common;
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  439  	struct rcar_thermal_priv *priv;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  440  	struct device *dev = &pdev->dev;
+3277e022a1c31f Lad Prabhakar         2022-01-10  441  	struct resource *res;
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  442  	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  443  	int mres = 0;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  444  	int i;
+fb84d9907f0ff0 Devendra Naga         2013-03-04  445  	int ret = -ENODEV;
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  446  	int idle = IDLE_INTERVAL;
+11313746547015 Yoshihiro Shimoda     2015-01-07  447  	u32 enr_bits = 0;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  448  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  449  	common = devm_kzalloc(dev, sizeof(*common), GFP_KERNEL);
+b0a60d88d60b92 Jingoo Han            2014-05-07  450  	if (!common)
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  451  		return -ENOMEM;
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  452  
+84f0e490bee068 Kuninori Morimoto     2015-11-10  453  	platform_set_drvdata(pdev, common);
+84f0e490bee068 Kuninori Morimoto     2015-11-10  454  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  455  	INIT_LIST_HEAD(&common->head);
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  456  	spin_lock_init(&common->lock);
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  457  	common->dev = dev;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  458  
+51d45d25948bdf Kuninori Morimoto     2013-03-26  459  	pm_runtime_enable(dev);
+51d45d25948bdf Kuninori Morimoto     2013-03-26  460  	pm_runtime_get_sync(dev);
+51d45d25948bdf Kuninori Morimoto     2013-03-26  461  
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  462  	for (i = 0; i < chip->nirqs; i++) {
+3277e022a1c31f Lad Prabhakar         2022-01-10  463  		int irq;
+3277e022a1c31f Lad Prabhakar         2022-01-10  464  
+3277e022a1c31f Lad Prabhakar         2022-01-10  465  		ret = platform_get_irq_optional(pdev, i);
+3277e022a1c31f Lad Prabhakar         2022-01-10  466  		if (ret < 0 && ret != -ENXIO)
+3277e022a1c31f Lad Prabhakar         2022-01-10  467  			goto error_unregister;
+3277e022a1c31f Lad Prabhakar         2022-01-10  468  		if (ret > 0)
+3277e022a1c31f Lad Prabhakar         2022-01-10  469  			irq = ret;
+3277e022a1c31f Lad Prabhakar         2022-01-10  470  		else
+3277e022a1c31f Lad Prabhakar         2022-01-10  471  			break;
+3277e022a1c31f Lad Prabhakar         2022-01-10  472  
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  473  		if (!common->base) {
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  474  			/*
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  475  			 * platform has IRQ support.
+ee853addd9fedb Geert Uytterhoeven    2015-01-12  476  			 * Then, driver uses common registers
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  477  			 * rcar_has_irq_support() will be enabled
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  478  			 */
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  479  			res = platform_get_resource(pdev, IORESOURCE_MEM,
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  480  						    mres++);
+5095526faf3847 Sachin Kamat          2013-03-04  481  			common->base = devm_ioremap_resource(dev, res);
+39056e8a989ef5 Niklas Söderlund      2020-03-10  482  			if (IS_ERR(common->base)) {
+39056e8a989ef5 Niklas Söderlund      2020-03-10  483  				ret = PTR_ERR(common->base);
+39056e8a989ef5 Niklas Söderlund      2020-03-10  484  				goto error_unregister;
+39056e8a989ef5 Niklas Söderlund      2020-03-10  485  			}
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  486  
+6fe495e0f80ebe Geert Uytterhoeven    2014-01-07  487  			idle = 0; /* polling delay is not needed */
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  488  		}
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  489  
+3277e022a1c31f Lad Prabhakar         2022-01-10  490  		ret = devm_request_irq(dev, irq, rcar_thermal_irq,
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  491  				       IRQF_SHARED, dev_name(dev), common);
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  492  		if (ret) {
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  493  			dev_err(dev, "irq request failed\n ");
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  494  			goto error_unregister;
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  495  		}
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  496  
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  497  		/* update ENR bits */
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  498  		if (chip->irq_per_ch)
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  499  			enr_bits |= 1 << i;
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  500  	}
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  501  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  502  	for (i = 0;; i++) {
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  503  		res = platform_get_resource(pdev, IORESOURCE_MEM, mres++);
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  504  		if (!res)
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  505  			break;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  506  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  507  		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  508  		if (!priv) {
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  509  			ret = -ENOMEM;
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  510  			goto error_unregister;
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  511  		}
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  512  
+5095526faf3847 Sachin Kamat          2013-03-04  513  		priv->base = devm_ioremap_resource(dev, res);
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  514  		if (IS_ERR(priv->base)) {
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  515  			ret = PTR_ERR(priv->base);
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  516  			goto error_unregister;
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  517  		}
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  518  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  519  		priv->common = common;
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  520  		priv->id = i;
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  521  		priv->chip = chip;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  522  		mutex_init(&priv->lock);
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  523  		INIT_LIST_HEAD(&priv->list);
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  524  		INIT_DELAYED_WORK(&priv->work, rcar_thermal_work);
+a1ade5653804b8 Kuninori Morimoto     2015-12-15  525  		ret = rcar_thermal_update_temp(priv);
+a1ade5653804b8 Kuninori Morimoto     2015-12-15  526  		if (ret < 0)
+a1ade5653804b8 Kuninori Morimoto     2015-12-15  527  			goto error_unregister;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  528  
+392573b73ee337 Geert Uytterhoeven    2020-08-19  529  		if (chip->use_of_thermal) {
+b5177e394349c6 Daniel Lezcano        2022-07-27  530  			priv->zone = devm_thermal_of_zone_register(
+8b477ea56383dc Kuninori Morimoto     2016-01-28  531  						dev, i, priv,
+8b477ea56383dc Kuninori Morimoto     2016-01-28 @532  						&rcar_thermal_zone_of_ops);
+392573b73ee337 Geert Uytterhoeven    2020-08-19  533  		} else {
+8b477ea56383dc Kuninori Morimoto     2016-01-28  534  			priv->zone = thermal_zone_device_register(
+8b477ea56383dc Kuninori Morimoto     2016-01-28  535  						"rcar_thermal",
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  536  						1, 0, priv,
+d2a73e225d113f Kuninori Morimoto     2012-12-02  537  						&rcar_thermal_zone_ops, NULL, 0,
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  538  						idle);
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  539  
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  540  			ret = thermal_zone_device_enable(priv->zone);
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  541  			if (ret) {
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  542  				thermal_zone_device_unregister(priv->zone);
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  543  				priv->zone = ERR_PTR(ret);
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  544  			}
+bbcf90c0646ac7 Andrzej Pietrasiewicz 2020-06-29  545  		}
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  546  		if (IS_ERR(priv->zone)) {
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  547  			dev_err(dev, "can't register thermal zone\n");
+fb84d9907f0ff0 Devendra Naga         2013-03-04  548  			ret = PTR_ERR(priv->zone);
+87260d3f7aecba Dirk Behme            2016-04-21  549  			priv->zone = NULL;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  550  			goto error_unregister;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  551  		}
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  552  
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  553  		if (chip->use_of_thermal) {
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  554  			/*
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  555  			 * thermal_zone doesn't enable hwmon as default,
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  556  			 * but, enable it here to keep compatible
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  557  			 */
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  558  			priv->zone->tzp->no_hwmon = false;
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  559  			ret = thermal_add_hwmon_sysfs(priv->zone);
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  560  			if (ret)
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  561  				goto error_unregister;
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  562  		}
+64a411e8042ed0 Kuninori Morimoto     2016-07-19  563  
+e0a5172e9eec7f Kuninori Morimoto     2013-01-31  564  		rcar_thermal_irq_enable(priv);
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  565  
+1dc20828e674a7 Kuninori Morimoto     2013-03-26  566  		list_move_tail(&priv->list, &common->head);
+11313746547015 Yoshihiro Shimoda     2015-01-07  567  
+11313746547015 Yoshihiro Shimoda     2015-01-07  568  		/* update ENR bits */
+1969d9dc2079e4 Yoshihiro Kaneko      2018-05-20  569  		if (!chip->irq_per_ch)
+11313746547015 Yoshihiro Shimoda     2015-01-07  570  			enr_bits |= 3 << (i * 8);
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  571  	}
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  572  
+542cdf40680494 Simon Horman          2018-07-24  573  	if (common->base && enr_bits)
+11313746547015 Yoshihiro Shimoda     2015-01-07  574  		rcar_thermal_common_write(common, ENR, enr_bits);
+11313746547015 Yoshihiro Shimoda     2015-01-07  575  
+3db46c939677e3 Laurent Pinchart      2013-05-14  576  	dev_info(dev, "%d sensor probed\n", i);
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  577  
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  578  	return 0;
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  579  
+3676d1dd3d3069 Kuninori Morimoto     2013-01-31  580  error_unregister:
+84f0e490bee068 Kuninori Morimoto     2015-11-10  581  	rcar_thermal_remove(pdev);
+51d45d25948bdf Kuninori Morimoto     2013-03-26  582  
+fb84d9907f0ff0 Devendra Naga         2013-03-04  583  	return ret;
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  584  }
+1e426ffddf2f15 Kuninori Morimoto     2012-07-21  585  
+
+:::::: The code at line 532 was first introduced by commit
+:::::: 8b477ea56383dc8b838f1f8b506e4571c14ceb30 thermal: rcar: enable to use thermal-zone on DT
+
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Eduardo Valentin <edubezval@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

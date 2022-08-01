@@ -2,206 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1FE586DE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D868586DEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiHAPj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
+        id S231932AbiHAPk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiHAPj0 (ORCPT
+        with ESMTP id S230128AbiHAPk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:39:26 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D002A279;
-        Mon,  1 Aug 2022 08:39:25 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id w16so5735415ilh.0;
-        Mon, 01 Aug 2022 08:39:25 -0700 (PDT)
+        Mon, 1 Aug 2022 11:40:57 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6995112D25
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:40:55 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i14so2347628ejg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eAe7alzTmYY/YiuNxHp3jFfpoVXuSFHK6N9OKpdBXM4=;
+        b=dqXElW12x3Nf1adve0FLN6Dupn3kHSUgN9sYbnFl8W2foA8kCRBB4Oqz3YXG1deXaj
+         o9YDAMA4hmvBfemzoDBv44euEEL4C0tcGCUWrXBTUBb9rxMTTedgAUqTZyIKNPWYYev9
+         PXZZ/EILKOAjF3Ap07eBe8OJtVzCPglRxSIjD+Pjoz0Jx0TYPzWVC1UFJmTno0gg/N+/
+         ER8cX31HqvQVufz/Ptm+durPDQW0AHRNWGDBTexyGkot90rq4/qRINnF33axnPFrngNd
+         mf/Jr5rGy+4hV+4A52lPKySYxrYFaKUFZvlT3IlgQoJL30YYudZ/2Gkqo2OUNz+70Cie
+         GBEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=50cOczXCPH0lsQClqP+sr3sqPn4n1C8s/4thD9fgHTU=;
-        b=5Xe1Oophi9dYEz9lTrZILsq46utzyn1IkkuxhQP4UQ5+wSlmnb8gbCO32uTww2DSjV
-         mqmletHkarH/UhSua2cySrgJhkt6fW+yebML7Ha98OHshWZ11m5FkTGX3CPL1lhyDUwh
-         0AGWcvOArp+YLzIEGMxSylImUyVaMonUe1hIdybAVPFXauD8PHfufYlp1EdmtZbsSvOA
-         hBuZ3/ULzNoJkpMD3B8VvvFvfLSaWVX88rcITKsxIFnV6mDyl/NnP8fJB7aXBWh7a67s
-         6HlIlMI3skh270uUAlrGlnD23RcBVDlvR1a0TcqW9PQmh5H6aV3NsR43fL993aABdBY8
-         GB+A==
-X-Gm-Message-State: ACgBeo0sU1E+6ylcgjz3o3VudXPLPSQwwbyd+Xkvc099WUUu9b6SYnUo
-        4V7M1TXTiA87AskdOWXvQQ==
-X-Google-Smtp-Source: AA6agR7ju5Fs55jq+PCYBmrlKdHUGFWx2/lR5ijKxxaC3y89nGYNuB/SdtKwX2ae3BTu7NsBh3Gokw==
-X-Received: by 2002:a05:6e02:1bc7:b0:2de:5f6d:866b with SMTP id x7-20020a056e021bc700b002de5f6d866bmr3730348ilv.58.1659368364971;
-        Mon, 01 Aug 2022 08:39:24 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t11-20020a92c0cb000000b002dc2b20e9cfsm4891648ilf.1.2022.08.01.08.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 08:39:24 -0700 (PDT)
-Received: (nullmailer pid 1066414 invoked by uid 1000);
-        Mon, 01 Aug 2022 15:39:21 -0000
-Date:   Mon, 1 Aug 2022 09:39:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: net: Add Broadcom BCM4377 family PCI
- Bluetooth
-Message-ID: <20220801153921.GC1031441-robh@kernel.org>
-References: <20220801103633.27772-1-sven@svenpeter.dev>
- <20220801103633.27772-3-sven@svenpeter.dev>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eAe7alzTmYY/YiuNxHp3jFfpoVXuSFHK6N9OKpdBXM4=;
+        b=NyBj6K2C5wtSOfPTLbuAzaonQ9CvD6K0XWxQ5+yCWvYZcWg23wdYtFjDh4JbWRlBPR
+         TBI1JIlTzPcy5IuZub62k+1p6Ef3Q7AenZqjEMRfp+aKKAiAKUluVwNgftdr7PEAGsmU
+         IDF3t/CJfdxV/XmEKPDBI/haC9qh/DezNG2aT/LGCAGsIKycrj6Z82xQ+QFntizmMOYs
+         0WhiHs8NKf5u7uMEw/tBfiKKJOwjYRlntsbCef5Jrtuag+s7wLY/XhXgzW+DCNh1Vu45
+         +G46mJemXpD+gxSvvWuAnwOWOkBkzhM+TbRt0BX8Z6YKd+QpVAllO/vs30IWyHgloIMY
+         qLyA==
+X-Gm-Message-State: AJIora/uGHz6dzaUvUbaeP3JQO4N0VVDTx1jX+u9QmdkByAq8zeCN4Pf
+        A2daBNML822fUbufUMANE7J0yA==
+X-Google-Smtp-Source: AGRyM1uoM9kb4OzQLKOyKkYYZNlkvzM2RV8lA/tro3D3ap0Fiqp2LXBXSiy6IZGJCFZQibND2NCRlA==
+X-Received: by 2002:a17:906:5a67:b0:72b:610d:4aa4 with SMTP id my39-20020a1709065a6700b0072b610d4aa4mr13352511ejc.294.1659368454005;
+        Mon, 01 Aug 2022 08:40:54 -0700 (PDT)
+Received: from [192.168.178.55] (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170906775200b006fe8c831632sm5264510ejn.73.2022.08.01.08.40.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 08:40:53 -0700 (PDT)
+Message-ID: <4d88538d-c401-ebaf-8f63-8e8b7ad9e632@linbit.com>
+Date:   Mon, 1 Aug 2022 17:40:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801103633.27772-3-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] lib/lru_cache: Fixed array overflow caused by incorrect
+ boundary handling.
+Content-Language: en-US
+To:     John Sanpe <sanpeqf@gmail.com>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com
+References: <20220723075931.163245-1-sanpeqf@gmail.com>
+From:   =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+In-Reply-To: <20220723075931.163245-1-sanpeqf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:36:30PM +0200, Sven Peter wrote:
-> These chips are combined Wi-Fi/Bluetooth radios which expose a
-> PCI subfunction for the Bluetooth part.
-> They are found in Apple machines such as the x86 models with the T2
-> chip or the arm64 models with the M1 or M2 chips.
+Am 23.07.22 um 09:59 schrieb John Sanpe:
+> This problem occurs when malloc element failed on the first time.
+> At this time, the counter i is 0. When it's released, we subtract 1
+> in advance without checking, which will cause i to become UINT_MAX,
+> resulting in array overflow.
 > 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> Signed-off-by: John Sanpe <sanpeqf@gmail.com>
 > ---
->  .../bindings/net/brcm,bcm4377-bluetooth.yaml  | 77 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+>  lib/lru_cache.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
-> new file mode 100644
-> index 000000000000..afe6ecebd939
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
-> @@ -0,0 +1,77 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/brcm,bcm4377-bluetooth.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom BCM4377 family PCI Bluetooth Chips
-> +
-> +allOf:
-> +  - $ref: bluetooth-controller.yaml#
-> +
-> +maintainers:
-> +  - Sven Peter <sven@svenpeter.dev>
-> +
-> +description:
-> +  This binding describes Broadcom BCM4377 family PCI-attached bluetooth chips
+> diff --git a/lib/lru_cache.c b/lib/lru_cache.c
+> index 52313acbfa62..04d95de92602 100644
+> --- a/lib/lru_cache.c
+> +++ b/lib/lru_cache.c
+> @@ -147,7 +147,7 @@ struct lru_cache *lc_create(const char *name, struct kmem_cache *cache,
+>  		return lc;
+>  
+>  	/* else: could not allocate all elements, give up */
+> -	for (i--; i; i--) {
+> +	while (i--) {
+>  		void *p = element[i];
+>  		kmem_cache_free(cache, p - e_off);
+>  	}
 
-s/PCI/PCIe/
+Thanks for the fix, looks good to me.
 
-> +  usually found in Apple machines. The Wi-Fi part of the chip is described in
-> +  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - pci14e4,5fa0 # BCM4377
-> +      - pci14e4,5f69 # BCM4378
-> +      - pci14e4,5f71 # BCM4387
-> +
-> +  reg:
-> +    description: PCI device identifier.
-> +
-> +  brcm,board-type:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: Board type of the Bluetooth chip. This is used to decouple
-> +      the overall system board from the Bluetooth module and used to construct
-> +      firmware and calibration data filenames.
-> +      On Apple platforms, this should be the Apple module-instance codename
-> +      prefixed by "apple,", e.g. "apple,atlantisb".
+Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
 
-pattern: '^apple,.*'
-
-And when there's other known vendors we can add them.
-
-Really, I'm not all that crazy about this property. 'firmware-name' 
-doesn't work? Or perhaps this should just be a more specific compatible 
-string.
-
-> +
-> +  brcm,taurus-cal-blob:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: A per-device calibration blob for the Bluetooth radio. This
-> +      should be filled in by the bootloader from platform configuration
-> +      data, if necessary, and will be uploaded to the device.
-> +      This blob is used if the chip stepping of the Bluetooth module does not
-> +      support beamforming.
-> +
-> +  brcm,taurus-bf-cal-blob:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    description: A per-device calibration blob for the Bluetooth radio. This
-> +      should be filled in by the bootloader from platform configuration
-> +      data, if necessary, and will be uploaded to the device.
-> +      This blob is used if the chip stepping of the Bluetooth module supports
-> +      beamforming.
-> +
-> +  local-bd-address: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - local-bd-address
-> +  - brcm,board-type
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pci0 {
-
-pcie {
-
-> +      #address-cells = <3>;
-> +      #size-cells = <2>;
-> +
-> +      bluetooth@0,1 {
-> +        compatible = "pci14e4,5f69";
-> +        reg = <0x10100 0x0 0x0 0x0 0x0>;
-
-reg should not have the bus number here as that is dynamic. So 0x100 for 
-the 1st cell.
-
-> +        brcm,board-type = "apple,honshu";
-> +        /* To be filled by the bootloader */
-> +        local-bd-address = [00 00 00 00 00 00];
-> +      };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a6d3bd9d2a8d..8965556bace8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1837,6 +1837,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
->  F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
->  F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
->  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-> +F:	Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
->  F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
->  F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
->  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
-> -- 
-> 2.25.1
-> 
-> 
+-- 
+Christoph Böhmwalder
+LINBIT | Keeping the Digital World Running
+DRBD HA —  Disaster Recovery — Software defined Storage

@@ -2,90 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BD2586CDA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA9F586CE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiHAOa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        id S232446AbiHAOdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiHAOaV (ORCPT
+        with ESMTP id S232007AbiHAOcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:30:21 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BB713D3A;
-        Mon,  1 Aug 2022 07:30:19 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id l24so8465371ion.13;
-        Mon, 01 Aug 2022 07:30:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=0dbqmbbrnh6eHwm9n5c6wq1oHU5KlKV/W4sU8ErOXro=;
-        b=rHvQr7yitRqPdNI+1+3IY9rk9PgXUUgG6aQWDZ+fHTuEcXnyOWPOaEX8U9MWO2dKo0
-         AcVCZ03m75Xh7ihojlxhqGVrd23TAJ26ES8SQJM7kihKDVHgDAhY8n6CUDdYjH6hjx51
-         /BMSzwympbA1w8QjZIsedV4J3zYwGUJFarnUUvwZo/hdEnwzisJRkpTQ/KGWORpXknpX
-         OroE+XuHSGWcrtFv0IDJn/U+WDSQKXwVjQRR83P6vd5UEnU2R+oCrlf8ArGGbSgxMasT
-         InMOLDLfxmz62ev9vS7sqyRWJelqy+ToM515/y8scdmr/JNeqc0Gk6CAIKhaJGUvxWp4
-         GuMA==
-X-Gm-Message-State: AJIora+U2trNESuYqN6bWAvuELztuVEM9tROXiKBDJwVz9jZomBnjOml
-        HKPWE73WCuQdyLeMoBXGvA==
-X-Google-Smtp-Source: AGRyM1v5SwV/IkWt6ScPuoGGKKT/r+zR56rXpY8ZELh6SwE0TzxAIPSBHHoxSMGwgoWx4+L2i4xBhg==
-X-Received: by 2002:a05:6602:27cd:b0:669:3d8d:4d77 with SMTP id l13-20020a05660227cd00b006693d8d4d77mr5626127ios.216.1659364219057;
-        Mon, 01 Aug 2022 07:30:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056e02014f00b002de42539fddsm3267754ilr.68.2022.08.01.07.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 07:30:18 -0700 (PDT)
-Received: (nullmailer pid 974343 invoked by uid 1000);
-        Mon, 01 Aug 2022 14:30:17 -0000
-Date:   Mon, 1 Aug 2022 08:30:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     robh+dt@kernel.org, kuba@kernel.org,
-        linux-arm-kernel@lists.infradead.org, edumazet@google.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        davem@davemloft.net, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, pabeni@redhat.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: net: convert emac_rockchip.txt to
- YAML
-Message-ID: <20220801143017.GA973438-robh@kernel.org>
-References: <20220603163539.537-1-jbx6244@gmail.com>
+        Mon, 1 Aug 2022 10:32:55 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8034A1EEF2;
+        Mon,  1 Aug 2022 07:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659364374; x=1690900374;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NkCrMrpG7PAAemzFvj7zQriC7ibq+uDZy/7liQTcrfA=;
+  b=FC+xKTQYetVUG3hqKkTZ/U4Kh450qG4wnHV4jcEuJLbcM2w+d/vo3JSP
+   ETSBQXui4bE1hzXl2K6vCYWM6nWFVOeywk4hL7xdmsRd2nln5C4Ykqf8b
+   sjhyPMkoTR9ZPKG7BCjtQIX7LyuzhDoILNM8a0AQnLvzacHoVaFAqV5Zt
+   A=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Aug 2022 07:32:54 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 07:32:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 1 Aug 2022 07:32:52 -0700
+Received: from [10.216.14.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
+ 07:32:46 -0700
+Message-ID: <f9ab9c36-5ecd-a15d-57de-0ad999d575e4@quicinc.com>
+Date:   Mon, 1 Aug 2022 20:02:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603163539.537-1-jbx6244@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 1/8] drm/msm: Remove unnecessary pm_runtime_get/put
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <1659174051-27816-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220730150952.v3.1.Icf1e8f0c9b3e7e9933c3b48c70477d0582f3243f@changeid>
+ <CAF6AEGsOzd8wMbgpt7bGNdCspNoH4shQfTknwwdyVde8k4zcZw@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGsOzd8wMbgpt7bGNdCspNoH4shQfTknwwdyVde8k4zcZw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Jun 2022 18:35:37 +0200, Johan Jonker wrote:
-> Convert emac_rockchip.txt to YAML.
-> 
-> Changes against original bindings:
->   Add mdio sub node.
->   Add extra clock for rk3036
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
-> 
-> Changed V2:
->   use phy
->   rename to rockchip,emac.yaml
->   add more requirements
-> ---
->  .../devicetree/bindings/net/emac_rockchip.txt |  52 --------
->  .../bindings/net/rockchip,emac.yaml           | 115 ++++++++++++++++++
->  2 files changed, 115 insertions(+), 52 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/emac_rockchip.txt
->  create mode 100644 Documentation/devicetree/bindings/net/rockchip,emac.yaml
-> 
+On 7/31/2022 9:25 PM, Rob Clark wrote:
+> On Sat, Jul 30, 2022 at 2:41 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> We already enable gpu power from msm_gpu_submit(), so avoid a duplicate
+>> pm_runtime_get/put from msm_job_run().
+>>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> ---
+>>
+>> (no changes since v1)
+>>
+>>   drivers/gpu/drm/msm/msm_ringbuffer.c | 4 ----
+>>   1 file changed, 4 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm/msm_ringbuffer.c
+>> index 56eecb4..cad4c35 100644
+>> --- a/drivers/gpu/drm/msm/msm_ringbuffer.c
+>> +++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
+>> @@ -29,8 +29,6 @@ static struct dma_fence *msm_job_run(struct drm_sched_job *job)
+>>                  msm_gem_unlock(obj);
+>>          }
+>>
+>> -       pm_runtime_get_sync(&gpu->pdev->dev);
+>> -
+> This is removing a _get_sync() and simply relying on a _get() (async)
+> in msm_gpu_submit().. that seems pretty likely to go badly?  I think
+> it should probably replace the _get() in msm_gpu_submit() with
+> _get_sync() (but also since this is changing position of
+> resume/suspend vs active_lock, please make sure you test with lockdep
+> enabled)
+>
+> BR,
+> -R
+As discussed in the other patch, this is correctly handled in 
+msm_gpu_submit(). And from active_lock perspective, there is no change 
+actually. GPU is ON by the time we touch active_lock in both cases.
 
-Looks like this fell through the cracks. Applied, thanks!
+-Akhil.
+>>          /* TODO move submit path over to using a per-ring lock.. */
+>>          mutex_lock(&gpu->lock);
+>>
+>> @@ -38,8 +36,6 @@ static struct dma_fence *msm_job_run(struct drm_sched_job *job)
+>>
+>>          mutex_unlock(&gpu->lock);
+>>
+>> -       pm_runtime_put(&gpu->pdev->dev);
+>> -
+>>          return dma_fence_get(submit->hw_fence);
+>>   }
+>>
+>> --
+>> 2.7.4
+>>
+

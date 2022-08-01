@@ -2,163 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC35D587139
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E28587131
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234788AbiHATNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S234995AbiHATNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234855AbiHATMu (ORCPT
+        with ESMTP id S233913AbiHATMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 Aug 2022 15:12:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B76EE83
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659380985; x=1690916985;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tom3g7yIzEAkO9xNQcySMRrkC1MbjgY8VnF5cjIrsLY=;
-  b=kT1Wp3RKwtcZoI6C3NwEOmBzC3lsR/R9eXUA8MFFLZvKGWoBBRBcvezS
-   naJEj9RVhq0EDI/Kvul3lIVq8DAVMfOHP+ZFFgQ7xgjxJeRY2/e2B5dJ0
-   JNOH6z9vIUfP1+PGudasm26Md83m5hrlT/qcaJu+SsTRK/TsO1M4RXbgU
-   XJqw4EIMmKr0G0yido9iZ7ViIBrKQtebVrzOXZyDzgqhA8gVKNm9y43kP
-   R1SlN8tZfyl3lnyPffL65X30BxqxSs3WvuT83deTZxH1qOq1GoB4+VXIU
-   KNzUiXqEcp4R8IWelbD1wtBbdKED6r0X/vVkcow9ZaA8HFAmc/UHbPdlZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290438365"
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="290438365"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 12:09:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="929670087"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2022 12:09:43 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIanO-000FEv-1i;
-        Mon, 01 Aug 2022 19:09:42 +0000
-Date:   Tue, 2 Aug 2022 03:08:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: arch/riscv/kernel/machine_kexec.c:69:55: sparse: sparse: incorrect
- type in argument 2 (different address spaces)
-Message-ID: <202208020251.Nj0b2oNq-lkp@intel.com>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68C8E07;
+        Mon,  1 Aug 2022 12:09:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 924E534F3A;
+        Mon,  1 Aug 2022 19:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659380981; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=6+JrXqJEltXUWg9QjhAUhtfwUJNVGIb39jMoxht6RQM=;
+        b=g+/T2tb8ECWrIXttXqfIOPuOQ/irhfulZq3n7iOZUWwwRKqBuQjwAzpHXZDuI87dZ9JpL7
+        MQ0NFg+feKxIrjvc5VkXOQAropkUm3kMlzJUEZ/yqksYFxadQOabZFsbVR9Kv4Eu6WTIzb
+        jxAqRYSA9hybHk7OY8kDiCz/MBRYRaE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659380981;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=6+JrXqJEltXUWg9QjhAUhtfwUJNVGIb39jMoxht6RQM=;
+        b=swMNRBGXCXuFqp0p3KYlFXyvgSQS8uGzTGMNcaRFHfexdMFcGZqhO6+UAHLFhOEoJsZ19s
+        ie2pavcJ2UiRYiAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0DC4613AAE;
+        Mon,  1 Aug 2022 19:09:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AeHtL/Qk6GJ5SgAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Mon, 01 Aug 2022 19:09:40 +0000
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     linux-cifs@vger.kernel.org
+Cc:     smfrench@gmail.com, pc@cjr.nz, ronniesahlberg@gmail.com,
+        nspmangalore@gmail.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, tom@talpey.com,
+        samba-technical@lists.samba.org, pshilovsky@samba.org
+Subject: [RFC PATCH 0/3] Rename "cifs" module to "smbfs"
+Date:   Mon,  1 Aug 2022 16:09:30 -0300
+Message-Id: <20220801190933.27197-1-ematsumiya@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0cec3f24a7cedc726f8790d693aaff2c535dc4ce
-commit: b7fb4d78a6ade6026d9e5cf438c2a46ab962e032 RISC-V: use memcpy for kexec_file mode
-date:   2 months ago
-config: riscv-randconfig-s041-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020251.Nj0b2oNq-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b7fb4d78a6ade6026d9e5cf438c2a46ab962e032
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b7fb4d78a6ade6026d9e5cf438c2a46ab962e032
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+Hi,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+As part of the ongoing effort to remove the "cifs" nomenclature from the
+Linux SMB client, I'm proposing the rename of the module to "smbfs".
 
-sparse warnings: (new ones prefixed by >>)
->> arch/riscv/kernel/machine_kexec.c:69:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __user *buf @@
-   arch/riscv/kernel/machine_kexec.c:69:55: sparse:     expected void const *
-   arch/riscv/kernel/machine_kexec.c:69:55: sparse:     got void [noderef] __user *buf
-   arch/riscv/kernel/machine_kexec.c:169:1: sparse: sparse: symbol 'machine_kexec' redeclared with different type (different modifiers):
-   arch/riscv/kernel/machine_kexec.c:169:1: sparse:    void extern [addressable] [noreturn] [toplevel] machine_kexec( ... )
-   arch/riscv/kernel/machine_kexec.c: note: in included file:
-   include/linux/kexec.h:325:13: sparse: note: previously declared as:
-   include/linux/kexec.h:325:13: sparse:    void extern [addressable] [toplevel] machine_kexec( ... )
+As it's widely known, CIFS is associated to SMB1.0, which, in turn, is
+associated with the security issues it presented in the past. Using
+"SMBFS" makes clear what's the protocol in use for outsiders, but also
+unties it from any particular protocol version. It also fits in the
+already existing "fs/smbfs_common" and "fs/ksmbd" naming scheme.
 
-vim +69 arch/riscv/kernel/machine_kexec.c
+This short patch series only changes directory names and includes/ifdefs in
+headers and source code, and updates docs to reflect the rename. Other
+than that, no source code/functionality is modified (WIP though).
 
-    42	
-    43	/*
-    44	 * machine_kexec_prepare - Initialize kexec
-    45	 *
-    46	 * This function is called from do_kexec_load, when the user has
-    47	 * provided us with an image to be loaded. Its goal is to validate
-    48	 * the image and prepare the control code buffer as needed.
-    49	 * Note that kimage_alloc_init has already been called and the
-    50	 * control buffer has already been allocated.
-    51	 */
-    52	int
-    53	machine_kexec_prepare(struct kimage *image)
-    54	{
-    55		struct kimage_arch *internal = &image->arch;
-    56		struct fdt_header fdt = {0};
-    57		void *control_code_buffer = NULL;
-    58		unsigned int control_code_buffer_sz = 0;
-    59		int i = 0;
-    60	
-    61		kexec_image_info(image);
-    62	
-    63		/* Find the Flattened Device Tree and save its physical address */
-    64		for (i = 0; i < image->nr_segments; i++) {
-    65			if (image->segment[i].memsz <= sizeof(fdt))
-    66				continue;
-    67	
-    68			if (image->file_mode)
-  > 69				memcpy(&fdt, image->segment[i].buf, sizeof(fdt));
-    70			else if (copy_from_user(&fdt, image->segment[i].buf, sizeof(fdt)))
-    71				continue;
-    72	
-    73			if (fdt_check_header(&fdt))
-    74				continue;
-    75	
-    76			internal->fdt_addr = (unsigned long) image->segment[i].mem;
-    77			break;
-    78		}
-    79	
-    80		if (!internal->fdt_addr) {
-    81			pr_err("Device tree not included in the provided image\n");
-    82			return -EINVAL;
-    83		}
-    84	
-    85		/* Copy the assembler code for relocation to the control page */
-    86		if (image->type != KEXEC_TYPE_CRASH) {
-    87			control_code_buffer = page_address(image->control_code_page);
-    88			control_code_buffer_sz = page_size(image->control_code_page);
-    89	
-    90			if (unlikely(riscv_kexec_relocate_size > control_code_buffer_sz)) {
-    91				pr_err("Relocation code doesn't fit within a control page\n");
-    92				return -EINVAL;
-    93			}
-    94	
-    95			memcpy(control_code_buffer, riscv_kexec_relocate,
-    96				riscv_kexec_relocate_size);
-    97	
-    98			/* Mark the control page executable */
-    99			set_memory_x((unsigned long) control_code_buffer, 1);
-   100		}
-   101	
-   102		return 0;
-   103	}
-   104	
+Patch 1/3: effectively changes the module name to "smbfs" and create a
+	   "cifs" module alias to maintain compatibility (a warning
+	   should be added to indicate the complete removal/isolation of
+	   CIFS/SMB1.0 code).
+Patch 2/3: rename the source-code directory to align with the new module
+	   name
+Patch 3/3: update documentation references to "fs/cifs" or "cifs.ko" or
+	   "cifs module" to use the new name
+
+Enzo Matsumiya (3):
+  cifs: change module name to "smbfs.ko"
+  smbfs: rename directory "fs/cifs" -> "fs/smbfs"
+  smbfs: update doc references
+
+ Documentation/admin-guide/index.rst           |   2 +-
+ .../admin-guide/{cifs => smbfs}/authors.rst   |   0
+ .../admin-guide/{cifs => smbfs}/changes.rst   |   4 +-
+ .../admin-guide/{cifs => smbfs}/index.rst     |   0
+ .../{cifs => smbfs}/introduction.rst          |   0
+ .../admin-guide/{cifs => smbfs}/todo.rst      |  12 +-
+ .../admin-guide/{cifs => smbfs}/usage.rst     | 168 +++++++++---------
+ .../{cifs => smbfs}/winucase_convert.pl       |   0
+ Documentation/filesystems/index.rst           |   2 +-
+ .../filesystems/{cifs => smbfs}/cifsroot.rst  |  14 +-
+ .../filesystems/{cifs => smbfs}/index.rst     |   0
+ .../filesystems/{cifs => smbfs}/ksmbd.rst     |   2 +-
+ Documentation/networking/dns_resolver.rst     |   2 +-
+ .../translations/zh_CN/admin-guide/index.rst  |   2 +-
+ .../translations/zh_TW/admin-guide/index.rst  |   2 +-
+ fs/Kconfig                                    |   6 +-
+ fs/Makefile                                   |   2 +-
+ fs/cifs/Makefile                              |  34 ----
+ fs/{cifs => smbfs}/Kconfig                    | 108 +++++------
+ fs/smbfs/Makefile                             |  34 ++++
+ fs/{cifs => smbfs}/asn1.c                     |   0
+ fs/{cifs => smbfs}/cifs_debug.c               |  72 ++++----
+ fs/{cifs => smbfs}/cifs_debug.h               |   4 +-
+ fs/{cifs => smbfs}/cifs_dfs_ref.c             |   2 +-
+ fs/{cifs => smbfs}/cifs_fs_sb.h               |   0
+ fs/{cifs => smbfs}/cifs_ioctl.h               |   0
+ fs/{cifs => smbfs}/cifs_spnego.c              |   4 +-
+ fs/{cifs => smbfs}/cifs_spnego.h              |   0
+ .../cifs_spnego_negtokeninit.asn1             |   0
+ fs/{cifs => smbfs}/cifs_swn.c                 |   0
+ fs/{cifs => smbfs}/cifs_swn.h                 |   4 +-
+ fs/{cifs => smbfs}/cifs_unicode.c             |   0
+ fs/{cifs => smbfs}/cifs_unicode.h             |   0
+ fs/{cifs => smbfs}/cifs_uniupr.h              |   0
+ fs/{cifs => smbfs}/cifsacl.c                  |   6 +-
+ fs/{cifs => smbfs}/cifsacl.h                  |   0
+ fs/{cifs => smbfs}/cifsencrypt.c              |   0
+ fs/{cifs => smbfs}/cifsglob.h                 |  26 +--
+ fs/{cifs => smbfs}/cifspdu.h                  |   6 +-
+ fs/{cifs => smbfs}/cifsproto.h                |  10 +-
+ fs/{cifs => smbfs}/cifsroot.c                 |   0
+ fs/{cifs => smbfs}/cifssmb.c                  |  14 +-
+ fs/{cifs => smbfs}/connect.c                  |  36 ++--
+ fs/{cifs/cifsfs.c => smbfs/core.c}            |  49 ++---
+ fs/{cifs => smbfs}/dfs_cache.c                |   2 +-
+ fs/{cifs => smbfs}/dfs_cache.h                |   0
+ fs/{cifs => smbfs}/dir.c                      |   2 +-
+ fs/{cifs => smbfs}/dns_resolve.c              |   0
+ fs/{cifs => smbfs}/dns_resolve.h              |   0
+ fs/{cifs => smbfs}/export.c                   |   8 +-
+ fs/{cifs => smbfs}/file.c                     |  16 +-
+ fs/{cifs => smbfs}/fs_context.c               |  20 +--
+ fs/{cifs => smbfs}/fs_context.h               |   0
+ fs/{cifs => smbfs}/fscache.c                  |   0
+ fs/{cifs => smbfs}/fscache.h                  |   6 +-
+ fs/{cifs => smbfs}/inode.c                    |  10 +-
+ fs/{cifs => smbfs}/ioctl.c                    |   6 +-
+ fs/{cifs => smbfs}/link.c                     |   2 +-
+ fs/{cifs => smbfs}/misc.c                     |  14 +-
+ fs/{cifs => smbfs}/netlink.c                  |   0
+ fs/{cifs => smbfs}/netlink.h                  |   0
+ fs/{cifs => smbfs}/netmisc.c                  |   2 +-
+ fs/{cifs => smbfs}/nterr.c                    |   0
+ fs/{cifs => smbfs}/nterr.h                    |   0
+ fs/{cifs => smbfs}/ntlmssp.h                  |   2 +-
+ fs/{cifs => smbfs}/readdir.c                  |   4 +-
+ fs/{cifs => smbfs}/rfc1002pdu.h               |   0
+ fs/{cifs => smbfs}/sess.c                     |  10 +-
+ fs/{cifs => smbfs}/smb1ops.c                  |   4 +-
+ fs/{cifs => smbfs}/smb2file.c                 |   2 +-
+ fs/{cifs => smbfs}/smb2glob.h                 |   0
+ fs/{cifs => smbfs}/smb2inode.c                |   2 +-
+ fs/{cifs => smbfs}/smb2maperror.c             |   0
+ fs/{cifs => smbfs}/smb2misc.c                 |   0
+ fs/{cifs => smbfs}/smb2ops.c                  |  32 ++--
+ fs/{cifs => smbfs}/smb2pdu.c                  |  22 +--
+ fs/{cifs => smbfs}/smb2pdu.h                  |   0
+ fs/{cifs => smbfs}/smb2proto.h                |   0
+ fs/{cifs => smbfs}/smb2status.h               |   0
+ fs/{cifs => smbfs}/smb2transport.c            |   2 +-
+ fs/{cifs => smbfs}/smbdirect.c                |   0
+ fs/{cifs => smbfs}/smbdirect.h                |   2 +-
+ fs/{cifs => smbfs}/smbencrypt.c               |   0
+ fs/{cifs => smbfs}/smberr.h                   |   0
+ fs/{cifs/cifsfs.h => smbfs/smbfs.h}           |  12 +-
+ fs/{cifs => smbfs}/trace.c                    |   0
+ fs/{cifs => smbfs}/trace.h                    |   0
+ fs/{cifs => smbfs}/transport.c                |   4 +-
+ fs/{cifs => smbfs}/unc.c                      |   0
+ fs/{cifs => smbfs}/winucase.c                 |   0
+ fs/{cifs => smbfs}/xattr.c                    |  18 +-
+ 91 files changed, 414 insertions(+), 417 deletions(-)
+ rename Documentation/admin-guide/{cifs => smbfs}/authors.rst (100%)
+ rename Documentation/admin-guide/{cifs => smbfs}/changes.rst (73%)
+ rename Documentation/admin-guide/{cifs => smbfs}/index.rst (100%)
+ rename Documentation/admin-guide/{cifs => smbfs}/introduction.rst (100%)
+ rename Documentation/admin-guide/{cifs => smbfs}/todo.rst (95%)
+ rename Documentation/admin-guide/{cifs => smbfs}/usage.rst (87%)
+ rename Documentation/admin-guide/{cifs => smbfs}/winucase_convert.pl (100%)
+ rename Documentation/filesystems/{cifs => smbfs}/cifsroot.rst (85%)
+ rename Documentation/filesystems/{cifs => smbfs}/index.rst (100%)
+ rename Documentation/filesystems/{cifs => smbfs}/ksmbd.rst (99%)
+ delete mode 100644 fs/cifs/Makefile
+ rename fs/{cifs => smbfs}/Kconfig (72%)
+ create mode 100644 fs/smbfs/Makefile
+ rename fs/{cifs => smbfs}/asn1.c (100%)
+ rename fs/{cifs => smbfs}/cifs_debug.c (96%)
+ rename fs/{cifs => smbfs}/cifs_debug.h (98%)
+ rename fs/{cifs => smbfs}/cifs_dfs_ref.c (99%)
+ rename fs/{cifs => smbfs}/cifs_fs_sb.h (100%)
+ rename fs/{cifs => smbfs}/cifs_ioctl.h (100%)
+ rename fs/{cifs => smbfs}/cifs_spnego.c (98%)
+ rename fs/{cifs => smbfs}/cifs_spnego.h (100%)
+ rename fs/{cifs => smbfs}/cifs_spnego_negtokeninit.asn1 (100%)
+ rename fs/{cifs => smbfs}/cifs_swn.c (100%)
+ rename fs/{cifs => smbfs}/cifs_swn.h (95%)
+ rename fs/{cifs => smbfs}/cifs_unicode.c (100%)
+ rename fs/{cifs => smbfs}/cifs_unicode.h (100%)
+ rename fs/{cifs => smbfs}/cifs_uniupr.h (100%)
+ rename fs/{cifs => smbfs}/cifsacl.c (99%)
+ rename fs/{cifs => smbfs}/cifsacl.h (100%)
+ rename fs/{cifs => smbfs}/cifsencrypt.c (100%)
+ rename fs/{cifs => smbfs}/cifsglob.h (99%)
+ rename fs/{cifs => smbfs}/cifspdu.h (99%)
+ rename fs/{cifs => smbfs}/cifsproto.h (99%)
+ rename fs/{cifs => smbfs}/cifsroot.c (100%)
+ rename fs/{cifs => smbfs}/cifssmb.c (99%)
+ rename fs/{cifs => smbfs}/connect.c (99%)
+ rename fs/{cifs/cifsfs.c => smbfs/core.c} (98%)
+ rename fs/{cifs => smbfs}/dfs_cache.c (99%)
+ rename fs/{cifs => smbfs}/dfs_cache.h (100%)
+ rename fs/{cifs => smbfs}/dir.c (99%)
+ rename fs/{cifs => smbfs}/dns_resolve.c (100%)
+ rename fs/{cifs => smbfs}/dns_resolve.h (100%)
+ rename fs/{cifs => smbfs}/export.c (91%)
+ rename fs/{cifs => smbfs}/file.c (99%)
+ rename fs/{cifs => smbfs}/fs_context.c (99%)
+ rename fs/{cifs => smbfs}/fs_context.h (100%)
+ rename fs/{cifs => smbfs}/fscache.c (100%)
+ rename fs/{cifs => smbfs}/fscache.h (98%)
+ rename fs/{cifs => smbfs}/inode.c (99%)
+ rename fs/{cifs => smbfs}/ioctl.c (99%)
+ rename fs/{cifs => smbfs}/link.c (99%)
+ rename fs/{cifs => smbfs}/misc.c (99%)
+ rename fs/{cifs => smbfs}/netlink.c (100%)
+ rename fs/{cifs => smbfs}/netlink.h (100%)
+ rename fs/{cifs => smbfs}/netmisc.c (99%)
+ rename fs/{cifs => smbfs}/nterr.c (100%)
+ rename fs/{cifs => smbfs}/nterr.h (100%)
+ rename fs/{cifs => smbfs}/ntlmssp.h (98%)
+ rename fs/{cifs => smbfs}/readdir.c (99%)
+ rename fs/{cifs => smbfs}/rfc1002pdu.h (100%)
+ rename fs/{cifs => smbfs}/sess.c (99%)
+ rename fs/{cifs => smbfs}/smb1ops.c (99%)
+ rename fs/{cifs => smbfs}/smb2file.c (99%)
+ rename fs/{cifs => smbfs}/smb2glob.h (100%)
+ rename fs/{cifs => smbfs}/smb2inode.c (99%)
+ rename fs/{cifs => smbfs}/smb2maperror.c (100%)
+ rename fs/{cifs => smbfs}/smb2misc.c (100%)
+ rename fs/{cifs => smbfs}/smb2ops.c (99%)
+ rename fs/{cifs => smbfs}/smb2pdu.c (99%)
+ rename fs/{cifs => smbfs}/smb2pdu.h (100%)
+ rename fs/{cifs => smbfs}/smb2proto.h (100%)
+ rename fs/{cifs => smbfs}/smb2status.h (100%)
+ rename fs/{cifs => smbfs}/smb2transport.c (99%)
+ rename fs/{cifs => smbfs}/smbdirect.c (100%)
+ rename fs/{cifs => smbfs}/smbdirect.h (99%)
+ rename fs/{cifs => smbfs}/smbencrypt.c (100%)
+ rename fs/{cifs => smbfs}/smberr.h (100%)
+ rename fs/{cifs/cifsfs.h => smbfs/smbfs.h} (97%)
+ rename fs/{cifs => smbfs}/trace.c (100%)
+ rename fs/{cifs => smbfs}/trace.h (100%)
+ rename fs/{cifs => smbfs}/transport.c (99%)
+ rename fs/{cifs => smbfs}/unc.c (100%)
+ rename fs/{cifs => smbfs}/winucase.c (100%)
+ rename fs/{cifs => smbfs}/xattr.c (98%)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.3
+

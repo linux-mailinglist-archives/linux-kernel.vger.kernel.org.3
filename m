@@ -2,132 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAB1586E17
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE80A586E18
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiHAPxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        id S233727AbiHAPyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiHAPxR (ORCPT
+        with ESMTP id S231779AbiHAPyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:53:17 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF639B91
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:53:12 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id o9-20020a056e0214c900b002dc29c288bfso6905461ilk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:53:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=bK840S31wvjhJpvFujDOJzZOOevyh1Lvd1pyKumeyCM=;
-        b=m7d4hDRqtH557hQHDMLSR743mZhU3cFoNeEJUkztKJZCDpr+D2peGrXtje/KoeZi46
-         3Rf2bl4jMqoUMTz/r4YGR9wCj9xARvS5WIrWHzYwR+mQvgra3/ySlp+Jz7ART7EnDkzT
-         zLB2AIcj9tkF33vAzSuYE/BZFbHuvjSYpbv5VQNq/ydia/GVBRlBaAS8slHp3JHYIOfe
-         1oKfxM7mMn3L7RVfgnjhAuzR1PF1pxO0C3WLyu+ws0FwvE1fLatPROck0dihjp/LxFVP
-         sFvEDRoma9ObCTyLAp+3LRPEXmfzKPODuLVYKYA6okusMRTw4SkaWTnUJLVjQbrbvlcV
-         NOqA==
-X-Gm-Message-State: ACgBeo1E/+WGuXzUFHIG5b/gYm9f6X2gq3wBf0XB/YIDkYYz2CCnjwuQ
-        W1JN+znIUTk9vF5voIv/KvY0w5p5SDUuHmHfGCQcFgCOS98r
-X-Google-Smtp-Source: AA6agR6Pa/wYRSjkSeUFzdwCQ6zGAdPZWeUZLPWRfs0kol+bJm93H6Ac5nY9NZdx9R1AJQoqcGUqSnXrlc8RkvB+oz1RfTclUGWK
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4705:b0:342:74bb:dfa3 with SMTP id
- cs5-20020a056638470500b0034274bbdfa3mr2264863jab.1.1659369192287; Mon, 01 Aug
- 2022 08:53:12 -0700 (PDT)
-Date:   Mon, 01 Aug 2022 08:53:12 -0700
-In-Reply-To: <20220801154220.186048-1-khalid.masum.92@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041f57405e52fff3d@google.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
-From:   syzbot <syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com>
-To:     dan.carpenter@oracle.com, deller@gmx.de, khalid.masum.92@gmail.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        Mon, 1 Aug 2022 11:54:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A0337F9C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659369249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bDrzxcK/hdqF7u8DnUOKQqM/ecXSwkQXnfqic59uxkQ=;
+        b=eRu6D8FNVxFBjPEbx8Iu0l1FnY9tt/pb7feJ/RRLY3BO0RvhqErknnYp5nKVRmUr/HeAeg
+        jik5nUBgFwAS8rzY5hModn06zbh7oOHrEbioTd50Cf4b5Jb2l/uMwMb+eb4fE2MGTIdFDw
+        tqP19ebU69hIfmtRKgsJHbDYlQRMcTc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-102-9GoOoRyOOP-3kn0drtBscw-1; Mon, 01 Aug 2022 11:54:06 -0400
+X-MC-Unique: 9GoOoRyOOP-3kn0drtBscw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF7D4101A586;
+        Mon,  1 Aug 2022 15:54:05 +0000 (UTC)
+Received: from starship (unknown [10.40.194.242])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D3AB40E80F4;
+        Mon,  1 Aug 2022 15:53:59 +0000 (UTC)
+Message-ID: <ad3a01ffe9c6f7fa40a4b51ac88d8fad56606435.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
+ tracking externally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Mon, 01 Aug 2022 18:53:58 +0300
+In-Reply-To: <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZyWOh4NPA0uN5J@google.com>
+         <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+         <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
+         <Yt6/9V0S9of7dueW@google.com>
+         <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 2022-07-28 at 10:46 +0300, Maxim Levitsky wrote:
+> On Mon, 2022-07-25 at 16:08 +0000, Sean Christopherson wrote:
+> > On Wed, Jul 20, 2022, Maxim Levitsky wrote:
+> > > On Sun, 2022-05-22 at 13:22 +0300, Maxim Levitsky wrote:
+> > > > On Thu, 2022-05-19 at 16:37 +0000, Sean Christopherson wrote:
+> > > > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > > > > @@ -5753,6 +5752,10 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> > > Now for nested AVIC, this is what I would like to do:
+> > >  
+> > > - just like mmu, I prefer to register the write tracking notifier, when the
+> > >   VM is created.
+> > > 
+> > > - just like mmu, write tracking should only be enabled when nested AVIC is
+> > >   actually used first time, so that write tracking is not always enabled when
+> > >   you just boot a VM with nested avic supported, since the VM might not use
+> > >   nested at all.
+> > >  
+> > > Thus I either need to use the __kvm_page_track_register_notifier too for AVIC
+> > > (and thus need to export it) or I need to have a boolean
+> > > (nested_avic_was_used_once) and register the write tracking notifier only
+> > > when false and do it not on VM creation but on first attempt to use nested
+> > > AVIC.
+> > >  
+> > > Do you think this is worth it? I mean there is some value of registering the
+> > > notifier only when needed (this way it is not called for nothing) but it does
+> > > complicate things a bit.
+> > 
+> > Compared to everything else that you're doing in the nested AVIC code, refcounting
+> > the shared kvm_page_track_notifier_node object is a trivial amount of complexity.
+> Makes sense.
+> 
+> > And on that topic, do you have performance numbers to justify using a single
+> > shared node?  E.g. if every table instance has its own notifier, then no additional
+> > refcounting is needed. 
+> 
+> The thing is that KVM goes over the list of notifiers and calls them for every write from the emulator
+> in fact even just for mmio write, and when you enable write tracking on a page,
+> you just write protect the page and add a mark in the page track array, which is roughly 
+> 
+> 'don't install spte, don't install mmio spte, but just emulate the page fault if it hits this page'
+> 
+> So adding more than a bare minimum to this list, seems just a bit wrong.
+> 
+> 
+> >  It's not obvious that a shared node will provide better
+> > performance, e.g. if there are only a handful of AVIC tables being shadowed, then
+> > a linear walk of all nodes is likely fast enough, and doesn't bring the risk of
+> > a write potentially being stalled due to having to acquire a VM-scoped mutex.
+> 
+> The thing is that if I register multiple notifiers, they all will be called anyway,
+> but yes I can use container_of, and discover which table the notifier belongs to,
+> instead of having a hash table where I lookup the GFN of the fault.
+> 
+> The above means practically that all the shadow physid tables will be in a linear
+> list of notifiers, so I could indeed avoid per vm mutex on the write tracking,
+> however for simplicity I probably will still need it because I do modify the page,
+> and having per physid table mutex complicates things.
+> 
+> Currently in my code the locking is very simple and somewhat dumb, but the performance
+> is very good because the code isn't executed often, most of the time the AVIC hardware
+> works alone without any VM exits.
+> 
+> Once the code is accepted upstream, it's one of the things that can be improved.
+> 
+> 
+> Note though that I still need a hash table and a mutex because on each VM entry,
+> the guest can use a different physid table, so I need to lookup it, and create it,
+> if not found, which would require read/write of the hash table and thus a mutex.
+> 
+> 
+> 
+> > > I can also stash this boolean (like 'bool registered;') into the 'struct
+> > > kvm_page_track_notifier_node',  and thus allow the
+> > > kvm_page_track_register_notifier to be called more that once -  then I can
+> > > also get rid of __kvm_page_track_register_notifier. 
+> > 
+> > No, allowing redundant registration without proper refcounting leads to pain,
+> > e.g. X registers, Y registers, X unregisters, kaboom.
+> > 
+> 
+> True, but then what about adding a refcount to 'struct kvm_page_track_notifier_node'
+> instead of a boolean, and allowing redundant registration? 
+> Probably not worth it, in which case I am OK to add a refcount to my avic code.
+> 
+> Or maybe just scrap the whole thing and just leave registration and activation of the
+> write tracking as two separate things? Honestly now that looks like the most clean
+> solution.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: vmalloc-out-of-bounds Write in imageblit
 
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
-Write of size 4 at addr ffffc90004261000 by task syz-executor.4/4191
-
-CPU: 0 PID: 4191 Comm: syz-executor.4 Not tainted 5.19.0-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- fast_imageblit drivers/video/fbdev/core/sysimgblt.c:257 [inline]
- sys_imageblit+0x1ed0/0x2240 drivers/video/fbdev/core/sysimgblt.c:323
- drm_fb_helper_sys_imageblit drivers/gpu/drm/drm_fb_helper.c:825 [inline]
- drm_fbdev_fb_imageblit+0x15c/0x350 drivers/gpu/drm/drm_fb_helper.c:2328
- bit_putcs_unaligned drivers/video/fbdev/core/bitblit.c:139 [inline]
- bit_putcs+0x6e1/0xd20 drivers/video/fbdev/core/bitblit.c:188
- fbcon_putcs+0x314/0x3e0 drivers/video/fbdev/core/fbcon.c:1285
- do_update_region+0x399/0x630 drivers/tty/vt/vt.c:676
- redraw_screen+0x61f/0x740 drivers/tty/vt/vt.c:1035
- fbcon_do_set_font+0x5eb/0x6f0 drivers/video/fbdev/core/fbcon.c:2435
- fbcon_set_font+0x89d/0xab0 drivers/video/fbdev/core/fbcon.c:2522
- con_font_set drivers/tty/vt/vt.c:4666 [inline]
- con_font_op+0x73a/0xc90 drivers/tty/vt/vt.c:4710
- vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
- vt_ioctl+0x1efa/0x2b20 drivers/tty/vt/vt_ioctl.c:752
- tty_ioctl+0xbbd/0x15e0 drivers/tty/tty_io.c:2778
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff9cac89109
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff9cbd6c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007ff9cad9c030 RCX: 00007ff9cac89109
-RDX: 0000000020000040 RSI: 0000000000004b72 RDI: 0000000000000004
-RBP: 00007ff9cbd6c1d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffd34c3bf8f R14: 00007ff9cbd6c300 R15: 0000000000022000
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90003f61000, ffffc90004262000) created by:
- drm_gem_shmem_vmap_locked drivers/gpu/drm/drm_gem_shmem_helper.c:319 [inline]
- drm_gem_shmem_vmap+0x3d7/0x5a0 drivers/gpu/drm/drm_gem_shmem_helper.c:366
-
-Memory state around the buggy address:
- ffffc90004260f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc90004260f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc90004261000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                   ^
- ffffc90004261080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90004261100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
+Kind ping on this. Do you still want me to enable write tracking on the notifier registeration,
+or scrap the idea?
 
 
-Tested on:
+Best regards,
+	Maxim Levitsky
+> 
+> Best regards,
+> 	Maxim Levitsky
 
-commit:         3d7cb6b0 Linux 5.19
-git tree:       https://github.com/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11b85261080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70dd99d568a89e0
-dashboard link: https://syzkaller.appspot.com/bug?extid=14b0e8f3fd1612e35350
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13f0a73c080000
 

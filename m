@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8098B586D8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BBD586D8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiHAPTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S233384AbiHAPTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiHAPTV (ORCPT
+        with ESMTP id S232357AbiHAPTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:19:21 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1EE237C7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:19:20 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id r4so1766196vkf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:19:20 -0700 (PDT)
+        Mon, 1 Aug 2022 11:19:41 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10712AC4F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:19:40 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c15-20020a170902d48f00b0016c01db365cso7550508plg.20
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nx2PcYaiHqW1lYHUUeUhS477dvADEb3MkfTTwtrPOSw=;
-        b=k+/kYR5se5jVtdGNjaAb1TYy8yHoKB3ZOYEAOhfaEUnMxddq52yiGUcpCAszR+f8OY
-         E684j66WnJnMMkaXk5uXI6lyoszZYiEJujdlw08cQA/o2cM0SnsSPE3aym2QY5ri/XN3
-         6NROXuDBz/ayX8HrX9UWRCqfT32ZqttKvoNuK/wPnlnNK4zaRHpDVe+A4nMpWWutG83R
-         4i/eaK+V6/NG8C1gKi0d6dgJFnp7YpoKtgyUh4vXLXC460v4GikCi9yaMy+FEEJB9tlK
-         yy29JZmUtNNd33Ld+8Wk20wPxrVgn7s4tL1ll628UOwuSyeYo0Z9crqfC+gEtYGyEU+x
-         9crQ==
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=S/2jI0VtfXi7m6ZMf+qwyQLgOYuMiCIT7wBl4PXRX+g=;
+        b=OqEy/n2odJcpLuQeQrEW3uvv4W6U5wbHVoh+YVePDwAMenajqwhMu4ssIBWUMxydvo
+         PKYVsYiXs6raDPcmybsCA24N7Xr/PKhc3cv0Vwr6BMp4HyuldkXfgDcjH9L3QbzEG3q5
+         bnNJS2cnVbxfJyehbXL9D+5LzG6I9WBICeXtTSON6X+SPopmA/aqmPqDBG7bmgqEp6PG
+         5KtSDvU7j4UB39QtuZW1XmQ721oGR4wdvlfPYnTwC+l7niSzawHFaz2uGJslDdVkhgFL
+         9D7Sf0+Iz1Jj8kgeI9C//InH/tv88mSYgGkCu1saaRUz09yZ27m4tFnY+LnZQP+AJSP8
+         CdjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nx2PcYaiHqW1lYHUUeUhS477dvADEb3MkfTTwtrPOSw=;
-        b=TtOE7xAtpsrWBnnAtuDDNV2DmXRCvKeU89CrOTdJnKJziYf1pzM+YGgvNw3ApfhHEd
-         hAE76HWJ04yKnzZHjDTRbs0xy2qYz/y6X+Itw32uQJWK/IckmOnLF+fBuei3LtM3onP0
-         allMbLOJ5l/xsa2wEr7FfziUEqnDy26OGVfLPMi/Z4uIS3OoBXXeny3OLuXgkPNJz1fR
-         5wb0ddWLHI1xdaf4LNuTJchin8KtRn8iRfRY3fMPrRjk/XujyWJonVyWNwujP3Vbmzfv
-         to33pSLo2/hGiloodHRQUya8OGZoJrwDV0kecNHbmIBzosK06xJU6CxREtwlDwZxDtOY
-         oZTQ==
-X-Gm-Message-State: ACgBeo0V4oh+4epfcrbHoQfXw56UABKFUwpq7vPhvBqBpGGet6kAe6+u
-        NyhAruWBnkcEe+Zv/Tg1cFPnAAlP89LI8KryHw6b+A==
-X-Google-Smtp-Source: AA6agR6F/nAFrpseFKhU1HHqyctxIpyiHif+qSObpPjczQ35kWUud7JNZO6gKPiUeHXot1DUR4PDV/AVQHVZbX1eqCM=
-X-Received: by 2002:a1f:b60f:0:b0:377:4f57:fb19 with SMTP id
- g15-20020a1fb60f000000b003774f57fb19mr2809231vkf.26.1659367159450; Mon, 01
- Aug 2022 08:19:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABPqkBTU_StuH_zyZ=22wtV5_V8YDnxRpTSjy4Bg0s=mk8PahQ@mail.gmail.com>
- <20220725194743.173159-1-babu.moger@amd.com> <5a7abe15-5d0d-6ff0-3248-e6fcd6b92d7d@amd.com>
-In-Reply-To: <5a7abe15-5d0d-6ff0-3248-e6fcd6b92d7d@amd.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Mon, 1 Aug 2022 18:19:07 +0300
-Message-ID: <CABPqkBRjJEVAxBdG3i4f9rW6DDjq9YTE6Bp7Y+PmyedC_k1y9Q@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
-To:     babu.moger@amd.com
-Cc:     fenghua.yu@intel.com, linux-kernel@vger.kernel.org,
-        reinette.chatre@intel.com, x86@kernel.org
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=S/2jI0VtfXi7m6ZMf+qwyQLgOYuMiCIT7wBl4PXRX+g=;
+        b=zDkSnsKYOBh4pNWnFgp7Qo2AReof2+Oc8bl6V+fOmOJQl5/FIHUOSt7MrOMMgx+Lz7
+         1VkM+wrr/pkwUmtR58vzpJDPXf459JQ9qjdiFDx6x5JlcTXfDgCbMkhG/Bj0zF3hYv/m
+         kaNITHT4i4cOnCC7tgM9KZZbfYfAx2jR7YZzL6JW0O3A8F1+8mLY2bPexpiI2eRJCIlJ
+         cUWQm9LhnVgfDe78Q8LgJv+cbRAe+4PEEnNDhFKK3sUpe/4vkeby4hsukfLj/q2CnV/6
+         94VzeroFi6hj3OU0h832aIAEQx+5bSF8i9XPddlm3Ci5Je/42NevIGEnEdMxmWBmgQ7M
+         qmfg==
+X-Gm-Message-State: AJIora9m+ZtVt8CPyGah64WAEqxalESmAD8i0GdGeWDwi0g9tuM6aURn
+        M621IOO2esqgwkjWrHYXIVB6BBaDeYzE
+X-Google-Smtp-Source: AGRyM1tmitgRItVDG9wYYQJP7lV6j2QhkGGFMfWO4zg8l7GgEPHyefkScB+izDXwBytqYaqte5+sZLs4g3s8
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a63:6c45:0:b0:419:b668:6d with SMTP id
+ h66-20020a636c45000000b00419b668006dmr13395927pgc.548.1659367180173; Mon, 01
+ Aug 2022 08:19:40 -0700 (PDT)
+Date:   Mon,  1 Aug 2022 08:19:28 -0700
+Message-Id: <20220801151928.270380-1-vipinsh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting NUMA aware
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +65,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 5:58 PM Moger, Babu <babu.moger@amd.com> wrote:
->
->
-> On 7/25/22 14:47, Babu Moger wrote:
-> > Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
-> >
-> > Sorry, I didn't see this thread. Just noticed going thru the archives.
-> > Replying using "git send-email" to the thread.
-> >
-> > Thanks Stephane for the patch. Thanks Fenghua and Reinette for your comments.
-> >
-> > Stephane, Are you planning to re-submit the patch with Fenghua's proposal?
-> > If not I will resubmit with my current patch-set.
->
-Haven't had a chance to ge to this yet. But it's been ongoing for a
-while, so I am fine
-with Fenghua's proposal at this point.
+tdp_mmu_alloc_sp_for_split() allocates page tables for Eager Page
+Splitting.  Currently it does not specify a NUMA node preference, so it
+will try to allocate from the local node. The thread doing eager page
+splitting is supplied by the userspace and may not be running on the same
+node where it would be best for page tables to be allocated.
 
-> Didn't see Stephan's response yet. I will add this patch in my QoS series.
->
-> Stephan, Let me know if you want me to add your "Signed-off-by".
->
-Sure. Thanks.
+We can improve TDP MMU eager page splitting by making
+tdp_mmu_alloc_sp_for_split() NUMA-aware. Specifically, when splitting a
+huge page, allocate the new lower level page tables on the same node as the
+huge page.
 
-> Thanks
->
-> Babu
->
-> >
-> > I agree with Fenghua's proposal. Here is my proposal with slight modification.
-> >
-> > Thanks
-> >
-> > ==================================================================================
-> >
-> > Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
-> >
-> > Signed-off-by: Babu Moger <babu.moger@amd.com>
-> >
-> >
-> > diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> > index bb1c3f5f60c8..a5c51a14fbce 100644
-> > --- a/arch/x86/kernel/cpu/resctrl/core.c
-> > +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> > @@ -66,9 +66,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
-> >                       .rid                    = RDT_RESOURCE_L3,
-> >                       .name                   = "L3",
-> >                       .cache_level            = 3,
-> > -                     .cache = {
-> > -                             .min_cbm_bits   = 1,
-> > -                     },
-> >                       .domains                = domain_init(RDT_RESOURCE_L3),
-> >                       .parse_ctrlval          = parse_cbm,
-> >                       .format_str             = "%d=%0*x",
-> > @@ -83,9 +80,6 @@ struct rdt_hw_resource rdt_resources_all[] = {
-> >                       .rid                    = RDT_RESOURCE_L2,
-> >                       .name                   = "L2",
-> >                       .cache_level            = 2,
-> > -                     .cache = {
-> > -                             .min_cbm_bits   = 1,
-> > -                     },
-> >                       .domains                = domain_init(RDT_RESOURCE_L2),
-> >                       .parse_ctrlval          = parse_cbm,
-> >                       .format_str             = "%d=%0*x",
-> > @@ -877,6 +871,7 @@ static __init void rdt_init_res_defs_intel(void)
-> >                       r->cache.arch_has_sparse_bitmaps = false;
-> >                       r->cache.arch_has_empty_bitmaps = false;
-> >                       r->cache.arch_has_per_cpu_cfg = false;
-> > +                     r->cache.min_cbm_bits = 1;
-> >               } else if (r->rid == RDT_RESOURCE_MBA) {
-> >                       hw_res->msr_base = MSR_IA32_MBA_THRTL_BASE;
-> >                       hw_res->msr_update = mba_wrmsr_intel;
-> > @@ -897,6 +892,7 @@ static __init void rdt_init_res_defs_amd(void)
-> >                       r->cache.arch_has_sparse_bitmaps = true;
-> >                       r->cache.arch_has_empty_bitmaps = true;
-> >                       r->cache.arch_has_per_cpu_cfg = true;
-> > +                     r->cache.min_cbm_bits = 0;
-> >               } else if (r->rid == RDT_RESOURCE_MBA) {
-> >                       hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
-> >                       hw_res->msr_update = mba_wrmsr_amd;
->
-> --
-> Thanks
-> Babu Moger
->
+__get_free_page() is replaced by alloc_page_nodes(). This introduces two
+functional changes.
+
+  1. __get_free_page() removes gfp flag __GFP_HIGHMEM via call to
+  __get_free_pages(). This should not be an issue  as __GFP_HIGHMEM flag is
+  not passed in tdp_mmu_alloc_sp_for_split() anyway.
+
+  2. __get_free_page() calls alloc_pages() and use thread's mempolicy for
+  the NUMA node allocation. From this commit, thread's mempolicy will not
+  be used and first preference will be to allocate on the node where huge
+  page was present.
+
+dirty_log_perf_test for 416 vcpu and 1GB/vcpu configuration on a 8 NUMA
+node machine showed dirty memory time improvements between 2% - 35% in
+multiple runs.
+
+Suggested-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+---
+ arch/x86/kvm/mmu/tdp_mmu.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index bf2ccf9debcaa..1e30e18fc6a03 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1402,9 +1402,19 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
+ 	return spte_set;
+ }
+ 
+-static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
++/*
++ * Caller's responsibility to pass a valid spte which has the shadow page
++ * present.
++ */
++static int tdp_mmu_spte_to_nid(u64 spte)
++{
++	return page_to_nid(pfn_to_page(spte_to_pfn(spte)));
++}
++
++static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+ {
+ 	struct kvm_mmu_page *sp;
++	struct page *spt_page;
+ 
+ 	gfp |= __GFP_ZERO;
+ 
+@@ -1412,11 +1422,12 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+ 	if (!sp)
+ 		return NULL;
+ 
+-	sp->spt = (void *)__get_free_page(gfp);
+-	if (!sp->spt) {
++	spt_page = alloc_pages_node(nid, gfp, 0);
++	if (!spt_page) {
+ 		kmem_cache_free(mmu_page_header_cache, sp);
+ 		return NULL;
+ 	}
++	sp->spt = page_address(spt_page);
+ 
+ 	return sp;
+ }
+@@ -1426,6 +1437,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+ 						       bool shared)
+ {
+ 	struct kvm_mmu_page *sp;
++	int nid;
++
++	nid = tdp_mmu_spte_to_nid(iter->old_spte);
+ 
+ 	/*
+ 	 * Since we are allocating while under the MMU lock we have to be
+@@ -1436,7 +1450,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+ 	 * If this allocation fails we drop the lock and retry with reclaim
+ 	 * allowed.
+ 	 */
+-	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
++	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
+ 	if (sp)
+ 		return sp;
+ 
+@@ -1448,7 +1462,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+ 		write_unlock(&kvm->mmu_lock);
+ 
+ 	iter->yielded = true;
+-	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
++	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
+ 
+ 	if (shared)
+ 		read_lock(&kvm->mmu_lock);
+-- 
+2.37.1.455.g008518b4e5-goog
+

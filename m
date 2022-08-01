@@ -2,143 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDE1586B21
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12BF586B27
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbiHAMp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S234867AbiHAMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbiHAMph (ORCPT
+        with ESMTP id S234780AbiHAMpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:45:37 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B946DA4
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:32:54 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j7so13933990wrh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:32:54 -0700 (PDT)
+        Mon, 1 Aug 2022 08:45:53 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F7249B54
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:34:08 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id n8so18709440yba.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
-        b=1MBkA4LqiF8fI0dfhCjDcznALsi41csR8RWo8B2vXIaEqFfOsFRqiHCRFevYzqX8lq
-         tdSDgz5bwsQG79hc3kd4cKyzpweWaDLj5euZHMZ8Q9zdEYqsShIHDKDFttv68frF9K51
-         8F5YFa7BDVVbtQov0QIiY5bRRnf8WJxlf6auhTUNV9Po0xjI+/zxML6w8lS1N1rA5T3e
-         2v+pH+AERHtt+02YqoXwVpiKGavKriiDMsM2ynRux63XWQdHX37BU//YBoiIm55BZ0X7
-         RJq13GSYT2uWpGCrcFYjI2eWBsvW5nfLl9VW3XHlujK3xt5LVd9Ii05ttsfsiRg4YDAN
-         gAtQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LcoRKUZxcX+fwnP/w+Ek0L1ccliKcMJGGIMkqg+/gBk=;
+        b=8Qq67pSUym7bRxaJ1wXQxajEMJS6HpKos8PyqVw/AIYaTRUkyuiHDv0eycBw7WteMz
+         vA2ffmtRj5NpE9imFKTBnZZHdh7Veak9BjcfMJEO1TvQsTZncZ8wpJSSeWS/Fzl2r4oo
+         crxtVikU87MU4cvow8KAMXuSE8Fw4ECrP5KwDbAKdS8agCFU52209EKhx1fzCsQSWcmG
+         Bf2T4r9FGmsl0SSufopazQYH6qUx7esh3yBY7jYpKJtzHa+9ugcTbzjnNcl7YUrB99/v
+         9oEa7EI5KFpJbbLUS6osrgC2g3+vL4a3PJZdTepn337fCpKGSdA1qUQAomSfAXFQxHJJ
+         e1NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
-        b=hjQaujE/DsrL47KuwmB5e/dJP6eAhdC4EIOphIqtnziqEvDy9BNzp09QUCcwYId8QF
-         /EqF9U685/DHsRFpRrZLt3eRGAARnOV7YCTOlsONH3FPQ1KdS4XKmmKoNNGhZGCeey76
-         PgnoRhXOJUeYJQDITLK/VGsOdmBaDsv9CNDsE7K+zraof8UkKDNqSsLVYxC/R9HHf8oc
-         hOCSNVbKYaIXtfjSzTY1stnoqb1Yrk9A2ojl2m4fc1gWw+3hF+jl1UcjrnJhRFN7J2F3
-         szVSMS4oqjTl+TyVU9d39LDGhilWvSD6TjmvMvkxeseeeFPYEFFC1Xz+oFTwLgxNd+6q
-         LdFA==
-X-Gm-Message-State: ACgBeo0hhkQx/2LMT6bhSeM1U2mx2EiPPXEvjwB18giW46nKXTCeCSvz
-        RrkKZSpQD2CoITMKWGjFqMTQtW/kfL0W6A==
-X-Google-Smtp-Source: AA6agR7944sGCx6WI3LpU8LVDq4T/AE2Sxg90GKPb2BHCCrbdYHuOAn49HeQwObUPDO+UkB9PjVvcA==
-X-Received: by 2002:adf:db4c:0:b0:21e:ef46:af22 with SMTP id f12-20020adfdb4c000000b0021eef46af22mr9755067wrj.424.1659357172791;
-        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
-Received: from localhost ([109.180.234.208])
-        by smtp.gmail.com with ESMTPSA id e13-20020a5d65cd000000b0020fcaba73bcsm11806263wrw.104.2022.08.01.05.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
-        linux-pm@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        viresh.kumar@linaro.org, robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
-        <20220728221043.4161903-2-jeremy.linton@arm.com>
-        <871qu4krb4.fsf@stealth>
-        <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com>
-Date:   Mon, 01 Aug 2022 13:32:51 +0100
-In-Reply-To: <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com> (Jeremy Linton's
-        message of "Fri, 29 Jul 2022 10:20:46 -0500")
-Message-ID: <87tu6wjg98.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LcoRKUZxcX+fwnP/w+Ek0L1ccliKcMJGGIMkqg+/gBk=;
+        b=m2rkuzm9CusAsgzf1SqdIcFYNf4/ZwsFRvclTuJJs66OG+0LVEICh6foBJkGJ1HoYK
+         HitBHnVXQ/Sh/MBwTkkyzQbPF17kU2VQMLlWDK3O9U9O6oIeTCDhmmC0Y2bNEilHLRu0
+         ntJmTACi9F4L6NSyDSWveZghofrJHGycWPHpRqe9HFFBGz1nFswUXBsO1W3MBJo2PQd4
+         J+33KqvMTU84GkA1I+6sE8rqvhgqNb9nntC3751X1axqHxcKONgp8qzwg48vBygRaiq4
+         jta8wH7RWnhvxpM/KVV27Y1KUccxVkYbTQySqRtFy1cb5eUWnXBlLGbhiKoq6vHdM/Aq
+         e19w==
+X-Gm-Message-State: ACgBeo1b49DzkbcNaLaZYbRxLHOwxV1AQd7s4RDWW7SUgw94HtdIxIBK
+        81VmO7KabcxhsF+k01Sqaqi2gQPSmG7XPkKQL4Ed3w==
+X-Google-Smtp-Source: AA6agR6gUV377VODoTtcZyENpHL6zTEL/yl0+xktWswsikj2XjC6xG8FsEO1Dd8D5SwcKI+6sZgTq8Xo9pCEdETIOIU=
+X-Received: by 2002:a25:4941:0:b0:670:24c7:dc96 with SMTP id
+ w62-20020a254941000000b0067024c7dc96mr10354775yba.22.1659357247554; Mon, 01
+ Aug 2022 05:34:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-6-bchihi@baylibre.com>
+ <20220729201421.fxybo57g46ftghgd@notapiano>
+In-Reply-To: <20220729201421.fxybo57g46ftghgd@notapiano>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Mon, 1 Aug 2022 14:33:31 +0200
+Message-ID: <CAGuA+ooqk-tf5FVfEbA0WdjTOo2fPJi-+AaHDC9jXgw=3vKq0g@mail.gmail.com>
+Subject: Re: [PATCH v8 5/6] arm64: dts: mt8195: Add efuse node to mt8195
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeremy Linton <jeremy.linton@arm.com> writes:
-
-> Hi,
+On Fri, Jul 29, 2022 at 10:14 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 >
-> On 7/29/22 07:59, Punit Agrawal wrote:
->> Hi Jeremy,
->> One comment / query below.
->> Jeremy Linton <jeremy.linton@arm.com> writes:
->> 
->>> PCC regions utilize a mailbox to set/retrieve register values used by
->>> the CPPC code. This is fine as long as the operations are
->>> infrequent. With the FIE code enabled though the overhead can range
->>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
->>> based machines.
->>>
->>> So, before enabling FIE assure none of the registers used by
->>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
->>> enable a module parameter which can also disable it at boot or module
->>> reload.
->>>
->>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->>> ---
->>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->>>   include/acpi/cppc_acpi.h       |  5 +++++
->>>   3 files changed, 61 insertions(+), 4 deletions(-)
->>>
->> [...]
->> 
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>> index 24eaf0ec344d..ed607e27d6bb 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> [...]
->> 
->>> @@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
->>>   	};
->>>   	int ret;
->>>   -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
->>> +	if (cppc_perf_ctrs_in_pcc()) {
->>> +		pr_debug("FIE not enabled on systems with registers in PCC\n");
->> The message should probably be promoted to a pr_info() and exposed
->> as
->> part of the kernel logs. It is a change in the default behaviour we've
->> had until now. The message will provide some hint about why it was
->> disabled.
->> Thoughts?
+> On Tue, Jul 26, 2022 at 03:55:05PM +0200, Balsam CHIHI wrote:
+> > This adds the efuse node. This will be required by the thermal driver
+> > to get the calibration data.
+> >
+> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot=
+/dts/mediatek/mt8195.dtsi
+> > index 0ff34edcf8c8..4fbf24b5d202 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -1236,6 +1236,22 @@ nor_flash: spi@1132c000 {
+> >                       status =3D "disabled";
+> >               };
+> >
+> > +             efuse: efuse@11c10000 {
+> > +                     compatible =3D "mediatek,efuse";
+> > +                     reg =3D <0 0x11c10000 0 0x1000>;
+> > +                     #address-cells =3D <1>;
+> > +                     #size-cells =3D <1>;
+> > +                     lvts_efuse_data1: lvts1-calib@1bc {
+> > +                             reg =3D <0x1bc 0x14>;
+> > +                     };
+> > +                     lvts_efuse_data2: lvts2-calib@1d0 {
+> > +                             reg =3D <0x1d0 0x38>;
+> > +                     };
+> > +                     svs_calibration: calib@580 {
+> > +                             reg =3D <0x580 0x64>;
+> > +                     };
+> > +             };
+> > +
 >
-> I personally flip flopped between making it pr_info or pr_debug and
-> settled on debug because no one else was complaining about the
-> cppc_fie consumption. Which to me, meant that the users of platforms
-> utilizing PCC regions weren't sensitive to the problem, or weren't yet
-> running a distro/kernel with it enabled, or any number of other
-> reasons why the problem wasn't getting more attention. Mostly I
-> concluded the FIE code hadn't shown up in "enterprise" distros yet..
+> This commit doesn't apply, there's already an efuse node on mt8195.dtsi. =
+Please
+> rebase.
+>
+> Thanks,
+> N=C3=ADcolas
 
-I too was thinking that likely enterprise users haven't started digging
-into the performance impact of enabling frequency invariance.
+Hello N=C3=ADcolas,
 
-> But, yah, if no one is going to complain about the extra messages
-> pr_info() is a better plan.
+Thank you so much for the review.
+I rebased on top of the latest kernel version "linux-5.19.0" but I
+can't find efuse node on mt8195.dtsi.
+But, this node is indeed present on mt8192.dtsi.
 
-Thanks! I'll look out for the updated patch.
-
-FIE was designed to improve load balancing (and arguably fairness
-too). Hopefully, the message will aid users in looking more closely and
-complain to system vendor / upstream if it matters to their workloads.
+Best regards,
+Balsam

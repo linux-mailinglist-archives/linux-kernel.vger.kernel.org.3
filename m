@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC05586A87
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61F75869D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbiHAMSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        id S233686AbiHAMH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234332AbiHAMQk (ORCPT
+        with ESMTP id S233594AbiHAMHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:16:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F547E022;
-        Mon,  1 Aug 2022 04:59:00 -0700 (PDT)
+        Mon, 1 Aug 2022 08:07:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0CB5F130;
+        Mon,  1 Aug 2022 04:55:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E0FAB80E8F;
-        Mon,  1 Aug 2022 11:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98ED3C433D6;
-        Mon,  1 Aug 2022 11:58:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 663C761227;
+        Mon,  1 Aug 2022 11:55:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705DBC433D6;
+        Mon,  1 Aug 2022 11:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355138;
-        bh=501OjYb5HYrJrfCdqJVm4WnrudaBA4TQcWrbApMwIqU=;
+        s=korg; t=1659354921;
+        bh=b3RRbMvj1I7RgAEBxzdVO+YSM6bS7D3bRC0SQIiEaLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EXtt9CvBA+zBrkgEKMLjFbxo+2efwRy9Q1VPtcJ9apw5U3aRTDZF/xOYsBAhGQNmT
-         D6CJ95CQb9BInoPdY2zTsbPhM/gtXO17s/aBWyOeg+XuC1pT3IjPs+0IFGw+XBzAkj
-         poWqnTnVFIuSmrbMcM7F4mHvd/hjN7J87pc76z58=
+        b=j90pg0R8bZjGnBVsPgWC/KD687byOQwUOXkg2Jt5LH3YZ7bsxKH5a0Pdkc0K5F6Hu
+         m1tIgV2/cNqmNNxRhqtvAAYQatUE4tlKouqdCNDTtcOCjWfecFtik9GnhiYlgaEBDU
+         PtkSg/rHxuXkKxD1Qjufo6zQSP0Ix11a3dIyXaN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 77/88] net/funeth: Fix fun_xdp_tx() and XDP packet reclaim
-Date:   Mon,  1 Aug 2022 13:47:31 +0200
-Message-Id: <20220801114141.551590329@linuxfoundation.org>
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH 5.15 68/69] locking/rwsem: Allow slowpath writer to ignore handoff bit if not set by first waiter
+Date:   Mon,  1 Aug 2022 13:47:32 +0200
+Message-Id: <20220801114137.213981995@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,149 +55,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dimitris Michailidis <d.michailidis@fungible.com>
+From: Waiman Long <longman@redhat.com>
 
-[ Upstream commit 51a83391d77bb0f7ff0aef06ca4c7f5aa9e80b4c ]
+commit 6eebd5fb20838f5971ba17df9f55cc4f84a31053 upstream.
 
-The current implementation of fun_xdp_tx(), used for XPD_TX, is
-incorrect in that it takes an address/length pair and later releases it
-with page_frag_free(). It is OK for XDP_TX but the same code is used by
-ndo_xdp_xmit. In that case it loses the XDP memory type and releases the
-packet incorrectly for some of the types. Assorted breakage follows.
+With commit d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more
+consistent"), the writer that sets the handoff bit can be interrupted
+out without clearing the bit if the wait queue isn't empty. This disables
+reader and writer optimistic lock spinning and stealing.
 
-Change fun_xdp_tx() to take xdp_frame and rely on xdp_return_frame() in
-reclaim.
+Now if a non-first writer in the queue is somehow woken up or a new
+waiter enters the slowpath, it can't acquire the lock.  This is not the
+case before commit d257cc8cb8d5 as the writer that set the handoff bit
+will clear it when exiting out via the out_nolock path. This is less
+efficient as the busy rwsem stays in an unlock state for a longer time.
 
-Fixes: db37bc177dae ("net/funeth: add the data path")
-Signed-off-by: Dimitris Michailidis <dmichail@fungible.com>
-Link: https://lore.kernel.org/r/20220726215923.7887-1-dmichail@fungible.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In some cases, this new behavior may cause lockups as shown in [1] and
+[2].
+
+This patch allows a non-first writer to ignore the handoff bit if it
+is not originally set or initiated by the first waiter. This patch is
+shown to be effective in fixing the lockup problem reported in [1].
+
+[1] https://lore.kernel.org/lkml/20220617134325.GC30825@techsingularity.net/
+[2] https://lore.kernel.org/lkml/3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com/
+
+Fixes: d257cc8cb8d5 ("locking/rwsem: Make handoff bit handling more consistent")
+Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: John Donnelly <john.p.donnelly@oracle.com>
+Tested-by: Mel Gorman <mgorman@techsingularity.net>
+Link: https://lore.kernel.org/r/20220622200419.778799-1-longman@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/fungible/funeth/funeth_rx.c  |  5 ++++-
- .../net/ethernet/fungible/funeth/funeth_tx.c  | 20 +++++++++----------
- .../ethernet/fungible/funeth/funeth_txrx.h    |  6 +++---
- 3 files changed, 16 insertions(+), 15 deletions(-)
+ kernel/locking/rwsem.c |   30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/fungible/funeth/funeth_rx.c b/drivers/net/ethernet/fungible/funeth/funeth_rx.c
-index 0f6a549b9f67..29a6c2ede43a 100644
---- a/drivers/net/ethernet/fungible/funeth/funeth_rx.c
-+++ b/drivers/net/ethernet/fungible/funeth/funeth_rx.c
-@@ -142,6 +142,7 @@ static void *fun_run_xdp(struct funeth_rxq *q, skb_frag_t *frags, void *buf_va,
- 			 int ref_ok, struct funeth_txq *xdp_q)
- {
- 	struct bpf_prog *xdp_prog;
-+	struct xdp_frame *xdpf;
- 	struct xdp_buff xdp;
- 	u32 act;
- 
-@@ -163,7 +164,9 @@ static void *fun_run_xdp(struct funeth_rxq *q, skb_frag_t *frags, void *buf_va,
- 	case XDP_TX:
- 		if (unlikely(!ref_ok))
- 			goto pass;
--		if (!fun_xdp_tx(xdp_q, xdp.data, xdp.data_end - xdp.data))
-+
-+		xdpf = xdp_convert_buff_to_frame(&xdp);
-+		if (!xdpf || !fun_xdp_tx(xdp_q, xdpf))
- 			goto xdp_error;
- 		FUN_QSTAT_INC(q, xdp_tx);
- 		q->xdp_flush |= FUN_XDP_FLUSH_TX;
-diff --git a/drivers/net/ethernet/fungible/funeth/funeth_tx.c b/drivers/net/ethernet/fungible/funeth/funeth_tx.c
-index ff6e29237253..2f6698b98b03 100644
---- a/drivers/net/ethernet/fungible/funeth/funeth_tx.c
-+++ b/drivers/net/ethernet/fungible/funeth/funeth_tx.c
-@@ -466,7 +466,7 @@ static unsigned int fun_xdpq_clean(struct funeth_txq *q, unsigned int budget)
- 
- 		do {
- 			fun_xdp_unmap(q, reclaim_idx);
--			page_frag_free(q->info[reclaim_idx].vaddr);
-+			xdp_return_frame(q->info[reclaim_idx].xdpf);
- 
- 			trace_funeth_tx_free(q, reclaim_idx, 1, head);
- 
-@@ -479,11 +479,11 @@ static unsigned int fun_xdpq_clean(struct funeth_txq *q, unsigned int budget)
- 	return npkts;
- }
- 
--bool fun_xdp_tx(struct funeth_txq *q, void *data, unsigned int len)
-+bool fun_xdp_tx(struct funeth_txq *q, struct xdp_frame *xdpf)
- {
- 	struct fun_eth_tx_req *req;
- 	struct fun_dataop_gl *gle;
--	unsigned int idx;
-+	unsigned int idx, len;
- 	dma_addr_t dma;
- 
- 	if (fun_txq_avail(q) < FUN_XDP_CLEAN_THRES)
-@@ -494,7 +494,8 @@ bool fun_xdp_tx(struct funeth_txq *q, void *data, unsigned int len)
- 		return false;
- 	}
- 
--	dma = dma_map_single(q->dma_dev, data, len, DMA_TO_DEVICE);
-+	len = xdpf->len;
-+	dma = dma_map_single(q->dma_dev, xdpf->data, len, DMA_TO_DEVICE);
- 	if (unlikely(dma_mapping_error(q->dma_dev, dma))) {
- 		FUN_QSTAT_INC(q, tx_map_err);
- 		return false;
-@@ -514,7 +515,7 @@ bool fun_xdp_tx(struct funeth_txq *q, void *data, unsigned int len)
- 	gle = (struct fun_dataop_gl *)req->dataop.imm;
- 	fun_dataop_gl_init(gle, 0, 0, len, dma);
- 
--	q->info[idx].vaddr = data;
-+	q->info[idx].xdpf = xdpf;
- 
- 	u64_stats_update_begin(&q->syncp);
- 	q->stats.tx_bytes += len;
-@@ -545,12 +546,9 @@ int fun_xdp_xmit_frames(struct net_device *dev, int n,
- 	if (unlikely(q_idx >= fp->num_xdpqs))
- 		return -ENXIO;
- 
--	for (q = xdpqs[q_idx], i = 0; i < n; i++) {
--		const struct xdp_frame *xdpf = frames[i];
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -335,8 +335,6 @@ struct rwsem_waiter {
+ 	struct task_struct *task;
+ 	enum rwsem_waiter_type type;
+ 	unsigned long timeout;
 -
--		if (!fun_xdp_tx(q, xdpf->data, xdpf->len))
-+	for (q = xdpqs[q_idx], i = 0; i < n; i++)
-+		if (!fun_xdp_tx(q, frames[i]))
- 			break;
--	}
- 
- 	if (unlikely(flags & XDP_XMIT_FLUSH))
- 		fun_txq_wr_db(q);
-@@ -577,7 +575,7 @@ static void fun_xdpq_purge(struct funeth_txq *q)
- 		unsigned int idx = q->cons_cnt & q->mask;
- 
- 		fun_xdp_unmap(q, idx);
--		page_frag_free(q->info[idx].vaddr);
-+		xdp_return_frame(q->info[idx].xdpf);
- 		q->cons_cnt++;
- 	}
- }
-diff --git a/drivers/net/ethernet/fungible/funeth/funeth_txrx.h b/drivers/net/ethernet/fungible/funeth/funeth_txrx.h
-index 04c9f91b7489..8708e2895946 100644
---- a/drivers/net/ethernet/fungible/funeth/funeth_txrx.h
-+++ b/drivers/net/ethernet/fungible/funeth/funeth_txrx.h
-@@ -95,8 +95,8 @@ struct funeth_txq_stats {  /* per Tx queue SW counters */
- 
- struct funeth_tx_info {      /* per Tx descriptor state */
- 	union {
--		struct sk_buff *skb; /* associated packet */
--		void *vaddr;         /* start address for XDP */
-+		struct sk_buff *skb;    /* associated packet (sk_buff path) */
-+		struct xdp_frame *xdpf; /* associated XDP frame (XDP path) */
- 	};
+-	/* Writer only, not initialized in reader */
+ 	bool handoff_set;
  };
+ #define rwsem_first_waiter(sem) \
+@@ -456,10 +454,12 @@ static void rwsem_mark_wake(struct rw_se
+ 			 * to give up the lock), request a HANDOFF to
+ 			 * force the issue.
+ 			 */
+-			if (!(oldcount & RWSEM_FLAG_HANDOFF) &&
+-			    time_after(jiffies, waiter->timeout)) {
+-				adjustment -= RWSEM_FLAG_HANDOFF;
+-				lockevent_inc(rwsem_rlock_handoff);
++			if (time_after(jiffies, waiter->timeout)) {
++				if (!(oldcount & RWSEM_FLAG_HANDOFF)) {
++					adjustment -= RWSEM_FLAG_HANDOFF;
++					lockevent_inc(rwsem_rlock_handoff);
++				}
++				waiter->handoff_set = true;
+ 			}
  
-@@ -245,7 +245,7 @@ static inline int fun_irq_node(const struct fun_irq *p)
- int fun_rxq_napi_poll(struct napi_struct *napi, int budget);
- int fun_txq_napi_poll(struct napi_struct *napi, int budget);
- netdev_tx_t fun_start_xmit(struct sk_buff *skb, struct net_device *netdev);
--bool fun_xdp_tx(struct funeth_txq *q, void *data, unsigned int len);
-+bool fun_xdp_tx(struct funeth_txq *q, struct xdp_frame *xdpf);
- int fun_xdp_xmit_frames(struct net_device *dev, int n,
- 			struct xdp_frame **frames, u32 flags);
+ 			atomic_long_add(-adjustment, &sem->count);
+@@ -569,7 +569,7 @@ static void rwsem_mark_wake(struct rw_se
+ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
+ 					struct rwsem_waiter *waiter)
+ {
+-	bool first = rwsem_first_waiter(sem) == waiter;
++	struct rwsem_waiter *first = rwsem_first_waiter(sem);
+ 	long count, new;
  
--- 
-2.35.1
-
+ 	lockdep_assert_held(&sem->wait_lock);
+@@ -579,11 +579,20 @@ static inline bool rwsem_try_write_lock(
+ 		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
+ 
+ 		if (has_handoff) {
+-			if (!first)
++			/*
++			 * Honor handoff bit and yield only when the first
++			 * waiter is the one that set it. Otherwisee, we
++			 * still try to acquire the rwsem.
++			 */
++			if (first->handoff_set && (waiter != first))
+ 				return false;
+ 
+-			/* First waiter inherits a previously set handoff bit */
+-			waiter->handoff_set = true;
++			/*
++			 * First waiter can inherit a previously set handoff
++			 * bit and spin on rwsem if lock acquisition fails.
++			 */
++			if (waiter == first)
++				waiter->handoff_set = true;
+ 		}
+ 
+ 		new = count;
+@@ -978,6 +987,7 @@ queue:
+ 	waiter.task = current;
+ 	waiter.type = RWSEM_WAITING_FOR_READ;
+ 	waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
++	waiter.handoff_set = false;
+ 
+ 	raw_spin_lock_irq(&sem->wait_lock);
+ 	if (list_empty(&sem->wait_list)) {
 
 

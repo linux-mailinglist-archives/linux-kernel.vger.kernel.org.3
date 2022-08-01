@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124E1586E73
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AECF586E76
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiHAQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S234058AbiHAQSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233834AbiHAQSI (ORCPT
+        with ESMTP id S233840AbiHAQSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 Aug 2022 12:18:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5163E74E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:18:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40B73E74D;
+        Mon,  1 Aug 2022 09:18:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 393C3B8159E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EFF67C433C1;
-        Mon,  1 Aug 2022 16:18:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47AD6B812A2;
+        Mon,  1 Aug 2022 16:18:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 010B5C433D7;
+        Mon,  1 Aug 2022 16:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659370682;
-        bh=sT3zuzgRt8w5uFTOCXg5Oir3O7KYZNoeVUz6YW3xGgk=;
+        s=k20201202; t=1659370683;
+        bh=LykFEOHq/aeDFRNdmo0JTTnYeIahKFi85gTgILHpzkw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gQCBqek5g02tUKaYpp8CdgADICgCEQG4KiSXisC1A08b5ll60Mrta8zkjFnNIJSg1
-         L6UymPNJ2naqJBsbYeykxTYb9CO5D8EIM3+Ko7b7jO9l8JkbVdkzieTXay5+9RC/PJ
-         Fexgzxklw7cFclf4dpqPTdO7VGYhg0I5lRnqQk29wsGyCe+rrvhYlTslr9/fjUA7D4
-         /P6EDSyaK+kudaScVBKlIFp7Fr/YNK8aMKZ4FdBuSaPu1Xo1CTcExqoICg8A2JF/M0
-         4lPZ211Q1hHjpIaABS4Lj+why4iIZwYDxEemFgYtR9md96Iim3XgrUN8wSndUHj2SY
-         xggAjb63YGYiA==
+        b=GjauYRNOQKICXLEUegFd618KZyqS7hYTS4Hx8CqYYOlM7FUoQcPhddtx039xJzZAy
+         Op1OvimQNNBzY8NxbHASyiw+5YwTLkjD/Oaqlhk4SE3NOxGFtC+IRjjW6hdl02Wg6V
+         1K+pR+CehP6Y+/HJNxyGastLmliuvOnVt8GArvJkJSUmBJn47BXbzAljYP9CNgQuEg
+         ZM0nK0bRKnweiCcF5/sgfeFOftlRatyCYXjUYM6hqdajDiXtkVQ2FxpMgCqlJlqCnl
+         rT8R04Kw97o1fxQ/IlDQzUohu8wwd0fyE5ebHYl4Vf6+t6DxQDgVOrbW69yu8vUl5f
+         Wf0AkKMTFPtaQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D72A4C43142;
-        Mon,  1 Aug 2022 16:18:01 +0000 (UTC)
-Subject: Re: [GIT PULL] erofs updates for 5.20-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E07E0C43140;
+        Mon,  1 Aug 2022 16:18:02 +0000 (UTC)
+Subject: Re: [GIT PULL] file locking changes for v6.0
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YucDJOcnlB7EOD8g@debian>
-References: <YucDJOcnlB7EOD8g@debian>
-X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <YucDJOcnlB7EOD8g@debian>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
-X-PR-Tracked-Commit-Id: ecce9212d0fd7a2d4a4998f0c4623a66887e14c8
+In-Reply-To: <6dfd152d3643c568b928a96d334b50754cd752d4.camel@kernel.org>
+References: <6dfd152d3643c568b928a96d334b50754cd752d4.camel@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <6dfd152d3643c568b928a96d334b50754cd752d4.camel@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/filelock-v6.0
+X-PR-Tracked-Commit-Id: db4abb4a32ec979ea5deea4d0095fa22ec99a623
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e88745dcfd9de5c7de1c17f81e7cecec3d88871d
-Message-Id: <165937068187.17475.15354625708863816235.pr-tracker-bot@kernel.org>
-Date:   Mon, 01 Aug 2022 16:18:01 +0000
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yue Hu <huyue2@yulong.com>, linux-erofs@lists.ozlabs.org,
-        LKML <linux-kernel@vger.kernel.org>
+X-PR-Merge-Commit-Id: e6a7cf70a3ca9dc83419dd3d8ef09a800da3d7c1
+Message-Id: <165937068291.17475.9653797655780712882.pr-tracker-bot@kernel.org>
+Date:   Mon, 01 Aug 2022 16:18:02 +0000
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 1 Aug 2022 06:33:08 +0800:
+The pull request you sent on Mon, 01 Aug 2022 07:07:57 -0400:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/filelock-v6.0
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e88745dcfd9de5c7de1c17f81e7cecec3d88871d
+https://git.kernel.org/torvalds/c/e6a7cf70a3ca9dc83419dd3d8ef09a800da3d7c1
 
 Thank you!
 

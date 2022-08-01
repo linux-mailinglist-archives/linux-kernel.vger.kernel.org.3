@@ -2,276 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADE0586B1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDE1586B21
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbiHAMpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S234913AbiHAMp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234884AbiHAMoX (ORCPT
+        with ESMTP id S234981AbiHAMph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:44:23 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF3BBC9F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:30:28 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id u133so3801350pfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:30:28 -0700 (PDT)
+        Mon, 1 Aug 2022 08:45:37 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B946DA4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:32:54 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j7so13933990wrh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:32:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=79wsiIuqmJHlDnyKBpsU0dcqa0Z1I6VJ8b46FtTPbYM=;
-        b=jTNNzOOmgHHd+AvOuz5rDsU21f94l1AkStN4gk6xkuFxwap3k1ovDoQSmfuCITnqIq
-         S48kXaiIvPUki3wUKChY6ECaHwx1fkG6hNtLes5dlpzieakVBHqRQ6ZutqBA0ToF1IKd
-         LKHZdX6WB7fJ4rjYN7gO4iYDF/KPBmcFzdKt4=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
+        b=1MBkA4LqiF8fI0dfhCjDcznALsi41csR8RWo8B2vXIaEqFfOsFRqiHCRFevYzqX8lq
+         tdSDgz5bwsQG79hc3kd4cKyzpweWaDLj5euZHMZ8Q9zdEYqsShIHDKDFttv68frF9K51
+         8F5YFa7BDVVbtQov0QIiY5bRRnf8WJxlf6auhTUNV9Po0xjI+/zxML6w8lS1N1rA5T3e
+         2v+pH+AERHtt+02YqoXwVpiKGavKriiDMsM2ynRux63XWQdHX37BU//YBoiIm55BZ0X7
+         RJq13GSYT2uWpGCrcFYjI2eWBsvW5nfLl9VW3XHlujK3xt5LVd9Ii05ttsfsiRg4YDAN
+         gAtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=79wsiIuqmJHlDnyKBpsU0dcqa0Z1I6VJ8b46FtTPbYM=;
-        b=iDzvl0P+zy5T5Q30HgjOWkedm9pqbJt1WBA87TR9CVcTB/aASpTMlaLr9vagNOwQRp
-         aTh+0Ii07UCl47clLw9yz7mfx+KaqmZp49D27oK8Kjg+kEJVSC6d+mI7EfrPE/66r5e6
-         2mbpTjF9F1hjGwOO2sOWTXIEq4yleRlYTd4B1XHKopP0F5EKg2KlF84+3qb3oy1XqpWI
-         /1V/E94TQQfdwigUfeQN+018o2k3BcFNIiFtnVd++W5YL8wsjV9SkVaRP+DaI4+GgboY
-         VUf4E8BwL1pjNeivF1PiMcJ/xIBe7PU0gw8J0B0/XKlb3SAeld8FY+NYu1TjRR4TNTxU
-         ySOw==
-X-Gm-Message-State: ACgBeo03Uj7ct5bM24rAV597YirkD3xOhwv4PS0sKpxOGl6+z3jaYlyx
-        v3jodLoHUZqJ5SYlH3eDaT4ugQ==
-X-Google-Smtp-Source: AA6agR5IZ0ynGGVF4vFaonoCeVUtJtBEWv5+dEytr+8vY2V3PghKfQwt4/ksjGBBZ/CuKYf5jjacRA==
-X-Received: by 2002:a05:6a00:190b:b0:52c:eb0e:e1b6 with SMTP id y11-20020a056a00190b00b0052ceb0ee1b6mr12456249pfi.54.1659357028121;
-        Mon, 01 Aug 2022 05:30:28 -0700 (PDT)
-Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id a14-20020a1709027e4e00b0015e8d4eb219sm3473230pln.99.2022.08.01.05.30.25
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=nQEpMirCobOsOWattp713R2f+EJsY/28eyyRhLTxB+E=;
+        b=hjQaujE/DsrL47KuwmB5e/dJP6eAhdC4EIOphIqtnziqEvDy9BNzp09QUCcwYId8QF
+         /EqF9U685/DHsRFpRrZLt3eRGAARnOV7YCTOlsONH3FPQ1KdS4XKmmKoNNGhZGCeey76
+         PgnoRhXOJUeYJQDITLK/VGsOdmBaDsv9CNDsE7K+zraof8UkKDNqSsLVYxC/R9HHf8oc
+         hOCSNVbKYaIXtfjSzTY1stnoqb1Yrk9A2ojl2m4fc1gWw+3hF+jl1UcjrnJhRFN7J2F3
+         szVSMS4oqjTl+TyVU9d39LDGhilWvSD6TjmvMvkxeseeeFPYEFFC1Xz+oFTwLgxNd+6q
+         LdFA==
+X-Gm-Message-State: ACgBeo0hhkQx/2LMT6bhSeM1U2mx2EiPPXEvjwB18giW46nKXTCeCSvz
+        RrkKZSpQD2CoITMKWGjFqMTQtW/kfL0W6A==
+X-Google-Smtp-Source: AA6agR7944sGCx6WI3LpU8LVDq4T/AE2Sxg90GKPb2BHCCrbdYHuOAn49HeQwObUPDO+UkB9PjVvcA==
+X-Received: by 2002:adf:db4c:0:b0:21e:ef46:af22 with SMTP id f12-20020adfdb4c000000b0021eef46af22mr9755067wrj.424.1659357172791;
+        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d65cd000000b0020fcaba73bcsm11806263wrw.104.2022.08.01.05.32.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 05:30:27 -0700 (PDT)
-From:   Suniel Mahesh <sunil@amarulasolutions.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
-        USB list <linux-usb@vger.kernel.org>
-Subject: [RFC 2/2] HID: ghid: add example program for GET_REPORT
-Date:   Mon,  1 Aug 2022 18:00:10 +0530
-Message-Id: <20220801123010.2984864-3-sunil@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801123010.2984864-1-sunil@amarulasolutions.com>
-References: <20220801123010.2984864-1-sunil@amarulasolutions.com>
+        Mon, 01 Aug 2022 05:32:52 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        linux-pm@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        viresh.kumar@linaro.org, robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC regions
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+        <20220728221043.4161903-2-jeremy.linton@arm.com>
+        <871qu4krb4.fsf@stealth>
+        <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com>
+Date:   Mon, 01 Aug 2022 13:32:51 +0100
+In-Reply-To: <a0bdc45a-c5c6-65ba-1ab8-e52dd26652d7@arm.com> (Jeremy Linton's
+        message of "Fri, 29 Jul 2022 10:20:46 -0500")
+Message-ID: <87tu6wjg98.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a user-space ghid sample get report program at
-gadget side. This program sends reports from userspace(gadget side)
-which are saved in the kernel in a list.
+Jeremy Linton <jeremy.linton@arm.com> writes:
 
-When a host requests a particular report based on report number
-and type, corresponding report can be send to host, instead of a
-zero filled in report.
+> Hi,
+>
+> On 7/29/22 07:59, Punit Agrawal wrote:
+>> Hi Jeremy,
+>> One comment / query below.
+>> Jeremy Linton <jeremy.linton@arm.com> writes:
+>> 
+>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>> the CPPC code. This is fine as long as the operations are
+>>> infrequent. With the FIE code enabled though the overhead can range
+>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>> based machines.
+>>>
+>>> So, before enabling FIE assure none of the registers used by
+>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>> enable a module parameter which can also disable it at boot or module
+>>> reload.
+>>>
+>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>> ---
+>>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>   include/acpi/cppc_acpi.h       |  5 +++++
+>>>   3 files changed, 61 insertions(+), 4 deletions(-)
+>>>
+>> [...]
+>> 
+>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>> index 24eaf0ec344d..ed607e27d6bb 100644
+>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> [...]
+>> 
+>>> @@ -229,7 +233,12 @@ static void __init cppc_freq_invariance_init(void)
+>>>   	};
+>>>   	int ret;
+>>>   -	if (cppc_cpufreq_driver.get == hisi_cppc_cpufreq_get_rate)
+>>> +	if (cppc_perf_ctrs_in_pcc()) {
+>>> +		pr_debug("FIE not enabled on systems with registers in PCC\n");
+>> The message should probably be promoted to a pr_info() and exposed
+>> as
+>> part of the kernel logs. It is a change in the default behaviour we've
+>> had until now. The message will provide some hint about why it was
+>> disabled.
+>> Thoughts?
+>
+> I personally flip flopped between making it pr_info or pr_debug and
+> settled on debug because no one else was complaining about the
+> cppc_fie consumption. Which to me, meant that the users of platforms
+> utilizing PCC regions weren't sensitive to the problem, or weren't yet
+> running a distro/kernel with it enabled, or any number of other
+> reasons why the problem wasn't getting more attention. Mostly I
+> concluded the FIE code hadn't shown up in "enterprise" distros yet..
 
-This program can add, delete reports and modify an existing report.
+I too was thinking that likely enterprise users haven't started digging
+into the performance impact of enabling frequency invariance.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
- samples/Kconfig         |  10 +++
- samples/Makefile        |   1 +
- samples/ghid/Makefile   |   4 ++
- samples/ghid/test-hid.c | 134 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 149 insertions(+)
- create mode 100644 samples/ghid/Makefile
- create mode 100644 samples/ghid/test-hid.c
+> But, yah, if no one is going to complain about the extra messages
+> pr_info() is a better plan.
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 470ee3baf2e1..f3d7873bb966 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -86,6 +86,16 @@ config SAMPLE_FPROBE
- 	  This builds a fprobe example module. This module has an option 'symbol'.
- 	  You can specify a probed symbol or symbols separated with ','.
- 
-+config SAMPLE_GHID_GET_REPORT
-+        bool "GHID sample get report"
-+        depends on CC_CAN_LINK && HEADERS_INSTALL
-+        help
-+          Build GHID sample get report program. This program can send reports from
-+	  userspace(gadget side) which are saved in the kernel in a linked list.
-+	  When a host requests a particular report based on report number and type,
-+	  corresponding report can be send to host, instead of a zero filled in report.
-+	  This program can add, delete reports and modify an existing report.
-+
- config SAMPLE_KFIFO
- 	tristate "Build kfifo examples -- loadable modules only"
- 	depends on m
-diff --git a/samples/Makefile b/samples/Makefile
-index 701e912ab5af..1d58f7a0381e 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -6,6 +6,7 @@ subdir-$(CONFIG_SAMPLE_ANDROID_BINDERFS) += binderfs
- obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
- obj-$(CONFIG_SAMPLE_CONNECTOR)		+= connector/
- obj-$(CONFIG_SAMPLE_FANOTIFY_ERROR)	+= fanotify/
-+subdir-$(SAMPLE_GHID_GET_REPORT)	+= ghid
- subdir-$(CONFIG_SAMPLE_HIDRAW)		+= hidraw
- obj-$(CONFIG_SAMPLE_HW_BREAKPOINT)	+= hw_breakpoint/
- obj-$(CONFIG_SAMPLE_KDB)		+= kdb/
-diff --git a/samples/ghid/Makefile b/samples/ghid/Makefile
-new file mode 100644
-index 000000000000..8c93ded625c1
---- /dev/null
-+++ b/samples/ghid/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+userprogs-always-y += test-hid
-+
-+userccflags += -I usr/include
-diff --git a/samples/ghid/test-hid.c b/samples/ghid/test-hid.c
-new file mode 100644
-index 000000000000..f76786509047
---- /dev/null
-+++ b/samples/ghid/test-hid.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * usb hidg GET_REPORT example, device/gadget side
-+ * This program tests the newly implemented GET_REPORT feature
-+ *
-+ * Copyright (c) 2022 Amarula Solutions India PVT LTD
-+ *
-+ * Authors:
-+ * Copyright (c) 2022 Suniel Mahesh <sunil@amarulasolutions.com>
-+ *
-+ */
-+
-+#include <pthread.h>
-+/* Linux */
-+#include <linux/types.h>
-+#include <linux/input.h>
-+#include <linux/hidraw.h>
-+#include <linux/uhid.h>
-+#include <uapi/linux/usb/g_hid.h>
-+
-+/* Unix */
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+
-+/* C */
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <errno.h>
-+
-+/*
-+ * fix for failing compilation on systems that don't
-+ * yet populate new version of uapi/linux/usb/g_hid.h
-+ * to userspace.
-+ */
-+#define GADGET_ADD_REPORT_STATUS	_IOWR('g', 0x41, struct uhid_set_report_req)
-+#define GADGET_REMOVE_REPORT_STATUS	_IOWR('g', 0x42, struct uhid_get_report_req)
-+#define GADGET_UPDATE_REPORT_STATUS	_IOWR('g', 0x43, struct uhid_set_report_req)
-+
-+struct uhid_set_report_req *create_report(void)
-+{
-+	struct uhid_set_report_req *rep;
-+	int i;
-+
-+	rep = (struct uhid_set_report_req *)calloc(1, sizeof(struct uhid_set_report_req));
-+	if (rep == NULL) {
-+		perror("calloc() failed");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("enter report id:\n");
-+	scanf("%u", &rep->id);
-+	printf("enter report number:\n");
-+	scanf("%hhu", &rep->rnum);
-+	printf("enter report type:\n");
-+	scanf("%hhu", &rep->rtype);
-+	printf("enter report size:\n");
-+	scanf("%hu", &rep->size);
-+	printf("enter report data:\n");
-+
-+	for (i = 0; i < rep->size; i++)
-+		scanf("%hhu", &rep->data[i]);
-+
-+	return rep;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	const char *filename = NULL;
-+	struct uhid_set_report_req *report;
-+	int fd = 0, res = 0, i, reports;
-+
-+	if (argc < 1) {
-+		fprintf(stderr, "Usage: %s /dev/hidg0\n", argv[0]);
-+		return -1;
-+	}
-+
-+	filename = argv[1];
-+	fd = open(filename, O_RDWR, 0666);
-+
-+	if (fd == -1) {
-+		perror(filename);
-+		return -2;
-+	}
-+
-+	printf("enter no of reports to send from userspace:\n");
-+	scanf("%d", &reports);
-+
-+	if (reports == 0)
-+		goto out;
-+
-+	for (i = 0; i < reports; i++) {
-+		report = create_report();
-+/* send reports to device */
-+		res = ioctl(fd, GADGET_ADD_REPORT_STATUS, report);
-+		if (res < 0) {
-+			perror("GADGET_ADD_REPORT_STATUS");
-+			res = -3;
-+			goto test_end;
-+		}
-+		free(report);
-+	}
-+
-+/* delete report with report number specified */
-+	printf("deleting report w.r.t rtype and rnum:\n");
-+	report = create_report();
-+	res = ioctl(fd, GADGET_REMOVE_REPORT_STATUS, report);
-+	if (res < 0) {
-+		perror("GADGET_REMOVE_REPORT_STATUS");
-+		res = -4;
-+		goto test_end;
-+	}
-+	free(report);
-+
-+/* modify an existing report identified by report number */
-+	printf("modify report w.r.t rtype and rnum:\n");
-+	report = create_report();
-+	res = ioctl(fd, GADGET_UPDATE_REPORT_STATUS, report);
-+	if (res < 0) {
-+		perror("GADGET_UPDATE_REPORT_STATUS");
-+		res = -5;
-+	}
-+
-+test_end:
-+	free(report);
-+	report = NULL;
-+out:
-+	close(fd);
-+	return res;
-+}
--- 
-2.25.1
+Thanks! I'll look out for the updated patch.
 
+FIE was designed to improve load balancing (and arguably fairness
+too). Hopefully, the message will aid users in looking more closely and
+complain to system vendor / upstream if it matters to their workloads.

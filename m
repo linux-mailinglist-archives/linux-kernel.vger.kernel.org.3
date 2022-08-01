@@ -2,84 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3840B586407
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22D95863F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239841AbiHAGWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 02:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S239470AbiHAGQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 02:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiHAGWs (ORCPT
+        with ESMTP id S229681AbiHAGQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 02:22:48 -0400
-Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5CD13FB4;
-        Sun, 31 Jul 2022 23:22:47 -0700 (PDT)
-Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.113]); authenticated
-        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oIOpB-0006YE-Mj; Mon, 01 Aug 2022 08:22:45 +0200
-Message-ID: <c17f79c7-40ba-ab10-dd0a-0f6e2634717a@birger-koblitz.de>
-Date:   Mon, 1 Aug 2022 08:22:45 +0200
+        Mon, 1 Aug 2022 02:16:31 -0400
+Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C681FBF7F;
+        Sun, 31 Jul 2022 23:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1659334588; i=@fujitsu.com;
+        bh=SqdNfRUTtps9oPoA47tb8I8RRaOQ9D0X0B9W1LY6XLQ=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=kxADbukhk4LaHWYdKWOZpIT1arI14wE6PnWUiR5OkuVNgDDy2BlhK+aHCwGdu/3oV
+         Zt+5zNnce7mwh/685fB+aXugYoczAtsEKo41ZtHN5lUuSmdZvXDsdiC2GUjh4YfbEI
+         VPpWzMJV4sQsKdsXXuTyHStPbMouSf6wBvbwi01gORJLKBNtOJYRextGvCjwTD8iL2
+         sDIopFQsFrYtWAiFOAc6hdehVrL4fFh0hj1rYsYdiMg7YBLdk6zdXzOGTlXIsb/Ams
+         FG08w08DsieRmgU12IHUMZP94+sbTBSenaNWICX0DCkwEdUJwLV31wgbLOuvc0v0k4
+         6TUw3zZTZG1LQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRWlGSWpSXmKPExsViZ8OxWXd3/vM
+  kg64/IhYzZ5xgtJjyaymzxeVdc9gsnh3qZbH4MnUas8X5Y/3sDmweO2fdZffYtKqTzePzJjmP
+  rZ9vswSwRLFm5iXlVySwZjw/u5C14KhQxa5/bg2MB/m7GLk4hAQ2Mkq0np7HCuEsZpI49msLc
+  xcjJ5Czn1Fi7RwZEJtNQEPiXstNRhBbRKCTUWJbaxpIA7NAC6PE2aZFYA3CAuYSbxbeZAOxWQ
+  RUJN4f/MkCYvMKOEqcXPkWLC4hoCAx5eF7Zoi4oMTJmU/AapgFJCQOvngBFOcAqlGSmNkdD1F
+  eITFrVhsThK0mcfXcJuYJjPyzkHTPQtK9gJFpFaNNUlFmekZJbmJmjq6hgYGuoaGprqWZrpGh
+  gV5ilW6iXmqpbl5+UUmGrqFeYnmxXmpxsV5xZW5yTopeXmrJJkZgkKcUJ1zawbhu3y+9Q4ySH
+  ExKorxJec+ThPiS8lMqMxKLM+KLSnNSiw8xynBwKEnwfsgFygkWpaanVqRl5gAjDiYtwcGjJM
+  IbAdLKW1yQmFucmQ6ROsWoKCXOKwzSJwCSyCjNg2uDRfklRlkpYV5GBgYGIZ6C1KLczBJU+Ve
+  M4hyMSsK8biDjeTLzSuCmvwJazAS0OEv0CcjikkSElFQDk84GFaOpbCq/VH6t3Mk4e/m0L2JG
+  jxSfpwv9+bo+wTz05lp98+ANzw5mG2lxdJ2SV2DZ/W+BZdq5r3f5PQ/948/X+KIg46x8Znvms
+  m2Gqy0+br27wPer8LRv7X+WX0mKvvxyoXWHXHNN6MnAn05OnQq2d7xW86y1DONzcn3A8+R5yM
+  rEZYGL17z95FSYd1OWYWtH34pM1tibu9eErn3tPH/RZv6ve0LnWnUu69Fm35Y5pT9wZeaG3rZ
+  Wj6tfa3m1HFZ+2OURKjnN73Pf5Yvnvk50VV10WkJpQc/pmPd8XqaiORaz4v3mmc/Mf6I17e/9
+  42qzHqyYcdRhe+jmr8suu2WGnxWv6JjLetDH7dV6xiwlluKMREMt5qLiRACTGfaKbQMAAA==
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-8.tower-745.messagelabs.com!1659334586!549255!1
+X-Originating-IP: [62.60.8.179]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 5502 invoked from network); 1 Aug 2022 06:16:27 -0000
+Received: from unknown (HELO n03ukasimr04.n03.fujitsu.local) (62.60.8.179)
+  by server-8.tower-745.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Aug 2022 06:16:27 -0000
+Received: from n03ukasimr04.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTP id B44E014C;
+        Mon,  1 Aug 2022 07:16:26 +0100 (BST)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr04.n03.fujitsu.local (Postfix) with ESMTPS id A73BE75;
+        Mon,  1 Aug 2022 07:16:26 +0100 (BST)
+Received: from be48d2029e82.localdomain (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Mon, 1 Aug 2022 07:16:23 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        "Leon Romanovsky" <leon@kernel.org>, <linux-rdma@vger.kernel.org>
+CC:     <yangx.jy@fujitsu.com>, Bob Pearson <rpearsonhpe@gmail.com>,
+        <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH] RDMA/RXE: Add send_common_ack() helper
+Date:   Mon, 1 Aug 2022 06:23:30 +0000
+Message-ID: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bert@biot.com, sander@svanheule.net
-From:   Birger Koblitz <mail@birger-koblitz.de>
-Subject: [PATCH 7/7] spi: realtek-rtl: update devicetree documentation
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;mail@birger-koblitz.de;1659334967;7b32f370;
-X-HE-SMSGID: 1oIOpB-0006YE-Mj
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update documentation to include the optional clocks and
-spi-max-frequency properties in the devicetree node.
+Most code in send_ack() and send_atomic_ack() are duplicate, move them
+to a new helper send_common_ack().
 
-Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+In newer IBA SPEC, some opcodes require acknowledge with a zero-length read
+response, with this new helper, we can easily implement it later.
+
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
-  .../devicetree/bindings/spi/realtek,rtl-spi.yaml       | 10 ++++++++++
-  1 file changed, 10 insertions(+)
+ drivers/infiniband/sw/rxe/rxe_resp.c | 43 ++++++++++++++----------------------
+ 1 file changed, 17 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml b/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
-index 2f938c293f70..e790a85067d3 100644
---- a/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
-@@ -21,9 +21,17 @@ properties:
-        - realtek,rtl8391-spi
-        - realtek,rtl8392-spi
-        - realtek,rtl8393-spi
-+      - realtek,rtl9300-spi
-+      - realtek,rtl9310-spi
-
-    reg:
-      maxItems: 1
+diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+index b36ec5c4d5e0..4c398fa220fa 100644
+--- a/drivers/infiniband/sw/rxe/rxe_resp.c
++++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+@@ -1028,50 +1028,41 @@ static enum resp_states do_complete(struct rxe_qp *qp,
+ 		return RESPST_CLEANUP;
+ }
+ 
+-static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
 +
-+  clocks:
-+    maxItems: 1
-+
-+  spi-max-frequency: 1
-+    maxItems: 1
-
-  required:
-    - compatible
-@@ -36,6 +44,8 @@ examples:
-      spi: spi@1200 {
-          compatible = "realtek,rtl8382-spi";
-          reg = <0x1200 0x100>;
-+        clocks = <&lx_clk>
-+        spi-max-requency = <25000000>;
-          #address-cells = <1>;
-          #size-cells = <0>;
-      };
++static int send_common_ack(struct rxe_qp *qp, u8 syndrome, u32 psn,
++				  int opcode, const char *msg)
+ {
+-	int err = 0;
++	int err;
+ 	struct rxe_pkt_info ack_pkt;
+ 	struct sk_buff *skb;
+ 
+-	skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ACKNOWLEDGE,
+-				 0, psn, syndrome);
+-	if (!skb) {
+-		err = -ENOMEM;
+-		goto err1;
+-	}
++	skb = prepare_ack_packet(qp, &ack_pkt, opcode, 0, psn, syndrome);
++	if (!skb)
++		return -ENOMEM;
+ 
+ 	err = rxe_xmit_packet(qp, &ack_pkt, skb);
+ 	if (err)
+-		pr_err_ratelimited("Failed sending ack\n");
++		pr_err_ratelimited("Failed sending %s\n", msg);
+ 
+-err1:
+ 	return err;
+ }
+ 
+-static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
++static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
+ {
+-	int err = 0;
+-	struct rxe_pkt_info ack_pkt;
+-	struct sk_buff *skb;
+-
+-	skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE,
+-				 0, psn, syndrome);
+-	if (!skb) {
+-		err = -ENOMEM;
+-		goto out;
+-	}
++	return send_common_ack(qp, syndrome, psn,
++			IB_OPCODE_RC_ACKNOWLEDGE, "ACK");
++}
+ 
+-	err = rxe_xmit_packet(qp, &ack_pkt, skb);
+-	if (err)
+-		pr_err_ratelimited("Failed sending atomic ack\n");
++static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
++{
++	int ret = send_common_ack(qp, syndrome, psn,
++			IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE, "ATOMIC ACK");
+ 
+ 	/* have to clear this since it is used to trigger
+ 	 * long read replies
+ 	 */
+ 	qp->resp.res = NULL;
+-out:
+-	return err;
++	return ret;
+ }
+ 
+ static enum resp_states acknowledge(struct rxe_qp *qp,
 -- 
-2.25.1
+1.8.3.1
 

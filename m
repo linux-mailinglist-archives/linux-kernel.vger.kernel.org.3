@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D3C5863FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F25F5863FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239869AbiHAGUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 02:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S239776AbiHAGUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 02:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239816AbiHAGU2 (ORCPT
+        with ESMTP id S239069AbiHAGUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 02:20:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6851E42
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 23:20:12 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oIOmY-0002T6-6k; Mon, 01 Aug 2022 08:20:02 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oIOmS-0001nM-L1; Mon, 01 Aug 2022 08:19:56 +0200
-Date:   Mon, 1 Aug 2022 08:19:56 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-Message-ID: <20220801061956.3wkakhwatvqlngff@pengutronix.de>
-References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+        Mon, 1 Aug 2022 02:20:02 -0400
+Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CA513FA8;
+        Sun, 31 Jul 2022 23:19:59 -0700 (PDT)
+Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.113]); authenticated
+        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oIOmU-00051u-26; Mon, 01 Aug 2022 08:19:58 +0200
+Message-ID: <a9568128-172a-6693-c059-7b2be2cafb97@birger-koblitz.de>
+Date:   Mon, 1 Aug 2022 08:19:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bert@biot.com, sander@svanheule.net
+From:   Birger Koblitz <mail@birger-koblitz.de>
+Subject: [PATCH 4/7] spi: realtek-rtl: add parallel IO suppport
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;mail@birger-koblitz.de;1659334800;60fd91a7;
+X-HE-SMSGID: 1oIOmU-00051u-26
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+The Realtek SoCs are capable of dual and/or quad IO.
+Add a function to enable this functionality.
 
-On 22-07-30, Adam Ford wrote:
-> Hey all,
-> 
-> I am trying to test Jagan's patch series [1] to add support for the
-> samsung dsim bridge which is used on the imx8mm to output DSI video.
-> The DSIM gets the video from the mxsfb, and in my case, the DSI is
-> sent to the adv7535 for connecting to HDMI.
+Signed-off-by: Birger Koblitz <mail@birger-koblitz.de>
+---
+  drivers/spi/spi-realtek-rtl.c | 22 ++++++++++++++++++++++
+  1 file changed, 22 insertions(+)
 
-So you're using the NXP recommended evalboard setup :)
+diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
+index 5979233522f4..25a90493bf6e 100644
+--- a/drivers/spi/spi-realtek-rtl.c
++++ b/drivers/spi/spi-realtek-rtl.c
+@@ -25,6 +25,9 @@ struct rtspi {
+  #define RTL_SPI_SFCSR_CSB3		BIT(14)
+  #define RTL_SPI_SFCSR_RDY		BIT(27)
+  #define RTL_SPI_SFCSR_CS		BIT(24)
++#define RTL_SPI_SFCSR_WIDTH_MASK	~(0x03 << 25)
++#define RTL_SPI_SFCSR_WIDTH_DUAL	(0x01 << 25)
++#define RTL_SPI_SFCSR_WIDTH_QUAD	(0x02 << 25)
+  #define RTL_SPI_SFCSR_LEN_MASK		~(0x03 << 28)
+  #define RTL_SPI_SFCSR_LEN1		(0x00 << 28)
+  #define RTL_SPI_SFCSR_LEN4		(0x03 << 28)
+@@ -118,6 +121,25 @@ static void rcv1(struct rtspi *rtspi, u8 *buf)
+  	*buf = readl(REG(RTL_SPI_SFDR)) >> 24;
+  }
 
-> I have been able to get the device tree setup and I don't get any
-> errors.  The Linux system appears to think the video is connected as
-> determined by modetest:
++static void set_mode(struct rtspi *rtspi, unsigned int mode)
++{
++	u32 value;
++
++	value = readl(REG(RTL_SPI_SFCSR));
++	value &= RTL_SPI_SFCSR_WIDTH_MASK;
++	switch (mode) {
++	case SPI_NBITS_QUAD:
++		value |= RTL_SPI_SFCSR_WIDTH_QUAD;
++		break;
++	case SPI_NBITS_DUAL:
++		value |= RTL_SPI_SFCSR_WIDTH_DUAL;
++		break;
++	default:
++		break;
++	}
++	writel(value, REG(RTL_SPI_SFCSR));
++}
++
+  static int transfer_one(struct spi_controller *ctrl, struct spi_device *spi,
+  			struct spi_transfer *xfer)
+  {
+-- 
+2.25.1
 
-...
-
-> Unfortunately, there is no video in my monitor, and my monitor states
-> there is no signal.
-
-This is pretty much known, at least on our side. We also have a few more
-patches on top of the series [1] for fixing the horizontal porches.  Our
-current status is that we can get only one mode out of the ADV7535 which
-is 1080P. Our assumption is that the ADV7535 needs some attentions
-(fixes) but we can't verify that since the documentation is under NDA.
-
-> If I use NXP's downstream kernel, this same hardware configuration
-> works fine and I can see the video.
-
-This is because of the NXP downstream kernel porch 'calculation' and
-workarounds. The values they are using for calculation don't take any
-mode values into account and instead they are using a table. We don't
-know where those values come from.
-
-> I have checked the clk_summary, and the working and non-working
-> conditions both have clock rates that are the same for DSI, LCDIF and
-> related items.  The power domains connected to the lcdif and the dsi
-> show they are active.
-> 
-> Since I go no errors, and  Linux looks like it's happy, I was hoping
-> someone from who better understands the interconnections between all
-> these bridge layers might be able to offer a suggestion of something
-> to investigate and/or try.
-> 
-> The kernel repo I am using is from Jagan located here:
-> 
-> [1] - https://github.com/openedev/kernel
-> 
-> I am not convinced it's a device tree issue since I get no errors when
-> the drivers enumerate, but I can provide my device tree updates if
-> that helps.
-
-Please see above. Our debugging showed that there is a strange behaviour
-of the ADV7535 but we don't have any documentation.
-
-Regards,
-  Marco

@@ -2,112 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04B8586865
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CCA5868FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiHALqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S232106AbiHALzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiHALq3 (ORCPT
+        with ESMTP id S232282AbiHALyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:46:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219B0357E5
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:46:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 1 Aug 2022 07:54:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E942E3FA29;
+        Mon,  1 Aug 2022 04:50:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BA3154DC25;
-        Mon,  1 Aug 2022 11:46:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659354386; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qNd2da+ped5af3bAA+RfV2DV9zxTIUEcxQB5O8P8qeM=;
-        b=h/CWLyG/iPcxNauNxR6QHHabWWMotBeR84mb2GmU5s8XQvioptIx7yJYKOZvWIx/7CD0Tr
-        sjyFqlggJoB6Kh3jCUA7WzRhGgUuVWr+Lnf9vZzmry03IDwR6pgarvljoK1gVFZxGU3PmN
-        jjpPPTi5Hw1xMW4W5aRZ0r0Lp0zp0gY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659354386;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qNd2da+ped5af3bAA+RfV2DV9zxTIUEcxQB5O8P8qeM=;
-        b=3RN+s3RinkUnyXQoLoWpbkbrDNBAItSVhXiBdq4EuQPrTVR8mJam2vyu55qbz/JUPixNv3
-        Rqo3ydS3pjK32WDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD81913AAE;
-        Mon,  1 Aug 2022 11:46:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rj9QKhK952KfCgAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 01 Aug 2022 11:46:26 +0000
-Date:   Mon, 1 Aug 2022 13:46:22 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/core for v6.0
-Message-ID: <Yue9DqpfTtzdkCBr@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03257B80E8F;
+        Mon,  1 Aug 2022 11:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47461C433C1;
+        Mon,  1 Aug 2022 11:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659354643;
+        bh=d0PFtRJnzZrBYfXv4fhaquB7q0KQccE/rvCowFHmkbs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IsCIu8jKnZT5JcP6UV/KWKgG3FzmWGnT2b36gFDnwfhNzP8H/DWvlAZF9Yj5kdAeR
+         68+gZS5PGo5Q1BmGL1pFTMsJhNCIQdV4nlg6skAxHeIcRklv/9gVY4oie/HD8qabCO
+         B50FtI/dYkFZl8QZrcqxKsBOD9geWXwSylX9bnBI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 06/65] watch_queue: Fix missing rcu annotation
+Date:   Mon,  1 Aug 2022 13:46:23 +0200
+Message-Id: <20220801114133.926593140@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+References: <20220801114133.641770326@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: David Howells <dhowells@redhat.com>
 
-please pull two x86/core fixes for 6.0.
+commit e0339f036ef4beb9b20f0b6532a1e0ece7f594c6 upstream.
 
-Thx.
+Since __post_watch_notification() walks wlist->watchers with only the
+RCU read lock held, we need to use RCU methods to add to the list (we
+already use RCU methods to remove from the list).
 
+Fix add_watch_to_object() to use hlist_add_head_rcu() instead of
+hlist_add_head() for that list.
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
+ kernel/watch_queue.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -497,7 +497,7 @@ int add_watch_to_object(struct watch *wa
+ 		unlock_wqueue(wqueue);
+ 	}
+ 
+-	hlist_add_head(&watch->list_node, &wlist->watchers);
++	hlist_add_head_rcu(&watch->list_node, &wlist->watchers);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(add_watch_to_object);
 
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_core_for_v6.0_rc1
-
-for you to fetch changes up to a1a5482a2c6e38a3ebed32e571625c56a8cc41a6:
-
-  x86/extable: Fix ex_handler_msr() print condition (2022-07-21 10:39:42 +0200)
-
-----------------------------------------------------------------
-- Have invalid MSR accesses warnings appear only once after a
-pr_warn_once() change broke that
-
-- Simplify {JMP,CALL}_NOSPEC and let the objtool retpoline patching
-infra take care of them instead of having unreadable alternative macros
-there
-
-----------------------------------------------------------------
-Peter Zijlstra (2):
-      x86,nospec: Simplify {JMP,CALL}_NOSPEC
-      x86/extable: Fix ex_handler_msr() print condition
-
- arch/x86/include/asm/nospec-branch.h | 24 ++++++++++++++++++------
- arch/x86/mm/extable.c                | 16 +++++++++-------
- include/linux/once_lite.h            | 20 ++++++++++++++++----
- 3 files changed, 43 insertions(+), 17 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)

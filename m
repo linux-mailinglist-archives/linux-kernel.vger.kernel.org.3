@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F105869CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A7E586AAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiHAMFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S234719AbiHAMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiHAMFE (ORCPT
+        with ESMTP id S231250AbiHAMTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:05:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797933DBC9;
-        Mon,  1 Aug 2022 04:54:40 -0700 (PDT)
+        Mon, 1 Aug 2022 08:19:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C552341D24;
+        Mon,  1 Aug 2022 04:59:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04441B81177;
-        Mon,  1 Aug 2022 11:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607D3C433D6;
-        Mon,  1 Aug 2022 11:54:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62B68B80EAC;
+        Mon,  1 Aug 2022 11:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B191DC433D6;
+        Mon,  1 Aug 2022 11:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354877;
-        bh=QCM+pkoBB3k0TyrYAg7KgYY8WjHYnJqZJO075BhLf2o=;
+        s=korg; t=1659355179;
+        bh=wGBP3vpY2EXQPUTz+LAQAA7C2ooTfZjpQU4fqeVse8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UHc9dFVxKxx6Th2YhTD3/u44JeuKGHjLIEwsKJaKACQgWKqQOg6WBhHLIP1ukPqMU
-         9YnRrCxkFPePC930LUDYE91f/Vcpgh9BCPV74IKjZRtUOKR0V4CgC525oJZUaDoLkf
-         HQtvoD4zrplJgYsFSabW9p/H+PpuohLbY5GC9Z6k=
+        b=RoeT/Y+Z9sQaM0lGqza0Gp+ws0T4mBuhyttcbjkuKKl9bcTTIDi3UNBqS2wv1OyW9
+         J14KTcSZXTFGr25uHjo7u6hzBv+AA2hvarK+TPWvE2Rtv3ATjgCwBMgBmpQ9JcwtwS
+         8wIDt9xEp1ssFpDB0q70Jqo2mtWmov7kwFV2l8vY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 53/69] ipv4: Fix data-races around sysctl_fib_notify_on_flag_change.
-Date:   Mon,  1 Aug 2022 13:47:17 +0200
-Message-Id: <20220801114136.635281463@linuxfoundation.org>
+Subject: [PATCH 5.18 64/88] ipv4: Fix data-races around sysctl_fib_notify_on_flag_change.
+Date:   Mon,  1 Aug 2022 13:47:18 +0200
+Message-Id: <20220801114140.980705341@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
-index a9cd9c2bd84e..19c6e7b93d3d 100644
+index 43a496272227..c1b53854047b 100644
 --- a/net/ipv4/fib_trie.c
 +++ b/net/ipv4/fib_trie.c
-@@ -1037,6 +1037,7 @@ fib_find_matching_alias(struct net *net, const struct fib_rt_info *fri)
+@@ -1042,6 +1042,7 @@ fib_find_matching_alias(struct net *net, const struct fib_rt_info *fri)
  
  void fib_alias_hw_flags_set(struct net *net, const struct fib_rt_info *fri)
  {
@@ -81,7 +81,7 @@ index a9cd9c2bd84e..19c6e7b93d3d 100644
  	struct fib_alias *fa_match;
  	struct sk_buff *skb;
  	int err;
-@@ -1058,14 +1059,16 @@ void fib_alias_hw_flags_set(struct net *net, const struct fib_rt_info *fri)
+@@ -1063,14 +1064,16 @@ void fib_alias_hw_flags_set(struct net *net, const struct fib_rt_info *fri)
  	WRITE_ONCE(fa_match->offload, fri->offload);
  	WRITE_ONCE(fa_match->trap, fri->trap);
  

@@ -2,91 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2E058631F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EDA586325
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238960AbiHADin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 23:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S238241AbiHADo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 23:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiHADim (ORCPT
+        with ESMTP id S230343AbiHADou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 23:38:42 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC9A10FF0
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 20:38:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lx3kN1zBNz4x1S;
-        Mon,  1 Aug 2022 13:38:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1659325116;
-        bh=a6rojnADEQz4YaXLUNDgDgnJraQcyq4lfTUzba9isA8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nmtXVlTJeDidpXmsU/j+3ucJNxrzRKUeJQRe8pZVaJ0HQ51/vNAoFjPqblu3ThgPG
-         AZZH3vioqUl9prqZkTQMvrMJpvaC6FjO850uPILuAG7Hq386q2ZN3Ol9d5W/53Rt7j
-         5cy5hu0yse14NuKB4xfznYYIaysk0yciTDZbVzEzuMnYCEb/6uiWeZwIgoTs/gvl5Y
-         q4H9/tCS6DCD56ehJEw48UyxI/F8gIFrOfhDmEXWD7ep8zbGvW4anDaNdlsQ42+Bz4
-         6zphYwPGc9Zj9ZVPYM1nW8N/lnohYmLV3HzUJNuDzxfMNLhglzlWrQKw6sghhpvw19
-         JzyM3TvEJXtXA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Ellerman <patch-notifications@ellerman.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc/85xx: P2020: Add law_trgt_if property to PCIe
- DT nodes
-In-Reply-To: <CAL_JsqJZ6s4qU+Yt4CCj3q-Fk_MKEddx5aLKu15NLnTbgMyRGA@mail.gmail.com>
-References: <20220504180822.29782-1-pali@kernel.org>
- <165909977761.253830.2305727219055135050.b4-ty@ellerman.id.au>
- <CAL_JsqJZ6s4qU+Yt4CCj3q-Fk_MKEddx5aLKu15NLnTbgMyRGA@mail.gmail.com>
-Date:   Mon, 01 Aug 2022 13:38:32 +1000
-Message-ID: <87k07sbpl3.fsf@mpe.ellerman.id.au>
+        Sun, 31 Jul 2022 23:44:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AFC25FF;
+        Sun, 31 Jul 2022 20:44:48 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lx3mw00JHzWfth;
+        Mon,  1 Aug 2022 11:40:47 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 11:44:46 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 1 Aug
+ 2022 11:44:45 +0800
+Message-ID: <d229f862-97b5-c3fb-d73b-d9216a05daa0@huawei.com>
+Date:   Mon, 1 Aug 2022 11:44:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] kprobes: Forbid probing on kprobe_insn_slot
+Content-Language: en-US
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>
+References: <20220727032058.60444-1-chenzhongjin@huawei.com>
+ <20220801004854.9c2b36f38fe5ad19b2271196@kernel.org>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20220801004854.9c2b36f38fe5ad19b2271196@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh+dt@kernel.org> writes:
-> On Fri, Jul 29, 2022 at 7:17 AM Michael Ellerman
-> <patch-notifications@ellerman.id.au> wrote:
->>
->> On Wed, 4 May 2022 20:08:22 +0200, Pali Roh=C3=A1r wrote:
->> > DT law_trgt_if property defines Local Access Window Target Interface.
->> >
->> > Local Access Window Target Interface is used for identifying individual
->> > peripheral and mapping its memory to CPU. Interface id is defined by
->> > hardware itself.
->> >
->> > U-Boot uses law_trgt_if DT property in PCIe nodes for configuring memo=
-ry
->> > mapping of individual PCIe controllers.
->> >
->> > [...]
->>
->> Applied to powerpc/next.
->>
->> [1/1] powerpc/85xx: P2020: Add law_trgt_if property to PCIe DT nodes
->>       https://git.kernel.org/powerpc/c/1f00b5ab992c122c51bc37662b3b4df59=
-63462f3
+Hi,
+
+On 2022/7/31 23:48, Masami Hiramatsu (Google) wrote:
+> On Wed, 27 Jul 2022 11:20:58 +0800
+> Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 >
-> Why? Minimally, it needs a vendor prefix and s/_/-/ as I commented.
+>> Syzkaller reported a BUG on arm64:
+>> Unrecoverable kprobe detected.
+>> Dumping kprobe:
+>> Name: (null)
+>> Offset: 0
+>> Address: 0xffffa00010019000
+>> ------------[ cut here ]------------
+>> kernel BUG at arch/arm64/kernel/probes/kprobes.c:235!
+>> Internal error: Oops - BUG: 0 [#1] SMP
+>> Modules linked in:
+>> CPU: 1 PID: 31060 Comm: syz-executor.6 Not tainted 5.10.0 #11
+>> ...
+>> Call trace:
+>>   reenter_kprobe arch/arm64/kernel/probes/kprobes.c:234 [inline]
+>>   kprobe_handler+0x23c/0x26c arch/arm64/kernel/probes/kprobes.c:339
+>>   kprobe_breakpoint_handler+0x24/0x34 arch/arm64/kernel/probes/kprobes.c:406
+>>   call_break_hook+0xf4/0x13c arch/arm64/kernel/debug-monitors.c:322
+>>   brk_handler+0x2c/0xa0 arch/arm64/kernel/debug-monitors.c:329
+>>   do_debug_exception+0x140/0x230 arch/arm64/mm/fault.c:867
+>>   el1_dbg+0x38/0x50 arch/arm64/kernel/entry-common.c:182
+>>   el1_sync_handler+0xf4/0x150 arch/arm64/kernel/entry-common.c:219
+>>   el1_sync+0x74/0x100 arch/arm64/kernel/entry.S:665
+>>   0xffffa00010019000
+>>   do_futex+0x2f4/0x370 kernel/futex.c:3735
+>>   __do_sys_futex kernel/futex.c:3798 [inline]
+>>   __se_sys_futex kernel/futex.c:3764 [inline]
+>>   __arm64_sys_futex+0x168/0x3a0 kernel/futex.c:3764
+>>   __invoke_syscall arch/arm64/kernel/syscall.c:36 [inline]
+>>   invoke_syscall arch/arm64/kernel/syscall.c:48 [inline]
+>>   el0_svc_common.constprop.0+0xf4/0x414 arch/arm64/kernel/syscall.c:155
+>>   do_el0_svc+0x50/0x11c arch/arm64/kernel/syscall.c:217
+>>   el0_svc+0x20/0x30 arch/arm64/kernel/entry-common.c:353
+>>   el0_sync_handler+0xe4/0x1e0 arch/arm64/kernel/entry-common.c:369
+>>   el0_sync+0x148/0x180 arch/arm64/kernel/entry.S:683
+>> Code: 91018360 97ff1838 aa1703e0 97ff1fdf (d4210000)
+>> ---[ end trace 767503e946e01b15 ]---
+>>
+>> Syzbot tried to porbe on a kprobe_insn_slot.
+>>
+>> kprobe will replace instruciton with a break and store the origin one
+>> on kprobe_insn_slot. However these slots are not in .kprobes.text and
+>> exported by perf_event_ksymbol so can be probed by perf interface.
+>>
+>> Probing these slots will triggers kprobe handler inside single step
+>> process and for some architectures such as arm64 this will causes a
+>> bug().
+>>
+>> These slots are kprobe process so they should not be probed anyway.
+>> Add kprobe_insn_slot check when register_kprobe to forbid probing on
+>> these slots.
+> Oops, good catch!
+>
+> Previously this was not counted as text area, but now the kernel_text_address()
+> returns true for these trampoline buffers.
+>
+> In this case, I think kprobes should be limited to probe only
+> core_kernel_text and module_text.
+> Can you use is_module_text_address() and core_kernel_text() instead?
+> Below can allow kprobes probing on other trampolines like ftrace and
+> bpf.
+> Also, you may need this tag;
+>
+> Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+>
+> Thank you,
 
-OK. I misread your "maybe that's fine" as approval.
+Thanks for review!
 
-Pali can you send a fixup patch please?
+Please see next version here: https://lkml.org/lkml/2022/7/31/436
 
-cheers
+[PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
+
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>>   kernel/kprobes.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+>> index f214f8c088ed..3e798b62db70 100644
+>> --- a/kernel/kprobes.c
+>> +++ b/kernel/kprobes.c
+>> @@ -1562,6 +1562,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>>   	/* Ensure it is not in reserved area nor out of text */
+>>   	if (!kernel_text_address((unsigned long) p->addr) ||
+>>   	    within_kprobe_blacklist((unsigned long) p->addr) ||
+>> +	    is_kprobe_insn_slot((unsigned long) p->addr) ||
+>> +	    is_kprobe_optinsn_slot((unsigned long) p->addr) ||
+>>   	    jump_label_text_reserved(p->addr, p->addr) ||
+>>   	    static_call_text_reserved(p->addr, p->addr) ||
+>>   	    find_bug((unsigned long)p->addr)) {
+>> -- 
+>> 2.17.1
+>>
+Best,
+
+Chen
+
+

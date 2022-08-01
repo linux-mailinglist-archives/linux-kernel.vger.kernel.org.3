@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2555B586E65
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42F6586E6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbiHAQQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S233036AbiHAQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbiHAQQq (ORCPT
+        with ESMTP id S232936AbiHAQRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:16:46 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A456C15824;
-        Mon,  1 Aug 2022 09:16:45 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso15807941pjo.1;
-        Mon, 01 Aug 2022 09:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DyQ9K8ymMDEzTjm8+aouou/83gQAMkkB40Lq7COAi90=;
-        b=bKc+XzrgkCFZiEUbnAS5/FO+43F/9SjycwR/YkYtA5DisTt0Do0fsQg6bF49bGnGd9
-         YA0a3vSXT4RPvmr8zpb5WPNfsG11qdnVmP5H+cZ4kmPs3GXxtQb13FmSs/fqFOEBXLQH
-         anlVgMx+bTF316hXTuS3rispdu1AK1ZbEhokhVLNBAJzU62ck1eKyaEuoND5XoMx50Ig
-         gcveZR6kzZRu20VjweEzzurVLn1Mf5i49vnaK7i1JyiV4ityVX4lsHE7wg3cWc4Q+j6S
-         6NvGPsgenWjJdFEmu9Wk4wB66TR//iFiNIsncnefryw8HBT/ThlsXMA7A+daWK3oj587
-         7/Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DyQ9K8ymMDEzTjm8+aouou/83gQAMkkB40Lq7COAi90=;
-        b=OzZWqd2lI4VvFw23u6J5drulM3cLbAL/W2kkoQfT397D1Ziq8C7rnzhpMLQitKZMl9
-         7fPqd2SQY+EVTvT1Eqzh5uGgApSR4hpNm27YxAJPkb0ExXj7LGxYYcsCvi9VeQCiIXSL
-         s9vZIKzZkuVlrzdKn0p23RSdFgOJj/AosDlZToMrK/0kkeonRVgy+/axqCoUygCmo0pZ
-         jHfVGRsWCeztoqqKdsn4kZ0EZU7byhpjBltKC6fhnP5S8TYC1AphL515yfCCCyIqTk0Y
-         WsiTvK2edvfkiJo5OEeTTD0bsubNrbH9jE1HjqQ+4Eiyb45+GABz4w6MQ7pw37w7LOLP
-         R5uA==
-X-Gm-Message-State: ACgBeo1UcaMmAKLx8RZRwkZAy0JZ0DRaZEeQLOxXlx4AL6CX0cA4Ukzz
-        3SGG50RuZX69KEuuzemTvDY=
-X-Google-Smtp-Source: AA6agR5WQHS2QRnUdDFKIXQxlmyPnqxXuPRAoKSIJNemA2+P+CYErRyt7sfsSAhSbAbcAFNBb+Sz3Q==
-X-Received: by 2002:a17:90b:4b81:b0:1ef:cd2c:bf2e with SMTP id lr1-20020a17090b4b8100b001efcd2cbf2emr19492079pjb.137.1659370605031;
-        Mon, 01 Aug 2022 09:16:45 -0700 (PDT)
-Received: from berlinger (berlinger.seclab.cs.ucsb.edu. [128.111.49.72])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170903204b00b0016c27561454sm9671277pla.283.2022.08.01.09.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 09:16:44 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 09:16:42 -0700
-From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        syzbot+c70d87ac1d001f29a058 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        linux-security-modules <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH v3] kernel/watch_queue: Make pipe NULL while clearing
- watch_queue
-Message-ID: <20220801161642.GA1932489@berlinger>
-References: <20220728155121.12145-1-code@siddh.me>
- <18258c1d370.6c4bec7a269297.4170944235031209431@siddh.me>
- <Yuepw21SyLbWt9F+@kroah.com>
- <182597c78f6.70a93066293735.4741894763116073008@siddh.me>
- <182597eccd3.14cac6a4293987.1730526835854998440@siddh.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <182597eccd3.14cac6a4293987.1730526835854998440@siddh.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 12:17:15 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41A73C150;
+        Mon,  1 Aug 2022 09:17:11 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id CF75E32003AC;
+        Mon,  1 Aug 2022 12:17:07 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Mon, 01 Aug 2022 12:17:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659370627; x=1659457027; bh=jSlZW82kJO
+        trbsQe+JWb98zS2xjRzoI5vbOs5++NnLQ=; b=j+GWpCvsQyFaFkCglcB0vStu9k
+        LNvemfQuROlI50kri4OODR1wwspPqN0P9b/KZ6Mi4pA3nb9vTv/a2XpeCnPz8s1Q
+        ZyrOOMAj1vCo3mv7VHRvIm3+ndYLyuqUi6P6Hoeh749xVq0VCMfqQRMB03Y7Q2mp
+        5Jk7DVRA2I8TGr11UbdyujuBpZ67/R9dtg3NVwQFAcadZlVFAiMi+o1T/TOkukJf
+        60TrbGvISdZiTg+nvlq+ipJfVYOT86qZ5hs4KbneZ/YlFRqDQp57lB+PJFFtlXAJ
+        vsfTkDBeRy3Vpi7UUifih3F/Kin4YzkHt/HLZ4FGJvfLgRBKM1DT5azrt90w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659370627; x=1659457027; bh=jSlZW82kJOtrbsQe+JWb98zS2xjR
+        zoI5vbOs5++NnLQ=; b=UFLGOg8bmfKGjg6eBmzPiEALlv2ne6zwLHkf6CAKKPTe
+        q+WBVhjtEeFcP+knkt4R1KvIhFMF887xyT/yv3L0FHCEM959bUQZJbhwBnh8hA8c
+        vGyD20iqFFbli43+jXAngETlBE1fan3wBzYcPJ9TL5mgpCn8TUYtiu1pInOAJaF1
+        DXaMg0F8ahp0KFnHzCkGxLEBtyldkcMT81Bm00Z9cfJWsyzQURK9OfcQRSI+1fxi
+        NyaxhdYZA9kN4XrAgRW30DmQHbzAreSCUoVWEHe6LTG8QUBx6pfQLfeh5jagFNAp
+        /LrCuCh8MPQRpRRiE+JuSYdzbFEapvcma+go5D1UlA==
+X-ME-Sender: <xms:gvznYkqjDpOKirvF_YfHCLNGsdf6JyxGZ7xKM0hT5KIT-rwLotCMpA>
+    <xme:gvznYqoeHsCzDexZniUgW_xxHQy_rodn9VNwWyP4VrWDRpEY1sLuUvuLDUfDXOSe-
+    jZ_Uv5Ny5JaLfT4Aw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvvefutgesthdtredt
+    reertdenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighi
+    iiqeenucggtffrrghtthgvrhhnpedtudehudfhveduieeikeejudeljeffuddtieffieel
+    jedtudehhfekheehuedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:g_znYpMieIStRIn2GW82fu5o1RUabVAJRoznglkT1kFd_j4lAcFoGQ>
+    <xmx:g_znYr42nvQcT5Omno-WOsekr5KvRASGi0_a6ctcE1Xkz74NrrceHw>
+    <xmx:g_znYj7H98NjvGqIfdqPzSO3wRyiVQXH0ohybUdDjF01ZwndKYzJ8Q>
+    <xmx:g_znYlmKQhqep1_Zew9lQ338OcaWvWBh_DYbnWAHGTygEODgWKPsYA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EBBA2BC0075; Mon,  1 Aug 2022 12:17:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
+Mime-Version: 1.0
+Message-Id: <6ce70dc2-7c4a-4048-aa45-9954082c0f29@www.fastmail.com>
+In-Reply-To: <CAP01T75LMwpz3ZPSUgtX2_RDUhB33djJmJs8W--Qh4H8J9iNsQ@mail.gmail.com>
+References: <cover.1659209738.git.dxu@dxuuu.xyz>
+ <abd424ee71675e3008acd4a2c1fd136cb7dbf8be.1659209738.git.dxu@dxuuu.xyz>
+ <CAP01T75LMwpz3ZPSUgtX2_RDUhB33djJmJs8W--Qh4H8J9iNsQ@mail.gmail.com>
+Date:   Mon, 01 Aug 2022 10:16:46 -0600
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add connmark read/write test
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 06:30:58PM +0530, Siddh Raman Pant wrote:
-> On Mon, 01 Aug 2022 18:28:25 +0530  Siddh Raman Pant <code@siddh.me> wrote:
-> > I now tried the 5.10.y branch of stable (which has v5.10.134), but the
-> > reproducer isn't triggering the bug for me. 
+Hi Kumar,
 
-Are you referring to the reproducer attached to our original report?
-https://lore.kernel.org/all/CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com/
+On Mon, Aug 1, 2022, at 8:51 AM, Kumar Kartikeya Dwivedi wrote:
+> On Sat, 30 Jul 2022 at 21:40, Daniel Xu <dxu@dxuuu.xyz> wrote:
+>>
+>> Test that the prog can read/write to/from the connection mark. This
+>> test is nice because it ensures progs can interact with netfilter
+>> subsystem correctly.
+>>
+>
+> Commit message is a bit misleading, where are you writing to ct->mark? :)
+> The cover letter also mentions "reading and writing from nf_conn". Do
+> you have patches whitelisting nf_conn::mark for writes?
+> If not, drop the writing related bits from the commit log. The rest
+> looks ok to me.
 
+Ah good catch, thanks. I've neglected to actually test writing to the mark.
+I'll follow up with another patch to enable writing to mark and testing it.
+
+And in meantime let's just change the commit msg on this patchset.
+
+I'm in the middle of a move right now so I probably can't respin the patch
+for a few more days. Feel free to edit the commit msgs. Or I'll send it again
+when I set my computer up.
+
+[...]
+
+Thanks,
+Daniel

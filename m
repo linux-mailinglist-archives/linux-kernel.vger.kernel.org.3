@@ -2,99 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED50C586D6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA266586D71
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiHAPIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S232033AbiHAPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiHAPIm (ORCPT
+        with ESMTP id S229943AbiHAPKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:08:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF632AE26;
-        Mon,  1 Aug 2022 08:08:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EFB06147B;
-        Mon,  1 Aug 2022 15:08:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47B0C433C1;
-        Mon,  1 Aug 2022 15:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659366519;
-        bh=AqruWdRdzFUO73wzzBKn5xGprtjbDadpunKpXdhVebc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tYO6GXrHSmgf6b5UQaNoTIguI0zkkMemEFQ6hijAg3nrK3UfBlhy2E7ZW/XQiJoqt
-         JK26CNqSlHs46WPjTHiQGo/zPxY0XTa42EIph2gXg+xxT9ZjnXP5kLSm2D/xmlKZgB
-         VpkuPuQzH28KgHkJoP/TbAYsxBaYFK0UXf72ADuzoHBjnngGbdmYnYxA+sefpYE9zC
-         qtiWB83TVbbeqnUhMwvlVIY7D81qggakd6ueXzM1imWqaidHOaK+sa33aw6nV6CneJ
-         9dOeezBvQN/bTw1eloPA9vhDe2jT+7f8ZDRI012YqVrHRnbLFq1x6k79W3BCx9JRN0
-         MM1sHKdfRAz9Q==
-Message-ID: <09ac06d6-4373-0953-5ed0-ed85ef25c999@kernel.org>
-Date:   Mon, 1 Aug 2022 09:08:37 -0600
+        Mon, 1 Aug 2022 11:10:23 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A491964C1;
+        Mon,  1 Aug 2022 08:10:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659366623; x=1690902623;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=a7fStmEkXQqjNzeaJ60mZgYwtUwEj9JVdHOtlh68THc=;
+  b=RCL4muJ59/OoNG/KmwETe2YdwtxX5hrd7So1BxEcH/PV5MQ9CZFoMofD
+   760dz6j5GL5pWHEqDbSZkUvrHOawCnr++o7rCaxxa1f+ZlaZhl+bGKYaT
+   3yz02C0HUPIlE6WLCe3ysxMYKmo2KWrqjmi5UM5EdtXSXyP1v5r2g77tW
+   c=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 01 Aug 2022 08:10:22 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 08:10:21 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 1 Aug 2022 08:10:20 -0700
+Received: from [10.216.14.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
+ 08:10:13 -0700
+Message-ID: <e18b057b-f5da-48a4-7086-9bc64d3819fb@quicinc.com>
+Date:   Mon, 1 Aug 2022 20:40:07 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] neigh: fix possible DoS due to net iface start/stop
- loop
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 4/8] drm/msm: Fix cx collapse issue during recovery
 Content-Language: en-US
-To:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        netdev@vger.kernel.org
-Cc:     "Denis V. Lunev" <den@openvz.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>, linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Konstantin Khorenko <khorenko@virtuozzo.com>, kernel@openvz.org
-References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
- <20220729103559.215140-2-alexander.mikhalitsyn@virtuozzo.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220729103559.215140-2-alexander.mikhalitsyn@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Clark <robdclark@gmail.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1659174051-27816-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220730150952.v3.4.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
+ <CAF6AEGuqptUzOtcjG+oA4BQha3Jk-UzDK-8SF_8v5A+8Dg71uQ@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGuqptUzOtcjG+oA4BQha3Jk-UzDK-8SF_8v5A+8Dg71uQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/29/22 4:35 AM, Alexander Mikhalitsyn wrote:
-> The patch proposed doing very simple thing. It drops only packets from
+On 7/31/2022 9:52 PM, Rob Clark wrote:
+> On Sat, Jul 30, 2022 at 2:41 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> There are some hardware logic under CX domain. For a successful
+>> recovery, we should ensure cx headswitch collapses to ensure all the
+>> stale states are cleard out. This is especially true to for a6xx family
+>> where we can GMU co-processor.
+>>
+>> Currently, cx doesn't collapse due to a devlink between gpu and its
+>> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
+>> that the iommu driver removes its vote on cx gdsc.
+>>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> ---
+>>
+>> Changes in v3:
+>> - Simplied the pm refcount drop since we have just a single refcount now
+>> for all active submits
+>>
+>>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 24 +++++++++++++++++++++---
+>>   drivers/gpu/drm/msm/msm_gpu.c         |  4 +---
+>>   2 files changed, 22 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index 42ed9a3..1b049c5 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -1193,7 +1193,7 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>>   {
+>>          struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>>          struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+>> -       int i;
+>> +       int i, active_submits;
+>>
+>>          adreno_dump_info(gpu);
+>>
+>> @@ -1210,8 +1210,26 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>>           */
+>>          gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+>>
+>> -       gpu->funcs->pm_suspend(gpu);
+>> -       gpu->funcs->pm_resume(gpu);
+>> +       pm_runtime_dont_use_autosuspend(&gpu->pdev->dev);
+>> +
+>> +       /* active_submit won't change until we make a submission */
+>> +       mutex_lock(&gpu->active_lock);
+>> +       active_submits = gpu->active_submits;
+>> +       mutex_unlock(&gpu->active_lock);
+>> +
+>> +       /* Drop the rpm refcount from active submits */
+>> +       if (active_submits)
+>> +               pm_runtime_put(&gpu->pdev->dev);
+> Couldn't this race with an incoming submit triggering active_submits
+> to transition 0 -> 1?  Moving the mutex_unlock() would solve this.
+>
+> Actually, maybe just move the mutex_unlock() to the end of the entire
+> sequence.  You could also clear gpu->active_submits and restore it
+> before unlocking, so you can drop the removal of the WARN_ON_ONCE
+> (patch 6/8) which should otherwise be squashed into this patch to keep
+> things bisectable
+Because we are holding gpu->lock, there won't be any new submissions to 
+gpu. But I agree with your both suggestions.
 
-it does 2 things - adds a namespace check and a performance based change
-with the way the list is walked.
+-Akhil.
+>
+>> +
+>> +       /* And the final one from recover worker */
+>> +       pm_runtime_put_sync(&gpu->pdev->dev);
+>> +
+>> +       pm_runtime_use_autosuspend(&gpu->pdev->dev);
+>> +
+>> +       if (active_submits)
+>> +               pm_runtime_get(&gpu->pdev->dev);
+>> +
+>> +       pm_runtime_get_sync(&gpu->pdev->dev);
+>>
+>>          msm_gpu_hw_init(gpu);
+>>   }
+>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+>> index 1945efb..07e55a6 100644
+>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+>> @@ -426,9 +426,7 @@ static void recover_worker(struct kthread_work *work)
+>>                  /* retire completed submits, plus the one that hung: */
+>>                  retire_submits(gpu);
+>>
+>> -               pm_runtime_get_sync(&gpu->pdev->dev);
+>>                  gpu->funcs->recover(gpu);
+>> -               pm_runtime_put_sync(&gpu->pdev->dev);
+> Hmm, could this have some fallout on earlier gens?
+>
+> I guess I should extend the igt msm_recovery test to run on things
+> prior to a6xx..
+>
+> BR,
+> -R
+No, because of patch 3/8 in this series.
 
-> the same namespace in the pneigh_queue_purge() where network interface
-> state change is detected. This is enough to prevent the problem for the
-> whole node preserving original semantics of the code.
-> 
+-Akhil.
+>
+>>                  /*
+>>                   * Replay all remaining submits starting with highest priority
+>> @@ -445,7 +443,7 @@ static void recover_worker(struct kthread_work *work)
+>>                  }
+>>          }
+>>
+>> -       pm_runtime_put_sync(&gpu->pdev->dev);
+>> +       pm_runtime_put(&gpu->pdev->dev);
+>>
+>>          mutex_unlock(&gpu->lock);
+>>
+>> --
+>> 2.7.4
+>>
 
-
-> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-> index 54625287ee5b..213ec0be800b 100644
-> --- a/net/core/neighbour.c
-> +++ b/net/core/neighbour.c
-
-> @@ -386,8 +396,7 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
->  	neigh_flush_dev(tbl, dev, skip_perm);
->  	pneigh_ifdown_and_unlock(tbl, dev);
->  
-> -	del_timer_sync(&tbl->proxy_timer);
-
-why are you removing this line too?
-
-> -	pneigh_queue_purge(&tbl->proxy_queue);
-> +	pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev));
->  	return 0;
->  }
->  

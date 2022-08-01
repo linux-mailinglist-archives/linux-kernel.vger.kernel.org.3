@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC44C586DD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590A3586DE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiHAPeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S231804AbiHAPhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiHAPeo (ORCPT
+        with ESMTP id S230501AbiHAPhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:34:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB88B2CE01
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:34:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88F3FB80EB8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA22C43141
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659368080;
-        bh=SopU2Dx9+Fogun8+HI+zMadE4kKBX3Mq9vYrcuV465k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b2Cxruv739bbgE7iFITXxWHDVNzUDFsNvBnlGt8iYgq2Ek0u5x+UnoDg09uzpNgE9
-         H3z7is4LZKFG3DgbrOL3bDYCsTGswqZVegnpUgYfGKs96HspM15wzKgFJkXhRDDzHa
-         VhE23gCvbdV1HCRw1abmnfo9sYmEWG0IDFy1ZyQu0rBOmuYxBxIyVs+oPVGekXx+tZ
-         gExj9O940PgOHX98GtqLbW2ObwwZPtnTDS0QklHBc8b1wydr/5IIKBe9lII/YB0UdU
-         1OF9O5yXRgZUhZcLLqQVyyw/VlYDIeYN8BP+JBvmES0625aVBdtvRlNcnYjUbKNlf0
-         MtXb7cCyNcAIg==
-Received: by mail-vs1-f42.google.com with SMTP id j2so5148442vsp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:34:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0ZDh9ufds0p9wBtrwyIGS+3WJf0Nle1ZO6/f9XM4NnILl5cgWu
-        nXD9BLRQMkIgK0tfaoIc+QUqm0TXhB8UFGNbyR0=
-X-Google-Smtp-Source: AA6agR7Qrsp+h8Ya+oRX+sMvc1vsXjXlxEd9rU8clHuJTbjfM3u9QDVn/4iabqscndTjm5fWadzbymScnQlqIw0+PtE=
-X-Received: by 2002:a05:6102:390d:b0:387:78b9:bf9c with SMTP id
- e13-20020a056102390d00b0038778b9bf9cmr352221vsu.43.1659368079127; Mon, 01 Aug
- 2022 08:34:39 -0700 (PDT)
+        Mon, 1 Aug 2022 11:37:00 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717A72A705
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:36:57 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id w15so3621628ljw.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
+        b=UKcP1FDF09nj1k3uYCs67Q7ZyiUIjGtO/8/Bj2O390UgRgAJaQbdj4bNFv73NHa6D2
+         iYDxlXmYJBF3bZ+BbTGm686z3m5B8jXpwu0YmqjPCoKHCXX42ltrt2aAmH4sQv+ccJN+
+         OHyZ31OJTJwijh8OV8oO5eWh1/bM4pqSqK2uyo052aPr6eVSdk1CVQkx424vXYMEZQTj
+         HsS77Ky28UOjl0KpgsmMPfvxGbLfejaevmoaRlv0kRAHXIpr67GF1/t31ULjMlw9VGDc
+         NI+pGTJBLZwknk3P787XURm2/kBy3STaEpJiGhVmWsgdrf7IgJXaPWV7ssfsuJ7alB0a
+         /1Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=q9Slei3vdZHf3BWZhWjxjnYHcSiTDd6lLLw5COAJJH4=;
+        b=iHq/Z7WYYrqDeW4/94KJYR42inEnXvf+2aRNevl7JqucbTMq7gQ632Pffh0vg2YSvO
+         EsNUeGXaJfRjJTTcFkSaD8z20fT11Hs1h51OvjuPVlMoadvIEGPZUX2UzQCdfPUQFW7o
+         IxISsbQSKPFCSSt7InApztus1KKc4mZryJmL/iQvGcg2gUYWM/L5wq957irZ3YdFeCZx
+         ED1Y6HPG1S9noJeS96x5DDwfTA7tVU7tSZxqqCTNQLpNnOuQ86OmBA+UUByeMJHhMTz3
+         viJO1oBxu2oJ8XWjX7QS4VU8l5wu92OHcFO394XrG5P6FztN707ag8fdlRoNksL2wjYm
+         Ibwg==
+X-Gm-Message-State: AJIora//HjDNgCp+5mqWDh+95fpK/CGdJFbLMeVsGZvceD6ZzXxpH/6u
+        YqOd+E4fREbocadFUBNixYbAMDpud+Fsxckwcew=
+X-Google-Smtp-Source: AGRyM1vmE9FJ4oaYsT2Hr55xmADsiyPljwE7zY7KjJ0BGtCDobMH8efpf5FFXcSqHPDNiB3EqFhLCRIlfACfnG64NOA=
+X-Received: by 2002:a2e:be90:0:b0:25e:1496:a0b8 with SMTP id
+ a16-20020a2ebe90000000b0025e1496a0b8mr5475533ljr.194.1659368215756; Mon, 01
+ Aug 2022 08:36:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801121726.9681-1-zhangqing@loongson.cn>
-In-Reply-To: <20220801121726.9681-1-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 1 Aug 2022 23:34:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H61DOGHXeVmZif7e04jpYBZNja-wPyLFhAtECZkZSQScA@mail.gmail.com>
-Message-ID: <CAAhV-H61DOGHXeVmZif7e04jpYBZNja-wPyLFhAtECZkZSQScA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] LoongArch: Add unwinder support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jinyang He <hejinyang@loongson.cn>
+Received: by 2002:aa6:cb52:0:b0:1fa:aaed:e6d9 with HTTP; Mon, 1 Aug 2022
+ 08:36:55 -0700 (PDT)
+From:   Bright Gawayn <gben68387@gmail.com>
+Date:   Mon, 1 Aug 2022 21:06:55 +0530
+Message-ID: <CAG1+V0zQ=FhBLNLT__co7DHJWC=eYBw480NBDxjx-Za_ZVMuzw@mail.gmail.com>
+Subject: Lucrative business proposal very urgent!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:243 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gben68387[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [gben68387[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+Hello dear My name is Mr Bright Gawayn,  It's my pleasure to contact you today.
 
-I think we don't need to CC linux-kernel; on the other hand, CC
-linux-arch and Arnd is worthy.
-BTW, it seems you are missing V2 in the title.
+We use a certain raw material in our pharmaceutical firm for the
+manufacture of animal vaccines and many more.
 
-Huacai
+My intention is to give you the new contact information of the local
+manufacturer of this raw material in India and every details regarding
+how to supply the material to my company if you're interested, my
+company pays in advance for this material.
 
-On Mon, Aug 1, 2022 at 8:17 PM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> This series in order to add stacktrace suport, Some upcoming features require
-> these changes, like trace, divide unwinder into guess unwinder and prologue
-> unwinder is to add new unwinders in the future, eg:unwind_frame, unwind_orc .etc.
-> Three stages when we do unwind,
->   1) unwind_start(), the prapare of unwinding, fill unwind_state.
->   2) unwind_done(), judge whether the unwind process is finished or not.
->   3) unwind_next_frame(), unwind the next frame.
->
-> you can test them by:
->   1) echo t > /proc/sysrq-trigger
->   2) cat /proc/*/stack
->   4) ftrace: function graph
->   5) uprobe: echo 1 > ./options/userstacktrace
->
-> Changes from v1 to v2:
->
-> - Add the judgment of the offset value of ra in the prologue.
->   (Suggested by Youling).
-> - Create an inline function to check the sign bit, which is convenient
->   for extending other types of immediates.  (Suggested by Jinyang).
-> - Fix sparse warning :
->     arch/loongarch/include/asm/uaccess.h:232:32: sparse: sparse: incorrect
->     type in argument 2 (different address spaces) @@     expected void const
->     *from @@     got void const [noderef] __user *from @@
-> - Add USER_STACKTRACE support as a series.
->
-> Qing Zhang (4):
->   LoongArch: Add guess unwinder support
->   LoongArch: Add prologue unwinder support
->   LoongArch: Add stacktrace support
->   LoongArch: Add USER_STACKTRACE support
->
->  arch/loongarch/Kconfig                  |   6 +
->  arch/loongarch/Kconfig.debug            |  28 ++++
->  arch/loongarch/include/asm/inst.h       |  52 +++++++
->  arch/loongarch/include/asm/processor.h  |   9 ++
->  arch/loongarch/include/asm/stacktrace.h |  22 +++
->  arch/loongarch/include/asm/switch_to.h  |  14 +-
->  arch/loongarch/include/asm/uaccess.h    |   4 +-
->  arch/loongarch/include/asm/unwind.h     |  45 +++++++
->  arch/loongarch/kernel/Makefile          |   4 +
->  arch/loongarch/kernel/asm-offsets.c     |   2 +
->  arch/loongarch/kernel/process.c         |  64 +++++++++
->  arch/loongarch/kernel/stacktrace.c      |  79 +++++++++++
->  arch/loongarch/kernel/switch.S          |   2 +
->  arch/loongarch/kernel/traps.c           |  27 ++--
->  arch/loongarch/kernel/unwind_guess.c    |  65 +++++++++
->  arch/loongarch/kernel/unwind_prologue.c | 172 ++++++++++++++++++++++++
->  16 files changed, 577 insertions(+), 18 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/unwind.h
->  create mode 100644 arch/loongarch/kernel/stacktrace.c
->  create mode 100644 arch/loongarch/kernel/unwind_guess.c
->  create mode 100644 arch/loongarch/kernel/unwind_prologue.c
->
-> --
-> 2.20.1
->
->
+Due to some reasons, which I will explain in my next email, I cannot
+procure this material and supply it to my company myself due to the
+fact that I am a staff in the company.
+
+Please get back to me as soon as possible for full detail if you are interested.
+
+Thanks and regards
+Bright.

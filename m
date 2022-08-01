@@ -2,291 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF74587223
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D51587222
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiHAUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S234426AbiHAUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235207AbiHAULh (ORCPT
+        with ESMTP id S233932AbiHAUL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:11:37 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B335A1F2C8
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:11:33 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id g186-20020a636bc3000000b0041c3d64031cso853610pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=0mdeI523HJsfpDmBYJiTh0Es4z/AK+3t/iCjVMxK4H8=;
-        b=FNYsvNGIIbrMdVUMZpg6Ar13XTBO/15HB5oFMWA9oqLT0ua04TRPk7W9xjfcd1Pbv4
-         LZw4Jzx72J+ELYc7QnpyA17Q/aSlUGpJRs+uHJiCl2bQ2P8bfWiDVL7MKhUW0dTLxMZ8
-         uWoQIEQ8BZt0c+GZQAWf7H/bNMM4dWd45y9VzugcoHpBSG2BN4yQHkVl0ZJy3OU7Odyy
-         YueJ4ssvd8eM/XBPPIwjT3DctXaE2Zma+5qmStdL0layhPS3e2ucElnyw35tHmSkq9TX
-         hGRX6f/4puNgGiPDs+JUNMdfHCAfDG4QuB8c49xT57AdwIylmh25c/7ckktLvwqyrHQM
-         EUnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=0mdeI523HJsfpDmBYJiTh0Es4z/AK+3t/iCjVMxK4H8=;
-        b=R1oufmjKU1uZboqsVY/jnsv1iEKvN6uW+2s1HdiaZYLfHoJ6HPqHQ23Gm8jqO2VHSu
-         8cvgvYLCp94Ni9+3qjJ4fnVwOQVziq94xxoHhism/b0zoJNwAdxPrMJnCHXe2qzp2qNA
-         oAX7lvjY6DW+vKxFPFExRncmVnE27LjGKHdpwEJ3cwHtl/gbucwm3hKtUTgggjKn67VM
-         h822JwbZ5767Cz7qJUMyhUblDPy4r1okLmi6Qiy0by7T/G54711Q/O2g4+K4W3Wqr/Z4
-         hGY/Pe3kmJYBg7kAVF9cXHclC2QtWyx9gRflsV5BMf1wwQSJ2nQdSjlAEikoqgW+1iJL
-         jRzg==
-X-Gm-Message-State: ACgBeo19gkxyTvms3mEePeULScg4uodSLQgYDXV3dNoZo66DxwY+ugiB
-        xuWTEgPJSGuTSh9OtDjU7zWsd1ncA7Q=
-X-Google-Smtp-Source: AA6agR46JnPtyjv1bPfVhmXTlTfhhpzl3f1XSIQ3cm2YjuMjaOhA4VUMRlW8AXjSn0+LUkqwWjJ327HRXaA=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:6be2:f99c:e23c:fa12])
- (user=pgonda job=sendgmr) by 2002:a17:902:9043:b0:16c:d862:fdf5 with SMTP id
- w3-20020a170902904300b0016cd862fdf5mr18037377plz.97.1659384693320; Mon, 01
- Aug 2022 13:11:33 -0700 (PDT)
-Date:   Mon,  1 Aug 2022 13:11:09 -0700
-In-Reply-To: <20220801201109.825284-1-pgonda@google.com>
-Message-Id: <20220801201109.825284-12-pgonda@google.com>
-Mime-Version: 1.0
-References: <20220801201109.825284-1-pgonda@google.com>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [V2 11/11] KVM: selftests: Add simple sev vm testing
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, marcorr@google.com,
-        seanjc@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        Peter Gonda <pgonda@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 16:11:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E554A32452;
+        Mon,  1 Aug 2022 13:11:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 230F260A07;
+        Mon,  1 Aug 2022 20:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B6EC43470;
+        Mon,  1 Aug 2022 20:11:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659384715;
+        bh=OSqIQPfvYpzTMvxqawaSlG0ztJzt6V5STNgZXTe0fuk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=n3VA8XWEWImLnSFoDbftmNWnGl2LpOR6WfCL0l/z4/qXaMLMsmRlR4TFlTadFAhNW
+         AmfQGx82DBpm3WiUjTW44FAzY51y8Frvh/Erc3eRgTyXK/tKm/PzdisTk8ugOUxZv5
+         LRiunU+dY5vEKGPMvaHjaTBa1g5USOG2QDAZKbCNnH+GS++coY8YXXPrv3zfNuZlhV
+         IYeUF5K4mrdM3sfmYKO0qKq38h/SC2mot3Nz4e+lPemjzooVFi4VsZUDApg6oQSjEd
+         QEOzDBnApfeU5BSQX0R/cg7lAHBowEtAWWkr4q1Iep/dYxKa+Lc1BH6Ee/2JyTSALm
+         UyJgmIjb5sxsA==
+Date:   Mon, 1 Aug 2022 15:11:53 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 11/15] PCI: dwc: Simplify in/outbound iATU
+ setup methods
+Message-ID: <20220801201153.GA622787@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801135057.GK93763@thinkpad>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A very simple of booting SEV guests that checks related CPUID bits. This
-is a stripped down version of "[PATCH v2 08/13] KVM: selftests: add SEV
-boot tests" from Michael but much simpler.
+On Mon, Aug 01, 2022 at 07:20:57PM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jun 24, 2022 at 05:39:43PM +0300, Serge Semin wrote:
+> > From maintainability and scalability points of view it has been wrong to
+> > use different iATU inbound and outbound regions accessors for the viewport
+> > and unrolled versions of the iATU CSRs mapping. Seeing the particular iATU
+> > region-wise registers layout is almost fully compatible for different
+> > IP-core versions, there were no much points in splitting the code up that
+> > way since it was possible to implement a common windows setup methods for
+> > both viewport and unrolled iATU CSRs spaces. While what we can observe in
+> > the current driver implementation of these methods, is a lot of code
+> > duplication, which consequently worsen the code readability,
+> > maintainability and scalability. Note the current implementation is a bit
+> > more performant than the one suggested in this commit since it implies
+> > having less MMIO accesses. But the gain just doesn't worth having the
+> > denoted difficulties especially seeing the iATU setup methods are mainly
+> > called on the DW PCIe controller and peripheral devices initialization
+> > stage.
+> > 
+> > Here we suggest to move the iATU viewport and unrolled CSR access
+> > specifics in the dw_pcie_readl_atu() and dw_pcie_writel_atu() method, and
+> > convert the dw_pcie_prog_outbound_atu() and
+> > dw_pcie_prog_{ep_}inbound_atu() functions to being generic instead of
+> > having a different methods for each viewport and unrolled types of iATU
+> > CSRs mapping. Nothing complex really. First of all the dw_pcie_readl_atu()
+> > and dw_pcie_writel_atu() are converted to accept relative iATU CSRs
+> > address together with the iATU region direction (inbound or outbound) and
+> > region index. If DW PCIe controller doesn't have the unrolled iATU CSRs
+> > space, then the accessors will need to activate a iATU viewport based on
+> > the specified direction and index, otherwise a base address for the
+> > corresponding region CSRs will be calculated by means of the
+> > PCIE_ATU_UNROLL_BASE() macro. The CSRs macro have been modified in
+> > accordance with that logic in the pcie-designware.h header file.
+> > 
+> > The rest of the changes in this commit just concern converting the iATU
+> > in-/out-bound setup methods and iATU regions detection procedure to be
+> > compatible with the new accessors semantics. As a result we've dropped the
+> > no more required dw_pcie_prog_outbound_atu_unroll(),
+> > dw_pcie_prog_inbound_atu_unroll() and dw_pcie_iatu_detect_regions_unroll()
+> > methods.
+> > 
+> > Note aside with the denoted code improvements, there is an additional
+> > positive side effect of this change. If at some point an atomic iATU
+> > configs setup procedure is required, it will be possible to be done with
+> > no much effort just by adding the synchronization into the
+> > dw_pcie_readl_atu() and dw_pcie_writel_atu() accessors.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> One nitpick mentioned below. With that fixed,
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Peter Gonda <pgonda@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/kvm_util_base.h     |   2 +
- .../selftests/kvm/include/x86_64/sev.h        |   3 +
- tools/testing/selftests/kvm/lib/x86_64/sev.c  |   2 -
- .../selftests/kvm/x86_64/sev_all_boot_test.c  | 131 ++++++++++++++++++
- 6 files changed, 138 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+> > +static inline void __iomem *dw_pcie_select_atu(struct dw_pcie *pci, u32 dir,
+> 
+> This could be renamed to "dw_pcie_get_atu_base()" since we are anyway getting
+> the base address of iATU.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index d625a3f83780..ca57969a0923 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -33,6 +33,7 @@
- /x86_64/pmu_event_filter_test
- /x86_64/set_boot_cpu_id
- /x86_64/set_sregs_test
-+/x86_64/sev_all_boot_test
- /x86_64/sev_migrate_tests
- /x86_64/smm_test
- /x86_64/state_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index b247c4b595af..73b083f93b46 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -122,6 +122,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_caps_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
-+TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/amx_test
- TEST_GEN_PROGS_x86_64 += x86_64/max_vcpuid_cap_test
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 1172c4218ccc..3c0ab83c5f69 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -820,6 +820,8 @@ vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
- 
- static inline vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
- {
-+	TEST_ASSERT(!vm->memcrypt.encrypted,
-+		    "Encrypted guests have their page tables encrypted so gva2* conversions are not possible.");
- 	return addr_arch_gva2gpa(vm, gva);
- }
- 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
-index 2f7f7c741b12..b6552ea1c716 100644
---- a/tools/testing/selftests/kvm/include/x86_64/sev.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
-@@ -22,6 +22,9 @@
- #define SEV_POLICY_NO_DBG	(1UL << 0)
- #define SEV_POLICY_ES		(1UL << 2)
- 
-+#define CPUID_MEM_ENC_LEAF 0x8000001f
-+#define CPUID_EBX_CBIT_MASK 0x3f
-+
- enum {
- 	SEV_GSTATE_UNINIT = 0,
- 	SEV_GSTATE_LUPDATE,
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-index 3abcf50c0b5d..8f9f55c685a7 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-@@ -13,8 +13,6 @@
- #include "sev.h"
- 
- #define PAGE_SHIFT		12
--#define CPUID_MEM_ENC_LEAF 0x8000001f
--#define CPUID_EBX_CBIT_MASK 0x3f
- 
- struct sev_vm {
- 	struct kvm_vm *vm;
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-new file mode 100644
-index 000000000000..b319d18bdb60
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Basic SEV boot tests.
-+ *
-+ * Copyright (C) 2021 Advanced Micro Devices
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "linux/psp-sev.h"
-+#include "sev.h"
-+
-+#define VCPU_ID			2
-+#define PAGE_STRIDE		32
-+
-+#define SHARED_PAGES		8192
-+#define SHARED_VADDR_MIN	0x1000000
-+
-+#define PRIVATE_PAGES		2048
-+#define PRIVATE_VADDR_MIN	(SHARED_VADDR_MIN + SHARED_PAGES * PAGE_SIZE)
-+
-+#define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
-+
-+#define NR_SYNCS 1
-+
-+static void guest_run_loop(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+	int i;
-+
-+	for (i = 0; i <= NR_SYNCS; ++i) {
-+		vcpu_run(vcpu);
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_SYNC:
-+			continue;
-+		case UCALL_DONE:
-+			return;
-+		case UCALL_ABORT:
-+			TEST_ASSERT(false, "%s at %s:%ld\n\tvalues: %#lx, %#lx",
-+				    (const char *)uc.args[0], __FILE__,
-+				    uc.args[1], uc.args[2], uc.args[3]);
-+		default:
-+			TEST_ASSERT(
-+				false, "Unexpected exit: %s",
-+				exit_reason_str(vcpu->run->exit_reason));
-+		}
-+	}
-+}
-+
-+static void __attribute__((__flatten__)) guest_sev_code(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+	uint64_t sev_status;
-+
-+	GUEST_SYNC(1);
-+
-+	cpuid(CPUID_MEM_ENC_LEAF, &eax, &ebx, &ecx, &edx);
-+	GUEST_ASSERT(eax & (1 << 1));
-+
-+	sev_status = rdmsr(MSR_AMD64_SEV);
-+	GUEST_ASSERT((sev_status & 0x1) == 1);
-+
-+	GUEST_DONE();
-+}
-+
-+static struct sev_vm *setup_test_common(void *guest_code, uint64_t policy,
-+					struct kvm_vcpu **vcpu)
-+{
-+	uint8_t measurement[512];
-+	struct sev_vm *sev;
-+	struct kvm_vm *vm;
-+	int i;
-+
-+	sev = sev_vm_create(policy, TOTAL_PAGES);
-+	if (!sev)
-+		return NULL;
-+	vm = sev_get_vm(sev);
-+
-+	/* Set up VCPU and initial guest kernel. */
-+	*vcpu = vm_vcpu_add(vm, VCPU_ID, guest_code);
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	/* Allocations/setup done. Encrypt initial guest payload. */
-+	sev_vm_launch(sev);
-+
-+	/* Dump the initial measurement. A test to actually verify it would be nice. */
-+	sev_vm_launch_measure(sev, measurement);
-+	pr_info("guest measurement: ");
-+	for (i = 0; i < 32; ++i)
-+		pr_info("%02x", measurement[i]);
-+	pr_info("\n");
-+
-+	sev_vm_launch_finish(sev);
-+
-+	return sev;
-+}
-+
-+static void test_sev(void *guest_code, uint64_t policy)
-+{
-+	struct sev_vm *sev;
-+	struct kvm_vcpu *vcpu;
-+
-+	sev = setup_test_common(guest_code, policy, &vcpu);
-+	if (!sev)
-+		return;
-+
-+	/* Guest is ready to run. Do the tests. */
-+	guest_run_loop(vcpu);
-+
-+	pr_info("guest ran successfully\n");
-+
-+	sev_vm_free(sev);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	/* SEV tests */
-+	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_code, 0);
-+
-+	return 0;
-+}
--- 
-2.37.1.455.g008518b4e5-goog
+I can see it both ways.  It definitely returns a base address, so
+"get_atu_base" makes sense.  But it also writes PCIE_ATU_VIEWPORT, and
+"select_atu" hints at that side effect while "get_atu_base" does not.
 
+> > +					       u32 index)
+> >  {
+> > +	void __iomem *base = pci->atu_base;
+> > +
+> > +	if (pci->iatu_unroll_enabled)
+> > +		base += PCIE_ATU_UNROLL_BASE(dir, index);
+> > +	else
+> > +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, dir | index);
+> > +
+> > +	return base;
+> > +}

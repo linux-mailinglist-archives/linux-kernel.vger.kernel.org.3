@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7582A5868A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8729F5868F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiHALvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S232397AbiHALy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiHALul (ORCPT
+        with ESMTP id S232217AbiHALyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:50:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD52402DC;
-        Mon,  1 Aug 2022 04:49:17 -0700 (PDT)
+        Mon, 1 Aug 2022 07:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4CA3DBDF;
+        Mon,  1 Aug 2022 04:50:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90952612C5;
-        Mon,  1 Aug 2022 11:49:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994CEC433C1;
-        Mon,  1 Aug 2022 11:49:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F04612E3;
+        Mon,  1 Aug 2022 11:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7D2C433B5;
+        Mon,  1 Aug 2022 11:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354556;
-        bh=bZ79vMwd6lZjbx+kr4CrkCQzjZarKgGBb2BuBwBdQ20=;
+        s=korg; t=1659354635;
+        bh=rcXhONTnsSRcgl/29eaAgLPlHuMMAOLV0cxVAhvv3aU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wttkDDwk9K0Eo70cW77PWIwqsNurDOyXvoNpVM7ZiEyX/tCg8rX7R1jYBTYWhK/xD
-         Qp0YlvfpUTUs83u+6stc5acrAHLm9qBCDc+hjsHWLuRvbQ1J970p80j5btr19/WYP8
-         pQ03QxWmc/cDennJF9FgJT317eqgny6fvlbNTQmo=
+        b=KeF3nwRCscCP2p9T9+TpePLpkMR7BRFM7nLAcShmRO+fhZdVR9xTWSbko7OUX/gmu
+         4YPZC0eelbDeOyoRU/OyL9mPYDbOd6VDWeI3hmp+de/ixv2sgQxiyHOPOu6ge6Ln2b
+         PJmx8DvD59hm7X58fuGfVhwDWEmbzvXn23uAvt88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 07/34] tcp: Fix a data-race around sysctl_tcp_frto.
+        stable@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 30/65] Documentation: fix sctp_wmem in ip-sysctl.rst
 Date:   Mon,  1 Aug 2022 13:46:47 +0200
-Message-Id: <20220801114128.334090136@linuxfoundation.org>
+Message-Id: <20220801114134.979359718@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
-References: <20220801114128.025615151@linuxfoundation.org>
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+References: <20220801114133.641770326@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit 706c6202a3589f290e1ef9be0584a8f4a3cc0507 upstream.
+[ Upstream commit aa709da0e032cee7c202047ecd75f437bb0126ed ]
 
-While reading sysctl_tcp_frto, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+Since commit 1033990ac5b2 ("sctp: implement memory accounting on tx path"),
+SCTP has supported memory accounting on tx path where 'sctp_wmem' is used
+by sk_wmem_schedule(). So we should fix the description for this option in
+ip-sysctl.rst accordingly.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+v1->v2:
+  - Improve the description as Marcelo suggested.
+
+Fixes: 1033990ac5b2 ("sctp: implement memory accounting on tx path")
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_input.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/networking/ip-sysctl.rst | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -2030,7 +2030,7 @@ void tcp_enter_loss(struct sock *sk)
- 	 * loss recovery is underway except recurring timeout(s) on
- 	 * the same SND.UNA (sec 3.2). Disable F-RTO on path MTU probing
- 	 */
--	tp->frto = net->ipv4.sysctl_tcp_frto &&
-+	tp->frto = READ_ONCE(net->ipv4.sysctl_tcp_frto) &&
- 		   (new_recovery || icsk->icsk_retransmits) &&
- 		   !inet_csk(sk)->icsk_mtup.probe_size;
- }
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 0b1f3235aa77..0158dff63887 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2629,7 +2629,14 @@ sctp_rmem - vector of 3 INTEGERs: min, default, max
+ 	Default: 4K
+ 
+ sctp_wmem  - vector of 3 INTEGERs: min, default, max
+-	Currently this tunable has no effect.
++	Only the first value ("min") is used, "default" and "max" are
++	ignored.
++
++	min: Minimum size of send buffer that can be used by SCTP sockets.
++	It is guaranteed to each SCTP socket (but not association) even
++	under moderate memory pressure.
++
++	Default: 4K
+ 
+ addr_scope_policy - INTEGER
+ 	Control IPv4 address scoping - draft-stewart-tsvwg-sctp-ipv4-00
+-- 
+2.35.1
+
 
 

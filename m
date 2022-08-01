@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AAD586E81
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE26586E84
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiHAQZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S232543AbiHAQ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiHAQZO (ORCPT
+        with ESMTP id S230109AbiHAQ0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:25:14 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EAEB9F;
-        Mon,  1 Aug 2022 09:25:12 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id tk8so21313377ejc.7;
-        Mon, 01 Aug 2022 09:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=wcy/rcdKHUsNf9tppWBLadn82oSwXUzbkvBCll0A8mA=;
-        b=TLv1gSxXzDStTb6ykAHt11EaqHfK+pLXvcQHlAj3SlnO/ZMxskqKqEx79KFChNByi4
-         nlN9ZzgoIA3qDwW3n2p0zP6YXyeb2XyI2oHdu7fqem/c9ulb1JK4yOUWGkUMG6t5jp+G
-         nMoY/RFCK+cr+HQc+9CqJ1GSlKyNqSXXVzvYDM2KBzfGFVpbdHnAM8nTAFh10yYIYh4Y
-         quD5rXmZO7lLZe6GuDWtmVxXu6vrKTjCXh5sAs5JajY/y2Y0Fje7JvE391oDfKscVDPV
-         rnQfm01JZBNSxqdWqO9aBIQtJFh43fZITEfy3QiYiRFEK2fzKlenATobXJ1NXtDzSnKz
-         47Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=wcy/rcdKHUsNf9tppWBLadn82oSwXUzbkvBCll0A8mA=;
-        b=P1BuZLwzjEJnwFpSQ5hTnxoh5gIc5JQIDkkowbQPpV2fM2MKjhknqDbW390sfpzGT9
-         CAdfczm6gl2QZ1WrmeYhlWxB2oGhBRSvChLpBJVnl0iweJvSshIYiGDyFm91DJs6Gl7Y
-         DZ5vgPti2dIEBP/gy6rQrdSv5zdp+BXFsPWvdsPkAMQIeb5jIPdpCS2m3xSamUWRJwaH
-         I1Fe46JEx7M7Rw887s6Foe/QccJnh0JRFCXpQJFD3XFlXrI2+UyqHLRddtjPDREM0AXP
-         Sm6sT2egRuJzx+zyEhhs1DSy0P55nYHL5toyYeBEg26nF+r3ZI/LBhdYRJ022PbNCFLF
-         p98w==
-X-Gm-Message-State: AJIora/oh0EmY4woG4sn/7tGJi3unMylw3rPUOeOIMwHlfhqgf7qkk6m
-        6RhRErH8kqckPmtWaa/rv78=
-X-Google-Smtp-Source: AGRyM1sfslgwNE2GdO0SHlXU0tbK1hPkwQ+VSVUZaeLM+n3ccGrAYsitmIUAfEpBwO1L4oeN3Bo4aA==
-X-Received: by 2002:a17:906:8501:b0:711:bf65:2a47 with SMTP id i1-20020a170906850100b00711bf652a47mr13389539ejx.150.1659371110880;
-        Mon, 01 Aug 2022 09:25:10 -0700 (PDT)
-Received: from krava ([83.240.62.89])
-        by smtp.gmail.com with ESMTPSA id e15-20020a50fb8f000000b0043a6df72c11sm6918178edq.63.2022.08.01.09.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 09:25:10 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 1 Aug 2022 18:25:07 +0200
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] libbpf: Initialize err in probe_map_create
-Message-ID: <Yuf+Y7ocn1mgiaE3@krava>
-References: <20220801025109.1206633-1-f.fainelli@gmail.com>
+        Mon, 1 Aug 2022 12:26:40 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D1815FFC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659371199; x=1690907199;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=It0H6nm9UIBqNOs9o9jHekTAAKKWAtaD7Oz8hhPieaw=;
+  b=Bw0COXbbHHQ8w0/IxF3rNamqmyBm6Ox7yEqkzFcc0YI5nQjVNafRkv92
+   vzIxrFEPTCmWoRqh/tEv/045XY04fTS4NSFH3OzO/7yZTYuNke5d+SEmQ
+   xUXkgw+BVJk7CjniGycZjQQ2EdXArdVBn6OJMFhU/cQkkBFlcNf5JMFoU
+   wvLu3PN+PbPTmygRkeTVTEbIo6o3YdvDtFmhLWFV1k1XYgYP/n7vZ7nHe
+   guIhmo4zg41+AkYHAIsGrDWF88OH92By07T5AQozFQiwJosfzfmlTQh5h
+   8eZQEzRj66xmjtK7eFXyX60wYf3QYnVUyPwJGNfyd7QXSwm/06IbiZX0P
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290400533"
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="290400533"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 09:26:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
+   d="scan'208";a="670097873"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 Aug 2022 09:26:37 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIYFZ-000F9d-0R;
+        Mon, 01 Aug 2022 16:26:37 +0000
+Date:   Tue, 2 Aug 2022 00:26:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aurelien Jarno <aurelien@aurel32.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: drivers/clocksource/timer-clint.c:82:24: sparse: sparse: cast
+ removes address space '__iomem' of expression
+Message-ID: <202208020048.JB7pUSUy-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801025109.1206633-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 07:51:09PM -0700, Florian Fainelli wrote:
-> GCC-11 warns about the possibly unitialized err variable in
-> probe_map_create:
-> 
-> libbpf_probes.c: In function 'probe_map_create':
-> libbpf_probes.c:361:38: error: 'err' may be used uninitialized in this function [-Werror=maybe-uninitialized]
->   361 |                 return fd < 0 && err == exp_err ? 1 : 0;
->       |                                  ~~~~^~~~~~~~~~
-> 
-> Fixes: 878d8def0603 ("libbpf: Rework feature-probing APIs")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi Aurelien,
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+First bad commit (maybe != root cause):
 
-jirka
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3d7cb6b04c3f3115719235cc6866b10326de34cd
+commit: 6df2a016c0c8a3d0933ef33dd192ea6606b115e3 riscv: fix build with binutils 2.38
+date:   6 months ago
+config: riscv-randconfig-s041-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020048.JB7pUSUy-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6df2a016c0c8a3d0933ef33dd192ea6606b115e3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6df2a016c0c8a3d0933ef33dd192ea6606b115e3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ drivers/clocksource/ net/dccp/
 
-> ---
->  tools/lib/bpf/libbpf_probes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-> index 97b06cede56f..6cf44e61815d 100644
-> --- a/tools/lib/bpf/libbpf_probes.c
-> +++ b/tools/lib/bpf/libbpf_probes.c
-> @@ -247,7 +247,7 @@ static int probe_map_create(enum bpf_map_type map_type, __u32 ifindex)
->  	LIBBPF_OPTS(bpf_map_create_opts, opts);
->  	int key_size, value_size, max_entries;
->  	__u32 btf_key_type_id = 0, btf_value_type_id = 0;
-> -	int fd = -1, btf_fd = -1, fd_inner = -1, exp_err = 0, err;
-> +	int fd = -1, btf_fd = -1, fd_inner = -1, exp_err = 0, err = 0;
->  
->  	opts.map_ifindex = ifindex;
->  
-> -- 
-> 2.25.1
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/clocksource/timer-clint.c:82:24: sparse: sparse: cast removes address space '__iomem' of expression
+>> drivers/clocksource/timer-clint.c:82:24: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   drivers/clocksource/timer-clint.c:82:24: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/clocksource/timer-clint.c:82:24: sparse:     got unsigned int [usertype] *
+   drivers/clocksource/timer-clint.c:80:22: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/clocksource/timer-clint.c:80:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   drivers/clocksource/timer-clint.c:80:22: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/clocksource/timer-clint.c:80:22: sparse:     got unsigned int [usertype] *
+   drivers/clocksource/timer-clint.c:237:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct clock_event_device [noderef] __percpu * @@
+   drivers/clocksource/timer-clint.c:237:36: sparse:     expected void *
+   drivers/clocksource/timer-clint.c:237:36: sparse:     got struct clock_event_device [noderef] __percpu *
+--
+   net/dccp/proto.c:524:52: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be32 const [usertype] service @@     got int [addressable] val @@
+   net/dccp/proto.c:524:52: sparse:     expected restricted __be32 const [usertype] service
+   net/dccp/proto.c:524:52: sparse:     got int [addressable] val
+>> net/dccp/proto.c:595:13: sparse: sparse: restricted __be32 degrades to integer
+>> net/dccp/proto.c:595:13: sparse: sparse: restricted __be32 degrades to integer
+   net/dccp/proto.c:595:13: sparse: sparse: cast from restricted __be32
+   net/dccp/proto.c:707:57: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be32 [usertype] param @@     got int cmsg_type @@
+   net/dccp/proto.c:707:57: sparse:     expected restricted __be32 [usertype] param
+   net/dccp/proto.c:707:57: sparse:     got int cmsg_type
+
+vim +/__iomem +82 drivers/clocksource/timer-clint.c
+
+2ac6795fcc085e Anup Patel 2020-08-17  68  
+2ac6795fcc085e Anup Patel 2020-08-17  69  #ifdef CONFIG_64BIT
+2ac6795fcc085e Anup Patel 2020-08-17  70  static u64 notrace clint_get_cycles64(void)
+2ac6795fcc085e Anup Patel 2020-08-17  71  {
+2ac6795fcc085e Anup Patel 2020-08-17  72  	return clint_get_cycles();
+2ac6795fcc085e Anup Patel 2020-08-17  73  }
+2ac6795fcc085e Anup Patel 2020-08-17  74  #else /* CONFIG_64BIT */
+2ac6795fcc085e Anup Patel 2020-08-17  75  static u64 notrace clint_get_cycles64(void)
+2ac6795fcc085e Anup Patel 2020-08-17  76  {
+2ac6795fcc085e Anup Patel 2020-08-17  77  	u32 hi, lo;
+2ac6795fcc085e Anup Patel 2020-08-17  78  
+2ac6795fcc085e Anup Patel 2020-08-17  79  	do {
+2ac6795fcc085e Anup Patel 2020-08-17  80  		hi = clint_get_cycles_hi();
+2ac6795fcc085e Anup Patel 2020-08-17  81  		lo = clint_get_cycles();
+2ac6795fcc085e Anup Patel 2020-08-17 @82  	} while (hi != clint_get_cycles_hi());
+2ac6795fcc085e Anup Patel 2020-08-17  83  
+2ac6795fcc085e Anup Patel 2020-08-17  84  	return ((u64)hi << 32) | lo;
+2ac6795fcc085e Anup Patel 2020-08-17  85  }
+2ac6795fcc085e Anup Patel 2020-08-17  86  #endif /* CONFIG_64BIT */
+2ac6795fcc085e Anup Patel 2020-08-17  87  
+
+:::::: The code at line 82 was first introduced by commit
+:::::: 2ac6795fcc085e8d03649f1bbd0d70aaff612cad clocksource/drivers: Add CLINT timer driver
+
+:::::: TO: Anup Patel <anup.patel@wdc.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

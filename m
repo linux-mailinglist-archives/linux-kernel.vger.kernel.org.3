@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FFB586E05
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC1F586E07
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiHAPqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S232258AbiHAPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiHAPql (ORCPT
+        with ESMTP id S230501AbiHAPrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:46:41 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158282E6A4
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:46:41 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10ec41637b3so5959946fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=FKWfV0YKdSbGcGL8JfBr05jog3rOXyTHkyO18qbmTgI=;
-        b=d80b217wQpzIfjlSI8irMsaCmjnFVjXFrweqO9678Db2IH66hhASVQkm33Ehcb/Pig
-         L+ANg683Xv3QIy5OdIM2judb/VY/XgufoJIkWQ9eNOSdRVmuE6vnmbQrpgwpV4ERQWKE
-         nTMZvYP7AcYaihgq+da6CMskk81FpE7E5M93A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FKWfV0YKdSbGcGL8JfBr05jog3rOXyTHkyO18qbmTgI=;
-        b=M1n3LRq5wFNG/LPpeohhtwgMI7v0mp4IK2H0jnPZGR1LKaPYH6msUcKFoMP5yRU8S8
-         pbTC0HUPCAUy4ezqQyYML7UWIFzLLl8Rl76gc5Mt0XV7xrjkih9Aa+qN5+9AjM2aXU/w
-         K/tXX9JvwSMw7roETNR5n2yNADo0gVOA27GrQRD0b5V+XLcu86RFgjbz4BriLyCzTOZy
-         L7nYrpo18KFDFSe/siWJlc+8pbvSIJW/YnxdKH8rtWTkhruzpDbsxCtjRsnIaKPodvL7
-         LSytR4w/WA4CXhbvnkKBJ/uLkwC8Iz/E6+CQc4acvSn4/rPOsbssXzEJ58NMLc8IBNMg
-         k6Hg==
-X-Gm-Message-State: AJIora9kvl8yFt9ndseMi2z4T9gGHzqSKOB3Qw1aZga5LOCkbOWNLsC/
-        aTcGmXq3TJccww38/33BDSkEXiNgn3kl8lAhdQg=
-X-Google-Smtp-Source: AGRyM1tLnZGetW1mCMPAMzU+kKzzUJ2QjN9DVsQsh/yqxgvuxubKlQ7DRyF8Uu1Y3QaH2N6d9UZKpw==
-X-Received: by 2002:a05:6870:a198:b0:e2:6f65:b91f with SMTP id a24-20020a056870a19800b000e26f65b91fmr8108844oaf.192.1659368800203;
-        Mon, 01 Aug 2022 08:46:40 -0700 (PDT)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com. [209.85.160.49])
-        by smtp.gmail.com with ESMTPSA id a17-20020a9d6e91000000b0061c7adb4006sm2850625otr.13.2022.08.01.08.46.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 08:46:39 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-10ea30a098bso9251892fac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:46:39 -0700 (PDT)
-X-Received: by 2002:a05:6870:65a7:b0:10e:d8ab:dd79 with SMTP id
- fp39-20020a05687065a700b0010ed8abdd79mr2693975oab.53.1659368799695; Mon, 01
- Aug 2022 08:46:39 -0700 (PDT)
+        Mon, 1 Aug 2022 11:47:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67060A1BD
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:47:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29CF8B81217
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9523EC433C1;
+        Mon,  1 Aug 2022 15:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659368835;
+        bh=EelFEDjYIFAlC+o2r5NZx9bJaOmFQVywzegLhjqSaC4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HuJwsZ9xV38BeQqatGjqnIImOC1cOM0xch1ETGPfrPJ6nL3+K5D/o2cLSRwXpApHk
+         1kTUNtJqk1PLn5Tj0ceFqZ8COJSwzW1Tb1eTxb+iEafBAV6wxcQsJR8RwDy9mivsq1
+         uW0BcmC4tSANkv4EGbqc94hXDgVBZKEIq3RbN/mc4W/fRdKnjXpOWuau1/I1LRpuAr
+         C4Uubjj5670tgl1vfpReX7s4px+rTrYZTAop3l7AFmRfoBUxmcU1ETYhWESW2op+Nx
+         xEJglOCfSo1dTo7pZTLTfZ6aSdlKJ0QxJxphnOIBDrhZg7z3Fc5KnAQO9qTVN5/XCF
+         Y5684Qu87fzFg==
+Message-ID: <9db28a6d-38a4-b22b-ad5e-10b7d4617385@kernel.org>
+Date:   Mon, 1 Aug 2022 23:47:10 +0800
 MIME-Version: 1.0
-References: <20220801144329.GA10643@redhat.com>
-In-Reply-To: <20220801144329.GA10643@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 1 Aug 2022 08:46:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgCi2LLzSJg_7nRs+nQbVgT8HwEKzjMae_4geVCA+1SNg@mail.gmail.com>
-Message-ID: <CAHk-=wgCi2LLzSJg_7nRs+nQbVgT8HwEKzjMae_4geVCA+1SNg@mail.gmail.com>
-Subject: Re: [GIT PULL] dlm updates for 6.0
-To:     David Teigland <teigland@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next v2] f2fs: fix null-ptr-deref in
+ f2fs_get_dnode_of_data
+Content-Language: en-US
+To:     Ye Bin <yebin10@huawei.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20220801112604.3406642-1-yebin10@huawei.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220801112604.3406642-1-yebin10@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,19 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 7:43 AM David Teigland <teigland@redhat.com> wrote:
->
-> (You can ignore the premature 5.20 pull request from some weeks ago.)
+On 2022/8/1 19:26, Ye Bin wrote:
+> There is issue as follows when test f2fs atomic write:
+> F2FS-fs (loop0): Can't find valid F2FS filesystem in 2th superblock
+> F2FS-fs (loop0): invalid crc_offset: 0
+> F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=1, run fsck to fix.
+> F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=2, run fsck to fix.
+> ==================================================================
+> BUG: KASAN: null-ptr-deref in f2fs_get_dnode_of_data+0xac/0x16d0
+> Read of size 8 at addr 0000000000000028 by task rep/1990
+> 
+> CPU: 4 PID: 1990 Comm: rep Not tainted 5.19.0-rc6-next-20220715 #266
+> Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x6e/0x91
+>   print_report.cold+0x49a/0x6bb
+>   kasan_report+0xa8/0x130
+>   f2fs_get_dnode_of_data+0xac/0x16d0
+>   f2fs_do_write_data_page+0x2a5/0x1030
+>   move_data_page+0x3c5/0xdf0
+>   do_garbage_collect+0x2015/0x36c0
+>   f2fs_gc+0x554/0x1d30
+>   f2fs_balance_fs+0x7f5/0xda0
+>   f2fs_write_single_data_page+0xb66/0xdc0
+>   f2fs_write_cache_pages+0x716/0x1420
+>   f2fs_write_data_pages+0x84f/0x9a0
+>   do_writepages+0x130/0x3a0
+>   filemap_fdatawrite_wbc+0x87/0xa0
+>   file_write_and_wait_range+0x157/0x1c0
+>   f2fs_do_sync_file+0x206/0x12d0
+>   f2fs_sync_file+0x99/0xc0
+>   vfs_fsync_range+0x75/0x140
+>   f2fs_file_write_iter+0xd7b/0x1850
+>   vfs_write+0x645/0x780
+>   ksys_write+0xf1/0x1e0
+>   do_syscall_64+0x3b/0x90
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> As 3db1de0e582c commit changed atomic write way which new a cow_inode for
+> atomic write file, and also mark cow_inode as FI_ATOMIC_FILE.
+> When f2fs_do_write_data_page write cow_inode will use cow_inode's cow_inode
+> which is NULL. Then will trigger null-ptr-deref.
+> To solve above issue, introduce FI_COW_FILE flag for COW inode.
+> 
+> Fiexes: 3db1de0e582c("f2fs: change the current atomic write way")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Gaah. That was the first thing I pulled this morning because it was
-the earliest.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-And apparently you've rebased, so I can't even just pull on top.
-
-Gaah. Now I'll have to go back and re-do everything I've done this morning.
-
-PLEASE don't do things like this to me. If you know you are going to
-re-do a pull request, let me know early, so that I don't pull the old
-one.
-
-                  Linus
+Thanks,

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0006F586993
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1A0586A4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiHAMEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S234019AbiHAMOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiHAMCb (ORCPT
+        with ESMTP id S234014AbiHAMN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:02:31 -0400
+        Mon, 1 Aug 2022 08:13:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888085508B;
-        Mon,  1 Aug 2022 04:54:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A70C481E3;
+        Mon,  1 Aug 2022 04:57:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9765861320;
-        Mon,  1 Aug 2022 11:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0092C433C1;
-        Mon,  1 Aug 2022 11:54:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6E346010C;
+        Mon,  1 Aug 2022 11:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF81DC433C1;
+        Mon,  1 Aug 2022 11:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354842;
-        bh=Z8AqWcpFbAGXc/LWg9x7xP2xPEeolQbqmfWOLAhCe64=;
+        s=korg; t=1659355064;
+        bh=PVWIwpwWsxXqfVFC5HBmdbDeAqcAbN3HY3A4y6tHyYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jEMIPovq7o2XjEqPsBCHlMHgJjErnohuNLgeZBcwaDiplP7JBUSyDQ6gYZVVMxKnT
-         X7RnAapTlkIiD01NQCtMBlrOstgCdySYxT9+uguh9fmaYuAUTveEscOkUPNKd1RAyY
-         oPE+QgRUXvj+anUy9U0Ku3B3DPVDxGTONWg3n3k8=
+        b=jM4ZRkXE6DG0i0VwLpTTuMWjjpkp+DvNUc0Kw65dXPT2uQaMbA3+bTxRP1036FjBX
+         ff83xHfPSi9EsrXvTMZUkqDO22H71qEtGmxwcED2V0zbNlhhmXOf/vY9RYBNHlhiyU
+         IdIPMaYbpdPpf3j48+2W2T80FRQRk2bFlu/ClB5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 38/69] tcp: Fix a data-race around sysctl_tcp_autocorking.
-Date:   Mon,  1 Aug 2022 13:47:02 +0200
-Message-Id: <20220801114136.026144208@linuxfoundation.org>
+Subject: [PATCH 5.18 49/88] tcp: Fix a data-race around sysctl_tcp_autocorking.
+Date:   Mon,  1 Aug 2022 13:47:03 +0200
+Message-Id: <20220801114140.280402426@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,18 +70,18 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 1abdb8712655..7ba9059c263a 100644
+index 97fed1217b7f..60b46f2a6896 100644
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -694,7 +694,7 @@ static bool tcp_should_autocork(struct sock *sk, struct sk_buff *skb,
+@@ -686,7 +686,7 @@ static bool tcp_should_autocork(struct sock *sk, struct sk_buff *skb,
  				int size_goal)
  {
  	return skb->len < size_goal &&
 -	       sock_net(sk)->ipv4.sysctl_tcp_autocorking &&
 +	       READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_autocorking) &&
  	       !tcp_rtx_queue_empty(sk) &&
- 	       refcount_read(&sk->sk_wmem_alloc) > skb->truesize;
- }
+ 	       refcount_read(&sk->sk_wmem_alloc) > skb->truesize &&
+ 	       tcp_skb_can_collapse_to(skb);
 -- 
 2.35.1
 

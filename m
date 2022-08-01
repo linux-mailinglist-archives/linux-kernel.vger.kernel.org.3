@@ -2,84 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11961587277
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C26587279
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiHAUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S234364AbiHAUut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbiHAUuU (ORCPT
+        with ESMTP id S231338AbiHAUuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:50:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52D5FA7;
-        Mon,  1 Aug 2022 13:50:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68D10B81693;
-        Mon,  1 Aug 2022 20:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1987AC433D6;
-        Mon,  1 Aug 2022 20:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659387017;
-        bh=GWDH/MBhC6DxM10eEHhv53g9zopJp+n1XzbvYqNJv64=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qgMCGfwMbs4NN5jXIPFLlTw4ZwYnhSJG0xmiuoxmGDBgr23o8iuoNqhk4c5WrKTTA
-         A39CGcWflw45LSo5iyWPIcvpymhcs13lKKKpmypj2QxltzlK9HVhvi9SFgHHqxaJOe
-         lbCA7IayxKQrUqY4LoZ3k1i+5RSuGnaDlZcpCF4DHY1YqhHO6GolNmdDbO/1uwenoc
-         ItI58dACX5ADrbMRKgQQADrZLVFXfupe53s0kYxx0Cg0BbgM87Mph2shO/rNH/Apek
-         Ea9+a3m2Zdx8tdW9R2BO5TYVCCJm0COzBiM8mmqzyjonY0MG4m6AaXcq/7wS4m5lzr
-         r4u5I0eyxgRlA==
-Received: by mail-yb1-f182.google.com with SMTP id p71so2538971yba.9;
-        Mon, 01 Aug 2022 13:50:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3bv5QBTtdRLxsUvn7EyMmhuH21IYe+QK/rTpEYYJCklrI4NqEz
-        yvDAwsSF2oJdJhtrOPc/s6airBH0dcK+RZmrj90=
-X-Google-Smtp-Source: AA6agR7B6n3bppA2HMcAG6qZsy2SmmbwUqOUZsgCGNONeZWpvlLQcK+GIhNAJZP9GYQGu9RZjET6Vke3Tshg+xpZOAo=
-X-Received: by 2002:a25:8b92:0:b0:66d:553a:f309 with SMTP id
- j18-20020a258b92000000b0066d553af309mr12901013ybl.322.1659387016079; Mon, 01
- Aug 2022 13:50:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220727210600.120221-1-logang@deltatee.com> <20220727210600.120221-2-logang@deltatee.com>
- <YuKZmloAcZWY5of8@infradead.org> <CAPhsuW4jtiuNPzC2aK-Jo80X15AWdYi7HQ2n7YWqVP6Uux3hYg@mail.gmail.com>
- <215E9FEF-69F9-44AB-A5B0-FD3C8335E985@deltatee.com> <CAPhsuW4r2nz3Q62Q9CpouHmy2JNwgJZsn=ZHT3q82DE6ddhXtA@mail.gmail.com>
- <YugKGLvbnvSeJfRg@infradead.org>
-In-Reply-To: <YugKGLvbnvSeJfRg@infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 1 Aug 2022 13:50:05 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4Lsj5TxBxbqsWfHid_n3x=H=CwuPaFBJ0KbQ3XkgA3vQ@mail.gmail.com>
-Message-ID: <CAPhsuW4Lsj5TxBxbqsWfHid_n3x=H=CwuPaFBJ0KbQ3XkgA3vQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] md/raid5: Refactor raid5_get_active_stripe()
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
+        Mon, 1 Aug 2022 16:50:46 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6849FD4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:50:45 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31f3959ba41so100674817b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=E1/rW2r70zyzqbkFgkmqJNWOc56RBiTRd890RD2T0+o=;
+        b=XRNlLnXNNNo/3J7ur9PazcMWQXWXdy0i4aGQbhsUznk0w+tMIO9sDu0/7g4O8KG4rj
+         1ZrxlurF863pz5Ebm+T4N2HcJD52RhpJaFJPFR9aKR7WBPWlwrfGimgPIESCe9w4X19g
+         /DJzSPvoMe13rkKB5nYSXS3rQqPrju6VAZ8rY5Bz4GkUHFeGAacz6MSAJISiWmY+CAYZ
+         X708Q4v77OzFy5rU4nh05vdJy0wsp/2b49O+5Nwzt1fALXz3+IY16QIf8Y48uNcz6Mgy
+         VGsUQxlIf9Mb7z5Xngd0eivSJTu55Ob0xqWvwq1e//6nRxA32t1PzpuWiPPf4FhxenMo
+         119w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=E1/rW2r70zyzqbkFgkmqJNWOc56RBiTRd890RD2T0+o=;
+        b=eNVwNQsLhKyTkRcVUxzi6VFZAcFh2ubA6rCUb9PuGyVj530JVtzZaOxH4SG0oxCJj6
+         67XSgTiOHS0/kU92bU4VEHDxSuRAB3Gi5K9asijybUlY4gyOHk2+KqrsLbF9snMmc2ed
+         hVspTKYQnSD3NAu0iBt5S2TcJ0rhNIcAcCrwbVgz7IePvmqt+vgltICh5JApu9xhpXol
+         xi5GV84pIEcabgZ/HXKq5nAWX3WJsFQZu479nv03OJQwv0UaXhlwFDq25t6hO3b24pjz
+         xuRm/5MmaTbWQmrE2qrwow+ixyvPJ1sO0nVUUVBfPHp+XjR7bQmC28dnUmtXIun+jn4n
+         k0VA==
+X-Gm-Message-State: ACgBeo1rcdmqT0VR00fBAgmSvH2LkM8FuHk3HwKtB9tcg23H8PnynmcO
+        EHEq/uO6/aFnV8HH5t6T8Lzvu+DBiY7bcXCOjHnJx6g7D8go2FfuDryMMSeDydE8gwp5KYcSduS
+        CUWfh4Im6H8QKslJqK7YQffMyLEytMa/QIXccyUqy1EZqDzzg1ESNmdHFISBY8+Y29bFY5Q==
+X-Google-Smtp-Source: AA6agR4ATB4rd/E+Yib6g1x/Un/QX10KVOPSLBYrSV7E3jAYeDJgdVlnl3sf2MKEZUQJL1J/GFxE3Eb/Crc=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:7c9:7b32:e73f:6716])
+ (user=haoluo job=sendgmr) by 2002:a25:640d:0:b0:670:9077:2203 with SMTP id
+ y13-20020a25640d000000b0067090772203mr12776495ybb.460.1659387045104; Mon, 01
+ Aug 2022 13:50:45 -0700 (PDT)
+Date:   Mon,  1 Aug 2022 13:50:39 -0700
+Message-Id: <20220801205039.2755281-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [PATCH bpf-next v1] bpf, iter: clean up bpf_seq_read().
+From:   Hao Luo <haoluo@google.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 10:15 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, Aug 01, 2022 at 09:49:38AM -0700, Song Liu wrote:
-> > We are in the merge window right now. So the timing is a little tricky. I will
-> > try to send pull requests with this set as-is. Then we can do follow-ups.
->
-> I can send the patch.  I don't think it's anywhere near critical enought to
-> rush it into the current merge window, though.
+Refactor bpf_seq_read() by extracting some common logic into helper
+functions. I hope this makes bpf_seq_read() more readable. This is
+a refactoring patch, so no behavior change is expected.
 
-Agreed. Let's improve it in 6.0.
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ kernel/bpf/bpf_iter.c | 156 +++++++++++++++++++++++++-----------------
+ 1 file changed, 93 insertions(+), 63 deletions(-)
 
-Thanks!
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 7e8fd49406f6..39b5b647fdb7 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -77,6 +77,83 @@ static bool bpf_iter_support_resched(struct seq_file *seq)
+ 	return iter_priv->tinfo->reg_info->feature & BPF_ITER_RESCHED;
+ }
+ 
++/* do_copy_to_user, copies seq->buf at offset seq->from to userspace and
++ * updates corresponding fields in seq. It returns -EFAULT if any error
++ * happens. The actual number of bytes copied is returned via the argument
++ * 'copied'.
++ */
++static int do_copy_to_user(struct seq_file *seq, char __user *buf, size_t size,
++			   size_t *copied)
++{
++	size_t n;
++
++	n = min(seq->count, size);
++	if (copy_to_user(buf, seq->buf + seq->from, n))
++		return -EFAULT;
++
++	seq->count -= n;
++	seq->from += n;
++	*copied = n;
++	return 0;
++}
++
++/* do_seq_show, shows the given object 'p'. If 'p' is skipped or
++ * error happens, resets seq->count to 'offs'.
++ *
++ * Returns err > 0, indicating show() skips this object.
++ * Returns err = 0, indicating show() succeeds.
++ * Returns err < 0, indicating show() fails or overflow happened.
++ */
++static int do_seq_show(struct seq_file *seq, void *p, size_t offs)
++{
++	int err;
++
++	WARN_ON(IS_ERR_OR_NULL(p));
++
++	err = seq->op->show(seq, p);
++	if (err > 0) {
++		/* object is skipped, decrease seq_num, so next
++		 * valid object can reuse the same seq_num.
++		 */
++		bpf_iter_dec_seq_num(seq);
++		seq->count = offs;
++		return err;
++	}
++
++	if (err < 0 || seq_has_overflowed(seq)) {
++		seq->count = offs;
++		return err ? err : -E2BIG;
++	}
++
++	/* err == 0 and no overflow */
++	return 0;
++}
++
++/* do_seq_stop, stops at the given object 'p'. 'p' could be an ERR or NULL. If
++ * 'p' is an ERR or there was an overflow, reset seq->count to 'offs' and
++ * returns error. Returns 0 otherwise.
++ */
++static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
++{
++	if (IS_ERR(p)) {
++		seq->op->stop(seq, NULL);
++		seq->count = offs;
++		return PTR_ERR(p);
++	}
++
++	seq->op->stop(seq, p);
++	if (!p) {
++		if (!seq_has_overflowed(seq)) {
++			bpf_iter_done_stop(seq);
++		} else {
++			seq->count = offs;
++			if (offs == 0)
++				return -E2BIG;
++		}
++	}
++	return 0;
++}
++
+ /* maximum visited objects before bailing out */
+ #define MAX_ITER_OBJECTS	1000000
+ 
+@@ -91,7 +168,7 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 			    loff_t *ppos)
+ {
+ 	struct seq_file *seq = file->private_data;
+-	size_t n, offs, copied = 0;
++	size_t offs, copied = 0;
+ 	int err = 0, num_objs = 0;
+ 	bool can_resched;
+ 	void *p;
+@@ -108,40 +185,18 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 	}
+ 
+ 	if (seq->count) {
+-		n = min(seq->count, size);
+-		err = copy_to_user(buf, seq->buf + seq->from, n);
+-		if (err) {
+-			err = -EFAULT;
+-			goto done;
+-		}
+-		seq->count -= n;
+-		seq->from += n;
+-		copied = n;
++		err = do_copy_to_user(seq, buf, size, &copied);
+ 		goto done;
+ 	}
+ 
+ 	seq->from = 0;
+ 	p = seq->op->start(seq, &seq->index);
+-	if (!p)
++	if (IS_ERR_OR_NULL(p))
+ 		goto stop;
+-	if (IS_ERR(p)) {
+-		err = PTR_ERR(p);
+-		seq->op->stop(seq, p);
+-		seq->count = 0;
+-		goto done;
+-	}
+ 
+-	err = seq->op->show(seq, p);
+-	if (err > 0) {
+-		/* object is skipped, decrease seq_num, so next
+-		 * valid object can reuse the same seq_num.
+-		 */
+-		bpf_iter_dec_seq_num(seq);
+-		seq->count = 0;
+-	} else if (err < 0 || seq_has_overflowed(seq)) {
+-		if (!err)
+-			err = -E2BIG;
+-		seq->op->stop(seq, p);
++	err = do_seq_show(seq, p, 0);
++	if (err < 0) {
++		do_seq_stop(seq, p, 0);
+ 		seq->count = 0;
+ 		goto done;
+ 	}
+@@ -153,7 +208,7 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 		num_objs++;
+ 		offs = seq->count;
+ 		p = seq->op->next(seq, p, &seq->index);
+-		if (pos == seq->index) {
++		if (unlikely(pos == seq->index)) {
+ 			pr_info_ratelimited("buggy seq_file .next function %ps "
+ 				"did not updated position index\n",
+ 				seq->op->next);
+@@ -161,7 +216,7 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 		}
+ 
+ 		if (IS_ERR_OR_NULL(p))
+-			break;
++			goto stop;
+ 
+ 		/* got a valid next object, increase seq_num */
+ 		bpf_iter_inc_seq_num(seq);
+@@ -172,22 +227,16 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 		if (num_objs >= MAX_ITER_OBJECTS) {
+ 			if (offs == 0) {
+ 				err = -EAGAIN;
+-				seq->op->stop(seq, p);
++				do_seq_stop(seq, p, seq->count);
+ 				goto done;
+ 			}
+ 			break;
+ 		}
+ 
+-		err = seq->op->show(seq, p);
+-		if (err > 0) {
+-			bpf_iter_dec_seq_num(seq);
+-			seq->count = offs;
+-		} else if (err < 0 || seq_has_overflowed(seq)) {
+-			seq->count = offs;
++		err = do_seq_show(seq, p, offs);
++		if (err < 0) {
+ 			if (offs == 0) {
+-				if (!err)
+-					err = -E2BIG;
+-				seq->op->stop(seq, p);
++				do_seq_stop(seq, p, seq->count);
+ 				goto done;
+ 			}
+ 			break;
+@@ -197,30 +246,11 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+ 			cond_resched();
+ 	}
+ stop:
+-	offs = seq->count;
+-	/* bpf program called if !p */
+-	seq->op->stop(seq, p);
+-	if (!p) {
+-		if (!seq_has_overflowed(seq)) {
+-			bpf_iter_done_stop(seq);
+-		} else {
+-			seq->count = offs;
+-			if (offs == 0) {
+-				err = -E2BIG;
+-				goto done;
+-			}
+-		}
+-	}
+-
+-	n = min(seq->count, size);
+-	err = copy_to_user(buf, seq->buf, n);
+-	if (err) {
+-		err = -EFAULT;
++	err = do_seq_stop(seq, p, seq->count);
++	if (err)
+ 		goto done;
+-	}
+-	copied = n;
+-	seq->count -= n;
+-	seq->from = n;
++
++	err = do_copy_to_user(seq, buf, size, &copied);
+ done:
+ 	if (!copied)
+ 		copied = err;
+-- 
+2.37.1.455.g008518b4e5-goog
 
-Song

@@ -2,183 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DB2586D87
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED78586D82
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiHAPRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S233179AbiHAPRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiHAPRp (ORCPT
+        with ESMTP id S233153AbiHAPQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:17:45 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA8725283
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:17:43 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j1so6165264wrw.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=BsB/xDepRoJiilddxJDopGmANpQBABFrmiBJJLAilII=;
-        b=KVU27RcJoNT5haO/2EHOyGXIbUgKL9t5rs7rpFIiOJ/x7tw4+H0XZP2t/2/skQso5i
-         I4tlHbfrfdhOtUAJd0MuyGoofKCtO5/hab4h2xB9NTHurtrTH5p9H1NdjXxZHuMFcLxs
-         Gr5hdcJ4s7ylqGuX35jAERdVUSK8FHgc2LZwe2Mo8MU8jmMIZie9g+v7v0FxmFXyej+d
-         g61PAEusEBM4ae+sCe2F83A2lsxf8rb2lIBmjXprFlsTk42lr1G7YBMRoCIR2UrurZQW
-         oreZbNW4rdcHQZei5vRfBUtC/0rOyL3Si0JqFG/1FggbYzPUXLGtvXA7OnY99WwgkAf6
-         ER7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=BsB/xDepRoJiilddxJDopGmANpQBABFrmiBJJLAilII=;
-        b=1xlUVyzYSLcTelWd7ogfg0+o85vMcPEzlpfgS7D9hS1B9bYBdHxPzOyi6f73eRbuOs
-         ttGg3SWIRWQZzpTodb5lHBGzHvf3zKvypM6/15++AS3qnaUYu1m2KOklCVRAVFbvfW/7
-         XahE2giPPxtqi8+1+mvoLbC7wWNmjhvXOEJzfVnZ98Gq6zCqCqKJzO+4iws5fb/1PBhb
-         EbRbySvCbbSdqGsj7enHFFEFWjqlt+Z0728x/M3uBYStguD6681KiK1KMuecL7diL/vl
-         vlm+FVtvy7NkfxZyzuAw10bn0EB492vYCiekIf3tJrN2X2v+9Dr+MuT6ZLIggxNJ7zhB
-         CQkw==
-X-Gm-Message-State: ACgBeo2SEzh3mEwRAUb2GN9/JonJMXVBidXViMaaesLvrEcWCu1ePt9m
-        r1n4T07S7wK4gRsS7AUcILa1mg==
-X-Google-Smtp-Source: AA6agR4o/IUoeMmtVpmXqxTtjr73ll0mC5RHrbMlyqMBRYLgHsh2iUy1/T4/VQCnPSELak43YE1uGA==
-X-Received: by 2002:a05:6000:1ac8:b0:220:6af3:935d with SMTP id i8-20020a0560001ac800b002206af3935dmr1527550wry.549.1659367062220;
-        Mon, 01 Aug 2022 08:17:42 -0700 (PDT)
-Received: from localhost.localdomain ([195.24.90.54])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05600c4f4e00b003a2d47d3051sm18881505wmq.41.2022.08.01.08.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 08:17:41 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH] venus: pm_helpers: Fix warning in OPP during probe
-Date:   Mon,  1 Aug 2022 18:16:41 +0300
-Message-Id: <20220801151641.1069181-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 1 Aug 2022 11:16:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CD024BC8;
+        Mon,  1 Aug 2022 08:16:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 089C6B81217;
+        Mon,  1 Aug 2022 15:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35175C433C1;
+        Mon,  1 Aug 2022 15:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659367015;
+        bh=pSXSf1aeVqWVQCcBcL4HOgiZB3i5p+bYXDxKTnDwCTY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HaF7w62TEI/sbGdBt8MnFflAEp8kXVgpMoH3YB9X0wvHly6XTRUedvj8W2tYAhh4x
+         +fkpOT5ZOsLIA5umEt6cJwShiOLPk73YX5EKCuj2Zc1ollwBNFqcrYuff0fKyBN3RC
+         6TplN9Gc9zJqZ5wgZucx3xBY7PqW2m/qIccqdCH7WXqOhobznc6wDgqxuXMNrcl2N9
+         0Wv7ZJnTWRRITEqYEFM69ea2+SfCIrocMXPt/mCkQvaTJ3V6taLvhCMkLOtbc7iICp
+         fX5C08Kpof37krH7hQ2sk9OB+rpyLHk/1Ss4dn6BAp4VNUejPCZZxZFo8PSS0DjaTU
+         gKCQJ5uP9EPoA==
+Date:   Mon, 1 Aug 2022 16:16:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Per-Daniel Olsson <perdo@axis.com>,
+        Rickard x Andersson <rickaran@axis.com>
+Subject: Re: [PATCH v2 2/8] dt-bindings: regulator: pca9450: Allow arbitrary
+ regulator names
+Message-ID: <YufuYabz0MeJ8r8z@sirena.org.uk>
+References: <20220801131554.116795-1-frieder@fris.de>
+ <20220801131554.116795-3-frieder@fris.de>
+ <YufTP621Bsu8HVpP@sirena.org.uk>
+ <16f688e9-7777-c5f1-0269-f83ed6788831@kontron.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xDyTfeOSnKbkpx89"
+Content-Disposition: inline
+In-Reply-To: <16f688e9-7777-c5f1-0269-f83ed6788831@kontron.de>
+X-Cookie: Dieters live life in the fasting lane.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following WARN triggered during Venus driver probe on
-5.19.0-rc8-next-20220728:
 
- WARNING: CPU: 7 PID: 339 at drivers/opp/core.c:2471 dev_pm_opp_set_config+0x49c/0x610
- Modules linked in: qcom_spmi_adc5 rtc_pm8xxx qcom_spmi_adc_tm5 leds_qcom_lpg led_class_multicolor
-  qcom_pon qcom_vadc_common venus_core(+) qcom_spmi_temp_alarm v4l2_mem2mem videobuf2_v4l2 msm(+)
-  videobuf2_common crct10dif_ce spi_geni_qcom snd_soc_sm8250 i2c_qcom_geni gpu_sched
-  snd_soc_qcom_common videodev qcom_q6v5_pas soundwire_qcom drm_dp_aux_bus qcom_stats
-  drm_display_helper qcom_pil_info soundwire_bus snd_soc_lpass_va_macro mc qcom_q6v5
-  phy_qcom_snps_femto_v2 qcom_rng snd_soc_lpass_macro_common snd_soc_lpass_wsa_macro
-  lpass_gfm_sm8250 slimbus qcom_sysmon qcom_common qcom_glink_smem qmi_helpers
-  qcom_wdt mdt_loader socinfo icc_osm_l3 display_connector
-  drm_kms_helper qnoc_sm8250 drm fuse ip_tables x_tables ipv6
- CPU: 7 PID: 339 Comm: systemd-udevd Not tainted 5.19.0-rc8-next-20220728 #4
- Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
- pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : dev_pm_opp_set_config+0x49c/0x610
- lr : dev_pm_opp_set_config+0x58/0x610
- sp : ffff8000093c3710
- x29: ffff8000093c3710 x28: ffffbca3959d82b8 x27: ffff8000093c3d00
- x26: ffffbca3959d8e08 x25: ffff4396cac98118 x24: ffff4396c0e24810
- x23: ffff4396c4272c40 x22: ffff4396c0e24810 x21: ffff8000093c3810
- x20: ffff4396cac36800 x19: ffff4396cac96800 x18: 0000000000000000
- x17: 0000000000000003 x16: ffffbca3f4edf198 x15: 0000001cba64a858
- x14: 0000000000000180 x13: 000000000000017e x12: 0000000000000000
- x11: 0000000000000002 x10: 0000000000000a60 x9 : ffff8000093c35c0
- x8 : ffff4396c4273700 x7 : ffff43983efca6c0 x6 : ffff43983efca640
- x5 : 00000000410fd0d0 x4 : ffff4396c4272c40 x3 : ffffbca3f5d1e008
- x2 : 0000000000000000 x1 : ffff4396c2421600 x0 : ffff4396cac96860
- Call trace:
-  dev_pm_opp_set_config+0x49c/0x610
-  devm_pm_opp_set_config+0x18/0x70
-  vcodec_domains_get+0xb8/0x1638 [venus_core]
-  core_get_v4+0x1d8/0x218 [venus_core]
-  venus_probe+0xf4/0x468 [venus_core]
-  platform_probe+0x68/0xd8
-  really_probe+0xbc/0x2a8
-  __driver_probe_device+0x78/0xe0
-  driver_probe_device+0x3c/0xf0
-  __driver_attach+0x70/0x120
-  bus_for_each_dev+0x70/0xc0
-  driver_attach+0x24/0x30
-  bus_add_driver+0x150/0x200
-  driver_register+0x64/0x120
-  __platform_driver_register+0x28/0x38
-  qcom_venus_driver_init+0x24/0x1000 [venus_core]
-  do_one_initcall+0x54/0x1c8
-  do_init_module+0x44/0x1d0
-  load_module+0x16c8/0x1aa0
-  __do_sys_finit_module+0xbc/0x110
-  __arm64_sys_finit_module+0x20/0x30
-  invoke_syscall+0x44/0x108
-  el0_svc_common.constprop.0+0xcc/0xf0
-  do_el0_svc+0x2c/0xb8
-  el0_svc+0x2c/0x88
-  el0t_64_sync_handler+0xb8/0xc0
-  el0t_64_sync+0x18c/0x190
-  qcom-venus: probe of aa00000.video-codec failed with error -16
+--xDyTfeOSnKbkpx89
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The fix is re-ordering the code related to OPP core. The OPP core
-expects all configuration options to be provided before the OPP
-table is added.
+On Mon, Aug 01, 2022 at 03:45:52PM +0200, Frieder Schrempf wrote:
+> Am 01.08.22 um 15:21 schrieb Mark Brown:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/platform/qcom/venus/pm_helpers.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> > This should simply be removed from the bindings for the device, devices
+> > have no business placing any constraint on this generic binding.
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index cb48c5ff3dee..c93d2906e4c7 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -875,7 +875,7 @@ static int vcodec_domains_get(struct venus_core *core)
- 	}
- 
- skip_pmdomains:
--	if (!core->has_opp_table)
-+	if (!core->res->opp_pmdomain)
- 		return 0;
- 
- 	/* Attach the power domain for setting performance state */
-@@ -1007,6 +1007,10 @@ static int core_get_v4(struct venus_core *core)
- 	if (ret)
- 		return ret;
- 
-+	ret = vcodec_domains_get(core);
-+	if (ret)
-+		return ret;
-+
- 	if (core->res->opp_pmdomain) {
- 		ret = devm_pm_opp_of_add_table(dev);
- 		if (!ret) {
-@@ -1017,10 +1021,6 @@ static int core_get_v4(struct venus_core *core)
- 		}
- 	}
- 
--	ret = vcodec_domains_get(core);
--	if (ret)
--		return ret;
--
- 	return 0;
- }
- 
--- 
-2.25.1
+> Ok, IIUC something like below should do then. I can change this in the
+> next iteration of this series or send it separately if the rest of the
+> set gets accepted as-is.
 
+Yes, just send it any time and I can apply it as a fix.
+
+--xDyTfeOSnKbkpx89
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLn7mEACgkQJNaLcl1U
+h9DcvAf+OL6kk/U+n1i8yT2A0OedNTTVypjDULReLCbVRBhiJfKjexG/ZKBMGs1a
+y3ogBBbb7O5rzCnBkcZmn7c94GNUCvk7QfpJzB7OcgRORoAzTNB3Nkcc0rhO586v
+91NzqwhOSpDSWsHkOjFHaixJJRuvTaGlR4LptFQdPk8DGN42Pn2zQ/FThRi2c5iU
+k2B/Dtp8oWAA8Z60i/2s3S6p2neCsOTihV3aYHy5GLGPL9yMZSEraQHO0TzDNyM3
+Em/o/L4cIzlBnKfO5AHdJNDjBE85Om0HfkrSGBgTjJ46RvuGfztZY5kZga1VNBUs
+Euk0j9lKJBqVciVhv4khDRd7Ol851w==
+=/gmk
+-----END PGP SIGNATURE-----
+
+--xDyTfeOSnKbkpx89--

@@ -2,175 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D4B586F9F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBB3586FA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiHARgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S232347AbiHARhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiHARgQ (ORCPT
+        with ESMTP id S231820AbiHARhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:36:16 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861E12ADB;
-        Mon,  1 Aug 2022 10:36:14 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 491585C00FC;
-        Mon,  1 Aug 2022 13:36:12 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Mon, 01 Aug 2022 13:36:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1659375372; x=1659461772; bh=Y2
-        57L4d6b5CFZRcEy4JTormzanQNT+CLmxVCxY4oXZQ=; b=g4bHXidTEQtZid/MiU
-        Km2uU51ckhpdCCymYl9CZnQTKMlvu+uJpr/P5nW4iTzjl1vl2e8ieXlyrpXfYsrE
-        i2ewUMNKuXi9h7fs6I8OyyJk0qdyz0Xk640DgQBehTA/5dbT41tICmzo3pwl4MJN
-        4qpe3+T99uf2uQ4MKBtHYokvje5dVU2sSDThBGjByO5035SFXneWI6lJ+FF/Uc0+
-        1bVfqKYJYBDnBiLDN/qochGDy/GLy5ca1FNe/dS5xehVIrakomdfjcE8K1fLkmu5
-        O0Ef9GaLpCJATqeso3YDjcXku+INE8xh2w+SFu+u2YVr9qEXvP/A8H1fH6uqeXa7
-        yM4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659375372; x=1659461772; bh=Y257L4d6b5CFZRcEy4JTormzanQN
-        T+CLmxVCxY4oXZQ=; b=W/FfjJ0eKIl/DnkCsoGQA8BXCbnS7+/bgS4IsH8VkUFc
-        WEFgOu9seVvV32WdW8BXLdISTVnxmC7NrzewMn2cYqTWjICiGUdQkYwPmfDDM9i6
-        7Q9OboAhiF4ugSPkxFtpJEzhhVL0L7qXDjAz4fKoZ5N74QHCR5ADne85PHBYZuHX
-        BIwdNSA3kFt0PxjnvkCZoPIgcWYeEkzlLR/ILAHup3SzdbJrjeUUEzXobCU59M7L
-        cEgRBI1hmwIPsAYi7F5pxUir5Azv8ZuckuDCSO0hGSl02LvCw0cOCwMpVXeYWJMi
-        5YSILl8MsCgPKBAh1bKy42hWCyICXQYdT4jbAZaG+A==
-X-ME-Sender: <xms:Cw_oYrr_5aCcl7cEE8iaunfu4F_D1TAzOMyG-iKFo2s8kzoT5W2JBQ>
-    <xme:Cw_oYloaHXmrllphGVNjks4ob5Q4icuVgL8s2XahiBUYr-vwpeoE8npb7JMYNE4HD
-    whi1wwhU0Gvmdg9Agc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeefgedugffhjedvfffggfektedutdetueehudeitdfgudefvdduiedt
-    vdeliedvgfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhp
-    vghtvghrrdguvghv
-X-ME-Proxy: <xmx:Cw_oYoNsaQXZJY3jgsO6geqeaJyaheDOg96WD6T7KWUkt0bAAZh1uw>
-    <xmx:Cw_oYu5RCO3SfaN-QC5_LwJh_uAEw1PVWJfcaW1L1IN4YHElfs-mOQ>
-    <xmx:Cw_oYq560o3pp4JroCLxPVfRfAWjZK-k7L6lRy59B9UN7S__p0weBw>
-    <xmx:DA_oYpQDEz816y26wyIy4v7InNIcT-9QSPcwrFPOFJfMwpZdBzLJTQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5A72EA6007C; Mon,  1 Aug 2022 13:36:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-758-ge0d20a54e1-fm-20220729.001-ge0d20a54
-Mime-Version: 1.0
-Message-Id: <de5f9eb8-9328-4c1c-a57c-a06d40ec203e@www.fastmail.com>
-In-Reply-To: <20220801152338.GB1031441-robh@kernel.org>
-References: <20220801103633.27772-1-sven@svenpeter.dev>
- <20220801103633.27772-2-sven@svenpeter.dev>
- <20220801152338.GB1031441-robh@kernel.org>
-Date:   Mon, 01 Aug 2022 19:35:51 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Marcel Holtmann" <marcel@holtmann.org>,
-        "Johan Hedberg" <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: net: Add generic Bluetooth controller
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 13:37:21 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDFD38B7
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:37:19 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so11236871pjn.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=m6RoQab6XfL3m83DwD4AA4wcnAm85sbG4DZvEhMAwLQ=;
+        b=gLiDAYzKp9k5A5mPr/+5czOhANqndPFpAAi5PfJ0EZTvUYkp+5XTzOjaSWqMzDdvl6
+         1+gXkoWW0D/PSJ/QnBcIbNGtDJMzRyC/7Kl1eW27ufLEu3eLuHgFUorF9THrHOLIM+qS
+         1dPMCnjMCQOj7O1f2qS7MM/MQZU/tsmjq3p6A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=m6RoQab6XfL3m83DwD4AA4wcnAm85sbG4DZvEhMAwLQ=;
+        b=J+VoaiziYZMtDtL7SWb7Os0hInYaA1ZXRzkyFs7WmcMUhtWasCbMzVaEHr4bpLQfHR
+         /j9E/X+nDxzelWNVV1rwc46qi6LM8e1UiOcirn4OvUUJ3fH+fC3phrIFmhi3r0g5zyQy
+         biLsRt400rAhV9s6vvmiiryD+aSS6rte6An1A/7/gJL+b7a4VGpwZM1raEB1pN/dnW2j
+         0zOtNQR7OSIAPDBwH+OtJ22Cin7iKuJXLPkVVfj0dRSnFoTMDT9F/2DGwFdNbWbezCbC
+         0LfwGSQ0gxhFzbPdFh/t1Z9NB9/lnebT24jN3waR84/SdFz3wNcV6zccu812zNHKNdcu
+         reBA==
+X-Gm-Message-State: ACgBeo3iFGmsNpDnAfCCstFwB7qEACsteoyTe9fUOACsYiOVHHWSP+58
+        Mjjf6HLw70ZHrb9cVVCrZ/HD+Q==
+X-Google-Smtp-Source: AA6agR59F6yh+fOCa/OcF84WjhO5d1D6O8NLvFgbumG3rvr9gZF3GjA4pGjg7ROchBAWufu0Rz/Zxg==
+X-Received: by 2002:a17:90a:fe7:b0:1f3:10f0:c251 with SMTP id 94-20020a17090a0fe700b001f310f0c251mr21108751pjz.165.1659375439209;
+        Mon, 01 Aug 2022 10:37:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w11-20020a17090aea0b00b001f10c959aa2sm9150105pjy.42.2022.08.01.10.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 10:37:11 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 10:37:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [GIT PULL] execve updates for v5.20-rc1
+Message-ID: <202208011036.F80AB3F@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Linus,
 
-On Mon, Aug 1, 2022, at 17:23, Rob Herring wrote:
-> On Mon, Aug 01, 2022 at 12:36:29PM +0200, Sven Peter wrote:
->> Bluetooth controllers share the common local-bd-address property.
->> Add a generic YAML schema to replace bluetooth.txt for those.
->> 
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->> I hope it's fine to list the current Bluetooth maintainers in here
->> as well.
->> 
->>  .../bindings/net/bluetooth-controller.yaml    | 30 +++++++++++++++++++
->>  .../devicetree/bindings/net/bluetooth.txt     |  6 +---
->>  2 files changed, 31 insertions(+), 5 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/net/bluetooth-controller.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/net/bluetooth-controller.yaml b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
->> new file mode 100644
->> index 000000000000..0ea8a20e30f9
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/bluetooth-controller.yaml
->> @@ -0,0 +1,30 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/bluetooth-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Bluetooth Controller Generic Binding
->> +
->> +maintainers:
->> +  - Marcel Holtmann <marcel@holtmann.org>
->> +  - Johan Hedberg <johan.hedberg@gmail.com>
->> +  - Luiz Augusto von Dentz <luiz.dentz@gmail.com>
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "^bluetooth(@.*)?$"
->> +
->> +  local-bd-address:
->> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->> +    minItems: 6
->> +    maxItems: 6
->> +    description:
->> +      Specifies the BD address that was uniquely assigned to the Bluetooth
->> +      device. Formatted with least significant byte first (little-endian), e.g.
->> +      in order to assign the address 00:11:22:33:44:55 this property must have
->> +      the value [55 44 33 22 11 00].
->> +
->> +additionalProperties: true
->> +
->> +...
->> diff --git a/Documentation/devicetree/bindings/net/bluetooth.txt b/Documentation/devicetree/bindings/net/bluetooth.txt
->> index 94797df751b8..3cb5a7b8e5ad 100644
->> --- a/Documentation/devicetree/bindings/net/bluetooth.txt
->> +++ b/Documentation/devicetree/bindings/net/bluetooth.txt
->> @@ -1,5 +1 @@
->> -The following properties are common to the Bluetooth controllers:
->> -
->> -- local-bd-address: array of 6 bytes, specifies the BD address that was
->> -  uniquely assigned to the Bluetooth device, formatted with least significant
->> -  byte first (little-endian).
->> +This file has been moved to bluetooth-controller.yaml.
->
-> There's one reference to bluetooth.txt. Update it and remove this file.
+Please pull these execve updates for v5.20-rc1.
 
-Sure, I've just checked and found Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-and Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml and will
-update both for v2 and remove bluetooth.txt.
+Thanks!
 
+-Kees
 
-Thanks,
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
 
-Sven
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v5.20-rc1
+
+for you to fetch changes up to c6e8e36c6ae4b11bed5643317afb66b6c3cadba8:
+
+  exec: Call kmap_local_page() in copy_string_kernel() (2022-07-27 14:15:09 -0700)
+
+----------------------------------------------------------------
+execve updates for v5.20-rc1
+
+- Allow unsharing time namespace on vfork+exec (Andrei Vagin)
+
+- Replace usage of deprecated kmap APIs (Fabio M. De Francesco)
+
+- Fix spelling mistake (Zhang Jiaming)
+
+----------------------------------------------------------------
+Andrei Vagin (2):
+      fs/exec: allow to unshare a time namespace on vfork+exec
+      selftests/timens: add a test for vfork+exit
+
+Fabio M. De Francesco (1):
+      exec: Call kmap_local_page() in copy_string_kernel()
+
+Zhang Jiaming (1):
+      exec: Fix a spelling mistake
+
+ fs/exec.c                                   | 15 +++--
+ kernel/fork.c                               |  5 +-
+ kernel/nsproxy.c                            |  3 +-
+ tools/testing/selftests/timens/Makefile     |  2 +-
+ tools/testing/selftests/timens/vfork_exec.c | 90 +++++++++++++++++++++++++++++
+ 5 files changed, 106 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/timens/vfork_exec.c
+
+-- 
+Kees Cook

@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2098D5871A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA84E5871AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiHATrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S235064AbiHATsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbiHATrV (ORCPT
+        with ESMTP id S233984AbiHATsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:47:21 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A762FFF1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:47:18 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id z19so11439789plb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:47:18 -0700 (PDT)
+        Mon, 1 Aug 2022 15:48:10 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73272DFA4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:48:09 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so13169468pjk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc;
-        bh=Mow6E29ZT9zxboeclfk6gr8yssMaDp6juneP9qcI0Xk=;
-        b=dIGPyacbRcwqZS/lbdKExr1xTt+i/r4zr2uzwgWLGyRfRYGPRbl8lDGC1Xlx2gF0sO
-         Ym9T4+vHcpGDMeCKt1ewS70ATB/Q+yNs++qIOYT2PS1CaghlqaK4vl10RFi2V/qsNML5
-         3UYu8rHB482f8kQCmxo0b9nWSmftpedesJeaE=
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc;
+        bh=/UjpGjvFL3sibVJo59GHZKoup8UUWGhLbToraE4pk1c=;
+        b=OvDKJHkuzMJcVLXEFC1bqL1wcm5p0SnabErpgGxihoSK9Uc4A4+WReyBvN2LlzGtyv
+         oExgxjTdmwWWlc1CLmnn8/2uPxh0E86tHKBeH+IC+A2RDy5yPxTxSrPdumrDWoPmlYqn
+         r+iojLrXSIDDb0X7X3Fb/HDetdvvfAo2JO4DE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=Mow6E29ZT9zxboeclfk6gr8yssMaDp6juneP9qcI0Xk=;
-        b=hbBfVvJuikikczgO19E1+JAEfT1tTWfPzcivxTQP6NC3rLJYbZ8n5ECIMwGU8maN1N
-         0fe6aFJX6x+9Dozc5IgyH/DwI7nD1K94teACJpwnuV0osMPhBc5rd6BIH1WXdvdrN4ZP
-         W8qRClASnCKyaeDmYNuadUE1C7D3bghqm15ILZo0/pTj+iz/p/ulvxBqcKeNM2rhuc87
-         0eocpnrNHHyAtN6+/W4PnKLnDWFWx8wtKyIlh3SUyQ5nzkQiXxAgfAXUlkSM/iJEwjDm
-         oOyNeyEs0BdH3LdRYYVKQQ9mCPB0ZklBIccGdB+WGkOv2IYSPxuPQhUGmxcYIyBKZhLQ
-         6cpg==
-X-Gm-Message-State: ACgBeo2peac/bsJI0IJmj8BYCssPPhvVfAwUlYDO7wHf7UicEmT+dBcJ
-        TQphEZ/fr5h9B8z3qVQQAl0G3g==
-X-Google-Smtp-Source: AA6agR7Rt7Uz+JnSffWYWJFONeYyUz2ikTCu6M8QHj6S6eU0BCdm+SgssHtT7kt+E09cXZLJcZzfkQ==
-X-Received: by 2002:a17:902:720b:b0:16d:2c4c:b52a with SMTP id ba11-20020a170902720b00b0016d2c4cb52amr17706658plb.155.1659383237790;
-        Mon, 01 Aug 2022 12:47:17 -0700 (PDT)
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc;
+        bh=/UjpGjvFL3sibVJo59GHZKoup8UUWGhLbToraE4pk1c=;
+        b=iR0WamGnUj+IqC/wUXdGTSmQSEZrm/BMKhKtZ/EdsGdl7DDQTwhgAjMcYaIGMsl5yx
+         AuOey18eX4Fp4MoQM3WXJymtyQZtBPhaOcX5qgi/q4YmnorMoZqMTUsBwqBCkXhd2Mg5
+         Cn/PwCq4S2/3yqh/06tetmWWxjEEDlPWJQVNQchlpETSLOxXQA7F4An9TCPzZowQNS1A
+         /Sgk9u01FvUbnxMJJh0foMCgaYeBsnTOhnhgc82KC9PQ+TxwRG9QVywh4/+flqtUzM+f
+         gxXyB/ue9T85YLnV7G6PsYmyk4mMNZ4PFCAy3aNl2nKVPKbdBCWzH2bqsN3kTnp2lPg7
+         uXMQ==
+X-Gm-Message-State: ACgBeo20SJLXrs79oQw2MPHrWD/T0a4QC/XRvFxwXpXK15QTdvWwzZFq
+        z3GVsh+Q6RU9Bwcqaq7ne8BwBw==
+X-Google-Smtp-Source: AA6agR5Nk46v/PRbhQqt0VsnTBi7B1fRkXmHxKiwR73qjc8WT8WzvIfSDSh1VEjwu4rpEzkktKAFDA==
+X-Received: by 2002:a17:902:b215:b0:168:da4b:c925 with SMTP id t21-20020a170902b21500b00168da4bc925mr17650845plr.155.1659383288897;
+        Mon, 01 Aug 2022 12:48:08 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170902ea1200b0016c28fbd7e5sm10266715plg.268.2022.08.01.12.47.13
+        by smtp.gmail.com with ESMTPSA id w4-20020a170902e88400b0016dc78d0153sm9991700plg.296.2022.08.01.12.48.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 12:47:14 -0700 (PDT)
+        Mon, 01 Aug 2022 12:48:05 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     f.fainelli@gmail.com,
+Cc:     kursad.oney@broadcom.com,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        kursad.oney@broadcom.com, dan.beygelman@broadcom.com,
-        anand.gore@broadcom.com, joel.peshkin@broadcom.com,
+        joel.peshkin@broadcom.com, anand.gore@broadcom.com,
+        f.fainelli@gmail.com, dan.beygelman@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: bcmbca: bcm6846: fix interrupt controller node
-Date:   Mon,  1 Aug 2022 12:46:47 -0700
-Message-Id: <20220801194647.29437-3-william.zhang@broadcom.com>
+Subject: [PATCH 1/2] ARM: dts: bcmbca: bcm6878: fix timer node cpu mask flag
+Date:   Mon,  1 Aug 2022 12:47:53 -0700
+Message-Id: <20220801194754.29492-1-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220801194647.29437-1-william.zhang@broadcom.com>
-References: <20220801194647.29437-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000074a45d05e5334419"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        boundary="000000000000805d9905e5334703"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000074a45d05e5334419
+--000000000000805d9905e5334703
 Content-Transfer-Encoding: 8bit
 
-Add the missing gic registers and interrupts property to the gic node.
+The cpu mask flag value should match the number of cpu cores in the
+chip. Correct the value to two cpus for BCM6878 dual core SoC.
 
-Fixes: de1a99ac0b64 ("ARM: dts: Add DTS files for bcmbca SoC BCM6846")
+Fixes: 6bcad714e173 ("ARM: dts: Add DTS files for bcmbca SoC BCM6878")
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
-
 ---
 
- arch/arm/boot/dts/bcm6846.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/bcm6878.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm6846.dtsi b/arch/arm/boot/dts/bcm6846.dtsi
-index 9876ceb1d47c..8aa47a2583b2 100644
---- a/arch/arm/boot/dts/bcm6846.dtsi
-+++ b/arch/arm/boot/dts/bcm6846.dtsi
-@@ -71,15 +71,17 @@ axi@81000000 {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
--		ranges = <0 0x81000000 0x4000>;
-+		ranges = <0 0x81000000 0x8000>;
+diff --git a/arch/arm/boot/dts/bcm6878.dtsi b/arch/arm/boot/dts/bcm6878.dtsi
+index a7dff596fe1e..6dd3d2df4e16 100644
+--- a/arch/arm/boot/dts/bcm6878.dtsi
++++ b/arch/arm/boot/dts/bcm6878.dtsi
+@@ -39,10 +39,10 @@ L2_0: l2-cache0 {
  
- 		gic: interrupt-controller@1000 {
- 			compatible = "arm,cortex-a7-gic";
- 			#interrupt-cells = <3>;
--			#address-cells = <0>;
- 			interrupt-controller;
-+			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_HIGH)>;
- 			reg = <0x1000 0x1000>,
--				<0x2000 0x2000>;
-+				<0x2000 0x2000>,
-+				<0x4000 0x2000>,
-+				<0x6000 0x2000>;
- 		};
+ 	timer {
+ 		compatible = "arm,armv7-timer";
+-		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+-			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
+ 		arm,cpu-registers-not-fw-configured;
  	};
  
 -- 
 2.34.1
 
 
---00000000000074a45d05e5334419
+--000000000000805d9905e5334703
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -186,13 +178,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPIJIR4NzKdeBZyelfyxomeOWIpw
-OqJfiCxlR+S8X8iFMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDgwMTE5NDcxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICWG9l1qqqCFLClzfHdnwgM2FnEN
+65vZUPtn7i7sOGmRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDgwMTE5NDgwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQDTZXQeiDyjJODLYyInGV/4hM3Cebmhrzyh7J6UhRBdGcnC
-w7HqTN+LaXBs3JNNVOXTP9hgYbObui2UlkZkd3I9PIATlWR7MiHjqqYcBUYDQAkEeN0LwbC5y+2h
-pFQoumAyb3U6M1DHY33zus+XeXB8DoSIuS+P3+HoARMiEVHEils2zFl+mwpijQ8vwyiiX7CM9LVT
-WWkY+viPx9mKFDg3v80fdAIgSNKWx5T1L7wxYZ7D9NPzVY0odpB4fFK4amJPHVdziNvgxRz72Ahi
-b12lD8B5FTvSKjwNbIo97f1RgJ5nyY08bZvg0w/h5LjeTTJBTcwmsYntXLz5K/4Wdop4
---00000000000074a45d05e5334419--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAn628HPY+NSbjoFiIC3xp8pQ3v+SMqnZzuAPWAwb/9gqw/
+ALbgxSyHfypVH0oUH6A/rt22fRmcMLlUB4KrFnrSHV9NYEy3Do8aL50jUgdgXRJPXinp2ObzqT+X
+j+qEFXlKbVY2WVgt9Kq4I0GTeGJflrcnLp04CnHQegCTSa7u9tQxLREBhhcVzsI8500tUcE316vs
+QdX6riAcKxZzQ2OAq0D3qXEi/xT/lKkb9HaverRRfdJ8TQToCSGqvX0RiN/H8zBpjm6rnt5AhRer
+NY707mLO4ftw1hCe+K6g5BUBRSZtaxY4NsQfQPU7rnFbpntMh6g3UOPVf7E79Be2UvHt
+--000000000000805d9905e5334703--

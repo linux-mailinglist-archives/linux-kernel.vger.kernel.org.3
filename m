@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B91587422
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D79587424
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiHAW4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S234576AbiHAW5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbiHAWz6 (ORCPT
+        with ESMTP id S229787AbiHAW5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:55:58 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339822982A
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:55:55 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id o1so9506503qkg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:55:55 -0700 (PDT)
+        Mon, 1 Aug 2022 18:57:47 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE26329822
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:57:46 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m8so15530369edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C5gulj3V+LjVOIWRA41K2fBbqvQq1arjIETo1B+W8Bc=;
-        b=AvaU/i6IarMIHH8auej+84EEnlucOm6JPsbblnmJsKfFSucB0wbidIBB9ImaoESPuy
-         D/vBYWruOWw+txPsHm4S1q/DyUBkvWFghGHvWwre5vgzRWy5XumhQbW4R68er0hrzV2C
-         FQ1LAn2CTfvRwIB87bZM1HRFEAck2joY9DuICCp38Khk74qg5BlXOm/YrKr/0vPDdp67
-         y55BhBcB1o3ow6/CoLlBtqbUX4T1g7vDBMDuUfkU61w3X1Answ8BhsyYBmVCDvh9fip8
-         BmERpPLyRVAB9KcgcuVZbXY+J0fZggzlxmmixfr1NUAwO3k8ScFlbII7wwwMh79rpQcT
-         HHfw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3RtPyRzfB+HpbeEhTpVLyjlCEZhvDS/xfu2vrY2Ps+0=;
+        b=BSJs3K6wmAEgOokteewdwhwrlGG6ViaQg8zXXgab7Z2kxWGLL0sgk+pFCtcw0JYS5w
+         rWIMf8TSZQ93mdKn1UojbZ73I7kiq7PSD/+A+WrQBIElm2OYhHUk75wGYmTMrMcLN4dn
+         ohBtLNk5Boz19RaAlAj3sEL7HVrosc7dDhUf3e8PEbKToq7X0LX+X5LUg9X8NvT2QVHc
+         yvIbd/9Fp/7mIGUkmvRgwoZHAq17B8ofXwafQuL4u9iQ0JDIyCyw+R4F8Ngtn4qVDAL5
+         8LBjIQkRKInarwtfe+0ks8vE8wGdyr43O/9NrH12+7q2cZ2TDZUuA/3PQeSHJNAi4qb9
+         6FCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C5gulj3V+LjVOIWRA41K2fBbqvQq1arjIETo1B+W8Bc=;
-        b=k7qSuHoj0m46lbHn0Y5jdwx4Ac/q0teY/GV8JEkmL86/uLIeeT2bFnt/z5HIaD6Av2
-         AHJF+afAclRNiAXG2tLihavO6BY6mJKpbiGjKWQ2tLAuF7RR1bqZ7AG7657P6beRxc51
-         Pan/zLLFDS8xUmZhVVjP9BrZZu4K/rwNmsHwcbxHEWF3QjvUOkEbGNzuUaszgWiIM0DE
-         qvmFeMTZHp+fvQD9hUz+BLsAiJbT7isuDEDiTk7/QBm9RyUI9vI4O7TWh5fZ7YQ4xmA4
-         nsmbt4L9Q4y85PfR+eNiTttdsc/s9TxH1SMQgGKfKOxVWDEuJdgoW1I59KmGmaCeBvih
-         jMkg==
-X-Gm-Message-State: AJIora959zl8G+rZu3knSG5E2qYrLNaa2CjoVhMgeYPifs1/Llry5k0b
-        6Do7ZHJybWD+lZx1XRzmcw0FGPl/n1TtS8BAiLI3vGQtmTyXaw==
-X-Google-Smtp-Source: AGRyM1tQWSH4FHcIXB/c1Om86xADkwc7GvPByRKGk241cmYYjcVU0Tb3fJawlIkwsscnpXTkE4OTfz6uJf2hwZwkTnY=
-X-Received: by 2002:a05:620a:4590:b0:6b5:e884:2d2c with SMTP id
- bp16-20020a05620a459000b006b5e8842d2cmr13691502qkb.267.1659394554140; Mon, 01
- Aug 2022 15:55:54 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3RtPyRzfB+HpbeEhTpVLyjlCEZhvDS/xfu2vrY2Ps+0=;
+        b=ph33f9EhUgWLSDPEzBhE5eymx2Y9JUWBT9Y7eeTffhzF+tkzyf9UayfFG9x/DRXNDz
+         4F/0dU8iEXwSa2FROtu7WqETNeVbUKOF40NLqj6Gfw7oSzeHHz9ArEilJxdPZWD50S1W
+         cxj+1Q9s7+LfdRIdPxSg1YBB8iMmo2AenjXighWcqaWTa6ZDh15gOnno+65pQN5aMquW
+         FDvTny0fkFs6t9+Jhmfl68uWVsLaIF5rPuvP/sKjekPnvOCGrNIoHV23Oe8Zt76u/r99
+         +ptEdcNP6EyGeccqO5iuP8T1+lpqBh0Kr6u/ceahzGJ1TFMqiYIkLLlJm6bwfKrFDS+h
+         AQHg==
+X-Gm-Message-State: ACgBeo3YEDoYGqZmgkSWAOrkiqDeRHHM4znDrtBDxQUGMS/PxjhLJbKZ
+        xHGrjJYVMQwaTFD6OBvqdn3ltUW2atikm25MZjQ=
+X-Google-Smtp-Source: AA6agR6KXe7sXk/8IbFRkqOSPia+ub7FMqBjrXdEXQw2hy+FXvDfCZHeUz7nyVRMBZQOniflLDJz2S4z6+xC61LLPXs=
+X-Received: by 2002:a05:6402:1e8c:b0:43d:db52:78a8 with SMTP id
+ f12-20020a0564021e8c00b0043ddb5278a8mr2755420edf.324.1659394665341; Mon, 01
+ Aug 2022 15:57:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-6-haoluo@google.com>
- <CAEf4Bzbdz7=Cg-87G2tak1Mr=1wJkqr6g2d=dkHqu0YH+j2unA@mail.gmail.com>
-In-Reply-To: <CAEf4Bzbdz7=Cg-87G2tak1Mr=1wJkqr6g2d=dkHqu0YH+j2unA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 1 Aug 2022 15:55:43 -0700
-Message-ID: <CA+khW7jiW=oAHS-N1ADLbqB74jTwAaLqUFFvYgb4xTz9WFwtZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/8] selftests/bpf: Test cgroup_iter.
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com> <CAHCN7xLDPvQ__WJPeCptvq7mFtF3v3TGAG_vyDBxSdoqWwoO8A@mail.gmail.com>
+In-Reply-To: <CAHCN7xLDPvQ__WJPeCptvq7mFtF3v3TGAG_vyDBxSdoqWwoO8A@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 1 Aug 2022 17:57:34 -0500
+Message-ID: <CAHCN7xJ44L01tyCNyWZsvG-+=OuT93KrG8YLm8rCrzd=L6PkeA@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,227 +83,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 2:51 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, Aug 1, 2022 at 3:07 PM Adam Ford <aford173@gmail.com> wrote:
 >
-> On Mon, Aug 1, 2022 at 10:54 AM Hao Luo <haoluo@google.com> wrote:
+> On Mon, Aug 1, 2022 at 2:33 PM Fabio Estevam <festevam@gmail.com> wrote:
 > >
-> > Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
-> > of the following structure:
+> > Hi Adam,
 > >
-> >     ROOT (working cgroup)
-> >      |
-> >    PARENT
-> >   /      \
-> > CHILD1  CHILD2
+> > On Sat, Jul 30, 2022 at 12:16 PM Adam Ford <aford173@gmail.com> wrote:
+> > >
+> > > Hey all,
+> > >
+> > > I am trying to test Jagan's patch series [1] to add support for the
+> > > samsung dsim bridge which is used on the imx8mm to output DSI video.
+> > > The DSIM gets the video from the mxsfb, and in my case, the DSI is
+> > > sent to the adv7535 for connecting to HDMI.
 > >
-> > and tests the following scenarios:
+> > I had to add some extra patches on top of Jagan's imx8mm-dsi-v3 to get
+> > HDMI output functional on a imx8mm-evk via ADV7535:
 > >
-> >  - invalid cgroup fd.
-> >  - pre-order walk over descendants from PARENT.
-> >  - post-order walk over descendants from PARENT.
-> >  - walk of ancestors from PARENT.
-> >  - early termination.
+> > https://github.com/fabioestevam/kernel/commits/imx8mm-dsi-v3
 > >
-> > Acked-by: Yonghong Song <yhs@fb.com>
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 193 ++++++++++++++++++
-> >  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
-> >  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++++
-> >  3 files changed, 239 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-> > new file mode 100644
-> > index 000000000000..5dc843a3f507
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-> > @@ -0,0 +1,193 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2022 Google */
-> > +
-> > +#include <test_progs.h>
-> > +#include <bpf/libbpf.h>
-> > +#include <bpf/btf.h>
-> > +#include "cgroup_iter.skel.h"
-> > +#include "cgroup_helpers.h"
-> > +
-> > +#define ROOT           0
-> > +#define PARENT         1
-> > +#define CHILD1         2
-> > +#define CHILD2         3
-> > +#define NUM_CGROUPS    4
-> > +
-> > +#define PROLOGUE       "prologue\n"
-> > +#define EPILOGUE       "epilogue\n"
-> > +
-> > +#define format_expected_output1(cg_id1) \
-> > +       snprintf(expected_output, sizeof(expected_output), \
-> > +                PROLOGUE "%8llu\n" EPILOGUE, (cg_id1))
-> > +
-> > +#define format_expected_output2(cg_id1, cg_id2) \
-> > +       snprintf(expected_output, sizeof(expected_output), \
-> > +                PROLOGUE "%8llu\n%8llu\n" EPILOGUE, \
-> > +                (cg_id1), (cg_id2))
-> > +
-> > +#define format_expected_output3(cg_id1, cg_id2, cg_id3) \
-> > +       snprintf(expected_output, sizeof(expected_output), \
-> > +                PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE, \
-> > +                (cg_id1), (cg_id2), (cg_id3))
-> > +
->
-> you use format_expected_output{1,2} just once and
-> format_expected_output3 twice. Is it worth defining macros for that?
->
+> > Does it work on your board?
 
-If not, we'd see this snprintf and format all over the place. It looks
-worse than the current one I think, prefer leave as-is.
+Fabio,
 
-> > +const char *cg_path[] = {
-> > +       "/", "/parent", "/parent/child1", "/parent/child2"
-> > +};
-> > +
-> > +static int cg_fd[] = {-1, -1, -1, -1};
-> > +static unsigned long long cg_id[] = {0, 0, 0, 0};
-> > +static char expected_output[64];
-> > +
-> > +int setup_cgroups(void)
-> > +{
-> > +       int fd, i = 0;
-> > +
-> > +       for (i = 0; i < NUM_CGROUPS; i++) {
-> > +               fd = create_and_get_cgroup(cg_path[i]);
-> > +               if (fd < 0)
-> > +                       return fd;
-> > +
-> > +               cg_fd[i] = fd;
-> > +               cg_id[i] = get_cgroup_id(cg_path[i]);
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +void cleanup_cgroups(void)
->
-> some more statics to cover (same for setup_cgroups)
->
+I tried your branch, but I still get no video on the output of HDMI.
+I do get a response to the modetest.  I won't post the whole thing
+here, but here is a snippet
 
-Oops. Will fix.
+CRTCs:
+id fb pos size
+33 37 (0,0) (1920x1080)
+  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
+flags: nhsync, nvsync; type: driver
+  props:
+24 VRR_ENABLED:
+flags: range
+values: 0 1
+value: 0
 
-> > +{
-> > +       int i;
-> > +
-> > +       for (i = 0; i < NUM_CGROUPS; i++)
-> > +               close(cg_fd[i]);
-> > +}
-> > +
-> > +static void read_from_cgroup_iter(struct bpf_program *prog, int cgroup_fd,
-> > +                                 int order, const char *testname)
-> > +{
-> > +       DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-> > +       union bpf_iter_link_info linfo;
-> > +       struct bpf_link *link;
-> > +       int len, iter_fd;
-> > +       static char buf[64];
-> > +
-> > +       memset(&linfo, 0, sizeof(linfo));
-> > +       linfo.cgroup.cgroup_fd = cgroup_fd;
-> > +       linfo.cgroup.traversal_order = order;
-> > +       opts.link_info = &linfo;
-> > +       opts.link_info_len = sizeof(linfo);
-> > +
-> > +       link = bpf_program__attach_iter(prog, &opts);
-> > +       if (!ASSERT_OK_PTR(link, "attach_iter"))
-> > +               return;
-> > +
-> > +       iter_fd = bpf_iter_create(bpf_link__fd(link));
-> > +       if (iter_fd < 0)
-> > +               goto free_link;
-> > +
-> > +       memset(buf, 0, sizeof(buf));
-> > +       while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
-> > +               ;
->
-> this is broken, in general, you are overriding buffer content with
-> each call to len
->
-> I think you intended to advance buf after each read() call (and reduce
-> remaining available buf size)?
->
+Planes:
+id crtc fb CRTC x,y x,y gamma size possible crtcs
+31 33 37 0,0 0,0 0        0x00000001
+  formats: RG16 XR24
+  props:
+8 type:
+flags: immutable enum
+enums: Overlay=0 Primary=1 Cursor=2
+value: 1
+30 IN_FORMATS:
+flags: immutable blob
+blobs:
 
-Ah. My bad. Copied from bpf_iter but didn't realize that in the
-bpf_iter case, it didn't care about the content read from buffer. Will
-fix.
+value:
+01000000000000000200000018000000
+01000000200000005247313658523234
+03000000000000000000000000000000
+0000000000000000
+in_formats blob decoded:
+RG16:  LINEAR
+XR24:  LINEAR
 
-> > +
-> > +       ASSERT_STREQ(buf, expected_output, testname);
-> > +
-> > +       /* read() after iter finishes should be ok. */
-> > +       if (len == 0)
-> > +               ASSERT_OK(read(iter_fd, buf, sizeof(buf)), "second_read");
-> > +
-> > +       close(iter_fd);
-> > +free_link:
-> > +       bpf_link__destroy(link);
-> > +}
-> > +
-> > +/* Invalid cgroup. */
-> > +static void test_invalid_cgroup(struct cgroup_iter *skel)
-> > +{
-> > +       DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-> > +       union bpf_iter_link_info linfo;
-> > +       struct bpf_link *link;
-> > +
-> > +       memset(&linfo, 0, sizeof(linfo));
-> > +       linfo.cgroup.cgroup_fd = (__u32)-1;
-> > +       opts.link_info = &linfo;
-> > +       opts.link_info_len = sizeof(linfo);
-> > +
-> > +       link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
-> > +       if (!ASSERT_ERR_PTR(link, "attach_iter"))
-> > +               bpf_link__destroy(link);
->
-> nit: you can call bpf_link__destroy() even if link is NULL or IS_ERR
->
+Frame buffers:
+id size pitch
 
-Ack. Still need to ASSERT on 'link' though, so the saving is probably
-just an indentation. Anyway, will change.
+When I compare this with NXP's downstream kernel that works with this
+monitor, I get some different info:
 
-> > +}
-> > +
->
-> [...]
->
-> > diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter.c b/tools/testing/selftests/bpf/progs/cgroup_iter.c
-> > new file mode 100644
-> > index 000000000000..2a34d146d6df
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/cgroup_iter.c
-> > @@ -0,0 +1,39 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2022 Google */
-> > +
-> > +#include "bpf_iter.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +
-> > +char _license[] SEC("license") = "GPL";
-> > +volatile int terminate_early = 0;
-> > +volatile u64 terminal_cgroup = 0;
-> > +
->
-> nit: you shouldn't need volatile for non-const global variables. Did
-> you see any problems without volatile?
->
+CRTCs:
+id fb pos size
+33 41 (0,0) (1920x1080)
+  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
+flags: nhsync, nvsync; type: driver
+  props:
+24 VRR_ENABLED:
+flags: range
+values: 0 1
+value: 0
 
-Nah. I don't know about that and see there are other tests that have
-this pattern. Will fix.
+Planes:
+id crtc fb CRTC x,y x,y gamma size possible crtcs
+31 33 41 0,0 0,0 0        0x00000001
+  formats: XR24 AR24 RG16 XB24 AB24 RX24 RA24 AR15 XR15 AB15 XB15 BG16
+  props:
+8 type:
+flags: immutable enum
+enums: Overlay=0 Primary=1 Cursor=2
+value: 1
+32 zpos:
+flags: immutable range
+values: 0 0
+value: 0
 
-> > +static inline u64 cgroup_id(struct cgroup *cgrp)
-> > +{
-> > +       return cgrp->kn->id;
-> > +}
-> > +
+Frame buffers:
+id size pitch
+
+Notably, the  formats for the downstream list significantly more
+formats.  I don't know how that translates to working video, but it
+was something to note.
+
 >
-> [...]
+> I'll give them a try tonight.  I managed to get a hold of an adv7535
+> user manual, and there are some items that it appears NXP did in their
+> downstream kernel that never got pushed upstream. Based on my review
+> of some of the changes, some of the NXP changes seem reasonable to me.
+> If/when I can get it working, I'll try to report back some of my
+> findings and push driver changes to the adv7535 as I find them.
+>
+> adam

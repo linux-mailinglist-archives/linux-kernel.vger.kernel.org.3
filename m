@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6826586871
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F2B586873
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiHALsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S231519AbiHALsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiHALsC (ORCPT
+        with ESMTP id S231482AbiHALsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:48:02 -0400
+        Mon, 1 Aug 2022 07:48:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFDA357E3;
-        Mon,  1 Aug 2022 04:48:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D50357ED;
+        Mon,  1 Aug 2022 04:48:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B28FD612CF;
-        Mon,  1 Aug 2022 11:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAACC433D6;
-        Mon,  1 Aug 2022 11:48:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9155A612C5;
+        Mon,  1 Aug 2022 11:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDC0C433D7;
+        Mon,  1 Aug 2022 11:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354481;
-        bh=w8vKAcRBTrQQjzh8VjZ1AFwqcHCYgjo4v0fVgshcQ00=;
+        s=korg; t=1659354484;
+        bh=/qYEJzRwOPh3lmTo2H4V8MfPr1kkl0t/ufrJ74RZtfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GfqjbU5DH6arLUnPdiYbFxBNgbmRDUw34zIJSt2gxiYZhjiBCTfRDb5JvDKZjLTAf
-         ned/wuZCe3v18V90Qgdqxaa5nGZxtEZ/blsaWv1jWla89sfRyNtkznoWhL05+e1omc
-         jNKdATk/vF+bBF7HGLBQ4zbrD8JYXiaHPQm6KoDM=
+        b=Kwiiy6FpoLhBLrv+i933LY/5ILEyM3VV0fv6xu4I/7OYjB+awTj9b+ZmNqwfOCUq2
+         /XZa+g1pgV0Kg6d+6GTQX5O1ZYUXgK+QVig6zMhqehFDuwhYK1pHNG/h58v4Gd4pb4
+         5y/l0SR98/nYDPWp7hoiydC/CVuYElksdZWkyhjI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Liang He <windhl@126.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.4 11/34] scsi: ufs: host: Hold reference returned by of_parse_phandle()
-Date:   Mon,  1 Aug 2022 13:46:51 +0200
-Message-Id: <20220801114128.471486665@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 12/34] tcp: Fix a data-race around sysctl_tcp_limit_output_bytes.
+Date:   Mon,  1 Aug 2022 13:46:52 +0200
+Message-Id: <20220801114128.501168275@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
 References: <20220801114128.025615151@linuxfoundation.org>
@@ -54,56 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit a3435afba87dc6cd83f5595e7607f3c40f93ef01 upstream.
+commit 9fb90193fbd66b4c5409ef729fd081861f8b6351 upstream.
 
-In ufshcd_populate_vreg(), we should hold the reference returned by
-of_parse_phandle() and then use it to call of_node_put() for refcount
-balance.
+While reading sysctl_tcp_limit_output_bytes, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Link: https://lore.kernel.org/r/20220719071529.1081166-1-windhl@126.com
-Fixes: aa4976130934 ("ufs: Add regulator enable support")
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 46d3ceabd8d9 ("tcp: TCP Small Queues")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufshcd-pltfrm.c |   15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ net/ipv4/tcp_output.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -125,9 +125,20 @@ out:
- 	return ret;
- }
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2276,7 +2276,7 @@ static bool tcp_small_queue_check(struct
+ 		      sk->sk_pacing_rate >> READ_ONCE(sk->sk_pacing_shift));
+ 	if (sk->sk_pacing_status == SK_PACING_NONE)
+ 		limit = min_t(unsigned long, limit,
+-			      sock_net(sk)->ipv4.sysctl_tcp_limit_output_bytes);
++			      READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_limit_output_bytes));
+ 	limit <<= factor;
  
-+static bool phandle_exists(const struct device_node *np,
-+			   const char *phandle_name, int index)
-+{
-+	struct device_node *parse_np = of_parse_phandle(np, phandle_name, index);
-+
-+	if (parse_np)
-+		of_node_put(parse_np);
-+
-+	return parse_np != NULL;
-+}
-+
- #define MAX_PROP_SIZE 32
- static int ufshcd_populate_vreg(struct device *dev, const char *name,
--		struct ufs_vreg **out_vreg)
-+				struct ufs_vreg **out_vreg)
- {
- 	int ret = 0;
- 	char prop_name[MAX_PROP_SIZE];
-@@ -140,7 +151,7 @@ static int ufshcd_populate_vreg(struct d
- 	}
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
--	if (!of_parse_phandle(np, prop_name, 0)) {
-+	if (!phandle_exists(np, prop_name, 0)) {
- 		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
- 				__func__, prop_name);
- 		goto out;
+ 	if (static_branch_unlikely(&tcp_tx_delay_enabled) &&
 
 

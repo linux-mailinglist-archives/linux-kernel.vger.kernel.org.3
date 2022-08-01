@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D51587222
+	by mail.lfdr.de (Postfix) with ESMTP id 77D14587221
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiHAUMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S233919AbiHAUM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbiHAUL7 (ORCPT
+        with ESMTP id S234725AbiHAUMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:11:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E554A32452;
-        Mon,  1 Aug 2022 13:11:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 1 Aug 2022 16:12:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BF33DF19;
+        Mon,  1 Aug 2022 13:12:04 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 230F260A07;
-        Mon,  1 Aug 2022 20:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B6EC43470;
-        Mon,  1 Aug 2022 20:11:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659384715;
-        bh=OSqIQPfvYpzTMvxqawaSlG0ztJzt6V5STNgZXTe0fuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=n3VA8XWEWImLnSFoDbftmNWnGl2LpOR6WfCL0l/z4/qXaMLMsmRlR4TFlTadFAhNW
-         AmfQGx82DBpm3WiUjTW44FAzY51y8Frvh/Erc3eRgTyXK/tKm/PzdisTk8ugOUxZv5
-         LRiunU+dY5vEKGPMvaHjaTBa1g5USOG2QDAZKbCNnH+GS++coY8YXXPrv3zfNuZlhV
-         IYeUF5K4mrdM3sfmYKO0qKq38h/SC2mot3Nz4e+lPemjzooVFi4VsZUDApg6oQSjEd
-         QEOzDBnApfeU5BSQX0R/cg7lAHBowEtAWWkr4q1Iep/dYxKa+Lc1BH6Ee/2JyTSALm
-         UyJgmIjb5sxsA==
-Date:   Mon, 1 Aug 2022 15:11:53 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 11/15] PCI: dwc: Simplify in/outbound iATU
- setup methods
-Message-ID: <20220801201153.GA622787@bhelgaas>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7244A6601BA5;
+        Mon,  1 Aug 2022 21:12:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659384722;
+        bh=Ww02GIODxPF1eQWZ6lWAqTXwqaa5UD98G24csRrYi5c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cyu+trJyxvIzAtsbdH+eRaHNA5ReSc+WTnNm85JhbbY69TX86XOdfKFz6K6Bgtt46
+         V3Rj9gR4f7vJWIccBBNOEfRNZsgUNDlCdSLbwT61J+kMBlGmqqX6FTNgaPsV1TZd28
+         ns4xMUMxmjX0rjQf8hjiyfknQjYqDOrMwXXu71G73LR64iXE1lNPNnN1sVRtp6VgCX
+         Ys4oEw31upAURNwAx0VCNqt4XCees5Rcr7up0uXnX1WfGwn+HijQaAAHYTN0mj6GHh
+         7z79MZKBEZsa0ciGtS38BnXqmSgTgk6ikSpSREhuugd27TAEXOxtDBELcx+t7M74U5
+         gtRZNHM1r+SXg==
+Message-ID: <6b35b912-68e5-e722-0b5a-0f7bd06c22c2@collabora.com>
+Date:   Mon, 1 Aug 2022 23:11:58 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801135057.GK93763@thinkpad>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 09/15] drm/gem: Add LRU/shrinker helper
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220726175043.1027731-1-robdclark@gmail.com>
+ <20220726175043.1027731-10-robdclark@gmail.com>
+ <def8e47c-067e-0841-4ae4-1eb90244cd50@collabora.com>
+ <CAF6AEGtV4GY6=PmQh0wrKxjxk_baRCzOo=s=Uz-uKBNEn7SBBg@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGtV4GY6=PmQh0wrKxjxk_baRCzOo=s=Uz-uKBNEn7SBBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 07:20:57PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jun 24, 2022 at 05:39:43PM +0300, Serge Semin wrote:
-> > From maintainability and scalability points of view it has been wrong to
-> > use different iATU inbound and outbound regions accessors for the viewport
-> > and unrolled versions of the iATU CSRs mapping. Seeing the particular iATU
-> > region-wise registers layout is almost fully compatible for different
-> > IP-core versions, there were no much points in splitting the code up that
-> > way since it was possible to implement a common windows setup methods for
-> > both viewport and unrolled iATU CSRs spaces. While what we can observe in
-> > the current driver implementation of these methods, is a lot of code
-> > duplication, which consequently worsen the code readability,
-> > maintainability and scalability. Note the current implementation is a bit
-> > more performant than the one suggested in this commit since it implies
-> > having less MMIO accesses. But the gain just doesn't worth having the
-> > denoted difficulties especially seeing the iATU setup methods are mainly
-> > called on the DW PCIe controller and peripheral devices initialization
-> > stage.
-> > 
-> > Here we suggest to move the iATU viewport and unrolled CSR access
-> > specifics in the dw_pcie_readl_atu() and dw_pcie_writel_atu() method, and
-> > convert the dw_pcie_prog_outbound_atu() and
-> > dw_pcie_prog_{ep_}inbound_atu() functions to being generic instead of
-> > having a different methods for each viewport and unrolled types of iATU
-> > CSRs mapping. Nothing complex really. First of all the dw_pcie_readl_atu()
-> > and dw_pcie_writel_atu() are converted to accept relative iATU CSRs
-> > address together with the iATU region direction (inbound or outbound) and
-> > region index. If DW PCIe controller doesn't have the unrolled iATU CSRs
-> > space, then the accessors will need to activate a iATU viewport based on
-> > the specified direction and index, otherwise a base address for the
-> > corresponding region CSRs will be calculated by means of the
-> > PCIE_ATU_UNROLL_BASE() macro. The CSRs macro have been modified in
-> > accordance with that logic in the pcie-designware.h header file.
-> > 
-> > The rest of the changes in this commit just concern converting the iATU
-> > in-/out-bound setup methods and iATU regions detection procedure to be
-> > compatible with the new accessors semantics. As a result we've dropped the
-> > no more required dw_pcie_prog_outbound_atu_unroll(),
-> > dw_pcie_prog_inbound_atu_unroll() and dw_pcie_iatu_detect_regions_unroll()
-> > methods.
-> > 
-> > Note aside with the denoted code improvements, there is an additional
-> > positive side effect of this change. If at some point an atomic iATU
-> > configs setup procedure is required, it will be possible to be done with
-> > no much effort just by adding the synchronization into the
-> > dw_pcie_readl_atu() and dw_pcie_writel_atu() accessors.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+On 8/1/22 23:00, Rob Clark wrote:
+> On Mon, Aug 1, 2022 at 12:41 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 7/26/22 20:50, Rob Clark wrote:
+>>> +/**
+>>> + * drm_gem_lru_remove - remove object from whatever LRU it is in
+>>> + *
+>>> + * If the object is currently in any LRU, remove it.
+>>> + *
+>>> + * @obj: The GEM object to remove from current LRU
+>>> + */
+>>> +void
+>>> +drm_gem_lru_remove(struct drm_gem_object *obj)
+>>> +{
+>>> +     struct drm_gem_lru *lru = obj->lru;
+>>> +
+>>> +     if (!lru)
+>>> +             return;
+>>> +
+>>> +     mutex_lock(lru->lock);
+>>> +     lru_remove(obj);
+>>> +     mutex_unlock(lru->lock);
+>>> +}
+>>> +EXPORT_SYMBOL(drm_gem_lru_remove);
+>>
+>> I made a preliminary port of the DRM-SHMEM shrinker on top of the the
+>> latest version of dma-buf locking convention and yours LRU patches. It
+>> all works good, the only thing that is missing for the DRM-SHMEM
+>> shrinker is the drm_gem_lru_remove_locked().
+>>
+>> What about to add a locked variant of drm_gem_lru_remove()?
 > 
-> One nitpick mentioned below. With that fixed,
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Sounds fine to me.. the only reason it didn't exist yet was because it
+> wasn't needed yet..
 
-> > +static inline void __iomem *dw_pcie_select_atu(struct dw_pcie *pci, u32 dir,
-> 
-> This could be renamed to "dw_pcie_get_atu_base()" since we are anyway getting
-> the base address of iATU.
+There is no use for the drm_gem_lru_move_tail_locked() as well, you're
+not using it in the MSM driver. Hence I thought it might be good to add
+the drm_gem_lru_remove_locked(), or maybe the
+drm_gem_lru_move_tail_locked() should be dropped then?
 
-I can see it both ways.  It definitely returns a base address, so
-"get_atu_base" makes sense.  But it also writes PCIE_ATU_VIEWPORT, and
-"select_atu" hints at that side effect while "get_atu_base" does not.
+> I can respin w/ an addition of a _locked() version, or you can add it
+> on top in your patchset.  Either is fine by me
 
-> > +					       u32 index)
-> >  {
-> > +	void __iomem *base = pci->atu_base;
-> > +
-> > +	if (pci->iatu_unroll_enabled)
-> > +		base += PCIE_ATU_UNROLL_BASE(dir, index);
-> > +	else
-> > +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, dir | index);
-> > +
-> > +	return base;
-> > +}
+The either option is fine by me too. If you'll keep the unused
+drm_gem_lru_move_tail_locked(), then will be nice to add
+drm_gem_lru_remove_locked().
+
+-- 
+Best regards,
+Dmitry

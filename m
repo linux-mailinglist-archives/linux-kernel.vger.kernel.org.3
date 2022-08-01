@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1FC586EF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E97586EFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbiHAQqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S234250AbiHAQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbiHAQp4 (ORCPT
+        with ESMTP id S234243AbiHAQqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:45:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F741084;
-        Mon,  1 Aug 2022 09:45:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CB0FB815B8;
-        Mon,  1 Aug 2022 16:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A215C433C1;
-        Mon,  1 Aug 2022 16:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659372353;
-        bh=pX7cVWCOiiHtMKCUYXRUfASuBYlxu+7/tdxAAuxjyrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hdGerin0vW2Af6UTgL4kPaMf6DXvN2ZyQDVQ/IenI4l39Fuk/vw/ujcKfhKWYW8OI
-         6sPS++jA3O9B7yfUmMwJyPPSqddw/f3OJaQgkuGQE68hjOyO8QPvQGaep5J0LSwjZT
-         dImiZrwlvdyunL1/LC1hrzv9bYVg/h5FqYkMuBJEQxpee/pmI2/SPevhFkvuBQI6Ac
-         c+m29F74WH2tlqm0sZuEWYiDVx9BC5HqZiLjKtQ4igf78uUeCF4cBTFtLxPCfhLrhU
-         qjkPql3Us+MkWcTNMAzOCG5kZsdOFhhy+jfhUHe60vZf3TabasmrqEPcex/fcRjHN8
-         mD1qRNntbXufQ==
-Date:   Mon, 1 Aug 2022 17:45:46 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Message-ID: <20220801164545.GA26471@willie-the-truck>
-References: <20220801154124.2011987-1-longman@redhat.com>
- <20220801154124.2011987-2-longman@redhat.com>
+        Mon, 1 Aug 2022 12:46:12 -0400
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7EEE01;
+        Mon,  1 Aug 2022 09:46:10 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id w185so11145486pfb.4;
+        Mon, 01 Aug 2022 09:46:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=oaCyo7hq+RU/dygb1CTSCLcZe9XahWnlD8COP0KgBlQ=;
+        b=qBAlWnSaEAraDzdpMhVqhX/c2M3Ni2uUnvZ+Kblu7OocNLvNzE5Mh/njJoI+je/92R
+         c9I6XzsggpMbwNMEQDK5YI1f6KrvZ9dg4eV9gaMsTT0oAzqhG03Z+y4AUZn+oPYP7vKa
+         mTg2LeNvZkDCYrGF4ojJ/YWTSWz6g9Ry1m4u3QskpD5h5tet4Gz3/7+SpE0p7fgFxmcY
+         V/OBOKKgvdPM0vayWtecNq6PPOtz8TvAs4sFs5dt9AEHiNhYjbIFhiGH4WpnsnbN6c4Q
+         8ZT13Xiz+c42TQilzf3ZEd8tDIUjVquc/7EW3ur2p5tqklVXjITOjnQTw4XcD0rtYYZN
+         Z7Fg==
+X-Gm-Message-State: AJIora+jv1hs9t9asOLXCwMwDQm+czsyO62iIKKbA0CSt/tC+ATDobl4
+        ICL9Gp9c41i4fX/jLM3hPTyoAvXw6yY=
+X-Google-Smtp-Source: AGRyM1tEQdPHp6rR+jB3N6XySraP/FcpHP+ZmIsTfItKq17AXBqA6+vqkHB25vBFYLeHTVfD9aerbQ==
+X-Received: by 2002:a63:f90d:0:b0:419:b112:91ea with SMTP id h13-20020a63f90d000000b00419b11291eamr14172722pgi.592.1659372370212;
+        Mon, 01 Aug 2022 09:46:10 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:6496:b2a7:616f:954d? ([2620:15c:211:201:6496:b2a7:616f:954d])
+        by smtp.gmail.com with ESMTPSA id o15-20020a17090a55cf00b001f333fab3d6sm7617838pjm.18.2022.08.01.09.46.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 09:46:09 -0700 (PDT)
+Message-ID: <bb20de72-fc15-feb1-541a-91454593e043@acm.org>
+Date:   Mon, 1 Aug 2022 09:46:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801154124.2011987-2-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] RDMA/ib_srpt: unify checking rdma_cm_id condition in
+ srpt_cm_req_recv()
+Content-Language: en-US
+To:     Li Zhijian <lizhijian@fujitsu.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        target-devel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 11:41:23AM -0400, Waiman Long wrote:
-> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
-> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
-> is currently used only by arm64 arch due to possible asymmetric cpu
-> setup. This patch extends its usage to save user provided cpumask when
-> sched_setaffinity() is called for all arches.
+On 7/31/22 23:43, Li Zhijian wrote:
+> Although rdma_cm_id and ib_cm_id passing to srpt_cm_req_recv() are
+> exclusive currently, all other checking condition are using rdma_cm_id.
+> So unify the 'if' condition to make the code more clear.
 > 
-> To preserve the existing arm64 use case, a new cpus_affinity_set flag is
-> added to differentiate if user_cpus_ptr is set up by sched_setaffinity()
-> or by force_compatible_cpus_allowed_ptr(). user_cpus_ptr
-> set by sched_setaffinity() has priority and won't be
-> overwritten by force_compatible_cpus_allowed_ptr() or
-> relax_compatible_cpus_allowed_ptr().
-> 
-> As a call to sched_setaffinity() will no longer clear user_cpus_ptr
-> but set it instead, the SCA_USER flag is no longer necessary and can
-> be removed.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 > ---
->  include/linux/sched.h |  1 +
->  kernel/sched/core.c   | 71 +++++++++++++++++++++++++++++++------------
->  kernel/sched/sched.h  |  1 -
->  3 files changed, 52 insertions(+), 21 deletions(-)
+>   drivers/infiniband/ulp/srpt/ib_srpt.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index c46f3a63b758..60ae022fa842 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -815,6 +815,7 @@ struct task_struct {
->  
->  	unsigned int			policy;
->  	int				nr_cpus_allowed;
-> +	int				cpus_affinity_set;
->  	const cpumask_t			*cpus_ptr;
->  	cpumask_t			*user_cpus_ptr;
->  	cpumask_t			cpus_mask;
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index da0bf6fe9ecd..7757828c7422 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2607,6 +2607,7 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
->  		return -ENOMEM;
->  
->  	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-> +	dst->cpus_affinity_set = src->cpus_affinity_set;
+> diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
+> index c3036aeac89e..21cbe30d526f 100644
+> --- a/drivers/infiniband/ulp/srpt/ib_srpt.c
+> +++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
+> @@ -2218,13 +2218,13 @@ static int srpt_cm_req_recv(struct srpt_device *const sdev,
+>   	ch->zw_cqe.done = srpt_zerolength_write_done;
+>   	INIT_WORK(&ch->release_work, srpt_release_channel_work);
+>   	ch->sport = sport;
+> -	if (ib_cm_id) {
+> -		ch->ib_cm.cm_id = ib_cm_id;
+> -		ib_cm_id->context = ch;
+> -	} else {
+> +	if (rdma_cm_id) {
+>   		ch->using_rdma_cm = true;
+>   		ch->rdma_cm.cm_id = rdma_cm_id;
+>   		rdma_cm_id->context = ch;
+> +	} else {
+> +		ch->ib_cm.cm_id = ib_cm_id;
+> +		ib_cm_id->context = ch;
+>   	}
+>   	/*
+>   	 * ch->rq_size should be at least as large as the initiator queue
 
-I haven't been through this thorougly, but it looks a bit suspicious to me
-to inherit this field directly across fork(). If a 64-bit task with this
-flag set forks and then exec's a 32-bit program, arm64 will be in trouble if
-we're not able to override the affinity forcefully.
+Although the above patch looks fine to me, I'm not sure this kind of 
+changes should be considered as useful or as churn?
 
-Will
+Bart.

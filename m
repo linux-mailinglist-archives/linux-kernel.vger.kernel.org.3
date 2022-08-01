@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECD2586F97
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C726586F99
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbiHARcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        id S232681AbiHARe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiHARcI (ORCPT
+        with ESMTP id S230387AbiHARe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:32:08 -0400
+        Mon, 1 Aug 2022 13:34:26 -0400
 Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996C16313
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:32:07 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id f65so10267293pgc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:32:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B605655D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:34:25 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 206so6788211pgb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Oes67+Ylc8hvEPTUUvcsJqVHsb6Ia9jyLiE8hgCVNoY=;
-        b=T1jFPqf9wVODHTeJONRr9EOi7wNtPB+eoTceHo+25lPpxLhaDKmEaTE0l8nXc6XqX9
-         NuUJGQV27xk9kGPp+GKQRyU0rrcggjp6JWDrhKdzDkDVTootOd88OwpFBK4hX8XkFdm3
-         qvWoUKI0V2ok6SdATji0mXb8wXUniuuI3U8m4=
+        bh=iG1tFlsYX7x+sS+wOqXkgTBitFnM+4O9QVj7OfY98rU=;
+        b=AujzntJakyHexjnmF/VbxTVSJFb0sJ4Vx0oWFB006B82OjGa5g+YXADCDbUSVMZ03I
+         y3P5XW2InEOaI7BxPx2WWRR1f264zPvYiuDyBZuBasv5m7SMWoc1DCOLtXiWOeWKTjyf
+         CwlJZiOPjfOSgJavIVLje9jbkSf2Poo8mFn2I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=Oes67+Ylc8hvEPTUUvcsJqVHsb6Ia9jyLiE8hgCVNoY=;
-        b=Iwe7kh/KgPr0YEv5eiD9hROCG2+zQ3j3qIQjatWl8jiMTCbaeNdpLB8O6k82+di7zU
-         AemcvpYYuqYaWPnTuIRkUSrPpCc8sHTV9ugqZu8Bm9uCCfTJYtokoKGm1Kw7XyiRCYNd
-         0VYH/fuMwSffYm7Eh2K3H98bffuTd6nIKlYmBsAVoEw/WXAjXTIlh2QoQCz7wdzRjCDn
-         I6mlwu4j0zurj6rmNLEQUXaccZxyptqbG7KtOcL0DqeoX8iN13cgER7c+SngJMGLVdfG
-         Yudl98M4qbw8gzvtf/qDV7zPrmNFc0Ls+I9lHmOp1ePUD1i11amcdlwIe/2iSsQQZtL4
-         9w3w==
-X-Gm-Message-State: ACgBeo1KW0btG+16hUNJEPWeYsy7SNmF2zFPI8rel84bhKv3pONLTDA7
-        mc07CSxg1uBRdugP09bj9e0RvQ==
-X-Google-Smtp-Source: AA6agR7NnPUJRs48F3s0ZZprsEavv77hy5g1o+FyMRU18b91gvKvhCbSSLcbY/yEIdJGd6An1iBiXQ==
-X-Received: by 2002:a62:52c3:0:b0:52d:c062:27d2 with SMTP id g186-20020a6252c3000000b0052dc06227d2mr1945806pfb.53.1659375127034;
-        Mon, 01 Aug 2022 10:32:07 -0700 (PDT)
+        bh=iG1tFlsYX7x+sS+wOqXkgTBitFnM+4O9QVj7OfY98rU=;
+        b=NPntCIpSLS2UfHQzck2J7Z+rdM9SGi3L3Fwe88cLLfGjrGpiUjkDGrK7ZqxB/dl/Va
+         RfceHeNVWph2HOFMO81jo+KxJcBXJHm4FE2Z85FRasRlzT/ieJolHd4JRdrgvEKzCJug
+         Mis27VMqgL73ZOVxhwL+vLAEc6VtwXEpcCXskPzHr+yBY1WfM/gHDYu6lo/T5XLuZZoz
+         xkRSqg1ZIzgzVRFrLIf/eec1LyyK1orIPpwys9bJ2T2bJluoGLF/2K3EpYHpwh+78MKN
+         uOov3QPVPVPxyMm9ULesRM0ngh9rFN9FdoduZvic/LA/odyjcpbsLePDoTXZeIY5tKZ0
+         lSeA==
+X-Gm-Message-State: AJIora9OHDY/2gSQSYjWjd/RfbkDi6S0vnI2H0TDoyyZ8dfMU3tEP6vR
+        VFWiB05pI0orSCMgOYQKogfYJQ==
+X-Google-Smtp-Source: AGRyM1tjAojuzDmcJt32ZzjbaJaE1UY2jhxIjdusCgWtn0YCp27SY9SXpQXFv8gZaKEhZucmZBSTVQ==
+X-Received: by 2002:a63:97:0:b0:41a:3c2:6238 with SMTP id 145-20020a630097000000b0041a03c26238mr14084203pga.499.1659375265142;
+        Mon, 01 Aug 2022 10:34:25 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id r7-20020a63ce47000000b004114aad90ebsm7794642pgi.49.2022.08.01.10.32.01
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902ce0c00b0016bf9437766sm9855117plg.261.2022.08.01.10.34.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 10:32:02 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 10:32:00 -0700
+        Mon, 01 Aug 2022 10:34:20 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 10:34:16 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [GIT PULL] pstore updates for v5.20-rc1
-Message-ID: <202208011029.A1E7EE281@keescook>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        YiFei Zhu <zhuyifei@google.com>
+Subject: [GIT PULL] seccomp update for v5.20-rc1
+Message-ID: <202208011033.344AB17@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,42 +65,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-Please pull these pstore updates for v5.20-rc1. The base (v5.18-rc2) is
-correct -- I intentionally skipped this tree last merge window.
+Please pull this tiny seccomp update for v5.20-rc1.
 
 Thanks!
 
 -Kees
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/pstore-v5.20-rc1
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.20-rc1
 
-for you to fetch changes up to 2c09d1443b9b8b6e25bfb2acf51ad442cf9b314e:
+for you to fetch changes up to 3ce4b78f73e8e00fb86bad67ee7f6fe12019707e:
 
-  pstore/zone: cleanup "rcnt" type (2022-06-23 08:27:52 -0700)
-
-----------------------------------------------------------------
-pstore updates for v5.20-rc1
-
-- Migrate to modern acomp crypto interface (Ard Biesheuvel)
-
-- Use better return type for "rcnt" (Dan Carpenter)
+  selftests/seccomp: Fix compile warning when CC=clang (2022-07-27 12:12:16 -0700)
 
 ----------------------------------------------------------------
-Ard Biesheuvel (1):
-      pstore: migrate to crypto acomp interface
+seccomp update for v5.20-rc1
 
-Dan Carpenter (1):
-      pstore/zone: cleanup "rcnt" type
+- Fix Clang build warning (YiFei Zhu)
 
- fs/pstore/platform.c | 63 ++++++++++++++++++++++++++++++++++++++++++----------
- fs/pstore/zone.c     | 12 +++++-----
- 2 files changed, 57 insertions(+), 18 deletions(-)
+----------------------------------------------------------------
+YiFei Zhu (1):
+      selftests/seccomp: Fix compile warning when CC=clang
+
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
 Kees Cook

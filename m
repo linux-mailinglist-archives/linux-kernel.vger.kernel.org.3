@@ -2,161 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C8958656D
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C44F58656F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiHAGzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 02:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229832AbiHAG4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 02:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiHAGzf (ORCPT
+        with ESMTP id S229555AbiHAGz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 02:55:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516CB18E18
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 23:55:30 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2716GSuR026514;
-        Mon, 1 Aug 2022 06:55:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5lB1ezmMHWY9mUEduax8LA8Wsmh5JZbmItaixuoFlW8=;
- b=SKuIu9SFBca73XptERrgE1ceOX9zfoS+wKViQ2+yhwoR7yKHPIM1dNaQjzuyKdIbW6lv
- rJ4do8vj7RkI5PaOfrZA0L9sYKHlTcuEvSydATXxmi3gESO2U658Iag7tgrCuG/pdEOU
- fKpoNSz4KhUPcLbzFRHtv14q+xNpcO2UsGxb802c2b88yJbtcwU74Xmcz/G5VY4HkOgl
- +2UT74REUQTpB0p64no5uVgHaDbsQf6UTXjyzEO6lzB5HGuqOfg32sQeVAD3X2vjAPDg
- 76AMA7NggcaJGS2JOoJpasLNyvVT7iw61v/YlvQk/PpicSploT0GQ+lBFj7ioAv6kdOi yA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp6vgw2ct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Aug 2022 06:55:15 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2716dfUf019153;
-        Mon, 1 Aug 2022 06:55:14 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp6vgw2bh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Aug 2022 06:55:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2716puYH028433;
-        Mon, 1 Aug 2022 06:55:12 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3hmv98htru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Aug 2022 06:55:11 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2716tOJG32768364
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 1 Aug 2022 06:55:24 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D139AE045;
-        Mon,  1 Aug 2022 06:55:09 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04D1EAE051;
-        Mon,  1 Aug 2022 06:55:06 +0000 (GMT)
-Received: from [9.43.22.209] (unknown [9.43.22.209])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  1 Aug 2022 06:55:05 +0000 (GMT)
-Message-ID: <1aba0c44-b096-8c75-8086-62d3cffc08b3@linux.ibm.com>
-Date:   Mon, 1 Aug 2022 12:25:04 +0530
+        Mon, 1 Aug 2022 02:55:59 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E511A82D;
+        Sun, 31 Jul 2022 23:55:55 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j15so4808089wrr.2;
+        Sun, 31 Jul 2022 23:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CDcBVXsrd0NrQbcXwpCbvBTDqZ66JWuglUosC0YVlls=;
+        b=iwwETTw0Gx8Q0bnHGOSIXSecWZtqQ9ypNBTdOBTDsPhqj47RBVYX847rITz5/KDeFq
+         P4joKgJRUnN3wirlwECuTGhdSLwagJQcu0924XhVkTn4zSHzuW2jpANrwF+Qqu5KmKkz
+         /CFWbS/MPqP8scp5EnOHV8ZLDkUwdD+okUqkDlbQYR03brHkFeTEflU4pFFytwdeh0ly
+         Bw1IPkndK6wzWPkwGxypi8pGp6sCV6nZ4kaUNmW76YcF0xG76cM1jMTFVFg7lXgOOqdH
+         lwtDuoTj934IWYRl5WT0HQvuDF6/udxnWaTzSJVeyXYpmxNtkEuJG93QPM03Ta+Q9tZo
+         eobg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CDcBVXsrd0NrQbcXwpCbvBTDqZ66JWuglUosC0YVlls=;
+        b=dYUfldQZLM9RwfH6juvSqszlExMEfAJhNKTKo/l5zyjFM/TO+hcZv6L9FaM1qnp36q
+         yGwSf7OrVJhbcUtbGFGnUici29fZRPe7VpHLBNz1zgTr/2TmbYjSHNdnmktesnHJvnB3
+         IdSKNEG3dyAp2E68avBgFp2bPiH1XyB6rkiqEwD3JK6zeBtvMtWHLsSFYoQWP/52a/1z
+         03XFF87666+cIBPL4BJYAnvb40QeEIXu3gouF/tgsBf7aCvncihf67RGvmmxEI4+A+yu
+         GD/ZOYTqbnaJGHAbmLHos5QEoG08UOnVBY00dPGvcV5h0hzRamS+5w0k5vwOZXeFRjoJ
+         YxwA==
+X-Gm-Message-State: ACgBeo3i1uynDxUja1mfFLImhukFZBOSxuOQB4m4/8MZzRKCaSdT81zu
+        HKXqQfev2bYBux5YqcPNXQQ=
+X-Google-Smtp-Source: AA6agR5zJwc7+hlJdQQ1xlSA09no/Nj4o1nozxAOJTF53UcyeOZKJhnIWvtq4RjcdbGoWYwLEcEHIg==
+X-Received: by 2002:a5d:6b50:0:b0:21e:298c:caad with SMTP id x16-20020a5d6b50000000b0021e298ccaadmr8786107wrw.509.1659336953965;
+        Sun, 31 Jul 2022 23:55:53 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id bh15-20020a05600c3d0f00b003a4a5bcd37esm10316906wmb.23.2022.07.31.23.55.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 23:55:53 -0700 (PDT)
+Message-ID: <a66792e1-5825-7912-0602-5a0fc47a75c6@gmail.com>
+Date:   Mon, 1 Aug 2022 09:55:51 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
- distance to MEMTIER_ADISTANCE_PMEM
+Subject: Re: [net-next PATCH] octeontx2-pf: Use only non-isolated cpus in irq
+ affinity
 Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
- <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
- <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <87bkt8s7w9.fsf@linux.ibm.com>
- <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <e5545c90-9595-d08c-8a1c-1c15e3b94999@linux.ibm.com>
- <87tu6wk0q5.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <826fbdbc-219f-8f4a-7373-41c718287533@linux.ibm.com>
- <87les8jwpu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <87les8jwpu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Sunil Kovvuri <sunil.kovvuri@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Netdev List <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>
+References: <20220725094402.21203-1-gakula@marvell.com>
+ <20220726200804.72deb465@kernel.org>
+ <23d40f8c-ad5b-c908-4081-24f882514ad7@gmail.com>
+ <CA+sq2CdV=ujVuJswkq5TvK8mM7b6_vBXKR=oNBGQzSTH2cEiXA@mail.gmail.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <CA+sq2CdV=ujVuJswkq5TvK8mM7b6_vBXKR=oNBGQzSTH2cEiXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SvZniomhhLx0an3BIJRSHFFQV8FDUJ5E
-X-Proofpoint-GUID: lU17vtRQGH5hmm26dL7Gx5Mcmz_Pcp-B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-01_02,2022-07-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 adultscore=0 malwarescore=0 mlxscore=0 impostorscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208010033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 12:07 PM, Huang, Ying wrote:
-> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
-> 
->> On 8/1/22 10:40 AM, Huang, Ying wrote:
->>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>
->>>> On 8/1/22 7:36 AM, Huang, Ying wrote:
->>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>
->>>>>> "Huang, Ying" <ying.huang@intel.com> writes:
->>>>>>
->>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-....
 
->>>>
->>>> With the module unload, it is kind of force removing the usage of the specific memtype.
->>>> Considering module unload will remove the usage of specific memtype from other parts
->>>> of the kernel and we already do all the required reset in memory hot unplug, do we
->>>> need to do the clear_node_memory_type above? 
->>>
->>> Per my understanding, we need to call clear_node_memory_type() in
->>> dev_dax_kmem_remove().  After that, we have nothing to do in
->>> dax_kmem_exit().
->>>
->>
->> Ok, I guess you are suggesting to do the clear_node_memory_type even if we fail the memory remove. 
+On 7/27/2022 10:03 AM, Sunil Kovvuri wrote:
 > 
-> Can we use node_memory_types[] to indicate whether a node is managed by
-> a driver?
 > 
-> Regardless being succeeded or failed, dev_dax_kmem_remove() will set
-> node_memory_types[] = NULL.  But until node is offlined, we will still
-> keep the node in the memory_dev_type (dax_pmem_type).
+> On Wed, Jul 27, 2022 at 11:01 AM Tariq Toukan <ttoukan.linux@gmail.com 
+> <mailto:ttoukan.linux@gmail.com>> wrote:
 > 
-> And we will prevent dax/kmem from unloading via try_module_get() and add
-> "struct module *" to struct memory_dev_type.
+> 
+> 
+>     On 7/27/2022 6:08 AM, Jakub Kicinski wrote:
+>      > On Mon, 25 Jul 2022 15:14:02 +0530 Geetha sowjanya wrote:
+>      >> This patch excludes the isolates cpus from the cpus list
+>      >> while setting up TX/RX queue interrupts affinity
+>      >>
+>      >> Signed-off-by: Geetha sowjanya <gakula@marvell.com
+>     <mailto:gakula@marvell.com>>
+>      >> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com
+>     <mailto:sgoutham@marvell.com>>
+>      >
+>      > Hm, housekeeping_cpumask() looks barely used by drivers,
+>      > do you have any references to discussions indicated drivers
+>      > are expected to pay attention to it? Really seems like something
+>      > that the core should take care of.
+>      >
+>      > Tariq, thoughts?
+> 
+>     I agree.
+>     IMO this logic best fits inside the new sched API I proposed last week
+>     (pending Ack...), transparent to driver.
+> 
+>     Find here:
+>     https://lore.kernel.org/all/20220719162339.23865-2-tariqt@nvidia.com/ <https://lore.kernel.org/all/20220719162339.23865-2-tariqt@nvidia.com/>
+> 
+> 
+> You mean
+> 
+> +static bool sched_cpus_spread_by_distance(int node, u16 *cpus, int 
+> ncpus) +{ +
+> 
+> .... + cpumask_copy(cpumask, cpu_online_mask);
+> 
+> Change cpu_online_mask here to a mask which gives non-isolated cores mask ?
 > 
 
-Current dax/kmem driver is not holding any module reference and allows the module to be unloaded
-anytime. Even if the memory onlined by the driver fails to be unplugged. Addition of memory_dev_type
-as suggested by you will be different than that. Page demotion can continue to work without the
-support of dax_pmem_type as long as we keep the older demotion order. Any new demotion order
-rebuild will remove the the memory node which was not hotunplugged  from the demotion order. Isn't that
-a much simpler implementation? 
+Yes that was the intention.
+However, on a second thought, I'm not sure this is a good idea.
 
--aneesh
-
+In some cases, the device driver is isolated-out for other higher prio 
+tasks. While in other cases, the device driver processing is the high 
+prio task and is isolated in these cpus for best performance.
+As the cpus spread usually affects affinity hints and numa-aware 
+allocations, your patch might cause a degradation if always applied.

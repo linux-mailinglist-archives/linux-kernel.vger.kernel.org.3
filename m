@@ -2,210 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561CA587261
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318C7587286
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiHAUem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S234550AbiHAUxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiHAUej (ORCPT
+        with ESMTP id S234071AbiHAUxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:34:39 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5932B62A;
-        Mon,  1 Aug 2022 13:34:38 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 271KSlJF023128;
-        Mon, 1 Aug 2022 20:34:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=QCK2TgUeOK45EAMpjO66m4Tblzy6TUaXNLnplAks2FM=;
- b=mQARlsrPuuZe236RRxSDZP16RJW1u0JKDGyADqKfm2Ug8f+aEa6SzxrSay5HF1VJtJtP
- DfKc1WieY30RgMN2ACE6cEZv5TM+iuXePHeuvRkao8ae86SjUo48JpXFbF29HZy1dcny
- RofUlETdF5YmsWTghSAtHNHhpm7nfjZsO6ia8phrbYkUC/ODyOGCC0mdA131Qk3Fr3rz
- IemXnAvPNj4sg4TQgOO0d1NTjq54A/f6n2NIB1J7OPF+d1VUn0LSpmL2MVgNx2pACKLk
- BubW1vBbNI9zjfnUgeOyOl0Qr/vE29/6KRz+AufHzSslza9BXe4wierWX6gZotqPUUAh Eg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmu80vwnf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 01 Aug 2022 20:34:10 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 271Jb2qC007532;
-        Mon, 1 Aug 2022 20:34:09 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu31dv5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 01 Aug 2022 20:34:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NS5WAkUUO9H3BCesRdP7UjSL/A1qUKXoQLpiuHTRQyb3EbGG/7rX6I2xQtA0GhFqi/8XNLNIxM4jJv5rMwa2cUjRX7OnWBKmATSoMnrlpWE3KkAcPE3aNZtg5CLaNWf7fBwyGfTX+fx0xVdjsRpmr28BTve0Vir7VFBZD5y+IOQ9Sn4y4eiUjaJkSi4JpNmeeEgtzlGvRb85r99w3RLi+/OMdZSlzCU79XFZiejOqpQLzFZnjuzBeAJhjZZetF2uD0N/s9INbY7FHam77Ogp5QSDQLLvH0sCsckfPRryHR7QLl0bi7JkDOmONTcVOqoAPxtL9zRIdZgWtVFkV3/K4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QCK2TgUeOK45EAMpjO66m4Tblzy6TUaXNLnplAks2FM=;
- b=G/Sd1z+fkLlW5khCX8OKfeH7wx7BeqUXVz9ET6HdEK0dhOZUtvMA5Va1almMhE6kw3ZP2JTXoYDjVg4JTbJ046b+2uvyJCdI4cYylpPPmrOw54rOBX9nlAZaD+bz2ByRInUEMYjQ980Bjq5aQsLEiCLUsL2JE5KSzOsrxW5q6pqMxjLPkQwEoDvIx6RfTYdz3Af+hlMSDclA/aFshLjDigX9tqcjvrkktUYJU+reti9pFCoHA1k4uSHb8ELR5vkKHrb6fHAnm9aX0sazMzKZS1a0CZj/40S04cuysnOuTexihJEVx9cv4T3tBX3euYb7zvj4kB6JfaJaQ2KwLUs3LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QCK2TgUeOK45EAMpjO66m4Tblzy6TUaXNLnplAks2FM=;
- b=kLIEGWFaikE9xipp7DmXk69XRuCs/ZSsZ4OxLtG0Erut14Gq8gRSkAtGqcFTi+tQeBNw96NvtqU2DVd7L4NqQnkkgAXTkUIErw4gYBtcKuAl4cmIESD0hAqw854nXF0OH4bWfmEhM0PaHqyuwkldZ8OPTF3ia/2PkNHIoW6LAys=
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
- by BN8PR10MB3203.namprd10.prod.outlook.com (2603:10b6:408:c6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Mon, 1 Aug
- 2022 20:34:07 +0000
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::b03d:e02a:73c0:a112]) by SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::b03d:e02a:73c0:a112%9]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
- 20:34:07 +0000
-From:   Jane Chu <jane.chu@oracle.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
-Subject: Re: [PATCH v5] x86/mce: retrieve poison range from hardware
-Thread-Topic: [PATCH v5] x86/mce: retrieve poison range from hardware
-Thread-Index: AQHYo9wls6kiGpcxYkOd5j6I+plua62aREeAgABAFwA=
-Date:   Mon, 1 Aug 2022 20:34:07 +0000
-Message-ID: <e3234907-df27-f0d4-ef63-ee1ec9808f54@oracle.com>
-References: <20220730061757.3441537-1-jane.chu@oracle.com>
- <62e802fb22f2f_b075294a8@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <62e802fb22f2f_b075294a8@dwillia2-xfh.jf.intel.com.notmuch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a45898c6-3aa8-49cf-5e5e-08da73fd2eb3
-x-ms-traffictypediagnostic: BN8PR10MB3203:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Sl2ILov/tgKMiFhfjrN5i+vFfN5IbOogOUZr7W1weMTqlZKfMZMtpUdEDn9EqeCu0cTc2U3udFB+g0hTWb6QOqIATfZjmcWUJxggH1XQls1BjcBl+vUb6fZhpKLBfidvHwnC0oaJjtpvkV0jawe0GcF++GHhbyV4SW2zWGAbrS0q9YX9K5z+hOCoJ6pPBIzd1ZYhOFgjs2Y84gp3lzVel/eOmWca6I5VE7vm0+vLtj/CprWDEhtZbp9t/0lQUhrVhvZrL8vLqtZmgbWipB8Nj7K7CMx3dMhdI6bPW6SFVl6+KWcE/JDc588/HBQt6/IbOj4+zbmSBg7epiBp0raPflSnOSRHDWUcwY61ApzG+RV7VTRQZy8R88Co00uR+5yhWGeYnxb/BrnEIuoQ+wbdvz4tINIPIXoRzobevWng6lvdd92G1Ti5sxErPrn+BKl7uWS4RApqEQh7M7jfDaIA2j0KrQ6wjM6meaxFlJYKpfm+VmKh/XHFUamXD4Z+wgw9H3s6lgLH0B6SqT4nPSU2OMQrtFeQyEaDV4tgSErVUJYSaKlwrYoSJt16mcGl74WT4tTFeYmj3xDb9etXrE9kmt4o3TzTes0QQn70RX4jEQzAwd4xDMgfRKBRQL/Uv/li9OVdgRaMwesPvgoLFAnbJD4zzqu4qsAV1iTdJN8/RnkEJoiXRS7p2tIdYnS+UrA2gIWR1S1gU5fWMdr7qMjyw9uJiRkSj3pNcTcALFjtHw21f+Qt0INPiopvR/bv6h8RlnHhnaQvGSulkkQYhx4Iaf399pLVguNfciyzvmw1zKEC9LLcYwGDj+U0z0tSY5+mKB4KUAdENewRceU5/meaEKRXBIjGZCL/q4rhNfoCyuHhohuRGzt+vDVUGAYm6zd1UWvJZseez3VDmj1A77tuu5Cs5JGG2SECBwWr6g8Vuz0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(39860400002)(346002)(366004)(376002)(921005)(122000001)(38100700002)(31686004)(5660300002)(31696002)(36756003)(86362001)(38070700005)(44832011)(7416002)(2906002)(66556008)(966005)(6506007)(8936002)(478600001)(66946007)(53546011)(66476007)(66446008)(64756008)(26005)(6512007)(83380400001)(110136005)(71200400001)(8676002)(76116006)(6486002)(41300700001)(316002)(186003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cS9NWllLcEt5ajZpOExXU3lzKzF1Y09OeXUwNGFyeUxDcEhFK2x5ZmUvTjVz?=
- =?utf-8?B?UXlUNDNOVjFHYmR4Y3duQ3dzK0wwUHA0dkVQaVRDMENrSmpibmZSRXhwQXRu?=
- =?utf-8?B?K1dkM3NTUU51bFFtOUp0SDE5Q3BnRkxwUm43RTJCeGpoTENyNTMyTHpQQ2Er?=
- =?utf-8?B?SzgwWjNmUExRRUcxeVRTT0VFTnUxNzNTSnFtR0kwTVdMU2VZRkt1SnA3d0py?=
- =?utf-8?B?T0Zuc05lZ3B6Nm1FQWtWUnZsRXAyYldqOE43a0l2TlJuSGF1bkQzb0krYVNk?=
- =?utf-8?B?ekkxNHluSGJuMWlNVzMzZFI4dXpXMDV1UVB1K2wxNE15cjhwYlBrYnAreUdm?=
- =?utf-8?B?REJ2eEJTcFoxNnh3ck5hYUUyUFlpeW5QK1FHb1NGbjJrZWgrY3JQd25KczY3?=
- =?utf-8?B?L0NES1pRSlViRU03SEZidzV3Q3hBVzlXYXlla2pMSjZoM2o5blpIYWkyMitK?=
- =?utf-8?B?VFVjb0ZHYWRuNHI3bXVWc0VyNHdEYzEvRlpMRUNhVllIUXpHem1rUEkraUUv?=
- =?utf-8?B?SWFkK3d2Z2VYRER4T01xdjFvaXdYaGNhZ1lYMy9ORnJJUzBvNy9rNm1MNWJr?=
- =?utf-8?B?bEE5MG1uV0NFaldvUi90Mng1dFFMWU5SWUJsY2NBdmxVMlZMZVAzb0F0aXMv?=
- =?utf-8?B?QUdMRGhQQzlFS1g5S0NLQXZSdy9oSXhnemtvZWJNdHV6VlMwSldxTmgycmxk?=
- =?utf-8?B?NXN3VGhnWWRrV3phODF2Y0ZUSVMwSWc0dlZ5bXU4MVZMSUY1U2Z0N2NkdjBr?=
- =?utf-8?B?MTlvY2xGekVaZGxEc0x5bkNzQXhOWEswM3NDc0NuN1d0TkFiWWdRVXRISTFs?=
- =?utf-8?B?Z3kvVHpiMkl1N2JiZXpRNnQyTmM4d3ZBcEIzYTd6MkVUZDRKSWJONEtKbVA2?=
- =?utf-8?B?d3pUUDJhR2ZaenNzTFp2OGY1TkxYT1V6RnlHTmQ5R3NKQ21WQkpKd205WUda?=
- =?utf-8?B?QVBUQSt5dWRwWmpOUFNRM3l3ay9DSmUzeXdQR0Zxalc0czZ2Nm9FWE1QL2VO?=
- =?utf-8?B?U3B2MkxlMGVYaHNOSnJVNzEvbzJwNmdSeXRsNmdTUGJnSVFuRVZaL0plZi9Z?=
- =?utf-8?B?bHVrd3A5SEE5SzdycDFWRlhFRzM3WGF3eHJZS0pwWEtza1h2dzg1Z0hzTzZx?=
- =?utf-8?B?NzF2bEJVRXNWRkk4VVZsYUJqS1M4RGJ4dTR1SEVZeHdqTldGYjR4S0N4bTNC?=
- =?utf-8?B?a0Zvbk0zKzIwRUxVUDFEcHRmMWhhbjBCN3dkbEtLanJNMi9TaC9xcGtXcEtS?=
- =?utf-8?B?c3UrRUpuMWVubUkvZmxXNXo1RHlPT0xVS3VhQ3pWNThFdnZSTS9BQnJ5NXUr?=
- =?utf-8?B?V2svbkdOQzYxRktNaDRYSUsvaDd1STd0c3ovYWw5S2ZaWWdMNjNTT0k5eGxa?=
- =?utf-8?B?anUwUDB5enYrR2hKY0V4TWhaSGtFNjBEU3ZqU3JoTzJUS2NWemN2M3hjU0Fp?=
- =?utf-8?B?SGZLaWpvSzBHNWx6b1FlSGx6eGoxekFJVXZ6cWsyWFBmNlJOcWRXZ004S1k5?=
- =?utf-8?B?SUR2ekJUK3dRU3hjMVc5ZVJMcXFQNlpKNlpsUEZCc3FRQzF4QTUrelczTkc4?=
- =?utf-8?B?THdaL0tNRndaeldYTHRMZysxV2htc2ZMZDlDUDd5YU4wY2w0Nkd1cDdERVdt?=
- =?utf-8?B?VUZ4WnZHTE5PWXh2bGpobUNGcnNpS1VIOGxQbXNmRWU5TkZNR3h0OGpNaVlo?=
- =?utf-8?B?aE1oTmptVUV2OFFLbG5rZ2xLNWtkWVdqMHo5Sk9xZE1GTVhydFdjNEtKZ0sy?=
- =?utf-8?B?emlJYjVqSkFza0pNYjdmSkFqdkZPSGxCSlRPZHAxbmtSYzg0cy8yMDNPRE5V?=
- =?utf-8?B?YzBkcE0vN3NNdlZSQ0FGeUpXdkZXN0RsUGt0S3FNWVAzek5ORnRLOHViYmhE?=
- =?utf-8?B?R1F3ZHh5ZU5XUitiMHdmc0k5UEtBWFIxSUExUXc4Y0wwbCtkKy82N1dNcGRl?=
- =?utf-8?B?ZWtPUS9HRzRkTEFzNlc2N3hMNFY0bng2ZGtGUVE1VCtMb1NzakJNcWFRUXBq?=
- =?utf-8?B?ZUFqNm5iVTN1dWtpVHFCNkp6Z1hWN2dpemRZWUpSa3NSQUc4eDNDYVBQUjBR?=
- =?utf-8?B?Wm55dE8zbFdObGJXMWlVa2FuT3N5WDNsVFVPbUxIUy9TaTVFZlhLK2kxLy95?=
- =?utf-8?Q?9MJw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <487FE2B04A0C9C48A675E478933A819B@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 1 Aug 2022 16:53:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2FB25E87
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659387197; x=1690923197;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iK6Wg0K+PZhrdJMSER+miS9uwCQp4U/wadG3QVzOXUA=;
+  b=dG0HdKo/66WU5RJe2mkAXFIiPtFR6pgsWrsv6gTWKroabKzq6n/F7hUj
+   qsV3aWyPlmLXjVwREazNXmMGK3cznz7xObF0ezX73dWCMJSL+ElCjREUg
+   GBHhMVceX0XYg3sDDhiZU1IonzOwcPraDcSEYgOSKv5HE6tTRhgp6B4/r
+   cB9J96SQ2DyuVrTCORx3AxLQB/B2jEk+gFSuULxMR/zGK/vFLVa6/EppE
+   hUPly82QqWLauryILXvHGMb6ACRkRvbpUGNfy4LFCBKoqf45IzwT6k248
+   BZvxE+nei6z1UsvT4QtF0x5/EqV8aT6Nr/Cdv0xhGfdjF1XoIIW81jfvV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="272290183"
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="272290183"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 13:40:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="929695853"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2022 13:40:44 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIcDT-000FHD-2T;
+        Mon, 01 Aug 2022 20:40:43 +0000
+Date:   Tue, 2 Aug 2022 04:39:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared
+Message-ID: <202208020406.09AXscU1-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a45898c6-3aa8-49cf-5e5e-08da73fd2eb3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 20:34:07.3304
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XFKFLF5khtDwpgaiPDL4m9tggbwsOVncMDoicJIpi4B5hE9DTsEnaHc4Mx3ohwWVPutGSG8FhlaR2g4XqOxAnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3203
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-01_11,2022-08-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
- adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2208010102
-X-Proofpoint-ORIG-GUID: ENWQLkznZGhnpfXPwpIrsPyVQmla9ufs
-X-Proofpoint-GUID: ENWQLkznZGhnpfXPwpIrsPyVQmla9ufs
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gOC8xLzIwMjIgOTo0NCBBTSwgRGFuIFdpbGxpYW1zIHdyb3RlOg0KPiBKYW5lIENodSB3cm90
-ZToNCj4+IFdpdGggQ29tbWl0IDc5MTdmOWNkYjUwMyAoImFjcGkvbmZpdDogcmVseSBvbiBtY2Ut
-Pm1pc2MgdG8gZGV0ZXJtaW5lDQo+PiBwb2lzb24gZ3JhbnVsYXJpdHkiKSB0aGF0IGNoYW5nZWQg
-bmZpdF9oYW5kbGVfbWNlKCkgY2FsbGJhY2sgdG8gcmVwb3J0DQo+PiBiYWRyYW5nZSBhY2NvcmRp
-bmcgdG8gMVVMTCA8PCBNQ0lfTUlTQ19BRERSX0xTQihtY2UtPm1pc2MpLCBpdCdzIGJlZW4NCj4+
-IGRpc2NvdmVyZWQgdGhhdCB0aGUgbWNlLT5taXNjIExTQiBmaWVsZCBpcyAweDEwMDAgYnl0ZXMs
-IGhlbmNlIGluamVjdGluZw0KPj4gMiBiYWNrLXRvLWJhY2sgcG9pc29ucyBhbmQgdGhlIGRyaXZl
-ciBlbmRzIHVwIGxvZ2dpbmcgOCBiYWRibG9ja3MsDQo+PiBiZWNhdXNlIDB4MTAwMCBieXRlcyBp
-cyA4IDUxMi1ieXRlLg0KPj4NCj4+IERhbiBXaWxsaWFtcyBub3RpY2VkIHRoYXQgYXBlaV9tY2Vf
-cmVwb3J0X21lbV9lcnJvcigpIGhhcmRjb2RlDQo+PiB0aGUgTFNCIGZpZWxkIHRvIFBBR0VfU0hJ
-RlQgaW5zdGVhZCBvZiBjb25zdWx0aW5nIHRoZSBpbnB1dA0KPj4gc3RydWN0IGNwZXJfc2VjX21l
-bV9lcnIgcmVjb3JkLiAgU28gY2hhbmdlIHRvIHJlbHkgb24gaGFyZHdhcmUgd2hlbmV2ZXINCj4+
-IHN1cHBvcnQgaXMgYXZhaWxhYmxlLg0KPj4NCj4+IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL3IvN2VkNTBmZDgtNTIxZS1jYWRlLTc3YjEtNzM4YjhiZmI4NTAyQG9yYWNsZS5jb20NCj4+
-DQo+PiBSZXZpZXdlZC1ieTogRGFuIFdpbGxpYW1zIDxkYW4uai53aWxsaWFtc0BpbnRlbC5jb20+
-DQo+PiBTaWduZWQtb2ZmLWJ5OiBKYW5lIENodSA8amFuZS5jaHVAb3JhY2xlLmNvbT4NCj4+IC0t
-LQ0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9hcGVpLmMgfCAxNCArKysrKysrKysrKysr
-LQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMTMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0K
-Pj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9hcGVpLmMgYi9hcmNo
-L3g4Ni9rZXJuZWwvY3B1L21jZS9hcGVpLmMNCj4+IGluZGV4IDcxNzE5MjkxNWYyOC4uMmM3ZWEw
-YmE5ZGQ3IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9tY2UvYXBlaS5jDQo+
-PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L21jZS9hcGVpLmMNCj4+IEBAIC0yOSwxNSArMjks
-MjcgQEANCj4+ICAgdm9pZCBhcGVpX21jZV9yZXBvcnRfbWVtX2Vycm9yKGludCBzZXZlcml0eSwg
-c3RydWN0IGNwZXJfc2VjX21lbV9lcnIgKm1lbV9lcnIpDQo+PiAgIHsNCj4+ICAgCXN0cnVjdCBt
-Y2UgbTsNCj4+ICsJaW50IGxzYiA9IFBBR0VfU0hJRlQ7DQo+PiAgIA0KPj4gICAJaWYgKCEobWVt
-X2Vyci0+dmFsaWRhdGlvbl9iaXRzICYgQ1BFUl9NRU1fVkFMSURfUEEpKQ0KPj4gICAJCXJldHVy
-bjsNCj4+ICAgDQo+PiArCS8qDQo+PiArCSAqIEV2ZW4gaWYgdGhlIC0+dmFsaWRhdGlvbl9iaXRz
-IGFyZSBzZXQgZm9yIGFkZHJlc3MgbWFzaywNCj4+ICsJICogdG8gYmUgZXh0cmEgc2FmZSwgY2hl
-Y2sgYW5kIHJlamVjdCBhbiBlcnJvciByYWRpdXMgJzAnLA0KPj4gKwkgKiBhbmQgZmFsbGJhY2sg
-dG8gdGhlIGRlZmF1bHQgcGFnZSBzaXplLg0KPj4gKwkgKi8NCj4+ICsJaWYgKG1lbV9lcnItPnZh
-bGlkYXRpb25fYml0cyAmIENQRVJfTUVNX1ZBTElEX1BBX01BU0spIHsNCj4+ICsJCWxzYiA9IF9f
-ZmZzNjQobWVtX2Vyci0+cGh5c2ljYWxfYWRkcl9tYXNrKTsNCj4+ICsJCWlmIChsc2IgPT0gMSkN
-Cj4gDQo+IFRoaXMgd2FzIHRoZSByZWFzb24gSSByZWNvbW1lbmRlZCBod2VpZ2h0NjQgYW5kIG1p
-bl9ub3RfemVybygpIGFzDQo+IGh3ZWlnaHQ2NCBkb2VzIG5vdCBoYXZlIHRoZSB1bmRlZmluZWQg
-YmVoYXZpb3IuIEhvd2V2ZXIsIGFuIGV2ZW4gYmV0dGVyDQo+IG9wdGlvbiBpcyB0byBqdXN0IGRv
-Og0KPiANCj4gICAgICBmaW5kX2ZpcnN0X2JpdCgmbWVtX2Vyci0+cGh5c2ljYWxfYWRkcl9tYXNr
-LCBQQUdFX1NISUZUKQ0KPiANCj4gLi4uYXMgdGhhdCB0cmltcyB0aGUgcmVzdWx0IHRvIHRoZSBQ
-QUdFX1NISUZUIG1heCBhbmQgaGFuZGxlcyB0aGUgemVybw0KPiBjYXNlLg0KDQpUaGFua3MgRGFu
-ISAgSG93ZXZlciBpdCBsb29rcyBsaWtlIGZpbmRfZmlyc3RfYml0KCkgY291bGQgY2FsbCBpbnRv
-IA0KX19mZnMoeCkgd2hpY2ggaGFzIHRoZSBzYW1lIGxpbWl0YXRpb24gYXMgX19mZnM2NCh4KSwg
-YXMgVG9ueSBwb2ludGVkIG91dC4NCg0KSSdsbCBwb3N0IHY2IHNob3J0bHkuDQoNCnRoYW5rcywN
-Ci1qYW5lDQo=
+Hi Greg,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0cec3f24a7cedc726f8790d693aaff2c535dc4ce
+commit: 6b8be804ff376f6657ccdf6b29974e7c793d88c4 m68knommu: fix 68000 CPU link with no platform selected
+date:   10 weeks ago
+config: m68k-randconfig-m041-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020406.09AXscU1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b8be804ff376f6657ccdf6b29974e7c793d88c4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6b8be804ff376f6657ccdf6b29974e7c793d88c4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/m68k/68000/ints.c:77:6: warning: no previous prototype for 'process_int' [-Wmissing-prototypes]
+      77 | void process_int(int vec, struct pt_regs *fp)
+         |      ^~~~~~~~~~~
+   arch/m68k/68000/ints.c: In function 'process_int':
+>> arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared (first use in this function)
+      82 |         unsigned long pend = ISR;
+         |                              ^~~
+   arch/m68k/68000/ints.c:82:30: note: each undeclared identifier is reported only once for each function it appears in
+   arch/m68k/68000/ints.c: In function 'intc_irq_unmask':
+>> arch/m68k/68000/ints.c:135:9: error: 'IMR' undeclared (first use in this function)
+     135 |         IMR &= ~(1 << d->irq);
+         |         ^~~
+   arch/m68k/68000/ints.c: In function 'intc_irq_mask':
+   arch/m68k/68000/ints.c:140:9: error: 'IMR' undeclared (first use in this function)
+     140 |         IMR |= (1 << d->irq);
+         |         ^~~
+   arch/m68k/68000/ints.c: At top level:
+   arch/m68k/68000/ints.c:153:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
+     153 | void __init trap_init(void)
+         |             ^~~~~~~~~
+   arch/m68k/68000/ints.c:172:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
+     172 | void __init init_IRQ(void)
+         |             ^~~~~~~~
+   arch/m68k/68000/ints.c: In function 'init_IRQ':
+>> arch/m68k/68000/ints.c:176:9: error: 'IVR' undeclared (first use in this function)
+     176 |         IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
+         |         ^~~
+   arch/m68k/68000/ints.c:179:9: error: 'IMR' undeclared (first use in this function)
+     179 |         IMR = ~0;
+         |         ^~~
+
+
+vim +/ISR +82 arch/m68k/68000/ints.c
+
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   70  
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   71  /* The 68k family did not have a good way to determine the source
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   72   * of interrupts until later in the family.  The EC000 core does
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   73   * not provide the vector number on the stack, we vector everything
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   74   * into one vector and look in the blasted mask register...
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   75   * This code is designed to be fast, almost constant time, not clean!
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   76   */
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   77  void process_int(int vec, struct pt_regs *fp)
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   78  {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   79  	int irq;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   80  	int mask;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   81  
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  @82  	unsigned long pend = ISR;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   83  
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   84  	while (pend) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   85  		if (pend & 0x0000ffff) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   86  			if (pend & 0x000000ff) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   87  				if (pend & 0x0000000f) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   88  					mask = 0x00000001;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   89  					irq = 0;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   90  				} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   91  					mask = 0x00000010;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   92  					irq = 4;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   93  				}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   94  			} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   95  				if (pend & 0x00000f00) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   96  					mask = 0x00000100;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   97  					irq = 8;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   98  				} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16   99  					mask = 0x00001000;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  100  					irq = 12;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  101  				}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  102  			}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  103  		} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  104  			if (pend & 0x00ff0000) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  105  				if (pend & 0x000f0000) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  106  					mask = 0x00010000;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  107  					irq = 16;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  108  				} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  109  					mask = 0x00100000;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  110  					irq = 20;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  111  				}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  112  			} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  113  				if (pend & 0x0f000000) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  114  					mask = 0x01000000;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  115  					irq = 24;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  116  				} else {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  117  					mask = 0x10000000;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  118  					irq = 28;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  119  				}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  120  			}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  121  		}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  122  
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  123  		while (! (mask & pend)) {
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  124  			mask <<=1;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  125  			irq++;
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  126  		}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  127  
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  128  		do_IRQ(irq, fp);
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  129  		pend &= ~mask;
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  130  	}
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  131  }
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  132  
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  133  static void intc_irq_unmask(struct irq_data *d)
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  134  {
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06 @135  	IMR &= ~(1 << d->irq);
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  136  }
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  137  
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  138  static void intc_irq_mask(struct irq_data *d)
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  139  {
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  140  	IMR |= (1 << d->irq);
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  141  }
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  142  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  143  static struct irq_chip intc_irq_chip = {
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  144  	.name		= "M68K-INTC",
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  145  	.irq_mask	= intc_irq_mask,
+39a17940abc4d0 arch/m68knommu/platform/68328/ints.c Thomas Gleixner 2011-02-06  146  	.irq_unmask	= intc_irq_unmask,
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  147  };
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  148  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  149  /*
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  150   * This function should be called during kernel startup to initialize
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  151   * the machine vector table.
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  152   */
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  153  void __init trap_init(void)
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  154  {
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  155  	int i;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  156  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  157  	/* set up the vectors */
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  158  	for (i = 72; i < 256; ++i)
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  159  		_ramvec[i] = (e_vector) bad_interrupt;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  160  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  161  	_ramvec[32] = system_call;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  162  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  163  	_ramvec[65] = (e_vector) inthandler1;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  164  	_ramvec[66] = (e_vector) inthandler2;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  165  	_ramvec[67] = (e_vector) inthandler3;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  166  	_ramvec[68] = (e_vector) inthandler4;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  167  	_ramvec[69] = (e_vector) inthandler5;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  168  	_ramvec[70] = (e_vector) inthandler6;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  169  	_ramvec[71] = (e_vector) inthandler7;
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  170  }
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  171  
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  172  void __init init_IRQ(void)
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  173  {
+622e9472dd723d arch/m68k/platform/68328/ints.c      Greg Ungerer    2011-06-23  174  	int i;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  175  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01 @176  	IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  177  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  178  	/* turn off all interrupts */
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  179  	IMR = ~0;
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  180  
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  181  	for (i = 0; (i < NR_IRQS); i++) {
+0b98b1636cf2e1 arch/m68k/platform/68328/ints.c      Thomas Gleixner 2011-03-28  182  		irq_set_chip(i, &intc_irq_chip);
+0b98b1636cf2e1 arch/m68k/platform/68328/ints.c      Thomas Gleixner 2011-03-28  183  		irq_set_handler(i, handle_level_irq);
+1985d2538cccdc arch/m68knommu/platform/68328/ints.c Greg Ungerer    2009-05-01  184  	}
+^1da177e4c3f41 arch/m68knommu/platform/68328/ints.c Linus Torvalds  2005-04-16  185  }
+2502b667ea835e arch/m68knommu/platform/68328/ints.c Greg Ungerer    2007-07-19  186  
+
+:::::: The code at line 82 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

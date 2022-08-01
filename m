@@ -2,63 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07FC58744E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DFB587452
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiHAXRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S234158AbiHAXTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiHAXRI (ORCPT
+        with ESMTP id S230362AbiHAXTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:17:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9941C1571F;
-        Mon,  1 Aug 2022 16:17:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90A65B81624;
-        Mon,  1 Aug 2022 23:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0226DC433C1;
-        Mon,  1 Aug 2022 23:17:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KjyvVmoT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659395820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6BLlcSVe1CGPnmaca1xSo/G7abzxcO+mP2nlAj4VRgM=;
-        b=KjyvVmoTB9SNZ8poPhaMmH3/8n06j7ZChE8PP72Y9ZHmCz0L7wnqpi4fioWdyv5aRgtVjH
-        Kcvn6bvYZpCcKbJCVoDVbPDPMreYiPEbaULCtbOxrzs1815Ay3WRQyoGWFxk+4JnwBm4/s
-        dw83dXUA12VQSArYwSiems++IoRAgQ0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ac8a4693 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 23:16:59 +0000 (UTC)
-Date:   Tue, 2 Aug 2022 01:16:56 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        x86@kernel.org, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH RFC v1] random: implement getrandom() in vDSO
-Message-ID: <Yuhe6IIFXqNMZs5b@zx2c4.com>
-References: <20220729145525.1729066-1-Jason@zx2c4.com>
- <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
- <YuXCpyULk6jFgGV5@zx2c4.com>
- <87zggnsqwj.ffs@tglx>
+        Mon, 1 Aug 2022 19:19:52 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-bgr052101064006.outbound.protection.outlook.com [52.101.64.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5782A40F;
+        Mon,  1 Aug 2022 16:19:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q/vpHL9Qp+WFR07KuWXYwsyzAnzzcgE2Xw71iWOLVjeh9BTGHdiNcZV4PnyzKSbvHyRofY4OhVUkEF4Q4HANS26Glzh2t8vbvdkBmTcbAyaZD5Uk3yZF+DxM3ecsORXxGJEiocpZ8sEG3/Ycw5bOcWc//+nF6XSW1aQDBWz01LtjWJJQocGOJSnSRORzxonVu+qgG6+h9FgJZ8nlYFV0NZx5mURoPvpYOKiiUlU7wOCqBTiUIOh7Igy5nhLRbpMS3IDY0j8BGQrbTYTzqfKOwLEEU3RptpCelLv2e1910Hj8qzlpnH+KKImmgchqT1uTISe24YfGvUTsPjN5YMBdFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v4ivXbwyhchz2gX03GAcBD6zzDIW5+sem5beLSjDLMY=;
+ b=Hy3EN3kSoG6h+iFck+snW45nZi6ld0Pclbj4iN61cHFwBCpsHRWPQamWSfOqs49dslixyVlYGlEeulxHTj7zi5k5bfbYTG5W1dXvMK6tE7EAiJDQvofE7fJhIcBaXjtvqGHEibmZxozkVKIPpguTuetnH7Z5m4rz0QWYbVGLHpNywMqJTDmaTqlOPm2LWd1YE1fAFbCHxoO/y6ldRZ9Ixo01ryBl4PJX/XXMkzAY4LPk3OlqVihtw74iNYjAwOlgfMwzXypZ4mR5Qvx0Vp0/Y6UY0aM6siM9x/zyRR2RJcKT9RiHAKONQLaFMlw7ZxaoN3AdWYYveZ0JQ3/cKGhRLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v4ivXbwyhchz2gX03GAcBD6zzDIW5+sem5beLSjDLMY=;
+ b=mYomdPqq/0wM7lqWYcgpEZpOs8apW3HbXjrwvkD5jmcjjFf9TbChQGM52jNUEo9KTrOiCFdhAwv2nK0xLfu7XiZAWg0XvhUTF3JH2MTx7ZglYZYtP1bKJlFzr5RzboA41KG0Fe0ogrtRACjrJL8xf2hYsgzsev7MwJPA/X0OHEU=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by PH0PR05MB8057.namprd05.prod.outlook.com (2603:10b6:510:76::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.12; Mon, 1 Aug
+ 2022 23:19:49 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::d813:9300:4877:39d0]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::d813:9300:4877:39d0%8]) with mapi id 15.20.5504.014; Mon, 1 Aug 2022
+ 23:19:48 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+CC:     "Schaufler, Casey" <casey.schaufler@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+Thread-Topic: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Thread-Index: AQHYm6moVvUxeU2aLUSjhWg4PqcU4q2H1VIAgAANjICAAASjgIASdSEAgAAsz4CAADGMgIAACBIA
+Date:   Mon, 1 Aug 2022 23:19:48 +0000
+Message-ID: <858CC870-B061-4ADC-B5F4-C95E72F72CEC@vmware.com>
+References: <20220719195628.3415852-1-axelrasmussen@google.com>
+ <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
+ <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
+ <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
+ <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
+ <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
+ <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
+In-Reply-To: <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 07896e4f-26d5-47bd-0e3e-08da74145440
+x-ms-traffictypediagnostic: PH0PR05MB8057:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zMUTKgYo+obp60m9HklnU5bPaEOcDqw9foAxZMSAMzS8srNL1PzJr8tgIhQjUiyrqjhpxDHR80FHCnr3p4GrjjmGC31uUE52ThYuYyrrZcHZV4x7B48GA1UtckA7/PvswWbfF6H2B28PLYL3gm/T/w0kKEdh9MchbuSvzIpNNN2+Rq8Dr8pai0pavazAXCHuIi616thCIgJjklH92cBOtXBfhv/0CdsZ6i2LAagxO/fkrhZKqEJye8Ggi8XHNCOIspfswEUUi2+BZsBNj9XTRZhP3ghmLEvdxg5U2Fsyk3bXSjbfV1huYuTy5S/olJFUs7+wo4xH34WfUlp+V99FMUfZmiDpElDsBbq8dhC1JXL6AJaE+3aKO/7hw1+RYvPxxczL0E6u6vu5jlsB3Cb/ZuxGrtiAQw3wq/9RTY1xL/MSuT2b48WQnvCbdwUZP7xEcWWRymXX1M+htK6f6cCMY1Y3Qq8VVba6rvUcr8ZkYIlraXT6VQSmoin4x/vv8PNLx3Iu3U+9KnDNpnGs/1mx6Rc4kNUM480wijfcelGCYlpc5wtdmgPM/22y/Ul6M9GOZaSbgYGogqucbdSNz/czseJ4ouDsWFniE6O2fJzkQGNlqTOBxD8qC/vzbh33XFXa08plWv4ivhU8Mc8hl5dSzql62aGz1BAzM6Nx4Gg77jgHKjMyJQkYq82Vhjwcn0mV7rHqc9/HLNpiD/fcsOWqPpmGLV2/GwnGjEpilCDdUqcYNbJyoqw0cKMUUHpAPrFwHMZs64Oa4DMHyvTmMpqPfj852NzKZLjt4LUEyKTD9eHaNDBSuxnuodlZUzdN8I8lUjvQyhT4mLHlBfj10qAMsQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(136003)(366004)(346002)(8936002)(66446008)(6486002)(64756008)(478600001)(66556008)(4326008)(8676002)(66476007)(71200400001)(186003)(83380400001)(7416002)(36756003)(86362001)(54906003)(6916009)(38070700005)(2616005)(2906002)(41300700001)(6506007)(316002)(53546011)(6512007)(33656002)(76116006)(5660300002)(66946007)(26005)(38100700002)(122000001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXFqUEh1cWpkU0ExaEhhU016MUlCU0RwZS9zTGlsYkpCOHFGMEk0N0Z6Vzdy?=
+ =?utf-8?B?c1VzUWF3Vkxlc2xsZmZzdDZJdnRjREtyUFhIZXQvUEYzdmt3Wk41MFpKOVRH?=
+ =?utf-8?B?NjlHdm5vWVZheXdUeDdCQUJ1cGUyV0Nud3dhaG1pS1YrdG4xeVN1MGRSYmJU?=
+ =?utf-8?B?amFHYWoxZlJYa0pQNkE4TkRmeDVMb0theGo1Y2ZhRldvQ0dNUDFFbGZwZXln?=
+ =?utf-8?B?T0JBd3RlM056YWRrSjcyaUtERW1RNTlIZ2xOSzMzR0xZenM5bzBVczZaTDF0?=
+ =?utf-8?B?dGpRMTZBRlR4WktVamxCQnNqMXR2Z2dZdVFyc0RjWGxZbDJHWnAyT2kyU3FX?=
+ =?utf-8?B?ZWttdVF3SFZGY3llYWtmWTJOT0Z5dGtkV0tZdVhud1kxUithYTZyaEVrL2Fw?=
+ =?utf-8?B?Zk5HTEFQa2VRUXAxTk1QRHdIQ0xGRWpGaGFxVzFXd1prajZwR0tkcVlucnpY?=
+ =?utf-8?B?Y3RtOG5zemhyRmxJZGcwWmZaNTR4MUhHUU80S0Zrc1RXQlNhK0h6MWQ1c0Js?=
+ =?utf-8?B?cUd4ejdPTTc2SWV0WmpGTG9QQ2pHS2lQNHNXSWFjY0RRKzhSRUdHM21GWHF6?=
+ =?utf-8?B?TndYaUF2TFZqUVNHQmtJakMvc3VJRE5rSDYyOUVVMTFrYUEwWG40M0lybzRW?=
+ =?utf-8?B?Uk9JS3dWYVBINzhCUWNSaXhVV3M2Qmp6MHdVMEJ6RGtrRmVoUzllZ0xqdWVX?=
+ =?utf-8?B?cDNSMkNOSnBuRWlZYnhvdTBJa2JPMkVnSVYyZytPYTVKV3NHcDF4Smh3eWJj?=
+ =?utf-8?B?SXVlVEd3UUdxWnE5KzlncEVLMGRlUW1RNklzOFcrT0JQQnZrRUNHdnVTT1VC?=
+ =?utf-8?B?SU1yQ0Y0WVpRSnhXTS9zcldwVWM0LzVtMThrYUpScHRmWDRXSFl2WEcyNDdY?=
+ =?utf-8?B?SGVHL3kzU0RnNFI1ZllIVW0xMTkydmZNZG93Y01RVUZaVWtQOFJZbU5lbGJH?=
+ =?utf-8?B?OVdIU2c3aUdjR0UvOVYvWHh6R1NNRFM5NkhCMHBNcWxjdDBSZ0VjbWhkSkRW?=
+ =?utf-8?B?a2FuQk5VZVBWVkprL1o3VW1WZVVXeENyNTd1NGNucCtlRHVpdk9iMzR2Slp4?=
+ =?utf-8?B?ZERLL3RGWTYwS1RDc0tsRk1HanFsMitjcjgrSy9MMkNsTDNiVGhkdG9CQ3BE?=
+ =?utf-8?B?UWFEVUZGL1p3OXM5K3lJcWxOK1MvaFhRaHp0dUQ2eU44TFRlQ0xZZkVLREZL?=
+ =?utf-8?B?MGxveWZRd2VoUTNhZTE0UVFoYkVyc3hTdXVmdGxWS0JMbExCaThnNkxrM1Rj?=
+ =?utf-8?B?TW1ZV1hRQzRocW15aTRFMjBsNGNkamRtdm1aQUhWNVZzWFFmNHJ5b0pOVjNz?=
+ =?utf-8?B?QUJFOFQ0WEYxZHhITGgrVVFSeTB0OHN4dmI2TU1HYklIeWNaMkI0RVR4bFZU?=
+ =?utf-8?B?OGNFRFA1VjU2Mndpdk5iVW1ELzVEY1hVUHlNUUYwUW81Y00ySEpRVXdjcSt4?=
+ =?utf-8?B?VGRFYUFRYXlBZjNlckFkV3BlbTAxOXFDNS9VdXExN3hYNHJVdHN0U21nbXZJ?=
+ =?utf-8?B?ekNpbzBIZEo3MkZvWjdld01SbHcrYTNra1RMNk1zbk9TWDBjZm9nUU56T3lE?=
+ =?utf-8?B?eVkvVXBlYWxEVzVjN0QxR3pjdEVGSFlCV2Y5K0pmQlFBaWh5ek9JYnRsdStO?=
+ =?utf-8?B?YnZ4SkV3MFQ3ZzYvTGp1TmVPMFpYV1kwT1ltaTBkMWtGWEZCRTNwY2IxVEo0?=
+ =?utf-8?B?L0FWQVY3Mm1KWElndHZBcjNXcmdBNmxobGFFNWdDSmROMXk5TWxhaVpOc3lS?=
+ =?utf-8?B?TStwNHBlU1BvSi9hUDIyMmNzUjF2clROSm1hakhmaCs2aVkvTVpnc1ZBRDFY?=
+ =?utf-8?B?dDhvVm9jVG5LQ0pxeHJuMmRBUmd6MDVMTlBmc0paSGhhS0hlWC9jVENwTDQ3?=
+ =?utf-8?B?dkVEcTN1NG5zV2w3bkllS0lBNEZpdlphSTV4RWxMVkJzTzkwVmJ3Vi9xdVYx?=
+ =?utf-8?B?QlZiQnN3aGFKZ2FxZnNXRjdSVlFCUmVoTGkzQW1tN24yaUhOcGVNOTVxcUJp?=
+ =?utf-8?B?aE95bW03ZkxVS0xOR3BIOWs5cmdKMyt1ekxSMjdPbTdTYzZVbjNJTm1LSjZT?=
+ =?utf-8?B?VDlOT3g0ZHFFTWVEdkJtSTNIYjJSUmx0VFoxc21IYXdPSzJveUY0TGZ0aUVE?=
+ =?utf-8?Q?Kbx5fUuefrkRTwNsr8qlVWi3L?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <216C0BC7B275ED4BBDC0BBACB713FDF3@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87zggnsqwj.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07896e4f-26d5-47bd-0e3e-08da74145440
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 23:19:48.7685
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JjWv36TGD8mvMhoQcIxy8Nezi28+QFH4mhJe6sztoredkOwWZtXY8RyKG2I61U+u11sP8DwnA0W6t0sU1KsM0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8057
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,75 +154,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 09:30:20PM +0200, Thomas Gleixner wrote:
-> Jason!
-
-Thomas!
-
-> > So, anyway, if I do muster a v2 of this (perhaps just to see the idea
-> > through), the API might split in two to something like:
-> >
-> >   void *getrandom_allocate_states([inout] size_t *number_of_states, [out] size_t *length_per_state);
-> >   ssize_t getrandom(void *state, void *buffer, size_t len, unsigned long flags);
-> 
-> I'm not seeing any reason to have those functions at all.
-> 
-> The only thing which would be VDSO worthy here is the access to
-> random_state->ready and random_state->generation as that's the
-> information which is otherwise not available to userspace.
-
-I think you might have missed the part of the patch message where I
-discuss this. I'm happy to talk about that more, but it might help the
-discussion to refer to the parts already addressed. Reproduced here:
-
-| How do we rectify this? By putting a safe implementation of getrandom()
-| in the vDSO, which has access to whatever information a
-| particular iteration of random.c is using to make its decisions. I use
-| that careful language of "particular iteration of random.c", because the
-| set of things that a vDSO getrandom() implementation might need for making
-| decisions as good as the kernel's will likely change over time. This
-| isn't just a matter of exporting certain *data* to userspace. We're not
-| going to commit to a "data API" where the various heuristics used are
-| exposed, locking in how the kernel works for decades to come, and then
-| leave it to various userspaces to roll something on top and shoot
-| themselves in the foot and have all sorts of complexity disasters.
-| Rather, vDSO getrandom() is supposed to be the *same exact algorithm*
-| that runs in the kernel, except it's been hoisted into userspace as
-| much as possible. And so vDSO getrandom() and kernel getrandom() will
-| always mirror each other hermetically.
-
-To reiterate, I don't want to commit to a particular data API, or even
-to an ideal interplay between kernel random and user random. I'd like to
-retain the latitude to change the semantics there considerably, so that
-Linux isn't locked into one RNG design forever. I think that kind of
-lock in would be a mistake. For example, just the generation counter
-alone won't do it (as I mentioned later on in the message; the RFC patch
-is somewhat incomplete). Rather, the interface I'm fine committing to
-would be the higher level getrandom(), with maybe an added state
-parameter, which doesn't expose any guts about what it's actually doing.
-
-Comex (CC'd) described in a forum comment the idea (and perhaps vDSO in
-general?) as a little more akin to system libraries on Windows or macOS,
-which represent the OS barrier, rather than the raw system call. Such
-libraries then can operate on private data as necessary. So in that
-sense, this patch here isn't very Linuxy (which Comex described as a
-potentially positive thing, but I assume you disagree).
-
-Anyway, I guess it in large part isn't so dissimilar to decisions you
-made around other vDSO functions, where to draw the barrier, etc. Why
-not just have an accessor for each vvar struct member and leave it to
-userspaces to implement? Well, that'd probably be a terrible idea for
-various reasons, and I feel the same way about exposing too many
-getrandom() guts.
-
-> So you can just have:
-> 
->    int random_check_and_update_generation(u64 *generation);
-> 
-> Everything else is library material, really.
-
-Not very appealing for the reasons mentioned above, but also for the
-record, I may like this idea for a closely related thing, vmgenid, but
-that's a different conversation I'll get back to another time.
-
-Jason
+T24gQXVnIDEsIDIwMjIsIGF0IDM6NTAgUE0sIEF4ZWwgUmFzbXVzc2VuIDxheGVscmFzbXVzc2Vu
+QGdvb2dsZS5jb20+IHdyb3RlOg0KDQo+IOKaoCBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gTW9u
+LCBBdWcgMSwgMjAyMiBhdCAxMjo1MyBQTSBOYWRhdiBBbWl0IDxuYW1pdEB2bXdhcmUuY29tPiB3
+cm90ZToNCj4+IE9uIEF1ZyAxLCAyMDIyLCBhdCAxMDoxMyBBTSwgQXhlbCBSYXNtdXNzZW4gPGF4
+ZWxyYXNtdXNzZW5AZ29vZ2xlLmNvbT4gd3JvdGU6DQo+IA0KPiBBaCwgdGhhdCBJIHRoaW5rIGlz
+IG1vcmUgb3IgbGVzcyB3aGF0IG15IHNlcmllcyBhbHJlYWR5IHByb3Bvc2VzLCBpZiBJDQo+IHVu
+ZGVyc3RhbmQgeW91IGNvcnJlY3RseS4NCj4gDQo+IFRoZSB1c2FnZSBpczoNCj4gDQo+IGZkID0g
+b3BlbigvZGV2L3VzZXJmYXVsdGZkKSAvKiBUaGlzIEZEIGlzIG9ubHkgdXNlZnVsIGZvciBjcmVh
+dGluZyBuZXcNCj4gdXNlcmZhdWx0ZmRzICovDQo+IHVmZmQgPSBpb2N0bChmZCwgVVNFUkZBVUxU
+RkRfSU9DX05FVykgLyogTm93IHlvdSBnZXQgYSByZWFsIHVmZmQgKi8NCj4gY2xvc2UoZmQpOyAv
+KiBObyBsb25nZXIgbmVlZGVkIG5vdyB0aGF0IHdlIGhhdmUgYSByZWFsIHVmZmQgKi8NCj4gDQo+
+IC8qIFVzZSB1ZmZkIHRvIHJlZ2lzdGVyLCBDT1BZLCBDT05USU5VRSwgd2hhdGV2ZXIgKi8NCj4g
+DQo+IE9uZSB0aGluZyB3ZSBjb3VsZCBkbyBub3cgb3IgaW4gdGhlIGZ1dHVyZSBpcyBleHRlbmQN
+Cj4gVVNFUkZBVUxURkRfSU9DX05FVyB0byB0YWtlIGEgcGlkIGFzIGFuIGFyZ3VtZW50LCB0byBz
+dXBwb3J0IGNyZWF0aW5nDQo+IHVmZmRzIGZvciByZW1vdGUgcHJvY2Vzc2VzLg0KPiANCj4gDQo+
+IA0KPiBBbmQgdGhlbiB3ZSBnZXQgdGhlIGJlbmVmaXQgb2YgcGVybWlzc2lvbnMgZm9yIC9kZXYg
+bm9kZXMgd29ya2luZyB2ZXJ5DQo+IG5hdHVyYWxseSAtIHRoZXkgZGVmYXVsdCB0byByb290LCBi
+dXQgY2FuIGJlIGNvbmZpZ3VyZWQgYnkgdGhlDQo+IHN5c2FkbWluIHZpYSBjaG93bi9jaG1vZCwg
+b3IgdWRldiBydWxlcywgb3Igd2hhdGV2ZXIuDQoNCk9oLiBTdHVwaWQgbWUuIFRoZW4geWVzLCB1
+c2luZyB0aGUgL2Rldi91c2VyZmF1bHRmZCBpcyBpbiBsaW5lIHdpdGggb3RoZXINCnVzYWdlIG1v
+ZGVscywgc3VjaCBhcyBLVk0uIEFuZCByZWFkaW5nIGZyb20gZWFjaCBmaWxlIGRlc2NyaXB0b3Ig
+aXMgaW5kZWVkDQpwcm92aWRpbmcgZGlmZmVyZW50IG91dHB1dC4NCg0K

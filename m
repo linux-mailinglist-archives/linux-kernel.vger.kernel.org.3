@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8495862AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895D55862AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239154AbiHACfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S239170AbiHACgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237027AbiHACfD (ORCPT
+        with ESMTP id S239160AbiHACgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:35:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7166912D18;
-        Sun, 31 Jul 2022 19:35:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id t2so9246525ply.2;
-        Sun, 31 Jul 2022 19:35:02 -0700 (PDT)
+        Sun, 31 Jul 2022 22:36:48 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EB762FD
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 17so9424897pfy.0
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=05yqPtQPTf7ci9YCnKgRef4tjyfFywaN/GoiFJ0YjOE=;
-        b=I7J1Tt2AoMlpWf7ocbBYJyXVFnGRake41dwUCDfgo04DRKkXDA83/TwaZfnII6HmTI
-         PY/h2yeLaIeDEmiCLrg8rRJ7gBeYG5enucjxqLCrVmpvoI87i1aP5lgFinwcoqgNyA1C
-         0vNvlssNXWIWFvcTELv7P/Bv15uQmploiYXbfD1zr/lnO2QGXl+5TMAeD8Ue9X6rbN1v
-         qJLR+CHFOzcdOLxkWR4wknaRuajUYinbKD9yfyueiuiUcMd1U91dmPuExOoAmYinz9Xc
-         dE+8fTlkpSL9ZyoCjjxa4QDEcXT4iWihb5LSOlhpW4zyVhgCh1QxQfYW2okpkHAsRybK
-         fpXg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=l14ypADMZwmwBX3PPuNnhfhC0pkWgO3nxHo/kcyqcDQQy6USdhzex+seukGsSkiqSF
+         CD7pjPOYfJb33Kd7/A6vDuOlVFJR69nqhta9PCeUDn5y37fM+EkdqrOWOxK0nM364cNI
+         2hS6W+ancz2HhSWKGABkGucgEiskAd7ylplsxyesLdgbKYAGyM0I/K+ZEXPCQJj/GkFL
+         8Y9XaXvYU44xz7LbcwFhfHWp3z3bb1GMR4qPIK58+MeCotpAY7lzMuOK025gYsWI0JgR
+         W00nJkIsFipx8cXltA+pedB7ltCKnQ+3K6ezUJJcMD8vPYZcKGA2QkZCWNkwtVcXUu7k
+         0vXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=05yqPtQPTf7ci9YCnKgRef4tjyfFywaN/GoiFJ0YjOE=;
-        b=cSrkdaP6wJeIMMJA2P+aJq+kt/i7mvPkMZA7otD35CMSx7uRT8uth2pY537ylMr9Md
-         8mTQG7wCS8OTS5lYEQ91quFWp4bxISMRG/WZl8GUqqUj6+4JXHBY80vKDNkbmDixEx/9
-         ib6i2PZxO00ZhbqTZa+Tf8hTIM2bfeUjFKiPbYC1gzftFjxKDNNPFYML2vgDH3uynjf8
-         EWzu91Zvt4my++IpSgMAtN8U2MOIt+IClxT/PCU+5rsnV4DwbBcDYjRPtvhpM43LbrGx
-         B6N12vhNAjk7ym3bwAfGMboqkue40R1UOw3tVRafsSiXTNLmBYDSbK04zLyaUIM4xeAO
-         nhKw==
-X-Gm-Message-State: ACgBeo33eLP65nWl9KIEIjCVm8MBX6qM349d7mmaqLagE52RwDowq5ZK
-        U7xwOnUlm5yX3zP9Jf5ycRN7nKX+O9M=
-X-Google-Smtp-Source: AA6agR5ANAUOldoWBdgDfPgTkC2NwGER016r7xM3vQLroEoUjf81/eG4YADIx+t9uOGcoXwHYf/4gg==
-X-Received: by 2002:a17:903:4054:b0:16d:afc6:e7b5 with SMTP id n20-20020a170903405400b0016dafc6e7b5mr14536856pla.55.1659321301738;
-        Sun, 31 Jul 2022 19:35:01 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s5-20020a17090a2f0500b001f218ddd5e2sm10205068pjd.32.2022.07.31.19.35.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=18orZUCRZ06bULK/3w3vt1he48R14gKl+0EG1htGAfiK65yEs6F/NHozDK6z/EeUyq
+         9YnLGy+B/QFVD0/96rrGM88HFpKvFt9yMYszX3zp9wYU1ITG8JvgsZ/7Ut7Y101HgiTo
+         amh3ZfX08GDb6zGYm3z6tq07YWoq6PP4F8WcyMsvTUi54bRA8pMArejr4ABq6waudbTT
+         GYZTWeHvtnKNAgVMzuS1gK7mbMssDr9PtS7SSMwyy7xshpD+jwBJIbvppPpPEUq86vgx
+         1ETc8Q3k7erOqIWiL9rYEQ8a7+h/JvkKfFtmoUbVHQxj5Dr3N9LuojE31kDjocl9V1Zo
+         YwCg==
+X-Gm-Message-State: AJIora+xvipbaUI+wTbx++cIlPD+RUidq5Y8E4/Kba5NYwU8qdxaZaNj
+        ElB2btDw8QIOlyCsU6Vl1bIssw==
+X-Google-Smtp-Source: AGRyM1uWuPpbJThAzj8401hKyu6FavGanE+K+gT78KliFc+nSDEucI4aDKw5IqZW2VO01+cLRobseA==
+X-Received: by 2002:a05:6a00:24c6:b0:52b:ee89:eca9 with SMTP id d6-20020a056a0024c600b0052bee89eca9mr14043056pfv.78.1659321406689;
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b0016d1f6d1b99sm8237530plx.49.2022.07.31.19.36.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:35:01 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-remoteproc@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] remoteproc: qcom:q6v5_pas:using the pm_runtime_resume_and_get to  simplify the code
-Date:   Mon,  1 Aug 2022 02:34:29 +0000
-Message-Id: <20220801023429.1595033-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 08:06:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+ dev_pm_opp_set_config+0x344/0x620
+Message-ID: <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
+References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
+ <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+ <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 25-07-22, 14:55, Stanimir Varbanov wrote:
+> Hi Viresh,
+> 
+> I can take a look and provide a patch to fix that.
 
-Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
-and pm_runtime_put_noidle.
+Any update on this ? I am going to send pull request for 5.20 very soon and it
+would have been much better if this was fixed before I send that.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 98f133f9bb60..6da68a4e5fe9 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -106,9 +106,8 @@ static int adsp_pds_enable(struct qcom_adsp *adsp, struct device **pds,
- 
- 	for (i = 0; i < pd_count; i++) {
- 		dev_pm_genpd_set_performance_state(pds[i], INT_MAX);
--		ret = pm_runtime_get_sync(pds[i]);
-+		ret = pm_runtime_resume_and_get(pds[i]);
- 		if (ret < 0) {
--			pm_runtime_put_noidle(pds[i]);
- 			dev_pm_genpd_set_performance_state(pds[i], 0);
- 			goto unroll_pd_votes;
- 		}
 -- 
-2.25.1
+viresh

@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8365586696
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F6A586699
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiHAIvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S229852AbiHAIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiHAIva (ORCPT
+        with ESMTP id S230018AbiHAIwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:51:30 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7C54DF4E;
-        Mon,  1 Aug 2022 01:51:28 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 604F61E80D06;
-        Mon,  1 Aug 2022 16:50:53 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id S4LnGvzaf86W; Mon,  1 Aug 2022 16:50:50 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id AFC1F1E80CEA;
-        Mon,  1 Aug 2022 16:50:50 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] proc: remove initialization assignment
-Date:   Mon,  1 Aug 2022 16:51:17 +0800
-Message-Id: <20220801085117.4313-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 04:52:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008832F679;
+        Mon,  1 Aug 2022 01:52:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D6961029;
+        Mon,  1 Aug 2022 08:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A4CC433D7;
+        Mon,  1 Aug 2022 08:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659343920;
+        bh=UUSSE82nxVKqS27Phsx9M3lpwwky5qxW8QBahnQN8CY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wc1KsCtvcrXj53L9zyFkW5vKlphg/qkmDzlYmFQU+uLm3BoWShweV4g9AWySb24Ot
+         LJIFH71xc3n3qWK9zGuimNeNatfGpTgAnSuX2L8V9aaXo8AMEvJM1GK8elvH/JNLox
+         nYjFPmJYxL5drt+PSjL+sZiDC8fXX0+TXKhPxTxM=
+Date:   Mon, 1 Aug 2022 10:51:50 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc:     Sasha Levin <sashal@kernel.org>, Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 0/3] fix build error in bpf selftests
+Message-ID: <YueUJqQUUbr9n8wn@kroah.com>
+References: <20220801072916.29586-1-dtcccc@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801072916.29586-1-dtcccc@linux.alibaba.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allocation address of the core_parent pointer variable is first
-executed in the function, no initialization assignment is required.
+On Mon, Aug 01, 2022 at 03:29:13PM +0800, Tianchen Ding wrote:
+> We found a compile error when building tools/testing/selftests/bpf/ on 5.10.y.
+> tools/testing/selftests/bpf/prog_tests/sk_lookup.c:1092:15: error: 'struct bpf_sk_lookup' has no member named 'cookie'
+>  1092 |  if (CHECK(ctx.cookie == 0, "ctx.cookie", "no socket selected\n"))
+>       |               ^
+> 
+> To fix this bug, this patchset backports three patches from upstream:
+> https://lore.kernel.org/bpf/20210303101816.36774-1-lmb@cloudflare.com/
+> 
+> Patch 1 and 2 are necessary for bpf selftests build pass on 5.10.y.
+> Patch 3 does not impact building stage, but can avoid a test case
+> failure (by skipping it).
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- fs/proc/proc_sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Now queued up, thanks.
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 021e83fe831f..50ba9e4fb284 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1246,7 +1246,7 @@ static bool get_links(struct ctl_dir *dir,
- static int insert_links(struct ctl_table_header *head)
- {
- 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
--	struct ctl_dir *core_parent = NULL;
-+	struct ctl_dir *core_parent;
- 	struct ctl_table_header *links;
- 	int err;
- 
--- 
-2.18.2
-
+greg k-h

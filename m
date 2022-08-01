@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB902586C6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23181586C6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiHAN6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S231389AbiHAN6c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 1 Aug 2022 09:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiHAN6E (ORCPT
+        with ESMTP id S229943AbiHAN62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:58:04 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B554625C7D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:58:03 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id w7so10487172ply.12
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=BB24aZrQzWx7b/4V6aQ9XY05tsIpeq4BoURTiaKXIoo=;
-        b=Mkvw4rmTd45cfr18gIKd5gdZlpfz626XmBvvPXXz99GV6TTC7i62ozrHKBtoeJNY7W
-         rN9yr58q0V3qwXmuRzqR++1C3m5e104/N7tQ15nHWXmNk+dtLnqKM9/y9As03G6NLIx7
-         mTTUK9NuxTuxrEmtRRqUeUnWbOfWMcDyxaGTKqQ99Ti/R890xIxAqpxWzA0trc9Pl4OQ
-         ZVhwTiN2j7HT++kwNXtNXufoUe/CXqEJRf4hVBzoxTq1LRnqIKS+KrZP5OLjXjYTcqVf
-         KkclJaWYVBEylBySgvAeFCoK6mj00DNP+ds0NjRirxutJYk+vokq6c0f0v72gZRBw0tR
-         wQSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=BB24aZrQzWx7b/4V6aQ9XY05tsIpeq4BoURTiaKXIoo=;
-        b=HuChGm2gQhBlgOPxutENug4ssCd7avUcXh5dPLurliuiQyW0ghzbnoBy2lUL7MnfPi
-         8rZyXONsTx2dZQn1oYPKIDjZNxQ4tYJgjh5Bjwn1XAk6UsE5ZnZru3V3eYJqJaFjzznm
-         WrXT9XRLG9p5uokxIACqjDwSgCxJ/IW7F0/n+NK+dltFWxMGsd3yHqWpbstYhfU3AvPd
-         TB6HWrf32RtJoyaS/VR2YS1N9wzIzKKQ8BwX+GsMNGLLKgibiGdVzPwdBJrfOQncs+X7
-         kisO30xNQA3lRcVnKB9MekyxUdRcgyFYhU2ZctxxEkxtjjRTCuoey3JjJjnooYQD1xE5
-         6uuA==
-X-Gm-Message-State: ACgBeo30/GFE/7gX2e6/0HIBUJEud+gnpF0LAYa/xftmT9zqbOImPpN8
-        JoYLItuIQY7vGlBYtZ54b+IL1XthEejXhkDFvPibiA==
-X-Google-Smtp-Source: AA6agR7u2AdTNxFh13tZed3hx6+3zIzZNu+TCh8Oe8USjtdQCd3Qg1Q1lVqzolCbNm86oJepkCHRpNDfX0RAIn/HLqg=
-X-Received: by 2002:a17:90b:198d:b0:1f3:f72:cfdc with SMTP id
- mv13-20020a17090b198d00b001f30f72cfdcmr19910303pjb.237.1659362283145; Mon, 01
- Aug 2022 06:58:03 -0700 (PDT)
+        Mon, 1 Aug 2022 09:58:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E91C28E3E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:58:24 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxKQN39dQzlW9d;
+        Mon,  1 Aug 2022 21:55:40 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 21:58:20 +0800
+Received: from kwepemi500012.china.huawei.com (7.221.188.12) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 21:58:20 +0800
+Received: from kwepemi500012.china.huawei.com ([7.221.188.12]) by
+ kwepemi500012.china.huawei.com ([7.221.188.12]) with mapi id 15.01.2375.024;
+ Mon, 1 Aug 2022 21:58:20 +0800
+From:   "xuqiang (M)" <xuqiang36@huawei.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "elver@google.com" <elver@google.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "tangmeng@uniontech.com" <tangmeng@uniontech.com>,
+        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>,
+        "weiyongjun (A)" <weiyongjun1@huawei.com>
+Subject: Re: [PATCH -next] panic: Add register_panic_notifier and
+ unregister_panic_notifier
+Thread-Topic: [PATCH -next] panic: Add register_panic_notifier and
+ unregister_panic_notifier
+Thread-Index: AQHYpZ/egy0qdqWHEES2vQeF021riw==
+Date:   Mon, 1 Aug 2022 13:58:20 +0000
+Message-ID: <d6ba371d778842bead73e62fc04d612f@huawei.com>
+References: <20220801100509.62282-1-xuqiang36@huawei.com>
+ <2d4fa03a-f460-d995-88e8-7f0e58e557bd@igalia.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20220728190810.1290857-1-robh@kernel.org> <CABb+yY2jV7c8oX7=F=nocfvGrOMHJAYov7zS2nT0=qFoNyoxJQ@mail.gmail.com>
- <CABb+yY0JzztBB+giBu+RCt-dzgwYWF32sCR3WKKP9U5K9UvhxA@mail.gmail.com>
- <20220729111051.5me4vklrzskvsj4w@bogus> <CABb+yY1=cppy9QAN=cLWmhvmYrQ5QpY5adE+nRev1rVrtp-QUw@mail.gmail.com>
- <20220801102309.efvmde2ackh3vyg4@bogus>
-In-Reply-To: <20220801102309.efvmde2ackh3vyg4@bogus>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Mon, 1 Aug 2022 08:57:52 -0500
-Message-ID: <CAJe_ZhdCJ7ba26cGY6-kJC0mCUXU+ACBW1k1VNmXS9gZcLi16Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mailbox: arm,mhu: Make secure interrupt optional
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 at 05:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> On Fri, Jul 29, 2022 at 10:18:04AM -0500, Jassi Brar wrote:
+在 2022/8/1 20:12, Guilherme G. Piccoli 写道:
+> On 01/08/2022 07:05, Xu Qiang wrote:
+>> Add two methods to manipulate panic_notifier_list and export them.
+>> Subsequently, panic_notifier_list is changed to static variable.
+>>
+>> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
+> Hi Xu Qiang, first of all, thanks for your patch!
+> I'd like to mention 2 things about it:
 >
-> > > Anyways I can insert a module that requests this channel and bring down
-> > > the system as accessing anything configure secure from non-secure side
-> > > on Juno results in system hang/error.
-> > >
-> > Why go to those lengths? These are already simpler options available  ;-)
-> > 1)   while (1) ;      // preferably in some atomic context
-> > 2)   *((int *) 0) = 0;   // you might want to iterate over offset for
-> > guaranteed results
-> > 3) Slightly more work, but you also have the opportunity to erase your
-> > storage device
+> (a) As-is, there's no much use for it - I mean, you're adding a helper
+> but you didn't change the uses of such notifier list addition (and there
+> are plenty of them). Are you intend to change it, or just use the new
+> API in new calls?
+After this patch comes in, I will replace all the old interfaces with
+the new ones.
 >
-> I know these simple methods but can I hinder secure side services with
-> these ?
+> (b) Even more important: we are working in a panic notifier refactor
+> [0], and that'll add new lists. I'm still working on that, plan to
+> submit (relatively) soon. Maybe worth to wait it, if this one is not urgent?
+I can wait for your patch to be incorporated before submitting it.
 >
-Ideally, no. And neither if we enumerate the secure-channel in dt and driver.
+> Cheers,
+>
+>
+> Guilherme
+>
+>
+> [0]
+> https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/
+>
+Thanks
 
-See, even if you remove support for the secure channel in the kernel,
-a doped super-user could always insmod a module that attempts to
-access the secure address space that you want to "hide".
+Xu
 
-cheers.
+

@@ -2,282 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9C1587043
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AAB58704A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbiHASNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S233511AbiHASQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiHASNP (ORCPT
+        with ESMTP id S232463AbiHASQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:13:15 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1223D26C6;
-        Mon,  1 Aug 2022 11:13:14 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id s16so2265549ilp.3;
-        Mon, 01 Aug 2022 11:13:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=j9dit8EqlWhA+Rr+GJY5510B6cmCqLCKgNOXN9P6uiM=;
-        b=g8nQZ1BPkX1lxBLXzzF9tLiYNS8AWv8vmeSkpRN39CJsP3CN2UhZwf0ZJKXm5SarFk
-         xuFdroBl/f9yoqVl7goFTN+1pYbYTDV/QvTVxkACTOxYPtdgiuk2VvMdtLg/UyYTTcfS
-         U50W3j0GSVT6ubgxdVx4IzYERIEmzNy9vxF5ni8f37d4seikOJisPH8JLlJiWmJv4Lha
-         jdjZdY7ggcrL89a5sVp3pLPZCmu7IeKE2To+CuTxS6d1awE5b5mv05tq7WmhbL6gUsq/
-         TOXkLPG17VVPIdEJVWRO5nfhtOIE/z2je0LWiH5ZLPkM7SIE0OTx6lzW1R1YvpiJPhN9
-         2vlw==
-X-Gm-Message-State: ACgBeo0V4qjRFLpc63yBmCd9KZBAmkuY7F1lRawcy67HPntee9/jrIFf
-        TweHwr8UaUzaSUFMxM/FYw==
-X-Google-Smtp-Source: AA6agR5C9PX1B7eebFsRwDF+jj5DM2vHaWnHure64vtNN+g1MnF9pk2wwrqQ/RR8MEbUiTuAqhqUVA==
-X-Received: by 2002:a92:c26d:0:b0:2de:bfd7:17e with SMTP id h13-20020a92c26d000000b002debfd7017emr1403981ild.156.1659377593211;
-        Mon, 01 Aug 2022 11:13:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id g14-20020a05663810ee00b003423f7b779csm4718055jae.41.2022.08.01.11.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:13:12 -0700 (PDT)
-Received: (nullmailer pid 1278505 invoked by uid 1000);
-        Mon, 01 Aug 2022 18:13:11 -0000
-Date:   Mon, 1 Aug 2022 12:13:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
- Port bindings
-Message-ID: <20220801181311.GA1266390-robh@kernel.org>
-References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
- <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
+        Mon, 1 Aug 2022 14:16:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390CD1122;
+        Mon,  1 Aug 2022 11:16:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9719611D6;
+        Mon,  1 Aug 2022 18:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B144FC433C1;
+        Mon,  1 Aug 2022 18:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659377777;
+        bh=ILNZcngc/0DTkB4CXY/R6bcTVDUmSD/QbrmX4P3OgOo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ix2BALo0Uxce3OGW6PwEW1ZFvyNWi+SLhnQ6zM80HE8f9rIJ25CXDIs6/8tt7PD1w
+         62UjZ+K9evFDMvh0J7ryeU06D7ILv2L/iqPUY8hXYRMCmz/AigLbCIAymd893zdm9l
+         H0UbIG9ufLIxVP2u5xd/J55a28pQUjCrhRPDUDtEJFFKahYeNzLGurIBfi2U07x5Cy
+         4jNyGw6J70IIJsHFACT8ZS46GJWgsqmoXvw3jXuym6uEjH4aEE8Dj3rpOsILP7cCWW
+         FGmNHicJHWEcl0RDR9TQYUP9ATsMKCqrGSp1LKSdG6QzdZofTHTdiBu3KspKMul1s1
+         tvqKns2jqAwpw==
+Date:   Mon, 1 Aug 2022 11:16:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+Message-ID: <YugYbvRu1xqnx6mC@dev-arch.thelio-3990X>
+References: <20220720232332.2720091-1-justinstitt@google.com>
+ <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+ <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
+ <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
+ <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAFhGd8r1_A67aVt_5tMz-1NC51JrCFG=8cDsmTMz1kOricWEOA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 05:34:22PM +0300, Serge Semin wrote:
-> Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
-> link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
-> controller is supposed to be fed up with four clock sources: DBI
-> peripheral clock, AXI application Tx/Rx clocks and external PHY/core
-> reference clock generating the 100MHz signal. In addition to that the
-> platform provide a way to reset each part of the controller:
-> sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
-> Hot/Power reset signal. The Root Port controller is equipped with multiple
-> IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
-> equalization request and eDMA ones. The registers space is accessed over
-> the DBI interface. There can be no more than four inbound or outbound iATU
-> windows configured.
+On Mon, Aug 01, 2022 at 10:40:29AM -0700, Justin Stitt wrote:
+> > OK, I think that will be good timing.
+> > Please ping me if I forget to pick it up.
+> >
+> Hey Masahiro, just pinging to see the state of this PR.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> I think we are on pace to re-enable this warning.
 > 
-> ---
-> 
-> Changelog v2:
-> - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> - Fix the 'compatible' property definition to being more specific about
->   what strings are supposed to be used. Due to that we had to add the
->   select property to evaluate the schema against the Baikal-T1 PCIe DT
->   nodes only.
-> ---
->  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
->  1 file changed, 154 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> new file mode 100644
-> index 000000000000..23bd1d0aa5c5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> @@ -0,0 +1,154 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Baikal-T1 PCIe Root Port Controller
-> +
-> +maintainers:
-> +  - Serge Semin <fancer.lancer@gmail.com>
-> +
-> +description:
-> +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
-> +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
-> +  Port function and is capable of establishing the link up to Gen.3 speed
-> +  on x4 lanes. It doesn't have embedded clock and reset control module, so
-> +  the proper interface initialization is supposed to be performed by software.
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: baikal,bt1-pcie
-> +
-> +  required:
-> +    - compatible
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: baikal,bt1-pcie
-> +      - const: snps,dw-pcie-4.60a
-> +      - const: snps,dw-pcie
+> I believe there exists only _two_ patches left still needing to go
+> through along with this patch:
+> 1) https://lore.kernel.org/all/20220718050356.227647-1-hch@lst.de/
 
-Again, these fallbacks simply aren't useful.
+This is now in the block tree, so it should be squared away:
 
-> +
-> +  reg:
-> +    description:
-> +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
+https://lore.kernel.org/YuFhR9OoPvM9VsdT@infradead.org/
 
-'iATU-capable region' means config space? That's not very clear.
+Stephen is on vacation so -next hasn't updated for a few days but it
+sounds like Mark is going to provide some coverage:
 
-> +    maxItems: 3
-> +
-> +  reg-names:
-> +    minItems: 3
-> +    maxItems: 3
-> +    items:
-> +      enum: [ dbi, dbi2, config ]
+https://lore.kernel.org/YugAzWWl++ArhhPS@sirena.org.uk/
 
-Define the order. Here, and the rest.
+> 2) https://lore.kernel.org/all/YtnDltqEVeJQQkbW@dev-arch.thelio-3990X/
 
-> +
-> +  interrupts:
-> +    description:
-> +      MSI, AER, PME, Hot-plug, Link Bandwidth Management, Link Equalization
-> +      request and eight Read/Write eDMA IRQ lines are available.
-> +    maxItems: 14
-> +
-> +  interrupt-names:
-> +    minItems: 14
-> +    maxItems: 14
-> +    items:
-> +      oneOf:
-> +        - pattern: '^dma[0-7]$'
-> +        - enum: [ msi, aer, pme, hp, bw_mg, l_eq ]
-> +
-> +  clocks:
-> +    description:
-> +      DBI (attached to the APB bus), AXI-bus master and slave interfaces
-> +      are fed up by the dedicated application clocks. A common reference
-> +      clock signal is supposed to be attached to the corresponding Ref-pad
-> +      of the SoC. It will be redistributed amongst the controller core
-> +      sub-modules (pipe, core, aux, etc).
-> +    minItems: 4
-> +    maxItems: 4
-> +
-> +  clock-names:
-> +    minItems: 4
-> +    maxItems: 4
-> +    items:
-> +      enum: [ dbi, mstr, slv, ref ]
-> +
-> +  resets:
-> +    description:
-> +      A comprehensive controller reset logic is supposed to be implemented
-> +      by software, so almost all the possible application and core reset
-> +      signals are exposed via the system CCU module.
-> +    minItems: 9
-> +    maxItems: 9
-> +
-> +  reset-names:
-> +    minItems: 9
-> +    maxItems: 9
-> +    items:
-> +      enum: [ mstr, slv, pwr, hot, phy, core, pipe, sticky, non-sticky ]
-> +
-> +  baikal,bt1-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to the Baikal-T1 System Controller DT node. It's required to
-> +      access some additional PM, Reset-related and LTSSM signals.
-> +
-> +  num-lanes:
-> +    maximum: 4
-> +
-> +  max-link-speed:
-> +    maximum: 3
-> +
+We need to chase this, as I haven't seen an "applied" email. We have two
+options:
 
-> +  num-ob-windows:
-> +    const: 4
-> +
-> +  num-ib-windows:
-> +    const: 4
+1. Ask the maintainers to apply the change to their branch directly.
+2. Ask them for an "Ack" so that we can apply that change along with
+   this one.
 
-These are deprecated. Don't add them for a new binding.
+It is worth a ping asking which they prefer. The first option is
+simpler, as the change that introduced the warning is only in -next so
+it can just be applied to the same branch; the only concern is making
+sure that change makes -rc1. The second option gives us more flexibility
+with enabling the warning in the event that the change missed being
+added to the main pull request but it will require basing the change on
+a non-rc base, which most maintainers don't really like.
 
+It is ultimately up to Masahiro but my vision is:
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - interrupt-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    pcie@1f052000 {
-> +      compatible = "baikal,bt1-pcie", "snps,dw-pcie-4.60a", "snps,dw-pcie";
-> +      device_type = "pci";
-> +      reg = <0x1f052000 0x1000>, <0x1f053000 0x1000>, <0x1bdbf000 0x1000>;
-> +      reg-names = "dbi", "dbi2", "config";
-> +      #address-cells = <3>;
-> +      #size-cells = <2>;
-> +      ranges = <0x81000000 0 0x00000000 0x1bdb0000 0 0x00008000>,
-> +               <0x82000000 0 0x20000000 0x08000000 0 0x13db0000>;
-> +      bus-range = <0x0 0xff>;
-> +
-> +      interrupts = <0 80 4>, <0 81 4>, <0 82 4>, <0 83 4>,
-> +                   <0 84 4>, <0 85 4>, <0 86 4>, <0 87 4>,
-> +                   <0 88 4>, <0 89 4>, <0 90 4>, <0 91 4>,
-> +                   <0 92 4>, <0 93 4>;
-> +      interrupt-names = "dma0", "dma1", "dma2", "dma3", "dma4", "dma5", "dma6",
-> +                        "dma7", "msi", "aer", "pme", "hp", "bw_mg", "l_eq";
-> +
-> +      clocks = <&ccu_sys 1>, <&ccu_axi 6>, <&ccu_axi 7>, <&clk_pcie>;
-> +      clock-names = "dbi", "mstr", "slv", "ref";
-> +
-> +      resets = <&ccu_axi 6>, <&ccu_axi 7>, <&ccu_sys 7>, <&ccu_sys 10>,
-> +               <&ccu_sys 4>, <&ccu_sys 6>, <&ccu_sys 5>, <&ccu_sys 8>,
-> +               <&ccu_sys 9>;
-> +      reset-names = "mstr", "slv", "pwr", "hot", "phy", "core", "pipe",
-> +                    "sticky", "non-sticky";
-> +
-> +      reset-gpios = <&port0 0 1>;
-> +
-> +      num-lanes = <4>;
-> +      max-link-speed = <3>;
-> +    };
-> +...
-> -- 
-> 2.35.1
-> 
-> 
+1. Ping the patch, asking how to proceed.
+2. If the maintainers can pick it up and it will make the merge window,
+   let them apply it then apply this patch to the Kbuild tree for -next.
+3. If they prefer the "Ack" route, wait until mainline contains the
+   problematic patch then apply the warning fix patch and this patch to
+   the Kbuild tree on top of the problematic merge.
+4. Wait until all other patches are in mainline (I can watch mainline
+   and build it continuously) then pull request the branch containing
+   whatever changes we need.
+
+Masahiro, does that sound reasonable?
+
+Cheers,
+Nathan

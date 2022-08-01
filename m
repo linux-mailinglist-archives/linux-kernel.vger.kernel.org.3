@@ -2,151 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DFB587452
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6EE587454
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiHAXTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S234487AbiHAXUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiHAXTw (ORCPT
+        with ESMTP id S233286AbiHAXUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:19:52 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-bgr052101064006.outbound.protection.outlook.com [52.101.64.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5782A40F;
-        Mon,  1 Aug 2022 16:19:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q/vpHL9Qp+WFR07KuWXYwsyzAnzzcgE2Xw71iWOLVjeh9BTGHdiNcZV4PnyzKSbvHyRofY4OhVUkEF4Q4HANS26Glzh2t8vbvdkBmTcbAyaZD5Uk3yZF+DxM3ecsORXxGJEiocpZ8sEG3/Ycw5bOcWc//+nF6XSW1aQDBWz01LtjWJJQocGOJSnSRORzxonVu+qgG6+h9FgJZ8nlYFV0NZx5mURoPvpYOKiiUlU7wOCqBTiUIOh7Igy5nhLRbpMS3IDY0j8BGQrbTYTzqfKOwLEEU3RptpCelLv2e1910Hj8qzlpnH+KKImmgchqT1uTISe24YfGvUTsPjN5YMBdFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v4ivXbwyhchz2gX03GAcBD6zzDIW5+sem5beLSjDLMY=;
- b=Hy3EN3kSoG6h+iFck+snW45nZi6ld0Pclbj4iN61cHFwBCpsHRWPQamWSfOqs49dslixyVlYGlEeulxHTj7zi5k5bfbYTG5W1dXvMK6tE7EAiJDQvofE7fJhIcBaXjtvqGHEibmZxozkVKIPpguTuetnH7Z5m4rz0QWYbVGLHpNywMqJTDmaTqlOPm2LWd1YE1fAFbCHxoO/y6ldRZ9Ixo01ryBl4PJX/XXMkzAY4LPk3OlqVihtw74iNYjAwOlgfMwzXypZ4mR5Qvx0Vp0/Y6UY0aM6siM9x/zyRR2RJcKT9RiHAKONQLaFMlw7ZxaoN3AdWYYveZ0JQ3/cKGhRLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v4ivXbwyhchz2gX03GAcBD6zzDIW5+sem5beLSjDLMY=;
- b=mYomdPqq/0wM7lqWYcgpEZpOs8apW3HbXjrwvkD5jmcjjFf9TbChQGM52jNUEo9KTrOiCFdhAwv2nK0xLfu7XiZAWg0XvhUTF3JH2MTx7ZglYZYtP1bKJlFzr5RzboA41KG0Fe0ogrtRACjrJL8xf2hYsgzsev7MwJPA/X0OHEU=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by PH0PR05MB8057.namprd05.prod.outlook.com (2603:10b6:510:76::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.12; Mon, 1 Aug
- 2022 23:19:49 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::d813:9300:4877:39d0]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::d813:9300:4877:39d0%8]) with mapi id 15.20.5504.014; Mon, 1 Aug 2022
- 23:19:48 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-CC:     "Schaufler, Casey" <casey.schaufler@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-Thread-Topic: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Thread-Index: AQHYm6moVvUxeU2aLUSjhWg4PqcU4q2H1VIAgAANjICAAASjgIASdSEAgAAsz4CAADGMgIAACBIA
-Date:   Mon, 1 Aug 2022 23:19:48 +0000
-Message-ID: <858CC870-B061-4ADC-B5F4-C95E72F72CEC@vmware.com>
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
- <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
- <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
- <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
- <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
- <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
-In-Reply-To: <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 07896e4f-26d5-47bd-0e3e-08da74145440
-x-ms-traffictypediagnostic: PH0PR05MB8057:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zMUTKgYo+obp60m9HklnU5bPaEOcDqw9foAxZMSAMzS8srNL1PzJr8tgIhQjUiyrqjhpxDHR80FHCnr3p4GrjjmGC31uUE52ThYuYyrrZcHZV4x7B48GA1UtckA7/PvswWbfF6H2B28PLYL3gm/T/w0kKEdh9MchbuSvzIpNNN2+Rq8Dr8pai0pavazAXCHuIi616thCIgJjklH92cBOtXBfhv/0CdsZ6i2LAagxO/fkrhZKqEJye8Ggi8XHNCOIspfswEUUi2+BZsBNj9XTRZhP3ghmLEvdxg5U2Fsyk3bXSjbfV1huYuTy5S/olJFUs7+wo4xH34WfUlp+V99FMUfZmiDpElDsBbq8dhC1JXL6AJaE+3aKO/7hw1+RYvPxxczL0E6u6vu5jlsB3Cb/ZuxGrtiAQw3wq/9RTY1xL/MSuT2b48WQnvCbdwUZP7xEcWWRymXX1M+htK6f6cCMY1Y3Qq8VVba6rvUcr8ZkYIlraXT6VQSmoin4x/vv8PNLx3Iu3U+9KnDNpnGs/1mx6Rc4kNUM480wijfcelGCYlpc5wtdmgPM/22y/Ul6M9GOZaSbgYGogqucbdSNz/czseJ4ouDsWFniE6O2fJzkQGNlqTOBxD8qC/vzbh33XFXa08plWv4ivhU8Mc8hl5dSzql62aGz1BAzM6Nx4Gg77jgHKjMyJQkYq82Vhjwcn0mV7rHqc9/HLNpiD/fcsOWqPpmGLV2/GwnGjEpilCDdUqcYNbJyoqw0cKMUUHpAPrFwHMZs64Oa4DMHyvTmMpqPfj852NzKZLjt4LUEyKTD9eHaNDBSuxnuodlZUzdN8I8lUjvQyhT4mLHlBfj10qAMsQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(136003)(366004)(346002)(8936002)(66446008)(6486002)(64756008)(478600001)(66556008)(4326008)(8676002)(66476007)(71200400001)(186003)(83380400001)(7416002)(36756003)(86362001)(54906003)(6916009)(38070700005)(2616005)(2906002)(41300700001)(6506007)(316002)(53546011)(6512007)(33656002)(76116006)(5660300002)(66946007)(26005)(38100700002)(122000001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXFqUEh1cWpkU0ExaEhhU016MUlCU0RwZS9zTGlsYkpCOHFGMEk0N0Z6Vzdy?=
- =?utf-8?B?c1VzUWF3Vkxlc2xsZmZzdDZJdnRjREtyUFhIZXQvUEYzdmt3Wk41MFpKOVRH?=
- =?utf-8?B?NjlHdm5vWVZheXdUeDdCQUJ1cGUyV0Nud3dhaG1pS1YrdG4xeVN1MGRSYmJU?=
- =?utf-8?B?amFHYWoxZlJYa0pQNkE4TkRmeDVMb0theGo1Y2ZhRldvQ0dNUDFFbGZwZXln?=
- =?utf-8?B?T0JBd3RlM056YWRrSjcyaUtERW1RNTlIZ2xOSzMzR0xZenM5bzBVczZaTDF0?=
- =?utf-8?B?dGpRMTZBRlR4WktVamxCQnNqMXR2Z2dZdVFyc0RjWGxZbDJHWnAyT2kyU3FX?=
- =?utf-8?B?ZWttdVF3SFZGY3llYWtmWTJOT0Z5dGtkV0tZdVhud1kxUithYTZyaEVrL2Fw?=
- =?utf-8?B?Zk5HTEFQa2VRUXAxTk1QRHdIQ0xGRWpGaGFxVzFXd1prajZwR0tkcVlucnpY?=
- =?utf-8?B?Y3RtOG5zemhyRmxJZGcwWmZaNTR4MUhHUU80S0Zrc1RXQlNhK0h6MWQ1c0Js?=
- =?utf-8?B?cUd4ejdPTTc2SWV0WmpGTG9QQ2pHS2lQNHNXSWFjY0RRKzhSRUdHM21GWHF6?=
- =?utf-8?B?TndYaUF2TFZqUVNHQmtJakMvc3VJRE5rSDYyOUVVMTFrYUEwWG40M0lybzRW?=
- =?utf-8?B?Uk9JS3dWYVBINzhCUWNSaXhVV3M2Qmp6MHdVMEJ6RGtrRmVoUzllZ0xqdWVX?=
- =?utf-8?B?cDNSMkNOSnBuRWlZYnhvdTBJa2JPMkVnSVYyZytPYTVKV3NHcDF4Smh3eWJj?=
- =?utf-8?B?SXVlVEd3UUdxWnE5KzlncEVLMGRlUW1RNklzOFcrT0JQQnZrRUNHdnVTT1VC?=
- =?utf-8?B?SU1yQ0Y0WVpRSnhXTS9zcldwVWM0LzVtMThrYUpScHRmWDRXSFl2WEcyNDdY?=
- =?utf-8?B?SGVHL3kzU0RnNFI1ZllIVW0xMTkydmZNZG93Y01RVUZaVWtQOFJZbU5lbGJH?=
- =?utf-8?B?OVdIU2c3aUdjR0UvOVYvWHh6R1NNRFM5NkhCMHBNcWxjdDBSZ0VjbWhkSkRW?=
- =?utf-8?B?a2FuQk5VZVBWVkprL1o3VW1WZVVXeENyNTd1NGNucCtlRHVpdk9iMzR2Slp4?=
- =?utf-8?B?ZERLL3RGWTYwS1RDc0tsRk1HanFsMitjcjgrSy9MMkNsTDNiVGhkdG9CQ3BE?=
- =?utf-8?B?UWFEVUZGL1p3OXM5K3lJcWxOK1MvaFhRaHp0dUQ2eU44TFRlQ0xZZkVLREZL?=
- =?utf-8?B?MGxveWZRd2VoUTNhZTE0UVFoYkVyc3hTdXVmdGxWS0JMbExCaThnNkxrM1Rj?=
- =?utf-8?B?TW1ZV1hRQzRocW15aTRFMjBsNGNkamRtdm1aQUhWNVZzWFFmNHJ5b0pOVjNz?=
- =?utf-8?B?QUJFOFQ0WEYxZHhITGgrVVFSeTB0OHN4dmI2TU1HYklIeWNaMkI0RVR4bFZU?=
- =?utf-8?B?OGNFRFA1VjU2Mndpdk5iVW1ELzVEY1hVUHlNUUYwUW81Y00ySEpRVXdjcSt4?=
- =?utf-8?B?VGRFYUFRYXlBZjNlckFkV3BlbTAxOXFDNS9VdXExN3hYNHJVdHN0U21nbXZJ?=
- =?utf-8?B?ekNpbzBIZEo3MkZvWjdld01SbHcrYTNra1RMNk1zbk9TWDBjZm9nUU56T3lE?=
- =?utf-8?B?eVkvVXBlYWxEVzVjN0QxR3pjdEVGSFlCV2Y5K0pmQlFBaWh5ek9JYnRsdStO?=
- =?utf-8?B?YnZ4SkV3MFQ3ZzYvTGp1TmVPMFpYV1kwT1ltaTBkMWtGWEZCRTNwY2IxVEo0?=
- =?utf-8?B?L0FWQVY3Mm1KWElndHZBcjNXcmdBNmxobGFFNWdDSmROMXk5TWxhaVpOc3lS?=
- =?utf-8?B?TStwNHBlU1BvSi9hUDIyMmNzUjF2clROSm1hakhmaCs2aVkvTVpnc1ZBRDFY?=
- =?utf-8?B?dDhvVm9jVG5LQ0pxeHJuMmRBUmd6MDVMTlBmc0paSGhhS0hlWC9jVENwTDQ3?=
- =?utf-8?B?dkVEcTN1NG5zV2w3bkllS0lBNEZpdlphSTV4RWxMVkJzTzkwVmJ3Vi9xdVYx?=
- =?utf-8?B?QlZiQnN3aGFKZ2FxZnNXRjdSVlFCUmVoTGkzQW1tN24yaUhOcGVNOTVxcUJp?=
- =?utf-8?B?aE95bW03ZkxVS0xOR3BIOWs5cmdKMyt1ekxSMjdPbTdTYzZVbjNJTm1LSjZT?=
- =?utf-8?B?VDlOT3g0ZHFFTWVEdkJtSTNIYjJSUmx0VFoxc21IYXdPSzJveUY0TGZ0aUVE?=
- =?utf-8?Q?Kbx5fUuefrkRTwNsr8qlVWi3L?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <216C0BC7B275ED4BBDC0BBACB713FDF3@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 1 Aug 2022 19:20:30 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54491705C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:20:29 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id pm17so6449352pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=oH+8etKuIM6aBousCne/v0+DDKXUI5egfWCxKIjJmOQ=;
+        b=J3Zgk4LK/fWlvilZiNNGzMPE6ezjMVZkvbcW0nyF5Hb/uZdApCNUCgvPzErVgwm8zr
+         xrHnneSy/rokZY8o//WCQ+qH8zUyl4XH8jcCO2SRyqKjKasel6AKZ/80N08jnGZmKyXH
+         eWjPh6Sk+7DoTkRbIOyYd1xnddXOM+TfC+svuekpHFEhiWuortbzPpNDoBT3XXtMiP61
+         CBF1hxIQcJWWtitta92C0lQ31TV+jauAGWIeMwwYfjTG3SZ3yVR3zLTBuyrxtMSoAItu
+         gR/7H4UcFvFAnU79/JT2UtuOF0iWF3Uw4/kmeFs7NukWdu/V1cs8XhgVWBrlN7mHhk6/
+         qBJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=oH+8etKuIM6aBousCne/v0+DDKXUI5egfWCxKIjJmOQ=;
+        b=zCotO6JVlbrL/GvuZVvNS82pwX2Ogp+ssKBsNnSxyVwR/gieQiBjlWfH2sQdg2JCmG
+         M0ljIFw2lcI5T4C2o2vAB1uFecGbwMYmtkMClZIOZSNF700crInS/zLM7TqXPiDHxZ2N
+         e6usJrTO8WOQCtUAPTCoB3Y1hdn17uykn/DNimsgLB/sUq3GKscliqtFoOnxPzZ2O/6S
+         PrSniig3O2jJK4UQUL01Hs1RHmQZn7FyJbpT1mnO/Qf18Da4lskPt1MClV+2fvOMkMiE
+         uf5vdv7kklGcJXS54i0cIilm1IaNNrZ2voYUvMwsR4/tHSnId69IP9n2wCIAWRqBcgEM
+         POMA==
+X-Gm-Message-State: ACgBeo2Y4DKFAXIvH2pVqMyU+sfx1hcIQPYnmW/R6zondBIS1m7HMVI8
+        6UPRQVWhoQYlwCSjg4Ue46lUlQ==
+X-Google-Smtp-Source: AA6agR58cYnI8PKVRkgy6gjbtVEerZK2gDoKSF33ntb6xOVQe07A20qTrcKm1/K/E1USixg410o7Eg==
+X-Received: by 2002:a17:90b:4c4e:b0:1f0:48e7:7258 with SMTP id np14-20020a17090b4c4e00b001f048e77258mr21488831pjb.223.1659396029066;
+        Mon, 01 Aug 2022 16:20:29 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b00525343b5047sm2452341pfk.76.2022.08.01.16.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 16:20:28 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 23:20:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Fully re-evaluate MMIO caching when
+ SPTE masks change
+Message-ID: <YuhfuQbHy4P9EZcw@google.com>
+References: <20220728221759.3492539-1-seanjc@google.com>
+ <20220728221759.3492539-3-seanjc@google.com>
+ <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
+ <YuP3zGmpiALuXfW+@google.com>
+ <f313c41ed50e187ae5de87b32325c6cd4cc17c79.camel@intel.com>
+ <YufgCR9CpeoVWKF7@google.com>
+ <244f619a4e7a1c7079830d12379872a111da418d.camel@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07896e4f-26d5-47bd-0e3e-08da74145440
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 23:19:48.7685
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JjWv36TGD8mvMhoQcIxy8Nezi28+QFH4mhJe6sztoredkOwWZtXY8RyKG2I61U+u11sP8DwnA0W6t0sU1KsM0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8057
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <244f619a4e7a1c7079830d12379872a111da418d.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,25 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gQXVnIDEsIDIwMjIsIGF0IDM6NTAgUE0sIEF4ZWwgUmFzbXVzc2VuIDxheGVscmFzbXVzc2Vu
-QGdvb2dsZS5jb20+IHdyb3RlOg0KDQo+IOKaoCBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gTW9u
-LCBBdWcgMSwgMjAyMiBhdCAxMjo1MyBQTSBOYWRhdiBBbWl0IDxuYW1pdEB2bXdhcmUuY29tPiB3
-cm90ZToNCj4+IE9uIEF1ZyAxLCAyMDIyLCBhdCAxMDoxMyBBTSwgQXhlbCBSYXNtdXNzZW4gPGF4
-ZWxyYXNtdXNzZW5AZ29vZ2xlLmNvbT4gd3JvdGU6DQo+IA0KPiBBaCwgdGhhdCBJIHRoaW5rIGlz
-IG1vcmUgb3IgbGVzcyB3aGF0IG15IHNlcmllcyBhbHJlYWR5IHByb3Bvc2VzLCBpZiBJDQo+IHVu
-ZGVyc3RhbmQgeW91IGNvcnJlY3RseS4NCj4gDQo+IFRoZSB1c2FnZSBpczoNCj4gDQo+IGZkID0g
-b3BlbigvZGV2L3VzZXJmYXVsdGZkKSAvKiBUaGlzIEZEIGlzIG9ubHkgdXNlZnVsIGZvciBjcmVh
-dGluZyBuZXcNCj4gdXNlcmZhdWx0ZmRzICovDQo+IHVmZmQgPSBpb2N0bChmZCwgVVNFUkZBVUxU
-RkRfSU9DX05FVykgLyogTm93IHlvdSBnZXQgYSByZWFsIHVmZmQgKi8NCj4gY2xvc2UoZmQpOyAv
-KiBObyBsb25nZXIgbmVlZGVkIG5vdyB0aGF0IHdlIGhhdmUgYSByZWFsIHVmZmQgKi8NCj4gDQo+
-IC8qIFVzZSB1ZmZkIHRvIHJlZ2lzdGVyLCBDT1BZLCBDT05USU5VRSwgd2hhdGV2ZXIgKi8NCj4g
-DQo+IE9uZSB0aGluZyB3ZSBjb3VsZCBkbyBub3cgb3IgaW4gdGhlIGZ1dHVyZSBpcyBleHRlbmQN
-Cj4gVVNFUkZBVUxURkRfSU9DX05FVyB0byB0YWtlIGEgcGlkIGFzIGFuIGFyZ3VtZW50LCB0byBz
-dXBwb3J0IGNyZWF0aW5nDQo+IHVmZmRzIGZvciByZW1vdGUgcHJvY2Vzc2VzLg0KPiANCj4gDQo+
-IA0KPiBBbmQgdGhlbiB3ZSBnZXQgdGhlIGJlbmVmaXQgb2YgcGVybWlzc2lvbnMgZm9yIC9kZXYg
-bm9kZXMgd29ya2luZyB2ZXJ5DQo+IG5hdHVyYWxseSAtIHRoZXkgZGVmYXVsdCB0byByb290LCBi
-dXQgY2FuIGJlIGNvbmZpZ3VyZWQgYnkgdGhlDQo+IHN5c2FkbWluIHZpYSBjaG93bi9jaG1vZCwg
-b3IgdWRldiBydWxlcywgb3Igd2hhdGV2ZXIuDQoNCk9oLiBTdHVwaWQgbWUuIFRoZW4geWVzLCB1
-c2luZyB0aGUgL2Rldi91c2VyZmF1bHRmZCBpcyBpbiBsaW5lIHdpdGggb3RoZXINCnVzYWdlIG1v
-ZGVscywgc3VjaCBhcyBLVk0uIEFuZCByZWFkaW5nIGZyb20gZWFjaCBmaWxlIGRlc2NyaXB0b3Ig
-aXMgaW5kZWVkDQpwcm92aWRpbmcgZGlmZmVyZW50IG91dHB1dC4NCg0K
+On Tue, Aug 02, 2022, Kai Huang wrote:
+> On Mon, 2022-08-01 at 14:15 +0000, Sean Christopherson wrote:
+> > Another thing to note is that only the value needs to be per-VM, the mask can be
+> > KVM-wide, i.e. "mask = SUPPRESS_VE | RWX" will work for TDX and non-TDX VMs when
+> > EPT is enabled.
+> 
+> Yeah, but is more like VMX and TDX both *happen* to have the same mask? 
+> Theoretically,  VMX only need RWX to trigger EPT misconfiguration but doesn't
+> need SUPPRESS_VE.
+
+Right, SUPPRESS_VE isn't strictly necessary, but KVM already deliberately avoids
+bit 63 because it has meaning, e.g. SUPPRESS_VE for EPT and NX for PAE and 64-bit
+paging.  
+
+> I don't see making mask/value both per-vm is a big issue?
+
+Yes and no.
+
+No, in the sense that it's not a big issue in terms of code.  
+
+Yes, because of the connotations of having a per-VM mask.  While having SUPPRESS_VE
+in the mask for non-TDX EPT isn't strictly necessary, it's also not strictly necessary
+to _not_ have it in the mask.  In other words, having a per-VM mask incorrectly
+implies that TDX _must_ have a different mask.
+
+It's also one more piece of information that developers have to track down and
+account for, i.e. one more thing we can screw up.
+
+The other aspect of MMIO SPTEs are that the mask bits must not overlap the generation
+bits or shadow-present bit, and changing any of those bits requires careful
+consideration, i.e. defining the set of _allowed_ mask bits on a per-VM basis would
+incur significant complexity without providing meaningful benefit.  As a result,
+it's highly unlikely that we'll ever want to opportunsitically "reclaim" bit 63
+for MMIO SPTEs, so there's practically zero cost if it's included in the mask for
+non-TDX EPT.

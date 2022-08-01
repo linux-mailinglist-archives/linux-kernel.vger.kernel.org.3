@@ -2,159 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD57586706
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEFF586707
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiHAJoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S230378AbiHAJp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiHAJoh (ORCPT
+        with ESMTP id S230149AbiHAJpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:44:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8276937190;
-        Mon,  1 Aug 2022 02:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659347076; x=1690883076;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
-  b=bfbnPYZCyhVuLaSebBFDf+KJqGsjZozZjH/r6SnQJu2RftzstnxtCX/f
-   gDLehZbbpbesXZae7Y9e7e3xkftAkDD68FHgGEolueY6G4/G7A7JvOzA/
-   lQsxWCEfsNFO0nLyPr/MOUcnAaZ4CUy5WaH3P7s6HHksWE5FhqWXS4k1v
-   wFcp/5gH24yH+jszg3t/dQl721TTRz8Y8x1pM6gBbACsHFE7uDQ9piUt0
-   Xv74Y9Hv/RUkDp1dJQOFou0SzewmeYH3ttVk4INl4t6TzpdBhKmwgKMZO
-   vkdGpb58MLceQqoetb+rlvt/gZBezI+8qD9iBA87kP2Pivc1SquIP7FLy
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="106989123"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Aug 2022 02:44:35 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 1 Aug 2022 02:44:34 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Mon, 1 Aug 2022 02:44:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nZCGQ7KW6HPsxoQacZNGrnw/zr9BfB6IBGfd6DCW/zOwbJappbFXYmQD4SJSoHiDZ9VIbFwvxIJ0ZhTR0RDIOhusbNB/z9UzvOMAxRx7IExkML3W9SwcAk7hw0KoI/R7PhDrur3gLLYDAdKS91yB153kH7Oxj22+SiZCNnN4+QDKP9jSWOcTSO+f5AhlZq0xonW2Hz29hpGS+LHeJGlQvjOHzNIGzZxrvUvHKF8fudFBNi2Q7f0bMM2vI2SHn51b4XvOwgVYGqDs/9WKp2eV/2tZCk7ztjnewvpmmEsld9ulcB6omvAnVjSgzZUFnKzFi6aix90hHbAKMj49cviMQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
- b=A6IoldUW1DyrkzpSWej8pEzwblQCjkwKtbCEtWJfMoApDV7KO9bCR3eku4Odb0B8bGXsB39CUSKiy9hQt5gJBoDrT6AhzbJctMHIVGJdHX1rvJSdpyUog4e/jJW3vlm2gXOBZszSsRHvWHq+sVFMbs61S9iYSA5uvUxgkRjvJL2lYRHeKPu+j1S2Onk0YBzylbygc46zjbUnzEYtcJS+ba6SlPAj6uL69CnETQfyT40C4nKLotf1n66uAGkNz3d9KYd+BMnQUSW/zKXpIAYMevo+UsXfHpDh6/iJNEpRDdphc8Xy0/uQjQpv5AfptX9Jjq7kcSnIUBybQ3mTCQFDMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W4AnvstPIzdlgTyZ5a2iIrMwNj3XZpbvLWxWsomfcYw=;
- b=CobN6T2bUr2PBR6JWf5dlzJgLt4feTleIiAMwSixDbIieYbVj6cL+9yYs6FQf3ULA/8OgDayiP/i3XoI3pKkxu693UEfeqQBMwAk5FblVwln1QnDwfFEeT/22og1+qnn64foX/ZdoiVMZgY104MCVuX8mQ2tLWQyjOPwe3+66Yc=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by SJ0PR11MB5615.namprd11.prod.outlook.com (2603:10b6:a03:305::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Mon, 1 Aug
- 2022 09:44:30 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
- 09:44:29 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <jic23@kernel.org>
-CC:     <Eugen.Hristev@microchip.com>, <lars@metafoo.de>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 19/19] iio: adc: at91-sama5d2_adc: add runtime pm
- support
-Thread-Topic: [PATCH v2 19/19] iio: adc: at91-sama5d2_adc: add runtime pm
- support
-Thread-Index: AQHYpYtLkpQs06VmrEudrSLpXJCwXg==
-Date:   Mon, 1 Aug 2022 09:44:29 +0000
-Message-ID: <dcdbed32-bf81-3e28-6f68-21bfc8e3f57d@microchip.com>
-References: <20220628151631.3116454-1-claudiu.beznea@microchip.com>
- <20220628151631.3116454-20-claudiu.beznea@microchip.com>
- <20220731211101.2ca0ab1b@jic23-huawei>
-In-Reply-To: <20220731211101.2ca0ab1b@jic23-huawei>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c4d69d04-146c-484a-65ca-08da73a26e16
-x-ms-traffictypediagnostic: SJ0PR11MB5615:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bWvFyNILDDQQBn+CkXpwIUW4tpW6DShSSBfPoy2Evo02w2yKzS5p/HOxGDLCIS5NLmfcbCJAIhzefX7nfHGBtLq9pllX6qbcERo4JedNUQJ5tNv+l48oSlxTQvQq3PfkwEJSqJorqzaL4OsjeuDhSYamE3s4YAACMUoQvCwvE8XmJzxILCGR6LWnsWSafFGEyNC4dx3amdg6KTUI2fPF7qjzSlr+boS7FKS17koWNYR8s5rpsAd/6czNUGLvwXN9A6P+Kasto2AJgvT/c/fj09VKJdjLO+qQBro5ryUOLob+u6aPv8Ykmd3EJyK6ws2J3iLbNGKA9dz6cSLuof+G2NHSs1IqMKN06kUNUEB/JRkrB2SuboXjy/BJJC2tAjttS5iUAAWhDZGGDRKRP1c6OUxRrgX6xxDkpnzsvlj26lyqNF3mOZbDj2Q1nr15Il6kqXFFI0XZtkT5CXhq5UbaGnKciV0GSAE5GDU8nTG0huV2M0ixF8b3E13Slr5W7lgY/p8IQ23ZLGfFGT369gTWpHrpH/pNNk+wbmo6eD35JunAwI4dpHxmVWWYtxKyUF/3grvUnn2JqWU+/5MF3wo2qNipWgXuNoz6twmPJr7tMfSbxKZS0Tpb1XNR7pZTs4wOJ201lMQfSdpAFoexYjM2xR4tGgwffynPfduE/AW/bysHrz+0mJPsnED1WQ810bIBrnVrZxnuETTBJCqw9C3OOkxZkG0VM4WAcdIs7cP9LEyXhqiyQZ4DSLDCAhiEyN/UFVGS8+mvyUWBRGO+9TBBiCkRtkhGOjS5ijonmadbyYaKXo4fbnH2jlMouXcGOofLaP4btOq05xhw35jXB0YhzlNHF4yYD+irmIaVYuCpxYoNQZpSS6N8eIrKsLLKNUdU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(39860400002)(136003)(346002)(396003)(376002)(5660300002)(36756003)(8936002)(64756008)(8676002)(66556008)(66476007)(2906002)(76116006)(41300700001)(66946007)(91956017)(66446008)(31686004)(316002)(4326008)(53546011)(54906003)(71200400001)(6916009)(478600001)(6486002)(122000001)(6506007)(38070700005)(6512007)(2616005)(186003)(38100700002)(86362001)(31696002)(26005)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TU9MZlRQcndHOGRCek5wZ0dJMzdybms3YmxwalNpUnNldEphR2dYVkZqRjdE?=
- =?utf-8?B?cVZOMUNZaFdqaGpKbVVpWUQvV3RHVldjUFE1VnpsNFhyblNSdkZDWE1lcDdQ?=
- =?utf-8?B?NzJUdS9UZ2FFeHVMbW9LaHVybGsxK1JvV29oMnFyVmIxWVhZdjVIZU1najl2?=
- =?utf-8?B?N3JmdnhOSmJ4UVdIdnlDb2JZR040UGRhazJzOEp6aitMN1M3WlpjYlllbytX?=
- =?utf-8?B?OUViN2NsT1BTYVV5Sk54SXhUd2d5RjJ3aEhEVXVSczFldDZiYkR3YzFGRVA1?=
- =?utf-8?B?OWE5Y0pVUXh6dnRhNnd5N0xMN2VoeVdvNEYwcURwbEdxYVFwbDBqSXZXNU9q?=
- =?utf-8?B?dXNFbTZieUhSQ005aUpnVUJFMm84dWhwVldETGZUN1k3N0wvUFUyYlFjWEkr?=
- =?utf-8?B?cEhadnVQaGNnNmR3c0JlSkNtOUM4OUNWVHJhS0hrOHZCTGRpNFpqY093bnNH?=
- =?utf-8?B?SUhSdjRRNWpyL3k0YUlXUFlCMUpkaERxUE9QYm13MTk2b1Aza3JMcklCd1k1?=
- =?utf-8?B?WFk1RWFZYkdSd216U0RiaTFHL1Q4ejhFUkhoU0diaUtRWEhUdEtsK2U1TUZj?=
- =?utf-8?B?NHBNN0w0VlZMblhyTFFwUDgyQ1J3ekM5aVJKN0gvQkJKZzdLOXVudVRNdllI?=
- =?utf-8?B?djlvbEJXS3BMWGZhZFE3UnFLekJGbXNUNm1qbjZjTWxLbFc4SmIrUjBtM3Bp?=
- =?utf-8?B?bStlTk5teFVLVm1DZ3lxcHFHeUdOamlIdWdWaTROMVhrTi96c1crUVV0ZEFu?=
- =?utf-8?B?MzdLSFBjdEViNXJ0R0U0U0NtbldIWkFobis4UitkdDhBOTBSVmU2TktqNE9M?=
- =?utf-8?B?WXJNUmlQS2QwWnRIeDVoM1ZhTkNkaDVYdSs0eXRuRnd1MmM5UjUvbjhITC9D?=
- =?utf-8?B?NHl2WDg3L2VZeE5YbkRoeFFLbGNReFNCcG1sdmZRbnJGdTJOdjRvNUZWQkxU?=
- =?utf-8?B?UmFOZDlCcFZDWm5ETkJEVHp6TitFalpTWVk5UGE4TWM5U2pWdUFobm93MEY2?=
- =?utf-8?B?U2NJdHJYTStHYXI2cnJQdG5UL3ZKZzVhcWtIUXNJUWpBc0VOanhYRHRKWUJl?=
- =?utf-8?B?THcwRnhINEpqaTI2U0dJeXRUaXhYeGFDSFI1ZWkxNUE1QXZzNnowNUJmUTd1?=
- =?utf-8?B?OVpEcjlsNkJwYzRsM2hjOTdsK2svMmQyV29LS2tFQU8yaXdLQUk2eHo2U1BG?=
- =?utf-8?B?S3MxZHUrQUtySFEydlIzWVorZE1FOUd6NTFpUXNIanpnTndXQVludDRBSVNV?=
- =?utf-8?B?RkdhbWlSdlVDNGtGRnN3WlNaS2lLZm02cCtpbFA3VUNtNDRpRWJlYUcxRWJy?=
- =?utf-8?B?cy92RVYrMzNCSEQxN29UOUl0ZWtONmNsWjBPTzcvWkMxbFZpNS9mOHZPK3oz?=
- =?utf-8?B?OUVRYndnWDNpQ2dISzNLS2U2MHkrYldOeTJVK3NJalpES2FVOGR0Um5FQnI2?=
- =?utf-8?B?UVdNbytydi9QejF5YVExLzVXblpUSjhCK2dLUXh0dEp2a095QlE4akVyYXFl?=
- =?utf-8?B?VndndkxXNGwwT3VhT1NqMG9BTWVrbmZTM3FUbmVqb1FaNDBiekswTEJtNHln?=
- =?utf-8?B?SDNaZ0FSRDlQS2d2aEJ0Y1ZIKzRlUW40ekg4RCtzZHBQcmplUVN6VUcvOXRj?=
- =?utf-8?B?RU5RVjRTYWhlNis5UUVqTzA3VTZlcnBoUjZlZTFGalMvTEhURzdselc5dEk3?=
- =?utf-8?B?TmpXZGc5MEZIdU0vNjgxTThnUloyNkFsVGhEMnFNNmVPa0FFUDJyS285bXpX?=
- =?utf-8?B?NWtxNVhjYzJjTW5kY1oyZXNPd0IzMC9qUkNKNWtNb0x2S1c2RHdRWW5SRFZX?=
- =?utf-8?B?a1M3SlBUa1ZCWmZFNXo0RGRrZnJaeFBFWWpNUDNzdFg5WmR1N3YySHoveWF2?=
- =?utf-8?B?UE1FZ0xaQmQwbHBnYTVwb0JNaVZPTEVTb01JWWdoY0gwems1R1o5OEdwZjZ1?=
- =?utf-8?B?aUZOcXNOdDdjanZtSFp2VEtObHBUdmgwemhqczlaQWZGa3RPRDlyMzNkcDFj?=
- =?utf-8?B?NlRRb1AvVlMrS3JPRDdXSitVNzZ4ME1hOWlOeFJzNU44cThYMXB2VUk1OGdu?=
- =?utf-8?B?SlBhM3FtaFR0bE5GUm1XTjJ1VjVQcTdzSW9zcXlkOU56VGN3d2NzdjBYZ2xx?=
- =?utf-8?B?ck1uMHF0NWFGUisyZ1pxdW43cGFCOW40alpTRmMyT3VnblNjcXFianJXMHV1?=
- =?utf-8?B?dXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5BD7E8FFFC1E8648B72AC83E657FCA33@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 1 Aug 2022 05:45:55 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AB2EB87A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:45:53 -0700 (PDT)
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxoM_OoOdipBIAAA--.479S3;
+        Mon, 01 Aug 2022 17:45:51 +0800 (CST)
+Subject: Re: [PATCH v4 4/4] LoongArch: Support modules with new relocation
+ types
+To:     Xi Ruoyao <xry111@xry111.site>
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+ <7fbcd23074e58117c6bcfbd832679de2386ff995.camel@xry111.site>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jinyang He <hejinyang@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <79920175-ff30-29e8-077e-c9ef46ea236b@loongson.cn>
+Date:   Mon, 1 Aug 2022 17:45:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4d69d04-146c-484a-65ca-08da73a26e16
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 09:44:29.4735
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ekgDQMExf34QXacV5x4dVwXa+epOuXzqTXvSjt7r4nK9ed2qIx4p28lKuqTbexq1c1A6ePFNbPz2cIXlkk64vihXSipHx92wgyWbomJW+4Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5615
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+In-Reply-To: <7fbcd23074e58117c6bcfbd832679de2386ff995.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9BxoM_OoOdipBIAAA--.479S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3AryrtF1fGF1rJw1UJF43Wrg_yoW3JFWrpF
+        yDZr9FyF48CFn7Wa4rt3Z8ZF17Ww1kKrW2ga43W3yxAFnrJryIkF1xKryDJayUWrnYkry8
+        XFnYgw1xZa9rJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfU8KZXUUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,25 +62,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMzEuMDcuMjAyMiAyMzoxMSwgSm9uYXRoYW4gQ2FtZXJvbiB3cm90ZToNCj4gRVhURVJOQUwg
-RU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Ug
-a25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBUdWUsIDI4IEp1biAyMDIyIDE4OjE2
-OjMxICswMzAwDQo+IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29t
-PiB3cm90ZToNCj4gDQo+PiBBZGQgcnVudGltZSBQTSBzdXBwb3J0IGJ5IGRpc2FibGluZy9lbmFi
-bGluZyBBREMncyBwZXJpcGhlcmFsIGNsb2NrLg0KPj4gT24gc2ltcGxlIGNvbnZlcnNpb24gdGhl
-IEFEQydzIGNsb2NrIGlzIGtlcHQgZW5hYmxlZCBqdXN0IHdoaWxlIHRoZQ0KPj4gY29udmVyc2lv
-biBpcyBpbiBwcm9ncmVzcy4gVGhpcyBpbmNsdWRlcyBhbHNvIHRlbXBlcmF0dXJlIGNvbnZlcnNp
-b24uDQo+PiBGb3IgdHJpZ2dlcmVkIGJ1ZmZlcnMgYW5kIHRvdWNoIGNvbnZlcnNpb25zIHRoZSBB
-REMgY2xvY2sgaXMga2VwdCBlbmFibGVkDQo+PiB3aGlsZSB0aGUgdHJpZ2dlcmVkIGJ1ZmZlcnMg
-b3IgdG91Y2ggYXJlIGVuYWJsZWQuIEFsb25nIHdpdGggaXQgcmVtb3ZlZA0KPj4gdGhlIF9fbWF5
-YmVfdW51c2VkIG9uIHN1c3BlbmQoKSBhbmQgcmVzdW1lKCkgb3BzIGFzIHRoZSBkZXZfcG1fb3Bz
-DQo+PiBvYmplY3QgbWVtYmVycyBhcmUgbm93IGZpbGxlZCB3aXRoIFNZU1RFTV9TTEVFUF9QTV9P
-UFMoKS4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpu
-ZWFAbWljcm9jaGlwLmNvbT4NCj4gDQo+IEhpIENsYXVkaWEsDQo+IA0KPiBUaGlzIHBhdGNoIGNy
-b3NzZWQgd2l0aCBhIG1hc3MgY29udmVyc2lvbiBzZXJpZXMgdGFraW5nIGxvdHMgb2YgZHJpdmVy
-cw0KPiBvdmVyIHRvIHRoZSBuZXcgUE0gb3BzIG1hY3Jvcy4gVGhhdCBjb3ZlcmVkIHNvbWUgb2Yg
-dGhlIGNoYW5nZXMgaW4gaGVyZS4NCj4gSSd2ZSBoYW5kIGFwcGxpZWQgdGhpcyBidXQgcGxlYXNl
-IGNoZWNrIEkgZGlkbid0IG1lc3MgaXQgdXAuDQoNCkhpLCBKb25hdGhhbiwNCg0KSSd2ZSB0ZXN0
-ZWQgaXQgb24gYSBTQU1BNUQyIGFuZCBpdCB3YXMgZ29vZC4NCg0KVGhhbmsgeW91IGZvciB0YWtp
-bmcgY2FyZSBvZiBpdC4NCkNsYXVkaXUgQmV6bmVhDQoNCj4gDQo+IFRoYW5rcywNCj4gDQo+IEpv
-bmF0aGFuDQoNCg==
+Hi, Ruoyao
+
+On 07/29/2022 04:42 PM, Xi Ruoyao wrote:
+> If GAS 2.40 and/or GCC 13 is used to build the kernel, the modules will
+> contain R_LARCH_B26, R_LARCH_PCALA_HI20, R_LARCH_PCALA_LO12,
+> R_LARCH_GOT_PC_HI20, and R_LARCH_GOT_PC_LO12 relocations.  Support them
+> in the module loader to allow a kernel built with latest toolchain
+> capable to load the modules.
+>
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>  arch/loongarch/include/asm/elf.h        | 37 +++++++++++
+>  arch/loongarch/kernel/module-sections.c | 12 +++-
+>  arch/loongarch/kernel/module.c          | 85 +++++++++++++++++++++++++
+>  3 files changed, 132 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
+> index 5f3ff4781fda..7af0cebf28d7 100644
+> --- a/arch/loongarch/include/asm/elf.h
+> +++ b/arch/loongarch/include/asm/elf.h
+> @@ -74,6 +74,43 @@
+>  #define R_LARCH_SUB64				56
+>  #define R_LARCH_GNU_VTINHERIT			57
+>  #define R_LARCH_GNU_VTENTRY			58
+> +#define R_LARCH_B16				64
+> +#define R_LARCH_B21				65
+> +#define R_LARCH_B26				66
+> +#define R_LARCH_ABS_HI20			67
+> +#define R_LARCH_ABS_LO12			68
+> +#define R_LARCH_ABS64_LO20			69
+> +#define R_LARCH_ABS64_HI12			70
+> +#define R_LARCH_PCALA_HI20			71
+> +#define R_LARCH_PCALA_LO12			72
+> +#define R_LARCH_PCALA64_LO20			73
+> +#define R_LARCH_PCALA64_HI12			74
+> +#define R_LARCH_GOT_PC_HI20			75
+> +#define R_LARCH_GOT_PC_LO12			76
+> +#define R_LARCH_GOT64_PC_LO20			77
+> +#define R_LARCH_GOT64_PC_HI12			78
+> +#define R_LARCH_GOT_HI20			79
+> +#define R_LARCH_GOT_LO12			80
+> +#define R_LARCH_GOT64_LO20			81
+> +#define R_LARCH_GOT64_HI12			82
+> +#define R_LARCH_TLS_LE_HI20			83
+> +#define R_LARCH_TLS_LE_LO12			84
+> +#define R_LARCH_TLS_LE64_LO20			85
+> +#define R_LARCH_TLS_LE64_HI12			86
+> +#define R_LARCH_TLS_IE_PC_HI20			87
+> +#define R_LARCH_TLS_IE_PC_LO12			88
+> +#define R_LARCH_TLS_IE64_PC_LO20		89
+> +#define R_LARCH_TLS_IE64_PC_HI12		90
+> +#define R_LARCH_TLS_IE_HI20			91
+> +#define R_LARCH_TLS_IE_LO12			92
+> +#define R_LARCH_TLS_IE64_LO20			93
+> +#define R_LARCH_TLS_IE64_HI12			94
+> +#define R_LARCH_TLS_LD_PC_HI20			95
+> +#define R_LARCH_TLS_LD_HI20			96
+> +#define R_LARCH_TLS_GD_PC_HI20			97
+> +#define R_LARCH_TLS_GD_HI20			98
+> +#define R_LARCH_32_PCREL			99
+> +#define R_LARCH_RELAX				100
+>
+>  #ifndef ELF_ARCH
+>
+> diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
+> index 36a77771d18c..8c0e4ad048cc 100644
+> --- a/arch/loongarch/kernel/module-sections.c
+> +++ b/arch/loongarch/kernel/module-sections.c
+> @@ -76,12 +76,20 @@ static void count_max_entries(Elf_Rela *relas, int num,
+>
+>  	for (i = 0; i < num; i++) {
+>  		type = ELF_R_TYPE(relas[i].r_info);
+> -		if (type == R_LARCH_SOP_PUSH_PLT_PCREL) {
+> +		switch (type) {
+> +		case R_LARCH_SOP_PUSH_PLT_PCREL:
+> +		case R_LARCH_B26:
+>  			if (!duplicate_rela(relas, i))
+>  				(*plts)++;
+> -		} else if (type == R_LARCH_SOP_PUSH_GPREL)
+> +			break;
+> +		case R_LARCH_SOP_PUSH_GPREL:
+> +		case R_LARCH_GOT_PC_HI20:
+>  			if (!duplicate_rela(relas, i))
+>  				(*gots)++;
+> +			break;
+> +		default:
+> +			/* Do nothing. */
+> +		}
+>  	}
+>  }
+>
+> diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+> index 3ac4fbb5f109..c7b40150e1f0 100644
+> --- a/arch/loongarch/kernel/module.c
+> +++ b/arch/loongarch/kernel/module.c
+> @@ -291,6 +291,86 @@ static int apply_r_larch_add_sub(struct module *mod, u32 *location, Elf_Addr v,
+>  	}
+>  }
+>
+> +static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v,
+> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
+> +{
+> +	ptrdiff_t offset = (void *)v - (void *)location;
+> +	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+> +
+> +	if (offset >= SZ_128M)
+> +		v = module_emit_plt_entry(mod, v);
+> +
+> +	if (offset < -SZ_128M)
+> +		v = module_emit_plt_entry(mod, v);
+> +
+> +	offset = (void *)v - (void *)location;
+> +
+> +	if (offset & 3) {
+> +		pr_err("module %s: jump offset = 0x%llx unaligned! dangerous R_LARCH_B26 (%u) relocation\n",
+> +				mod->name, (long long)offset, type);
+> +		return -ENOEXEC;
+> +	}
+> +
+> +	if (!signed_imm_check(offset, 28)) {
+> +		pr_err("module %s: jump offset = 0x%llx overflow! dangerous R_LARCH_B26 (%u) relocation\n",
+> +				mod->name, (long long)offset, type);
+> +		return -ENOEXEC;
+> +	}
+> +
+> +	offset >>= 2;
+> +	insn->reg0i26_format.immediate_l = offset & 0xffff;
+> +	insn->reg0i26_format.immediate_h = (offset >> 16) & 0x3ff;
+> +	return 0;
+> +}
+> +
+> +static int apply_r_larch_pcala_hi20(struct module *mod, u32 *location,
+> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
+> +		unsigned int type)
+> +{
+> +	ptrdiff_t offset = (void *)((v + 0x800) & ~0xfff) -
+> +		(void *)((Elf_Addr)location & ~0xfff);
+> +	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+> +
+> +	if (!signed_imm_check(offset, 32)) {
+> +		pr_err("module %s: PCALA offset = 0x%llx does not fit in 32-bit signed and is unsupported by kernel! dangerous %s (%u) relocation\n",
+> +				mod->name, (long long)offset, __func__, type);
+> +		return -ENOEXEC;
+> +	}
+Do we need to add a "location" message when the relocation fails? To
+get the PC for better debugging.
+
+> +
+> +	insn->reg1i20_format.immediate = (offset >> 12) & 0xfffff;
+> +	return 0;
+> +}
+> +
+> +static int apply_r_larch_got_pc_hi20(struct module *mod, u32 *location,
+> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
+> +		unsigned int type)
+> +{
+> +	Elf_Addr got = module_emit_got_entry(mod, v);
+> +
+> +	return apply_r_larch_pcala_hi20(mod, location, got, rela_stack,
+> +			rela_stack_top, type);
+> +}
+> +
+> +static int apply_r_larch_pcala_lo12(struct module *mod, u32 *location,
+> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
+> +		unsigned int type)
+> +{
+> +	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+> +
+> +	insn->reg2i12_format.immediate = v & 0xfff;
+> +	return 0;
+> +}
+> +
+> +static int apply_r_larch_got_pc_lo12(struct module *mod, u32 *location,
+> +		Elf_Addr v, s64 *rela_stack, size_t *rela_stack_top,
+> +		unsigned int type)
+> +{
+> +	Elf_Addr got = module_emit_got_entry(mod, v);
+> +
+> +	return apply_r_larch_pcala_lo12(mod, location, got, rela_stack,
+> +			rela_stack_top, type);
+> +}
+Maybe it might look better to keep the apply_r_larch_* functions
+ordered by relocation type ID?
+Order:
+   apply_r_larch_pcala_hi20
+   apply_r_larch_pcala_lo12
+   apply_r_larch_got_pc_hi20
+   apply_r_larch_got_pc_lo12
+
+Thanks,
+Youling
+
+> +
+>  /*
+>   * reloc_handlers_rela() - Apply a particular relocation to a module
+>   * @mod: the module to apply the reloc to
+> @@ -321,6 +401,11 @@ static reloc_rela_handler reloc_rela_handlers[] = {
+>  	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     = apply_r_larch_sop,
+>  	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] = apply_r_larch_sop_imm_field,
+>  	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     = apply_r_larch_add_sub,
+> +	[R_LARCH_B26]					     = apply_r_larch_b26,
+> +	[R_LARCH_PCALA_HI20]				     = apply_r_larch_pcala_hi20,
+> +	[R_LARCH_PCALA_LO12]				     = apply_r_larch_pcala_lo12,
+> +	[R_LARCH_GOT_PC_HI20]				     = apply_r_larch_got_pc_hi20,
+> +	[R_LARCH_GOT_PC_LO12]				     = apply_r_larch_got_pc_lo12,
+>  };
+>
+>  int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+>
+

@@ -2,204 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB87586BAA
+	by mail.lfdr.de (Postfix) with ESMTP id D6425586BAB
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbiHANOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiHANOp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232122AbiHANOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 1 Aug 2022 09:14:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EC9255A5
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:14:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11C98B8116B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89772C433C1;
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231190AbiHANOn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 1 Aug 2022 09:14:43 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0D255A5;
+        Mon,  1 Aug 2022 06:14:41 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 83E631885393;
         Mon,  1 Aug 2022 13:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659359681;
-        bh=Ys23SCaqwQo0xJ/5DGB6j0jxIe7a4XFk2MqQP4qYS00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=baIFx+BYLzwvIxTsk4i8ToRmLEoWEk38ssM0zmXdIqkX41EIzrEPFwBMX2wf95LLR
-         2wrIH8KYLcUICP7WFQ8GoZe/NHONm3uQo7fQOgysSAvkfmWgJ1d6I7a1CxLvssE2SR
-         wp6+jBWYWhs7Y19+0ZNga6eZVp66AgaBGTnLbylFY/0lXHJasfTxuWVo6lSIyucf3H
-         QACKpjJjJfYdx72qIvN7u+5S42H2mfZBnQj7woFipz+5dNQsRxn99r8mVyzQCo7SvZ
-         XzGZ/NsTXGM7Dkvyuq6Brj6XQITdc0gtCcMJJq1fg9hlMY845zfzYNqT7rRp0KFUkl
-         JKN9ro0gLjfSA==
-Date:   Mon, 1 Aug 2022 14:14:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kevin Lu <luminlong@139.com>
-Cc:     linux-kernel@vger.kernel.org, shenghao-ding@ti.com, kevin-lu@ti.com
-Subject: Re: [PATCH v1 1/1] Add a new kcontrol for phase calib, remove
- unnecessary header file, make code more comply with linux coding style
-Message-ID: <YufRu6/Wed2J/eoX@sirena.org.uk>
-References: <20220801025939.2343-1-luminlong@139.com>
- <20220801025939.2343-2-luminlong@139.com>
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 771CB25032B7;
+        Mon,  1 Aug 2022 13:14:39 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 71C6DA1E00B9; Mon,  1 Aug 2022 13:14:39 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3VOt0VJwLJ0XInkT"
-Content-Disposition: inline
-In-Reply-To: <20220801025939.2343-2-luminlong@139.com>
-X-Cookie: Dieters live life in the fasting lane.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 01 Aug 2022 15:14:39 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <Yt0ouiEcAHs8AqAA@shredder>
+References: <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+ <YtQosZV0exwyH6qo@shredder>
+ <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
+ <20220721115935.5ctsbtoojtoxxubi@skbuf> <YtlUWGdgViyjF6MK@shredder>
+ <20220721142001.twcmiyvhvlxmp24j@skbuf> <Yt0ouiEcAHs8AqAA@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <2c95ec0a86674c598b5faf6d66410e1f@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-07-24 13:10, Ido Schimmel wrote:
+> 
+>> In the mv88e6xxx offload implementation, the locked entries eventually
+>> age out from time to time, practically giving the true owner of the 
+>> MAC
+>> address another chance every 5 minutes or so. In the pure software
+>> implementation of locked FDB entries I'm not quite sure. It wouldn't
+>> make much sense for the behavior to differ significantly though.
+> 
+> From what I can tell, the same happens in software, but this behavior
+> does not really make sense to me. It differs from how other learned
+> entries age/roam and can lead to problems such as the one described
+> above. It is also not documented anywhere, so I can't tell if it's
+> intentional or an oversight. We need to have a good reason for such a
+> behavior other than the fact that it appears to conform to the quirks 
+> of
+> one hardware implementation.
+> 
+>> 
+>> > It seems like the main purpose of these locked entries is to signal to
+>> > user space the presence of a certain MAC behind a locked port, but they
+>> > should not be able to affect packet forwarding in the bridge, unlike
+>> > regular entries.
+>> 
+>> So essentially what you want is for br_handle_frame_finish() to treat
+>> "dst = br_fdb_find_rcu(br, eth_hdr(skb)->h_dest, vid);" as NULL if
+>> test_bit(BR_FDB_LOCKED, &dst->flags) is true?
+> 
+> Yes. It's not clear to me why unauthorized hosts should be given the
+> ability to affect packet forwarding in the bridge through these locked
+> entries when their primary purpose seems to be notifying user space
+> about the presence of the MAC. At the very least this should be
+> explained in the commit message, to indicate that some thought went 
+> into
+> this decision.
+> 
 
---3VOt0VJwLJ0XInkT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I guess you are right that the SW setup locked entries can be used to 
+gain uni-directional traffic through a switch, which should really not 
+be the case.
+In this case I expect the zero-DPV entries to not give this ability, 
+which is the correct behaviour with MAB IMHO.
 
-On Mon, Aug 01, 2022 at 10:59:39AM +0800, Kevin Lu wrote:
+>> 
+>> > Regarding a separate knob for MAB, I tend to agree we need it. Otherwise
+>> > we cannot control which locked ports are able to populate the FDB with
+>> > locked entries. I don't particularly like the fact that we overload an
+>> > existing flag ("learning") for that. Any reason not to add an explicit
+>> > flag ("mab")? At least with the current implementation, locked entries
+>> > cannot roam between locked ports and cannot be refreshed, which differs
+>> > from regular learning.
+>> 
+>> Well, assuming we model the software bridge closer to mv88e6xxx (where
+>> locked FDB entries can roam after a certain time), does this change 
+>> things?
+>> In the software implementation I think it would make sense for them to
+>> be able to roam right away (the age-out interval in mv88e6xxx is just 
+>> a
+>> compromise between responsiveness to roaming and resistance to DoS).
+> 
+> Exactly. If this is the best that we can do with mv88e6xxx, then so be
+> it, but other implementations (software/hardware) do not have the same
+> limitations and I don't see a reason to bend them.
+> 
+> Regarding "learning" vs. "mab" (or something else), the former is a
+> well-defined flag available since forever. In 5.18 and 5.19 it can also
+> be enabled together with "locked" and packets from an unauthorized host
+> (modulo link-local ones) will not populate the FDB. I prefer not to
+> change an existing behavior.
+> 
+> From usability point of view, I think a new flag would be easier to
+> explain than explaining that "learning on" behaves like A or B, based 
+> on
+> whether "locked on" is set. The bridge can also be taught to forbid the
+> new flag from being set when "locked" is not set.
+> 
+> A user space daemon that wants to try 802.1x and fallback to MAB can
+> enable both flags or enable "mab" after some timer expires.
 
-This looks mostly good however there are a few things that need looking
-at:
-
-> Signed-off-by: Kevin Lu <luminlong@139.com>
-> ---
->  tlv320adcx140.c | 1218 +++++++++++++++++++++++++++++++++++++++++++++++
->  tlv320adcx140.h |  157 ++++++
->  2 files changed, 1375 insertions(+)
->  create mode 100644 tlv320adcx140.c
->  create mode 100644 tlv320adcx140.h
-
-This is a new driver which isn't what the changelog says at all, and it
-lacks any Kconfig or Makefile updates so the new driver won't be built.
-
-Please format your changelog as covered in submitting-patches.rst, both
-accurately describing what's in the patch and following the subject line
-style for the subsystem.
-
-> +static const char * const resistor_text[] = {
-> +	"2.5 kOhm", "10 kOhm", "20 kOhm"
-> +};
-> +
-> +static SOC_ENUM_SINGLE_DECL(in1_resistor_enum, ADCX140_CH1_CFG0, 2,
-> +			    resistor_text);
-> +static SOC_ENUM_SINGLE_DECL(in2_resistor_enum, ADCX140_CH2_CFG0, 2,
-> +			    resistor_text);
-> +static SOC_ENUM_SINGLE_DECL(in3_resistor_enum, ADCX140_CH3_CFG0, 2,
-> +			    resistor_text);
-> +static SOC_ENUM_SINGLE_DECL(in4_resistor_enum, ADCX140_CH4_CFG0, 2,
-> +			    resistor_text);
-
-Is this something that can usefully be varied at runtime or does it
-depend on the board design?
-
-> +	SND_SOC_DAPM_MIXER("Output Mixer", SND_SOC_NOPM, 0, 0,
-> +		&adcx140_output_mixer_controls[0],
-> +		ARRAY_SIZE(adcx140_output_mixer_controls)),
-
-Don't put all the mixer controls into an array and then index into it by
-magic numbers, just declare variables for all the individual controls.
-This is much more readable and less error prone.
-
-> +static const char * const phase_calib_text[] = {
-> +	"Disable",
-> +	"Enable"
-> +};
-> +
-> +static const struct soc_enum phase_calib_enum[] = {
-> +	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(phase_calib_text), phase_calib_text),
-> +};
-
-This is a simple on/off switch, it should be a normal control with a
-name ending in Switch not an enum.
-
-> +static int adcx140_phase_calib_get(struct snd_kcontrol *pKcontrol,
-> +	struct snd_ctl_elem_value *pValue)
-> +{
-> +	struct snd_soc_component *codec =
-> +		snd_soc_kcontrol_component(pKcontrol);
-> +	struct adcx140_priv *adcx140 = snd_soc_component_get_drvdata(codec);
-> +
-> +	pValue->value.integer.value[0] = adcx140->phase_calib_on;
-
-Please follow the normal kernel coding style for variable and parameter
-names, don't use hungarian notation.
-
-> +static int adcx140_phase_calib_put(struct snd_kcontrol *pKcontrol,
-> +	struct snd_ctl_elem_value *pValue)
-> +{
-> +	struct snd_soc_component *codec
-> +		= snd_soc_kcontrol_component(pKcontrol);
-> +	struct adcx140_priv *adcx140 = snd_soc_component_get_drvdata(codec);
-> +
-> +	adcx140->phase_calib_on = pValue->value.integer.value[0];
-> +
-> +	return 0;
-> +}
-
-This should return 1 if the value changes, the mixer-test selftest will
-check for this and a number of other issues - you should ensure your
-driver passes that cleanly.
-
-> +	/* signal polarity */
-> +	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-> +	case SND_SOC_DAIFMT_IB_NF:
-> +	case SND_SOC_DAIFMT_IB_IF:
-> +		inverted_bclk = !inverted_bclk;
-> +		break;
-> +	case SND_SOC_DAIFMT_NB_IF:
-> +		iface_reg1 |= ADCX140_FSYNCINV_BIT;
-> +		break;
-> +	case SND_SOC_DAIFMT_NB_NF:
-> +		break;
-
-This is treating _IB_IF and _IB_NF identically which is clearly wrong.
-It looks like the ADCX140_FSYNCINV_BIT setting needs to be handled.
-
-> +	adcx140->supply_areg = devm_regulator_get_optional(adcx140->dev,
-> +							   "areg");
-> +	if (IS_ERR(adcx140->supply_areg)) {
-> +		if (PTR_ERR(adcx140->supply_areg) == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +
-> +		adcx140->supply_areg = NULL;
-> +	} else {
-> +		ret = regulator_enable(adcx140->supply_areg);
-> +		if (ret) {
-> +			dev_err(adcx140->dev, "Failed to enable areg\n");
-> +			return ret;
-> +		}
-> +
-> +		ret = devm_add_action_or_reset(&i2c->dev,
-> +			adcx140_disable_regulator, adcx140);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-Unless the hardware can work without power this is buggy.  The driver
-should request and unconditionally use all supplies the device
-physically has, it should only use _get_optional() for supplies which
-may be physically absent in the system for some reason.  For example
-with the TLV320ADC6140 it looks like the driver shuld be requesting
-AVDD and IOVDD and that AREG is an output from the device.
-
---3VOt0VJwLJ0XInkT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLn0boACgkQJNaLcl1U
-h9Cr9Qf/ULUoVl5YDm4HlnyFKdSJrFSop/q5H0KXaJHmquPMXs0cOgHHvxDoB1eb
-4rNNqHk94qy2/e3RKv1gDLaeEj/1E/WSPGFbQJXOX8dBs3kKgVXQpVxb1xQUwGDg
-WWzfeCVimsEPHX1zHjAYVH2Rwu7fpgEj/9qoejZPiBwAeZkHFKh0oIwi309BeICp
-Bbqi5L+0+OSc+ZdSt2E34oxXrVH6xtkmrDuHmmdhXJ5f2EyjZHPrgqkmS9H1owVO
-UhzoXIX2VoavCZI/gu7FCV0/JoKRz8Dy9gOtAIHJlJuwGVA/NK7Z/sGZ04AnM+nc
-2ZXkgZpnLe0Y1E6aWklITqvQgan13w==
-=ylpb
------END PGP SIGNATURE-----
-
---3VOt0VJwLJ0XInkT--
+With this driver it is not really an option to use +learning for a 
+opt-in for MAB. I think locked port should always have -learning before 
+locking the port. In fact there is a problem in this implementation with 
+MAB if -learning is applied after locking the port, as that will disable 
+MAB, but also refresh and all other violation interrupts.
+So I guess I need to disable the learning flag to the driver when the 
+port is locked, or even from the bridge?

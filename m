@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A7D58697C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB3E586A70
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbiHAMCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S234319AbiHAMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbiHAMAq (ORCPT
+        with ESMTP id S234240AbiHAMPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:00:46 -0400
+        Mon, 1 Aug 2022 08:15:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB604E872;
-        Mon,  1 Aug 2022 04:53:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EC048EA2;
+        Mon,  1 Aug 2022 04:58:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08559612C6;
-        Mon,  1 Aug 2022 11:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CEFBC433D6;
-        Mon,  1 Aug 2022 11:53:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60FE2601BD;
+        Mon,  1 Aug 2022 11:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C03C433D6;
+        Mon,  1 Aug 2022 11:58:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354789;
-        bh=h2cD6mP9oo859yPB9nAEQNjXoWrMcTRTI3Ci+qVuKZg=;
+        s=korg; t=1659355096;
+        bh=A4HOruPbbaKVIxq1nerFl1jW8NyTpVY694MfOQPQpO8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbS6eeRImnpwXY3RoMIkqRmy+FmbSd7dNLx5QyDYILz8xLIFqHbpyFVjL4CkwFo0U
-         mG8rEOTjekz3kD1ofWGMFPaI8LHuMDiHQ2cN30985YBDQqNA4jUQEASYvAArn0awpa
-         CusKtdinTxbFuwRZHf1jS/6KX38vl7/C0GXyMDhs=
+        b=zTvBvqB8D6jr7tqRT5ducGLX+Q0ekoZpOdLhl0rdZ+fManccM6bF88mVxBewfpZJx
+         KIzch5JQm8aiCW9SMjb7lt4w1y7WyJV4oXHMBu8LiwFvArqbwp/JwEsRj7jy99Ywcn
+         ptf3D/iuyBSlI0+56XR4Bp5qqPARO+4B6uq97ErM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 21/69] ice: do not setup vlan for loopback VSI
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Liang He <windhl@126.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.18 31/88] scsi: ufs: host: Hold reference returned by of_parse_phandle()
 Date:   Mon,  1 Aug 2022 13:46:45 +0200
-Message-Id: <20220801114135.369470914@linuxfoundation.org>
+Message-Id: <20220801114139.455220675@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Liang He <windhl@126.com>
 
-commit cc019545a238518fa9da1e2a889f6e1bb1005a63 upstream.
+commit a3435afba87dc6cd83f5595e7607f3c40f93ef01 upstream.
 
-Currently loopback test is failiing due to the error returned from
-ice_vsi_vlan_setup(). Skip calling it when preparing loopback VSI.
+In ufshcd_populate_vreg(), we should hold the reference returned by
+of_parse_phandle() and then use it to call of_node_put() for refcount
+balance.
 
-Fixes: 0e674aeb0b77 ("ice: Add handler for ethtool selftest")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220719071529.1081166-1-windhl@126.com
+Fixes: aa4976130934 ("ufs: Add regulator enable support")
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufshcd-pltfrm.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -5481,10 +5481,12 @@ int ice_vsi_cfg(struct ice_vsi *vsi)
- 	if (vsi->netdev) {
- 		ice_set_rx_mode(vsi->netdev);
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -107,9 +107,20 @@ out:
+ 	return ret;
+ }
  
--		err = ice_vsi_vlan_setup(vsi);
-+		if (vsi->type != ICE_VSI_LB) {
-+			err = ice_vsi_vlan_setup(vsi);
- 
--		if (err)
--			return err;
-+			if (err)
-+				return err;
-+		}
++static bool phandle_exists(const struct device_node *np,
++			   const char *phandle_name, int index)
++{
++	struct device_node *parse_np = of_parse_phandle(np, phandle_name, index);
++
++	if (parse_np)
++		of_node_put(parse_np);
++
++	return parse_np != NULL;
++}
++
+ #define MAX_PROP_SIZE 32
+ static int ufshcd_populate_vreg(struct device *dev, const char *name,
+-		struct ufs_vreg **out_vreg)
++				struct ufs_vreg **out_vreg)
+ {
+ 	char prop_name[MAX_PROP_SIZE];
+ 	struct ufs_vreg *vreg = NULL;
+@@ -121,7 +132,7 @@ static int ufshcd_populate_vreg(struct d
  	}
- 	ice_vsi_cfg_dcb_rings(vsi);
  
+ 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
+-	if (!of_parse_phandle(np, prop_name, 0)) {
++	if (!phandle_exists(np, prop_name, 0)) {
+ 		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
+ 				__func__, prop_name);
+ 		goto out;
 
 

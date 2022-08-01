@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA5F587230
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20438587234
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiHAUO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S234529AbiHAUPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234736AbiHAUOb (ORCPT
+        with ESMTP id S234232AbiHAUPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:14:31 -0400
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12774505A
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1659384807; bh=E43cQkvn/4/VHiP7B0OPm/B+8rXIwu0R/6PBB0SR798=; h=Date:To:Cc:From:Subject:References:From:Subject:Reply-To; b=myJ8/rNW54VSib9BxXvanrJTHBimTcsjMoZPawp2E1VFf8ZFB+/pWSk/ABcLvF8444ILaeiJIvyewaTiu48joXXbsgR2vDJgAT8OqFAeF6uEoCjFzvYMHanuF6X76Nzx1tPQJzkIRmmOuvXbB09cVh4PtRfij0H+cvc9UPpoOgoQmMq0cyuSSOyELx7bvm9NlzvjZz/P8genITYsrGyG3MqKDIzEiSKGbG1rLpsQyadi3N7NGHmlMS/ymOjaDAOwPw22xmNf5fi7R2/Vd8UFJMUtSXuBGRXeW4wa21jakxw+v1sEiNL+on8IwPBZJGPcX0Wn0JnDMsyzg9vobliLdg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1659384807; bh=qr2qLQWxP80b35yhKXdOd+b5Jw+iwWVz4oScqlLgtj8=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=j5hEGl+CUf3gtGGrj/erI2erszo2145C0k0B9k5yxoq3vXypteJSBshrfArM8tC+pMd8UrlmLZNnpQfI4z/YNTdR+Vnr7Y2v6EdwxMwQg325Sg47yT9rJc5UQY2HFrIlMbHhEgRa/uCOgEIajQHmw+TET02mtsdQTErg471Q4guJhFUzRvCQICbTbenfNpS0FZSjf9twBBGwDI2+bnLtpfSIKxmgOf2q9A1wSut3/3OJuD6IFPXomJPujptqmx1tNuiq8nBGXRFPw3ug8kc4hyW4TiI67ppT/NE7e9dikxp4b7RukJAZzt0aSRqBjbFFXgayOyIc2YhYGDX8H4bCag==
-X-YMail-OSG: glwSvgwVM1nDgNhBS8JECVcpJrYn_sSCP7Q8tSCB6TySPVHOUF7kkZwJfv81e.v
- 9IGIq.W8K7xVBiv2eVdhm7uAcP_Z8MDoEKaouQnrejbuxsGbknMD47UI9iBJyN6Mw5B0C1RDvmgI
- RjqwswHkkcvC_eVdosZimt4DUzY5YJqBAFtWl5uK3_28NykfoJU7ODdJhBD47LEN5rqWAy0Cbz_.
- mKwcpGnKdIT8h48I2Paw2wjevpEU6WJuFA1Dsxg4JxfzJMBhk6YBM3fuBbCTuLg3eooqsPuGB1pi
- fE8EqL.F7R4dCQ6MDGAaAs3VczPZrK5wYtqy3BzI4Vrwsbumn.qDutdEnYW9LyS49BD22IMaqqwa
- FYc6rWUB2O7Wgesd8mkRVb.sOR0FBG25hs99Jy5FhXMEyoB3rkoYR65QHDpNdHfcf2e_9u2Ig1yL
- PtyOjZkSdxdjLPoAH3W16.T2TbmFTsuX3XrON5dfAGueQGS2qa6GIPGy9fXa6QlwXkFuUaGhyixt
- B.bf7so5zVwgl9zI7AScKpCddD5QBinwql0bkKh5h4VGdKkdt5fr5kLoUwlWO1CQaLk16J93BmL7
- 9lCeGGEBmp0XCCYV0_v2KtUBKUNKBRqPPvoS8EQMcauk73ARxxE8Z.6s_Tb4.ko0PX2KN0O3K3l7
- jJXVYIv5JQTW5do1MpLM.0URHnDUEuqz.63vxJ81nQ_9uJ4A8f279B4C07zfoiQCsBP5UVzb9fzm
- YnI8dzAR5b4YNBw5eN2cbUo7d4Z98wDFhxmoHeGzDMrKU1BidbYiAkCScsFlnxvk9mAxhOKsCwlq
- qaW9RhmFbHW6Wk1VO8gOVkjzJw8rB2r5Ea6K412byPUoqXYWMICJwlE7NtcGu2tDGLQDyCe9ymOc
- gdAWW_UCv_hO9Dh9iTHUKTIemOzt0jUMbX9tjAHO0AMQSvCExUVIHSfzavxroVmwIsKYGn.dN8uX
- .koNd9boutCs44qw4btQ1.pEFBMR3ii5pmAkprY96QF97auDmsUzsrDdN6ljZuUsbtuQDN2FZO_9
- 8_weyURNFIQHEN79jO982C.VO6IyNiBKkZBgWwZisjakJGbo9ZkJWFy4pzFROGRAd16aFat19nDP
- jDpDJi8Lia2VX4w0jC9f6iG89pJrg99hTvKBMUgzj7ryFHAAi3l8un_jG9ydfodDekCMWrJ0z1zU
- 9sjPXZ32KR.Igb4wyBe0N5KN84MvUmJVP1P4DALLR1_s_PBxaqZ3xL3N9tpZuFf6o3NGYMAIeBOg
- f8Br1ybZPz9Dxgc6iemfn5qawhyMKvpUG4LuB7BdDHH.FK36f1n4VyYjGMh3XDg8SrWTEIOWIGve
- WqdRTQPDeKmgyvLImZOOZqvSYR1LuJ3Ok3Hrz4q1lrS6a5N68I0R6hak8CQfxihq.MTWwQGshDIw
- zdRily32TbudyOBp03s7lFAv3dnJ0XIcEzg5yjBwNThbBo2_JvcxWsRz7NrDM4JW3KPKqRrd4LTZ
- dvfvD2iA2wBM_eMkhNj0OcIw_oyPIcFM46bj.LRXAl0fWvWUV4rZakzarahNBkv4oVrt56cydYG9
- LDEaIeBT7gNJDBy40CB32ZeY5hzBLKNJ0bi6uHlzyY6XyEYe8qSTqV.DqmWJI8dR86xwCEtYlO1E
- i2Xaw9beVT2yDx.EP3FkrS.agz_qAlPswi6Kq6zAYp.MpeLfNqZos170eqReH5CMGVT6CPaSg5ho
- eve1.I7obnqOUmTLq1SQ7NcIvIG4EKaBUzKyfvSU35gy9HidikqD3APyGPbyUZKHstCdepkpzFd9
- gNM4ntLKHOG.U_rK067v95fIxQGYo0YHbASqwQM3cPufNkWB8oLAEFbccntaJv_KX3r42Mo_ytMm
- NLgrTzorU56rMPvXnr16bveKtt2ZyUewiMmW13Ba0Y710o1xAqDckwz8w38Oa0H3pInKKzq0dnv_
- FOlgTf308RImUfCFNfRAZZsiF_QoH0q63PLv_gy7H6Q1M9oRi7JIv1ZDl6KkHLxUP_77fnr.tyut
- W_qxCJxTa9C4HKwEvDq_LDNUeb0R9WeCWxErkq3BqxJkAocZrs4XPztx.v0KA5z7syvYqOzLi64Y
- rcTaT.dBYo0y55vwFca0y7xX1GaEYJTkVAK9PRkEl93RwubgG5F1Xkf_AZOIoFgMlmfMlCBiPq6N
- sRmksc_U.YLAaxzBz57Ryw_QdivpUOoIrrLAZzQhWe56dtJI4Fq2Sp7aWq_PoNDV1Sxf5GFNMfY2
- twIrYfiC5tiAMT1Bwxv0xKc2xO_RQva8DfRW0UHmxjl3Q
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 1 Aug 2022 20:13:27 +0000
-Received: by hermes--production-bf1-99ddd9c9c-mpxmp (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c13a2b16efdf9bc73ba23e617461e1ba;
-          Mon, 01 Aug 2022 20:13:23 +0000 (UTC)
-Message-ID: <827a0fe0-03a3-b5ca-db34-daff17095b8f@schaufler-ca.com>
-Date:   Mon, 1 Aug 2022 13:13:20 -0700
+        Mon, 1 Aug 2022 16:15:22 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D055E45F59
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:14:23 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id w29so8936642qtv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hefring-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eEVJVI7ZHSfxXmecZ7P8AtoCE66RlHY49+eIUnnu+00=;
+        b=ibXN/3C4tzWEWtqX2Fgim0+ZN2LlTdvveKO5yKYY/752MdiTb2MyZDFF511ZPAOFXf
+         OR+b68+f5yxY9kOwhd1Gnt6PhkkwyTOn/lbZj3u37XssrpIpd6nPLqGl3VcVDXdDZCip
+         vKozvHxKQvZB4dRZ4NoyLZwFcxNcblqSLRJKYTWXO5E8OJm5bVN2jFG5RAmB7lN89jEP
+         UzU0bX1oFq5BOOw1bT7euje8PGZ1ZQLgBPHa/QfE5/5qXld6ClmHr7xFXH9xytKuZGRn
+         TCYnMwxMJyF7HfviMtL7YbjtGgp6mnMF8PlUW8yhpIJ53X74Z3pmARkehV3DfYxUPGsH
+         F2Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eEVJVI7ZHSfxXmecZ7P8AtoCE66RlHY49+eIUnnu+00=;
+        b=sReIniB7xekHvFtb4EGeGjrWz/ylrF9u59iG89tsPnhRpGJ88DaXtUP2tuEmMNO0wu
+         Nx6CGe5OjQ3wknBwr1xWrNc2doY8/lYP9fcGa0C8+wCWiWWJZUBW4LCzBd5tgaFMqqSr
+         sHjsCFEjyhkzW+evDmEYHkoHM/uqy48URP8Qm+MSDIh9dMa9nB8ekZEYTykSv4FKOIel
+         JObNfFdbkI9sU0a/RaddQFuctWy2bKoETPQc4IAIzgQXBWDn6gjdFkjH3DGxfOgxjjoX
+         8eyDLKR1gkKlVwH8rvybgS4xYlxtTBRZg2ycnwokeWJYArGpMs+R0+bjpp9NW5gsbtYe
+         HGEQ==
+X-Gm-Message-State: AJIora8DLS4c1/WFP+Vuux4d1qa4dxUHIFhvSJ4d3n+djxKzhdoZWiF5
+        LBdBPZiMIJPqdm2UCQfTopgdMw==
+X-Google-Smtp-Source: AGRyM1uWTfS2YCHrnGWCx6rTienxTjs9YGc2SzlErgnBKQjE3z7DqcxkZiuoquBx4Ax1K1ro3GQ43g==
+X-Received: by 2002:a05:622a:2d6:b0:31f:3670:3d2b with SMTP id a22-20020a05622a02d600b0031f36703d2bmr15673451qtx.412.1659384862954;
+        Mon, 01 Aug 2022 13:14:22 -0700 (PDT)
+Received: from hefring.. ([50.212.55.89])
+        by smtp.gmail.com with ESMTPSA id r20-20020a05620a299400b006b59ddb4bc5sm9288317qkp.84.2022.08.01.13.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 13:14:22 -0700 (PDT)
+From:   Ben Wolsieffer <ben.wolsieffer@hefring.com>
+X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+Cc:     Ben Wolsieffer <Ben.Wolsieffer@hefring.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] ARM: v7m: handle faults and enable debugging
+Date:   Mon,  1 Aug 2022 16:13:37 -0400
+Message-Id: <20220801201347.1255392-1-Ben.Wolsieffer@hefring.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     torvalds@linux-foundation.org
-Cc:     LSM List <linux-security-module@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        casey@schaufler-ca.com
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Subject: [GIT PULL] Smack patches for v6.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <827a0fe0-03a3-b5ca-db34-daff17095b8f.ref@schaufler-ca.com>
-X-Mailer: WebService/1.1.20447 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+This series enables real exception handlers on no-MMU systems,
+increasing robustness in the face of buggy user- or kernel-space
+software. Previously, any fault would trigger the invalid exception
+handler, which would hang the system. With this series, faults only
+kill the offending process and allow the rest of the system to
+continue operating.
 
-Here is the Smack pull request for v6.0.
+The second patch in this series adds support for undefined instruction
+hooks, enabling software breakpoints through ptrace. Using this
+functionality currently requires a patch to gdb.
 
-There are two minor code clean-ups. One removes a touch of
-dead code and the other replaces an instance of kzalloc + strncpy
-with kstrndup. The changes have been in next and pass all tests.
-Thank you.
+This series has been tested on an STM32F746 (Cortex-M7).
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+I would appreciate feedback in particular on the following questions:
+* Is the fault table formatting acceptable? Or should the lines be
+  wrapped/shortened?
+* Does my chosen mapping between faults and signals make sense?
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-are available in the Git repository at:
+Ben Wolsieffer (2):
+  ARM: v7m: handle faults
+  ARM: v7m: support undefined instruction hooks
 
-  https://github.com/cschaufler/smack-next tags/Smack-for-6.0
+ arch/arm/include/asm/traps.h |   2 +
+ arch/arm/include/asm/v7m.h   |  29 +++++++
+ arch/arm/kernel/Makefile     |   2 +-
+ arch/arm/kernel/entry-v7m.S  |  68 ++++++++++++++-
+ arch/arm/kernel/traps-v7m.c  | 162 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 258 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/kernel/traps-v7m.c
 
-for you to fetch changes up to aa16fb4b9e7e1057008d999138e7ae68a40bf167:
-
-  smack: Remove the redundant lsm_inode_alloc (2022-08-01 11:26:09 -0700)
-
-----------------------------------------------------------------
-Two minor code clean-ups for Smack.
-
-----------------------------------------------------------------
-GONG, Ruiqi (1):
-      smack: Replace kzalloc + strncpy with kstrndup
-
-Xiu Jianfeng (1):
-      smack: Remove the redundant lsm_inode_alloc
-
- security/smack/smack_access.c | 7 ++-----
- security/smack/smack_lsm.c    | 7 -------
- 2 files changed, 2 insertions(+), 12 deletions(-)
+-- 
+2.37.0
 

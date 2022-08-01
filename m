@@ -2,128 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158D7586393
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81E9586395
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239480AbiHAEkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 00:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S239483AbiHAElR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 00:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiHAEkI (ORCPT
+        with ESMTP id S232156AbiHAElQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 00:40:08 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CBF13E12
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:40:06 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220801044003epoutp0437aafe20b2cd8d756e04266870db1037~HHsFaJEsT1022510225epoutp04l
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:40:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220801044003epoutp0437aafe20b2cd8d756e04266870db1037~HHsFaJEsT1022510225epoutp04l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659328803;
-        bh=hzbhYOqkA0ybVjCJXM7h/bXExcppfaT3rHZaniOrLxw=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=aNXycnH/j+wLhJf8VcZHc0w8lW51psbMR+xmQum32mTx2jyqjMKQqRhnuORMsZfGc
-         VqUrl3P8FY31eV+npfYxvguVcsMcTmfVyFe68LQKPdc6MIybAza0+KRsMeY5iyaplE
-         DT9x5l4gLQOoRU+V5nVwQGBiEGI0S78521NAX/48=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220801044002epcas2p25ff9d7be2d3e639947b880e93769a660~HHsEydK4h1270312703epcas2p2f;
-        Mon,  1 Aug 2022 04:40:02 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Lx55G3gZWz4x9QZ; Mon,  1 Aug
-        2022 04:40:02 +0000 (GMT)
-X-AuditID: b6c32a45-45bff700000025c2-ce-62e7592258dc
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3E.C5.09666.22957E26; Mon,  1 Aug 2022 13:40:02 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v1] f2fs: remove device type check for direct IO
-Reply-To: eunhee83.rho@samsung.com
-Sender: Eunhee Rho <eunhee83.rho@samsung.com>
-From:   Eunhee Rho <eunhee83.rho@samsung.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220801040607epcms2p82da0594039ba5f1ed77c451e2d13c965@epcms2p8>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220801044002epcms2p5a832b87ab1e6c8f0391d8d26f33c042c@epcms2p5>
-Date:   Mon, 01 Aug 2022 13:40:02 +0900
-X-CMS-MailID: 20220801044002epcms2p5a832b87ab1e6c8f0391d8d26f33c042c
+        Mon, 1 Aug 2022 00:41:16 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3973E13E18
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:41:15 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2714cg0C029348;
+        Mon, 1 Aug 2022 04:40:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=uhpKx3x0xG9N3j2V9BpIaZmBpPxWP4s8h0X7qAg6OhY=;
+ b=ZzRmp3uhrlC7a8mH6AAQMtSq8C3gZeyheV+v/gom7bg/yquWEGofRRaPSgYYS5y6SW2M
+ 9h8KW4Wavf6qxgairLyjPOtH8IznDbiTXyJRtWtimTK6blRg4XpxAifC/GJ7Qd3yXRkq
+ fgEEmILYs2X4Yf2pieWP+BK8EGeoLhpE62qJNzWFV3ODGyMFaOlf5Pq2LzgYgWkjxCm8
+ fjYWxR//0Esc/4Jvxit8Cq7PXbcdYeubgMUg51FgQAd/lCisgsDjDLMO0ffLieGONCHw
+ Ab0KGPzEfTiiKQUTk/F4LhDcEqpTCayvXUmouY8VGM7FIM5ZU/n7CzLg/ykuK5VgCwDW KA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp51q3t2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:40:49 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2714Huj1018438;
+        Mon, 1 Aug 2022 04:40:48 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp51q3t1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:40:48 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2714Zabi032343;
+        Mon, 1 Aug 2022 04:40:46 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3hmv98snq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:40:46 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2714ehVG21823866
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Aug 2022 04:40:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6879AE04D;
+        Mon,  1 Aug 2022 04:40:43 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F528AE045;
+        Mon,  1 Aug 2022 04:40:40 +0000 (GMT)
+Received: from [9.43.22.209] (unknown [9.43.22.209])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Aug 2022 04:40:40 +0000 (GMT)
+Message-ID: <e5545c90-9595-d08c-8a1c-1c15e3b94999@linux.ibm.com>
+Date:   Mon, 1 Aug 2022 10:10:39 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_ADISTANCE_PMEM
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
+ <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
+ <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <87bkt8s7w9.fsf@linux.ibm.com>
+ <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmha5S5PMkgzmzJC1OTz3LZPHykKbF
-        k/WzmC0uLXK3uLxrDpsDq8emVZ1sHrsXfGby6NuyitHj8ya5AJaobJuM1MSU1CKF1Lzk/JTM
-        vHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoK1KCmWJOaVAoYDE4mIlfTubovzS
-        klSFjPziElul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMI68TCxawV/ya/4W5gfED
-        axcjJ4eEgInE1jPvWLoYuTiEBHYwSny+fYi9i5GDg1dAUOLvDmGQGmEBB4kTUzczgdhCAkoS
-        fw/eZ4KI60pM2TKJEcRmE9CWuHK8nRVkjojAQ0aJD0e2MUEs4JWY0f6UBcKWlti+fCtYA6eA
-        n8SyrodQNRoSP5b1MkPYohI3V79lh7HfH5vPCGGLSLTeOwtVIyjx4OduqLiExN2NLWwQdr5E
-        z5OjUDMrJHauuApVoy9xrWMj2A28Ar4Sn45OAJvPIqAqsWfNHqhdLhKb5rwHm8MsIC+x/e0c
-        ZlA4MAtoSqzfpQ9iSggoSxy5xQLzVcPG3+zobGYBPomOw3/h4jvmPYG6Rk1i8ccF0CCXkbix
-        4T7TBEalWYiAnoVk7yyEvQsYmVcxiqUWFOempxYbFRjCozY5P3cTIzj5abnuYJz89oPeIUYm
-        DsZDjBIczEoivHdcnicJ8aYkVlalFuXHF5XmpBYfYjQF+ngis5Rocj4w/eaVxBuaWBqYmJkZ
-        mhuZGpgrifN6pWxIFBJITyxJzU5NLUgtgulj4uCUamASk5vSddz9fiif9pYWgadGzjv/Bqs9
-        U7/ntKfqy5G9zevvPHh/9eHVB9MLv/g+Zk9/KnJt8Uoz9i/nf4Rv9ks40N0dfKTsXW+gmQ93
-        yps5gdEd9bzpC9boLqsQPWAwp4L5/IRO79uJHnG5kzPueFwtnhEU5bvsQ1/wL9viFbnnJZgy
-        fJ4kMTsyt+/hFDmhsaxQdOOyea4Ls2u/3KoWm6J2/JHJ6lMX1GSq1/aw+jdsbXGUnvOD+6jD
-        kqBSc58Pmgty7e4ox62tKnS1Wft5DY81/9cq/2t1X3Kb/RhfTI9MmLshNT5O/NORbxZNJyvC
-        M2ZV3ua+IVdaz/g5863W0p2nbb7zMaXLmPmzNjrHGCmxFGckGmoxFxUnAgDxZxfnBwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220729002517epcms2p35eed262c3349287436c1848ab350c2d4
-References: <20220801040607epcms2p82da0594039ba5f1ed77c451e2d13c965@epcms2p8>
-        <YuXZSTw4reBDtLgk@google.com>
-        <20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p3>
-        <CGME20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p5>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: M1GP1LNOeqYg8rUFG5j6zI2HEJ6fJ9BQ
+X-Proofpoint-ORIG-GUID: QRYI9fI8bNG1DvGisY4jgeL4iFNBpJcO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_01,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208010024
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To ensure serialized IOs, f2fs allows only LFS mode for zoned
-device. Remove redundant check for direct IO.
+On 8/1/22 7:36 AM, Huang, Ying wrote:
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> "Huang, Ying" <ying.huang@intel.com> writes:
+>>
+>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>>>
+>>>> By default, all nodes are assigned to the default memory tier which
+>>>> is the memory tier designated for nodes with DRAM
+>>>>
+>>>> Set dax kmem device node's tier to slower memory tier by assigning
+>>>> abstract distance to MEMTIER_ADISTANCE_PMEM. PMEM tier
+>>>> appears below the default memory tier in demotion order.
+>>>>
+>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>> ---
+>>>>  drivers/dax/kmem.c           |  9 +++++++++
+>>>>  include/linux/memory-tiers.h | 19 ++++++++++++++++++-
+>>>>  mm/memory-tiers.c            | 28 ++++++++++++++++------------
+>>>>  3 files changed, 43 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+>>>> index a37622060fff..6b0d5de9a3e9 100644
+>>>> --- a/drivers/dax/kmem.c
+>>>> +++ b/drivers/dax/kmem.c
+>>>> @@ -11,6 +11,7 @@
+>>>>  #include <linux/fs.h>
+>>>>  #include <linux/mm.h>
+>>>>  #include <linux/mman.h>
+>>>> +#include <linux/memory-tiers.h>
+>>>>  #include "dax-private.h"
+>>>>  #include "bus.h"
+>>>>  
+>>>> @@ -41,6 +42,12 @@ struct dax_kmem_data {
+>>>>  	struct resource *res[];
+>>>>  };
+>>>>  
+>>>> +static struct memory_dev_type default_pmem_type  = {
+>>>
+>>> Why is this named as default_pmem_type?  We will not change the memory
+>>> type of a node usually.
+>>>
+>>
+>> Any other suggestion? pmem_dev_type? 
+> 
+> Or dax_pmem_type?
+> 
+> DAX is used to enumerate the memory device.
+> 
+>>
+>>>> +	.adistance = MEMTIER_ADISTANCE_PMEM,
+>>>> +	.tier_sibiling = LIST_HEAD_INIT(default_pmem_type.tier_sibiling),
+>>>> +	.nodes  = NODE_MASK_NONE,
+>>>> +};
+>>>> +
+>>>>  static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>>  {
+>>>>  	struct device *dev = &dev_dax->dev;
+>>>> @@ -62,6 +69,8 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>>>>  		return -EINVAL;
+>>>>  	}
+>>>>  
+>>>> +	init_node_memory_type(numa_node, &default_pmem_type);
+>>>> +
+>>>
+>>> The memory hot-add below may fail.  So the error handling needs to be
+>>> added.
+>>>
+>>> And, it appears that the memory type and memory tier of a node may be
+>>> fully initialized here before NUMA hot-adding started.  So I suggest to
+>>> set node_memory_types[] here only.  And set memory_dev_type->nodes in
+>>> node hot-add callback.  I think there is the proper place to complete
+>>> the initialization.
+>>>
+>>> And, in theory dax/kmem.c can be unloaded.  So we need to clear
+>>> node_memory_types[] for nodes somewhere.
+>>>
+>>
+>> I guess by module exit we can be sure that all the memory managed
+>> by dax/kmem is hotplugged out. How about something like below?
+> 
+> Because we set node_memorty_types[] in dev_dax_kmem_probe(), it's
+> natural to clear it in dev_dax_kmem_remove().
+> 
 
-Signed-off-by: Eunhee Rho <eunhee83.rho@samsung.com>
----
- fs/f2fs/f2fs.h | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Most of required reset/clear is done as part of memory hotunplug. So
+if we did manage to successfully unplug the memory, everything except
+node_memory_types[node] should be reset. That makes the clear_node_memory_type
+the below. 
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index ecd870e5d6da..ca9354746eec 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -4496,12 +4496,7 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
- 	/* disallow direct IO if any of devices has unaligned blksize */
- 	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
- 		return true;
--	/*
--	 * for blkzoned device, fallback direct IO to buffered IO, so
--	 * all IOs can be serialized by log-structured write.
--	 */
--	if (f2fs_sb_has_blkzoned(sbi))
--		return true;
-+
- 	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
- 		if (block_unaligned_IO(inode, iocb, iter))
- 			return true;
--- 
-2.25.1
+void clear_node_memory_type(int node, struct memory_dev_type *memtype)
+{
+
+	mutex_lock(&memory_tier_lock);
+	/*
+	 * memory unplug did clear the node from the memtype and
+	 * dax/kem did initialize this node's memory type.
+	 */
+	if (!node_isset(node, memtype->nodes) && node_memory_types[node]  == memtype){
+		node_memory_types[node] = NULL;
+	}
+	mutex_unlock(&memory_tier_lock);
+}
+
+With the module unload, it is kind of force removing the usage of the specific memtype.
+Considering module unload will remove the usage of specific memtype from other parts
+of the kernel and we already do all the required reset in memory hot unplug, do we
+need to do the clear_node_memory_type above? 
+
+-aneesh
+
+
 

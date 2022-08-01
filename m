@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC592587288
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A4F587290
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiHAUxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S234642AbiHAUzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbiHAUxa (ORCPT
+        with ESMTP id S234629AbiHAUzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:53:30 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0DC32452;
-        Mon,  1 Aug 2022 13:53:29 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e132so10688984pgc.5;
-        Mon, 01 Aug 2022 13:53:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=DrRt3rmkEQEdaQFsMHB+bUVmGYUs4qBKiZq/F5t4yF8=;
-        b=DPXa5ugFMKmBlYHqheM6/Cm121QkqcXN7HtFQM7SxU6XFGoZbVCXj5v7mm+tlA8Xgv
-         KpjRpwcAIfAbyKcUODigw3bcYi3WCx2dp5c3GvcnxMGJq1rC4zhVLNBjF8Zn2K8YRJuH
-         iwdhD4s78oz9nCtvZ3HE3g7RK2xZVvY6rxPELylwTZnAOhEzUiJvIFvSL9/VPKy2Yrpz
-         lyyKs21XViNQDL+cPZPDfm7dcBg8uaiQPS5Xj1qHUmqpDwaSXKjSjX1HTmlmfFwxYKiz
-         kvBGpwzcUThr47iaOs6x2AlujAohYuFuQbMZRF3utLVIzCHKq5r2Ev5t2cB85rkp4K9+
-         ZrKw==
+        Mon, 1 Aug 2022 16:55:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3B7B165A9
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659387343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=If7o53X6NPJUO5QP9EKT7gVSaWaVmoWSrh7iKnn9p6w=;
+        b=YpUTMiQTp1t/rRFotX1+njk4xA/3YrjtWelRd0gzFEXKnBuxhRvf9Empz7k1XlPtzhpIMh
+        V5j5d7CWlSh5rZaNFKhFpefbuAixITmk0eqL3HaoswjhVL82jQiD4vAdQvvJTVsMIzHw4r
+        6mk/jMSJpje1tfaW9jZeBjmOPXgEdyM=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-logxaxFFNm-XxQcoCLel1w-1; Mon, 01 Aug 2022 16:55:42 -0400
+X-MC-Unique: logxaxFFNm-XxQcoCLel1w-1
+Received: by mail-io1-f70.google.com with SMTP id g22-20020a056602249600b0067caba4f24bso4370727ioe.4
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:55:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DrRt3rmkEQEdaQFsMHB+bUVmGYUs4qBKiZq/F5t4yF8=;
-        b=vafmFN2jDTnwzPly9cyuIn2W+dOc/XO7Ek1klLl0a1QES7sXbV6jKBF17tXJnMH2lN
-         XJxQzMPRDN3xSchv3TRTiTBnDbEZBBY56rSXByQwyg04EmYCSzTJlrylHrj6kWnqgojc
-         qaN5bjh+vZBMCA14rLztdBCniakiPmshzcrWH/Owipk1hpA4aXNOl4zhwsGV55uW4woX
-         oX3kVZ9rDoYJGVn8CPJhSaQs29vAzqbE55od1i4rpwMmJkMicecEy/tm3zwQdmtdt/fh
-         hcYHCwF7zDfo/k+ZJH2ByBWINfwtg4HichUnaWUkNJMhDhx9ELfHoy2JAYnklv2WS/BW
-         YL5A==
-X-Gm-Message-State: ACgBeo154hgw3Xdz3XcXf6nwUHIkv7i/pYj1mfxIenZ5LdBn4xGc8xyp
-        VLkKbItw4E4yIRNnAS9v4Bv5Exx+218=
-X-Google-Smtp-Source: AA6agR7GVr8r6zvwk7Ol6bNWawTHTSq6eMQTyAL5PDXZ6Warkjm3D4t8Juc7os34NcNXYEGTqHGqGw==
-X-Received: by 2002:a05:6a00:2386:b0:52d:7472:208 with SMTP id f6-20020a056a00238600b0052d74720208mr6565937pfc.8.1659387209254;
-        Mon, 01 Aug 2022 13:53:29 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x16-20020aa79410000000b0052d543b72cdsm3586319pfo.189.2022.08.01.13.53.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 13:53:28 -0700 (PDT)
-Message-ID: <dd216056-def1-695c-028b-47a2f45ae13c@gmail.com>
-Date:   Mon, 1 Aug 2022 13:53:26 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=If7o53X6NPJUO5QP9EKT7gVSaWaVmoWSrh7iKnn9p6w=;
+        b=49/u5idHS/XfG5/PezXIw8okqompaHpugrH/HLVP+H4dbbGWbhAVig/c+W89Kqfn8u
+         DYvq82QeP7ECjSIgvTbXQhYf1jZDa/iN3FK04JxbWB69ru0NtcT2x4GCYoFLe/pdOkIN
+         53TCPxcCCPvaMWUxKlxYdkr9UadWFYXPY7mHsMN/H1qfsO0qyCwV5przADFCIHg7pYdk
+         BO9yk9XlevQ5ePdkmM6osIcZSUbV+/SwmXigZP8jXFOTyNo1Z2xUCAqXFkjkZ2Ytp9Ws
+         wrtPWxmUomKwMquKKoc4XAs+iufIP0mYXUWqqibGuhURLfCxtDYRaeW3xPa4meZ5K4Vf
+         6fgA==
+X-Gm-Message-State: AJIora/f28X167LQIENkW2AQAXIy8oaqQjZljnsS5mPCJCb8NfC5SoxT
+        x8RuqU2EyqN+89Ye2muFOXJvvN2u+Nq/VfIwMw/wQ8c9r75ZwW3JwzIqU0u5efa6lsM/2s6Wbwp
+        gMkuOhlgmajTdnWj5mveaZTdy
+X-Received: by 2002:a05:6638:1602:b0:341:3e1f:d862 with SMTP id x2-20020a056638160200b003413e1fd862mr7064960jas.24.1659387342025;
+        Mon, 01 Aug 2022 13:55:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sjutKz5dBzIoacK7wfnyP8jIm+dI8xx7u0A1yEnZnR/R5aP1CIyq7RJKqoV8fdmri+4HklNw==
+X-Received: by 2002:a05:6638:1602:b0:341:3e1f:d862 with SMTP id x2-20020a056638160200b003413e1fd862mr7064952jas.24.1659387341842;
+        Mon, 01 Aug 2022 13:55:41 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x14-20020a92de0e000000b002dd0cf02f42sm5119805ilm.44.2022.08.01.13.55.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 13:55:41 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 14:55:40 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     <cohuck@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vfio/pci: fix the wrong word
+Message-ID: <20220801145540.5cb4460e.alex.williamson@redhat.com>
+In-Reply-To: <20220801013918.2520-1-liubo03@inspur.com>
+References: <20220801013918.2520-1-liubo03@inspur.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 00/65] 5.10.135-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220801114133.641770326@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 04:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.135 release.
-> There are 65 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.135-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sun, 31 Jul 2022 21:39:18 -0400
+Bo Liu <liubo03@inspur.com> wrote:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on BMIPS_GENERIC:
+> This patch fixes a wrong word in comment.
+> 
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_config.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+> index 97e5ade6efb3..442d3ba4122b 100644
+> --- a/drivers/vfio/pci/vfio_pci_config.c
+> +++ b/drivers/vfio/pci/vfio_pci_config.c
+> @@ -222,7 +222,7 @@ static int vfio_default_config_write(struct vfio_pci_core_device *vdev, int pos,
+>  		memcpy(vdev->vconfig + pos, &virt_val, count);
+>  	}
+>  
+> -	/* Non-virtualzed and writable bits go to hardware */
+> +	/* Non-virtualized and writable bits go to hardware */
+>  	if (write & ~virt) {
+>  		struct pci_dev *pdev = vdev->pdev;
+>  		__le32 phys_val = 0;
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Applied to vfio next branch for v5.20/v6.0.  Thanks,
+
+Alex
+

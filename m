@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E6C5866BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED315866C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiHAJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S230378AbiHAJQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiHAJPG (ORCPT
+        with ESMTP id S230356AbiHAJQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:15:06 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ADC1DA43
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:15:04 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id kb8so4600409ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 02:15:04 -0700 (PDT)
+        Mon, 1 Aug 2022 05:16:09 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3221928B;
+        Mon,  1 Aug 2022 02:16:07 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k8so11167782wrd.5;
+        Mon, 01 Aug 2022 02:16:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nB0ZRcjHZMk2tgYdKDIpiNEK8D7kZup7/hRGKDPsck4=;
-        b=TbF5k8lyU8bYSJIOuZfc6dx3Pu2cpOLaSdtPvHDtFTEGT1CpqKn5DYiTKT6YjXrbKa
-         pGP3AEGJSE59P+Tj6IxfhCLBkb75gBAyOXdEoMu8Uz9snItXHj05Bw/RkjDlcs4HApj7
-         /5+Pj0fLBpIfOQnm7ZT//8mWu1EAhkj9WP20V7Tf1wixsGdfiNvbYokNwL9GtKu1XzAk
-         CBkVoh2fCOgB6gniZH2xIcKxiv5KXGVJ54irhasRjnP9ucIOdmUkrwQLfhs6KkylN2Rw
-         hwgumJxPaiUKuiXVCHByZNqOmWe1bQOqK4Sa1mIvPAW8RBXneUoEN8ImnRpu7cY2an0V
-         RYdQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=Tja2EFPyR9iUy4sMrbNy5to4k8GjJT+Iqt2a+ErBpQA=;
+        b=RNjdWdTQnqA+kebxOhQ5HcdRkjHgz+MNIIvVy8F8eoO5eqhXky9IrC+7nP1kJuHcs6
+         1YweMHre0ez39ofM4CRIH/R5EyND3ZEecr0sWh/3zleGtFaAG0/srG8zjcI+q4paSIbS
+         OzrP6/x8OXFcxy69dDiMoEa5vHPZDmDAJkZMepyhdZFNM0Ab6kQoxIcbZx+MpcVRNIwm
+         OwISfMLblyJbhC36kOWBsGkFhrcVyT04xUEMfZLgtZDici/hL6qMhV+kPAJfT8Vd2c9+
+         sSFwxXhsmRFm7AEDFDheSHEBEYtiAl90IQlMpxiN3jldTY2PNO4HwkPEVUCuQTOWEVQr
+         B2NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nB0ZRcjHZMk2tgYdKDIpiNEK8D7kZup7/hRGKDPsck4=;
-        b=yFNhi91vVphG2e95fECECSoGNs1cjs8xTiOPCdlwdtyzjGaPyiPhjBDCVn58A4Eekw
-         Ga6WjAUwj/BZ8dDyg29wFn3M9aR6wvlA6xPLKbIHXdgViuVQNECHrIwLTTal7AMtvrMj
-         Ux84b+LCziusAZpD1RErgkHf3zZ/dBdfe9FMyTYOD0PZI0nKFgaXm4Ve/oDJIeM7bHEb
-         MHi8T3MfO8ePGuX0KsiZocWcakoYUlLD0ZQR8rXugXrcRe4XJ8SMf/OICQMyEruqlIg9
-         iU6xHvOLoQKsqXnRdKc7upqxQI8Gok59lVO8F8CO3OlkptVLe5J44t25fTY9v9fz/DXq
-         aKvQ==
-X-Gm-Message-State: AJIora984Geh+HXDWwT+at4tJpad5YCcWNKFAGwQnjh3LY1KWxwdJvXO
-        zmy4x6GIjNkXcmHgoYZ06PrQ9dGwwKwVXeBtTiM=
-X-Google-Smtp-Source: AGRyM1tdqEZNvEHN17gL0IdChWTy1N9Y3rhfLEmxfsEOT1JID0/U8cF+R1tUlSDF+kQdnPrj2/EPqtjLnReIkf5/h48=
-X-Received: by 2002:a17:907:c06:b0:701:eb60:ded with SMTP id
- ga6-20020a1709070c0600b00701eb600dedmr12205508ejc.178.1659345303440; Mon, 01
- Aug 2022 02:15:03 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=Tja2EFPyR9iUy4sMrbNy5to4k8GjJT+Iqt2a+ErBpQA=;
+        b=fVyYYGEedq9BrJOIjxMdfU08FJaiA/qP5jgYY34h1ipih+BW/h4Qx1sGJ0QZ5DQT/p
+         6h3l4v9G3kK1Xfo1qlTniVhOfzH9H1PnO2GajtyBitLlUZ9FkkQ3VNHxERlR715Nsnw3
+         gGJSrm6rXmODip0DLnQwDMr4tIqZmoMczugmM1rXOsXxLHcb/0DMUEwhhM2p+kyD8P1T
+         v55wwiVdR4YWbbS2yXrawcEquML7Nm9uHrXpMpAFKn1/q9tx11emNy99NcFexXhBeMka
+         e8pocBk29ipxaVKTnkmNY5kKb70p3Xkq7kdhKGV7IiVNvKKpymr5qLu1vdharBhqIT27
+         T59g==
+X-Gm-Message-State: ACgBeo393Y68/cBrxkr6P7vuWweWfSJN7IAo7NKmy/VvDybgjFxWocRI
+        i6ICEYm8GklUxHE6T4KY4ew=
+X-Google-Smtp-Source: AA6agR5jObBw61r1YAVTh8d/hD+OVUCxxp2UOweoA/p2sxcm1ChkdM6elCJIxvT5KlVuLtdb6qB5LA==
+X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id v18-20020a5d6b12000000b0021f1568c7e1mr8145250wrw.532.1659345366272;
+        Mon, 01 Aug 2022 02:16:06 -0700 (PDT)
+Received: from eldamar (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id bh16-20020a05600c3d1000b003a326ba4e99sm14500266wmb.34.2022.08.01.02.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 02:16:05 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [RESEND PATCH] Documentation: ABI: Mention retbleed vulnerability info file for sysfs
+Date:   Mon,  1 Aug 2022 11:15:30 +0200
+Message-Id: <20220801091529.325327-1-carnil@debian.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220731201258.11262-1-andriy.shevchenko@linux.intel.com> <9b9abdf0-7cd5-df51-adbf-2225291f0dd2@redhat.com>
-In-Reply-To: <9b9abdf0-7cd5-df51-adbf-2225291f0dd2@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 1 Aug 2022 11:14:26 +0200
-Message-ID: <CAHp75VduSG=BerPJo9phXJKWa-yu_uXbP+ifkax=3FUTE7et+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 01/10] mfd: intel_soc_pmic: Fix an error handling path
- in intel_soc_pmic_i2c_probe()
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 10:43 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 7/31/22 22:12, Andy Shevchenko wrote:
+While reporting for the AMD retbleed vulnerability was added in
+6b80b59b3555 ("x86/bugs: Report AMD retbleed vulnerability") the new
+sysfs file was not mentioned so far in the ABI documentation for
+sysfs-devices-system-cpu.
 
-...
+Fixes: 6b80b59b3555 ("x86/bugs: Report AMD retbleed vulnerability")
+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+---
+ Documentation/ABI/testing/sysfs-devices-system-cpu | 1 +
+ 1 file changed, 1 insertion(+)
 
-> >  err_del_irq_chip:
-> > +     pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
-> >       regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
-> >       return ret;
->
-> Note alternatively we could just move the pwm_add_table() to just before the "return 0",
-> there is no strict ordering between adding the mfd devices and the pwm_add_table()
-> (the pwm device only becomes available after the pwm-driver has bound to the mfd
-> instantiated platform device which happens later).
->
-> IMHO that would be a bit cleaner.
-
-Good suggestion!
-
-Since I need to send a v3 anyway, I will fix this accordingly.
-
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index bcc974d276dc..3cda940108f6 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -527,6 +527,7 @@ What:		/sys/devices/system/cpu/vulnerabilities
+ 		/sys/devices/system/cpu/vulnerabilities/tsx_async_abort
+ 		/sys/devices/system/cpu/vulnerabilities/itlb_multihit
+ 		/sys/devices/system/cpu/vulnerabilities/mmio_stale_data
++		/sys/devices/system/cpu/vulnerabilities/retbleed
+ Date:		January 2018
+ Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+ Description:	Information about CPU vulnerabilities
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.1
+

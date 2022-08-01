@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B05862F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EC35862F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbiHADFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 23:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S239646AbiHADFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 23:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239502AbiHADFY (ORCPT
+        with ESMTP id S239509AbiHADFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 23:05:24 -0400
+        Sun, 31 Jul 2022 23:05:25 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5070F21AA;
-        Sun, 31 Jul 2022 20:05:21 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id B345832007D7;
-        Sun, 31 Jul 2022 23:05:19 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E852186;
+        Sun, 31 Jul 2022 20:05:24 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 8ABBC32007CF;
+        Sun, 31 Jul 2022 23:05:22 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 31 Jul 2022 23:05:20 -0400
+  by compute2.internal (MEProxy); Sun, 31 Jul 2022 23:05:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1659323119; x=1659409519; bh=9D
-        NTC2mZK/vx4J+nMP9mcn6k409H3HxgWzx4BXzvEGc=; b=py/87n3iVOI+rcmVUm
-        MaLITFggHr8YiskCeRPMyKfZeJEJGnYlEATdpxq4gFGFg1ciNozM3sQHWKCoSMVV
-        oH+lJBw4mTp+YDJGUhvDpRCygkIthJww92Z/L3m+Yx5nVIS9/e/89LfOStJ3sEZs
-        CvwKId2qKB4hL0Cit2sZwbCauqlaZNDGLAPR1LIyYKVIMqcEVfu4adRXUZWYsoE0
-        xyBxkTcCU2KndbOt/c40KTLZtdjQXYaTtxbmGcz71RJn9S5DXPa7JkjNXpElfSAm
-        IA4h57YKmzyVD7XnJf19BIy1EPcSxCdRM/6kDCsIsFNxLz1uoN7xHJnfsuXuGaWD
-        PUeg==
+        :subject:subject:to:to; s=fm1; t=1659323122; x=1659409522; bh=7E
+        qXmtvRWN3harpfqilHqd1KdE7zLHtd34jbY/6w4ZE=; b=eFSIgj/zUkcefTKGuO
+        Y/zxVkUVTYypNyf6bjSKOr6tSKuNx24GxMXPibu9Uz09eoAqMst1fxYC/nYe36UX
+        gPmiD3pzCQ92ndnwv0NwJGZtWLOptLQl+wwLd866zzKIUuPwfBabnhdX3YlXbmuq
+        nagR+49Mwlznz+R/lFjqwaxoTxzJdFvAAGhdIQTzCQJGa5q2Xx4Os6bd4Zoe3n9G
+        BpZRXOeZ1B20nT/+9+uJmTeTO8L2bdUV2YRlKem9PXKJySmOaNyA3Cnlw2GjecYG
+        TmZICynbV61Pqb/q4FGoidEHh0OHYQkzVFPJ/Cl7n4DaJxBDGTyq88q15C9TwWtU
+        p9Hg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659323119; x=1659409519; bh=9DNTC2mZK/vx4
-        J+nMP9mcn6k409H3HxgWzx4BXzvEGc=; b=IZTDjTi9cjjt+BKL+kIUqXmHXdJVg
-        OVrE4VDWvnsMaQhk9bJ2zFTAQQSpI9JufzIhWzJ3Iej2hfwFaJ6nGFEq15sEDl0U
-        Y3IGU5sq9wmROaLKyMn7y1hXubuMV+KgN2Ob89/D6Dsg77NUWfNLOGZ+sfqIRxbx
-        mUZZlnojqaThRkF4Mah1RkgruqzJV9AlnV/039a1QDlMT93JDOg1KEHyykauUmki
-        p+iLIOIw/veE4Xm6leEEDRd7JYIRkMgZUTXBlqybUq3EuLOpMFcMIcT3Wlom6wOV
-        8JbVZBmEp0aSdW+x25WOa2aQABcGHpC7JQ+ETPWEZ1SbM4dtqomvgDjZw==
-X-ME-Sender: <xms:70LnYtX-lNLl1F42UDEbw-5jqzl5uG6wlqwguFxmTJ4nxGjRVB6_qg>
-    <xme:70LnYtn6tXDTE-DGquswazJjvzx_qp02POgSHoGqRGHnmim2BAN_RREWodKVLBTHV
-    ngDAVCUw_2JOmlKGg>
-X-ME-Received: <xmr:70LnYpYcR-Ks9h4DLRKn1PRKGEC4BFfipJs7gjXuUIyq5GIoSFPYPf7BKrZwUJPG7rQmN07AwQtoi3sLQq-wBGkqoBFz0Fb4PGCIjWbcQPaFR3oLft03ctpm4wbgOMRNrWuYxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddgheejucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm3; t=1659323122; x=1659409522; bh=7EqXmtvRWN3ha
+        rpfqilHqd1KdE7zLHtd34jbY/6w4ZE=; b=DltB057GwG0zCnuEKMZb7mkjwmRD8
+        mMYLgCHkGFOqq7K1Z3N0uyKQh6GWlZpyEO6mMBie5KEvc1TvHL2UgGVYta80Qrwf
+        HfhjjK5ARnxl1uVxhH2nI4nTbqLH3vFZlcGcD09VtKnyuIyh/3Po0N53v22GA3FF
+        R795aV2L9YSvcnaPX0KsoP/bD4XAxygUfzfOdlRPZ6nZaTbmHYwhX9srFcnAQ9oW
+        ltaewQHsm+tSwy8dH8nw3zeVv1gJhouduU/Ts0FTXTnmaxZz0I90SKIaBna1Bi1z
+        EiBK0vDQlAyXXW44BUezcelcPCzxuYduU0ZQxeEGgBCxrakzLg450DefA==
+X-ME-Sender: <xms:8ULnYvjuLrldCLQctICYn2YYKrQMqQ7RCet0yuT1-SSjAMn6FPx2ZA>
+    <xme:8ULnYsCrRKgk96Hshgi_qJ-ZF8zhnW1oYJmZ046tvZ9xOaV0VE8rrPbaFRvcTmMxO
+    DhKTpr5aVFk6fySNw>
+X-ME-Received: <xmr:8ULnYvH46yPTlpY_HDQVya6e8cDDIXMcSc7THoe8_3G8Kk83lwh9OEiY8pVgePeDagInaKI6zZ0aPHU4cZ7kDE96-u3IpIbW52kMocKsILKMyPQR2T59lV8CX0dewr-eRLGJwQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddgheekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddgheejucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:70LnYgVcIe-dg9d-qf9LnHkGSapk9J-GiVO122EGm576QaUXCQUALw>
-    <xmx:70LnYnlwwDBJ8_-nC4bfP43zYtYQmj95fCRez2OoEADHf2zrOsW_Xw>
-    <xmx:70LnYtc1b8W5u_yrU55Nczk9pRk1deI-i6Ha9MBDT3W9ADosNNwatA>
-    <xmx:70LnYldsqkMMCnvSSPSYmvPD1kGweoPxYzg-x7-5agqI5fvmjgQuWw>
+X-ME-Proxy: <xmx:8ULnYsTwMA6m9bQ8Rg4WkmvdwezE1pAAovFuNhYOAdn-IEnHfaMahw>
+    <xmx:8ULnYsxfGixJ8BLkowGRkLcccmw5czha30a4ZRposmOhNmX7m0gP0g>
+    <xmx:8ULnYi6uQjIiXxw7jwf1tKdW_Y4ip4iGj_8hzymB3ONEj1qevD1yng>
+    <xmx:8kLnYm6ouLO122iFBupxlwz5yksr3T0qZ84OOCXlg3ox7VWxVF2YJw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 31 Jul 2022 23:05:18 -0400 (EDT)
+ 31 Jul 2022 23:05:21 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -74,9 +74,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH 2/9] soc: sunxi: sram: Actually claim SRAM regions
-Date:   Sun, 31 Jul 2022 22:05:02 -0500
-Message-Id: <20220801030509.21966-3-samuel@sholland.org>
+Subject: [PATCH 3/9] soc: sunxi: sram: Prevent the driver from being unbound
+Date:   Sun, 31 Jul 2022 22:05:03 -0500
+Message-Id: <20220801030509.21966-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220801030509.21966-1-samuel@sholland.org>
 References: <20220801030509.21966-1-samuel@sholland.org>
@@ -91,29 +91,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sunxi_sram_claim() checks the sram_desc->claimed flag before updating
-the register, with the intent that only one device can claim a region.
-However, this was ineffective because the flag was never set.
+This driver exports a regmap tied to the platform device (as opposed to
+a syscon, which exports a regmap tied to the OF node). Because of this,
+the driver can never be unbound, as that would destroy the regmap. Use
+builtin_platform_driver_probe() to enforce this limitation.
 
-Fixes: 4af34b572a85 ("drivers: soc: sunxi: Introduce SoC driver to map SRAMs")
+Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on A64")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/soc/sunxi/sunxi_sram.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/sunxi/sunxi_sram.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index a8f3876963a0..f3d3f9259df9 100644
+index f3d3f9259df9..a858a37fcdd4 100644
 --- a/drivers/soc/sunxi/sunxi_sram.c
 +++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -254,6 +254,7 @@ int sunxi_sram_claim(struct device *dev)
- 	writel(val | ((device << sram_data->offset) & mask),
- 	       base + sram_data->reg);
+@@ -330,7 +330,7 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
+ 	.writeable_reg	= sunxi_sram_regmap_accessible_reg,
+ };
  
-+	sram_desc->claimed = true;
- 	spin_unlock(&sram_lock);
+-static int sunxi_sram_probe(struct platform_device *pdev)
++static int __init sunxi_sram_probe(struct platform_device *pdev)
+ {
+ 	struct dentry *d;
+ 	struct regmap *emac_clock;
+@@ -410,9 +410,8 @@ static struct platform_driver sunxi_sram_driver = {
+ 		.name		= "sunxi-sram",
+ 		.of_match_table	= sunxi_sram_dt_match,
+ 	},
+-	.probe	= sunxi_sram_probe,
+ };
+-module_platform_driver(sunxi_sram_driver);
++builtin_platform_driver_probe(sunxi_sram_driver, sunxi_sram_probe);
  
- 	return 0;
+ MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
+ MODULE_DESCRIPTION("Allwinner sunXi SRAM Controller Driver");
 -- 
 2.35.1
 

@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E881858723E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4A058724A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiHAUSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S233661AbiHAUYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbiHAUSp (ORCPT
+        with ESMTP id S232882AbiHAUYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:18:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8AE2BC8;
-        Mon,  1 Aug 2022 13:18:43 -0700 (PDT)
+        Mon, 1 Aug 2022 16:24:47 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FB93ED4F;
+        Mon,  1 Aug 2022 13:24:45 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id y13so8435835ejp.13;
+        Mon, 01 Aug 2022 13:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659385123; x=1690921123;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3q4LLeG/W8kgmZyTfF/ii6+XJjoOenvpsCafYt2ua74=;
-  b=nFPmbiGeH6/twR/qmxp8u5vD3RTFA2aPxmVi8decj5b2U5VzH9GdUUv5
-   kz/DT+DCL68Dj8mNMIiI/Ju+6tXgyREKC6WXKqqGAlQYd3Tuyfy9ILVX2
-   +8SYKEbX6mhVE2Q/52yojWU9CtaY88j+I769wnUvkGjtijb1a7Fl0xaO0
-   c=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Aug 2022 13:18:43 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 13:18:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 1 Aug 2022 13:18:42 -0700
-Received: from [10.111.174.48] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
- 13:18:38 -0700
-Message-ID: <488f0db0-6fa9-8a66-f055-f2cc57470a47@quicinc.com>
-Date:   Mon, 1 Aug 2022 13:18:35 -0700
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=VGHWLnPOuI0iW4HF+EMCDJDCZmTKff3mWYUEzLkNfiw=;
+        b=dAzPq79++vwSq3w9xA+4dohDcZvqi0e0ZQ0sY20qPIv0KLftLe3e63OzidprZpDuoI
+         dUcHn7uiB6ShtYIQEPH3oA23MVDDdQc/IBZUvm+nLbF8YFnVOdvokA/6adhir8ew94VV
+         jDnADahwtP6A6hkTmXRV0krv2F+5BjZ04OB12O1eB8CqKY4ebhE2Kz4CJTajnzEBIQVe
+         QYUcHbGs2Dw2OG8HsnIy7x/e9DC2Z6IVTYVomM5jdVsgUeXjHI/8mcJ+22uYBuQBIQaW
+         cHcpGZp1pKi9mFeyMF1yuAFgwasQMxksaltwAlZc8QXa29StcOgY+ok9GDdvczOC8pej
+         m6fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=VGHWLnPOuI0iW4HF+EMCDJDCZmTKff3mWYUEzLkNfiw=;
+        b=DPcbn64dLvy3IhLUDK59FIUKJMC3rM1umU6ElIeGrdNdsNhUfoo4KK9au73+D8ArrH
+         nAUqwWZiDqS7HrNDncCa19Vwm7vB6S/G/i0ZqLJlLpSvlOPr4FKuPDErPdvFXmLKunnJ
+         +iHv8tx429P5JWnb8cav9rM+/AgHngvB2x1mLuK8XuuBQ+C70RwIUmHvIf6NQw/EN7N/
+         Sy/LL9R8OHls4PyKLxo4rZBw7puC7uyhvFUJLhqybUMFigvcaTM1Xtf21XIcIb1wDGPj
+         1ByMe6Pe2ew7SerCtSmAJbhyix2agnE/S8UMGH57OCRO6peREy+bKZ/7epdx50Rqip29
+         2wRA==
+X-Gm-Message-State: AJIora/yzCshTgfDxIozmIOFZAqRXJ3WU8aNBGVCMigZONxRWoEuLg1D
+        h20QmlHZ/sNqHrFmq4sRY5U=
+X-Google-Smtp-Source: AGRyM1t3kp3muaqngGlm0Nz2Rmtd9ZP/PZxNvexVuNje+xgIsmXZMoTPLIjVHEmigwBTkt2r3eWYUw==
+X-Received: by 2002:a17:907:2d90:b0:72f:5bb:1f32 with SMTP id gt16-20020a1709072d9000b0072f05bb1f32mr14043465ejc.758.1659385483943;
+        Mon, 01 Aug 2022 13:24:43 -0700 (PDT)
+Received: from krava ([83.240.62.89])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170906301300b006fef0c7072esm5579555ejz.144.2022.08.01.13.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 13:24:43 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 1 Aug 2022 22:24:41 +0200
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Faust <david.faust@oracle.com>
+Subject: Re: [PATCH] libbpf: skip empty sections in
+ bpf_object__init_global_data_maps
+Message-ID: <Yug2iYQyd0TNlnHW@krava>
+References: <20220731232649.4668-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v2] drm/msm/dp: delete
- DP_RECOVERED_CLOCK_OUT_EN to fix tps4
-Content-Language: en-US
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <quic_aravindh@quicinc.com>, <freedreno@lists.freedesktop.org>
-References: <1659384830-9909-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1659384830-9909-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731232649.4668-1-james.hilliard1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/1/2022 1:13 PM, Kuogee Hsieh wrote:
-> Data Symbols scrambled is required for tps4 at link training 2.
-> Therefore SCRAMBLING_DISABLE bit should not be set for tps4 to
-> work.
-> RECOVERED_CLOCK_OUT_EN is for enable simple EYE test for jitter
-> measurement with minimal equipment for embedded applications purpose
-> and is not required to be set during normal operation.
-> Current implementation always have RECOVERED_CLOCK_OUT_EN bit set
-> which cause SCRAMBLING_DISABLE bit wrongly set at tps4 which prevent
-> tps4 from working.
-> This patch delete setting RECOVERED_CLOCK_OUT_EN to fix SCRAMBLING_DISABLE
-> be wrongly set at tps4.
+On Sun, Jul 31, 2022 at 05:26:49PM -0600, James Hilliard wrote:
+> The GNU assembler generates an empty .bss section. This is a well
+> established behavior in GAS that happens in all supported targets.
 > 
-> Changes in v2:
-> -- fix Fixes tag
+> The LLVM assembler doesn't generate an empty .bss section.
 > 
-> Fixes: c943b4948b58 ("drm/msm/dp: add displayPort driver support")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> bpftool chokes on the empty .bss section.
+> 
+> Additionally in bpf_object__elf_collect the sec_desc->data is not
+> initialized when a section is not recognized. In this case, this
+> happens with .comment.
+> 
+> So we must check that sec_desc->data is initialized before checking
+> if the size is 0.
 
-This is a good catch !
+oops David send same change but I asked him to move the check
+to bpf_object__elf_collect [1] .. but with your explanation this
+fix actualy looks fine to me
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+jirka
 
+
+[1] https://lore.kernel.org/bpf/YuKaFiZ+ksB5f0Ye@krava/
+
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/lib/bpf/libbpf.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index ab6aa13..013ca02 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1214,7 +1214,7 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
->   	if (ret)
->   		return ret;
->   
-> -	dp_ctrl_train_pattern_set(ctrl, pattern | DP_RECOVERED_CLOCK_OUT_EN);
-> +	dp_ctrl_train_pattern_set(ctrl, pattern);
->   
->   	for (tries = 0; tries <= maximum_retries; tries++) {
->   		drm_dp_link_train_channel_eq_delay(ctrl->aux, ctrl->panel->dpcd);
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 50d41815f431..77e3797cf75a 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -1642,6 +1642,10 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+>  	for (sec_idx = 1; sec_idx < obj->efile.sec_cnt; sec_idx++) {
+>  		sec_desc = &obj->efile.secs[sec_idx];
+>  
+> +		/* Skip recognized sections with size 0. */
+> +		if (sec_desc->data && sec_desc->data->d_size == 0)
+> +			continue;
+> +
+>  		switch (sec_desc->sec_type) {
+>  		case SEC_DATA:
+>  			sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
+> -- 
+> 2.34.1
+> 

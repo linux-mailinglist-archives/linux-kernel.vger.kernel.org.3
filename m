@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9F1586FEE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A905B586FF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiHAR5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S233914AbiHAR6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiHARzJ (ORCPT
+        with ESMTP id S234139AbiHAR5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:55:09 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7135C33434
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:55:00 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id w15so18452900lft.11
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0dGf0wQlT5nVscla096RlUxod41IYCPpARZuBEndXgw=;
-        b=T6Yc3nNefe3TyXG0Vbq3cLSHdoLWMnMoLC1rCsAkOgbXk6qxf5NxTtsWLdlh+h8h+Y
-         zy2IwEG5thASc8/tliCDThGrGmtCTEdm8IXEBOHigiClrMlsAzwm83kX6UzZ765pOx1e
-         OclAzmznuvZ754z0Ve0hY1GPZHIA1OlVcjqd1pdshqzyg6rGVUId1LPHhOz3KeyYZFRc
-         t/OHO6Ha6Awj4xVLh6Z29b7VRFpOctOrXQjlHsrwl4Qf09vAHD3rLXe3d64GSOjqOUXp
-         pxqPLGY1Wx82yKUx05QB3V6cu+EFy6fNjGcOecN3bN3HXJRhuRdVTt0iyNgPggTgQqgE
-         58kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0dGf0wQlT5nVscla096RlUxod41IYCPpARZuBEndXgw=;
-        b=Rn8q+RCLPJGw/rmTMFL75eKQqA2ozlrAttJbW1GGTRI4Io1tJfGF7sSskUX5qgcOAG
-         4VX8YWlWyYWTovR00dgPK4YV1a1lXOFdyAtFz3azkcZw2HdQEZEnR8ZABqVA9mFcbJ/x
-         q2tz0nFWcRPCYT1M4TxyIhG8xaYaKeMzYdLPXWUCNlVd/1Q1JIORp4/4i3fBqS5dDpbz
-         iFO6urnfMmFf36BA5SKkoSfB3t14X7Wjx67X9sdKbah4YgJHL+TVSCXxkImUr5MErK6H
-         oaXT6HG27ma7aD+cvgLxVz3iBof23IeRwbRheawdjNzmRE88ZVW+9Pj7jybqZ86JssT+
-         xnIw==
-X-Gm-Message-State: AJIora/ecQW4s5dPkqoK7VaUJxy3y3aAR5iSPDxwZ5v3NMrDtHGArDEU
-        iroL8oEHaWa3HMrMssjvWBzwYw==
-X-Google-Smtp-Source: AGRyM1sQPJdZYAWXfwoVj4Hz7Z7Cwylr4YwG9UFSXMVERZh0c/cbramPGiv0H/4T1qlznG/Ilz5Rxw==
-X-Received: by 2002:ac2:4a8f:0:b0:48a:9705:c81d with SMTP id l15-20020ac24a8f000000b0048a9705c81dmr5760708lfp.63.1659376498624;
-        Mon, 01 Aug 2022 10:54:58 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id bj38-20020a2eaaa6000000b0025d64453f4dsm1654422ljb.122.2022.08.01.10.54.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 10:54:57 -0700 (PDT)
-Message-ID: <428fe2c1-3c70-5ae8-efcb-1e4a0426a972@linaro.org>
-Date:   Mon, 1 Aug 2022 19:54:54 +0200
+        Mon, 1 Aug 2022 13:57:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55738B1DC;
+        Mon,  1 Aug 2022 10:56:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF1561160;
+        Mon,  1 Aug 2022 17:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2A0BC433C1;
+        Mon,  1 Aug 2022 17:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659376583;
+        bh=sgF7Ila5Go50G/Z0YwLeetdlAZaIQSPpQ4eGRIrjUfQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eQTYpYq2X9p4/bUFs31elGwHf3bxE9a0XO/ulP0WVFoHMvP3pBDsTMQejLTPyc2N3
+         U0fHcZyyUzs/hhoGl63QeTyCgHAAWQZe5PVcW3pUX6PHoCVWvrN7qmCR175zqC2h5i
+         6yEdsEwEqFKRGuM4hKs3bzMgYHLh3cS7AmlMpItHucbTG+v8TztGV6kKSsW1wrdAoz
+         jDJBZwDTV9oi3kQt+hKPYgo9brBELv4brGpE+pT9HyEmJI2p/7/4DShfeKyk/IagAY
+         VirBQTb9SHpfzfBi8+biYsCRl6uS+abxZJMAkSqhtHs9YjBiHqk5FiyIi0wd7aKtOp
+         VqQoQ40Kai+IA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5DE0940736; Mon,  1 Aug 2022 14:56:20 -0300 (-03)
+Date:   Mon, 1 Aug 2022 14:56:20 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf symbol: Fail to read phdr workaround
+Message-ID: <YugTxE/O0SmTb9FI@kernel.org>
+References: <20220731164923.691193-1-irogers@google.com>
+ <20220801015259.GA101027@leoy-ThinkPad-X240s>
+ <CAP-5=fVSjCQ4jeAeyP5THnQVyXDpKd6Ob33C7PDwFB_6+YSXuw@mail.gmail.com>
+ <YufJP5YqeEBM51HL@kernel.org>
+ <20220801132511.GC73228@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH net-next] dt-bindings: net: dsa: mediatek,mt7530:
- completely rework binding
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220726122406.31043-1-arinc.unal@arinc9.com>
- <a8c778db-f52c-45cb-c671-556b24f3cb46@linaro.org>
- <a2dd1ce2-a23e-8894-5ef4-b73ef0dad89d@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a2dd1ce2-a23e-8894-5ef4-b73ef0dad89d@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801132511.GC73228@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,31 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/07/2022 10:24, Arınç ÜNAL wrote:
-> Hi Krzysztof,
+Em Mon, Aug 01, 2022 at 09:25:11PM +0800, Leo Yan escreveu:
+> On Mon, Aug 01, 2022 at 09:38:23AM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Sun, Jul 31, 2022 at 11:19:15PM -0700, Ian Rogers escreveu:
+> > > On Sun, Jul 31, 2022, 6:53 PM Leo Yan <leo.yan@linaro.org> wrote:
+> > > 
+> > > > On Sun, Jul 31, 2022 at 09:49:23AM -0700, Ian Rogers wrote:
+> > > > > The perf jvmti agent doesn't create program headers, in this case
+> > > > > fallback on section headers as happened previously.
+> > > > >
+> > > > > Fixes: 882528d2e776 ("perf symbol: Skip symbols if SHF_ALLOC flag is not
+> > > > set")
+> > > >
+> > > > It's good to change fix tag as:
+> > > > Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
+> > > >
+> > > 
+> > > Doh! I was rushing this morning. Thanks for catching and reviewing!
+> > 
+> > I made the adjustments and added a note with the repro, to help in the
+> > future when trying to test this area.
 > 
-> On 27.07.2022 13:29, Krzysztof Kozlowski wrote:
->> On 26/07/2022 14:24, Arınç ÜNAL wrote:
->>> Completely rework the binding for MediaTek MT7530 and MT7531 switches.
->>
->> Rules are the same for schema as for driver - one patch, one thing. You
->> mix here trivial style changes (removal of quotes) with functional stuff.
->>
->> Patch is unreviewable, so it must be split.
+> Thanks, Arnaldo.
 > 
-> Thank you. I'm going to split it this way:
-> - Trivial changes; fix title and property descriptions, remove quotes, 
-> add me as maintainer, etc.
-> - Update binding description
-> - Update json-schema for compatible devices
-> - Update examples
+> > I also think we could have something like a 'perf test' mode where, when
+> > asked to, it would enable tests that involve downloading such files to
+> > perform tests, such as this dacapo benchmark, and then would test if the
+> > output matches expectations.
 > 
-> Let me know if you have any objections.
+> I will add a testing based on the steps, alongside with the discussed
+> testing for data symbols.  Will share out after get ready.
 
+Great! Thanks in advance,
 
-Depends what are these "udpates". One logical change = one patch. Adding
-compatible in one patch and then adding example for it, is not correct.
-
-
-Best regards,
-Krzysztof
+- Arnaldo

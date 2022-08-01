@@ -2,105 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D4B5867E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340D75867E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiHALHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S231322AbiHALIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiHALHG (ORCPT
+        with ESMTP id S229945AbiHALIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:07:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5C0225EB9
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:07:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 342D6139F;
-        Mon,  1 Aug 2022 04:07:04 -0700 (PDT)
-Received: from [10.57.10.23] (unknown [10.57.10.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4ECE63F67D;
-        Mon,  1 Aug 2022 04:07:02 -0700 (PDT)
-Message-ID: <71774d67-6c7f-ea42-2911-a3eb1955777d@arm.com>
-Date:   Mon, 1 Aug 2022 12:06:56 +0100
+        Mon, 1 Aug 2022 07:08:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EAA25EB9;
+        Mon,  1 Aug 2022 04:08:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69D6FB81015;
+        Mon,  1 Aug 2022 11:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A10DC433D7;
+        Mon,  1 Aug 2022 11:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659352079;
+        bh=yhvvbg6GF1sEgC1dFsVO2YGfdbo91aaJfzHhGKT/T5Q=;
+        h=Subject:From:To:Cc:Date:From;
+        b=foRyyHoOA69mTCsjGKUbto7dyt3Th2qzXXge69tlrsEBR/XGz3wR50NoJVIcENggW
+         4y7Zz83UF6L+gtRNXh3V6QiVyI8s++gSJvPYrXwnw7LW/VaiXDYuH36Z07/ui0Ae2v
+         H/iKWQEtflQHlofqFCD4uDTdCtP15rWd8/b58h4QqFip1CuI2xmACrr7zghz262f3L
+         BbLLYmX27PzN64Y6uUtfzMi2agrIcWGpy0q3JMqzFJkTloMcC7HRs/p1HWBGuco5c5
+         hZfDCBdL5wxZbQpbqvKfEVGLSixstwSCPqa2lC+rCHmJioBhcLxcuD34w0A+RWz2jf
+         VnUCF5FAB5WSw==
+Message-ID: <6dfd152d3643c568b928a96d334b50754cd752d4.camel@kernel.org>
+Subject: [GIT PULL] file locking changes for v6.0
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 01 Aug 2022 07:07:57 -0400
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-JJ/ZILuXfnDP7WXpxKjl"
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [POSSIBLE BUG] iommu/io-pgtable-arm: possible dereferencing of
- NULL pointer
-Content-Language: en-GB
-To:     Will Deacon <will@kernel.org>,
-        Subkhankulov Rustam <subkhankulov@ispras.ru>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-References: <28df50012344fb1c925a7ceaf55ae400152ffb48.camel@ispras.ru>
- <20220719173610.GA14526@willie-the-truck>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220719173610.GA14526@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-19 18:36, Will Deacon wrote:
-> On Mon, Jul 18, 2022 at 12:20:06PM +0300, Subkhankulov Rustam wrote:
->> Version: 5-19-rc6
->>
->> In function '__arm_lpae_alloc_pages' pointer 'dev' is compared with
->> NULL at [drivers/iommu/io-pgtable-arm.c: 203]. This means that the
->> pointer can be NULL.
->>
->> -----------------------------------------------------------------------
->> 203 	p = alloc_pages_node(dev ? dev_to_node(dev) : NUMA_NO_NODE,
->> 204 			     gfp | __GFP_ZERO, order);
->> -----------------------------------------------------------------------
->>
->> Then, if cfg->coherent_walk == 0 at [drivers/iommu/io-pgtable-arm.c:
->> 209], function 'dma_map_single', which is defined as
->> 'dma_map_single_attrs', is called and pointer dev is passed as
->> first parameter.
->>
->> -----------------------------------------------------------------------
->> 209 	if (!cfg->coherent_walk) {
->> 208 		dma = dma_map_single(dev, pages, size, DMA_TO_DEVICE);
->> -----------------------------------------------------------------------
->>
->> Therefore, pointer 'dev' passed to function 'dev_driver_string'
->> in macro 'dev_WARN_ONCE' at [include/linux/dma-mapping.h: 326],
->> where it is dereferenced at [drivers/base/core.c: 2091].
->>
->> -----------------------------------------------------------------------
->> 2083	const char *dev_driver_string(const struct device *dev)
->> 2084	{
->> 2085		struct device_driver *drv;
->> 2086
->> ---
->> 2091		drv = READ_ONCE(dev->driver);
->> -----------------------------------------------------------------------
->>
->> Thus, if it is possible that 'dev' is null at the same time
->> that flag 'coherent_walk' is 0, then NULL pointer will be
->> dereferenced.
->>
->> Should we somehow avoid NULL pointer dereference or is this
->> situation impossible and we should remove comparison with NULL?
-> 
-> I think 'dev' is only null in the case of the selftest initcall
-> (see arm_lpae_do_selftests()), and 'coherent_walk' is always true there.
 
-Indeed, the intent is that cfg->iommu_dev == NULL is a special case for 
-the selftest, which must always claim coherency as well for this reason. 
-I suppose we could add an explicit assertion along those lines in 
-alloc_pgtable if anyone really thinks it matters.
+--=-JJ/ZILuXfnDP7WXpxKjl
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
 
-Cheers,
-Robin.
+The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28=
+:
+
+  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/file=
+lock-v6.0
+
+for you to fetch changes up to db4abb4a32ec979ea5deea4d0095fa22ec99a623:
+
+  fs/lock: Rearrange ops in flock syscall. (2022-07-18 10:01:47 -0400)
+
+----------------------------------------------------------------
+Just a couple of flock() patches from Kuniyuki Iwashima. The main
+changes are that this moves a file_lock allocation from the slab to the
+stack.
+----------------------------------------------------------------
+Kuniyuki Iwashima (2):
+      fs/lock: Don't allocate file_lock in flock_make_lock().
+      fs/lock: Rearrange ops in flock syscall.
+
+ fs/locks.c | 77 ++++++++++++++++++++++++++++------------------------------=
+-------------------
+ 1 file changed, 28 insertions(+), 49 deletions(-)
+--=20
+Jeff Layton <jlayton@kernel.org>
+
+--=-JJ/ZILuXfnDP7WXpxKjl
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAABCAAxFiEES8DXskRxsqGE6vXTAA5oQRlWghUFAmLntA0THGpsYXl0b25A
+a2VybmVsLm9yZwAKCRAADmhBGVaCFUlREACUrULlM4SporlHDF85svm+S3sBIiDz
+q2cb+k+KzybCYSZ9Nxv7KtVbFrRXa4B3vu7sEm2X+sjc7tc9uD4yJpwx7bfMq7vS
+0eOtuYWQMLe/KCzS2IS7l5LMnnzbjkg5LwsKR1REnsddqMHWELU6E3RbPdTLiZli
+uzMaC1yin2BFC6kWcWGxIxHkuwz4lGTnN7RfG42vToX6CRPb8J4k4LmBFaCLmij1
+rsluYto9wrBuvARH9EN032tz+1cIIrcIBJS76PLjURv87bRKPvK3vKPQm2CPgG7H
+9k3FWV8c1C9J6Wvnp+Iiy0xcvGDqqDqpfDPw00qNJ3E0m03zVqiUfeWoffhlQeSK
+eZZY11UNhsmaKx0JUDtH96DVOSRy72lLpeeDtTacOd4ruYdJ9Zr7xM2BRHUTbytM
+hPTzuz2rF6n0Z+/pY+MugSvTrvBNOnYDi4LLNQ8mkefIWPtQn9SaSMriTlm3JSkx
+Sm1ERxC+lrhQkDX36UIsz3pAzYDvYOYizVk/zxutDpK3JJOgtXMaD7pHLaK83AVA
+GbnLJr54visdq9QfXSV6tBbKcOtnbDmSE9pbiVDRtkdQsOo/PVtzNUHoC4vrF1xN
+OmUw56kkeA2PziiYDJPXwd3yOFYpOSabQDALbv4eJQy0jUTJBlXQ2p8n6t2BBZ/0
+S3BETpRMQMp5cw==
+=OOlp
+-----END PGP SIGNATURE-----
+
+--=-JJ/ZILuXfnDP7WXpxKjl--

@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F4B5865AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE275865B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiHAHcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 03:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S229726AbiHAHhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 03:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHAHcw (ORCPT
+        with ESMTP id S229447AbiHAHhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 03:32:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C18D2C122
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 00:32:51 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 09:32:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659339169;
+        Mon, 1 Aug 2022 03:37:23 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E593A4A9;
+        Mon,  1 Aug 2022 00:37:20 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CFC2124000A;
+        Mon,  1 Aug 2022 07:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1659339438;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0lWex5vw1JdCmlOGVBXm1q0/d6SAMz/GZdYiASXTbCA=;
-        b=4TGAW4OhyUhnniMGUlzZG/SIrYsZp3hnCND8w/0nR7/vwo3U/qyOI6MlKypTz4cgn8/0Bm
-        scY89HO+dDGDr9e8Q8pfF9adpx9AZFjj8xsIn+Il9g+g2WVXEsnKTV4gPLkeAjFH8QDUGQ
-        04Fo3a9OjapbZEvjR5CjG1OZrcoq5LK+aqBT8Uw7MCqKQM51zRGotyAzgWGs1vfG0eWWv8
-        x+i+7ilG0dPwdONsQeiBSJHBDEtkw6WMkIlKabh86DVAZ5NvLKL3vRyc0nS9KnIahGzpn9
-        MPfbQOj4iKX27sojdYwNdxzi3Rh3DiQzMJIaH+nuCQbn3k0wsWYdYvAO7rRsXA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659339169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0lWex5vw1JdCmlOGVBXm1q0/d6SAMz/GZdYiASXTbCA=;
-        b=d3Jn4OIXU9r3zbMWktHVp1exeOqYAnzQ3zwisw5LX2PZLSFgGUhhsRwG+5f8TTYGp6t1kd
-        jO4j8j1PW3YGudCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 2/2 v2] lib/vsprintf: Initialize vsprintf's pointer hash
- once the random core is ready.
-Message-ID: <YueBnnnnvpxxjE4N@linutronix.de>
-References: <20220729154716.429964-1-bigeasy@linutronix.de>
- <20220729154716.429964-3-bigeasy@linutronix.de>
- <YuRtSGCfe2qxHrqT@zx2c4.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rD3QjUZWg+66SP9jAAlBBPHmhDHWvUYeejN9eH8mXTY=;
+        b=h0LfKaeRHio27vUJyBgru+uQuMivEezj0vwKEe5CP1uKMATNMX9TWuTev3uxTXSFKAQHg8
+        LgWL3LjjwdJEK+ohyKxGfGI+pD12/rMqkHF4NfcHX7fQr2kFvwPvzC5WyHoDOTeQagetA9
+        62D6oBZPE8wUppXr24jRhyNb21kNdr6wMuKWXNnSl6kfJEkgqPxIXZ+PyEzmVivw/01VQo
+        qQqGDbOc6hUSpP00Ea3KJswI78E+D56nzpN4TI24I+vAt6jFO9Iyu/K7e9BQeGNtt1OjFY
+        /uzcDrMnBoFsLKRsnBaDrautBd/0iHmdneVaZXbnJQlVI0nJX3MlpNSkAYkohg==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
+        UNGLinuxDriver@microchip.com
+Subject: [PATCH net-next v4 0/4] net: Introduce QUSGMII phy mode
+Date:   Mon,  1 Aug 2022 09:37:09 +0200
+Message-Id: <20220801073713.32290-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YuRtSGCfe2qxHrqT@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-30 01:29:12 [+0200], Jason A. Donenfeld wrote:
-> On Fri, Jul 29, 2022 at 05:47:16PM +0200, Sebastian Andrzej Siewior wrote:
-> > +static void fill_ptr_key_workfn(struct work_struct *work)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = get_random_bytes_wait(&ptr_key, sizeof(ptr_key));
-> 
-> > +static int vsprintf_init_hashval(void)
-> > +{
-> > +	static DECLARE_WORK(fill_ptr_key_work, fill_ptr_key_workfn);
-> > +
-> > +	queue_work(system_unbound_wq, &fill_ptr_key_work);
-> > +	return 0;
-> > +}
-> > +subsys_initcall(vsprintf_init_hashval)
-> 
-> I'm unsure how good of an idea this is; it'll wind up setting off the
-> jitter entropy thing very early in init. It's probably a better idea to
-> just schedule the worker the first time that the RNG is already
-> initialized by some other means. Check `in_hardirq()` or something if
-> you're worried about missing the first message.
+Hello everyone,
 
-I'm aware of in_hardirq() and this not the only I have to worry about.
-The same is true for interrupts-off, preempt-off, BH-disabled, rcu-read
-section.
-If you don't want me to use get_random_bytes_wait(), would you prefer to
-delay it to late_initcall() or would you rather prefer to schedule a worker
-every other second until the RNG is ready?
+This is the V4 of a previous series [1] initially aimed at introducing
+inband extensions, with modes like QUSGMII. This mode allows passing
+info in the ethernet preamble between the MAC and the PHY, such s
+timestamps.
 
-> Jason
+This series has now become a preliminary series, that simply introduces
+the new interface mode, without support for inband extensions, that will
+come later.
 
-Sebastian
+The reasonning is that work will need to be done in the networking
+subsystem, but also in the generic phy driver subsystem to allow serdes
+configuration for qusgmii.
+
+This series add the mode, the relevant binding changes, adds support for
+it in the lan966x driver, and also introduces a small helper to get the
+number of links a given phy mode can carry (think 1 for SGMII and 4 for
+QSGMII). This allows for better readability and will prove useful
+when (if) we support PSGMII (5 links on 1 interface) and OUSGMII (8
+links on one interface).
+
+V4 contains no change but the collected Reviewed-by from Andrew.
+
+Best regards,
+
+Maxime
+
+Maxime Chevallier (4):
+  net: phy: Introduce QUSGMII PHY mode
+  dt-bindings: net: ethernet-controller: add QUSGMII mode
+  net: phy: Add helper to derive the number of ports from a phy mode
+  net: lan966x: Add QUSGMII support for lan966x
+
+ .../bindings/net/ethernet-controller.yaml     |  1 +
+ Documentation/networking/phy.rst              |  9 ++++
+ .../ethernet/microchip/lan966x/lan966x_main.c |  2 +
+ .../microchip/lan966x/lan966x_phylink.c       |  3 +-
+ .../ethernet/microchip/lan966x/lan966x_port.c | 22 +++++---
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  6 +++
+ drivers/net/phy/phy-core.c                    | 52 +++++++++++++++++++
+ drivers/net/phy/phylink.c                     |  3 ++
+ include/linux/phy.h                           |  6 +++
+ 9 files changed, 97 insertions(+), 7 deletions(-)
+
+-- 
+2.37.1
+

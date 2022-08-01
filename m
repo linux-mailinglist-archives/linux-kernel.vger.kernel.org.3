@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3696A5871C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E837F5871CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiHATw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S235171AbiHATxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiHATwY (ORCPT
+        with ESMTP id S232649AbiHATxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:52:24 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164A064F4
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:52:24 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so9709723fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=wnWScf7LqaAZDkgZLzfimbdgLl88BBcMGXBxkFVnUxw=;
-        b=R6pwpH/oM2GIYRFw8ggxOe+jAaEgpxEAYVIalSyt7g0V84z3CA3NBm3Js8HpWp2IdO
-         8IfPN2CEQfwy9AzXfrtD8wS5qwo9wDyKCwDy2/D2oVjjqhzBTtxIpxwNakj4YF3QuAND
-         ZWj1/1jGDo3rUIX+r7OV6quKddh8vidqqnq+dHKdc3gOvQxemfqdqH9ZCGTbeos1Pvgy
-         QuwIFXXabOxeudMYtcKgHy98/X2TroHOG3g/kQMsla1rT56ji+v4aMd1v41T1i5lMncp
-         R4XjfoGVJPKDIyPeRbHdX55tm0jeT/Qu5B6IX5/Wm0hwaBcxq7d5eAF0hkAfpBZu0Ncj
-         yMdg==
+        Mon, 1 Aug 2022 15:53:36 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C6762E1;
+        Mon,  1 Aug 2022 12:53:35 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-32269d60830so120390717b3.2;
+        Mon, 01 Aug 2022 12:53:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=wnWScf7LqaAZDkgZLzfimbdgLl88BBcMGXBxkFVnUxw=;
-        b=LnncCLH/nlq1mtOxUMvhNf1uxC5SjvkAMpPeMLPgxHkyaffiUwvJ4J+muKljKSKFE1
-         0tgs9NBcjYBUqtB1yhsYzvGWvFd6dNnrwFnT1kRrGRbPCAxr1hakOoxN4sGWgiGtTCfD
-         w4B6aeqnO9b+t81JwF5BFrSRYmhblqFteFApXgUrK+KeI93C0LjFA59W1CeHLqUVxsRp
-         mXyG1TXqHxFtdF71nIJYxKeAT2aVLURIzbw7L8aF7A8vnT5lspx2th953hPDqMgNChjx
-         3Y0/IVYir1zUAgFEHGrc7t1qLsZiOUcDighZPsGR2xar1zR0ShBk4Eixl14p7EQBkCKs
-         V6ew==
-X-Gm-Message-State: AJIora8RCtA8r/qcdjeKZxSVuSO3hmx2EuU/9b7krEQbyD0OnfJWZ34o
-        k2QaB+CNHGf7UiYDHte6+tVOKixIwPNEW4L3E/QQzZM54paC
-X-Google-Smtp-Source: AGRyM1sV3MTmg1UTxb+NlyH4mYnyvqIa3VrKRt+JM1Fp0fB5GFjb/XZCHX1rgY0ucm8rsIXInjWUyHeomQF9CL3bL4A=
-X-Received: by 2002:a05:6870:b40d:b0:10b:8586:9d91 with SMTP id
- x13-20020a056870b40d00b0010b85869d91mr8361515oap.136.1659383543416; Mon, 01
- Aug 2022 12:52:23 -0700 (PDT)
+        bh=0v6TbsxxrY2rW0RsMJwBCQ0Z1bJeBDSjf5C1NGUUv9U=;
+        b=SSPU9nqGBUlS6JqwE81fs4R9cJuMwE5u6Fz3HW7nGqS457phkOO/zQE3I15xY5YkGf
+         wi+quFAEmiuiiiZINgOjeVPOU5WADlTfll9G+fUm+m97SZpaRHmuGj70RO8Z2XnGXYJj
+         l6Gxak6K+IjuvhlIhkx6CLu4K8kVblyL71QRWCDyicmY6j9RN8yEh/xsj0mM+VZikQjD
+         SPeCFN/uuG7ycljoUH317JabJlqrYtU9P/oqszaySRfoE40TPpZuXxT3EbLSDJ70dD/o
+         KBFAsZj0CrBmvsgI9hmmE3dN0remzLDrEcyzDN4aGCRe1fTm+0Pm/QmtyHtVIKq9V9Sl
+         m9NQ==
+X-Gm-Message-State: ACgBeo0VfJix8MUUsrK159SoNW9k9n0eC537yBBFXC3Cf/at3R3MNd8I
+        KSoD1Ij45HanMxDr0g51Se/hn73k3TGAu03I9JwytxsAVpU/5w==
+X-Google-Smtp-Source: AA6agR5qyI2WP0GnZStHyUT2dYQho0ujsdtPbdORfj58jWveOLDhl8yZTBFUO5/t/v6dgIJSl7fWAxFnyFnkxSSTGaw=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr14333553ywb.326.1659383614932; Mon, 01
+ Aug 2022 12:53:34 -0700 (PDT)
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 1 Aug 2022 15:52:12 -0400
-Message-ID: <CAHC9VhTzrgsDuSgQSAJyJ=E9q5VsLqvms8n83WS3oMnFJtxf7w@mail.gmail.com>
-Subject: [GIT PULL] Audit patches for v6.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 1 Aug 2022 21:53:19 +0200
+Message-ID: <CAJZ5v0hX=o5nCmYgLekz_XMRfQcdPyFjC+=+BqEAvetNGD3ASw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v5.20-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +54,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Linus,
 
-Two minor audit patches: on marks a function as static, the other
-removes a redundant length check.  Everything merges cleanly against
-your tree of a few minutes ago, please merge for v6.0.
+Please pull from the tag
 
--Paul
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.20-rc1
 
---
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+with top-most commit da9d01794e31714a90a38e395c14723fb46f90b0
 
- Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+ Merge tag 'thermal-v5.20-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux
 
-are available in the Git repository at:
+on top of commit 32346491ddf24599decca06190ebca03ff9de7f8
 
- git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-   tags/audit-pr-20220801
+ Linux 5.19-rc6
 
-for you to fetch changes up to 546093206ba16623c18e344630dbfdd71a4327e0:
+to receive thermal control updates for 5.20-rc1.
 
- audit: make is_audit_feature_set() static (2022-06-13 14:08:57 -0400)
+These start a rework of the handling of trip points in the thermal
+core, improve the cpufreq/devfreq cooling device handling, update
+some thermal control drivers and the tmon utility and clean up code.
 
-----------------------------------------------------------------
-audit/stable-6.0 PR 20220801
+Specifics:
 
-----------------------------------------------------------------
-Shreenidhi Shedi (1):
-     audit: remove redundant data_len check
+ - Consolidate the thermal core code by beginning to move the thermal
+   trip structure from the thermal OF code as a generic structure to be
+   used by the different sensors when registering a thermal zone
+   (Daniel Lezcano).
 
-Xiu Jianfeng (1):
-     audit: make is_audit_feature_set() static
+ - Make per cpufreq / devfreq cooling device ops instead of using a
+   global variable, fix comments and rework the trace information
+   (Lukasz Luba).
 
-include/linux/audit.h | 2 --
-kernel/audit.c        | 4 ++--
-2 files changed, 2 insertions(+), 4 deletions(-)
+ - Add the include/dt-bindings/thermal.h under the area covered by the
+   thermal maintainer in the MAINTAINERS file (Lukas Bulwahn).
 
--- 
-paul-moore.com
+ - Improve the error output by giving the sensor identification when a
+   thermal zone failed to initialize, the DT bindings by changing the
+   positive logic and adding the r8a779f0 support on the rcar3 (Wolfram
+   Sang).
+
+ - Convert the QCom tsens DT binding to the dtsformat format (Krzysztof
+   Kozlowski).
+
+ - Remove the pointless get_trend() function in the QCom, Ux500 and
+   tegra thermal drivers, along with the unused DROP_FULL and
+   RAISE_FULL trends definitions. Simplify the code by using clamp()
+   macros (Daniel Lezcano).
+
+ - Fix ref_table memory leak at probe time on the k3_j72xx bandgap
+   (Bryan Brattlof).
+
+ - Fix array underflow in prep_lookup_table (Dan Carpenter).
+
+ - Add static annotation to the k3_j72xx_bandgap_j7* data structure
+   (Jin Xiaoyun).
+
+ - Fix typos in comments detected on sun8i by Coccinelle (Julia
+   Lawall).
+
+ - Fix typos in comments on rzg2l (Biju Das).
+
+ - Remove as unnecessary call to dev_err() as the error is already
+   printed by the failing function on u8500 (Yang Li).
+
+ - Register the thermal zones as hwmon sensors for the Qcom thermal
+   sensors (Dmitry Baryshkov).
+
+ - Fix 'tmon' tool compilation issue by adding phtread.h include
+   (Markus Mayer).
+
+ - Fix typo in the comments for the 'tmon' tool (Slark Xiao).
+
+ - Make the thermal core use ida_alloc()/free() directly instead of
+   ida_simple_get()/ida_simple_remove() that have been deprecated
+   (keliu).
+
+ - Drop ACPI_FADT_LOW_POWER_S0 check from the Intel PCH thermal control
+   driver (Rafael Wysocki).
+
+Thanks!
+
+
+---------------
+
+Biju Das (1):
+      thermal/drivers/rzg2l: Fix comments
+
+Bryan Brattlof (1):
+      thermal/drivers/k3_j72xx_bandgap: Fix ref_table memory leak during probe
+
+Dan Carpenter (1):
+      thermal/drivers/k3_j72xx_bandgap: Fix array underflow in
+prep_lookup_table()
+
+Daniel Lezcano (16):
+      thermal/drivers/qcom: Remove get_trend function
+      thermal/drivers/tegra: Remove get_trend function
+      thermal/drivers/u8500: Remove the get_trend function
+      thermal/core: Use clamp() helper in the stepwise governor
+      thermal/core: Remove DROP_FULL and RAISE_FULL
+      thermal/core: Avoid calling ->get_trip_temp() unnecessarily
+      thermal/core: Remove duplicate information when an error occurs
+      thermal/of: Replace device node match with device node search
+      thermal/of: Remove the device node pointer for thermal_trip
+      thermal/of: Move thermal_trip structure to thermal.h
+      thermal/core: Remove unneeded EXPORT_SYMBOLS
+      thermal/core: Move thermal_set_delay_jiffies to static
+      thermal/core: Rename 'trips' to 'num_trips'
+      thermal/core: Add thermal_trip in thermal_zone
+      thermal/of: Use thermal trips stored in the thermal zone
+      thermal/of: Initialize trip points separately
+
+Dmitry Baryshkov (2):
+      thermal/drivers/qcom/temp-alarm: Register thermal zones as hwmon sensors
+      thermal/drivers/qcom/spmi-adc-tm5: Register thermal zones as hwmon sensors
+
+Jason Wang (1):
+      thermal/ti-soc-thermal: Fix comment typo
+
+Jiang Jian (1):
+      thermal: intel: x86_pkg_temp_thermal: Drop duplicate 'is' from comment
+
+Jin Xiaoyun (1):
+      thermal/drivers/k3_j72xx_bandgap: Make
+k3_j72xx_bandgap_j721e_data and k3_j72xx_bandgap_j7200_data static
+
+Julia Lawall (1):
+      thermal/drivers/sun8i: Fix typo in comment
+
+Krzysztof Kozlowski (1):
+      dt-bindings: thermal: qcom,spmi-temp-alarm: convert to dtschema
+
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/thermal to THERMAL
+
+Lukasz Luba (4):
+      drivers/thermal/cpufreq_cooling: Use private callback ops for
+each cooling device
+      drivers/thermal/cpufreq_cooling : Refactor
+thermal_power_cpu_get_power tracing
+      drivers/thermal/cpufreq_cooling: Update outdated comments
+      drivers/thermal/devfreq_cooling: Extend the
+devfreq_cooling_device with ops
+
+Markus Mayer (1):
+      thermal/tools/tmon: Include pthread and time headers in tmon.h
+
+Rafael J. Wysocki (1):
+      intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
+
+Slark Xiao (1):
+      thermal/tools/tmon: Fix typo 'the the' in comment
+
+Wolfram Sang (3):
+      drivers/thermal/rcar_gen3_thermal: Improve logging during probe
+      dt-bindings: thermal: rcar-gen3-thermal: use positive logic
+      dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
+
+Yang Li (1):
+      thermal/drivers/u8500: Remove unnecessary print function dev_err()
+
+keliu (1):
+      thermal: Directly use ida_alloc()/free()
+
+---------------
+
+ .../bindings/thermal/qcom,spmi-temp-alarm.yaml     |  85 +++++++++
+ .../bindings/thermal/qcom-spmi-temp-alarm.txt      |  51 ------
+ .../bindings/thermal/rcar-gen3-thermal.yaml        |  36 ++--
+ MAINTAINERS                                        |   1 +
+ drivers/thermal/cpufreq_cooling.c                  |  77 +++-----
+ drivers/thermal/db8500_thermal.c                   |  34 +---
+ drivers/thermal/devfreq_cooling.c                  |  27 +--
+ drivers/thermal/gov_fair_share.c                   |   6 +-
+ drivers/thermal/gov_power_allocator.c              |   4 +-
+ drivers/thermal/gov_step_wise.c                    |  26 +--
+ drivers/thermal/intel/intel_pch_thermal.c          |   8 -
+ drivers/thermal/intel/x86_pkg_temp_thermal.c       |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c                 |  13 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   5 +
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   5 +
+ drivers/thermal/qcom/tsens.c                       |  12 --
+ drivers/thermal/qcom/tsens.h                       |   2 -
+ drivers/thermal/rcar_gen3_thermal.c                |   4 +-
+ drivers/thermal/rzg2l_thermal.c                    |  18 +-
+ drivers/thermal/sun8i_thermal.c                    |   2 +-
+ drivers/thermal/tegra/soctherm.c                   |  32 ----
+ drivers/thermal/tegra/tegra30-tsensor.c            |   2 +-
+ drivers/thermal/thermal_core.c                     |  79 ++++----
+ drivers/thermal/thermal_core.h                     |  15 --
+ drivers/thermal/thermal_helpers.c                  |  13 +-
+ drivers/thermal/thermal_netlink.c                  |   2 +-
+ drivers/thermal/thermal_of.c                       | 201 ++++++++++++---------
+ drivers/thermal/thermal_sysfs.c                    |  22 +--
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
+ include/linux/thermal.h                            |  26 ++-
+ include/trace/events/thermal.h                     |  28 +--
+ tools/thermal/tmon/pid.c                           |   2 +-
+ tools/thermal/tmon/tmon.h                          |   3 +
+ 33 files changed, 397 insertions(+), 448 deletions(-)

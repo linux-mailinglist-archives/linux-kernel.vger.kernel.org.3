@@ -2,219 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3008E5863DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11C75863E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 08:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238804AbiHAGGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 02:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S239280AbiHAGIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 02:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiHAGGM (ORCPT
+        with ESMTP id S229666AbiHAGIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 02:06:12 -0400
-Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF976329
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 23:06:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VL1DdLW_1659333965;
-Received: from 30.97.48.40(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VL1DdLW_1659333965)
-          by smtp.aliyun-inc.com;
-          Mon, 01 Aug 2022 14:06:06 +0800
-Message-ID: <f4f9c5be-a5ce-9e82-56ff-89d1aeee4d98@linux.alibaba.com>
-Date:   Mon, 1 Aug 2022 14:06:13 +0800
+        Mon, 1 Aug 2022 02:08:34 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091CAB849;
+        Sun, 31 Jul 2022 23:08:34 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id q19so337953pfg.8;
+        Sun, 31 Jul 2022 23:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=uURXq1o8zPy8kBNbXRu1fsY4+FJW1JU5uvH5/iofuOI=;
+        b=X38sMtbVw10EoxxrfF8/ubFdVUKAJvxuQ75TwkyDIC1Ok/wXwyKzEmOlAWPEQv1bzb
+         FLxzzWbrrkmAn2hsDcWcpJAc9WrZ3U2JwZHnrh51NODYqObyrdswRftfdWs0GgQjI44m
+         mqDB4zplEXeMp/4LpnEzVKxHQJvaKGOylhu566J6LZF8t/z4P6FB4aiH0ogTs8MaS/g6
+         J1Y8ehWM5rLeLuSFGiEpPLdzf5doAz0twXWa5ZGJb+CRGWPmebDwCEZCp4ahdFhyfCGl
+         5TDjLIZN8jMRy7CGhZj0+FlAL4tWEGBqj1TYPE9n/PJErrXUJhEkxp89P2t+BV/QvYJ7
+         vNxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=uURXq1o8zPy8kBNbXRu1fsY4+FJW1JU5uvH5/iofuOI=;
+        b=aDfPi9SCZFEDfA+GjGZZ/pkHDt65wLAC8ZH8+X3GNirhlI0r/suuXTEOPjNxgFZkcH
+         yU/kf9BcA/Tqte4Z8DSputIKxsMnTZRbJvFpz7MFfGPvF/v5Wq1aeRarnvlsILcmvR/r
+         1lYWDfpCsw9/bnpsR19nDb50ihlDJsRBBFLW+egUseE5EOcPs2Zs7FU5jv0KrLcx6WON
+         HxggLJP98TZvIyH44A4COs2iY/PxT99RF7JFU0wLw8ysC80C32XAXlLrcUUZM3AefcXY
+         FTVGHEcXaHLWWznvsGkByG0Saq4UKRop60kYzxg9DTDNZ6cgKhdkKP75VEiX206T3QOz
+         oYNg==
+X-Gm-Message-State: AJIora9+QZX9ukUD2vHm5t0Cz3dxTd+D8KCJ9fhkzzYWHUt69NfK3zUO
+        BFnNpMEjVwheq6HchiTOqow=
+X-Google-Smtp-Source: AGRyM1uwGAtgc2eoB6MRwIiqmRSWObleqzmE5vZMYSMCrYYWunQYxFIoJPB1qbB95STA6zVq4XZeKA==
+X-Received: by 2002:a63:db09:0:b0:41b:6744:a255 with SMTP id e9-20020a63db09000000b0041b6744a255mr12096992pgg.556.1659334113428;
+        Sun, 31 Jul 2022 23:08:33 -0700 (PDT)
+Received: from sebin-inspiron.bbrouter ([2409:4073:2115:6e1b:8b67:c426:26:e09])
+        by smtp.gmail.com with ESMTPSA id x14-20020a63cc0e000000b0041aa01c8bb0sm6556681pgf.10.2022.07.31.23.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 23:08:32 -0700 (PDT)
+From:   Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     mailmesebin00@gmail.com, Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mike McGowen <mike.mcgowen@microchip.com>,
+        Kumar Meiyappan <Kumar.Meiyappan@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH -next] scsi: smartpqi: Overwriting previous value
+Date:   Mon,  1 Aug 2022 11:38:21 +0530
+Message-Id: <20220801060821.52386-1-mailmesebin00@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC V3 PATCH] mm: add last level page table numa info to
- /proc/pid/numa_pgtable
-To:     Xin Hao <xhao@linux.alibaba.com>, willy@infradead.org
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220801032704.64356-1-xhao@linux.alibaba.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220801032704.64356-1-xhao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xin,
+Fixes coverity warning 'Unused value'. Assigning value 256 in
+shost->max_lun but that stored value is overwritten before it can be
+used.
 
-On 8/1/2022 11:27 AM, Xin Hao wrote:
-> In many data center servers, the shared memory architectures is
-> Non-Uniform Memory Access (NUMA), remote numa node data access
-> often brings a high latency problem, but what we are easy to ignore
-> is that the page table remote numa access, It can also leads to a
-> performance degradation.
-> 
-> So there add a new interface in /proc, This will help developers to
-> get more info about performance issues if they are caused by cross-NUMA.
-> 
-> V2 -> V3
-> 1, Fix compile warning bug.
-> 
-> V1 -> V2
-> 1, As Matthew Wilcox advise, Simplify the code.
-> 2, Do some codes format fix.
+Fixes: 904f2bfda65e0 (Add driver support for multi-LUN devices)
+Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
+---
+ drivers/scsi/smartpqi/smartpqi_init.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Please move the changes history under your 'Signed-off-by' with '---'.
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 7a8c2c75acba..5a9fd52c6e7c 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -7405,7 +7405,6 @@ static int pqi_register_scsi(struct pqi_ctrl_info *ctrl_info)
+ 	shost->max_channel = PQI_MAX_BUS;
+ 	shost->max_cmd_len = MAX_COMMAND_SIZE;
+ 	shost->max_lun = PQI_MAX_LUNS_PER_DEVICE;
+-	shost->max_lun = ~0;
+ 	shost->max_id = ~0;
+ 	shost->max_sectors = ctrl_info->max_sectors;
+ 	shost->can_queue = ctrl_info->scsi_ml_can_queue;
+-- 
+2.34.1
 
-> 
-> V2: https://lore.kernel.org/linux-mm/20220731155223.60238-1-xhao@linux.alibaba.com/
-> V1: https://lore.kernel.org/linux-mm/YuVqdcY8Ibib2LJa@casper.infradead.org/T/
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> ---
->   fs/proc/base.c     |  2 ++
->   fs/proc/internal.h |  1 +
->   fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 90 insertions(+)
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 8dfa36a99c74..487e82dd3275 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] = {
->   	REG("maps",       S_IRUGO, proc_pid_maps_operations),
->   #ifdef CONFIG_NUMA
->   	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
-> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->   #endif
->   	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
->   	LNK("cwd",        proc_cwd_link),
-> @@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
->   #endif
->   #ifdef CONFIG_NUMA
->   	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
-> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->   #endif
->   	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
->   	LNK("cwd",       proc_cwd_link),
-> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-> index 06a80f78433d..e7ed9ef097b6 100644
-> --- a/fs/proc/internal.h
-> +++ b/fs/proc/internal.h
-> @@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
-> 
->   extern const struct file_operations proc_pid_maps_operations;
->   extern const struct file_operations proc_pid_numa_maps_operations;
-> +extern const struct file_operations proc_pid_numa_pgtable_operations;
->   extern const struct file_operations proc_pid_smaps_operations;
->   extern const struct file_operations proc_pid_smaps_rollup_operations;
->   extern const struct file_operations proc_clear_refs_operations;
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 2d04e3470d4c..77b7a49757f5 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -1999,4 +1999,91 @@ const struct file_operations proc_pid_numa_maps_operations = {
->   	.release	= proc_map_release,
->   };
-> 
-> +struct pgtable_numa_private {
-> +	struct proc_maps_private proc_maps;
-> +	unsigned long node[MAX_NUMNODES];
-> +};
-> +
-> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
-> +				     unsigned long end, struct mm_walk *walk)
-> +{
-> +	struct pgtable_numa_private *priv = walk->private;
-> +	struct page *page;
-> +	int nid;
-> +
-> +	if (pmd_huge(*pmd)) {
-> +		page = virt_to_page(pmd);
-> +	} else {
-> +		page = pmd_page(*pmd);
-
-You should validate if the pmd is valid or present before getting the 
-pagetable page.
-
-if (pmd_none(*pmd) || !pmd_present(*pmd))
-
-Another issue is I think you should hold the pmd lock to call 
-pmd_page(), since after the validation of pmd_huge(), the pmd entry can 
-be modified by other threads if you did not hold the pmd lock.
-
-> +	}
-> +
-> +	nid = page_to_nid(page);
-> +	priv->node[nid]++;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct mm_walk_ops show_numa_pgtable_ops = {
-> +	.pmd_entry = gather_pgtable_numa_stats,
-> +};
-> +
-> +/*
-> + * Display the page talbe allocated per node via /proc.
-> + */
-> +static int show_numa_pgtable(struct seq_file *m, void *v)
-> +{
-> +	struct pgtable_numa_private *numa_priv = m->private;
-> +	struct vm_area_struct *vma = v;
-> +	struct mm_struct *mm = vma->vm_mm;
-> +	struct file *file = vma->vm_file;
-> +	int nid;
-> +
-> +	if (!mm)
-> +		return 0;
-> +
-> +	memset(numa_priv->node, 0, sizeof(numa_priv->node));
-> +
-> +	seq_printf(m, "%08lx ", vma->vm_start);
-> +
-> +	if (file) {
-> +		seq_puts(m, " file=");
-> +		seq_file_path(m, file, "\n\t= ");
-> +	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
-> +		seq_puts(m, " heap");
-> +	} else if (is_stack(vma)) {
-> +		seq_puts(m, " stack");
-> +	}
-> +
-> +	/* mmap_lock is held by m_start */
-> +	walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
-> +
-> +	for_each_node_state(nid, N_MEMORY) {
-> +		if (numa_priv->node[nid])
-> +			seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
-> +	}
-> +	seq_putc(m, '\n');
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct seq_operations proc_pid_numa_pgtable_op = {
-> +	.start  = m_start,
-> +	.next   = m_next,
-> +	.stop   = m_stop,
-> +	.show   = show_numa_pgtable,
-> +};
-> +
-> +static int pid_numa_pgtable_open(struct inode *inode, struct file *file)
-> +{
-> +	return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
-> +			sizeof(struct pgtable_numa_private));
-> +}
-> +
-> +const struct file_operations proc_pid_numa_pgtable_operations = {
-> +	.open		= pid_numa_pgtable_open,
-> +	.read		= seq_read,
-> +	.llseek		= seq_lseek,
-> +	.release	= proc_map_release,
-> +};
-> +
->   #endif /* CONFIG_NUMA */
-> --
-> 2.31.0

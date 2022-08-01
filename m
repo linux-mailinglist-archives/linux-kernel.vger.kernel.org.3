@@ -2,169 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B18D586257
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 03:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE36586260
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 03:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238847AbiHABmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 21:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S236511AbiHABwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 21:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238774AbiHABmH (ORCPT
+        with ESMTP id S229569AbiHABwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 21:42:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11BF6334
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 18:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659318126; x=1690854126;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=f6A94/AbCD2zeg1OTcqBVC3mr6x9cCno7xyjb7ct57o=;
-  b=TplBBSP6UCQKQDYJFxo1SLLqORsJv31nfvY7W8hmPIP4MI9cWXZLy7Tl
-   3OIvhWHU0iqmSdonFqRFUBG9bPSULTNKsaGXVhRVOsqZV7ZV/UlTjsI70
-   m56yZZ2Pd/ijUE0uutCIwb2ne40WWhf7dz7XaQMk0Vhr7GCEtEqq+n6Vx
-   nPaHLFnLp4s6g7l0g/z5hDnmLLRjxZELJMx/dHEhSFbTgOZ6yibWxSw/I
-   ANY+sbM+0wmc5nmv2wy72s+F5WAqfWmC009Zyt6auAoAy3CJIHgWL1YHQ
-   WQjx1y+dQq48VFoKI1c+1jd9f3smTM8pv3WR/n7rhdwDsO9+M3hHNDUFv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="268808645"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="268808645"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 18:42:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="577607411"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Jul 2022 18:42:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIKRY-000Egg-1h;
-        Mon, 01 Aug 2022 01:42:04 +0000
-Date:   Mon, 01 Aug 2022 09:41:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 44a4ddede9cf44627ea6e30b339caeb39cea46af
-Message-ID: <62e72f3f.3m37BTkjZi+FqMpT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 31 Jul 2022 21:52:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31033101EC;
+        Sun, 31 Jul 2022 18:52:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id v16-20020a17090abb9000b001f25244c65dso13637293pjr.2;
+        Sun, 31 Jul 2022 18:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cts89Urg1Uc0LBv0m8WUOVTMu8H/nP9lQWVspGvxl/M=;
+        b=Yoyl7sblFAAr4nHx9Dw11RXEAxdHiU4x6bJUImWzvGs8+ogPEAD8n1G3W4OLAvcriP
+         XTjhuYo6QuntcB3so/5xBNA2YDR+GYuYl+MZ0EdsQ6oJ9YdTl7y2uDLaLvcOgbdfUou9
+         IOdgeaItYpET9I6Feq6O2WIx51DSLd7xTJFLL9+JzLCWhwQGXTYIZESs+dmFF8CjJlk9
+         NeT1k58fdutlDBeJEzgOHs8rAg67bFvrfwaHaEaqe7HLu/2q+J+IU5f8UrHjXFS+YNDD
+         xFaYIKJeH8S0d4LD2LMFOdMj4JIVaPCdSsYES8eAZLX1eDD9AKBzaM3M0LpLtKWJ36PM
+         VR6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cts89Urg1Uc0LBv0m8WUOVTMu8H/nP9lQWVspGvxl/M=;
+        b=xpa/oTCqJLOTi11UoSP3HD4ysuWco9ydaPoCvynLkhLvj6p/To98EUZ9HD518XtuvQ
+         n9S9FzZdGd3QOqNgDgFw9hIB4wuk7XAE7Irz0TrR3V1MNukIPMjVFhu899P61nlBQaDK
+         pV0l+Ea4VGi/+qx28AiFioP4dJkhc6PXwzZ4YljtpXk2taNjznY+qLBB8rFvL+a33CMz
+         bPMdql38fOQv7rELtgKoYnAIVHnJW1UTRQ72JtB875j+bft2p4KBgqosV3x2B0thn/ul
+         lOlMD7l+Qh72wqs2uJs7VEArCj46LHdIhX0Ac0HMzeMUpcXiquOOJHLR/2k5HBKFy3SY
+         4vGA==
+X-Gm-Message-State: ACgBeo0ZHS+4wIFsN6Ha5DukIhIU6LTBkyQKR5s3zwOGzGu5rq9zbNYd
+        vSaWitxdbRx+TYx5HI0QglA=
+X-Google-Smtp-Source: AA6agR6QZqDQ9TIbddaHajr6M7D7HTfebbIH2FC8Gj5rE5OFz3YWnlmS6T6dPK+JFQNL9it6Wi8rZA==
+X-Received: by 2002:a17:903:11d1:b0:16c:defc:a098 with SMTP id q17-20020a17090311d100b0016cdefca098mr14349003plh.50.1659318762325;
+        Sun, 31 Jul 2022 18:52:42 -0700 (PDT)
+Received: from [10.10.4.41] (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id v10-20020a63f20a000000b0041b672e93c2sm6292529pgh.17.2022.07.31.18.52.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jul 2022 18:52:41 -0700 (PDT)
+Message-ID: <4ea235d1-46c1-87de-760f-dc4775007ae0@gmail.com>
+Date:   Mon, 1 Aug 2022 09:50:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 2/2] iio: humidity: hdc100x: add manufacturer and
+ device ID check
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
+ <20220728125435.3336618-3-potin.lai.pt@gmail.com>
+ <20220731130959.50826fc4@jic23-huawei>
+From:   Potin Lai <potin.lai.pt@gmail.com>
+In-Reply-To: <20220731130959.50826fc4@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 44a4ddede9cf44627ea6e30b339caeb39cea46af  Merge branch into tip/master: 'x86/vmware'
 
-elapsed time: 712m
+On 7/31/22 20:09, Jonathan Cameron wrote:
+> On Thu, 28 Jul 2022 12:54:35 +0000
+> Potin Lai <potin.lai.pt@gmail.com> wrote:
+>
+>> Add manufacturer and device ID checking during probe, and skip the
+>> checking if chip model not supported.
+>>
+>> Supported:
+>> - HDC1000
+>> - HDC1010
+>> - HDC1050
+>> - HDC1080
+>>
+>> Not supported:
+>> - HDC1008
+>>
+>> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> I need some more information on the 'why' of this patch.  There are a number
+> of drivers that do a similar ID check but in recent times, that approach has
+> been considered wrong because it breaks potential use of multiple compatible
+> entries in device tree.   If a new device comes along and is backwards
+> compatible with an existing one (maybe has new features, but using them is
+> optional) then we want to have an entry that looks like
+>
+> compatible = "ti,hdc1099", "ti,hdc1080"
+>
+> If the new ID is not supported by the kernel that is being used, we still
+> want the driver to 'work' using the fallback compatible.
+>
+> As such, we no generally do the following.
+>
+> 1) If we have a match to a device we know about but it's not the one the
+>    firmware tells us to expect, print a warning but operate as if the firmware
+>    had been correct - particularly if we know the parts aren't compatible
+>    with each other. (this bit is optional as we should be able to assume firmware
+>    doesn't do stupid things :)
+> 2) If we don't match at all, print a warning about an unknown device but carry
+>    on with assumption that the firmware is correct and this new device ID is
+>    backwards compatible with the provided fallback compatible.
+>
+> So if this is just a bit of defensive programming (rather than necessary for some
+> reason not yet explained) then change from returning an error on probe() to 
+> printing an warning message but continuing anyway. (which is part (2) of the
+> above)
+Hi Jonathan,
+In our hardware board, we have "ti,hdc1080" as main source, and "silabs,si7020"
+for 2nd source. This two chip are locate at same bus and same slave address,
+and we want to use multiple compatibles to support both chips with single device
+node in device tree.
+ 
+Ex:
+compatible = "ti,hdc1099", "silabs,si7020";
+ 
+In order to support this, I need to add ID checking mechanism into the current
+hdc100x driver, so the si7020 chip will fail to probe with hdc100x driver
+(because the ID checking is not failed), then success probe with si7020.
+ 
+Base on you explanation, it looks multiple compatibles is not suitable in this
+case? Would you mind advise us what would be the better approach for our case?
 
-configs tested: 88
-configs skipped: 2
+Thanks,
+Potin
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                                defconfig
-arc                  randconfig-r043-20220731
-riscv                randconfig-r042-20220731
-s390                 randconfig-r044-20220731
-x86_64                              defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a001
-arm                                 defconfig
-x86_64                        randconfig-a004
-arm                              allyesconfig
-i386                          randconfig-a003
-arc                               allnoconfig
-x86_64                        randconfig-a002
-alpha                             allnoconfig
-riscv                             allnoconfig
-i386                          randconfig-a005
-x86_64                        randconfig-a006
-powerpc                           allnoconfig
-csky                              allnoconfig
-mips                             allyesconfig
-arm64                            allyesconfig
-powerpc                          allmodconfig
-i386                          randconfig-a014
-arc                              allyesconfig
-ia64                             allmodconfig
-i386                          randconfig-a012
-alpha                            allyesconfig
-i386                          randconfig-a016
-sh                               allmodconfig
-m68k                       m5475evb_defconfig
-arm                            zeus_defconfig
-sh                   sh7724_generic_defconfig
-sh                          rsk7203_defconfig
-sh                   sh7770_generic_defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-mips                       bmips_be_defconfig
-arm                           h3600_defconfig
-powerpc                    amigaone_defconfig
-powerpc                      mgcoge_defconfig
-mips                      maltasmvp_defconfig
-nios2                         10m50_defconfig
-mips                        vocore2_defconfig
-mips                             allmodconfig
-s390                          debug_defconfig
-i386                          randconfig-c001
-s390                 randconfig-r044-20220801
-arc                  randconfig-r043-20220801
-riscv                randconfig-r042-20220801
-sh                        sh7763rdp_defconfig
-powerpc                      makalu_defconfig
-arc                        nsimosci_defconfig
-parisc                generic-64bit_defconfig
-arm                          pxa910_defconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20220731
-hexagon              randconfig-r045-20220731
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-x86_64                        randconfig-a001
-i386                          randconfig-a004
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a015
-arm                            dove_defconfig
-powerpc                  mpc885_ads_defconfig
-x86_64               randconfig-a002-20220801
-x86_64               randconfig-a001-20220801
-x86_64               randconfig-a006-20220801
-x86_64               randconfig-a003-20220801
-x86_64               randconfig-a004-20220801
-x86_64               randconfig-a005-20220801
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

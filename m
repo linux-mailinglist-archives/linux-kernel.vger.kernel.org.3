@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895D55862AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F9F5862B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239170AbiHACgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S239187AbiHAChq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbiHACgs (ORCPT
+        with ESMTP id S237684AbiHACho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:36:48 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EB762FD
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 17so9424897pfy.0
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
+        Sun, 31 Jul 2022 22:37:44 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532DCCF
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:37:43 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id r186so8532354pgr.2
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
-        b=l14ypADMZwmwBX3PPuNnhfhC0pkWgO3nxHo/kcyqcDQQy6USdhzex+seukGsSkiqSF
-         CD7pjPOYfJb33Kd7/A6vDuOlVFJR69nqhta9PCeUDn5y37fM+EkdqrOWOxK0nM364cNI
-         2hS6W+ancz2HhSWKGABkGucgEiskAd7ylplsxyesLdgbKYAGyM0I/K+ZEXPCQJj/GkFL
-         8Y9XaXvYU44xz7LbcwFhfHWp3z3bb1GMR4qPIK58+MeCotpAY7lzMuOK025gYsWI0JgR
-         W00nJkIsFipx8cXltA+pedB7ltCKnQ+3K6ezUJJcMD8vPYZcKGA2QkZCWNkwtVcXUu7k
-         0vXA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=lXB0daiEp1IPszXD6lgU6e6WPPivz7kdrh5SiPt8e4w=;
+        b=YPhNY15H5CaQQ/HwGPI1gF8eVX5EYfKwSwYqO74WPIVnF47YgVCKq3Ix7MQ0Y+s510
+         +hn2Qv7HdutmdW2LNgHBDHzUqefm5CE2zE2AQuyDosrtf+RIYaGCqieFiubPyDTg9wZr
+         nhYyZLZjFNhvpR+yCnjE3FixYjDog+mKJDa2p36UpYYOZUkJzFpIK8v6Sf4vmjI+loYf
+         VuZZOLHqeZLeYy7GDLPNy9X5hS7dJVIqkbQJEUVe6DkiWfAuf9BZ50sbmVpQcFYYsqe5
+         96dEdPbG4t5XbtCTsh7BXi3842ZZj8rlSZ+oiKDR0lvzTQZ0nuGQBJgc83EykzeRFymy
+         Uibw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
-        b=18orZUCRZ06bULK/3w3vt1he48R14gKl+0EG1htGAfiK65yEs6F/NHozDK6z/EeUyq
-         9YnLGy+B/QFVD0/96rrGM88HFpKvFt9yMYszX3zp9wYU1ITG8JvgsZ/7Ut7Y101HgiTo
-         amh3ZfX08GDb6zGYm3z6tq07YWoq6PP4F8WcyMsvTUi54bRA8pMArejr4ABq6waudbTT
-         GYZTWeHvtnKNAgVMzuS1gK7mbMssDr9PtS7SSMwyy7xshpD+jwBJIbvppPpPEUq86vgx
-         1ETc8Q3k7erOqIWiL9rYEQ8a7+h/JvkKfFtmoUbVHQxj5Dr3N9LuojE31kDjocl9V1Zo
-         YwCg==
-X-Gm-Message-State: AJIora+xvipbaUI+wTbx++cIlPD+RUidq5Y8E4/Kba5NYwU8qdxaZaNj
-        ElB2btDw8QIOlyCsU6Vl1bIssw==
-X-Google-Smtp-Source: AGRyM1uWuPpbJThAzj8401hKyu6FavGanE+K+gT78KliFc+nSDEucI4aDKw5IqZW2VO01+cLRobseA==
-X-Received: by 2002:a05:6a00:24c6:b0:52b:ee89:eca9 with SMTP id d6-20020a056a0024c600b0052bee89eca9mr14043056pfv.78.1659321406689;
-        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b0016d1f6d1b99sm8237530plx.49.2022.07.31.19.36.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=lXB0daiEp1IPszXD6lgU6e6WPPivz7kdrh5SiPt8e4w=;
+        b=odgq2CGU3lfsHTmKXgVQigAR4je1RTz8yYMUfCysvUoDNaSlbw4pSktjk0rcIEBu9c
+         scmp9WK5WP3b8ps9BqV/GtbgNVFlAaDhXnpjr3Mjp7E8/zNFNaJZCaXKAJGO9mLK6gBf
+         VhZMr3wcJgTIC+UC/2s+3ZbW6kz5QKEzkn01uNWuE/gdm329AWM2McygLAmLf+48BvOz
+         H3Kx58I/7TKrCHxEm88+ezYZG3BpPYpTVIOI8Zqv2gcj8gr6OIce5px8n57W5oYyOvyM
+         JOeFRzH6aomG5AQlCxIEcQky4YHgZ3Z3w2ttG9UxhsqK3wVXp94Fp22i2wUa7I0V/UDk
+         EkYg==
+X-Gm-Message-State: AJIora9xaP7gb0UW4CBKtLMnM014Y4HpQSUoyPKMXFXGqakvEL2if2/l
+        u9lVwPwOBFsPvKImF4aGpw45ylqVGcc=
+X-Google-Smtp-Source: AGRyM1vkrnlUyBdeQSpJcGixcW0bP+dpn4G3gZyhx+d3gdoXpoeA9fV+ccVQOE/3hje7tjQGSCWiRQ==
+X-Received: by 2002:a05:6a00:240e:b0:52c:81cf:8df8 with SMTP id z14-20020a056a00240e00b0052c81cf8df8mr14283962pfh.60.1659321463167;
+        Sun, 31 Jul 2022 19:37:43 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id k32-20020a17090a3ea300b001f317767790sm8594894pjc.23.2022.07.31.19.37.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 08:06:36 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
- dev_pm_opp_set_config+0x344/0x620
-Message-ID: <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
-References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
- <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
- <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+        Sun, 31 Jul 2022 19:37:42 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mtd@lists.infradead.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] mtd: rawnand: gpmi: using the pm_runtime_resume_and_get  to  simplify the code
+Date:   Mon,  1 Aug 2022 02:37:38 +0000
+Message-Id: <20220801023738.1595203-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-07-22, 14:55, Stanimir Varbanov wrote:
-> Hi Viresh,
-> 
-> I can take a look and provide a patch to fix that.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Any update on this ? I am going to send pull request for 5.20 very soon and it
-would have been much better if this was fixed before I send that.
+Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
+and pm_runtime_put_noidle.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+index 93da23682d86..0e7da90d6559 100644
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -2504,9 +2504,8 @@ static int gpmi_nfc_exec_op(struct nand_chip *chip,
+ 	for (i = 0; i < GPMI_MAX_TRANSFERS; i++)
+ 		this->transfers[i].direction = DMA_NONE;
+ 
+-	ret = pm_runtime_get_sync(this->dev);
++	ret = pm_runtime_resume_and_get(this->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(this->dev);
+ 		return ret;
+ 	}
+ 
 -- 
-viresh
+2.25.1

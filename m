@@ -2,67 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B38587410
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBBF587417
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbiHAWp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S235459AbiHAWvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiHAWpz (ORCPT
+        with ESMTP id S234970AbiHAWve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:45:55 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9501025C55;
-        Mon,  1 Aug 2022 15:45:53 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x10so11089208plb.3;
-        Mon, 01 Aug 2022 15:45:53 -0700 (PDT)
+        Mon, 1 Aug 2022 18:51:34 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC5526AC2
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:51:31 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id q14so9518327iod.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AtOQ8tHmPtgKCDJS9j7o/E1QD8d/xlqEfyE4sVh4ZB4=;
-        b=NSVz48WbXAo0zzkalJT+7YY9YPZ10DnH17bP4Bs95wcBV3icqXPcTXHjG3B6OjmgIj
-         MSdYB+HouNhwQrwqM+lhpuZsxdhoM48cuXHAh31BVNS+DNFSVCGHqjnGvT90DmiyN7kJ
-         7GwWh8GcUnAD6+NlxFNjHij+gSTeHW8qhpnQVm6la8b3y14b3T3lOdqlxYk6O/HNxJLY
-         kNXWl5UxxUyFpR5HozTifPz/61ep8k2CPaz21O2zRtx2jSaU5m6Dr01alzFv6hRE6GHC
-         7j8X7J6yMCUa+7po524merGg9RkI9oaisX+pHGfB01IMIiMf70WRwdVSidhvCm4cXhP6
-         jIoQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=glcOCUJ/+awLcSG8X5QxtUVosWAHdrRlN7P8qFCy/KU=;
+        b=VgjLNHr1hMbP7jz5VD9tM4tHHUdeWiE6jv/PZZxVCEl8oCfbeuNfGwRZv+sM+Wf2i5
+         oNtEEDp7KV0lDn8cKVruat3XxxQpJMcYjwbPK6y/MVRRPL11HHL0qSFaA+lfpHzZBha0
+         nLWIVaLCa21JIuOinIDkNS5w6493rVMBjMsIoJBEJyiHzTbqwHr8PtBHwPGlSVsZYhnF
+         QZ0bwchCYRMq8Xg6oV57EE21VLo09Sr7nwNLOc9tMa0EkmmzqE6+UV6VMx2SxN+hUzky
+         CnA8w+UFJxkOejBgEvFvCIaDj3nOXOQ57P4poCq6zqCOaJrsgvvPN50y3wl4tui1yenO
+         Uz4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AtOQ8tHmPtgKCDJS9j7o/E1QD8d/xlqEfyE4sVh4ZB4=;
-        b=KNoNxBP2vICoLm6EBPGTLLkW+ggHd+A+CszNICklbd+vEi2kqXcZO5E5yYcV8jpWfd
-         bnY1Mx/KJ96gPRZlskug0igYM8AxcSSIn1bIvAb0pYaWgB/bQewMeE5JYTtHXW+NSG8K
-         247giiN5AnSq7zZwQIMTEb/aUWlF+MMmG1fIraqegG0DcFj2Hu+Cphe4eAgm/ukUC2xv
-         8qeKPUg6EOI7uNLjuqoS5JCkpiyqIiAQFl0WAaqKgpusdo4xF5O7VwwgNanjnkR9USVo
-         4ccIZyPGcVY7Eb4Y3wGoBjzKWjdd7t0wbcBUWd1w+j2nCmMCcRLGVwvMKCQE5kv5VR9A
-         ccug==
-X-Gm-Message-State: ACgBeo0PplD5BakB5ezI3h0SyPojt6BqU1Y4VrQFC9z2LHv16jE3Kav3
-        R2MwerwW8bi6OXTI9G1s9TQiizcY0O/IB0rD2Gc=
-X-Google-Smtp-Source: AA6agR48Cj0HIlSuKrodOPmWWeTupADHJelVeA4OTdExNg4BQCR7YGngCoM2yYZJ8St9BPI3p2vDG1D4LMviCWNRGuI=
-X-Received: by 2002:a17:902:8c8a:b0:16e:ceb1:d90a with SMTP id
- t10-20020a1709028c8a00b0016eceb1d90amr12397511plo.170.1659393952926; Mon, 01
- Aug 2022 15:45:52 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=glcOCUJ/+awLcSG8X5QxtUVosWAHdrRlN7P8qFCy/KU=;
+        b=RFzecEQQnd4Vo9pk+iMNCLFZq8mn7nwGLs3UmEF+nbiMp6AC78UXLCaw1Rs7SCXxkh
+         isp+otZo237nOAGh0RFqcPs4YRz4oPLfeKoKfOkt0zcOOSNosm1lekptfuijAjvjkOAm
+         3HvT5eO08bsOn/CeREYDA78bG5bIR6jGn9w/yxSPqJLBvR3mjX7dSELGLZ3A2YOEneEe
+         YUT5Ww+A+XcuZdJRYTcZgcxBk2gahbzzTKV5AwoXkmv+UI2HJgPtnvF14J6Q8Q4ZaXF3
+         i+yYang6e3i/iAMi7biuX26n+iPCtAdYlZGshN0vX2JkPVRDHdt50SrTSy6xauZYnedh
+         kxpg==
+X-Gm-Message-State: AJIora+6t57E4jpYjIADn045G0tLpbHzyjOvwQ+mYp5UjzHcRtztVu3n
+        5p/PU8qQRGSnMvDGsYkadxmg0VFuLAMENLqcYI60Eg==
+X-Google-Smtp-Source: AGRyM1uNtkg5Y2IRmGnxo1RbFLJVbjJuAEzaSRiEXHBPKJ+mQGbRVw11UEmSKc0sWqWF8C25CpekbWeNsTatl+C7xk4=
+X-Received: by 2002:a05:6602:15c8:b0:67c:45c7:40c9 with SMTP id
+ f8-20020a05660215c800b0067c45c740c9mr6287785iow.138.1659394290961; Mon, 01
+ Aug 2022 15:51:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801114138.041018499@linuxfoundation.org>
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Mon, 1 Aug 2022 16:45:41 -0600
-Message-ID: <CAFU3qoYROXFxSTVAo_BLsYYEo7N874KY3F9XQeq1b4Xzf3PDzA@mail.gmail.com>
-Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220719195628.3415852-1-axelrasmussen@google.com>
+ <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
+ <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
+ <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com> <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
+ <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
+In-Reply-To: <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Mon, 1 Aug 2022 15:50:55 -0700
+Message-ID: <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Nadav Amit <namit@vmware.com>
+Cc:     "Schaufler, Casey" <casey.schaufler@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,48 +92,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 1:37 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Mon, Aug 1, 2022 at 12:53 PM Nadav Amit <namit@vmware.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.18.16 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On Aug 1, 2022, at 10:13 AM, Axel Rasmussen <axelrasmussen@google.com> wr=
+ote:
 >
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
+> > =E2=9A=A0 External Email
+> >
+> > I finished up some other work and got around to writing a v5 today,
+> > but I ran into a problem with /proc/[pid]/userfaultfd.
+> >
+> > Files in /proc/[pid]/* are owned by the user/group which started the
+> > process, and they don't support being chmod'ed.
+> >
+> > For the userfaultfd device, I think we want the following semantics:
+> > - For UFFDs created via the device, we want to always allow handling
+> > kernel mode faults
+> > - For security, the device should be owned by root:root by default, so
+> > unprivileged users don't have default access to handle kernel faults
+> > - But, the system administrator should be able to chown/chmod it, to
+> > grant access to handling kernel faults for this process more widely.
+> >
+> > It could be made to work like that but I think it would involve at leas=
+t:
+> >
+> > - Special casing userfaultfd in proc_pid_make_inode
+> > - Updating setattr/getattr for /proc/[pid] to meaningfully store and
+> > then retrieve uid/gid different from the task's, again probably
+> > special cased for userfautlfd since we don't want this behavior for
+> > other files
+> >
+> > It seems to me such a change might raise eyebrows among procfs folks.
+> > Before I spend the time to write this up, does this seem like
+> > something that would obviously be nack'ed?
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.16-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
+> [ Please avoid top-posting in the future ]
+
+I will remember this. Gmail's default behavior is annoying. :/
+
 >
-> thanks,
+> I have no interest in making your life harder than it should be. If you
+> cannot find a suitable alternative, I will not fight against it.
 >
-> greg k-h
+> How about this alternative: how about following KVM usage-model?
+>
+> IOW: You open /dev/userfaultfd, but this is not the file-descriptor that =
+you
+> use for most operations. Instead you first issue an ioctl - similarly to
+> KVM_CREATE_VM - to get a file-descriptor for your specific process. You t=
+hen
+> use this new file-descriptor to perform your operations (read/ioctl/etc).
+>
+> This would make the fact that ioctls/reads from different processes refer=
+ to
+> different contexts (i.e., file-descriptors) much more natural.
+>
+> Does it sound better?
 
-Hi Greg,
+Ah, that I think is more or less what my series already proposes, if I
+understand you correctly.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+The usage is:
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+fd =3D open(/dev/userfaultfd) /* This FD is only useful for creating new
+userfaultfds */
+uffd =3D ioctl(fd, USERFAULTFD_IOC_NEW) /* Now you get a real uffd */
+close(fd); /* No longer needed now that we have a real uffd */
 
-     Total time: 0.718 [sec]
+/* Use uffd to register, COPY, CONTINUE, whatever */
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
+One thing we could do now or in the future is extend
+USERFAULTFD_IOC_NEW to take a pid as an argument, to support creating
+uffds for remote processes.
 
-     Total time: 13.324 [sec]
 
-      13.324520 usecs/op
-          75049 ops/sec
 
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+And then we get the benefit of permissions for /dev nodes working very
+naturally - they default to root, but can be configured by the
+sysadmin via chown/chmod, or udev rules, or whatever.

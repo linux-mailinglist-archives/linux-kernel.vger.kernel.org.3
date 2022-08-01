@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DEE586A8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3098B5869D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiHAMSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S233660AbiHAMIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiHAMRK (ORCPT
+        with ESMTP id S233700AbiHAMH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:17:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC157E308;
-        Mon,  1 Aug 2022 04:59:03 -0700 (PDT)
+        Mon, 1 Aug 2022 08:07:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7055F99C;
+        Mon,  1 Aug 2022 04:55:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3C60B81170;
-        Mon,  1 Aug 2022 11:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63FC9C433C1;
-        Mon,  1 Aug 2022 11:59:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F39F612D0;
+        Mon,  1 Aug 2022 11:55:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B04AC433C1;
+        Mon,  1 Aug 2022 11:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355140;
-        bh=MXZi7ngGCR1PaGjCZ9fo8g4JjUSp+/AUMi04FkgXCUg=;
+        s=korg; t=1659354924;
+        bh=R4r38YJ5Dy31el24nkUxBsEoOBTpXjcjl5kVMXZYn0Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sEn/FA7iiyurhxl3W0qV9L3s4Ou5GQAtxXPcxCj3MP6flUm5ZP9FjXEDkXVGSi6bf
-         pTY7xaV76RoFWzp0yehAH/tzCJTRZZRqHZbiNFK7G5O2JS52hPR/OS37ZHED81U1T/
-         uLPOKcFhcMk+OZ66/+6z3n+I3A6CSs57n5twhTH4=
+        b=oR8d9sBzlm911P52+XYucIPtBfcrqjwTyRHnq4tJ6lA0rxXvD8IdcWH+A4Gma9ihI
+         icQZRhUcdGWRieSF9vdEO256wKU2SDRuFhRRle3pjFluxb9vBUJVRkjeNRXmJU8wad
+         70O9eL4HExtZdcH7XuufHMQzOPBaoCyRZ7e0U5+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 78/88] stmmac: dwmac-mediatek: fix resource leak in probe
-Date:   Mon,  1 Aug 2022 13:47:32 +0200
-Message-Id: <20220801114141.583663229@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.15 69/69] x86/bugs: Do not enable IBPB at firmware entry when IBPB is not available
+Date:   Mon,  1 Aug 2022 13:47:33 +0200
+Message-Id: <20220801114137.252692437@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-[ Upstream commit 4d3d3a1b244fd54629a6b7047f39a7bbc8d11910 ]
+commit 571c30b1a88465a1c85a6f7762609939b9085a15 upstream.
 
-If mediatek_dwmac_clks_config() fails, then call stmmac_remove_config_dt()
-before returning.  Otherwise it is a resource leak.
+Some cloud hypervisors do not provide IBPB on very recent CPU processors,
+including AMD processors affected by Retbleed.
 
-Fixes: fa4b3ca60e80 ("stmmac: dwmac-mediatek: fix clock issue")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YuJ4aZyMUlG6yGGa@kili
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Using IBPB before firmware calls on such systems would cause a GPF at boot
+like the one below. Do not enable such calls when IBPB support is not
+present.
+
+  EFI Variables Facility v0.08 2004-May-17
+  general protection fault, maybe for address 0x1: 0000 [#1] PREEMPT SMP NOPTI
+  CPU: 0 PID: 24 Comm: kworker/u2:1 Not tainted 5.19.0-rc8+ #7
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+  Workqueue: efi_rts_wq efi_call_rts
+  RIP: 0010:efi_call_rts
+  Code: e8 37 33 58 ff 41 bf 48 00 00 00 49 89 c0 44 89 f9 48 83 c8 01 4c 89 c2 48 c1 ea 20 66 90 b9 49 00 00 00 b8 01 00 00 00 31 d2 <0f> 30 e8 7b 9f 5d ff e8 f6 f8 ff ff 4c 89 f1 4c 89 ea 4c 89 e6 48
+  RSP: 0018:ffffb373800d7e38 EFLAGS: 00010246
+  RAX: 0000000000000001 RBX: 0000000000000006 RCX: 0000000000000049
+  RDX: 0000000000000000 RSI: ffff94fbc19d8fe0 RDI: ffff94fbc1b2b300
+  RBP: ffffb373800d7e70 R08: 0000000000000000 R09: 0000000000000000
+  R10: 000000000000000b R11: 000000000000000b R12: ffffb3738001fd78
+  R13: ffff94fbc2fcfc00 R14: ffffb3738001fd80 R15: 0000000000000048
+  FS:  0000000000000000(0000) GS:ffff94fc3da00000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: ffff94fc30201000 CR3: 000000006f610000 CR4: 00000000000406f0
+  Call Trace:
+   <TASK>
+   ? __wake_up
+   process_one_work
+   worker_thread
+   ? rescuer_thread
+   kthread
+   ? kthread_complete_and_exit
+   ret_from_fork
+   </TASK>
+  Modules linked in:
+
+Fixes: 28a99e95f55c ("x86/amd: Use IBPB for firmware calls")
+Reported-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220728122602.2500509-1-cascardo@canonical.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/x86/kernel/cpu/bugs.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-index ca8ab290013c..d42e1afb6521 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-@@ -688,18 +688,19 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1513,6 +1513,7 @@ static void __init spectre_v2_select_mit
+ 	 * enable IBRS around firmware calls.
+ 	 */
+ 	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
++	    boot_cpu_has(X86_FEATURE_IBPB) &&
+ 	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+ 	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
  
- 	ret = mediatek_dwmac_clks_config(priv_plat, true);
- 	if (ret)
--		return ret;
-+		goto err_remove_config_dt;
- 
- 	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
--	if (ret) {
--		stmmac_remove_config_dt(pdev, plat_dat);
-+	if (ret)
- 		goto err_drv_probe;
--	}
- 
- 	return 0;
- 
- err_drv_probe:
- 	mediatek_dwmac_clks_config(priv_plat, false);
-+err_remove_config_dt:
-+	stmmac_remove_config_dt(pdev, plat_dat);
-+
- 	return ret;
- }
- 
--- 
-2.35.1
-
 
 

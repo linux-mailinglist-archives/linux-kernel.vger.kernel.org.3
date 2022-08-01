@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837AF5868AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8AE586929
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiHALwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S232710AbiHAL6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiHALvd (ORCPT
+        with ESMTP id S232666AbiHAL5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:51:33 -0400
+        Mon, 1 Aug 2022 07:57:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9FD3E77E;
-        Mon,  1 Aug 2022 04:49:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552C48CAF;
+        Mon,  1 Aug 2022 04:51:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26F78B8116B;
-        Mon,  1 Aug 2022 11:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474BFC433D6;
-        Mon,  1 Aug 2022 11:49:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6C93B8116E;
+        Mon,  1 Aug 2022 11:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407FFC433C1;
+        Mon,  1 Aug 2022 11:51:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354566;
-        bh=vYtUgWJOtyovVyFdms+tN1lBrNToWs07uk+ePG6BBiM=;
+        s=korg; t=1659354710;
+        bh=j+lLUqvz74ahqj07oBiRiEe4LBl0Q7op740iScROl2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KMXQexf8eWrclj8piMd3UjUfNR31rbM2WMkEDecaD9UQgwvKB8iPRWzI755Jrj239
-         oowqym1S/kef426lt7jPV48R01UtUIftG6mukKEMBmHNYNzwp/eEhETpiy3WSYANmH
-         N8H/SMHhTfdEs/BhsLRkHC47DKBA4t7kjLRjsb3U=
+        b=ATWQfGO22NMbLY72pHISDqOFAtFi18kk2sHv2F2wdQCojnHWumV5pHvmhRffHVGUD
+         OcuvVGAUuHKQ5ZA/YLgKfBCiR7/78qahPqMeqqUDRgFv+L7ulSlPLtwrKERUknzMFs
+         tbVeHCKqTy0NEbrVo6+wQWzG96znOydOeRKwm91I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ewan Milne <emilne@redhat.com>, Long Li <longli@microsoft.com>,
-        John Garry <john.garry@huawei.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Yu Kuai <yukuai3@huawei.com>
-Subject: [PATCH 5.4 34/34] scsi: core: Fix race between handling STS_RESOURCE and completion
-Date:   Mon,  1 Aug 2022 13:47:14 +0200
-Message-Id: <20220801114129.332434263@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH 5.10 58/65] xfs: hold buffer across unpin and potential shutdown processing
+Date:   Mon,  1 Aug 2022 13:47:15 +0200
+Message-Id: <20220801114136.094866787@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
-References: <20220801114128.025615151@linuxfoundation.org>
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+References: <20220801114133.641770326@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,57 +54,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Brian Foster <bfoster@redhat.com>
 
-commit 673235f915318ced5d7ec4b2bfd8cb909e6a4a55 upstream.
+commit 84d8949e770745b16a7e8a68dcb1d0f3687bdee9 upstream.
 
-When queuing I/O request to LLD, STS_RESOURCE may be returned because:
+The special processing used to simulate a buffer I/O failure on fs
+shutdown has a difficult to reproduce race that can result in a use
+after free of the associated buffer. Consider a buffer that has been
+committed to the on-disk log and thus is AIL resident. The buffer
+lands on the writeback delwri queue, but is subsequently locked,
+committed and pinned by another transaction before submitted for
+I/O. At this point, the buffer is stuck on the delwri queue as it
+cannot be submitted for I/O until it is unpinned. A log checkpoint
+I/O failure occurs sometime later, which aborts the bli. The unpin
+handler is called with the aborted log item, drops the bli reference
+count, the pin count, and falls into the I/O failure simulation
+path.
 
- - Host is in recovery or blocked
+The potential problem here is that once the pin count falls to zero
+in ->iop_unpin(), xfsaild is free to retry delwri submission of the
+buffer at any time, before the unpin handler even completes. If
+delwri queue submission wins the race to the buffer lock, it
+observes the shutdown state and simulates the I/O failure itself.
+This releases both the bli and delwri queue holds and frees the
+buffer while xfs_buf_item_unpin() sits on xfs_buf_lock() waiting to
+run through the same failure sequence. This problem is rare and
+requires many iterations of fstest generic/019 (which simulates disk
+I/O failures) to reproduce.
 
- - Target queue throttling or target is blocked
+To avoid this problem, grab a hold on the buffer before the log item
+is unpinned if the associated item has been aborted and will require
+a simulated I/O failure. The hold is already required for the
+simulated I/O failure, so the ordering simply guarantees the unpin
+handler access to the buffer before it is unpinned and thus
+processed by the AIL. This particular ordering is required so long
+as the AIL does not acquire a reference on the bli, which is the
+long term solution to this problem.
 
- - LLD rejection
-
-In these scenarios BLK_STS_DEV_RESOURCE is returned to the block layer to
-avoid an unnecessary re-run of the queue. However, all of the requests
-queued to this SCSI device may complete immediately after reading
-'sdev->device_busy' and BLK_STS_DEV_RESOURCE is returned to block layer. In
-that case the current I/O won't get a chance to get queued since it is
-invisible at that time for both scsi_run_queue_async() and blk-mq's
-RESTART.
-
-Fix the issue by not returning BLK_STS_DEV_RESOURCE in this situation.
-
-Link: https://lore.kernel.org/r/20201202100419.525144-1-ming.lei@redhat.com
-Fixes: 86ff7c2a80cd ("blk-mq: introduce BLK_STS_DEV_RESOURCE")
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Ewan Milne <emilne@redhat.com>
-Cc: Long Li <longli@microsoft.com>
-Reported-by: John Garry <john.garry@huawei.com>
-Tested-by: "chenxiang (M)" <chenxiang66@hisilicon.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Brian Foster <bfoster@redhat.com>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Acked-by: Darrick J. Wong <djwong@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_lib.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/xfs/xfs_buf_item.c |   37 +++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1719,8 +1719,7 @@ out_put_budget:
- 	case BLK_STS_OK:
- 		break;
- 	case BLK_STS_RESOURCE:
--		if (atomic_read(&sdev->device_busy) ||
--		    scsi_device_blocked(sdev))
-+		if (scsi_device_blocked(sdev))
- 			ret = BLK_STS_DEV_RESOURCE;
- 		break;
- 	default:
+--- a/fs/xfs/xfs_buf_item.c
++++ b/fs/xfs/xfs_buf_item.c
+@@ -393,17 +393,8 @@ xfs_buf_item_pin(
+ }
+ 
+ /*
+- * This is called to unpin the buffer associated with the buf log
+- * item which was previously pinned with a call to xfs_buf_item_pin().
+- *
+- * Also drop the reference to the buf item for the current transaction.
+- * If the XFS_BLI_STALE flag is set and we are the last reference,
+- * then free up the buf log item and unlock the buffer.
+- *
+- * If the remove flag is set we are called from uncommit in the
+- * forced-shutdown path.  If that is true and the reference count on
+- * the log item is going to drop to zero we need to free the item's
+- * descriptor in the transaction.
++ * This is called to unpin the buffer associated with the buf log item which
++ * was previously pinned with a call to xfs_buf_item_pin().
+  */
+ STATIC void
+ xfs_buf_item_unpin(
+@@ -420,12 +411,26 @@ xfs_buf_item_unpin(
+ 
+ 	trace_xfs_buf_item_unpin(bip);
+ 
++	/*
++	 * Drop the bli ref associated with the pin and grab the hold required
++	 * for the I/O simulation failure in the abort case. We have to do this
++	 * before the pin count drops because the AIL doesn't acquire a bli
++	 * reference. Therefore if the refcount drops to zero, the bli could
++	 * still be AIL resident and the buffer submitted for I/O (and freed on
++	 * completion) at any point before we return. This can be removed once
++	 * the AIL properly holds a reference on the bli.
++	 */
+ 	freed = atomic_dec_and_test(&bip->bli_refcount);
+-
++	if (freed && !stale && remove)
++		xfs_buf_hold(bp);
+ 	if (atomic_dec_and_test(&bp->b_pin_count))
+ 		wake_up_all(&bp->b_waiters);
+ 
+-	if (freed && stale) {
++	 /* nothing to do but drop the pin count if the bli is active */
++	if (!freed)
++		return;
++
++	if (stale) {
+ 		ASSERT(bip->bli_flags & XFS_BLI_STALE);
+ 		ASSERT(xfs_buf_islocked(bp));
+ 		ASSERT(bp->b_flags & XBF_STALE);
+@@ -468,13 +473,13 @@ xfs_buf_item_unpin(
+ 			ASSERT(bp->b_log_item == NULL);
+ 		}
+ 		xfs_buf_relse(bp);
+-	} else if (freed && remove) {
++	} else if (remove) {
+ 		/*
+ 		 * The buffer must be locked and held by the caller to simulate
+-		 * an async I/O failure.
++		 * an async I/O failure. We acquired the hold for this case
++		 * before the buffer was unpinned.
+ 		 */
+ 		xfs_buf_lock(bp);
+-		xfs_buf_hold(bp);
+ 		bp->b_flags |= XBF_ASYNC;
+ 		xfs_buf_ioend_fail(bp);
+ 	}
 
 

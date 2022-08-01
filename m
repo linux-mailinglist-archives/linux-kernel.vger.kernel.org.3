@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FA0587444
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AA9587447
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235275AbiHAXKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S234498AbiHAXMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiHAXKd (ORCPT
+        with ESMTP id S232024AbiHAXMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:10:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E014E19029;
-        Mon,  1 Aug 2022 16:10:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE00760DE0;
-        Mon,  1 Aug 2022 23:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5A9C433C1;
-        Mon,  1 Aug 2022 23:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659395430;
-        bh=c68rvvKS7OQgl7DSiVXP6nOIRR0u1tOQMrT4+jA51fE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Y+i7h8rHt7TGpHAWfVjqvgbK+2WMmD82Hc7mAxOb0aI49VvxXJ/OHEqKkz5251s9d
-         Qks06Ig1tubt+kmUzInNt9UInoy9zGAM+fDDRZ5dFgn3lhFXQ90VsKf96o8MjuaFXr
-         SuLWtOh1NoJRw+S9jZYLDGyBTnL5JYZC2q3CkC8j0psP63MYikDjgXumwt7XA7VXNN
-         YF618/qertaCAdhOtxSVbba7X7TcEjG7xN2/Gpz1aZNoZRJ6aIh0GFvVnJ1+T26udB
-         A+uxXIu7tba7WAPZd7gCzSxgq6vFUuENDVsv7GmBoXTfALO4/fwvAMuRvXEPUIz3+n
-         qgUgIcPqLSwbA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A403B5C0D2B; Mon,  1 Aug 2022 16:10:29 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 16:10:29 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcutorture: Use the barrier operation corresponding to
- rcutorture.torture_type
-Message-ID: <20220801231029.GB2860372@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220731105356.1741086-1-qiang1.zhang@intel.com>
+        Mon, 1 Aug 2022 19:12:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885819029
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:12:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso6678334pjq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vcne+DijzvkGGojl7ODwtHBhru6f6mHbW8Yh6JWpaSo=;
+        b=BSFh9Y/3Bqf/eS6bf/VCEmnc4PQDR2RyCgFyqmlEFpQpCNlbiH1W0gCWFDtQ7rUKT9
+         Kl93q+bIPvOnfXkMMWeMVnZuTXEaO4BXGXKTibfb5rBQ8tvlJd80aS7YXjl9Wjxr0VQt
+         53i2nwUa9LLbSM4WpBK6CG3zOKyeTykIBaXoVQsjaNFLRSqzoIaQ/z6mkjeWlgcETkhz
+         04vtV67FjJCyiiUA+NQsymzh7cRXmXYoX99X9hwG/PMyyHqZDxB30IPXvcJvQXMryq+f
+         3krV0vPaUpSNlT7vywfNl+nuXcT9dkBniEyn7b8QncxUhaFwZZawz1xry3cj99hUKBO/
+         vkuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vcne+DijzvkGGojl7ODwtHBhru6f6mHbW8Yh6JWpaSo=;
+        b=v//BaXhVK3/JlkaUNCIuDEjNFIZHWFgVdUXcC6f46WKPazxdUTCm47rtCwTnKzap9P
+         Cc7HJ9NYE6G8/LJPvvkRmJBUOM6YTXmgj03nvjDpu1e3id7tG9RkG/T3axJaLXhaICVl
+         LglVtyxCT3qYiEVlRFw8RvKPE7dri8ybAOFL7N28UaY2A5XotSc+Abnk7KbfOudFuA+u
+         rp2Arfulypdljdy9ipbKiMSvKmJqGwfnaFpBmHlV2Stee0v8Ii2aPQUXle2Nb850pqaU
+         Xgv/MndpDSrvd1jNOBtziH8FTiBxjmw/z47BzySw2kit4WPa8GBNv53p7Ozd88LEK0rO
+         Oy4Q==
+X-Gm-Message-State: ACgBeo1c67lbnr9jQ2FAvk0sL+nxAA7tJEKSrdcdQN/lCNiL4p1D4DGE
+        SRYaw7l55KXf2Tn7YIB76YoilqRMp730ni/h0hs=
+X-Google-Smtp-Source: AA6agR5MQkRVnpQvn23Dqex9iHEwjfhYODOQ7uDrOBdjfp44M0noFu3cGl/T0SboflHe+rhf23b2iHPvWRoDJuJ2liU=
+X-Received: by 2002:a17:902:e746:b0:16e:f7cf:671f with SMTP id
+ p6-20020a170902e74600b0016ef7cf671fmr4205003plf.168.1659395529356; Mon, 01
+ Aug 2022 16:12:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731105356.1741086-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com> <20220801225538.qtdb5zd66g6ipewz@pengutronix.de>
+In-Reply-To: <20220801225538.qtdb5zd66g6ipewz@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 1 Aug 2022 20:11:55 -0300
+Message-ID: <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Adam Ford <aford173@gmail.com>, Marek Vasut <marex@denx.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 06:53:56PM +0800, Zqiang wrote:
-> when the rcutorture.torture_type value is 'rcu', this is correct for
-> invoke rcu_barrier() to wait all in-flight call_rcu() callbacks
-> (rcu_torture_fwd_cb_cr()) complete in rcutorture_oom_notify(). but when
-> the rcutorture.torture_type value is 'tasks-tracing', invoke rcu_barrier()
-> won't wait all in-flight call_rcu_tasks_trace() callbacks complete, the
-> rcu_barrier_tasks_trace() should be invoked.
-> 
-> This commit fix it by using barrier operation corresponding to
-> rcutorture.torture_type to wait all in-flight rcu_torture_fwd_cb_cr()
-> complete.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Hi Marco,
 
-Good catch, thank you!
+On Mon, Aug 1, 2022 at 7:55 PM Marco Felsch <m.felsch@pengutronix.de> wrote:
 
-I have done my usual wordsmithing as shown below.  Could you please
-double-check it?
+> Question is, does your setup work for all modes after applying your
+> patches and without using the NXP-downstream porches settings? We also
 
-							Thanx, Paul
+Without Frieder's patch:
+"drm/exynos: Fix horizontal timing settings in MHPORCH/MSYNC
+registers", I get no HDMI output.
 
-------------------------------------------------------------------------
+Regards,
 
-commit f8c9027f9c81be92344996a51babaa5a23bd88db
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Sun Jul 31 18:53:56 2022 +0800
-
-    rcutorture: Use the barrier operation specified by cur_ops
-    
-    The rcutorture_oom_notify() function unconditionally invokes
-    rcu_barrier(), which is OK when the rcutorture.torture_type value is
-    "rcu", but unhelpful otherwise.  The purpose of these barrier calls is to
-    wait for all outstanding callback-flooding callbacks to be invoked before
-    cleaning up their data.  Using the wrong barrier function therefore
-    risks arbitrary memory corruption.  Thus, this commit changes these
-    rcu_barrier() calls into cur_ops->cb_barrier() to make things work when
-    torturing non-vanilla flavors of RCU.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 7f13f2e5ed62f..7e7d54841613c 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -2638,12 +2638,12 @@ static int rcutorture_oom_notify(struct notifier_block *self,
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
- 	pr_info("%s: Freed %lu RCU callbacks.\n", __func__, ncbs);
--	rcu_barrier();
-+	cur_ops->cb_barrier();
- 	ncbs = 0;
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
- 	pr_info("%s: Freed %lu RCU callbacks.\n", __func__, ncbs);
--	rcu_barrier();
-+	cur_ops->cb_barrier();
- 	ncbs = 0;
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
+Fabio Estevam

@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BBD586D8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E443A586D92
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233384AbiHAPTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S233408AbiHAPTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiHAPTl (ORCPT
+        with ESMTP id S232357AbiHAPTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:19:41 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10712AC4F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:19:40 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c15-20020a170902d48f00b0016c01db365cso7550508plg.20
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:19:40 -0700 (PDT)
+        Mon, 1 Aug 2022 11:19:48 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D3F3337D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:19:46 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so8421673otb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 08:19:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=S/2jI0VtfXi7m6ZMf+qwyQLgOYuMiCIT7wBl4PXRX+g=;
-        b=OqEy/n2odJcpLuQeQrEW3uvv4W6U5wbHVoh+YVePDwAMenajqwhMu4ssIBWUMxydvo
-         PKYVsYiXs6raDPcmybsCA24N7Xr/PKhc3cv0Vwr6BMp4HyuldkXfgDcjH9L3QbzEG3q5
-         bnNJS2cnVbxfJyehbXL9D+5LzG6I9WBICeXtTSON6X+SPopmA/aqmPqDBG7bmgqEp6PG
-         5KtSDvU7j4UB39QtuZW1XmQ721oGR4wdvlfPYnTwC+l7niSzawHFaz2uGJslDdVkhgFL
-         9D7Sf0+Iz1Jj8kgeI9C//InH/tv88mSYgGkCu1saaRUz09yZ27m4tFnY+LnZQP+AJSP8
-         CdjA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4KphHhaoyXc371JKTPQphkPCqA2NS8jh1IIkyTneq4o=;
+        b=62EB/TFA4EuJYasg0ku1Dzr9dF033+9r1gXM0z+QJ7j/FuTK5jhbf38GBxyKpAP1ji
+         7Drz7ejxjN9DxPHD/ANUEK6L3cZPI9kd1/4JsiNCkcd8r0EE7Y31h8eUk8Q4T4JCYL3I
+         wG9l4kSHTD9SNnUXEVcwOcs77YOob6wKHSNIg0dih6qNHzqlFov+sSv9NIQMHsPnI7y5
+         H4PYESNlKNYjX61q+2qeK+YdhaBuvc/wNy56XLdYm/ndygfjSy8HPh0I7D2XR9miZcy5
+         E6TRQoilJz8V5YJiz//4+CWH/Ith4r/ncRDxeHNXkGgVVHLxKgv/rSkb4eGyDgYXYkRb
+         1VlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=S/2jI0VtfXi7m6ZMf+qwyQLgOYuMiCIT7wBl4PXRX+g=;
-        b=zDkSnsKYOBh4pNWnFgp7Qo2AReof2+Oc8bl6V+fOmOJQl5/FIHUOSt7MrOMMgx+Lz7
-         1VkM+wrr/pkwUmtR58vzpJDPXf459JQ9qjdiFDx6x5JlcTXfDgCbMkhG/Bj0zF3hYv/m
-         kaNITHT4i4cOnCC7tgM9KZZbfYfAx2jR7YZzL6JW0O3A8F1+8mLY2bPexpiI2eRJCIlJ
-         cUWQm9LhnVgfDe78Q8LgJv+cbRAe+4PEEnNDhFKK3sUpe/4vkeby4hsukfLj/q2CnV/6
-         94VzeroFi6hj3OU0h832aIAEQx+5bSF8i9XPddlm3Ci5Je/42NevIGEnEdMxmWBmgQ7M
-         qmfg==
-X-Gm-Message-State: AJIora9m+ZtVt8CPyGah64WAEqxalESmAD8i0GdGeWDwi0g9tuM6aURn
-        M621IOO2esqgwkjWrHYXIVB6BBaDeYzE
-X-Google-Smtp-Source: AGRyM1tmitgRItVDG9wYYQJP7lV6j2QhkGGFMfWO4zg8l7GgEPHyefkScB+izDXwBytqYaqte5+sZLs4g3s8
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a63:6c45:0:b0:419:b668:6d with SMTP id
- h66-20020a636c45000000b00419b668006dmr13395927pgc.548.1659367180173; Mon, 01
- Aug 2022 08:19:40 -0700 (PDT)
-Date:   Mon,  1 Aug 2022 08:19:28 -0700
-Message-Id: <20220801151928.270380-1-vipinsh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting NUMA aware
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, dmatlack@google.com, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4KphHhaoyXc371JKTPQphkPCqA2NS8jh1IIkyTneq4o=;
+        b=EptLstm7YvRjCJUxA5dk1N/DlhVPw+Pdftl1u3GsCGUzESMz6IcqeFgS66I5GNaCKA
+         2B+QEHVzu0rPxKZxo3aGsMWNPNyizg758BjWoFAGAHJfQhc61bKlQqI7eF26TVH7l7aW
+         37oli6XwV7hhwTynacCIXPPvDfL9K9MnLBxrSyYcGvQhH6f7gXoE43jAEDY3YK3s6DTw
+         4cl6JyxTdjJtQGd3b2xHbriy9ach+xdRIz4PUWzqTBJ47HUGHKrofM/22hlRaEh6nuTF
+         Eurd5PLJ/71keGjHA/CCwo2+RevelG3qs0RKa/G64KLPK0YboMTpO8aJFuxr1W6zr+Uf
+         s0+g==
+X-Gm-Message-State: ACgBeo02MXW0016Djhj8koQYvmh9S9WP//qpfHI24reFNh24YDJMcVn1
+        woDZ5XGDmVhg+ymprHiIzTq7j1PJZtYnR4w4nFtR
+X-Google-Smtp-Source: AA6agR58TUz+jQfBltCbxRg6WZrQY7oenMMZ6MBjbTUxC7EEAw7vmQXEqpFoYsjefFs4nmqFahyuv4TBVZlaC3y3xi4=
+X-Received: by 2002:a9d:7a99:0:b0:629:805:bca4 with SMTP id
+ l25-20020a9d7a99000000b006290805bca4mr2748972otn.26.1659367185883; Mon, 01
+ Aug 2022 08:19:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com> <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
+In-Reply-To: <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 1 Aug 2022 11:19:35 -0400
+Message-ID: <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org
+Cc:     Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
+        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,107 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tdp_mmu_alloc_sp_for_split() allocates page tables for Eager Page
-Splitting.  Currently it does not specify a NUMA node preference, so it
-will try to allocate from the local node. The thread doing eager page
-splitting is supplied by the userspace and may not be running on the same
-node where it would be best for page tables to be allocated.
+On Mon, Aug 1, 2022 at 9:13 AM Frederick Lawler <fred@cloudflare.com> wrote:
+> On 7/22/22 7:20 AM, Paul Moore wrote:
+> > On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> >
+> >> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+> >>> While creating a LSM BPF MAC policy to block user namespace creation, we
+> >>> used the LSM cred_prepare hook because that is the closest hook to prevent
+> >>> a call to create_user_ns().
+> >>>
+> >>> The calls look something like this:
+> >>>
+> >>> cred = prepare_creds()
+> >>> security_prepare_creds()
+> >>> call_int_hook(cred_prepare, ...
+> >>> if (cred)
+> >>> create_user_ns(cred)
+> >>>
+> >>> We noticed that error codes were not propagated from this hook and
+> >>> introduced a patch [1] to propagate those errors.
+> >>>
+> >>> The discussion notes that security_prepare_creds()
+> >>> is not appropriate for MAC policies, and instead the hook is
+> >>> meant for LSM authors to prepare credentials for mutation. [2]
+> >>>
+> >>> Ultimately, we concluded that a better course of action is to introduce
+> >>> a new security hook for LSM authors. [3]
+> >>>
+> >>> This patch set first introduces a new security_create_user_ns() function
+> >>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> >> Patch 1 and 4 still need review from the lsm/security side.
+> >
+> > This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
+> >
+> > I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
+>
+> Based on last weeks comments, should I go ahead and put up v4 for
+> 5.20-rc1 when that drops, or do I need to wait for more feedback?
 
-We can improve TDP MMU eager page splitting by making
-tdp_mmu_alloc_sp_for_split() NUMA-aware. Specifically, when splitting a
-huge page, allocate the new lower level page tables on the same node as the
-huge page.
+In general it rarely hurts to make another revision, and I think
+you've gotten some decent feedback on this draft, especially around
+the BPF LSM tests; I think rebasing on Linus tree after the upcoming
+io_uring changes are merged would be a good idea.  Although as a
+reminder to the BPF LSM folks - I'm looking at you KP Singh :) - I
+need an ACK from you guys before I merge the BPF related patches
+(patches {2,3}/4).  For the record, I think the SELinux portion of
+this patchset (path 4/4) is fine.
 
-__get_free_page() is replaced by alloc_page_nodes(). This introduces two
-functional changes.
+There is the issue of Eric's NACK, but I believe the responses that
+followed his comment sufficiently addressed those concerns and it has
+now been a week with no further comment from Eric; we should continue
+to move forward with this.
 
-  1. __get_free_page() removes gfp flag __GFP_HIGHMEM via call to
-  __get_free_pages(). This should not be an issue  as __GFP_HIGHMEM flag is
-  not passed in tdp_mmu_alloc_sp_for_split() anyway.
-
-  2. __get_free_page() calls alloc_pages() and use thread's mempolicy for
-  the NUMA node allocation. From this commit, thread's mempolicy will not
-  be used and first preference will be to allocate on the node where huge
-  page was present.
-
-dirty_log_perf_test for 416 vcpu and 1GB/vcpu configuration on a 8 NUMA
-node machine showed dirty memory time improvements between 2% - 35% in
-multiple runs.
-
-Suggested-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- arch/x86/kvm/mmu/tdp_mmu.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index bf2ccf9debcaa..1e30e18fc6a03 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1402,9 +1402,19 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
- 	return spte_set;
- }
- 
--static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-+/*
-+ * Caller's responsibility to pass a valid spte which has the shadow page
-+ * present.
-+ */
-+static int tdp_mmu_spte_to_nid(u64 spte)
-+{
-+	return page_to_nid(pfn_to_page(spte_to_pfn(spte)));
-+}
-+
-+static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
- {
- 	struct kvm_mmu_page *sp;
-+	struct page *spt_page;
- 
- 	gfp |= __GFP_ZERO;
- 
-@@ -1412,11 +1422,12 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
- 	if (!sp)
- 		return NULL;
- 
--	sp->spt = (void *)__get_free_page(gfp);
--	if (!sp->spt) {
-+	spt_page = alloc_pages_node(nid, gfp, 0);
-+	if (!spt_page) {
- 		kmem_cache_free(mmu_page_header_cache, sp);
- 		return NULL;
- 	}
-+	sp->spt = page_address(spt_page);
- 
- 	return sp;
- }
-@@ -1426,6 +1437,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
- 						       bool shared)
- {
- 	struct kvm_mmu_page *sp;
-+	int nid;
-+
-+	nid = tdp_mmu_spte_to_nid(iter->old_spte);
- 
- 	/*
- 	 * Since we are allocating while under the MMU lock we have to be
-@@ -1436,7 +1450,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
- 	 * If this allocation fails we drop the lock and retry with reclaim
- 	 * allowed.
- 	 */
--	sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-+	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
- 	if (sp)
- 		return sp;
- 
-@@ -1448,7 +1462,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
- 		write_unlock(&kvm->mmu_lock);
- 
- 	iter->yielded = true;
--	sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
-+	sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
- 
- 	if (shared)
- 		read_lock(&kvm->mmu_lock);
 -- 
-2.37.1.455.g008518b4e5-goog
-
+paul-moore.com

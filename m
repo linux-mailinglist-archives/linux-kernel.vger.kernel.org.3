@@ -2,82 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE5F5867C5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791415867CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiHAKoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S230405AbiHAKuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiHAKog (ORCPT
+        with ESMTP id S230042AbiHAKuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:44:36 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E95CD88
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1659350669; bh=1EJPgP5q2q4V6iN2Gc8k3q+T6sP+TuI5mAZxt56oEQs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=v9H4tKDdubqQVOdqaUwRK8QP0jXaMIWtxKlvyIiTLreQbdA/IBUpyp9xVApCdYE31
-         qnwe8Onyel1WcDO1/+4Z0XsEul2UA6IJTyRB4/XKeAd93kZdLHfvvUrLFMEZHsQ/z8
-         l48EYuJEuTFwWCnGyEkFelCf7Y43U5Iq8m6M3BtM=
-Received: from [100.100.57.219] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 1 Aug 2022 06:50:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472F0F68;
+        Mon,  1 Aug 2022 03:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2590B60103;
-        Mon,  1 Aug 2022 18:44:29 +0800 (CST)
-Message-ID: <a9777679-ff44-daac-57bb-ea3c52c6907f@xen0n.name>
-Date:   Mon, 1 Aug 2022 18:44:28 +0800
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05109B80FF1;
+        Mon,  1 Aug 2022 10:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 90B34C433B5;
+        Mon,  1 Aug 2022 10:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659351012;
+        bh=AyuwO2/1dfwoNstGKU29Y1p6hs/jknSvMh/8nrrVsOA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tK0zGZmbyB0iE27QZ6Op3Xvp0TZfDHAzYfOHg51x9Ty55mB2/QklLqp8Arn7SFQVx
+         9K9wwSKjamGlseT8br2Xeyk7VP+qJ+PeaAfAsHgT0p0vzWfqw0VsUuK9SHLhio0XnY
+         RjTOPThHVGRm5jiePCY5ux70VGoxgxPSdIW8k/EQjW8c6u8odtlQpwNVeYA0AWBrqC
+         W+BrbrSLW/+orEwVgZ5Mo9lw1IV/GVDsx4q/xU4VuuTGNR3IL9EXm4d1giW1RszHDh
+         vbuklrPnW6Ug0LCGIrKIDYX9whdX0SbrlN1Yre/LYf/+tLRvnlyeUQpHGAt8fmXu1B
+         vmtGSlQX2SPhg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71040C43140;
+        Mon,  1 Aug 2022 10:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0)
- Gecko/20100101 Thunderbird/105.0a1
-Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
-Content-Language: en-US
-To:     Jinyang He <hejinyang@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        Lulu Cheng <chenglulu@loongson.cn>
-References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
- <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn>
- <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
- <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
- <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
- <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn>
- <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
- <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
- <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
- <7512ae16-b171-d072-674f-a6b9a5e764d6@loongson.cn>
- <CAAhV-H5wSJZ2X46ySqoaJd7Z2soGcYKRNixnghmE3f3zEzyS+w@mail.gmail.com>
- <10751c9af5d45fea741e0bbed6c818ddb9db3ac3.camel@xry111.site>
- <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/rds: Use PTR_ERR instead of IS_ERR for rdsdebug()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165935101245.27984.11610788210313298570.git-patchwork-notify@kernel.org>
+Date:   Mon, 01 Aug 2022 10:50:12 +0000
+References: <20220727150341.23746-1-liqiong@nfschina.com>
+In-Reply-To: <20220727150341.23746-1-liqiong@nfschina.com>
+To:     Li Qiong <liqiong@nfschina.com>
+Cc:     santosh.shilimkar@oracle.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        yuzhe@nfschina.com, renyu@nfschina.com, jiaming@nfschina.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/1 18:08, Jinyang He wrote:
-> [snip]
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 27 Jul 2022 23:03:41 +0800 you wrote:
+> If 'local_odp_mr->r_trans_private' is a error code,
+> it is better to print the error code than to print
+> the value of IS_ERR().
 > 
-> Actually, I really hope kernel image is in the XKVRANGE, rather
-> than being in XKPRANGE. So that we can limit kernel and modules
-> be in 4GB range. I think it will make all work normally. :-(
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> ---
+>  net/rds/rdma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just my 2c. I'd prefer any scheme in which memfd_secret is possible. The 
-current design makes it impossible to carve out memory regions from 
-kernel's view, IIUC, which is of course something to improve...
+Here is the summary with links:
+  - net/rds: Use PTR_ERR instead of IS_ERR for rdsdebug()
+    https://git.kernel.org/netdev/net/c/5121db6afb99
 
+You are awesome, thank you!
 -- 
-WANG "xen0n" Xuerui
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 

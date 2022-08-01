@@ -2,150 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80C4586D03
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4DB586D0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiHAOj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S232822AbiHAOkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiHAOj5 (ORCPT
+        with ESMTP id S232837AbiHAOkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:39:57 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB233A08;
-        Mon,  1 Aug 2022 07:39:55 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 41022355282;
-        Mon,  1 Aug 2022 10:39:54 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id qU3Ksj57-Bf5; Mon,  1 Aug 2022 10:39:53 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 84365355281;
-        Mon,  1 Aug 2022 10:39:53 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 84365355281
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1659364793;
-        bh=S6TGQdRaLLzWDqfWZw/iX4zWZbflDaNiquwZgEj1VAU=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=GEcHO9q5VqIHAvO9M4Ydp4H68nx8WrnKU7NcXWY2D7IPyC0YwoxjOAQ2lgkRGgNzZ
-         xtOOS0dDoNecDFEt3sAJl2HOP1/QLkuAUKpunPP7NjbTqa4Y2pVH7fWmGTXX+/83IB
-         UjxztRTvu6bSF+Pg0bLf2mJFZ+RDS8N7HxfhjngILB7wnOz//L8fWUiIuP+pQfgQVo
-         ebxXkCRVmopyaquWoHbqFAALghaeRLubX5azntPcaXkhAEmgyRgTwqpML6A+9ttaA0
-         Dr90DNSqBCm0aWFCmnwD5hMHweDS0t0PDUKreEY9JjqJPUvbCAyNVK4gcjqnFtrFpF
-         n9cfH2lJ+M3XQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 28mwD_qkks1k; Mon,  1 Aug 2022 10:39:53 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 72610354FAE;
-        Mon,  1 Aug 2022 10:39:53 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 10:39:53 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Peter Oskolkov <posk@posk.io>,
-        Florian Weimer <fweimer@redhat.com>,
-        Carlos O'Donell <carlos@redhat.com>
-Message-ID: <1686554751.93506.1659364793386.JavaMail.zimbra@efficios.com>
-In-Reply-To: <YufV3PmAOfo1Gt7g@gmail.com>
-References: <20220622194617.1155957-1-mathieu.desnoyers@efficios.com> <20220622194617.1155957-2-mathieu.desnoyers@efficios.com> <YufV3PmAOfo1Gt7g@gmail.com>
-Subject: Re: [PATCH 2/2] rseq: Kill process when unknown flags are
- encountered in ABI structures
+        Mon, 1 Aug 2022 10:40:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A04537185
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659364840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OgqhE+gnu6wIXIAF0NLfff8Tx1dAcg+s0AiRearY4Bw=;
+        b=jKKp6ijs62iALrIHw5dEpdJnUhWWhftH9DqKcSXR2Wn36utdh26glAn4Esv8NMxJ7WdMTF
+        JxPBdKz2FyIe9+Cv15mnvMMn/5wrvdt6Uo3pyl9qq4Ls17W8BC989zpRh93nfnNPr9rGNZ
+        po5awplZSMLH3cPYuls5CnaNmzydjvg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-lr3gSQvSPXGEkokmH3FIIg-1; Mon, 01 Aug 2022 10:40:37 -0400
+X-MC-Unique: lr3gSQvSPXGEkokmH3FIIg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E694C85A587;
+        Mon,  1 Aug 2022 14:40:36 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-103.pek2.redhat.com [10.72.12.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CA143141510F;
+        Mon,  1 Aug 2022 14:40:32 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@infradead.org,
+        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org,
+        Baoquan He <bhe@redhat.com>
+Subject: [PATCH 00/11] mm: ioremap:  Convert architectures to take GENERIC_IOREMAP way
+Date:   Mon,  1 Aug 2022 22:40:18 +0800
+Message-Id: <20220801144029.57829-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Topic: rseq: Kill process when unknown flags are encountered in ABI structures
-Thread-Index: Gyv6lAHRYZe8QjWfh6WSrEJ1aTXMvw==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Aug 1, 2022, at 9:32 AM, Ingo Molnar mingo@kernel.org wrote:
+Currently, many architecutres have't taken the standard GENERIC_IOREMAP
+way to implement ioremap_prot(), iounmap(), and ioremap_xx(), but make
+these functions specifically under each arch's folder. Those cause many
+duplicated codes of ioremap() and iounmap().
 
-> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
->> rseq_abi()->flags and rseq_abi()->rseq_cs->flags 29 upper bits are
->> currently unused.
->> 
->> The current behavior when those bits are set is to ignore them. This is
->> not an ideal behavior, because when future features will start using
->> those flags, if user-space fails to correctly validate that the kernel
->> indeed supports those flags (e.g. with a new sys_rseq flags bit) before
->> using them, it may incorrectly assume that the kernel will handle those
->> flags way when in fact those will be silently ignored on older kernels.
->> 
->> Validating that unused flags bits are cleared will allow a smoother
->> transition when those flags will start to be used by allowing
->> applications to fail early, and obviously, when they attempt to use the
->> new flags on an older kernel that does not support them.
->> 
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> ---
->>  kernel/rseq.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/kernel/rseq.c b/kernel/rseq.c
->> index 81d7dc80787b..bda8175f8f99 100644
->> --- a/kernel/rseq.c
->> +++ b/kernel/rseq.c
->> @@ -176,7 +176,7 @@ static int rseq_need_restart(struct task_struct *t, u32
->> cs_flags)
->>  	u32 flags, event_mask;
->>  	int ret;
->>  
->> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS))
->> +	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
->>  		return -EINVAL;
->>  
->>  	/* Get thread flags. */
->> @@ -184,7 +184,7 @@ static int rseq_need_restart(struct task_struct *t, u32
->> cs_flags)
->>  	if (ret)
->>  		return ret;
->>  
->> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS))
->> +	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
->>  		return -EINVAL;
-> 
-> Just to make it clear: no existing libraries/tooling out there have learned
-> to rely on the old ABI that ignored unset flags, right? Only then is this
-> patch ABI-safe.
+In this patchset, firstly adapt the hooks io[re|un]map_allowed, then
+make use of them to convert those ARCH-es to take GENERIC_IOREMAP method.
+With these change, duplicated ioremap/iounmap() code uder ARCH-es are
+removed.
 
-The projects I know about that use rseq at the moment don't rely on the old ABI
-ignoring unset flags:
+This is suggested by Christoph in below discussion:
+https://lore.kernel.org/all/Yp7h0Jv6vpgt6xdZ@infradead.org/T/#u
 
-- glibc initialize the rseq_abi()->flags to 0 and do not use rseq_abi()->rseq_cs->flags yet.
-- tcmalloc initialize rseq_abi()->flags and rseq_abi()->rseq_cs->flags to 0.
-- librseq (still only a master branch, no officially released public API yet) initialize
-  rseq_abi()->flags and rseq_abi()->rseq_cs->cs_flags to 0.
-- the Linux kernel selftests initialize rseq_abi()->flags and rseq_abi()->rseq_cs->cs_flags
-  to 0.
-- AFAIK DynamoRIO does not rely on the kernel ignoring unset flags bits.
-- AFAIK CRIU does not rely on the kernel ignoring unset flags bits.
+And it's basically further action after arm64 has converted to
+GENERIC_IOREMAP way in below patchset.
+[PATCH v5 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
+https://lore.kernel.org/all/20220607125027.44946-1-wangkefeng.wang@huawei.com/T/#u
 
-If anyone else rely on rseq ignoring those unset flags, please yell now.
+And some change of io[re|un]map_allowed() is borrowed from the v3 of
+arm64 converting patch.
+[PATCH v3 4/6] mm: ioremap: Add arch_ioremap/iounmap()
+https://lore.kernel.org/all/20220519082552.117736-5-wangkefeng.wang@huawei.com/T/#u
 
-Thanks,
+For patch 1~3, I don't merge them because I made them in different
+rounds of changing. And splitting them makes me easily describe the
+intention and make review easier. I can merge them after v1 reviewing
+if anyone thinks they should be merged.
 
-Mathieu
+Testing:
+It passes the testing on arm64 and s390. For other ARCHes, I only tried
+to pass build with existing RPMs of cross compiling tools. ARCHes like
+openrisc, parisc, don't build because of lack of cross compiling RPMS.
+
+Baoquan He (11):
+  mm/ioremap: change the return value of io[re|un]map_allowed
+  mm: ioremap: fixup the physical address
+  mm: ioremap: allow ARCH to have its own ioremap definition
+  arc: mm: Convert to GENERIC_IOREMAP
+  hexagon: mm: Convert to GENERIC_IOREMAP
+  ia64: mm: Convert to GENERIC_IOREMAP
+  openrisc: mm: Convert to GENERIC_IOREMAP
+  parisc: mm: Convert to GENERIC_IOREMAP
+  s390: mm: Convert to GENERIC_IOREMAP
+  sh: mm: Convert to GENERIC_IOREMAP
+  xtensa: mm: Convert to GENERIC_IOREMAP
+
+ arch/arc/Kconfig               |  1 +
+ arch/arc/include/asm/io.h      | 19 +++++++---
+ arch/arc/mm/ioremap.c          | 60 +++++--------------------------
+ arch/arm64/include/asm/io.h    |  3 +-
+ arch/arm64/mm/ioremap.c        | 17 ++++++---
+ arch/hexagon/Kconfig           |  1 +
+ arch/hexagon/include/asm/io.h  |  9 +++--
+ arch/hexagon/mm/ioremap.c      | 44 -----------------------
+ arch/ia64/Kconfig              |  1 +
+ arch/ia64/include/asm/io.h     | 26 ++++++++------
+ arch/ia64/mm/ioremap.c         | 50 ++++++--------------------
+ arch/openrisc/Kconfig          |  1 +
+ arch/openrisc/include/asm/io.h | 16 ++++++---
+ arch/openrisc/mm/ioremap.c     | 49 ++++++++-----------------
+ arch/parisc/include/asm/io.h   | 16 ++++++---
+ arch/parisc/mm/ioremap.c       | 66 ++++------------------------------
+ arch/s390/Kconfig              |  1 +
+ arch/s390/include/asm/io.h     | 26 +++++++++-----
+ arch/s390/pci/pci.c            | 60 +++++--------------------------
+ arch/sh/Kconfig                |  1 +
+ arch/sh/include/asm/io.h       | 47 ++++++++----------------
+ arch/sh/mm/ioremap.c           | 62 +++++++-------------------------
+ arch/xtensa/Kconfig            |  1 +
+ arch/xtensa/include/asm/io.h   | 39 ++++++++++----------
+ arch/xtensa/mm/ioremap.c       | 56 +++++++----------------------
+ include/asm-generic/io.h       | 24 +++++++------
+ mm/ioremap.c                   | 21 ++++++-----
+ 27 files changed, 232 insertions(+), 485 deletions(-)
+ delete mode 100644 arch/hexagon/mm/ioremap.c
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.34.1
+

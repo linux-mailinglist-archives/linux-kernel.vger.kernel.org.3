@@ -2,271 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C205867BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7625867C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiHAKmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        id S231282AbiHAKoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiHAKm3 (ORCPT
+        with ESMTP id S231285AbiHAKoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:42:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60DFE107
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659350542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k1SB3jWY6iy3jPM3BFAzl6DIaTlKQJipefko9OVG/m0=;
-        b=bgJ4ddz1WpiMPUmLjyVEHLnHIljYJ1XzikRYX5gux1uY5lPccVpfeqZy4rgdAqJh9p9kl3
-        7cF4+Krk5tu8qWt/kWXcwPDdUmQFkTo10qDenKqRqSLCXC7wcEZbWrwgFBX0U12KlFALPE
-        2QMbiC1XeVvZ4GvW1Pg/Of+zmZrPA9Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-wUxvdLfDNCm4w7kAkTguWg-1; Mon, 01 Aug 2022 06:42:16 -0400
-X-MC-Unique: wUxvdLfDNCm4w7kAkTguWg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61620280048A;
-        Mon,  1 Aug 2022 10:42:15 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 544D4C15D67;
-        Mon,  1 Aug 2022 10:42:15 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 271AgFew024213;
-        Mon, 1 Aug 2022 06:42:15 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 271AgFCC024209;
-        Mon, 1 Aug 2022 06:42:15 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 1 Aug 2022 06:42:15 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v4 1/2] introduce test_bit_acquire and use it in
- wait_on_bit
-In-Reply-To: <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Mon, 1 Aug 2022 06:44:17 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED572BD9
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:44:11 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 271ACh3F029375;
+        Mon, 1 Aug 2022 10:44:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=RXfc5IvYdrkYClnP5bh8AdfKM8yaCN8U5KobACyMiPE=;
+ b=QZqCLaXRvyrB7uo8Y1UXtu0NM8hxaqQrCMGNnZd2OnqLbpGZjPAGY/Tw3R+N+ZNJm41i
+ m0KaqfwDFyl7wWxBHs6R4QsIwiSbxHKuy3cYsaUlweu0IiChkweT0rxIO+ZO063iPz4y
+ eXvciFVLkye7nBl3sO6Uhvx8/M7Uv/eoTKEMqWk3Et0iB/K3g7KMKj003B4ywW7zoaXS
+ Ob3vKwWB/dr2sSSTSD+0ui3bkFFV6IEydchDbimfCWyCgZx+n31PUs844O4FIxuHdslC
+ bLy2AV9qyH69C2zIw81Ms2f2b2drEFkx31isTyZ0IOYhqbud43GuUsBXcR9qXO46XkBY Ug== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmu80uawe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 01 Aug 2022 10:44:07 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2718u2Xk007473;
+        Mon, 1 Aug 2022 10:44:06 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu30wjw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 01 Aug 2022 10:44:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KZumGy87kpGeLj8t89tDuLl34Wy5qEB1KS4XMD9x7zuBg6EKljb14F0cNbLNUyGcKt8bPmcjQ7yE7HpZwOpyeo6d/Pzscxlm1FXhzXW3yGuWp441UXNWP1a5bZbdPqoVthQIsGI8Vs/zXL0GVulqzJQVRx2xR+2ynEggt8a+DTvEVIgepI+VX3PxUghP/I/QJyGVYqtfpsquCSNSazghsw0RSNs2F0eNar+hRCbLLeBVcEoVwLDf3ZqNzkCGnXYLH8LnuS9KgiY4CYWlK0SDC6t2kyyRF8pDjjMlQkbqj5InqHt4JfRItBeIPUXn9YvezmzjY1hMeCTiCPbFEwC3kA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RXfc5IvYdrkYClnP5bh8AdfKM8yaCN8U5KobACyMiPE=;
+ b=MwC8KOlNQ07JqI5E4fk4DLNXH5CbT1eR1LV0Kl3SVrDvcYrGC2JN9qDBNND1wxaru15ru4o852slNb7EXXq29LDUcsosul4Wh3hT2IiLXD5iZnX6iZcM2wfkln0Hw5eoQs00EWUStMTl+viOl98gcLY1IMbK9CH81Z+eukiF6A/A0M2NfjnsTHokAdi02io5ejHzWyp+TM/cpvWIps8TFWNO6pSRqzJkLnnYRNipter56U+rH50yr/6zfZSvJXxGPutBfHY/Lw5pX03NobgCmGAKi+oQw6AVmV1NGBcAeJVM93INCeaejf7S/CK0ArxI7bqiwpo3+93oOUoT5mXSpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RXfc5IvYdrkYClnP5bh8AdfKM8yaCN8U5KobACyMiPE=;
+ b=Fc4PjyVoMz93c3hSLk2eEGz/SggktX88D7LtINZSA4pfD2meH1Dgewyk6IGfY9X8rY0nrTgIrKPRBz/aE3jC8H8Kn9VZz+3JOs5VZshXf2XU7JucB9UEMc0rZiWbuJhT9NPwjtrYzK4Ti/NoUZWR2DJcSj61XDNaFQnKkSjzR68=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CH0PR10MB5226.namprd10.prod.outlook.com
+ (2603:10b6:610:da::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Mon, 1 Aug
+ 2022 10:44:04 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
+ 10:44:04 +0000
+Date:   Mon, 1 Aug 2022 13:43:43 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot+14b0e8f3fd1612e35350@syzkaller.appspotmail.com,
+        khalid.masum@aol.com
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in imageblit (2)
+Message-ID: <20220801104343.GA3438@kadam>
+References: <000000000000bbdd0405d120c155@google.com>
+ <20220730081246.4567-1-khalid.masum.92@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220730081246.4567-1-khalid.masum.92@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0001.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::6)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 959c43fe-f33f-41cf-3c93-08da73aabff5
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5226:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7L/5jL1cNV5j6+77+15GvXmR9tRJu6BvPsYLZ7qme4j5NaLSj8WIvktzmHxlEmAMSd7+4wUE2wUO00qZ93Ohcc3RhLdhTnVslBl46/bI3rUu17yNS8D4AaaEwaPJWdHc0ftpL2WscjWFA+HMbPyhI6iaG57eZecHzY1LD4H+cKp5RoGQkc1IY4cq4y7l7HGvL/fDQM2gM1Crs3BY6Ubw+NHvtlCEj7yjhy+mqZnWmU8WxKtMW0uUDJdRMGKTblSX+mPd+j046PlkdWYAwzg5BgzAc8SJA4j5Qy/0hB0aYH96DHDAEz4nWs2jmh9XtqLS3mz7xjTikRk2JAVayXeO6CwleEsSv3EmjdJ421cUTmJz9AgWApZj6nXESAu65UTeLcG4eRpK35Lb0pKLYmZe8Bs7jnMFf7E4e8HX3MDPAYeRdLxtqEro5T61cj8QqwwOHiYCmIiatKhrYYZMS/eKcgDimEEHXKzwDBUUPYk/A9ZntgtMsD07HSL+W2zY9edR/OHK14dwmSe6ySLqHxw+c5YzbjWJjo6cOBuAoRnvbGA2minP9RVMVQbjMwwQpje8C7moKnUfGAY0Yj8hUcSVOtdVFZxcN04Vs14CDWFshMhUHOX0M/MJysy+ewg4B0wPI/punQTOI4KHSaFOKy9z2bwelYm3MWwhyPTlM91pJ5A1xr6F41rrT+stpOX+FrXPpb6t1wOCc4cAa+8bzswCTxr2hoYR5AElO4ktXpn0BjDAfzEZjaq7f+0uL4hGMGAbqpITIK94gXGweP7un9wYG8SsPFa5f0kVaslxPBTxAF0ew4UrG8KY4ArFpUzEpeRgtiYRUfRt/oZNW13twnHe1w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(39860400002)(346002)(136003)(366004)(376002)(83380400001)(6486002)(478600001)(966005)(38350700002)(1076003)(38100700002)(186003)(41300700001)(6666004)(26005)(2906002)(6916009)(9686003)(6512007)(52116002)(8936002)(33656002)(5660300002)(44832011)(6506007)(33716001)(8676002)(316002)(86362001)(66476007)(66946007)(66556008)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cr9N+5ShtzNtWmMcZMH1523aL0Hci22v0mDCJ4mPQv9ogeeEt8WpSYJajCjV?=
+ =?us-ascii?Q?5UX0ZdwfKZNIjKZU0lH0Pptrg5Gjk3/W7HwpWqzSC2y+A1ULX5KalvcLAihF?=
+ =?us-ascii?Q?4mftFlExsWt9AHib0H5GefrHhBsdJHrS/kntZoPMPIuDu5TCiGfwG2OG/e5H?=
+ =?us-ascii?Q?Jv2LuiEnO10ceOC8am7dE4gzRgnulPzGi9BoE9NAHaBvVh2jGkq+2dBBVy9W?=
+ =?us-ascii?Q?swrJkDRngnEwZXTWgX8ptSyAt2zBdtwADqsXSeYpZatTpr9L9a/IeZvVF0bT?=
+ =?us-ascii?Q?/iNu54oelYBCX+MdzxUfDFPjlt6+9/1RMdEeJMJxu2X4reXq0Zd3OvHpRHPy?=
+ =?us-ascii?Q?MRMAOBuLsXrdlSuk8b9At8vYmDSPwf8nv/ganDELvPlWo3MXm4nCEKynTTwp?=
+ =?us-ascii?Q?8/LvSEJ9xoBU9wF7lY5TOgw1+EM2rz6Bq0+gDZhebYMBp3N96eR4DQTQBYUo?=
+ =?us-ascii?Q?uJHk0oHizZaesqAy8cNck885lCM6ePzfjJ4iuca/f9EtU38+ZOigCK+mfZfj?=
+ =?us-ascii?Q?oUYlR0qQTpr+nTfL2XCqosRBg7Yhhiu6l52ophC/TUXwlfRbJEGysXHFQi2c?=
+ =?us-ascii?Q?25M9o5S7Z90tA4U/N2KzRxfKV+tlThm7mR1Tl5Xnjp2c2L+AdokviS53mNte?=
+ =?us-ascii?Q?rIFgbVCR9YxqtyWABO2YAMmDR4kLuBq0yS3knacJ5SeHHxAgDETcTgaYRA8d?=
+ =?us-ascii?Q?Sm4qtPrrAaazxwiuftp7bDVe3tI1fPOEiGPShhLYo0ehxCzdjdsKOa+Q28Sd?=
+ =?us-ascii?Q?oDZLoVkM4YN/c5d4jGLJVqbPtnNf8x9GHYNhc/cbDAPDTWLkkiTeDpaoYeMx?=
+ =?us-ascii?Q?+TA7ObsHNpR/mejtk+bLWPptbHwcZuJFGpEiAgB/7KGB/iLAbZZX1XFjGbx+?=
+ =?us-ascii?Q?WNAhuGm+Qx1c83F55q9DLzzGxCGdwWXrNYPqPzbcGvDmCAZ1b2fLY2a2VhJD?=
+ =?us-ascii?Q?/3SXTl/LXEEbW5Pv/oClBpbiJvotSlW3uXm4mgkms0Nn0kMM7StGExjmExmd?=
+ =?us-ascii?Q?cRK2tJV43L+dKZeYVY6yvtI8Su44mrNVqwayVIg0T4oJxjsGH/BWyxbW99yI?=
+ =?us-ascii?Q?tHzJ8RlLTq3dOIjnoaO7I0Hb0LkhV7Lyl/F/A5C4OC3MZqy//zIM7aschLn/?=
+ =?us-ascii?Q?93mSIDQCvZ/7VUOPJji7kj/Yb2OqBNE51q3lbXc2gA8hv/zes7lfz/gmle1R?=
+ =?us-ascii?Q?uj+T1H8+6VKpK/n9E4EA8GH0t+xfzA5c3zP6u2xhw1IpsbMkA3ugTtew0vXy?=
+ =?us-ascii?Q?ytLrnv08jTrBvuD2kw0zk/PAh1T3EVLHRzfDjcAmebVqI1tbPWEzysRNJJIt?=
+ =?us-ascii?Q?g/79AEh45Nc2MTXmBeByPhejKCOPR6JiX3I2b03s+Ctx540tC93nIVkx7wsF?=
+ =?us-ascii?Q?TYMn2sIDR+4yYiXyG/DuWO2H+alE2wDpdJxO/HWNghmu3mNdZJLhqAZMJASu?=
+ =?us-ascii?Q?GYfR37d+KpMFBqhMS0RLlTKQKkkdXLIGq5GqxWrtgHAcKm+2KmYUMECmzKSL?=
+ =?us-ascii?Q?ZIbCLwp86P5u5rjUjD4o/mOk02//VRCkzeSTaWV2w/vTQgaErJGLw+7itShr?=
+ =?us-ascii?Q?39MFKCpXQ0nfCtHfjlXP41c8z8IUtS8g63p6aBS547UrymQRzVsHN2tyJO9J?=
+ =?us-ascii?Q?KQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 959c43fe-f33f-41cf-3c93-08da73aabff5
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 10:44:04.0375
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p0DFJL2Ta+XCOmuZafctp5Hu4Ea4XLbDX6XLp9gTerE8poSLHeHkN7pEMs3GO+NwymjQCcy5CaQVDSvKH939oBptVtE1SE3p0of5dvDDLZs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5226
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_05,2022-08-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208010052
+X-Proofpoint-ORIG-GUID: Aao-EZCokPxwS94RM_PeI0AkPVSssYmf
+X-Proofpoint-GUID: Aao-EZCokPxwS94RM_PeI0AkPVSssYmf
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wait_on_bit tests the bit without any memory barriers, consequently the
-code that follows wait_on_bit may be moved before testing the bit on
-architectures with weak memory ordering. When the code tests for some
-event using wait_on_bit and then performs a load operation, the load may
-be unexpectedly moved before wait_on_bit and it may return data that
-existed before the event occurred.
+On Sat, Jul 30, 2022 at 02:12:46PM +0600, Khalid Masum wrote:
+> Currently the if block's condition has an unhandled case, where the
+> result of ret might get greater than vc->vc_scr_end, and therefore
+> the corresponding handler in else block never gets executed. Which
+> eventually causes panic in fast_imageblit.
+> 
+> Add this extra check in the conditions to fix this breakage.
+> 
+> #syz-test: https://github.com/torvalds/linux.git e0dccc3b76fb 
+> 
+> ---
+>  drivers/video/fbdev/core/fbcon.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+> index 1a9aa12cf886..d026f3845b60 100644
+> --- a/drivers/video/fbdev/core/fbcon.c
+> +++ b/drivers/video/fbdev/core/fbcon.c
+> @@ -2591,14 +2591,13 @@ static unsigned long fbcon_getxy(struct vc_data *vc, unsigned long pos,
+>  {
+>  	unsigned long ret;
+>  	int x, y;
+> +	unsigned long offset = (pos - vc->vc_origin) / 2;
+> +	x = offset % vc->vc_cols;
+> +	y = offset / vc->vc_cols;
+> +	ret = pos + (vc->vc_cols - x) * 2;
+>  
+> -	if (pos >= vc->vc_origin && pos < vc->vc_scr_end) {
+> -		unsigned long offset = (pos - vc->vc_origin) / 2;
+> -
+> -		x = offset % vc->vc_cols;
+> -		y = offset / vc->vc_cols;
+> -		ret = pos + (vc->vc_cols - x) * 2;
+> -	} else {
+> +	if (!pos >= vc->vc_origin || !pos < vc->vc_scr_end ||
+> +	                             !ret < vc->vc_scr_end) {
 
-Such bugs exist in fs/buffer.c:__wait_on_buffer,
-drivers/md/dm-bufio.c:new_read,
-drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:dvb_usb_start_feed,
-drivers/bluetooth/btusb.c:btusb_mtk_hci_wmt_sync
-and perhaps in other places.
 
-We fix this class of bugs by adding a new function test_bit_acquire that
-reads the bit and provides acquire memory ordering semantics.
+These are precendence bugs.  The ! will be done before the >=.  Write it
+as:
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
+	if (pos < vc->vc_origin || pos >= vc->vc_scr_end ||
+	    ret >= vc->vc_scr_end) {
 
----
- arch/s390/include/asm/bitops.h                       |   10 ++++++++++
- arch/x86/include/asm/bitops.h                        |    7 ++++++-
- include/asm-generic/bitops/instrumented-non-atomic.h |   11 +++++++++++
- include/asm-generic/bitops/non-atomic.h              |   13 +++++++++++++
- include/linux/wait_bit.h                             |    8 ++++----
- kernel/sched/wait_bit.c                              |    6 +++---
- 6 files changed, 47 insertions(+), 8 deletions(-)
 
-Index: linux-2.6/arch/x86/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-@@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
- 
- static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
- {
--	return ((1UL << (nr & (BITS_PER_LONG-1))) &
-+	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
- 		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
-+	barrier();
-+	return r;
- }
- 
- static __always_inline bool variable_test_bit(long nr, volatile const unsigned long *addr)
-@@ -224,6 +226,9 @@ static __always_inline bool variable_tes
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
-+#define arch_test_bit_acquire(nr, addr)		\
-+	arch_test_bit(nr, addr)
-+
- /**
-  * __ffs - find first set bit in word
-  * @word: The word to search
-Index: linux-2.6/include/asm-generic/bitops/instrumented-non-atomic.h
-===================================================================
---- linux-2.6.orig/include/asm-generic/bitops/instrumented-non-atomic.h	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/include/asm-generic/bitops/instrumented-non-atomic.h	2022-08-01 12:28:33.000000000 +0200
-@@ -135,4 +135,15 @@ static __always_inline bool test_bit(lon
- 	return arch_test_bit(nr, addr);
- }
- 
-+/**
-+ * test_bit_acquire - Determine whether a bit is set with acquire semantics
-+ * @nr: bit number to test
-+ * @addr: Address to start counting from
-+ */
-+static __always_inline bool test_bit_acquire(long nr, const volatile unsigned long *addr)
-+{
-+	instrument_atomic_read(addr + BIT_WORD(nr), sizeof(long));
-+	return arch_test_bit_acquire(nr, addr);
-+}
-+
- #endif /* _ASM_GENERIC_BITOPS_INSTRUMENTED_NON_ATOMIC_H */
-Index: linux-2.6/include/asm-generic/bitops/non-atomic.h
-===================================================================
---- linux-2.6.orig/include/asm-generic/bitops/non-atomic.h	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/include/asm-generic/bitops/non-atomic.h	2022-08-01 12:27:43.000000000 +0200
-@@ -119,4 +119,17 @@ arch_test_bit(unsigned int nr, const vol
- }
- #define test_bit arch_test_bit
- 
-+/**
-+ * arch_test_bit - Determine whether a bit is set with acquire semantics
-+ * @nr: bit number to test
-+ * @addr: Address to start counting from
-+ */
-+static __always_inline int
-+arch_test_bit_acquire(unsigned int nr, const volatile unsigned long *addr)
-+{
-+	unsigned val = smp_load_acquire(&addr[BIT_WORD(nr)]);
-+	return 1UL & (val >> (nr & (BITS_PER_LONG-1)));
-+}
-+#define test_bit_acquire arch_test_bit_acquire
-+
- #endif /* _ASM_GENERIC_BITOPS_NON_ATOMIC_H_ */
-Index: linux-2.6/arch/s390/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/s390/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/arch/s390/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-@@ -184,6 +184,16 @@ static inline bool arch_test_bit(unsigne
- 	return *addr & mask;
- }
- 
-+static inline bool arch_test_bit_acquire(unsigned long nr,
-+					 const volatile unsigned long *ptr)
-+{
-+	const volatile unsigned long *addr = __bitops_word(nr, ptr);
-+	unsigned long val = smp_load_acquire(addr);
-+	unsigned long mask = __bitops_mask(nr);
-+
-+	return val & mask;
-+}
-+
- static inline bool arch_test_and_set_bit_lock(unsigned long nr,
- 					      volatile unsigned long *ptr)
- {
-Index: linux-2.6/include/linux/wait_bit.h
-===================================================================
---- linux-2.6.orig/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
-@@ -71,7 +71,7 @@ static inline int
- wait_on_bit(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait,
-@@ -96,7 +96,7 @@ static inline int
- wait_on_bit_io(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait_io,
-@@ -123,7 +123,7 @@ wait_on_bit_timeout(unsigned long *word,
- 		    unsigned long timeout)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit_timeout(word, bit,
- 					       bit_wait_timeout,
-@@ -151,7 +151,7 @@ wait_on_bit_action(unsigned long *word,
- 		   unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit_acquire(bit, word))
- 		return 0;
- 	return out_of_line_wait_on_bit(word, bit, action, mode);
- }
-Index: linux-2.6/kernel/sched/wait_bit.c
-===================================================================
---- linux-2.6.orig/kernel/sched/wait_bit.c	2022-08-01 12:27:43.000000000 +0200
-+++ linux-2.6/kernel/sched/wait_bit.c	2022-08-01 12:27:43.000000000 +0200
-@@ -25,7 +25,7 @@ int wake_bit_function(struct wait_queue_
- 
- 	if (wait_bit->key.flags != key->flags ||
- 			wait_bit->key.bit_nr != key->bit_nr ||
--			test_bit(key->bit_nr, key->flags))
-+			test_bit_acquire(key->bit_nr, key->flags))
- 		return 0;
- 
- 	return autoremove_wake_function(wq_entry, mode, sync, key);
-@@ -45,9 +45,9 @@ __wait_on_bit(struct wait_queue_head *wq
- 
- 	do {
- 		prepare_to_wait(wq_head, &wbq_entry->wq_entry, mode);
--		if (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags))
-+		if (test_bit_acquire(wbq_entry->key.bit_nr, wbq_entry->key.flags))
- 			ret = (*action)(&wbq_entry->key, mode);
--	} while (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
-+	} while (test_bit_acquire(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
- 
- 	finish_wait(wq_head, &wbq_entry->wq_entry);
- 
+>  		/* Should not happen */
+>  		x = y = 0;
+>  		ret = vc->vc_origin;
+
+regards,
+dan carpenter
 

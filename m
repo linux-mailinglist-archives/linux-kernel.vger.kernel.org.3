@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919925862CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987845862CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239348AbiHACoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S239383AbiHACq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239301AbiHACoK (ORCPT
+        with ESMTP id S239360AbiHACqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:44:10 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3770613D09;
-        Sun, 31 Jul 2022 19:44:09 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lx2V371dpz9t05;
-        Mon,  1 Aug 2022 10:42:51 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 10:44:01 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 1 Aug 2022 10:44:00 +0800
-Subject: Re: [PATCH -next] video: fbdev: imxfb: fix return value check in
- imxfb_probe()
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <deller@gmx.de>
-References: <20220729024134.159942-1-yangyingliang@huawei.com>
- <20220730231815.dzuscf2x2sgj66bg@pengutronix.de>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <b1487b74-cbc1-013b-f734-c78319d76894@huawei.com>
-Date:   Mon, 1 Aug 2022 10:43:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 31 Jul 2022 22:46:25 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696F13D30
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:46:24 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso3650635pjq.0
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8yfqYZjt+LHaAkyMukBjLigEQNB1mAsrZSJ5C4LdniE=;
+        b=HfyctZh7JKhDHUQOzoqrfWL5xvYZc0cYFhGek6v3N5uwbWts0Q1cOJS6yNbpeG4q7u
+         nvGuUZoeAB+KEGz/Kzjph7w5zgaAIrKDTnH7AYt2J2TpJLD6YPmAbqQ0gQ1zO/GuoREk
+         LjGO5W4duQqgemHEG5QZD6EHJuzEuxMgKh+kig+kUbZoJJLoJv+NpGEErw/+WM5E/TRA
+         XkRliHm4XGXByB0eFGTIETy70KkzKfOYVv779w162e0wh9XBdWHJq/hjs94T/d098+Is
+         LiOmP/+TlDhfIY8Du1N03o7vaw51LwHI6xRhUHvA8e9iu2Oon5VaUtv1WxyaYDIjQUmj
+         LFnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8yfqYZjt+LHaAkyMukBjLigEQNB1mAsrZSJ5C4LdniE=;
+        b=MMNT9elRDKTZhNeYheNr8LzGp1AkRJ9ej1CtUh9irF5EXYiQnwsUU67GlIpbbS2dXL
+         VAW+odA+adjt+cgtp5HThCoVYGDDIzIgsWpaMBOGYfBM2FvsFeriyyF70823j8hZUcf+
+         nc/82nlETkwRgjobbeFNHXbzeb/9GPvU7A/E1qNZDIQgdM1bvF8NjDFrzOCAfheaiwEW
+         qYNCTs1uE8dQYGzrepRn6MyrrKga0huaiQU0E6EGbkUCxthoXFKOjiPSv7YDWlcoSt0q
+         SoZCjsIA02B41SSdnPy5ff+PuFyd1urYSsb0AWhV4Z2Ufa68zfSO/VmCJfnOXjNmH2Ne
+         M1oA==
+X-Gm-Message-State: ACgBeo0Xhsmb0eHRudfLlYNnxeKVbk0NXiQTyn4Ew1xRCR0u6n7BtE9L
+        0lYvHufhgF+L+C1rrB/1I52YrQhkHdK4uwbDfJM=
+X-Google-Smtp-Source: AA6agR6e+/M6PT6wLXiayDSHo+mXQ/jAOFKezT5KXwgMQTz7N3moy7jDXG4rBCaFmM8Q6nn7+u98SZ5qz19NByCVfb8=
+X-Received: by 2002:a17:90b:4a0a:b0:1f4:e4fc:91d3 with SMTP id
+ kk10-20020a17090b4a0a00b001f4e4fc91d3mr7814667pjb.67.1659321983196; Sun, 31
+ Jul 2022 19:46:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220730231815.dzuscf2x2sgj66bg@pengutronix.de>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-2-qais.yousef@arm.com>
+ <CAB8ipk-PzwsfTzJtfrq6vJJdDNHsnGKrHjFR+527SoxBNQy0YA@mail.gmail.com>
+ <20220721102417.cf6ukxpvkh4grjeh@wubuntu> <CAB8ipk98A5XOSXMwmJGugi-9R=TkVNGcvZA3ky_iem_Mg5COOw@mail.gmail.com>
+ <20220727162531.466btzfk7lfibf6u@wubuntu>
+In-Reply-To: <20220727162531.466btzfk7lfibf6u@wubuntu>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Mon, 1 Aug 2022 10:46:12 +0800
+Message-ID: <CAB8ipk8+pfFmHJxuGks1tOVCit3UMk4AevKhORAwAOY7whrk0A@mail.gmail.com>
+Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+ migration margin
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +75,406 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Qais
 
-On 2022/7/31 7:18, Uwe Kleine-König wrote:
-> Hello,
+On Thu, Jul 28, 2022 at 12:25 AM Qais Yousef <qais.yousef@arm.com> wrote:
 >
-> On Fri, Jul 29, 2022 at 10:41:34AM +0800, Yang Yingliang wrote:
->> If devm_ioremap_resource() fails, it never return NULL, replace
->> NULL test with IS_ERR().
-> Oh, thanks for cleanup up behind me. Did you find this using some static
-> analysis tool? I would consider it interesting and fair to mention this
-> in the commit log.
-I found it by coccicheck like this:
+> Hi Xuewen
+>
+> On 07/25/22 19:59, Xuewen Yan wrote:
+> > Hi Qais
+> >
+> > On Thu, Jul 21, 2022 at 6:24 PM Qais Yousef <qais.yousef@arm.com> wrote:
+> > >
+> > > Hi Xuewen
+> > >
+> > > On 07/20/22 15:17, Xuewen Yan wrote:
+> > > > Hi Qais,
+> > > >
+> > > > On Thu, Jun 30, 2022 at 3:47 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> > > > >
+> > > > > fits_capacity() verifies that a util is within 20% margin of the
+> > > > > capacity of a CPU, which is an attempt to speed up upmigration.
+> > > > >
+> > > > > But when uclamp is used, this 20% margin is problematic because for
+> > > > > example if a task is boosted to 1024, then it will not fit on any CPU
+> > > > > according to fits_capacity() logic.
+> > > > >
+> > > > > Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
+> > > > > end up on big instead on the desired medium CPU.
+> > > >
+> > > > I think it is reasonable. Since the user sets uclamp_min to be greater
+> > > > than 0, the user prefers that the process has better performance cpu.
+> > > > If ignore the margin here, the uclamp_min is meaningless.
+> > >
+> > > Why is it meaningless?
+> > >
+> > > uclamp is a performance hint, not a bandwidth hint.
+> > >
+> > > That is, if the task's util_avg, which represents its bandwidth, is being
+> > > impacted then it should move up.
+> > >
+> > > But if the task is getting the bandwidth it needs, which is again represented
+> > > by its util_avg, then uclamp_min just ensure it is running at the right
+> > > performance level. Performance level is orthogonal to bandwidth.
+> > >
+> > > As long as the medium CPU will run at max performance point, it is fine.
+> >
+> > This involves the meaning of uclamp, if it guarantees performance
+> > rather than bandwidth, then it is fine:-)
+>
+> +1
+>
+> I do have a patch to add kernel doc to better explain what uclamp is. Hopefully
+> I'll send this out soon. I've been sleeping on it for a long while but too many
+> things to do, too little time :-)
+Ah, Could this patch loop me in the future? I want to learn more from
+you, Thanks!
 
-@@
-expression ret, E;
-@@
-ret = \(devm_ioremap_resource\)(...);
-... when != ret = E
-     when != IS_ERR(ret)
-(
-  ret == NULL || IS_ERR(ret)
-|
-  IS_ERR(ret) || ret == NULL
-|
-  ret != NULL && !IS_ERR(ret)
-|
-  !IS_ERR(ret) && ret != NULL
-|
-- ret == NULL
-+ IS_ERR(ret)
-|
-- ret != NULL
-+ !IS_ERR(ret)
-)
+>
+> >
+> > >
+> > > >
+> > > > >
+> > > > > Similar corner cases exist for uclamp and usage of capacity_of().
+> > > > > Slightest irq pressure on biggest CPU for example will make a 1024
+> > > > > boosted task look like it can't fit.
+> > > >
+> > > > I think it can't fit is reasonable. The uclamp_min is limit the
+> > > > util_avg, if the task can fit the cpu with capacity is 1024, which
+> > > > uclamp_min is 1024, How to deal with the task which util is 1024?
+> > > > Maybe your idea is that the biggest cpu can fit any task even if it's
+> > > > util is 1024?
+> > >
+> > > util_fits_cpu() compares util_avg with capacity_of(). So if
+> > >
+> > >         util_avg >= 0.8 * 1024
+> > >
+> > > then it will not fit the cpu. Regardless of what is the uclamp_min value. Only
+> > > exception is if you use uclamp_max, then by design this should force it to fit
+> > > even if util_avg is bigger.
+> >
+> > Okay, This also involves the meaning of uclamp. It represents performance. :-)
+>
+> +1
+>
+> >
+> > >
+> > > >
+> > > > >
+> > > > > What we really want is for uclamp comparisons to ignore the migration
+> > > > > margin and capacity pressure, yet retain them for when checking the
+> > > > > _actual_ util signal.
+> > > > >
+> > > > > For example, task p:
+> > > > >
+> > > > >         p->util_avg = 300
+> > > > >         p->uclamp[UCLAMP_MIN] = 1024
+> > > > >
+> > > > > Will fit a big CPU. But
+> > > > >
+> > > > >         p->util_avg = 900
+> > > > >         p->uclamp[UCLAMP_MIN] = 1024
+> > > > >
+> > > > > will not, this should trigger overutilized state because the big CPU is
+> > > > > now *actually* being saturated.
+> > > >
+> > > > Now the code would catch the uclamp before judging the fits_capacity.
+> > > > The two task both can not fit the cpu, why the task(300) can fit the
+> > > > cpu?
+> > >
+> > > Because
+> > >
+> > >         p->util_avg < 0.8 * capacity_of(big_cpu)
+> > > AND
+> > >         p->uclamp_min <= capacity_orig_of(big_cpu)
+> > >
+> > > Why it shouldn't fit?
+> > >
+> > > Please keep in mind that uclamp is a performance hint and not a bandwidth hint.
+> > > It requests for the task to run at a performance level, if we can satisfy that
+> > > request, but it doesn't say that the task is actually occupies that bandwidth.
+> > >
+> > > By design, we want to allow multiple small tasks to be packed on a big core.
+> > > For example if we have
+> > >
+> > >         p0->util_avg = 300
+> > >         p0->uclamp_min = 1024
+> > >
+> > >         p1->util_avg = 300
+> > >         p1->uclamp_min = 1024
+> > >
+> > > Then by design we would like to enable both of these tasks to run on big cores.
+> > >
+> > > Their combined bandwidth is 600, which is well below the available bandwidth.
+> > > And uclamp_min = 1024 just means these task must run at highest frequency on
+> > > the biggest cpu.
+> > >
+> > > feec() will actually take care of deciding whether to pack or spread within
+> > > the big cpu 'cluster'. util_fits_cpu() role is merely to indicate whether this
+> > > cpu is a viable option or not.
+> > >
+> > > Taking any pressure into account will mean any hint to 1024 will almost always
+> > > fail because in the common case there's always some form of pressure on a CPU.
+> > > So even if capacity_of() is 1023, this will make p0 and p1 to trigger
+> > > overutilized state. Which is plain wrong. The tasks are actually small, and the
+> > > fact that uclamp_min is 1024 is a simple request to *attempt* to run it at max
+> > > performance point, which is the biggest core and highest frequency. None of
+> > > these has any correlation to rt/irq pressures.
+> >
+> > Okay, Thanks for the the very detailed explanation, I will re-review
+> > this patch from a different angle:-)
+> > Cheers~
+>
+> Glad that was readable! :-)
+>
+> >
+> > >
+> > > >
+> > > > >
+> > > > > Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
+> > > > >
+> > > > >         p->util_avg = 1024
+> > > > >         p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
+> > > > >
+> > > > > Should fit the task on medium cpus without triggering overutilized
+> > > > > state.
+> > > >
+> > > > I fully agree with this! But there is a problem, How to do when there
+> > > > is RT pressure or irq pressure?
+> > > > Maybe it is better to compare the uclamp_max with the capacity_of(cpu)
+> > > > instead of the capacity_origin?
+> > >
+> > > No. This IS the problem I am trying to fix with this series. UCLAMP_MAX limits
+> > > the performance level the task can obtain.
+> > >
+> > > The fact that there's RT or irq pressure doesn't prevent this task from being
+> > > capped to that performance level.
+> > >
+> > > Beside this will break the ability to use uclamp as a weak affinity.
+> > >
+> > > Setting uclamp_max to capacity_orig_of(little_cpu), as one would do for
+> > > background tasks for instance, will enable EAS to consider the little cores as
+> > > a viable candidate and select it if it is the most energy efficient CPU.
+> > > Which is an intended design use case.
+> > >
+> > > If we start failing to do this randomly because of spurious RT and irq
+> > > pressure, the benefit of the hint will be significantly reduced.
+> > > And then it *will* become meaningless.
+> >
+> > I agree with you, but I'm still a bit concerned that such a setup will
+> > cause performance issues.
+> > As you say, may one want the background tasks running on the little
+> > cpus, he can use cpuset to control them completely.
+>
+> We are actually hoping that we can enable using uclamp_max as weak affinity
+> instead of the aggressive cpusets. But there's still a bit more work to do
+> before we can get there.
+>
+> > When there are many processes in the system, if such processes always
+> > fit small cores, do we need to consider more when load balancing?
+>
+> Oh, you're worried about packing these tasks on small cores?
+>
+> We've looked at that, and this should be hard to happen.
+>
+> EAS will always distribute tasks on max_spare_capacity cpu in the performance
+> domain. Only exception I'm aware of is if a lot of tasks wake up at the same
+> time. Then there's a chance (race) they all see the same max_spare capacity
+> before any of these tasks gets enqueue to adjust the rq->util_avg.
+>
+> Packing can't happen outside of EAS AFAICT. The default behavior of the
+> scheduler is to distribute tasks on idle cpus or based on load.
+>
+> If we're in overutilized, then select_idle_capacity() should consider the idle
+> cpus only. And in load balance in general should distribute tasks based on
+> idle/load.
 
-Thanks,
-Yang
+Yes, you're right, I'm thinking a little bit less...Thanks!
+
 >
-> Best regards
-> Uwe
+> Keep in mind from EAS PoV, util_fits_cpu() just says this is a viable
+> candidate. The actual selection has to satisfy other conditions in feec(). One
+> of them is that this candidate is max_spare_capacity - which effectively
+> distributes within a performance domain.
+>
+> I'd expect us to start spilling to medium cores because they'd become more
+> energy efficient than the little cores at some point when they're all
+> overloaded.
+>
+> Maybe you had a different scenario in mind. If yes, can you explain it more
+> details please?
+>
+> >
+> > >
+> > > >
+> > > > >
+> > > > > Inlined comments expand more on desired behavior in more scenarios.
+> > > > >
+> > > > > Introduce new util_fits_cpu() function which encapsulates the new logic.
+> > > > > The new function is not used anywhere yet, but will be used to update
+> > > > > various users of fits_capacity() in later patches.
+> > > > >
+> > > > > Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
+> > > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > > > > ---
+> > > > >  kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
+> > > > >  1 file changed, 114 insertions(+)
+> > > > >
+> > > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > > index f80ae86bb404..5eecae32a0f6 100644
+> > > > > --- a/kernel/sched/fair.c
+> > > > > +++ b/kernel/sched/fair.c
+> > > > > @@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+> > > > >         trace_sched_util_est_se_tp(&p->se);
+> > > > >  }
+> > > > >
+> > > > > +static inline int util_fits_cpu(unsigned long util,
+> > > > > +                               unsigned long uclamp_min,
+> > > > > +                               unsigned long uclamp_max,
+> > > > > +                               int cpu)
+> > > > > +{
+> > > >
+> > > > May the function name is not proper when the uclamp is unused.
+> > >
+> > > Are you suggesting to rename it? What name do you have in mind?
+> > > I think this is a suitable name, but open for suggestions :-)
+> >
+> > Okay:-)
+> >
+> > >
+> > > >
+> > > > > +       unsigned long capacity = capacity_of(cpu);
+> > > > > +       unsigned long capacity_orig;
+> > > > > +       bool fits, max_capacity;
+> > > > > +       bool uclamp_max_fits;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Check if the real util fits without any uclamp boost/cap applied.
+> > > > > +        */
+> > > > > +       fits = fits_capacity(util, capacity);
+> > > > > +
+> > > > > +       if (!uclamp_is_used())
+> > > > > +               return fits;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * We must use capacity_orig_of() for comparing against uclamp_min and
+> > > > > +        * uclamp_max. We only care about capacity pressure (by using
+> > > > > +        * capacity_of()) for comparing against the real util.
+> > > > > +        *
+> > > > > +        * If a task is boosted to 1024 for example, we don't want a tiny
+> > > > > +        * pressure to skew the check whether it fits a CPU or not.
+> > > > > +        *
+> > > > > +        * Similarly if a task is capped to capacity_orig_of(little_cpu), it
+> > > > > +        * should fit a little cpu even if there's some pressure.
+> > > > > +        *
+> > > > > +        * Known limitation is when thermal pressure is severe to the point
+> > > > > +        * where we have capacity inversion. We don't cater for that as the
+> > > > > +        * system performance will already be impacted severely.
+> > > > > +        */
+> > > > > +       capacity_orig = capacity_orig_of(cpu);
+> > > > > +
+> > > > > +       /*
+> > > > > +        * We want to force a task to fit a cpu as implied by uclamp_max.
+> > > > > +        * But we do have some corner cases to cater for..
+> > > > > +        *
+> > > > > +        *
+> > > > > +        *                                 C=z
+> > > > > +        *   |                             ___
+> > > > > +        *   |                  C=y       |   |
+> > > > > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
+> > > > > +        *   |      C=x        |   |      |   |
+> > > > > +        *   |      ___        |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |    (util somewhere in this region)
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   +----------------------------------------
+> > > > > +        *         cpu0        cpu1       cpu2
+> > > > > +        *
+> > > > > +        *   In the above example if a task is capped to a specific performance
+> > > > > +        *   point, y, then when:
+> > > > > +        *
+> > > > > +        *   * util = 80% of x then it does not fit on cpu0 and should migrate
+> > > > > +        *     to cpu1
+> > > > > +        *   * util = 80% of y then it is forced to fit on cpu1 to honour
+> > > > > +        *     uclamp_max request.
+> > > > > +        *
+> > > > > +        *   which is what we're enforcing here. A task always fits if
+> > > > > +        *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
+> > > > > +        *   the normal upmigration rules should withhold still.
+> > > > > +        *
+> > > > > +        *   Only exception is when we are on max capacity, then we need to be
+> > > > > +        *   careful not to block overutilized state. This is so because:
+> > > > > +        *
+> > > > > +        *     1. There's no concept of capping at max_capacity! We can't go
+> > > > > +        *        beyond this performance level anyway.
+> > > > > +        *     2. The system is being saturated when we're operating near
+> > > > > +        *        max_capacity, it doesn't make sense to block overutilized.
+> > > > > +        */
+> > > > > +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> > > > > +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
+> > > > > +       fits = fits || uclamp_max_fits;
+> > > >
+> > > > As I said above, Using the capacity_orig may ignore the rt/irq pressure.
+> > > > If we have two or more middle cpus, we can select the cpu whose rt/irq
+> > > > pressure is smaller.
+> > > > If using the capacity_orig, the first MID cpu is always the candidate.
+> > >
+> > > I hope my explanation above addressed that too. rt/irq has no impact on the
+> > > task's ability to achieve the required performance level from uclamp hint PoV.
+> > > We still use util_avg to compare with rt/irq pressure as usual. so if rt/irq
+> > > pose any issue to the task's ability to obtain the required bandwidth that will
+> > > be taken into account. But if util_avg is happy with that level of rt/irq
+> > > pressure, then uclamp only cares about being able to achieve the performance
+> > > level on that cpu, which doesn't care about rt/irq pressure.
+> > >
+> > > >
+> > > > > +
+> > > > > +       /*
+> > > > > +        *
+> > > > > +        *                                 C=z
+> > > > > +        *   |                             ___       (region a, capped, util >= uclamp_max)
+> > > > > +        *   |                  C=y       |   |
+> > > > > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
+> > > > > +        *   |      C=x        |   |      |   |
+> > > > > +        *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
+> > > > > +        *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
+> > > > > +        *   |     |   |       |   |      |   |
+> > > > > +        *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
+> > > > > +        *   +----------------------------------------
+> > > > > +        *         cpu0        cpu1       cpu2
+> > > > > +        *
+> > > > > +        * a) If util > uclamp_max, then we're capped, we don't care about
+> > > > > +        *    actual fitness value here. We only care if uclamp_max fits
+> > > > > +        *    capacity without taking margin/pressure into account.
+> > > > > +        *    See comment above.
+> > > > > +        *
+> > > > > +        * b) If uclamp_min <= util <= uclamp_max, then the normal
+> > > > > +        *    fits_capacity() rules apply. Except we need to ensure that we
+> > > > > +        *    enforce we remain within uclamp_max, see comment above.
+> > > > > +        *
+> > > > > +        * c) If util < uclamp_min, then we are boosted. Same as (b) but we
+> > > > > +        *    need to take into account the boosted value fits the CPU without
+> > > > > +        *    taking margin/pressure into account.
+> > > > > +        *
+> > > > > +        * Cases (a) and (b) are handled in the 'fits' variable already. We
+> > > > > +        * just need to consider an extra check for case (c) after ensuring we
+> > > > > +        * handle the case uclamp_min > uclamp_max.
+> > > > > +        */
+> > > > > +       uclamp_min = min(uclamp_min, uclamp_max);
+> > > > > +       if (util < uclamp_min)
+> > > > > +               fits = fits && (uclamp_min <= capacity_orig);
+> > > >
+> > > > As said above, I think the uclamp_min should consider the margin.
+> > >
+> > > Addressed above ;-)
+> >
+> > Okay, I would revisit the patch:-)
+>
+> Thanks!!
 >
 >
+> Cheers
+>
+> --
+> Qais Yousef

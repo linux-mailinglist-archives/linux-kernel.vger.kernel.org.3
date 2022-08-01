@@ -2,79 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F21586E09
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBD8586E0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiHAPrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
+        id S232447AbiHAPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiHAPrl (ORCPT
+        with ESMTP id S231144AbiHAPsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:47:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13EB33340
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:47:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59359B8124C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6824C433D6;
-        Mon,  1 Aug 2022 15:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659368858;
-        bh=vo0HQjEwl/3zE+Vx+C+n57BORefplVKjlJ4d+4Oo0TY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=niTCD5PwhTlZvw2lOpi1FfZDU1mbAc/YFlmwC/MGGPTNveZnncw5Kic0avG4zE0PO
-         7+xNtUaU8upocsv0k7dmk3HkLREJ3qd/pc/mK8AMYX3o6U1KgHSRmSm5JE3PPFOQXQ
-         DHJrcmQgiU6K0otv33AE1U94Ba9q7TkxVHOcToIPHHLz1Q/+o12CLpsSFDeWPLUIvR
-         GoXwWaBiZztW/cB/DZ9r860L5Y7CuulnuJQ9VCEu2ggHTfdVXTAfQ4gaJQKZR8Mzmb
-         RISwcAEckgVpyS4UroYeFnUEkhcQs1oBAt0yRMNlcPLHEgyTp8JYby9Jl2gbqvZDE2
-         3oYcLiIxudsiQ==
-Date:   Mon, 1 Aug 2022 08:47:36 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: drivers/net/ethernet/atheros/ag71xx.c:994:38: warning: passing
- argument 2 of 'ag71xx_hw_set_macaddr' discards 'const' qualifier from
- pointer target type
-Message-ID: <20220801084736.0655e1da@kernel.org>
-In-Reply-To: <202208010713.jcG50gwa-lkp@intel.com>
-References: <202208010713.jcG50gwa-lkp@intel.com>
+        Mon, 1 Aug 2022 11:48:32 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA4731DE0
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Bw2G8fr14ujR+mPl0CVqh1ElxFbp1/PqK8jCTY1CQ8M=; b=Z/4fGfwHlhxXvzVawdJsguPCDe
+        Ub4PLkiJaq/lWttL5s6MmwV6qKSuE8uhFRd8A7nYbpVWbzabcoPo2MVl+oJN84C8lAvoiRL4RWEq7
+        XWu/E5zLdcxwSm1jLVRZFwPK5QOCVBUm9qvtlaFm1eqKT6PaokCT4L5zXaQy/uGlRClqtfG20rck8
+        OKLFK5aKs35abkggiHECmKAReayGf9iHZrpSTOyGwy7G3vHTyNKod4kURS6WNgho+D3VNbDyYgQLV
+        nY960hiRsDIvHD6f5biSGu2iIlYrlw/ycsKss34tx+aRls/m5zHxXdZJ0fp/jElHEwMmaJZ4bmcBi
+        8RueC1fg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33652)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oIXeZ-00026j-4M; Mon, 01 Aug 2022 16:48:23 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oIXeX-0007AU-6E; Mon, 01 Aug 2022 16:48:21 +0100
+Date:   Mon, 1 Aug 2022 16:48:21 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: Linux 5.19-rc8
+Message-ID: <Yuf1xYLAhCMjwCYT@shell.armlinux.org.uk>
+References: <YuAm5h1B6bsrR/9q@fedora>
+ <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+ <YuAv+lV324G7pmlk@yury-laptop>
+ <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
+ <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
+ <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
+ <YuCDscyJotkjNQcH@shell.armlinux.org.uk>
+ <CAAH8bW-BNfhuXF_2cO+x2Qc51G-DFskFmKw8hzDHhC+3Rn1ZUA@mail.gmail.com>
+ <YuDsmmAnOsgNDuWQ@shell.armlinux.org.uk>
+ <YuWk3titnOiQACzC@yury-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YuWk3titnOiQACzC@yury-laptop>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 07:20:16 +0800 kernel test robot wrote:
-> Hi Jakub,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   3d7cb6b04c3f3115719235cc6866b10326de34cd
-> commit: adeef3e32146a8d2a73c399dc6f5d76a449131b1 net: constify netdev->dev_addr
-> date:   8 months ago
-> config: mips-randconfig-r033-20220801 (https://download.01.org/0day-ci/archive/20220801/202208010713.jcG50gwa-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adeef3e32146a8d2a73c399dc6f5d76a449131b1
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout adeef3e32146a8d2a73c399dc6f5d76a449131b1
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/ethernet/atheros/
+Oh FFS.
 
-That's fixed by 225b0ed27e6 FWIW but the fix went into the wrong tree.
-Luckily the merge window is upon us.
+I see you decided off your own back to remove the ARM version of the
+find_bit functions, with NO agreement from the arch maintainer. This
+is not on.
+
+
+On Sat, Jul 30, 2022 at 02:38:38PM -0700, Yury Norov wrote:
+> On Wed, Jul 27, 2022 at 08:43:22AM +0100, Russell King (Oracle) wrote:
+> > On Tue, Jul 26, 2022 at 06:33:55PM -0700, Yury Norov wrote:
+> > > On Tue, Jul 26, 2022 at 5:15 PM Russell King (Oracle)
+> > > <linux@armlinux.org.uk> wrote:
+> > > >
+> > > > On Tue, Jul 26, 2022 at 01:20:23PM -0700, Linus Torvalds wrote:
+> > > > > On Tue, Jul 26, 2022 at 12:44 PM Russell King (Oracle)
+> > > > > <linux@armlinux.org.uk> wrote:
+> > > > > >
+> > > > > > Overall, I would say it's pretty similar (some generic perform
+> > > > > > marginally better, some native perform marginally better) with the
+> > > > > > exception of find_first_bit() being much better with the generic
+> > > > > > implementation, but find_next_zero_bit() being noticably worse.
+> > > > >
+> > > > > The generic _find_first_bit() code is actually sane and simple. It
+> > > > > loops over words until it finds a non-zero one, and then does trivial
+> > > > > calculations on that last word.
+> > > > >
+> > > > > That explains why the generic code does so much better than your byte-wise asm.
+> > > > >
+> > > > > In contrast, the generic _find_next_bit() I find almost offensively
+> > > > > silly - which in turn explains why your byte-wide asm does better.
+> > > > >
+> > > > > I think the generic _find_next_bit() should actually do what the m68k
+> > > > > find_next_bit code does: handle the first special word itself, and
+> > > > > then just call find_first_bit() on the rest of it.
+> > > > >
+> > > > > And it should *not* try to handle the dynamic "bswap and/or bit sense
+> > > > > invert" thing at all. That should be just four different (trivial)
+> > > > > cases for the first word.
+> > > >
+> > > > Here's the results for the native version converted to use word loads:
+> > > >
+> > > > [   37.319937]
+> > > >                Start testing find_bit() with random-filled bitmap
+> > > > [   37.330289] find_next_bit:                 2222703 ns, 163781 iterations
+> > > > [   37.339186] find_next_zero_bit:            2154375 ns, 163900 iterations
+> > > > [   37.348118] find_last_bit:                 2208104 ns, 163780 iterations
+> > > > [   37.372564] find_first_bit:               17722203 ns,  16370 iterations
+> > > > [   37.737415] find_first_and_bit:          358135191 ns,  32453 iterations
+> > > > [   37.745420] find_next_and_bit:             1280537 ns,  73644 iterations
+> > > > [   37.752143]
+> > > >                Start testing find_bit() with sparse bitmap
+> > > > [   37.759032] find_next_bit:                   41256 ns,    655 iterations
+> > > > [   37.769905] find_next_zero_bit:            4148410 ns, 327026 iterations
+> > > > [   37.776675] find_last_bit:                   48742 ns,    655 iterations
+> > > > [   37.790961] find_first_bit:                7562371 ns,    655 iterations
+> > > > [   37.797743] find_first_and_bit:              47366 ns,      1 iterations
+> > > > [   37.804527] find_next_and_bit:               59924 ns,      1 iterations
+> > > >
+> > > > which is generally faster than the generic version, with the exception
+> > > > of the sparse find_first_bit (generic was:
+> > > > [   25.657304] find_first_bit:                7328573 ns,    656 iterations)
+> > > >
+> > > > find_next_{,zero_}bit() in the sparse case are quite a bit faster than
+> > > > the generic code.
+> > > 
+> > > Look at find_{first,next}_and_bit results. Those two have no arch version
+> > > and in both cases use generic code. In theory they should be equally fast
+> > > before and after, but your testing says that generic case is slower even
+> > > for them, and the difference is comparable with real arch functions numbers.
+> > > It makes me feel like:
+> > >  - there's something unrelated, like governor/throttling that affect results;
+> > >  - the numbers are identical, taking the dispersion into account.
+> > > 
+> > > If the difference really concerns you, I'd suggest running the test
+> > > several times
+> > > to measure confidence intervals.
+> > 
+> > Given that the benchmark is run against random bitmaps and with
+> > interrupts enabled, there is going to be noise in the results.
+> > 
+> > Here's the second run:
+> > 
+> > [26234.429389]
+> >                Start testing find_bit() with random-filled bitmap
+> > [26234.439722] find_next_bit:                 2206687 ns, 164277 iterations
+> > [26234.448664] find_next_zero_bit:            2188368 ns, 163404 iterations
+> > [26234.457612] find_last_bit:                 2223742 ns, 164278 iterations
+> > [26234.482056] find_first_bit:               17720726 ns,  16384 iterations
+> > [26234.859374] find_first_and_bit:          370602019 ns,  32877 iterations
+> > [26234.867379] find_next_and_bit:             1280651 ns,  74091 iterations
+> > [26234.874107]
+> >                Start testing find_bit() with sparse bitmap
+> > [26234.881014] find_next_bit:                   46142 ns,    656 iterations
+> > [26234.891900] find_next_zero_bit:            4158987 ns, 327025 iterations
+> > [26234.898672] find_last_bit:                   49727 ns,    656 iterations
+> > [26234.912504] find_first_bit:                7107862 ns,    656 iterations
+> > [26234.919290] find_first_and_bit:              52092 ns,      1 iterations
+> > [26234.926076] find_next_and_bit:               60856 ns,      1 iterations
+> > 
+> > And a third run:
+> > 
+> > [26459.679524]
+> >                Start testing find_bit() with random-filled bitmap
+> > [26459.689871] find_next_bit:                 2199418 ns, 163311 iterations
+> > [26459.698798] find_next_zero_bit:            2181289 ns, 164370 iterations
+> > [26459.707738] find_last_bit:                 2213638 ns, 163311 iterations
+> > [26459.732224] find_first_bit:               17764152 ns,  16429 iterations
+> > [26460.133823] find_first_and_bit:          394886375 ns,  32672 iterations
+> > [26460.141818] find_next_and_bit:             1269693 ns,  73485 iterations
+> > [26460.148545]
+> >                Start testing find_bit() with sparse bitmap
+> > [26460.155433] find_next_bit:                   40753 ns,    653 iterations
+> > [26460.166307] find_next_zero_bit:            4148211 ns, 327028 iterations
+> > [26460.173078] find_last_bit:                   50017 ns,    653 iterations
+> > [26460.187007] find_first_bit:                7205325 ns,    653 iterations
+> > [26460.193790] find_first_and_bit:              49358 ns,      1 iterations
+> > [26460.200577] find_next_and_bit:               62332 ns,      1 iterations
+> > 
+> > My gut feeling is that yes, there is some variance, but not on an
+> > order that is significant that would allow us to say "there's no
+> > difference".
+> > 
+> > find_next_bit results for random are: 2222703, 2206687, 2199418,
+> > which is an average of 2209603 and a variance of around 0.5%.
+> > The difference between this and the single generic figure I have
+> > is on the order of 20%.
+> > 
+> > I'll do the same with find_first_bit for random: 17722203, 17720726,
+> > and 17764152. Average is 17735694. Variance is around 0.1% or 0.2%.
+> > The difference between this and the single generic figure I have is
+> > on the order of 5%. Not so large, but still quite a big difference
+> > compared to the variance.
+> > 
+> > find_first_bit for sparse: 7562371, 7107862, 7205325. Average is
+> > 7291853. Variance is higher at about 4%. Difference between this and
+> > the generic figure is 0.5%, so this one is not significantly
+> > different.
+> > 
+> > The best result looks to be find_next_zero_bit for the sparse bitmap
+> > case. The generic code measures 5.5ms, the native code is sitting
+> > around 4.1ms. That's a difference of around 34%, and by just looking
+> > at the range in the figures above we can see this is a significant
+> > result without needing to do the calculations. Similar is true of
+> > find_next_bit for the sparse bitmap.
+> > 
+> > So, I think the results are significant in most cases and variance
+> > doesn't account for the differences. The only one which isn't is
+> > find_first_bit for the sparse case.
+> 
+> Hi Russel,
+> 
+> + Alexey Klimov <klimov.linux@gmail.com>
+> 
+> This is my testings for native vs generic find_bit operations on a15
+> and 17.
+> 
+> The raw numbers are collected by Alexey Klimov on Odroid-xu3. All cpu
+> frequencies were fixed at 1000Mhz. (Thanks a lot!)
+> 
+> For each native/generic @ a15/a7 configuration, the find_bit_benchmark 
+> was run 5 times, and the results are summarized below:
+> 
+> A15                      Native     Generic       Difference
+> Dense                        ns          ns       %   sigmas
+> find_next_bit:          3746929     3231641      14      8.3
+> find_next_zero_bit:     3935354     3202608      19     10.4
+> find_last_bit:          3134713     3129717       0      0.1
+> find_first_bit:        85626542    20498669      76    172.4
+> find_first_and_bit:   409252997   414820417      -1     -0.2
+> find_next_and_bit:      1678706     1654420       1      0.4
+>                                               
+> Sparse                                        
+> find_next_bit:          143208        77924      46     29.4
+> find_next_zero_bit:    6893375      6059177      12     14.3
+> find_last_bit:           67174        68616      -2     -1.0
+> find_first_bit:       33689256      8151493      76     47.8
+> find_first_and_bit:     124758       156974     -26     -1.3
+> find_next_and_bit:       53391        56716      -6     -0.2
+> 
+> A7                      Native      Generic       Difference
+> Dense                       ns           ns       %   sigmas
+> find_next_bit:         4207627      5532764     -31    -14.9
+> find_next_zero_bit:    4259961      5236880     -23    -10.0
+> find_last_bit:         4281386      4201025       2      1.5
+> find_first_bit:      236913620     50970424      78    163.3
+> find_first_and_bit:  728069762    750580781      -3     -0.7
+> find_next_and_bit:     2696263      2766077      -3     -0.9
+> 
+> Sparse
+> find_next_bit:          327241       143776      56     40.7
+> find_next_zero_bit:    6987249     10235989     -46    -21.8
+> find_last_bit:           97758        94725       3      0.6
+> find_first_bit:       94628040     21051964      78     41.8
+> find_first_and_bit:     248133       241267       3      0.3
+> find_next_and_bit:      136475       154000     -13     -0.5
+> 
+> The last column is the difference between native and generic code
+> performance normalized to a standard deviation:
+>         (mean(native) - mean(generic)) / max(std(native), std(generic))
+> 
+> The results look consistent to me because 'and' subtests that are always
+> generic differ by less than one sigma.
+> 
+> On A15 generic code is a clear winner. On A7 results are inconsistent
+> although significant. Maybe it's worth to retest on A7.
+>  
+> Regarding the choice between native and generic core - I would prefer
+> generic version even if it's slightly slower because it is tested and
+> maintained better. And because the results of the test are at least on
+> par, to me it's a no-brainer.
+> 
+> Would be really interesting to compare performance of your LDRB->LDR
+> patch with the generic code using the same procedure.
+> 
+> Thanks,
+> Yury
+> 
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

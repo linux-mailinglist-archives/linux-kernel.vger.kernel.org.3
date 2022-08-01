@@ -2,103 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDC75873D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C018C5873D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiHAWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S235298AbiHAWTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiHAWTB (ORCPT
+        with ESMTP id S231986AbiHAWTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:19:01 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68922654C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:19:00 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id o2so9445634iof.8
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=buWpDoyRJL+IgqIja3qNH5XA+qhezm6ica8qDK/+0ng=;
-        b=MbRFc1imuyNgpm5/KrBD2htSg/jJSj6zWsN59GlvQ2ZExegKrTfRuC6/mWsLAqN2Ro
-         S5cKDdripZHZPb+tZ2e1Ucxj0S8L4Wtd8r8fXRs1Ke3A9D5KHZVJmgOczQorzJ4s9RaK
-         hztvBM/8OXCbDz0yQ57vV2P6RIzHtEiwTq7UU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=buWpDoyRJL+IgqIja3qNH5XA+qhezm6ica8qDK/+0ng=;
-        b=CZVL7nuRhCUZDsq8/IwsYluqFLcsQGl/JeDFx192ecVHN/dxqnbsYRWF8rehbAVMDp
-         5zOYl5FyF1x15Vz6ZKjZ4eUWQB+GsNvo8wJx01pheHsuPbCtUNvy0f631HbLRoSGOMM6
-         /yjgdfRqB52+B3KUCP5CfhjLquv5Y/XHxGkRxV31dtwFjNWjKX1HMp2ct3I7IRCMn29V
-         XEblS8Z76Ro9dCnpQNvKROPEUyKIQlv6wunF1oQvDetgUpd309rmt6CaZeetlpA6Hd3e
-         eBUFH4eQLvWk90s4M00QmZxuw29Lqp/0HNNq6LVuYOnaeeboRcHXujQCkmh4ar0zHUOb
-         Qs+w==
-X-Gm-Message-State: AJIora9513R/XXiEDgMx8SWB223sHmuBkWDS+snwsFhLdjZ347W8+oE6
-        gg/SBnDOVJKmLw940MMjHw2ZTw==
-X-Google-Smtp-Source: AGRyM1uz5AQwJEETrCxvG9oQBd+GOrHViYp78JQCCsJ0i3dNK+OPQRafNcu0rRSM8uklg3NfQgcuVA==
-X-Received: by 2002:a05:6638:12cc:b0:33f:7b73:541e with SMTP id v12-20020a05663812cc00b0033f7b73541emr7354939jas.275.1659392340229;
-        Mon, 01 Aug 2022 15:19:00 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k18-20020a026612000000b00331b9a3c5adsm5767840jac.170.2022.08.01.15.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 15:18:59 -0700 (PDT)
-Subject: Re: [PATCH 5.15 00/69] 5.15.59-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bb24cd0d-7a3e-34e1-f091-4942b60538aa@linuxfoundation.org>
-Date:   Mon, 1 Aug 2022 16:18:59 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 1 Aug 2022 18:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549F731230;
+        Mon,  1 Aug 2022 15:19:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFD2C60BEF;
+        Mon,  1 Aug 2022 22:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9BCC433C1;
+        Mon,  1 Aug 2022 22:19:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659392359;
+        bh=VuPZOuf958xM5rF1x2Ju4XLPmq5AxRetWWzkWL1/+Fk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DxSO+c25Vg0xVxE7Lrl7QO2SU3lL52zhFS8MLWxj5Cy3hfz1SugSQVkH8pL4Sy/Nl
+         3eIrhkFHyzv+rWZ19rsgm3SGNRPi9bxk+aA3mm3OI5AKyQGyF1XwoUlIVtK5bSwEA4
+         U6wSVLbtXPYI+ASn7WzkT5AUXyvdJUxePq4P8uetsVTpk3pYPcYzZBFuHdoXGr9tFT
+         nnEYiv+bI7DgvPamuvoWI9UlFm3n+2iW1wQo12l4AXzYwR+J1bOCi5D9kburAzRd4+
+         8NONz0roqE4F9W5UD5RGKRy3QF/sicW8vQrwK7dxadQlz71JKlLENpI47k9WnfuNb1
+         sexri8nPrEmdw==
+Date:   Mon, 1 Aug 2022 17:19:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Cyril Brulebois <kibi@debian.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 0/7] PCI: brcmstb: Re-submit reverted patchset
+Message-ID: <20220801221916.GA677562@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4af7c132-1100-3d48-2311-e6be3bdf3629@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 5:46 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.59 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Jul 26, 2022 at 04:41:09PM -0700, Florian Fainelli wrote:
+> On 7/26/22 15:03, Bjorn Helgaas wrote:
+> > On Mon, Jul 25, 2022 at 11:12:49AM -0400, Jim Quinlan wrote:
+> >> ...
+> >> Jim Quinlan (7):
+> >>   PCI: brcmstb: Remove unnecessary forward declarations
+> >>   PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+> >>   PCI: brcmstb: Gate config space access on link status
+> >>   PCI: brcmstb: Add mechanism to turn on subdev regulators
+> >>   PCI: brcmstb: Add control of subdevice voltage regulators
+> >>   PCI: brcmstb: Do not turn off WOL regulators on suspend
+> >>   PCI: brcmstb: Have .map_bus function names end with 'map_bus'
+> >>
+> >>  drivers/pci/controller/pcie-brcmstb.c | 476 ++++++++++++++++++--------
+> >>  1 file changed, 341 insertions(+), 135 deletions(-)
+> > 
+> > I reworked these and put them on pci/ctrl/brcm for v5.20.  This is a
+> > proposal, not something set in stone.  But time is of the essence to
+> > figure out how we want to proceed.
+> > 
+> > I changed a lot of stuff and it's likely I broke something in the
+> > process, so please take a look and test this out.  Here's an outline
+> > of what I changed:
+> > 
+> >   - Moved the config access "link up" check earlier because it's not
+> >     related to the power regulator patches.
+> > 
+> >   - Changed config access "link up" checks to use PCIE_ECAM_REG()
+> >     instead of hard-coding 0xfff masks.  The 32-bit accessors already
+> >     mask out the low two bits, so we don't need to do that here.
+> > 
+> >   - Squashed pci_subdev_regulators_add_bus() directly into
+> >     brcm_pcie_add_bus() for readability.  Similarly for
+> >     pci_subdev_regulators_remove_bus().
+> > 
+> >   - This makes a clear split between:
+> > 
+> >     * A patch that adds get/enable of regulators, and starting the
+> >       link after enabling regulators, and
+> > 
+> >     * A patch that disables/enables regulators for suspend/resume.
+> > 
+> >   - Since we only support one set of subregulator info (for one Root
+> >     Port, and brcm_pcie_suspend_noirq() depends on this since it uses
+> >     the pcie->sr pointer), use pcie->sr always instead of
+> >     dev->driver_data.
+> > 
+> >   - Squashed wakeup device checking into the suspend/resume patch so
+> >     there's not a time when suspend might turn off power to a wakeup
+> >     device.
+> > 
+> >   - Renamed brcm_pcie_map_bus32() to brcm7425_pcie_map_bus() so it
+> >     ends in "_map_bus()" like other drivers.  Also,
+> >     brcm7425_pcie_map_bus() doesn't actually depend on the 32-bitness.
 > 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
+> Attached is the diff between Jim's and your branch just so it is easier to see what moved around.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.59-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+> Initial testing on an ARCH_BRCMSTB system with PCIe appears to be good, we don't have any regulator on that board so the dummy ones get picked up which is expected. Same thing with a Raspberry Pi 4B system.
 > 
-> thanks,
+> I could unbind and bind again and there were no reference count leaks on the regulators, so this looks good to me.
 > 
-> greg k-h
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 > 
+> of course, we should have Jim's test results as well as Cyril's ideally to make sure there are no regressions on the CM4 board.
 
-Compiled and booted on my test system. No dmesg regressions.
+Cyril, any chance you could test this to be sure it fixes the problem
+you reported?  This is in -next and hopefully headed for v5.20/v6.0
+soon.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+I see that we failed to reference
+https://bugzilla.kernel.org/show_bug.cgi?id=215925 in the commit logs,
+but IIUC, this *should* fix that.
 
-thanks,
--- Shuah
+Bjorn

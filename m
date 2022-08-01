@@ -2,190 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E72B58719C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AD258719D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiHATpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S234512AbiHATpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbiHATpn (ORCPT
+        with ESMTP id S234935AbiHATpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:45:43 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC7B1C934
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:45:42 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id z187so1657606pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:45:42 -0700 (PDT)
+        Mon, 1 Aug 2022 15:45:50 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BF61408E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:45:48 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id p132so14211169oif.9
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 12:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc;
-        bh=2eDIKfNBF69ExcRKVHhtooYqQWQsrphsGma18ozfvH4=;
-        b=Is8XoEMm5TsccimUxOK4ufioDn9Y6hRSdcohyhrcDryhP6Zzc6gXN5hTpsgqwsi0pa
-         ppMhplIYcy73di0iYa4OjRYJGKbz/JcxH3KI3N79ODAXJer2NW23CACdxsdi4tzruVEr
-         vMfTpAqR/P8LWxj4sQkQwLfZ2Q+oJ7V7Hprv0=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=zTO5z1b2HBi2MHvoO0VDCQa4JcalTm7DQj8Wt/tBQgU=;
+        b=gwOcIWDnx/oz5Jund5U+0j32WTTBpWogDpXxD0OMEDpt/pD7rfetrivW9TjnfW+0po
+         iL9MShgxX938M0rQmfpYWhsLeAqmXvjkvbZ0f+QLrgAOW1KH4/SVQOQ5heSKbSQTqk19
+         JuNDGFYOnIjZkAK9IwmX/Mhf0mc1Vzu5Hg/cvJNiRHPl6qTS54DHAjOkWvOu3b3hd3Ru
+         Qsp3qRJLUDK+WYoC87BMrohHVl0uRJZC8ENtdYo6dqSbkAMFYmUxmUllUyYRuj14TaLV
+         RbBJiZrxGyd/e/DPzjcYc6CBfbuaemupx2Bmk+cDxIut1iFWm/JWYMY+6tqZNRv5hscU
+         ziRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=2eDIKfNBF69ExcRKVHhtooYqQWQsrphsGma18ozfvH4=;
-        b=BKwrTSZdi1j+WrPNs6XaUGM8tLPIfXNi8OfxELpPVc2oGeI+zvZHQEXBjpzpOZSo2n
-         At8QNbJYuwyBztURtaqklIsxwsJRbg9U9GI9H9jvo3siSAznqFVzlZf6WdEwAm/cDd8F
-         23tNIdtL+MZnQvA1GMAEKDq0u9wDY1kjqDbH6hlsEPGZMLqFZNHPPW5jOF67GtrSVPgi
-         houLLbrzZNWpAiLAKPoDmzF5W3HbKYj5JNLHYSLJWmcxxg9baY/mY+RVjzyoTLLXvXUi
-         OWH4CAldxErWuZokUV9t/YOwSs8w2JbCB6sHQqZodY3OKlwRhbsmG19rNz/GzF8H5RBl
-         8a2Q==
-X-Gm-Message-State: ACgBeo0tyLqDcT315X6Vpz3qECUqJsNRUIpo5RX9vf3hybDBcVsIrnof
-        e0D/GDQP9ikoli5EmLmbxchKjQ==
-X-Google-Smtp-Source: AA6agR4WKVMImdPP267oQVx+HHFvwniZXyodbaG7daVdtGkLXCWjNLlejY/L3y2/nuTvS++VMiOMvA==
-X-Received: by 2002:a63:d24c:0:b0:41b:b2b1:fff9 with SMTP id t12-20020a63d24c000000b0041bb2b1fff9mr11555298pgi.246.1659383142119;
-        Mon, 01 Aug 2022 12:45:42 -0700 (PDT)
-Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b0016d9877d3bfsm10075561plg.32.2022.08.01.12.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 12:45:40 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     f.fainelli@gmail.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        kursad.oney@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] ARM: dts: bcmbca: bcm63178: cosmetic change
-Date:   Mon,  1 Aug 2022 12:44:48 -0700
-Message-Id: <20220801194448.29363-4-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220801194448.29363-1-william.zhang@broadcom.com>
-References: <20220801194448.29363-1-william.zhang@broadcom.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=zTO5z1b2HBi2MHvoO0VDCQa4JcalTm7DQj8Wt/tBQgU=;
+        b=re0vBUE4NSCm7YsyI99lW+oFUhSJPlC3x0QZHrS7CmyqNAwvresTCbDoGofrGWFPQQ
+         v1bRRQeGOl/zbEzNdLoM8u2x5zC6wBJK0SKQWyk2ppOugpKvr/QupsubweCJsXxWQ0Kh
+         pHg9XjJ3a4WpSt9zrin0KT1R2dIkfSomym/3NLJJiPt64XRFvoHY/hoV5eutXRMLwqqt
+         hGt8qjuHrOb19xe7N6VMI47f2baXr291jZiZBtA61wMbzSx2T3gUkcJCDeYoBX0i/dMe
+         nCGKMKbIqDUeFKNakYeS0V78aiQxWkxfNyWQWih+wGuDUCgFE2s6E0WrobZ8Ravj/YAl
+         yhXA==
+X-Gm-Message-State: AJIora/qYATCSoma9rCZxVZOs7Q7D24ma08oOJIUpv2JT3JC7WDrLx+1
+        w36xBzwbOu73uFD63mNX72AgUEZ/GWZJDsf+
+X-Google-Smtp-Source: AGRyM1vmfNmmRu2L6std5nKqLGzLUJ78DCnrLH8a8WRpHZdEaUrrpKMDmO6fEkjUPTAwEi1LkE1btQ==
+X-Received: by 2002:a05:6808:2099:b0:33a:aa4f:25e6 with SMTP id s25-20020a056808209900b0033aaa4f25e6mr6993997oiw.129.1659383148107;
+        Mon, 01 Aug 2022 12:45:48 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.75.211])
+        by smtp.gmail.com with ESMTPSA id m14-20020a9d73ce000000b0061c34994238sm2994807otk.40.2022.08.01.12.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 12:45:46 -0700 (PDT)
+Message-ID: <be23477d-7c17-1e65-d9cb-d2331b4ce8fe@linaro.org>
+Date:   Mon, 1 Aug 2022 14:45:44 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c0f4d905e5333ee7"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220801114138.041018499@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c0f4d905e5333ee7
-Content-Transfer-Encoding: 8bit
+Hello!
 
-Add new line between dts node.
+On 01/08/22 06:46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.16 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.16-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
----
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
- arch/arm/boot/dts/bcm63178.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+## Build
+* kernel: 5.18.16-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.18.y
+* git commit: 7e8a7b1c98057a3014222a505c28c6bd43ed5666
+* git describe: v5.18.14-248-g7e8a7b1c9805
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18.14-248-g7e8a7b1c9805
 
-diff --git a/arch/arm/boot/dts/bcm63178.dtsi b/arch/arm/boot/dts/bcm63178.dtsi
-index dba71fa53466..cbd094dde6d0 100644
---- a/arch/arm/boot/dts/bcm63178.dtsi
-+++ b/arch/arm/boot/dts/bcm63178.dtsi
-@@ -32,6 +32,7 @@ CA7_1: cpu@1 {
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
- 		};
-+
- 		CA7_2: cpu@2 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a7";
-@@ -39,6 +40,7 @@ CA7_2: cpu@2 {
- 			next-level-cache = <&L2_0>;
- 			enable-method = "psci";
- 		};
-+
- 		L2_0: l2-cache0 {
- 			compatible = "cache";
- 		};
+## No test regressions (compared to v5.18.14-159-g63d1be154edd)
+
+## No metric regressions (compared to v5.18.14-159-g63d1be154edd)
+
+## No test fixes (compared to v5.18.14-159-g63d1be154edd)
+
+## No metric fixes (compared to v5.18.14-159-g63d1be154edd)
+
+## Test result summary
+total: 136635, pass: 122379, fail: 825, skip: 12686, xfail: 745
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 311 total, 308 passed, 3 failed
+* arm64: 68 total, 66 passed, 2 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 23 total, 20 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 59 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
 -- 
-2.34.1
-
-
---000000000000c0f4d905e5333ee7
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKMgU0l8vgcoc3bKTj2ZW4uUrN89
-dbGv9pjPHLzDzcPQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDgwMTE5NDU0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAJfoamCEcf8XQX+8JiyA8WDxwndD4/+vLgF4Zu3T/GVZvn
-vX0OZE/r8r+r+WZoGcTGjrfz2uVlfqLX1ZK2QY2lpQRP1KcBl53tab9mu8YU9E59G8B+K088G44u
-vO0My79I6pe5Z9277HcCEEtHU/ckVrJs4YmugpLAKBZ5YQwpWKHYdmC8nkjemJR88mc82YM+WIEJ
-fxzaWc5+uBYzkQjDI6FZ002QByqDSdoayqkWrwZ/ZfOXAGDuTuYI9CHmehfPbKIVF7vij8lzNifI
-PE/8Qwq+HzxxGATVVGW7o033QAHOVB5TKtyS8BQBxCHEML3HlYgjlH0lJG0XLfW6K9Ld
---000000000000c0f4d905e5333ee7--
+Linaro LKFT
+https://lkft.linaro.org

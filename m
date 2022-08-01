@@ -2,104 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9546586D22
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BD3586D26
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiHAOmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
+        id S233140AbiHAOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiHAOmH (ORCPT
+        with ESMTP id S233068AbiHAOnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:42:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BBA3D599
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C854611BF
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 14:41:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479E9C433D6;
-        Mon,  1 Aug 2022 14:41:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oG/vRklh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659364897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=htIi3XqksEfEoqLAYx07oI8o30SOM6ge3VdkGTv3zmk=;
-        b=oG/vRklhyXZaR17jMX+GhIcO/gmN1XwrpPHRYyw86I2hFJowXlpPUFXPVgWIVEyVoTWZrU
-        mI/+vz7O8jDHDklVtpoM9sg1yWYN4DNSoxEmTXwm6BgH9H3dggCgGcRBtCCiJIU64S9VA9
-        TUKZLMhkBI/JGTkrAfYqXluH5QlDeCI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d5a7f480 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 14:41:37 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 16:41:34 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <YufmHsYX0+I3rpx4@zx2c4.com>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
- <YufkZU9kGkHHUhAK@linutronix.de>
+        Mon, 1 Aug 2022 10:43:03 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594983F30D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:42:14 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j1so6031705wrw.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 07:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=4mNGPkiJmohKmnOITHrGFa8PgJkIob3O+bOGBuccTN0=;
+        b=JaRggMvlHH/j4V6dHNpxE2SGL71/p/MNU0fZhD+h5pf9VtLt+vuL6gltrwEZU9J9i8
+         spwkxa9c73rQDdTtwEh/rf7IytRiLNrcWDdiGQQSryc4qlTZp6Jw0MGRBiH4JeI8LtUP
+         eGzJU/74n7nPJDVzvdIdxW2PiQwYOvqerhEMdStBGhPBrxEOSzqHse23A5lT8P9E95n4
+         +hbFgil/Y6y0SIlc078KBnRLHROIuYDoy4yBshgxfjnSud1/so+tdNjqDX2TVz54y6i2
+         d86BpqU1BgPcf72wQtlrcXcFkney5LdIihUIvj5dAO/5QRl2+A/NIC8wscpDD9Fw3asc
+         3bMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=4mNGPkiJmohKmnOITHrGFa8PgJkIob3O+bOGBuccTN0=;
+        b=CfN13EaT3BWix8vy85C3BzsmapHEll1DtvzaHclo8RjYIFFHO9SYrz6h3K2GMqZczs
+         iS72XKW9WLPd8Q2N2IqTNbba0LkHqS32d09JRQIoypzGlBjxWH8EYRXaXF2Fzpw2VTCW
+         pFoYLJxUf7YNjrWRQloleME6M9XqFGd/QzlpgBKS4Rzq98Qz6ZPpiSID3cxmIm5B7z5J
+         c15hrGn9lYvhWv8v+s/4i60fpMyLN+5K8oyhdb3/qRMx18Lq5x6ONo2+/cD4oQzO7FX+
+         rndXmfOoFu6m0UIqpzy4FXqjZkWf7Ob+ecw2cYOzoXZE5zAFrfLPTCWum9McTIjnwko4
+         GVKA==
+X-Gm-Message-State: ACgBeo26UT1ANTmm7k3ZkpI7vpHvKddCwZrHUgOl0VeqwNhZN2ke0Obt
+        XsANzCR+TV4/J3II1PlZO7bq7Q==
+X-Google-Smtp-Source: AA6agR4/IyYurhGhEZw2tgwWkaDRof0/42GQxvcMgrV1ZTVNlW1ZTXb5875EISg5z4dRhX8+wNWUXQ==
+X-Received: by 2002:a5d:4889:0:b0:21d:eab7:f798 with SMTP id g9-20020a5d4889000000b0021deab7f798mr10403906wrq.96.1659364932883;
+        Mon, 01 Aug 2022 07:42:12 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id l3-20020adff483000000b00220592005edsm7068170wro.85.2022.08.01.07.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 07:42:12 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 15:42:09 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        cy_huang <cy_huang@richtek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v3 0/3] Add Richtek RT5120 PMIC support
+Message-ID: <YufmQXSQ093YkuiE@google.com>
+References: <1657780937-20891-1-git-send-email-u0084500@gmail.com>
+ <CADiBU39x98iyO_OB2sYdAUGUOW9pV4dt+mEdfquhuJVm1HDRHA@mail.gmail.com>
+ <ada44af6-2a5e-0b1c-8c46-3dbaae9b1a94@linaro.org>
+ <CADiBU3-juJZoeGccjPGCsJJ=B7Sez=MhtiiFADCuCCGc7fLrxQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YufkZU9kGkHHUhAK@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CADiBU3-juJZoeGccjPGCsJJ=B7Sez=MhtiiFADCuCCGc7fLrxQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+On Tue, 26 Jul 2022, ChiYuan Huang wrote:
 
-On Mon, Aug 01, 2022 at 04:34:13PM +0200, Sebastian Andrzej Siewior wrote:
-> So I have everything ready for 5.20 (6.0) ready without the RT patch and
-> then this vsprintf issues comes along…
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年7月26日 週二 下午5:59寫道：
+> >
+> > On 26/07/2022 05:45, ChiYuan Huang wrote:
+> > > cy_huang <u0084500@gmail.com> 於 2022年7月14日 週四 下午2:42寫道：
+> > >>
+> > >> From: ChiYuan Huang <cy_huang@richtek.com>
+> > >>
+> > >> This patch series is to add Richtek RT5120 PMIC support.
+> > >> In RT5120, it integrates four channels of buck converter, one channel of LDO,
+> > >> and one external enable channel to control the external power source.
+> > > ping ......
+> >
+> > Whom are you pinging? Everyone in To list?
+> >
+> Sorry, forget to specify the part.
+> I'm pining the 'mfd' patch and 'power key' patch.
 
-I already sent my rc1 pull to Linus for 6.0, but I can do a second pull
-with this in it for next week while the merge window is still open, so
-that your RT-patch-len-zero objective is still met for 6.0.
+Don't ping any{thing,one}!  If you think your patch has fallen through
+the gaps (it hasn't), then submit a [RESEND].
 
-> From that point of view I would prefer to either init it upfront in a
-> way that works for everyone/ loose the first %p since it is probably a
-> minor inconvenience if nobody complains - instead swapping all locks.
-> We managed without this for kasan and lockdep which are both not used in
-> a production environment.
+Your patch was submitted at the very end of the development cycle,
+which means that it is low priority and is unlikely to receive
+attention until after -rc1 is out.
 
-The kfence change was a production change, actually. Lots of people turn
-that on by default.
-
-If you want to address this within printk itself, just do `if (rt || lockdep)`
-as the condition, so we don't swallow the first one. When you have to
-make code worse to satisfy a tool, the tool is the problem. We only
-would need this first message dropping on rt, not on other kernels.
-Don't knock other kernels.
-
-However... I suspect these issues will continue to bite us in new subtle
-ways for some time to come. Who is to say that you can't call
-get_random_bytes() from a driver's hard IRQ? As RT gets integrated and
-more widely deployed, I imagine these things will start coming up.
-random.c was already designed to handle random bytes in irqoff; that's
-why it uses irqsave/irqrestore all over its spinlock handling. This RT
-thing is a snag in that original intention. But its an intention trivial
-to recover with this patch. So if you're okay with it, I think I'd
-prefer to do this and have our problems go away once and for all.
-
-> I would need to do worst-case measurements and I've been looking at this
-> just before writting the other email and there was a local_lock_t
-> somewhere which needs also change…
-
-That would be very interesting to learn about. If your measurements say
-yes, then maybe we can do this. If your measurements say "yikes", then I
-guess we can't. Either way, I like having some metric to decide this by.
-
-Jason
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

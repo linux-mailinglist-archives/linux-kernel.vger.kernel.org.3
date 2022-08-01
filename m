@@ -2,142 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30E6586EA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2007D586EA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiHAQf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S233801AbiHAQfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbiHAQfS (ORCPT
+        with ESMTP id S233081AbiHAQfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:35:18 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAFA3B1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:35:10 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id c185so13645313oia.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 09:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Fto1MpscWUFMNnBCFYXAwkIBHHJszVTIcxuhyhUimb8=;
-        b=FI+OTAEIYz2VsoXDkzo0BCE6i9UMDcLbhJ8KfQlM/Yb9whP/Aso6fJ6y77PQwhSnmh
-         LxrcRuG9r+1+NvdtFo31ZVrKx3dxqveIXaUH1MX9/P2cjvo8vJJiQImvUd5srpvFqSjX
-         gWd329LBF4+LFX44YhtcZ3a9uJTsRResZet1+XcU1+rNQD/w9pcinpKpIdIqvt9yl5gw
-         iXliFpwyHfGGnu7OpXt6GjUGhpaateed5310JLq6R84x7GmQyYp1iRpuyOIIhQXgRxzD
-         S3YHp7JVREAfFsiFCf0AWwsBF5mWhs1fqm12YsQRTrLC8OkjHs5jWq2wHG7W89qukPgb
-         shyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Fto1MpscWUFMNnBCFYXAwkIBHHJszVTIcxuhyhUimb8=;
-        b=2CZFNl5CV2yZbX0l9fYZJADNqvVQl5RIpEGkxHS6ad520KMEzuA8QqeAYAmQWiwGpQ
-         x6Iu0/YsjuhLlhFHajWWcADRv0k4hnnK5i5NhZYxn2fdwqBWj2J3yDwGlZZeNRyFg0a7
-         jN7WQ5Rw9bG4X4rIr5XXM7S2p3d/u2BFZuJsfEiu8/sQwjcKNDcGO8atbMYujoRJB1Zy
-         j9mGvL8S07AU9OT6g4gsj1SiUq4hLLk8seN0K6xKO4cuWvsUua5O1J1YfmwfnVskl2R9
-         dZ1xAa1G+wm+i50HMXmjU6bcd8ZAv6v5amNhoNdeGU+HziywbqQ7BB35PHJia/cLpxFz
-         ON7Q==
-X-Gm-Message-State: AJIora/uy9JsqyCgjSAENqysLTG0P8ewidLuCIguFU/PWDWhR7sn+GGh
-        /BcBBitm9qwqBOyc67GU7b0S8qCffG4dd2lLId8e
-X-Google-Smtp-Source: AGRyM1sRwoHyAz1+k6JJUYUkUrZCg+t9c/gxOPl7fh2C55+kVa8+g83QHhkhNo8kDmE2GSBbgnazRbcpMAgwbTLYWjE=
-X-Received: by 2002:a05:6808:3087:b0:33a:a6ae:7bf7 with SMTP id
- bl7-20020a056808308700b0033aa6ae7bf7mr7223113oib.41.1659371710188; Mon, 01
- Aug 2022 09:35:10 -0700 (PDT)
+        Mon, 1 Aug 2022 12:35:12 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB463E757
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:35:07 -0700 (PDT)
+Received: from localhost.localdomain (unknown [92.49.173.143])
+        by mail.ispras.ru (Postfix) with ESMTPSA id F0D40407624D;
+        Mon,  1 Aug 2022 16:35:04 +0000 (UTC)
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Baskov Evgeniy <baskov@ispras.ru>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH v5 3/5] x86/setup: Use resolve_cmdline() in setup.c
+Date:   Mon,  1 Aug 2022 19:34:59 +0300
+Message-Id: <8fcb2e2d98875fd1423967de572d63d01b7749a4.1658843651.git.baskov@ispras.ru>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1658843651.git.baskov@ispras.ru>
+References: <cover.1658843651.git.baskov@ispras.ru>
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
-In-Reply-To: <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 1 Aug 2022 12:34:59 -0400
-Message-ID: <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>,
-        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 11:25 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 8/1/2022 6:13 AM, Frederick Lawler wrote:
-> > On 7/22/22 7:20 AM, Paul Moore wrote:
-> >> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> >>
-> >>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
-> >>>> While creating a LSM BPF MAC policy to block user namespace
-> >>>> creation, we
-> >>>> used the LSM cred_prepare hook because that is the closest hook to
-> >>>> prevent
-> >>>> a call to create_user_ns().
-> >>>>
-> >>>> The calls look something like this:
-> >>>>
-> >>>> cred = prepare_creds()
-> >>>> security_prepare_creds()
-> >>>> call_int_hook(cred_prepare, ...
-> >>>> if (cred)
-> >>>> create_user_ns(cred)
-> >>>>
-> >>>> We noticed that error codes were not propagated from this hook and
-> >>>> introduced a patch [1] to propagate those errors.
-> >>>>
-> >>>> The discussion notes that security_prepare_creds()
-> >>>> is not appropriate for MAC policies, and instead the hook is
-> >>>> meant for LSM authors to prepare credentials for mutation. [2]
-> >>>>
-> >>>> Ultimately, we concluded that a better course of action is to
-> >>>> introduce
-> >>>> a new security hook for LSM authors. [3]
-> >>>>
-> >>>> This patch set first introduces a new security_create_user_ns()
-> >>>> function
-> >>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
-> >>> Patch 1 and 4 still need review from the lsm/security side.
-> >>
-> >>
-> >> This patchset is in my review queue and assuming everything checks
-> >> out, I expect to merge it after the upcoming merge window closes.
-> >>
-> >> I would also need an ACK from the BPF LSM folks, but they're CC'd on
-> >> this patchset.
-> >
-> > Based on last weeks comments, should I go ahead and put up v4 for
-> > 5.20-rc1 when that drops, or do I need to wait for more feedback?
->
-> As the primary consumer of this hook is BPF I would really expect their
-> reviewed-by before accepting this.
+From: Baskov Evgeniy <baskov@ispras.ru>
 
-We love all our in-tree LSMs equally.  As long as there is at least
-one LSM which provides an implementation and has ACK'd the hook, and
-no other LSMs have NACK'd the hook, then I have no problem merging it.
-I doubt it will be necessary in this case, but if we need to tweak the
-hook in the future we can definitely do that; we've done this in the
-past when it has made sense.
+Use a common helper function for command line resolving in
+arch/x86/kernel/setup.c for code unification.
 
-As a reminder, the LSM hooks are *not* part of the "don't break
-userspace" promise.  I know it gets a little muddy with the way the
-BPF LSM works, but just as we don't want to allow one LSM to impact
-the runtime controls on another, we don't want to allow one LSM to
-freeze the hooks for everyone.
+Signed-off-by: Baskov Evgeniy <baskov@ispras.ru>
 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index bd6c6fd373ae..9c1e943a49c3 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -47,6 +47,7 @@
+ #include <asm/pci-direct.h>
+ #include <asm/prom.h>
+ #include <asm/proto.h>
++#include <asm/shared/setup-cmdline.h>
+ #include <asm/thermal.h>
+ #include <asm/unwind.h>
+ #include <asm/vsyscall.h>
+@@ -159,10 +160,7 @@ unsigned long saved_video_mode;
+ #define RAMDISK_PROMPT_FLAG		0x8000
+ #define RAMDISK_LOAD_FLAG		0x4000
+ 
+-static char __initdata command_line[COMMAND_LINE_SIZE];
+-#ifdef CONFIG_CMDLINE_BOOL
+-static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
+-#endif
++static char command_line[COMMAND_LINE_SIZE] __initdata = COMMAND_LINE_INIT;
+ 
+ #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE)
+ struct edd edd;
+@@ -896,20 +894,8 @@ void __init setup_arch(char **cmdline_p)
+ 	bss_resource.start = __pa_symbol(__bss_start);
+ 	bss_resource.end = __pa_symbol(__bss_stop)-1;
+ 
+-#ifdef CONFIG_CMDLINE_BOOL
+-#ifdef CONFIG_CMDLINE_OVERRIDE
+-	strscpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+-#else
+-	if (builtin_cmdline[0]) {
+-		/* append boot loader cmdline to builtin */
+-		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+-		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+-		strscpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+-	}
+-#endif
+-#endif
+-
+-	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
++	resolve_cmdline(command_line, boot_command_line);
++	strscpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
+ 
+ 	/*
 -- 
-paul-moore.com
+2.35.1
+

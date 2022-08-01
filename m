@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666B858703B
+	by mail.lfdr.de (Postfix) with ESMTP id B334D58703C
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiHASK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S232045AbiHASLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234168AbiHASKm (ORCPT
+        with ESMTP id S234365AbiHASKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:10:42 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B072114D35;
-        Mon,  1 Aug 2022 11:10:41 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so8768330otb.5;
-        Mon, 01 Aug 2022 11:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc;
-        bh=t6ktmqB/P+iluSUoepFDW78LdbJE+Fu7Yw/Iev2hh+0=;
-        b=G3vDEWAVfZhvAhqzNmPb7hGt0UmFSl5MbSUIKNUKbWEavHVKbUv8EFbdxwWA3BV5Zm
-         4AA1O9X2FZ1l7Haew5HvtPBuyBjIZrYxIJXDshJ0tMzgQZo1AJ8RzVjzLwtHnTwNAtrH
-         xFCLimvaq8KdHsXFbshY93wKdkAuLSgZcMI5LjtVq2tUqXz47CVs0Dupa+gFM/UWZV2+
-         LaeabaGWvyLyMvdQUFCcT4gh6uoam589Qb40hpoq6xgywAU/XVdPhg8WGKziheYJkVmz
-         Sla583hf8d6zY7AJXAJGgNl66WfwzF/oplDlR9XN7XyPrL7PbuF+lOlQbgw9mK2fqHvX
-         Prsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=t6ktmqB/P+iluSUoepFDW78LdbJE+Fu7Yw/Iev2hh+0=;
-        b=RFy31ox0Dcd7Ni47Gssh8HGq1szeK3PeITzK7yidsWdbJ8/BomH3Dr572p1lSx3jMU
-         Hvhn9o9dqFfeuoOOX81uwzl3AaEQBWwdkByt7RjW5wjsXIqO/r+ob77RnMexujfSPfmp
-         b4rzT6EE9s8G3SepufREYMhfapbNOr++JvUWY5EUDhkf9eaGoeDqeys4bLYPgNbky9Jk
-         vaFimbA76Lt+YQeO7LZUpXyEDWba12oUW++R8bDpDnhcwu2/n1LpLEwRFv7NczCi22/e
-         C0K0BgEyfsjnm2GSC2Atk9wizU5f6+/wBeBacwEgiQKuQQFSa/Iqa9TFG+ykjmPFwNtr
-         NOTg==
-X-Gm-Message-State: AJIora/g0p7F6pvL5dpzmMdA8fecarRJAO91XaqkcfetdhnFYYhOJAIf
-        84tVNULbZoTle9SWjRvy0OG6kRpKm5r+35CU
-X-Google-Smtp-Source: AGRyM1v7szvswPwf09KMfvoE2EGaTFPnWuf7OyKEK4JiU9jIlFZJVEMli8qPqx2glC6iLP1T0xUrZw==
-X-Received: by 2002:a9d:4c8:0:b0:61c:a6d0:c2a6 with SMTP id 66-20020a9d04c8000000b0061ca6d0c2a6mr6289779otm.273.1659377441058;
-        Mon, 01 Aug 2022 11:10:41 -0700 (PDT)
-Received: from DESKTOP-GSR5SR7.localdomain (097-093-024-013.res.spectrum.com. [97.93.24.13])
-        by smtp.gmail.com with ESMTPSA id m13-20020a4aab8d000000b004354d726305sm2823245oon.8.2022.08.01.11.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:10:40 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 11:10:38 -0700
-From:   Max Dunbar <mdsurfing4@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: Fix Typo
-Message-ID: <20220801181038.GA957@DESKTOP-GSR5SR7.localdomain>
+        Mon, 1 Aug 2022 14:10:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FC315A2B;
+        Mon,  1 Aug 2022 11:10:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB72861168;
+        Mon,  1 Aug 2022 18:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3087EC433C1;
+        Mon,  1 Aug 2022 18:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659377446;
+        bh=eogaxGAwAkmy4/fpjaPZI6kZCAoWTosZA8Bc+IIaeWg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k+18rjM7/vpJ901Bmues0JbNcQdsuXedRxVxbTe5Ll3OMbPzPHxprXOpN3Mfg9EU4
+         omggqsyKb1H8tsI7DmrFOtDhUQkeToEDB7OI5uOIw/ttj4BVs9biq0asaReiJ5PuOx
+         6XhACgirN8hauoIEVSNFq876BiEHIHFUjyVoFqPmx7wg7Qx0iHtIL/siQ+2eLmJKbI
+         ZM83W3dkWRzpTq2ezvNNu/ZVjXI3aPuSKOPm++L1kJsW8UnRaKUbwP2/3LTa9/I7Dr
+         SJqNJJMSgnZkXEyaNWVBJWS04OH7jj6kABywm7XZ9TIQAZH8ivFn4NPaLZZYfqW/eo
+         Y8TwzolmDhN/A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A6F9940736; Mon,  1 Aug 2022 15:10:43 -0300 (-03)
+Date:   Mon, 1 Aug 2022 15:10:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Ben Hutchings <benh@debian.org>
+Subject: Re: [PATCH v3 2/8] tools build: Don't display disassembler-four-args
+ feature test
+Message-ID: <YugXI9zVJQi6Nxah@kernel.org>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220801013834.156015-1-andres@anarazel.de>
+ <20220801013834.156015-3-andres@anarazel.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220801013834.156015-3-andres@anarazel.de>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correcting "wil" to "will" in the hwmon documentation
+Em Sun, Jul 31, 2022 at 06:38:28PM -0700, Andres Freund escreveu:
+> The feature check does not seem important enough to display. Suggested by
+> Jiri Olsa.
 
-Signed-off-by: Max Dunbar <mdsurfing4@gmail.com>
----
- Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I turned the last paragraph into a:
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index f3276b3a381a..a4755a5a24af 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -57,7 +57,7 @@ register/unregister functions::
- hwmon_device_register_with_groups registers a hardware monitoring device.
- The first parameter of this function is a pointer to the parent device.
- The name parameter is a pointer to the hwmon device name. The registration
--function wil create a name sysfs attribute pointing to this name.
-+function will create a name sysfs attribute pointing to this name.
- The drvdata parameter is the pointer to the local driver data.
- hwmon_device_register_with_groups will attach this pointer to the newly
- allocated hwmon device. The pointer can be retrieved by the driver using
+Suggested-by: Jiri Olsa <jolsa@kernel.org>
+ 
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+> Signed-off-by: Andres Freund <andres@anarazel.de>
+> ---
+>  tools/build/Makefile.feature | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+> index 8f6578e4d324..fc6ce0b2535a 100644
+> --- a/tools/build/Makefile.feature
+> +++ b/tools/build/Makefile.feature
+> @@ -135,8 +135,7 @@ FEATURE_DISPLAY ?=              \
+>           get_cpuid              \
+>           bpf			\
+>           libaio			\
+> -         libzstd		\
+> -         disassembler-four-args
+> +         libzstd
+>  
+>  # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
+>  # If in the future we need per-feature checks/flags for features not
+> -- 
+> 2.37.0.3.g30cc8d0f14
+
 -- 
-2.25.1
 
+- Arnaldo

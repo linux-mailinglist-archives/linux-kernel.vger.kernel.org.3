@@ -2,270 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF79586BF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61375586BF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiHAN22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S231544AbiHAN2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiHAN2V (ORCPT
+        with ESMTP id S231440AbiHAN2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:28:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDFA73C179
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659360499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9HeT4J2pwN84U0RWrWPAlfTJpr5y0EVb+TVvboAarr4=;
-        b=hCamkqLDwQbEplQglLNvN1DCXzTN+LUTuS6g0m7/0c5RHQi1Yi3GAcKqBum2yik38SNJRO
-        1gaNaD20hS+tQ8dLZOfI0oJdIM7+oIgw0rcz8Q6clEQd07gw8AzFmIJjfVQI6cgCow4hOy
-        oX1r3inix1Pf6GEi5Nf4AkxINYC3NPE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-wfcs6X_eM6-4CKH-UlyKHg-1; Mon, 01 Aug 2022 09:28:18 -0400
-X-MC-Unique: wfcs6X_eM6-4CKH-UlyKHg-1
-Received: by mail-wm1-f69.google.com with SMTP id x17-20020a05600c21d100b003a32dda6577so1533708wmj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:28:18 -0700 (PDT)
+        Mon, 1 Aug 2022 09:28:31 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1243C8D7
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:28:29 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id p8so10405320plq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wyQqPKgBTGooqZfohpI1mfr8+wRbGXjvZx6y58chggA=;
+        b=llMzU+PmXn8jowe/WZtM708qdAhg0SRPpGZUPSdzCnyXQU7Oh7acn+pWlwMF4mYMZi
+         cqcceiPSVNHCGTiUhuai9CSLBod+3dTA/4z2rv0p0WyRxO3XLjHWhUv72QTXvqKv7ksD
+         Pt+NEI4N+BSttGQpSAJpmC5rLjPWEEEI/8PeUXTq+WoBk2H8aMSN6QQLHZHHieGa3L7S
+         RrW/QPJx4MA6L4dn/Xqz3kfUmF+I3YPg2Kur6lj0zN1h/OQAXWg9XRO4nUSnYczo0J3x
+         bMjJG+3bYAGTZ7qr69219QdJrFeAMAbV1duarZX+6yT8sEYIFOBy6va6pJJfNyJ8Rwbr
+         mECw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=9HeT4J2pwN84U0RWrWPAlfTJpr5y0EVb+TVvboAarr4=;
-        b=DFQ67wkZTuvmPMW4wbRoq+hdpjOhDMP2P5G0k5ym9POyhyd77ghTjlfMfofYrg89nk
-         KiEN6xV9BzaHtbGTYRrA7nNd3aiN38VweiNvWoUKZ90rMvczun1YiVvPDjXBfFXzQPod
-         4xs98qPm616HgSRIljTsH+nIIYQUWdVwjJh5wnE/yvVP6H7M6D1rnWylmM7VP35oXY68
-         xf5Sey297G9T7/goxZWbVzC3nOLHlHpf7yXHVcieXzzzBJRVSQxk0Nmuf27Jql4+TV1S
-         5+7osrAUxUJhblPhkpdZHCZ2qbq98Fu10p96sRZ7dJuUGSzZ5ud+KNmQl/Q2IZe+pHTC
-         xQMA==
-X-Gm-Message-State: ACgBeo10QdgelXmS17tUG0sNEWXboUFf/0VY4HrbQJHv5ZTk8ASqLiKD
-        4kdwNCxe5H9IDpB2EmAZJUsLvPODk0+BGumOnfBN04+7DpmbpZ+4r0XjpS0Q1lcOUz++/if56YO
-        KR4c8sJ1SYQPlDjaZpJjZWjoH
-X-Received: by 2002:adf:e881:0:b0:21f:abb:fc0a with SMTP id d1-20020adfe881000000b0021f0abbfc0amr9692044wrm.103.1659360497231;
-        Mon, 01 Aug 2022 06:28:17 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7UYK7ZDuMNgtMyeC5Mwc+2jyxv+KxRym0qux7n9+Y6OT4H9DgkvxuzUxC/BH0QrzhH/lRuFA==
-X-Received: by 2002:adf:e881:0:b0:21f:abb:fc0a with SMTP id d1-20020adfe881000000b0021f0abbfc0amr9692021wrm.103.1659360496952;
-        Mon, 01 Aug 2022 06:28:16 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:6900:6d08:8df1:dd2c:bf00? (p200300cbc70469006d088df1dd2cbf00.dip0.t-ipconnect.de. [2003:cb:c704:6900:6d08:8df1:dd2c:bf00])
-        by smtp.gmail.com with ESMTPSA id z12-20020a05600c03cc00b003a2eacc8179sm14598761wmd.27.2022.08.01.06.28.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 06:28:16 -0700 (PDT)
-Message-ID: <0c1f9e76-9b1d-7069-bb09-c18e4f19f0c4@redhat.com>
-Date:   Mon, 1 Aug 2022 15:28:15 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wyQqPKgBTGooqZfohpI1mfr8+wRbGXjvZx6y58chggA=;
+        b=bHcp8kwb9KztY+ei+xynxqoanMJxx4kvNO/OURjGRkBf2fp67bsNjScSGL13SKBOlO
+         Rj0sA3Tz7q3nIIiCTq7BFlNdTc90iY4Q3MTeRTn2LWL/yaxy3sSx2cPUuXDbu0jqW37B
+         gmUvgIaF8efU/I//vrwut4aLPqRoXzLBtsgCLP/fhbSxZWakpCVn1X4xcdDyg0gIfpLQ
+         7q0g1PVCKrrMWe9UlEkjKKksEpBSQfCicN6eYsAoIwAhrleZHK14MrQK/Mb5Sl2zgy31
+         UffJSkcYH9quyqCyZ4OmWPO81yWWV7qXdM//suXS+04MMZIywi3UGBmptcArjJvOtZ+r
+         diZA==
+X-Gm-Message-State: ACgBeo1eftJgfx+PpaFXMgCHiezLQMjq5evHX5o9FkDkgrzM/+uMuf2C
+        tesrtpM2nZXmZd4LBXk7DZPy
+X-Google-Smtp-Source: AA6agR5zmrc/qpk0QEVdPd0hGYr/gqqpLMP0KZT8hDjPgliTh6m/o/2HqS8lfcbo52JPraornwDhIw==
+X-Received: by 2002:a17:90b:4c12:b0:1f5:958:c313 with SMTP id na18-20020a17090b4c1200b001f50958c313mr3657056pjb.6.1659360508919;
+        Mon, 01 Aug 2022 06:28:28 -0700 (PDT)
+Received: from thinkpad ([117.217.185.73])
+        by smtp.gmail.com with ESMTPSA id w4-20020a17090a1b8400b001f32f242020sm7502648pjc.43.2022.08.01.06.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 06:28:28 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 18:58:17 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, eswara.kota@linux.intel.com
+Subject: Re: [PATCH RESEND v4 06/15] PCI: intel-gw: Drop manual DW PCIe
+ controller version setup
+Message-ID: <20220801132817.GF93763@thinkpad>
+References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143947.8991-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Xin Hao <xhao@linux.alibaba.com>, willy@infradead.org
-Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220801121727.76186-1-xhao@linux.alibaba.com>
- <20220801121727.76186-2-xhao@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH V4 1/1] mm: add last level page table numa info to
- /proc/pid/numa_pgtable
-In-Reply-To: <20220801121727.76186-2-xhao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143947.8991-7-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.08.22 14:17, Xin Hao wrote:
-> In many data center servers, the shared memory architectures is
-> Non-Uniform Memory Access (NUMA), remote numa node data access
-> often brings a high latency problem, but what we are easy to ignore
-> is that the page table remote numa access, It can also leads to a
-> performance degradation.
+On Fri, Jun 24, 2022 at 05:39:38PM +0300, Serge Semin wrote:
+> Since the DW PCIe common code now supports the IP-core version
+> auto-detection there is no point manually setting the version up for the
+> controllers newer than v4.70a. In particular Intel GW PCIe platform code
+> can be set free from the manual version setup, which as a positive side
+> effect causes the private device data removal too.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Let me try rewriting:
+I don't have a hardware to test. But going by the DWC spec, this looks good to
+me.
 
-"
-Many data center servers employ Non-Uniform Memory Access (NUMA)
-architectures. Remote numa memory access results in high latency. While
-memory placement is one issue, sub-optimal page table placement can also
-result in surprise performance degradation.
-"
+CCed the author of this driver, "Dilip Kota" in case he can confirm.
+
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
 
 > 
-> So there add a new interface in /proc, This will help developers to
-> get more info about performance issues if they are caused by cross-NUMA.
-
-
-Why do we only care about "last level page table", why not about the others?
-
-IMHO, we could emit something like "0, 1, 3, 0" instead for a given user
-space address, showing the NUMA node the page table belongs to from
-highest to lowest page table level.
-
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-
-The kernel test robot reported that we need "/proc/pid/numa_pgtable" ?! :)
-
-Just drop that unless it's a follow-up fix.
-
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
 > ---
->  fs/proc/base.c     |  2 ++
->  fs/proc/internal.h |  1 +
->  fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 90 insertions(+)
 > 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 8dfa36a99c74..487e82dd3275 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] = {
->  	REG("maps",       S_IRUGO, proc_pid_maps_operations),
->  #ifdef CONFIG_NUMA
->  	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
-> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->  #endif
->  	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
->  	LNK("cwd",        proc_cwd_link),
-> @@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
->  #endif
->  #ifdef CONFIG_NUMA
->  	REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
-> +	REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
->  #endif
->  	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
->  	LNK("cwd",       proc_cwd_link),
-> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-> index 06a80f78433d..e7ed9ef097b6 100644
-> --- a/fs/proc/internal.h
-> +++ b/fs/proc/internal.h
-> @@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode *inode, unsigned int mode);
+> Folks, I don't have Intel GW PCIe hw instance to test it out. Could you
+> please make sure this patch doesn't brake anything?
 > 
->  extern const struct file_operations proc_pid_maps_operations;
->  extern const struct file_operations proc_pid_numa_maps_operations;
-> +extern const struct file_operations proc_pid_numa_pgtable_operations;
->  extern const struct file_operations proc_pid_smaps_operations;
->  extern const struct file_operations proc_pid_smaps_rollup_operations;
->  extern const struct file_operations proc_clear_refs_operations;
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 2d04e3470d4c..77b7a49757f5 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -1999,4 +1999,91 @@ const struct file_operations proc_pid_numa_maps_operations = {
->  	.release	= proc_map_release,
+> Changelog v3:
+> - This is a new patch create as a result of the discussion:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-6-Sergey.Semin@baikalelectronics.ru/
+> ---
+>  drivers/pci/controller/dwc/pcie-intel-gw.c | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-intel-gw.c b/drivers/pci/controller/dwc/pcie-intel-gw.c
+> index 371b5aa189d1..a44f685ec94d 100644
+> --- a/drivers/pci/controller/dwc/pcie-intel-gw.c
+> +++ b/drivers/pci/controller/dwc/pcie-intel-gw.c
+> @@ -58,10 +58,6 @@
+>  #define BUS_IATU_OFFSET			SZ_256M
+>  #define RESET_INTERVAL_MS		100
+>  
+> -struct intel_pcie_soc {
+> -	u32	pcie_ver;
+> -};
+> -
+>  struct intel_pcie {
+>  	struct dw_pcie		pci;
+>  	void __iomem		*app_base;
+> @@ -394,13 +390,8 @@ static const struct dw_pcie_host_ops intel_pcie_dw_ops = {
+>  	.host_init =		intel_pcie_rc_init,
 >  };
+>  
+> -static const struct intel_pcie_soc pcie_data = {
+> -	.pcie_ver =		DW_PCIE_VER_520A,
+> -};
+> -
+>  static int intel_pcie_probe(struct platform_device *pdev)
+>  {
+> -	const struct intel_pcie_soc *data;
+>  	struct device *dev = &pdev->dev;
+>  	struct intel_pcie *pcie;
+>  	struct dw_pcie_rp *pp;
+> @@ -424,12 +415,7 @@ static int intel_pcie_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	data = device_get_match_data(dev);
+> -	if (!data)
+> -		return -ENODEV;
+> -
+>  	pci->ops = &intel_pcie_ops;
+> -	pci->version = data->pcie_ver;
+>  	pp->ops = &intel_pcie_dw_ops;
+>  
+>  	ret = dw_pcie_host_init(pp);
+> @@ -447,7 +433,7 @@ static const struct dev_pm_ops intel_pcie_pm_ops = {
+>  };
+>  
+>  static const struct of_device_id of_intel_pcie_match[] = {
+> -	{ .compatible = "intel,lgm-pcie", .data = &pcie_data },
+> +	{ .compatible = "intel,lgm-pcie" },
+>  	{}
+>  };
+>  
+> -- 
+> 2.35.1
 > 
-> +struct pgtable_numa_private {
-> +	struct proc_maps_private proc_maps;
-> +	unsigned long node[MAX_NUMNODES];
-> +};
-> +
-> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
-> +				     unsigned long end, struct mm_walk *walk)
-> +{
-> +	struct pgtable_numa_private *priv = walk->private;
-> +	struct page *page;
-> +	int nid;
-> +
-> +	if (pmd_huge(*pmd)) {
-> +		page = virt_to_page(pmd);
-> +	} else {
-> +		page = pmd_page(*pmd);
-> +	}
-> +
-> +	nid = page_to_nid(page);
-> +	priv->node[nid]++;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct mm_walk_ops show_numa_pgtable_ops = {
-> +	.pmd_entry = gather_pgtable_numa_stats,
-> +};
-> +
-> +/*
-> + * Display the page talbe allocated per node via /proc.
-
-s/talbe/table/
-
-but the comment somehow doesn't make sense. We don't display a page table.
-
-> + */
-> +static int show_numa_pgtable(struct seq_file *m, void *v)
-> +{
-> +	struct pgtable_numa_private *numa_priv = m->private;
-> +	struct vm_area_struct *vma = v;
-> +	struct mm_struct *mm = vma->vm_mm;
-> +	struct file *file = vma->vm_file;
-> +	int nid;
-> +
-> +	if (!mm)
-> +		return 0;
-> +
-> +	memset(numa_priv->node, 0, sizeof(numa_priv->node));
-> +
-> +	seq_printf(m, "%08lx ", vma->vm_start);
-> +
-> +	if (file) {
-> +		seq_puts(m, " file=");
-> +		seq_file_path(m, file, "\n\t= ");
-> +	} else if (vma->vm_start <= mm->brk && vma->vm_end >= mm->start_brk) {
-> +		seq_puts(m, " heap");
-> +	} else if (is_stack(vma)) {
-> +		seq_puts(m, " stack");
-> +	}
-> +
-> +	/* mmap_lock is held by m_start */
-> +	walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
-> +
-> +	for_each_node_state(nid, N_MEMORY) {
-> +		if (numa_priv->node[nid])
-> +			seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
-> +	}
-> +	seq_putc(m, '\n');
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct seq_operations proc_pid_numa_pgtable_op = {
-> +	.start  = m_start,
-> +	.next   = m_next,
-> +	.stop   = m_stop,
-> +	.show   = show_numa_pgtable,
-> +};
-> +
-> +static int pid_numa_pgtable_open(struct inode *inode, struct file *file)
-> +{
-> +	return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
-> +			sizeof(struct pgtable_numa_private));
-> +}
-> +
-> +const struct file_operations proc_pid_numa_pgtable_operations = {
-> +	.open		= pid_numa_pgtable_open,
-> +	.read		= seq_read,
-> +	.llseek		= seq_lseek,
-> +	.release	= proc_map_release,
-> +};
-> +
->  #endif /* CONFIG_NUMA */
-> --
-> 2.31.0
-> 
-
 
 -- 
-Thanks,
-
-David / dhildenb
-
+மணிவண்ணன் சதாசிவம்

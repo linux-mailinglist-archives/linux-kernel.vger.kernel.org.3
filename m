@@ -2,188 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF36E586DED
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDC4586DF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiHAPlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S232759AbiHAPl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiHAPlS (ORCPT
+        with ESMTP id S231226AbiHAPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:41:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3C828702;
-        Mon,  1 Aug 2022 08:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 1 Aug 2022 11:41:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 860DC2A72E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659368511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6aGAsmftLF/0dvg9tasEyfV88rlFwnKcqNhuGDzyxe4=;
+        b=H9alO73+1jg9xAuRK+5yRhXxiLEA3apU9186ezlO0fcJ+gy4X++oasUHfyxA5xffjyWdHM
+        jGRHcDRdplC+yNUT5zwxDsaQI9HBqtElBfy7giMzrSwRKV1NEdDojVYSsCjuMApCflbkCJ
+        VlbTzxtGetv/R0vyBdz8q8aKVGtESPQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-xB1oEN01MyuRFgU_OYbiIQ-1; Mon, 01 Aug 2022 11:41:48 -0400
+X-MC-Unique: xB1oEN01MyuRFgU_OYbiIQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A09C760B84;
-        Mon,  1 Aug 2022 15:41:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC09C433D6;
-        Mon,  1 Aug 2022 15:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659368477;
-        bh=McQjB7B9+v6P6Vwsyy7FekofjGEdZ7yr6p3TwkW422k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/nizH6z4oa2MFgq4rDBoMlCCjcUelTNIm48N5xxMvOpwrvypb0hLAAiDoZoX8Fis
-         gM8FG/bdT1Gf34pKc+iQaH0gmhTJHRRvDcWXfxlcsTwilbW8YRcJQpDXVZrLNBvitZ
-         vGC8IlZnklxu1jty5KQCaxtoNxW4ZIYcCB/sgnr3BKJMmeWP3PFx64AHFV2zCd+OKL
-         RBQVZKu0o7T9bJ6vE2PAk4ef2gagrtXOywMx3frPCbQUeKaLXXeyHzQI+8wlcVDEC+
-         PkKklTA1+araS+GHQrRIXYFCNjk/GIdf+1EItsoDxUTLeSksBXcdu0LTEuE85Bz67I
-         pUP6BQV42Wc5g==
-Date:   Mon, 1 Aug 2022 16:41:09 +0100
-From:   Will Deacon <will@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8890805B9A;
+        Mon,  1 Aug 2022 15:41:47 +0000 (UTC)
+Received: from llong.com (unknown [10.22.17.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F24F7492C3B;
+        Mon,  1 Aug 2022 15:41:46 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
-Message-ID: <20220801154108.GA26280@willie-the-truck>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/2] sched, cgroup/cpuset: Keep user set cpus affinity
+Date:   Mon,  1 Aug 2022 11:41:22 -0400
+Message-Id: <20220801154124.2011987-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, Paul,
+v2:
+ - Rework the v1 patch by extending the semantics of user_cpus_ptr to
+   store user set cpus affinity and keeping to it as much as possible.
 
-Apologies for the slow response here; believe it or not, I was attending
-a workshop about memory ordering.
+The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+Introduce task_struct::user_cpus_ptr to track requested affinity")
+which uses it narrowly to allow keeping cpus affinity intact with
+asymmetric cpu setup.
 
-On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
-> On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
-> > Even alpha is specified to be locally ordered wrt *one* memory
-> > location, including for reads (See table 5-1: "Processor issue order",
-> > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
-> > new value, a subsequent read is not allowed to see an older one - even
-> > without a memory barrier.
-> > 
-> > Will, Paul? Maybe that's only for overlapping loads/stores, not for
-> > loads/loads. Because maybe alpha for once isn't the weakest possible
-> > ordering.
-> 
-> The "bad boy" in this case is Itanium, which can do some VLIW reordering
-> of accesses.  Or could, I am not sure that newer Itanium hardware
-> does this.  But this is why Itanium compilers made volatile loads use
-> the ld,acq instruction.
-> 
-> Which means that aligned same-sized marked accesses to a single location
-> really do execute consistently with some global ordering, even on Itanium.
+This patchset extends user_cpus_ptr to store user set cpus affinity
+via sched_setaffinity() API. With that information avaiable, it will
+enable cpuset to keep cpus afinity as close to what the user wants as
+possible within the cpu list constraint of the current cpuset.
 
-Although this is true, there's a really subtle issue which crops up if you
-try to compose this read-after-read ordering with dependencies in the case
-where the two reads read the same value (which is encapsulated by the
-unusual RSW litmus test that I've tried to convert to C below):
+Waiman Long (2):
+  sched: Use user_cpus_ptr for saving user provided cpumask in
+    sched_setaffinity()
+  cgroup/cpuset: Keep user set cpus affinity
 
+ include/linux/sched.h  |  1 +
+ kernel/cgroup/cpuset.c | 24 ++++++++++++--
+ kernel/sched/core.c    | 71 ++++++++++++++++++++++++++++++------------
+ kernel/sched/sched.h   |  1 -
+ 4 files changed, 74 insertions(+), 23 deletions(-)
 
-/* Global definitions; assume everything zero-initialised */
-struct foo {
-	int *x;
-};
+-- 
+2.31.1
 
-int x;
-struct foo foo;
-struct foo *ptr;
-
-
-/* CPU 0 */
-WRITE_ONCE(x, 1);
-WRITE_ONCE(foo.x, &x);
-
-/*
- * Release ordering to ensure that somebody following a non-NULL ptr will
- * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
- */
-smp_store_release(&ptr, &foo);
-
-
-/* CPU 1 */
-int *xp1, *xp2, val;
-struct foo *foop;
-
-/* Load the global pointer and check that it's not NULL. */
-foop = READ_ONCE(ptr);
-if (!foop)
-	return;
-
-/*
- * Load 'foo.x' via the pointer we just loaded. This is ordered after the
- * previous READ_ONCE() because of the address dependency.
- */
-xp1 = READ_ONCE(foop->x);
-
-/*
- * Load 'foo.x' directly via the global 'foo'.
- * _This is loading the same address as the previous READ_ONCE() and
- *  therefore cannot return a stale (NULL) value!_
- */
-xp2 = READ_ONCE(foo.x);
-
-/*
- * Load 'x' via the pointer we just loaded.
- * _We may see zero here!_
- */
-val = READ_ONCE(*xp2);
-
-
-So in this case, the two same-location reads on CPU1 are actually executed
-out of order, but you can't tell just by looking at them in isolation
-because they returned the same value (i.e. xp1 == xp2 == &x). However, you
-*can* tell when you compose them in funny situations such as above (and I
-believe that this is demonstrably true on PPC and Arm; effectively the
-read-after-read ordering machinery only triggers in response to incoming
-snoops).
-
-There's probably a more-compelling variant using an (RCpc) load acquire
-instead of the last address dependency on CPU 1 as well.
-
-Anyway, I think all I'm trying to say is that I'd tend to shy away from
-relying on read-after-read ordering if it forms part of a more involved
-ordering relationship.
-
-> > But the patch looks fine, though I agree that the ordering in
-> > __wait_on_buffer should probably be moved into
-> > wait_on_bit/wait_on_bit_io.
-> > 
-> > And would we perhaps want the bitops to have the different ordering
-> > versions? Like "set_bit_release()" and "test_bit_acquire()"? That
-> > would seem to be (a) cleaner and (b) possibly generate better code for
-> > architectures where that makes a difference?
-> 
-> As always, I defer to the architecture maintainers on this one.
-
-FWIW, that makes sense to me. We already have release/acquire/releaxed
-variants of the bitops in the atomic_t API so it seems natural to have
-a counterpart in the actual bitops API as well.
-
-Will

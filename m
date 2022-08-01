@@ -2,146 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E6D586302
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2FD586303
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbiHADNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 23:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S239505AbiHADOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 23:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbiHADNI (ORCPT
+        with ESMTP id S233331AbiHADOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 23:13:08 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CEBA461
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 20:13:05 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220801031302epoutp049b4e883c51b79efe60c247f1610cec02~HGgHXCFCL2598825988epoutp04d
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:13:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220801031302epoutp049b4e883c51b79efe60c247f1610cec02~HGgHXCFCL2598825988epoutp04d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659323582;
-        bh=IzTJpwJDmv27DqFGcnFFbEYZnoox6AVDGRsU60ndVjo=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=kbU3ZxM9cStWXW5Ggswg6sJgz+AjWq9hDd8thcCfM9SXjaq9UrRwZB6Of0LQ4itAb
-         Sj7umqAqUNuLmtcxPSzBEXmpHXg4M/eBgdPac1eAW/Hj1Kidjd/PyACT1TqN+iyHiO
-         SminOS4fsJInu/xHctuL4hdboNggj86ZBodhbSz0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220801031301epcas2p2f53b8f11b7f52761f5261b2a55d34dd2~HGgGbbOER0653206532epcas2p2_;
-        Mon,  1 Aug 2022 03:13:01 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.97]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lx38s1syGz4x9Q1; Mon,  1 Aug
-        2022 03:13:01 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        42.B4.09642.DB447E26; Mon,  1 Aug 2022 12:13:01 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220801031300epcas2p25866dfc0158ecdd33ef18c44aa23b155~HGgFWtDOs0771607716epcas2p23;
-        Mon,  1 Aug 2022 03:13:00 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220801031300epsmtrp107beaf4b67106b98f0c2178662c1dc07~HGgFV88m_1998119981epsmtrp1m;
-        Mon,  1 Aug 2022 03:13:00 +0000 (GMT)
-X-AuditID: b6c32a47-5e1ff700000025aa-8b-62e744bdc9ee
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.A1.08905.CB447E26; Mon,  1 Aug 2022 12:13:00 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220801031300epsmtip26a5d52c831d6a24302043c9d36e37293~HGgFHT5Bk0544405444epsmtip2_;
-        Mon,  1 Aug 2022 03:13:00 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [RESEND PATCH v1] scsi: ufs: enable link lost interrupt
-Date:   Mon,  1 Aug 2022 12:09:40 +0900
-Message-Id: <1659323380-161341-1-git-send-email-kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmqe5el+dJBkeXclicfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Xi69JnrBarFz9gsVh0YxuTxc0tR1ksLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
-        WPrvLYsDr8fiPS+ZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7VLZNRmpiSmqR
-        Qmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtC5SgpliTmlQKGAxOJi
-        JX07m6L80pJUhYz84hJbpdSClJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTsjI2TO1kLTrNX
-        HL2wm7mBcSlbFyMnh4SAicSKH08Zuxi5OIQEdjBKnLn4iRnC+cQocfLhSSjnG6NE485pcC0r
-        5/ayQCT2Mkq8uLqPDcL5wShxaMZEZpAqNgFNiac3pzKBJEQEVjJJ3Hi1jAkkwSygLrFrwgkg
-        m4NDWMBB4uHvfJAwi4CqxI1rB9hBbF4BN4nleyZDbZOTuHmuE+wMCYGX7BIda4+zQiRcJBY9
-        aoSyhSVeHd/CDmFLSbzsb2MHmS8hUCyxaZ88RG8Do8SST5tZIGqMJWY9a2cEqWEGOnT9Ln2I
-        cmWJI7dYIK7kk+g4/BdqCq9ER5sQRKOyxK9JkxkhbEmJmTfvQC31kNj7qBvMFhKIlei6+IVx
-        AqPsLIT5CxgZVzGKpRYU56anFhsVGMMjKTk/dxMjOAVque9gnPH2g94hRiYOxkOMEhzMSiK8
-        AgGPk4R4UxIrq1KL8uOLSnNSiw8xmgKDayKzlGhyPjAJ55XEG5pYGpiYmRmaG5kamCuJ83ql
-        bEgUEkhPLEnNTk0tSC2C6WPi4JRqYIr7zvvumMu20NY1jp7vl15fx3T6RZz81W555ZtdZxoc
-        BIXuPkk/tetmsbrXxuJT33Yesq+JX3o7+2v1N0/vN2XdtxhkX9o2H6lRk5tualK5beE3hdff
-        E3eqLAjxfhgxSVrvPK/R1eC/s/Vzfn7/+HwSd3Ztez0D75RMDy39Q8d/qbU4NIZEnHq0YafT
-        P8e1S2e8u7njiPzm/JbHF4XjVd9y7KorbAo+eoHntO3VMy2b7Aw61vx81XJLqz/p0ZY6+0OS
-        SXPKkzJveP+wmLS8KsT58qUL5iftymyyFr/9pf9V4MfJTXe3fZuod+JlnWr74s06ZtoPuhQ7
-        PuY6Borde+MXxv/9Ym6G4fv/rzMlAz4qsRRnJBpqMRcVJwIAULRY8QoEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKLMWRmVeSWpSXmKPExsWy7bCSvO4el+dJBkvma1icfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Xi69JnrBarFz9gsVh0YxuTxc0tR1ksLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
-        WPrvLYsDr8fiPS+ZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7FJdNSmpOZllq
-        kb5dAlfGxsmdrAWn2SuOXtjN3MC4lK2LkZNDQsBEYuXcXhYQW0hgN6PEmW1MEHFJiRM7nzNC
-        2MIS91uOsHYxcgHVfGOUeHDlFStIgk1AU+LpzalgDSIC25kkfn1MA7GZBdQldk04ARTn4BAW
-        cJB4+DsfJMwioCpx49oBdhCbV8BNYvmeyVA3yEncPNfJPIGRZwEjwypGydSC4tz03GLDAsO8
-        1HK94sTc4tK8dL3k/NxNjOCQ1NLcwbh91Qe9Q4xMHIyHGCU4mJVEeAUCHicJ8aYkVlalFuXH
-        F5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwMTkqLzQJdVU52Gy+/ETPF0F
-        ZufVmg7/Z73Vw6C1dqeL24bWjwmVYlyfBauO7cqc9lf5vO2ZQsmjTbpn63/x59vznm7jfvBW
-        WHXysVM+6eryb2c8Mzquxm1sd1X+1Gnh2L7G06sn5n2NlzmwQfDEV63680UPneqP2v/0Mt3w
-        c2+85vttvN5l27g/nPWYfLAn9E2TWWFD3j+fTNlnpz/z+369JjUtuq/bo9V34qMNz2a0z+Ny
-        S4v1c9myiefixfey2Z0/n38U9Gtt4qyySBaM/vrtBee51Xxh0xuNMlQydT6YTmd39yj98k1Q
-        70qzeOQCmzjG2B/VLXmlk08WFpyUOSJ+1npul5eWeXhk7lFvJZbijERDLeai4kQAxcbPALgC
-        AAA=
-X-CMS-MailID: 20220801031300epcas2p25866dfc0158ecdd33ef18c44aa23b155
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220801031300epcas2p25866dfc0158ecdd33ef18c44aa23b155
-References: <CGME20220801031300epcas2p25866dfc0158ecdd33ef18c44aa23b155@epcas2p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 31 Jul 2022 23:14:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81385A46B
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 20:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659323657; x=1690859657;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=WTbP2bKiNaHPRGg+rr4Vtpo273wRdjm4l6Tttm4B97Y=;
+  b=MnPoi8pnwoMROb4tQu7FEvvNk6ovbNiY5mteSx9dhGwkgXlME2iw5ymk
+   DQHV3651gwOyPNDh7gJPHpxmeToiFZSMybyyHgLrMKgqmY+OORik4MOBZ
+   rYjxUXDHECSWbgbNuOpzBlKBz4dzRD3qzS6u9PQFMWLaw6SKOQ62Ci4/x
+   pdhcZ8Drlg8HCpLev+o/J6EhtQt50Nss2wf9jNkG3wf3EOWFUjraQcs0E
+   7plvtC9Yr3xmOTxT81Y3u4A3DLU3uKzRrAyxKZzlamBgVasAotYX+DXhI
+   nmRaoNgq8bk+f7F2jbkSg71YurMKjXMELqqvkJCjwsu0d1kwDBMRx0t70
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="286611255"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="286611255"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 20:14:17 -0700
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="577627956"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2022 20:14:14 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH RFC 1/4] mm/swap: Add swp_offset_pfn() to fetch PFN from
+ swap entry
+References: <20220729014041.21292-1-peterx@redhat.com>
+        <20220729014041.21292-2-peterx@redhat.com>
+Date:   Mon, 01 Aug 2022 11:13:58 +0800
+In-Reply-To: <20220729014041.21292-2-peterx@redhat.com> (Peter Xu's message of
+        "Thu, 28 Jul 2022 21:40:38 -0400")
+Message-ID: <8735eglkp5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Link lost is treated as fatal error with the following
-patch, but its event isn't registered as interrupt source,
-so I enable it.
---
-scsi: ufs: Treat link loss as fatal error
+Peter Xu <peterx@redhat.com> writes:
 
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
----
- drivers/scsi/ufs/ufshci.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+> We've got a bunch of special swap entries that stores PFN inside the swap
+> offset fields.  To fetch the PFN, normally the user just calls swp_offset()
+> assuming that'll be the PFN.
+>
+> Add a helper swp_offset_pfn() to fetch the PFN instead, fetching only the
+> max possible length of a PFN on the host, meanwhile doing proper check with
+> MAX_PHYSMEM_BITS to make sure the swap offsets can actually store the PFNs
+> properly always using the BUILD_BUG_ON() in is_pfn_swap_entry().
+>
+> One reason to do so is we never tried to sanitize whether swap offset can
+> really fit for storing PFN.  At the meantime, this patch also prepares us
+> with the future possibility to store more information inside the swp offset
+> field, so assuming "swp_offset(entry)" to be the PFN will not stand any
+> more very soon.
+>
+> Replace many of the swp_offset() callers to use swp_offset_pfn() where
+> proper.  Note that many of the existing users are not candidates for the
+> replacement, e.g.:
+>
+>   (1) When the swap entry is not a pfn swap entry at all, or,
+>   (2) when we wanna keep the whole swp_offset but only change the swp type.
+>
+> For the latter, it can happen when fork() triggered on a write-migration
+> swap entry pte, we may want to only change the migration type from
+> write->read but keep the rest, so it's not "fetching PFN" but "changing
+> swap type only".  They're left aside so that when there're more information
+> within the swp offset they'll be carried over naturally in those cases.
+>
+> Since at it, dropping hwpoison_entry_to_pfn() because that's exactly what
+> the new swp_offset_pfn() is about.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  arch/arm64/mm/hugetlbpage.c |  2 +-
+>  include/linux/swapops.h     | 28 ++++++++++++++++++++++------
+>  mm/hmm.c                    |  2 +-
+>  mm/memory-failure.c         |  2 +-
+>  mm/page_vma_mapped.c        |  6 +++---
+>  5 files changed, 28 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index 7430060cb0d6..f897d40821dd 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -242,7 +242,7 @@ static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
+>  {
+>  	VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
+>  
+> -	return page_folio(pfn_to_page(swp_offset(entry)));
+> +	return page_folio(pfn_to_page(swp_offset_pfn(entry)));
+>  }
+>  
+>  void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index a3d435bf9f97..5378f77860fb 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -23,6 +23,14 @@
+>  #define SWP_TYPE_SHIFT	(BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+>  #define SWP_OFFSET_MASK	((1UL << SWP_TYPE_SHIFT) - 1)
+>  
+> +/*
+> + * Definitions only for PFN swap entries (see is_pfn_swap_entry()).  To
+> + * store PFN, we only need SWP_PFN_BITS bits.  Each of the pfn swap entries
+> + * can use the extra bits to store other information besides PFN.
+> + */
+> +#define SWP_PFN_BITS			(MAX_PHYSMEM_BITS - PAGE_SHIFT)
+> +#define SWP_PFN_MASK			((1UL << SWP_PFN_BITS) - 1)
+> +
+>  /* Clear all flags but only keep swp_entry_t related information */
+>  static inline pte_t pte_swp_clear_flags(pte_t pte)
+>  {
+> @@ -64,6 +72,16 @@ static inline pgoff_t swp_offset(swp_entry_t entry)
+>  	return entry.val & SWP_OFFSET_MASK;
+>  }
+>  
+> +/*
+> + * This should only be called upon a pfn swap entry to get the PFN stored
+> + * in the swap entry.  Please refers to is_pfn_swap_entry() for definition
+> + * of pfn swap entry.
+> + */
+> +static inline unsigned long swp_offset_pfn(swp_entry_t entry)
+> +{
 
-diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
-index a7ff0e5..0b627f4 100644
---- a/drivers/scsi/ufs/ufshci.h
-+++ b/drivers/scsi/ufs/ufshci.h
-@@ -133,11 +133,7 @@ static inline u32 ufshci_version(u32 major, u32 minor)
- 
- #define UFSHCD_UIC_MASK		(UIC_COMMAND_COMPL | UFSHCD_UIC_PWR_MASK)
- 
--#define UFSHCD_ERROR_MASK	(UIC_ERROR |\
--				DEVICE_FATAL_ERROR |\
--				CONTROLLER_FATAL_ERROR |\
--				SYSTEM_BUS_FATAL_ERROR |\
--				CRYPTO_ENGINE_FATAL_ERROR)
-+#define UFSHCD_ERROR_MASK	(UIC_ERROR | INT_FATAL_ERRORS)
- 
- #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
- 				CONTROLLER_FATAL_ERROR |\
--- 
-2.7.4
+Is it good to call is_pfn_swap_entry() here for debug that can be
+eliminated in the production kernel?
 
+> +	return swp_offset(entry) & SWP_PFN_MASK;
+> +}
+> +
+>  /* check whether a pte points to a swap entry */
+>  static inline int is_swap_pte(pte_t pte)
+>  {
+> @@ -369,7 +387,7 @@ static inline int pte_none_mostly(pte_t pte)
+>  
+>  static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
+>  {
+> -	struct page *p = pfn_to_page(swp_offset(entry));
+> +	struct page *p = pfn_to_page(swp_offset_pfn(entry));
+>  
+>  	/*
+>  	 * Any use of migration entries may only occur while the
+> @@ -387,6 +405,9 @@ static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
+>   */
+>  static inline bool is_pfn_swap_entry(swp_entry_t entry)
+>  {
+> +	/* Make sure the swp offset can always store the needed fields */
+> +	BUILD_BUG_ON(SWP_TYPE_SHIFT < SWP_PFN_BITS);
+
+	BUILD_BUG_ON(SWP_TYPE_SHIFT <= SWP_PFN_BITS);
+
+?
+
+Best Regards,
+Huang, Ying
+
+> +
+>  	return is_migration_entry(entry) || is_device_private_entry(entry) ||
+>  	       is_device_exclusive_entry(entry);
+>  }
+> @@ -475,11 +496,6 @@ static inline int is_hwpoison_entry(swp_entry_t entry)
+>  	return swp_type(entry) == SWP_HWPOISON;
+>  }
+>  
+> -static inline unsigned long hwpoison_entry_to_pfn(swp_entry_t entry)
+> -{
+> -	return swp_offset(entry);
+> -}
+> -
+>  static inline void num_poisoned_pages_inc(void)
+>  {
+>  	atomic_long_inc(&num_poisoned_pages);
+> diff --git a/mm/hmm.c b/mm/hmm.c
+> index f2aa63b94d9b..3850fb625dda 100644
+> --- a/mm/hmm.c
+> +++ b/mm/hmm.c
+> @@ -253,7 +253,7 @@ static int hmm_vma_handle_pte(struct mm_walk *walk, unsigned long addr,
+>  			cpu_flags = HMM_PFN_VALID;
+>  			if (is_writable_device_private_entry(entry))
+>  				cpu_flags |= HMM_PFN_WRITE;
+> -			*hmm_pfn = swp_offset(entry) | cpu_flags;
+> +			*hmm_pfn = swp_offset_pfn(entry) | cpu_flags;
+>  			return 0;
+>  		}
+>  
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index cc6fc9be8d22..e451219124dd 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -632,7 +632,7 @@ static int check_hwpoisoned_entry(pte_t pte, unsigned long addr, short shift,
+>  		swp_entry_t swp = pte_to_swp_entry(pte);
+>  
+>  		if (is_hwpoison_entry(swp))
+> -			pfn = hwpoison_entry_to_pfn(swp);
+> +			pfn = swp_offset_pfn(swp);
+>  	}
+>  
+>  	if (!pfn || pfn != poisoned_pfn)
+> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+> index 8e9e574d535a..93e13fc17d3c 100644
+> --- a/mm/page_vma_mapped.c
+> +++ b/mm/page_vma_mapped.c
+> @@ -86,7 +86,7 @@ static bool check_pte(struct page_vma_mapped_walk *pvmw)
+>  		    !is_device_exclusive_entry(entry))
+>  			return false;
+>  
+> -		pfn = swp_offset(entry);
+> +		pfn = swp_offset_pfn(entry);
+>  	} else if (is_swap_pte(*pvmw->pte)) {
+>  		swp_entry_t entry;
+>  
+> @@ -96,7 +96,7 @@ static bool check_pte(struct page_vma_mapped_walk *pvmw)
+>  		    !is_device_exclusive_entry(entry))
+>  			return false;
+>  
+> -		pfn = swp_offset(entry);
+> +		pfn = swp_offset_pfn(entry);
+>  	} else {
+>  		if (!pte_present(*pvmw->pte))
+>  			return false;
+> @@ -221,7 +221,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>  					return not_found(pvmw);
+>  				entry = pmd_to_swp_entry(pmde);
+>  				if (!is_migration_entry(entry) ||
+> -				    !check_pmd(swp_offset(entry), pvmw))
+> +				    !check_pmd(swp_offset_pfn(entry), pvmw))
+>  					return not_found(pvmw);
+>  				return true;
+>  			}

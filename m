@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95384586977
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982CF5869FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiHAMCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S233713AbiHAMKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiHAMAf (ORCPT
+        with ESMTP id S233417AbiHAMJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:00:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564FE4E601;
-        Mon,  1 Aug 2022 04:52:58 -0700 (PDT)
+        Mon, 1 Aug 2022 08:09:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D746566F;
+        Mon,  1 Aug 2022 04:56:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D51F4B81171;
-        Mon,  1 Aug 2022 11:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427DDC433D6;
-        Mon,  1 Aug 2022 11:52:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 032B4B81170;
+        Mon,  1 Aug 2022 11:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E759C433D7;
+        Mon,  1 Aug 2022 11:56:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354775;
-        bh=QdhoJKHWHOYGae7EJTZdGq1HN/BPTPc3s5JJatJcrEw=;
+        s=korg; t=1659354975;
+        bh=L65EoCY1Wjh6qCUUyO68ActgUWoVIRRu6kgfGRc9XL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1vhoft/hTOHG9sQeGQMcyqYK1zL7MekI+4gS9C6x4hYDFg4y6tH4IE1nuJKPIHrFD
-         Llt8lyhLcaAyu66my58HbRXNakqagyTdCXG5t2TrRguFK3y4nCMfuB1Ntohcb2YEyO
-         nghjOECO0YuIkPvVRs5MUikwFrcFoalO8bzEoQXc=
+        b=vIjEwxf9U5MAq8HOJHk7BzmoIEg0CX6tHf1aLomir6RF2GpWrxMXjCXr7vBaQ0yET
+         BCFVUAPpBOB2mJ06+aYgtqzj3O26EWFwVtXzsBqkwFd/2MeTjnjwUdTQziHT5JSH8q
+         3pRQ7sK4/qnaamzJUByYajFUwV3XbpTWhFZ9hD18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.15 08/69] asm-generic: remove a broken and needless ifdef conditional
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.18 18/88] watch_queue: Fix missing rcu annotation
 Date:   Mon,  1 Aug 2022 13:46:32 +0200
-Message-Id: <20220801114134.815320414@linuxfoundation.org>
+Message-Id: <20220801114138.878778584@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,51 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-commit e2a619ca0b38f2114347b7078b8a67d72d457a3d upstream.
+commit e0339f036ef4beb9b20f0b6532a1e0ece7f594c6 upstream.
 
-Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
-falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
-in the reference) in ./include/asm-generic/io.h.
+Since __post_watch_notification() walks wlist->watchers with only the
+RCU read lock held, we need to use RCU methods to add to the list (we
+already use RCU methods to remove from the list).
 
-Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
+Fix add_watch_to_object() to use hlist_add_head_rcu() instead of
+hlist_add_head() for that list.
 
-GENERIC_DEVMEM_IS_ALLOWED
-Referencing files: include/asm-generic/io.h
-
-The actual fix, though, is simply to not to make this function declaration
-dependent on any kernel config. For architectures that intend to use
-the generic version, the arch's 'select GENERIC_LIB_DEVMEM_IS_ALLOWED' will
-lead to picking the function definition, and for other architectures, this
-function is simply defined elsewhere.
-
-The wrong '#ifndef' on a non-existing config symbol also always had the
-same effect (although more by mistake than by intent). So, there is no
-functional change.
-
-Remove this broken and needless ifdef conditional.
-
-Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/asm-generic/io.h |    2 --
- 1 file changed, 2 deletions(-)
+ kernel/watch_queue.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1125,9 +1125,7 @@ static inline void memcpy_toio(volatile
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -494,7 +494,7 @@ int add_watch_to_object(struct watch *wa
+ 		unlock_wqueue(wqueue);
+ 	}
+ 
+-	hlist_add_head(&watch->list_node, &wlist->watchers);
++	hlist_add_head_rcu(&watch->list_node, &wlist->watchers);
+ 	return 0;
  }
- #endif
- 
--#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
- extern int devmem_is_allowed(unsigned long pfn);
--#endif
- 
- #endif /* __KERNEL__ */
- 
+ EXPORT_SYMBOL(add_watch_to_object);
 
 

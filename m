@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B9A5863B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 07:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D238586398
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238827AbiHAFI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 01:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S239514AbiHAErP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 00:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiHAFIz (ORCPT
+        with ESMTP id S238845AbiHAErN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 01:08:55 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEA612ACE
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:08:54 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id s206so8754290pgs.3
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 22:08:54 -0700 (PDT)
+        Mon, 1 Aug 2022 00:47:13 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7327BA194
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:47:12 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id b81so4988641vkf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc;
-        bh=FI2slEDL0OuyC3Vag1PYn+ptaAQPjUy3upspXOztAUk=;
-        b=gsub5H2rhbM2DFZX8x20b8mFjESBS8BmlfMoexLGK2OHt6mCIlS5vGC/7nJk+cwOyP
-         QbB0aBv5uX+qS7z304m6BbcPXQCRAnnlps7v5SNEmU5VWpMgVkWP7WKbQKoMcCvu5Pmh
-         2IWDiz5M6kFgDKayUbW+llxLGpAHvpvZ9NA/q9cCAD5lw06AJXtwxwH1qoPVIlZMclKU
-         mkUWnq38tBhrTQGTDMFVTyYZHuCAFvouYUEjMCopVXxR4DYOJrvRqD/6dU7UGEH+RFcG
-         c7c7RRXBLRYzrWTHUwCNjWhJUVOj/vSzIRYXwqgf1XfGkxcPo8BGLKSlrNfZBLImdjo6
-         2v5Q==
+        h=mime-version:references:in-reply-to:sender:from:date:message-id
+         :subject:to:cc;
+        bh=Lw6ftY/TKlMb6+me9g+W5uZ99+C7bnz14lMwnr8n6c4=;
+        b=BivyfpXPh+b5BrckNjDolRmC/G0BCa132qwkYm/uOKn0qBhRgcfnEGfELdMx74doVO
+         NWjYAZ+hUT4OSrptv7Nafz/y4Mo7nXoTpKgsOj7YIPXHbXpTbGpdL81j3aIz9UxZVUhq
+         OIRZKaW+j4qXI8C7riokWIyOjiC30f2otq93U9ZLTccOpwgqJPfoZ5rr/rgP1Bxu+PYm
+         EHvyL4fw31d0BKURn3Ivz/le3NSEcHiGCNPOM+PQUxa8s2egUdPIpamSVu7mrrnEy7mW
+         g+Co3xuU+IWGzAQHti29kkt4PYVMe+gvvhl2gjgsPRT2KUJvsFM9zpYDELCeHCbe6PFN
+         jvDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc;
-        bh=FI2slEDL0OuyC3Vag1PYn+ptaAQPjUy3upspXOztAUk=;
-        b=PgY0LZZpf+O7BB+TFs+uGWtq/3BzQQ9nIpm0Rb6VHJrTSvRmENkUiLjam4y0Arn0N1
-         1QKyEYgCAhceMY1LuTasEE7UmxMTCFP2cfdLTWhoFdg3+iomNmhw4RoRGaTgVDMIqxpn
-         NZds2mQsu3gqlX1gAvDCqqiQHAG9YNrZbZBkU+B2r+AwHcxjMsgCqhXzwpaGTTjd7ZeL
-         nQvZuJw++axSmlIolvPzw2v2M9YQTZps4tC6mAD3ko5mw61GebwcWeb/Qj+ikg4+xSFP
-         AeaXRJIEo2nqZRMmLBBtg+/h2K2Ll6zJKDCKRQLa+IpozpfrO7buBokLKcxZALRJIXjc
-         6swg==
-X-Gm-Message-State: AJIora+AC2NZ8o1PuDCKBI9D1gBu0JuGVzbmJqQ99zJU3h+4Syhwbovq
-        vQcZoPQ1PnoJRw07G77aLzLdyyRAostXeg==
-X-Google-Smtp-Source: AGRyM1u8IDjmNenIskJL/4ifXqk/YzPCpvCHLiR+hZE8kFIlozkZG/hoKkv8dBbqBxpJLz5FgjB4eQ==
-X-Received: by 2002:a05:6a00:230d:b0:52b:1819:3a0 with SMTP id h13-20020a056a00230d00b0052b181903a0mr14463443pfh.53.1659330533464;
-        Sun, 31 Jul 2022 22:08:53 -0700 (PDT)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id l9-20020a170903244900b0016dc307aef4sm8467231pls.36.2022.07.31.22.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 22:08:52 -0700 (PDT)
-References: <20220707090501.55483-1-schspa@gmail.com>
- <0320c5f9-cbda-1652-1f97-24d1a22fb298@gmail.com>
- <YtAqsyjlvmfDokH/@worktop.programming.kicks-ass.net>
- <m2tu6zxme3.fsf@gmail.com>
- <CAJhGHyBc4HXE8bRFYcqNLoX7oNqdq62tOFWvR0XGCAcBJ9mgsQ@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, Tejun Heo <tj@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] workqueue: Use active mask for new worker when pool is
- DISASSOCIATED
-Date:   Mon, 01 Aug 2022 12:42:33 +0800
-In-reply-to: <CAJhGHyBc4HXE8bRFYcqNLoX7oNqdq62tOFWvR0XGCAcBJ9mgsQ@mail.gmail.com>
-Message-ID: <m235egv9d1.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:sender:from
+         :date:message-id:subject:to:cc;
+        bh=Lw6ftY/TKlMb6+me9g+W5uZ99+C7bnz14lMwnr8n6c4=;
+        b=16pRMIrAoS9IltdHF6Fd2oMUc62hgfgSav3mHO8ytaPxWbzzdRRnkEtsRTE8ADj4Hd
+         MCrDyscQgdJM4irHQl5CPF5NrCX6lCe5Vk5D4zn5gRvdm8I0ulmcgGUjv5aiVDHKgBCb
+         teUxLVTEv9/PTKQ2lDA9e8d0OcY/KpkboSGP6jzcRIMzdB9v+l+8ahiGv8awP/x1ab1a
+         CdyHTo9dSf7kRjuFH85JVANKRtNACym3AmVD47xVSZzlXP8fCj7BgQHXpgLCfEsUmmOG
+         TfXpVO9Grf2p4+E+8ErrB6bjDrQQvUR8tAIsHDWKfhn9FrdvbnNQv5iNnvpgqLZtHoID
+         mD2Q==
+X-Gm-Message-State: ACgBeo16Gg3klysMFWZbjcAdBttLwBmN82pk++TyI1sW+wnY/gOjN0Qa
+        BnqiY3YyCNXUm+joTBYGKxTwJ/XOtObmt13BMDY=
+X-Google-Smtp-Source: AA6agR6BBWM7q0N4oPiUYv0EGCG/OK3dmvKCfZPyMNQt8ZobjEPOOwF15DS7dBfG3tpXHcif9HtzVL92A6o+Qt952ak=
+X-Received: by 2002:a1f:34d8:0:b0:377:142f:3e2f with SMTP id
+ b207-20020a1f34d8000000b00377142f3e2fmr4440588vka.27.1659329231324; Sun, 31
+ Jul 2022 21:47:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220227205608.30812-1-cristian.marussi@arm.com> <20220227205608.30812-15-cristian.marussi@arm.com>
+In-Reply-To: <20220227205608.30812-15-cristian.marussi@arm.com>
+Sender: getarunks@gmail.com
+X-Google-Sender-Delegation: getarunks@gmail.com
+From:   Arun KS <arunks.linux@gmail.com>
+Date:   Mon, 1 Aug 2022 10:17:00 +0530
+X-Google-Sender-Auth: xqremnycBgmRgYu3Ngu8pLSRFS8
+Message-ID: <CAKZGPANYh4aS47WH8UBPiTVdE9sOstZD+yZgHkPcUAWX=Gc-dQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 14/16] firmware: arm_scmi: Add testing Voltage
+ protocol support
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        peter.hilber@opensynergy.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,107 +73,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cristian,
 
-Lai Jiangshan <jiangshanlai@gmail.com> writes:
-
-> On Sat, Jul 30, 2022 at 12:19 PM Schspa Shi <schspa@gmail.com> wrote:
->>
->>
->> Peter Zijlstra <peterz@infradead.org> writes:
->>
->> > On Wed, Jul 13, 2022 at 05:52:58PM +0800, Lai Jiangshan wrote:
->> >>
->> >>
->> >> CC Peter.
->> >> Peter has changed the CPU binding code in workqueue.c.
->> >
->> > [ 1622.829091] WARNING: CPU: 3 PID: 31 at kernel/sched/core.c:7756 sched_cpu_dying+0x74/0x204
->> > [ 1622.829374] CPU: 3 PID: 31 Comm: migration/3 Tainted: P           O      5.10.59-rt52 #2
->> >                                                                       ^^^^^^^^^^^^^^^^^^^^^
->> >
->> > I think we can ignore this as being some ancient kernel. Please try
->> > something recent.
->>
->> Hi peter:
->>
->> I spent a few days writing a test case and reproduced the problem on
->> kernel 5.19. I think it's time for us to review the V3 patch for a fix.
->>
->> The V3 patch is at
->> https://lore.kernel.org/all/20220714031645.28004-1-schspa@gmail.com/
->> Please help to review it.
+On Mon, Feb 28, 2022 at 4:23 AM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
 >
-> Because of the implementation of is_cpu_allowed(),
-> I am still suspicious about how the newly created worker can be woken
-> up in the dying cpu since it has no KTHREAD_IS_PER_CPU set.
+> firmware: arm_scmi: Add testing Voltage protocol support
 >
-
-I think the comments of the V3 patch have explained the problem, the
-newly created worker runs on the dying CPU because we bind it to the
-dying CPU via kthread_bind_mask or set_cpus_allowed_ptr.
-
-Please refer to the following scenarios.
-
-           CPU0                                  CPU1
-------------------------------------------------------------------
-sched_cpu_deactivate(cpu_active_mask clear)
-workqueue_offline_cpu(work pool POOL_DISASSOCIATED)
-  -- all worker will migrate to another cpu --
-                                    worker_thread
-                                    -- will create new worker if
-                                       pool->worklist is not empty
-                                       create_worker()
-                                     -- new kworker will bound to CPU0
-                               (pool->attrs->cpumask will be mask of CPU0).
-      kworker/0:x will running on rq
-
-sched_cpu_dying
-  if (rq->nr_running != 1 || rq_has_pinned_tasks(rq))
-    WARN(true, "Dying CPU not properly vacated!");
-      ---------OOPS-------------
-
-When CPUHP_HRTIMERS_PREPARE < CPU0's state < CPUHP_AP_WORKQUEUE_ONLINE,
-the CPU0 still can schedule a new work, which will add a new work to
-pool->worklist of a dying CPU's work pool.
-
-> Is it a dying cpu when onlining a CPU fails?  I think balance_push
-> is not set in this case when it fails at some point during online.
-> But I haven't looked into the details and linked the clues.
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+>  .../arm_scmi/scmi_test_driver/Makefile        |  2 +-
+>  .../arm_scmi/scmi_test_driver/scmi_test.c     |  2 +
+>  .../arm_scmi/scmi_test_driver/test_common.h   |  1 +
+>  .../arm_scmi/scmi_test_driver/test_voltages.c | 51 +++++++++++++++++++
+>  4 files changed, 55 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
 >
-
-Not this case, there is on onlining CPU fails log in my test log.
-
+> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/Makefile b/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
+> index 68a3d94a6a88..3b7df18de250 100644
+> --- a/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
+> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  scmi_test_driver-objs := scmi_test.o test_common.o test_clocks.o test_sensors.o \
+> -       test_powers.o
+> +       test_powers.o test_voltages.o
+>  obj-$(CONFIG_ARM_SCMI_TEST_DRIVER) += scmi_test_driver.o
 >
->>
->> Test branch as:
->> https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/tag/?h=v5.19-rc8-rt8
->>
+> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c b/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
+> index df0d3e572010..2ca9f82c5bf3 100644
+> --- a/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
+> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
+> @@ -26,6 +26,7 @@ int (*scmi_test_init[SCMI_MAX_PROTOCOLS])(struct scmi_test_setup *) = {
+>         [SCMI_PROTOCOL_POWER] = scmi_test_power_init,
+>         [SCMI_PROTOCOL_CLOCK] = scmi_test_clock_init,
+>         [SCMI_PROTOCOL_SENSOR] = scmi_test_sensor_init,
+> +       [SCMI_PROTOCOL_VOLTAGE] = scmi_test_voltage_init,
+>  };
 >
-> Can it only be triggered in the rt kernel?
+>  static void
+> @@ -125,6 +126,7 @@ static int scmi_testing_probe(struct scmi_device *sdev)
+>  }
 >
-
-I only test on rt kernel, because of I work on RT kernel now, But I
-think non-rt kernel have the issues too.
-
->> I think this code is new enough to demonstrate that the problem persists.
->>
->> The log as fellowing:
->>
->> [ 3103.198684] ------------[ cut here ]------------
->> [ 3103.198684] Dying CPU not properly vacated!
->> [ 3103.198684] WARNING: CPU: 1 PID: 23 at kernel/sched/core.c:9575 sched_cpu_dying.cold+0xc/0xc3
->> [ 3103.198684] Modules linked in: work_test(O)
+>  static const struct scmi_device_id scmi_id_table[] = {
+> +       { SCMI_PROTOCOL_VOLTAGE, "__scmi_test-voltage" },
+>         { SCMI_PROTOCOL_CLOCK, "__scmi_test-clock" },
+>         { SCMI_PROTOCOL_SENSOR, "__scmi_test-sensor" },
+>         { SCMI_PROTOCOL_POWER, "__scmi_test-power" },
+> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h b/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
+> index 9f3d35ba4477..338b65da593f 100644
+> --- a/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
+> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
+> @@ -102,6 +102,7 @@ int scmi_test_release(struct inode *ino, struct file *filp);
 >
-> Could you give me the code of this module?
-
-The module's source code is at
-https://github.com/schspa/code_snippet/blob/master/kernel_module/workqueue_test/work-test.c
-Kernel defconfig is at
-https://github.com/schspa/ktest/blob/main/configs/linux_rt_defconfig
-
-I add a hook to the entry of worker_thread, which add extra 50ms delay
-to make it reproduced faster.
-
--- 
-BRs
-Schspa Shi
+>  int scmi_test_clock_init(struct scmi_test_setup *tsp);
+>  int scmi_test_sensor_init(struct scmi_test_setup *tsp);
+> +int scmi_test_voltage_init(struct scmi_test_setup *tsp);
+>  int scmi_test_power_init(struct scmi_test_setup *tsp);
+>
+>  #endif /* __SCMI_TEST_COMMON_H */
+> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c b/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
+> new file mode 100644
+> index 000000000000..ab91080e3a0f
+> --- /dev/null
+> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * SCMI Testing Driver - Voltage Protocol
+> + *
+> + * Copyright (C) 2022 ARM Ltd.
+> + */
+> +
+> +#include <linux/dcache.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/err.h>
+> +#include <linux/fs.h>
+> +#include <linux/io.h>
+> +#include <linux/kstrtox.h>
+> +#include <linux/module.h>
+> +#include <linux/scmi_protocol.h>
+> +#include <linux/slab.h>
+> +
+> +#include "test_common.h"
+> +
+> +struct scmi_voltage_data {
+> +       unsigned int version;
+> +       int count;
+> +};
+> +
+> +int scmi_test_voltage_init(struct scmi_test_setup *tsp)
+> +{
+> +       struct scmi_voltage_data *vdata;
+> +       struct device *dev = &tsp->sdev->dev;
+> +       const struct scmi_voltage_proto_ops *voltage_ops;
+> +
+> +       vdata = devm_kzalloc(dev, sizeof(*vdata), GFP_KERNEL);
+> +       if (!vdata)
+> +               return -ENOMEM;
+> +
+> +       voltage_ops = tsp->ops;
+> +       vdata->version = voltage_ops->version_get(tsp->ph);
+> +       vdata->count = voltage_ops->num_domains_get(tsp->ph);
+> +
+> +       if (vdata->count <= 0) {
+> +               dev_err(dev, "number of voltage doms invalid: %d\n",
+> +                       vdata->count);
+> +               return vdata->count ?: -EINVAL;
+> +       }
+> +
+> +       dev_info(dev, "Found %d voltage resources.\n", vdata->count);
+> +
+> +       tsp->priv = vdata;
+> +       debugfs_create_x32("version", 0400, tsp->parent, &vdata->version);
+Any particular reason, why we are not creating debugfs entires for
+regulator level_get/level_set like it was done for
+clocks(rate_get_set)?
+> +
+> +       return 0;
+> +}
+> --
+> 2.17.1
+>

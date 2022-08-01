@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC85862A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D645862A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239028AbiHACcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S239101AbiHACdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239052AbiHACcl (ORCPT
+        with ESMTP id S239104AbiHACc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:32:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A45D13CCF
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:32:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4F0F61210
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9932C433D7;
-        Mon,  1 Aug 2022 02:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659321159;
-        bh=ngzqObwtwIp2kbdKF1z/NesmrXUK7HAjk3wY6TqLDeY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PolyEiYkekg3yuJn8tKEgRqOGxr2ij/b3czk8uAfmTSN0nhuEunx1nubZ980vdITt
-         qtYwIFV4kMMmND+AC09ZuHnnEky/SdSceqOAf/e3xG1BpCSNbX14psSletYS/ruqqn
-         Bt+CW8Gw+dFtw6D5JtNL551YEVabHXLOrfwYSugmW7xZ59BNaWQUwm87M/rGfMK5Ug
-         Q4ynh9Dql5QCuu1I9VT+Ukpb8Rqi/ZVR7D/AicZ28fPGe3MAWiy8P6FKugQTtDzEfn
-         E6dWDd9Jn4fn4t80pvSZP77soojTYYartt3q8gGAlcyExwBsUn8D6igKCaXURETSt5
-         7b7jWAhmrPMsA==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 3/3] selftests/ftrace: Add eprobe syntax error testcase
-Date:   Mon,  1 Aug 2022 11:32:34 +0900
-Message-Id: <165932115471.2850673.8014722990775242727.stgit@devnote2>
+        Sun, 31 Jul 2022 22:32:58 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1459B13CC5;
+        Sun, 31 Jul 2022 19:32:58 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s206so8533045pgs.3;
+        Sun, 31 Jul 2022 19:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JlhlolBNeXxkDjV//2ef/jXtAKI/H1zfuYrT43FexCc=;
+        b=oJt1bVNqQEFIfZQAQxWeGYb4Jb6DQ47rwBYVBOjX6AABvHZbQBP77ZDjADBJEtWowA
+         wo+CV4xFXZkrYNrxrTtnho/DgaNvR9RsHkd5Ta3tOHvM4AzfklTAD12fFxuA36L3l88U
+         bx/hyJKTDbyEGKXB7ruFkwLZZ3A0MJGZGY+dzq3mleTCqJKdpy66Wim8NPsBoL0Hn8qF
+         9Hs9BiLeyZVf8PvfynobbVK3l5Hd4bWyBswRLH+py6tDdVNFHhAxtzMZMJGePKXlKhnu
+         pXq2s5H0cwv0RC7Xy2ALSdwm2/wiD+xxT2reSZWiUyimrWgUcv/Bg0Tv9DOrVtAbzKyg
+         J02w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JlhlolBNeXxkDjV//2ef/jXtAKI/H1zfuYrT43FexCc=;
+        b=X+tRtLhF2ht2fmF3+qsQrp4tAzpEvqQo3GiR5scQEU57qfsOSB8J7TKoBO72Ct/V7f
+         idtKh7pYxsQKdxdr72FjLXLGS3Rze8RNfpb7gVHcUSTKv88Uucn83KrqV8Y6AQKgIcAO
+         pvgIDBFho3uUXYsDACEQJZnmdaymc59wwlwSXi5uK8UKS1a8r40SQRvWdRa8MX/B+T5o
+         O9Wke+vnzCLqC/E/d7SrsA8rkmLfG8FBaBIUOKOWoY+4H11hZiIZfu3RuIuHb0BB/fo+
+         OEML449APQxt96286SW5LgDNpWIgZwZNxrABCriRL27ULmUF9a+yrJEYH/s7CvK4SJ8t
+         U0pQ==
+X-Gm-Message-State: ACgBeo1tnMbvs7EcZ/KArYb6BRAuu25x2rnmkF5wrQGg0omVsnYd9kvd
+        6Qi2jIrhZrTDJoGD0QtV49ACUtfO70s=
+X-Google-Smtp-Source: AA6agR5tMVXiBYKF3nI/RS/QQ00QvV+tAPQDpE0yDtZBdWFBtPB+rzkcZ5ivAsWawv+skl1UPESH9w==
+X-Received: by 2002:a63:27c3:0:b0:41b:cd2c:af9f with SMTP id n186-20020a6327c3000000b0041bcd2caf9fmr6306784pgn.609.1659321177496;
+        Sun, 31 Jul 2022 19:32:57 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 13-20020a62140d000000b0052ce4074fddsm4897703pfu.145.2022.07.31.19.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 19:32:57 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] can: ctucanfd:using the pm_runtime_resume_and_get to  simplify the code
+Date:   Mon,  1 Aug 2022 02:32:53 +0000
+Message-Id: <20220801023253.1594906-1-ye.xingchen@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <165932112555.2850673.7704483936633223533.stgit@devnote2>
-References: <165932112555.2850673.7704483936633223533.stgit@devnote2>
-User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Add a syntax error test case for eprobe as same as kprobes.
+Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
+and pm_runtime_put_noidle.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- .../test.d/dynevent/eprobes_syntax_errors.tc       |   27 ++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
+ drivers/net/can/ctucanfd/ctucanfd_base.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-new file mode 100644
-index 000000000000..fc1daac7f066
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-@@ -0,0 +1,27 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Event probe event parser error log check
-+# requires: dynamic_events events/syscalls/sys_enter_openat "<attached-group>.<attached-event> [<args>]":README error_log
-+
-+check_error() { # command-with-error-pos-by-^
-+    ftrace_errlog_check 'event_probe' "$1" 'dynamic_events'
-+}
-+
-+check_error 'e ^a.'			# NO_EVENT_INFO
-+check_error 'e ^.b'			# NO_EVENT_INFO
-+check_error 'e ^a.b'			# BAD_ATTACH_EVENT
-+check_error 'e syscalls/sys_enter_openat ^foo'	# BAD_ATTACH_ARG
-+check_error 'e:^/bar syscalls/sys_enter_openat'	# NO_GROUP_NAME
-+check_error 'e:^12345678901234567890123456789012345678901234567890123456789012345/bar syscalls/sys_enter_openat'	# GROUP_TOO_LONG
-+
-+check_error 'e:^foo.1/bar syscalls/sys_enter_openat'	# BAD_GROUP_NAME
-+check_error 'e:^ syscalls/sys_enter_openat'		# NO_EVENT_NAME
-+check_error 'e:foo/^12345678901234567890123456789012345678901234567890123456789012345 syscalls/sys_enter_openat'	# EVENT_TOO_LONG
-+check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
-+
-+check_error 'e:foo/bar syscalls/sys_enter_openat arg=^dfd'	# BAD_FETCH_ARG
-+check_error 'e:foo/bar syscalls/sys_enter_openat ^arg=$foo'	# BAD_ATTACH_ARG
-+
-+check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
-+
-+exit 0
-
+diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
+index 6b281f6eb9b4..36c3381d0927 100644
+--- a/drivers/net/can/ctucanfd/ctucanfd_base.c
++++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
+@@ -1199,11 +1199,10 @@ static int ctucan_open(struct net_device *ndev)
+ 	struct ctucan_priv *priv = netdev_priv(ndev);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(priv->dev);
++	ret = pm_runtime_resume_and_get(priv->dev);
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
+ 			   __func__, ret);
+-		pm_runtime_put_noidle(priv->dev);
+ 		return ret;
+ 	}
+ 
+@@ -1281,10 +1280,9 @@ static int ctucan_get_berr_counter(const struct net_device *ndev, struct can_ber
+ 	struct ctucan_priv *priv = netdev_priv(ndev);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(priv->dev);
++	ret = pm_runtime_resume_and_get(priv->dev);
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n", __func__, ret);
+-		pm_runtime_put_noidle(priv->dev);
+ 		return ret;
+ 	}
+ 
+@@ -1394,11 +1392,10 @@ int ctucan_probe_common(struct device *dev, void __iomem *addr, int irq, unsigne
+ 
+ 	if (pm_enable_call)
+ 		pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
+ 			   __func__, ret);
+-		pm_runtime_put_noidle(priv->dev);
+ 		goto err_pmdisable;
+ 	}
+ 
+-- 
+2.25.1

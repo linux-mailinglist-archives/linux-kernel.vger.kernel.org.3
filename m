@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B503586979
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F27586A6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiHAMCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S234271AbiHAMQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbiHAMAm (ORCPT
+        with ESMTP id S234212AbiHAMPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:00:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053654E87E;
-        Mon,  1 Aug 2022 04:53:07 -0700 (PDT)
+        Mon, 1 Aug 2022 08:15:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2301978DD1;
+        Mon,  1 Aug 2022 04:58:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A05D612C6;
-        Mon,  1 Aug 2022 11:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47314C433C1;
-        Mon,  1 Aug 2022 11:53:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD5A4601BD;
+        Mon,  1 Aug 2022 11:58:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF1CC433C1;
+        Mon,  1 Aug 2022 11:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354786;
-        bh=ylwYwQBHKHrrf5WERfOmLKeWNJrYqbbBICcC7Ddjhpg=;
+        s=korg; t=1659355094;
+        bh=kylcY1j2D2eTbNQf+jHP542bF54FMmv/+lnUvabInZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jxhRYgA3Ag4bB822X3tSBEcRT6EQ5Y/EWHqkrF8obB1oessRDT/F7OoIyB8buAVE1
-         JwesmDNfeV5ry5ykIEd8DjyRpAT21+0Ej3dV4X72aGKfBRcTO5CGkqplg3h1jDkPlC
-         DBvR6N/AGXaUDJHuGSkQdl4s7uGmA7ve1XOF/MsI=
+        b=fImbhH9LZGCKCSmWF6zoGGYoFTkk16QLGZLo2wesqUVpcPgEvIrWmt8fEtUl2lqNu
+         XUwro3y5hXkCwhLECqHrMqlNEovqz8DupNUyVUGSjFKTvWnZREOfUae9d/qw5406tq
+         USmh51oX4YhrNxjp6M0b8D1j6V6ZHHPpg7aM3lQ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Marek Szlosek <marek.szlosek@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.15 20/69] ice: check (DD | EOF) bits on Rx descriptor rather than (EOP | RS)
+Subject: [PATCH 5.18 30/88] ice: Fix VSIs unable to share unicast MAC
 Date:   Mon,  1 Aug 2022 13:46:44 +0200
-Message-Id: <20220801114135.330401083@linuxfoundation.org>
+Message-Id: <20220801114139.402674669@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +58,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
 
-commit 283d736ff7c7e96ac5b32c6c0de40372f8eb171e upstream.
+commit 5c8e3c7ff3e7bd7b938659be704f75cc746b697f upstream.
 
-Tx side sets EOP and RS bits on descriptors to indicate that a
-particular descriptor is the last one and needs to generate an irq when
-it was sent. These bits should not be checked on completion path
-regardless whether it's the Tx or the Rx. DD bit serves this purpose and
-it indicates that a particular descriptor is either for Rx or was
-successfully Txed. EOF is also set as loopback test does not xmit
-fragmented frames.
+The driver currently does not allow two VSIs in the same PF domain
+to have the same unicast MAC address. This is incorrect in the sense
+that a policy decision is being made in the driver when it must be
+left to the user. This approach was causing issues when rebooting
+the system with VFs spawned not being able to change their MAC addresses.
+Such errors were present in dmesg:
 
-Look at (DD | EOF) bits setting in ice_lbtest_receive_frames() instead
-of EOP and RS pair.
+[ 7921.068237] ice 0000:b6:00.2 ens2f2: Unicast MAC 6a:0d:e4:70:ca:d1 already
+exists on this PF. Preventing setting VF 7 unicast MAC address to 6a:0d:e4:70:ca:d1
 
-Fixes: 0e674aeb0b77 ("ice: Add handler for ethtool selftest")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Fix that by removing this restriction. Doing this also allows
+us to remove some additional code that's checking if a unicast MAC
+filter already exists.
+
+Fixes: 47ebc7b02485 ("ice: Check if unicast MAC exists before setting VF MAC")
+Signed-off-by: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+Signed-off-by: Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Marek Szlosek <marek.szlosek@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_ethtool.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_main.c  |    2 +
+ drivers/net/ethernet/intel/ice/ice_sriov.c |   40 -----------------------------
+ 2 files changed, 2 insertions(+), 40 deletions(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -651,7 +651,8 @@ static int ice_lbtest_receive_frames(str
- 		rx_desc = ICE_RX_DESC(rx_ring, i);
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -4640,6 +4640,8 @@ ice_probe(struct pci_dev *pdev, const st
+ 		ice_set_safe_mode_caps(hw);
+ 	}
  
- 		if (!(rx_desc->wb.status_error0 &
--		    cpu_to_le16(ICE_TX_DESC_CMD_EOP | ICE_TX_DESC_CMD_RS)))
-+		    (cpu_to_le16(BIT(ICE_RX_FLEX_DESC_STATUS0_DD_S)) |
-+		     cpu_to_le16(BIT(ICE_RX_FLEX_DESC_STATUS0_EOF_S)))))
- 			continue;
++	hw->ucast_shared = true;
++
+ 	err = ice_init_pf(pf);
+ 	if (err) {
+ 		dev_err(dev, "ice_init_pf failed: %d\n", err);
+--- a/drivers/net/ethernet/intel/ice/ice_sriov.c
++++ b/drivers/net/ethernet/intel/ice/ice_sriov.c
+@@ -1310,39 +1310,6 @@ out_put_vf:
+ }
  
- 		rx_buf = &rx_ring->rx_buf[i];
+ /**
+- * ice_unicast_mac_exists - check if the unicast MAC exists on the PF's switch
+- * @pf: PF used to reference the switch's rules
+- * @umac: unicast MAC to compare against existing switch rules
+- *
+- * Return true on the first/any match, else return false
+- */
+-static bool ice_unicast_mac_exists(struct ice_pf *pf, u8 *umac)
+-{
+-	struct ice_sw_recipe *mac_recipe_list =
+-		&pf->hw.switch_info->recp_list[ICE_SW_LKUP_MAC];
+-	struct ice_fltr_mgmt_list_entry *list_itr;
+-	struct list_head *rule_head;
+-	struct mutex *rule_lock; /* protect MAC filter list access */
+-
+-	rule_head = &mac_recipe_list->filt_rules;
+-	rule_lock = &mac_recipe_list->filt_rule_lock;
+-
+-	mutex_lock(rule_lock);
+-	list_for_each_entry(list_itr, rule_head, list_entry) {
+-		u8 *existing_mac = &list_itr->fltr_info.l_data.mac.mac_addr[0];
+-
+-		if (ether_addr_equal(existing_mac, umac)) {
+-			mutex_unlock(rule_lock);
+-			return true;
+-		}
+-	}
+-
+-	mutex_unlock(rule_lock);
+-
+-	return false;
+-}
+-
+-/**
+  * ice_set_vf_mac
+  * @netdev: network interface device structure
+  * @vf_id: VF identifier
+@@ -1376,13 +1343,6 @@ int ice_set_vf_mac(struct net_device *ne
+ 	if (ret)
+ 		goto out_put_vf;
+ 
+-	if (ice_unicast_mac_exists(pf, mac)) {
+-		netdev_err(netdev, "Unicast MAC %pM already exists on this PF. Preventing setting VF %u unicast MAC address to %pM\n",
+-			   mac, vf_id, mac);
+-		ret = -EINVAL;
+-		goto out_put_vf;
+-	}
+-
+ 	mutex_lock(&vf->cfg_lock);
+ 
+ 	/* VF is notified of its new MAC via the PF's response to the
 
 

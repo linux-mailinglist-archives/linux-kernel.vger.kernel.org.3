@@ -2,185 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3357586F74
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA77586F76
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiHARVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S232305AbiHARVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiHARVC (ORCPT
+        with ESMTP id S232386AbiHARVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:21:02 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106F7626D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:21:01 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso6569505pjl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 10:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=fCk/XHp8B9iXH6n1wItqgYGmM7fwmMYgI5yP8mbmH3U=;
-        b=IDqkq0RRB5/0q0fvX92do69q1cmAV0EFEgHWrW70RErB2+5n+m61no3QcSCeUCyUlx
-         uvEQW4vuCXpwC5S61++fwjKgE3nUx0FQnjgPU3XFVIVpP+LUmI7iynZ6/f65Ejd1AaC9
-         NvU5Y1vDmH5Dko03H7Y0arebgyzLqYB/j7gHew5AaaCS3ISq94S1W4PACPtorR2QfRd5
-         L14zFBc9ZRRBZUzZr469ACZiS9xJCL4dWXy4JX/+sw2KPfdGq2DlaXW85e1qylNvtxw6
-         awyxapPLGplyeVQ3VjeAEr8lvkfl6G5kgatCXsmSgZOAdBt2P5yKrAC5ZsxLZ1d6RHz1
-         lHLQ==
+        Mon, 1 Aug 2022 13:21:13 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD6C9FD3;
+        Mon,  1 Aug 2022 10:21:12 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id pm17so5706809pjb.3;
+        Mon, 01 Aug 2022 10:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fCk/XHp8B9iXH6n1wItqgYGmM7fwmMYgI5yP8mbmH3U=;
-        b=ARpSAqr3leKXXZR28cT2l7bzPvoFsxvnyUmw0D0CIKFeaKb6yVqYGqyH5W3CQ78k4L
-         dpDN0ZyqolY422ZY/7NtwlSpGTGts5y7jJzYou90wSk1sgvRjsbcnkiogYO3mURg22+h
-         xqUYrCkaUhVefUo5dpVQSWGCp0bJ9s/mR3j9PLAA5HtsCBZwYEfWxwDISsiCS9PDC8yC
-         I1Qam0E9eo1tREsJ5eSmpmfs7AD0HPkdxEb1SZUUBpfmLl4s8pT7AXS8CSKJnyegu2yn
-         A9vE7e8trthz+5FVBQPsexbyoYmeK/3ZKTKM1dS5EtrCdDvlevHDMfsdJhot9BAp2u+p
-         xYkQ==
-X-Gm-Message-State: ACgBeo1VX2NXuE1dQOAy/MsT9kT4R7Jral2sHFIMw1XHzXwcs0VJFyTo
-        KFtFtXoMyOrG3aajcfxrXGg0Ew==
-X-Google-Smtp-Source: AA6agR72h6LzCvsibpvxaxXVJaAf1hKXItzbo4mmcP0PdraAjvoT0eodhuHPNH3+KjI/0w/NW86UyA==
-X-Received: by 2002:a17:90b:1c85:b0:1f1:d78a:512b with SMTP id oo5-20020a17090b1c8500b001f1d78a512bmr20754163pjb.92.1659374460388;
-        Mon, 01 Aug 2022 10:21:00 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0016bdf2220desm3355943plc.263.2022.08.01.10.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 10:20:58 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 17:20:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
- tracking externally
-Message-ID: <YugLc5LLPJkt89z6@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-5-mlevitsk@redhat.com>
- <YoZyWOh4NPA0uN5J@google.com>
- <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
- <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
- <Yt6/9V0S9of7dueW@google.com>
- <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=PIN4B1+zujt9LiBMql7z7J0iPpi02q4Ca3aFC6/SCYg=;
+        b=uX0Zi/juFXI8I7baEHIRUIu8+mj60p1BlJp+TK5qkjkrJh3d+sNI5b/ii52MhBwXDa
+         ubcELTGiemLkU2AO975hDKkvSZYdsyJItilEUML+thiftoX/c2Mg7SqLkD3s50O+OkpF
+         jyGlXkvpG7eaUsN3IyBp2JrEScZreq07KgvSmu7nK4VR8UX48zmU4DlkH+mrzKPLDqNU
+         kHOx5ndPCBzwRLndY+RKvTFTELJCknfokq8iV7V6TbSH4v1y4xwhIVSWeJJMt82wvFet
+         aWK5Xrlp6Mqhpi6b88xVh+D+8dG0utH+MZttdFD91vz83QSxdG8fAysUjHFnpzm9hQji
+         rozQ==
+X-Gm-Message-State: ACgBeo1eMrD5wf4C3HygWZHYN1s1bD969740ObDKvME+/My0FvNEzQbv
+        wOkFUzUTrOBxSEcJADAz2y4=
+X-Google-Smtp-Source: AA6agR6ETjSTmK+NOR8RRKSSy2RLoYq0f95Q5qBeCvVX2eqgmgjwfpPciLHhaHLL9Vibz7xBwoR/EQ==
+X-Received: by 2002:a17:902:8206:b0:16e:c738:d492 with SMTP id x6-20020a170902820600b0016ec738d492mr13180712pln.5.1659374471426;
+        Mon, 01 Aug 2022 10:21:11 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:6496:b2a7:616f:954d? ([2620:15c:211:201:6496:b2a7:616f:954d])
+        by smtp.gmail.com with ESMTPSA id s2-20020a632142000000b0041a8f882e5bsm7833024pgm.42.2022.08.01.10.21.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 10:21:10 -0700 (PDT)
+Message-ID: <1809cefc-0c59-ef6c-c3da-7695722a8b78@acm.org>
+Date:   Mon, 1 Aug 2022 10:21:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v1] scsi: ufs: enable link lost interrupt
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+References: <CGME20220801031300epcas2p25866dfc0158ecdd33ef18c44aa23b155@epcas2p2.samsung.com>
+ <1659323380-161341-1-git-send-email-kwmad.kim@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1659323380-161341-1-git-send-email-kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022, Maxim Levitsky wrote:
-> On Mon, 2022-07-25 at 16:08 +0000, Sean Christopherson wrote:
-> > On Wed, Jul 20, 2022, Maxim Levitsky wrote:
-> > And on that topic, do you have performance numbers to justify using a single
-> > shared node?  E.g. if every table instance has its own notifier, then no additional
-> > refcounting is needed. 
-> 
-> The thing is that KVM goes over the list of notifiers and calls them for
-> every write from the emulator in fact even just for mmio write, and when you
-> enable write tracking on a page, you just write protect the page and add a
-> mark in the page track array, which is roughly 
-> 
-> 'don't install spte, don't install mmio spte, but just emulate the page fault if it hits this page'
-> 
-> So adding more than a bare minimum to this list, seems just a bit wrong.
+On 7/31/22 20:09, Kiwoong Kim wrote:
+> Link lost is treated as fatal error with the following
+> patch, but its event isn't registered as interrupt source,
+> so I enable it.
+> --
+> scsi: ufs: Treat link loss as fatal error
 
-Hmm, I see what you're saying.  To some extent, having a minimal page tracker
-implementation is just that, an implementation detail.  But for better or worse,
-the existing API effectively pushes range checking to the callers.  I agree that
-breaking from that pattern would be odd.
+Is this patch perhaps intended as a fix for patch "scsi: ufs: Treat link 
+loss as fatal error"? If so, does it need a Fixes: tag?
 
-> >  It's not obvious that a shared node will provide better performance, e.g.
-> >  if there are only a handful of AVIC tables being shadowed, then a linear
-> >  walk of all nodes is likely fast enough, and doesn't bring the risk of a
-> >  write potentially being stalled due to having to acquire a VM-scoped
-> >  mutex.
-> 
-> The thing is that if I register multiple notifiers, they all will be called anyway,
-> but yes I can use container_of, and discover which table the notifier belongs to,
-> instead of having a hash table where I lookup the GFN of the fault.
-> 
-> The above means practically that all the shadow physid tables will be in a linear
-> list of notifiers, so I could indeed avoid per vm mutex on the write tracking,
-> however for simplicity I probably will still need it because I do modify the page,
-> and having per physid table mutex complicates things.
-> 
-> Currently in my code the locking is very simple and somewhat dumb, but the performance
-> is very good because the code isn't executed often, most of the time the AVIC hardware
-> works alone without any VM exits.
+Thanks,
 
-Yes, but because the code isn't executed often, pretty much any solution will
-provide good performance.
+Bart.
 
-> Once the code is accepted upstream, it's one of the things that can be improved.
-> 
-> Note though that I still need a hash table and a mutex because on each VM entry,
-> the guest can use a different physid table, so I need to lookup it, and create it,
-> if not found, which would require read/write of the hash table and thus a mutex.
-
-One of the points I'm trying to make is that a hash table isn't strictly required.
-E.g. if I understand the update rules correctly, I believe tables can be tracked
-via an RCU-protected list, with vCPUs taking a spinlock and doing synchronize_rcu()
-when adding/removing a table.  That would avoid having to take any "real" locks in
-the page track notifier.
-
-The VM-scoped mutex worries me as it will be a bottleneck if L1 is running multiple
-L2 VMs.  E.g. if L1 is frequently switching vmcs12 and thus avic_physical_id, then
-nested VMRUN will effectively get serialized.  That is mitigated to some extent by
-an RCU-protected list, as a sane L1 will use a single table for each L2, and so a
-vCPU will need to add/remove a table if and only if it's the first/last vCPU to
-start/stop running an L2 VM.
-
-> > > I can also stash this boolean (like 'bool registered;') into the 'struct
-> > > kvm_page_track_notifier_node',  and thus allow the
-> > > kvm_page_track_register_notifier to be called more that once -  then I can
-> > > also get rid of __kvm_page_track_register_notifier. 
-> > 
-> > No, allowing redundant registration without proper refcounting leads to pain,
-> > e.g. X registers, Y registers, X unregisters, kaboom.
-> > 
-> 
-> True, but then what about adding a refcount to 'struct kvm_page_track_notifier_node'
-> instead of a boolean, and allowing redundant registration?
-> Probably not worth it, in which case I am OK to add a refcount to my avic code.
-
-Ya, I would rather force AVIC to do the refcounting.  Existing users don't need a
-refcount, and doing the refcounting in AVIC code means kvm_page_track_notifier_node
-can WARN on redundant registration, i.e. can sanity check the AVIC code to some
-extent.
-
-> Or maybe just scrap the whole thing and just leave registration and
-> activation of the write tracking as two separate things? Honestly now that
-> looks like the most clean solution.
-
-It's the easiest, but IMO it's not the cleanest.  Allowing notifiers to be
-registered without tracking being enabled is undesirable, especially since we know
-we can prevent it.

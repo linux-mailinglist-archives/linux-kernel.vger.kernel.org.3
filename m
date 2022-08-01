@@ -2,150 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3F55867D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5735867D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiHAKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S230366AbiHAKx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiHAKw3 (ORCPT
+        with ESMTP id S230042AbiHAKxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:52:29 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448EE29803;
-        Mon,  1 Aug 2022 03:52:28 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s206so9356847pgs.3;
-        Mon, 01 Aug 2022 03:52:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1+zvFjvjZf1WXQC9+iCFiiUb93JkcfGfa2IxHwe2fOA=;
-        b=VNUjTKm13wfj24ap78DlMZVMElCnn7kIr+3VsTjeEfZzKaARcXJMo/pJmIZSYnlIE3
-         tzUxEMhN/heggErO2Umsfls4cyDivjgNVLtqpubdYk0H2iSYMmZi1KIk+PpDrZh+iz0q
-         RIxjS5hQXd1SjDBfycx1IPxFsK0rLKzlyH6ocdy9UqViFbeMMmi1690lgslaEj8w9Ouu
-         /iiY1lYjEAG+8HREsunwtNmf+Jw36TBbWOzljWPNNh4aMCqmXMgifwpAuPdM31LL/oh8
-         8f9qoFsrlAXrOEtcYJwr1wg6LtcV3YAI7ZItpVD4KWKW3TGLL1luHH/itr/PpKkcPwGS
-         1P1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1+zvFjvjZf1WXQC9+iCFiiUb93JkcfGfa2IxHwe2fOA=;
-        b=FDzfjhxFbLVx3cwxYJ1VCtEIZrypUyD6OHHOOBIrhUgfp1ANKs3b1D88bgFvHHUO7l
-         IMKkZineyUllvt3WcCbAvhyfxdPBPdC73N1UHxU1xTxzqOBwCcgrALV0LaZgrtnbY5Za
-         J7FAlWLip4LUol444y1KA+6er5OzUpUeftwdERB7CWX/fGsfELAF+VIYSo97W7HGXiSX
-         Z8i0E+9XT0yZJUXVS4RuSTOOr83c1bmZ9bxlAEU3wioX0ilxgZ0DoZBU4azQxdTXZ0ka
-         x9OdFFvhA2VRiigepOA5+3eBod3qJkdYoYB9QtuQPpxAx7rtMXfycO9ISabxtBEgSC6z
-         EjJw==
-X-Gm-Message-State: AJIora9kbNejQG8XIrmEJRd4e4gPbZ/NwBS2Xhn28RPmMeYCaZbAiT/D
-        HF4bc+m5o08IxAgGrBN25ahm9TkB3pklYedhbVNrxd9Boxo7rQ==
-X-Google-Smtp-Source: AGRyM1sv37v5Hk+L2tOCiqUuVEMnF8+2HFUZ7PSVXSmiljZ+YdGarEsBPJrVkpXcpZhE/DSkkZonOrm7zRnG6geK0vo=
-X-Received: by 2002:a05:6a00:188e:b0:52a:af7f:e715 with SMTP id
- x14-20020a056a00188e00b0052aaf7fe715mr15495962pfh.2.1659351147607; Mon, 01
- Aug 2022 03:52:27 -0700 (PDT)
+        Mon, 1 Aug 2022 06:53:23 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D73729803
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:53:21 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VL5xOVg_1659351196;
+Received: from 30.240.98.221(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VL5xOVg_1659351196)
+          by smtp.aliyun-inc.com;
+          Mon, 01 Aug 2022 18:53:18 +0800
+Message-ID: <53793484-07a4-edab-652d-06e5e28521d8@linux.alibaba.com>
+Date:   Mon, 1 Aug 2022 18:53:16 +0800
 MIME-Version: 1.0
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com> <a431ac00-ee65-df7a-674c-27f13fc7be82@microchip.com>
-In-Reply-To: <a431ac00-ee65-df7a-674c-27f13fc7be82@microchip.com>
-From:   naga sureshkumar <nagasuresh12@gmail.com>
-Date:   Mon, 1 Aug 2022 16:22:16 +0530
-Message-ID: <CAH_iE_03fHMbCwGPsE_CmbokRh5cW_bEaX8RodK1ovWeTSHuhQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-To:     Conor.Dooley@microchip.com
-Cc:     Nagasuresh.Relli@microchip.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [RFC V3 PATCH] mm: add last level page table numa info to
+ /proc/pid/numa_pgtable
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>, willy@infradead.org
+Cc:     akpm@linux-foundation.org, adobriyan@gmail.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220801032704.64356-1-xhao@linux.alibaba.com>
+ <f4f9c5be-a5ce-9e82-56ff-89d1aeee4d98@linux.alibaba.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <f4f9c5be-a5ce-9e82-56ff-89d1aeee4d98@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
 
-Thanks for your review.
-
-On Mon, Aug 1, 2022 at 3:54 PM <Conor.Dooley@microchip.com> wrote:
+在 2022/8/1 下午2:06, Baolin Wang 写道:
+> Hi Xin,
 >
-> Hey Suresh,
+> On 8/1/2022 11:27 AM, Xin Hao wrote:
+>> In many data center servers, the shared memory architectures is
+>> Non-Uniform Memory Access (NUMA), remote numa node data access
+>> often brings a high latency problem, but what we are easy to ignore
+>> is that the page table remote numa access, It can also leads to a
+>> performance degradation.
+>>
+>> So there add a new interface in /proc, This will help developers to
+>> get more info about performance issues if they are caused by cross-NUMA.
+>>
+>> V2 -> V3
+>> 1, Fix compile warning bug.
+>>
+>> V1 -> V2
+>> 1, As Matthew Wilcox advise, Simplify the code.
+>> 2, Do some codes format fix.
 >
-> On 01/08/2022 10:42, Naga Sureshkumar Relli wrote:
-> > Add compatible string for Microchip CoreQSPI controller.
-> >
-> > Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-> > ---
-> >  .../devicetree/bindings/spi/microchip,mpfs-spi.yaml    | 10 +++++++---
-> >  1 file changed, 7 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > index 7326c0a28d16..b65f4e070796 100644
-> > --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> > @@ -14,9 +14,13 @@ allOf:
-> >
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -      - microchip,mpfs-spi
-> > -      - microchip,mpfs-qspi
-> > +    oneOf:
-> > +      - description: Microchip's Polarfire SoC SPI controller.
->                                          ^
-> (This is a capital F btw)
+> Please move the changes history under your 'Signed-off-by' with '---'.
 >
-> > +        const: microchip,mpfs-spi
-> > +      - description: Microchip's Polarfire SoC QSPI controller.
-> > +        const: microchip,mpfs-qspi
-> > +      - description: Microchip's FPGA QSPI controller.
-> > +        const: microchip,coreqspi-rtl-v2
+>>
+>> V2: 
+>> https://lore.kernel.org/linux-mm/20220731155223.60238-1-xhao@linux.alibaba.com/
+>> V1: 
+>> https://lore.kernel.org/linux-mm/YuVqdcY8Ibib2LJa@casper.infradead.org/T/
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+>> ---
+>>   fs/proc/base.c     |  2 ++
+>>   fs/proc/internal.h |  1 +
+>>   fs/proc/task_mmu.c | 87 ++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 90 insertions(+)
+>>
+>> diff --git a/fs/proc/base.c b/fs/proc/base.c
+>> index 8dfa36a99c74..487e82dd3275 100644
+>> --- a/fs/proc/base.c
+>> +++ b/fs/proc/base.c
+>> @@ -3224,6 +3224,7 @@ static const struct pid_entry tgid_base_stuff[] 
+>> = {
+>>       REG("maps",       S_IRUGO, proc_pid_maps_operations),
+>>   #ifdef CONFIG_NUMA
+>>       REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
+>> +    REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
+>>   #endif
+>>       REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
+>>       LNK("cwd",        proc_cwd_link),
+>> @@ -3571,6 +3572,7 @@ static const struct pid_entry tid_base_stuff[] = {
+>>   #endif
+>>   #ifdef CONFIG_NUMA
+>>       REG("numa_maps", S_IRUGO, proc_pid_numa_maps_operations),
+>> +    REG("numa_pgtable", S_IRUGO, proc_pid_numa_pgtable_operations),
+>>   #endif
+>>       REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
+>>       LNK("cwd",       proc_cwd_link),
+>> diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+>> index 06a80f78433d..e7ed9ef097b6 100644
+>> --- a/fs/proc/internal.h
+>> +++ b/fs/proc/internal.h
+>> @@ -296,6 +296,7 @@ struct mm_struct *proc_mem_open(struct inode 
+>> *inode, unsigned int mode);
+>>
+>>   extern const struct file_operations proc_pid_maps_operations;
+>>   extern const struct file_operations proc_pid_numa_maps_operations;
+>> +extern const struct file_operations proc_pid_numa_pgtable_operations;
+>>   extern const struct file_operations proc_pid_smaps_operations;
+>>   extern const struct file_operations proc_pid_smaps_rollup_operations;
+>>   extern const struct file_operations proc_clear_refs_operations;
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 2d04e3470d4c..77b7a49757f5 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1999,4 +1999,91 @@ const struct file_operations 
+>> proc_pid_numa_maps_operations = {
+>>       .release    = proc_map_release,
+>>   };
+>>
+>> +struct pgtable_numa_private {
+>> +    struct proc_maps_private proc_maps;
+>> +    unsigned long node[MAX_NUMNODES];
+>> +};
+>> +
+>> +static int gather_pgtable_numa_stats(pmd_t *pmd, unsigned long addr,
+>> +                     unsigned long end, struct mm_walk *walk)
+>> +{
+>> +    struct pgtable_numa_private *priv = walk->private;
+>> +    struct page *page;
+>> +    int nid;
+>> +
+>> +    if (pmd_huge(*pmd)) {
+>> +        page = virt_to_page(pmd);
+>> +    } else {
+>> +        page = pmd_page(*pmd);
 >
-> I am not sure that this is the correct "hierarchy". coreQSPI has a
-> subset of the registers of the "hard" QSPI & the same driver works
-> for both at the moment. The "hard" QSPI is based on the FPGA core,
-> so I think this should be changed to something like the following:
-I have added each element for each controller separately.
-but the below one hierarchy explains clearly about the cores.
-I will update the bindings.
+> You should validate if the pmd is valid or present before getting the 
+> pagetable page.
 >
-> properties:
->   compatible:
->     oneOf:
->       - description: Microchip's PolarFire SoC QSPI controller
->         items:
->           - const: microchip,mpfs-qspi
->           - const: microchip,coreqspi-rtl-v2
->       - description: Microchip's fabric based QSPI IP core
->         const: microchip,coreqspi-rtl-v2
->       - description: Microchip's PolarFire SoC SPI controller
->         const: microchip,mpfs-spi
+> if (pmd_none(*pmd) || !pmd_present(*pmd))
 >
-> Unrelated to this patch, but a
+> Another issue is I think you should hold the pmd lock to call 
+> pmd_page(), since after the validation of pmd_huge(), the pmd entry 
+> can be modified by other threads if you did not hold the pmd lock.
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f4202a19faa1..887bfee5c7af 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17526,6 +17526,7 @@ F:      drivers/pci/controller/pcie-microchip-host.c
->  F:     drivers/rtc/rtc-mpfs.c
->  F:     drivers/soc/microchip/
->  F:     drivers/spi/spi-microchip-core.c
-> +F:     drivers/spi/spi-microchip-core-qspi.c
->  F:     drivers/usb/musb/mpfs.c
->  F:     include/soc/microchip/mpfs.h
->
-> Would be nice too.
-Ok.
-
-Thanks,
-Naga Sureshkumar Relli.
->
-> Thanks,
-> Conor.
+Thanks, Baolin, i will fix it in the next version.
+>> +    }
+>> +
+>> +    nid = page_to_nid(page);
+>> +    priv->node[nid]++;
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct mm_walk_ops show_numa_pgtable_ops = {
+>> +    .pmd_entry = gather_pgtable_numa_stats,
+>> +};
+>> +
+>> +/*
+>> + * Display the page talbe allocated per node via /proc.
+>> + */
+>> +static int show_numa_pgtable(struct seq_file *m, void *v)
+>> +{
+>> +    struct pgtable_numa_private *numa_priv = m->private;
+>> +    struct vm_area_struct *vma = v;
+>> +    struct mm_struct *mm = vma->vm_mm;
+>> +    struct file *file = vma->vm_file;
+>> +    int nid;
+>> +
+>> +    if (!mm)
+>> +        return 0;
+>> +
+>> +    memset(numa_priv->node, 0, sizeof(numa_priv->node));
+>> +
+>> +    seq_printf(m, "%08lx ", vma->vm_start);
+>> +
+>> +    if (file) {
+>> +        seq_puts(m, " file=");
+>> +        seq_file_path(m, file, "\n\t= ");
+>> +    } else if (vma->vm_start <= mm->brk && vma->vm_end >= 
+>> mm->start_brk) {
+>> +        seq_puts(m, " heap");
+>> +    } else if (is_stack(vma)) {
+>> +        seq_puts(m, " stack");
+>> +    }
+>> +
+>> +    /* mmap_lock is held by m_start */
+>> +    walk_page_vma(vma, &show_numa_pgtable_ops, numa_priv);
+>> +
+>> +    for_each_node_state(nid, N_MEMORY) {
+>> +        if (numa_priv->node[nid])
+>> +            seq_printf(m, " N%d=%lu", nid, numa_priv->node[nid]);
+>> +    }
+>> +    seq_putc(m, '\n');
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct seq_operations proc_pid_numa_pgtable_op = {
+>> +    .start  = m_start,
+>> +    .next   = m_next,
+>> +    .stop   = m_stop,
+>> +    .show   = show_numa_pgtable,
+>> +};
+>> +
+>> +static int pid_numa_pgtable_open(struct inode *inode, struct file 
+>> *file)
+>> +{
+>> +    return proc_maps_open(inode, file, &proc_pid_numa_pgtable_op,
+>> +            sizeof(struct pgtable_numa_private));
+>> +}
+>> +
+>> +const struct file_operations proc_pid_numa_pgtable_operations = {
+>> +    .open        = pid_numa_pgtable_open,
+>> +    .read        = seq_read,
+>> +    .llseek        = seq_lseek,
+>> +    .release    = proc_map_release,
+>> +};
+>> +
+>>   #endif /* CONFIG_NUMA */
+>> -- 
+>> 2.31.0

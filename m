@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED19587034
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB56587037
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbiHASJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S233831AbiHASKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiHASJ1 (ORCPT
+        with ESMTP id S231769AbiHASK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:09:27 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779D6631F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 11:09:26 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id f11so10356768pgj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 11:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc;
-        bh=buI3P5LUkfgSTkKT1wJ6o5Ld9MFKem6S6jV5l/Tz040=;
-        b=TVwpWFePbr7QIkqPK9g0bD8Qm+c+9gedf9K69Au2nuHkik5NrNb8XdmcKPBnRwZm8f
-         7uSBSoATG3SUx25HqOfh0vTim/6WsK55SpzGO/PwpdVP+2TcblfmsehXXGDId2CyT+eZ
-         0qMKYb+BYfeHN/VqyVXuOIF6z7y0jpkf4lS+ZSptVOLdkrrq13JjRxWg0My42zYZggAq
-         KSotrKZLarXj6L5YIpWsY5tsrjZB11YnsHQpO/ZIUzpcgxOGR3ZekGiDp6fMlX+mrqHG
-         Azos+VZxcMfjsKogb4CpFsHJHk+bcuf66SoWkYg+DSx1vXBVER9POIebMtatfiSClEvz
-         eBsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=buI3P5LUkfgSTkKT1wJ6o5Ld9MFKem6S6jV5l/Tz040=;
-        b=Kg3OL7DUVt++oRr05o8NXj5r4JwxSdG4woka4pU5OucUB0ot59nUiZtMPyMgF/FKkv
-         rKM1v/6Fy14nJcEuV/iMdyUJUG/WVDLWVbAK+x/MpdPx5G/Hr0IgzXilBs3H7lvnrkv9
-         IGui/vWN3XD0LCSiIXCC2PG99kpDcF26HCk0Q201oMNGvfK7o39hA5CdLWuZVf+nhn07
-         a3JNsKjayX4g2nePrerMxjAWrEFFN0TunhnvE0Lr9qZOjhwITNXiqrmLgXiNYc7vMXfE
-         R9NNYi+WQTIMF6087PwrpLbiHAMUMteukR9BoaY1i1qxButCtQ0G2c17j4+yQ7ISdoej
-         DYzg==
-X-Gm-Message-State: AJIora8IfVoWd8NaVVwWwH2RGWZm6b4iBAthNZgzn/Ge6rKWsDPIfYWr
-        0F0bikM4YE1eBR3aFt2ifUqbM1sP/6vTXP9MGLQ=
-X-Google-Smtp-Source: AGRyM1skO9OZiznQiXUbkRy30yfoNVffr4YujYni5aDsd2Ou0FtD/t/MZHUSdYd8pTZt4SNUy1tyvd03KGnG1+QiY9k=
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:630e with SMTP id
- b12-20020a056a00114c00b005282c7a630emr17173878pfm.86.1659377365550; Mon, 01
- Aug 2022 11:09:25 -0700 (PDT)
+        Mon, 1 Aug 2022 14:10:29 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D29B120BC;
+        Mon,  1 Aug 2022 11:10:28 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 70CE75C012E;
+        Mon,  1 Aug 2022 14:10:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 01 Aug 2022 14:10:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1659377427; x=1659463827; bh=LogpDSeo1A
+        6PXvYxv3ErSmrzLvCcwrfut/h5Re9qqjU=; b=PLXtmaifjVtwiRqc3fWArR4Zwf
+        9/JCeW0dOPx7qcV6AfwYG/akFaitXHXAgM0fhO7sBhogxXGVsMpMByXS2J/ZbFF9
+        SGkXF3OWLhsNC1kyRbqw86CBSVnbBZAC7lu00KVNc2jubKge8H2wYQpmk9YfbNPs
+        FFE6zbiUd8EUe+jASnL3XspDe3fHd0nozj74IWTDXz+r0mxbxf8ffmg+VOYjjaw4
+        ZJwivOhTDgUaP+sXYliBsxw1kb9csKHkp4dZuFV7ziLpXWFkhZIiqWgBIxJvdJf6
+        TplOlbaG0vQo8E1Y2Qd6sUZ7X8jw/nyHeF2FH0zxF7I6dRNddtBk4ZcnjHNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659377427; x=1659463827; bh=LogpDSeo1A6PXvYxv3ErSmrzLvCc
+        wrfut/h5Re9qqjU=; b=Bp+AI7ukIM4IGuUXrqCEuQfHRHQVm34XOgZdd6pvuw2F
+        L4DFnTQhIlHI+2bs4kAIo1noTaZpVZzzwX2bHdpkqQF/TI2TCYRZk2ODiacB5sYM
+        o3iY8kWv1sALjOZREc7qthSUtxklIh4RtlFvQDkmnNx2CP3cmUrbfwM3FEvbrNzt
+        RjmSvB5LmT7izqFyju13f0UlzCR0SxfyPOmokZ3K68UbHVHkQpWiOERX9ppJnOCw
+        u4R7VrRQH4eHp48zX2cuZHm7viciPVIAOyBHrS8//H/ED/p7RFg7hfB3T7hhKlHI
+        0s/BJTikHNP4iIeziNqwBS+x5Ys3fNBFMYlN1g12WQ==
+X-ME-Sender: <xms:ExfoYu9Nrpixf5tnWJ2okvmxXgps9hy1xZaJ5csF3U13YcbaeNPiNQ>
+    <xme:ExfoYusEhv6wt5rDjqDhGDZYw1bCmmz4JHAiGShXFWe3C8Vs0hCRnB_AxIydGDyVN
+    Gtv2WL1JWT8SndfQQ>
+X-ME-Received: <xmr:ExfoYkCSfxHQaZskJzj4hDHJtsqCuBPHCJCsQ_UPoMZQwZN2uKxHEGOrAMfPr1OaNZyVZYT8NE0lTp6PGfqBngVG9DReZ5fK4F_0qQykD6gQd4-v1zt8ASJc2Pcs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpeeuteevjefgvdeuteelkeekgedtleefgfffieefffdvheejueejheff
+    lefhhfdvleenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgpdhkvghrnhgvlh
+    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:ExfoYmcxmqjzIj4mMSXuVvF3B8FaQSKQkW9E9ifAXeT2LenKrxHRCA>
+    <xmx:ExfoYjNXQWv6LOGCYrSkjydwa8NMxQl5o1yHOkQHVnDaai_-zm9gjQ>
+    <xmx:ExfoYgmPFH2kYFbIF4fvJEFJWzGq0RidtHhz65wgDp2jEmyWmJLKgg>
+    <xmx:ExfoYuef9vi1vjR4kzZw7VE63oWOUv9f6yEkEVO9EFk6sv4NfZ7Iog>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 1 Aug 2022 14:10:26 -0400 (EDT)
+Date:   Mon, 1 Aug 2022 11:10:25 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ben Hutchings <benh@debian.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH v3 3/8] tools include: add dis-asm-compat.h to handle
+ version differences
+Message-ID: <20220801181025.xcgiui7hmp3rfmyr@awork3.anarazel.de>
+References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
+ <20220801013834.156015-1-andres@anarazel.de>
+ <20220801013834.156015-4-andres@anarazel.de>
+ <YugVzJqQhp2rYRvS@kernel.org>
 MIME-Version: 1.0
-References: <20220725163246.38486-1-vdasa@vmware.com> <Yt7bfyANrfdPxdS8@kroah.com>
- <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com> <YuAD90UfLnf1Ojso@kroah.com>
- <47D07B41-C327-4908-A383-683FC6C67040@vmware.com> <CAJ60do+Lgnx6gfHncckF-=8F=zzn81tCiFNLOmg_8TyuLGUotw@mail.gmail.com>
- <CAJ60doKSPJbvXoTZDfSmaAV5Sh3-RiqtTUw73S3R3TBknLmqDA@mail.gmail.com>
-In-Reply-To: <CAJ60doKSPJbvXoTZDfSmaAV5Sh3-RiqtTUw73S3R3TBknLmqDA@mail.gmail.com>
-From:   rajesh jalisatgi <rajeshjalisatgi@gmail.com>
-Date:   Mon, 1 Aug 2022 11:09:14 -0700
-Message-ID: <CAJ60doLTnYDpLKxCgJo05qERk+2sU+wkX0w=3A8J1kLZVzrmMA@mail.gmail.com>
-Subject: Fwd: [PATCH] VMCI: Update maintainers for VMCI
-To:     Vishnu Dasa <vdasa@vmware.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YugVzJqQhp2rYRvS@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 8:55 AM Vishnu Dasa <vdasa@vmware.com> wrote:
->
->
-> > On Jul 26, 2022, at 8:10 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 25, 2022 at 06:29:25PM +0000, Vishnu Dasa wrote:
-> >>
-> >>> On Jul 25, 2022, at 11:05 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >>>
-> >>> On Mon, Jul 25, 2022 at 09:32:46AM -0700, vdasa@vmware.com wrote:
-> >>>> From: Vishnu Dasa <vdasa@vmware.com>
-> >>>>
-> >>>> Remove Rajesh as a maintainer for the VMCI driver.
-> >>>
-> >>> Why?
-> >>
-> >> Rajesh is no longer with VMware and won't be working on VMCI.
-> >
-> > But employment does not matter for maintainership and has nothing to do
-> > with it.  Maintainership follows the person, not the company, you all
-> > know this.
-> >
-> > So for obvious reasons, I can't take this type of change without Rajesh
-> > acking it.
->
-> I understand.  After getting in touch with Rajesh, cc'ing him via his personal
-> email ID.
->
-> Rajesh, could you please provide your ack if you agree with this patch to
-> remove you as the maintainer for VMCI?
+Hi,
+
+On 2022-08-01 15:05:00 -0300, Arnaldo Carvalho de Melo wrote:
+> Em Sun, Jul 31, 2022 at 06:38:29PM -0700, Andres Freund escreveu:
+> > binutils changed the signature of init_disassemble_info(), which now causes
+> > compilation failures for tools/{perf,bpf}, e.g. on debian unstable.
+> > Relevant binutils commit:
+> > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
+> > 
+> > This commit introduces a wrapper for init_disassemble_info(), to avoid
+> > spreading #ifdef DISASM_INIT_STYLED to a bunch of places. Subsequent
+> > commits will use it to fix the build failures.
+> > 
+> > It likely is worth adding a wrapper for disassember(), to avoid the already
+> > existing DISASM_FOUR_ARGS_SIGNATURE ifdefery.
+> > 
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > Cc: Quentin Monnet <quentin@isovalent.com>
+> > Cc: Ben Hutchings <benh@debian.org>
+> > Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
+> > Signed-off-by: Andres Freund <andres@anarazel.de>
+> > Signed-off-by: Ben Hutchings <benh@debian.org>
+> 
+> So, who is the author of this patch? Ben? b4 complained about it:
+
+I squashed a fixup of Ben into my patch (moving the include in annotate.c into
+the HAVE_LIBBFD_SUPPORT section). I don't know what the proper procedure is
+for that - I'd asked in
+https://lore.kernel.org/20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de
 
 
- I understand that this patch removes me as the maintainer for VMCI.
- Acked-by: Rajesh Jalisatgi <rajeshjalisatgi@gmail.com>
+> NOTE: some trailers ignored due to from/email mismatches:
+>     ! Trailer: Signed-off-by: Ben Hutchings <benh@debian.org>
+>      Msg From: Andres Freund <andres@anarazel.de>
+> NOTE: Rerun with -S to apply them anyway
+> 
+> If it is Ben, then we would need a:
+> 
+> From: Ben Hutchings <benh@debian.org>
+> 
+> At the beginning of the patch, right?
 
-Thanks
-Rajesh
+I don't know, I interact with the kernel processes too rarely...
+
+Greetings,
+
+Andres Freund

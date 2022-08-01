@@ -2,171 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBBF587417
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9454587421
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 00:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbiHAWvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 18:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S235464AbiHAWz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 18:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiHAWve (ORCPT
+        with ESMTP id S234307AbiHAWzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 18:51:34 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC5526AC2
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:51:31 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id q14so9518327iod.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 15:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=glcOCUJ/+awLcSG8X5QxtUVosWAHdrRlN7P8qFCy/KU=;
-        b=VgjLNHr1hMbP7jz5VD9tM4tHHUdeWiE6jv/PZZxVCEl8oCfbeuNfGwRZv+sM+Wf2i5
-         oNtEEDp7KV0lDn8cKVruat3XxxQpJMcYjwbPK6y/MVRRPL11HHL0qSFaA+lfpHzZBha0
-         nLWIVaLCa21JIuOinIDkNS5w6493rVMBjMsIoJBEJyiHzTbqwHr8PtBHwPGlSVsZYhnF
-         QZ0bwchCYRMq8Xg6oV57EE21VLo09Sr7nwNLOc9tMa0EkmmzqE6+UV6VMx2SxN+hUzky
-         CnA8w+UFJxkOejBgEvFvCIaDj3nOXOQ57P4poCq6zqCOaJrsgvvPN50y3wl4tui1yenO
-         Uz4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=glcOCUJ/+awLcSG8X5QxtUVosWAHdrRlN7P8qFCy/KU=;
-        b=RFzecEQQnd4Vo9pk+iMNCLFZq8mn7nwGLs3UmEF+nbiMp6AC78UXLCaw1Rs7SCXxkh
-         isp+otZo237nOAGh0RFqcPs4YRz4oPLfeKoKfOkt0zcOOSNosm1lekptfuijAjvjkOAm
-         3HvT5eO08bsOn/CeREYDA78bG5bIR6jGn9w/yxSPqJLBvR3mjX7dSELGLZ3A2YOEneEe
-         YUT5Ww+A+XcuZdJRYTcZgcxBk2gahbzzTKV5AwoXkmv+UI2HJgPtnvF14J6Q8Q4ZaXF3
-         i+yYang6e3i/iAMi7biuX26n+iPCtAdYlZGshN0vX2JkPVRDHdt50SrTSy6xauZYnedh
-         kxpg==
-X-Gm-Message-State: AJIora+6t57E4jpYjIADn045G0tLpbHzyjOvwQ+mYp5UjzHcRtztVu3n
-        5p/PU8qQRGSnMvDGsYkadxmg0VFuLAMENLqcYI60Eg==
-X-Google-Smtp-Source: AGRyM1uNtkg5Y2IRmGnxo1RbFLJVbjJuAEzaSRiEXHBPKJ+mQGbRVw11UEmSKc0sWqWF8C25CpekbWeNsTatl+C7xk4=
-X-Received: by 2002:a05:6602:15c8:b0:67c:45c7:40c9 with SMTP id
- f8-20020a05660215c800b0067c45c740c9mr6287785iow.138.1659394290961; Mon, 01
- Aug 2022 15:51:30 -0700 (PDT)
+        Mon, 1 Aug 2022 18:55:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6E529822
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 15:55:54 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oIeKC-0002CQ-Ll; Tue, 02 Aug 2022 00:55:48 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oIeK2-0003NF-Gx; Tue, 02 Aug 2022 00:55:38 +0200
+Date:   Tue, 2 Aug 2022 00:55:38 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Adam Ford <aford173@gmail.com>, Marek Vasut <marex@denx.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+Message-ID: <20220801225538.qtdb5zd66g6ipewz@pengutronix.de>
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
- <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
- <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com> <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
- <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
-In-Reply-To: <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 1 Aug 2022 15:50:55 -0700
-Message-ID: <CAJHvVcgR63YNyGYj1Z-XAj5WP631P0DSEK8Mx=f9E=QGJBeRug@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Nadav Amit <namit@vmware.com>
-Cc:     "Schaufler, Casey" <casey.schaufler@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 12:53 PM Nadav Amit <namit@vmware.com> wrote:
->
-> On Aug 1, 2022, at 10:13 AM, Axel Rasmussen <axelrasmussen@google.com> wr=
-ote:
->
-> > =E2=9A=A0 External Email
+Hi Fabio, Adam,
+
++Cc Marek, Robert, Laurentiu
+
+On 22-08-01, Fabio Estevam wrote:
+> Hi Adam,
+> 
+> On Sat, Jul 30, 2022 at 12:16 PM Adam Ford <aford173@gmail.com> wrote:
 > >
-> > I finished up some other work and got around to writing a v5 today,
-> > but I ran into a problem with /proc/[pid]/userfaultfd.
+> > Hey all,
 > >
-> > Files in /proc/[pid]/* are owned by the user/group which started the
-> > process, and they don't support being chmod'ed.
-> >
-> > For the userfaultfd device, I think we want the following semantics:
-> > - For UFFDs created via the device, we want to always allow handling
-> > kernel mode faults
-> > - For security, the device should be owned by root:root by default, so
-> > unprivileged users don't have default access to handle kernel faults
-> > - But, the system administrator should be able to chown/chmod it, to
-> > grant access to handling kernel faults for this process more widely.
-> >
-> > It could be made to work like that but I think it would involve at leas=
-t:
-> >
-> > - Special casing userfaultfd in proc_pid_make_inode
-> > - Updating setattr/getattr for /proc/[pid] to meaningfully store and
-> > then retrieve uid/gid different from the task's, again probably
-> > special cased for userfautlfd since we don't want this behavior for
-> > other files
-> >
-> > It seems to me such a change might raise eyebrows among procfs folks.
-> > Before I spend the time to write this up, does this seem like
-> > something that would obviously be nack'ed?
->
-> [ Please avoid top-posting in the future ]
+> > I am trying to test Jagan's patch series [1] to add support for the
+> > samsung dsim bridge which is used on the imx8mm to output DSI video.
+> > The DSIM gets the video from the mxsfb, and in my case, the DSI is
+> > sent to the adv7535 for connecting to HDMI.
+> 
+> I had to add some extra patches on top of Jagan's imx8mm-dsi-v3 to get
+> HDMI output functional on a imx8mm-evk via ADV7535:
+> 
+> https://github.com/fabioestevam/kernel/commits/imx8mm-dsi-v3
 
-I will remember this. Gmail's default behavior is annoying. :/
+You have a few interesting patches from Marek and Robert I didn't
+noticed yet :)
 
->
-> I have no interest in making your life harder than it should be. If you
-> cannot find a suitable alternative, I will not fight against it.
->
-> How about this alternative: how about following KVM usage-model?
->
-> IOW: You open /dev/userfaultfd, but this is not the file-descriptor that =
-you
-> use for most operations. Instead you first issue an ioctl - similarly to
-> KVM_CREATE_VM - to get a file-descriptor for your specific process. You t=
-hen
-> use this new file-descriptor to perform your operations (read/ioctl/etc).
->
-> This would make the fact that ioctls/reads from different processes refer=
- to
-> different contexts (i.e., file-descriptors) much more natural.
->
-> Does it sound better?
+Question is, does your setup work for all modes after applying your
+patches and without using the NXP-downstream porches settings? We also
+have a few patches in our queue for the porch calculation which we wanna
+send as soon as possible as we verified our assumptions.
 
-Ah, that I think is more or less what my series already proposes, if I
-understand you correctly.
-
-The usage is:
-
-fd =3D open(/dev/userfaultfd) /* This FD is only useful for creating new
-userfaultfds */
-uffd =3D ioctl(fd, USERFAULTFD_IOC_NEW) /* Now you get a real uffd */
-close(fd); /* No longer needed now that we have a real uffd */
-
-/* Use uffd to register, COPY, CONTINUE, whatever */
-
-One thing we could do now or in the future is extend
-USERFAULTFD_IOC_NEW to take a pid as an argument, to support creating
-uffds for remote processes.
-
-
-
-And then we get the benefit of permissions for /dev nodes working very
-naturally - they default to root, but can be configured by the
-sysadmin via chown/chmod, or udev rules, or whatever.
+Regards,
+  Marco

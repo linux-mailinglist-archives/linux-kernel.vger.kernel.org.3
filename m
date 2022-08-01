@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9885869BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88E05869C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiHAMG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S233522AbiHAMGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbiHAMFZ (ORCPT
+        with ESMTP id S232844AbiHAMFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:05:25 -0400
+        Mon, 1 Aug 2022 08:05:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA8E5A3C8;
-        Mon,  1 Aug 2022 04:54:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EDD5A898;
+        Mon,  1 Aug 2022 04:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCE78612E9;
-        Mon,  1 Aug 2022 11:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC360C433B5;
-        Mon,  1 Aug 2022 11:54:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C862612D0;
+        Mon,  1 Aug 2022 11:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA08C433B5;
+        Mon,  1 Aug 2022 11:54:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354891;
-        bh=5h3bzxrjB1ZhgLS2xrBBNMEny23XJ8/pd1w1qBZljHo=;
+        s=korg; t=1659354894;
+        bh=6LDtu3xfLD3w2Kt9zGVdzUU8HzppBADqvcuwSBLmMK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DWHMLM54Y6nt4ZrgrWNTY72rD0temXWOtQ8cEFC77oz7zCOZBMM2IX6GSsgw3ixKs
-         SoPHWRn95VuonoSbsuC6C5WN/shnD1/98rnsHrIW3mk79WhOWPg7w2buYhXFJXz3+2
-         wFdq99xCiq3gKLrT+aBQEHvMmXFH76C/N6NpVW4U=
+        b=WCit6fv0QNlpCAe0Vxi5OvHSVwh4cT2YIuBMpbEtmjpP40sDLyuPuKD+xfQWCOr2a
+         qYDzUmXA2DEoXcnZhzIDIAqIElHshxgXPy/yVlKYgwMKVcFUsRpXQtJHeXcLEVRcAr
+         Lrz30rhj21ji1u1GMJ6mv5y4MS98lqW75beS7+m0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Chang Rui <changruinj@gmail.com>,
+        Fangrui Song <maskray@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 58/69] virtio-net: fix the race between refill work and close
-Date:   Mon,  1 Aug 2022 13:47:22 +0200
-Message-Id: <20220801114136.820093152@linuxfoundation.org>
+Subject: [PATCH 5.15 59/69] perf symbol: Correct address for bss symbols
+Date:   Mon,  1 Aug 2022 13:47:23 +0200
+Message-Id: <20220801114136.859810226@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
 References: <20220801114134.468284027@linuxfoundation.org>
@@ -56,146 +62,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Leo Yan <leo.yan@linaro.org>
 
-[ Upstream commit 5a159128faff151b7fe5f4eb0f310b1e0a2d56bf ]
+[ Upstream commit 2d86612aacb7805f72873691a2644d7279ed0630 ]
 
-We try using cancel_delayed_work_sync() to prevent the work from
-enabling NAPI. This is insufficient since we don't disable the source
-of the refill work scheduling. This means an NAPI poll callback after
-cancel_delayed_work_sync() can schedule the refill work then can
-re-enable the NAPI that leads to use-after-free [1].
+When using 'perf mem' and 'perf c2c', an issue is observed that tool
+reports the wrong offset for global data symbols.  This is a common
+issue on both x86 and Arm64 platforms.
 
-Since the work can enable NAPI, we can't simply disable NAPI before
-calling cancel_delayed_work_sync(). So fix this by introducing a
-dedicated boolean to control whether or not the work could be
-scheduled from NAPI.
+Let's see an example, for a test program, below is the disassembly for
+its .bss section which is dumped with objdump:
 
-[1]
-==================================================================
-BUG: KASAN: use-after-free in refill_work+0x43/0xd4
-Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+  ...
 
-CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-Workqueue: events refill_work
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0xbb/0x6ac
- ? _printk+0xad/0xde
- ? refill_work+0x43/0xd4
- kasan_report+0xa8/0x130
- ? refill_work+0x43/0xd4
- refill_work+0x43/0xd4
- process_one_work+0x43d/0x780
- worker_thread+0x2a0/0x6f0
- ? process_one_work+0x780/0x780
- kthread+0x167/0x1a0
- ? kthread_exit+0x50/0x50
- ret_from_fork+0x22/0x30
- </TASK>
-...
+  Disassembly of section .bss:
 
-Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+  0000000000004040 <completed.0>:
+  	...
+
+  0000000000004080 <buf1>:
+  	...
+
+  00000000000040c0 <buf2>:
+  	...
+
+  0000000000004100 <thread>:
+  	...
+
+First we used 'perf mem record' to run the test program and then used
+'perf --debug verbose=4 mem report' to observe what's the symbol info
+for 'buf1' and 'buf2' structures.
+
+  # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
+  # ./perf --debug verbose=4 mem report
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
+    symbol__new: buf2 0x30a8-0x30e8
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
+    symbol__new: buf1 0x3068-0x30a8
+    ...
+
+The perf tool relies on libelf to parse symbols, in executable and
+shared object files, 'st_value' holds a virtual address; 'sh_addr' is
+the address at which section's first byte should reside in memory, and
+'sh_offset' is the byte offset from the beginning of the file to the
+first byte in the section.  The perf tool uses below formula to convert
+a symbol's memory address to a file address:
+
+  file_address = st_value - sh_addr + sh_offset
+                    ^
+                    ` Memory address
+
+We can see the final adjusted address ranges for buf1 and buf2 are
+[0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
+incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
+compiler attribute with 64-byte alignment.
+
+The problem happens for 'sh_offset', libelf returns it as 0x3028 which
+is not 64-byte aligned, combining with disassembly, it's likely libelf
+doesn't respect the alignment for .bss section, therefore, it doesn't
+return the aligned value for 'sh_offset'.
+
+Suggested by Fangrui Song, ELF file contains program header which
+contains PT_LOAD segments, the fields p_vaddr and p_offset in PT_LOAD
+segments contain the execution info.  A better choice for converting
+memory address to file address is using the formula:
+
+  file_address = st_value - p_vaddr + p_offset
+
+This patch introduces elf_read_program_header() which returns the
+program header based on the passed 'st_value', then it uses the formula
+above to calculate the symbol file address; and the debugging log is
+updated respectively.
+
+After applying the change:
+
+  # ./perf --debug verbose=4 mem report
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 p_vaddr: 0x3d28 p_offset: 0x2d28
+    symbol__new: buf2 0x30c0-0x3100
+    ...
+    dso__load_sym_internal: adjusting symbol: st_value: 0x4080 p_vaddr: 0x3d28 p_offset: 0x2d28
+    symbol__new: buf1 0x3080-0x30c0
+    ...
+
+Fixes: f17e04afaff84b5c ("perf report: Fix ELF symbol parsing")
+Reported-by: Chang Rui <changruinj@gmail.com>
+Suggested-by: Fangrui Song <maskray@google.com>
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220724060013.171050-2-leo.yan@linaro.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/virtio_net.c |   37 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ tools/perf/util/symbol-elf.c | 45 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 41 insertions(+), 4 deletions(-)
 
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -213,9 +213,15 @@ struct virtnet_info {
- 	/* Packet virtio header size */
- 	u8 hdr_len;
- 
--	/* Work struct for refilling if we run low on memory. */
-+	/* Work struct for delayed refilling if we run low on memory. */
- 	struct delayed_work refill;
- 
-+	/* Is delayed refill enabled? */
-+	bool refill_enabled;
-+
-+	/* The lock to synchronize the access to refill_enabled */
-+	spinlock_t refill_lock;
-+
- 	/* Work struct for config space updates */
- 	struct work_struct config_work;
- 
-@@ -319,6 +325,20 @@ static struct page *get_a_page(struct re
- 	return p;
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index ecd377938eea..ef6ced5c5746 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -233,6 +233,33 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+ 	return NULL;
  }
  
-+static void enable_delayed_refill(struct virtnet_info *vi)
++static int elf_read_program_header(Elf *elf, u64 vaddr, GElf_Phdr *phdr)
 +{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_enabled = true;
-+	spin_unlock_bh(&vi->refill_lock);
++	size_t i, phdrnum;
++	u64 sz;
++
++	if (elf_getphdrnum(elf, &phdrnum))
++		return -1;
++
++	for (i = 0; i < phdrnum; i++) {
++		if (gelf_getphdr(elf, i, phdr) == NULL)
++			return -1;
++
++		if (phdr->p_type != PT_LOAD)
++			continue;
++
++		sz = max(phdr->p_memsz, phdr->p_filesz);
++		if (!sz)
++			continue;
++
++		if (vaddr >= phdr->p_vaddr && (vaddr < phdr->p_vaddr + sz))
++			return 0;
++	}
++
++	/* Not found any valid program header */
++	return -1;
 +}
 +
-+static void disable_delayed_refill(struct virtnet_info *vi)
-+{
-+	spin_lock_bh(&vi->refill_lock);
-+	vi->refill_enabled = false;
-+	spin_unlock_bh(&vi->refill_lock);
-+}
-+
- static void virtqueue_napi_schedule(struct napi_struct *napi,
- 				    struct virtqueue *vq)
+ static bool want_demangle(bool is_kernel_sym)
  {
-@@ -1454,8 +1474,12 @@ static int virtnet_receive(struct receiv
- 	}
- 
- 	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
--		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
--			schedule_delayed_work(&vi->refill, 0);
-+		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
-+			spin_lock(&vi->refill_lock);
-+			if (vi->refill_enabled)
-+				schedule_delayed_work(&vi->refill, 0);
-+			spin_unlock(&vi->refill_lock);
-+		}
- 	}
- 
- 	u64_stats_update_begin(&rq->stats.syncp);
-@@ -1578,6 +1602,8 @@ static int virtnet_open(struct net_devic
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i, err;
- 
-+	enable_delayed_refill(vi);
+ 	return is_kernel_sym ? symbol_conf.demangle_kernel : symbol_conf.demangle;
+@@ -1209,6 +1236,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 					sym.st_value);
+ 			used_opd = true;
+ 		}
 +
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		if (i < vi->curr_queue_pairs)
- 			/* Make sure we have some buffers: if oom use wq. */
-@@ -1958,6 +1984,8 @@ static int virtnet_close(struct net_devi
- 	struct virtnet_info *vi = netdev_priv(dev);
- 	int i;
- 
-+	/* Make sure NAPI doesn't schedule refill work */
-+	disable_delayed_refill(vi);
- 	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
-@@ -2455,6 +2483,8 @@ static int virtnet_restore_up(struct vir
- 
- 	virtio_device_ready(vdev);
- 
-+	enable_delayed_refill(vi);
+ 		/*
+ 		 * When loading symbols in a data mapping, ABS symbols (which
+ 		 * has a value of SHN_ABS in its st_shndx) failed at
+@@ -1262,11 +1290,20 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 				goto out_elf_end;
+ 		} else if ((used_opd && runtime_ss->adjust_symbols) ||
+ 			   (!used_opd && syms_ss->adjust_symbols)) {
++			GElf_Phdr phdr;
 +
- 	if (netif_running(vi->dev)) {
- 		err = virtnet_open(vi->dev);
- 		if (err)
-@@ -3162,6 +3192,7 @@ static int virtnet_probe(struct virtio_d
- 	vdev->priv = vi;
++			if (elf_read_program_header(syms_ss->elf,
++						    (u64)sym.st_value, &phdr)) {
++				pr_warning("%s: failed to find program header for "
++					   "symbol: %s st_value: %#" PRIx64 "\n",
++					   __func__, elf_name, (u64)sym.st_value);
++				continue;
++			}
+ 			pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
+-				  "sh_addr: %#" PRIx64 " sh_offset: %#" PRIx64 "\n", __func__,
+-				  (u64)sym.st_value, (u64)shdr.sh_addr,
+-				  (u64)shdr.sh_offset);
+-			sym.st_value -= shdr.sh_addr - shdr.sh_offset;
++				  "p_vaddr: %#" PRIx64 " p_offset: %#" PRIx64 "\n",
++				  __func__, (u64)sym.st_value, (u64)phdr.p_vaddr,
++				  (u64)phdr.p_offset);
++			sym.st_value -= phdr.p_vaddr - phdr.p_offset;
+ 		}
  
- 	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-+	spin_lock_init(&vi->refill_lock);
- 
- 	/* If we can receive ANY GSO packets, we must allocate large ones. */
- 	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+ 		demangled = demangle_sym(dso, kmodule, elf_name);
+-- 
+2.35.1
+
 
 

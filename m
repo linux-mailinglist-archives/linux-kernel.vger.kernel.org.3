@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D443586AD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FA3586AD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbiHAMbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S234628AbiHAMcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbiHAMbh (ORCPT
+        with ESMTP id S234571AbiHAMcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:31:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7376969F1F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:11:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FCD160EE6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B018C433C1;
-        Mon,  1 Aug 2022 12:11:46 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="of8795Qp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659355904;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ec9m+bkHcs7kSLZ7WnnfBVOiBP4SdMr+uo7n0QyASHg=;
-        b=of8795Qpckq663rDSszVZP+HRDateWgKjGmeGXcTkgFVZVzW4ci/su25PNYqMGexuK5Ffb
-        9GQQSDrBIXvzDbvdz7aJFx46sv6iP4pD3BE6HSWsAyieBdTF/bQiFkUfDi3r5MBdlcdIr5
-        ky1KXmG4uViN4oxqx0iZAu3C9Sw5V9k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 16016793 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 12:11:43 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 14:11:33 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 1/2 v2] lib/vsprintf: Remove static_branch_likely() from
- __ptr_to_hashval().
-Message-ID: <YufC9XCej2qmcH8p@zx2c4.com>
-References: <20220729154716.429964-1-bigeasy@linutronix.de>
- <20220729154716.429964-2-bigeasy@linutronix.de>
+        Mon, 1 Aug 2022 08:32:24 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA77392A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5gyy20rCHxHhW8ugW8OEOWxPmnQJGbQ0xlIOrNar5yo=; b=J0NfEgoK+bkuRJvxHFO11cnOpU
+        pELLmFWZzS3XGSSBJPC0oKoKTYSRqbiMOvfkoDnGcSaR9WxJl/VZ6H13T3vLenW6B5aCpTXLdaOd/
+        n+RsOnVBYDt9oVKDJT4Xoc3MeusmMRlh0VQtTq0uUnEYFtNRh27vTd6HcY+uyirgVtepWVG/w7qJo
+        T9SEt8ZBLViv1jSc7/cd4fPWCCyZNXKRIdO+fozyu0a0/ivp66HrnA6BEtQSG6nv9/NTUtbTGy2sv
+        hdqJ5pYMHno8Vgrx5AQ7PWz2VjqkQdG9O8qlA4dUaRPypDHORaDozKP18xh5btC3/O1YrkU2WKCUi
+        977TIYJg==;
+Received: from [187.56.70.103] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oIUHE-00Dk8T-BB; Mon, 01 Aug 2022 14:12:05 +0200
+Message-ID: <2d4fa03a-f460-d995-88e8-7f0e58e557bd@igalia.com>
+Date:   Mon, 1 Aug 2022 09:11:46 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220729154716.429964-2-bigeasy@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next] panic: Add register_panic_notifier and
+ unregister_panic_notifier
+Content-Language: en-US
+To:     Xu Qiang <xuqiang36@huawei.com>, pmladek@suse.com,
+        akpm@linux-foundation.org, elver@google.com, mcgrof@kernel.org,
+        tangmeng@uniontech.com, yangtiezhu@loongson.cn,
+        john.ogness@linutronix.de, bigeasy@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, guohanjun@huawei.com,
+        weiyongjun1@huawei.com
+References: <20220801100509.62282-1-xuqiang36@huawei.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220801100509.62282-1-xuqiang36@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 05:47:15PM +0200, Sebastian Andrzej Siewior wrote:
-> Using static_branch_likely() to signal that ptr_key has been filled is a
-> bit much given that it is not a fast path.
+On 01/08/2022 07:05, Xu Qiang wrote:
+> Add two methods to manipulate panic_notifier_list and export them.
+> Subsequently, panic_notifier_list is changed to static variable.
 > 
-> Replace static_branch_likely() with bool for condition and a memory
-> barrier for ptr_key.
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  lib/vsprintf.c |   19 ++++++++-----------
->  1 file changed, 8 insertions(+), 11 deletions(-)
-> 
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -750,12 +750,7 @@ static int __init debug_boot_weak_hash_e
->  }
->  early_param("debug_boot_weak_hash", debug_boot_weak_hash_enable);
->  
-> -static DEFINE_STATIC_KEY_FALSE(filled_random_ptr_key);
-> -
-> -static void enable_ptr_key_workfn(struct work_struct *work)
-> -{
-> -	static_branch_enable(&filled_random_ptr_key);
-> -}
-> +static bool filled_random_ptr_key;
+> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
 
-This should be __read_mostly, right? Just like ptr_key.
+Hi Xu Qiang, first of all, thanks for your patch!
+I'd like to mention 2 things about it:
 
-Jason
+(a) As-is, there's no much use for it - I mean, you're adding a helper
+but you didn't change the uses of such notifier list addition (and there
+are plenty of them). Are you intend to change it, or just use the new
+API in new calls?
+
+(b) Even more important: we are working in a panic notifier refactor
+[0], and that'll add new lists. I'm still working on that, plan to
+submit (relatively) soon. Maybe worth to wait it, if this one is not urgent?
+
+Cheers,
+
+
+Guilherme
+
+
+[0]
+https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/

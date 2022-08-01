@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47AC5862A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1872F58629D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239022AbiHACch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S239044AbiHACcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239052AbiHACc1 (ORCPT
+        with ESMTP id S239013AbiHACcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:32:27 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE96C12D1D;
-        Sun, 31 Jul 2022 19:32:24 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id x11so7107687qts.13;
-        Sun, 31 Jul 2022 19:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LbN/7gBvVv1RRKMY+HZS9hC+6waaWky3BM3Xc+dBSts=;
-        b=N4G4Be9xrzDcyeiZbeUWCt9NSltr79R7d7AqH04+P7sTBqzZWDk/PCtBLj6MNSJCr7
-         QXWZTv5vqTw6gVrHg/aCMywS43F5TcLkiXHGrjuF5Unf3EZek4XRJBn/WmUI3lffTwdo
-         +4cR3MTfNNy5lGMEACdsogPZLMFcKQyLli3yCS8cy8BRm29yy5+JClxif8prEkzk8HK5
-         Yu6eRuK0zGstm+x0+ZSARpw2g9v/hLBLCRG0lVQ8xp2Hsa+CyPonn0x8VfXpuQjinf/8
-         B9vMBvRGCDjk3fHXh3/hnwJmwaYobtWNRuanz+BAgg00142kmXiFoPqkDh7BvuB+mSVr
-         BThw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LbN/7gBvVv1RRKMY+HZS9hC+6waaWky3BM3Xc+dBSts=;
-        b=btH5LFK/4TCJUpfs83eOB3UOLlVjdRhT10KiYhkTxEA5WbTIm09ylf3iducPLnSzeP
-         NuILn9CUDvdc1o7uQooJHp1EYgzM77BTOLDWGNl3jwoG6WoLmyJmrnbLO0URJ9me5snb
-         RPUcMvtgflL3tqb0U6K3AQ0mIpEecWc9I/CTAbxmnmaZmRwEmjliuHJGMNFZGkUy07r2
-         cdc4NS06gdYH2COy6JbFYG/v7KIVNPaDdnUrCQ5WHdykDQXCA4gEEHBuh9mqKoGvX1IG
-         epYM2/b+Cyr3fz/fAGPuOeD3B/9L/HlWFI4/cXSWCWFQ2K2RoDUg11NMPe3BQ5lks9sN
-         5HwQ==
-X-Gm-Message-State: AJIora8JRzk3vGvq8lrcunYcLZU/dQHPmYYykF6GZuwn8iAH1KZG4iVh
-        am1WWO6m13cT1EtGyelL58I/rV4uwuG15+KCJGs=
-X-Google-Smtp-Source: AGRyM1vpJoZ102DrXO2dbAWQF8oCXXjGzS5L8PSc81BGtnuTdBQPRwOvGYxBGnvlxBJj96jCkHZkKHUEIWmwnV5woyc=
-X-Received: by 2002:a05:622a:650:b0:31f:496:49e4 with SMTP id
- a16-20020a05622a065000b0031f049649e4mr12948149qtb.70.1659321143804; Sun, 31
- Jul 2022 19:32:23 -0700 (PDT)
+        Sun, 31 Jul 2022 22:32:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B5012ABA
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:32:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 689C861205
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C684C4314D;
+        Mon,  1 Aug 2022 02:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659321139;
+        bh=kMRPtGRuT0shf2/slxZfL4SP6ABHEl6v4bjwo3XuLpE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i8OZt0PbUrRVMJYlH3z5eNtD26Qo+Ws7Wh95+YN3Id2We30fYvXoy9YIkhrPvuKMc
+         z7g6HYa82Hf6743Y3lE7qiTzgJrGHHzX8f3d3niyKHWxUGacDjSEtBbdG9PQ2bU/IT
+         qbIVeq9B26YcEPJiwK8fCR9vlCpKByUeSsKWGPjBzoofuB9TrQBlHHQ0Omei/RrlYU
+         VaNe487sBWfrMuSFkqFost7gOHP4+l7MgCS+QWuicMgJU5kvfg4ybbgFwJ0Dq/6V24
+         BMAV924NW0Ht/+nO2cNEPwimBfJ2smpEHFNcXNv4FR5v954CkTW4o2BowBJBhgZenU
+         ulMxgdk2FEprg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 1/3] tracing/eprobe: Show syntax error logs in error_log file
+Date:   Mon,  1 Aug 2022 11:32:15 +0900
+Message-Id: <165932113556.2850673.3483079297896607612.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <165932112555.2850673.7704483936633223533.stgit@devnote2>
+References: <165932112555.2850673.7704483936633223533.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20220729074935.115072-1-yangyingliang@huawei.com> <CAH2r5muo6yBej4J_2P+09WNmDoCSW3vbgR4JwM-42B0SQoUotA@mail.gmail.com>
-In-Reply-To: <CAH2r5muo6yBej4J_2P+09WNmDoCSW3vbgR4JwM-42B0SQoUotA@mail.gmail.com>
-From:   Shyam Prasad N <nspmangalore@gmail.com>
-Date:   Mon, 1 Aug 2022 08:02:13 +0530
-Message-ID: <CANT5p=rhyrwR_EGn01Ux7wsTaP05gjmD6_CZYfyRQc1Xd97Mow@mail.gmail.com>
-Subject: Re: [PATCH -next] cifs: fix wrong unlock before return from cifs_tree_connect()
-To:     Steve French <smfrench@gmail.com>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 9:08 PM Steve French <smfrench@gmail.com> wrote:
->
-> merged into cifs-2.6.git for-next
->
-> On Fri, Jul 29, 2022 at 2:45 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
-> >
-> > It should unlock 'tcon->tc_lock' before return from cifs_tree_connect().
-> >
-> > Fixes: fe67bd563ec2 ("cifs: avoid use of global locks for high contention data")
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > ---
-> >  fs/cifs/connect.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> > index 931d4b6fafc8..1362210f3ece 100644
-> > --- a/fs/cifs/connect.c
-> > +++ b/fs/cifs/connect.c
-> > @@ -4583,7 +4583,7 @@ int cifs_tree_connect(const unsigned int xid, struct cifs_tcon *tcon, const stru
-> >         if (tcon->ses->ses_status != SES_GOOD ||
-> >             (tcon->status != TID_NEW &&
-> >             tcon->status != TID_NEED_TCON)) {
-> > -               spin_unlock(&tcon->ses->ses_lock);
-> > +               spin_unlock(&tcon->tc_lock);
-> >                 return 0;
-> >         }
-> >         tcon->status = TID_IN_TCON;
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Thanks,
->
-> Steve
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Good catch. Looks good to me.
+Show the syntax errors for event probes in error_log file as same as
+other dynamic events, so that user can understand what is the problem.
 
--- 
-Regards,
-Shyam
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ kernel/trace/trace_eprobe.c |   11 +++++++++--
+ kernel/trace/trace_probe.h  |    5 ++++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index a30f21499e81..4a0e9d927443 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -839,8 +839,11 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
+ 	if (ret)
+ 		return ret;
+ 
+-	if (ep->tp.args[i].code->op == FETCH_OP_TP_ARG)
++	if (ep->tp.args[i].code->op == FETCH_OP_TP_ARG) {
+ 		ret = trace_eprobe_tp_arg_update(ep, i);
++		if (ret)
++			trace_probe_log_err(0, BAD_ATTACH_ARG);
++	}
+ 
+ 	return ret;
+ }
+@@ -880,8 +883,10 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+ 	trace_probe_log_set_index(1);
+ 	sys_event = argv[1];
+ 	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
+-	if (!sys_event || !sys_name)
++	if (!sys_event || !sys_name) {
++		trace_probe_log_err(0, NO_EVENT_INFO);
+ 		goto parse_error;
++	}
+ 
+ 	if (!event) {
+ 		strscpy(buf1, argv[1], MAX_EVENT_NAME_LEN);
+@@ -896,6 +901,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+ 
+ 	if (IS_ERR(ep)) {
+ 		ret = PTR_ERR(ep);
++		if (ret == -ENODEV)
++			trace_probe_log_err(0, BAD_ATTACH_EVENT);
+ 		/* This must return -ENOMEM or missing event, else there is a bug */
+ 		WARN_ON_ONCE(ret != -ENOMEM && ret != -ENODEV);
+ 		ep = NULL;
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 92cc149af0fd..3b3869ae8cfd 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -442,7 +442,10 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+ 	C(FAIL_REG_PROBE,	"Failed to register probe event"),\
+ 	C(DIFF_PROBE_TYPE,	"Probe type is different from existing probe"),\
+ 	C(DIFF_ARG_TYPE,	"Argument type or name is different from existing probe"),\
+-	C(SAME_PROBE,		"There is already the exact same probe event"),
++	C(SAME_PROBE,		"There is already the exact same probe event"),\
++	C(NO_EVENT_INFO,	"This requires both group and event name to attach"),\
++	C(BAD_ATTACH_EVENT,	"Attached event does not exist"),\
++	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),
+ 
+ #undef C
+ #define C(a, b)		TP_ERR_##a
+

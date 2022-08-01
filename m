@@ -2,148 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2843586D2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D96586D2C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbiHAOnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S232876AbiHAOoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiHAOn0 (ORCPT
+        with ESMTP id S232828AbiHAOoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:43:26 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC03F3E741;
-        Mon,  1 Aug 2022 07:42:47 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9B6D6354FD0;
-        Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id QMZj_jTw1QdE; Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 101353550BA;
-        Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 101353550BA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1659364966;
-        bh=Omq/uk2xaYsFc2SnbTFQ8Np0ewayqBDo2ZaBgjfBp6A=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=hQsyBsFhZGR2HBjKVRTylO783wrqVCDAV9vJ7Mo1m/pJGhG8Do1JuWZ3TqmY/e0i+
-         l6eNir06gZ/PR5Yj5urlm0h3MINBQvx6Zn7ooholxF+uHk8SHheWKiludVlnigHVPq
-         wm9UI2I1iV/mXReFV6tXJTebRtB/Mhsojtj16kXp0nyD0hN8Js2ejNskhWBmkfqcA3
-         MfPEWI+73BXqrFMbeKLiKfakkss6oQt3Vw3ZF+sxeQSvbbvMUoLymKxcWIz9ai+hJN
-         nX8B0C8zF0PbLMGjiPzddkI/B0sgWtiRcksAm3NLgChoPPc7hcoPpdOssC8+vdUWsO
-         0Cz+KHrh2MpOQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qVFcZWVe3CeT; Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id EC0AC354F2C;
-        Mon,  1 Aug 2022 10:42:45 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 10:42:45 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Peter Oskolkov <posk@posk.io>
-Message-ID: <1656318880.93523.1659364965914.JavaMail.zimbra@efficios.com>
-In-Reply-To: <87tu6wm46t.fsf@oldenburg.str.redhat.com>
-References: <20220622194617.1155957-1-mathieu.desnoyers@efficios.com> <20220622194617.1155957-2-mathieu.desnoyers@efficios.com> <YufV3PmAOfo1Gt7g@gmail.com> <87tu6wm46t.fsf@oldenburg.str.redhat.com>
-Subject: Re: [PATCH 2/2] rseq: Kill process when unknown flags are
- encountered in ABI structures
+        Mon, 1 Aug 2022 10:44:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07FD44198F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:43:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659365015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=lHBn5LnyRO9uny/Jc1eLld7xvN44+4tID8y8dm6xkco=;
+        b=LBHGKyU4PzV6xoRiRVZ8Z7TOq0FD0XFZmQVHrangiPU3/YtOalp94+UDsxe+a4Ie+A2ho3
+        +lutdtIEHDxUQ963aUjSlFzzkOuhdKiYjYV7Rim9FY2WcqBuYmUzhylf1ksqEb08usMJqN
+        JfIUunnFimH9ykg0v2103C/h759WC5E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-oUHoTuR9NE27teTrZaGBKg-1; Mon, 01 Aug 2022 10:43:32 -0400
+X-MC-Unique: oUHoTuR9NE27teTrZaGBKg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6592D8037AA;
+        Mon,  1 Aug 2022 14:43:31 +0000 (UTC)
+Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 304CC2026D64;
+        Mon,  1 Aug 2022 14:43:31 +0000 (UTC)
+Date:   Mon, 1 Aug 2022 09:43:29 -0500
+From:   David Teigland <teigland@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Subject: [GIT PULL] dlm updates for 6.0
+Message-ID: <20220801144329.GA10643@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Topic: rseq: Kill process when unknown flags are encountered in ABI structures
-Thread-Index: pv0m3/O0YjWhUVPgCMLJGmsVZ4uj9w==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Aug 1, 2022, at 10:25 AM, Florian Weimer fweimer@redhat.com wrote:
+Hi Linus,
 
-> * Ingo Molnar:
-> 
->> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
->>
->>> rseq_abi()->flags and rseq_abi()->rseq_cs->flags 29 upper bits are
->>> currently unused.
->>> 
->>> The current behavior when those bits are set is to ignore them. This is
->>> not an ideal behavior, because when future features will start using
->>> those flags, if user-space fails to correctly validate that the kernel
->>> indeed supports those flags (e.g. with a new sys_rseq flags bit) before
->>> using them, it may incorrectly assume that the kernel will handle those
->>> flags way when in fact those will be silently ignored on older kernels.
->>> 
->>> Validating that unused flags bits are cleared will allow a smoother
->>> transition when those flags will start to be used by allowing
->>> applications to fail early, and obviously, when they attempt to use the
->>> new flags on an older kernel that does not support them.
->>> 
->>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>> ---
->>>  kernel/rseq.c | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>> 
->>> diff --git a/kernel/rseq.c b/kernel/rseq.c
->>> index 81d7dc80787b..bda8175f8f99 100644
->>> --- a/kernel/rseq.c
->>> +++ b/kernel/rseq.c
->>> @@ -176,7 +176,7 @@ static int rseq_need_restart(struct task_struct *t, u32
->>> cs_flags)
->>>  	u32 flags, event_mask;
->>>  	int ret;
->>>  
->>> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS))
->>> +	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
->>>  		return -EINVAL;
->>>  
->>>  	/* Get thread flags. */
->>> @@ -184,7 +184,7 @@ static int rseq_need_restart(struct task_struct *t, u32
->>> cs_flags)
->>>  	if (ret)
->>>  		return ret;
->>>  
->>> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS))
->>> +	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
->>>  		return -EINVAL;
->>
->> Just to make it clear: no existing libraries/tooling out there have learned
->> to rely on the old ABI that ignored unset flags, right? Only then is this
->> patch ABI-safe.
-> 
-> I believe glibc initializes the flag fields to zero before calling the
-> rseq system call.  (I don't know if the rseq system call does its own
-> initialization; maybe it should if it doesn't do so already.)
+Please pull dlm updates from tag:
 
-Initialization and following updates of rseq_abi()->flags and
-rseq_abi()->rseq_cs->flags is done by user-space, so the rseq
-system call does not initialize any of those fields.
+git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-6.0
 
-Indeed glibc initialize the rseq_abi()->flags to 0, and does not
-use rseq_abi()->rseq_cs->flags as of now.
+Changes in this set of commits:
+
+. Delay the cleanup of interrupted posix lock requests until the
+  user space result arrives. Previously, the immediate cleanup
+  would lead to extraneous warnings when the result arrived.
+
+. Tracepoint improvements, e.g. adding the lock resource name.
+
+. Delay the completion of lockspace creation until one full recove
+  cycle has completed. This allows more error cases to be returned
+  the caller.
+
+. Remove warnings from the locking layer about delayed network rep
+  The recently added midcomms warnings are much more useful.
+
+. Begin the process of deprecating two unused lock-timeout-related
+  features. These features now require enabling via a Kconfig opti
+  and enabling them triggers deprecation warnings. We expect to
+  remove the code in v6.2.
 
 Thanks,
+Dave
 
-Mathieu
+(You can ignore the premature 5.20 pull request from some weeks ago.)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Alexander Aring (19):
+      fs: dlm: plock use list_first_entry
+      fs: dlm: add pid to debug log
+      fs: dlm: change plock interrupted message to debug again
+      fs: dlm: use dlm_plock_info for do_unlock_close
+      fs: dlm: change posix lock sigint handling
+      fs: dlm: change ast and bast trace order
+      fs: dlm: remove additional dereference of lksb
+      fs: dlm: add resource name to tracepoints
+      fs: dlm: update comments about recovery and membership handling
+      fs: dlm: call dlm_lsop_recover_prep once
+      fs: dlm: make new_lockspace() wait until recovery completes
+      fs: dlm: handle recovery result outside of ls_recover
+      fs: dlm: add comment about lkb IFL flags
+      fs: dlm: fix grammar in lowcomms output
+      fs: dlm: remove waiter warnings
+      fs: dlm: remove timeout from dlm_user_adopt_orphan
+      fs: dlm: add deprecation Kconfig and warnings for timeouts
+      fs: dlm: don't use deprecated timeout features by default
+      fs: dlm: move kref_put assert for lkb structs
+
+
+ fs/dlm/Kconfig             |   9 +++
+ fs/dlm/Makefile            |   2 +-
+ fs/dlm/ast.c               |   4 +-
+ fs/dlm/config.c            |  21 ++++---
+ fs/dlm/config.h            |   3 +-
+ fs/dlm/dlm_internal.h      |  32 ++++++++--
+ fs/dlm/lock.c              | 143 ++++++++++++++++++---------------------------
+ fs/dlm/lock.h              |  17 +++++-
+ fs/dlm/lockspace.c         |  31 +++++++---
+ fs/dlm/lowcomms.c          |   4 +-
+ fs/dlm/member.c            |  30 +++++-----
+ fs/dlm/plock.c             |  51 +++++++++++-----
+ fs/dlm/recoverd.c          |  35 +++++++++--
+ fs/dlm/user.c              |  21 ++++++-
+ include/trace/events/dlm.h | 118 ++++++++++++++++++++++++++++++-------
+ 15 files changed, 351 insertions(+), 170 deletions(-)
+

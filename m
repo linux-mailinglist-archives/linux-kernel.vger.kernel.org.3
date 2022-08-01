@@ -2,63 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ABB586654
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AC7586659
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiHAI1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S229900AbiHAI2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHAI13 (ORCPT
+        with ESMTP id S229755AbiHAI2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:27:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C9E33353
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:27:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 38C104D5D2;
-        Mon,  1 Aug 2022 08:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659342445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SdhTMIjPPoyPm4ytL5iSfFfAavCD7IKkQAlMtSUtLeU=;
-        b=cgP3t2tXFUGdDQGWLqEOjh/oS6KIQ81XvO6+x3y60b18u+hx+j67HAFA7Vbz5xDoHKRf8C
-        gnx7tOCviWhbwsym7YB9Gl3JwZsRpuwEmE5skkNWIRxxyg01XE8YUGu7CarwfQnNOIgQaU
-        BoMnqdhmz5iUu41RCF8W7OZ0i3AoTjM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0CBA713A72;
-        Mon,  1 Aug 2022 08:27:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Fr5ZAG2O52JqKQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 01 Aug 2022 08:27:25 +0000
-Date:   Mon, 1 Aug 2022 10:27:24 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com,
-        quic_pkondeti@quicinc.com, pasha.tatashin@soleen.com,
-        sjpark@amazon.de, sieberf@amazon.com, shakeelb@google.com,
-        dhowells@redhat.com, willy@infradead.org, minchan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH V2] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-ID: <YueObAiml8c74DLV@dhcp22.suse.cz>
-References: <1658931303-17024-1-git-send-email-quic_charante@quicinc.com>
- <YuKfQoOHG1celfBK@dhcp22.suse.cz>
- <6b646ff2-b6f6-052e-f3f4-3bf05243f049@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b646ff2-b6f6-052e-f3f4-3bf05243f049@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        Mon, 1 Aug 2022 04:28:10 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C95FE33353;
+        Mon,  1 Aug 2022 01:28:07 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 723F320FEB71;
+        Mon,  1 Aug 2022 01:28:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 723F320FEB71
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1659342487;
+        bh=a9yKeSW/6jig4mvjN1XRYFNCnlNtSHtny6A4dlHfsyA=;
+        h=From:To:Subject:Date:From;
+        b=o77IKbLcCaGCDWXmftaJ/pmeoAfhEDV8kZEmHThS/okdEXsQESvrD9JnZLzlvRYG+
+         H3oqGzvfI3tlq3jHJBF74AxGNMbkX4Ddz8yCofXWROaB/WgtjdpxOKGZYRD+Zglp3Q
+         6elmUYs2pXBetGo1PANULvmI/E963d+E+1jopLPg=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [PATCH] scsi: storvsc: Remove WQ_MEM_RECLAIM from storvsc_error_wq
+Date:   Mon,  1 Aug 2022 01:28:03 -0700
+Message-Id: <1659342483-4857-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,75 +46,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 29-07-22 21:17:44, Charan Teja Kalla wrote:
-> Thanks Michal for the reviews!!
-> 
-> On 7/28/2022 8:07 PM, Michal Hocko wrote:
-> >> FAQ's:
-> >> Q) Should page_ext_[get|put]() needs to be used for every page_ext
-> >> access?
-> >> A) NO, the synchronization is really not needed in all the paths of
-> >> accessing page_ext. One case is where extra refcount is taken on a
-> >> page for which memory block, this pages falls into, offline operation is
-> >> being performed. This extra refcount makes the offline operation not to
-> >> succeed hence the freeing of page_ext.  Another case is where the page
-> >> is already being freed and we do reset its page_owner.
-> > This is just subtlety and something that can get misunderstood over
-> > time. Moreover there is no documentation explaining the difference.
-> > What is the reason to have these two different APIs in the first place.
-> > RCU read side is almost zero cost. So what is the point?
-> Currently not all the places where page_ext is being used is put under
-> the rcu_lock. I just used rcu lock in the places where it is possible to
-> have the use-after-free of page_ext. You recommend to use rcu lock while
-> using with page_ext in all the places?
+storvsc_error_wq workqueue should not be marked as WQ_MEM_RECLAIM
+as it's doesn't need to make forward progress under memory pressure.
+Marking this workqueue as WQ_MEM_RECLAIM may cause deadlock while
+flushing a non-WQ_MEM_RECLAIM workqueue.
+In the current state it causes the following warning:
 
-Yes. Using locking inconsistently just begs for future problems. There
-should be a very good reason to use lockless approach in some paths and
-that would be where the locking overhead is not really acceptable or
-when the locking cannot be used for other reasons.
+[   14.506347] ------------[ cut here ]------------
+[   14.506354] workqueue: WQ_MEM_RECLAIM storvsc_error_wq_0:storvsc_remove_lun is flushing !WQ_MEM_RECLAIM events_freezable_power_:disk_events_workfn
+[   14.506360] WARNING: CPU: 0 PID: 8 at <-snip->kernel/workqueue.c:2623 check_flush_dependency+0xb5/0x130
+[   14.506390] CPU: 0 PID: 8 Comm: kworker/u4:0 Not tainted 5.4.0-1086-azure #91~18.04.1-Ubuntu
+[   14.506391] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
+[   14.506393] Workqueue: storvsc_error_wq_0 storvsc_remove_lun
+[   14.506395] RIP: 0010:check_flush_dependency+0xb5/0x130
+		<-snip->
+[   14.506408] Call Trace:
+[   14.506412]  __flush_work+0xf1/0x1c0
+[   14.506414]  __cancel_work_timer+0x12f/0x1b0
+[   14.506417]  ? kernfs_put+0xf0/0x190
+[   14.506418]  cancel_delayed_work_sync+0x13/0x20
+[   14.506420]  disk_block_events+0x78/0x80
+[   14.506421]  del_gendisk+0x3d/0x2f0
+[   14.506423]  sr_remove+0x28/0x70
+[   14.506427]  device_release_driver_internal+0xef/0x1c0
+[   14.506428]  device_release_driver+0x12/0x20
+[   14.506429]  bus_remove_device+0xe1/0x150
+[   14.506431]  device_del+0x167/0x380
+[   14.506432]  __scsi_remove_device+0x11d/0x150
+[   14.506433]  scsi_remove_device+0x26/0x40
+[   14.506434]  storvsc_remove_lun+0x40/0x60
+[   14.506436]  process_one_work+0x209/0x400
+[   14.506437]  worker_thread+0x34/0x400
+[   14.506439]  kthread+0x121/0x140
+[   14.506440]  ? process_one_work+0x400/0x400
+[   14.506441]  ? kthread_park+0x90/0x90
+[   14.506443]  ret_from_fork+0x35/0x40
+[   14.506445] ---[ end trace 2d9633159fdc6ee7 ]---
 
-RCU read lock is essentially zero overhead so the only reason would be
-that the critical section would require to sleep. Is any of that the
-case?
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ drivers/scsi/storvsc_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If there is a real need to have a lockless variant then I would propose
-to add __page_ext_get/put which would be lockless and clearly documented
-under which contexts it can be used and enfore those condictions (e.g.
-reference count assumption).
-
-> My only point here is since there may be a non-atomic context exist
-> across page_ext_get/put() and If users are sure that this page's
-> page_ext will not be freed by parallel offline operation, they need not
-> get the rcu lock.
-
-Existing users are probably easy to check but think about the future.
-Most developers (even a large part of the MM community) is not deeply
-familiar with the memory hotplug. Not to mention people do not tend to
-follow development in that area and assumptions might change.
-
-[...]
-> >> @@ -298,9 +300,26 @@ static void __free_page_ext(unsigned long pfn)
-> >>  	ms = __pfn_to_section(pfn);
-> >>  	if (!ms || !ms->page_ext)
-> >>  		return;
-> >> -	base = get_entry(ms->page_ext, pfn);
-> >> +
-> >> +	base = READ_ONCE(ms->page_ext);
-> >> +	if (page_ext_invalid(base))
-> >> +		base = (void *)base - PAGE_EXT_INVALID;
-> > All page_ext accesses should use the same fetched pointer including the
-> > ms->page_ext check. Also page_ext_invalid _must_ be true here otherwise
-> > something bad is going on so I would go with
-> > 	if (WARN_ON_ONCE(!page_ext_invalid(base)))
-> > 		return;
-> > 	base = (void *)base - PAGE_EXT_INVALID;
-> 
-> The roll back operation in the online_page_ext(), where we free the
-> allocated page_ext's, will not have the PAGE_EXT_INVALID flag thus
-> WARN() may not work here. no?
-
-Wouldn't ms->page_ext be NULL in that case?
-
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index fe000da..8ced292 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -2012,7 +2012,7 @@ static int storvsc_probe(struct hv_device *device,
+ 	 */
+ 	host_dev->handle_error_wq =
+ 			alloc_ordered_workqueue("storvsc_error_wq_%d",
+-						WQ_MEM_RECLAIM,
++						0,
+ 						host->host_no);
+ 	if (!host_dev->handle_error_wq) {
+ 		ret = -ENOMEM;
 -- 
-Michal Hocko
-SUSE Labs
+1.8.3.1
+

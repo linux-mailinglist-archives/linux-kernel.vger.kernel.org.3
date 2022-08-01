@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D62958668C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F007858668D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiHAIqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S230162AbiHAIrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiHAIq2 (ORCPT
+        with ESMTP id S229642AbiHAIrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:46:28 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307E232BAD;
-        Mon,  1 Aug 2022 01:46:26 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 520113200319;
-        Mon,  1 Aug 2022 04:46:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 01 Aug 2022 04:46:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1659343581; x=1659429981; bh=MmWQQwnoIs
-        Ox2ktt+sqgYPhQg8kOnNwtDf2Fo92hJuM=; b=j/1yvp0dvB40mwD16TE4i+E9g4
-        aui9sSfvJOWtCA0hHNTpJT6sl0/QcSaES3VArdbsXpHtX/+VTqQ8H6agP0MDYwcS
-        U4hF01teRwdtSCXIv9xzlj00YcV+gc/68iH6g1geEouv58n/uG4S0nWm8o7AGpby
-        gmyv5T28bamtdPSw+uwTq75jtEX0dJWtgNbWQ1h2sxTJAt+1ihtRefsP3bWWzPA7
-        jfXP8mJdU9TV6sA+GLXXK+UfIv3/dEwP9Ag6zICxPCpZdHrcyJhJAXyuPhAhZ2OF
-        hAHzxKPIp/aKZsrEO1jRg4OlU2K2tmyrh3j/3Gvhh4VMCQebOKY9Z5iIAAAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659343581; x=1659429981; bh=MmWQQwnoIsOx2ktt+sqgYPhQg8kO
-        nNwtDf2Fo92hJuM=; b=N7RYiqbTKDoJTloKtiRNk8R85wCaKANCmum3Q4cMpCKd
-        MUBypEDHdzzhKTMxqLO74WfcZk+y5ZOCL8IgXVV/jH0/4ev3P0ZjYZe6uzt3+6dD
-        CHjos1ksel7N75Catzq/Wq3bxNVQLh0lTH5rjg2PPdt+KvqaG0b/pbxN4HLlacl3
-        nEiA9hquQ0zQhMgvDTU67gH/idQn9QYxj+U3KfXvoHZcz3aN+0K4r/ybenzd5t9I
-        vLxIJQa4fzSmRnzIcmaenizY0O3BQSCE475AlCn+pg1RluFa2OPeJTjr0qx3JO6O
-        xbg7NvBuMzinBkaIbWV0QcXjdq9BhOTb7DjJZvr4rQ==
-X-ME-Sender: <xms:3ZLnYizPB-U4tuh4lpaApwbGe526Zwh1b9PowmPeVKkflsZ82Qm0ag>
-    <xme:3ZLnYuTZ-vSmBR9PM_PQliqPCkrhBeTRz_1wEYaguxU6MSRCp6AElndOVtXXVNijF
-    rUQyVGDxR2MuQ>
-X-ME-Received: <xmr:3ZLnYkX2ITzkJBDqpJ99w-EEqL5Y0SkUiDPWvdmh5-r36ycz4jREhfnNIaSFbif7856bU-qkm9dNyUWfBG84mqTiWncyzgc5zQugPQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:3ZLnYohFN0BbwBXymKYrYPYOhDdy3A72PclkGWswDjtV0-jskTz7Lw>
-    <xmx:3ZLnYkCPpEVpAwKxEeM5cmGgvpL-KAY2mgYJzDCKmhRhGTeaZ9JVCg>
-    <xmx:3ZLnYpIaq4-_TPpoKx5Vk6xqo5P39RyzRd6z4nSXtoNRoZRV7OTrIQ>
-    <xmx:3ZLnYuy4M526QGgGht5MOgw0gd5qDQrm7BTIBZQV3zpx81mrzKtGVw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 Aug 2022 04:46:21 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 10:46:11 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     ming.lei@redhat.com, stable@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH stable 5.4] scsi: core: Fix race between handling
- STS_RESOURCE and completion
-Message-ID: <YueS04RIq2gTUGgg@kroah.com>
-References: <20220801012251.1959147-1-yukuai1@huaweicloud.com>
+        Mon, 1 Aug 2022 04:47:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E98432D81
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:47:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DCEDA60FB9;
+        Mon,  1 Aug 2022 08:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659343630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i3plC4gDCirp0/qEelmSAUkiw7vjt0l7z6WMBswDQpA=;
+        b=kvjC6SkQ2jq0/pIqyrMLbUusGyMzDJgTpRqcOZB+GQy53XYapOoF+xKlAXR4Cyre0whHO2
+        oSKg3XevIukFCA/b4rkpJf9TIrsNdY5/MYcIMnyXCFW5abcsX72PGY8p+f9yCohFEDD15M
+        idBdYfxPiuLIiCsrGQZWAWRAVXkS5/4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6ED113A72;
+        Mon,  1 Aug 2022 08:47:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nPMLKg6T52IMMwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 01 Aug 2022 08:47:10 +0000
+Date:   Mon, 1 Aug 2022 10:47:10 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com,
+        quic_pkondeti@quicinc.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/page_ext: remove unused variable in offline_page_ext
+Message-ID: <YueTDphOhJgvB58e@dhcp22.suse.cz>
+References: <1659330397-11817-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801012251.1959147-1-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1659330397-11817-1-git-send-email-quic_charante@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 09:22:51AM +0800, Yu Kuai wrote:
-> From: Ming Lei <ming.lei@redhat.com>
+On Mon 01-08-22 10:36:37, Charan Teja Kalla wrote:
+> Remove unused variable 'nid' in offline_page_ext(). This is not used
+> since the page_ext code inception.
 > 
-> commit 673235f915318ced5d7ec4b2bfd8cb909e6a4a55 upstream.
-> 
-> When queuing I/O request to LLD, STS_RESOURCE may be returned because:
-> 
->  - Host is in recovery or blocked
-> 
->  - Target queue throttling or target is blocked
-> 
->  - LLD rejection
-> 
-> In these scenarios BLK_STS_DEV_RESOURCE is returned to the block layer to
-> avoid an unnecessary re-run of the queue. However, all of the requests
-> queued to this SCSI device may complete immediately after reading
-> 'sdev->device_busy' and BLK_STS_DEV_RESOURCE is returned to block layer. In
-> that case the current I/O won't get a chance to get queued since it is
-> invisible at that time for both scsi_run_queue_async() and blk-mq's
-> RESTART.
-> 
-> Fix the issue by not returning BLK_STS_DEV_RESOURCE in this situation.
-> 
-> Link: https://lore.kernel.org/r/20201202100419.525144-1-ming.lei@redhat.com
-> Fixes: 86ff7c2a80cd ("blk-mq: introduce BLK_STS_DEV_RESOURCE")
-> Cc: Hannes Reinecke <hare@suse.com>
-> Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Ewan Milne <emilne@redhat.com>
-> Cc: Long Li <longli@microsoft.com>
-> Reported-by: John Garry <john.garry@huawei.com>
-> Tested-by: "chenxiang (M)" <chenxiang66@hisilicon.com>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks
+
 > ---
->  drivers/scsi/scsi_lib.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  mm/page_ext.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index 3dc715d..e22a928 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -336,7 +336,7 @@ static int __meminit online_page_ext(unsigned long start_pfn,
+>  }
+>  
+>  static int __meminit offline_page_ext(unsigned long start_pfn,
+> -				unsigned long nr_pages, int nid)
+> +				unsigned long nr_pages)
+>  {
+>  	unsigned long start, end, pfn;
+>  
+> @@ -362,11 +362,11 @@ static int __meminit page_ext_callback(struct notifier_block *self,
+>  		break;
+>  	case MEM_OFFLINE:
+>  		offline_page_ext(mn->start_pfn,
+> -				mn->nr_pages, mn->status_change_nid);
+> +				mn->nr_pages);
+>  		break;
+>  	case MEM_CANCEL_ONLINE:
+>  		offline_page_ext(mn->start_pfn,
+> -				mn->nr_pages, mn->status_change_nid);
+> +				mn->nr_pages);
+>  		break;
+>  	case MEM_GOING_OFFLINE:
+>  		break;
+> -- 
+> 2.7.4
 
-Both now queued up, thanks.
-
-greg k-h
+-- 
+Michal Hocko
+SUSE Labs

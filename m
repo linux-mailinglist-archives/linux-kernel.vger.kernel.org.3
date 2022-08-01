@@ -2,138 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1656258658A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0939A586589
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 09:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiHAHNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 03:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiHAHNM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229721AbiHAHNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 1 Aug 2022 03:13:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E9F32478
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 00:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659337991; x=1690873991;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=V0G6j28IaHxr9oC8YL9qnfip8DUfa6h6YBjToRwmjiE=;
-  b=Iq2WpJ4EOOYbR1YyFm9DyViQiiFCtjysmJluh/Zk8iKY87NJ6rGJU/M1
-   TRXFScxbBBB33OMxQ0NRDygK4Gk78N2F/Ip49PNPdlbyV3AXIRtQo6s2r
-   SQfLnYjrly9tfVyyVhP9r4YfLafrzg4TxkLnheVSbns8q6jdummtAtDTL
-   R2XZMYXpaTXTiKCMbAv1tQ5NcQDi1UXkMK2yMxZF/BfnYMMJhwn5uzqC3
-   tOp18s9FP2E93rerqLIGS3/bdT3lGjTzUh83jrkXjbuXQo8kcbCW35g72
-   ITZvD/JdexnvKwxuFadm+K/A0ufvSGvZBknBKWLfuCHNOtwIuJFws4tMx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="314902910"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="314902910"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 00:13:11 -0700
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="929447841"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 00:13:08 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v11 4/8] mm/demotion/dax/kmem: Set node's abstract
- distance to MEMTIER_ADISTANCE_PMEM
-References: <20220728190436.858458-1-aneesh.kumar@linux.ibm.com>
-        <20220728190436.858458-5-aneesh.kumar@linux.ibm.com>
-        <875yjgmocg.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <87bkt8s7w9.fsf@linux.ibm.com>
-        <87k07slnt7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <e5545c90-9595-d08c-8a1c-1c15e3b94999@linux.ibm.com>
-        <87tu6wk0q5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <826fbdbc-219f-8f4a-7373-41c718287533@linux.ibm.com>
-        <87les8jwpu.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <1aba0c44-b096-8c75-8086-62d3cffc08b3@linux.ibm.com>
-Date:   Mon, 01 Aug 2022 15:13:04 +0800
-In-Reply-To: <1aba0c44-b096-8c75-8086-62d3cffc08b3@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Mon, 1 Aug 2022 12:25:04 +0530")
-Message-ID: <87h72wjv27.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbiHAHNK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 1 Aug 2022 03:13:10 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C6A326D2;
+        Mon,  1 Aug 2022 00:13:09 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w15so2195983ljw.1;
+        Mon, 01 Aug 2022 00:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tfEi2wATHr5s4kAbTzVzbDuu02MelmoOTRN0imH5lW8=;
+        b=lKuwDM5luzL0HuSV27/K8oRHXozyJBISiaUy73xruCv38UkGcbVNfgTQWJJseAW08I
+         ChOX8NOriHiLVOV2uIpKIrBq7GS0HwZ4+fGEoHpmsgFIKnArf7c7uqlCSMdUhkzvhM76
+         HCLdzTlQvmtf0HM1ALOImkUaM/+QVB5Bf1eaz9RSsguGg/FqiBRVyBhzGkhXk9Cw+ELH
+         fMLGhjeumaJ4I8dOVY+ND/whsG+ilHWQrnxPSc0kYcbIh2V4eu8SXpHz7PF24RDXBNs5
+         KZqnLUPp9JJF8Hq5kHCydF7TPr5GEgGJmlDoHsOf6aSdMDmYnzoPSFU6kLj5hFebAjEi
+         CE4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tfEi2wATHr5s4kAbTzVzbDuu02MelmoOTRN0imH5lW8=;
+        b=nMBQpx3TnU29xqM0fuwRc+kIy/BFrteA3ritE0xUGVlcjywkXJrvN//tE8rI+4PaZk
+         ii5zs69Qw9+SqTAi/prfPF/keP8c2gL8C23wgxmEc1Q1c0I+1gFuKtjDyHWOgzkKKj1b
+         egSPpVnVpVjYwFuTQjv/bIoZ4X3wrTl88bhNZ4cTRSGcl3mDWTDWQT7ZAHcFUaEFYT2D
+         Bb+tROTjcctl/MszLsCfRBmvkzj+brTIhU+sVmGT8wjVGqiDZl/xil7CEIwbciBrhLjx
+         ZnO2fyHH9LTELbfb7929dyVdhHEg1ZkOWNSL/FicOEr5F4WwzaVhEgTRXPsu9dW9tBCd
+         QgtQ==
+X-Gm-Message-State: ACgBeo2w9SDpB9MQxEaobYq2+kBR1hPfAhyGMiMW56hLrT0BYgs40UFF
+        YHi4WuQbTTYYGEtwSdb0f6w=
+X-Google-Smtp-Source: AA6agR7vEFgdSYQVtY7U/GEd7y4UkOGiCvIE2pQTwLE1T3EdkgiOpNcpYXFaK6rn0MMLGWrDFxVyOw==
+X-Received: by 2002:a2e:9dcc:0:b0:25e:45d8:6184 with SMTP id x12-20020a2e9dcc000000b0025e45d86184mr2659982ljj.46.1659337987555;
+        Mon, 01 Aug 2022 00:13:07 -0700 (PDT)
+Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id w11-20020a2e958b000000b0025d6ecbc897sm75939ljh.46.2022.08.01.00.13.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 00:13:06 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 09:17:17 +0200
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 5/9] iio: adc: mcp3911: add support for buffers
+Message-ID: <Yud9/eDs4i36T7Gk@gmail.com>
+References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+ <20220722130726.7627-6-marcus.folkesson@gmail.com>
+ <20220731175121.5d9493a0@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="duuZgvRLw+wN+EG6"
+Content-Disposition: inline
+In-Reply-To: <20220731175121.5d9493a0@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-> On 8/1/22 12:07 PM, Huang, Ying wrote:
->> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> On 8/1/22 10:40 AM, Huang, Ying wrote:
->>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
->>>>
->>>>> On 8/1/22 7:36 AM, Huang, Ying wrote:
->>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>>>>>
->>>>>>> "Huang, Ying" <ying.huang@intel.com> writes:
->>>>>>>
->>>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->
-> ....
->
->>>>>
->>>>> With the module unload, it is kind of force removing the usage of the specific memtype.
->>>>> Considering module unload will remove the usage of specific memtype from other parts
->>>>> of the kernel and we already do all the required reset in memory hot unplug, do we
->>>>> need to do the clear_node_memory_type above? 
->>>>
->>>> Per my understanding, we need to call clear_node_memory_type() in
->>>> dev_dax_kmem_remove().  After that, we have nothing to do in
->>>> dax_kmem_exit().
->>>>
->>>
->>> Ok, I guess you are suggesting to do the clear_node_memory_type even if we fail the memory remove. 
->> 
->> Can we use node_memory_types[] to indicate whether a node is managed by
->> a driver?
->> 
->> Regardless being succeeded or failed, dev_dax_kmem_remove() will set
->> node_memory_types[] = NULL.  But until node is offlined, we will still
->> keep the node in the memory_dev_type (dax_pmem_type).
->> 
->> And we will prevent dax/kmem from unloading via try_module_get() and add
->> "struct module *" to struct memory_dev_type.
->> 
->
-> Current dax/kmem driver is not holding any module reference and allows the module to be unloaded
-> anytime. Even if the memory onlined by the driver fails to be unplugged. Addition of memory_dev_type
-> as suggested by you will be different than that. Page demotion can continue to work without the
-> support of dax_pmem_type as long as we keep the older demotion order. Any new demotion order
-> rebuild will remove the the memory node which was not hotunplugged  from the demotion order. Isn't that
-> a much simpler implementation? 
+--duuZgvRLw+wN+EG6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Per my understanding, unbinding/binding the dax/kmem driver means
-changing the memory type of a memory device.  For example, unbinding
-dax/kmem driver may mean changing the memory type from dax_pmem_type to
-default_memory_type (or default_dram_type).  That appears strange.  But
-if we force the NUMA node to be offlined for unbinding, we can avoid to
-change the memory type to default_memory_type.
+Hi Jonathan,
 
-Best Regards,
-Huang, Ying
+On Sun, Jul 31, 2022 at 05:51:21PM +0100, Jonathan Cameron wrote:
+> On Fri, 22 Jul 2022 15:07:22 +0200
+> Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+>=20
+> > Add support for buffers to make the driver fit for more usecases.
+> >=20
+> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>=20
+> Assuming the Kconfig change from previous patch is pulled into this one...
+
+Yep
+
+>=20
+> A few questions / comments inline.
+>=20
+> Thanks,
+>=20
+> Jonathan
+>=20
+> > ---
+> >  drivers/iio/adc/mcp3911.c | 96 ++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 89 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> > index 00dadb1761dc..96c0a2a50c7c 100644
+> > --- a/drivers/iio/adc/mcp3911.c
+> > +++ b/drivers/iio/adc/mcp3911.c
+> > @@ -5,15 +5,22 @@
+> >   * Copyright (C) 2018 Marcus Folkesson <marcus.folkesson@gmail.com>
+> >   * Copyright (C) 2018 Kent Gustavsson <kent@minoris.se>
+> >   */
+> > +#include <linux/bitfield.h>
+> > +#include <linux/bits.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/err.h>
+> >  #include <linux/iio/iio.h>
+> > +#include <linux/iio/buffer.h>
+> > +#include <linux/iio/triggered_buffer.h>
+> > +#include <linux/iio/trigger_consumer.h>
+> > +#include <linux/iio/trigger.h>
+> >  #include <linux/module.h>
+> >  #include <linux/mod_devicetable.h>
+> >  #include <linux/property.h>
+> >  #include <linux/regulator/consumer.h>
+> >  #include <linux/spi/spi.h>
+>=20
+> Line break here to separate the 'chunks' of includes.
+>=20
+
+OK
+
+> > +#include <asm/unaligned.h>
+> > =20
+> >  #define MCP3911_REG_CHANNEL0		0x00
+> >  #define MCP3911_REG_CHANNEL1		0x03
+> > @@ -22,6 +29,7 @@
+> >  #define MCP3911_REG_GAIN		0x09
+> > =20
+> >  #define MCP3911_REG_STATUSCOM		0x0a
+> > +#define MCP3911_STATUSCOM_READ		GENMASK(7, 6)
+> >  #define MCP3911_STATUSCOM_CH1_24WIDTH	BIT(4)
+> >  #define MCP3911_STATUSCOM_CH0_24WIDTH	BIT(3)
+> >  #define MCP3911_STATUSCOM_EN_OFFCAL	BIT(2)
+> > @@ -54,6 +62,13 @@ struct mcp3911 {
+> >  	struct regulator *vref;
+> >  	struct clk *clki;
+> >  	u32 dev_addr;
+> > +	struct {
+> > +		u32 channels[MCP3911_NUM_CHANNELS];
+> > +		s64 ts __aligned(8);
+> > +	} scan;
+> > +
+> > +	u8 tx_buf[MCP3911_NUM_CHANNELS * 3] __aligned(IIO_DMA_MINALIGN);
+> > +	u8 rx_buf[MCP3911_NUM_CHANNELS * 3];
+> >  };
+> > =20
+> >  static int mcp3911_read(struct mcp3911 *adc, u8 reg, u32 *val, u8 len)
+> > @@ -196,16 +211,63 @@ static int mcp3911_write_raw(struct iio_dev *indi=
+o_dev,
+> >  		.type =3D IIO_VOLTAGE,				\
+> >  		.indexed =3D 1,					\
+> >  		.channel =3D idx,					\
+> > +		.scan_index =3D idx,				\
+> >  		.info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW) |	\
+> >  			BIT(IIO_CHAN_INFO_OFFSET) |		\
+> >  			BIT(IIO_CHAN_INFO_SCALE),		\
+> > +		.scan_type =3D {					\
+> > +			.sign =3D 's',				\
+> > +			.realbits =3D 24,				\
+> > +			.storagebits =3D 32,			\
+> > +			.endianness =3D IIO_BE,			\
+> > +		},						\
+> >  }
+> > =20
+> >  static const struct iio_chan_spec mcp3911_channels[] =3D {
+> >  	MCP3911_CHAN(0),
+> >  	MCP3911_CHAN(1),
+> > +	IIO_CHAN_SOFT_TIMESTAMP(2),
+> >  };
+> > =20
+> > +static irqreturn_t mcp3911_trigger_handler(int irq, void *p)
+> > +{
+> > +	struct iio_poll_func *pf =3D p;
+> > +	struct iio_dev *indio_dev =3D pf->indio_dev;
+> > +	struct mcp3911 *adc =3D iio_priv(indio_dev);
+> > +	struct spi_transfer xfer =3D {
+> > +		.tx_buf =3D adc->tx_buf,
+> > +		.rx_buf =3D adc->rx_buf,
+> > +		.len =3D sizeof(adc->rx_buf),
+> > +	};
+> > +	int scan_index;
+> > +	int i =3D 0;
+> > +	int ret;
+> > +
+> > +	mutex_lock(&adc->lock);
+> > +	adc->tx_buf[0] =3D MCP3911_REG_READ(MCP3911_CHANNEL(0), adc->dev_addr=
+);
+> > +	ret =3D spi_sync_transfer(adc->spi, &xfer, 1);
+> > +	if (ret < 0) {
+> > +		dev_warn(&adc->spi->dev,
+> > +				"failed to get conversion data\n");
+> > +		goto out;
+> > +	}
+> > +
+> > +	for_each_set_bit(scan_index, indio_dev->active_scan_mask,
+> > +			indio_dev->masklength) {
+> > +		const struct iio_chan_spec *scan_chan =3D &indio_dev->channels[scan_=
+index];
+> > +
+> > +		adc->scan.channels[i] =3D get_unaligned_be24(&adc->rx_buf[scan_chan-=
+>channel * 3]);
+>=20
+> This has me a little curious.  It seems to be potentially reading from by=
+te 0 which in the spi
+> transfer is at the same time as the tx that tells the device what the com=
+mand is.  I'd expect
+> it to be one byte later.  Easiest way to do that being to have two transf=
+ers (though you could
+> just add to the offset). I might be misremembering how the spi_transfer s=
+tuff works though.
+> Been a while since I hacked anything SPI based...
+>=20
+
+Good catch.
+I did not even notice that the resolution of my plot-script was wrong...
+
+
+> > +		i++;
+> > +	}
+> > +	iio_push_to_buffers_with_timestamp(indio_dev, &adc->scan,
+> > +			iio_get_time_ns(indio_dev));
+> > +out:
+> > +	mutex_unlock(&adc->lock);
+> > +	iio_trigger_notify_done(indio_dev->trig);
+> > +
+> > +	return IRQ_HANDLED;
+> > +}
+> > +
+> >  static const struct iio_info mcp3911_info =3D {
+> >  	.read_raw =3D mcp3911_read_raw,
+> >  	.write_raw =3D mcp3911_write_raw,
+> > @@ -214,7 +276,7 @@ static const struct iio_info mcp3911_info =3D {
+> >  static int mcp3911_config(struct mcp3911 *adc)
+> >  {
+> >  	struct device *dev =3D &adc->spi->dev;
+> > -	u32 configreg;
+> > +	u32 regval;
+> >  	int ret;
+> > =20
+> >  	ret =3D device_property_read_u32(dev, "microchip,device-addr", &adc->=
+dev_addr);
+> > @@ -233,29 +295,43 @@ static int mcp3911_config(struct mcp3911 *adc)
+> >  	}
+> >  	dev_dbg(&adc->spi->dev, "use device address %i\n", adc->dev_addr);
+> > =20
+> > -	ret =3D mcp3911_read(adc, MCP3911_REG_CONFIG, &configreg, 2);
+> > +	ret =3D mcp3911_read(adc, MCP3911_REG_CONFIG, &regval, 2);
+>=20
+> If I was being fussy I'd ask you to pull the refactoring in here out as a=
+ precusor
+> patch to simplify reviewing the new stuff a little.  However it's fairly =
+minor
+> so I'll let that go this time.
+
+Ok, I got you wrong. Thanks.
+
+
+Best regards
+Marcus Folkesson
+
+
+--duuZgvRLw+wN+EG6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmLnffgACgkQiIBOb1ld
+UjJrsA//QNPLk1KdyBX/KMqbppkvEFxQ+f4oB2ZP4V2KTgYVKvHDPtIpMpee8CA7
+EJjJ/xNEsaFgF+OaYuAyuxSdutjELmhnahInt44U0vHjCJf8yjool08Ana+uZAdN
+Fs+ZbaCAZLaLgmYcZ3J73SnlsXLT1gLb5XLsKeajjPGL444pIL3WzYqgguRgANMv
+GQ5tz1cZbS2iKXUa0il6QoC6wGvoMR97nq8k5hAJAfcJMCrwDsjjIsiJBeiwX0Wu
+n6sfHH3XcGOtjeT6lywsGOR0k9X4M2gmZraOSr35laZeBF9XRoZWA9SJw2UKfYnz
+g+9sZj58umwqpCHYu7ylGi/yUVJY4Xzu+oFTvxaSbN9yiljPaoCHDBSw29KtXr/E
+YD20x0kIO7E5aoVZPiAn5vugC2OSubm0BoPPNRyKQMdfSiqmy+fVANjI46aA/lrl
+prkdWX4h3RPHqlGkwEI7kX1F7KxN5dPyYcWsY4tpsqQ2PBirTt8QBfySOU/B1Jxr
+Y1ZnOa2VZs5u1Wxy3qodui2NU6KCEKuAgKs4KpNKNKDZd2rgZO6qz1zMT0/NMWND
+uhgV+1E0kUrCY1fHh6scYFXwFf2tepMEHkY13dOobnVkby2FGMGeBc1uTx1d+WzG
+vqBlyw2rFhNshCEQPcHcDlBVd1GLhmjqZB4oQDu5t6Jf2IRPx34=
+=c9jC
+-----END PGP SIGNATURE-----
+
+--duuZgvRLw+wN+EG6--

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A950E586990
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5900586A4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiHAMEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S233911AbiHAMOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiHAMCb (ORCPT
+        with ESMTP id S233941AbiHAMNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:02:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E80E54CA3;
-        Mon,  1 Aug 2022 04:54:01 -0700 (PDT)
+        Mon, 1 Aug 2022 08:13:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0331740BF0;
+        Mon,  1 Aug 2022 04:57:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70E75B80E8F;
-        Mon,  1 Aug 2022 11:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D2AC433D7;
-        Mon,  1 Aug 2022 11:53:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8460601BD;
+        Mon,  1 Aug 2022 11:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6D26C433D6;
+        Mon,  1 Aug 2022 11:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354839;
-        bh=iK4b8g/7nH1wBTsDaWuZzdBFa+OXGbijtK8FFi9mvZ4=;
+        s=korg; t=1659355061;
+        bh=YbmgbmyACU5oWKp981nJxWl6QS1LxWlzYtM4WloYayk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1z8qlOWHKEc9PfRT+U7Klyn6uHF2wYKcJQng2ny2kESjxRx05wE3G6k3KAqPku4BI
-         bvhLUPRSppbW3wW6HHPkYvcndwzsXM5uLPctAfml2eZhjCRNA/cJDt4o+Pf1pvqVan
-         BvWVx18axiHlHZ1iF9U9pYZUb8D2v9Ec7zybQfDI=
+        b=XpDmIhyFO5yP6cfrzA5VV4FV1uOKfwXhNEdOoazzh5+ZVtmzOvveqBSNK0Pxfu3Vd
+         tHQRSpQJ41iE6QdKaIGM1zuKEKjsfFN8dGgef5trV3dpOYTN1Qm9RMy7/GVT6KjKqg
+         rMubanRpApUc0Wh5K61Vkt8NX9NBkwoJrjSoAWrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 37/69] tcp: Fix a data-race around sysctl_tcp_min_rtt_wlen.
-Date:   Mon,  1 Aug 2022 13:47:01 +0200
-Message-Id: <20220801114135.995249238@linuxfoundation.org>
+Subject: [PATCH 5.18 48/88] tcp: Fix a data-race around sysctl_tcp_min_rtt_wlen.
+Date:   Mon,  1 Aug 2022 13:47:02 +0200
+Message-Id: <20220801114140.243597986@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index a5357ebfbcc0..b925c766f1d2 100644
+index 78e16891f12b..f3b658fa3e7b 100644
 --- a/net/ipv4/tcp_input.c
 +++ b/net/ipv4/tcp_input.c
-@@ -3050,7 +3050,7 @@ static void tcp_fastretrans_alert(struct sock *sk, const u32 prior_snd_una,
+@@ -3058,7 +3058,7 @@ static void tcp_fastretrans_alert(struct sock *sk, const u32 prior_snd_una,
  
  static void tcp_update_rtt_min(struct sock *sk, u32 rtt_us, const int flag)
  {

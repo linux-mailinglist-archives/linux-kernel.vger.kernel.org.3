@@ -2,79 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117AF58727C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334E758727E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234409AbiHAUve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S234481AbiHAUvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiHAUvc (ORCPT
+        with ESMTP id S234425AbiHAUvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:51:32 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73373BE3D;
-        Mon,  1 Aug 2022 13:51:31 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id o2so9299758iof.8;
-        Mon, 01 Aug 2022 13:51:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qgUhYsG/SYQmVu/9j7OPoFS1V3zLSqEU7jYdb6tWXhY=;
-        b=0sHBpclR+IHBBMBuB8FkRxYFhJBvHRbN5vl/igSD56k9PzpdhSMvudfw2IQuMJgNvR
-         Kv+6m0Nd8KnIunEpcFqm4IuwP8YD3APHHdhQhWP1ccInmWX68XKGr5RoNIgWBl5hOUIN
-         e9xFCWpwVAHpA++3Ggdwu+0clVHJfAsa22FiYCYPp77BVuJe5UdPajGuGb1SAm8E3oID
-         JfBA2nog/TwOKfY9pEA9MnPeWcaeMfsjasHvTgBLKjcBBHEs3H6oinUBMs0N15SJzWKL
-         O1BDNeW+8qTRYjy4y4Kiu1HvmbpHS4bTleh8qbKe/nfTbL25RfWClEhNjFJyj2As+eaU
-         BJcg==
-X-Gm-Message-State: AJIora+PApn6WkbEZXhVwEwVoDheqPnpxuo/+7iq77HVve6B6ByeUgmi
-        hIgimvszogqar3JMwAh9OfuuU4Aa5g==
-X-Google-Smtp-Source: AGRyM1tnJuzsCSZNhFYqrZAkbxWwxTjobiIrgH/A29DqVlb0dQa0BjGPlS97Edwzw8MIDswVZ4j+mg==
-X-Received: by 2002:a05:6638:1508:b0:342:3f57:290a with SMTP id b8-20020a056638150800b003423f57290amr6991377jat.279.1659387090698;
-        Mon, 01 Aug 2022 13:51:30 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056638018f00b0034142dad202sm5797270jaq.31.2022.08.01.13.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 13:51:30 -0700 (PDT)
-Received: (nullmailer pid 1487097 invoked by uid 1000);
-        Mon, 01 Aug 2022 20:51:29 -0000
-Date:   Mon, 1 Aug 2022 14:51:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: host-generic-pci: Allow IOMMU and MSI
- properties
-Message-ID: <20220801205129.GA1487043-robh@kernel.org>
-References: <20220728175137.1172841-1-robh@kernel.org>
+        Mon, 1 Aug 2022 16:51:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2774BE3D;
+        Mon,  1 Aug 2022 13:51:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62399611C5;
+        Mon,  1 Aug 2022 20:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B779C433D6;
+        Mon,  1 Aug 2022 20:51:48 +0000 (UTC)
+Date:   Mon, 1 Aug 2022 16:51:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, mhiramat@kernel.org, peterz@infradead.org,
+        mingo@kernel.org, ast@kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
+Message-ID: <20220801165146.26fdeca2@gandalf.local.home>
+In-Reply-To: <Yug6bx7T4GzqUf2a@krava>
+References: <20220801033719.228248-1-chenzhongjin@huawei.com>
+        <Yug6bx7T4GzqUf2a@krava>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728175137.1172841-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 11:51:37 -0600, Rob Herring wrote:
-> Allow 'iommu-map', 'iommu-map-mask', and 'msi-parent' properties for
-> generic host. This fixes unevaluated property warnings on Arm Juno, AMD
-> Seattle, and FSL LS1028a.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/pci/host-generic-pci.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On Mon, 1 Aug 2022 22:41:19 +0200
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-Applied, thanks!
+> LGTM cc-ing Steven because it affects ftrace as well
+
+Thanks for the Cc, but I don't quite see how it affects ftrace.
+
+Unless you are just saying how it can affect kprobe_events?
+
+-- Steve
+
+
+> 
+> jirka
+> 
+> > 
+> > v1 -> v2:
+> > Check core_kernel_text and is_module_text_address rather than
+> > only kprobe_insn.
+> > Also fix title and commit message for this. See old patch at [1].
+> > ---
+> >  kernel/kprobes.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index f214f8c088ed..80697e5e03e4 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+> >  	preempt_disable();
+> >  
+> >  	/* Ensure it is not in reserved area nor out of text */
+> > -	if (!kernel_text_address((unsigned long) p->addr) ||
+> > +	if (!(core_kernel_text((unsigned long) p->addr) ||
+> > +	    is_module_text_address((unsigned long) p->addr)) ||
+> >  	    within_kprobe_blacklist((unsigned long) p->addr) ||
+> >  	    jump_label_text_reserved(p->addr, p->addr) ||
+> >  	    static_call_text_reserved(p->addr, p->addr) ||
+> > -- 
+> > 2.17.1
+> >   
+

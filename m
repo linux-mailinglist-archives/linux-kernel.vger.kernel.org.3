@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CC7586F41
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E44B586F44
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 19:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbiHARGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 13:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S232223AbiHARHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 13:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbiHARGE (ORCPT
+        with ESMTP id S230298AbiHARHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:06:04 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C50DA8;
-        Mon,  1 Aug 2022 10:06:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q16so10217213pgq.6;
-        Mon, 01 Aug 2022 10:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc;
-        bh=/GdX+TR/Dtbf4gZ83aEvjO8naUsD3U4cGz+frlvpnOI=;
-        b=o49/EjuQpvSTcPsbZwuHWglxkwKdt473C3AZnhHy9r95Q0aLNcUJsXd7JMPC1RZLDB
-         UThRymlZAgKSpv7WLErK8CBS11UOIaaKAUnZ32jfIfULDBS9ODMUNx7BZdTY2zF0Kmzm
-         tE399kMtdOorrioGu8LSAJLHUPlcKNrtz1VDKC0nPSLULkKrGHCLoM5vO35C1eeED3Rw
-         PeS8Ex5Xzfz1Quw2pmDzulr5CJ6vs8LucMdBAfQvwUwe9XE00Wohi+Dxm0W7VM60P3J5
-         lsvT7HDn7Ow3XiGODf4hEGrNtCMGA6wqThEn+fli4G0eMV5qHv4obY0Gd1PVZBj2rjfo
-         GQdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc;
-        bh=/GdX+TR/Dtbf4gZ83aEvjO8naUsD3U4cGz+frlvpnOI=;
-        b=DexX7S8dWXTsbPJGlvprnm4s6NM7NTiJASfmkZ3DjmtrPj+NnqUGY2xv1vX8OOXSOj
-         oO2oVZWw1NdelwJYyT+bojZjHlLhfOeKZtyd71F939xyOXiE5qLDVglwF27RoSwqzsmS
-         XM9C7Jx/xeu79vlrj03QhprtG1uSFB3tYlU/L8P97PqYg4hbCnbnV5eKLfx3TTF6bFGW
-         JlHtVLia/GZb6n+Uh4ZabuIrZpMyYxwHS+0OkK5APXYeNOVPy2UfqC4zyGhJWzX5GChf
-         5WHUVIr32sVMLE/Vb9y78KDN1h3MoUvGfFm/7w9+747HhMQ/05qFd3udIVKINLYHzfSC
-         GqJg==
-X-Gm-Message-State: ACgBeo0UrM8qSU2/Ktc6urcOSdLK5/5QNMiWIK51GUqucXNFWoXfK1aw
-        1RuAUdLMosJvIojjEKnQT0JXBXwlCS0=
-X-Google-Smtp-Source: AA6agR5s5Zfk3FtUy7YsJFbbCSJCmURCfncv4qh4gGsK3lo8q1nAgdMpbls2WZiXh5ba7LysV86iqg==
-X-Received: by 2002:a63:5b21:0:b0:41c:2292:b2e7 with SMTP id p33-20020a635b21000000b0041c2292b2e7mr4200768pgb.46.1659373561722;
-        Mon, 01 Aug 2022 10:06:01 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id m23-20020a17090ade1700b001f02a72f29csm5487495pjv.8.2022.08.01.10.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 10:06:00 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 1 Aug 2022 07:05:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: [GIT PULL] cgroup changes for v5.20-rc1
-Message-ID: <YugH95n04DM6yRta@slm.duckdns.org>
+        Mon, 1 Aug 2022 13:07:10 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D0310E4
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 10:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lV6Nj9c4zvsHkFQy7tICycDimwo4Sq7catGYsp4e4OM=; b=sszIulLjEmptCoufWV9wadwb/R
+        IVtmrJZm/Vty1rFEIr29ikO/5UmW6LsYXtyEHOU5bNSRa0f0C7XJ/D2VNjmUmLuhv8TYhO2ACzj+h
+        TMlhiuE69NL5c2Nj1cuv3LMv63tAj0pnuOFp2tLz/WbGmHVxPdo2WNN1xtKc+JcdIrUSalpQmXVCh
+        huPAqm10mMtetvt4p7Loc8AdcjzwSVablv+s8SA8WPl+qGWiRydKvSFq3q22kyS8WhfBhnOAjafr7
+        2Ztmk+Q/0x7Guu7S9gYcwWbqktGLC3zLJS9HmC4Tm1N9W4tlTkiDshcMQ7BgSDEIzbcxbKw4mJfkz
+        rm8KI8HQ==;
+Received: from [187.34.27.134] (helo=[192.168.15.109])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oIYsd-00Dy7P-Lq; Mon, 01 Aug 2022 19:06:59 +0200
+Message-ID: <31187f41-64c8-d7ce-fcf2-5da421b3e194@igalia.com>
+Date:   Mon, 1 Aug 2022 14:06:41 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv2 -next] drm/amdgpu: double free error and freeing
+ uninitialized null pointer
+Content-Language: en-US
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>, Evan Quan <evan.quan@amd.com>,
+        Tom St Denis <tom.stdenis@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220730034923.25500-1-mailmesebin00@gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20220730034923.25500-1-mailmesebin00@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e71e60cd74df9386c3f684c54888f2367050b831:
+Às 00:46 de 30/07/22, Sebin Sebastian escreveu:
+> Fix a double free and an uninitialized pointer read error. Both tmp and
+> new are pointing at same address and both are freed which leads to
+> double free. Adding a check to verify if new and tmp are free in the
+> error_free label fixes the double free issue. new is not initialized to
+> null which also leads to a free on an uninitialized pointer.
+> 
+> Suggested by: S. Amaranath <Amaranath.Somalapuram@amd.com>
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
 
-  Merge tag 'dma-mapping-5.19-2022-06-06' of git://git.infradead.org/users/hch/dma-mapping (2022-06-06 17:56:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-5.20
-
-for you to fetch changes up to 265792d0dede9259f0ca56bb3efcc23eceee7d01:
-
-  cgroup: Skip subtree root in cgroup_update_dfl_csses() (2022-07-28 07:26:30 -1000)
-
-----------------------------------------------------------------
-Several core optimizations:
-
-* threadgroup_rwsem write locking is skipped when configuring controllers in
-  empty subtrees. Combined with CLONE_INTO_CGROUP, this allows the common
-  static usage pattern to not grab threadgroup_rwsem at all (glibc still
-  doesn't seem ready for CLONE_INTO_CGROUP unfortunately).
-
-* threadgroup_rwsem used to be put into non-percpu mode by default due to
-  latency concerns in specific use cases. There's no reason for everyone
-  else to pay for it. Make the behavior optional.
-
-* psi no longer allocates memory when disabled.
-
-along with some code cleanups.
-
-----------------------------------------------------------------
-Chen Wandun (1):
-      psi: dont alloc memory for psi by default
-
-Lin Feng (2):
-      cgroup.c: add helper __cset_cgroup_from_root to cleanup duplicated codes
-      cgroup.c: remove redundant check for mixable cgroup in cgroup_migrate_vet_dst
-
-Tejun Heo (4):
-      cgroup: Elide write-locking threadgroup_rwsem when updating csses on an empty subtree
-      cgroup: Add "no" prefixed mount options
-      cgroup: Make !percpu threadgroup_rwsem operations optional
-      cgroup: remove "no" prefixed mount options
-
-Waiman Long (1):
-      cgroup: Skip subtree root in cgroup_update_dfl_csses()
-
- Documentation/admin-guide/cgroup-v2.rst |   8 ++
- include/linux/cgroup-defs.h             |  21 ++++-
- include/linux/cgroup.h                  |   2 +-
- init/Kconfig                            |  10 +++
- kernel/cgroup/cgroup-internal.h         |   1 +
- kernel/cgroup/cgroup-v1.c               |  17 +++-
- kernel/cgroup/cgroup.c                  | 136 ++++++++++++++++++++------------
- kernel/sched/psi.c                      |  19 +++--
- 8 files changed, 151 insertions(+), 63 deletions(-)
+Reviewed-by: André Almeida <andrealmeid@igalia.com>

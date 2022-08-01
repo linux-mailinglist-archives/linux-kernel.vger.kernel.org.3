@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE36586260
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 03:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68436586262
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 03:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiHABwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 21:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S237029AbiHABxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 21:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiHABwo (ORCPT
+        with ESMTP id S236885AbiHABxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 21:52:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31033101EC;
-        Sun, 31 Jul 2022 18:52:43 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id v16-20020a17090abb9000b001f25244c65dso13637293pjr.2;
-        Sun, 31 Jul 2022 18:52:43 -0700 (PDT)
+        Sun, 31 Jul 2022 21:53:08 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AF912087
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 18:53:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id sz17so17742503ejc.9
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 18:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cts89Urg1Uc0LBv0m8WUOVTMu8H/nP9lQWVspGvxl/M=;
-        b=Yoyl7sblFAAr4nHx9Dw11RXEAxdHiU4x6bJUImWzvGs8+ogPEAD8n1G3W4OLAvcriP
-         XTjhuYo6QuntcB3so/5xBNA2YDR+GYuYl+MZ0EdsQ6oJ9YdTl7y2uDLaLvcOgbdfUou9
-         IOdgeaItYpET9I6Feq6O2WIx51DSLd7xTJFLL9+JzLCWhwQGXTYIZESs+dmFF8CjJlk9
-         NeT1k58fdutlDBeJEzgOHs8rAg67bFvrfwaHaEaqe7HLu/2q+J+IU5f8UrHjXFS+YNDD
-         xFaYIKJeH8S0d4LD2LMFOdMj4JIVaPCdSsYES8eAZLX1eDD9AKBzaM3M0LpLtKWJ36PM
-         VR6g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yTvm3wwagmTX69a1KC3CUigiKtFCy3zwt67VVBZyDak=;
+        b=GPqW1cTLq5YaJ7qIRYRVxx9+6cQZp1Moby7K1w3+gO0s7t18ND9NWqsag2/40InWoK
+         frmyFWE9D6dlG3SRq6yPU3uRZ9Q6Wgx273hlmzeamoXLcqIvI15Emjaa07ckgKpiRLy7
+         ujzHufZKrkUfcQgC1OCDvBe0/DZ3tumedxGlufI5ZEkC0creBoIhLcJ4S8mBx+bEeJ3b
+         RuW3SvhyOFWT12JUy0oJkTlk7gJmkS6hBfklSHiVGI/06hRu3m+H5kE4AtoI95230Gjo
+         Q9Z3vxklJJXLUUQeeu9FJHY2xA46Tb2LU2FiI8cN/JFuHu6BJu4FQTuNjaog7wmZq5Ul
+         giLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cts89Urg1Uc0LBv0m8WUOVTMu8H/nP9lQWVspGvxl/M=;
-        b=xpa/oTCqJLOTi11UoSP3HD4ysuWco9ydaPoCvynLkhLvj6p/To98EUZ9HD518XtuvQ
-         n9S9FzZdGd3QOqNgDgFw9hIB4wuk7XAE7Irz0TrR3V1MNukIPMjVFhu899P61nlBQaDK
-         pV0l+Ea4VGi/+qx28AiFioP4dJkhc6PXwzZ4YljtpXk2taNjznY+qLBB8rFvL+a33CMz
-         bPMdql38fOQv7rELtgKoYnAIVHnJW1UTRQ72JtB875j+bft2p4KBgqosV3x2B0thn/ul
-         lOlMD7l+Qh72wqs2uJs7VEArCj46LHdIhX0Ac0HMzeMUpcXiquOOJHLR/2k5HBKFy3SY
-         4vGA==
-X-Gm-Message-State: ACgBeo0ZHS+4wIFsN6Ha5DukIhIU6LTBkyQKR5s3zwOGzGu5rq9zbNYd
-        vSaWitxdbRx+TYx5HI0QglA=
-X-Google-Smtp-Source: AA6agR6QZqDQ9TIbddaHajr6M7D7HTfebbIH2FC8Gj5rE5OFz3YWnlmS6T6dPK+JFQNL9it6Wi8rZA==
-X-Received: by 2002:a17:903:11d1:b0:16c:defc:a098 with SMTP id q17-20020a17090311d100b0016cdefca098mr14349003plh.50.1659318762325;
-        Sun, 31 Jul 2022 18:52:42 -0700 (PDT)
-Received: from [10.10.4.41] (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id v10-20020a63f20a000000b0041b672e93c2sm6292529pgh.17.2022.07.31.18.52.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jul 2022 18:52:41 -0700 (PDT)
-Message-ID: <4ea235d1-46c1-87de-760f-dc4775007ae0@gmail.com>
-Date:   Mon, 1 Aug 2022 09:50:28 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yTvm3wwagmTX69a1KC3CUigiKtFCy3zwt67VVBZyDak=;
+        b=PzeIlvLO4jX+g4+atldFNY8yfo5h6qZS9KlCoOsOIrjHHF1pEebMX6FLhnXxsaGVKZ
+         lQrjhtqFD0fZqQhNBgcUs7vNcS3arMqyiK2rT6S/sBW/I36aSSow0x/PbuBAQXPL6Spe
+         W6Sy0YfF9wZxaAIJc1Dqf0RMzC7bDgWsOl+GVNYcMzsArzH2EQdhd0BUyKNV6QM2WMPa
+         cPZyZFzAv8Jme3VBBK+Pc4uFAhaNjdM4gcLuowIWeX4Wat9lMBV0KuYNFE14CE1flksL
+         D/iZQulNnTYYN5kamp3EaAd5CJ52b149rbqbHk1HGLjemjEXYghQ2j5zAi+AgI5AkW0Z
+         eh/Q==
+X-Gm-Message-State: AJIora+qruOzOcTdnxsheeTS6fv9mFSGULLvzXKimZtaRXwBE8VSC/RN
+        3Ruos3GN2lIF2ocPIjGe/wi7uw==
+X-Google-Smtp-Source: AGRyM1sYxTmAAq2ftLjn15qJjzoPeYDwFeWVqT5gRbWJYURnOvZmEA+/36cenRUMOT6AnJ4ECGUniw==
+X-Received: by 2002:a17:906:7950:b0:72f:d4a4:564d with SMTP id l16-20020a170906795000b0072fd4a4564dmr10730422ejo.479.1659318785656;
+        Sun, 31 Jul 2022 18:53:05 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.98.208])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05640202c100b0043cf2e0ce1csm6043374edx.48.2022.07.31.18.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 18:53:05 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 09:52:59 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf symbol: Fail to read phdr workaround
+Message-ID: <20220801015259.GA101027@leoy-ThinkPad-X240s>
+References: <20220731164923.691193-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 2/2] iio: humidity: hdc100x: add manufacturer and
- device ID check
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220728125435.3336618-1-potin.lai.pt@gmail.com>
- <20220728125435.3336618-3-potin.lai.pt@gmail.com>
- <20220731130959.50826fc4@jic23-huawei>
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <20220731130959.50826fc4@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731164923.691193-1-irogers@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jul 31, 2022 at 09:49:23AM -0700, Ian Rogers wrote:
+> The perf jvmti agent doesn't create program headers, in this case
+> fallback on section headers as happened previously.
+> 
+> Fixes: 882528d2e776 ("perf symbol: Skip symbols if SHF_ALLOC flag is not set")
 
-On 7/31/22 20:09, Jonathan Cameron wrote:
-> On Thu, 28 Jul 2022 12:54:35 +0000
-> Potin Lai <potin.lai.pt@gmail.com> wrote:
->
->> Add manufacturer and device ID checking during probe, and skip the
->> checking if chip model not supported.
->>
->> Supported:
->> - HDC1000
->> - HDC1010
->> - HDC1050
->> - HDC1080
->>
->> Not supported:
->> - HDC1008
->>
->> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
-> I need some more information on the 'why' of this patch.  There are a number
-> of drivers that do a similar ID check but in recent times, that approach has
-> been considered wrong because it breaks potential use of multiple compatible
-> entries in device tree.   If a new device comes along and is backwards
-> compatible with an existing one (maybe has new features, but using them is
-> optional) then we want to have an entry that looks like
->
-> compatible = "ti,hdc1099", "ti,hdc1080"
->
-> If the new ID is not supported by the kernel that is being used, we still
-> want the driver to 'work' using the fallback compatible.
->
-> As such, we no generally do the following.
->
-> 1) If we have a match to a device we know about but it's not the one the
->    firmware tells us to expect, print a warning but operate as if the firmware
->    had been correct - particularly if we know the parts aren't compatible
->    with each other. (this bit is optional as we should be able to assume firmware
->    doesn't do stupid things :)
-> 2) If we don't match at all, print a warning about an unknown device but carry
->    on with assumption that the firmware is correct and this new device ID is
->    backwards compatible with the provided fallback compatible.
->
-> So if this is just a bit of defensive programming (rather than necessary for some
-> reason not yet explained) then change from returning an error on probe() to 
-> printing an warning message but continuing anyway. (which is part (2) of the
-> above)
-Hi Jonathan,
-In our hardware board, we have "ti,hdc1080" as main source, and "silabs,si7020"
-for 2nd source. This two chip are locate at same bus and same slave address,
-and we want to use multiple compatibles to support both chips with single device
-node in device tree.
- 
-Ex:
-compatible = "ti,hdc1099", "silabs,si7020";
- 
-In order to support this, I need to add ID checking mechanism into the current
-hdc100x driver, so the si7020 chip will fail to probe with hdc100x driver
-(because the ID checking is not failed), then success probe with si7020.
- 
-Base on you explanation, it looks multiple compatibles is not suitable in this
-case? Would you mind advise us what would be the better approach for our case?
+It's good to change fix tag as:
+Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
 
-Thanks,
-Potin
+I saw stable kernel maintainers have back ported patch "perf symbol:
+Correct address for bss symbols" for stable kernel branches, the
+suggested fix tag would allow this patch to be landed on stable kernels
+as well.
 
+I think I need to manually send the patch "perf symbol: Skip symbols
+if SHF_ALLOC flag is not set" to stable kernel mailing list, this
+patch missed fix tag.
+
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+With updating fix tag:
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: Leo Yan <leo.yan@linaro.org>

@@ -2,171 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1308F587397
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 23:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449DA58739B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 23:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiHAVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 17:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S234730AbiHAVvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 17:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234715AbiHAVul (ORCPT
+        with ESMTP id S229914AbiHAVvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 17:50:41 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796CB33E3F;
-        Mon,  1 Aug 2022 14:50:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jb3E60nfh8SExVy1Rq2aYucRrY4XBH9p5RitY35zrY6nbnqYs98k0dnGarTIaeR9i3lULYzm5K6Qj0KvsOC462Yund7S3QFP4Orfz21BtI6rzq1c2YuKg9w8V7CkxiZvYq4b0vh/Y/QC7M6EKuvHZZmvmo7uvq7LbUtdA0HxzFs9hOIX/pGo+si0ChwFy9vqN/jp1+g7QQU2yQmOjpWNNCXk0XX69MWVvHiB/OeJ47ElZccvl3QBOGa26SjiWEapOTZgEf5i5beCYrEaX5cSD9BApV0MQ0eBhuP9cxYm4EXjBn2uSH8niH8hVDi2XC9PC4OUcgh10K1iK16DeXdrDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mUWrBzUIUdIg+XNRO5/LQ0VTPvePzzxnBUzg4ipYhXI=;
- b=j2TZUJyk2XhzLjn9hwEPKaBpyHLTxb+Ym2NrC1NNtLWWfnN7QdFCzvcoqcvTKeWpU+dpVG0LcO1fj7NkwR2/Xf5Ujv+2W7UqE1pJUwsU/IjtUh+03xktNdOsVJ36h3IEFU5xiTGI0nXlMTlCuhvXHUsLBmR1MxMOqi8ShqHKVerTLTFAyWtlVXcz0IfylmMSf8gHKyeNbUBeDE9X+XEqihqXAZxkLQYO66O/w+vfhwP0SwPui/VmAqeSOgxyRW5n6euvXlczbFZS2Q/ME7YYRBidn4KumwoSxFBavX9FhWvLdBOD5sdYmfJTV0paz1E/qIrrlnC3ZyMpif3P/JeIag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mUWrBzUIUdIg+XNRO5/LQ0VTPvePzzxnBUzg4ipYhXI=;
- b=XXcYuUDAVB+wKrUqSGGj1V59yBJxh2W4K9M4SPPafCVdcPbiFWHY4XRh0Oara9K3JNPiXgT9JLjmMjFX+54sxFr36MeBeFrLZqhcUANo/sQlcV6tb8QT/sqBeZPU1mbHhalYwtBe02D0TSXbI+hRqQHs+MnfpsikFKkhcKUjaMs=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by CY4PR12MB1941.namprd12.prod.outlook.com (2603:10b6:903:11a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Mon, 1 Aug
- 2022 21:50:37 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
- 21:50:37 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>
-CC:     Dave Hansen <dave.hansen@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
-Thread-Topic: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
-Thread-Index: AQHYhkJMEjVRVcpx502HVSPCQUlAqK1bejcAgAACPYCAAD2E8IAAAkWAgAAEHtCAAALbAIAAEKeAgAACGACAAAZmMIABummAgAABGvCALNnqAIAAfWiAgAAF14CAD98qkA==
-Date:   Mon, 1 Aug 2022 21:50:37 +0000
-Message-ID: <SN6PR12MB2767658F1A362C82922FB2DB8E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
- <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
- <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
- <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <YrTq3WfOeA6ehsk6@google.com>
- <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
- <YtqLhHughuh3KDzH@zn.tnic> <Ytr0t119QrZ8PUBB@google.com>
- <Ytr5ndnlOQvqWdPP@zn.tnic>
-In-Reply-To: <Ytr5ndnlOQvqWdPP@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-08-01T21:47:54Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=d59a5693-f5fd-4e04-b216-e51b70cd444b;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-08-01T21:50:35Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: f3da2763-b53b-4cb3-a9f3-25a4b2069d66
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4667e8fe-5c0c-4621-2e5b-08da7407de68
-x-ms-traffictypediagnostic: CY4PR12MB1941:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nZrFlDdDbA48lupu0mMl821rjtqJjYLI/DKlOIEYIgnhVXZjBDG66TD4wR0IUXJ/AHYnk1zyyurF/iS4QyE9KDM818Gn+CDZ68D7/VhRUHuU2nrcy74EOnyOS/bLF6vYSzaAGmZdhtDZ23sbDIvbfBq6fLdTAt2A9b/t6sumVnDxJggO02LQiydeeHgF+0FZ7qpyRMlUkUi0pT4ulOkCk7mtCqW3mscaaV5Jo9ssB/tvk+RpzUaVjBkpt357PcQO9eGVXf46iozkmcQCnFncBjMyzbVegXodWgdmfql+3wQhsf4/j5IckS/RcnRi8VyuvP/MDJKV/zYQAADviEs8DEJ5upeZoHgDnzwRSSrVSvOedxtxcIMyFYOoG51HPquhFM5pFCPIpkyo2OEAytyhH2D91SQ8q5DQy/78fuPi+Fmsd0wQxVj/yIvgFlv8boN6WyJrE5x7wEYRAk9OMYZoOV3bPScf+NR3GYI0AgULykoyx9DHG+0uNkZVEEn8txABHmNT7y/6o2okaEvF4rgeXeOeLV/5G2E3ML80BW//CJ+0+41SIjOtlK4PMGfJ8QLKXwGpz/9rtMqs3E7iljVTtczFpw7RbXY3+6nBPI1t+QfNp3LBM8k65zTvRawntvKJfpHM5eEabPhZBXtZ517wkxd0DcEmXZHGA3YnyKDD/Z8F2AE5NuM/+KOVYqL5gGlJoXSC3hXskdL66K/BuQNqfFXpv4ih8HvlSI4UcTfPSSFkodUajDZJkDKeXl9nxyBRN3omnFn27AhBD+dm/tpoLGaypGWEEfRFyDGgHLdRRM2OL9lXlnDxEFNx7qKyo7cY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(66476007)(66946007)(26005)(41300700001)(9686003)(66446008)(66556008)(64756008)(7696005)(6506007)(8936002)(478600001)(316002)(186003)(110136005)(54906003)(52536014)(71200400001)(83380400001)(4326008)(8676002)(76116006)(33656002)(38100700002)(122000001)(86362001)(55016003)(38070700005)(2906002)(7406005)(7416002)(4744005)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JoePGJw5cUwu9BxopF034vMDM0qsASzMRjloBkGcWAS4l67VDv0cSRNsjLX7?=
- =?us-ascii?Q?6cwBR6I8MpD0aeMQG3Sx7iV3U4bQe5h7+Wz5M49Ypb9+x6gZfrVy39ebfvBS?=
- =?us-ascii?Q?sy16117bLeuIu4fO4BAcpvoJ7x3L72h5KNaTuGKpwmoXYr6CiIqs6Yb1NVqH?=
- =?us-ascii?Q?rmpj9n6GE+t/M97wItqQH1jOanQoIUW4gd02hXTs2qAd7VYs/nhtigUEWmYR?=
- =?us-ascii?Q?DGwZjNBRGzvT/yvcEhpNkziQO/VK4NjI+gFKE6hQUERLtpNyEr4l44kp00Q0?=
- =?us-ascii?Q?x981726/wSrfMwKVPDTlQN4Qm+OBwO4IWCf/PKWrnWY7xvC2Rfa9AGjZJ0Hi?=
- =?us-ascii?Q?vQvtnV3inYmlep7S5wuQwAtqrIPwNcUMa4xHzo3R9uhgLRxNemhFTCOrH6Wm?=
- =?us-ascii?Q?gi9jCoE5OavFacLQYLr80YxvK391fGP/a+xWQ3zzQOXjIhB2uk7xk2D+wF6N?=
- =?us-ascii?Q?bb1JoP4MC8rAKzwx7WH9uUDciQGF0Uwx6khskVSG7IAGUt6NoLErjH8gBnlz?=
- =?us-ascii?Q?9YLNF43Efuww1g6Wwy7gDa8m8CQfeym465d/00oxLBc2gH7QmH8OIEfh+ffS?=
- =?us-ascii?Q?fiV27oED9HNFkVSTkesz84wAnXrHWqgMlJx+bcIjvVCsV9ut7vipx+KfAnwi?=
- =?us-ascii?Q?3x1itCgxJ+cLBjf2vDasvWJtjR0Anr7lqTtfwlx40YJUaFgJD7GBqK50tHej?=
- =?us-ascii?Q?EkTD2/nAFGbt0eqQqqC1DEFU7JSBJUjuxhaG4MrdQHUobEEMPoSboi49WjQa?=
- =?us-ascii?Q?2sz9JSNbyGxoIZ52pK85XyOsY9VGON+vUktuiH5Fnkos5w4kdQPmBdYzMcmC?=
- =?us-ascii?Q?piuzPP6x5F6SOO/nfmbgvaZK1jbkAIxO5NRqCh7MpV2RnlEiqtab+dCZlclX?=
- =?us-ascii?Q?0bXXpyXx7IqkSbbrYZwHVo4xUpX/fUWwxiU3Xgu/TxmATPRHP15EUyQMMN9Y?=
- =?us-ascii?Q?ecLMvT2cl07kZ/VgjQOsEjDOhUn5nxZQzAcMH75CjrjitFCIq5rzQ6e1gs5H?=
- =?us-ascii?Q?7CiFgORO4qX8r6FY/5/fWfq4f2Ur2m6hRmprWC9Bs06IpgW5MU4mvGKjo6/g?=
- =?us-ascii?Q?+upNLDCG105fipz98gphX9GBqAeGa3LpLPSZdwfCXBbTpLZh0NdPiZEKJJWv?=
- =?us-ascii?Q?Eq8icaFZXOppU0mKQOQUCdc9U8XcqdqMfskv62YvSFuvH9QYGzHh1YXglaRk?=
- =?us-ascii?Q?n+3GTSIaWCjRsK1woqfajPBGZUOYCNJfS0StfZBiamIXLU19iJ+ddeNAyqFx?=
- =?us-ascii?Q?rZO34H3aogVeboq1ykxlkN3fm8Q3I4KMW2qsfgW9Smmx/sTDXzQbculq/UFu?=
- =?us-ascii?Q?qMDULMgsy/utrwcsMk6mC7i3wWJaFtwuRojBbrymQLPT6nRzPuyfyQjQ7XpW?=
- =?us-ascii?Q?1Zfy/1NQ6wpy+7V7YhmVJWz98PfYIErCkPDiX6s/spDPzF/mE5aHuRTGGCH3?=
- =?us-ascii?Q?JaHVWBxBWbptGa47pN4qX0SFO4IfcdlFCsTN3uF+AxTDP4ntZbh5htDu18YZ?=
- =?us-ascii?Q?Puem7U/5cbPiCZCQoqcTjnWCkp5CPfdJ1mgdUFbGejgoxykPG2aL5xTKcKhc?=
- =?us-ascii?Q?HI5Ksljzft+Qf5MNdH4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 1 Aug 2022 17:51:45 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E397039BA0;
+        Mon,  1 Aug 2022 14:51:43 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m8so15392980edd.9;
+        Mon, 01 Aug 2022 14:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VLuEcIkJtnKoMl8gBoUClGYBdOKVju+Fv4CrOEtOKBE=;
+        b=eQywm0SYRown4Vd/F5Sr8QZB48pltddGfTACwJqvJydCzDVTxghTZycjVyzWDiMkmx
+         tyyyQjbdCUDr7XtTQ8Ow/Tih7gktgV/xyfyLcPy3yJy4r2s7Hw+2X2ghPlZqM7nVHMLG
+         QCJX6wLvU8q8xx94nsmL3NoW5mKF0nqg+5QEysJ6T6a29nFkAFoXXobQSBocpv57pRcL
+         z4XvKnxw7JfBduEJtfa4MjDQ3/1NK5RV/ssYjkCtpAm2mGhzllxE7Kc1LCHKxObtsWr3
+         B0lzm8o+zw0y3SOBWcaSuVIiA8/z+5kCPMPgv6COUw0f4mbhhWge+Ay9Uh2mSj/gehvA
+         g+gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VLuEcIkJtnKoMl8gBoUClGYBdOKVju+Fv4CrOEtOKBE=;
+        b=ICV92xa1efoaTRYgnd1C1x2J/yS0ye0Iu69cKne491bsw7uQkcc9UpltVjN1W75/Cr
+         nkkyTt48pL4611zpYYzSQgRJiSAvIZiLmLQANsfY0J29/zchHqCXWshhMLkoZnV86u63
+         XyKUMGI5ChWykYxnxtUgj2kLwqiekAbBc2L1fPaSgGC6EI2GHfLLUDN0NBMheE86vI+n
+         oNTWbCE4ax35CMugzanDNWnnE/afj2lqJFrMueT3AxBQ6r2b7lki2CU7dwsigE2ndovu
+         RPBX6h/DGadhU1/CVP8W9hnCs6F8POWN05eAlt71/lqv/08ZrKIXyMZUghqojSw72zks
+         c1sg==
+X-Gm-Message-State: ACgBeo2o9T6Rwi9niqGYkY9w9o/iWX2q+2bGQiIWU0jlhYPRmlAeq5Ox
+        xI4i7XSmTnE6/7bgeR2pqCW2evwjNIwPZJWt+PQ=
+X-Google-Smtp-Source: AA6agR7aLJ8wAO+BNHBsLmozA0N0weo6l4KeLAuItYUFusShEQ4dh2D1zYVKD/t563zJOWxIQTUHpiTlWB4jj8uhxY8=
+X-Received: by 2002:aa7:de18:0:b0:43d:30e2:d22b with SMTP id
+ h24-20020aa7de18000000b0043d30e2d22bmr15551672edv.224.1659390702488; Mon, 01
+ Aug 2022 14:51:42 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4667e8fe-5c0c-4621-2e5b-08da7407de68
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 21:50:37.0684
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hPP0mf5N8vk9V9w7FgbVrx5k0emK/PpIPxbGPNyvMRUBsT8ksoE3WHTqNA2Zpgs9WQJ4rZjx6UrfFIOr7Nz+IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1941
+References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-6-haoluo@google.com>
+In-Reply-To: <20220801175407.2647869-6-haoluo@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 1 Aug 2022 14:51:31 -0700
+Message-ID: <CAEf4Bzbdz7=Cg-87G2tak1Mr=1wJkqr6g2d=dkHqu0YH+j2unA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 5/8] selftests/bpf: Test cgroup_iter.
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -174,27 +83,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On Mon, Aug 1, 2022 at 10:54 AM Hao Luo <haoluo@google.com> wrote:
+>
+> Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
+> of the following structure:
+>
+>     ROOT (working cgroup)
+>      |
+>    PARENT
+>   /      \
+> CHILD1  CHILD2
+>
+> and tests the following scenarios:
+>
+>  - invalid cgroup fd.
+>  - pre-order walk over descendants from PARENT.
+>  - post-order walk over descendants from PARENT.
+>  - walk of ancestors from PARENT.
+>  - early termination.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
+>  .../selftests/bpf/prog_tests/cgroup_iter.c    | 193 ++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+>  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++++
+>  3 files changed, 239 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+> new file mode 100644
+> index 000000000000..5dc843a3f507
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+> @@ -0,0 +1,193 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Google */
+> +
+> +#include <test_progs.h>
+> +#include <bpf/libbpf.h>
+> +#include <bpf/btf.h>
+> +#include "cgroup_iter.skel.h"
+> +#include "cgroup_helpers.h"
+> +
+> +#define ROOT           0
+> +#define PARENT         1
+> +#define CHILD1         2
+> +#define CHILD2         3
+> +#define NUM_CGROUPS    4
+> +
+> +#define PROLOGUE       "prologue\n"
+> +#define EPILOGUE       "epilogue\n"
+> +
+> +#define format_expected_output1(cg_id1) \
+> +       snprintf(expected_output, sizeof(expected_output), \
+> +                PROLOGUE "%8llu\n" EPILOGUE, (cg_id1))
+> +
+> +#define format_expected_output2(cg_id1, cg_id2) \
+> +       snprintf(expected_output, sizeof(expected_output), \
+> +                PROLOGUE "%8llu\n%8llu\n" EPILOGUE, \
+> +                (cg_id1), (cg_id2))
+> +
+> +#define format_expected_output3(cg_id1, cg_id2, cg_id3) \
+> +       snprintf(expected_output, sizeof(expected_output), \
+> +                PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE, \
+> +                (cg_id1), (cg_id2), (cg_id3))
+> +
 
->> I disagree.  Running an old kernel on new hardware with a different=20
->> RMP layout should refuse to use SNP, not read/write garbage and likely=20
->> corrupt the RMP and/or host memory.
+you use format_expected_output{1,2} just once and
+format_expected_output3 twice. Is it worth defining macros for that?
 
->See my example below.
+> +const char *cg_path[] = {
+> +       "/", "/parent", "/parent/child1", "/parent/child2"
+> +};
+> +
+> +static int cg_fd[] = {-1, -1, -1, -1};
+> +static unsigned long long cg_id[] = {0, 0, 0, 0};
+> +static char expected_output[64];
+> +
+> +int setup_cgroups(void)
+> +{
+> +       int fd, i = 0;
+> +
+> +       for (i = 0; i < NUM_CGROUPS; i++) {
+> +               fd = create_and_get_cgroup(cg_path[i]);
+> +               if (fd < 0)
+> +                       return fd;
+> +
+> +               cg_fd[i] = fd;
+> +               cg_id[i] = get_cgroup_id(cg_path[i]);
+> +       }
+> +       return 0;
+> +}
+> +
+> +void cleanup_cgroups(void)
 
-> And IMO, hiding the non-architectural RMP format in SNP-specific code=20
-> so that we don't have to churn a bunch of call sites that don't _need_=20
-> access to the raw RMP format is a good idea regardless of whether we=20
-> want to be optimistic or pessimistic about future formats.
+some more statics to cover (same for setup_cgroups)
 
->I don't think I ever objected to that.
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < NUM_CGROUPS; i++)
+> +               close(cg_fd[i]);
+> +}
+> +
+> +static void read_from_cgroup_iter(struct bpf_program *prog, int cgroup_fd,
+> +                                 int order, const char *testname)
+> +{
+> +       DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> +       union bpf_iter_link_info linfo;
+> +       struct bpf_link *link;
+> +       int len, iter_fd;
+> +       static char buf[64];
+> +
+> +       memset(&linfo, 0, sizeof(linfo));
+> +       linfo.cgroup.cgroup_fd = cgroup_fd;
+> +       linfo.cgroup.traversal_order = order;
+> +       opts.link_info = &linfo;
+> +       opts.link_info_len = sizeof(linfo);
+> +
+> +       link = bpf_program__attach_iter(prog, &opts);
+> +       if (!ASSERT_OK_PTR(link, "attach_iter"))
+> +               return;
+> +
+> +       iter_fd = bpf_iter_create(bpf_link__fd(link));
+> +       if (iter_fd < 0)
+> +               goto free_link;
+> +
+> +       memset(buf, 0, sizeof(buf));
+> +       while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
+> +               ;
 
-I agree with what Sean is recommending to do.=20
+this is broken, in general, you are overriding buffer content with
+each call to len
 
-As I mentioned earlier, in the long term and with respect to future platfor=
-ms, we are going to add architectural support
-to read RMP table entries, so this structure will exist only for older plat=
-form support.
+I think you intended to advance buf after each read() call (and reduce
+remaining available buf size)?
 
-Thanks,
-Ashish
+> +
+> +       ASSERT_STREQ(buf, expected_output, testname);
+> +
+> +       /* read() after iter finishes should be ok. */
+> +       if (len == 0)
+> +               ASSERT_OK(read(iter_fd, buf, sizeof(buf)), "second_read");
+> +
+> +       close(iter_fd);
+> +free_link:
+> +       bpf_link__destroy(link);
+> +}
+> +
+> +/* Invalid cgroup. */
+> +static void test_invalid_cgroup(struct cgroup_iter *skel)
+> +{
+> +       DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> +       union bpf_iter_link_info linfo;
+> +       struct bpf_link *link;
+> +
+> +       memset(&linfo, 0, sizeof(linfo));
+> +       linfo.cgroup.cgroup_fd = (__u32)-1;
+> +       opts.link_info = &linfo;
+> +       opts.link_info_len = sizeof(linfo);
+> +
+> +       link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
+> +       if (!ASSERT_ERR_PTR(link, "attach_iter"))
+> +               bpf_link__destroy(link);
+
+nit: you can call bpf_link__destroy() even if link is NULL or IS_ERR
+
+> +}
+> +
+
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter.c b/tools/testing/selftests/bpf/progs/cgroup_iter.c
+> new file mode 100644
+> index 000000000000..2a34d146d6df
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/cgroup_iter.c
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Google */
+> +
+> +#include "bpf_iter.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +volatile int terminate_early = 0;
+> +volatile u64 terminal_cgroup = 0;
+> +
+
+nit: you shouldn't need volatile for non-const global variables. Did
+you see any problems without volatile?
+
+> +static inline u64 cgroup_id(struct cgroup *cgrp)
+> +{
+> +       return cgrp->kn->id;
+> +}
+> +
+
+[...]

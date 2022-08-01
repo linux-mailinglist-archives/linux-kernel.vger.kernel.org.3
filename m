@@ -2,219 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69721586BFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D589586C00
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiHAN3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S231616AbiHAN3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiHAN3V (ORCPT
+        with ESMTP id S231623AbiHAN31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:29:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95863C179;
-        Mon,  1 Aug 2022 06:29:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85E6C612C6;
-        Mon,  1 Aug 2022 13:29:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3959C433D6;
-        Mon,  1 Aug 2022 13:29:18 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="S+kpgMnl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659360556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKJOoamZnuVeYfzjXQgjS2Ghoq/vg62eefbibY7cYCQ=;
-        b=S+kpgMnlJ3fPlcD1QucdzozIO/1dBK30GkPDxs1UJbUgoZSco6LkGuioxJQTbj7n+U4PPi
-        NgtZaQ0icPKfKxIt7m5yaUQQumNu72ZzFsoAgrCKmjkMLWEycDSjOogk+uPd6Mm+yUBD6c
-        tap8jPql2sblg0GOcnp0RT0swe2Eme0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bdcf6de2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 13:29:16 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 15:29:11 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        x86@kernel.org, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH RFC v2] random: implement getrandom() in vDSO
-Message-ID: <YufVJ5wmYgkgRnpQ@zx2c4.com>
-References: <YuXLlUZ8EzvZB43U@zx2c4.com>
- <20220731013125.2103601-1-Jason@zx2c4.com>
- <871qu0qri6.fsf@oldenburg.str.redhat.com>
- <YufLzQkmaERnJMOs@zx2c4.com>
+        Mon, 1 Aug 2022 09:29:27 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFF43C8FF
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:29:25 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso12416561pjq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=piHbK3UTbLD9iX3PR06IXvcLd5J15k6XNiAP53ZMJ4M=;
+        b=uarbxJk2fAKWggvb+nqWwyIdVHYdxMvhC3w+walHGbRvIXqB/KHaPOb1ekLfW5unTw
+         FleMMIiUYW4Ox6mnoQvMRDLVgqJbyNjh8uZTkuxJcVY2OuIC5YAueJRbPnCEnEA/WHwF
+         Cppgpm4qkdJ34arKkjA5Bo7fozZ+Jt4lh/SZ9TMlxqF+zWANlRQXfFf1bGQedPoRSWTz
+         x752vYb4PVKFaK+yZy0ofrS8Y4fkLsFcQicGYgL7PF9bW7MwJoNQA56yQ6NsvOuF54xd
+         VjWEGBSYVTgMI7ga5Tp7HPy8FPwnZK3M8UZUsdF6CQiE2Yf1lH8SCys76qUtTPc1rUOp
+         IDfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=piHbK3UTbLD9iX3PR06IXvcLd5J15k6XNiAP53ZMJ4M=;
+        b=0SfTFSHq4VwJUm2fEL3zy8J+o1w8lBe9BhZ0uAvehXm8qhnIgbFoZRU9CFmaXSU1JH
+         leYV1dsRztsuosZoePgBfobHQWacWyAlSGWgolll/lHuRoHd19R2Zm0U46y1iW5vxdX0
+         P09IG289veoJZcvUsfu8ry1tm1X6NrtowUMX3+ymGVNdbLHbFlfYFhIiH6F1oscKMtxf
+         it178KYlu6h0IhqHBnQknAnSGAFRwH9eHSI5Uox5xwvMl12x+ygOPNf1Jk8KdcRSl2nB
+         yD596KddXPs5M4kAEhgg4W4gQd3YaKoJ86JUYp5D28Cs5qHT2/6paO0Kf18v3KzDrSJm
+         Tycg==
+X-Gm-Message-State: ACgBeo28f5GLbwUnHdBpJEXB//FeaWO6mNvnxNFU/VOiUAcAVeKlyLn2
+        2X8qvdxfXo39yU3HRbyHrJYp
+X-Google-Smtp-Source: AA6agR6f2gG1JYF96xw37fgWxbCpANQ6x8CkczTqANqhYTnastBsdlFNyUsPc3C5KODvwf6fE5Bb3A==
+X-Received: by 2002:a17:90b:3a90:b0:1f2:edfe:db4 with SMTP id om16-20020a17090b3a9000b001f2edfe0db4mr19430937pjb.105.1659360564404;
+        Mon, 01 Aug 2022 06:29:24 -0700 (PDT)
+Received: from thinkpad ([117.217.185.73])
+        by smtp.gmail.com with ESMTPSA id l190-20020a6225c7000000b0052d98fbf8f3sm1647563pfl.56.2022.08.01.06.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 06:29:24 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 18:59:12 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 07/15] PCI: tegra194: Drop manual DW PCIe
+ controller version setup
+Message-ID: <20220801132912.GG93763@thinkpad>
+References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143947.8991-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YufLzQkmaERnJMOs@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624143947.8991-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
-
-On Mon, Aug 01, 2022 at 02:49:17PM +0200, Jason A. Donenfeld wrote:
-> What I understand you to mean is that *instead of* doing vDSO, we could
-> just batch in the kernel, and reap most of the performance benefits. If
-> that turns out to be true, and then we don't even need this vDSO stuff,
-> I'd be really happy. So I'll give this a try.
+On Fri, Jun 24, 2022 at 05:39:39PM +0300, Serge Semin wrote:
+> Since the DW PCIe common code now supports the IP-core version
+> auto-detection there is no point in manually setting the version up for the
+> controllers newer than v4.70a. Seeing Tegra 194 PCIe Host and EP
+> controllers are based on the DW PCIe v4.90a IP-core we can freely drop the
+> dw_pcie.version field initialization.
 > 
-> One question is where to store that batch. On the surface, per-cpu seems
-> appealing, like what we do for get_random_u32() and such for kernel
-> callers. But per-cpu means disabling preemption, which then becomes a
-> problem when copying into userspace, where the copies can fault. So
-> maybe something more sensible is, like above, just doing this per-task.
-> I'll give it a stab and will let you know what it looks like.
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-So doing the batching in the kernel gives roughly a 2x performance boost
-for the u32 case. Below is a little hacky patch you can play with. This
-isn't the face melting 15x of the vDSO approach, but it is something, I
-guess.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Jason
+Thanks,
+Mani
 
-From 99a314f603c9cd173e6db2e3776eb76477283e1a Mon Sep 17 00:00:00 2001
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Mon, 1 Aug 2022 15:19:33 +0200
-Subject: [PATCH] random: batch getrandom() output per-task
+> 
+> ---
+> 
+> Folks, I don't have Tegra 194 PCIe hw instance to test it out. Could you
+> please make sure this patch doesn't brake anything?
+> 
+> Changelog v3:
+> - This is a new patch create as a result of the discussion:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-6-Sergey.Semin@baikalelectronics.ru/
+> ---
+>  drivers/pci/controller/dwc/pcie-tegra194.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index f24b30b7454f..e497e6de8d15 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -1979,7 +1979,6 @@ static int tegra194_pcie_probe(struct platform_device *pdev)
+>  	pci->ops = &tegra_dw_pcie_ops;
+>  	pci->n_fts[0] = N_FTS_VAL;
+>  	pci->n_fts[1] = FTS_VAL;
+> -	pci->version = DW_PCIE_VER_490A;
+>  
+>  	pp = &pci->pp;
+>  	pp->num_vectors = MAX_MSI_IRQS;
+> -- 
+> 2.35.1
+> 
 
-bla bla just a test
-
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 68 +++++++++++++++++++++++++++----------------
- include/linux/sched.h |  6 ++++
- 2 files changed, 49 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index d44832e9e709..1be0fea81cea 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -400,49 +400,67 @@ EXPORT_SYMBOL(get_random_bytes);
- static ssize_t get_random_bytes_user(struct iov_iter *iter)
- {
- 	u32 chacha_state[CHACHA_STATE_WORDS];
--	u8 block[CHACHA_BLOCK_SIZE];
--	size_t ret = 0, copied;
-+	unsigned long next_gen;
-+	size_t ret, copied, batch_len;
-+	bool do_more = true;
-
- 	if (unlikely(!iov_iter_count(iter)))
- 		return 0;
-
--	/*
--	 * Immediately overwrite the ChaCha key at index 4 with random
--	 * bytes, in case userspace causes copy_to_iter() below to sleep
--	 * forever, so that we still retain forward secrecy in that case.
--	 */
--	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
--	/*
--	 * However, if we're doing a read of len <= 32, we don't need to
--	 * use chacha_state after, so we can simply return those bytes to
--	 * the user directly.
--	 */
--	if (iov_iter_count(iter) <= CHACHA_KEY_SIZE) {
--		ret = copy_to_iter(&chacha_state[4], CHACHA_KEY_SIZE, iter);
--		goto out_zero_chacha;
-+retry_generation:
-+	ret = 0;
-+	next_gen = READ_ONCE(base_crng.generation);
-+	if (unlikely(next_gen != current->rng_batch.generation || crng_has_old_seed())) {
-+		current->rng_batch.position = sizeof(current->rng_batch.buf);
-+		current->rng_batch.generation = next_gen;
- 	}
-
--	for (;;) {
--		chacha20_block(chacha_state, block);
-+more_batch:
-+	batch_len = min_t(size_t, iov_iter_count(iter),
-+			  sizeof(current->rng_batch.buf) - current->rng_batch.position);
-+	if (batch_len) {
-+		copied = copy_to_iter(current->rng_batch.buf + current->rng_batch.position,
-+				      batch_len, iter);
-+		ret += copied;
-+		memset(current->rng_batch.buf + current->rng_batch.position, 0, batch_len);
-+		current->rng_batch.position += batch_len;
-+		if (!iov_iter_count(iter) || copied != batch_len)
-+			goto out;
-+	}
-+
-+	crng_make_state(chacha_state, current->rng_batch.buf + CHACHA_BLOCK_SIZE, 32);
-+	while (iov_iter_count(iter) >= CHACHA_BLOCK_SIZE) {
-+		chacha20_block(chacha_state, current->rng_batch.buf);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
-
--		copied = copy_to_iter(block, sizeof(block), iter);
-+		copied = copy_to_iter(current->rng_batch.buf, CHACHA_BLOCK_SIZE, iter);
- 		ret += copied;
--		if (!iov_iter_count(iter) || copied != sizeof(block))
-+		if (!iov_iter_count(iter) || copied != CHACHA_BLOCK_SIZE) {
-+			do_more = false;
- 			break;
-+		}
-
--		BUILD_BUG_ON(PAGE_SIZE % sizeof(block) != 0);
-+		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
- 		if (ret % PAGE_SIZE == 0) {
--			if (signal_pending(current))
-+			if (signal_pending(current)) {
-+				do_more = false;
- 				break;
-+			}
- 			cond_resched();
- 		}
- 	}
--
--	memzero_explicit(block, sizeof(block));
--out_zero_chacha:
-+	chacha20_block(chacha_state, current->rng_batch.buf);
-+	current->rng_batch.position = 0;
- 	memzero_explicit(chacha_state, sizeof(chacha_state));
-+	if (do_more)
-+		goto more_batch;
-+
-+out:
-+	if (unlikely(ret && current->rng_batch.generation != READ_ONCE(base_crng.generation))) {
-+		iov_iter_revert(iter, ret);
-+		goto retry_generation;
-+	}
- 	return ret ? ret : -EFAULT;
- }
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index c46f3a63b758..6df125a43bb1 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1500,6 +1500,12 @@ struct task_struct {
- 	struct callback_head		l1d_flush_kill;
- #endif
-
-+	struct {
-+		unsigned long generation;
-+		u8 buf[96];
-+		u8 position;
-+	} rng_batch;
-+
- 	/*
- 	 * New fields for task_struct should be added above here, so that
- 	 * they are included in the randomized portion of task_struct.
---
-2.35.1
-
-
+-- 
+மணிவண்ணன் சதாசிவம்

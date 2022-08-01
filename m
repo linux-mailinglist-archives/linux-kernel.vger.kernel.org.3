@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F3586A5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB72586974
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiHAMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S232935AbiHAMCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbiHAMOu (ORCPT
+        with ESMTP id S233005AbiHAMAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:14:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13AF7858C;
-        Mon,  1 Aug 2022 04:58:05 -0700 (PDT)
+        Mon, 1 Aug 2022 08:00:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDB24E857;
+        Mon,  1 Aug 2022 04:53:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 671D3B80E8F;
-        Mon,  1 Aug 2022 11:58:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D049CC433C1;
-        Mon,  1 Aug 2022 11:58:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8807761326;
+        Mon,  1 Aug 2022 11:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9344BC433C1;
+        Mon,  1 Aug 2022 11:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659355083;
-        bh=iv8aXyOYAKbnZ+8BSaqMJfr4nzdWoMVAHy3Es2WIAeU=;
+        s=korg; t=1659354784;
+        bh=Pk5xfaZveeo4I7PJdyybX2fZfA1CFcunfBUWgqk6NJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TB7WjXDmV6PqsY1JhJAjkgdj8YLzBAJ+1KCzPXnLtFocuY7HVfkP3/601bQLx1XKI
-         YWmJT8JE4pmp955svSi1tR1iWmkNMwh+3fkALlOga6jN3QjjTkOerz4OnVzXfaJ4/x
-         f3B8wdtVjuqCd8l8vo3WtQkk24/TGwygE2BJo4aU=
+        b=WAHp3Yp9L7/Y2JRVQIoF01vFPn7Rt1mOOPramuRw1NO9h3LHrv9eonVdW9sHXtHYT
+         m8f0tWVpmAkJjDWX0HIMGzoQ6EX1WS8aG1QzLTPQJB/7ai2eVAU22xgHP+y089C4+U
+         CjoNBswF/vGPtP+3uj5fIr/54pRRBnQc3Kd8Lnnw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.18 29/88] ice: do not setup vlan for loopback VSI
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 19/69] tcp: Fix data-races around sysctl_tcp_no_ssthresh_metrics_save.
 Date:   Mon,  1 Aug 2022 13:46:43 +0200
-Message-Id: <20220801114139.353024978@linuxfoundation.org>
+Message-Id: <20220801114135.282857286@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit cc019545a238518fa9da1e2a889f6e1bb1005a63 upstream.
+commit ab1ba21b523ab496b1a4a8e396333b24b0a18f9a upstream.
 
-Currently loopback test is failiing due to the error returned from
-ice_vsi_vlan_setup(). Skip calling it when preparing loopback VSI.
+While reading sysctl_tcp_no_ssthresh_metrics_save, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: 0e674aeb0b77 ("ice: Add handler for ethtool selftest")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 65e6d90168f3 ("net-tcp: Disable TCP ssthresh metrics cache by default")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/ipv4/tcp_metrics.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -5994,10 +5994,12 @@ int ice_vsi_cfg(struct ice_vsi *vsi)
- 	if (vsi->netdev) {
- 		ice_set_rx_mode(vsi->netdev);
+--- a/net/ipv4/tcp_metrics.c
++++ b/net/ipv4/tcp_metrics.c
+@@ -385,7 +385,7 @@ void tcp_update_metrics(struct sock *sk)
  
--		err = ice_vsi_vlan_setup(vsi);
-+		if (vsi->type != ICE_VSI_LB) {
-+			err = ice_vsi_vlan_setup(vsi);
+ 	if (tcp_in_initial_slowstart(tp)) {
+ 		/* Slow start still did not finish. */
+-		if (!net->ipv4.sysctl_tcp_no_ssthresh_metrics_save &&
++		if (!READ_ONCE(net->ipv4.sysctl_tcp_no_ssthresh_metrics_save) &&
+ 		    !tcp_metric_locked(tm, TCP_METRIC_SSTHRESH)) {
+ 			val = tcp_metric_get(tm, TCP_METRIC_SSTHRESH);
+ 			if (val && (tcp_snd_cwnd(tp) >> 1) > val)
+@@ -401,7 +401,7 @@ void tcp_update_metrics(struct sock *sk)
+ 	} else if (!tcp_in_slow_start(tp) &&
+ 		   icsk->icsk_ca_state == TCP_CA_Open) {
+ 		/* Cong. avoidance phase, cwnd is reliable. */
+-		if (!net->ipv4.sysctl_tcp_no_ssthresh_metrics_save &&
++		if (!READ_ONCE(net->ipv4.sysctl_tcp_no_ssthresh_metrics_save) &&
+ 		    !tcp_metric_locked(tm, TCP_METRIC_SSTHRESH))
+ 			tcp_metric_set(tm, TCP_METRIC_SSTHRESH,
+ 				       max(tcp_snd_cwnd(tp) >> 1, tp->snd_ssthresh));
+@@ -418,7 +418,7 @@ void tcp_update_metrics(struct sock *sk)
+ 			tcp_metric_set(tm, TCP_METRIC_CWND,
+ 				       (val + tp->snd_ssthresh) >> 1);
+ 		}
+-		if (!net->ipv4.sysctl_tcp_no_ssthresh_metrics_save &&
++		if (!READ_ONCE(net->ipv4.sysctl_tcp_no_ssthresh_metrics_save) &&
+ 		    !tcp_metric_locked(tm, TCP_METRIC_SSTHRESH)) {
+ 			val = tcp_metric_get(tm, TCP_METRIC_SSTHRESH);
+ 			if (val && tp->snd_ssthresh > val)
+@@ -463,7 +463,7 @@ void tcp_init_metrics(struct sock *sk)
+ 	if (tcp_metric_locked(tm, TCP_METRIC_CWND))
+ 		tp->snd_cwnd_clamp = tcp_metric_get(tm, TCP_METRIC_CWND);
  
--		if (err)
--			return err;
-+			if (err)
-+				return err;
-+		}
- 	}
- 	ice_vsi_cfg_dcb_rings(vsi);
- 
+-	val = net->ipv4.sysctl_tcp_no_ssthresh_metrics_save ?
++	val = READ_ONCE(net->ipv4.sysctl_tcp_no_ssthresh_metrics_save) ?
+ 	      0 : tcp_metric_get(tm, TCP_METRIC_SSTHRESH);
+ 	if (val) {
+ 		tp->snd_ssthresh = val;
 
 

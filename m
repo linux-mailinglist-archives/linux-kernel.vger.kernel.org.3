@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763FA5871FC
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F41B587204
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiHAUI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S233626AbiHAULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 16:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiHAUIY (ORCPT
+        with ESMTP id S233778AbiHAULP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:08:24 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D2827B00;
-        Mon,  1 Aug 2022 13:08:23 -0700 (PDT)
+        Mon, 1 Aug 2022 16:11:15 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAEC1A04D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:11:13 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id b8-20020a17090a010800b001f1f4fc8178so6422151pjb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 13:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659384503; x=1690920503;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Z2sKdEmuR5GzYMOhpZvEQcMlZYe/O/eQFVyPPPVjpGM=;
-  b=vP7AIw461jRm7Q85tnBz+9hQR10wSdo3fF1HOlrzL/nRL0SZPoszkalN
-   C6VihlJ1msDuUszMMuztzX7QKh3k2UBtsubpWCAAkyeHcBQbV7FBQ5crz
-   1oyug4ILF/WgywcHZ3u83nbEmZo3qcPcJPmXOv+ns/dvFPXJqAvp5iQBS
-   A=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Aug 2022 13:08:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 13:08:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 1 Aug 2022 13:08:22 -0700
-Received: from [10.110.16.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
- 13:08:20 -0700
-Message-ID: <89f3dfa2-0983-5e33-281f-94539492d1d2@quicinc.com>
-Date:   Mon, 1 Aug 2022 13:08:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/msm/dp: delete DP_RECOVERED_CLOCK_OUT_EN to fix tps4
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1659382970-17477-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52=zJ0ScrknAhsvJQc5hXP7+TGaoa4gnaVzsT26bQL_Uw@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n52=zJ0ScrknAhsvJQc5hXP7+TGaoa4gnaVzsT26bQL_Uw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=spLa+8cqriOZAhw1Zi4AYOlRklLSR96sO0vwvWIpDDs=;
+        b=NOWEDdkgFqZDD8hZ0NEfLZMXqE32QLY4UxFy8k2Nc5sI+vpryX39pHFxsWXpJ3Zvky
+         xuuubFLBR7kkMlia5/tS8XGvZYhSF9iL18Gv8IEVO5UYX7JHuijqyqLiZiQ7rw66IzeB
+         bcFm3UlkHTRb8oDdeLATcB9lab3n59LRpLAfr4C6X8R/P6G0VUwA8k6IVf78jtBq/qB+
+         34QR8FEBRnzrWGBgs0oozXdZreNy9Q0hOUSHbW9q7ghnKBRirG+eI9Q1SPedw7NTx3iR
+         y1ovkgjD+jLXafOW+sFrznI2rQIB81Saqj0J2mjUAvI7/++EcDFyqt4z0pcnVkNcwo8e
+         0+MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=spLa+8cqriOZAhw1Zi4AYOlRklLSR96sO0vwvWIpDDs=;
+        b=pQSJWO3tp8f4QrgZGKD4gLKUXfHzqTejgVfPXkPPZgOu1Zs+kFAjear1B9DG0/oI+u
+         QlTfRhRKlzL2F6/FdY7skLCnh2OcZAkF67NevIo5yvqxXyn/0h4y2CwwAEHR5hjTpeMf
+         vCKa9L9r8hP7swifUTGwaE4BlglHRkquEm1gvwIDdAoQRYGWm6T65Rdi5qL+J1l6osMY
+         CMaKkhbtwoTREAiFmDNLI73/quTE/zZEHo+JTjToZKK77Fw3DhaAs/cSU1/x2wH4aCIe
+         XqzU/kTXUnukTKNkWOZE10TAkvWfVEQLKMAaEi8kX+QOY52lDHw7rE1yCtcyM7j7H4lF
+         tNgQ==
+X-Gm-Message-State: AJIora9yo84jGhIkDWc+R4SedkT04xI0+7kqQQbkJTewiUsCXftdKuTy
+        mg8yQKDgQDmkd/ZpUntF6MXC80/yR6k=
+X-Google-Smtp-Source: AGRyM1sUGZIglgDaDk7TTl6TqPw6CNdURLsQ5TG4EFHeDqXvU0dXnNnlu2+kp5P1aHi7O0aXmBEXQLwzXjQ=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:6be2:f99c:e23c:fa12])
+ (user=pgonda job=sendgmr) by 2002:a05:6a00:e0e:b0:522:990c:ab60 with SMTP id
+ bq14-20020a056a000e0e00b00522990cab60mr17866513pfb.8.1659384672663; Mon, 01
+ Aug 2022 13:11:12 -0700 (PDT)
+Date:   Mon,  1 Aug 2022 13:10:58 -0700
+Message-Id: <20220801201109.825284-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Subject: [V2 00/11] KVM: selftests: Add simple SEV test
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, marcorr@google.com,
+        seanjc@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
+        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
+        Peter Gonda <pgonda@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series combines the work Michael Roth has done in supporting
+SEV guests in selftests and the work Sean Christopherson suggested to
+allow ucalls from SEV guests. And the work Sean has sent to consolidate
+the ucall boilerplate code. Along with a very simple version of the
+SEV selftests Michael originally proposed.
+
+V2
+ * Dropped RFC tag
+ * Correctly seperated Sean's ucall patches into 2 as originally
+   intended.
+ * Addressed andrew.jones@ in ucall patches.
+ * Fixed ucall pool usage to work for other archs
+
+V1
+ * https://lore.kernel.org/all/20220715192956.1873315-1-pgonda@google.com/
 
 
-On 8/1/2022 12:51 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-08-01 12:42:50)
->> Data Symbols scrambled is required for tps4 at link training 2.
->> Therefore SCRAMBLING_DISABLE bit should not be set for tps4 to
->> work.
->> RECOVERED_CLOCK_OUT_EN is for enable simple EYE test for jitter
->> measurement with minimal equipment for embedded applications purpose
->> and is not required to be set during normal operation.
->> Current implementation always have RECOVERED_CLOCK_OUT_EN bit set
->> which cause SCRAMBLING_DISABLE bit wrongly set at tps4 which prevent
->> tps4 from working.
->> This patch delete setting RECOVERED_CLOCK_OUT_EN to fix SCRAMBLING_DISABLE
->> be wrongly set at tps4.
->>
->> Fixes: 956653250b21 ("drm/msm/dp: add support of tps4 (training pattern 4) for HBR3")
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> index ab6aa13..013ca02 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> @@ -1214,7 +1214,7 @@ static int dp_ctrl_link_train_2(struct dp_ctrl_private *ctrl,
->>          if (ret)
->>                  return ret;
->>
->> -       dp_ctrl_train_pattern_set(ctrl, pattern | DP_RECOVERED_CLOCK_OUT_EN);
->> +       dp_ctrl_train_pattern_set(ctrl, pattern);
-> This line is from the first patch introducing this driver. Even if this
-> is fixing tps4 support, it sounds like the bit should never have been
-> enabled in the first place. Why isn't the fixes tag targeted at the
-> first commit? Does it hurt to apply it without commit 956653250b21?
-agree, it should be fixed to first patch
+Michael Roth (6):
+  KVM: selftests: move vm_phy_pages_alloc() earlier in file
+  KVM: selftests: sparsebit: add const where appropriate
+  KVM: selftests: add hooks for managing encrypted guest memory
+  KVM: selftests: handle encryption bits in page tables
+  KVM: selftests: add support for encrypted vm_vaddr_* allocations
+  KVM: selftests: add library for creating/interacting with SEV guests
+
+Peter Gonda (3):
+  tools: Add atomic_test_and_set_bit()
+  KVM: selftests: Make ucall work with encrypted guests
+  KVM: selftests: Add simple sev vm testing
+
+Sean Christopherson (2):
+  KVM: selftests: Consolidate common code for popuplating
+  KVM: selftests: Consolidate boilerplate code in get_ucall()
+
+ tools/arch/x86/include/asm/atomic.h           |   7 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/include/kvm_util_base.h     |  26 ++
+ .../testing/selftests/kvm/include/sparsebit.h |  36 +--
+ .../selftests/kvm/include/ucall_common.h      |  15 +-
+ .../selftests/kvm/include/x86_64/sev.h        |  47 +++
+ .../testing/selftests/kvm/lib/aarch64/ucall.c |  33 +--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 267 +++++++++++++-----
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |  40 +--
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |  37 +--
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  48 ++--
+ .../testing/selftests/kvm/lib/ucall_common.c  | 139 +++++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  15 +-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  | 249 ++++++++++++++++
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |  37 +--
+ .../selftests/kvm/x86_64/sev_all_boot_test.c  | 131 +++++++++
+ 17 files changed, 885 insertions(+), 246 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/sev.h
+ create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/sev.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+
+-- 
+2.37.1.455.g008518b4e5-goog
+

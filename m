@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C429E586840
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1D3586846
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiHALhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S230455AbiHALiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiHALh3 (ORCPT
+        with ESMTP id S229903AbiHALiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:37:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7931DE0;
-        Mon,  1 Aug 2022 04:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659353848; x=1690889848;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=azmVu0T8YocFW5dwTvOLApSkeJHj/Z3gH67lHkTjtE0=;
-  b=QsYUknFX/mzEZ/H1FuKeZGf109X1jk/qb08WF47x1gqshMj4ed1910H+
-   T+E7KgaQaIKCPh4NY6nScpI/zO9CkD64opf21miya5ai88a5fJqPyUlnb
-   PSCta2EIGSr2mjIuXiZgsx5gXlVdoz0H2WPdCGsyWmgP62Ep22ZgHhlCh
-   as0Rqh84+T5xOyToRd0s3nf2ProAZmfI+SH1FN1iya5Mr6lKhXdr/CDsq
-   jMkjk5f199FPAoAZ4egGB8jXFaGQd2YpHqq9IIDDxkxpuvto9awFgJTKk
-   WPTLQroTUNnheqmBqYajnXZ5eeYgclWDlMNBtdPAO3vHZH0LyxiiAsG/5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="290334125"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="290334125"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 04:37:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="929518841"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2022 04:37:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D3B9B1D0; Mon,  1 Aug 2022 14:37:35 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>
-Subject: [PATCH v2 4/4] platform/x86: pmc_atom: Amend comment style and grammar
-Date:   Mon,  1 Aug 2022 14:37:34 +0300
-Message-Id: <20220801113734.36131-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220801113734.36131-1-andriy.shevchenko@linux.intel.com>
-References: <20220801113734.36131-1-andriy.shevchenko@linux.intel.com>
+        Mon, 1 Aug 2022 07:38:51 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AED31928;
+        Mon,  1 Aug 2022 04:38:50 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxGKM6tWSzlW4H;
+        Mon,  1 Aug 2022 19:36:07 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 1 Aug 2022 19:38:48 +0800
+Received: from huawei.com (10.174.176.191) by dggpemm500018.china.huawei.com
+ (7.185.36.111) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 1 Aug
+ 2022 19:38:47 +0800
+From:   l00581214 <liutie4@huawei.com>
+To:     <jstultz@google.com>, <tglx@linutronix.de>, <sboyd@kernel.org>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hewenliang4@huawei.com>, <linfeilong@huawei.com>
+Subject: [PATCH] clocksource: Resolve some coding specification issues about spaces
+Date:   Mon, 1 Aug 2022 19:38:44 +0800
+Message-ID: <20220801113844.982-1-liutie4@huawei.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.176.191]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The style of the comments is not uniform, make it so and fix
-a few grammar issues. While at it, update Copyright years.
+From: Tie Liu <liutie4@huawei.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+When I read the code, I noticed that some spaces were not used in accordance with current encoding specifications, so I tried to modify them.
+
+Signed-off-by: Liu Tie <liutie4@huawei.com>
 ---
-v2: no changes
- drivers/platform/x86/pmc_atom.c            | 19 ++++++++-----------
- include/linux/platform_data/x86/pmc_atom.h |  4 ++--
- 2 files changed, 10 insertions(+), 13 deletions(-)
+ kernel/time/clocksource.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
-index 8d91999446f5..3271aec23abe 100644
---- a/drivers/platform/x86/pmc_atom.c
-+++ b/drivers/platform/x86/pmc_atom.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Intel Atom SOC Power Management Controller Driver
-- * Copyright (c) 2014, Intel Corporation.
-+ * Intel Atom SoC Power Management Controller Driver
-+ * Copyright (c) 2014-2015,2017,2022 Intel Corporation.
-  */
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index cee5da1e5..46b738696 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -47,7 +47,7 @@ void
+ clocks_calc_mult_shift(u32 *mult, u32 *shift, u32 from, u32 to, u32 maxsec)
+ {
+ 	u64 tmp;
+-	u32 sft, sftacc= 32;
++	u32 sft, sftacc = 32;
  
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-@@ -494,11 +494,7 @@ static int pmc_setup_dev(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	return ret;
- }
- 
--/*
-- * Data for PCI driver interface
-- *
-- * used by pci_match_id() call below.
-- */
-+/* Data for PCI driver interface used by pci_match_id() call below */
- static const struct pci_device_id pmc_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_VLV_PMC), (kernel_ulong_t)&byt_data },
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_CHT_PMC), (kernel_ulong_t)&cht_data },
-@@ -510,8 +506,9 @@ static int __init pmc_atom_init(void)
- 	struct pci_dev *pdev = NULL;
- 	const struct pci_device_id *ent;
- 
--	/* We look for our device - PCU PMC
--	 * we assume that there is max. one device.
-+	/*
-+	 * We look for our device - PCU PMC.
-+	 * We assume that there is maximum one device.
- 	 *
- 	 * We can't use plain pci_driver mechanism,
- 	 * as the device is really a multiple function device,
-@@ -523,7 +520,7 @@ static int __init pmc_atom_init(void)
- 		if (ent)
- 			return pmc_setup_dev(pdev, ent);
+ 	/*
+ 	 * Calculate the shift factor which is limiting the conversion
+@@ -55,7 +55,7 @@ clocks_calc_mult_shift(u32 *mult, u32 *shift, u32 from, u32 to, u32 maxsec)
+ 	 */
+ 	tmp = ((u64)maxsec * from) >> 32;
+ 	while (tmp) {
+-		tmp >>=1;
++		tmp >>= 1;
+ 		sftacc--;
  	}
--	/* Device not found. */
-+	/* Device not found */
- 	return -ENODEV;
+ 
+@@ -863,7 +863,7 @@ static u32 clocksource_max_adjustment(struct clocksource *cs)
+ 	 * We won't try to correct for more than 11% adjustments (110,000 ppm),
+ 	 */
+ 	ret = (u64)cs->mult * 11;
+-	do_div(ret,100);
++	do_div(ret, 100);
+ 	return (u32)ret;
  }
  
-@@ -531,6 +528,6 @@ device_initcall(pmc_atom_init);
- 
- /*
- MODULE_AUTHOR("Aubrey Li <aubrey.li@linux.intel.com>");
--MODULE_DESCRIPTION("Intel Atom SOC Power Management Controller Interface");
-+MODULE_DESCRIPTION("Intel Atom SoC Power Management Controller Interface");
- MODULE_LICENSE("GPL v2");
- */
-diff --git a/include/linux/platform_data/x86/pmc_atom.h b/include/linux/platform_data/x86/pmc_atom.h
-index ea01dd80153b..ae9b9f4a8697 100644
---- a/include/linux/platform_data/x86/pmc_atom.h
-+++ b/include/linux/platform_data/x86/pmc_atom.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Intel Atom SOC Power Management Controller Header File
-- * Copyright (c) 2014, Intel Corporation.
-+ * Intel Atom SoC Power Management Controller Header File
-+ * Copyright (c) 2014-2015,2022 Intel Corporation.
+@@ -1446,7 +1446,7 @@ device_initcall(init_clocksource_sysfs);
+  * Takes a clocksource= boot argument and uses it
+  * as the clocksource override name.
   */
- 
- #ifndef PMC_ATOM_H
+-static int __init boot_override_clocksource(char* str)
++static int __init boot_override_clocksource(char *str)
+ {
+ 	mutex_lock(&clocksource_mutex);
+ 	if (str)
+@@ -1464,7 +1464,7 @@ __setup("clocksource=", boot_override_clocksource);
+  * DEPRECATED! Takes a clock= boot argument and uses it
+  * as the clocksource override name
+  */
+-static int __init boot_override_clock(char* str)
++static int __init boot_override_clock(char *str)
+ {
+ 	if (!strcmp(str, "pmtmr")) {
+ 		pr_warn("clock=pmtmr is deprecated - use clocksource=acpi_pm\n");
 -- 
-2.35.1
+2.27.0
 

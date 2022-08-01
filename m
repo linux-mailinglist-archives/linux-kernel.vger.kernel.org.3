@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DBF586D65
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED50C586D6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiHAPIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S231599AbiHAPIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiHAPIN (ORCPT
+        with ESMTP id S229943AbiHAPIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:08:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C7C22BF0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:08:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 16219205CD;
-        Mon,  1 Aug 2022 15:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659366480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=tZ5/mt7pK+Lds/lRdOSRmYcWBntq5z5pKDBstGKZLkQ=;
-        b=HX4Cii1hu4LtXGA4C3pZcloj8FWzs/VfMBOC5Jy2NpKFAvP2RqYNZBIpRCPJoyXHLDhQ8C
-        tBPCO+8XP6k+65k2BIOAylA2dO4yIkegQNyLwrnUgdSP4fJVR//EYZShrzuRDbLwa6J9OT
-        AOzGvRKeJLG/7UkvKvoXXDbgf+wr+E8=
-Received: from suse.cz (unknown [10.100.208.146])
+        Mon, 1 Aug 2022 11:08:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF632AE26;
+        Mon,  1 Aug 2022 08:08:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A394A2C141;
-        Mon,  1 Aug 2022 15:07:59 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 17:07:56 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] printk for 5.20
-Message-ID: <YufsTLpighCI7qSf@alley>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EFB06147B;
+        Mon,  1 Aug 2022 15:08:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47B0C433C1;
+        Mon,  1 Aug 2022 15:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659366519;
+        bh=AqruWdRdzFUO73wzzBKn5xGprtjbDadpunKpXdhVebc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tYO6GXrHSmgf6b5UQaNoTIguI0zkkMemEFQ6hijAg3nrK3UfBlhy2E7ZW/XQiJoqt
+         JK26CNqSlHs46WPjTHiQGo/zPxY0XTa42EIph2gXg+xxT9ZjnXP5kLSm2D/xmlKZgB
+         VpkuPuQzH28KgHkJoP/TbAYsxBaYFK0UXf72ADuzoHBjnngGbdmYnYxA+sefpYE9zC
+         qtiWB83TVbbeqnUhMwvlVIY7D81qggakd6ueXzM1imWqaidHOaK+sa33aw6nV6CneJ
+         9dOeezBvQN/bTw1eloPA9vhDe2jT+7f8ZDRI012YqVrHRnbLFq1x6k79W3BCx9JRN0
+         MM1sHKdfRAz9Q==
+Message-ID: <09ac06d6-4373-0953-5ed0-ed85ef25c999@kernel.org>
+Date:   Mon, 1 Aug 2022 09:08:37 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] neigh: fix possible DoS due to net iface start/stop
+ loop
+Content-Language: en-US
+To:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        netdev@vger.kernel.org
+Cc:     "Denis V. Lunev" <den@openvz.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>, linux-kernel@vger.kernel.org,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>, kernel@openvz.org
+References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
+ <20220729103559.215140-2-alexander.mikhalitsyn@virtuozzo.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220729103559.215140-2-alexander.mikhalitsyn@virtuozzo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 7/29/22 4:35 AM, Alexander Mikhalitsyn wrote:
+> The patch proposed doing very simple thing. It drops only packets from
 
-please pull the latest printk changes from
+it does 2 things - adds a namespace check and a performance based change
+with the way the list is walked.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.20
+> the same namespace in the pneigh_queue_purge() where network interface
+> state change is detected. This is enough to prevent the problem for the
+> whole node preserving original semantics of the code.
+> 
 
-=====================================
 
-- Completely disable printing on consoles with CONFIG_RT. They break
-  RT guarantees. They are too slow to be called with raw spinlocks.
-  They can't be called with normal spinlocks in an atomic context because
-  RT spinlocks might sleep. It is going to get fixed by the kthreads and
-  atomic consoles. In the meantime, the debugging of CONFIG_RT kernel
-  will be possible only by the user space kernel log readers.
+> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+> index 54625287ee5b..213ec0be800b 100644
+> --- a/net/core/neighbour.c
+> +++ b/net/core/neighbour.c
 
-- Allow to read kernel log in gdb even on 32 bits systems.
+> @@ -386,8 +396,7 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
+>  	neigh_flush_dev(tbl, dev, skip_perm);
+>  	pneigh_ifdown_and_unlock(tbl, dev);
+>  
+> -	del_timer_sync(&tbl->proxy_timer);
 
-- More granular check of the buffer usage in printf selftest.
+why are you removing this line too?
 
-- Clang warning fix.
-
-----------------------------------------------------------------
-Antonio Borneo (1):
-      scripts/gdb: fix 'lx-dmesg' on 32 bits arch
-
-Justin Stitt (1):
-      lib/test_printf.c: fix clang -Wformat warnings
-
-Petr Mladek (2):
-      Merge branch 'for-5.20' into for-linus
-      Merge branch 'rework/kthreads' into for-linus
-
-Rasmus Villemoes (1):
-      lib/test_printf.c: split write-beyond-buffer check in two
-
-Sebastian Andrzej Siewior (1):
-      printk: Skip console drivers on PREEMPT_RT.
-
- kernel/printk/printk.c     | 10 ++++++++++
- lib/test_printf.c          | 21 +++++++++++++++++----
- scripts/gdb/linux/dmesg.py |  9 +++------
- scripts/gdb/linux/utils.py | 14 ++++++++++++--
- 4 files changed, 42 insertions(+), 12 deletions(-)
+> -	pneigh_queue_purge(&tbl->proxy_queue);
+> +	pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev));
+>  	return 0;
+>  }
+>  

@@ -2,105 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BD2586E6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124E1586E73
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiHAQRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
+        id S233933AbiHAQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiHAQRu (ORCPT
+        with ESMTP id S233834AbiHAQSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:17:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585192AC42
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:17:49 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a7so8307520ejp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 09:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=gbhIr0dMzm81+SDBkNEjnMlQtKTmm0VmrGqMRqLxYPs=;
-        b=NDxKoaJiNPQBSEq08NX3l0jM8LCk8mtj7rxUXmG2bPj5YQFFaQqM/wNFRi9l8jtYUy
-         iLIL9lX0aereoQUPGAFZAWwJ1EJ3X4xQfQkWsVVzrj8kzUc6MWrZ+u68R30AUXKiD9Xs
-         idhNYaYWb9LnOFTpLDDxd9gm+Ca8arF9Ry65s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=gbhIr0dMzm81+SDBkNEjnMlQtKTmm0VmrGqMRqLxYPs=;
-        b=Eo9Gu6aTm70CsXoFrBTIAxlAv0Ni7ye4Kz4BY5X5qPbR6b3FTQYKxiBPUtgtNfvpCd
-         rYvzfEsGZkY5KmQjdrcK3RZKa1vIf1gQKQa/fRnHQJj+2WewKE5zTjj3EMtPT6w4gXJ+
-         Jw9/70rvvnTnIIIigC/z7mFjAQLHA7G9kmBgtBUnFFq1cwkzBXM6J3eifHH1JtZ8/p5J
-         8HfLgV9DEKEiJpZdXGK70LV5QcIcmo7vZrGSVXHBQcBlkbGxS9geA8fQ42Hmu7bHIcGk
-         weCq4+n70i4gKGtuhACMjFAQ4/wUsNmxU9W567ZA8tjJc8cntfPtRRasO6yENhfmcaG0
-         kn2g==
-X-Gm-Message-State: AJIora+QUuKYQ34P97OX+2GbAC2T9H6m7Stykty9AgYrHjLFaUTrmL0i
-        dNUbFz3WofjLB9PynQfjY2sFN/giWShm0Y6zLZo=
-X-Google-Smtp-Source: AGRyM1vK6l3tSeN1ClKHd4RBIXihD+Gl3L1SC1EgcojmOKaiNCT8lMqxLI9d/Z+iVJCyEq2+9/EH4Q==
-X-Received: by 2002:a17:907:7d8b:b0:72f:2306:329a with SMTP id oz11-20020a1709077d8b00b0072f2306329amr12615439ejc.369.1659370667731;
-        Mon, 01 Aug 2022 09:17:47 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id ek6-20020a056402370600b0043a2b8ab377sm7017051edb.88.2022.08.01.09.17.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 09:17:47 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id v5so6040431wmj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 09:17:47 -0700 (PDT)
-X-Received: by 2002:a05:600c:21d7:b0:3a3:2088:bbc6 with SMTP id
- x23-20020a05600c21d700b003a32088bbc6mr11480857wmj.68.1659370666735; Mon, 01
- Aug 2022 09:17:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220801144329.GA10643@redhat.com> <CAHk-=wgCi2LLzSJg_7nRs+nQbVgT8HwEKzjMae_4geVCA+1SNg@mail.gmail.com>
- <20220801155028.GA12328@redhat.com> <20220801155624.GB12328@redhat.com>
-In-Reply-To: <20220801155624.GB12328@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 1 Aug 2022 09:17:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi07ue68JuYXDdPD-s93UTs0Tp0oAvdnyxS3zQQSosEOA@mail.gmail.com>
-Message-ID: <CAHk-=wi07ue68JuYXDdPD-s93UTs0Tp0oAvdnyxS3zQQSosEOA@mail.gmail.com>
-Subject: Re: [GIT PULL] dlm updates for 6.0
-To:     David Teigland <teigland@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 12:18:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5163E74E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:18:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 393C3B8159E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EFF67C433C1;
+        Mon,  1 Aug 2022 16:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659370682;
+        bh=sT3zuzgRt8w5uFTOCXg5Oir3O7KYZNoeVUz6YW3xGgk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gQCBqek5g02tUKaYpp8CdgADICgCEQG4KiSXisC1A08b5ll60Mrta8zkjFnNIJSg1
+         L6UymPNJ2naqJBsbYeykxTYb9CO5D8EIM3+Ko7b7jO9l8JkbVdkzieTXay5+9RC/PJ
+         Fexgzxklw7cFclf4dpqPTdO7VGYhg0I5lRnqQk29wsGyCe+rrvhYlTslr9/fjUA7D4
+         /P6EDSyaK+kudaScVBKlIFp7Fr/YNK8aMKZ4FdBuSaPu1Xo1CTcExqoICg8A2JF/M0
+         4lPZ211Q1hHjpIaABS4Lj+why4iIZwYDxEemFgYtR9md96Iim3XgrUN8wSndUHj2SY
+         xggAjb63YGYiA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D72A4C43142;
+        Mon,  1 Aug 2022 16:18:01 +0000 (UTC)
+Subject: Re: [GIT PULL] erofs updates for 5.20-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YucDJOcnlB7EOD8g@debian>
+References: <YucDJOcnlB7EOD8g@debian>
+X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <YucDJOcnlB7EOD8g@debian>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
+X-PR-Tracked-Commit-Id: ecce9212d0fd7a2d4a4998f0c4623a66887e14c8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e88745dcfd9de5c7de1c17f81e7cecec3d88871d
+Message-Id: <165937068187.17475.15354625708863816235.pr-tracker-bot@kernel.org>
+Date:   Mon, 01 Aug 2022 16:18:01 +0000
+To:     Gao Xiang <xiang@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Yue Hu <huyue2@yulong.com>, linux-erofs@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:56 AM David Teigland <teigland@redhat.com> wrote:
->
-> At risk of compounding your trouble, I could have added that you can use
-> the original merge and have me send the fixup.
+The pull request you sent on Mon, 1 Aug 2022 06:33:08 +0800:
 
-Well, I only had something like 4 other merges on top, none of them
-*that* complicated.
+> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.20-rc1
 
-And I hadn't pushed out, so I just redid them.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e88745dcfd9de5c7de1c17f81e7cecec3d88871d
 
-I did notice your "v2" pull request fairly quickly, because I try to
-do my pulls (when I have lots of them, like at the beginning of the
-merge window) in some kind of "order of areas", so I was doing
-filesystem and vfs stuff, and  your v2 ended up showing up in that
-bunch too, and I hadn't done too much.
+Thank you!
 
-I doubt I would have needed help with the conflicts, but I decided to
-not even look at them, because even with them resolved it would just
-have been ugly to have that pointless duplication from the rebase when
-I could just start from scratch again.
-
-But again: please don't rebase stuff you have already exposed to
-others. It causes real issues. This was just one example of it.
-
-And if you *do* have to rebase for a real technical reason ("Oh, that
-was a disaster, it absolutely *must* be fixed"), please let involved
-people know asap.
-
-And a version number change is not a "huge disaster, must rebase".
-
-           Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

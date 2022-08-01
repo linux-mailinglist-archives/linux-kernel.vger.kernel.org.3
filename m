@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105C6586AC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0721D586AD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbiHAM2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S230231AbiHAMa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234464AbiHAM1y (ORCPT
+        with ESMTP id S232008AbiHAMam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:27:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E82D7904D0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:07:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 326EC139F;
-        Mon,  1 Aug 2022 05:07:18 -0700 (PDT)
-Received: from [10.57.10.23] (unknown [10.57.10.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6162E3F73B;
-        Mon,  1 Aug 2022 05:07:15 -0700 (PDT)
-Message-ID: <19a0a508-fb39-8b06-ce0f-ce26767ef57f@arm.com>
-Date:   Mon, 1 Aug 2022 13:07:10 +0100
+        Mon, 1 Aug 2022 08:30:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3895C0D
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 05:09:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5F3601CD
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC42EC433D6
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 12:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659355793;
+        bh=Dj1WIaCLQ5ggZ5YYu7kWg3EE1ARgkRRqTx0wUE79N1Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c+VOQW+SUaPWZGfEtTnRKM9wkL7ZL5NmiF2/xp8QvARdIFIZA7xwhjCd9KsNpnlEj
+         glohiSMODaiuT6YFBP0kBCMI91LXKRzivrvXau/VHLn8Da5Z0sZDaLJM2uZ3IGx9qE
+         zvnkh1t//1KWbMJJNR86u7OBTD8eDZcB3ykxbBJQMeGBTX7xUxZQR3qIZMXHMlXOTx
+         LmGPLDG67Mmv9DS5j9Sp9MmxixLjWXf3lXIe6ccFUe/MVy+JF93yJ5bucIVvY+1kPL
+         o4cgqpzQWljJQFPmDCoc9xN+dfuKgoN4+qwd134qr3fZjmtGq6uTRwXRnuzy28gbsx
+         WqnonsX1TDiug==
+Received: by mail-vs1-f48.google.com with SMTP id 129so10962831vsq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 05:09:52 -0700 (PDT)
+X-Gm-Message-State: AJIora/mr3vPBqSxOiBdXO6ibrKUd3Rj8ob8l5apbVuPPPKsv9ywHVwv
+        9H7Yac5RnO++L9OTtR7d7UqcqYXLTVhI4zTgn0s=
+X-Google-Smtp-Source: AGRyM1s0etQ9Pvllk/JiNzbTQ6QGqNTG4QGA7PokgrtQugX90IoTP+3B3Ap08D0LMddUwtf24xueuWULWjo15yBKjXY=
+X-Received: by 2002:a05:6102:dd4:b0:358:62b5:20a6 with SMTP id
+ e20-20020a0561020dd400b0035862b520a6mr5613984vst.84.1659355791817; Mon, 01
+ Aug 2022 05:09:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dma-debug: Remove warning in dma_debug_entry
-Content-Language: en-GB
-To:     yf.wang@mediatek.com, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
-        Ning Li <Ning.Li@mediatek.com>, Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>
-References: <20220730085657.31977-1-yf.wang@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220730085657.31977-1-yf.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <32a74a218c76611f897fd1df1ad0059068621133.camel@xry111.site>
+ <ec52fd49-4a30-15d9-3d32-fd7bc6d8b3f0@loongson.cn> <0179679b736aea7258981dec2d83107cce74dfc1.camel@xry111.site>
+ <a139a8475fe295ac9f17064269cd0312dca6f96e.camel@xry111.site>
+ <6b5d2188f93ed72b67a4bbb7116113f833fe1ee5.camel@xry111.site>
+ <d7670b60-2782-4642-995b-7baa01779a66@loongson.cn> <7cad6e78014168a8906e130e1cf3809077d2bda7.camel@xry111.site>
+ <1d0783b87bda3e454a111862fcc5b5faffcb16b0.camel@xry111.site>
+ <00eede4b1380888a500f74b1e818bb25a550632b.camel@xry111.site>
+ <7512ae16-b171-d072-674f-a6b9a5e764d6@loongson.cn> <CAAhV-H5wSJZ2X46ySqoaJd7Z2soGcYKRNixnghmE3f3zEzyS+w@mail.gmail.com>
+ <10751c9af5d45fea741e0bbed6c818ddb9db3ac3.camel@xry111.site>
+ <7b1f9813-85fc-acfd-8e24-7e01469ded3a@loongson.cn> <ba5e99de-0719-af88-4d94-8860787a4251@loongson.cn>
+ <d6cab26afc5829c1b93bc1cc5867ebf22f5c7f47.camel@xry111.site>
+In-Reply-To: <d6cab26afc5829c1b93bc1cc5867ebf22f5c7f47.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 1 Aug 2022 20:09:39 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7pWc2bNtdyoczmANiNLSs_+A1ZVhakMdrZjGFXpMzCfQ@mail.gmail.com>
+Message-ID: <CAAhV-H7pWc2bNtdyoczmANiNLSs_+A1ZVhakMdrZjGFXpMzCfQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] LoongArch: Support new relocation types
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Lulu Cheng <chenglulu@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-30 09:56, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
-> 
-> The same physical address can be mapped multiple times, and it is not
-> required to have attributes such as DMA_ATTR_SKIP_CPU_SYNC, but
-> dma_debug_entry will report an warning if active_cacheline_insert
-> returns -EEXIST, which can cause a lot of trouble.
-> 
-> For example, if two dma engine share the same dma-buf, the two dma
-> engine drivers will call the DMA API to map their own dma address
-> respectively, which is normal follow, but dma_debug_entry will
-> report an warning.
-> 
-> In addition, if active_cacheline_insert returns -EEXIST, the
-> active_cacheline_inc_overlap function already has the logic to
-> check overlapping mappings counter, if it exceeded
-> ACTIVE_CACHELINE_MAX_OVERLAP overlapping mappings, it already
-> has a warning.
-> And also, if warning as panic is turned on, it will cause KE.
-> 
-> So, dma_debug_entry does not need report warning.
+Hi, Ruoyao,
 
-I'm sure this has come up before, but I can't remember enough of the 
-context to easily search for the previous thread.
+On Mon, Aug 1, 2022 at 7:40 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> On Mon, 2022-08-01 at 19:28 +0800, Youling Tang wrote:
+>
+> > > Actually, I really hope kernel image is in the XKVRANGE, rather
+> > > than being in XKPRANGE. So that we can limit kernel and modules
+> > > be in 4GB range. I think it will make all work normally. :-(
+> > >
+> >
+> > Assuming that the kernel and modules are limited to 4G, the external
+> > symbols will be accessed through pcrel32, which means that there is no
+> > need to pass the GOT table entry and there is no need for got support
+>
+> We'll still need to modify GCC to use PC-rel for accessing an object in
+> another TU (by default, or an option to control), instead of GOT.  Or
+> just add support to GOT relocations here.  But anyway it will be much
+> easier as we won't need to handle per-CPU variables specially.
+All tlb-mapped kernel may be supported in future, but no now. Because
+there are a ton of problems. :)
 
-In short, this check is not entirely correct, but removing it isn't 
-right either, since that would be too much of a step backwards in terms 
-of debug coverage IMO. What we need here is to do a bit more work to 
-differentiate between mappings of the exact same buffer, which are 
-allowed, vs. any other kind of partial overlaps which are still illegal 
-and definitely deserve a warning.
-
-Furthermore, even for the valid dma-buf import case I'm not convinced 
-that the SKIP_CPU_SYNC check can be dropped either. If one device can 
-import a buffer while another device is already accessing it, there are 
-definitely combinations of parameters which could lead to potential data 
-loss (e.g. a non-coherent DMA_TO_DEVICE mapping during a non-coherent 
-DMA_FROM_DEVICE access, a or non-coherent DMA_FROM_DEVICE mapping during 
-a coherent DMA_TO_DEVICE access).
-
-Thanks,
-Robin.
-
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> ---
->   kernel/dma/debug.c | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-> index 2caafd13f8aa..ad731f7858c9 100644
-> --- a/kernel/dma/debug.c
-> +++ b/kernel/dma/debug.c
-> @@ -566,9 +566,6 @@ static void add_dma_entry(struct dma_debug_entry *entry, unsigned long attrs)
->   	if (rc == -ENOMEM) {
->   		pr_err_once("cacheline tracking ENOMEM, dma-debug disabled\n");
->   		global_disable = true;
-> -	} else if (rc == -EEXIST && !(attrs & DMA_ATTR_SKIP_CPU_SYNC)) {
-> -		err_printk(entry->dev, entry,
-> -			"cacheline tracking EEXIST, overlapping mappings aren't supported\n");
->   	}
->   }
->   
+Huacai
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University

@@ -2,220 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE49586B9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085B6586B9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiHANMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S231445AbiHANOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiHANMb (ORCPT
+        with ESMTP id S231335AbiHANN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:12:31 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E7252AA
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:12:29 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id u133so3904522pfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:12:29 -0700 (PDT)
+        Mon, 1 Aug 2022 09:13:58 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC4C255A5
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:13:55 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10ea30a098bso8711308fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jO1bqIIamDycGg4bu9gqL7wpx+GWJSddw3ScY623t+4=;
-        b=ldLqZN/JZgXIMHZSkgb0EPjT4l9tbZFVODBOINq3PjAzp8QoxfEpDQPwr+O7Zyz/q0
-         KQi5YMTNOmHy6oSnwh4CoK0Bx7b0Uxtkt6ZPbQybXc+cm0qR8NUGbWNizJYwiXt26bRD
-         CyHEpc5F6tuAhNMAucwjsjHe/se9pr5mS23TcNBZ48ecNEMv4HwwI+YUbaOgQM+Npbt1
-         /3gAde/DrC4SURPzJnDAJyfDsBqVRWQem1NdGfz81y9cqu0/HSfvBb50BbaoFVX7uLdZ
-         M5XR/qIsl+QoaU5s+Y6LCBeiCoh1n8cV62j6o21HWWJF5P/bY2e2AW7oHTU+tuNg5KyB
-         aFeg==
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=S4v2xzmivjkPNxxCfifaPK4xR7fi1R2DYRzw0gzDhqk=;
+        b=aU/EMjwvPmQHuC3EBkgE95P1u4OscFyLNRNnnObQ+qrX4FI5VdaEavlkuJv0eLaafS
+         LRfaSM+ftYFZBzQXUQVTjMlxhJ82TBVrX2MBIhQvsXC+TEYUHrHEHfxiIZvTEcQvnkne
+         otTWe5IN176ijSIBTW+IPCt5doE2JAB8vJu0Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jO1bqIIamDycGg4bu9gqL7wpx+GWJSddw3ScY623t+4=;
-        b=Tvo7i6bqF9z5lxHsHDnn8NPG0c+USHB3RDbLRCn5QFARFswbgYJAgaAlCjdKyBahfc
-         IFL4g3B9Ihl8NRGZ0mgizoXCyvYusLhmtec5sSnbD/GPloq/GVMs1lXQVuPnAj62VhLC
-         76fAkO6ai69563Ud9g3msapYJZsygU96TV4QTWAqt537zrIBgB8WqoRepeNzYAr9Wczk
-         Di7Eu5ENFMmFRZLuBSgamgQVmbPnQSPEcW1yZHXGAwAymrDKhG6IL4YLtjYEFcLQMZgA
-         iY69q1JyMN2Lb7SbSP9ij6hdKIyJUVmp1btwJS7pluHux8VR/PwY0PwardL3etyUFE70
-         ZyyQ==
-X-Gm-Message-State: ACgBeo3CljhbeGuR6Iqjm2Vw4pDM4H0noiwJYQZEFc+crkAH2qxA3F8O
-        N5jb1U+izsRyws/nipLsk3Ar
-X-Google-Smtp-Source: AA6agR4S1dUEx4li1cfSqTDjfJx1siavuXv+Qxp1ggsYNxB9BseT82XgYD4ZkmAMk8xZVux8VCJzeA==
-X-Received: by 2002:a63:4407:0:b0:41c:30f7:8faf with SMTP id r7-20020a634407000000b0041c30f78fafmr2542123pga.359.1659359548939;
-        Mon, 01 Aug 2022 06:12:28 -0700 (PDT)
-Received: from thinkpad ([117.217.185.73])
-        by smtp.gmail.com with ESMTPSA id u17-20020a170903125100b0016d33b8a231sm9641684plh.270.2022.08.01.06.12.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 06:12:28 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 18:42:19 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 04/15] PCI: dwc: Add IP-core version detection
- procedure
-Message-ID: <20220801131219.GD93763@thinkpad>
-References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
- <20220624143947.8991-5-Sergey.Semin@baikalelectronics.ru>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=S4v2xzmivjkPNxxCfifaPK4xR7fi1R2DYRzw0gzDhqk=;
+        b=TlD/cxUdYooqHLqCoF5rSnrnfBGPpcPqHumlrINhKdFvG6SvIikII3ii0vrfN20qXO
+         r5CfqLVQiAhNKQaP38DJy8hV0TP5O5SRtk+S+56De5UUTSiJSu0d9ZnSaqogi2J/P6rt
+         B4hOG98C2Azwv6RQXIoB+Ixd/hH+JZVz0n+Vzw3Fo6fYwh++lGL02pP/GQoNYIwFFJcE
+         zm1qNAUlBJch47s9XYZqrCz5JiIx4A89lHyqZY2Ax2VZFF8IMVlaBlTtRnEwwHFxCCIT
+         4+DLnR9RQnKfueGlzlfsnjbW/hVR6BogzVNTR97umqsxWxc8mCCF3TBxrmY2kyFx3715
+         xBbg==
+X-Gm-Message-State: AJIora/+AnLJBwhqH+4kCm9aTs2Zh5u904ciTXOqgeMFE5yBOVoETQ1K
+        3wMemVVt9uW/MJkABDLhWudy3A==
+X-Google-Smtp-Source: AGRyM1vAYe6eYSqkhNEffp5nkSzS3sTGEFR4Fq4tFcvvlB80G4i7/GERIpfxWhXyvbYGQjvJ5+67TQ==
+X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr6761101oac.286.1659359635202;
+        Mon, 01 Aug 2022 06:13:55 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id 22-20020aca2816000000b00339ff117f38sm2400911oix.53.2022.08.01.06.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 06:13:54 -0700 (PDT)
+Message-ID: <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
+Date:   Mon, 1 Aug 2022 08:13:57 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624143947.8991-5-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>, Martin KaFai Lau <kafai@fb.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:39:36PM +0300, Serge Semin wrote:
-> Since DWC PCIe v4.70a the controller version and version type can be read
-> from the PORT_LOGIC.PCIE_VERSION_OFF and PORT_LOGIC.PCIE_VERSION_TYPE_OFF
-> registers respectively. Seeing the generic code has got version-dependent
-> parts let's use these registers to find out the controller version.  The
-> detection procedure is executed for both RC and EP modes right after the
-> platform-specific initialization. We can't do that earlier since the
-> glue-drivers can perform the DBI-related setups there including the bus
-> reference clocks activation, without which the CSRs just can't be read.
+On 7/22/22 7:20 AM, Paul Moore wrote:
+> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
 > 
-> Note the CSRs content is zero on the older DWC PCIe controller. In that
-> case we have no choice but to rely on the platform setup.
+>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>>> a call to create_user_ns().
+>>>
+>>> The calls look something like this:
+>>>
+>>> cred = prepare_creds()
+>>> security_prepare_creds()
+>>> call_int_hook(cred_prepare, ...
+>>> if (cred)
+>>> create_user_ns(cred)
+>>>
+>>> We noticed that error codes were not propagated from this hook and
+>>> introduced a patch [1] to propagate those errors.
+>>>
+>>> The discussion notes that security_prepare_creds()
+>>> is not appropriate for MAC policies, and instead the hook is
+>>> meant for LSM authors to prepare credentials for mutation. [2]
+>>>
+>>> Ultimately, we concluded that a better course of action is to introduce
+>>> a new security hook for LSM authors. [3]
+>>>
+>>> This patch set first introduces a new security_create_user_ns() function
+>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+>> Patch 1 and 4 still need review from the lsm/security side.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> ---
+> This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
 > 
-> Changelog v2:
-> - Move the IP-core version detection procedure call from
->   dw_pcie_ep_init_complete() to dw_pcie_ep_init().
-> ---
->  .../pci/controller/dwc/pcie-designware-ep.c   |  2 ++
->  .../pci/controller/dwc/pcie-designware-host.c |  2 ++
->  drivers/pci/controller/dwc/pcie-designware.c  | 24 +++++++++++++++++++
->  drivers/pci/controller/dwc/pcie-designware.h  |  6 +++++
->  4 files changed, 34 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> index 1e35542d6f72..ffbd3af6d65a 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> @@ -711,6 +711,8 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
->  	ep->phys_base = res->start;
->  	ep->addr_size = resource_size(res);
->  
-> +	dw_pcie_version_detect(pci);
-> +
-
-There is still an ongoing debate about moving all DBI accesses to
-init_complete. But this is fine atm.
-
-Thanks,
-Mani
-
->  	dw_pcie_iatu_detect(pci);
->  
->  	ep->ib_window_map = devm_kcalloc(dev,
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 95256434913f..b1437b37140f 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -405,6 +405,8 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
->  		}
->  	}
->  
-> +	dw_pcie_version_detect(pci);
-> +
->  	dw_pcie_iatu_detect(pci);
->  
->  	dw_pcie_setup_rc(pp);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index f10a7d5d94e8..cbb36ccaa48b 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -16,6 +16,30 @@
->  #include "../../pci.h"
->  #include "pcie-designware.h"
->  
-> +void dw_pcie_version_detect(struct dw_pcie *pci)
-> +{
-> +	u32 ver;
-> +
-> +	/* The content of the CSR is zero on DWC PCIe older than v4.70a */
-> +	ver = dw_pcie_readl_dbi(pci, PCIE_VERSION_NUMBER);
-> +	if (!ver)
-> +		return;
-> +
-> +	if (pci->version && pci->version != ver)
-> +		dev_warn(pci->dev, "Versions don't match (%08x != %08x)\n",
-> +			 pci->version, ver);
-> +	else
-> +		pci->version = ver;
-> +
-> +	ver = dw_pcie_readl_dbi(pci, PCIE_VERSION_TYPE);
-> +
-> +	if (pci->type && pci->type != ver)
-> +		dev_warn(pci->dev, "Types don't match (%08x != %08x)\n",
-> +			 pci->type, ver);
-> +	else
-> +		pci->type = ver;
-> +}
-> +
->  /*
->   * These interfaces resemble the pci_find_*capability() interfaces, but these
->   * are for configuring host controllers, which are bridges *to* PCI devices but
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index 6b81530fb2ca..7899808bdbc6 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -85,6 +85,9 @@
->  #define PCIE_PORT_MULTI_LANE_CTRL	0x8C0
->  #define PORT_MLTI_UPCFG_SUPPORT		BIT(7)
->  
-> +#define PCIE_VERSION_NUMBER		0x8F8
-> +#define PCIE_VERSION_TYPE		0x8FC
-> +
->  #define PCIE_ATU_VIEWPORT		0x900
->  #define PCIE_ATU_REGION_INBOUND		BIT(31)
->  #define PCIE_ATU_REGION_OUTBOUND	0
-> @@ -279,6 +282,7 @@ struct dw_pcie {
->  	struct dw_pcie_ep	ep;
->  	const struct dw_pcie_ops *ops;
->  	u32			version;
-> +	u32			type;
->  	int			num_lanes;
->  	int			link_gen;
->  	u8			n_fts[2];
-> @@ -290,6 +294,8 @@ struct dw_pcie {
->  #define to_dw_pcie_from_ep(endpoint)   \
->  		container_of((endpoint), struct dw_pcie, ep)
->  
-> +void dw_pcie_version_detect(struct dw_pcie *pci);
-> +
->  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
->  u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
->  
-> -- 
-> 2.35.1
+> I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
 > 
 
--- 
-மணிவண்ணன் சதாசிவம்
+Based on last weeks comments, should I go ahead and put up v4 for 
+5.20-rc1 when that drops, or do I need to wait for more feedback?
+
+> --
+> paul-moore.com
+> 
+> 
+

@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27CE5868E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97B15868EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiHALya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
+        id S232373AbiHALyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiHALxv (ORCPT
+        with ESMTP id S231951AbiHALyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:53:51 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DD42FFC7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659354629; x=1690890629;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NzcCfCscpwoWHMsQNKhneOoJCWfbmeXO5OjY7iwI/rc=;
-  b=W93JPivz4gJqlsapmjex0/U+oYOF8YC4jfYVN+skuwtbelK/6cqw+2wt
-   p+ulZoDZ2uS0voA+AovgNNXnl1rMRYIU5rMJg0lf3JRXhotYW8qxkL0td
-   8lv+BSeRl4p5hisxu81U/UZHZJ5/maX+5WSd6W38h9/pMjGTjpoBWHypZ
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Aug 2022 04:50:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 04:50:27 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 1 Aug 2022 04:50:27 -0700
-Received: from [10.216.43.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
- 04:50:22 -0700
-Message-ID: <f670c6ee-1c20-570f-68f9-42a3e1e85557@quicinc.com>
-Date:   Mon, 1 Aug 2022 17:20:19 +0530
+        Mon, 1 Aug 2022 07:54:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7B93D5B8
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:50:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A3E1566D06;
+        Mon,  1 Aug 2022 11:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659354632; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j2vlYIzw1z7eYxghzcCES9qKW7rI0I/r5Kp98c3NyCI=;
+        b=PULHzQObWEebinSD7RXLXFjB9cCI51Eiw9dvcw+5kPJF81dgTGWD1SBzyPK9EjTl66drsw
+        dfimcPXfeuaB3jQt/pkWhALjIjVG+U0X06gE4wABywjKxYwzn/VxSpDzqwqpWTlNikfZGG
+        5nrJFCc51M2gQ1uQZ6QhDB60cp/9mT0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659354632;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j2vlYIzw1z7eYxghzcCES9qKW7rI0I/r5Kp98c3NyCI=;
+        b=RBgL8VfJRQhU4xXdZtWgAwjXwNzWZwL82sF559H/7HOZ4WAZYHxzuCtrjf2s8+I0NpOpjA
+        g6bmAxRr3eE99tCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9756E13AAE;
+        Mon,  1 Aug 2022 11:50:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iUnjJAi+52KTDAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 01 Aug 2022 11:50:32 +0000
+Date:   Mon, 1 Aug 2022 13:50:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/build for v6.0
+Message-ID: <Yue+CFzVZusSJeZc@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V2] mm: fix use-after free of page_ext after race with
- memory-offline
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>,
-        <quic_pkondeti@quicinc.com>, <pasha.tatashin@soleen.com>,
-        <sjpark@amazon.de>, <sieberf@amazon.com>, <shakeelb@google.com>,
-        <dhowells@redhat.com>, <willy@infradead.org>,
-        <liuting.0x7c00@bytedance.com>, <minchan@kernel.org>,
-        Michal Hocko <mhocko@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <1658931303-17024-1-git-send-email-quic_charante@quicinc.com>
- <6168cf49-bf75-2ebb-ab55-30de473835e3@redhat.com>
- <a26ce299-aed1-b8ad-711e-a49e82bdd180@quicinc.com>
- <3fc8a61b-ad70-8092-9197-4920e0897593@redhat.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <3fc8a61b-ad70-8092-9197-4920e0897593@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks David!!
+Hi Linus,
 
-On 8/1/2022 2:00 PM, David Hildenbrand wrote:
->> Having said that, I am open to go for call_rcu() and infact it will be a
->> much simple change where I can do the freeing of page_ext in the
->> __free_page_ext() itself which is called for every section there by
->> avoid the extra tracking flag PAGE_EXT_INVALID.
->>       ...........
->>         WRITE_ONCE(ms->page_ext, NULL);
->> 	call_rcu(rcu_head, fun); // Free in fun()
->>        .............
->>
->> Or your opinion is to use call_rcu () only once in place of
->> synchronize_rcu() after invalidating all the page_ext's of memory block?
-> 
-> Yeah, that would be an option. And if you fail to allocate a temporary
-> buffer to hold the data-to-free (structure containing rcu_head), the
-> slower fallback path would be synchronize_rcu().
-> 
+pls pull a couple of x86 build fixes for 6.0.
 
-I will add this as a note in the code that in future If some
-optimizations needs to be done in this path, this option can be
-considered.  Hope this will be fine for now?
+Thx.
 
-> But again, I'm also not sure if we have to optimize here right now.
+---
 
-Thanks,
-Charan
+The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+
+  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_build_for_v6.0_rc1
+
+for you to fetch changes up to 2d17bd24b0169d3fdbf003dfd55af600e9a30553:
+
+  x86/purgatory: Omit use of bin2c (2022-07-25 10:32:32 +0200)
+
+----------------------------------------------------------------
+- Fix stack protector builds when cross compiling with Clang
+
+- Other Kbuild improvements and fixes
+
+----------------------------------------------------------------
+Masahiro Yamada (3):
+      x86/build: Remove unused OBJECT_FILES_NON_STANDARD_test_nx.o
+      x86/purgatory: Hard-code obj-y in Makefile
+      x86/purgatory: Omit use of bin2c
+
+Nathan Chancellor (1):
+      x86/Kconfig: Fix CONFIG_CC_HAS_SANE_STACKPROTECTOR when cross compiling with clang
+
+ arch/x86/.gitignore                  |  2 --
+ arch/x86/Kconfig                     |  5 ++---
+ arch/x86/kernel/Makefile             |  2 --
+ arch/x86/purgatory/Makefile          | 10 ++--------
+ arch/x86/purgatory/kexec-purgatory.S | 14 ++++++++++++++
+ scripts/remove-stale-files           |  2 ++
+ 6 files changed, 20 insertions(+), 15 deletions(-)
+ create mode 100644 arch/x86/purgatory/kexec-purgatory.S
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

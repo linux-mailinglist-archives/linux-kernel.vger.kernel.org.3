@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417CC5866A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B8C5866A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiHAIzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 04:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S229945AbiHAI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiHAIzE (ORCPT
+        with ESMTP id S229623AbiHAI7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0388E3AE60
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659344103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BxiaabKGDEEtXA0mz5czXoc0qeEtxLpaIEZjWv8Aze0=;
-        b=f+LDhGAZf44t1XL1AjVrqrSLlDcZ+EUPzOCxOYMOkSRYJJKrqqZco5k+gqOoBVt51SZZio
-        Juz3seJQ292Z80wvF35ioasgsbVVeFLN/75hzdCjpYJFjZaIHZpuxkQLVXvg38krb3OPS7
-        qa+fOgqDcvwvAPf6Wz9jyDaO8yaJmAY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480-PVw37Qg1OSeCy_Tmtvq2mg-1; Mon, 01 Aug 2022 04:54:57 -0400
-X-MC-Unique: PVw37Qg1OSeCy_Tmtvq2mg-1
-Received: by mail-wm1-f72.google.com with SMTP id c189-20020a1c35c6000000b003a4bfb16d86so1807285wma.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 01:54:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=BxiaabKGDEEtXA0mz5czXoc0qeEtxLpaIEZjWv8Aze0=;
-        b=cBRalIZ79h2rsHa2MTJhjJCN5xv5pd1kUSO/tVIkqItVgactKWh1ohPWUKOsBx7KNG
-         T/0znLYNnPaUGXDe8sfLrVaufjuTUE+g984vr9GlzN9e6srg4gTMOiBkJc5BO3sEzJwj
-         58lgKBtDy7gfWZtWQs1TZULsZ8iOdZmM6/F9NDAM9ZaolGOAsVIEBjK+77KOjN43LKFp
-         GLkz6A6Gc6JSi2oDMRBpPKwCXFDZAc04LwOEBMFAWOgI4aUPP6UKdgFd45zDOlZm98UL
-         baPEckexciwj62BwowokLLmRTJzZkT5ahxR14nEa6QVrehWQuGoFax/pQQgV5o+ALOlE
-         h/aA==
-X-Gm-Message-State: AJIora9EE+Q8kS59aqI3dGzz4SWAVXKeHa48Ewm44LwYF3OYvEF7/yTt
-        IsNkWUE66T2MVLp0LlcRXy6j5irbEIjh5knBcmgJNjgaMSEt/qXqzQOhfpn2WkcmX0fplFxDp0U
-        mT/89atFI+QzVH0vDt0x4V2+QHesrvuE4tv+/hR3M1MPJulaj/fuVZMeno4J6gzc6e7ZHGF8MWr
-        cN
-X-Received: by 2002:a1c:2584:0:b0:3a1:9de1:f2cd with SMTP id l126-20020a1c2584000000b003a19de1f2cdmr9827308wml.182.1659344096711;
-        Mon, 01 Aug 2022 01:54:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vPXHZnEm7WMbonZJJdCYbmjiBsmz6Iyba+hidulBSCOoByBRhmsHlJYAmd1cCIvqAHDv/xhA==
-X-Received: by 2002:a1c:2584:0:b0:3a1:9de1:f2cd with SMTP id l126-20020a1c2584000000b003a19de1f2cdmr9827284wml.182.1659344096428;
-        Mon, 01 Aug 2022 01:54:56 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id p3-20020a5d68c3000000b0021ee65426a2sm11153544wrw.65.2022.08.01.01.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 01:54:55 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-In-Reply-To: <62ac29cb-3270-a810-bad1-3692da448016@redhat.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-10-vkuznets@redhat.com>
- <YtnMIkFI469Ub9vB@google.com>
- <48de7ea7-fc1a-6a83-3d6f-e04d26ea2f05@redhat.com>
- <Yt7ehL0HfR3b97FQ@google.com>
- <870d507d-a516-5601-4d21-2bfd571cf008@redhat.com>
- <YuMKBzeB2cE/NZ2K@google.com>
- <62ac29cb-3270-a810-bad1-3692da448016@redhat.com>
-Date:   Mon, 01 Aug 2022 10:54:54 +0200
-Message-ID: <875yjc2vj5.fsf@redhat.com>
+        Mon, 1 Aug 2022 04:59:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E293D2AC71
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659344364; x=1690880364;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WLSob6WZRijo1r4X/QWSTUIvozlCXPaoJf/ZsfYxpKY=;
+  b=LXjEXE9BB4zFEbVbA2X9YZMta+EuxYv/tDCLag+DumoIbXtclw/BFkrq
+   KLAEkhsibeuXPyFs2zZ4XArKXOTOlN4t3hELrR3NPDfdSpgMbzWen08V9
+   cnoLLK+iYzXs7w66WCD0nqzn8kEj+kWM9gad9g1A40EPWxo9YcSV+jKKf
+   iRU8vsOk7cg2dO04zuDLdAHvq6NxQ+VENpGK6XjglgYE9SgtgjPMwt21Y
+   4rt85DqIEDl6nB18hAS1iyB1lqhGZ97m+p47Yh7bPHimFD9tt+7IzKnPt
+   XGRST+SERwQIKAW2UB4TXSeuqpMkieK6zlC9rpDXJTrkG7Zolef1qxp/L
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="350806562"
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="350806562"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 01:59:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
+   d="scan'208";a="630159734"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 01 Aug 2022 01:59:23 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIRGk-000Eyh-27;
+        Mon, 01 Aug 2022 08:59:22 +0000
+Date:   Mon, 1 Aug 2022 16:58:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.19.y-rt-rebase 16/55] kernel/softirq.c:640:1:
+ sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be
+ static?
+Message-ID: <202208011628.5yMVdsg8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.19.y-rt-rebase
+head:   4730816e7a6aab17945765fc82d47cdc9a05b8fa
+commit: 492b6c0790cc99809397f2daca10299efb6ed354 [16/55] rcutorture: Also force sched priority to timersd on boosting test.
+config: microblaze-randconfig-s041-20220731 (https://download.01.org/0day-ci/archive/20220801/202208011628.5yMVdsg8-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=492b6c0790cc99809397f2daca10299efb6ed354
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.19.y-rt-rebase
+        git checkout 492b6c0790cc99809397f2daca10299efb6ed354
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-> On 7/29/22 00:13, Sean Christopherson wrote:
->> The only flaw in this is if KVM gets handed a CPUID model that enumerates support
->> for 2025 (or whenever the next update comes) but not 2022.  Hmm, though if Microsoft
->> defines each new "version" as a full superset, then even that theoretical bug goes
->> away.  I'm happy to be optimistic for once and give this a shot.  I definitely like
->> that it makes it easier to see the deltas between versions.
->
-> Okay, I have queued the series but I still haven't gone through all the 
-> comments.  So this will _not_ be in the 5.21 pull request.
->
-> The first patch also needs a bit more thought to figure out the impact 
-> on userspace and whether we can consider syndbg niche enough to not care.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-(Sorry for delayed replies here, I'm back from vacation now)
+sparse warnings: (new ones prefixed by >>)
+>> kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
 
-The first patch is not a requirement for the rest of the series, we can
-discuss it separately. I, however, think that we can just keep checking
-HV_FEATURE_DEBUG_MSRS_AVAILABLE in hv_check_msr_access() to be
-compatible with existing QEMUs and make QEMU expose both
-HV_FEATURE_DEBUG_MSRS_AVAILABLE and HV_ACCESS_DEBUG_MSRS unconditionally
-when syndbg feature is enabled as we know that missing
-HV_ACCESS_DEBUG_MSRS is just a bug. I don't think we actually need to
-be so picky and support VMMs which want to set 'syndbg without access to
-it' and 'access to syndbg without syndbg' use-cases. All-or-nothing is
-likely good enough.
+vim +/__pcpu_scope_timersd +640 kernel/softirq.c
+
+   639	
+ > 640	DEFINE_PER_CPU(struct task_struct *, timersd);
+   641	static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
+   642	
 
 -- 
-Vitaly
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

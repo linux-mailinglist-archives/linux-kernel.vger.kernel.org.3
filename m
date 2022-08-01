@@ -2,149 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818295872AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 22:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EE45872B6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 23:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiHAU7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 16:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
+        id S234999AbiHAVCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 17:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiHAU71 (ORCPT
+        with ESMTP id S233686AbiHAVCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 16:59:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07713C8D2;
-        Mon,  1 Aug 2022 13:59:26 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1D996601BAB;
-        Mon,  1 Aug 2022 21:59:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659387565;
-        bh=kLwdG/0US6e3TVfucDi0dS3MIj0n/fqR+ABIVUCOHYA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k3ArR2O+ETfI5f6+/T7xyNeH0/dnuTUC8FRwcBUBzpJJf4aXUVutdwdRL9v0XM1h8
-         +BQDCelQMHZMsPanb7yXKnHDYXSGm+IQAhWWcI2ljjBfC6riMvt/hWhc2vfWZxTlcD
-         q4SCA63aozYINczTftUWAuL6VBRsaPdDYaxr7+8C9PVxODvgQ6Og4JtVSktYujoQUb
-         7a5KouIOD34ANJ/gffHkzAZ0aethoh8eh6BKzode6g1brjVWdFPXpmQT1pGNEu8vI5
-         78NggmwxkOf9OgCKHObzdKVLiPIZyJuFzhH2zxoTRY802d9xTWXmQrRXfqq7kHz4Yu
-         vKz5EP6hyRAsg==
-Message-ID: <a402e627-9437-1daa-0149-b8265dbfad5e@collabora.com>
-Date:   Mon, 1 Aug 2022 23:59:22 +0300
+        Mon, 1 Aug 2022 17:02:45 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531A37FA4;
+        Mon,  1 Aug 2022 14:02:45 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id 125so9328349iou.6;
+        Mon, 01 Aug 2022 14:02:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=UWLMU/KM5qthMireVIdywA7pGmSk84uLopBUFlw01rk=;
+        b=6M1fQKNuUBiUabSsOxhoxMyomS9uVO0nO5Xly2kvMJlzCXwfsZ/CuyjIAigbjxlrQQ
+         Bd+PdWduDsCLgxj95mpXTEx0SF2O3ajaM13Z+O7wWRA6DMymF3LtUq9GpDd0HP0YmU2B
+         M9Q0Xmff7qVV2feK+xMeuIg71fjDgXwcvZjUQgDCM+ZIozR1b7OJUGMfZIfbc1l20+T/
+         wi+s7cZXb2/wQ7TN+NHkJGUG9bBlo8vliDKprKSDBO/1uxd7aQdzow8RGkPTxf8VhpxL
+         YyVSNjUjjEp0Tnl5wbswMGKbHJmIHupsi2Nr7sdeXB0WGsGnyZCYN5KSIi160Mjlg3o4
+         8XGw==
+X-Gm-Message-State: AJIora8kH25SKKRMuWGnQeFyI0vfc2E5GOcIiXEYasxtFHqCke+tkSjc
+        3Sbd+W/D+Cda1amQTFuZtw==
+X-Google-Smtp-Source: AGRyM1v/mytZaineqXwNw7H/fOehJ7t8VBW56FOnKxiyUKOT9WmqvVAmUm2cMCPhAvyGnzD9w2Q8jw==
+X-Received: by 2002:a05:6602:2c52:b0:67c:19d6:b628 with SMTP id x18-20020a0566022c5200b0067c19d6b628mr6204085iov.151.1659387764307;
+        Mon, 01 Aug 2022 14:02:44 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id j10-20020a0566022cca00b00675a83bc1e3sm6045876iow.13.2022.08.01.14.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 14:02:43 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: dma: arm,pl330: Add missing 'iommus' property
+Date:   Mon,  1 Aug 2022 15:02:37 -0600
+Message-Id: <20220801210237.1501488-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 09/15] drm/gem: Add LRU/shrinker helper
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220726175043.1027731-1-robdclark@gmail.com>
- <20220726175043.1027731-10-robdclark@gmail.com>
- <def8e47c-067e-0841-4ae4-1eb90244cd50@collabora.com>
- <CAF6AEGtV4GY6=PmQh0wrKxjxk_baRCzOo=s=Uz-uKBNEn7SBBg@mail.gmail.com>
- <6b35b912-68e5-e722-0b5a-0f7bd06c22c2@collabora.com>
- <733f5d3f-293e-f951-a00b-fcd3052f68e7@collabora.com>
- <88576d7a-da5f-753d-51cf-08ed22f7c81e@collabora.com>
- <CAF6AEGu1_5EBmKQR8cMs=or6o_ALBWxTyKA_JL-G-AhemDyaww@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGu1_5EBmKQR8cMs=or6o_ALBWxTyKA_JL-G-AhemDyaww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 23:42, Rob Clark wrote:
-> On Mon, Aug 1, 2022 at 1:26 PM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> On 8/1/22 23:13, Dmitry Osipenko wrote:
->>> On 8/1/22 23:11, Dmitry Osipenko wrote:
->>>> On 8/1/22 23:00, Rob Clark wrote:
->>>>> On Mon, Aug 1, 2022 at 12:41 PM Dmitry Osipenko
->>>>> <dmitry.osipenko@collabora.com> wrote:
->>>>>>
->>>>>> On 7/26/22 20:50, Rob Clark wrote:
->>>>>>> +/**
->>>>>>> + * drm_gem_lru_remove - remove object from whatever LRU it is in
->>>>>>> + *
->>>>>>> + * If the object is currently in any LRU, remove it.
->>>>>>> + *
->>>>>>> + * @obj: The GEM object to remove from current LRU
->>>>>>> + */
->>>>>>> +void
->>>>>>> +drm_gem_lru_remove(struct drm_gem_object *obj)
->>>>>>> +{
->>>>>>> +     struct drm_gem_lru *lru = obj->lru;
->>>>>>> +
->>>>>>> +     if (!lru)
->>>>>>> +             return;
->>>>>>> +
->>>>>>> +     mutex_lock(lru->lock);
->>>>>>> +     lru_remove(obj);
->>>>>>> +     mutex_unlock(lru->lock);
->>>>>>> +}
->>>>>>> +EXPORT_SYMBOL(drm_gem_lru_remove);
->>>>>>
->>>>>> I made a preliminary port of the DRM-SHMEM shrinker on top of the the
->>>>>> latest version of dma-buf locking convention and yours LRU patches. It
->>>>>> all works good, the only thing that is missing for the DRM-SHMEM
->>>>>> shrinker is the drm_gem_lru_remove_locked().
->>>>>>
->>>>>> What about to add a locked variant of drm_gem_lru_remove()?
->>>>>
->>>>> Sounds fine to me.. the only reason it didn't exist yet was because it
->>>>> wasn't needed yet..
->>>>
->>>> There is no use for the drm_gem_lru_move_tail_locked() as well, you're
->>>> not using it in the MSM driver. Hence I thought it might be good to add
->>>> the drm_gem_lru_remove_locked(), or maybe the
->>>> drm_gem_lru_move_tail_locked() should be dropped then?
->>>>
->>>>> I can respin w/ an addition of a _locked() version, or you can add it
->>>>> on top in your patchset.  Either is fine by me
->>>>
->>>> The either option is fine by me too. If you'll keep the unused
->>>> drm_gem_lru_move_tail_locked(), then will be nice to add
->>>> drm_gem_lru_remove_locked().
->>>>
->>>
->>> The drm_gem_lru_move_tail_locked() will be needed by DRM-SHMEM shrinker,
->>> BTW.
->>
->> On the other hand, I see now that DRM-SHMEM shrinker can use the
->> unlocked versions only. Hence both drm_gem_lru_move_tail_locked() and
->> drm_gem_lru_remove_locked() aren't needed.
-> 
-> drm_gem_lru_move_tail_locked() is used internally, but I guess it
-> could be made static since there ended up not being external users
-> (yet?)
+The pl330 can be behind an IOMMU which is the case for Arm Juno board.
+Add the 'iommus' property allowing for 1 IOMMU entry per channel for
+writes and 1 IOMMU entry for reads.
 
-Making it static will be good.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Include IOMMU entry for read channel
+---
+ Documentation/devicetree/bindings/dma/arm,pl330.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> I could see _move_tail_locked() being useful for a driver that wanted
-> to bulk update a bunch of GEM objs, for ex. all the bo's associated
-> with a submit/job.
-
-At minimum we shouldn't expose the unused kernel symbols. But if you're
-planning to make use of this function later on, then it might be fine to
-add it.
-
+diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+index 2bec69b308f8..4a3dd6f5309b 100644
+--- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
++++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+@@ -55,6 +55,12 @@ properties:
+ 
+   dma-coherent: true
+ 
++  iommus:
++    minItems: 1
++    maxItems: 9
++    description: Up to 1 IOMMU entry per DMA channel for writes and 1
++      IOMMU entry for reads.
++
+   power-domains:
+     maxItems: 1
+ 
 -- 
-Best regards,
-Dmitry
+2.34.1
+

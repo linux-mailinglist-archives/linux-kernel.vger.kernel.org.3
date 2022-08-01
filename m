@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF17D587460
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C27587463
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234741AbiHAX2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S234855AbiHAX3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233923AbiHAX17 (ORCPT
+        with ESMTP id S232527AbiHAX3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:27:59 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4271C90B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:27:56 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x23so3216228pll.7
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/tTorCEzOmnUDzNhkZIciJ+wzNRg3nenVtbBYRc4+HY=;
-        b=HLSxTUhjIGSoKgrpJTvEe2BSJUu8HkdegkhTgKCCzrprkf+z0kAg6VZmfFraeURLHp
-         Q9yAx517aQZdg3uE6aHTtphBlf2HbSaoAu7IplrVUxdjdcr6ZlUbngoqSDy38iIIyipJ
-         MIKZ171KgXMpKG0Wr6UtTfpvvdhUOgTNY8Sb4EZvT3T6CtC5cRGlv65e44FVKB1IJ5h1
-         FhwhGKcXEsMnZvo3/RI18OVks1epLPGjShn145SqTrgm585AVZrDCmX4xu47TJp+4F2P
-         XWnbH4Lg+yOehCBTVKDZesa+l1440fhkxKJ6OdxdPkA3fHtsoJyyVmgcNJveE0fm5QDp
-         bmkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/tTorCEzOmnUDzNhkZIciJ+wzNRg3nenVtbBYRc4+HY=;
-        b=wFhaZqb7PG/UN1dJpGaVfnU5idW/dsImmhzE5Hep7/rq7K+GwwB7D69u35jGICEdNf
-         rzEvjOfHnNXB9PtXK0gOv0k9/WJiKO6aYOY9ZdCVJvibpP4OKIQAMQSo/yz5jQX2Oq4L
-         V9NgoEvOXyCPEPvtcQisPK/iT1uXR+JKrPS/YOVUTKKs5SVWKFMwIC1xO9JA6VWvviIl
-         ZMPZ6REC+wBrsIEX67FsL3vXCj3m/6A3l6RuhglVUjaj1k5NgkT3PmdLEip/oG3jEmwU
-         c3JFNogXlvhkWTI8qI/75eBviqyt7tZ+gncPBBEr/K89Ua1gFI05+PCizvl3uSjgY/DD
-         Q76Q==
-X-Gm-Message-State: ACgBeo2Tu+VtrKDLvcz0Ks7CPLORU5bp3qmXS1CZcoPLIN1g3i2TEyD3
-        6n8UFEg0QuR5MdAZVUBkpeNqfw==
-X-Google-Smtp-Source: AA6agR5W3KyfYb0Ah0rzkQsVS3EmFauvkZr3Wm3ya6FofXb6KmVQ9TDyKYHTIH7cB5T2IOiTJJP76Q==
-X-Received: by 2002:a17:902:f609:b0:168:dcbe:7c4d with SMTP id n9-20020a170902f60900b00168dcbe7c4dmr18480479plg.169.1659396476264;
-        Mon, 01 Aug 2022 16:27:56 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b0016d62ba5665sm10396763plh.254.2022.08.01.16.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 16:27:55 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 23:27:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [RFC PATCH v6 036/104] KVM: x86/mmu: Explicitly check for MMIO
- spte in fast page fault
-Message-ID: <YuhheIdg47zCDiNi@google.com>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <d1a1da631b44f425d929767fda74c90de2d87a8d.1651774250.git.isaku.yamahata@intel.com>
- <YuhTPxZNhxFs+xjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuhTPxZNhxFs+xjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Mon, 1 Aug 2022 19:29:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12022182D;
+        Mon,  1 Aug 2022 16:29:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58412B815BE;
+        Mon,  1 Aug 2022 23:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5927CC433D6;
+        Mon,  1 Aug 2022 23:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659396543;
+        bh=EthOnS7yDEmr90RlBcQIT6E/wUDMKFGG1x8VYcmF1j0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EiBIfttFLAvYAdzaQGF4B8h2IEm4SBhwDILvRRFvzTt3VDaIJ5x8zzSABoaE5ybLA
+         kh3Xc3yV7ZNFlKG1JCySUUtn3eeRsW3t6QtSbytwOlrXGG1CmjADE0f4PJY4vetFH6
+         J2IBlR1XZn2uTTW6jc3TFA6gcERxIZXcsB1FR8epqlhGHnu9BK5pK7K1T5O6HKLkNG
+         ze7g+CPf3VxH8cdB/Xhlu84ac5CIaBVP3J0SoModjTXUKgQTUEsVgErFKV9EDgQKri
+         DXR2zujgF3fftvBqx8qlgZYnXjM6i/BO1zsqyXVCSyDQ/AUl4iGqY0mYQvUck3nMWy
+         QOlB5uNS1oKvQ==
+Date:   Tue, 2 Aug 2022 08:28:57 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <mhiramat@kernel.org>,
+        <peterz@infradead.org>, <mingo@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>
+Subject: Re: [PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
+Message-Id: <20220802082857.51a92a167876a2e3ba270aa7@kernel.org>
+In-Reply-To: <20220801033719.228248-1-chenzhongjin@huawei.com>
+References: <20220801033719.228248-1-chenzhongjin@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022, David Matlack wrote:
-> On Thu, May 05, 2022 at 11:14:30AM -0700, isaku.yamahata@intel.com wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > 
-> > Explicitly check for an MMIO spte in the fast page fault flow.  TDX will
-> > use a not-present entry for MMIO sptes, which can be mistaken for an
-> > access-tracked spte since both have SPTE_SPECIAL_MASK set.
-> > 
-> > MMIO sptes are handled in handle_mmio_page_fault for non-TDX VMs, so this
-> > patch does not affect them.  TDX will handle MMIO emulation through a
-> > hypercall instead.
-> > 
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index d1c37295bb6e..4a12d862bbb6 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3184,7 +3184,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> >  		else
-> >  			sptep = fast_pf_get_last_sptep(vcpu, fault->addr, &spte);
-> >  
-> > -		if (!is_shadow_present_pte(spte))
-> > +		if (!is_shadow_present_pte(spte) || is_mmio_spte(spte))
-> 
-> I wonder if this patch is really necessary. is_shadow_present_pte()
-> checks if SPTE_MMU_PRESENT_MASK is set (which is bit 11, not
-> shadow_present_mask). Do TDX VMs set bit 11 in MMIO SPTEs?
+On Mon, 1 Aug 2022 11:37:19 +0800
+Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
-This patch should be unnecessary, TDX's not-present SPTEs was one of my motivations
-for adding MMU_PRESENT.   Bit 11 most definitely must not be set for MMIO SPTEs.
+> kernel_text_address returns ftrace_trampoline, kprobe_insn_slot
+> and bpf_text_address as kprobe legal address.
+> 
+> These text are removable and changeable without any notifier to
+> kprobes. Probing on them can trigger some unexpected behavior[1].
+> 
+> Considering that jump_label and static_call text are already be
+> forbiden to probe, kernel_text_address should be replaced with
+> core_kernel_text and is_module_text_address to check other text
+> which is unsafe to kprobe.
+> 
+> [1] https://lkml.org/lkml/2022/7/26/1148
+> 
+> Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+> Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+
+Thanks! this looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
+> ---
+> v2 -> v3:
+> Remove '-next' carelessly added in title.
+> 
+> v1 -> v2:
+> Check core_kernel_text and is_module_text_address rather than
+> only kprobe_insn.
+> Also fix title and commit message for this. See old patch at [1].
+> ---
+>  kernel/kprobes.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f214f8c088ed..80697e5e03e4 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>  	preempt_disable();
+>  
+>  	/* Ensure it is not in reserved area nor out of text */
+> -	if (!kernel_text_address((unsigned long) p->addr) ||
+> +	if (!(core_kernel_text((unsigned long) p->addr) ||
+> +	    is_module_text_address((unsigned long) p->addr)) ||
+>  	    within_kprobe_blacklist((unsigned long) p->addr) ||
+>  	    jump_label_text_reserved(p->addr, p->addr) ||
+>  	    static_call_text_reserved(p->addr, p->addr) ||
+> -- 
+> 2.17.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

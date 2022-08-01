@@ -2,185 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E4A5871D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B55C5871D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 21:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiHATxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 15:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S235209AbiHATxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 15:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiHATxj (ORCPT
+        with ESMTP id S234382AbiHATxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 15:53:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F1D62E1;
-        Mon,  1 Aug 2022 12:53:38 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id m4so480166ejr.3;
-        Mon, 01 Aug 2022 12:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=KaTiX46BfLE12fhVgvPIixWb+ByqaTNtLnUIiRpJ4Zw=;
-        b=FfjO+oJuktYQF9bGnTgM86VKFS3QavixeEpHkRMyhKM1xgc9rm5nr8FyG7jhNLUlXj
-         W11415JbeywsHo4HKNnBSXwQ4h+DsTyhmuzPst/YIKnKHDXDF6S4mjCXOytlvHDFEbJ2
-         EG1ByChlKqvBWJlQK+HE1SyFFauJfqfDV3iUhnahi7RJbuisS/mVU332g2mdYcraHZ8C
-         /ADDIQ7ApPWRG46NUger6AlDEUg3tBo8DSaBq4E8vPyqqTX6UXYv+Lz6/n1HMxmkd7dR
-         HivAjNHDkjfkpqdf6WC6hf4MZL31LqZhqHxbCx/S2L36Xo3bf7dYhRMI5OBdOP2ovGv+
-         UOQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=KaTiX46BfLE12fhVgvPIixWb+ByqaTNtLnUIiRpJ4Zw=;
-        b=egaASx5Isa25YTLH2LJgA9E/zzrVICYQhoea6ROQoYgr1zl9NtJxJdBanP9VBE8QJ7
-         Tv4HPoNtkT2sG48h75I9H+8E49niy9aLejO9avJ7fK1INsBmdbdUejC0dzRf5sd+5LWs
-         KHfI3HLN/GwgqGycr7FVFDeJYKiwNrWKHabX9X39dTWhAvCI84xgUNy8SjKYhz5MSLB+
-         JJ+/KWRFk3CePhx1PWO9FQDLwn8/lKpTe1v82kO+5Q1F6+/A234LXJNf0R91iIpWbxuy
-         0np00ZLgaHs0Xm0DbU8EMKMqIevVwA/YiGCn5sZuhvdyrlYLqW1hQdpgp/LtpdqIzgae
-         EH+Q==
-X-Gm-Message-State: AJIora9lpaAygWmuSzf0gE7TXSbbdf5sc3nOZmYIkYFSEs2uiD82+Wn/
-        YD4Ko7S4uFMb47kM/TZIDUs=
-X-Google-Smtp-Source: AGRyM1s775GHjwiLz8RqVuiodHvdjfu5yWdWA3P+HR5c477vNhFTeo9NFHwv4nD56wIioygy8NTu2A==
-X-Received: by 2002:a17:907:2807:b0:72b:4530:29d5 with SMTP id eb7-20020a170907280700b0072b453029d5mr14292755ejc.69.1659383616519;
-        Mon, 01 Aug 2022 12:53:36 -0700 (PDT)
-Received: from krava ([83.240.62.89])
-        by smtp.gmail.com with ESMTPSA id o21-20020a170906775500b0072f9dc2c246sm5469763ejn.133.2022.08.01.12.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 12:53:36 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 1 Aug 2022 21:53:34 +0200
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Andres Freund <andres@anarazel.de>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Ben Hutchings <benh@debian.org>
-Subject: Re: [PATCH v3 0/8] tools: fix compilation failure caused by
- init_disassemble_info API changes
-Message-ID: <YugvPgKszlWXN8RO@krava>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220801013834.156015-1-andres@anarazel.de>
- <YufK0qnvVWCAFGEH@kernel.org>
+        Mon, 1 Aug 2022 15:53:41 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2063.outbound.protection.outlook.com [40.107.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D048F17AB1;
+        Mon,  1 Aug 2022 12:53:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LsETfzDOUpPTN1WOSGCwgxWBU9Zgih0earwSrJK2ARGwlCLLv3PcjzwDRVpJnm0TQYUtbnyWIj4AGRagAZkhSqDmSLxF4tvbvNYVB7ygqS6ZHV/H8d/8mJOm2WNpmJ43qzhVRsoBKyfV/+S61IMMNikPFu0KYQbM0mzOoj5yhapCU6GflZa9RPahClWUw2Lu7T9/UyyiOuSfux4bj+FfGWEWklSlptnrX5Afz/kk1atmjGVvN+Y7qOoL0OjHqe4LqYSKmeuqpTi82foWZ074H4L8v/4uLhHlbzKiap4sCygay2TM8SAighFb2taOFP/oUcDGa0BYQXrDy6CMmiX+TQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GZL75a2w0YyGBTAPqF5JYchGpNbEQFEr+jvdvOMpCkc=;
+ b=iqDXCgxFNLBSsFhDWQ1Z/UmTRAmOUlafjC060DUvMYXD91hYHWv8wp1KWH3srJBcV819RnFwm5q1Xl6dYYINT1rM/l04RK7UAddkJU21jqnphbwfwj2JjSMwDfUEfMZfwQ6+KnU4wzc+R4283NnZWd4tAblkNJer94Og0x1+BV0giPOjtPkhmKqDcty6wJ9SgoDadw5ljJKJfxK0LA6/mtarrtga4Zm9fmd9/LCwe3sUFbUkc5tqurU/LCZVjZB8dD1iKkrgUY5crj9HYKX3XcFDuAvZeURLTzKSXJ0ZgWJgCpLYYUdtvXHPVckF/tC0XRS5Jhyfshp3QqWSYYrkSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GZL75a2w0YyGBTAPqF5JYchGpNbEQFEr+jvdvOMpCkc=;
+ b=ezyKQpuJpmBktKNeoCzGy87OXEiWDPp3bZy3biSadT+wZZu7Gvv/M972qK4zLJvZRhB/pxXYnEezpBUbIVgcOJV9HYggWody/kOnAcGolMTnUOHvA0gZIaNXGohH3Ikhuu5khmsWLV5cSPcT8cRPAYVoMSpwZDprDhm8IE5Dc94=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by PH0PR05MB7590.namprd05.prod.outlook.com (2603:10b6:510::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5504.12; Mon, 1 Aug 2022 19:53:37 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::d813:9300:4877:39d0]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::d813:9300:4877:39d0%8]) with mapi id 15.20.5504.014; Mon, 1 Aug 2022
+ 19:53:36 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+CC:     "Schaufler, Casey" <casey.schaufler@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+Thread-Topic: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Thread-Index: AQHYm6moVvUxeU2aLUSjhWg4PqcU4q2H1VIAgAANjICAAASjgIASdSEAgAAsz4A=
+Date:   Mon, 1 Aug 2022 19:53:35 +0000
+Message-ID: <DDE06635-71B4-46B9-9635-97E35E0B5482@vmware.com>
+References: <20220719195628.3415852-1-axelrasmussen@google.com>
+ <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
+ <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
+ <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
+ <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
+In-Reply-To: <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ff930dbf-0c5e-40fb-7b3f-08da73f78590
+x-ms-traffictypediagnostic: PH0PR05MB7590:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FN7inO5zJ+Gsh7WLFwey7Wxee0apQjtDju/+QEOrgtkfFWOVTwIJUUDyCQru5cBUebE/KBuvMZhY/t8XxGirQCV4IA9NwKbU6s0uG8OzZ8uhX5xxcFt8AC9CmiUj/ePmSowdxSCTtbaxinClCkJLkCIFGZyebgu4LzFERfFoKdbXpIE3WspRgTRJ64UE8UAJcFd55fm3dPYWaxwJRNATA0x9p02t+GFFQzBBy6iQhzo/PviQIHQudwfZlaQQIlf+ibmsdGDsXhQ/a2tikXzJbdTlU92W3NeZqMus2k/akX1C3hsRyQBKMl1+c+VzD/aKGqWSLe2VpmP6L5rnu8hIxcRvjdTXIMEiOHaqlmlWWGwGnSDNon1pcuL7R8SLy6W90Lf5ImbvUluGJb80PyQWFJtVMed5VP4dapWzV820PzQCreGpaaV9Lg7eAQ5/tT2PYx26igvYkuovQq2flmcNmSSDt8hnSLKuRz5376dOqwPSGjduinkFv3hS4ktKXy3OTWFxDAztRV431LNdbIMTUusBAsNHu1gN0icsjC74OFyjAg6Ye86//X7iUEIdBSCnx8B5pL2RTHQ2jAZttXeARfHt+4C7hFfqXRdT31lzbTAefm5XkSBh1wytwIuf0SssTW6vH6iGfIQE3FGr6ywz0Qkr5Uoy8V8aulbRwF16+1SH+m40P5R9GP/4Hpj5t5GBZPZRZeoSbWxcC6H9Je1VNGWalutw4gUIqmYtNkeLzgr2Ova+AUB7OEa2GqKTG6aXMiguiC/78DFRqFmD2x++7KNlr27S1AR/sSxzDfK3g5ROYKbXYsj1c+1Lq2GE3WeAZHrVDnG9W7mRpp18JoJNew==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(26005)(53546011)(6512007)(478600001)(7416002)(8936002)(5660300002)(6486002)(33656002)(2906002)(6506007)(86362001)(41300700001)(122000001)(38070700005)(83380400001)(2616005)(71200400001)(186003)(6916009)(38100700002)(66946007)(76116006)(8676002)(54906003)(4326008)(66476007)(66446008)(64756008)(36756003)(66556008)(316002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dW43clpyZzE5TFEwNnkzU2REOEkzS0RMeDU5N1RXRXNzRXVRMk1PUHZmUG1Q?=
+ =?utf-8?B?dUZRU0FGUzRlNHFmeFgvMGZpaTgwejNuVW5BNlBFKzU3MnZwVnpyZDdiSElK?=
+ =?utf-8?B?c21BNERKS1NjWk5nOFlnZnhabGJJZ2c4U285NUU0anc2SDdsbWUvYVk1NnUx?=
+ =?utf-8?B?b2RKb3NLY1MzR01yVWZLemw2ZmsxWGFENmQxSDhZSkNyb1BwN0hPb3pqTTZw?=
+ =?utf-8?B?Uk1IUG96SSswSEFsaWpuS3JyTnhPRTZxaVJuM0szOStuNjFpb3NTNHAyUlZO?=
+ =?utf-8?B?cVRuem1oY2tnYklkSndVbVdNeUw5WkNmK1hLcjlvUzdtV29YQkZUTGxEWUFM?=
+ =?utf-8?B?c01MY1ZGcTFCUlYvVUpNanltUEVzR3NrTUZpbHN0U2daUmxBTyttUUdjSlNx?=
+ =?utf-8?B?dis0TG5qd2dGOGJUcE1XOHM0TGRlY1d2KzUzSTJYZGZpT3VMa1M3ZFI1ektD?=
+ =?utf-8?B?Z3JYczdGRG9aUjdOcWd6ekxiTDdZZmo4ZWQ2ZHROK1pBbE9tZTNGOXZsb0dv?=
+ =?utf-8?B?ei9SWGNMMnE0MUJqWUxYZjRDbzl3M2pXaWEyb0Y1YWE0VDBsek5XNDAvdzh2?=
+ =?utf-8?B?Zlk1dHNOdkNkNENyajdlTFNIbTJua2lXZmNobTJFVUd6bDdKSlU3L3BLWGhp?=
+ =?utf-8?B?UDJ1Rnk0VzgzcHp1WENiRkVpNVdadUpjZXppKzI1bDhXdlRNOU9scWRYQXdG?=
+ =?utf-8?B?VHhqRjc2RlA0dXRVTVFZUjROMndVMW1WbVFiQjlHejlQYUw5blVOZjJSbDZF?=
+ =?utf-8?B?bVgwQ3FvN1dlWWFWU3RXRTA1Nk1sR3lueEwvek9mdlJTcTA0VWZIZFpKbnZh?=
+ =?utf-8?B?em9na1hGaEM5YmpSWUJKN2k0MFo0SjBrbkV0UllFMlNYc1NpNncvNHlvVjhy?=
+ =?utf-8?B?WTYzcjF6WUlQalZraSs1TXU2akFJekRWUmhyNldlaCtocDMvWE5ZZWxMdWRD?=
+ =?utf-8?B?bjd3VkRWbEZhZVg3SWl5aTRBZ3oxRjUwazNZa3hqcUpjYXdVS1hhTCtiRWpT?=
+ =?utf-8?B?dVdTY3hIODZKK2ZGL1NKOE5XMDhpVkt4eEd2bUdEMmdxMmZ4NkFuOVNtTEhx?=
+ =?utf-8?B?cDlLcXdCMjdnM2o3WXZrdmlyVDFxTy9oUEgzSG9qOXlNOFJJOFk2Q0FiVk1y?=
+ =?utf-8?B?K3gvZnE3NndJUlBqN0JGS0lyN2ZiYy9TQ1BqTURZdlRBdk16RUlpK1QwdWFj?=
+ =?utf-8?B?dGxyUnJIQXNudldBT0xkSyt4NHZCcXk2eUFmVEUrblFkRTQ2b2p6SjBJM2lx?=
+ =?utf-8?B?eW5jbUx1bjByZGlNb0xnYUFJUkFjQ3JLVGdQeWV4Q1FjODZ5T3Yzc3p6bWxQ?=
+ =?utf-8?B?aXdvOUxwTVZVaEpNcW9DMVRqS2szVFUyMWhLYWFLbFpNODV2em9rbFE3Z0ty?=
+ =?utf-8?B?NTdweXRvT0kveVNQKzQvaTVxNDJoVlUwYlErWGh4VnJQM2NCdG5Qc0ZzT245?=
+ =?utf-8?B?THpmb2d5TWo2UXMzcVNTR3ByMDZLNHVFR0U0aks2cVVVZ3NMOUlyNEc2Yk5K?=
+ =?utf-8?B?UmJKdFA0dW9SdE4wak1scGw1UjNWUm55VW5wbUwwc2xud0hadFYzUk5vU0lQ?=
+ =?utf-8?B?TlBQZi93Q01FaUd4OHdnWkQ3dUJMR0VaZlpLY1pHTUFDckpoMy8ydFpiTnla?=
+ =?utf-8?B?b1hibHpNYTMrMXhKWVZvUGdIMUZHQUY4Smc4V1NhU1BwWkw3V1ZoMnNkdDJP?=
+ =?utf-8?B?OGFWSmpNRGtFdnplMm5MN201S1k5cTQrLzE2UGRzTnJBQmNWdk43UkRQT0ps?=
+ =?utf-8?B?R3dTNURublliWW9CS0ZmQ2hOREJpY3pWd0tEN0lvUncramx2REs2ZkMxTlND?=
+ =?utf-8?B?NWphL0t0dE5qeEhYbzdPRFJ0QTBmelJONHpKQXlBVkFJV1pGZlRMc3NuT3Az?=
+ =?utf-8?B?YzNBUFpJd2tZMmlzaWtDU1VWWXpxUnFKZ1A4REZGaDFiK3JOV3psdkV6NGhF?=
+ =?utf-8?B?TUlhNkpzaktNdTZUdlA1a2J6UnI0cEVRd1B3bXRPbDZ6YmhqeXl1RE9hQ2ZR?=
+ =?utf-8?B?cXhIcTN2Ti9PMmVFbzdlTEhtSnFzeEF6cmEzN3FrYkszOVFJSGZhMjJTT05s?=
+ =?utf-8?B?eFBweUxWd20zYnN4YWJDdG1yQWI3dHRhMmlQRXZ0RWsyQm1RQ0xNd00rUEhY?=
+ =?utf-8?Q?DSY9xH8YCccOxwnNSa9WnTeGr?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0E801C91B3E5924AAEA700C70CFAD8B2@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YufK0qnvVWCAFGEH@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff930dbf-0c5e-40fb-7b3f-08da73f78590
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2022 19:53:35.8957
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GwxQmhKbkh3lTYtmInRkW7DCKYrV9a20ikmvgdJEppOfVQcNUfyeh3ZiNwZinuGlz2KqjdS+5nitkSgzILATAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB7590
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 09:45:06AM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sun, Jul 31, 2022 at 06:38:26PM -0700, Andres Freund escreveu:
-> > binutils changed the signature of init_disassemble_info(), which now causes
-> > compilation failures for tools/{perf,bpf} on e.g. debian unstable. Relevant
-> > binutils commit:
-> > https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=60a3da00bd5407f07
-> > 
-> > I first fixed this without introducing the compat header, as suggested by
-> > Quentin, but I thought the amount of repeated boilerplate was a bit too
-> > much. So instead I introduced a compat header to wrap the API changes. Even
-> > tools/bpf/bpftool/jit_disasm.c, which needs its own callbacks for json, imo
-> > looks nicer this way.
-> > 
-> > I'm not regular contributor, so it very well might be my procedures are a
-> > bit off...
-> > 
-> > I am not sure I added the right [number of] people to CC?
-> 
-> I think its ok
->  
-> > WRT the feature test: Not sure what the point of the -DPACKAGE='"perf"' is,
-> 
-> I think its related to libbfd, and it comes from a long time ago, trying
-> to find the cset adding that...
-> 
-> > nor why tools/perf/Makefile.config sets some LDFLAGS/CFLAGS that are also
-> > in feature/Makefile and why -ldl isn't needed in the other places. But...
-> > 
-> > V2:
-> > - split patches further, so that tools/bpf and tools/perf part are entirely
-> >   separate
-> 
-> Cool, thanks, I'll process the first 4 patches, then at some point the
-> bpftool bits can be merged, alternatively I can process those as well if
-> the bpftool maintainers are ok with it.
-> 
-> I'll just wait a bit to see if Jiri and others have something to say.
-
-looks good
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-> 
-> - Arnaldo
-> 
-> > - included a bit more information about tests I did in commit messages
-> > - add a maybe_unused to fprintf_json_styled's style argument
-> > 
-> > V3:
-> > - don't include dis-asm-compat.h when building without libbfd
-> >   (Ben Hutchings)
-> > - don't include compiler.h in dis-asm-compat.h, use (void) casts instead,
-> >   to avoid compiler.h include due to potential licensing conflict
-> > - dual-license dis-asm-compat.h, for better compatibility with the rest of
-> >   bpftool's code (suggested by Quentin Monnet)
-> > - don't display feature-disassembler-init-styled test
-> >   (suggested by Jiri Olsa)
-> > - don't display feature-disassembler-four-args test, I split this for the
-> >   different subsystems, but maybe that's overkill? (suggested by Jiri Olsa)
-> > 
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> > Cc: Quentin Monnet <quentin@isovalent.com>
-> > CC: Ben Hutchings <benh@debian.org>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Link: https://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-> > Link: https://lore.kernel.org/lkml/CA+icZUVpr8ZeOKCj4zMMqbFT013KJz2T1csvXg+VSkdvJH1Ubw@mail.gmail.com
-> > 
-> > Andres Freund (8):
-> >   tools build: Add feature test for init_disassemble_info API changes
-> >   tools build: Don't display disassembler-four-args feature test
-> >   tools include: add dis-asm-compat.h to handle version differences
-> >   tools perf: Fix compilation error with new binutils
-> >   tools bpf_jit_disasm: Fix compilation error with new binutils
-> >   tools bpf_jit_disasm: Don't display disassembler-four-args feature
-> >     test
-> >   tools bpftool: Fix compilation error with new binutils
-> >   tools bpftool: Don't display disassembler-four-args feature test
-> > 
-> >  tools/bpf/Makefile                            |  7 ++-
-> >  tools/bpf/bpf_jit_disasm.c                    |  5 +-
-> >  tools/bpf/bpftool/Makefile                    |  8 ++-
-> >  tools/bpf/bpftool/jit_disasm.c                | 42 +++++++++++---
-> >  tools/build/Makefile.feature                  |  4 +-
-> >  tools/build/feature/Makefile                  |  4 ++
-> >  tools/build/feature/test-all.c                |  4 ++
-> >  .../feature/test-disassembler-init-styled.c   | 13 +++++
-> >  tools/include/tools/dis-asm-compat.h          | 55 +++++++++++++++++++
-> >  tools/perf/Makefile.config                    |  8 +++
-> >  tools/perf/util/annotate.c                    |  7 ++-
-> >  11 files changed, 138 insertions(+), 19 deletions(-)
-> >  create mode 100644 tools/build/feature/test-disassembler-init-styled.c
-> >  create mode 100644 tools/include/tools/dis-asm-compat.h
-> > 
-> > -- 
-> > 2.37.0.3.g30cc8d0f14
-> 
-> -- 
-> 
-> - Arnaldo
+T24gQXVnIDEsIDIwMjIsIGF0IDEwOjEzIEFNLCBBeGVsIFJhc211c3NlbiA8YXhlbHJhc211c3Nl
+bkBnb29nbGUuY29tPiB3cm90ZToNCg0KPiDimqAgRXh0ZXJuYWwgRW1haWwNCj4gDQo+IEkgZmlu
+aXNoZWQgdXAgc29tZSBvdGhlciB3b3JrIGFuZCBnb3QgYXJvdW5kIHRvIHdyaXRpbmcgYSB2NSB0
+b2RheSwNCj4gYnV0IEkgcmFuIGludG8gYSBwcm9ibGVtIHdpdGggL3Byb2MvW3BpZF0vdXNlcmZh
+dWx0ZmQuDQo+IA0KPiBGaWxlcyBpbiAvcHJvYy9bcGlkXS8qIGFyZSBvd25lZCBieSB0aGUgdXNl
+ci9ncm91cCB3aGljaCBzdGFydGVkIHRoZQ0KPiBwcm9jZXNzLCBhbmQgdGhleSBkb24ndCBzdXBw
+b3J0IGJlaW5nIGNobW9kJ2VkLg0KPiANCj4gRm9yIHRoZSB1c2VyZmF1bHRmZCBkZXZpY2UsIEkg
+dGhpbmsgd2Ugd2FudCB0aGUgZm9sbG93aW5nIHNlbWFudGljczoNCj4gLSBGb3IgVUZGRHMgY3Jl
+YXRlZCB2aWEgdGhlIGRldmljZSwgd2Ugd2FudCB0byBhbHdheXMgYWxsb3cgaGFuZGxpbmcNCj4g
+a2VybmVsIG1vZGUgZmF1bHRzDQo+IC0gRm9yIHNlY3VyaXR5LCB0aGUgZGV2aWNlIHNob3VsZCBi
+ZSBvd25lZCBieSByb290OnJvb3QgYnkgZGVmYXVsdCwgc28NCj4gdW5wcml2aWxlZ2VkIHVzZXJz
+IGRvbid0IGhhdmUgZGVmYXVsdCBhY2Nlc3MgdG8gaGFuZGxlIGtlcm5lbCBmYXVsdHMNCj4gLSBC
+dXQsIHRoZSBzeXN0ZW0gYWRtaW5pc3RyYXRvciBzaG91bGQgYmUgYWJsZSB0byBjaG93bi9jaG1v
+ZCBpdCwgdG8NCj4gZ3JhbnQgYWNjZXNzIHRvIGhhbmRsaW5nIGtlcm5lbCBmYXVsdHMgZm9yIHRo
+aXMgcHJvY2VzcyBtb3JlIHdpZGVseS4NCj4gDQo+IEl0IGNvdWxkIGJlIG1hZGUgdG8gd29yayBs
+aWtlIHRoYXQgYnV0IEkgdGhpbmsgaXQgd291bGQgaW52b2x2ZSBhdCBsZWFzdDoNCj4gDQo+IC0g
+U3BlY2lhbCBjYXNpbmcgdXNlcmZhdWx0ZmQgaW4gcHJvY19waWRfbWFrZV9pbm9kZQ0KPiAtIFVw
+ZGF0aW5nIHNldGF0dHIvZ2V0YXR0ciBmb3IgL3Byb2MvW3BpZF0gdG8gbWVhbmluZ2Z1bGx5IHN0
+b3JlIGFuZA0KPiB0aGVuIHJldHJpZXZlIHVpZC9naWQgZGlmZmVyZW50IGZyb20gdGhlIHRhc2sn
+cywgYWdhaW4gcHJvYmFibHkNCj4gc3BlY2lhbCBjYXNlZCBmb3IgdXNlcmZhdXRsZmQgc2luY2Ug
+d2UgZG9uJ3Qgd2FudCB0aGlzIGJlaGF2aW9yIGZvcg0KPiBvdGhlciBmaWxlcw0KPiANCj4gSXQg
+c2VlbXMgdG8gbWUgc3VjaCBhIGNoYW5nZSBtaWdodCByYWlzZSBleWVicm93cyBhbW9uZyBwcm9j
+ZnMgZm9sa3MuDQo+IEJlZm9yZSBJIHNwZW5kIHRoZSB0aW1lIHRvIHdyaXRlIHRoaXMgdXAsIGRv
+ZXMgdGhpcyBzZWVtIGxpa2UNCj4gc29tZXRoaW5nIHRoYXQgd291bGQgb2J2aW91c2x5IGJlIG5h
+Y2snZWQ/DQoNClsgUGxlYXNlIGF2b2lkIHRvcC1wb3N0aW5nIGluIHRoZSBmdXR1cmUgXQ0KDQpJ
+IGhhdmUgbm8gaW50ZXJlc3QgaW4gbWFraW5nIHlvdXIgbGlmZSBoYXJkZXIgdGhhbiBpdCBzaG91
+bGQgYmUuIElmIHlvdQ0KY2Fubm90IGZpbmQgYSBzdWl0YWJsZSBhbHRlcm5hdGl2ZSwgSSB3aWxs
+IG5vdCBmaWdodCBhZ2FpbnN0IGl0Lg0KDQpIb3cgYWJvdXQgdGhpcyBhbHRlcm5hdGl2ZTogaG93
+IGFib3V0IGZvbGxvd2luZyBLVk0gdXNhZ2UtbW9kZWw/DQoNCklPVzogWW91IG9wZW4gL2Rldi91
+c2VyZmF1bHRmZCwgYnV0IHRoaXMgaXMgbm90IHRoZSBmaWxlLWRlc2NyaXB0b3IgdGhhdCB5b3UN
+CnVzZSBmb3IgbW9zdCBvcGVyYXRpb25zLiBJbnN0ZWFkIHlvdSBmaXJzdCBpc3N1ZSBhbiBpb2N0
+bCAtIHNpbWlsYXJseSB0bw0KS1ZNX0NSRUFURV9WTSAtIHRvIGdldCBhIGZpbGUtZGVzY3JpcHRv
+ciBmb3IgeW91ciBzcGVjaWZpYyBwcm9jZXNzLiBZb3UgdGhlbg0KdXNlIHRoaXMgbmV3IGZpbGUt
+ZGVzY3JpcHRvciB0byBwZXJmb3JtIHlvdXIgb3BlcmF0aW9ucyAocmVhZC9pb2N0bC9ldGMpLg0K
+DQpUaGlzIHdvdWxkIG1ha2UgdGhlIGZhY3QgdGhhdCBpb2N0bHMvcmVhZHMgZnJvbSBkaWZmZXJl
+bnQgcHJvY2Vzc2VzIHJlZmVyIHRvDQpkaWZmZXJlbnQgY29udGV4dHMgKGkuZS4sIGZpbGUtZGVz
+Y3JpcHRvcnMpIG11Y2ggbW9yZSBuYXR1cmFsLg0KDQpEb2VzIGl0IHNvdW5kIGJldHRlcj8=

@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4936658630B
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F318458630D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 05:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbiHADYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 23:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S238659AbiHADZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 23:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237074AbiHADX4 (ORCPT
+        with ESMTP id S237074AbiHADY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 23:23:56 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B429C65B1;
-        Sun, 31 Jul 2022 20:23:55 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id q7so10888490ljp.13;
-        Sun, 31 Jul 2022 20:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=GNxvEO8zKMF9CuL60442aziMrziKJwXDy+lUG20M/ag=;
-        b=iyx3d/NDu2nKpMoy/Z9uAw6CuiuFJYmEEu4gVHmqdwBt5ror1Ahn3BNZL1p+OmS9HE
-         tAyIPEko9+xcgfN/Je26e00wMf18DiARtGozbBZRu4XaFfijI2YJ1oOIIq0CMr9spXu2
-         gi4ZVOjpKapMxnbUlHVaXaqDmaXALMj9+WD8ojtm6zhn7JMOGlvHC9r1PpAPfYIdT/8E
-         5deVq7qTyvZBBlec470JvDLuZzF8vEiT+4etz6i/E+rlNeM6m9tz/ywPWCtAlo6cM74i
-         3dDoNaDkeNIs2CGOpop3eiqjG9K21J0xneISc9BX6XowptUOuOtuL7Au/vbnV7crIYFh
-         xPbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GNxvEO8zKMF9CuL60442aziMrziKJwXDy+lUG20M/ag=;
-        b=C7gCt1igVj2Swks3cQDGuUJfLlMbJUwzH/vs+t6YTYUPuPx+MPGegUx2n/ijcmneh1
-         g0LBqaaZZbFO6djAGe/PxuTPok8MrUAsqVECkkQvBBR9kWzZjgfKqdRy6gzTX+BMkwY2
-         euUj7BB2Te4lW0oRQYV0hMy16kbVbsgANYddk8NCNb1N0Kfkt0P/MTeCqyno4EDdO+5n
-         W2kA7NPMhQ+0bKLSxNyFyFvnBmW585EPZx1rjp0Tz9Gu1VY6bIOLbHWqVs76hPE0JRAD
-         x8sRY+CTAmmBX7+ma7wOhrbgUYveSp+lqLeOBp2+nsLugVX+56Ibm3cMTFBTBsdnKICD
-         PVGg==
-X-Gm-Message-State: AJIora8ud5PWpejrIMEgibiFaCylZKGCXbNbfFylb3Nr80IkfWxyg12B
-        Jx6B0mgHVpGsOTFwjSnQTJXVx6KwLNQ6tGWZaw==
-X-Google-Smtp-Source: AGRyM1tC/foZjMEICK7b3UU3dizOYg3b315tP53NJ2o45HmK9C2RYWpFxF7iN7nxEF1ccgNI3PN6erQlx3BUs/zqYBo=
-X-Received: by 2002:a05:651c:98d:b0:25d:eb67:7160 with SMTP id
- b13-20020a05651c098d00b0025deb677160mr4247395ljq.385.1659324233799; Sun, 31
- Jul 2022 20:23:53 -0700 (PDT)
+        Sun, 31 Jul 2022 23:24:58 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3AB65B1;
+        Sun, 31 Jul 2022 20:24:56 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B1E785C00A3;
+        Sun, 31 Jul 2022 23:24:55 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 31 Jul 2022 23:24:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1659324295; x=1659410695; bh=gMZgdyYp8c
+        FAC5VD+4qabL5nDDePRou6YT7DYrrfPjI=; b=cOU1dy4e8cSqv41xnwzteNFNTM
+        yLE3XusVWrc5D34bS8wI8UVs2plXSb9iuRTBydERXAlTqQi4MRp0ZPBOGRNGgi+c
+        Web5EEeo514X0BI3sQ00PIGxwlto7di0tdXlS+D7i8ZgpzdpTHby96nOffG5jspa
+        VhD9Il85hJriaZ2W0SDiQAcqv9vWt7HyVmaAzmBYTrMqf6Ri9Pu3WqY4XKnj5zM0
+        Sb9082pKnqiCkyKnC3OLCWCTtfCxhvlX9tHhWWOBZDaO8wBy/hE0GUUye8aomAXH
+        f6e32YK4blQFiuC+5IVLtGyyXL/rHRihrjM/GoS4vOnmOYUe3siQi+1nvelA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1659324295; x=
+        1659410695; bh=gMZgdyYp8cFAC5VD+4qabL5nDDePRou6YT7DYrrfPjI=; b=t
+        PwRgE+PoeSiq4n7416AuxSOid+gooUjbYYiYkeHsncZvHfQBdstXrGzbsa92uGq8
+        piVNLSRVZKHvmaLRGE1DSIeCmlRQ34cgm/2hLyGEE5bufq1o7iNvFPbgOGk59rto
+        YvLsAsKueVvZ0TekZCAOn2YNLMWRrMz6NCvOyylilHPlZGDPvHx2JQMYkyMbM5ru
+        cjOIu0jN2Q5slDhlG5JGWX17LJ975J9IffLvVkRV38vRS3IcgWOXYMBX2prpMDSF
+        rYXqsX4k8yIb5/Ta1yZ04hBiF81t0wy5Ff4aRI2uS/G66rC6FXArFVMzEtn7NhAZ
+        mAQlSsUrxEfxjiMp/rqyA==
+X-ME-Sender: <xms:h0fnYlAVX4pNoPFhzBWB41kNZQSD4IKQG0fbnzQUpjg1gBDZ6eypFw>
+    <xme:h0fnYjgPWKVZhOrX2Av5Srtf0UZfhtu_AsrA_L2CqaBGI5pjTN74vD1MNCObcQRu5
+    Swmyv3LlUEh7qb2J10>
+X-ME-Received: <xmr:h0fnYgkjKxMhknC1NkFT6WlregqnYpbwPTsUSirve480khPASnZsmLlwrrI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvvddgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfggtggusehttdertd
+    dttddvnecuhfhrohhmpeflohhshhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhht
+    rhhiphhlvghtthdrohhrgheqnecuggftrfgrthhtvghrnhepuddvleehtedtgfdvvdelge
+    eufedugeduveffkeejgefffedvieekhedvheelkefhnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvghtth
+    drohhrgh
+X-ME-Proxy: <xmx:h0fnYvxsB0p9BJz792N_8H5fz-qSJM7a_s3NAY7shvDAOvuD0AeVJw>
+    <xmx:h0fnYqSTp23QqTuoKS9BftPlqkEgYltpNqkoFM8oTEnuVXge_wCCMg>
+    <xmx:h0fnYibRFRPP4szCY83D61k-oP-YOhCNBO_-yzsdFKAVqQlNzYmMFA>
+    <xmx:h0fnYlfxyyb1Yr6c5qqGi-2BGHSwk1RKLLYmaMPeQM0qMCfisage1w>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 31 Jul 2022 23:24:54 -0400 (EDT)
+Date:   Sun, 31 Jul 2022 20:24:53 -0700
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ext4: Don't run ext4lazyinit for read-only filesystems
+Message-ID: <48b41da1498fcac3287e2e06b660680646c1c050.1659323972.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-References: <20220720204414.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
-In-Reply-To: <20220720204414.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Mon, 1 Aug 2022 11:23:42 +0800
-Message-ID: <CAGaU9a_Tm_awy+EAaYpv1Aj+URKkrD1yZDY2dWbhoWj0qUr5uw@mail.gmail.com>
-Subject: Re: [PATCH] ufs: core: ufshcd: use CLOCK_BOOTTIME for debugging timestamps
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniil,
+On a read-only filesystem, we won't invoke the block allocator, so we
+don't need to prefetch the block bitmaps.
 
-On Wed, Jul 20, 2022 at 6:49 PM Daniil Lunev <dlunev@chromium.org> wrote:
->
-> CLOCK_MONOTONIC is not advanced when the system is in suspend. This
-> becomes problematic when debugging issues related to suspend-resume:
-> the timestamps printed by ufshcd_print_trs can not be correlated with
-> dmesg entries, which are timestamped with CLOCK_BOOTTIME.
->
-> This CL changes the used clock to CLOCK_BOOTTIME for the informational
-> timestamp variables and adds mirroring CLOCK_BOOTIME instances for
-> variables used in subsequent derevations (to not change the semantics of
-> those derevations).
->
-> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
->
+This avoids starting and running the ext4lazyinit thread at all on a
+system with no read-write ext4 filesystems (for instance, a container VM
+with read-only filesystems underneath an overlayfs).
 
-Regarding the suspend/resume issue breakdown with aligned timestamp
-with the dmesg logs, perhaps we need to use "sched_clock()" since it
-is the timestamp used by dmesg?
+Fixes: 21175ca434c5 ("ext4: make prefetch_block_bitmaps default")
+Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+---
 
-Thanks,
-Stanley
+Tested in a VM, with a read-only ext4 root filesystem. Confirmed that
+ext4lazyinit starts without this patch, and does not start with this
+patch.
+
+(For a future merge window, not the current one. Please let me know if I
+need to re-send this at a later, more convenient time.)
+
+ fs/ext4/super.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 845f2f8aee5f..20437acc8865 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -3973,9 +3973,9 @@ int ext4_register_li_request(struct super_block *sb,
+ 		goto out;
+ 	}
+ 
+-	if (test_opt(sb, NO_PREFETCH_BLOCK_BITMAPS) &&
+-	    (first_not_zeroed == ngroups || sb_rdonly(sb) ||
+-	     !test_opt(sb, INIT_INODE_TABLE)))
++	if (sb_rdonly(sb) ||
++	    (test_opt(sb, NO_PREFETCH_BLOCK_BITMAPS) &&
++	     (first_not_zeroed == ngroups || !test_opt(sb, INIT_INODE_TABLE))))
+ 		goto out;
+ 
+ 	elr = ext4_li_request_new(sb, first_not_zeroed);
+-- 
+2.36.1
+

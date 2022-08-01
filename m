@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5339F586C30
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFF5586C31
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiHANoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S231863AbiHANo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiHANn6 (ORCPT
+        with ESMTP id S230410AbiHANoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:43:58 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B53C95BB;
-        Mon,  1 Aug 2022 06:43:57 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id n138so8393763iod.4;
-        Mon, 01 Aug 2022 06:43:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=zsZQN63lOHh8h4GXaIvhTBnUEILZRHFu8ewz58HKTGY=;
-        b=hDem/g4l+oFS2ei0esqWY9ZaNfAo94ZSEPCgFulNQvyMKFoVr6ZzItT71gkjb9msSE
-         R6DNLCLvrttj0pe9NSCWviOFMI+4Gp4r7VmuYk1vNhnNCDdX/kCXjEN9b7p+qO5MD7dT
-         Yk5yiMH97ws8Er+fYm11hRfkohX++uvLI/08sd5d0ZOTqa8vlxE69hebmYjspc97TN6s
-         JxRcjwoKEcnEdyMBA/HWxCsMeqKHcEmxv9w3vqsR9XzKMPJqBja7/Z0Xs7S94xSrmU0F
-         i0oGWKpg5GCLHL76Vizb3Lg6Hhj7CKE+2CxDpc2Rn2Rp4omQQdbzUsxNFZYBU6r3qfby
-         wr3w==
-X-Gm-Message-State: AJIora/YzEZdfng7R+8BtiC24m/q+H6vWkuALQb2N+jWVf+2Sg5aVKAr
-        uSdV4S63wn0+74cLv9Zd/A==
-X-Google-Smtp-Source: AGRyM1t9Mj5nTHd4BV8E79tZn1dYTdEMV9X5kGdVN8crTiTo4iJ1VJeyJLdxHMNomc1wjgRKUpobrw==
-X-Received: by 2002:a05:6638:30b:b0:33f:8d28:4d85 with SMTP id w11-20020a056638030b00b0033f8d284d85mr5996500jap.13.1659361436772;
-        Mon, 01 Aug 2022 06:43:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t3-20020a02b183000000b0033e9c4c6a9esm5149828jah.82.2022.08.01.06.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 06:43:56 -0700 (PDT)
-Received: (nullmailer pid 914821 invoked by uid 1000);
-        Mon, 01 Aug 2022 13:43:53 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Will Deacon <will@kernel.org>, Chris Healy <cphealy@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        devicetree@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-In-Reply-To: <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
-References: <20220801060049.1655177-1-jiucheng.xu@amlogic.com> <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
-Subject: Re: [PATCH v3 4/4] dt-binding: perf: Add Amlogic DDR PMU
-Date:   Mon, 01 Aug 2022 07:43:53 -0600
-Message-Id: <1659361433.078688.914820.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 09:44:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A85795BB
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:44:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7831B8119C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 13:44:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B59DC433C1;
+        Mon,  1 Aug 2022 13:44:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="W/O0C4j5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1659361458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AhoIl2LdEiU3EgVGZTGhOwseEVER6qH2H/xWKoB/EPQ=;
+        b=W/O0C4j5e6b8ggtJVIpd+5tl1dnQXle7vVV6E5+qRjkGbSy7l7OM+C3gTQ4PERSmouM0xO
+        2HEN0mgKegen4CSAJkrSJFQwhcgDlS2XREwm0o1RViXVGwOfS+qQwHPrt2nTUWYVvP4vTj
+        wm9zRH1KCAqJPOupsTzOWBzPz957UH8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 48b358dd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 1 Aug 2022 13:44:17 +0000 (UTC)
+Date:   Mon, 1 Aug 2022 15:44:12 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>, Petr Mladek <pmladek@suse.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4] lib/vsprintf: defer filling siphash key on RT
+Message-ID: <YufYlRWneJkvIpr7@zx2c4.com>
+References: <YufHN7fF0dROMETj@zx2c4.com>
+ <20220801123945.43081-1-Jason@zx2c4.com>
+ <YufLK6hio/v1gfmq@linutronix.de>
+ <YufW4G/A3eQKpdjj@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YufW4G/A3eQKpdjj@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 01 Aug 2022 14:00:49 +0800, Jiucheng Xu wrote:
-> Add binding documentation for the Amlogic G12 series DDR
-> performance monitor unit.
+Hey again,
+
+On Mon, Aug 01, 2022 at 03:36:32PM +0200, Jason A. Donenfeld wrote:
+> Hi Sebastian,
 > 
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> ---
-> Changes v2 -> v3:
->   - Remove oneOf
->   - Add descriptions
->   - Fix compiling warning
+> On Mon, Aug 01, 2022 at 02:46:35PM +0200, Sebastian Andrzej Siewior wrote:
+> > On 2022-08-01 14:39:46 [+0200], Jason A. Donenfeld wrote:
+> > > On RT, we can't call get_random_bytes() from inside of the raw locks
+> > > that callers of vsprintf might take, because get_random_bytes() takes
+> > > normal spinlocks. So on those RT systems, defer the siphash key
+> > > generation to a worker.
+> > > 
+> > > Also, avoid using a static_branch, as this isn't the fast path.
+> > > Using static_branch_likely() to signal that ptr_key has been filled is a
+> > > bit much given that it is not a fast path.
+> > > 
+> > > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> > > Reported-by: Mike Galbraith <efault@gmx.de>
+> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > ---
+> > > Sebastian - feel free to take this and tweak it as needed. Sending this
+> > > mostly as something illustrative of what the "simpler" thing would be
+> > > that I had in mind. -Jason
+> > 
+> > Can have the same behaviour regardless of CONFIG_PREEMPT_RT? Here
+> > lockdep _may_ yell with !RT because it is broken for RT.
+> > If we agree that we drop the first %p print here, can we do this on
+> > both (regardless of CONFIG_PREEMPT_RT)?
 > 
-> Changes v1 -> v2:
->   - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
->   - Delete "model", "dmc_nr", "chann_nr" new properties
->   - Fix compiling error
-> ---
->  .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 51 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+> "Lockdep may yell" -- but this would be when lockdep is turned on to
+> catch RT bugs, not to catch non-RT bugs. The actual bug only exists on
+> RT. This is an RT problem. Stop pretending that this is a real issue
+> outside of RT. It isn't. This is *only* an RT issue. So why would we
+> make things worse for an issue that doesn't actually exist on non-RT?
 > 
+> I too generally prefer having only one code path and not two. But the
+> way this patch is written, the worker function just gets reused with a
+> straight call on the non-RT case, so it doesn't actually require
+> duplicating code.
+> 
+> Jason
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+By the way, another option that would be fine with me would be to make
+random.c use all raw spinlocks. From a non-RT perspective, that wouldn't
+change the codegen at all, so it doesn't make a huge difference to me.
+From an RT perspective, it would presumably fix a lot of these issues,
+and enable randomness to be available in any context, which is maybe
+what we want anyway. From an RT-safety point of view, I suspect doing
+this might actually be okay, because the locks are only ever protecting
+operations that are fixed duration CPU-bound, like generating a chacha
+block or something, not waiting for some I/O.
 
-yamllint warnings/errors:
+Thoughts on that?
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/perf/amlogic,g12_ddr_pmu.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Jason

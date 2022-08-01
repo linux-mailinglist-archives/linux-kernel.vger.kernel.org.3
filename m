@@ -2,90 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FFC586CEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1826586CF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiHAOeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S232547AbiHAOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiHAOeR (ORCPT
+        with ESMTP id S231459AbiHAOgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:34:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEDA26AD7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:34:16 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 16:34:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659364454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SFOMAExeeQUZnj03kTpLl/utTFCYl4+l+62DC6Nz1fg=;
-        b=2XcFbEM9SxMo9YWU1tlF+IqljY/rD/e4EoHFmNBa2HLfCfgS2Azc4js7wUjO6FqotTmFjY
-        qTZHEDMiT7xAqcnOk4OcsQC/3G/QX3zMO/rjtdnz2yAQkPVlaWhBIHBDFcAKATI0YlsdNh
-        X/0HMH2KFUlKI3W7Z+2RVoOQaz/E9mOgrvm94s4xldR4/fTWfruuyhqFZ43OozU3Ll/G5x
-        erbxjIUyoJJeJBH9xRAY5a4+Nv36iDvZmjSEjBtvogSrb4qiT6Sv+LoLH1It7g5vUsCvRs
-        /1wfdpXPcCQbKddKLbCOhdLIH/mg60kHAhchqBNL9+ewNJ2ah9fs1dmtDG/q0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659364454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SFOMAExeeQUZnj03kTpLl/utTFCYl4+l+62DC6Nz1fg=;
-        b=sQ7RKYZKBlpMQIZ/jZNMnb91eTHm9Nv4/Xbpo3omZ2lNWHw3qAGKaWxrcg2uEPKt8/XQaN
-        PHU6W9+z9kC7HhCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <YufkZU9kGkHHUhAK@linutronix.de>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
+        Mon, 1 Aug 2022 10:36:37 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070D33206B;
+        Mon,  1 Aug 2022 07:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659364596; x=1690900596;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Z1q6yWbe6ZKJFIdTiO5T8PBqxZ1ZPjO7H90GXR9+67U=;
+  b=LRpWrRheL3eiemN78HAwiOQSpAY+kGDEzNPodqCdoNCoX1WgxVh6d7h4
+   nwgXCZrTfSTRZvbPX+bmxO3qcDOj2RtFbZM3KHLyna1980JVLyaIncbZa
+   9hlIJjgu0u7Qa81RFgweHnpNQMzCpK0LBqGnZHfVkSd5S9OY4SKp9JsLj
+   g=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Aug 2022 07:36:36 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 07:36:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 1 Aug 2022 07:36:05 -0700
+Received: from [10.216.14.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 1 Aug 2022
+ 07:35:58 -0700
+Message-ID: <f08be233-77ae-f645-df88-d264f2336725@quicinc.com>
+Date:   Mon, 1 Aug 2022 20:05:53 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220801142530.133007-1-Jason@zx2c4.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 2/8] drm/msm: Take single rpm refcount on behalf of all
+ submits
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <1659174051-27816-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220730150952.v3.2.Ifee853f6d8217a0fdacc459092bbc9e81a8a7ac7@changeid>
+ <CAF6AEGs7zKDoRY=ijxFQvaZig=UiSPgWkJFA-PY2MTxKWr5bpw@mail.gmail.com>
+ <d7f95663-c0f7-8227-dbc0-fac43bdf6faa@quicinc.com>
+ <CAF6AEGt5H=T_0HOLrNqRHZOYNicfk74bgZrQH56k2bYpi5JsRA@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGt5H=T_0HOLrNqRHZOYNicfk74bgZrQH56k2bYpi5JsRA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-01 16:25:31 [+0200], Jason A. Donenfeld wrote:
-> After handling several bug reports using various creative solutions,
-> it's becoming clear that random bytes are actually a useful thing to
-> happen from any ordinary context, including when interruptsare off.
-> Actually, that's been long recognized, which is why the RNG uses
-> spinlocks rather than mutexes. But on RT, those spinlocks are getting
-> converted back into sleeping locks.
->=20
-> This clearly is causing more problems than it might hypothetically
-> solve. Additionally, the locks in random.c are generally for fixed
-> durations doing CPU-bound operations -- no waiting for hardware or I/O
-> or the like. So this shouldn't result in a real harm to latency.
->=20
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Sebastian - I won't move forward with this without your Ack, obviously.
-> What do you think of this general approach? -Jason
+On 8/1/2022 3:45 AM, Rob Clark wrote:
+> On Sun, Jul 31, 2022 at 9:33 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> On 7/31/2022 9:26 PM, Rob Clark wrote:
+>>> On Sat, Jul 30, 2022 at 2:41 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>>> Instead of separate refcount for each submit, take single rpm refcount
+>>>> on behalf of all the submits. This makes it easier to drop the rpm
+>>>> refcount during recovery in an upcoming patch.
+>>>>
+>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>>> ---
+>>>>
+>>>> (no changes since v1)
+>>> I see no earlier version of this patch?
+My bad, that is incorrect. This is a new patch included in the current 
+series.
 
-I would need to do worst-case measurements and I've been looking at this
-just before writting the other email and there was a local_lock_t
-somewhere which needs also change=E2=80=A6
+-Akhil.
+>>>
+>>>>    drivers/gpu/drm/msm/msm_gpu.c | 12 ++++++++----
+>>>>    1 file changed, 8 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+>>>> index c8cd9bf..e1dd3cc 100644
+>>>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+>>>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+>>>> @@ -663,11 +663,12 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+>>>>           mutex_lock(&gpu->active_lock);
+>>>>           gpu->active_submits--;
+>>>>           WARN_ON(gpu->active_submits < 0);
+>>>> -       if (!gpu->active_submits)
+>>>> +       if (!gpu->active_submits) {
+>>>>                   msm_devfreq_idle(gpu);
+>>>> -       mutex_unlock(&gpu->active_lock);
+>>>> +               pm_runtime_put_autosuspend(&gpu->pdev->dev);
+>>>> +       }
+>>>>
+>>>> -       pm_runtime_put_autosuspend(&gpu->pdev->dev);
+>>>> +       mutex_unlock(&gpu->active_lock);
+>>>>
+>>>>           msm_gem_submit_put(submit);
+>>>>    }
+>>>> @@ -756,14 +757,17 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
+>>>>
+>>>>           /* Update devfreq on transition from idle->active: */
+>>>>           mutex_lock(&gpu->active_lock);
+>>>> -       if (!gpu->active_submits)
+>>>> +       if (!gpu->active_submits) {
+>>>> +               pm_runtime_get(&gpu->pdev->dev);
+>>>>                   msm_devfreq_active(gpu);
+>>>> +       }
+>>>>           gpu->active_submits++;
+>>>>           mutex_unlock(&gpu->active_lock);
+>>>>
+>>>>           gpu->funcs->submit(gpu, submit);
+>>>>           gpu->cur_ctx_seqno = submit->queue->ctx->seqno;
+>>>>
+>>>> +       pm_runtime_put(&gpu->pdev->dev);
+>>> this looks unbalanced?
+>> There is another pm_runtime_get_sync at the top of this function. Just
+>> before hw_init().
+>> https://elixir.bootlin.com/linux/v5.19-rc8/source/drivers/gpu/drm/msm/msm_gpu.c#L737
+> oh, right.. sorry, I was looking at my local stack of WIP patches
+> which went the opposite direction and moved the runpm into just
+> msm_job_run().. I'll drop that one
+>
+> BR,
+> -R
+>
+>> -Akhil.
+>>> BR,
+>>> -R
+>>>
+>>>>           hangcheck_timer_reset(gpu);
+>>>>    }
+>>>>
+>>>> --
+>>>> 2.7.4
+>>>>
 
-So I have everything ready for 5.20 (6.0) ready without the RT patch and
-then this vsprintf issues comes along=E2=80=A6
-=46rom that point of view I would prefer to either init it upfront in a
-way that works for everyone/ loose the first %p since it is probably a
-minor inconvenience if nobody complains - instead swapping all locks.
-We managed without this for kasan and lockdep which are both not used in
-a production environment.
-
-Sebastian

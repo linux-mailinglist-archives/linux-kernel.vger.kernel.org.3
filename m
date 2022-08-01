@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96213586BB8
+	by mail.lfdr.de (Postfix) with ESMTP id 4B721586BB7
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiHANQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        id S232123AbiHANQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiHANQL (ORCPT
+        with ESMTP id S231509AbiHANQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:16:11 -0400
+        Mon, 1 Aug 2022 09:16:18 -0400
 Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395062B26E;
-        Mon,  1 Aug 2022 06:16:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A38D4C01B5;
-        Mon,  1 Aug 2022 15:16:06 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5322C10E;
+        Mon,  1 Aug 2022 06:16:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DD187C01C1;
+        Mon,  1 Aug 2022 15:16:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1659359767; h=from:subject:date:message-id:to:cc:mime-version:
+        t=1659359769; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=ibTdyKFj8P0BuRvMeMNwN6K/pbZ2SGY2V9Kqxo+bbC0=;
-        b=uX2pZnU3cjvu8YT6x3oPKmDewPet1ZJ2cDt7lizZ7Sw+HNPP3WzVoFUJ42Ndml/m2PCE//
-        hrgR9tCz8rtjh/OFDIdYr1jMZ4I9xVMP3ckjhy+5UutgsjxpTNyt1pn6SnmBlMQhht7RUN
-        YU2GysQ/jzE4PWQT3Sp0jUZ6l8uKeifjOpojPB68QW+QtIrVD12sHoR7ss/OsY5KK6gjk6
-        quA5qWe1A5H9QlKHpR7IKC+wIzdmHY016al8tbJN0Ps2f9Ft0ukD6nwD38x3eqCqHPPKk1
-        ZNjt7uY0U22fS4F9pqoTO8B41m0MuT7Wz+FHR97Y9KUPaXZ4/kb7aBgbCA+lOg==
+        bh=uEhwV847uQ4J0YX9XnJNc7BuGq20ipcYeJhXwV8hGfQ=;
+        b=rJIHRllQZmD6WLYndAzI53c6VELbAIE/0yYoV4fKu9yLcpXeWhHgFSuvnR+aGNx46Sxo/W
+        VgEIknyFuEFzO+djnNedHDYTyvZxejWR6LmU7FI/1ITc6ux98BLb9xp8DWzslYSQ6bR4cM
+        2laySzagDfl6um3sqLSS8oG9N0mwB0gUCKqOixFxRLQvbLCiwatTs58A6f1o2g/q+zb7CD
+        lAmOGM+vuL9GHGjWZiQA+ryruO6RFsntB7YjoPysg5/i3phGPYb42/gKjdYvaj47ToDoB/
+        666vZL4yk1ENZUBadWm83M1yqBvj64ugUEY2Z8c0VasSFbNL7v5Q3Xdcixo4UQ==
 From:   Frieder Schrempf <frieder@fris.de>
 To:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -40,9 +40,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v2 3/8] arm64: dts: imx8mm-kontron: Adjust board and SoM model strings
-Date:   Mon,  1 Aug 2022 15:15:47 +0200
-Message-Id: <20220801131554.116795-4-frieder@fris.de>
+Subject: [PATCH v2 4/8] arm64: dts: imx8mm-kontron: Use the VSELECT signal to switch SD card IO voltage
+Date:   Mon,  1 Aug 2022 15:15:48 +0200
+Message-Id: <20220801131554.116795-5-frieder@fris.de>
 In-Reply-To: <20220801131554.116795-1-frieder@fris.de>
 References: <20220801131554.116795-1-frieder@fris.de>
 MIME-Version: 1.0
@@ -59,45 +59,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-The official naming includes "SL" (SoM-Line) or "BL" (Board-Line).
-The legacy identifiers are kept in brackets and are still used in
-file names and compatible strings.
+It turns out that it is not necessary to declare the VSELECT signal as
+GPIO and let the PMIC driver set it to a fixed high level. This switches
+the voltage between 3.3V and 1.8V by setting the PMIC register for LDO5
+accordingly.
 
+Instead we can do it like other boards already do and simply mux the
+VSELECT signal of the USDHC interface to the pin. This makes sure that
+the correct voltage is selected by setting the PMIC's SD_VSEL input
+to high or low accordingly.
+
+Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
 Changes in v2:
-* none
+* Add Heiko's R-b tag (Thanks!)
 ---
- arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts    | 2 +-
- arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts    | 3 +++
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-index 23be1ec538ba..cb8102bb8db5 100644
+index cb8102bb8db5..bc46426ad8f6 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-@@ -8,7 +8,7 @@
- #include "imx8mm-kontron-n801x-som.dtsi"
+@@ -321,6 +321,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d0
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d0
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d0
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
  
- / {
--	model = "Kontron i.MX8MM N801X S";
-+	model = "Kontron BL i.MX8MM (N801X)";
- 	compatible = "kontron,imx8mm-n801x-s", "kontron,imx8mm-n801x-som", "fsl,imx8mm";
+@@ -333,6 +334,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d4
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d4
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d4
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
  
- 	aliases {
+@@ -345,6 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
+ };
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-index 8f90eb02550d..b6d90d646a5f 100644
+index b6d90d646a5f..77c074b491a6 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-@@ -6,7 +6,7 @@
- #include "imx8mm.dtsi"
+@@ -86,7 +86,6 @@ pca9450: pmic@25 {
+ 		pinctrl-0 = <&pinctrl_pmic>;
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+-		sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
  
- / {
--	model = "Kontron i.MX8MM N801X SoM";
-+	model = "Kontron SL i.MX8MM (N801X)";
- 	compatible = "kontron,imx8mm-n801x-som", "fsl,imx8mm";
+ 		regulators {
+ 			reg_vdd_soc: BUCK1 {
+@@ -229,7 +228,6 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA			0x400001c3
+ 	pinctrl_pmic: pmicgrp {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
+-			MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x141
+ 		>;
+ 	};
  
- 	memory@40000000 {
 -- 
 2.37.1
 

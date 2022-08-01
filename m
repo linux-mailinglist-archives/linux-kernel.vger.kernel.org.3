@@ -2,127 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D306B586E36
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3514A586E38
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiHAQCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S232063AbiHAQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiHAQCn (ORCPT
+        with ESMTP id S231310AbiHAQDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:02:43 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB443336A
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:02:42 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 1 Aug 2022 12:03:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E838028724;
+        Mon,  1 Aug 2022 09:03:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 8047630494D;
-        Mon,  1 Aug 2022 18:02:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1659369760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f3hxkzXi+pvt7W5ZxfDPzIuf1Pn6WGDyIat0IzyBqWI=;
-        b=mgSsDPTPqVRBw5neJ4ZiTWwWKEzCSFvdhB4aniGxBHWR8tBd2oNHfBl71GOfnkobzjNuRq
-        wNrMAV7/5acfFp8711h9Fvf5QMkm24fXqJMLM/VpRfD6JdBZMm6pn/rBBvYRycCuhE/aiq
-        vd6+OmzcorvzcLwwHGL/ssdpV6dtyiy9mOCyAU7OY4Ca2YcrEhKm5rrkyBwrzJebZB7Iia
-        lF+9N1rVkyn4rOHIZgZGuIZdtGK/e53QywBk29NzC734jL68m9hVPlfV+bEeZEZ34ebQyD
-        MEyBxbVoQ/kJWAfHVcwoiSJPIgreyDdNZTWu+w1SMr7QY9WS25AckUwx6DK9ZA==
-Message-ID: <0dbe47388183bf17830e5c77513ca78c58e32612.camel@svanheule.net>
-Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
- VPE
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Aleksander Jan Bajkowski <olek2@wp.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 01 Aug 2022 18:02:38 +0200
-In-Reply-To: <20220801152559.GA9041@alpha.franken.de>
-References: <20220702190705.5319-1-olek2@wp.pl>
-         <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
-         <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
-         <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
-         <20220707100630.GC9894@alpha.franken.de>
-         <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
-         <20220707143930.GA14693@alpha.franken.de>
-         <CAFBinCBq3ydoxtj1VG=kjqbq5NjP1ZnQe_dOAS2Gjm2fNkK9Yg@mail.gmail.com>
-         <20220801152559.GA9041@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B4F3B80FA1;
+        Mon,  1 Aug 2022 16:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945BEC433D6;
+        Mon,  1 Aug 2022 16:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659369820;
+        bh=K8PZRhgkYG3cNsoiyYsSqxmzC5S5rbdYFqDxKPBWgag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=idMcUm3VwOTAalLuTRvxJl4kr1d7Jpt26SetaJhhkPVQ8BX0HxfeHwJTeCGOIPKpX
+         Bt9vOq8TcQE2pnaecmKNy75kxJeSE8b9fHP9CKFQFq8V/djjMlP9b8zkiG4lr7hKp2
+         2fmsL4OT3uC6S9iQ1q5TfK0ifvwq3Xi/G2VgvmnLQTkXaDMnUGHwT+jJleJYXaI6Fi
+         ohXxmEQMCgarm5SE6ZP70fF7/6QY75dkRAs4wiQmkYm2/vMVGjqhBS7py2eIVhF3sL
+         23N3q4BYQRmJxZXZftGX+kvzp2ptWQDi6eIaH2Bp5yvwH6wt50eiI4EsCJfKDXfPX+
+         d+1rLe++PThoQ==
+Date:   Mon, 1 Aug 2022 17:03:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 2/2] regulator: sun20i: Add support for Allwinner D1 LDOs
+Message-ID: <Yuf5VQNrBHi7xG81@sirena.org.uk>
+References: <20220801044758.12679-1-samuel@sholland.org>
+ <20220801044758.12679-2-samuel@sholland.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yUJqW8Kc38GtV6bu"
+Content-Disposition: inline
+In-Reply-To: <20220801044758.12679-2-samuel@sholland.org>
+X-Cookie: Dieters live life in the fasting lane.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-On Mon, 2022-08-01 at 17:25 +0200, Thomas Bogendoerfer wrote:
-> On Thu, Jul 28, 2022 at 05:50:10PM +0200, Martin Blumenstingl wrote:
-> > I think for the Realtek SoC's this would be problematic because it's
-> > using MIPS_GENERIC. My understanding is that in an ideal world all
->=20
-> which SOC are these ?
+--yUJqW8Kc38GtV6bu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-That would be the SoCs supported by MACH_REALTEK_RTL. More specifically, th=
-e
-ones affected by this issue are the RTL8391M, RTL8392M, RTL8393M, and RTL83=
-96M
-which have two VPEs.
+On Sun, Jul 31, 2022 at 11:47:58PM -0500, Samuel Holland wrote:
 
-The SoC interrupt controller on these chips can route interrupts to all CPU=
- HW
-interrupts. If only IP6 and IP7 are enabled on the second VPE, anything rou=
-ted
-there to IP2-IP5 ends up in a black hole.
+> +static const struct regulator_desc sun20i_d1_analog_ldo_descs[] = {
+> +	{
+> +		.name		= "aldo",
+> +		.supply_name	= "vdd33",
+> +		.of_match	= "aldo",
+> +		.ops		= &sun20i_d1_analog_ldo_ops,
+> +		.type		= REGULATOR_VOLTAGE,
+> +		.owner		= THIS_MODULE,
+> +		.n_voltages	= BIT(3),
 
-Best,
-Sander
+I'm really unconvinced that using BIT() is clearer than just writing the
+number of voltages directly as a number.
 
->=20
-> > platforms would switch to MIPS_GENERIC.
-> > As an alternative to making irq-mips-cpu capable of changing another
-> > CPU's registers: would you also be happy with a change that implements
-> > the following idea (pseudocode) in vsmp_init_secondary():
-> > =C2=A0=C2=A0=C2=A0 struct device_node *root_node =3D of_find_node_by_pa=
-th("/");
-> >=20
-> > =C2=A0=C2=A0=C2=A0 if (mips_gic_present() ||
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(root=
-_node, "lantiq,xrx200") ||
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(root=
-_node, "realtek,some-relevant-soc"))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 change_c0_status(ST0_IM, STA=
-TUSF_IP2 | STATUSF_IP3 |
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 STAT=
-USF_IP4 | STATUSF_IP5 |
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 STAT=
-USF_IP6 | STATUSF_IP7);
-> > =C2=A0=C2=A0=C2=A0 else
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
-> >=20
-> > =C2=A0=C2=A0=C2=A0 of_node_put(root_node);
-> >=20
-> > That way we don't risk enabling interrupt lines which shouldn't be
-> > enabled (on SoCs which we don't know).
-> > And also it would not cause any issues with MIPS_GENERIC support.
->=20
-> well it's not exactly the abstraction I'm looking for, but it's ok for me
-> as a short term way to move forward.
->=20
-> Thomas.
->=20
+--yUJqW8Kc38GtV6bu
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLn+VQACgkQJNaLcl1U
+h9BlqQf/VyorEumLx9DM246SpPg5dho5RS+QCt5MT3miehmIayT0RTVcEQzLPx0P
+BrxsBsvfEMpglkiW/NjFZ5aQ5nsqRNOe5f67MMt1gLXhps0tU/4szWEIzrtyoN8Z
+lCOeUmVhd5+savX5s1DdAHg+YvbKZ9idn0xUY+Bm85R+vttFj8zB56i3tLP5proz
+w/+jgHUD0VCu+1yYTXpxHEHdwzxKMh0aWsDWFzC6C+bvbf5smqucs2lhc75Vc/CS
+EPPiFY9/7uhX7TjqqaePvChkKpBlF5NShk59rmjawuiNVHowAMQW74OtP1VtA3WO
+KPyaTH1QC3JrujzDBEKK026dd6Artw==
+=TkpN
+-----END PGP SIGNATURE-----
+
+--yUJqW8Kc38GtV6bu--

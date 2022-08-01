@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE06586C89
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03BF586C8D
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiHAOFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S232255AbiHAOGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiHAOFG (ORCPT
+        with ESMTP id S229943AbiHAOG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:05:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84F1E2B260;
-        Mon,  1 Aug 2022 07:05:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF9DED1;
-        Mon,  1 Aug 2022 07:05:05 -0700 (PDT)
-Received: from [10.57.10.23] (unknown [10.57.10.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 877DA3F73B;
-        Mon,  1 Aug 2022 07:05:00 -0700 (PDT)
-Message-ID: <57431a71-a71e-472a-9fb4-7acd4f9534cc@arm.com>
-Date:   Mon, 1 Aug 2022 15:04:55 +0100
+        Mon, 1 Aug 2022 10:06:28 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82CDE0CE
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 07:06:27 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31f661b3f89so109798067b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 07:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=G5UhvGzRrQcBGCWtOdqFEgZwHRGSXUKRpcxRX6CD/7s=;
+        b=rAPWjvDI2x1MNj7Bu1CCOyfybJSBeCkfp/LO5TNPavNuMm1PCpq9vZac1affXCfVvt
+         HfQUD8IDa7FYkHaDZMmcJgTJksD4uPs0blDFqQ4TqvxFRHM8ukS10lHLa+Zyoq/SswML
+         dFVjUkxMDEro74y/G2bBenIgy9dTvbXgFbkcc5PnIJ+4PHL3ocZEDki/xulKClATsVTa
+         8hSok7ks8K8ULZoPe5omstJhi8J3ZuM96/LSTUO/Sv9qL1U6a5psDTTSJObennoaI22A
+         l4ANlFj4EZS+9RCDlPFPQfV+2r3BvdiPIQi/w8S3AYyLyMpIaQxPp6Uea92VnIcplfZ1
+         WoRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G5UhvGzRrQcBGCWtOdqFEgZwHRGSXUKRpcxRX6CD/7s=;
+        b=56U6ocwS6avLO1T9qihBw5c6syuQ3kiP6ndU03sKyPhnKHeJkGxk+lozyHW0w5d5KH
+         pDE2f9ScHBRSFV5Dj2x9LeZzrwcqmQwmqa/wTBOkyKQRyaQye8EZeAk1BPjpzR6ycQWe
+         98DzTNa6GjrTiWmccHPiAH8l7/0Pot8h7q7djnrzN+nzKhdMmht8/J5SDbkrkT9VRw7A
+         LGF4J4pYuJQT1VNy9Mk59gT9JQMGCDOz/+zRimHBBlM3PFm6mJ9ZeOwLuNUyu7SirkJc
+         NA4O8AibjOZxh7NaTwjKfAIx/nA9Pb8uBsxV/+x0uXbNiCLWOLAeNNy2jCzv6ySNsQXT
+         xepg==
+X-Gm-Message-State: ACgBeo1FyuTPRRpfS3c+fYMQSOaD4G0eYyVs/VjvPD2XULV2iPeJc7mw
+        TD8ImA5kkIKf4TDXus50q3oWbxU5AxLIVK+VzoFJDQ==
+X-Google-Smtp-Source: AA6agR6vW/VAc4Dmh2BSzM1CMV3dpkiThH+Yy3VeiFrVu6/wrlBxfsp4wfADdlQot0YVXYIc8OqwDm89KXSYApQ8LVE=
+X-Received: by 2002:a0d:f045:0:b0:324:55ec:6595 with SMTP id
+ z66-20020a0df045000000b0032455ec6595mr11570098ywe.255.1659362787035; Mon, 01
+ Aug 2022 07:06:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 00/13] DMA Mapping P2PDMA Pages
-Content-Language: en-GB
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, Stephen Bates <sbates@raithlin.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
+References: <20220628113714.7792-1-yee.lee@mediatek.com> <20220628113714.7792-2-yee.lee@mediatek.com>
+ <CAMuHMdX=MTsmo5ZVa8ya3xmr4Mx7f0PB3gvFF42pdaTYB6-u5A@mail.gmail.com>
+ <20220715163305.e70c8542d5e7d96c5fd87185@linux-foundation.org>
+ <CAMuHMdWSsibmL=LauLm+OTn0SByLA4tGsbhbMsnvSRdb381RTQ@mail.gmail.com>
+ <CANpmjNPhhPUZFSZaLbwyJfACWMOqFchvm-Sx+iwGSM3sxkky8Q@mail.gmail.com>
+ <20220719161356.df8d7f6fc5414cc9cc7f8302@linux-foundation.org> <dc7800c0-43f3-6453-ef5f-1ceb659062de@intel.com>
+In-Reply-To: <dc7800c0-43f3-6453-ef5f-1ceb659062de@intel.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 1 Aug 2022 16:05:50 +0200
+Message-ID: <CANpmjNNpvbBR6z0T7m1gCp1XoVOHN7CpHoauMKLvtFd5NYJK2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mm: kfence: apply kmemleak_ignore_phys on early
+ allocated pool
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        yee.lee@mediatek.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:KFENCE" <kasan-dev@googlegroups.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-References: <20220708165104.5005-1-logang@deltatee.com>
- <20220726112906.GA2169@lst.de>
- <a9a1641a-aa5c-ce29-e4a4-c266f4494004@deltatee.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <a9a1641a-aa5c-ce29-e4a4-c266f4494004@deltatee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +87,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-26 16:55, Logan Gunthorpe wrote:
-> 
-> 
-> On 2022-07-26 05:29, Christoph Hellwig wrote:
->> I've applied this to the dma-mapping for-next branch.
->>
->> I'd have liked a review from Robin, but as he seems to be out and the
->> rework was to fit his comments I'd rather have us unblocked before
->> the end of the merge window.
-> 
-> Great thanks! If Robin has some feedback when he gets back I'd be happy
-> to make a couple more cleanup patches.
+[+x86 maintainers ...]
 
-Indeed I've been taking some (rather overdue) holiday the last couple of 
-weeks, sorry I forgot to take a look at this version beforehand. From a 
-quick skim, nothing stands out as objectionable; thanks for taking my 
-suggestions on board!
+On Wed, 20 Jul 2022 at 01:22, Dave Hansen <dave.hansen@intel.com> wrote:
+> On 7/19/22 16:13, Andrew Morton wrote:
+> > On Mon, 18 Jul 2022 16:26:25 +0200 Marco Elver <elver@google.com> wrote:
+> >
+> >> On Sat, 16 Jul 2022 at 20:43, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >> [...]
+> >>>> - This patch has been accused of crashing the kernel:
+> >>>>
+> >>>>         https://lkml.kernel.org/r/YsFeUHkrFTQ7T51Q@xsang-OptiPlex-9020
+> >>>>
+> >>>>   Do we think that report is bogus?
+> >>> I think all of this is highly architecture-specific...
+> >> The report can be reproduced on i386 with CONFIG_X86_PAE=y. But e.g.
+> >> mm/memblock.c:memblock_free() is also guilty of using __pa() on
+> >> previously memblock_alloc()'d addresses. Looking at the phys addr
+> >> before memblock_alloc() does virt_to_phys(), the result of __pa()
+> >> looks correct even on PAE, at least for the purpose of passing it on
+> >> to kmemleak(). So I don't know what that BUG_ON(slow_virt_to_phys() !=
+> >> phys_addr) is supposed to tell us here.
+> >>
+> > It's only been nine years, so I'm sure Dave can remember why he added
+> > it ;)
+> >
+> >               BUG_ON(slow_virt_to_phys((void *)x) != phys_addr);
+> >
+> > in arch/x86/mm/physaddr.c:__phys_addr().
+>
+> I think I intended it to double check that the linear map is *actually*
+> a linear map for 'x'.  Sure, we can use the "x - PAGE_OFFSET" shortcut,
+> but did it turn out to be actually accurate for the address it was handed?
+>
+> I'd be curious what the page tables actually say for the address that's
+> causing problems.
 
-At some point once this lands I'll have a go at using the new flags to 
-improve iommu-dma bounce buffering, so if I do spot anything else while 
-I'm in there I'm sure could clean it up myself.
+test robot just reminded us again:
+https://lore.kernel.org/all/YufXncrWhJZH0ifB@xsang-OptiPlex-9020/T/#u
 
-Cheers,
-Robin.
+Few things I noticed:
+
+* mm/memblock.c's memblock_free() also uses __pa() to convert back to
+physical address. Presumably that's also wrong. What should be used
+instead?
+
+* kmemleak happily converts phys_addr_t to unsigned long everywhere,
+but with i386 PAE, this will narrow a 64-bit address to a 32-bit
+address. Is that correct? Does kmemleak need a "depends on 64BIT ||
+!PHYS_ADDR_T_64BIT"?

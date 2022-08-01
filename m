@@ -2,146 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716D8586676
+	by mail.lfdr.de (Postfix) with ESMTP id 22E3D586675
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 10:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiHAIhR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 1 Aug 2022 04:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S230229AbiHAIh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 04:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiHAIhP (ORCPT
+        with ESMTP id S230230AbiHAIhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 04:37:15 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 288AA2ED5C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:37:13 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-60-CksiPPRtPA6w1mXQckakNQ-1; Mon, 01 Aug 2022 09:37:09 +0100
-X-MC-Unique: CksiPPRtPA6w1mXQckakNQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 1 Aug 2022 09:37:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 1 Aug 2022 09:37:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Stephen Hemminger' <stephen@networkplumber.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Pablo Neira Ayuso" <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "Florian Westphal" <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "Akhmat Karakotov" <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        Juergen Gross <jgross@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        "Suma Hegde" <suma.hegde@amd.com>,
-        =?iso-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Scott Wood <oss@buserror.net>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@kernel.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        "Kuniyuki Iwashima" <kuniyu@amazon.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "Stefano Garzarella" <sgarzare@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Wang Qing" <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        Benjamin Poirier <bpoirier@nvidia.com>,
-        Victor Erminpour <victor.erminpour@oracle.com>,
-        "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-Subject: RE: [RFC] Remove DECNET support from kernel
-Thread-Topic: [RFC] Remove DECNET support from kernel
-Thread-Index: AQHYpREB8DXx1AZd/0ac5Son0/agPK2ZuBOg
-Date:   Mon, 1 Aug 2022 08:37:03 +0000
-Message-ID: <c43f221d8e824cd2bf9746596423befc@AcuMS.aculab.com>
-References: <20220731190646.97039-1-stephen@networkplumber.org>
-In-Reply-To: <20220731190646.97039-1-stephen@networkplumber.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+        Mon, 1 Aug 2022 04:37:22 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2071.outbound.protection.outlook.com [40.107.92.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002142F02C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 01:37:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RI5aB7WckYsEczCjETbOXbiF8RJ/WVVe+Paqj2ajo8/xiE5dXFAlKEa43xUlDpJaMWsM+SWv/15tc6XxjPvokKfnTgMo65/Vaqtfn8eLOi0qgPSy+GbyyU0+ka74NV1PRFENdTm5ZMKAO/3dpljnHG9fhQFfINk9zDVRstvHPBTA4tspH08JbFbUZmjySHRzAwFDnP4dgSvaeB49vJs03DisfgBKyRKmf52cFeBRqvnETn3Na3e8c7wnU33Nsfw3nOdmbqIVbarnXYfnAAHF5oBeKSnzsFG6WYIjZp+0M3V1KGXfoBe8rA/LsRW88muS1kzaR4UJB2s073lIUMqVcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hJUFeZC1l62lVKqBERsBSxQhaTYmmjQ1CKLf1oJtnyc=;
+ b=il3kZw2gFchUh97wDXuem+Mt7Qq2/UMaGAB47wSywt8rqeQhe7Wck92NPzZRCjjX38AhiFDRMqsXIoFeErOWpqgiKKNSE2CfEBvf6NCEmwe8bqwXZcsK4I/CEqf+aCQB/p9wsQrCaAnSOJAXjY5sHsnUe3IQ1S70pKr7AjyXxlCygXGHgP/FzidZcG45ILOUEHx6a8aHQ9Ox7uAVESZSh7jtEgV1FW8TkT3/keNXlasfI5K0Fg00+/BJayEMXo7eZZgteWTUFAHDlPrdi6g4jyVAypMCB+4E+s9FxWtP0fWAazft+ldMVM/nOVD8+sLXVGariW+LZrZTd+0chO5T2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hJUFeZC1l62lVKqBERsBSxQhaTYmmjQ1CKLf1oJtnyc=;
+ b=lfcWEU+yGKgP+RaqV2wCCH9kWyRHvPglbt/5k/6+y0WiH4RNfT2a1udTuoqiHTZC92/OKHLuDyIp/3A0X34XYp/AbsYhanN1jbDwjgjA0kM+I6W7gPIXgfvQjMFBvu9uYSMz9QOGbVSOO/RMW/06uXwUXLYyKKQ9nCl5qwn7gcY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ CH2PR12MB3814.namprd12.prod.outlook.com (2603:10b6:610:28::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.14; Mon, 1 Aug 2022 08:37:18 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::d4af:b726:bc18:e60c]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::d4af:b726:bc18:e60c%6]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
+ 08:37:18 +0000
+Message-ID: <c2e66e25-d1f1-5c93-9916-25ccbad89d2a@amd.com>
+Date:   Mon, 1 Aug 2022 15:37:09 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] iommu/amd: Fix compile warning in init code
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+References: <20220729100432.22474-1-joro@8bytes.org>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <20220729100432.22474-1-joro@8bytes.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR01CA0040.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::14) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b5b19dc5-9953-478f-bbdc-08da73990b5c
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3814:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ekd/aPeYjC9YTYJKKmM6QG6DJiIhKth94PrXLLzaqTzRQbUi5TGsyhsh4NmFdJRePu8Wy6WO5UELwinYRKtUI9cI/Chz4esOn3nceAR1Hi/PA+9Ai9tA3dfEKE1VajBXxJ+hk0TNUTa3dwLsc4doMHj8VrqmZMG8f1KpsSRokJW0sr00E8Rg6Tv2aJK0RhqDNFeCZraKwGEZY0hfLIb4mduz7PPAKolsvDqJfNDk8tUBk5J5QtI7IEzBqc35mDbKFtpfd9YZGqkJp/dLzqIGt2g+kNQQEV6/IgAP0rwaz77jKUwURH6yJ5c+G9cZJtTwFcJt1N52eGZ0hGVssJPs42D0MgEu56qhtwAKuxscGutxPRzkEJa3ooJ/Fh0srmBRzqudAcZUWNzRBo+HZTo/P8IG2n42qClKHW32wlST1tYHRE3Zt2rN17LM/Uj5nBSiWbutSXd3/1/idMqk6im7hLc5kJ6ZPz/XW5KgS3Da9Yra9pJcEWmCTbVKVtNSjW4OaoWGqwcgdW0I4hWkYH2A9fNBRxVLh4pP8+MV7zTHLugwrWHJ2y81GHkw+uzJRvVSSvOVNWPQ/ynfbCC4uxUfhADPy+qiuEZAYBEvdWS1v8SYHRGelshxPCX0zTV2hmCHMH+P2tS9pCX9u/Gzba7LV688HZ4A1TBQiM53jTi+jj30q2/AgwxrhPXTjEBeOCyGO0PediLY+RJOw48Vxa09jyBbrp9dAz5XGi+1aA8Yn6UZMr1wMz9Z3yzwW3zuosW7lckW+9SObO0JRl3SWi1LFt+2o0nUGzejFYcT6zuKRL0Yd61e3HrYb/L1S8duqlnBcAOX6USy9VbWLbbqnUJinQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(376002)(346002)(396003)(316002)(41300700001)(2906002)(4326008)(66476007)(66556008)(8676002)(66946007)(36756003)(6666004)(186003)(6916009)(54906003)(31686004)(83380400001)(2616005)(6512007)(38100700002)(26005)(5660300002)(8936002)(6486002)(478600001)(31696002)(6506007)(53546011)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1V5ODVvWExIem8rUFhEMDM1eWdsQTRyYmZPZzNoMUpLY3VkcDVJUE9MS2ZU?=
+ =?utf-8?B?bU5NWUFwOWQ1Y3hpN1FDeUZtNUloUWpIb083Q0UzMjVYa2dtZzRKZXcvMDBG?=
+ =?utf-8?B?STdXSkt0V2FyNEFiQWdsS1Z5dmVHYzN6YjNZQ05rTndLbWlSQWEyYjZCWWRo?=
+ =?utf-8?B?OVhZa2FoV3RVaEdPQkVmeFo2MHh1ZHEvTmoyMDlMVThmaDlYS2E0SFowbjZm?=
+ =?utf-8?B?S3NUTXpJRm81aE1Wb1VZamdXZ1VIZkEyVXphMi9YU1R6YnFFVzFlampNeDJt?=
+ =?utf-8?B?aitBbWdqTEUrbzBmMkZhbGtDdjZLUzBZbEt4b3d6SUZrcC95eDdSZXo5VUs1?=
+ =?utf-8?B?WUdNSUtnY2YreHQ0MHdsUGFiM05QUEFmOE01d1dac0lCSjJnZDJiSjZpVDkw?=
+ =?utf-8?B?Zk05UHlvTXNySk5HSnBIeHloV20zTmUwckJpbmdsb3hYU203anVwZklaVllI?=
+ =?utf-8?B?Y2tjSE9RNHJCMDFJbnkvWndvR2M0NkxUdllROTlRS0h3MWhxWE9KNUh4eVRU?=
+ =?utf-8?B?ZnNwdUVERkxMNlBqMW41eW1Nc1ZjU0J2TThXaCtCemNhdGQ5a0RGVnlZbGRj?=
+ =?utf-8?B?TURZVGFOU28wc0VGQ3hpa2Q2a1pjQkViVHp5VTBVOTR0bWN6RHlhRE45eEV3?=
+ =?utf-8?B?NGJSOTdpSk9KKzJtNWVWN1BhaFEwckhZMFkrSFlHNkVQUmE2VXN2cklaN2dG?=
+ =?utf-8?B?eEg2MUF0NlZqMDhLZWhYRm0zUGFYSkFPWDNYZW5LQVc3NWhLMWdhK1B1MGV5?=
+ =?utf-8?B?bUZkd1NNTXR4MDI4cUdTY0xXOXpNRDVuOTI2QStFeU5oV2VyVHBTd2hXaWNl?=
+ =?utf-8?B?MW1rbkJLWncra1pYQW9iSVRvMzY2ejA3aW1qTnpHVXozeUhNVUdZNTN4YmN4?=
+ =?utf-8?B?bVFQWHVsSXg4SlB4VUNDWi92Y0QvRkNEWStmenh3em9jZFRGT3Z4QzA3UXhi?=
+ =?utf-8?B?TWRWYWgwQ0hGYnNjTFpwclJYRnJBS1R6cC9ma1J6TUNTRVVraFZyU2taZERl?=
+ =?utf-8?B?QjNpUWZFL3A0SlBsek1qbll6OHhKU2pwN3EzWnVFaldYdys5OFZaWEU2Qmpl?=
+ =?utf-8?B?aHlPUGdIQ1JNQ1BsNUdjbHRLOXBQSityQUZvVjhVQ1lWZ3BpcDlTRlBiUXlW?=
+ =?utf-8?B?am5tSEY3V2UyeDI4ckF0YThhaHpRMG9ON21uaTdRL0Z5Q0RLUUtTdmVkZ1g2?=
+ =?utf-8?B?WVVJZzRrMitnQzlLQlZnSDFoOVpoRXVsVkd4UVhzRm9XUGxsQXV4YXhoK0pl?=
+ =?utf-8?B?dFJvM2xKemx3dkZuOGRSV1QyTmpXN0dnNEdUL3I3VjFZYmpYZkxTN05RWUto?=
+ =?utf-8?B?RGRqUTZFSkZDUWd5TTJVVkg0WVhMK01CMjFqVW1uV082Q3hyTGVESXdLZElx?=
+ =?utf-8?B?SXIxRk9YTHN3VVZRY05WYUUranR3dzVmYWkvZmgwMXV2YnovTW1zcGhObXd5?=
+ =?utf-8?B?VGZEOHlIR3F1VDZWUlo2QjRjRHJJNjdCNjZOaFF6Vko1OWdQbENXZnFRc0Jw?=
+ =?utf-8?B?QUlIWVR1UUs4QzRjQkhRQ1dGVklJQitwRVBDR201RkZySWEwdkVlTXgvOFNX?=
+ =?utf-8?B?bGxuVzRGeWJBamJmWSs1VW9mZHg1ZUMrVWV0VjlyVjA4c2Z6TmdmeUU0Vlpx?=
+ =?utf-8?B?VmlQejZYby9UcEZZT1gxL0xHOVpuU3dDbDBKSERWR2oyR3ZaRVZSNWw5ejVs?=
+ =?utf-8?B?d3ZUcUd4QllFelErZlRTNkRvQ3B5UDVWWk9FM2h0cEY5RUtsV1R6clJnU0J6?=
+ =?utf-8?B?VmxlcC9zdXlsUHZDVC9rd3BBeGxWYUwyeGRDTUp0YjZtR2J5UU9oTDFRL01D?=
+ =?utf-8?B?ajcrb0hRMzFBSWlGQmhWaElzck5jT2xoZlFnUGxRZ0RWdHFHOXkxamN6Rks4?=
+ =?utf-8?B?dTNNdkZBNWRaK0ZRVnFyVUlMUE5HcmRsa0gyUS9nMUcrMFNYWHYzWHVlVldT?=
+ =?utf-8?B?ZStGdmIrWHhwR2IycmhoRk42aUlzS2o5V0ZEd3RyMEM5VXpKWWV4dDdBMFFh?=
+ =?utf-8?B?S2FBME0zenlJTEJzaTdpSXQvNUdXU014bjNpZktET0d2bHpRSm9uL0Zpc2V3?=
+ =?utf-8?B?TEVPRjRhWWd3aXloR3Jzajd6OVlqbWxVQ0ZYMzlYTlkvNHhNL0RucGNTZkgz?=
+ =?utf-8?Q?ZRZO8nlKjlIgQM3jLAVxXj1AA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5b19dc5-9953-478f-bbdc-08da73990b5c
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 08:37:18.8527
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lZ0Nu4OMh5lO+Gx0NK0xyBYv0CPxFqKhf4dputLV4pNg1lpchstQFb64BW/oIHStNi9f6eqSRzCzQRraHI4OtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3814
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Hemminger
-> Sent: 31 July 2022 20:06
-> To: netdev@vger.kernel.org
+
+
+On 7/29/2022 5:04 PM, Joerg Roedel wrote:
+> From: Joerg Roedel <jroedel@suse.de>
 > 
-> Decnet is an obsolete network protocol that receives more attention
-> from kernel janitors than users. It belongs in computer protocol
-> history museum not in Linux kernel.
+> A recent commit introduced these compile warnings:
 > 
-> It has been Orphaned in kernel since 2010.
-> And the documentation link on Sourceforge says it is abandoned there.
+>    CC      drivers/iommu/amd/init.o
+> drivers/iommu/amd/init.c:938:12: error: ‘iommu_init_ga_log’ defined but not used [-Werror=unused-function]
+>    938 | static int iommu_init_ga_log(struct amd_iommu *iommu)
+>        |            ^~~~~~~~~~~~~~~~~
+> drivers/iommu/amd/init.c:902:12: error: ‘iommu_ga_log_enable’ defined but not used [-Werror=unused-function]
+>    902 | static int iommu_ga_log_enable(struct amd_iommu *iommu)
+>        |            ^~~~~~~~~~~~~~~~~~~
+> 
+> The warnings appear because both functions are defined when IRQ
+> remapping is not enabled, but only used when IRQ remapping is enabled.
+> 
+> Fix it by only defining the functions when IRQ remapping is enabled.
+> 
+> Fixes: c5e1a1eb9279 ("iommu/amd: Simplify and Consolidate Virtual APIC (AVIC) Enablement")
+> Signed-off-by: Joerg Roedel <jroedel@suse.de>
 
-It was pretty much obsolete when I was writing ethernet drivers
-in the early 1990's.
-Sort of surprising support ever got into Linux in the first place!
+Ah... sorry. I missed this part.
 
-Remember it requires the ethernet MAC address be set to a
-locally assigned value that is the machine's 'node number'.
+Reviewed-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 
-Does this remove some/most/all of the [gs]et_sockopt() calls
-where the length is ignored/
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Thank you,
+Suravee

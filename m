@@ -2,84 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78CC586CB3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948DE586CB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiHAOS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S230335AbiHAOUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiHAOS4 (ORCPT
+        with ESMTP id S230109AbiHAOUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:18:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B364E22BF6;
-        Mon,  1 Aug 2022 07:18:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 263EC1FB;
-        Mon,  1 Aug 2022 07:18:56 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.114])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BE433F73B;
-        Mon,  1 Aug 2022 07:18:53 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 15:18:50 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jassi Brar <jaswinder.singh@linaro.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mailbox: arm,mhu: Make secure interrupt
- optional
-Message-ID: <20220801141850.yqa4kal5gyc4l7pj@bogus>
-References: <20220728190810.1290857-1-robh@kernel.org>
- <CABb+yY2jV7c8oX7=F=nocfvGrOMHJAYov7zS2nT0=qFoNyoxJQ@mail.gmail.com>
- <CABb+yY0JzztBB+giBu+RCt-dzgwYWF32sCR3WKKP9U5K9UvhxA@mail.gmail.com>
- <20220729111051.5me4vklrzskvsj4w@bogus>
- <CABb+yY1=cppy9QAN=cLWmhvmYrQ5QpY5adE+nRev1rVrtp-QUw@mail.gmail.com>
- <20220801102309.efvmde2ackh3vyg4@bogus>
- <CAJe_ZhdCJ7ba26cGY6-kJC0mCUXU+ACBW1k1VNmXS9gZcLi16Q@mail.gmail.com>
+        Mon, 1 Aug 2022 10:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36A6237F2;
+        Mon,  1 Aug 2022 07:20:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49A8E61305;
+        Mon,  1 Aug 2022 14:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A34C433D6;
+        Mon,  1 Aug 2022 14:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659363599;
+        bh=1QCs0qzsHxnPAI9Bdfuyd55D+HqNh5iQyhLVzRjoDRo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j0AlTl1K5v4LB/AM1PKRzJRvGN/BwIIeYfX3RwIYaCHxMNNiZE0s6ER60B7Wurp7E
+         +BzR/0Xtt70RZxb9QoSBWQmDllL7NE4R5CQms7YXXv2BH6aw8lkk3RZDjjn/DK0Cy+
+         hTlJO50rcZjfBRP8OXFsXi62VXnpV5llQB3/HyWuLVzJtkbFW0c5c19juwwBRLTTjR
+         wRoqPbg351J3mQJ/1pwrLmLRBsXDFV3nCLq+WiZOFPIyg6igLlcFH1cmkVEPIOkQbb
+         gdsX94TcUBvWeRXYh+0cdGno47synsLs3yDa8wpulG9b4Mj/mNyQaiIheP3IFIjLaQ
+         q+N9Yd8y2aNQg==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>
+Subject: [GIT PULL] fs idmapped updates for v5.20/v6.0
+Date:   Mon,  1 Aug 2022 16:19:42 +0200
+Message-Id: <20220801141942.1525924-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJe_ZhdCJ7ba26cGY6-kJC0mCUXU+ACBW1k1VNmXS9gZcLi16Q@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 08:57:52AM -0500, Jassi Brar wrote:
-> On Mon, 1 Aug 2022 at 05:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > On Fri, Jul 29, 2022 at 10:18:04AM -0500, Jassi Brar wrote:
-> >
-> > > > Anyways I can insert a module that requests this channel and bring down
-> > > > the system as accessing anything configure secure from non-secure side
-> > > > on Juno results in system hang/error.
-> > > >
-> > > Why go to those lengths? These are already simpler options available  ;-)
-> > > 1)   while (1) ;      // preferably in some atomic context
-> > > 2)   *((int *) 0) = 0;   // you might want to iterate over offset for
-> > > guaranteed results
-> > > 3) Slightly more work, but you also have the opportunity to erase your
-> > > storage device
-> >
-> > I know these simple methods but can I hinder secure side services with
-> > these ?
-> >
-> Ideally, no. And neither if we enumerate the secure-channel in dt and driver.
-> 
-> See, even if you remove support for the secure channel in the kernel,
-> a doped super-user could always insmod a module that attempts to
-> access the secure address space that you want to "hide".
->
+Hey Linus,
 
-True, generally they should have put this in a separate page/range so
-TZ could program accordingly and prohibit any access 🙁.
+/* Summary */
+This introduces the new vfs{g,u}id_t types we agreed on. Similar to k{g,u}id_t
+the new types are just simple wrapper structs around regular {g,u}id_t types.
 
---
-Regards,
-Sudeep
+They allow to establish a type safety boundary in the VFS for idmapped mounts
+preventing confusion betwen {g,u}ids mapped into an idmapped mount and {g,u}ids
+mapped into the caller's or the filesystem's idmapping.
+
+An initial set of helpers is introduced that allows to operate on vfs{g,u}id_t
+types. We will remove all references to non-type safe idmapped mounts helpers
+in the very near future. The patches do already exist.
+
+This pull request converts the core attribute changing codepaths which become
+significantly easier to reason about because of this change.
+
+We will just give a few highlights here as the patches give detailed overviews
+of what is happening in the commit messages:
+* The kernel internal struct iattr contains type safe vfs{g,u}id_t values
+  clearly communicating that these values have to take a given mount's
+  idmapping into account.
+* The ownership values placed in struct iattr to change ownership are identical
+  for idmapped and non-idmapped mounts going forward. This also allows to
+  simplify stacking filesystems such as overlayfs that change attributes In
+  other words, they always represent the values.
+* Instead of open coding checks for whether ownership changes have been
+  requested and an actual update of the inode is required we now have small
+  static inline wrappers that abstract this logic away removing a lot of code
+  duplication from individual filesystems that all open-coded the same checks.
+
+There will be a second pull request coming that contains the work to fix posix
+acls for stacked filesystems such as overlayfs. This work has been announced by
+Miklos in
+72a8e05d4f66 ("Merge tag 'ovl-fixes-5.19-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs")
+
+I could have sent this all in a single pull request but since they have very
+distinct topics and the posix acl work came in later this didn't make a lot of
+sense.
+
+/* Testing */
+All patches are based on v5.19-rc3 and have been sitting in linux-next. No
+build failures or warnings were observed and fstests, selftests, and LTP have
+seen no regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the Git repository at:
+
+  git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux tags/fs.idmapped.vfsuid.v5.20
+
+for you to fetch changes up to 77940f0d96cd2ec9fe2125f74f513a7254bcdd7f:
+
+  mnt_idmapping: align kernel doc and parameter order (2022-06-29 16:34:41 +0200)
+
+Please consider pulling these changes from the signed fs.idmapped.vfsuid.v5.20 tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+fs.idmapped.vfsuid.v5.20
+
+----------------------------------------------------------------
+Christian Brauner (12):
+      mnt_idmapping: add vfs{g,u}id_t
+      fs: add two type safe mapping helpers
+      fs: use mount types in iattr
+      fs: introduce tiny iattr ownership update helpers
+      fs: port to iattr ownership update helpers
+      quota: port quota helpers mount ids
+      security: pass down mount idmapping to setattr hook
+      attr: port attribute changes to new types
+      attr: fix kernel doc
+      fs: port HAS_UNMAPPED_ID() to vfs{g,u}id_t
+      mnt_idmapping: use new helpers in mapped_fs{g,u}id()
+      mnt_idmapping: align kernel doc and parameter order
+
+Seth Forshee (1):
+      mnt_idmapping: return false when comparing two invalid ids
+
+ fs/attr.c                         |  74 +++++-----
+ fs/ext2/inode.c                   |   8 +-
+ fs/ext4/inode.c                   |  14 +-
+ fs/f2fs/file.c                    |  22 ++-
+ fs/f2fs/recovery.c                |  10 +-
+ fs/fat/file.c                     |   9 +-
+ fs/jfs/file.c                     |   4 +-
+ fs/ocfs2/file.c                   |   2 +-
+ fs/open.c                         |  60 ++++++--
+ fs/overlayfs/copy_up.c            |   4 +-
+ fs/overlayfs/overlayfs.h          |  12 +-
+ fs/quota/dquot.c                  |  17 ++-
+ fs/reiserfs/inode.c               |   4 +-
+ fs/xfs/xfs_iops.c                 |  14 +-
+ fs/zonefs/super.c                 |   2 +-
+ include/linux/evm.h               |   6 +-
+ include/linux/fs.h                | 140 ++++++++++++++++++-
+ include/linux/mnt_idmapping.h     | 279 +++++++++++++++++++++++++++++++++-----
+ include/linux/quotaops.h          |  15 +-
+ include/linux/security.h          |   8 +-
+ security/integrity/evm/evm_main.c |  12 +-
+ security/security.c               |   5 +-
+ 22 files changed, 546 insertions(+), 175 deletions(-)

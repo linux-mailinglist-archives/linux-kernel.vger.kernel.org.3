@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E332586A10
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC665869A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiHAMMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S232537AbiHAMEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbiHAMKF (ORCPT
+        with ESMTP id S233268AbiHAMEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:10:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F73F67140;
-        Mon,  1 Aug 2022 04:56:28 -0700 (PDT)
+        Mon, 1 Aug 2022 08:04:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D858F13CE5;
+        Mon,  1 Aug 2022 04:54:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D4661356;
-        Mon,  1 Aug 2022 11:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 545C2C433D7;
-        Mon,  1 Aug 2022 11:56:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DA18B80EAC;
+        Mon,  1 Aug 2022 11:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB649C433D6;
+        Mon,  1 Aug 2022 11:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354986;
-        bh=8n/EyEPKuxTryT72m5JHpU1BoWBbah+puosE3lJB+Zs=;
+        s=korg; t=1659354850;
+        bh=d0PFtRJnzZrBYfXv4fhaquB7q0KQccE/rvCowFHmkbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcF0evmRPA2iRWJvI821SsXcWWO7N4vY2Ev87OHaP3UQ7wfHh2UkAp6PI48wCt2BK
-         xwvwkyex87Sxt3k6UWswdLkKqXMcSBHVAMXVgTf2TleJRucodIP2fmzGq60g+yCMC9
-         mEy4sWG8GOfKXmJXoDk5zPqXGXl270crYjgSoaMY=
+        b=NFptDyMPM2UcKiElTOnDnjKXF9T7cQb1I7algTmWP4B8ExUwDxMxgAiklIhv9FmxD
+         aKKw1mutgsGmjob6hQo1KfV01JUVJ2FhbLnCEWAN6f4oHs8Nzg9vIcG0TGe0b0nlSV
+         aHYzjXmt1DgooOiGC/T7AMGbA+oD0JQlrvQB7Qz0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.18 21/88] tcp: Fix a data-race around sysctl_tcp_app_win.
-Date:   Mon,  1 Aug 2022 13:46:35 +0200
-Message-Id: <20220801114139.009374501@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 12/69] watch_queue: Fix missing rcu annotation
+Date:   Mon,  1 Aug 2022 13:46:36 +0200
+Message-Id: <20220801114134.979072791@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
+References: <20220801114134.468284027@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: David Howells <dhowells@redhat.com>
 
-commit 02ca527ac5581cf56749db9fd03d854e842253dd upstream.
+commit e0339f036ef4beb9b20f0b6532a1e0ece7f594c6 upstream.
 
-While reading sysctl_tcp_app_win, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+Since __post_watch_notification() walks wlist->watchers with only the
+RCU read lock held, we need to use RCU methods to add to the list (we
+already use RCU methods to remove from the list).
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fix add_watch_to_object() to use hlist_add_head_rcu() instead of
+hlist_add_head() for that list.
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_input.c |    2 +-
+ kernel/watch_queue.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -534,7 +534,7 @@ static void tcp_grow_window(struct sock
-  */
- static void tcp_init_buffer_space(struct sock *sk)
- {
--	int tcp_app_win = sock_net(sk)->ipv4.sysctl_tcp_app_win;
-+	int tcp_app_win = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_app_win);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	int maxwin;
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -497,7 +497,7 @@ int add_watch_to_object(struct watch *wa
+ 		unlock_wqueue(wqueue);
+ 	}
  
+-	hlist_add_head(&watch->list_node, &wlist->watchers);
++	hlist_add_head_rcu(&watch->list_node, &wlist->watchers);
+ 	return 0;
+ }
+ EXPORT_SYMBOL(add_watch_to_object);
 
 

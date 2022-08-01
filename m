@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3EA586D42
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B62586D4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiHAOuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S233057AbiHAOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiHAOuU (ORCPT
+        with ESMTP id S231246AbiHAOw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:50:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE1DFDE;
-        Mon,  1 Aug 2022 07:50:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B82AFCE16D3;
-        Mon,  1 Aug 2022 14:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB3AC433D6;
-        Mon,  1 Aug 2022 14:50:15 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Hch54xq6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1659365413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IL1fL31Kufub455HpgLgDd5H/KhEcVXE4PfEbm2p3dk=;
-        b=Hch54xq6rR0E6RYbiyyV/89OLOmKVN4Bw6ZxmnLZuw8LmSwF0XW81C3bc6mGKOEmHgU+tD
-        stVWZPQWgfvM3g0yOcNAuDhj1u0bY/6XeKY+EKy42o1zWpBpgKJDIOC4/zqbRRq9WlmAx8
-        yv7p88zrL9gNGF/nb54tGi7LQa55dqo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6957966a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 1 Aug 2022 14:50:13 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id j195so19249768ybj.11;
-        Mon, 01 Aug 2022 07:50:12 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3H7AFoDrboKltXaIv//KyAgqFdRk+63YFc3+ZazFoWHLMmrvLo
-        rS3Ki9echLCxMLEsQhAuRO4mkJYJUUV0hIHOBJA=
-X-Google-Smtp-Source: AA6agR6P70edYqiN+zUwKWi9WNeeDQlBEVmK8mzIeWJiBehF/9yUDRm2k8cgf/ZDiZNwZvbs/5SzSQc6w3Gplutopvw=
-X-Received: by 2002:a25:250:0:b0:673:e6c5:27bf with SMTP id
- 77-20020a250250000000b00673e6c527bfmr11691124ybc.258.1659365411128; Mon, 01
- Aug 2022 07:50:11 -0700 (PDT)
+        Mon, 1 Aug 2022 10:52:29 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC19E82;
+        Mon,  1 Aug 2022 07:52:28 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id c185so8540874iof.7;
+        Mon, 01 Aug 2022 07:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l7ojz6Jr8VoXsOFJvjo5w+Wh1LaqUsoO8fMGMvKg3Yo=;
+        b=djC127ULTFz4xJs8CmEcWzLu4J4dGN6sIoZ4sCuEpJ139tX8RkfyfYCEab4tz2nw4H
+         uUK4NXxBShUg+KTl+QZg34fr57E+KWdj2TPnICQAM48h92c8Xr6NaMopq0xv1DfMdJGZ
+         e56LZDh20rFVkrbYhdNNhcKnaTiP5skHBnOGLt9vhZxIpAfbmiNufHvMmm+66HRopi3Y
+         Kh9oh+EhiMoSR73fSp9fSPSN2qMj641B4VGL3VmjvK4Z7zOv5XJEMlM+4W3WHCRJxObN
+         aY+/Ae6/7BPZA8DPkkbpy3TjCYpBnu13khO59FpTlExf2+gRDVJfKz5MpNnrxK0CE9Am
+         j6GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l7ojz6Jr8VoXsOFJvjo5w+Wh1LaqUsoO8fMGMvKg3Yo=;
+        b=6vOi6z50Q0XKVM7oBa3caDmX6za3JzmhNXX4m+8DT2QP07RSW0RTMe64sqz6ttpOeZ
+         wDxLwvuieNEoKwOIDLQqaxfo0+QiJlDryn28OCUxJSEMSbXAj/y1xTbn7UTq+eO6xfAj
+         gLEqlm5cgRMbXmISkjIOZjWDUiaB8yd3mHoDy4S4He+iStEo0x6+FeK0HSZ8i+ZAyM8N
+         Nx6/7WoPXFAfiyyRFkgS2NwK/AlvbZmaPWKe+cN1+PV26qy0UaiWOp1q65BCjsDqwXFi
+         rDcf2OCaGAmgM0zI/8nNP8pfgxMa3BALClUqnNmocFV5u1KICTO3RA8t8KOPY6S69kxy
+         ZX9Q==
+X-Gm-Message-State: ACgBeo0rD3trcrD0u4/NAHrBSmteDEtPCfwU7A87xNLoZIZFKSfKOBgO
+        wBt/H7B9SbZSHKg92WeR97Ds0j+5CPDNHReigHZYunFa
+X-Google-Smtp-Source: AA6agR65Jkd0CJqIPC/14yJ+f24+zSh7iwI09gLN6VifIf6m70t5zlhNppdoBrDxMo6rZxSakZ2cSjFM3XumU2/wILY=
+X-Received: by 2002:a05:6638:381d:b0:342:7727:50ad with SMTP id
+ i29-20020a056638381d00b00342772750admr1753941jav.206.1659365548059; Mon, 01
+ Aug 2022 07:52:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
- <20220719130207.147536-1-Jason@zx2c4.com> <7285be49c459bdc8f4ec3abe85d9e171@linux.ibm.com>
-In-Reply-To: <7285be49c459bdc8f4ec3abe85d9e171@linux.ibm.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 1 Aug 2022 16:50:00 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rk27DA0DmTY7hhedFT0ftkMKhZn30NCvjkkzkKD0hNfQ@mail.gmail.com>
-Message-ID: <CAHmME9rk27DA0DmTY7hhedFT0ftkMKhZn30NCvjkkzkKD0hNfQ@mail.gmail.com>
-Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
-To:     freude@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        x86@kernel.org, Will Deacon <will@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <cover.1659209738.git.dxu@dxuuu.xyz> <abd424ee71675e3008acd4a2c1fd136cb7dbf8be.1659209738.git.dxu@dxuuu.xyz>
+In-Reply-To: <abd424ee71675e3008acd4a2c1fd136cb7dbf8be.1659209738.git.dxu@dxuuu.xyz>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Mon, 1 Aug 2022 16:51:52 +0200
+Message-ID: <CAP01T75LMwpz3ZPSUgtX2_RDUhB33djJmJs8W--Qh4H8J9iNsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add connmark read/write test
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,28 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harald,
-
-On Mon, Aug 1, 2022 at 4:47 PM Harald Freudenberger
-<freude@linux.ibm.com> wrote:
+On Sat, 30 Jul 2022 at 21:40, Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> Nice interface :-)
-> Here is my
-> Acked-by: Harald Freudenberger <freude@linux.ibm.com>
+> Test that the prog can read/write to/from the connection mark. This
+> test is nice because it ensures progs can interact with netfilter
+> subsystem correctly.
+>
 
-You're too late; I already sent in my pull request. But that's okay; I
-received Heiko's ack on this for s390.
+Commit message is a bit misleading, where are you writing to ct->mark? :)
+The cover letter also mentions "reading and writing from nf_conn". Do
+you have patches whitelisting nf_conn::mark for writes?
+If not, drop the writing related bits from the commit log. The rest
+looks ok to me.
 
-> but please keep in mind that your patch does not apply cleanly as there
-> is my other patch
-> 918e75f77af7 ("s390/archrandom: prevent CPACF trng invocations in
-> interrupt context")
-> in between.
 
-Yea, this was a late addition to 5.19, and my random tree was based on
-an earlier rc of 5.19. That kind of thing happens and is fine; Stephen
-caught it when doing the next merge and carries the merge conflict
-resolution there. I mentioned it to Linus in my pull, so he'll be able
-to work it out.
-
-Jason
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
+>  tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> index 317978cac029..7232f6dcd252 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
+>
+>  static void test_bpf_nf_ct(int mode)
+>  {
+> -       const char *iptables = "iptables -t raw %s PREROUTING -j CT";
+> +       const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
+>         int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
+>         struct sockaddr_in peer_addr = {};
+>         struct test_bpf_nf *skel;
+> @@ -114,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
+>         /* expected status is IPS_SEEN_REPLY */
+>         ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
+>         ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
+> +       ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
+>  end:
+>         if (srv_client_fd != -1)
+>                 close(srv_client_fd);
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 84e0fd479794..2722441850cc 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -28,6 +28,7 @@ __be16 sport = 0;
+>  __be32 daddr = 0;
+>  __be16 dport = 0;
+>  int test_exist_lookup = -ENOENT;
+> +u32 test_exist_lookup_mark = 0;
+>
+>  struct nf_conn;
+>
+> @@ -174,6 +175,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>                        sizeof(opts_def));
+>         if (ct) {
+>                 test_exist_lookup = 0;
+> +               if (ct->mark == 42)
+> +                       test_exist_lookup_mark = 43;
+>                 bpf_ct_release(ct);
+>         } else {
+>                 test_exist_lookup = opts_def.error;
+> --
+> 2.37.1
+>

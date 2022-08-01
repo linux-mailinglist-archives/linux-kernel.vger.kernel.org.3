@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACD65868AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B315868DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiHALwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S231896AbiHALyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiHALvk (ORCPT
+        with ESMTP id S232071AbiHALxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:51:40 -0400
+        Mon, 1 Aug 2022 07:53:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7193C41996;
-        Mon,  1 Aug 2022 04:49:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A85BC9C;
+        Mon,  1 Aug 2022 04:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B41BB81170;
-        Mon,  1 Aug 2022 11:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89D58C433D6;
-        Mon,  1 Aug 2022 11:49:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76D79B80E8F;
+        Mon,  1 Aug 2022 11:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A1EC433D6;
+        Mon,  1 Aug 2022 11:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354564;
-        bh=fO1lx1xABXRdQqqW9forF2aYYrqiHWrRZn9jlSJ4i2o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=apxDjz/EXESUWjh539iuHaEXJ/dtO6SpzIH5HJyIaZxRyu+GGuHhzI6mlKz8LR9fF
-         DpuKdT1i8EqHOifT/F3Ko3enueQQSUaTHh4sppSliph/9pYGN0qUnPm2QIEXmO4j7x
-         2eH46YfjT6k5QzHKivQgf/GV27hOVBW+jkomOj4A=
+        s=korg; t=1659354616;
+        bh=ZgTX1xYORGpaMshMzsAcx77X/gR0/NHi1txnd9buRYQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cnvTIQBYfn3d9hqOTuzg9UbRzvTV5LTMDySGvXZvdkbiqtjALGKht7vJLd2E66avz
+         ubYgo5Yp0jvob17Go4BSv0mJ/KT7h9/k6m9t+NpMCnNzZr1sY4mwkhPOc9yFdnn4kd
+         k3GsXjggDNgJftiZzh6VVitb4VT71pNoj4VxRoSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.4 00/34] 5.4.209-rc1 review
-Date:   Mon,  1 Aug 2022 13:46:40 +0200
-Message-Id: <20220801114128.025615151@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 24/65] igmp: Fix data-races around sysctl_igmp_qrv.
+Date:   Mon,  1 Aug 2022 13:46:41 +0200
+Message-Id: <20220801114134.714482596@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
+In-Reply-To: <20220801114133.641770326@linuxfoundation.org>
+References: <20220801114133.641770326@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.209-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.209-rc1
-X-KernelTest-Deadline: 2022-08-03T11:41+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -61,166 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.209 release.
-There are 34 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-Anything received after that time might be too late.
+[ Upstream commit 8ebcc62c738f68688ee7c6fec2efe5bc6d3d7e60 ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.209-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-and the diffstat can be found below.
+While reading sysctl_igmp_qrv, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-thanks,
+This test can be packed into a helper, so such changes will be in the
+follow-up series after net is merged into net-next.
 
-greg k-h
+  qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
 
--------------
-Pseudo-Shortlog of commits:
+Fixes: a9fe8e29945d ("ipv4: implement igmp_qrv sysctl to tune igmp robustness variable")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/ipv4/igmp.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.209-rc1
+diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
+index 428cc3a4c36f..c71b863093ac 100644
+--- a/net/ipv4/igmp.c
++++ b/net/ipv4/igmp.c
+@@ -827,7 +827,7 @@ static void igmp_ifc_event(struct in_device *in_dev)
+ 	struct net *net = dev_net(in_dev->dev);
+ 	if (IGMP_V1_SEEN(in_dev) || IGMP_V2_SEEN(in_dev))
+ 		return;
+-	WRITE_ONCE(in_dev->mr_ifc_count, in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv);
++	WRITE_ONCE(in_dev->mr_ifc_count, in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv));
+ 	igmp_ifc_start_timer(in_dev, 1);
+ }
+ 
+@@ -1009,7 +1009,7 @@ static bool igmp_heard_query(struct in_device *in_dev, struct sk_buff *skb,
+ 		 * received value was zero, use the default or statically
+ 		 * configured value.
+ 		 */
+-		in_dev->mr_qrv = ih3->qrv ?: net->ipv4.sysctl_igmp_qrv;
++		in_dev->mr_qrv = ih3->qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 		in_dev->mr_qi = IGMPV3_QQIC(ih3->qqic)*HZ ?: IGMP_QUERY_INTERVAL;
+ 
+ 		/* RFC3376, 8.3. Query Response Interval:
+@@ -1189,7 +1189,7 @@ static void igmpv3_add_delrec(struct in_device *in_dev, struct ip_mc_list *im,
+ 	pmc->interface = im->interface;
+ 	in_dev_hold(in_dev);
+ 	pmc->multiaddr = im->multiaddr;
+-	pmc->crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++	pmc->crcount = in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 	pmc->sfmode = im->sfmode;
+ 	if (pmc->sfmode == MCAST_INCLUDE) {
+ 		struct ip_sf_list *psf;
+@@ -1240,9 +1240,11 @@ static void igmpv3_del_delrec(struct in_device *in_dev, struct ip_mc_list *im)
+ 			swap(im->tomb, pmc->tomb);
+ 			swap(im->sources, pmc->sources);
+ 			for (psf = im->sources; psf; psf = psf->sf_next)
+-				psf->sf_crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++				psf->sf_crcount = in_dev->mr_qrv ?:
++					READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 		} else {
+-			im->crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++			im->crcount = in_dev->mr_qrv ?:
++				READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 		}
+ 		in_dev_put(pmc->interface);
+ 		kfree_pmc(pmc);
+@@ -1349,7 +1351,7 @@ static void igmp_group_added(struct ip_mc_list *im)
+ 	if (in_dev->dead)
+ 		return;
+ 
+-	im->unsolicit_count = net->ipv4.sysctl_igmp_qrv;
++	im->unsolicit_count = READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 	if (IGMP_V1_SEEN(in_dev) || IGMP_V2_SEEN(in_dev)) {
+ 		spin_lock_bh(&im->lock);
+ 		igmp_start_timer(im, IGMP_INITIAL_REPORT_DELAY);
+@@ -1363,7 +1365,7 @@ static void igmp_group_added(struct ip_mc_list *im)
+ 	 * IN() to IN(A).
+ 	 */
+ 	if (im->sfmode == MCAST_EXCLUDE)
+-		im->crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++		im->crcount = in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 
+ 	igmp_ifc_event(in_dev);
+ #endif
+@@ -1754,7 +1756,7 @@ static void ip_mc_reset(struct in_device *in_dev)
+ 
+ 	in_dev->mr_qi = IGMP_QUERY_INTERVAL;
+ 	in_dev->mr_qri = IGMP_QUERY_RESPONSE_INTERVAL;
+-	in_dev->mr_qrv = net->ipv4.sysctl_igmp_qrv;
++	in_dev->mr_qrv = READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ }
+ #else
+ static void ip_mc_reset(struct in_device *in_dev)
+@@ -1888,7 +1890,7 @@ static int ip_mc_del1_src(struct ip_mc_list *pmc, int sfmode,
+ #ifdef CONFIG_IP_MULTICAST
+ 		if (psf->sf_oldin &&
+ 		    !IGMP_V1_SEEN(in_dev) && !IGMP_V2_SEEN(in_dev)) {
+-			psf->sf_crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++			psf->sf_crcount = in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 			psf->sf_next = pmc->tomb;
+ 			pmc->tomb = psf;
+ 			rv = 1;
+@@ -1952,7 +1954,7 @@ static int ip_mc_del_src(struct in_device *in_dev, __be32 *pmca, int sfmode,
+ 		/* filter mode change */
+ 		pmc->sfmode = MCAST_INCLUDE;
+ #ifdef CONFIG_IP_MULTICAST
+-		pmc->crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++		pmc->crcount = in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 		WRITE_ONCE(in_dev->mr_ifc_count, pmc->crcount);
+ 		for (psf = pmc->sources; psf; psf = psf->sf_next)
+ 			psf->sf_crcount = 0;
+@@ -2131,7 +2133,7 @@ static int ip_mc_add_src(struct in_device *in_dev, __be32 *pmca, int sfmode,
+ #ifdef CONFIG_IP_MULTICAST
+ 		/* else no filters; keep old mode for reports */
+ 
+-		pmc->crcount = in_dev->mr_qrv ?: net->ipv4.sysctl_igmp_qrv;
++		pmc->crcount = in_dev->mr_qrv ?: READ_ONCE(net->ipv4.sysctl_igmp_qrv);
+ 		WRITE_ONCE(in_dev->mr_ifc_count, pmc->crcount);
+ 		for (psf = pmc->sources; psf; psf = psf->sf_next)
+ 			psf->sf_crcount = 0;
+-- 
+2.35.1
 
-Ming Lei <ming.lei@redhat.com>
-    scsi: core: Fix race between handling STS_RESOURCE and completion
-
-Wei Mingzhi <whistler@member.fsf.org>
-    mt7601u: add USB device ID for some versions of XiaoDu WiFi Dongle.
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    ARM: crypto: comment out gcc warning that breaks clang builds
-
-Xin Long <lucien.xin@gmail.com>
-    sctp: leave the err path free in sctp_stream_init to sctp_stream_free
-
-Alejandro Lucero <alejandro.lucero-palau@amd.com>
-    sfc: disable softirqs for ptp TX
-
-Leo Yan <leo.yan@linaro.org>
-    perf symbol: Correct address for bss symbols
-
-Jason Wang <jasowang@redhat.com>
-    virtio-net: fix the race between refill work and close
-
-Florian Westphal <fw@strlen.de>
-    netfilter: nf_queue: do not allow packet truncation below transport header offset
-
-Duoming Zhou <duoming@zju.edu.cn>
-    sctp: fix sleep in atomic context bug in timer handlers
-
-Michal Maloszewski <michal.maloszewski@intel.com>
-    i40e: Fix interface init with MSI interrupts (no MSI-X)
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_comp_sack_nr.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_comp_sack_delay_ns.
-
-Xin Long <lucien.xin@gmail.com>
-    Documentation: fix sctp_wmem in ip-sysctl.rst
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_invalid_ratelimit.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_autocorking.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_min_rtt_wlen.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_min_tso_segs.
-
-Liang He <windhl@126.com>
-    net: sungem_phy: Add of_node_put() for reference returned by of_get_parent()
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    igmp: Fix data-races around sysctl_igmp_qrv.
-
-Ziyang Xuan <william.xuanziyang@huawei.com>
-    ipv6/addrconf: fix a null-ptr-deref bug for ip6_ptr
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    net: ping6: Fix memleak in ipv6_renew_options().
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_challenge_ack_limit.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_limit_output_bytes.
-
-Liang He <windhl@126.com>
-    scsi: ufs: host: Hold reference returned by of_parse_phandle()
-
-Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-    ice: do not setup vlan for loopback VSI
-
-Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-    ice: check (DD | EOF) bits on Rx descriptor rather than (EOP | RS)
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_nometrics_save.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_frto.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_adv_win_scale.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix a data-race around sysctl_tcp_app_win.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp: Fix data-races around sysctl_tcp_dsack.
-
-Harald Freudenberger <freude@linux.ibm.com>
-    s390/archrandom: prevent CPACF trng invocations in interrupt context
-
-ChenXiaoSong <chenxiaosong2@huawei.com>
-    ntfs: fix use-after-free in ntfs_ucsncmp()
-
-Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-    Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put
-
-
--------------
-
-Diffstat:
-
- Documentation/networking/ip-sysctl.txt       |  9 +++-
- Makefile                                     |  4 +-
- arch/arm/lib/xor-neon.c                      |  3 +-
- arch/s390/include/asm/archrandom.h           |  9 ++--
- drivers/net/ethernet/intel/i40e/i40e_main.c  |  4 ++
- drivers/net/ethernet/intel/ice/ice_ethtool.c |  3 +-
- drivers/net/ethernet/intel/ice/ice_main.c    |  8 ++--
- drivers/net/ethernet/sfc/ptp.c               | 22 ++++++++++
- drivers/net/sungem_phy.c                     |  1 +
- drivers/net/virtio_net.c                     | 37 +++++++++++++++--
- drivers/net/wireless/mediatek/mt7601u/usb.c  |  1 +
- drivers/scsi/scsi_lib.c                      |  3 +-
- drivers/scsi/ufs/ufshcd-pltfrm.c             | 15 ++++++-
- fs/ntfs/attrib.c                             |  8 +++-
- include/net/addrconf.h                       |  3 ++
- include/net/bluetooth/l2cap.h                |  1 +
- include/net/tcp.h                            |  2 +-
- net/bluetooth/l2cap_core.c                   | 61 ++++++++++++++++++++++------
- net/ipv4/igmp.c                              | 24 ++++++-----
- net/ipv4/tcp.c                               |  2 +-
- net/ipv4/tcp_input.c                         | 20 +++++----
- net/ipv4/tcp_metrics.c                       |  2 +-
- net/ipv4/tcp_output.c                        |  4 +-
- net/ipv6/ping.c                              |  6 +++
- net/netfilter/nfnetlink_queue.c              |  7 +++-
- net/sctp/associola.c                         |  5 +--
- net/sctp/stream.c                            | 19 ++-------
- net/sctp/stream_sched.c                      |  2 +-
- tools/perf/util/symbol-elf.c                 | 45 ++++++++++++++++++--
- 29 files changed, 247 insertions(+), 83 deletions(-)
 
 

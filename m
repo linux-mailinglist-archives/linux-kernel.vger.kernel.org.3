@@ -2,286 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D54C587487
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABBD587490
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 01:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235313AbiHAXnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 19:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S234271AbiHAXwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 19:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbiHAXnK (ORCPT
+        with ESMTP id S232060AbiHAXwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:43:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37989474E0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 16:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659397388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bqrH14f6u4rtPBP7mTrKN6TGeXQ06NPlIMwH+7GumHY=;
-        b=M1vbh2kEGPx/eKvcKlcs8tsHK6Phte6uZjXcVAi9MaPaMP8xVGzg5jjeBQt+a8JeLqRpL2
-        af/dv5OPbux+dZk4vETJFgOAxoduqRe6yILwjZcp7yTNB1rkYIiEm73OJyb9cKyI4tpTkT
-        zlVtWML1sykvo3ulcDel0BkEQaPpePM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-JI3ZNjb4NRil0bg_j-Wxqg-1; Mon, 01 Aug 2022 19:43:07 -0400
-X-MC-Unique: JI3ZNjb4NRil0bg_j-Wxqg-1
-Received: by mail-wm1-f71.google.com with SMTP id 131-20020a1c0289000000b003a3497306a8so7427255wmc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 16:43:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=bqrH14f6u4rtPBP7mTrKN6TGeXQ06NPlIMwH+7GumHY=;
-        b=brU5kn1WamUdHmTC/7r6l6aE+Dk0EUz9i7ZgGYZR+aPJuMpxHg/aIX5qkJcC+N96nG
-         oWnTRXtZNKMZT8m/NBp14i0xbY1ESxX+/7rteHq23eCM6TR/qqqftuMzv+6IkTGnWyFI
-         11ZL/0jYwV83HMZzfLdIQxbs5C9lHJFsItF3YINU84IOiGChd9fqrhGE5jLTT8TKwpmM
-         E9UnMa7oui0AUCyNBFlmhOmMr0UmobGdgdaJATXMFrhjA9Em2daxwSQroDyeDzTwvnd0
-         qBgjrJccnWwK2QxgqGrnttqws9IctSG+jbHW+tgHZcFiUnISlEfDilSVWSbmMWiFNseM
-         UIPg==
-X-Gm-Message-State: ACgBeo3xnugJDZ7NZymrpn4C/IlY2hWHuakkZSr+L+AqrflMbc1Gr8lI
-        avMHEkB8fIktKFAms7Kyk3ybxh3Opz/U+hIFTVrORRR304DED3dZ+e1eGxBgmJCz2rrWNk5CwQa
-        31/Y6lLVZ3LZ1WQ4ZpWxETCk=
-X-Received: by 2002:a05:6000:1841:b0:21e:fa04:61f4 with SMTP id c1-20020a056000184100b0021efa0461f4mr11433933wri.491.1659397385872;
-        Mon, 01 Aug 2022 16:43:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR62sTUIxjyKmfQTaQnIyR3CaV/L2KTymYkPMJZ/SjfCdT+1VJLxYfrbdThjN3//o4rzt26j2Q==
-X-Received: by 2002:a05:6000:1841:b0:21e:fa04:61f4 with SMTP id c1-20020a056000184100b0021efa0461f4mr11433927wri.491.1659397385658;
-        Mon, 01 Aug 2022 16:43:05 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id p15-20020adfce0f000000b0021ee28ff76esm13335489wrn.38.2022.08.01.16.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 16:43:04 -0700 (PDT)
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     frederic@kernel.org, mtosatti@redhat.com
-Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
-        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
-        oleksandr@natalenko.name, atomlin@atomlin.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v5 2/2] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
-Date:   Tue,  2 Aug 2022 00:42:58 +0100
-Message-Id: <20220801234258.134609-3-atomlin@redhat.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801234258.134609-1-atomlin@redhat.com>
-References: <20220801234258.134609-1-atomlin@redhat.com>
+        Mon, 1 Aug 2022 19:52:36 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2FA2654D;
+        Mon,  1 Aug 2022 16:52:34 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 271NnpAm030714;
+        Mon, 1 Aug 2022 23:52:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=0l2JK4Xxe/FU/AqaB3HeM+oP9w1gR6GO3VyWB8JQM0k=;
+ b=Gqf8Idc9ijpMzK35DKpVJmsmguuPhgIu9GIcwG6zzzbDYVw0vSPvvTR++YtV15PmbdRp
+ mu0qJSPqyOrS4SmDiaRqLbk165D6ggOOLVva7l6J2XMZ3ucPwIG1gNxOjB5UHGUq4TH9
+ IIm4Ron6OmHVSX4mFRC9kUiZQsRHbjZ6fNTu4jb9V+BQC9IMOqxQD4bGMXf/IyElr/bt
+ BR+vPxCM7PgRtWevldvJ8A5Wyiqyl3qdEqajGI4juck6hP+eujbrCGRor3WAWqq+O0f1
+ 7XWmxQwV6s0Vb0lo1BCudn0MRIAPXZjR4Srxz60nhOXsf2KbSLE+7Xs4C7l75Mkz9Umx gg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmu2c55t9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 01 Aug 2022 23:52:31 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 271Kgqgp010963;
+        Mon, 1 Aug 2022 23:52:30 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu31qy3s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 01 Aug 2022 23:52:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aE5wus0cuEqUO3MzKGBuiVfOLQNiNmwCTHqT6O2SuSCLn61PoQEn6WNOQShU5BdiVuhA1MR9blxr+T/7susDu5Pyg4lsKc8PMlZ8KMSLVzXNqZhmOYGdoDQKLZWlxYyZwJ+D6r/U8drfLIUw0P0IpSv9XdXZ9RaK/or53qj91dtiSjSfRynrClxIg9/w9HhiZgNVx0yWSrMAlNuA++sB8RU9+Clcni+riouyTp82PehaYBfqTPpQNtZloYmD/D/paLcZLnqnu9SuIpY6cxcpSSlDOiJLd3Vs0UKtI0zOGZXjWstY4H6MHCQJq6nq0jQN5D6EB865Z+ri4F0OSZq3LA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0l2JK4Xxe/FU/AqaB3HeM+oP9w1gR6GO3VyWB8JQM0k=;
+ b=QVulDWXE3/gBN1pJqhrGVJCrBiJFGs2d9HoUlafzMF2Shuh0Yvg98BUwS+MneXZiF1Df1ludigIBZEuz90JLN7oI1xuJ2HcSJfsvqe7x1IR2PYbdlzGNJ5IDXQkn17QXS2rGVx+Dq/FZg6/d3fz7/my+7AZZp4l24m2TvmeboThZuWmZZZg6tFWSFOR3gxrKsJ9cMe7ViKs0SvGLzLHVMrc+AE9ZtYEnCCFF2o0zI1CUc5rrdeDQBcKOaSDrrckn5dDcafvTDrG2c4WybEZrlG8DxhmAqlWI1rVyonmoB2s5DuwxgGyWoib33GoNW9u4CvAbz/8MTKIpOc6r2a4z4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0l2JK4Xxe/FU/AqaB3HeM+oP9w1gR6GO3VyWB8JQM0k=;
+ b=h7YryXlKKCHYqUVQPh0KinE0gcHMRrOlwg+lvymIsP1d2NoqziOoEoRVOHAjuZK5/GfiX8+5R0JLa/oHtmcVa2oPzgNG8pHBjszM0hPNVS8uOslq930ZcLwrTCQRVTSJpWJ7gbXTatUr964BmgxJylOue9+4HDALYCpDyfS3n/A=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY4PR10MB1608.namprd10.prod.outlook.com (2603:10b6:910:9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Mon, 1 Aug
+ 2022 23:52:28 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45%5]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
+ 23:52:28 +0000
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Khalid Aziz <khalid@gonehiking.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: FlashPoint: remove redundant variable bm_int_st
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1v8rb34k5.fsf@ca-mkp.ca.oracle.com>
+References: <20220730123736.147758-1-colin.i.king@gmail.com>
+Date:   Mon, 01 Aug 2022 19:52:23 -0400
+In-Reply-To: <20220730123736.147758-1-colin.i.king@gmail.com> (Colin Ian
+        King's message of "Sat, 30 Jul 2022 13:37:36 +0100")
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR06CA0021.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::26) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b9090876-eecd-4883-3e49-08da7418e3fb
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1608:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 835QPZf8Vf5nKSJDekK0XAxO5mNH2bk9TWoZVcPnvGoCJJjUIuciJGZCXrnd+VHSdkQm4ZCmFIbkA4WnYQpANiU1UqyZNcaMDsbM1W/MGhMXY2rnekYhtr5ykwUf1bjqzUBt7Toj00aJOWtaZa/QpyyXhCLACO6BsQY7tx6GllKnD7NnaIl1Ams8xcMI3lIUYs9gDg1Lge39KwCq0l/1FqS2TmjyZeOZo4Ew0/eA3KcIVseYx+BFY/em5K9tC0yN0rU+dk/gCwZcmFlfyJ1t/oyMII6DgHjNA6GfjwR9ClRiRxRkFH5vq/UZ84biwl8z4NSK1cs5LJY679Iu5vrUu6Kl+kBiENcuFdKoznqcNpNaMSI+aBhMtIv3EsYXWY14fZS/PG0HRFQZp6Sm0/MjqzK8V5q2OSJ5NvY+NT7eZ0OISslIJ5GII/i8DHJ5tK5P8J0bK1P2/+tbAtRn0qzou2VxeCE3LtcUV7tFm2L/3b+Kgr2QdTzWY0y7ihDJM6ek66fMXZ1KjrqxlCLapEHps/A+6ITCGjTzYG/llgYoUFQpHe/gRA215k+fvulkW5cqG6mnVey31NMFVJYzvC1r5LG4TY0PN5V8CA0lXTBhLzbd8W4BGl7LmoiP3biA19I8TN5tt5KD3dJ8/kKhe16dn1Azr0tOtMgvEuZSLUbxPIP3sX5YCqIMoxKvYA4WuMFndQccwEIZkuwszqOwLuvyIcYt3HYS7K0DKfeDnjeg1mTbtKeE5oQScKSJ4C2Z6xtSNgQl+sPS6g/UAcfgqHlE5TQodgvvqn6St5d0XCVKUkGsbKwZy7lh8rRdvWhrFdZh
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(136003)(366004)(346002)(376002)(66476007)(478600001)(66946007)(26005)(66556008)(6512007)(6666004)(36916002)(8936002)(6506007)(52116002)(186003)(41300700001)(316002)(6916009)(6486002)(4326008)(8676002)(54906003)(38350700002)(38100700002)(558084003)(86362001)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?52lxJ5ot+/TB8y0K0MJvnsY5z8FlX3+3oxsgjNLSKBbGWPt3/smdwE4z1q4Q?=
+ =?us-ascii?Q?c+06p20GdaC1uJcQZn6yZ3W1mygxXQVlTpEvSbpegLmTKkt8g9JbXuen2/O3?=
+ =?us-ascii?Q?0cbPzzfD8wCZ0NMvqZIgPceTxsAptUIYpTQkxCPwWe2TusNGHpIsIDpvgiHk?=
+ =?us-ascii?Q?NCnGHU1qaqLFBSZxNcVXJzXP0fDKbrCX/JW6I20mhBhD+WL/Oyw/EEZYAeS0?=
+ =?us-ascii?Q?pMJkbURRFursPcXvkyXQz85korMfOpnzpFV9/sipMPaw/RwDa7PZ26VY38qg?=
+ =?us-ascii?Q?p8RNQh7GeFlAWv7ldQzFkntVkeAt44Jxn2w+OE6pVkXzJIV+P5V7DIMK+d6g?=
+ =?us-ascii?Q?X59Dm9dgp77wXWE6+ylfMR8E2AmixJS2B0TXYNYOEwKCiF9her5WQLHHn6YR?=
+ =?us-ascii?Q?Z1T+8ZAqiOYbuh36LRdjdg6IMEg+/IHEosGjFwcvMvnZfRvxO4tYnaCnQIzT?=
+ =?us-ascii?Q?WQ7C95nwPdgBv1IW0OCkiU3/LprYIMWH0hT1x/IJinB7dNRevhExcU5iRISd?=
+ =?us-ascii?Q?Lk2ZeCZ0gZ/U0VTyCeTJvlcYMqUeijKLsFTwea0OZ+RoSgFqsRzqRZdwcDAq?=
+ =?us-ascii?Q?JjoeICS8W/SFzMdtPeHzrTBOrVv5PhM4zwRDYj6D+DhX6wlWWD6OExDV8tCY?=
+ =?us-ascii?Q?e1ieavzybZPgeOH32KZgxfetrThWTe26fdNzRFYwWS+RyiLqppj+5xQVRUj3?=
+ =?us-ascii?Q?Nw7HOUqr06lN6ZnKf7e650WQAkSqZ7GGWUgPi6l1LcC65E8sxbgoODurF8bP?=
+ =?us-ascii?Q?QGyGrhnf1kwL6OYTwhbkBsrMrZSK0e9zt2zwm46RfEKoYiv9jajwTsyZt5/J?=
+ =?us-ascii?Q?d/yzG9skQVZPILPO2f45m8ywWjI3TFYEqfVMTa9/AqFR8FgtD2gLsgLcpzje?=
+ =?us-ascii?Q?rScu/2vbLlMYZR9C+WEqJTPf9D0k1YkfOLqXTBdReYmVolvYvT2VCEV2cRE3?=
+ =?us-ascii?Q?4ain3LqqPsXymMtx9gdYYLx+ePPNDYMYQOf0LP6RaZ74W1rqXMmL3OTr1+k0?=
+ =?us-ascii?Q?fAbm10o4eoDTCR6t/ClK9SLF8gg88AZ3uN/lH9xWqYyUiMldFLfqaHqIABHS?=
+ =?us-ascii?Q?IYpi35bmvnr3OIHu4GxY5KsSVPi++qif7tPr3lgwu5ujZVWTVuW9dcc6bjcT?=
+ =?us-ascii?Q?fUFsb3mqZMxly0oOJu6Z/A7FHFqIVWyeoqv4umGXavd0BayUZGBuJ3tnlzH4?=
+ =?us-ascii?Q?ET5l2HsfnT+SnN6NtqDBh3/Z8r0MrIX8o8Jak72o5HFP5XoWyD/0wbRt33Ov?=
+ =?us-ascii?Q?6BUVQ1I9PMXHv7yow9mnFtUFiyG9Dh//0+B9fNkJD9OiMVI8R7BfjD8HnR9Y?=
+ =?us-ascii?Q?z/mZYUctp+M/t83zUYqjIIgO8v6p5UaV/SJf21a0XiP/K9+qJEiBLSU5IwRO?=
+ =?us-ascii?Q?ECK641Xa+VRUivpcoNiW1Z49qqdhaEOAnc0dYO1f9K+m2Bn+J+55gQofy3YS?=
+ =?us-ascii?Q?mWNVaDeoQkIB8E9ULh8Ic5fLTbJQePEiGBhZpp1LUaIfspkUKXUP3jDy0RXo?=
+ =?us-ascii?Q?P1HPZFd1nQtai1qOYGKpuS348xMR3dUPni6yixVhmCHFGqLhKhI3HgVYxklb?=
+ =?us-ascii?Q?Z7arQlxKn8BJ/wMrSPtDqnPZWjoiGCVlg4M5Zkh6zgdHehrvPIEtNzL7BnAM?=
+ =?us-ascii?Q?VQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9090876-eecd-4883-3e49-08da7418e3fb
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 23:52:28.2870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h2JLAlryJK7qnAhvfOpdlb5MjR4EBQVRXRMgscEKqBKhs4WoDWXCsFxYtCDk4Z/PDhWLgXytYM+CrRc1cdwUxpvO1mzcJEvBUMuxY4T4BHI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1608
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_12,2022-08-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=924
+ malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208010119
+X-Proofpoint-GUID: JWAxH0nDfiPG_kgfQaBhoMcynxcD6Ayd
+X-Proofpoint-ORIG-GUID: JWAxH0nDfiPG_kgfQaBhoMcynxcD6Ayd
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the context of the idle task and an adaptive-tick mode/or a nohz_full
-CPU, quiet_vmstat() can be called: before stopping the idle tick,
-entering an idle state and on exit. In particular, for the latter case,
-when the idle task is required to reschedule, the idle tick can remain
-stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
-indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
-counters should be processed to ensure the respective values have been
-reset and folded into the zone specific 'vm_stat[]'. That being said, it
-can only occur when: the idle tick was previously stopped, and
-reprogramming of the timer is not required.
 
-A customer provided some evidence which indicates that the idle tick was
-stopped; albeit, CPU-specific vmstat counters still remained populated.
-Thus one can only assume quiet_vmstat() was not invoked on return to the
-idle loop.
+Colin,
 
-If I understand correctly, I suspect this divergence might erroneously
-prevent a reclaim attempt by kswapd. If the number of zone specific free
-pages are below their per-cpu drift value then
-zone_page_state_snapshot() is used to compute a more accurate view of
-the aforementioned statistic.  Thus any task blocked on the NUMA node
-specific pfmemalloc_wait queue will be unable to make significant
-progress via direct reclaim unless it is killed after being woken up by
-kswapd (see throttle_direct_reclaim()).
+> The variable bm_int_st is assigned a value but it is never read. The
+> variable and the assignment are redundant and can be removed.
 
-Consider the following theoretical scenario:
+Applied to 5.20/scsi-staging, thanks!
 
-        1.      CPU Y migrated running task A to CPU X that was
-                in an idle state i.e. waiting for an IRQ - not
-                polling; marked the current task on CPU X to
-                need/or require a reschedule i.e., set
-                TIF_NEED_RESCHED and invoked a reschedule IPI to
-                CPU X (see sched_move_task())
-
-        2.      CPU X acknowledged the reschedule IPI from CPU Y;
-                generic idle loop code noticed the
-                TIF_NEED_RESCHED flag against the idle task and
-                attempts to exit of the loop and calls the main
-                scheduler function i.e. __schedule().
-
-                Since the idle tick was previously stopped no
-                scheduling-clock tick would occur.
-                So, no deferred timers would be handled
-
-        3.      Post transition to kernel execution Task A
-                running on CPU Y, indirectly released a few pages
-                (e.g. see __free_one_page()); CPU Y's
-                'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
-                specific 'vm_stat[]' update was deferred as per the
-                CPU-specific stat threshold
-
-        4.      Task A does invoke exit(2) and the kernel does
-                remove the task from the run-queue; the idle task
-                was selected to execute next since there are no
-                other runnable tasks assigned to the given CPU
-                (see pick_next_task() and pick_next_task_idle())
-
-        5.      On return to the idle loop since the idle tick
-                was already stopped and can remain so (see [1]
-                below) e.g. no pending soft IRQs, no attempt is
-                made to zero and fold CPU Y's vmstat counters
-                since reprogramming of the scheduling-clock tick
-                is not required/or needed (see [2])
-
-		  ...
-		    do_idle
-		    {
-
-		      __current_set_polling()
-		      tick_nohz_idle_enter()
-
-		      while (!need_resched()) {
-
-			local_irq_disable()
-
-			...
-
-			/* No polling or broadcast event */
-			cpuidle_idle_call()
-			{
-
-			  if (cpuidle_not_available(drv, dev)) {
-			    tick_nohz_idle_stop_tick()
-			      __tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched))
-			      {
-				int cpu = smp_processor_id()
-
-				if (ts->timer_expires_base)
-				  expires = ts->timer_expires
-				else if (can_stop_idle_tick(cpu, ts))
-	      (1) ------->        expires = tick_nohz_next_event(ts, cpu)
-				else
-				  return
-
-				ts->idle_calls++
-
-				if (expires > 0LL) {
-
-				  tick_nohz_stop_tick(ts, cpu)
-				  {
-
-				    if (ts->tick_stopped && (expires == ts->next_tick)) {
-	      (2) ------->            if (tick == KTIME_MAX || ts->next_tick ==
-					hrtimer_get_expires(&ts->sched_timer))
-					return
-				    }
-				    ...
-				  }
-
-So the idea of with this patch is to ensure refresh_cpu_vm_stats(false) is
-called, when it is appropriate, on return to the idle loop when the idle
-tick was previously stopped too. Additionally, in the context of
-nohz_full, when the scheduling-tick is stopped and before exiting
-to user-mode, ensure no CPU-specific vmstat differentials remain.
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- include/linux/tick.h     |  9 ++-------
- kernel/time/tick-sched.c | 19 ++++++++++++++++++-
- 2 files changed, 20 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index bfd571f18cfd..4c576c9ca0a2 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -11,7 +11,6 @@
- #include <linux/context_tracking_state.h>
- #include <linux/cpumask.h>
- #include <linux/sched.h>
--#include <linux/rcupdate.h>
- 
- #ifdef CONFIG_GENERIC_CLOCKEVENTS
- extern void __init tick_init(void);
-@@ -123,6 +122,8 @@ enum tick_dep_bits {
- #define TICK_DEP_MASK_RCU		(1 << TICK_DEP_BIT_RCU)
- #define TICK_DEP_MASK_RCU_EXP		(1 << TICK_DEP_BIT_RCU_EXP)
- 
-+void tick_nohz_user_enter_prepare(void);
-+
- #ifdef CONFIG_NO_HZ_COMMON
- extern bool tick_nohz_enabled;
- extern bool tick_nohz_tick_stopped(void);
-@@ -305,10 +306,4 @@ static inline void tick_nohz_task_switch(void)
- 		__tick_nohz_task_switch();
- }
- 
--static inline void tick_nohz_user_enter_prepare(void)
--{
--	if (tick_nohz_full_cpu(smp_processor_id()))
--		rcu_nocb_flush_deferred_wakeup();
--}
--
- #endif
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 30049580cd62..c7c69a974414 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -26,6 +26,7 @@
- #include <linux/posix-timers.h>
- #include <linux/context_tracking.h>
- #include <linux/mm.h>
-+#include <linux/rcupdate.h>
- 
- #include <asm/irq_regs.h>
- 
-@@ -43,6 +44,20 @@ struct tick_sched *tick_get_tick_sched(int cpu)
- 	return &per_cpu(tick_cpu_sched, cpu);
- }
- 
-+void tick_nohz_user_enter_prepare(void)
-+{
-+	struct tick_sched *ts;
-+
-+	if (tick_nohz_full_cpu(smp_processor_id())) {
-+		ts = this_cpu_ptr(&tick_cpu_sched);
-+
-+		if (ts->tick_stopped)
-+			quiet_vmstat();
-+		rcu_nocb_flush_deferred_wakeup();
-+	}
-+}
-+EXPORT_SYMBOL(tick_nohz_user_enter_prepare);
-+
- #if defined(CONFIG_NO_HZ_COMMON) || defined(CONFIG_HIGH_RES_TIMERS)
- /*
-  * The time, when the last jiffy update happened. Write access must hold
-@@ -890,6 +905,9 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
- 		ts->do_timer_last = 0;
- 	}
- 
-+	/* Attempt to fold when the idle tick is stopped or not */
-+	quiet_vmstat();
-+
- 	/* Skip reprogram of event if its not changed */
- 	if (ts->tick_stopped && (expires == ts->next_tick)) {
- 		/* Sanity check: make sure clockevent is actually programmed */
-@@ -911,7 +929,6 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
- 	 */
- 	if (!ts->tick_stopped) {
- 		calc_load_nohz_start();
--		quiet_vmstat();
- 
- 		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
- 		ts->tick_stopped = 1;
 -- 
-2.37.1
-
+Martin K. Petersen	Oracle Linux Engineering

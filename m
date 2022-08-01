@@ -2,187 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1D85866F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AFD5866F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiHAJmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S230307AbiHAJmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiHAJl6 (ORCPT
+        with ESMTP id S230255AbiHAJmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:41:58 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29293718F;
-        Mon,  1 Aug 2022 02:41:56 -0700 (PDT)
-Received: from grover.sesame ([133.106.54.139]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 2719ejxx028043;
-        Mon, 1 Aug 2022 18:40:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 2719ejxx028043
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1659346849;
-        bh=7q7KNGP7/8ph5xksTlmgfiesAmDvv/CKZe58ESb/eDo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LbZgrAreaPkPlb/wEO3dsqk7JBzysZDCYlWDQ8kEDeyUNSM1rGjzAGNCdHzTZq5xE
-         +JyzdCSgNupwcX3f4Tm1q+VRpXu2eXsFF8KQW0nfZuUfSl4dgeMr/OMXCE8ghQo3cv
-         QqXKB7wsJB6qDe8zFUg5zrIznAiz/t6c4XjUo2Odu6MEArfEMmEFCaRVg0QKNEjcZ3
-         OJ6qecXK4uNfQd3IMNGhgvrq8UKVuiTxQliNBkbsZKPe7t5DAjHXSnGHSEhGvMuZEJ
-         DB9AQ5O1NtEFzWPcsmZCQWQi9ysA4FcsaQJKjGU67KMH058PkVRJArhuz1cHgt5gDs
-         up2WdLwf8Wgvw==
-X-Nifty-SrcIP: [133.106.54.139]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Mon, 1 Aug 2022 05:42:02 -0400
+Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0206E37195
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:42:00 -0700 (PDT)
+X-Virus-Scanned: Yes
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] modpost: remove .symbol_white_list field entirely
-Date:   Mon,  1 Aug 2022 18:39:02 +0900
-Message-Id: <20220801093902.1506297-4-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220801093902.1506297-1-masahiroy@kernel.org>
-References: <20220801093902.1506297-1-masahiroy@kernel.org>
-MIME-Version: 1.0
+Subject: [PATCH v3 1/1] virtio: Restore semantics of vq->broken in virtqueues and improve irq handling
+Date:   Mon,  1 Aug 2022 09:39:41 +0000
+Message-Id: <20220801093940.2343377-1-alexander.atanasov@virtuozzo.com>
+In-Reply-To: <20220627144544.1947013-1-alexander.atanasov@virtuozzo.com>
+References: <20220627144544.1947013-1-alexander.atanasov@virtuozzo.com>
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not so useful to have symbol whitelists in arrays. With this
-over-engineering, the code is difficult to follow.
+virtio: harden vring IRQ (8b4ec69d7e09) changed the meaning
+of vq->broken which results in vring_interrupt handles IRQs for
+broken drivers as IRQ_NONE and not IRQ_HANDLED and made impossible
+to initiallize vqs before the driver is ready, i.e. in probe method.
+Balloon driver does this and it can not load because it fails in
+vqs_init with -EIO.
 
-Let's do it more directly, and collect the relevant code to one place.
+So instead of changing the original intent ot the flag introduce
+a new flag vq->ready which servers the purpose to check of early IRQs.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+With the new flag improve the logic of IRQ handling like this:
+Until the driver is ready return IRQ_HANDLED so the IRQ does not get
+disabled while starting up.
+If the driver gets broken return IRQ_NONE so the IRQ gets disabled.
+
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
+ drivers/virtio/virtio_ring.c  | 34 ++++++++++++++++++++++------------
+ include/linux/virtio.h        |  4 +++-
+ include/linux/virtio_config.h | 12 ++++++------
+ 3 files changed, 31 insertions(+), 19 deletions(-)
 
- scripts/mod/modpost.c | 55 +++++++++++++------------------------------
- 1 file changed, 16 insertions(+), 39 deletions(-)
+V2:
+  Reworked on top of config option to disable the hardening.
+V3:
+  Changed irq handling logic depending on the flags
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index bcd1319f3097..8484c0798f28 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -845,28 +845,12 @@ static const char *const init_data_sections[] =
- /* all init sections */
- static const char *const init_sections[] = { ALL_INIT_SECTIONS, NULL };
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 643ca779fcc6..a385d563c71f 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -100,6 +100,9 @@ struct vring_virtqueue {
+ 	/* Other side has made a mess, don't try any more. */
+ 	bool broken;
  
--/* All init and exit sections (code + data) */
--static const char *const init_exit_sections[] =
--	{ALL_INIT_SECTIONS, ALL_EXIT_SECTIONS, NULL };
--
- /* all text sections */
- static const char *const text_sections[] = { ALL_TEXT_SECTIONS, NULL };
- 
- /* data section */
- static const char *const data_sections[] = { DATA_SECTIONS, NULL };
- 
--
--/* symbols in .data that may refer to init/exit sections */
--#define DEFAULT_SYMBOL_WHITE_LIST					\
--	"*driver",							\
--	"*_template", /* scsi uses *_template a lot */			\
--	"*_timer",    /* arm uses ops structures named _timer a lot */	\
--	"*_sht",      /* scsi also used *_sht to some extent */		\
--	"*_ops",							\
--	"*_probe",							\
--	"*_probe_one",							\
--	"*_console"
--
- static const char *const head_sections[] = { ".head.text*", NULL };
- static const char *const linker_symbols[] =
- 	{ "__init_begin", "_sinittext", "_einittext", NULL };
-@@ -898,9 +882,6 @@ enum mismatch {
-  *
-  * @mismatch: Type of mismatch.
-  *
-- * @symbol_white_list: Do not match a relocation to a symbol in this list
-- * even if it is targeting a section in @bad_to_sec.
-- *
-  * @handler: Specific handler to call when a match is found.  If NULL,
-  * default_mismatch_handler() will be called.
-  *
-@@ -910,7 +891,6 @@ struct sectioncheck {
- 	const char *bad_tosec[20];
- 	const char *good_tosec[20];
- 	enum mismatch mismatch;
--	const char *symbol_white_list[20];
- 	void (*handler)(const char *modname, struct elf_info *elf,
- 			const struct sectioncheck* const mismatch,
- 			Elf_Rela *r, Elf_Sym *sym, const char *fromsec);
-@@ -935,16 +915,11 @@ static const struct sectioncheck sectioncheck[] = {
- 	.fromsec = { DATA_SECTIONS, NULL },
- 	.bad_tosec = { ALL_XXXINIT_SECTIONS, NULL },
- 	.mismatch = DATA_TO_ANY_INIT,
--	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
- },
- {
- 	.fromsec = { DATA_SECTIONS, NULL },
- 	.bad_tosec = { INIT_SECTIONS, NULL },
- 	.mismatch = DATA_TO_ANY_INIT,
--	.symbol_white_list = {
--		"*_template", "*_timer", "*_sht", "*_ops",
--		"*_probe", "*_probe_one", "*_console", NULL
--	},
- },
- {
- 	.fromsec = { TEXT_SECTIONS, NULL },
-@@ -955,7 +930,6 @@ static const struct sectioncheck sectioncheck[] = {
- 	.fromsec = { DATA_SECTIONS, NULL },
- 	.bad_tosec = { ALL_EXIT_SECTIONS, NULL },
- 	.mismatch = DATA_TO_ANY_EXIT,
--	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
- },
- /* Do not reference init code/data from meminit code/data */
- {
-@@ -1051,15 +1025,6 @@ static const struct sectioncheck *section_mismatch(
-  *   fromsec = .data*
-  *   atsym   = __param_ops_*
-  *
-- * Pattern 2:
-- *   Many drivers utilise a *driver container with references to
-- *   add, remove, probe functions etc.
-- *   the pattern is identified by:
-- *   tosec   = init or exit section
-- *   fromsec = data section
-- *   atsym = *driver, *_template, *_sht, *_ops, *_probe,
-- *           *probe_one, *_console, *_timer
-- *
-  * Pattern 3:
-  *   Whitelist all references from .head.text to any init section
-  *
-@@ -1108,10 +1073,22 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
- 	    strstarts(fromsym, "__param_ops_"))
- 		return 0;
- 
--	/* Check for pattern 2 */
--	if (match(tosec, init_exit_sections) &&
--	    match(fromsec, data_sections) &&
--	    match(fromsym, mismatch->symbol_white_list))
-+	/* symbols in data sections that may refer to any init/exit sections */
-+	if (match(fromsec, PATTERNS(DATA_SECTIONS)) &&
-+	    match(tosec, PATTERNS(ALL_INIT_SECTIONS, ALL_EXIT_SECTIONS)) &&
-+	    match(fromsym, PATTERNS("*_template", // scsi uses *_template a lot
-+				    "*_timer", // arm uses ops structures named _timer a lot
-+				    "*_sht", // scsi also used *_sht to some extent
-+				    "*_ops",
-+				    "*_probe",
-+				    "*_probe_one",
-+				    "*_console")))
-+		return 0;
++	/* the queue is ready to handle interrupts */
++	bool ready;
 +
-+	/* symbols in data sections that may refer to meminit/exit sections */
-+	if (match(fromsec, PATTERNS(DATA_SECTIONS)) &&
-+	    match(tosec, PATTERNS(ALL_XXXINIT_SECTIONS, ALL_EXIT_SECTIONS)) &&
-+	    match(fromsym, PATTERNS("*driver")))
- 		return 0;
+ 	/* Host supports indirect buffers */
+ 	bool indirect;
  
- 	/* Check for pattern 3 */
+@@ -1708,10 +1711,9 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 	vq->we_own_ring = true;
+ 	vq->notify = notify;
+ 	vq->weak_barriers = weak_barriers;
+-#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+-	vq->broken = true;
+-#else
+ 	vq->broken = false;
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
++	vq->ready = false;
+ #endif
+ 	vq->last_used_idx = 0 | (1 << VRING_PACKED_EVENT_F_WRAP_CTR);
+ 	vq->event_triggered = false;
+@@ -2160,13 +2162,21 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+ 	if (unlikely(vq->broken)) {
+ #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 		dev_warn_once(&vq->vq.vdev->dev,
+-			      "virtio vring IRQ raised before DRIVER_OK");
++			      "virtio vring IRQ raised for broken vq");
+ 		return IRQ_NONE;
+ #else
+ 		return IRQ_HANDLED;
+ #endif
+ 	}
+ 
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
++	if (unlikely(!vq->ready)) {
++		dev_warn_once(&vq->vq.vdev->dev,
++			      "virtio vring IRQ raised before DRIVER_OK");
++		return IRQ_HANDLED;
++	}
++#endif
++
+ 	/* Just a hint for performance: so it's ok that this can be racy! */
+ 	if (vq->event)
+ 		vq->event_triggered = true;
+@@ -2207,10 +2217,9 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+ 	vq->we_own_ring = false;
+ 	vq->notify = notify;
+ 	vq->weak_barriers = weak_barriers;
+-#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+-	vq->broken = true;
+-#else
+ 	vq->broken = false;
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
++	vq->ready = false;
+ #endif
+ 	vq->last_used_idx = 0;
+ 	vq->event_triggered = false;
+@@ -2429,14 +2438,15 @@ void virtio_break_device(struct virtio_device *dev)
+ }
+ EXPORT_SYMBOL_GPL(virtio_break_device);
+ 
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ /*
+  * This should allow the device to be used by the driver. You may
+  * need to grab appropriate locks to flush the write to
+- * vq->broken. This should only be used in some specific case e.g
++ * vq->ready. This should only be used in some specific case e.g
+  * (probing and restoring). This function should only be called by the
+  * core, not directly by the driver.
+  */
+-void __virtio_unbreak_device(struct virtio_device *dev)
++void __virtio_device_ready(struct virtio_device *dev)
+ {
+ 	struct virtqueue *_vq;
+ 
+@@ -2444,12 +2454,12 @@ void __virtio_unbreak_device(struct virtio_device *dev)
+ 	list_for_each_entry(_vq, &dev->vqs, list) {
+ 		struct vring_virtqueue *vq = to_vvq(_vq);
+ 
+-		/* Pairs with READ_ONCE() in virtqueue_is_broken(). */
+-		WRITE_ONCE(vq->broken, false);
++		WRITE_ONCE(vq->ready, true);
+ 	}
+ 	spin_unlock(&dev->vqs_list_lock);
+ }
+-EXPORT_SYMBOL_GPL(__virtio_unbreak_device);
++EXPORT_SYMBOL_GPL(__virtio_device_ready);
++#endif
+ 
+ dma_addr_t virtqueue_get_desc_addr(struct virtqueue *_vq)
+ {
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index d8fdf170637c..a63120477ae1 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -131,7 +131,9 @@ void unregister_virtio_device(struct virtio_device *dev);
+ bool is_virtio_device(struct device *dev);
+ 
+ void virtio_break_device(struct virtio_device *dev);
+-void __virtio_unbreak_device(struct virtio_device *dev);
++#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
++void __virtio_device_ready(struct virtio_device *dev);
++#endif
+ 
+ void virtio_config_changed(struct virtio_device *dev);
+ #ifdef CONFIG_PM_SLEEP
+diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+index b47c2e7ed0ee..472d4703d499 100644
+--- a/include/linux/virtio_config.h
++++ b/include/linux/virtio_config.h
+@@ -260,22 +260,22 @@ void virtio_device_ready(struct virtio_device *dev)
+ #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+ 	/*
+ 	 * The virtio_synchronize_cbs() makes sure vring_interrupt()
+-	 * will see the driver specific setup if it sees vq->broken
+-	 * as false (even if the notifications come before DRIVER_OK).
++	 * will see the driver specific setup if it sees vq->ready
++	 * as true (even if the notifications come before DRIVER_OK).
+ 	 */
+ 	virtio_synchronize_cbs(dev);
+-	__virtio_unbreak_device(dev);
++	__virtio_device_ready(dev);
+ #endif
+ 	/*
+-	 * The transport should ensure the visibility of vq->broken
++	 * The transport should ensure the visibility of vq->ready
+ 	 * before setting DRIVER_OK. See the comments for the transport
+ 	 * specific set_status() method.
+ 	 *
+ 	 * A well behaved device will only notify a virtqueue after
+ 	 * DRIVER_OK, this means the device should "see" the coherenct
+-	 * memory write that set vq->broken as false which is done by
++	 * memory write that set vq->ready as true which is done by
+ 	 * the driver when it sees DRIVER_OK, then the following
+-	 * driver's vring_interrupt() will see vq->broken as false so
++	 * driver's vring_interrupt() will see vq->ready as true so
+ 	 * we won't lose any notification.
+ 	 */
+ 	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
 -- 
-2.34.1
+2.25.1
 

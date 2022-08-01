@@ -2,85 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC774586715
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095B2586719
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiHAJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S230503AbiHAJwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiHAJwH (ORCPT
+        with ESMTP id S230399AbiHAJw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:52:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C68F23BEB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659347525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Afp8FUD7Ek0MnxgDfmSmKaUslh6+V7F3FKE45E7vdmo=;
-        b=iCK4V6VDe1V5lbJkg+u5wJZKonO110i6Phw4mfyDYTvg2Ogr1Xxc8+6hAKlVnpKaVdBHZ7
-        WVAXS/NOfFe2UaS5UIZ32niFgdO6Kv9Av5+1XCBCBS8NXw+QjsmWPqNwavLxlltztf4vQO
-        VGjWys79t/PhDoQ0Ra0gT9NIi9pU9L8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-d5f5IE1VNqOGNsdrEiCbZA-1; Mon, 01 Aug 2022 05:52:03 -0400
-X-MC-Unique: d5f5IE1VNqOGNsdrEiCbZA-1
-Received: by mail-ed1-f70.google.com with SMTP id o2-20020a056402438200b0043d552deb2aso3090030edc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 02:52:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Afp8FUD7Ek0MnxgDfmSmKaUslh6+V7F3FKE45E7vdmo=;
-        b=tB3moQZPXez8MNbT5gHz8w+WOfO1xq4r4glqNTU2HVeo1cjRgUlCFoHUjjzGqvCYrk
-         YzxUBD+ri+XyVsL6nuQDoCHQ3jfpeca90efoC+LhJL+Al1SV23atOajsqM3O2dzWwZhA
-         sHK/QlW5ZkyiwvxrVmvJZ1GL4KhU4inufo+rQOEHI84SA8ppOLgJqIvs0k5OZZlTimcv
-         IS7vAMiwjFNEtOcHAID8xbnekJ8VA/cv/A6XYg9fd81yVRJBRITKjpZT5trxl4oRDyb9
-         DwxL9CyhjB3DajQPsi9efzaWrEpASUJ0drlky0YUlrfQD8RAU6kOaJzQzJ5xLcn8CGQF
-         7fFg==
-X-Gm-Message-State: ACgBeo2trcB5pR5xSNOYojdFZhTCwOes8sDqbEsJtVi7v3+QOtAUQIBB
-        gqpXBeXbKJIPYeJOTMsDWdOfGI5dbzL6sBThZjVyQ8b+IngKvPTMem3q2sQrhPlfLbjkVrpWYbs
-        1p5ZHspv/qaD7v38htUuQ3Pdu
-X-Received: by 2002:a17:907:7355:b0:730:664f:91f with SMTP id dq21-20020a170907735500b00730664f091fmr5115008ejc.400.1659347522606;
-        Mon, 01 Aug 2022 02:52:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6SQtruoNhBR6V/BXnzhRLsdRU6Xb86uCpbkBUw9/AS9qvmfy7ushvoU0TM6vW30Teb4XaCrw==
-X-Received: by 2002:a17:907:7355:b0:730:664f:91f with SMTP id dq21-20020a170907735500b00730664f091fmr5114995ejc.400.1659347522428;
-        Mon, 01 Aug 2022 02:52:02 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id fg7-20020a1709069c4700b007304d084c5esm1890371ejc.166.2022.08.01.02.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 02:52:01 -0700 (PDT)
-Message-ID: <98f1509a-2386-7c8f-cf53-cdb93990aa74@redhat.com>
-Date:   Mon, 1 Aug 2022 11:52:00 +0200
+        Mon, 1 Aug 2022 05:52:29 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7EC3337A;
+        Mon,  1 Aug 2022 02:52:23 -0700 (PDT)
+X-UUID: 740adc1427bb406e87292605e8f30a8d-20220801
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0ce791fa-a074-4bd6-8c8f-45e9898a1a58,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:b9ccee24-a982-4824-82d2-9da3b6056c2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 740adc1427bb406e87292605e8f30a8d-20220801
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <hui.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 822219463; Mon, 01 Aug 2022 17:52:19 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 1 Aug 2022 17:52:17 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 1 Aug 2022 17:52:17 +0800
+From:   Hui Liu <hui.liu@mediatek.com>
+To:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hui.liu@mediatek.com>, <jianguo.zhang@mediatek.com>,
+        <zhiyong.tao@mediatek.com>, <sean.wang@mediatek.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/2] MediaTek pinctrl patch on mt8188
+Date:   Mon, 1 Aug 2022 17:52:13 +0800
+Message-ID: <20220801095215.10876-1-hui.liu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 01/10] mfd: intel_soc_pmic: Fix an error handling path
- in intel_soc_pmic_i2c_probe()
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-References: <20220731201258.11262-1-andriy.shevchenko@linux.intel.com>
- <9b9abdf0-7cd5-df51-adbf-2225291f0dd2@redhat.com>
- <CAHp75VduSG=BerPJo9phXJKWa-yu_uXbP+ifkax=3FUTE7et+Q@mail.gmail.com>
- <CAHp75VcmuVcA_heURNh96zBDtpeNvx0t9buDOxnWNoea2G1uDg@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VcmuVcA_heURNh96zBDtpeNvx0t9buDOxnWNoea2G1uDg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,43 +60,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series include 2 patches:
+1.Add pinmux definition file and pinctrl binding document for mt8188.
+2.Add pinctrl driver for mt8188.
 
-On 8/1/22 11:29, Andy Shevchenko wrote:
-> On Mon, Aug 1, 2022 at 11:14 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Mon, Aug 1, 2022 at 10:43 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>> On 7/31/22 22:12, Andy Shevchenko wrote:
-> 
-> ...
-> 
->>>>  err_del_irq_chip:
->>>> +     pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
->>>>       regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
->>>>       return ret;
->>>
->>> Note alternatively we could just move the pwm_add_table() to just before the "return 0",
->>> there is no strict ordering between adding the mfd devices and the pwm_add_table()
->>> (the pwm device only becomes available after the pwm-driver has bound to the mfd
->>> instantiated platform device which happens later).
-> 
-> Just to be sure... How is it guaranteed that that happens later?
+Changes in patch v5:
+1.Move ref pincfg-node.yaml to the child '^pins' node in binding document.
 
-Ah you are right, it could happen immediately if the driver is builtin and
-has already registered (if the PWM driver is a module, as it is on Fedora,
-then the driver will only bind once the module is loaded).
+Changes in patch v4:
+1.Add gpio-line-names in binding document.
+2.Fix typo in driver files.
 
-Regardless there are no ordering guarantees between the probe() function of
-intel_soc_pmic and the consumer of the PWM device, so the consumer must
-be prepared to deal with the lookup not being present yet when its probe()
-function runs (*).
+Changes in patch v3:
+1.Fix binding document dt_binding_check fail issue.
 
-Regards,
+Changes in patch v2:
+1.Change pinmux definition file name to mediatek,mt8188-pinfunc.h.
+2.Change binding document name to mediatek,mt8188-pinctrl.yaml.
+3.Update yaml description.
 
-Hans
+Changes in patch v1:
+1.Add pinmux definition file.
+2.Add binding document.
+3.Add mt8188 pinctrl drivers.
 
+*** BLURB HERE ***
 
-*) ATM this is actually an unsolved problem and this works only because the PMIC
-drivers are builtin and i915, which consumes the PWM for backlight control
-is a module. Swapping the order does not impact this.
+Hui.Liu (2):
+  dt-bindings: pinctrl: add support for mediatek mt8188
+  pinctrl: mediatek: add mt8188 driver
+
+ .../pinctrl/mediatek,mt8188-pinctrl.yaml      |  238 ++
+ drivers/pinctrl/mediatek/Kconfig              |   12 +
+ drivers/pinctrl/mediatek/Makefile             |    1 +
+ drivers/pinctrl/mediatek/pinctrl-mt8188.c     | 1669 ++++++++++++
+ drivers/pinctrl/mediatek/pinctrl-mtk-mt8188.h | 2260 +++++++++++++++++
+ .../pinctrl/mediatek,mt8188-pinfunc.h         | 1280 ++++++++++
+ 6 files changed, 5460 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt8188.c
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt8188.h
+ create mode 100644 include/dt-bindings/pinctrl/mediatek,mt8188-pinfunc.h
+
+--
+2.18.0
+
 

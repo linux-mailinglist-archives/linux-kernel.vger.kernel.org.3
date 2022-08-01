@@ -2,122 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908E55866B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9B5866C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 11:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiHAJH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 05:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S230375AbiHAJQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 05:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiHAJHy (ORCPT
+        with ESMTP id S229709AbiHAJQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:07:54 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976F528E3D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659344873; x=1690880873;
-  h=subject:references:in-reply-to:to:cc:from:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=x9bmLfqCPADKO2VY/iNwV4o1wHzfaCzuIvmDlwgtyz8=;
-  b=LhwkloXG5Scc2hiDUSiI7d1Z3U23Ft4M7XP77HEyB3IPyBRqMYwKo/rB
-   ZR0ftJEjW7I/ubgAPVooBDQC92I8TRdBpMZ10//JnE9YRHA3J1BcP3dSN
-   P1oiQgDfrmVdT2qwyBsuGHDi6RO6r5eoqM/3OnYxWHFNQCXRMGfIPwwTF
-   dme9ljDovu0rFFNOLSek5JFbECoWul+Fi4s8B5WaL3FPnmaXzKWiUEKQO
-   WlC0SWfvETNcT2akS2EfdBa+orv+RB22MeNhl3qvrkoF0iKPnjBsColUx
-   gql+SnXymrpQDNgi12kcSopyyqKUFJVgFZEuSvrlaWNnwbqrwJ1MsMkNr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="314922841"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="314922841"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 02:07:53 -0700
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="661067254"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.172.209]) ([10.249.172.209])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 02:07:50 -0700
-Subject: Re: [PATCH drm-misc-next v6 3/5] drm/gem: rename GEM CMA helpers to
- GEM DMA helpers
-References: <202207312337.CwA6jvYb-lkp@intel.com>
-In-Reply-To: <202207312337.CwA6jvYb-lkp@intel.com>
-To:     Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        laurent.pinchart@ideasonboard.com, airlied@linux.ie,
-        tzimmermann@suse.de, mripard@kernel.org, sam@ravnborg.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Danilo Krummrich <dakr@redhat.com>
-From:   kernel test robot <rong.a.chen@intel.com>
-X-Forwarded-Message-Id: <202207312337.CwA6jvYb-lkp@intel.com>
-Message-ID: <c1fb382d-b8ff-5e68-5c50-bf820704ceec@intel.com>
-Date:   Mon, 1 Aug 2022 17:07:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Mon, 1 Aug 2022 05:16:07 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842C91928B
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 02:16:03 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id tl27so1327520ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 02:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc;
+        bh=mVLib6+KglGWzrVB//L7ezE4how+oky3wShDacSr+Rk=;
+        b=fp+jCnQ/ItfHQ1hBwegHh+Ldz7J5kAwEOruTIPovevlje/32kxnh/US3StTNaYN0hk
+         LBjV0xdxA2kKiZ7glZAtjn3ihomHLymWh2cSyoDhKTDoMt0iZjgAys3zXeZ2SIK1lC6N
+         FW7ALONcIV5nxv9CvyCeLgNoZFZ3ZWcMX0q24=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc;
+        bh=mVLib6+KglGWzrVB//L7ezE4how+oky3wShDacSr+Rk=;
+        b=JUPTBP6A6HkCr7AqsRqd3+xJ9lK3AuBmkP4ObtaEMXfmrJxEHC60LVCLm3BXduDoGS
+         GyaLl5Mw9H1i3izp3gyrjpg4r4yuFOOGln1eyM3lffBLXXF5Ep4fhOIvczHYe0fBhDf2
+         qtCIEgUoB9yxFlsSllroAZCQ1ItD1ZFyCcnvzByIiz7IyQn/g2AjWqerOuKbPbnk/8IG
+         DRBVIhni4nHjrygZ76fsHfhhSV1vftKcbm9I9rFXQb9DnqUGat73YIKzNHQVQOLrzVS+
+         r+szz3FHMpvXNgkug2CSoWIajcN4ADWD6JQ8i5DLmuN8+50sXDtjMzR9xO4vkt2nyr9f
+         1RiQ==
+X-Gm-Message-State: ACgBeo0ZzSOY5jAaUbfmy3aYpD3pXBRpIf4DG+ATn3SrnzzZhxtoAX93
+        oGPT1LIBgff3i0DDt1rlhSNRlw==
+X-Google-Smtp-Source: AA6agR4W2ED17/n5sJ/4mk6scRZmpD1dZvTpHT3k2MkraGjSqDq6np/Nh+5vKxICYqkmm4nr3glzrg==
+X-Received: by 2002:a17:907:1deb:b0:730:81ea:1d09 with SMTP id og43-20020a1709071deb00b0073081ea1d09mr3464726ejc.183.1659345362041;
+        Mon, 01 Aug 2022 02:16:02 -0700 (PDT)
+Received: from cloudflare.com (79.184.200.53.ipv4.supernova.orange.pl. [79.184.200.53])
+        by smtp.gmail.com with ESMTPSA id ky1-20020a170907778100b00722e52d043dsm4984008ejc.114.2022.08.01.02.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 02:16:01 -0700 (PDT)
+References: <00000000000026328205e08cdbeb@google.com>
+ <20220730085654.2598-1-yin31149@gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com,
+        andrii@kernel.org, ast@kernel.org, borisp@nvidia.com,
+        bpf@vger.kernel.org, wenjia@linux.ibm.com, ubraun@linux.ibm.com,
+        daniel@iogearbox.net, guvenc@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, guwen@linux.alibaba.com,
+        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, linux-s390@vger.kernel.org,
+        yhs@fb.com, 18801353760@163.com, paskripkin@gmail.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v2] net/smc: fix refcount bug in sk_psock_get (2)
+Date:   Mon, 01 Aug 2022 11:09:23 +0200
+In-reply-to: <20220730085654.2598-1-yin31149@gmail.com>
+Message-ID: <87wnbsjpdb.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+Hi,
 
-Thank you for the patch! Yet something to improve:
+On Sat, Jul 30, 2022 at 04:56 PM +08, Hawkins Jiawei wrote:
+> Syzkaller reports refcount bug as follows:
+> ------------[ cut here ]------------
+> refcount_t: saturated; leaking memory.
+> WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
+> Modules linked in:
+> CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
+> ...
+> Call Trace:
+>  <TASK>
+>  __refcount_add_not_zero include/linux/refcount.h:163 [inline]
+>  __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
+>  refcount_inc_not_zero include/linux/refcount.h:245 [inline]
+>  sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
+>  tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
+>  tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
+>  tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
+>  tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
+>  tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
+>  sk_backlog_rcv include/net/sock.h:1061 [inline]
+>  __release_sock+0x134/0x3b0 net/core/sock.c:2849
+>  release_sock+0x54/0x1b0 net/core/sock.c:3404
+>  inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
+>  __sys_shutdown_sock net/socket.c:2331 [inline]
+>  __sys_shutdown_sock net/socket.c:2325 [inline]
+>  __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
+>  __do_sys_shutdown net/socket.c:2351 [inline]
+>  __se_sys_shutdown net/socket.c:2349 [inline]
+>  __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>  </TASK>
+>
+> During SMC fallback process in connect syscall, kernel will
+> replaces TCP with SMC. In order to forward wakeup
+> smc socket waitqueue after fallback, kernel will sets
+> clcsk->sk_user_data to origin smc socket in
+> smc_fback_replace_callbacks().
+>
+> Later, in shutdown syscall, kernel will calls
+> sk_psock_get(), which treats the clcsk->sk_user_data
+> as sk_psock type, triggering the refcnt warning.
+>
+> So, the root cause is that smc and psock, both will use
+> sk_user_data field. So they will mismatch this field
+> easily.
+>
+> This patch solves it by using another bit(defined as
+> SK_USER_DATA_NOTPSOCK) in PTRMASK, to mark whether
+> sk_user_data points to a sk_psock object or not.
+> This patch depends on a PTRMASK introduced in commit f1ff5ce2cd5e
+> ("net, sk_msg: Clear sk_user_data pointer on clone if tagged").
+>
+> Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+> Fixes: a60a2b1e0af1 ("net/smc: reduce active tcp_listen workers")
+> Reported-and-tested-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Acked-by: Wen Gu <guwen@linux.alibaba.com>
+> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> ---
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[cannot apply to linus/master v5.19-rc8 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Since using psock is not the common case, I'm wondering if it makes more
+sense to have an inverse flag - SK_USER_DATA_PSOCK. Flag would be set by
+the psock code on assignment to sk_user_data.
 
-url: 
-https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220721-210404
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: nios2-buildonly-randconfig-r006-20220721 
-(https://download.01.org/0day-ci/archive/20220731/202207312337.CwA6jvYb-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-         wget 
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
--O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # 
-https://github.com/intel-lab-lkp/linux/commit/140c3d95439b5852acd816850625036ac3a1019d
-         git remote add linux-review https://github.com/intel-lab-lkp/linux
-         git fetch --no-tags linux-review 
-Danilo-Krummrich/drm-rename-CMA-helpers-to-DMA-helpers/20220721-210404
-         git checkout 140c3d95439b5852acd816850625036ac3a1019d
-         # save the config file
-         mkdir build_dir && cp config build_dir/.config
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross 
-W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
+This way we would also avoid some confusion. With the change below, the
+SK_USER_DATA_NOTPSOCK is not *always* set when sk_user_data holds a
+non-psock pointer. Only when SMC sets it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+If we go with the current approach, the rest of sites, execpt for psock,
+that assign to sk_user_data should be updated to set
+SK_USER_DATA_NOTPSOCK as well, IMO.
 
-All errors (new ones prefixed by >>):
+That is why I'd do it the other way.
 
->> nios2-linux-ld: drivers/gpu/drm/mxsfb/lcdif_drv.o:(.rodata+0x218): undefined reference to `drm_gem_dma_prime_import_sg_table'
->> nios2-linux-ld: drivers/gpu/drm/mxsfb/lcdif_drv.o:(.rodata+0x220): undefined reference to `drm_gem_dma_dumb_create'
-    nios2-linux-ld: drivers/gpu/drm/mxsfb/lcdif_kms.o: in function 
-`lcdif_plane_primary_atomic_update':
->> lcdif_kms.c:(.text+0x3a8): undefined reference to `drm_fb_dma_get_gem_addr'
-    lcdif_kms.c:(.text+0x3a8): relocation truncated to fit: 
-R_NIOS2_CALL26 against `drm_fb_dma_get_gem_addr'
-    nios2-linux-ld: drivers/gpu/drm/mxsfb/lcdif_kms.o: in function 
-`lcdif_crtc_atomic_enable':
-    lcdif_kms.c:(.text+0x658): undefined reference to 
-`drm_fb_dma_get_gem_addr'
-    lcdif_kms.c:(.text+0x658): relocation truncated to fit: 
-R_NIOS2_CALL26 against `drm_fb_dma_get_gem_addr'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
+[...]

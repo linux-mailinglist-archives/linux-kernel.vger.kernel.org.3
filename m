@@ -2,59 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF16586756
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE11586775
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 12:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiHAKZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 06:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S230523AbiHAK2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 06:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiHAKZE (ORCPT
+        with ESMTP id S231124AbiHAK2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 06:25:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A6713DD4;
-        Mon,  1 Aug 2022 03:25:03 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E9DD86124F;
-        Mon,  1 Aug 2022 10:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659349501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Mon, 1 Aug 2022 06:28:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD4A19C1F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 03:27:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BFCE34D9AB;
+        Mon,  1 Aug 2022 10:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659349661; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=QJL7yh9qb++H0PmmxKnrcUkjMVoDhypcV5pn4a84vOw=;
-        b=q8V89UoHd1DLwoOygs/cYLVvlO6obomnxieeZ/KzTSHx8sXx3Uduqi+2mJ72pLanLgwvva
-        fmIorNesi3FrMZHMLWrUYoWlKzgT+D5t4FJkNq5aTpkFo++GkbnSNANxiAwgV38eNXF3Ts
-        l4qSw4cwOqXyOa25IFIg8Q4UHDFBiSE=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=rn5huHOH16quOeORG7eIzTIvt1vz6KF42r/yYC7bKbI=;
+        b=cGvwg2ypDeqJIGzKJIzx5f3BH2sXzvOOcTY5fUdAOGeSOsxhdlTMyoETXOK7tBPS+RBVCq
+        WVDUzrhxJC0bo2J5+Tmcj9ZVgmD+cKoLjlMdXZSrAHkcwqbws6In8/T5HE+Llf4FoQgOmc
+        3pLeJFlK379BsqRJ2TtRHUU0AnMINO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659349661;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rn5huHOH16quOeORG7eIzTIvt1vz6KF42r/yYC7bKbI=;
+        b=Jbxz2qxjD3y3bN52O6hPHe9ayidDdEYgO8B689z/CshRaMvk3HdlhGy7YwGG91u+cRWDqX
+        FISnD7vdXloxKFAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C84872C141;
-        Mon,  1 Aug 2022 10:25:01 +0000 (UTC)
-Date:   Mon, 1 Aug 2022 12:24:58 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v3] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <Yuep+uKnDc0L2ICi@alley>
-References: <20220721175147.214642-1-song@kernel.org>
- <20220726233302.zwloxsammnu7clu4@treble>
- <CAPhsuW7tmRt=yx1+i62HPRJJ4Gp8xB_3XvpVxUC=SyGv6iCBEQ@mail.gmail.com>
- <CAPhsuW4F8f9GLHF9C54oWyFiyJ0eT5HOwfhmoxSJ3HeRr8zCSw@mail.gmail.com>
- <CAPhsuW4VFjyoYta6fEGXg4S1dbg8ynkdKZzuwYSp3FMEGPP0aA@mail.gmail.com>
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 74B0513A72;
+        Mon,  1 Aug 2022 10:27:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id K528Gp2q52LGZQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 01 Aug 2022 10:27:41 +0000
+Message-ID: <7434f77d-b5ab-444c-d8e3-9fcb0cf50527@suse.de>
+Date:   Mon, 1 Aug 2022 12:27:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW4VFjyoYta6fEGXg4S1dbg8ynkdKZzuwYSp3FMEGPP0aA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
+ kmb_plane_atomic_update()
+Content-Language: en-US
+To:     "Chrisanthus, Anitha" <anitha.chrisanthus@intel.com>,
+        Zeng Jingxiang <zengjx95@gmail.com>,
+        "edmund.j.dea@intel.com" <edmund.j.dea@intel.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "maxime@cerno.tech" <maxime@cerno.tech>,
+        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>
+Cc:     Zeng Jingxiang <linuszeng@tencent.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+References: <20220729030711.2117849-1-zengjx95@gmail.com>
+ <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
+ <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
+ <BY5PR11MB41828228EF0D27174703431B8C999@BY5PR11MB4182.namprd11.prod.outlook.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <BY5PR11MB41828228EF0D27174703431B8C999@BY5PR11MB4182.namprd11.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Yzuce7vHg1gmHPmG0f383nr2"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,82 +85,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2022-07-30 20:20:22, Song Liu wrote:
-> On Sat, Jul 30, 2022 at 3:32 PM Song Liu <song@kernel.org> wrote:
-> >
-> > On Tue, Jul 26, 2022 at 8:54 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Tue, Jul 26, 2022 at 4:33 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> > > >
-> > > > On Thu, Jul 21, 2022 at 10:51:47AM -0700, Song Liu wrote:
-> > > > > From: Miroslav Benes <mbenes@suse.cz>
-> > > > >
-> > > > > Josh reported a bug:
-> > > > >
-> > > > >   When the object to be patched is a module, and that module is
-> > > > >   rmmod'ed and reloaded, it fails to load with:
-> > > > >
-> > > > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > > > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > > > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > > > >
-> > > > >   The livepatch module has a relocation which references a symbol
-> > > > >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > > > >   tries to replace the old relocation with a new one, it sees that
-> > > > >   the previous one is nonzero and it errors out.
-> > > > >
-> > > > >   On ppc64le, we have a similar issue:
-> > > > >
-> > > > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> > > > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > > > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > > > >
-> > > > 3) A selftest would be a good idea.
-> > >
-> >
-> > I found it is pretty tricky to run the selftests inside a qemu VM. How about
-> > we test it with modules in samples/livepatch? Specifically, we can add a
-> > script try to reload livepatch-shadow-mod.ko.
-> 
-> Actually, livepatch-shadow-mod.ko doesn't have the reload problem before
-> the fix. Is this expected?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Yzuce7vHg1gmHPmG0f383nr2
+Content-Type: multipart/mixed; boundary="------------62zp05A6aR4NpX1MupwYCTqe";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: "Chrisanthus, Anitha" <anitha.chrisanthus@intel.com>,
+ Zeng Jingxiang <zengjx95@gmail.com>,
+ "edmund.j.dea@intel.com" <edmund.j.dea@intel.com>,
+ "airlied@linux.ie" <airlied@linux.ie>, "daniel@ffwll.ch" <daniel@ffwll.ch>,
+ "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
+ "maxime@cerno.tech" <maxime@cerno.tech>,
+ "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>
+Cc: Zeng Jingxiang <linuszeng@tencent.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Message-ID: <7434f77d-b5ab-444c-d8e3-9fcb0cf50527@suse.de>
+Subject: Re: [PATCH] drm/kmb: fix dereference before NULL check in
+ kmb_plane_atomic_update()
+References: <20220729030711.2117849-1-zengjx95@gmail.com>
+ <a68022f4-28d0-7743-27fe-6df652082184@suse.de>
+ <fef74b28-80f1-9184-efa5-25f3343ace40@suse.de>
+ <BY5PR11MB41828228EF0D27174703431B8C999@BY5PR11MB4182.namprd11.prod.outlook.com>
+In-Reply-To: <BY5PR11MB41828228EF0D27174703431B8C999@BY5PR11MB4182.namprd11.prod.outlook.com>
 
-Good question. I am afraid that there is no easy way to prepare
-the selftest at the moment.
+--------------62zp05A6aR4NpX1MupwYCTqe
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-There are two situations when a symbol from the livepatched module is
-relocated:
+SGkNCg0KQW0gMjkuMDcuMjIgdW0gMTg6NDAgc2NocmllYiBDaHJpc2FudGh1cywgQW5pdGhh
+Og0KPiBBZ3JlZSB3aXRoIFRob21hcywgZHJtX2F0b21pY19jb21taXQoKSB3aWxsIG5vdCBj
+YWxsIGttYl9hdG9taWNfdXBkYXRlKCkgd2l0aCBhIE5VTEwgcGxhbmUuIFRoaXMgaXMgbm90
+IGFuIGFjdHVhbCBidWcuDQoNCkluZGVlZCwgaXQncyB0aGUgYXRvbWljX3VwZGF0ZSBmdW5j
+dGlvbi4gSSBkaWRuJ3Qgbm90aWNlIGF0IGZpcnN0Lg0KDQo+IA0KPiBUaGFua3MsDQo+IEFu
+aXRoYQ0KPiANCj4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+PiBGcm9tOiBUaG9t
+YXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4+IFNlbnQ6IEZyaWRheSwg
+SnVseSAyOSwgMjAyMiA3OjI2IEFNDQo+PiBUbzogWmVuZyBKaW5neGlhbmcgPHplbmdqeDk1
+QGdtYWlsLmNvbT47IENocmlzYW50aHVzLCBBbml0aGENCj4+IDxhbml0aGEuY2hyaXNhbnRo
+dXNAaW50ZWwuY29tPjsgZWRtdW5kLmouZGVhQGludGVsLmNvbTsgYWlybGllZEBsaW51eC5p
+ZTsNCj4+IGRhbmllbEBmZndsbC5jaDsgbGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQu
+Y29tOyBtYXhpbWVAY2Vybm8udGVjaDsNCj4+IHZpbGxlLnN5cmphbGFAbGludXguaW50ZWwu
+Y29tDQo+PiBDYzogWmVuZyBKaW5neGlhbmcgPGxpbnVzemVuZ0B0ZW5jZW50LmNvbT47IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+PiBkcmktZGV2ZWxAbGlzdHMuZnJlZWRl
+c2t0b3Aub3JnDQo+PiBTdWJqZWN0OiBSZTogW1BBVENIXSBkcm0va21iOiBmaXggZGVyZWZl
+cmVuY2UgYmVmb3JlIE5VTEwgY2hlY2sgaW4NCj4+IGttYl9wbGFuZV9hdG9taWNfdXBkYXRl
+KCkNCj4+DQo+PiBIaQ0KPj4NCj4+IEFtIDI5LjA3LjIyIHVtIDE2OjIzIHNjaHJpZWIgVGhv
+bWFzIFppbW1lcm1hbm46DQo+Pj4gSGkNCj4+Pg0KPj4+IEFtIDI5LjA3LjIyIHVtIDA1OjA3
+IHNjaHJpZWIgWmVuZyBKaW5neGlhbmc6DQo+Pj4+IEZyb206IFplbmcgSmluZ3hpYW5nIDxs
+aW51c3plbmdAdGVuY2VudC5jb20+DQo+Pj4+DQo+Pj4+IFRoZSAicGxhbmUiIHBvaW50ZXIg
+d2FzIGFjY2VzcyBiZWZvcmUgY2hlY2tpbmcgaWYgaXQgd2FzIE5VTEwuDQo+Pj4+DQo+Pj4+
+IFRoZSBkcm1fYXRvbWljX2dldF9vbGRfcGxhbmVfc3RhdGUoKSBmdW5jdGlvbiB3aWxsIGRl
+cmVmZXJlbmNlDQo+Pj4+IHRoZSBwb2ludGVyICJwbGFuZSIuDQo+Pj4+IDM0NcKgwqDCoCBz
+dHJ1Y3QgZHJtX3BsYW5lX3N0YXRlICpvbGRfcGxhbmVfc3RhdGUgPQ0KPj4+PiAgwqDCoMKg
+wqDCoMKgwqAgZHJtX2F0b21pY19nZXRfb2xkX3BsYW5lX3N0YXRlKHN0YXRlLCBwbGFuZSk7
+DQo+Pj4+IDM0NsKgwqDCoCBzdHJ1Y3QgZHJtX3BsYW5lX3N0YXRlICpuZXdfcGxhbmVfc3Rh
+dGUgPQ0KPj4+PiAgwqDCoMKgwqDCoMKgwqAgZHJtX2F0b21pY19nZXRfbmV3X3BsYW5lX3N0
+YXRlKHN0YXRlLCBwbGFuZSk7DQo+Pj4+DQo+Pj4+IEEgTlVMTCBjaGVjayBmb3IgInBsYW5l
+IiBpbmRpY2F0ZXMgdGhhdCBpdCBtYXkgYmUgTlVMTA0KPj4+PiAzNjPCoMKgwqAgaWYgKCFw
+bGFuZSB8fCAhbmV3X3BsYW5lX3N0YXRlIHx8ICFvbGRfcGxhbmVfc3RhdGUpDQo+Pj4NCj4+
+PiBJcyB0aGlzIGFuIGFjdHVhbCBidWcgdGhhdCBoYXBwZW5zPw0KPj4+DQo+Pj4gQWxsIHBs
+YW5lcyBzaG91bGQgYWx3YXlzIGhhdmUgYSBzdGF0ZS4gVGhlcmVmb3JlIHRoZSB0ZXN0cyBm
+b3INCj4+PiAhbmV3X3BsYW5lX3N0YXRlIGFuZCAhb2xkX3BsYW5lX3N0YXRlIGNhbiBiZSBy
+ZW1vdmVkLCBJJ2Qgc2F5Lg0KPj4NCj4+IEp1c3QgdG8gY2xhcmlmeTogbW92aW5nIHRoZSB0
+ZXN0IGZvciAhcGxhbmUgYmVmb3JlIHVzaW5nIG9uZSBvZiB0aGUNCj4+IGdldF9wbGFuZV9z
+dGF0ZSBmdW5jdGlvbnMgaXMgYSBjb3JyZWN0IGJ1Z2ZpeC4NCj4+DQo+PiBCZXN0IHJlZ2Fy
+ZHMNCj4+IFRob21hcw0KPj4NCj4+Pg0KPj4+IEJlc3QgcmVnYXJkcw0KPj4+IFRob21hcw0K
+Pj4+DQo+Pj4+DQo+Pj4+IEZpeGVzOiA5Nzc2OTdlMjBiM2QgKCJkcm0vYXRvbWljOiBQYXNz
+IHRoZSBmdWxsIHN0YXRlIHRvIHBsYW5lcyBhdG9taWMNCj4+Pj4gZGlzYWJsZSBhbmQgdXBk
+YXRlIikNCj4+Pj4gRml4ZXM6IDM3NDE4YmYxNGMxMyAoImRybTogVXNlIHN0YXRlIGhlbHBl
+ciBpbnN0ZWFkIG9mIHRoZSBwbGFuZSBzdGF0ZQ0KPj4+PiBwb2ludGVyIikNCj4+Pj4gU2ln
+bmVkLW9mZi1ieTogWmVuZyBKaW5neGlhbmcgPGxpbnVzemVuZ0B0ZW5jZW50LmNvbT4NCj4+
+Pj4gLS0tDQo+Pj4+ICDCoCBkcml2ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jIHwgMTMg
+KysrKysrKystLS0tLQ0KPj4+PiAgwqAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygr
+KSwgNSBkZWxldGlvbnMoLSkNCj4+Pj4NCj4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1
+L2RybS9rbWIva21iX3BsYW5lLmMNCj4+Pj4gYi9kcml2ZXJzL2dwdS9kcm0va21iL2ttYl9w
+bGFuZS5jDQo+Pj4+IGluZGV4IDI3MzViOGViMzUzNy4uZDJiYzk5OGI2NWNlIDEwMDY0NA0K
+Pj4+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0va21iL2ttYl9wbGFuZS5jDQo+Pj4+ICsrKyBi
+L2RyaXZlcnMvZ3B1L2RybS9rbWIva21iX3BsYW5lLmMNCj4+Pj4gQEAgLTM0MiwxMCArMzQy
+LDcgQEAgc3RhdGljIHZvaWQga21iX3BsYW5lX3NldF9hbHBoYShzdHJ1Y3QNCj4+Pj4ga21i
+X2RybV9wcml2YXRlICprbWIsDQo+Pj4+ICDCoCBzdGF0aWMgdm9pZCBrbWJfcGxhbmVfYXRv
+bWljX3VwZGF0ZShzdHJ1Y3QgZHJtX3BsYW5lICpwbGFuZSwNCj4+Pj4gIMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZHJtX2F0b21pY19zdGF0
+ZSAqc3RhdGUpDQo+Pj4+ICDCoCB7DQo+Pj4+IC3CoMKgwqAgc3RydWN0IGRybV9wbGFuZV9z
+dGF0ZSAqb2xkX3BsYW5lX3N0YXRlID0NCj4+Pj4gZHJtX2F0b21pY19nZXRfb2xkX3BsYW5l
+X3N0YXRlKHN0YXRlLA0KPj4+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGxhbmUp
+Ow0KPj4+PiAtwqDCoMKgIHN0cnVjdCBkcm1fcGxhbmVfc3RhdGUgKm5ld19wbGFuZV9zdGF0
+ZSA9DQo+Pj4+IGRybV9hdG9taWNfZ2V0X25ld19wbGFuZV9zdGF0ZShzdGF0ZSwNCj4+Pj4g
+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBsYW5lKTsNCj4+Pj4gK8KgwqDCoCBzdHJ1
+Y3QgZHJtX3BsYW5lX3N0YXRlICpvbGRfcGxhbmVfc3RhdGUsICpuZXdfcGxhbmVfc3RhdGU7
+DQo+Pj4+ICDCoMKgwqDCoMKgIHN0cnVjdCBkcm1fZnJhbWVidWZmZXIgKmZiOw0KPj4+PiAg
+wqDCoMKgwqDCoCBzdHJ1Y3Qga21iX2RybV9wcml2YXRlICprbWI7DQo+Pj4+ICDCoMKgwqDC
+oMKgIHVuc2lnbmVkIGludCB3aWR0aDsNCj4+Pj4gQEAgLTM2MCw3ICszNTcsMTMgQEAgc3Rh
+dGljIHZvaWQga21iX3BsYW5lX2F0b21pY191cGRhdGUoc3RydWN0DQo+Pj4+IGRybV9wbGFu
+ZSAqcGxhbmUsDQo+Pj4+ICDCoMKgwqDCoMKgIHN0YXRpYyBkbWFfYWRkcl90IGFkZHJbTUFY
+X1NVQl9QTEFORVNdOw0KPj4+PiAgwqDCoMKgwqDCoCBzdHJ1Y3QgZGlzcF9jZmcgKmluaXRf
+ZGlzcF9jZmc7DQo+Pj4+IC3CoMKgwqAgaWYgKCFwbGFuZSB8fCAhbmV3X3BsYW5lX3N0YXRl
+IHx8ICFvbGRfcGxhbmVfc3RhdGUpDQo+Pj4+ICvCoMKgwqAgaWYgKCFwbGFuZSkNCj4+Pj4g
+K8KgwqDCoMKgwqDCoMKgIHJldHVybjsNCj4+Pj4gKw0KPj4+PiArwqDCoMKgIG9sZF9wbGFu
+ZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X29sZF9wbGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUp
+Ow0KPj4+PiArwqDCoMKgIG5ld19wbGFuZV9zdGF0ZSA9IGRybV9hdG9taWNfZ2V0X25ld19w
+bGFuZV9zdGF0ZShzdGF0ZSwgcGxhbmUpOw0KPj4+PiArDQo+Pj4+ICvCoMKgwqAgaWYgKCFu
+ZXdfcGxhbmVfc3RhdGUgfHwgIW9sZF9wbGFuZV9zdGF0ZSkNCg0KVG8gYWRkIHRvIG15IHBy
+ZXZpb3VzIHJlcGx5LCBub25lIG9mIHRoZXNlIHZhcmlhYmxlcyBjYW4gbGVnYWxseSBiZSBO
+VUxMIA0KaGVyZS4gSWYgcGxhbmUgaWYgTlVMTCwgRFJNIGhlbHBlcnMgd291bGQgcnVuIGF0
+b21pY19kaXNhYmxlIGluc3RlYWQuDQoNCklmIHlvdSB3YW50IHRvIGZpeCBhbnl0aGluZywg
+anVzdCByZW1vdmUgdGhlIHRlc3RzIGVudGlyZWx5IGFuZCBzYXZlIGEgDQpmZXcgQ1BVIGN5
+Y2xlcy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPj4+PiAgwqDCoMKgwqDCoMKgwqDC
+oMKgIHJldHVybjsNCj4+Pj4gIMKgwqDCoMKgwqAgZmIgPSBuZXdfcGxhbmVfc3RhdGUtPmZi
+Ow0KPj4+DQo+Pg0KPj4gLS0NCj4+IFRob21hcyBaaW1tZXJtYW5uDQo+PiBHcmFwaGljcyBE
+cml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdt
+YkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KPj4gKEhS
+QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
+dg0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
+DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
+IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
+R2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+--------------62zp05A6aR4NpX1MupwYCTqe--
 
-1. The livepatch might access a symbol exported by the module via
-   EXPORT_SYMBOL(). In this case, it is "normal" external symbol
-   and it gets relocated by the module loader.
+--------------Yzuce7vHg1gmHPmG0f383nr2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-   But EXPORT_SYMBOL() will create an explicit dependency between the
-   livepatch and livepatched module. As a result, the livepatch
-   module could be loaded only when the livepatched module is loaded.
-   And the livepatched module could not be removed when the livepatch
-   module is loaded.
+-----BEGIN PGP SIGNATURE-----
 
-   In this case, the problem will not exist. Well, the developers
-   of the livepatch module will probably want to avoid this
-   dependency.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLnqpwFAwAAAAAACgkQlh/E3EQov+Bi
+SA/+O9RxOAMRLrMf9K4urzfov/wT3mYjbLe1CfFj3l1CD+JYzAaON6JK3suaylx1XtRy6Td1IM1k
+WhbEUk1LLoe1yvCBu6Zd8PsaY/S4FtQnkzYDcQKTUOSMRT+F+LQFSj0o00fckrZPiuFP+ITD0R3p
+yMWBVJxrJvOQPK1sgRagS0SuQEqn++wIT/Pwh0B+qbTuE5iFKlnjFF/bpScSDeRmi31sNH9fScuy
+qQnpbbt4wz5GYmIMlRUampngPHX72q+NEdmADh0aD+PU4RUKjaH68e6+npclXNrndO164T9Tg92n
+hZf245fSz/sHSgNfrV30DLnPT/ZRS+zQdgvTVyHpGjsGfRPzMnihc/H8IUhFCgUqtoGRVwktZpOi
+5HaJ30gUHgyWArLJ60YQhVHT7cWg+VQZSCeullDhDUDVI2MF9p83bYE8dyNrYfUx5ftVfsQNpH75
++kdum23490DtS9UWT+TWOS8NhJpD3kzSy80+JFOwaR9YfNXrl1TMt2idSV/K1xYsc6WwWSF9kc2v
+x7e02856Kmwp6fAoOmKSdxPlZqV9KWaIOk9G5Yb+Ol/pwBycbYvKx+BHb0+hmo3U0eQk4eBcvZYS
+ALuL5Z4edfwWNchPoEMvqdkWLRUfuP2/Ad3fMJfDdG8Mh6ZMsdVlTbjVH6JO0qCDILvYhmHrgTDh
+GN8=
+=YGC8
+-----END PGP SIGNATURE-----
 
-
-2. The livepatch module might access a non-exported symbol from another
-   module using the special elf section for klp relocation, see
-   section, see Documentation/livepatch/module-elf-format.rst
-
-   These symbols are relocated in klp_apply_section_relocs().
-
-   The problem is that upstream does not have a support to
-   create this elf section. There is a patchset for this, see
-   https://lore.kernel.org/all/20220216163940.228309-1-joe.lawrence@redhat.com/
-   It requires some more review.
-
-
-Resume: I think that we could not prepare the selftest without
-	upstreaming klp-convert tool.
-
-Best Regards,
-Petr
+--------------Yzuce7vHg1gmHPmG0f383nr2--

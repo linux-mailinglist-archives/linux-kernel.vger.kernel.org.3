@@ -2,132 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF91586392
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158D7586393
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239434AbiHAEf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 00:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S239480AbiHAEkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 00:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238580AbiHAEfX (ORCPT
+        with ESMTP id S232156AbiHAEkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 00:35:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B736372;
-        Sun, 31 Jul 2022 21:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659328514;
-        bh=S/P/oJi+HDi2Ki9y66Mg4i/0i6XEUUjcEs7pNllRhCk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=JPsC9+8hY3tM8hmwXukacDoFoEP7gzxrYEtY2CQen4d3EdAXOVX8BrTMHziELDiO9
-         ZoA16TAbE1jo2ZkMX9pIIsEuRymXi0rMf85Q1HLVefs3JKWWQVZmY7oHdsBmfAQ2VX
-         SrjhZe7TaqmIEQaR7AVaM5xzVej1phCEPkst0X9E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.150.19]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwQXH-1nQH9r1T1R-00sMkY; Mon, 01
- Aug 2022 06:35:14 +0200
-Date:   Mon, 1 Aug 2022 06:34:26 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Zheyu Ma <zheyuma97@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] video: fbdev: arkfb: Found a divide-by-zero bug which may
- cause DoS
-Message-ID: <YudX0t/P94a0LKtr@ls3530>
-References: <CAMhUBjkps_2EAkbCpGuLiWVFObLkLuj=3UqbxcuENUNXMkbS9Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhUBjkps_2EAkbCpGuLiWVFObLkLuj=3UqbxcuENUNXMkbS9Q@mail.gmail.com>
-X-Provags-ID: V03:K1:yUB3w75aSGm2mOn7ZhOy/2gxfdGzu5mErxKQlgmB5aiqpnpRB5p
- 4l5MRF3xIsLdz+h/weJLLMHMHvOT1cmfskgVY6iW5hXzZvF7htka+V3T5/BdenwLtQmwO2+
- mlFYIiH2ap3WGw7UYK6SlhJoGNDqmmAwbCoxfI7KwT+L1TYJXjpQE+dRwietqyk0XZL1VQF
- JLNdi5Tft5rtvM3w9wZWg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IJ/efF9VVnE=:EDGZxZFr90uVcWBRz2orbz
- 54IyND+N+1epoY8rd9cGhwwMPmHqHM568b9m2l7YqiCO88gE2ItpR12I8kLQ0AErDm0ZHJJlv
- 8LyjHlO9/lbvwOYW0+4xMPKsHXO6XzI88Ui5zi/XLQlavcQ7fHozhot3zWmWMOeMjWgWzdvcN
- 43uNGpi1eg9N2ciLkMkt06j6lO1YDjQG6J3q1uq/OScQRuhcukdXIu8Hw/66UxWaFpCfVbdgC
- 3MSpoSkWEWDbo2h4pgyntlbYbab857HJkXuHhLR1Hya9sHrDK/yRiap+C6yOmxsX50r4N7kpw
- 5baGC1LtXLEaB1uwo2zEIgIyAx6PsmbdsB4/8EeL2q0mEPVzt9agkNFnTtOO//WI7MGg6Aqql
- veEXR5zpSrbhJBli5WnECGzaEz+Xc4uqu+UXCTNEqaAuXobL4v+IqwooOSASm5qpaqNHEYnTw
- nDvfHT0oc9btsiz4nsEoOkuafKJVez2OQsd3AP0hC3zsjRC3QlK6C2/pg1cAY+f3YOmL/xnq3
- lT+u6lQfRtPgOjYHogDrVO5Wkdv0NOUgnPGAhLkCS7rH6qWRiPyHu1brZS8tnyHyTw/QJkWzG
- 198EugQZBuCEYE6TaKUwFVASPQtk1bi9DF2+p+sO1DgBn3uu7cTggfRfBzUS3jLY4Opb8Whrv
- aj4tnlR9RIPESuobMi3R8E7OUdSRVZLv8dZgxNy7wi+GL+k63vyZq5oVb4EK/Np37yugS7YaL
- pKK6JxwoG00KlnNwju2FFbRUmN7H3CkjwOj+8QYA4/On5RZNr4Kc7kKBJoOHcGieivmHWQmbj
- PfWcDDhBrQx2Yp92vrEAQngj4lMQ2boFkGrZho9tw+nCj+j3AjBP/YfOQ29KYD7JXyZATMt4C
- ATwWPxEX59cZOsMOFsYv5zbUrktwYhXpMN6aOz/u8jz87VYoBjryrNj7lYi0TJ7D8soVE43JO
- 5g7jK0JYmLmcnRqcuXiQzIA6tuajbRYdpJGlXTS1muleKJSa2E0hyq/hvz7e8NAYIkWHOiHWT
- hRFEb/kZvYRO/l8n8kT5ICa/q4GPzjzwrYIFHkzmffEEst/9GvtmyLdIBziyA51XGKK+DJHvM
- y5rN/1GX3Z7rkLa28H3ADkzzwKNmdOZLj8/BYW6v8NxQ1nhcsw8z2TdpQ==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 00:40:08 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CBF13E12
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:40:06 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220801044003epoutp0437aafe20b2cd8d756e04266870db1037~HHsFaJEsT1022510225epoutp04l
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:40:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220801044003epoutp0437aafe20b2cd8d756e04266870db1037~HHsFaJEsT1022510225epoutp04l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659328803;
+        bh=hzbhYOqkA0ybVjCJXM7h/bXExcppfaT3rHZaniOrLxw=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=aNXycnH/j+wLhJf8VcZHc0w8lW51psbMR+xmQum32mTx2jyqjMKQqRhnuORMsZfGc
+         VqUrl3P8FY31eV+npfYxvguVcsMcTmfVyFe68LQKPdc6MIybAza0+KRsMeY5iyaplE
+         DT9x5l4gLQOoRU+V5nVwQGBiEGI0S78521NAX/48=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220801044002epcas2p25ff9d7be2d3e639947b880e93769a660~HHsEydK4h1270312703epcas2p2f;
+        Mon,  1 Aug 2022 04:40:02 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Lx55G3gZWz4x9QZ; Mon,  1 Aug
+        2022 04:40:02 +0000 (GMT)
+X-AuditID: b6c32a45-45bff700000025c2-ce-62e7592258dc
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3E.C5.09666.22957E26; Mon,  1 Aug 2022 13:40:02 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v1] f2fs: remove device type check for direct IO
+Reply-To: eunhee83.rho@samsung.com
+Sender: Eunhee Rho <eunhee83.rho@samsung.com>
+From:   Eunhee Rho <eunhee83.rho@samsung.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220801040607epcms2p82da0594039ba5f1ed77c451e2d13c965@epcms2p8>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220801044002epcms2p5a832b87ab1e6c8f0391d8d26f33c042c@epcms2p5>
+Date:   Mon, 01 Aug 2022 13:40:02 +0900
+X-CMS-MailID: 20220801044002epcms2p5a832b87ab1e6c8f0391d8d26f33c042c
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmha5S5PMkgzmzJC1OTz3LZPHykKbF
+        k/WzmC0uLXK3uLxrDpsDq8emVZ1sHrsXfGby6NuyitHj8ya5AJaobJuM1MSU1CKF1Lzk/JTM
+        vHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoK1KCmWJOaVAoYDE4mIlfTubovzS
+        klSFjPziElul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMI68TCxawV/ya/4W5gfED
+        axcjJ4eEgInE1jPvWLoYuTiEBHYwSny+fYi9i5GDg1dAUOLvDmGQGmEBB4kTUzczgdhCAkoS
+        fw/eZ4KI60pM2TKJEcRmE9CWuHK8nRVkjojAQ0aJD0e2MUEs4JWY0f6UBcKWlti+fCtYA6eA
+        n8SyrodQNRoSP5b1MkPYohI3V79lh7HfH5vPCGGLSLTeOwtVIyjx4OduqLiExN2NLWwQdr5E
+        z5OjUDMrJHauuApVoy9xrWMj2A28Ar4Sn45OAJvPIqAqsWfNHqhdLhKb5rwHm8MsIC+x/e0c
+        ZlA4MAtoSqzfpQ9iSggoSxy5xQLzVcPG3+zobGYBPomOw3/h4jvmPYG6Rk1i8ccF0CCXkbix
+        4T7TBEalWYiAnoVk7yyEvQsYmVcxiqUWFOempxYbFRjCozY5P3cTIzj5abnuYJz89oPeIUYm
+        DsZDjBIczEoivHdcnicJ8aYkVlalFuXHF5XmpBYfYjQF+ngis5Rocj4w/eaVxBuaWBqYmJkZ
+        mhuZGpgrifN6pWxIFBJITyxJzU5NLUgtgulj4uCUamASk5vSddz9fiif9pYWgadGzjv/Bqs9
+        U7/ntKfqy5G9zevvPHh/9eHVB9MLv/g+Zk9/KnJt8Uoz9i/nf4Rv9ks40N0dfKTsXW+gmQ93
+        yps5gdEd9bzpC9boLqsQPWAwp4L5/IRO79uJHnG5kzPueFwtnhEU5bvsQ1/wL9viFbnnJZgy
+        fJ4kMTsyt+/hFDmhsaxQdOOyea4Ls2u/3KoWm6J2/JHJ6lMX1GSq1/aw+jdsbXGUnvOD+6jD
+        kqBSc58Pmgty7e4ox62tKnS1Wft5DY81/9cq/2t1X3Kb/RhfTI9MmLshNT5O/NORbxZNJyvC
+        M2ZV3ua+IVdaz/g5863W0p2nbb7zMaXLmPmzNjrHGCmxFGckGmoxFxUnAgDxZxfnBwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220729002517epcms2p35eed262c3349287436c1848ab350c2d4
+References: <20220801040607epcms2p82da0594039ba5f1ed77c451e2d13c965@epcms2p8>
+        <YuXZSTw4reBDtLgk@google.com>
+        <20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p3>
+        <CGME20220729002517epcms2p35eed262c3349287436c1848ab350c2d4@epcms2p5>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Zheyu Ma <zheyuma97@gmail.com>:
-> I found a bug in the arkfb driver in the latest kernel, which may cause =
-DoS.
->
-> The reason for this bug is that the user controls some input to ioctl,
-> making 'mode' 0x7 on line 704, which causes hdiv =3D 1, hmul =3D 2, and =
-if
-> the pixclock is controlled to be 1, it will cause a division error in
-> the function ark_set_pixclock().
+To ensure serialized IOs, f2fs allows only LFS mode for zoned
+device. Remove redundant check for direct IO.
 
-You are right.
-I see in:
-  drivers/video/fbdev/arkfb.c:784: ark_set_pixclock(info, (hdiv * info->va=
-r.pixclock) / hmul);
-with hdiv=3D1, pixclock=3D1 and hmul=3D2 you end up with (1*1)/2 =3D (int)=
- 0.
-and then in
-  drivers/video/fbdev/arkfb.c:504: rv =3D dac_set_freq(par->dac, 0, 100000=
-0000 / pixclock);
-you'll get a division-by-zero.
+Signed-off-by: Eunhee Rho <eunhee83.rho@samsung.com>
+---
+ fs/f2fs/f2fs.h | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-> The easiest patch is to check the value of the argument 'pixclock' in
-> the ark_set_pixclock function, but this is perhaps too late, should we
-> do this check earlier? I'm not sure, so I'll report this bug to you.
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index ecd870e5d6da..ca9354746eec 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4496,12 +4496,7 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
+ 	/* disallow direct IO if any of devices has unaligned blksize */
+ 	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
+ 		return true;
+-	/*
+-	 * for blkzoned device, fallback direct IO to buffered IO, so
+-	 * all IOs can be serialized by log-structured write.
+-	 */
+-	if (f2fs_sb_has_blkzoned(sbi))
+-		return true;
++
+ 	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
+ 		if (block_unaligned_IO(inode, iocb, iter))
+ 			return true;
+-- 
+2.25.1
 
-Yes, I think it should be done earlier.
-
-Geert always mentioned that an invalid pixclock from userspace should be
-rounded up to the next valid pixclock.
-But since I don't have that hardware, I'm not sure how this can be done
-best for this driver.
-
-Do you have the hardware to test?
-If so, could you check the patch below?
-It should at least prevent the division-by-zero.
-If it works, I'm happy if you could send a final patch...
-
-Helge
-
-diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
-index eb3e47c58c5f..ed76ddc7df3d 100644
-=2D-- a/drivers/video/fbdev/arkfb.c
-+++ b/drivers/video/fbdev/arkfb.c
-@@ -781,7 +781,12 @@ static int arkfb_set_par(struct fb_info *info)
- 		return -EINVAL;
- 	}
-
--	ark_set_pixclock(info, (hdiv * info->var.pixclock) / hmul);
-+	value =3D (hdiv * info->var.pixclock) / hmul;
-+	if (!value) {
-+		fb_dbg(info, "invalid pixclock\n");
-+		value =3D 1;
-+	}
-+	ark_set_pixclock(info, value);
- 	svga_set_timings(par->state.vgabase, &ark_timing_regs, &(info->var), hmu=
-l, hdiv,
- 			 (info->var.vmode & FB_VMODE_DOUBLE)     ? 2 : 1,
- 			 (info->var.vmode & FB_VMODE_INTERLACED) ? 2 : 1,

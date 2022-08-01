@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEDE586854
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B14758685B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 13:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiHALma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 07:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S231496AbiHALni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 07:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiHALmL (ORCPT
+        with ESMTP id S231540AbiHALnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 07:42:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39483342E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659354130; x=1690890130;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cfFwAZTqn5tM4q6iksY6jHPLwcpemAGxTIyWJMX2QDI=;
-  b=LwYAThXXOo0UDeNsSzZlXhcpxcnCRfl3GA4eAHRGJ/tqExrYDnrmUoS1
-   grSgCk0A0EhgtkSdouhKa2/HumaFwZXIDUV2b7BRrGgBXboOqnY38/S2h
-   MbSp0JefjTLGB6RXbQSe2AG6yzi8U+IduDg2ZvDCEzGlIgOAESScFOzyv
-   0EWr02CYLnf7x86bhwCV59Q2t0wDqH39ibs8g1VGmqVjpYYmrPciY8u7U
-   3uTSit1Zw5Q1Vai10bCqWnOxnRaUGxrqCutDgQYTdRRfLI+h9hzzu/DMR
-   BbTPWVsc7q6LMeO0iHypIUVJwiJ3pNKD6pB6i7eI+Ms+Et4gZLsXLwduq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10425"; a="290334895"
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="290334895"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 04:42:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,206,1654585200"; 
-   d="scan'208";a="602007953"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 01 Aug 2022 04:42:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 48E24450; Mon,  1 Aug 2022 14:42:14 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee@kernel.org>, Andy Shevchenko <andy@kernel.org>
-Subject: [PATCH v3 10/10] mfd: intel_soc_pmic_crc: Update the copyright year
-Date:   Mon,  1 Aug 2022 14:42:11 +0300
-Message-Id: <20220801114211.36267-10-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
-References: <20220801114211.36267-1-andriy.shevchenko@linux.intel.com>
+        Mon, 1 Aug 2022 07:43:16 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33A533418
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 04:43:04 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s206so9453688pgs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 04:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jCZfqgpMIYNePan17xLuQgg/2P+1/yoh0ZDJdZ/18tI=;
+        b=IDlZWskTF70cLwVWU511IykP7AjcAZQRAs8VbYY0NylYCYM0GJ2goPqkXxs1+3oyAL
+         xruycQ6vh21/kXgFQ6YyXhYqPqZ1o1sM/twBunN/05CtkUSL5NTNSUCHOQL3+WBfWj1S
+         4AcaDOZME9ihzikOxhHpu0dIqXM/TVkSLeCIYgjNTgNpA/o/fx8RZj6i7fG4XxG7J857
+         a+TOwHrJ0DMEUMKTcXDe6HvsFadmvS+FKR7TchULQyxH8Pc9IWAUDAD5cFxGV9PfKnH7
+         6kWiotPrDaGVwgmgJ1jE5AIkwo8+ZF8NPfTbwRjIc/oXl6AWhp/dOZfbjp2DwFyzAKT7
+         8P9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jCZfqgpMIYNePan17xLuQgg/2P+1/yoh0ZDJdZ/18tI=;
+        b=CCkVyoIkQ54h8UOPkEDa0T8EX839DAXVE0hBESbLJJeiczCzmEPvQZva7/0W8kWUCa
+         gAJi0qFl8+27DsO0PGtjfon7upf1JLszjmIAYSz1a114bkyTSCp/ePhGZ2jrm6HQTy7W
+         Tpg/fpEog7iuL/tHGjQfjPRXhYEC2dkxvIob9p7FmQ2uQ4+4HyLaK4LRhdeiRx9ig6HQ
+         g93AUD8JkSLl+LQ6fC/MeFR/9VhbiCuLJtY6kpI4Xqi5ZNT0BwYKFCLZipxEbcafpLiA
+         usOGS5LaMYIbPlFX5YjtFg2Mf7pskDhW8J9yVYHSZTpXdfCodg9eYyAwzhg1pVxv77F1
+         /33g==
+X-Gm-Message-State: AJIora/Q5jUngiB4hrVZRQnw8Xq0mZZkzDxgfC/nCwLDljagu7AO5DMV
+        MM+qbvInATe/xAqInGh5JxfbuQ==
+X-Google-Smtp-Source: AGRyM1sy7zJbZBiuLqJ7c7UTW7/Bu4BYqPzTf/WcI22nbTu9nQpq2LYP0aw6jf2JYIEIq3ZhrUjwiA==
+X-Received: by 2002:a05:6a00:17aa:b0:52a:e94b:67e5 with SMTP id s42-20020a056a0017aa00b0052ae94b67e5mr16104010pfg.76.1659354184093;
+        Mon, 01 Aug 2022 04:43:04 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170902e55000b0016d5cf36ff8sm9496422plf.274.2022.08.01.04.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 04:43:03 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 17:13:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+ dev_pm_opp_set_config+0x344/0x620
+Message-ID: <20220801114301.k6ya3gfyy3pcrzwx@vireshk-i7>
+References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
+ <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+ <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+ <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
+ <d074daf4-c8e1-927d-9edd-2575f2335aa1@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d074daf4-c8e1-927d-9edd-2575f2335aa1@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the copyright year to be 2012-2014, 2022.
+On 01-08-22, 14:36, Stanimir Varbanov wrote:
+> Viresh,
+> 
+> On 8/1/22 05:36, Viresh Kumar wrote:
+> > On 25-07-22, 14:55, Stanimir Varbanov wrote:
+> >> Hi Viresh,
+> >>
+> >> I can take a look and provide a patch to fix that.
+> > 
+> > Any update on this ? I am going to send pull request for 5.20 very soon and it
+> > would have been much better if this was fixed before I send that.
+> > 
+> 
+> I'm trying on next-20220728, but applying [1] gives below errors:
+> 
+> /linux-next/drivers/media/platform/qcom/venus/pm_helpers.c: In function
+> ‘core_get_v1’:
+> /linux-next/drivers/media/platform/qcom/venus/pm_helpers.c:299:4: error:
+> ‘struct dev_pm_opp_config’ has no member named ‘clk_count’
+>   299 |   .clk_count = 1,
+>       |    ^~~~~~~~~
+> 
+> 
+> Do you have v3 for Venus driver ?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
----
+You don't need to apply anything over linux-next, it has everything you need.
+The patch you mention is dropped and we carry separate calls to configure OPP
+resources for now.
 
-v3: no changes
-v2: added tags and rebased on top of new patch 1
-
- drivers/mfd/intel_soc_pmic_crc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mfd/intel_soc_pmic_crc.c b/drivers/mfd/intel_soc_pmic_crc.c
-index bbb30060d2fb..40f14a0c0790 100644
---- a/drivers/mfd/intel_soc_pmic_crc.c
-+++ b/drivers/mfd/intel_soc_pmic_crc.c
-@@ -2,7 +2,7 @@
- /*
-  * Device access for Crystal Cove PMIC
-  *
-- * Copyright (C) 2012-2014 Intel Corporation. All rights reserved.
-+ * Copyright (C) 2012-2014, 2022 Intel Corporation. All rights reserved.
-  *
-  * Author: Yang, Bin <bin.yang@intel.com>
-  * Author: Zhu, Lejun <lejun.zhu@linux.intel.com>
 -- 
-2.35.1
-
+viresh

@@ -2,463 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D541B5863AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F0B5863AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239584AbiHAEwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 00:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S239634AbiHAE4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 00:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238845AbiHAEwd (ORCPT
+        with ESMTP id S238845AbiHAE4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 00:52:33 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB20B863
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:52:32 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id d187so10081945vsd.10
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:sender:from:date:message-id
-         :subject:to:cc;
-        bh=QhObdM4whM8wgagIQH3Pe5Zab0WkGbpVjTDUkWvEWI4=;
-        b=BwrRHWTWw7eBmHj/QwYlhLWCC1DieRb0W28m/Xgteo80NwphFEJsF2UFY9l9BSbvJG
-         zrcsICQfbBxq9NP86LX+OOsRpFZrte7yePjzdGTQ+ozq7fqAbR07sZLBW8MPEGTg7sRG
-         c46gqDbLWX+R34QFOgl4g6UAusNUhZNk/zXwII0sb4krMSxCNSO2bB9CSXDTLYOL8a//
-         ZLeZp031tLEpeMeD+Qqlz/k1D9VaSmdyTdus96jHsIHsOnoR+9ruOUboyw8fGSHz9XX5
-         PvKhKEE6OhTMnQRLfAPYHNBYK+qEZa40DbwvEy7tQWq/GnamifVslnrzgIYN4Ps5Os9G
-         tvWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:sender:from
-         :date:message-id:subject:to:cc;
-        bh=QhObdM4whM8wgagIQH3Pe5Zab0WkGbpVjTDUkWvEWI4=;
-        b=irEbJHYYED7tYjHvhIUNxxHB2PyHuxgww0seqGEF5nOcFmXGEvLWfzsp/bBJzuJkMZ
-         X5se57k+RetJCEcocQeAdqCmKYiBjaE50AzhmJ+o9+KEHDBmtigmky3RRzrRzWGx55g7
-         I0Ntpw430hoJwfuj42wga4XoKv+MHUsjRxlWCb0QL5UAtDTJYzDnrsYqOGxIRYXRQ3IL
-         CPrkD5n0D/3PEDQcSJrZollEAfZFraGGU+iYhPqJCGr9/cA3gI/snSud7OH5FKJ9e3Mq
-         gV71mk31DhmYGXd07nkBYLBrdOJojn9t9LFw41fKzertk/gXMHZA+Pftyoj1q8CBgNmR
-         V3jA==
-X-Gm-Message-State: AJIora/qAaBq8K1yEWkgyKF2O0bwDUjG3KPNETLKsGSlfBNAFp732kXH
-        jyN7LmXCONOJ+MlOe/elvUmRLIBHp5TGZt/p9+M=
-X-Google-Smtp-Source: AGRyM1tclHuS28Gd/ZpkxF0kB/RsoSriLwM8M0OtL0XHXlHfnvVhM/51TaghS4TMJVzFZuBW6FEOKORamj7rHB2NjSY=
-X-Received: by 2002:a05:6102:3ec7:b0:356:cbdf:122d with SMTP id
- n7-20020a0561023ec700b00356cbdf122dmr4744027vsv.9.1659329551112; Sun, 31 Jul
- 2022 21:52:31 -0700 (PDT)
+        Mon, 1 Aug 2022 00:56:16 -0400
+X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 31 Jul 2022 21:56:13 PDT
+Received: from p3plwbeout18-06.prod.phx3.secureserver.net (p3plsmtp18-06-2.prod.phx3.secureserver.net [173.201.193.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54885958A
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:56:12 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.141])
+        by :WBEOUT: with ESMTP
+        id INQioSaLhwd14INQiowzyE; Sun, 31 Jul 2022 21:53:25 -0700
+X-CMAE-Analysis: v=2.4 cv=Lc75VhTi c=1 sm=1 tr=0 ts=62e75c46
+ a=bheWAUFm1xGnSTQFbH9Kqg==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=biHskzXt2R4A:10 a=pGLkceISAAAA:8
+ a=M5qS2GdLtPm0FGHqoQ0A:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  INQioSaLhwd14
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp02.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1oINQh-0000wA-9b; Mon, 01 Aug 2022 05:53:23 +0100
+Message-ID: <28fd8f61-8005-96f8-7bfb-4a2519be5f18@squashfs.org.uk>
+Date:   Mon, 1 Aug 2022 05:53:18 +0100
 MIME-Version: 1.0
-References: <20220227205608.30812-1-cristian.marussi@arm.com> <20220227205608.30812-16-cristian.marussi@arm.com>
-In-Reply-To: <20220227205608.30812-16-cristian.marussi@arm.com>
-Sender: getarunks@gmail.com
-X-Google-Sender-Delegation: getarunks@gmail.com
-From:   Arun KS <arunks.linux@gmail.com>
-Date:   Mon, 1 Aug 2022 10:22:19 +0530
-X-Google-Sender-Auth: rMJv40lT6luGbdi4-s3TcTxC5-Q
-Message-ID: <CAKZGPAOvys8ddxr36WkfjAshZYBGWG6ecUMa8zGAPWhoEg=GVQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 15/16] selftests: arm64: Add initial SCMI testcases
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        peter.hilber@opensynergy.com, Arun KS <getarunks@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 3/3] squashfs: implement readahead
+To:     Xiongwei Song <sxwjean@gmail.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        xiaohong.qi@windriver.com
+References: <20220606150305.1883410-1-hsinyi@chromium.org>
+ <20220606150305.1883410-4-hsinyi@chromium.org>
+ <CAEVVKH_6PEc0CEfVrThO9m3kdcHVA=-i5FXkQTKaCgESVkJpig@mail.gmail.com>
+ <c02886b7-c3c0-aafa-d360-4bf54b972311@squashfs.org.uk>
+ <CAEVVKH_NemHoUuH6+Zf+gD5NgY_svGZ87G2XhHoK+1nEpL0sXA@mail.gmail.com>
+ <CAEVVKH8Ci-nU4eFqaLRrXN69zQuTr6PLZt3dcDkgcB6NrYPuSA@mail.gmail.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <CAEVVKH8Ci-nU4eFqaLRrXN69zQuTr6PLZt3dcDkgcB6NrYPuSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfK71FcYgAkbV9nNrY2lvlIMUk/hY2rFxUygHCKmRLQHmd736QQkiTEt5SO9Byfjk7hC7UKCmks1ioO9c5iTrQW0rkHVev+kE8apPLiynvjbXqVapySk9
+ mQUE7HMFMLwa3U2herZVaFjYfn2WIVXdBIXvirXsqESvSc8SXF4LvyIZa/ajFRozaBHArCQ5ueSWUOVgKHCrtrrA4eOH56u5PC0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cristian,
+On 29/07/2022 06:22, Xiongwei Song wrote:
+ > Hi Phillip,
+ >
+ > Gentle ping.
+ >
+ > Regards,
+ > Xiongwei
+ >
+ > On Fri, Jul 15, 2022 at 9:45 AM Xiongwei Song <sxwjean@gmail.com> wrote:
+ >>
+ >> Please see the test results below, which are from my colleague 
+Xiaohong Qi:
+ >>
+ >> I test file size from  256KB to 5120KB with thread number
+ >> 1,2,4,8,16,24,32(run ten times and get it’s average value). The read
+ >> performance is shown below. The difference of read performance between
+ >> 4.18 kernel and 5.10(with squashfs_readahead() patch v7) seems is
+ >> caused by the files whose size is litter than 256KB.
+ >>
+ >>                      T1              T2            T4             T8
+ >>           T16          T24          T32
+ >> All File Size
+ >>      4.18         136.8642   100.479    96.5523    96.1569    96.204
+ >>   96.0587    96.0519
+ >>      5.10-v7    138.474     103.1351  99.9192    99.7091    99.7894
+ >> 100.2034   100.4447
+ >>      Delta        1.6098       2.6561      3.3669      3.5522
+ >> 3.5854      4.1447      4.3928
 
-On Mon, Feb 28, 2022 at 12:16 PM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
->
-> A few initial testcases for Clock and Sensot protocol plus all the test
-> infrastructure, including the test runeer.
->
-> All of this just an experimental demonstrator.
->
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
->  tools/testing/selftests/arm64/Makefile        |   2 +-
->  tools/testing/selftests/arm64/scmi/Makefile   |   6 +
->  tools/testing/selftests/arm64/scmi/config     |   1 +
->  .../arm64/scmi/kselftest_scmi_lib.sh          | 118 ++++++++++++++++++
->  .../selftests/arm64/scmi/run_scmi_tests.sh    |  69 ++++++++++
->  .../testcases/protocol_0x14/clock_enable.sh   |  33 +++++
->  .../protocol_0x14/clock_rate_read.sh          |  18 +++
->  .../protocol_0x14/clock_rate_write.sh         |  29 +++++
->  .../testcases/protocol_0x15/sensor_reading.sh |  17 +++
->  9 files changed, 292 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/arm64/scmi/Makefile
->  create mode 100644 tools/testing/selftests/arm64/scmi/config
->  create mode 100644 tools/testing/selftests/arm64/scmi/kselftest_scmi_lib.sh
->  create mode 100755 tools/testing/selftests/arm64/scmi/run_scmi_tests.sh
->  create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_enable.sh
->  create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_read.sh
->  create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_write.sh
->  create mode 100755 tools/testing/selftests/arm64/scmi/testcases/protocol_0x15/sensor_reading.sh
->
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-> index 1e8d9a8f59df..6648dd8e2173 100644
-> --- a/tools/testing/selftests/arm64/Makefile
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -4,7 +4,7 @@
->  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->
->  ifneq (,$(filter $(ARCH),aarch64 arm64))
-> -ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi
-> +ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi scmi
->  else
->  ARM64_SUBTARGETS :=
->  endif
-> diff --git a/tools/testing/selftests/arm64/scmi/Makefile b/tools/testing/selftests/arm64/scmi/Makefile
-> new file mode 100644
-> index 000000000000..8786d8d4c332
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/Makefile
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +TEST_PROGS := run_scmi_tests.sh
-> +TEST_FILES := kselftest_scmi_lib.sh testcases/*
-> +
-> +include ../../lib.mk
-> diff --git a/tools/testing/selftests/arm64/scmi/config b/tools/testing/selftests/arm64/scmi/config
-> new file mode 100644
-> index 000000000000..161387084a3f
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/config
-> @@ -0,0 +1 @@
-> +CONFIG_ARM_SCMI_TEST_DRIVER=y
-> diff --git a/tools/testing/selftests/arm64/scmi/kselftest_scmi_lib.sh b/tools/testing/selftests/arm64/scmi/kselftest_scmi_lib.sh
-> new file mode 100644
-> index 000000000000..54d27b5f3e1a
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/kselftest_scmi_lib.sh
-> @@ -0,0 +1,118 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +SCMI_TEST_DRV="scmi_test_driver"
-> +TRES=(0 0 0)
-> +
-> +ksft_log()
-> +{
-> +       echo -e "[SCMI]: $1"
-> +}
-> +
-> +ksft_skip()
-> +{
-> +       echo -e "[SKIP]: $1"
-> +       exit 4
-> +}
-> +
-> +ksft_pass()
-> +{
-> +       echo -e "[PASS]: $1"
-> +}
-> +
-> +ksft_fail()
-> +{
-> +       echo -e "[FAIL]: $1"
-> +       exit 1
-> +}
-> +
-> +ksft_results()
-> +{
-> +       if [ $# -gt 0 ]; then
-> +               local val
-> +               local idx
-> +               local ret=$1
-> +
-> +               case "$ret" in
-> +                       0)
-> +                               idx=0
-> +                               ;;
-> +                       4)
-> +                               idx=1
-> +                               ;;
-> +                       *)
-> +                               idx=2
-> +                               ;;
-> +               esac
-> +               val=${TRES[${idx}]}
-> +               TRES[$idx]=$((val + 1))
-> +       else
-> +               ksft_log "Summary - PASS[${TRES[0]}]  SKIP[${TRES[1]}]  FAIL[${TRES[2]}]"
-> +               [ "x${TRES[2]}" != "x0" ] && exit 1
-> +               [ "x${TRES[1]}" != "x0" -a "x${TRES[0]}" == "x0" ] && exit 4
-> +               exit 0
-> +       fi
-> +}
-> +
-> +ksft_scmi_run_one()
-> +{
-> +       tcase=$1
-> +
-> +       echo "-> Running testcase: $tcase"
-> +
-> +       ./$tcase
-> +       ret=$?
-> +
-> +       ksft_results $ret
-> +}
-> +
-> +ksft_scmi_check_fw_version()
-> +{
-> +       local supported=$1
-> +       local current="${SCMI_VENDOR}:${SCMI_SUB_VENDOR}"
-> +
-> +       if [ "x${current}" != "x${supported}" ]; then
-> +               ksft_skip "Current FW('$current') is UNSUPPORTED. Should be '$supported'"
-> +       fi
-> +}
-> +
-> +ksft_scmi_transport_is_atomic ()
-> +{
-> +       [ "x$SCMI_TRANSPORT_IS_ATOMIC" == "xY" ] && return 0 || return 1
-> +}
-> +
-> +ksft_scmi_protocol_resources_get()
-> +{
-> +       local proto_dir=$1
-> +       local resources=""
-> +
-> +       for d in ${proto_dir}/*; do
-> +               rd="$(basename $d)"
-> +               [[ $rd =~ [0-9] ]] && resources="$resources $rd"
-> +       done
-> +
-> +       echo "$resources"
-> +}
-> +
-> +ksft_scmi_value_get()
-> +{
-> +       local syspath=$1
-> +       local __retval=$2
-> +       local value
-> +
-> +       value=$(cat $syspath)
-> +       [ "x$?" != "x0" ] && ksft_fail "Fail to read $syspath"
-> +
-> +       eval $__retval="'$value'"
-> +}
-> +
-> +ksft_scmi_value_set()
-> +{
-> +       local syspath=$1
-> +       local value=$2
-> +
-> +       echo $value > $syspath
-> +       [ "x$?" != "x0" ] && ksft_fail "Fail to write $syspath - err:$?"
-> +}
-> +
-> +
-> diff --git a/tools/testing/selftests/arm64/scmi/run_scmi_tests.sh b/tools/testing/selftests/arm64/scmi/run_scmi_tests.sh
-> new file mode 100755
-> index 000000000000..f372744a4579
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/run_scmi_tests.sh
-> @@ -0,0 +1,69 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +. ./kselftest_scmi_lib.sh
-> +
-> +check_root_privs()
-> +{
-> +       [ x"$(id -u)" != "x0" ] && ksft_skip "You need to be root"
-> +}
-> +
-> +check_scmi_testing_stack()
-> +{
-> +       local debugfs_root=$(findmnt -o TARGET -t debugfs | grep -v TARGET)
-> +       export SCMI_DEBUGFS_TOPDIR="$debugfs_root/scmi"
-> +
-> +       # Try to load module if not builtin
-> +       if [ ! -d $SCMI_DEBUGFS_TOPDIR ]; then
-> +               modprobe $SCMI_TEST_DRV || ksft_skip "Failed to load $SCMI_TEST_DRV"
-> +               [ ! -d $SCMI_DEBUGFS_TOPDIR ] && ksft_skip "SCMI Test stack not found; is CONFIG_ARM_SCMI_TEST_DRIVER enabled ?"
-> +       fi
-> +}
-> +
-> +setup_scmi_test_env()
-> +{
-> +       local scmi_info_dir="${SCMI_DEBUGFS_TOPDIR}/info/"
-> +
-> +       export SCMI_VENDOR="$(cat ${scmi_info_dir}/vendor_id)"
-> +       export SCMI_SUB_VENDOR="$(cat ${scmi_info_dir}/sub_vendor_id)"
-> +       export SCMI_VERS_MAJ="$(cat ${scmi_info_dir}/major_ver)"
-> +       export SCMI_VERS_MIN="$(cat ${scmi_info_dir}/minor_ver)"
-> +       export SCMI_VERS_IMPL="$(cat ${scmi_info_dir}/impl_ver)"
-> +
-> +       ksft_log "Found stack: $SCMI_VENDOR/$SCMI_SUB_VENDOR ${SCMI_VERS_MAJ}.${SCMI_VERS_MAJ} - $SCMI_VERS_IMPL"
-> +
-> +       SCMI_TEST_PROTOS=""
-> +       for p in ${SCMI_DEBUGFS_TOPDIR}/protocol_*; do
-> +               SCMI_TEST_PROTOS="${SCMI_TEST_PROTOS} $(basename $p)"
-> +       done
-> +
-> +       ksft_log "Found testing protocols: $SCMI_TEST_PROTOS"
-> +
-> +       export SCMI_TEST_PROTOS
-> +       SCMI_TRANSPORT_IS_ATOMIC="N"
-> +       [ -d "${SCMI_DEBUGFS_TOPDIR}/transport" ] &&
-> +               SCMI_TRANSPORT_IS_ATOMIC=$(cat "${SCMI_DEBUGFS_TOPDIR}/transport/is_atomic")
-> +       export SCMI_TRANSPORT_IS_ATOMIC
-> +}
-> +
-> +# Setup
-> +check_root_privs
-> +
-> +check_scmi_testing_stack
-> +
-> +setup_scmi_test_env
-> +
-> +# Main
-> +# Run all available tests for the found protocols
-> +#
-> +for proto_dir in $SCMI_TEST_PROTOS; do
-> +       [ ! -d $proto_dir ] && ksft_log "$proto_dir tests NOT supported." && continue
-> +       export TST_PROTO_DIR="${SCMI_DEBUGFS_TOPDIR}/${proto_dir}"
-> +       TST_PROTO_VERSION=$(cat ${TST_PROTO_DIR}/version)
-> +       ksft_log "Running tests for SCMI $proto_dir ver:$TST_PROTO_VERSION"
-> +       for tst in $proto_dir/*; do
-> +               ksft_scmi_run_one $tst
-> +       done
-> +done
-> +
-> +ksft_results
-> diff --git a/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_enable.sh b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_enable.sh
-> new file mode 100755
-> index 000000000000..4cdf3a097ba7
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_enable.sh
-> @@ -0,0 +1,33 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +. ./kselftest_scmi_lib.sh
-> +
-> +supported_fw="EMU-SCMI-VM:userland"
-> +ksft_scmi_check_fw_version $supported_fw
+To clarify what was mentioned later in the email - these results were
+obtained using SQUASHFS_DECOMP_MULTI_PERCPU, on a 12 core system?
 
-what is the necessity of this check? Won't it limits the use of this
-common test script across multiple platforms?
+If so these results are unexpected.  There is very little extra
+parallelism shown when increasing the threads.  There is about
+a 36% increase in performance moving from 1 thread to 2 threads, which
+is about what I expected, but from there on there is almost no
+parellelism improvement, even though you should have 12 available
+Squashfs decompressors.
 
-> +
-> +clock_enable_disable() {
-> +       rname=$1
-> +       rdir=$2
-> +       clk_op=$3
-> +
-> +       ksft_scmi_value_set $rdir/$clk_op Y
-> +       ksft_scmi_value_set $rdir/$clk_op N
-> +       ksft_log "Clock $rname: $clk_op - ON/OFF ... OK"
-> +}
-> +
-> +resources=$(ksft_scmi_protocol_resources_get $TST_PROTO_DIR)
-> +ksft_log "Found Clock resources: $resources"
-> +
-> +for res in $resources;do
-> +       resd="$TST_PROTO_DIR/$res"
-> +       name="$(cat $resd/info/name)"
-> +
-> +       clock_enable_disable $name $resd "enable"
-> +       if [ ksft_transport_is_atomic ]; then
-> +               clock_enable_disable $name $resd "enable_atomic_irqs_off"
-> +               clock_enable_disable $name $resd "enable_atomic_irqs_on"
-> +       fi
-> +done
-> +
-> +ksft_pass "$0"
-> diff --git a/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_read.sh b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_read.sh
-> new file mode 100755
-> index 000000000000..88c444fd317d
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_read.sh
-> @@ -0,0 +1,18 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +. ./kselftest_scmi_lib.sh
-> +
-> +resources=$(ksft_scmi_protocol_resources_get $TST_PROTO_DIR)
-> +ksft_log "Found Clock resources: $resources"
-> +
-> +for res in $resources;do
-> +       resd="$TST_PROTO_DIR/$res"
-> +       name="$(cat $resd/info/name)"
-> +       val=0
-> +
-> +       ksft_scmi_value_get $resd/rate_get_set val
-> +       ksft_log "$name READ => $val"
-> +done
-> +
-> +ksft_pass "$0"
-> diff --git a/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_write.sh b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_write.sh
-> new file mode 100755
-> index 000000000000..346084ec3812
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x14/clock_rate_write.sh
-> @@ -0,0 +1,29 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +. ./kselftest_scmi_lib.sh
-> +
-> +supported_fw="EMU-SCMI-VM:userland"
-> +ksft_scmi_check_fw_version $supported_fw
-> +
-> +resources=$(ksft_scmi_protocol_resources_get $TST_PROTO_DIR)
-> +ksft_log "Found Clock resources: $resources"
-> +
-> +for res in $resources;do
-> +       resd="$TST_PROTO_DIR/$res"
-> +       name="$(cat $resd/info/name)"
-> +       val=0
-> +       oldval=0
-> +       setval=0
-> +
-> +       ksft_scmi_value_get $resd/rate_get_set oldval
-> +       setval=$((oldval + 666))
-> +
-> +       ksft_scmi_value_set $resd/rate_get_set $setval
-> +
-> +       ksft_scmi_value_get $resd/rate_get_set val
-> +       [ "x$val" != "x$setval" ] && ksft_fail "Set:$setval readback:$val"
-> +       ksft_log "$name OK -> read:$oldval  set:$setval  readback:$val"
-> +done
-> +
-> +ksft_pass "$0"
-> diff --git a/tools/testing/selftests/arm64/scmi/testcases/protocol_0x15/sensor_reading.sh b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x15/sensor_reading.sh
-> new file mode 100755
-> index 000000000000..b0f5f6361379
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/scmi/testcases/protocol_0x15/sensor_reading.sh
-> @@ -0,0 +1,17 @@
-> +#!/bin/bash
-> +
-> +. ./kselftest_scmi_lib.sh
-> +
-> +resources=$(ksft_scmi_protocol_resources_get $TST_PROTO_DIR)
-> +ksft_log "Found Sensor resources: $resources"
-> +
-> +for res in $resources;do
-> +       resd="$TST_PROTO_DIR/$res"
-> +       name="$(cat $resd/info/name)"
-> +       val=0
-> +
-> +       ksft_scmi_value_get $resd/reading_get val
-> +       ksft_log "$name READ => $val"
-> +done
-> +
-> +ksft_pass $0
-> --
-> 2.17.1
->
+This is the results I get on a rather old 4-core X86_64 system using
+virtualisation, off SSD with a Squashfs filesystem created from a set of
+Linux kernel repositories and distro root filesystems.  So a lot of 
+small files and some larger files.
+
+************************
+1 Thread
+
+real    8m4.435s
+user    4m1.401s
+sys     2m57.680s
+
+2 Threads
+
+real    5m16.647s
+user    3m16.984s
+sys     2m35.655s
+
+4 Threads
+
+real    3m46.047s
+user    2m58.669s
+sys     2m20.193s
+
+8 Threads
+
+real    3m0.239s
+user    2m41.253s
+sys     2m27.935s
+
+16 Threads
+
+real    2m38.329s
+user    2m34.478s
+sys     2m26.303s
+***************************
+
+This is the behaviour I would expect to see, a steadily decreasing
+overall clock time, as more threads in parallel mean more Squashfs
+decompressors are used.  Due to user-space overheads and context
+switching, you will generally expect to see a decreasing clock
+time even after the number of threads is more than the number of cores
+available.  The rule of thumb is always to use at least double the number
+of real cores.
+
+As such your results are confusing, because they max out after only 2
+parallel threads.
+
+This may indicate there is something wrong somewhere in your system,
+where I/O is bottlenecking early, or it cannot accomodate multiple
+parallel reads and it is locking reads out.
+
+These results remind me of the old days using rotating media, where
+there was an expensive disk head SEEK to data blocks.  Trying to
+read multiple files simultaneously was often self-defeating because the
+extra SEEK time swallowed up any parallelism improvements, leading to
+negligible, flat and decreasing performance improvement as more threads
+were added.
+
+Of course I doubt seek time is involved here, but, a lot of things
+can emulate seek time, such as a constant unexpected cost.
+
+As this effect is observed with the "original" Squashfs, this is going
+to be external to Squashfs, and unrelated to the readhead patches.
+
+ >>
+ >> Fsize < 256KB
+ >>      4.18          21.7949    14.6959    11.639     10.5154    10.14
+ >>    10.1092    10.1425
+ >>      5.10-v7     23.8629    16.2483    13.1475   12.3697    12.1985
+ >> 12.8799    13.3292
+ >>      Delta         2.068        1.5524      1.5085     1.8543
+ >> 2.0585     2.7707     3.1867
+ >>
+
+This appears to show the readhead patch is performing much worse with
+files less than 256KB, than larger files.  Which would indicate a
+problem with the readahead patch.
+
+But, this may be a symptom of whatever is causing your general
+lack of parallelism. i.e. external to Squashfs.    When read sizes
+are small, any extra fixed costs loom large in the result because
+they are a significant proportion of the overall cost.  When
+read sizes are large, any extra fixed costs are a small proportion
+of the overall cost and show up marginally or not at all in the results.
+
+In otherwords, there is already a suspicion there are some unexpected
+fixed costs to doing I/O, which results in poor parallel performance.
+These fixed costs if they are worse on the later kernel, will show
+up here where read sizes are small, and may not show up elsewhere.
+
+I have instrumented and profiled the readahead patches on a large
+number of workloads, with various degrees of parallelism and I have
+not experienced any unexpected regressions in performance as reported
+here on small files.
+
+This is not to say there isn't an undiscovered issue with the
+readahead patch, but, I have to say the evidence more points to an
+issue with your system rather than the readahead patch.
+
+What I would do here is first investigate why you apear to have
+poor parallel I/O scaling.
+
+Phillip
+
+

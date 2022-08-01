@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED03C5869C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150B8586A7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbiHAMGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S234509AbiHAMRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbiHAMFy (ORCPT
+        with ESMTP id S234617AbiHAMQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:05:54 -0400
+        Mon, 1 Aug 2022 08:16:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E6D5C963;
-        Mon,  1 Aug 2022 04:55:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FFC7CB56;
+        Mon,  1 Aug 2022 04:58:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C498261359;
-        Mon,  1 Aug 2022 11:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD074C433D7;
-        Mon,  1 Aug 2022 11:55:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 088AB6010C;
+        Mon,  1 Aug 2022 11:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10925C433C1;
+        Mon,  1 Aug 2022 11:58:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354902;
-        bh=TQns3hjRBLYuanL/YF6iu0M/uuZZf7+dlf8QceGSMv8=;
+        s=korg; t=1659355124;
+        bh=DsYUMY9t7A0aU7eZB/mzzqS4nrfPLs6ALAid1gFFE6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xU8CPwFX81bPBv+kLUgZXPGe3iph5QWiKWw3an8J9n/s/LhS25FEbL/oTtJNlkwT7
-         TVaZvdnS8Sl4i7ZVD7ir1eFGV6PZzcBQXsW9YrFXTYw6AhkclQltaTkAtgeMDWNMnz
-         oPRNpCX7KjYhM6y/MH8fEaXuEc59lBg8fVOgjiJE=
+        b=ONtp5v70uey4cjwLsPC0xZ5Y/HEbP9o2K5KFMlCuWCC48Igk1QmLeLrBmRD3Pjvz1
+         b3LsJXcf8ogeipJAxboMljgq+t24PSa1cIkYpuXvr7awwRZrGo83CbyL9sH9qcwblM
+         A26glOHaJu5eLx/qP1oaHe3wyw7uJFiYcSmX51KY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Geliang Tang <geliang.tang@suse.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 61/69] sctp: leave the err path free in sctp_stream_init to sctp_stream_free
-Date:   Mon,  1 Aug 2022 13:47:25 +0200
-Message-Id: <20220801114136.937720338@linuxfoundation.org>
+Subject: [PATCH 5.18 72/88] mptcp: dont send RST for single subflow
+Date:   Mon,  1 Aug 2022 13:47:26 +0200
+Message-Id: <20220801114141.321741611@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,107 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Geliang Tang <geliang.tang@suse.com>
 
-[ Upstream commit 181d8d2066c000ba0a0e6940a7ad80f1a0e68e9d ]
+[ Upstream commit 1761fed2567807f26fbd53032ff622f55978c7a9 ]
 
-A NULL pointer dereference was reported by Wei Chen:
+When a bad checksum is detected and a single subflow is in use, don't
+send RST + MP_FAIL, send data_ack + MP_FAIL instead.
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000000
-  RIP: 0010:__list_del_entry_valid+0x26/0x80
-  Call Trace:
-   <TASK>
-   sctp_sched_dequeue_common+0x1c/0x90
-   sctp_sched_prio_dequeue+0x67/0x80
-   __sctp_outq_teardown+0x299/0x380
-   sctp_outq_free+0x15/0x20
-   sctp_association_free+0xc3/0x440
-   sctp_do_sm+0x1ca7/0x2210
-   sctp_assoc_bh_rcv+0x1f6/0x340
+So invoke tcp_send_active_reset() only when mptcp_has_another_subflow()
+is true.
 
-This happens when calling sctp_sendmsg without connecting to server first.
-In this case, a data chunk already queues up in send queue of client side
-when processing the INIT_ACK from server in sctp_process_init() where it
-calls sctp_stream_init() to alloc stream_in. If it fails to alloc stream_in
-all stream_out will be freed in sctp_stream_init's err path. Then in the
-asoc freeing it will crash when dequeuing this data chunk as stream_out
-is missing.
-
-As we can't free stream out before dequeuing all data from send queue, and
-this patch is to fix it by moving the err path stream_out/in freeing in
-sctp_stream_init() to sctp_stream_free() which is eventually called when
-freeing the asoc in sctp_association_free(). This fix also makes the code
-in sctp_process_init() more clear.
-
-Note that in sctp_association_init() when it fails in sctp_stream_init(),
-sctp_association_free() will not be called, and in that case it should
-go to 'stream_free' err path to free stream instead of 'fail_init'.
-
-Fixes: 5bbbbe32a431 ("sctp: introduce stream scheduler foundations")
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Link: https://lore.kernel.org/r/831a3dc100c4908ff76e5bcc363be97f2778bc0b.1658787066.git.lucien.xin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/associola.c |  5 ++---
- net/sctp/stream.c    | 19 +++----------------
- 2 files changed, 5 insertions(+), 19 deletions(-)
+ net/mptcp/subflow.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/sctp/associola.c b/net/sctp/associola.c
-index be29da09cc7a..3460abceba44 100644
---- a/net/sctp/associola.c
-+++ b/net/sctp/associola.c
-@@ -229,9 +229,8 @@ static struct sctp_association *sctp_association_init(
- 	if (!sctp_ulpq_init(&asoc->ulpq, asoc))
- 		goto fail_init;
- 
--	if (sctp_stream_init(&asoc->stream, asoc->c.sinit_num_ostreams,
--			     0, gfp))
--		goto fail_init;
-+	if (sctp_stream_init(&asoc->stream, asoc->c.sinit_num_ostreams, 0, gfp))
-+		goto stream_free;
- 
- 	/* Initialize default path MTU. */
- 	asoc->pathmtu = sp->pathmtu;
-diff --git a/net/sctp/stream.c b/net/sctp/stream.c
-index 6dc95dcc0ff4..ef9fceadef8d 100644
---- a/net/sctp/stream.c
-+++ b/net/sctp/stream.c
-@@ -137,7 +137,7 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
- 
- 	ret = sctp_stream_alloc_out(stream, outcnt, gfp);
- 	if (ret)
--		goto out_err;
-+		return ret;
- 
- 	for (i = 0; i < stream->outcnt; i++)
- 		SCTP_SO(stream, i)->state = SCTP_STREAM_OPEN;
-@@ -145,22 +145,9 @@ int sctp_stream_init(struct sctp_stream *stream, __u16 outcnt, __u16 incnt,
- handle_in:
- 	sctp_stream_interleave_init(stream);
- 	if (!incnt)
--		goto out;
--
--	ret = sctp_stream_alloc_in(stream, incnt, gfp);
--	if (ret)
--		goto in_err;
--
--	goto out;
-+		return 0;
- 
--in_err:
--	sched->free(stream);
--	genradix_free(&stream->in);
--out_err:
--	genradix_free(&stream->out);
--	stream->outcnt = 0;
--out:
--	return ret;
-+	return sctp_stream_alloc_in(stream, incnt, gfp);
- }
- 
- int sctp_stream_init_ext(struct sctp_stream *stream, __u16 sid)
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 7919e259175d..ccae50eba664 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1221,14 +1221,14 @@ static bool subflow_check_data_avail(struct sock *ssk)
+ 	/* RFC 8684 section 3.7. */
+ 	if (subflow->send_mp_fail) {
+ 		if (mptcp_has_another_subflow(ssk)) {
++			ssk->sk_err = EBADMSG;
++			tcp_set_state(ssk, TCP_CLOSE);
++			subflow->reset_transient = 0;
++			subflow->reset_reason = MPTCP_RST_EMIDDLEBOX;
++			tcp_send_active_reset(ssk, GFP_ATOMIC);
+ 			while ((skb = skb_peek(&ssk->sk_receive_queue)))
+ 				sk_eat_skb(ssk, skb);
+ 		}
+-		ssk->sk_err = EBADMSG;
+-		tcp_set_state(ssk, TCP_CLOSE);
+-		subflow->reset_transient = 0;
+-		subflow->reset_reason = MPTCP_RST_EMIDDLEBOX;
+-		tcp_send_active_reset(ssk, GFP_ATOMIC);
+ 		WRITE_ONCE(subflow->data_avail, MPTCP_SUBFLOW_NODATA);
+ 		return true;
+ 	}
 -- 
 2.35.1
 

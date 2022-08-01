@@ -2,227 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936F3586E61
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D306B586E36
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 18:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiHAQOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 12:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S231848AbiHAQCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 12:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiHAQOt (ORCPT
+        with ESMTP id S231540AbiHAQCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:14:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4953237F9E
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659370488; x=1690906488;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Y8Ios2pZ9qLf0wK9KahJsDuQ6Dyzgc57OUm0m3fCS5Y=;
-  b=jvLoK19s83VEk3R8AtcDY6e8/+DohJLl3XppQ6lKkPha5+y9AFKRbsSb
-   J6+BZXRST/RsfG6gFmSzxHLPBr1UBc/qPOUXBPXOZRHyFkLBxTznv2Ve7
-   s5x2KI8KxHn+s2MSighZ4bmEMQYbU7/3XFgQYhDMef3U2Y/IxWSSS0m+U
-   YiDmF3ZG89ggYrjZXtn+qQsxIKe6npv6+RRCE+U7OtV4PoM4cV/01uPAl
-   Qs0ukucfpOx/F8vYsO1oVchTDqpE8t84feiyWZlBDbHRudZsjYHyleZhb
-   or6x0E1wXM2XlqJFWYkTYHVPZqURAuX8u2OhmT1Lm55eSd5ye87eO2DeT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="289958112"
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="289958112"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 09:14:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,208,1654585200"; 
-   d="scan'208";a="605708771"
-Received: from yuanbowa-mobl.amr.corp.intel.com (HELO [10.212.86.5]) ([10.212.86.5])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 09:14:47 -0700
-Message-ID: <1e2c7dd9-0c28-17eb-b166-3bfaf65bbfe4@linux.intel.com>
-Date:   Mon, 1 Aug 2022 10:25:14 -0500
+        Mon, 1 Aug 2022 12:02:43 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB443336A
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 09:02:42 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 8047630494D;
+        Mon,  1 Aug 2022 18:02:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1659369760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f3hxkzXi+pvt7W5ZxfDPzIuf1Pn6WGDyIat0IzyBqWI=;
+        b=mgSsDPTPqVRBw5neJ4ZiTWwWKEzCSFvdhB4aniGxBHWR8tBd2oNHfBl71GOfnkobzjNuRq
+        wNrMAV7/5acfFp8711h9Fvf5QMkm24fXqJMLM/VpRfD6JdBZMm6pn/rBBvYRycCuhE/aiq
+        vd6+OmzcorvzcLwwHGL/ssdpV6dtyiy9mOCyAU7OY4Ca2YcrEhKm5rrkyBwrzJebZB7Iia
+        lF+9N1rVkyn4rOHIZgZGuIZdtGK/e53QywBk29NzC734jL68m9hVPlfV+bEeZEZ34ebQyD
+        MEyBxbVoQ/kJWAfHVcwoiSJPIgreyDdNZTWu+w1SMr7QY9WS25AckUwx6DK9ZA==
+Message-ID: <0dbe47388183bf17830e5c77513ca78c58e32612.camel@svanheule.net>
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>, git@birger-koblitz.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 01 Aug 2022 18:02:38 +0200
+In-Reply-To: <20220801152559.GA9041@alpha.franken.de>
+References: <20220702190705.5319-1-olek2@wp.pl>
+         <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+         <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
+         <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+         <20220707100630.GC9894@alpha.franken.de>
+         <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+         <20220707143930.GA14693@alpha.franken.de>
+         <CAFBinCBq3ydoxtj1VG=kjqbq5NjP1ZnQe_dOAS2Gjm2fNkK9Yg@mail.gmail.com>
+         <20220801152559.GA9041@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3] ASoC: Intel: cirrus-common: Use UID to map correct amp
- to prefix
-Content-Language: en-US
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Brent Lu <brent.lu@intel.com>, xliu <xiang.liu@cirrus.com>
-Cc:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220801094034.3927841-1-sbinding@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220801094034.3927841-1-sbinding@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
+On Mon, 2022-08-01 at 17:25 +0200, Thomas Bogendoerfer wrote:
+> On Thu, Jul 28, 2022 at 05:50:10PM +0200, Martin Blumenstingl wrote:
+> > I think for the Realtek SoC's this would be problematic because it's
+> > using MIPS_GENERIC. My understanding is that in an ideal world all
+>=20
+> which SOC are these ?
 
-On 8/1/22 04:40, Stefan Binding wrote:
-> Since the order of the amps in the ACPI determines the device name,
-> and the ACPI order may change depending on hardware configuration,
-> use UID to dynamically compute the dai links, allowing dynamic
-> assignment of the name_prefix.
-> 
-> The UIDs for these amps in ACPI are fixed, and map to a name_prefix,
-> where:
-> UID 0x0 -> WL
-> UID 0x1 -> WR
-> UID 0x2 -> TL
-> UID 0x3 -> TR
-> 
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+That would be the SoCs supported by MACH_REALTEK_RTL. More specifically, th=
+e
+ones affected by this issue are the RTL8391M, RTL8392M, RTL8393M, and RTL83=
+96M
+which have two VPEs.
 
-Thanks for the updates, LGTM
+The SoC interrupt controller on these chips can route interrupts to all CPU=
+ HW
+interrupts. If only IP6 and IP7 are enabled on the second VPE, anything rou=
+ted
+there to IP2-IP5 ends up in a black hole.
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Best,
+Sander
 
-> ---
->  sound/soc/intel/boards/sof_cirrus_common.c | 92 ++++++++++++----------
->  1 file changed, 49 insertions(+), 43 deletions(-)
-> 
-> diff --git a/sound/soc/intel/boards/sof_cirrus_common.c b/sound/soc/intel/boards/sof_cirrus_common.c
-> index f4192df962d6..6e39eda77385 100644
-> --- a/sound/soc/intel/boards/sof_cirrus_common.c
-> +++ b/sound/soc/intel/boards/sof_cirrus_common.c
-> @@ -10,6 +10,9 @@
->  #include "../../codecs/cs35l41.h"
->  #include "sof_cirrus_common.h"
->  
-> +#define CS35L41_HID "CSC3541"
-> +#define CS35L41_MAX_AMPS 4
-> +
->  /*
->   * Cirrus Logic CS35L41/CS35L53
->   */
-> @@ -35,50 +38,12 @@ static const struct snd_soc_dapm_route cs35l41_dapm_routes[] = {
->  	{"TR Spk", NULL, "TR SPK"},
->  };
->  
-> -static struct snd_soc_dai_link_component cs35l41_components[] = {
-> -	{
-> -		.name = CS35L41_DEV0_NAME,
-> -		.dai_name = CS35L41_CODEC_DAI,
-> -	},
-> -	{
-> -		.name = CS35L41_DEV1_NAME,
-> -		.dai_name = CS35L41_CODEC_DAI,
-> -	},
-> -	{
-> -		.name = CS35L41_DEV2_NAME,
-> -		.dai_name = CS35L41_CODEC_DAI,
-> -	},
-> -	{
-> -		.name = CS35L41_DEV3_NAME,
-> -		.dai_name = CS35L41_CODEC_DAI,
-> -	},
-> -};
-> +static struct snd_soc_dai_link_component cs35l41_components[CS35L41_MAX_AMPS];
->  
->  /*
->   * Mapping between ACPI instance id and speaker position.
-> - *
-> - * Four speakers:
-> - *         0: Tweeter left, 1: Woofer left
-> - *         2: Tweeter right, 3: Woofer right
->   */
-> -static struct snd_soc_codec_conf cs35l41_codec_conf[] = {
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV0_NAME),
-> -		.name_prefix = "TL",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV1_NAME),
-> -		.name_prefix = "WL",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV2_NAME),
-> -		.name_prefix = "TR",
-> -	},
-> -	{
-> -		.dlc = COMP_CODEC_CONF(CS35L41_DEV3_NAME),
-> -		.name_prefix = "WR",
-> -	},
-> -};
-> +static struct snd_soc_codec_conf cs35l41_codec_conf[CS35L41_MAX_AMPS];
->  
->  static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
->  {
-> @@ -117,10 +82,10 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
->  static const struct {
->  	unsigned int rx[2];
->  } cs35l41_channel_map[] = {
-> -	{.rx = {0, 1}}, /* TL */
->  	{.rx = {0, 1}}, /* WL */
-> -	{.rx = {1, 0}}, /* TR */
->  	{.rx = {1, 0}}, /* WR */
-> +	{.rx = {0, 1}}, /* TL */
-> +	{.rx = {1, 0}}, /* TR */
->  };
->  
->  static int cs35l41_hw_params(struct snd_pcm_substream *substream,
-> @@ -175,10 +140,51 @@ static const struct snd_soc_ops cs35l41_ops = {
->  	.hw_params = cs35l41_hw_params,
->  };
->  
-> +static const char * const cs35l41_name_prefixes[] = { "WL", "WR", "TL", "TR" };
-> +
-> +/*
-> + * Expected UIDs are integers (stored as strings).
-> + * UID Mapping is fixed:
-> + * UID 0x0 -> WL
-> + * UID 0x1 -> WR
-> + * UID 0x2 -> TL
-> + * UID 0x3 -> TR
-> + * Note: If there are less than 4 Amps, UIDs still map to WL/WR/TL/TR. Dynamic code will only create
-> + * dai links for UIDs which exist, and ignore non-existant ones. Only 2 or 4 amps are expected.
-> + * Return number of codecs found.
-> + */
-> +static int cs35l41_compute_codec_conf(void)
-> +{
-> +	const char * const uid_strings[] = { "0", "1", "2", "3" };
-> +	unsigned int uid, sz = 0;
-> +	struct acpi_device *adev;
-> +	struct device *physdev;
-> +
-> +	for (uid = 0; uid < CS35L41_MAX_AMPS; uid++) {
-> +		adev = acpi_dev_get_first_match_dev(CS35L41_HID, uid_strings[uid], -1);
-> +		if (!adev) {
-> +			pr_devel("Cannot find match for HID %s UID %u (%s)\n", CS35L41_HID, uid,
-> +				 cs35l41_name_prefixes[uid]);
-> +			continue;
-> +		}
-> +		physdev = get_device(acpi_get_first_physical_node(adev));
-> +		cs35l41_components[sz].name = dev_name(physdev);
-> +		cs35l41_components[sz].dai_name = CS35L41_CODEC_DAI;
-> +		cs35l41_codec_conf[sz].dlc.name = dev_name(physdev);
-> +		cs35l41_codec_conf[sz].name_prefix = cs35l41_name_prefixes[uid];
-> +		acpi_dev_put(adev);
-> +		sz++;
-> +	}
-> +
-> +	if (sz != 2 && sz != 4)
-> +		pr_warn("Invalid number of cs35l41 amps found: %d, expected 2 or 4\n", sz);
-> +	return sz;
-> +}
-> +
->  void cs35l41_set_dai_link(struct snd_soc_dai_link *link)
->  {
-> +	link->num_codecs = cs35l41_compute_codec_conf();
->  	link->codecs = cs35l41_components;
-> -	link->num_codecs = ARRAY_SIZE(cs35l41_components);
->  	link->init = cs35l41_init;
->  	link->ops = &cs35l41_ops;
->  }
+>=20
+> > platforms would switch to MIPS_GENERIC.
+> > As an alternative to making irq-mips-cpu capable of changing another
+> > CPU's registers: would you also be happy with a change that implements
+> > the following idea (pseudocode) in vsmp_init_secondary():
+> > =C2=A0=C2=A0=C2=A0 struct device_node *root_node =3D of_find_node_by_pa=
+th("/");
+> >=20
+> > =C2=A0=C2=A0=C2=A0 if (mips_gic_present() ||
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(root=
+_node, "lantiq,xrx200") ||
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of_device_is_compatible(root=
+_node, "realtek,some-relevant-soc"))
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 change_c0_status(ST0_IM, STA=
+TUSF_IP2 | STATUSF_IP3 |
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 STAT=
+USF_IP4 | STATUSF_IP5 |
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 STAT=
+USF_IP6 | STATUSF_IP7);
+> > =C2=A0=C2=A0=C2=A0 else
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> >=20
+> > =C2=A0=C2=A0=C2=A0 of_node_put(root_node);
+> >=20
+> > That way we don't risk enabling interrupt lines which shouldn't be
+> > enabled (on SoCs which we don't know).
+> > And also it would not cause any issues with MIPS_GENERIC support.
+>=20
+> well it's not exactly the abstraction I'm looking for, but it's ok for me
+> as a short term way to move forward.
+>=20
+> Thomas.
+>=20
+

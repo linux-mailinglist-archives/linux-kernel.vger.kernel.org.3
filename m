@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432065869E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E14C586AB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 14:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbiHAMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 08:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S234762AbiHAMUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 08:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiHAMIL (ORCPT
+        with ESMTP id S234381AbiHAMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:08:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8346665545;
-        Mon,  1 Aug 2022 04:55:43 -0700 (PDT)
+        Mon, 1 Aug 2022 08:19:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804F4AD5C;
+        Mon,  1 Aug 2022 04:59:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DAAD6135A;
-        Mon,  1 Aug 2022 11:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F56AC433C1;
-        Mon,  1 Aug 2022 11:55:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 389A9B810A2;
+        Mon,  1 Aug 2022 11:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F58C433D7;
+        Mon,  1 Aug 2022 11:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1659354942;
-        bh=Lz53QV+wGiKU9ujIrGRQxFCNLaQVP42ex38Cm1xI+wE=;
+        s=korg; t=1659355192;
+        bh=IHr1aUmBLBq6hdDkxtYE0BDsldJN3WkLHNFC/2Bp760=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PFDzCdysCJhN8A9qXmfZZ5ytvyZ02FKLaBZuD6yuKVrQK71R5rCqIzxL8LMeS4kgm
-         LIfsZ3FfsR39PrQIFJx4X4DfsKjZ1VBDisPgW3PeVuR9hWRc4zsjVFQMUM35g6wXo2
-         G4nSI2GApwl8LhElzvlrDRQnhWO5PpqkbfBZaskI=
+        b=dEGCMvAw0KCI7OjnRQxliPUbcgHTVeyWYDlu5eew2dsnmlefSQ6q0OmpHBDP+zZ+B
+         sXIdFcam7SrBVzJEJZY5NpEaZ244qIU/ZpbPlgG6IBjjXt8Ps4IF4PVX55seIVY0HG
+         kX2nYOQbXMpXCH3c+PmoicPOQZ/jalSjLjU4yy3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 48/69] net: Fix data-races around sysctl_[rw]mem(_offset)?.
-Date:   Mon,  1 Aug 2022 13:47:12 +0200
-Message-Id: <20220801114136.425185447@linuxfoundation.org>
+Subject: [PATCH 5.18 59/88] net: Fix data-races around sysctl_[rw]mem(_offset)?.
+Date:   Mon,  1 Aug 2022 13:47:13 +0200
+Message-Id: <20220801114140.746927246@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-References: <20220801114134.468284027@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+References: <20220801114138.041018499@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -86,10 +86,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  7 files changed, 21 insertions(+), 20 deletions(-)
 
 diff --git a/include/net/sock.h b/include/net/sock.h
-index 96f51d4b1649..819c53965ef3 100644
+index 6bef0ffb1e7b..9563a093fdfc 100644
 --- a/include/net/sock.h
 +++ b/include/net/sock.h
-@@ -2765,18 +2765,18 @@ static inline int sk_get_wmem0(const struct sock *sk, const struct proto *proto)
+@@ -2834,18 +2834,18 @@ static inline int sk_get_wmem0(const struct sock *sk, const struct proto *proto)
  {
  	/* Does this proto have per netns sysctl_wmem ? */
  	if (proto->sysctl_wmem_offset)
@@ -128,10 +128,10 @@ index dc92a67baea3..7d542eb46172 100644
  	/* Initialization of DECnet Session Control Port		*/
  	scp = DN_SK(sk);
 diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 7ba9059c263a..2097eeaf30a6 100644
+index 60b46f2a6896..91735d631a28 100644
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -458,8 +458,8 @@ void tcp_init_sock(struct sock *sk)
+@@ -452,8 +452,8 @@ void tcp_init_sock(struct sock *sk)
  
  	icsk->icsk_sync_mss = tcp_sync_mss;
  
@@ -141,8 +141,8 @@ index 7ba9059c263a..2097eeaf30a6 100644
 +	WRITE_ONCE(sk->sk_rcvbuf, READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_rmem[1]));
  
  	sk_sockets_allocated_inc(sk);
- 	sk->sk_route_forced_caps = NETIF_F_GSO;
-@@ -1722,7 +1722,7 @@ int tcp_set_rcvlowat(struct sock *sk, int val)
+ }
+@@ -1743,7 +1743,7 @@ int tcp_set_rcvlowat(struct sock *sk, int val)
  	if (sk->sk_userlocks & SOCK_RCVBUF_LOCK)
  		cap = sk->sk_rcvbuf >> 1;
  	else
@@ -152,7 +152,7 @@ index 7ba9059c263a..2097eeaf30a6 100644
  	WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
  
 diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 566745f527fe..e007bdc20e82 100644
+index de066fad7dfe..f09b1321a960 100644
 --- a/net/ipv4/tcp_input.c
 +++ b/net/ipv4/tcp_input.c
 @@ -426,7 +426,7 @@ static void tcp_sndbuf_expand(struct sock *sk)
@@ -173,7 +173,7 @@ index 566745f527fe..e007bdc20e82 100644
  
  	while (tp->rcv_ssthresh <= window) {
  		if (truesize <= skb->len)
-@@ -566,16 +566,17 @@ static void tcp_clamp_window(struct sock *sk)
+@@ -574,16 +574,17 @@ static void tcp_clamp_window(struct sock *sk)
  	struct tcp_sock *tp = tcp_sk(sk);
  	struct inet_connection_sock *icsk = inet_csk(sk);
  	struct net *net = sock_net(sk);
@@ -194,7 +194,7 @@ index 566745f527fe..e007bdc20e82 100644
  	}
  	if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
  		tp->rcv_ssthresh = min(tp->window_clamp, 2U * tp->advmss);
-@@ -737,7 +738,7 @@ void tcp_rcv_space_adjust(struct sock *sk)
+@@ -745,7 +746,7 @@ void tcp_rcv_space_adjust(struct sock *sk)
  
  		do_div(rcvwin, tp->advmss);
  		rcvbuf = min_t(u64, rcvwin * rcvmem,
@@ -204,7 +204,7 @@ index 566745f527fe..e007bdc20e82 100644
  			WRITE_ONCE(sk->sk_rcvbuf, rcvbuf);
  
 diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 51f31311fdb6..9c9a0f7a3dee 100644
+index 60c9f7f444e0..66836b8bd46f 100644
 --- a/net/ipv4/tcp_output.c
 +++ b/net/ipv4/tcp_output.c
 @@ -238,7 +238,7 @@ void tcp_select_initial_window(const struct sock *sk, int __space, __u32 mss,
@@ -217,10 +217,10 @@ index 51f31311fdb6..9c9a0f7a3dee 100644
  		space = min_t(u32, space, *window_clamp);
  		*rcv_wscale = clamp_t(int, ilog2(space) - 15,
 diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 01ede89e3c46..7f96e0c42a09 100644
+index e2790a6e90fb..07b5a2044cab 100644
 --- a/net/mptcp/protocol.c
 +++ b/net/mptcp/protocol.c
-@@ -1899,7 +1899,7 @@ static void mptcp_rcv_space_adjust(struct mptcp_sock *msk, int copied)
+@@ -1900,7 +1900,7 @@ static void mptcp_rcv_space_adjust(struct mptcp_sock *msk, int copied)
  
  		do_div(rcvwin, advmss);
  		rcvbuf = min_t(u64, rcvwin * rcvmem,
@@ -229,8 +229,8 @@ index 01ede89e3c46..7f96e0c42a09 100644
  
  		if (rcvbuf > sk->sk_rcvbuf) {
  			u32 window_clamp;
-@@ -2532,8 +2532,8 @@ static int mptcp_init_sock(struct sock *sk)
- 	icsk->icsk_ca_ops = NULL;
+@@ -2597,8 +2597,8 @@ static int mptcp_init_sock(struct sock *sk)
+ 	mptcp_ca_reset(sk);
  
  	sk_sockets_allocated_inc(sk);
 -	sk->sk_rcvbuf = sock_net(sk)->ipv4.sysctl_tcp_rmem[1];

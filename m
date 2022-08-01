@@ -2,196 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D238586398
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC64586399
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 06:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239514AbiHAErP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 00:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S239546AbiHAEsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 00:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238845AbiHAErN (ORCPT
+        with ESMTP id S238845AbiHAEsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 00:47:13 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7327BA194
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:47:12 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id b81so4988641vkf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:sender:from:date:message-id
-         :subject:to:cc;
-        bh=Lw6ftY/TKlMb6+me9g+W5uZ99+C7bnz14lMwnr8n6c4=;
-        b=BivyfpXPh+b5BrckNjDolRmC/G0BCa132qwkYm/uOKn0qBhRgcfnEGfELdMx74doVO
-         NWjYAZ+hUT4OSrptv7Nafz/y4Mo7nXoTpKgsOj7YIPXHbXpTbGpdL81j3aIz9UxZVUhq
-         OIRZKaW+j4qXI8C7riokWIyOjiC30f2otq93U9ZLTccOpwgqJPfoZ5rr/rgP1Bxu+PYm
-         EHvyL4fw31d0BKURn3Ivz/le3NSEcHiGCNPOM+PQUxa8s2egUdPIpamSVu7mrrnEy7mW
-         g+Co3xuU+IWGzAQHti29kkt4PYVMe+gvvhl2gjgsPRT2KUJvsFM9zpYDELCeHCbe6PFN
-         jvDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:sender:from
-         :date:message-id:subject:to:cc;
-        bh=Lw6ftY/TKlMb6+me9g+W5uZ99+C7bnz14lMwnr8n6c4=;
-        b=16pRMIrAoS9IltdHF6Fd2oMUc62hgfgSav3mHO8ytaPxWbzzdRRnkEtsRTE8ADj4Hd
-         MCrDyscQgdJM4irHQl5CPF5NrCX6lCe5Vk5D4zn5gRvdm8I0ulmcgGUjv5aiVDHKgBCb
-         teUxLVTEv9/PTKQ2lDA9e8d0OcY/KpkboSGP6jzcRIMzdB9v+l+8ahiGv8awP/x1ab1a
-         CdyHTo9dSf7kRjuFH85JVANKRtNACym3AmVD47xVSZzlXP8fCj7BgQHXpgLCfEsUmmOG
-         TfXpVO9Grf2p4+E+8ErrB6bjDrQQvUR8tAIsHDWKfhn9FrdvbnNQv5iNnvpgqLZtHoID
-         mD2Q==
-X-Gm-Message-State: ACgBeo16Gg3klysMFWZbjcAdBttLwBmN82pk++TyI1sW+wnY/gOjN0Qa
-        BnqiY3YyCNXUm+joTBYGKxTwJ/XOtObmt13BMDY=
-X-Google-Smtp-Source: AA6agR6BBWM7q0N4oPiUYv0EGCG/OK3dmvKCfZPyMNQt8ZobjEPOOwF15DS7dBfG3tpXHcif9HtzVL92A6o+Qt952ak=
-X-Received: by 2002:a1f:34d8:0:b0:377:142f:3e2f with SMTP id
- b207-20020a1f34d8000000b00377142f3e2fmr4440588vka.27.1659329231324; Sun, 31
- Jul 2022 21:47:11 -0700 (PDT)
+        Mon, 1 Aug 2022 00:48:00 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA6AA194
+        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 21:47:59 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2714dTvt029383;
+        Mon, 1 Aug 2022 04:47:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0ZeKB5/7UPuG9ARuCsC3LP8pAP1UFfxwG6u1FvcnW5s=;
+ b=UQAU1V4JvANv28YZnJjvlHftJA0XRW8+dSYjSi1lu8ArfH7z+O6TJfWdx4gYzkGYsDvD
+ qzrnST/XasSo2aCTHt79rIdnvc3LifUsAm/v+nelL38jAVs1DDZOzUsSJzoGnM8H+5Dm
+ VSez5tPmeYI1SRehpCZHVQNssUSK/hUNSnzzR30ayebFVTiynjxqpC1v/LmVhRoZ32oI
+ aT66c4TgK8CkZUUxQa2UY25JPGeDMOYKS1FwDeTSBtUW1gFsWpWbuRYOU3wjou/UYW7l
+ kd5A6thRtXFvRJI1Y8olj0lvGV8dEYf5sbq9IvtMxyaNDmkyKV7xlNzT0s6F6rBRQ/3R KA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp51q3xty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:47:37 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2714Fnva008605;
+        Mon, 1 Aug 2022 04:47:37 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hp51q3xt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:47:37 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2714ZR6Y032306;
+        Mon, 1 Aug 2022 04:47:35 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3hmv98snuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Aug 2022 04:47:35 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2714jMCP26345976
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Aug 2022 04:45:22 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C330AAE04D;
+        Mon,  1 Aug 2022 04:47:32 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22E2CAE045;
+        Mon,  1 Aug 2022 04:47:29 +0000 (GMT)
+Received: from [9.43.22.209] (unknown [9.43.22.209])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Aug 2022 04:47:28 +0000 (GMT)
+Message-ID: <60846a10-f661-69e1-f4f2-71bfeca8f9b4@linux.ibm.com>
+Date:   Mon, 1 Aug 2022 10:17:28 +0530
 MIME-Version: 1.0
-References: <20220227205608.30812-1-cristian.marussi@arm.com> <20220227205608.30812-15-cristian.marussi@arm.com>
-In-Reply-To: <20220227205608.30812-15-cristian.marussi@arm.com>
-Sender: getarunks@gmail.com
-X-Google-Sender-Delegation: getarunks@gmail.com
-From:   Arun KS <arunks.linux@gmail.com>
-Date:   Mon, 1 Aug 2022 10:17:00 +0530
-X-Google-Sender-Auth: xqremnycBgmRgYu3Ngu8pLSRFS8
-Message-ID: <CAKZGPANYh4aS47WH8UBPiTVdE9sOstZD+yZgHkPcUAWX=Gc-dQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 14/16] firmware: arm_scmi: Add testing Voltage
- protocol support
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
-        peter.hilber@opensynergy.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v12 1/8] mm/demotion: Add support for explicit memory
+ tiers
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Jagdish Gediya <jvgediya@linux.ibm.com>
+References: <20220729061349.968148-1-aneesh.kumar@linux.ibm.com>
+ <20220729061349.968148-2-aneesh.kumar@linux.ibm.com>
+ <877d3slmdm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <877d3slmdm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eIfzWnTfpgA0tsCGrJlY3NF1IA4ksNG5
+X-Proofpoint-ORIG-GUID: IVMadr9TdV0EjcZnW-apW2XLMAPNHRjw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_01,2022-07-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208010024
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cristian,
+On 8/1/22 8:07 AM, Huang, Ying wrote:
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> In the current kernel, memory tiers are defined implicitly via a demotion path
+>> relationship between NUMA nodes, which is created during the kernel
+>> initialization and updated when a NUMA node is hot-added or hot-removed. The
+>> current implementation puts all nodes with CPU into the highest tier, and builds
+>> the tier hierarchy tier-by-tier by establishing the per-node demotion targets
+>> based on the distances between nodes.
+>>
+>> This current memory tier kernel implementation needs to be improved for several
+>> important use cases,
+>>
+>> The current tier initialization code always initializes each memory-only NUMA
+>> node into a lower tier. But a memory-only NUMA node may have a high performance
+>> memory device (e.g. a DRAM-backed memory-only node on a virtual machine) that
+>> should be put into a higher tier.
+>>
+>> The current tier hierarchy always puts CPU nodes into the top tier. But on a
+>> system with HBM or GPU devices, the memory-only NUMA nodes mapping these devices
+>> should be in the top tier, and DRAM nodes with CPUs are better to be placed into
+>> the next lower tier.
+>>
+>> With current kernel higher tier node can only be demoted to nodes with shortest
+>> distance on the next lower tier as defined by the demotion path, not any other
+>> node from any lower tier. This strict, demotion order does not work in all use
+>> cases (e.g. some use cases may want to allow cross-socket demotion to another
+>> node in the same demotion tier as a fallback when the preferred demotion node is
+>> out of space), This demotion order is also inconsistent with the page allocation
+>> fallback order when all the nodes in a higher tier are out of space: The page
+>> allocation can fall back to any node from any lower tier, whereas the demotion
+>> order doesn't allow that.
+>>
+>> This patch series address the above by defining memory tiers explicitly.
+>>
+>> Linux kernel presents memory devices as NUMA nodes and each memory device is of
+>> a specific type. The memory type of a device is represented by its abstract
+>> distance. A memory tier corresponds to a range of abstract distance. This allows
+>> for classifying memory devices with a specific performance range into a memory
+>> tier.
+>>
+>> This patch configures the range/chunk size to be 128. The default DRAM
+>> abstract distance is 512. We can have 4 memory tiers below the default DRAM
+>                                                        ~~~~~
+> 
+> above?
 
-On Mon, Feb 28, 2022 at 4:23 AM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
->
-> firmware: arm_scmi: Add testing Voltage protocol support
->
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
->  .../arm_scmi/scmi_test_driver/Makefile        |  2 +-
->  .../arm_scmi/scmi_test_driver/scmi_test.c     |  2 +
->  .../arm_scmi/scmi_test_driver/test_common.h   |  1 +
->  .../arm_scmi/scmi_test_driver/test_voltages.c | 51 +++++++++++++++++++
->  4 files changed, 55 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
->
-> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/Makefile b/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
-> index 68a3d94a6a88..3b7df18de250 100644
-> --- a/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
-> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  scmi_test_driver-objs := scmi_test.o test_common.o test_clocks.o test_sensors.o \
-> -       test_powers.o
-> +       test_powers.o test_voltages.o
->  obj-$(CONFIG_ARM_SCMI_TEST_DRIVER) += scmi_test_driver.o
->
-> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c b/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
-> index df0d3e572010..2ca9f82c5bf3 100644
-> --- a/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
-> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/scmi_test.c
-> @@ -26,6 +26,7 @@ int (*scmi_test_init[SCMI_MAX_PROTOCOLS])(struct scmi_test_setup *) = {
->         [SCMI_PROTOCOL_POWER] = scmi_test_power_init,
->         [SCMI_PROTOCOL_CLOCK] = scmi_test_clock_init,
->         [SCMI_PROTOCOL_SENSOR] = scmi_test_sensor_init,
-> +       [SCMI_PROTOCOL_VOLTAGE] = scmi_test_voltage_init,
->  };
->
->  static void
-> @@ -125,6 +126,7 @@ static int scmi_testing_probe(struct scmi_device *sdev)
->  }
->
->  static const struct scmi_device_id scmi_id_table[] = {
-> +       { SCMI_PROTOCOL_VOLTAGE, "__scmi_test-voltage" },
->         { SCMI_PROTOCOL_CLOCK, "__scmi_test-clock" },
->         { SCMI_PROTOCOL_SENSOR, "__scmi_test-sensor" },
->         { SCMI_PROTOCOL_POWER, "__scmi_test-power" },
-> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h b/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
-> index 9f3d35ba4477..338b65da593f 100644
-> --- a/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
-> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/test_common.h
-> @@ -102,6 +102,7 @@ int scmi_test_release(struct inode *ino, struct file *filp);
->
->  int scmi_test_clock_init(struct scmi_test_setup *tsp);
->  int scmi_test_sensor_init(struct scmi_test_setup *tsp);
-> +int scmi_test_voltage_init(struct scmi_test_setup *tsp);
->  int scmi_test_power_init(struct scmi_test_setup *tsp);
->
->  #endif /* __SCMI_TEST_COMMON_H */
-> diff --git a/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c b/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
-> new file mode 100644
-> index 000000000000..ab91080e3a0f
-> --- /dev/null
-> +++ b/drivers/firmware/arm_scmi/scmi_test_driver/test_voltages.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SCMI Testing Driver - Voltage Protocol
-> + *
-> + * Copyright (C) 2022 ARM Ltd.
-> + */
-> +
-> +#include <linux/dcache.h>
-> +#include <linux/debugfs.h>
-> +#include <linux/err.h>
-> +#include <linux/fs.h>
-> +#include <linux/io.h>
-> +#include <linux/kstrtox.h>
-> +#include <linux/module.h>
-> +#include <linux/scmi_protocol.h>
-> +#include <linux/slab.h>
-> +
-> +#include "test_common.h"
-> +
-> +struct scmi_voltage_data {
-> +       unsigned int version;
-> +       int count;
-> +};
-> +
-> +int scmi_test_voltage_init(struct scmi_test_setup *tsp)
-> +{
-> +       struct scmi_voltage_data *vdata;
-> +       struct device *dev = &tsp->sdev->dev;
-> +       const struct scmi_voltage_proto_ops *voltage_ops;
-> +
-> +       vdata = devm_kzalloc(dev, sizeof(*vdata), GFP_KERNEL);
-> +       if (!vdata)
-> +               return -ENOMEM;
-> +
-> +       voltage_ops = tsp->ops;
-> +       vdata->version = voltage_ops->version_get(tsp->ph);
-> +       vdata->count = voltage_ops->num_domains_get(tsp->ph);
-> +
-> +       if (vdata->count <= 0) {
-> +               dev_err(dev, "number of voltage doms invalid: %d\n",
-> +                       vdata->count);
-> +               return vdata->count ?: -EINVAL;
-> +       }
-> +
-> +       dev_info(dev, "Found %d voltage resources.\n", vdata->count);
-> +
-> +       tsp->priv = vdata;
-> +       debugfs_create_x32("version", 0400, tsp->parent, &vdata->version);
-Any particular reason, why we are not creating debugfs entires for
-regulator level_get/level_set like it was done for
-clocks(rate_get_set)?
-> +
-> +       return 0;
-> +}
-> --
-> 2.17.1
->
+Updated the above as below.
+
+
+This patch configures the range/chunk size to be 128. The default DRAM abstract
+distance is 512. We can have 4 memory tiers below the default DRAM with abstract
+distance range 0 - 127, 127 - 255, 256- 383, 384 - 511. Faster memory devices
+can be placed in these faster(higher) memory tiers. Slower memory devices like
+persistent memory will have abstract distance higher than the default DRAM
+level.
+
+
+
+
+> 
+>> abstract distance which cover the range 0 - 127, 127 - 255, 256- 383, 384 - 511.
+>> Slower memory devices like persistent memory will have abstract distance higher
+>> than the default DRAM level.
+>>
+
+-aneesh

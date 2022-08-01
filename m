@@ -2,294 +2,409 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBD8586E0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14FF586E0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 17:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiHAPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 11:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S233079AbiHAPuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 11:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiHAPsc (ORCPT
+        with ESMTP id S231583AbiHAPuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 11:48:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA4731DE0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 08:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Bw2G8fr14ujR+mPl0CVqh1ElxFbp1/PqK8jCTY1CQ8M=; b=Z/4fGfwHlhxXvzVawdJsguPCDe
-        Ub4PLkiJaq/lWttL5s6MmwV6qKSuE8uhFRd8A7nYbpVWbzabcoPo2MVl+oJN84C8lAvoiRL4RWEq7
-        XWu/E5zLdcxwSm1jLVRZFwPK5QOCVBUm9qvtlaFm1eqKT6PaokCT4L5zXaQy/uGlRClqtfG20rck8
-        OKLFK5aKs35abkggiHECmKAReayGf9iHZrpSTOyGwy7G3vHTyNKod4kURS6WNgho+D3VNbDyYgQLV
-        nY960hiRsDIvHD6f5biSGu2iIlYrlw/ycsKss34tx+aRls/m5zHxXdZJ0fp/jElHEwMmaJZ4bmcBi
-        8RueC1fg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33652)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oIXeZ-00026j-4M; Mon, 01 Aug 2022 16:48:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oIXeX-0007AU-6E; Mon, 01 Aug 2022 16:48:21 +0100
-Date:   Mon, 1 Aug 2022 16:48:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: Linux 5.19-rc8
-Message-ID: <Yuf1xYLAhCMjwCYT@shell.armlinux.org.uk>
-References: <YuAm5h1B6bsrR/9q@fedora>
- <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
- <YuAv+lV324G7pmlk@yury-laptop>
- <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
- <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
- <CAHk-=wjpYLLoi1m0VRfVoyzGgmMiNwBhQ0XXG0VWwjskcz5Cug@mail.gmail.com>
- <YuCDscyJotkjNQcH@shell.armlinux.org.uk>
- <CAAH8bW-BNfhuXF_2cO+x2Qc51G-DFskFmKw8hzDHhC+3Rn1ZUA@mail.gmail.com>
- <YuDsmmAnOsgNDuWQ@shell.armlinux.org.uk>
- <YuWk3titnOiQACzC@yury-laptop>
+        Mon, 1 Aug 2022 11:50:15 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91200263B;
+        Mon,  1 Aug 2022 08:50:12 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A5E032C3;
+        Mon,  1 Aug 2022 15:50:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A5E032C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1659369011; bh=20A5U+Z3gG4choYaxh9BzbOOX1QGE8qoOKb510sBEP0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=p6o+o3j98yfsVZnWPIgTRnF4RTPBMjY56mwPjeNQfcF4BpdIE9/0nvkae1ZwbfVgP
+         vbyrDHRgCNOowXKI18tJ838NzR5qGKCgCcBhfAKlvn3hDk+k0iVz/UxEsNwS0RcpvD
+         YdOEuOm0IJGVHbxmc6GBBcjmtnuXe8AKOr15NdAhu9/Y8KT4lsFUVJ5sWIEHKTeV/8
+         IvWvMsBPk2i4Hmq1/HBzaMBbOPGYbm8yKztydi9Kl8Ch9DBmLZlyhSynRS3vzk6xlN
+         rPYyNyues3EPSItl15IAMPdVpMpaXSXmWXPLAQCYKUf9MCbGoXvdUwXgKFyDYKRTbh
+         HmZOXQXhvFOVA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [GIT PULL] Documentation for 6.0
+Date:   Mon, 01 Aug 2022 09:50:11 -0600
+Message-ID: <87ilnc6k0c.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuWk3titnOiQACzC@yury-laptop>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh FFS.
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
-I see you decided off your own back to remove the ARM version of the
-find_bit functions, with NO agreement from the arch maintainer. This
-is not on.
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
 
+are available in the Git repository at:
 
-On Sat, Jul 30, 2022 at 02:38:38PM -0700, Yury Norov wrote:
-> On Wed, Jul 27, 2022 at 08:43:22AM +0100, Russell King (Oracle) wrote:
-> > On Tue, Jul 26, 2022 at 06:33:55PM -0700, Yury Norov wrote:
-> > > On Tue, Jul 26, 2022 at 5:15 PM Russell King (Oracle)
-> > > <linux@armlinux.org.uk> wrote:
-> > > >
-> > > > On Tue, Jul 26, 2022 at 01:20:23PM -0700, Linus Torvalds wrote:
-> > > > > On Tue, Jul 26, 2022 at 12:44 PM Russell King (Oracle)
-> > > > > <linux@armlinux.org.uk> wrote:
-> > > > > >
-> > > > > > Overall, I would say it's pretty similar (some generic perform
-> > > > > > marginally better, some native perform marginally better) with the
-> > > > > > exception of find_first_bit() being much better with the generic
-> > > > > > implementation, but find_next_zero_bit() being noticably worse.
-> > > > >
-> > > > > The generic _find_first_bit() code is actually sane and simple. It
-> > > > > loops over words until it finds a non-zero one, and then does trivial
-> > > > > calculations on that last word.
-> > > > >
-> > > > > That explains why the generic code does so much better than your byte-wise asm.
-> > > > >
-> > > > > In contrast, the generic _find_next_bit() I find almost offensively
-> > > > > silly - which in turn explains why your byte-wide asm does better.
-> > > > >
-> > > > > I think the generic _find_next_bit() should actually do what the m68k
-> > > > > find_next_bit code does: handle the first special word itself, and
-> > > > > then just call find_first_bit() on the rest of it.
-> > > > >
-> > > > > And it should *not* try to handle the dynamic "bswap and/or bit sense
-> > > > > invert" thing at all. That should be just four different (trivial)
-> > > > > cases for the first word.
-> > > >
-> > > > Here's the results for the native version converted to use word loads:
-> > > >
-> > > > [   37.319937]
-> > > >                Start testing find_bit() with random-filled bitmap
-> > > > [   37.330289] find_next_bit:                 2222703 ns, 163781 iterations
-> > > > [   37.339186] find_next_zero_bit:            2154375 ns, 163900 iterations
-> > > > [   37.348118] find_last_bit:                 2208104 ns, 163780 iterations
-> > > > [   37.372564] find_first_bit:               17722203 ns,  16370 iterations
-> > > > [   37.737415] find_first_and_bit:          358135191 ns,  32453 iterations
-> > > > [   37.745420] find_next_and_bit:             1280537 ns,  73644 iterations
-> > > > [   37.752143]
-> > > >                Start testing find_bit() with sparse bitmap
-> > > > [   37.759032] find_next_bit:                   41256 ns,    655 iterations
-> > > > [   37.769905] find_next_zero_bit:            4148410 ns, 327026 iterations
-> > > > [   37.776675] find_last_bit:                   48742 ns,    655 iterations
-> > > > [   37.790961] find_first_bit:                7562371 ns,    655 iterations
-> > > > [   37.797743] find_first_and_bit:              47366 ns,      1 iterations
-> > > > [   37.804527] find_next_and_bit:               59924 ns,      1 iterations
-> > > >
-> > > > which is generally faster than the generic version, with the exception
-> > > > of the sparse find_first_bit (generic was:
-> > > > [   25.657304] find_first_bit:                7328573 ns,    656 iterations)
-> > > >
-> > > > find_next_{,zero_}bit() in the sparse case are quite a bit faster than
-> > > > the generic code.
-> > > 
-> > > Look at find_{first,next}_and_bit results. Those two have no arch version
-> > > and in both cases use generic code. In theory they should be equally fast
-> > > before and after, but your testing says that generic case is slower even
-> > > for them, and the difference is comparable with real arch functions numbers.
-> > > It makes me feel like:
-> > >  - there's something unrelated, like governor/throttling that affect results;
-> > >  - the numbers are identical, taking the dispersion into account.
-> > > 
-> > > If the difference really concerns you, I'd suggest running the test
-> > > several times
-> > > to measure confidence intervals.
-> > 
-> > Given that the benchmark is run against random bitmaps and with
-> > interrupts enabled, there is going to be noise in the results.
-> > 
-> > Here's the second run:
-> > 
-> > [26234.429389]
-> >                Start testing find_bit() with random-filled bitmap
-> > [26234.439722] find_next_bit:                 2206687 ns, 164277 iterations
-> > [26234.448664] find_next_zero_bit:            2188368 ns, 163404 iterations
-> > [26234.457612] find_last_bit:                 2223742 ns, 164278 iterations
-> > [26234.482056] find_first_bit:               17720726 ns,  16384 iterations
-> > [26234.859374] find_first_and_bit:          370602019 ns,  32877 iterations
-> > [26234.867379] find_next_and_bit:             1280651 ns,  74091 iterations
-> > [26234.874107]
-> >                Start testing find_bit() with sparse bitmap
-> > [26234.881014] find_next_bit:                   46142 ns,    656 iterations
-> > [26234.891900] find_next_zero_bit:            4158987 ns, 327025 iterations
-> > [26234.898672] find_last_bit:                   49727 ns,    656 iterations
-> > [26234.912504] find_first_bit:                7107862 ns,    656 iterations
-> > [26234.919290] find_first_and_bit:              52092 ns,      1 iterations
-> > [26234.926076] find_next_and_bit:               60856 ns,      1 iterations
-> > 
-> > And a third run:
-> > 
-> > [26459.679524]
-> >                Start testing find_bit() with random-filled bitmap
-> > [26459.689871] find_next_bit:                 2199418 ns, 163311 iterations
-> > [26459.698798] find_next_zero_bit:            2181289 ns, 164370 iterations
-> > [26459.707738] find_last_bit:                 2213638 ns, 163311 iterations
-> > [26459.732224] find_first_bit:               17764152 ns,  16429 iterations
-> > [26460.133823] find_first_and_bit:          394886375 ns,  32672 iterations
-> > [26460.141818] find_next_and_bit:             1269693 ns,  73485 iterations
-> > [26460.148545]
-> >                Start testing find_bit() with sparse bitmap
-> > [26460.155433] find_next_bit:                   40753 ns,    653 iterations
-> > [26460.166307] find_next_zero_bit:            4148211 ns, 327028 iterations
-> > [26460.173078] find_last_bit:                   50017 ns,    653 iterations
-> > [26460.187007] find_first_bit:                7205325 ns,    653 iterations
-> > [26460.193790] find_first_and_bit:              49358 ns,      1 iterations
-> > [26460.200577] find_next_and_bit:               62332 ns,      1 iterations
-> > 
-> > My gut feeling is that yes, there is some variance, but not on an
-> > order that is significant that would allow us to say "there's no
-> > difference".
-> > 
-> > find_next_bit results for random are: 2222703, 2206687, 2199418,
-> > which is an average of 2209603 and a variance of around 0.5%.
-> > The difference between this and the single generic figure I have
-> > is on the order of 20%.
-> > 
-> > I'll do the same with find_first_bit for random: 17722203, 17720726,
-> > and 17764152. Average is 17735694. Variance is around 0.1% or 0.2%.
-> > The difference between this and the single generic figure I have is
-> > on the order of 5%. Not so large, but still quite a big difference
-> > compared to the variance.
-> > 
-> > find_first_bit for sparse: 7562371, 7107862, 7205325. Average is
-> > 7291853. Variance is higher at about 4%. Difference between this and
-> > the generic figure is 0.5%, so this one is not significantly
-> > different.
-> > 
-> > The best result looks to be find_next_zero_bit for the sparse bitmap
-> > case. The generic code measures 5.5ms, the native code is sitting
-> > around 4.1ms. That's a difference of around 34%, and by just looking
-> > at the range in the figures above we can see this is a significant
-> > result without needing to do the calculations. Similar is true of
-> > find_next_bit for the sparse bitmap.
-> > 
-> > So, I think the results are significant in most cases and variance
-> > doesn't account for the differences. The only one which isn't is
-> > find_first_bit for the sparse case.
-> 
-> Hi Russel,
-> 
-> + Alexey Klimov <klimov.linux@gmail.com>
-> 
-> This is my testings for native vs generic find_bit operations on a15
-> and 17.
-> 
-> The raw numbers are collected by Alexey Klimov on Odroid-xu3. All cpu
-> frequencies were fixed at 1000Mhz. (Thanks a lot!)
-> 
-> For each native/generic @ a15/a7 configuration, the find_bit_benchmark 
-> was run 5 times, and the results are summarized below:
-> 
-> A15                      Native     Generic       Difference
-> Dense                        ns          ns       %   sigmas
-> find_next_bit:          3746929     3231641      14      8.3
-> find_next_zero_bit:     3935354     3202608      19     10.4
-> find_last_bit:          3134713     3129717       0      0.1
-> find_first_bit:        85626542    20498669      76    172.4
-> find_first_and_bit:   409252997   414820417      -1     -0.2
-> find_next_and_bit:      1678706     1654420       1      0.4
->                                               
-> Sparse                                        
-> find_next_bit:          143208        77924      46     29.4
-> find_next_zero_bit:    6893375      6059177      12     14.3
-> find_last_bit:           67174        68616      -2     -1.0
-> find_first_bit:       33689256      8151493      76     47.8
-> find_first_and_bit:     124758       156974     -26     -1.3
-> find_next_and_bit:       53391        56716      -6     -0.2
-> 
-> A7                      Native      Generic       Difference
-> Dense                       ns           ns       %   sigmas
-> find_next_bit:         4207627      5532764     -31    -14.9
-> find_next_zero_bit:    4259961      5236880     -23    -10.0
-> find_last_bit:         4281386      4201025       2      1.5
-> find_first_bit:      236913620     50970424      78    163.3
-> find_first_and_bit:  728069762    750580781      -3     -0.7
-> find_next_and_bit:     2696263      2766077      -3     -0.9
-> 
-> Sparse
-> find_next_bit:          327241       143776      56     40.7
-> find_next_zero_bit:    6987249     10235989     -46    -21.8
-> find_last_bit:           97758        94725       3      0.6
-> find_first_bit:       94628040     21051964      78     41.8
-> find_first_and_bit:     248133       241267       3      0.3
-> find_next_and_bit:      136475       154000     -13     -0.5
-> 
-> The last column is the difference between native and generic code
-> performance normalized to a standard deviation:
->         (mean(native) - mean(generic)) / max(std(native), std(generic))
-> 
-> The results look consistent to me because 'and' subtests that are always
-> generic differ by less than one sigma.
-> 
-> On A15 generic code is a clear winner. On A7 results are inconsistent
-> although significant. Maybe it's worth to retest on A7.
->  
-> Regarding the choice between native and generic core - I would prefer
-> generic version even if it's slightly slower because it is tested and
-> maintained better. And because the results of the test are at least on
-> par, to me it's a no-brainer.
-> 
-> Would be really interesting to compare performance of your LDRB->LDR
-> patch with the generic code using the same procedure.
-> 
-> Thanks,
-> Yury
-> 
+  git://git.lwn.net/linux.git tags/docs-6.0
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+for you to fetch changes up to 339170d8d3da5685762619080263abb78700ab4c:
+
+  docs: efi-stub: Fix paths for x86 / arm stubs (2022-07-28 09:41:56 -0600)
+
+----------------------------------------------------------------
+This was a moderately busy cycle for documentation, but nothing all that
+earth-shaking:
+
+- More Chinese translations, and an update to the Italian translations.
+  The Japanese, Korean, and traditional Chinese translations are
+  more-or-less unmaintained at this point, instead.
+
+- Some build-system performance improvements.
+
+- The removal of the archaic submitting-drivers.rst document, with the
+  movement of what useful material that remained into other docs.
+
+- Improvements to sphinx-pre-install to, hopefully, give more useful
+  suggestions.
+
+- A number of build-warning fixes
+
+Plus the usual collection of typo fixes, updates, and more.
+
+The -mm tree renames Documentation/vm to Documentation/*m*m; we tried to
+avoid conflicts from that move, but some have crept in anyway.  The path
+to resolution is for everything to be in the latter directory once all
+is done.
+
+----------------------------------------------------------------
+Akira Yokosawa (3):
+      docs/doc-guide: Add footnote on Inkscape for better images in PDF doc=
+uments
+      docs/doc-guide: Put meta title for kernel-doc HTML page
+      docs/doc-guide: Mention make variable SPHINXDIRS
+
+Alex Shi (1):
+      doc/zh_CN: remove submitting-driver reference from docs
+
+Binbin Zhou (12):
+      docs/zh_CN: core-api: Update the translation of cachetlb.rst to 5.19-=
+rc3
+      docs/zh_CN: core-api: Update the translation of cpu_hotplug.rst to 5.=
+19-rc3
+      docs/zh_CN: core-api: Update the translation of irq/irq-domain.rst to=
+ 5.19-rc3
+      docs/zh_CN: core-api: Update the translation of kernel-api.rst to 5.1=
+9-rc3
+      docs/zh_CN: core-api: Update the translation of mm-api.rst to 5.19-rc3
+      docs/zh_CN: core-api: Update the translation of printk-basics.rst to =
+5.19-rc3
+      docs/zh_CN: core-api: Update the translation of printk-format.rst to =
+5.19-rc3
+      docs/zh_CN: core-api: Update the translation of workqueue.rst to 5.19=
+-rc3
+      docs/zh_CN: core-api: Update the translation of xarray.rst to 5.19-rc3
+      docs/zh_CN: riscv: Remove the translation of pmu.rst
+      docs/zh_CN: riscv: Update the translation of vm-layout.rst to 5.19-rc1
+      docs/zh_CN: core-api: Add watch_queue Chinese translation
+
+Chao Liu (1):
+      docs: filesystems: f2fs: fix description about compress ioctl
+
+David Reaver (1):
+      scripts: get_feat.pl: use /usr/bin/env to find perl
+
+Deming Wang (1):
+      docs: Remove duplicate word
+
+Dongliang Mu (1):
+      docs: dev-tools: modify SPL reference URL to actual SPL doc entry
+
+Dov Murik (1):
+      Documentation: siphash: Fix typo in the name of offsetofend macro
+
+Federico Vaga (1):
+      doc:it_IT: align Italian documentation
+
+Jason A. Donenfeld (1):
+      docs: ABI: correct QEMU fw_cfg spec path
+
+Jonathan Corbet (4):
+      docs: automarkup: track failed cross-reference attempts
+      docs: automarkup: do not look up symbols twice
+      Merge branch 'submitting-drivers-removal' into docs-next
+      docs: Remove spurious tag from admin-guide/mm/overcommit-accounting.r=
+st
+
+Jo=C3=A3o Paulo Rechi Vita (1):
+      docs: efi-stub: Fix paths for x86 / arm stubs
+
+Juerg Haefliger (1):
+      docs: Kconfig: Fix help text indentation
+
+Lukas Bulwahn (12):
+      MAINTAINERS: mark linux-doc-tw-discuss mailing list moderated
+      docs: kernel-docs: order reference from newest to oldest
+      docs: kernel-docs: shorten the lengthy doc title
+      docs: kernel-docs: reflect that it is community-maintained
+      docs: kernel-docs: add a reference mentioned in submitting-drivers.rst
+      docs: admin: devices: drop confusing outdated statement on Latex
+      docs: process: remove outdated submitting-drivers.rst
+      docs: it_IT: align to submitting-drivers removal
+      docs: ja_JP: howto: remove reference to removed submitting-drivers
+      docs: ko_KR: howto: remove reference to removed submitting-drivers
+      docs: zh_CN: align to submitting-drivers removal
+      docs: zh_TW: align to submitting-drivers removal
+
+Martin Li=C5=A1ka (1):
+      docs/arm64: elf_hwcaps: Unify HWCAP lists as description lists
+
+Mauro Carvalho Chehab (23):
+      scripts: sphinx-pre-install: fix venv version check logic
+      scripts: sphinx-pre-install: report broken venv
+      scripts: sphinx-pre-install: check for PDF min version later on
+      scripts: sphinx-pre-install: provide both venv and package installs
+      scripts: sphinx-pre-install: place a warning for Sphinx >=3D 3.0
+      docs: tegra194-hte.rst: don't include gpiolib.c twice
+      docs: netdev: update maintainer-netdev.rst reference
+      docs: filesystems: update netfs-api.rst reference
+      docs: zh_CN: page_frags.rst: fix a broken reference
+      docs: zh_CN/devicetree: fix typos
+      docs: zh_CN: fix a broken reference
+      docs: zh_CN/vm: fix a typo for page reporting ReST file
+      docs: zh_CN/vm/zsmalloc.rst: fix a typo
+      Documentation: update watch_queue.rst references
+      Documentation: KVM: update s390-pv.rst reference
+      Documentation: KVM: update amd-memory-encryption.rst references
+      Documentation: KVM: update msr.rst reference
+      Documentation: KVM: update s390-diag.rst reference
+      objtool: update objtool.txt references
+      arch: m68k: q40: README: drop references to IDE driver
+      tegra194-hte.rst: fix reference to its binding
+      dt-bindings: mfd: update dlg,da9063.yaml reference
+      MAINTAINERS: update nvidia,tegra20-host1x.yaml reference
+
+Michael Kelley (3):
+      Documentation: hyperv: Add overview of Hyper-V enlightenments
+      Documentation: hyperv: Add overview of VMbus
+      Documentation: hyperv: Add overview of clocks and timers
+
+Muhammad Usama Anjum (1):
+      docs/kselftest: add more guidelines for adding new tests
+
+Niklas S=C3=B6derlund (1):
+      scripts: kernel-doc: Always increment warnings counter
+
+Sotir Danailov (1):
+      Documentation: process: Update email client instructions for Thunderb=
+ird
+
+Stephen Kitt (1):
+      docs: admin-guide/sysctl: Fix rendering error
+
+Steven Lung (1):
+      docs: UML: fix typo
+
+Tang Yizhou (2):
+      docs/zh_CN: Show the Chinese translation of spinlocks
+      docs/zh_CN: Add mutex-design Chinese translation
+
+Tom Schwindl (1):
+      docs: driver-api: gpio: Fix some typos
+
+Wu XiangCheng (3):
+      docs/zh_CN: Update translation of reporting-issues.rst to 5.18
+      docs/zh_CN: Update zh_CN/kernel-hacking/hacking.rst to 5.19-rc1
+      docs/zh_CN: Add a new translation of reporting-regressions.rst
+
+Yanteng Si (13):
+      docs/zh_CN: Update the translation of highmem to 5.19-rc1
+      docs/zh_CN: Update the translation of page_owner to 5.19-rc1
+      docs/zh_CN: Update the translation of vm index to 5.19-rc1
+      docs/zh_CN: add vm page_migration translation
+      docs/zh_CN: add vm vmalloced-kernel-stacks translation
+      Docs/zh_CN: Update the translation of iio_configfs to 5.19-rc8
+      Docs/zh_CN: Update the translation of kasan to 5.19-rc8
+      Docs/zh_CN: Update the translation of sparse to 5.19-rc8
+      Docs/zh_CN: Update the translation of testing-overview to 5.19-rc8
+      Docs/zh_CN: Update the translation of usage to 5.19-rc8
+      Docs/zh_CN: Update the translation of pci-iov-howto to 5.19-rc8
+      Docs/zh_CN: Update the translation of pci to 5.19-rc8
+      Docs/zh_CN: Update the translation of sched-stats to 5.19-rc8
+
+Yixuan Cao (1):
+      Documentation/translations/zh_CN/mm/page_owner.rst: adjust some words
+
+ .../ABI/testing/sysfs-firmware-qemu_fw_cfg         |   5 +-
+ Documentation/Kconfig                              |  23 +-
+ Documentation/admin-guide/devices.rst              |   7 +-
+ Documentation/admin-guide/efi-stub.rst             |   4 +-
+ Documentation/admin-guide/kernel-parameters.txt    |   2 +-
+ Documentation/admin-guide/sysctl/kernel.rst        |   4 +-
+ Documentation/arm64/elf_hwcaps.rst                 |  23 --
+ Documentation/dev-tools/coccinelle.rst             |   2 +-
+ Documentation/dev-tools/kselftest.rst              |  27 +-
+ .../devicetree/bindings/input/da9062-onkey.txt     |   2 +-
+ Documentation/doc-guide/kernel-doc.rst             |   2 +
+ Documentation/doc-guide/sphinx.rst                 |  14 +-
+ Documentation/driver-api/gpio/consumer.rst         |   2 +-
+ Documentation/driver-api/gpio/driver.rst           |   6 +-
+ Documentation/driver-api/gpio/using-gpio.rst       |   2 +-
+ Documentation/driver-api/hte/tegra194-hte.rst      |   5 +-
+ Documentation/filesystems/f2fs.rst                 |  13 +-
+ Documentation/filesystems/overlayfs.rst            |   2 +-
+ Documentation/hwmon/submitting-patches.rst         |   1 -
+ Documentation/kernel-hacking/hacking.rst           |   3 +-
+ Documentation/process/5.Posting.rst                |   3 +-
+ Documentation/process/8.Conclusion.rst             |  16 +-
+ Documentation/process/email-clients.rst            |  69 ++--
+ Documentation/process/howto.rst                    |   4 +-
+ Documentation/process/index.rst                    |   1 -
+ Documentation/process/kernel-docs.rst              |  62 +--
+ Documentation/process/submitting-drivers.rst       | 194 ---------
+ Documentation/process/submitting-patches.rst       |   5 +-
+ Documentation/security/keys/core.rst               |   2 +-
+ Documentation/security/secrets/coco.rst            |   2 +-
+ Documentation/security/siphash.rst                 |   2 +-
+ Documentation/sphinx/automarkup.py                 |  56 +--
+ .../devicetree/bindings/submitting-patches.rst     |  11 +
+ .../translations/it_IT/doc-guide/kernel-doc.rst    |   2 +
+ .../translations/it_IT/doc-guide/sphinx.rst        |  18 +-
+ .../translations/it_IT/kernel-hacking/hacking.rst  |  27 +-
+ .../translations/it_IT/kernel-hacking/locking.rst  |  14 +-
+ .../it_IT/maintainer/configure-git.rst             |  10 +
+ .../translations/it_IT/networking/netdev-FAQ.rst   |   2 +-
+ .../translations/it_IT/process/3.Early-stage.rst   |  17 +-
+ .../translations/it_IT/process/5.Posting.rst       |  32 +-
+ .../translations/it_IT/process/8.Conclusion.rst    |   5 +-
+ .../translations/it_IT/process/changes.rst         |  25 +-
+ .../translations/it_IT/process/coding-style.rst    |  42 +-
+ .../translations/it_IT/process/deprecated.rst      |  24 +-
+ Documentation/translations/it_IT/process/howto.rst |   3 +-
+ Documentation/translations/it_IT/process/index.rst |   2 +-
+ .../it_IT/process/maintainer-handbooks.rst         |  24 ++
+ .../it_IT/process/maintainer-pgp-guide.rst         |  14 +-
+ .../translations/it_IT/process/maintainer-tip.rst  |  10 +
+ .../translations/it_IT/process/maintainers.rst     |  13 +
+ .../it_IT/process/stable-kernel-rules.rst          |  42 +-
+ .../it_IT/process/submitting-drivers.rst           |  16 -
+ .../it_IT/process/submitting-patches.rst           |  72 ++--
+ Documentation/translations/ja_JP/howto.rst         |   4 +-
+ Documentation/translations/ko_KR/howto.rst         |   2 +-
+ .../translations/zh_CN/PCI/pci-iov-howto.rst       |   7 +-
+ Documentation/translations/zh_CN/PCI/pci.rst       |   6 +-
+ .../translations/zh_CN/admin-guide/index.rst       |   2 +-
+ .../zh_CN/admin-guide/mm/damon/usage.rst           |   2 +
+ .../zh_CN/admin-guide/reporting-issues.rst         | 125 +++---
+ .../zh_CN/admin-guide/reporting-regressions.rst    | 370 ++++++++++++++++++
+ .../translations/zh_CN/core-api/cachetlb.rst       |   6 +
+ .../translations/zh_CN/core-api/cpu_hotplug.rst    | 435 +++++++++++++++++=
++---
+ .../translations/zh_CN/core-api/index.rst          |   1 +
+ .../translations/zh_CN/core-api/irq/irq-domain.rst |  22 +-
+ .../translations/zh_CN/core-api/kernel-api.rst     |   3 +
+ .../translations/zh_CN/core-api/mm-api.rst         |  23 +-
+ .../translations/zh_CN/core-api/printk-basics.rst  |   3 +-
+ .../translations/zh_CN/core-api/printk-formats.rst |   3 +-
+ .../translations/zh_CN/core-api/watch_queue.rst    | 313 +++++++++++++++
+ .../translations/zh_CN/core-api/workqueue.rst      |  21 +-
+ .../translations/zh_CN/core-api/xarray.rst         |   4 +-
+ .../translations/zh_CN/dev-tools/kasan.rst         | 117 ++++--
+ .../translations/zh_CN/dev-tools/sparse.rst        |   2 +
+ .../zh_CN/dev-tools/testing-overview.rst           |  25 ++
+ .../translations/zh_CN/devicetree/index.rst        |   2 +-
+ .../translations/zh_CN/devicetree/of_unittest.rst  |   2 +-
+ .../translations/zh_CN/devicetree/usage-model.rst  |   2 +-
+ .../translations/zh_CN/doc-guide/kernel-doc.rst    |   2 +-
+ .../translations/zh_CN/iio/iio_configfs.rst        |  12 +-
+ .../translations/zh_CN/kernel-hacking/hacking.rst  |  25 +-
+ Documentation/translations/zh_CN/locking/index.rst |   5 +-
+ .../translations/zh_CN/locking/mutex-design.rst    | 145 +++++++
+ .../translations/zh_CN/process/5.Posting.rst       |   3 +-
+ .../translations/zh_CN/process/8.Conclusion.rst    |   1 -
+ Documentation/translations/zh_CN/process/howto.rst |   1 -
+ Documentation/translations/zh_CN/process/index.rst |   1 -
+ .../zh_CN/process/submitting-drivers.rst           | 160 --------
+ .../zh_CN/process/submitting-patches.rst           |   4 +-
+ Documentation/translations/zh_CN/riscv/index.rst   |   1 -
+ Documentation/translations/zh_CN/riscv/pmu.rst     | 235 -----------
+ .../translations/zh_CN/riscv/vm-layout.rst         |  37 ++
+ .../translations/zh_CN/scheduler/sched-stats.rst   |   8 +-
+ .../translations/zh_CN/vm/free_page_reporting.rst  |   2 +-
+ Documentation/translations/zh_CN/vm/frontswap.rst  |   2 +-
+ Documentation/translations/zh_CN/vm/highmem.rst    |  77 ++--
+ Documentation/translations/zh_CN/vm/index.rst      |  31 +-
+ Documentation/translations/zh_CN/vm/page_frags.rst |   2 +-
+ .../translations/zh_CN/vm/page_migration.rst       | 228 +++++++++++
+ Documentation/translations/zh_CN/vm/page_owner.rst |  79 +++-
+ .../zh_CN/vm/vmalloced-kernel-stacks.rst           | 133 +++++++
+ Documentation/translations/zh_CN/vm/zsmalloc.rst   |   2 +-
+ .../translations/zh_TW/process/5.Posting.rst       |   3 +-
+ .../translations/zh_TW/process/8.Conclusion.rst    |   1 -
+ Documentation/translations/zh_TW/process/howto.rst |   1 -
+ Documentation/translations/zh_TW/process/index.rst |   1 -
+ .../zh_TW/process/submitting-drivers.rst           | 164 --------
+ .../zh_TW/process/submitting-patches.rst           |   4 +-
+ Documentation/virt/hyperv/clocks.rst               |  73 ++++
+ Documentation/virt/hyperv/index.rst                |  12 +
+ Documentation/virt/hyperv/overview.rst             | 207 ++++++++++
+ Documentation/virt/hyperv/vmbus.rst                | 303 ++++++++++++++
+ Documentation/virt/index.rst                       |   1 +
+ Documentation/virt/kvm/api.rst                     |   4 +-
+ Documentation/virt/kvm/s390/s390-pv-boot.rst       |   2 +-
+ Documentation/virt/kvm/x86/hypercalls.rst          |   2 +-
+ .../virt/uml/user_mode_linux_howto_v2.rst          |   2 +-
+ Documentation/vm/overcommit-accounting.rst         |   2 -
+ Documentation/x86/orc-unwinder.rst                 |   2 +-
+ MAINTAINERS                                        |   7 +-
+ arch/m68k/q40/README                               |   5 +-
+ include/linux/fscache.h                            |   2 +-
+ include/linux/objtool.h                            |   2 +-
+ include/linux/watch_queue.h                        |   2 +-
+ init/Kconfig                                       |   2 +-
+ kernel/watch_queue.c                               |   2 +-
+ lib/Kconfig.debug                                  |   2 +-
+ scripts/get_feat.pl                                |   2 +-
+ scripts/kernel-doc                                 |  82 ++--
+ scripts/sphinx-pre-install                         |  90 ++++-
+ tools/include/linux/objtool.h                      |   2 +-
+ tools/objtool/check.c                              |   2 +-
+ 133 files changed, 3274 insertions(+), 1400 deletions(-)
+ delete mode 100644 Documentation/process/submitting-drivers.rst
+ create mode 100644 Documentation/translations/it_IT/devicetree/bindings/su=
+bmitting-patches.rst
+ create mode 100644 Documentation/translations/it_IT/maintainer/configure-g=
+it.rst
+ create mode 100644 Documentation/translations/it_IT/process/maintainer-han=
+dbooks.rst
+ create mode 100644 Documentation/translations/it_IT/process/maintainer-tip=
+.rst
+ create mode 100644 Documentation/translations/it_IT/process/maintainers.rst
+ delete mode 100644 Documentation/translations/it_IT/process/submitting-dri=
+vers.rst
+ create mode 100644 Documentation/translations/zh_CN/admin-guide/reporting-=
+regressions.rst
+ create mode 100644 Documentation/translations/zh_CN/core-api/watch_queue.r=
+st
+ create mode 100644 Documentation/translations/zh_CN/locking/mutex-design.r=
+st
+ delete mode 100644 Documentation/translations/zh_CN/process/submitting-dri=
+vers.rst
+ delete mode 100644 Documentation/translations/zh_CN/riscv/pmu.rst
+ create mode 100644 Documentation/translations/zh_CN/vm/page_migration.rst
+ create mode 100644 Documentation/translations/zh_CN/vm/vmalloced-kernel-st=
+acks.rst
+ delete mode 100644 Documentation/translations/zh_TW/process/submitting-dri=
+vers.rst
+ create mode 100644 Documentation/virt/hyperv/clocks.rst
+ create mode 100644 Documentation/virt/hyperv/index.rst
+ create mode 100644 Documentation/virt/hyperv/overview.rst
+ create mode 100644 Documentation/virt/hyperv/vmbus.rst

@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40E458706A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78CF587070
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 20:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiHAS26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 14:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S232691AbiHAShX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 14:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiHAS24 (ORCPT
+        with ESMTP id S230320AbiHAShV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:28:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A8EE0CC;
-        Mon,  1 Aug 2022 11:28:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C254FB81629;
-        Mon,  1 Aug 2022 18:28:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4BDC433C1;
-        Mon,  1 Aug 2022 18:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659378533;
-        bh=eR4O0ECQ4k++WJdThxBZKnP9tRrO4qiEt92KsE4iz0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fmiwxqnjU4eAzWua7DHQr3LUgRJHI64h7Ob4mYYI0lyYDfq99xS1oo62Vsqp9K/Gj
-         b4soRF7kEGtPp0Ub6yY154MxRF5YLb9kXhDRfmI1Jr9ia2ys21iCLqw6O23+kNAOtc
-         14Jlxy44hMQaE0ARbLaBDmP/DJ8P6DJJKeErUxf2t66aaykcGeNn9SXRq/CW3WS5tp
-         59mU2WEePl+yO0IgSRRewdWxnYB8p0KQ1qJw6pGJ2ND0h0nHm3JUMj7XSZWthnKkvM
-         4p42E3xHBkKYT4skiz75n0kxkGknVw2CigL/OSs1gL4bR4aQfzEKwTkMXKNYfbf6An
-         ugSdAVulHyzoA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E507540736; Mon,  1 Aug 2022 15:28:50 -0300 (-03)
-Date:   Mon, 1 Aug 2022 15:28:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Ben Hutchings <benh@debian.org>
-Subject: Re: [PATCH v3 8/8] tools bpftool: Don't display
- disassembler-four-args feature test
-Message-ID: <YugbYqyeLePDiELm@kernel.org>
-References: <20220622231624.t63bkmkzphqvh3kx@alap3.anarazel.de>
- <20220801013834.156015-1-andres@anarazel.de>
- <20220801013834.156015-9-andres@anarazel.de>
+        Mon, 1 Aug 2022 14:37:21 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486D1056C;
+        Mon,  1 Aug 2022 11:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659379016;
+        bh=XpvW2KGm+7Eri6BgmGU4YVNAdPx/qqDZZ5a0Ia/rFD8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Fw3fVD2WM08K/0HVTLZ2V7MVgR2Oxb4McHFcPbv0GxYM4G1R1tRSZTJjzg1GGaYpi
+         dduj2WkceGMMkRN6Jy1Enbc69ErIgIbEyxn7SpubI/dD0RqLAKprDNTRo8j1Fgko74
+         TV1jJSRvWjgzUJAMC9UAZL/53YdCe31soLgJ0hOg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.146.18] ([217.61.146.18]) by web-mail.gmx.net
+ (3c-app-gmx-bap33.server.lan [172.19.172.103]) (via HTTP); Mon, 1 Aug 2022
+ 20:36:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801013834.156015-9-andres@anarazel.de>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-851eda2a-519f-4ef6-ad2b-6870b3b682ff-1659379016837@3c-app-gmx-bap33>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Aw: [PATCH v4 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 1 Aug 2022 20:36:56 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20220619082605.7935-2-linux@fw-web.de>
+References: <20220619082605.7935-1-linux@fw-web.de>
+ <20220619082605.7935-2-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:INYgd8sb5GwLhiYt1Oy6FRHG6fA+Q6hpN6/UBzkegZzsjpAhCC2fjEQUPhCW1MT5tuFLM
+ 2OYlXf415NJLSTb83XzGlZnZjaF5yD0W3Xk+cIaYwpwz4DKbaxeDwJDSl2N2kXBNEwcqPHYFAmIW
+ NbaX2eO4Kqq2j5CTMBF5CmcFcW+YcNQiy3BDBQx1Liiebh3s/R48dnMX3AzVIkMFegBM5GIzTBTS
+ /JB/AVB9L7Ld9wQCnuHu/vJzFiNThZz4xi3gZAJZXZpNtYoZMWOPza8Lbo4x5/3/LzJIIuvymiyn
+ j4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Fx+Jw1pgeQ4=:D0VKvQE83yj6hlucNV3ytP
+ lEOHz4WpPymLe7+Hpg56BICeU/8a5CB+EJ7TOzVImKqHq+nLP4BcVzzFynNAlUbuw7M+FiCXL
+ G39E7XO1+3apzT+/7F5LJ/asHhKSAQgSTrYmWCV3bE64aZTmM9COoGmHeovmXxnyH1FldmlQM
+ jkweOFPbR2osMbMD700ODlbhDFv3WbvIcD8p3SRSRL9qUpOl+vzrPnq/P92k2dgs/Znq+lj5x
+ 1+DbcRvLX9zuLb0PbZomlqBf5vkW/SP9m24cqB7fQIYG2F1CzaKk4KrW++xcbwPRRh/hHsyaQ
+ YkTZ7/U+zWGzX5NqesQVhYyY3tueJ+B67Ts/hDOBVzyaYTqbB0QlwIHZoI4i+QWzP6j8iEuaC
+ 75MFF7CCPcxJuvdEI+wL0Ql0svnp5xlAx3TlPWaK6e0tKMgPkCouT+eVE7iZk2ZMfkbfsBP7j
+ 27a4b+Ft/IEnMuPgqk1ckXVwltUdy3rf7v2xWEOpEuVNnwOT8U0Ptc/xI5GJaaRgvuuOvOlRY
+ 9gZajBU/5H/hjs7H9rOC6g9jZHwPc1IVgc9CvvZ2Sq6a68N0A6OTvhz/xcOhCyAjnSKdkLTj7
+ FFmNx7/bPDUBTGQu5cHup21HtP6y818kYS5vMdqjJtIyLyRIDvZwALAsc/myONlISlJJUlcRm
+ 54bfo93kBSNSI9F56nnhpiFGysNc6KGqPIcQGeGc28OWN5XQGatlw6IfdDxnd1zCkdASx2jRp
+ 1qkqmE3jI1sBpKVKp8WXeXmfw6lo7xTb4LIS0OO7JCZtV8cC2sBJ2i/r5FJkEakEf6/row2Zb
+ Qds8BZb
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Jul 31, 2022 at 06:38:34PM -0700, Andres Freund escreveu:
-> The feature check does not seem important enough to display. Requested by
-> Jiri Olsa.
+Hi Rob,
 
-Sorry, I hadn't seen this one, removing my change.
+this (and the other bindings) part is marked as "not applicable", but with=
+out comment...it is not clear
+to me why it is not yet applied or how to proceed.
 
-- Arnaldo
- 
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> Cc: Quentin Monnet <quentin@isovalent.com>
-> Link: http://lore.kernel.org/lkml/20220622181918.ykrs5rsnmx3og4sv@alap3.anarazel.de
-> Signed-off-by: Andres Freund <andres@anarazel.de>
-> ---
->  tools/bpf/bpftool/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index 436e671b2657..517df016d54a 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -95,8 +95,7 @@ RM ?= rm -f
->  FEATURE_USER = .bpftool
->  FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled zlib libcap \
->  	clang-bpf-co-re
-> -FEATURE_DISPLAY = libbfd disassembler-four-args zlib libcap \
-> -	clang-bpf-co-re
-> +FEATURE_DISPLAY = libbfd zlib libcap clang-bpf-co-re
->  
->  check_feat := 1
->  NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
-> -- 
-> 2.37.0.3.g30cc8d0f14
+https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220619082=
+605.7935-2-linux@fw-web.de/
 
--- 
+Do you expect driver-changes which will change binding too?
 
-- Arnaldo
+should i resend it unchanged in v5 (when 5.20-rc1 is out)? or do you try t=
+o move the data-lanes into
+phy-provider which i have not got working?
+
+regards Frank

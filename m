@@ -2,215 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7F0586BE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D296586BE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiHANY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        id S231432AbiHANZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiHANYY (ORCPT
+        with ESMTP id S230349AbiHANZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:24:24 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEAD3206B;
-        Mon,  1 Aug 2022 06:24:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id tk8so20324045ejc.7;
-        Mon, 01 Aug 2022 06:24:23 -0700 (PDT)
+        Mon, 1 Aug 2022 09:25:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED4665C6
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 06:25:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id tl27so2486886ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 06:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc;
-        bh=wHG9uomB3z//oXuVAbnaYlvkAHPtRk7dQYikI60ETu8=;
-        b=qefJ8SkBCTvGg27w9gR2wFCgxb8Kj3bUrxFDjrrmwHOnwRT2AUe4aK5aYECwMYJ7gD
-         n48a1mXOJ0mMEivPkiHqCglmYXCgp3wN7ta2Zm6RSvj3ozp39L0v3gH+L3sGmrMYUUtd
-         otpvuJQiGBIm3B9baXxd4pGPmYOTJ1FpphXqph+zVbVgKyaqqF+Yh1RvyUII0fWzJ9wg
-         vUpm/CIo+3SvQhZF4NK8caIfA6A9XilUqgtK6xFjlzHaU1z7c2XW/mHbE3lgZzspQGW/
-         C9jxUTtCDrqD5Jjd4x2XoFHCr+xPJ1u/uCMFpB34c4emwq5OwTbsapwRZO+Fevg2+dxE
-         UqhA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HFfO1HMBlAYBBkGgrC3Zdil9m8wfHsNvxnffG7KMRuo=;
+        b=NmziJKJz1JfpVQc2os/blbsd+CkXJlYxuJ4vDzaF7b39G295OU5bumPkdwFdj6bDit
+         EqmAmQZ2KTW3KWsUS3rmNaXkL0x69Wa7iBop+DaPrcbnajH+V+Y55VyU65Q8YaNth8uJ
+         rf9XupigkmQo98VrQknB34nkIzsO1Pl8qtJdUdzIHia4Ijr86w2r10dRJAd6IioMBH48
+         VsimMUdUpwI7rKonMC0GX4dnt1vAmtBKQUjNcYh1a3JGUmWg8D1e9TI65QKQw4mebBDq
+         Uh6baa7v1mTSQUnzOPvinTGpFuPFRan99auvMCWRiZ2coKShMA2h9e9vZUnK+2jkIA4J
+         430Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc;
-        bh=wHG9uomB3z//oXuVAbnaYlvkAHPtRk7dQYikI60ETu8=;
-        b=bxqPyJaJ8zxDzpBh542glGu49/7oPXed2hFja6P3ERZTv3DlZWSRB6NWHzPMan+G+Y
-         C6z5FJhlfL7wHXtF2wSh9VNjF0ngTMz02fsT/deAoA/EgUromJymjzrwjmaLWIFbJuFL
-         zeQIYYDtAeNU6I4/OFM/cWBlepZnxt0duS05StcVxbcobRsgvpxpIj8/1w7Cg5vo9hJA
-         WEOZtmuN9wPfq6ZkeIN1bKahWxHdSIEaTL0ZDubjKx6ETMeKMcWJPzI+GiFQBEyUnOVd
-         b/yFKe0FmfhKHI3HloNj1ExDTZpHevAfjvXmUeZQuPgsQ/3pNaDYroCtleUt1HNjUYd0
-         Qoig==
-X-Gm-Message-State: AJIora9tehxye7J6RzYi7hyhH2SEpbvTvKqHP3P+dHuF7L8SxE/OCW8Z
-        5eqdtdaVSpZqNbOts/zy+mU=
-X-Google-Smtp-Source: AGRyM1vLY8fZMhXk9fdsAMEfR/Cz7pWsIKbhkbn9A4PyqreH0FtK86tf+Rd1XQAo+uywVArkeoMspA==
-X-Received: by 2002:a17:907:160f:b0:72f:1442:ed54 with SMTP id hb15-20020a170907160f00b0072f1442ed54mr12119573ejc.339.1659360261725;
-        Mon, 01 Aug 2022 06:24:21 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id lb17-20020a170907785100b0072ae174cdd4sm1870689ejc.111.2022.08.01.06.24.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HFfO1HMBlAYBBkGgrC3Zdil9m8wfHsNvxnffG7KMRuo=;
+        b=JI767R/kKydNXHluuCnLqhJx5uHP/aUAOkBIYZrFnZlafyRUr3sdwCnWLIxA85bOaF
+         myz0bFvEDvZEBn02x5B6Dnf/sL/bX7dMRCJGdqetMgN45LE2BBHm9rYkb7IvPV077wCS
+         NrvmwpsbG68PX7x+aFykke0we8QhYUOOIkmAXdWkcih+A8jXs4JA0iU6hc7Jqg8jsglM
+         3qltyFCeFsG+2n/b856ErQASVxT07H8aIA2WeVSBUleAj7jhWwBZOLoa1K1xByZF4N8d
+         0qbVdBhCQqlagPtB/BgjMH9ESXyrJl3x1+ZS821kfRexHCOvCGSXzqx/6L3a3mdl0CKY
+         n2VQ==
+X-Gm-Message-State: AJIora9m9Oy2iXShLHrdat4+Si1L15jQsR/zt+Bk/KjZdib5bnq4J5UY
+        EYGos7xbW/xTgojO0MpVKBWKKQ==
+X-Google-Smtp-Source: AGRyM1s67iEUBhHkvP0MHbGo0vD5PEpxwXHO/mMEOKvBcb/StnN9Hw6N6KaDK84FWUk/YPlKNqRnGQ==
+X-Received: by 2002:a17:906:cc17:b0:72b:4561:9153 with SMTP id ml23-20020a170906cc1700b0072b45619153mr12127952ejb.249.1659360316572;
+        Mon, 01 Aug 2022 06:25:16 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.98.208])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b006fe8b456672sm5171255eju.3.2022.08.01.06.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 06:24:21 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 1 Aug 2022 15:24:18 +0200
-To:     Jiri Olsa <olsajiri@gmail.com>,
+        Mon, 01 Aug 2022 06:25:16 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 21:25:11 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Stephane Eranian <eranian@google.com>
-Cc:     =?utf-8?B?6LCt5qKT54WK?= <tanzixuan.me@gmail.com>,
-        Zixuan Tan <tanzixuangg@gmail.com>, terrelln@fb.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
- libcrypto feature test
-Message-ID: <YufUAiLqKiuwdvcP@krava>
-References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
- <YrhxE4s0hLvbbibp@krava>
- <CABwm_eT_LE6VbLMgT31yqW=tc_obLP=6E0jnMqVn1sMdWrVVNw@mail.gmail.com>
- <Yrqcpr7ICzpsoGrc@krava>
+Subject: Re: [PATCH] perf symbol: Fail to read phdr workaround
+Message-ID: <20220801132511.GC73228@leoy-ThinkPad-X240s>
+References: <20220731164923.691193-1-irogers@google.com>
+ <20220801015259.GA101027@leoy-ThinkPad-X240s>
+ <CAP-5=fVSjCQ4jeAeyP5THnQVyXDpKd6Ob33C7PDwFB_6+YSXuw@mail.gmail.com>
+ <YufJP5YqeEBM51HL@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yrqcpr7ICzpsoGrc@krava>
+In-Reply-To: <YufJP5YqeEBM51HL@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 08:16:06AM +0200, Jiri Olsa wrote:
-> On Mon, Jun 27, 2022 at 11:08:34AM +0800, 谭梓煊 wrote:
-> > On Sun, Jun 26, 2022 at 10:45 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Mon, Aug 01, 2022 at 09:38:23AM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Sun, Jul 31, 2022 at 11:19:15PM -0700, Ian Rogers escreveu:
+> > On Sun, Jul 31, 2022, 6:53 PM Leo Yan <leo.yan@linaro.org> wrote:
+> > 
+> > > On Sun, Jul 31, 2022 at 09:49:23AM -0700, Ian Rogers wrote:
+> > > > The perf jvmti agent doesn't create program headers, in this case
+> > > > fallback on section headers as happened previously.
+> > > >
+> > > > Fixes: 882528d2e776 ("perf symbol: Skip symbols if SHF_ALLOC flag is not
+> > > set")
 > > >
-> > > On Sat, Jun 25, 2022 at 11:34:38PM +0800, Zixuan Tan wrote:
-> > > > With OpenSSL v3 installed, the libcrypto feature check fails as it use the
-> > > > deprecated MD5_* API (and is compiled with -Werror). The error message is
-> > > > as follows.
-> > > >
-> > > > $ make tools/perf
-> > > > ```
-> > > > Makefile.config:778: No libcrypto.h found, disables jitted code injection,
-> > > > please install openssl-devel or libssl-dev
-> > > >
-> > > > Auto-detecting system features:
-> > > > ...                         dwarf: [ on  ]
-> > > > ...            dwarf_getlocations: [ on  ]
-> > > > ...                         glibc: [ on  ]
-> > > > ...                        libbfd: [ on  ]
-> > > > ...                libbfd-buildid: [ on  ]
-> > > > ...                        libcap: [ on  ]
-> > > > ...                        libelf: [ on  ]
-> > > > ...                       libnuma: [ on  ]
-> > > > ...        numa_num_possible_cpus: [ on  ]
-> > > > ...                       libperl: [ on  ]
-> > > > ...                     libpython: [ on  ]
-> > > > ...                     libcrypto: [ OFF ]
-> > > > ...                     libunwind: [ on  ]
-> > > > ...            libdw-dwarf-unwind: [ on  ]
-> > > > ...                          zlib: [ on  ]
-> > > > ...                          lzma: [ on  ]
-> > > > ...                     get_cpuid: [ on  ]
-> > > > ...                           bpf: [ on  ]
-> > > > ...                        libaio: [ on  ]
-> > > > ...                       libzstd: [ on  ]
-> > > > ...        disassembler-four-args: [ on  ]
-> > > > ```
-> > > >
-> > > > This is very confusing because the suggested library (on my Ubuntu 20.04
-> > > > it is libssl-dev) is already installed. As the test only checks for the
-> > > > presence of libcrypto, this commit suppresses the deprecation warning to
-> > > > allow the test to pass.
-> > > >
-> > > > Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
-> > > > ---
-> > > >  tools/build/feature/test-libcrypto.c | 6 ++++++
-> > > >  1 file changed, 6 insertions(+)
-> > > >
-> > > > diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
-> > > > index a98174e0569c..31afff093d0b 100644
-> > > > --- a/tools/build/feature/test-libcrypto.c
-> > > > +++ b/tools/build/feature/test-libcrypto.c
-> > > > @@ -2,6 +2,12 @@
-> > > >  #include <openssl/sha.h>
-> > > >  #include <openssl/md5.h>
-> > > >
-> > > > +/*
-> > > > + * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
-> > > > + * feature test to fail silently. This is a workaround.
-> > > > + */
+> > > It's good to change fix tag as:
+> > > Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
 > > >
-> > > then we use these deprecated MD5 calls in util/genelf.c if libcrypto is detected,
-> > > so I wonder how come the rest of the compilation passed for you.. do you have
-> > > CONFIG_JITDUMP disabled?
-> > >
-> > > thanks,
-> > > jirka
-> > >
-> > No, CONFIG_JITDUMP is not disabled. I am using the default configuration.
 > > 
-> > Yes, you are right. The rest of the compilation should fail, but it doesn't.
-> > I checked the verbose build commands. This seems to be the result of another
-> > inconsistency.
-> > 
-> > If libcrypto is detected, the macro "HAVE_LIBCRYPTO_SUPPORT" will be
-> > defined, but in perf/util/genelf.c, "HAVE_LIBCRYPTO" without the "_SUPPORT"
-> > prefix is checked. This causes urandom always be used to create build id
-> > rather than MD5 and SHA1, no matter what the detection result is.
-> > 
-> > In perf/Makefile.config, from line 776
-> > ```
-> > ifndef NO_LIBCRYPTO
-> >   ifneq ($(feature-libcrypto), 1)
-> >     msg := $(warning No libcrypto.h found, disables jitted code injection,
-> >             please install openssl-devel or libssl-dev);
-> >     NO_LIBCRYPTO := 1
-> >   else                                  <-- if libcrypto feature detected
-> >     CFLAGS += -DHAVE_LIBCRYPTO_SUPPORT  <-- define this
-> >     EXTLIBS += -lcrypto
-> >     $(call detected,CONFIG_CRYPTO)
-> >   endif
-> > endif
-> > ```
-> > 
-> > In perf/util/genelf.c, from line 33
-> > ```
-> > #ifdef HAVE_LIBCRYPTO                <-- but check this, it's always false
+> > Doh! I was rushing this morning. Thanks for catching and reviewing!
 > 
-> nice :)
-> 
-> > 
-> > #define BUILD_ID_MD5
-> > #undef BUILD_ID_SHA /* does not seem to work well when linked with Java */
-> > #undef BUILD_ID_URANDOM /* different uuid for each run */
-> > 
-> > #ifdef BUILD_ID_SHA
-> > #include <openssl/sha.h>
-> > #endif
-> > 
-> > #ifdef BUILD_ID_MD5
-> > #include <openssl/md5.h>
-> > #endif
-> > #endif                               <-- this block will be skipped
-> > ```
-> > 
-> > Maybe we should fix this, to really make use of libcrypto if it is available?
-> 
-> yea, I think that was the original idea, let's keep the variable with
-> SUPPORT suffix and use the -Wdeprecated-declarations for genelf.c
-> 
-> full fix would be to detect the new API and use it when it's available but..
-> given that the check was false at least since 2016, perhaps we could remove
-> that code? ;-) Stephane?
+> I made the adjustments and added a note with the repro, to help in the
+> future when trying to test this area.
 
-ping
+Thanks, Arnaldo.
 
-jirka
+> I also think we could have something like a 'perf test' mode where, when
+> asked to, it would enable tests that involve downloading such files to
+> perform tests, such as this dacapo benchmark, and then would test if the
+> output matches expectations.
+
+I will add a testing based on the steps, alongside with the discussed
+testing for data symbols.  Will share out after get ready.
+
+Thanks,
+Leo

@@ -2,138 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C35D586D28
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2843586D2A
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 16:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbiHAOna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 10:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S232960AbiHAOnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 10:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiHAOnK (ORCPT
+        with ESMTP id S232759AbiHAOn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 10:43:10 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D873F31B;
-        Mon,  1 Aug 2022 07:42:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id k26so5033695ejx.5;
-        Mon, 01 Aug 2022 07:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=h2Fh+iK1e/QXgWo5H0E1vU8kQtq/DJDwu1GYW3hBz3Y=;
-        b=U1bGqNNi1488a5iQcjmUPIAFQYYL00jEn92UgvoN7kGOXtK556evaWQRjGHI6vxWty
-         ZzJRqCGQz9VhJ48p+UaAhe6QFoOc1zDBUQDUs/HH8yBOAiF6xpDRPe+eiaTutbL3GkBI
-         U5aRJm2f9gRSzde23vRXcOcazq/x2oqh0J56ORWu9wpnBAbDWeNpH6Ya/64EiAfklM8r
-         8tqqRrrszfAE1oAoPQ1dhB9Tf1T+YfiOAxqtA1fWCyKRPLrRvoMv1/T8ccMhWBRP5p9C
-         dlCdhPM8O3OdrsqifZH+Da8RPxA6SxRk+I2yUNk8ohJGpOHBqLngQvjfbDu5q0R4tuo5
-         S/sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=h2Fh+iK1e/QXgWo5H0E1vU8kQtq/DJDwu1GYW3hBz3Y=;
-        b=Cdy+mLQ4WbjS88XC2IulXc6YKUTaVF2drFIjNUtGxGsgHCPRrxv9w/maRsIbB3wX1r
-         bAiraJq7O2UeiGmN3C6hJXAiWpNzmgyJC10FX4OPNniEOQMz4xNcoq+g1BliLZO8P0X1
-         fBkp9Zj904vdnlKC5JK9w8jVNufzbR2OTJQfbPvNpzCPlXkXiPOIRlFquXnT2Qeu4CCk
-         18avLUrTCWhNichomhjVVMDsFHMhw7zm5r2EKWI0pBMtPcbpEqADInAuKkArNRamkyti
-         0E9+8ud0xWrbazLRoZRa0CQO13Sypv87QYvFVw/bRvSn7MkTFnwpQ23eTwcpYoVZPCx6
-         RusQ==
-X-Gm-Message-State: ACgBeo3UoUX2Pf2Sh0Ehz4cWgt+dxmGWOZHtdlzPipsQICtGZbNmL2Fu
-        JyEICeSAV06wl36FHylKHCc=
-X-Google-Smtp-Source: AA6agR4rew6sHeQa75WoyFDHFnmrBC5+biAhpvP3kI83fB/IPFaMC+sxN5BhASmkuiO/lt8aR2v2/Q==
-X-Received: by 2002:a17:907:2c54:b0:730:984d:70b6 with SMTP id hf20-20020a1709072c5400b00730984d70b6mr1225561ejc.102.1659364945535;
-        Mon, 01 Aug 2022 07:42:25 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id e24-20020a170906315800b007246492658asm5283190eje.117.2022.08.01.07.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 07:42:24 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 1 Aug 2022 16:42:22 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
+        Mon, 1 Aug 2022 10:43:26 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC03F3E741;
+        Mon,  1 Aug 2022 07:42:47 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9B6D6354FD0;
+        Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id QMZj_jTw1QdE; Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 101353550BA;
+        Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 101353550BA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1659364966;
+        bh=Omq/uk2xaYsFc2SnbTFQ8Np0ewayqBDo2ZaBgjfBp6A=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=hQsyBsFhZGR2HBjKVRTylO783wrqVCDAV9vJ7Mo1m/pJGhG8Do1JuWZ3TqmY/e0i+
+         l6eNir06gZ/PR5Yj5urlm0h3MINBQvx6Zn7ooholxF+uHk8SHheWKiludVlnigHVPq
+         wm9UI2I1iV/mXReFV6tXJTebRtB/Mhsojtj16kXp0nyD0hN8Js2ejNskhWBmkfqcA3
+         MfPEWI+73BXqrFMbeKLiKfakkss6oQt3Vw3ZF+sxeQSvbbvMUoLymKxcWIz9ai+hJN
+         nX8B0C8zF0PbLMGjiPzddkI/B0sgWtiRcksAm3NLgChoPPc7hcoPpdOssC8+vdUWsO
+         0Cz+KHrh2MpOQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qVFcZWVe3CeT; Mon,  1 Aug 2022 10:42:46 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id EC0AC354F2C;
+        Mon,  1 Aug 2022 10:42:45 -0400 (EDT)
+Date:   Mon, 1 Aug 2022 10:42:45 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] Perf events updates for v6.0
-Message-ID: <YufmTs3WbIcjlfyV@gmail.com>
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Peter Oskolkov <posk@posk.io>
+Message-ID: <1656318880.93523.1659364965914.JavaMail.zimbra@efficios.com>
+In-Reply-To: <87tu6wm46t.fsf@oldenburg.str.redhat.com>
+References: <20220622194617.1155957-1-mathieu.desnoyers@efficios.com> <20220622194617.1155957-2-mathieu.desnoyers@efficios.com> <YufV3PmAOfo1Gt7g@gmail.com> <87tu6wm46t.fsf@oldenburg.str.redhat.com>
+Subject: Re: [PATCH 2/2] rseq: Kill process when unknown flags are
+ encountered in ABI structures
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
+Thread-Topic: rseq: Kill process when unknown flags are encountered in ABI structures
+Thread-Index: pv0m3/O0YjWhUVPgCMLJGmsVZ4uj9w==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+----- On Aug 1, 2022, at 10:25 AM, Florian Weimer fweimer@redhat.com wrote:
 
-Please pull the latest perf/core git tree from:
+> * Ingo Molnar:
+> 
+>> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+>>
+>>> rseq_abi()->flags and rseq_abi()->rseq_cs->flags 29 upper bits are
+>>> currently unused.
+>>> 
+>>> The current behavior when those bits are set is to ignore them. This is
+>>> not an ideal behavior, because when future features will start using
+>>> those flags, if user-space fails to correctly validate that the kernel
+>>> indeed supports those flags (e.g. with a new sys_rseq flags bit) before
+>>> using them, it may incorrectly assume that the kernel will handle those
+>>> flags way when in fact those will be silently ignored on older kernels.
+>>> 
+>>> Validating that unused flags bits are cleared will allow a smoother
+>>> transition when those flags will start to be used by allowing
+>>> applications to fail early, and obviously, when they attempt to use the
+>>> new flags on an older kernel that does not support them.
+>>> 
+>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>> ---
+>>>  kernel/rseq.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>> 
+>>> diff --git a/kernel/rseq.c b/kernel/rseq.c
+>>> index 81d7dc80787b..bda8175f8f99 100644
+>>> --- a/kernel/rseq.c
+>>> +++ b/kernel/rseq.c
+>>> @@ -176,7 +176,7 @@ static int rseq_need_restart(struct task_struct *t, u32
+>>> cs_flags)
+>>>  	u32 flags, event_mask;
+>>>  	int ret;
+>>>  
+>>> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS))
+>>> +	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
+>>>  		return -EINVAL;
+>>>  
+>>>  	/* Get thread flags. */
+>>> @@ -184,7 +184,7 @@ static int rseq_need_restart(struct task_struct *t, u32
+>>> cs_flags)
+>>>  	if (ret)
+>>>  		return ret;
+>>>  
+>>> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS))
+>>> +	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
+>>>  		return -EINVAL;
+>>
+>> Just to make it clear: no existing libraries/tooling out there have learned
+>> to rely on the old ABI that ignored unset flags, right? Only then is this
+>> patch ABI-safe.
+> 
+> I believe glibc initializes the flag fields to zero before calling the
+> rseq system call.  (I don't know if the rseq system call does its own
+> initialization; maybe it should if it doesn't do so already.)
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-core-2022-08-01
+Initialization and following updates of rseq_abi()->flags and
+rseq_abi()->rseq_cs->flags is done by user-space, so the rseq
+system call does not initialize any of those fields.
 
-   # HEAD: 326ecc15c61c349cd49d1700ff9e3e31c6fd1cd5 perf/x86/ibs: Add new IBS register bits into header
+Indeed glibc initialize the rseq_abi()->flags to 0, and does not
+use rseq_abi()->rseq_cs->flags as of now.
 
-Perf events updates for this cycle are:
+Thanks,
 
-- Fix Intel Alder Lake PEBS memory access latency & data source profiling info bugs.
+Mathieu
 
-- Use Intel large-PEBS hardware feature in more circumstances, to reduce
-  PMI overhead & reduce sampling data.
-
-- Extend the lost-sample profiling output with the PERF_FORMAT_LOST ABI variant,
-  which tells tooling the exact number of samples lost.
-
-- Add new IBS register bits definitions.
-
-- AMD uncore events: Add PerfMonV2 DF (Data Fabric) enhancements.
-
- Thanks,
-
-	Ingo
-
------------------->
-Kan Liang (2):
-      perf/x86/intel: Fix PEBS memory access info encoding for ADL
-      perf/x86/intel: Fix PEBS data source encoding for ADL
-
-Like Xu (1):
-      x86/events/intel/ds: Enable large PEBS for PERF_SAMPLE_WEIGHT_TYPE
-
-Namhyung Kim (1):
-      perf/core: Add a new read format to get a number of lost samples
-
-Ravi Bangoria (1):
-      perf/x86/ibs: Add new IBS register bits into header
-
-Sandipan Das (5):
-      perf/x86/amd/uncore: Use dynamic events array
-      perf/x86/amd/uncore: Use attr_update for format attributes
-      perf/x86/amd/uncore: Detect available DF counters
-      perf/x86/amd/uncore: Add PerfMonV2 DF event format
-      perf/x86/amd/uncore: Add PerfMonV2 RDPMC assignments
-
-
- arch/x86/events/amd/uncore.c      | 146 +++++++++++++++++++++++++++++++-------
- arch/x86/events/intel/core.c      |   7 +-
- arch/x86/events/intel/ds.c        | 129 ++++++++++++++++++++++-----------
- arch/x86/events/perf_event.h      |  17 ++++-
- arch/x86/include/asm/amd-ibs.h    |  16 +++--
- arch/x86/include/asm/perf_event.h |  16 +++++
- include/linux/perf_event.h        |   2 +
- include/uapi/linux/perf_event.h   |   5 +-
- kernel/events/core.c              |  21 +++++-
- kernel/events/ring_buffer.c       |   5 +-
- 10 files changed, 280 insertions(+), 84 deletions(-)
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADDE586284
+	by mail.lfdr.de (Postfix) with ESMTP id 805CC586283
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 04:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbiHACUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 31 Jul 2022 22:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S238370AbiHACUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 31 Jul 2022 22:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbiHACUo (ORCPT
+        with ESMTP id S238437AbiHACUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 31 Jul 2022 22:20:44 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025FA12ADF
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:20:40 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id v18so9195842plo.8
-        for <linux-kernel@vger.kernel.org>; Sun, 31 Jul 2022 19:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=n2C3cWPyEPK62L9QNW3odLHuxPFgMTmW2KM5Bt5TsxQ=;
-        b=ST8eQORvYm28bCZgyqei+Qy7PRjx7Mr4o6WGtrfaC1aGclnURMntlThdQtNQAbkkHM
-         96Mu3ySe/iwoC3NfI8yEEPggUX9FGrqRCn7X1XoMgthGcodxwgfa/dUE1vmo7sWbt6DU
-         5wGhKADuPCIfwYBib1ZglyuKfNN9icDGGzzCXg4JrtI3gsaupeo7EoTLHtXZ0rr+lBtp
-         A6UDt24OYSSAKZaf36mXn/DkU2vqbRv0feXiM/1ldfF6G/ZEMYKMRjsL6C8FVqdDp7Ow
-         ddqZFOcwx6U/PgTlNjMBfERt1NkwQpbmtW5yr7o+UrTecgJyr+5adVgrY9PqfIYC3SJS
-         Q+pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=n2C3cWPyEPK62L9QNW3odLHuxPFgMTmW2KM5Bt5TsxQ=;
-        b=hcydf/99BtDOyNY5C9ALTruGQ3k/VhtfTl+yg4CfhiuP0KeQt90V0CtGH/vJ+XqqQt
-         x4/f1OoW2wRqeKJXQXJmSmFVNjZ/q6eGDClDxCpCzNAtZ03WlnXdtuxYJ6GKRNy8r7LM
-         jZpHtpLjtB3Hv9mnJBnFLnbB9Sea6C0c6tvG/uDwemInH1CEqfmmfbWqMy/xdl3HTHwq
-         8cLkyVTRkNozpohyyILZwiaHhWwmia6u6RTqUGatL0FhJg3HiXfG6dTnAUsT2C/Qc8ju
-         depEnpas8cEKeFLmK1whS14Rb7kQ3sFqGz50eHcLlyA0pbZfEQSwMRxteaTuBPmSY3Fx
-         RdnQ==
-X-Gm-Message-State: ACgBeo10qtN+bk+kICTj4XDI0xZQ61aJoCE86xd2tv3igdaAxyjl075U
-        F7+syxNdDKrYGB5nHgh+t23O+jnh+DE=
-X-Google-Smtp-Source: AA6agR4AQb0aEtJpC0HeT9arpqIdbfchcfCcMOjmv4J8FVnMK5JP8zlZ8yhidgLcEeOlopA6wG/ZNQ==
-X-Received: by 2002:a17:90b:3901:b0:1f0:2e50:6f3f with SMTP id ob1-20020a17090b390100b001f02e506f3fmr17505355pjb.233.1659320440077;
-        Sun, 31 Jul 2022 19:20:40 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w13-20020a170902ca0d00b001677fa34a07sm8076285pld.43.2022.07.31.19.20.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 19:20:39 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] drm/amd/display: Swap with swap() function Use swap() to instead of : temp = a; a =b; b = temp;
-Date:   Mon,  1 Aug 2022 02:20:30 +0000
-Message-Id: <20220801022030.1594208-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 31 Jul 2022 22:20:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1F912ABB;
+        Sun, 31 Jul 2022 19:20:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 038D8CE0F0E;
+        Mon,  1 Aug 2022 02:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6678CC433D6;
+        Mon,  1 Aug 2022 02:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659320435;
+        bh=8+H9rIFxtVXMLizyjzjdfAN5H4rrg+kZwIAaizE2yzQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qbHrryCgLDT40La7RvFNZvpswRq37MotxkwMrnSgvThg10C5P0Wuvbhb+kgAW2IV/
+         7l9AinfPyV+s0mp74V/lgRfNNWtXpVcoBhJZq6nNU0+Y+uztq9mnx8qZUNJtGfOmBy
+         z9E4MQQrlRBjePrgwRm5wkSRkYp1eh67rIz1eWdsjiCrWjEg7KPlp9UuuRYFvVdF4H
+         AG5ozENZQdt/UaSewznbAtfMQ42eqJ8Aijum4zvDsoNX31z1VJqC3WWFB8VpixZRdN
+         eZ7vzT+qAn+vAnbV2YEMFy6M4I4SzFXOjvGZzYicWbyrhI6mijE08eH8oBJNpMbil5
+         HrwTfHKih8DWg==
+Message-ID: <65fb5e26-2000-ffa5-5a3b-21db87da9e3b@kernel.org>
+Date:   Sun, 31 Jul 2022 20:20:31 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [RFC] Remove DECNET support from kernel
+Content-Language: en-US
+To:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Akhmat Karakotov <hmukos@yandex-team.ru>,
+        Antoine Tenart <atenart@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Juergen Gross <jgross@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Chen Yu <yu.c.chen@intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Suma Hegde <suma.hegde@amd.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Scott Wood <oss@buserror.net>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Victor Erminpour <victor.erminpour@oracle.com>,
+        "GONG, Ruiqi" <gongruiqi1@huawei.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
+        "open list:NETFILTER" <coreteam@netfilter.org>
+References: <20220731190646.97039-1-stephen@networkplumber.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220731190646.97039-1-stephen@networkplumber.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,38 +115,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 7/31/22 1:06 PM, Stephen Hemminger wrote:
+> Decnet is an obsolete network protocol that receives more attention
+> from kernel janitors than users. It belongs in computer protocol
+> history museum not in Linux kernel.
+> 
+> It has been Orphaned in kernel since 2010.
+> And the documentation link on Sourceforge says it is abandoned there.
+> 
+> Leave the UAPI alone to keep userspace programs compiling.
+> 
+> Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+> ---
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Acked-by: David Ahern <dsahern@kernel.org>
 
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-index 09fbb7ad5362..6e36a0f5989d 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-@@ -2906,7 +2906,6 @@ static enum bp_result construct_integrated_info(
- 	struct atom_common_table_header *header;
- 	struct atom_data_revision revision;
- 
--	struct clock_voltage_caps temp = {0, 0};
- 	uint32_t i;
- 	uint32_t j;
- 
-@@ -2982,10 +2981,8 @@ static enum bp_result construct_integrated_info(
- 				info->disp_clk_voltage[j-1].max_supported_clk
- 				) {
- 				/* swap j and j - 1*/
--				temp = info->disp_clk_voltage[j-1];
--				info->disp_clk_voltage[j-1] =
--					info->disp_clk_voltage[j];
--				info->disp_clk_voltage[j] = temp;
-+				swap(info->disp_clk_voltage[j-1],
-+					 info->disp_clk_voltage[j]);
- 			}
- 		}
- 	}
--- 
-2.25.1
+

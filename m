@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF915586C2F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5339F586C30
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 Aug 2022 15:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbiHANn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 09:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S231859AbiHANoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 09:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiHANn4 (ORCPT
+        with ESMTP id S231840AbiHANn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 09:43:56 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B191495BB;
-        Mon,  1 Aug 2022 06:43:55 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id y197so8360618iof.12;
-        Mon, 01 Aug 2022 06:43:55 -0700 (PDT)
+        Mon, 1 Aug 2022 09:43:58 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B53C95BB;
+        Mon,  1 Aug 2022 06:43:57 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id n138so8393763iod.4;
+        Mon, 01 Aug 2022 06:43:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=y4FlZrpOSW7bs3SSCv+hrJsY9DFSZ9IOQL9orespssM=;
-        b=Ik785jSVPFDzG/p7l0S2V5IFBPshRlBBpt6joZhsiDiNEgFL69HhetKUWsj/xPbObo
-         IeRHsgl5O4xG517UHWfWYvvnV0vDrJ9BgorzMRu+gyMxZFEAWR9EAu09gw6m2YkobZGF
-         GH3ut+igD+xUmzrTEcOnm8tD6kjfked+++8OUpCeBATdIdChhdNxB3n2L7BR317tLDCU
-         8TcEZjSEwvxq5AFsqZToTwVaTePtNUwHu5nROQRrTGNd+0hrUarMp/EWuq2OoXaZ/dxn
-         70eQP92cS/TlJoL8rDk5uuzgQoBuDFE0KBuklPOsZ5h2yGojK56kL4XgFBt5flz5AyFw
-         Oc7g==
-X-Gm-Message-State: ACgBeo18QHrF8s150mTIOIfp288fdOayScqUCRoMcAZQx2wplSKSiIJH
-        FxlJqZ7ISP16RrDwhGEyTQ==
-X-Google-Smtp-Source: AA6agR6RXwK+cr0Hg80Gi5E4Kbz7VRmoTYTZl1KiiQk8aOjn7XSfaVSOFmc0ncyMLohxtFBWQRdjng==
-X-Received: by 2002:a05:6638:ca:b0:342:7d2f:d882 with SMTP id w10-20020a05663800ca00b003427d2fd882mr528451jao.220.1659361434887;
-        Mon, 01 Aug 2022 06:43:54 -0700 (PDT)
+        bh=zsZQN63lOHh8h4GXaIvhTBnUEILZRHFu8ewz58HKTGY=;
+        b=hDem/g4l+oFS2ei0esqWY9ZaNfAo94ZSEPCgFulNQvyMKFoVr6ZzItT71gkjb9msSE
+         R6DNLCLvrttj0pe9NSCWviOFMI+4Gp4r7VmuYk1vNhnNCDdX/kCXjEN9b7p+qO5MD7dT
+         Yk5yiMH97ws8Er+fYm11hRfkohX++uvLI/08sd5d0ZOTqa8vlxE69hebmYjspc97TN6s
+         JxRcjwoKEcnEdyMBA/HWxCsMeqKHcEmxv9w3vqsR9XzKMPJqBja7/Z0Xs7S94xSrmU0F
+         i0oGWKpg5GCLHL76Vizb3Lg6Hhj7CKE+2CxDpc2Rn2Rp4omQQdbzUsxNFZYBU6r3qfby
+         wr3w==
+X-Gm-Message-State: AJIora/YzEZdfng7R+8BtiC24m/q+H6vWkuALQb2N+jWVf+2Sg5aVKAr
+        uSdV4S63wn0+74cLv9Zd/A==
+X-Google-Smtp-Source: AGRyM1t9Mj5nTHd4BV8E79tZn1dYTdEMV9X5kGdVN8crTiTo4iJ1VJeyJLdxHMNomc1wjgRKUpobrw==
+X-Received: by 2002:a05:6638:30b:b0:33f:8d28:4d85 with SMTP id w11-20020a056638030b00b0033f8d284d85mr5996500jap.13.1659361436772;
+        Mon, 01 Aug 2022 06:43:56 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t129-20020a025487000000b003415b95c097sm5294568jaa.42.2022.08.01.06.43.53
+        by smtp.gmail.com with ESMTPSA id t3-20020a02b183000000b0033e9c4c6a9esm5149828jah.82.2022.08.01.06.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 06:43:54 -0700 (PDT)
-Received: (nullmailer pid 914818 invoked by uid 1000);
+        Mon, 01 Aug 2022 06:43:56 -0700 (PDT)
+Received: (nullmailer pid 914821 invoked by uid 1000);
         Mon, 01 Aug 2022 13:43:53 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-sunxi@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-In-Reply-To: <20220801044758.12679-1-samuel@sholland.org>
-References: <20220801044758.12679-1-samuel@sholland.org>
-Subject: Re: [PATCH 1/2] regulator: dt-bindings: Add Allwinner D1 LDOs
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Will Deacon <will@kernel.org>, Chris Healy <cphealy@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        devicetree@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+In-Reply-To: <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
+References: <20220801060049.1655177-1-jiucheng.xu@amlogic.com> <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
+Subject: Re: [PATCH v3 4/4] dt-binding: perf: Add Amlogic DDR PMU
 Date:   Mon, 01 Aug 2022 07:43:53 -0600
-Message-Id: <1659361433.069437.914817.nullmailer@robh.at.kernel.org>
+Message-Id: <1659361433.078688.914820.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -63,30 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 31 Jul 2022 23:47:57 -0500, Samuel Holland wrote:
-> The Allwinner D1 SoC contains two pairs of in-package LDOs. One pair is
-> for general purpose use. LDOA generally powers the board's 1.8 V rail.
-> LDOB generally powers the in-package DRAM, where applicable.
+On Mon, 01 Aug 2022 14:00:49 +0800, Jiucheng Xu wrote:
+> Add binding documentation for the Amlogic G12 series DDR
+> performance monitor unit.
 > 
-> The other pair of LDOs powers the analog power domains inside the SoC,
-> including the audio codec, thermal sensor, and ADCs. These LDOs require
-> a 0.9 V bandgap voltage reference. The calibration value for the voltage
-> reference is stored in an eFuse, accessed via an NVMEM cell.
-> 
-> Neither LDO control register is in its own MMIO range; instead, each
-> regulator device relies on a syscon exported by some "host" device node.
-> Getting the register via a syscon avoids a dependency on the subsystem/
-> driver for that host device (e.g. a functioning thermal sensor should
-> not depend on having the audio codec driver loaded).
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
 > ---
+> Changes v2 -> v3:
+>   - Remove oneOf
+>   - Add descriptions
+>   - Fix compiling warning
 > 
->  .../allwinner,sun20i-d1-analog-ldos.yaml      | 77 +++++++++++++++++++
->  .../allwinner,sun20i-d1-system-ldos.yaml      | 55 +++++++++++++
->  2 files changed, 132 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+> Changes v1 -> v2:
+>   - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
+>   - Delete "model", "dmc_nr", "chann_nr" new properties
+>   - Fix compiling error
+> ---
+>  .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -95,11 +95,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.example.dts:24.27-28 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:383: Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-analog-ldos.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1404: dt_binding_check] Error 2
+./Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/perf/amlogic,g12_ddr_pmu.yaml#
 
 doc reference errors (make refcheckdocs):
 

@@ -2,64 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189FE5883B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4235883B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbiHBVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S234894AbiHBVng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiHBVlL (ORCPT
+        with ESMTP id S231759AbiHBVnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:41:11 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A665A1276B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:41:08 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31f3959ba41so128305177b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:41:08 -0700 (PDT)
+        Tue, 2 Aug 2022 17:43:33 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB4192B3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:43:32 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id g12so14761088pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=2Oj7GKF36foN2xzCMJsEg/+ZHnZe2AIMZ3VLvOtF3gc=;
-        b=l6RqDs+6IFXZysUKYya+R2SsHON0bu+fj6nv8FJ2gUbVtp4O/HIgYSN/38/CqG5HRu
-         au7OcsDePs0imDGdkEyVhyIIUQ/OrQE5M681LoehpxdcXXlSSJh1djFJyTMxKdSctxWH
-         VoMCamxtk3CGNmlLDmDw28s43YK55CBM06tLbJ/wnYt99tryonQLpqEPRUZZXESrkMpH
-         k57YmQNgepcAKV1U1GCP1z2le0W08M7mAf7wPTe40UWcP+KwVQbNEBhXumli6b6X0b+P
-         S7oY8JYeBGskER/uu1K3oFT77WVw/lFLLCe8C6ebdRV2S6erXziWBElZhCAxem+WN/NR
-         GGew==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=glIoMvy+V8piFljmDBSx1DXBvemkA6EbTrCh0bvpQQM=;
+        b=bXtC5cvRALUa/1WE0ly/zfA9Ixmtzw5XKDDqJ7xA/MZ2JEiS0E84uQe9/5YDrlj1j1
+         bPiKiu1wZ5qOKDN9EkX5fFU1UgNTVLbTTuGJNjJDmLCSdzSNfL3IFteLCTlz1lCwvgdJ
+         7l/KGtCLKdTW+9LqNbdBak5iOfLoU8BzAyb4p4MRp62KCRXTcK6aEv+iuElX9guDUtF9
+         A9dlpmOgwwMBQOSSCcAvoaHZLyxMFgFL+ccMmbyx7gdDjnIyRr1uqbTp0VCd0PXpZJbt
+         C0s+liN2XOmtcDLOR5jgbx/uMe7kL1/foBA5s7E8Pi+GDq7JLbzmPxvQcQ8JFgeawTOH
+         LZ2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=2Oj7GKF36foN2xzCMJsEg/+ZHnZe2AIMZ3VLvOtF3gc=;
-        b=xz/0w8C2FJP2eexRmgZqAKV9k3Wusi1f5zXdX5uk2dcp8dP2h+IlmI5Q2fW0mE6ol4
-         IqD6IvjyRXAPwHot1O8M25199JgFxNnDx28tF89uEX1D6kF8UJnLrkcwJdZvVJRpzDbk
-         8n1zS8wq/hXw2OKrIutjNVCin892GE1hqVT/UE5pelNRGlqLT5Xl28nS42oCxZg3747j
-         x5oQKHB8ACwYlelueDr/uFwfUET32rtIWYc0/+yWsNKEv+0FH1CrbP+njmehixT7av6T
-         Ah9edMsTOTU5Ph/lJPCBW4GgdeAW18tQt1STlTfpFLPgqQBxQ9sww2e+2OVmiovlacC6
-         p4jw==
-X-Gm-Message-State: ACgBeo0kS8Tk4S66352/V+SAClizV5mE+w/ksHjFaWiVgRxf+j++Er1a
-        Xdsht/Tcx2eUOaMbu0h0lInJsgfuf/Z4iw==
-X-Google-Smtp-Source: AA6agR6Vs262m5nFKDt9CTk3P/SK98G7ukbrd1D6Cs+bJ4KZWuTMBmzg2Wx+c9W98khx+AByTZ6h4VJylbwedw==
-X-Received: from neelnatu0.svl.corp.google.com ([2620:15c:2cd:202:52da:b54:3437:6f63])
- (user=neelnatu job=sendgmr) by 2002:a25:c9c4:0:b0:66f:e085:7ef2 with SMTP id
- z187-20020a25c9c4000000b0066fe0857ef2mr18101965ybf.166.1659476467926; Tue, 02
- Aug 2022 14:41:07 -0700 (PDT)
-Date:   Tue,  2 Aug 2022 14:40:41 -0700
-Message-Id: <20220802214041.2656586-1-neelnatu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH] sched, cpumask: don't leak impossible cpus via for_each_cpu_wrap().
-From:   Neel Natu <neelnatu@google.com>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Neel Natu <neelnatu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=glIoMvy+V8piFljmDBSx1DXBvemkA6EbTrCh0bvpQQM=;
+        b=V2PwWBdiGCmFbtCDz2/0uE01pp9/I5Z3lBx/b7npxKMyRKoVafeTduDPFFj6uwC9yn
+         YSQqYTJvAOCR4MfxwyjGvFa7CtjQLjJ3DUKGplO3Ur0vm/n5a+z+oadw+F1mnkmNRfPA
+         svkdwqAjGbpcbOPaOU1m06j/6zhlkhke5GjGcqUyUH5rzQSfqaQv3Yo32wSx0qTEOzSm
+         nhphhAfteXb950vYu51bG7Lw5ghE9i4i+jdlX93jGaHqlEfaePkSNaEYyWerl3LhA4R7
+         s2N6NfN2vna9TGIKFPZ0LXGr8uwxVvGoPDURFSS9oWKbwzHJS+Ezlkyx5BfOZam1Wf4J
+         hlow==
+X-Gm-Message-State: AJIora9ceykbfPZ3QlV1/GY8OoDyrITVMxfdYwaaNaiDcIvSQkSJsorz
+        4fuH5CghTMdQ4BdeC5MaOGZMRA==
+X-Google-Smtp-Source: AGRyM1t8NwHkIq41xaU0E/q8nllWxF+IG4nAKsFzU5BfqUvk9QC8EJW8Bvrd7zkDShHaMjlywqZsRw==
+X-Received: by 2002:a05:6a00:16ca:b0:52b:cc59:9488 with SMTP id l10-20020a056a0016ca00b0052bcc599488mr22807097pfc.0.1659476611335;
+        Tue, 02 Aug 2022 14:43:31 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b0016c28fbd7e5sm149763plh.268.2022.08.02.14.43.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 14:43:30 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 21:43:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dmytro Maluka <dmy@semihalf.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH 1/3] KVM: x86: Move kvm_(un)register_irq_mask_notifier()
+ to generic KVM
+Message-ID: <Yumafj7MQrG6nRjr@google.com>
+References: <20220715155928.26362-1-dmy@semihalf.com>
+ <20220715155928.26362-2-dmy@semihalf.com>
+ <YuLZng8mW0qn4MFk@google.com>
+ <1cdff41c-c917-1344-02bc-ad5cf5c79ab1@semihalf.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1cdff41c-c917-1344-02bc-ad5cf5c79ab1@semihalf.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,51 +88,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value of 'nr_cpumask_bits' is dependent on CONFIG_CPUMASK_OFFSTACK.
-This in turn can change the set of cpus visited by for_each_cpu_wrap()
-with a mask that has bits set in the range [nr_cpu_ids, NR_CPUS).
+On Fri, Jul 29, 2022, Dmytro Maluka wrote:
+> On 7/28/22 20:46, Sean Christopherson wrote:
+> > On Fri, Jul 15, 2022, Dmytro Maluka wrote:
+> >> In preparation for implementing postponing resamplefd event until the
+> >> interrupt is unmasked, move kvm_(un)register_irq_mask_notifier() from
+> >> x86 to arch-independent code to make it usable by irqfd.
+> > 
+> > This patch needs to move more than just the helpers, e.g. mask_notifier_list
+> > needs to be in "struct kvm", not "stuct kvm_arch".
+> > 
+> > arch/arm64/kvm/../../../virt/kvm/eventfd.c: In function ‘kvm_register_irq_mask_notifier’:
+> > arch/arm64/kvm/../../../virt/kvm/eventfd.c:528:51: error: ‘struct kvm_arch’ has no member named ‘mask_notifier_list’
+> >   528 |         hlist_add_head_rcu(&kimn->link, &kvm->arch.mask_notifier_list);
+> >       |                                                   ^
+> > make[3]: *** [scripts/Makefile.build:249: arch/arm64/kvm/../../../virt/kvm/eventfd.o] Error 1
+> > make[3]: *** Waiting for unfinished jobs....
+> >   AR      kernel/entry/built-in.a
+> 
+> Oops, sorry.
+> 
+> > And kvm_fire_mask_notifiers() should probably be moved as well, otherwise there's
+> > no point in moving the registration to common code.
+> 
+> Good point, we can move it right away, even though it is not called on
+> other architectures for now.
+> 
+> > The other option would be to make the generic functions wrappers around arch-specific
+> > hooks.  But IIRC won't this eventually be needed for other architectures?
+> 
+> Right, I assume we will eventually need it for ARM at least. Not in the
+> near future though, and at the moment I have no non-x86 hardware on hand
+> to implement it for other architectures.
+> 
+> Actually I feel a bit uncomfortable with generic irqfd relying on
+> kvm_register_irq_mask_notifier() which silently has no effect on other
+> architectures. Maybe it's better to keep
+> kvm_(un)register_irq_mask_notifier() in the x86 code, and for the
+> generic code add a weak version which e.g. just prints a warning like
+> "irq mask notifiers not implemented on this arch". (Or maybe instead of
+> weak functions introduce arch-specific hooks as you suggested, and print
+> such a warning if no hook is provided.) What do you think?
 
-Specifically on !CONFIG_CPUMASK_OFFSTACK kernels the API can iterate
-over cpus outside the 'cpu_possible_mask'.
+If the entire concept of having mask notifiers is x86 specific, then moving it to
+generic code obviously doesn't make sense.  But if the concept applies to other
+archictectures, then IMO the list belongs in "struct kvm" with generic, common
+helpers, even if no other arch calls kvm_fire_mask_notifiers() at this time.
 
-Fix this to make its behavior match for_each_cpu() which always limits
-the iteration to the range [0, nr_cpu_ids).
-
-Signed-off-by: Neel Natu <neelnatu@google.com>
----
- include/linux/cpumask.h | 2 +-
- lib/cpumask.c           | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index fe29ac7cc469..2a308cfc43da 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -303,7 +303,7 @@ extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool
-  */
- #define for_each_cpu_wrap(cpu, mask, start)					\
- 	for ((cpu) = cpumask_next_wrap((start)-1, (mask), (start), false);	\
--	     (cpu) < nr_cpumask_bits;						\
-+	     (cpu) < nr_cpu_ids;						\
- 	     (cpu) = cpumask_next_wrap((cpu), (mask), (start), true))
- 
- /**
-diff --git a/lib/cpumask.c b/lib/cpumask.c
-index a971a82d2f43..d47937fb49eb 100644
---- a/lib/cpumask.c
-+++ b/lib/cpumask.c
-@@ -82,9 +82,9 @@ int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool wrap)
- 	next = cpumask_next(n, mask);
- 
- 	if (wrap && n < start && next >= start) {
--		return nr_cpumask_bits;
-+		return nr_cpu_ids;
- 
--	} else if (next >= nr_cpumask_bits) {
-+	} else if (next >= nr_cpu_ids) {
- 		wrap = true;
- 		n = -1;
- 		goto again;
--- 
-2.37.1.455.g008518b4e5-goog
-
+Paolo and/or non-x86 folks, any thoughts?

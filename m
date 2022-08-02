@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2685874EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689B25874EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiHBA4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S234555AbiHBBBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiHBAz5 (ORCPT
+        with ESMTP id S229505AbiHBBBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:55:57 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC07D402C4
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:55:55 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id n138so9664552iod.4
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=htjvkGtQpD6Ib4OiEIrcN6xIzNKXkccUpXIUMoKCYKE=;
-        b=LbddkIraI5kkZn728C1TSSYy5FguP7AYKDzT0VdOo2sH0YCa/ykzKNIxF5+bY4i+Qr
-         GKIQKZX0wpnvX36KEgM7HkjtSE62AKJKKCBhanG6gKWSq2alQ7XCYsq96FIY5a+kgGvL
-         TlrHefU1yOJbYAX9bUBqcV6J6couXv9Hbfm9IvVoKcEf9HtJm9Mz6SCzPWz15nRi+jln
-         yejT6JbgQdqtOX/16ZaERVHMxOs76BzuJchiiUoNm64gtNSGm9ndu8cu8CRJZYU5jGWy
-         lYW8WwzRFum5g5hL8p7pUgDoAFlH2yijUUp4uyVsGObYLvnnQeHTtA6zEe8mtd4UoYUY
-         Edag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=htjvkGtQpD6Ib4OiEIrcN6xIzNKXkccUpXIUMoKCYKE=;
-        b=Qw/4TQJrPItbpisirR1CGghA2qtEg6wePwk5ganwYyuge/IotifO2thheGWpDMZj4/
-         VjxWh31ukyXrTUstIgzPbxT4ppaxMq7TsHF2yJheVWz6erb3IVqPyw0QsI4jmL+14v8s
-         Oirw03a3MHpt3tW7PESIxDBWgsSq2imnvX2sa0gRz531x7aatpzdr7Pcgxi618wtqXF7
-         ZHXZWaIS+0EjKht0tH8W3BdXQK2BSQtuF5BfzruQgxeB1rF2vvy3hdGct/69ifH87j/R
-         x9LBX1X0gJ+je/u4BZtRIIuPQrSyC4qvIJ4NRdgOBE9PdoH/KPb5LwirPHTfsLjFcL5t
-         CsCw==
-X-Gm-Message-State: AJIora/q2C2Sw1/WilwX7+oJKNc0F2TBZzW0twU2L8rSbXapXhv5qG20
-        D7PivMIOk8PShzf4LKD2aE+AFC5MYD2wLrvx60E=
-X-Google-Smtp-Source: AGRyM1sk7GvHka1gHmx27XQxq4PxeYaRf5VgpXSGDETtSipaNEzwr+0ExJdTormVztKqYE/ZhiJxqtCoFr6mIGeLyfg=
-X-Received: by 2002:a05:6638:4108:b0:33f:88e3:ccec with SMTP id
- ay8-20020a056638410800b0033f88e3ccecmr7763064jab.264.1659401755165; Mon, 01
- Aug 2022 17:55:55 -0700 (PDT)
+        Mon, 1 Aug 2022 21:01:44 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02DD3ED4C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:01:43 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 1404D802B9B8
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:01:40 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 2961A1007385C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:00:45 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id IgH6oCFFWWBOVIgH6ooUWP; Tue, 02 Aug 2022 01:00:45 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=cpReL30i c=1 sm=1 tr=0 ts=62e8773d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9m1x3LKgfERwWD0IXhC9WvK+flGZiLSnrwv2XHfvIKM=; b=o9J6rYbS/cKuVqR7QGVnd7aggQ
+        SaBvRymh5sNzUuxEPVHWZcp1K78ICr6ppAolKyGDh9HK3k+TesxQoIFObGOL2cZCYpA+HgsAJztji
+        jkQKGduqi5iZuIugXow6BmEbdFX3Cs8IsCsRVCLf/xTZ/BioUfOJtJIGQNzExecbpPXxGxdok8c1z
+        jcPSRAsBhaGzigomSpDyAOpQqtDNTt/u4U2Qk6bBk0yTbAcb3NbFUBMLOJrA306BSCwOV4HOhEpXy
+        zk14a4Bx2ED3OX3fczyPrm3He4IgSxuNxXjRf2+bQdjqPYIYqNh5h3UT7A2rvX7bKPB1EJKcaDBjR
+        ZcI46hFg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:38242 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oIgH5-003MHn-Fz;
+        Mon, 01 Aug 2022 19:00:43 -0600
+Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220801114138.041018499@linuxfoundation.org>
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <0d1bcc47-cb07-c0bb-0458-ff5ec543d7dd@w6rz.net>
+Date:   Mon, 1 Aug 2022 18:00:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <202207281950.xaFXiPzC-lkp@intel.com> <383b1045-94c5-c2b0-57db-9f4f4760206c@intel.com>
-In-Reply-To: <383b1045-94c5-c2b0-57db-9f4f4760206c@intel.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 2 Aug 2022 02:55:44 +0200
-Message-ID: <CANiq72ma-c5PjWSLOp3PwonLfkNp83csM=1EfzSPEr+QG-szzg@mail.gmail.com>
-Subject: Re: [linux-next:master 13092/13104] error[E0609]: no field
- `group_leader` on type `bindings_raw::task_struct`
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oIgH5-003MHn-Fz
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:38242
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 3:34 AM kernel test robot <yujie.liu@intel.com> wrote:
+On 8/1/22 4:46 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.16 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
-> commit: 475dd867241716f1b6ab12cc188c221bfadacc40 [13092/13104] Merge branch 'rust-next' of https://github.com/Rust-for-Linux/linux.git
-> config: arm64-randconfig-r033-20220728 (attached as .config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install arm64 cross compiling tool for clang build
->          # apt-get install binutils-aarch64-linux-gnu
->          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=475dd867241716f1b6ab12cc188c221bfadacc40
->          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->          git fetch --no-tags linux-next master
->          git checkout 475dd867241716f1b6ab12cc188c221bfadacc40
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
+> Anything received after that time might be too late.
 >
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <yujie.liu@intel.com>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.16-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fixed in rust-next (and v8 of the Rust patch series):
-https://github.com/Rust-for-Linux/linux/pull/850
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Thanks!
+Tested-by: Ron Economos <re@w6rz.net>
 
-Cheers,
-Miguel

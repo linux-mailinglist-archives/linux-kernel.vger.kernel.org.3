@@ -2,194 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FF2587964
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6790C587968
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236149AbiHBIyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S236167AbiHBIzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236140AbiHBIyJ (ORCPT
+        with ESMTP id S234821AbiHBIzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:54:09 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEEA4E868
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:54:06 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id z20so7785800ljq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XR3z9DiZ0DUd8EO4tWpZvpp8MkSks67AedEHj3l8ZF8=;
-        b=LLPYpdBYZldQTVnMi5TZ9MSqJ23My5pI3ZjxyzRdOKVa4+VnEAUHVbLcFEFWfG6Qpx
-         0PYkqQgkpJDSqA8TJihUg3mn17ojdwerBMXWmWNLXrf9IMgU+Yxx1CqDFaMT9xez6C1U
-         MlSGM9zPn907jTvNQ7dBn9doB6080t72nPeO7dpumNaN0hJD1ugLViGJJ3VcFkMGmb/P
-         VuJZQp2cz3vYRWCKf16pC6eB7uclrTgSuBL+AdAdeOCLTpRj/IVGfcavlwxP1JtONpi2
-         wD7lbnuGZW3fsz7bg58PoUZuGTquY+uxvtkTSu+zX1vngf8druXccdiKFY49d2kMvrcT
-         0dcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XR3z9DiZ0DUd8EO4tWpZvpp8MkSks67AedEHj3l8ZF8=;
-        b=jduLx+d1Bn7priLigDQMkCVxYmWh+zkOkKu/X6HgGnjUmoOaUmGfgB/mda615mc8DF
-         0c3xbvFBqMacuneBKYJSbWs+E3JFu45gbGvoAnus5wl8bumxbGtfAFwqL17r6Fg7DZFF
-         KgptBrNStxBYf5TzrqTsJZybHybZ5Z9CGiGZZxabRbttKCz60gFK1+aO7VjzIEeTCCnz
-         cH1fXt+FmOHo1czuGVDSAqVQZ/IyFKMPod4sgCko422fjywVBGEOHb9J4fKuQJ9X1itH
-         1PIcW7q+RdO2lIXCzIJ8RZkm1JGQLZIhUxmW2BLC3h3lmeY7I9hmOyWoPBLnOTx4C4t/
-         l8SA==
-X-Gm-Message-State: AJIora9/CiLyAMyEk4k+LXq+8W1wJhqJk5BnT8ijOXFvQPyHfIzgyIbT
-        PIiZHQUZV108eqVnmA5lSRP1xw==
-X-Google-Smtp-Source: AGRyM1v6jN2giQnkdU0GSCDvaWsmzaPi5BR/zKcdhtryG+h4RzjUod5ZflQKKYmLYzDtmmtonli6DA==
-X-Received: by 2002:a2e:8081:0:b0:253:ce61:3c66 with SMTP id i1-20020a2e8081000000b00253ce613c66mr5908085ljg.98.1659430445327;
-        Tue, 02 Aug 2022 01:54:05 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id j7-20020a2e6e07000000b0025e65b3b24csm13448ljc.4.2022.08.02.01.54.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:54:04 -0700 (PDT)
-Message-ID: <17a48c8d-fa66-95ba-4666-f4496425bd03@linaro.org>
-Date:   Tue, 2 Aug 2022 10:54:03 +0200
+        Tue, 2 Aug 2022 04:55:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4653642ADC;
+        Tue,  2 Aug 2022 01:55:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F24ADB819ED;
+        Tue,  2 Aug 2022 08:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B243C433C1;
+        Tue,  2 Aug 2022 08:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659430502;
+        bh=v15SE+bUAYu+VHGxejCWUdqp30Em57EgFuZNbFuNzTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lbqFy2fE3Hh6GUPcBuRDtvA42awecTErYS9b1Hsb9KTF/K59i5ujZxqkV0Umlmo9u
+         UP/RyYbwe/IKDhdjQCqUDCxefMu6VfEry+/VRsPztmsyBNyeAZmuOy21xxh4dR13Zo
+         /Cr2iCHUecG9MSfjHQaSRAwT3Fzxvgl6/W2cteBcXPB+ABgRQWFwiIJ/rXc9vnKy6a
+         G20Cvw8Tlsr8wQrzWFfQldfN8qmG7x2sjBP9GMZysrv7K8p89F8JrfCVYwUg4Af/fm
+         UdOR78bEMaQyZwOGK/3T81a4FdefnqNZ3EEevH4hrM2ZiPRxIsYVWhZ1KECk0gmSnb
+         oJ10SWnBG+yvg==
+Date:   Tue, 2 Aug 2022 09:54:55 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+Message-ID: <20220802085455.GC26962@willie-the-truck>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+ <20220801154108.GA26280@willie-the-truck>
+ <20220801192035.GA2860372@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/2] spi: microchip-core-qspi: Add support for microchip
- fpga qspi controllers
-Content-Language: en-US
-To:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor.dooley@microchip.com
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-3-nagasuresh.relli@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220801094255.664548-3-nagasuresh.relli@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801192035.GA2860372@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
-> Add a driver for Microchip FPGA QSPI controllers. This driver also
-> supports "hard" QSPI controllers on Polarfire SoC.
+On Mon, Aug 01, 2022 at 12:20:35PM -0700, Paul E. McKenney wrote:
+> On Mon, Aug 01, 2022 at 04:41:09PM +0100, Will Deacon wrote:
+> > Apologies for the slow response here; believe it or not, I was attending
+> > a workshop about memory ordering.
 > 
-> Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+> Nice!!!  Anything that I can/should know from that gathering?  ;-)
 
-Thank you for your patch. There is something to discuss/improve.
+Oh come off it, you know this stuff already ;)
 
-> +	qspi = spi_controller_get_devdata(ctlr);
-> +	platform_set_drvdata(pdev, qspi);
-> +
-> +	qspi->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(qspi->regs)) {
-> +		ret = PTR_ERR(qspi->regs);
-> +		goto remove_master;
-> +	}
-> +
-> +	qspi->clk = devm_clk_get(&pdev->dev, NULL);
-> +	if (IS_ERR(qspi->clk)) {
-> +		dev_err(&pdev->dev, "clock not found.\n");
-> +		ret = PTR_ERR(qspi->clk);
+> > On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
+> > > On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
+> > > > Even alpha is specified to be locally ordered wrt *one* memory
+> > > > location, including for reads (See table 5-1: "Processor issue order",
+> > > > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
+> > > > new value, a subsequent read is not allowed to see an older one - even
+> > > > without a memory barrier.
+> > > > 
+> > > > Will, Paul? Maybe that's only for overlapping loads/stores, not for
+> > > > loads/loads. Because maybe alpha for once isn't the weakest possible
+> > > > ordering.
+> > > 
+> > > The "bad boy" in this case is Itanium, which can do some VLIW reordering
+> > > of accesses.  Or could, I am not sure that newer Itanium hardware
+> > > does this.  But this is why Itanium compilers made volatile loads use
+> > > the ld,acq instruction.
+> > > 
+> > > Which means that aligned same-sized marked accesses to a single location
+> > > really do execute consistently with some global ordering, even on Itanium.
+> > 
+> > Although this is true, there's a really subtle issue which crops up if you
+> > try to compose this read-after-read ordering with dependencies in the case
+> > where the two reads read the same value (which is encapsulated by the
+> > unusual RSW litmus test that I've tried to convert to C below):
+> 
+> RSW from the infamous test6.pdf, correct?
 
-dev_err_probe() for the two of above.
+That's the badger. I've no doubt that you're aware of it already, but I
+thought it was a useful exercise to transcribe it to C and have it on the
+mailing list for folks to look at.
 
-> +		goto remove_master;
-> +	}
-> +
-> +	ret = clk_prepare_enable(qspi->clk);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "failed to enable clock\n");
-> +		goto remove_master;
-> +	}
-> +
-> +	init_completion(&qspi->data_completion);
-> +	mutex_init(&qspi->op_lock);
-> +
-> +	qspi->irq = platform_get_irq(pdev, 0);
-> +	if (qspi->irq <= 0) {
-> +		ret = qspi->irq;
-> +		goto clk_dis_all;
-> +	}
-> +
-> +	ret = devm_request_irq(&pdev->dev, qspi->irq, mchp_coreqspi_isr,
-> +			       0, pdev->name, qspi);
-> +	if (ret != 0) {
-> +		dev_err(&pdev->dev, "request_irq failed %d\n", ret);
-> +		goto clk_dis_all;
-> +	}
-> +
-> +	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
-> +	ctlr->mem_ops = &mchp_coreqspi_mem_ops;
-> +	ctlr->setup = mchp_coreqspi_setup_op;
-> +	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
-> +			  SPI_TX_DUAL | SPI_TX_QUAD;
-> +	ctlr->dev.of_node = np;
-> +
-> +	ret = devm_spi_register_controller(&pdev->dev, ctlr);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "spi_register_controller failed\n");
-> +		goto clk_dis_all;
-> +	}
-> +
-> +	return 0;
-> +
-> +clk_dis_all:
-> +	clk_disable_unprepare(qspi->clk);
-> +remove_master:
-> +	spi_controller_put(ctlr);
-> +
-> +	return ret;
-> +}
-> +
-> +static int mchp_coreqspi_remove(struct platform_device *pdev)
-> +{
-> +	struct mchp_coreqspi *qspi = platform_get_drvdata(pdev);
-> +	u32 control = readl_relaxed(qspi->regs + REG_CONTROL);
-> +
-> +	mchp_coreqspi_disable_ints(qspi);
-> +	control &= ~CONTROL_ENABLE;
-> +	writel_relaxed(control, qspi->regs + REG_CONTROL);
-> +	clk_disable_unprepare(qspi->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Platform driver data structure
-> + */
+> > /* Global definitions; assume everything zero-initialised */
+> > struct foo {
+> > 	int *x;
+> > };
+> > 
+> > int x;
+> > struct foo foo;
+> > struct foo *ptr;
+> > 
+> > 
+> > /* CPU 0 */
+> > WRITE_ONCE(x, 1);
+> 
+> Your x is RSW's z?
 
-Drop such comments.
+Yes.
 
-> +static const struct of_device_id mchp_coreqspi_of_match[] = {
-> +	{ .compatible = "microchip,mpfs-qspi" },
-> +	{ .compatible = "microchip,coreqspi-rtl-v2" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, mchp_coreqspi_of_match);
-> +
-> +static struct platform_driver mchp_coreqspi_driver = {
-> +	.probe = mchp_coreqspi_probe,
-> +	.driver = {
-> +		.name = "microchip,mpfs-qspi",
-> +		.of_match_table = mchp_coreqspi_of_match,
-> +	},
-> +	.remove = mchp_coreqspi_remove,
-> +};
-> +module_platform_driver(mchp_coreqspi_driver);
-> +
-> +MODULE_AUTHOR("Naga Sureshkumar Relli <nagasuresh.relli@microchip.com");
-> +MODULE_DESCRIPTION("Microchip coreQSPI QSPI controller driver");
-> +MODULE_LICENSE("GPL");
+> > WRITE_ONCE(foo.x, &x);
+> 
+> And your foo.x is RSW's x?  If so, the above WRITE_ONCE() could happen at
+> compile time, correct?  Or in the initialization clause of a litmus test?
 
+Yes, although I think it's a tiny bit more like real code to have it done
+here, although it means that the "surprising" outcome relies on this being
+reordered before the store to x.
 
-Best regards,
-Krzysztof
+> > /*
+> >  * Release ordering to ensure that somebody following a non-NULL ptr will
+> >  * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
+> >  */
+> > smp_store_release(&ptr, &foo);
+> 
+> Your ptr is RSW's y, correct?
+
+Yes.
+
+> > /* CPU 1 */
+> > int *xp1, *xp2, val;
+> > struct foo *foop;
+> > 
+> > /* Load the global pointer and check that it's not NULL. */
+> > foop = READ_ONCE(ptr);
+> > if (!foop)
+> > 	return;
+> 
+> A litmus tests can do this via the filter clause.
+
+Indeed, but I was trying to make this look like C code for non-litmus
+speakers!
+
+> > /*
+> >  * Load 'foo.x' via the pointer we just loaded. This is ordered after the
+> >  * previous READ_ONCE() because of the address dependency.
+> >  */
+> > xp1 = READ_ONCE(foop->x);
+> > 
+> > /*
+> >  * Load 'foo.x' directly via the global 'foo'.
+> >  * _This is loading the same address as the previous READ_ONCE() and
+> >  *  therefore cannot return a stale (NULL) value!_
+> >  */
+> > xp2 = READ_ONCE(foo.x);
+> 
+> OK, same location, but RSW calls only for po, not addr from the initial
+> read to this read, got it.  (My first attempt left out this nuance,
+> in case you were wondering.)
+
+Right, there is only po from the initial read to this read. If there was an
+address dependency, then we'd have a chain of address dependencies from the
+first read to the last read on this CPU and the result (of x == 0) would be
+forbidden.
+
+> > /*
+> >  * Load 'x' via the pointer we just loaded.
+> >  * _We may see zero here!_
+> >  */
+> > val = READ_ONCE(*xp2);
+> 
+> And herd7/LKMM agree with this, at least assuming I got the litmus
+> test right.  (I used RSW's variables as a cross-check.)
+
+That's promising, but see below...
+
+> C rsw
+> 
+> {
+> 	a=0;
+> 	x=z;
+> 	y=a;
+> 	z=0;
+> }
+> 
+> P0(int *x, int **y, int *z)
+> {
+> 	WRITE_ONCE(*z, 1);
+> 	WRITE_ONCE(*y, x);
+> }
+
+Ah wait, you need a barrier between these two writes, don't you? I used
+an smp_store_release() but smp[w]_mb() should do too.
+
+Will

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC37E587530
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A07587537
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiHBBv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S235566AbiHBBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235499AbiHBBvq (ORCPT
+        with ESMTP id S235516AbiHBBvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:51:46 -0400
+        Mon, 1 Aug 2022 21:51:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8405446D9A;
-        Mon,  1 Aug 2022 18:51:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10962A26E;
+        Mon,  1 Aug 2022 18:51:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E192E61043;
-        Tue,  2 Aug 2022 01:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539F2C433C1;
-        Tue,  2 Aug 2022 01:51:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 495C361059;
+        Tue,  2 Aug 2022 01:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD473C433D6;
+        Tue,  2 Aug 2022 01:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659405101;
-        bh=Cmqk+Safb+OhqlJuP/ABtXHVHQNIhLizb1za8f0+5uQ=;
+        s=k20201202; t=1659405108;
+        bh=TqMR/tIQcRK94+z9eetCsW+BK+LLUVa7DCQEAcBAA+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H7nG71GwvulAzC0TjP08CXespIHyK6y/A+KZw4C6JmTAeMfN5wTE+PYYTAQhd3LSF
-         m5U9RzBrES2O2IHP9zCrv+idgdHshoY8yz7aSWCQ8JwvsgxmD2OguUYJNny/7d09EJ
-         hflZroEokUwdmSFhmkQhVOzLZWnZB7+V9YXR3NRSokF5fe/1SMsnKJ8O5LKz0ROPqE
-         75g2aC7CA0TMkE16xAJ9Wa4uIj3qe1bABurVZF5Ke0W8hHmeQySj9FAA3HylO12Fpq
-         BqeT+PbXW7pM9+dfeHCCzIs6xwF+DzyAsh/FxeSfVv1RbIFD9LcXXufsRTKq3srX6P
-         8mJ7AfFvnbCNQ==
+        b=Q/5caY9M57mfl9FH2ASQi2naf9zkjJG7sLtTBScWduo2cd0WOjnRWfTB9xwFE2Fbz
+         racaBApzgnbeD0FAdSafeDX4quUKlLiHJW7eGHpyx28ax1pYWpm2S+zBPvA7I9SJ9u
+         70SwKZ2ALIeDbu5ebZjbFTI1nRuvHA8EGyAC6wJBzPHfj9vsVectuJD12BOXE/Q55w
+         M2Bn4KwGmSHS1TeHVZof1SNs5HUJO2PAvsqybTlzpwuyvIqwPortf8yCfHKeP7/0IO
+         WZNgtKIaJTzH4/SGy1EYoMQ8f6ycG6Ywyeb65yx8dKQ7YkogtM3TE7/UjlOBbGkgA9
+         FrNHwOySYVYTg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -39,13 +39,25 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
         Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
         Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v8 04/31] kallsyms: support "big" kernel symbols
-Date:   Tue,  2 Aug 2022 03:49:51 +0200
-Message-Id: <20220802015052.10452-5-ojeda@kernel.org>
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: [PATCH v8 05/31] kallsyms: increase maximum kernel symbol length to 512
+Date:   Tue,  2 Aug 2022 03:49:52 +0200
+Message-Id: <20220802015052.10452-6-ojeda@kernel.org>
 In-Reply-To: <20220802015052.10452-1-ojeda@kernel.org>
 References: <20220802015052.10452-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -60,16 +72,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Rust symbols can become quite long due to namespacing introduced
-by modules, types, traits, generics, etc.
+by modules, types, traits, generics, etc. For instance,
+the following code:
 
-Increasing to 255 is not enough in some cases, therefore
-introduce longer lengths to the symbol table.
+    pub mod my_module {
+        pub struct MyType;
+        pub struct MyGenericType<T>(T);
 
-In order to avoid increasing all lengths to 2 bytes (since most
-of them are small, including many Rust ones), use ULEB128 to
-keep smaller symbols in 1 byte, with the rest in 2 bytes.
+        pub trait MyTrait {
+            fn my_method() -> u32;
+        }
+
+        impl MyTrait for MyGenericType<MyType> {
+            fn my_method() -> u32 {
+                42
+            }
+        }
+    }
+
+generates a symbol of length 96 when using the upcoming v0 mangling scheme:
+
+    _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
+
+At the moment, Rust symbols may reach up to 300 in length.
+Setting 512 as the maximum seems like a reasonable choice to
+keep some headroom.
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
 Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
@@ -78,113 +108,107 @@ Co-developed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Gary Guo <gary@garyguo.net>
 Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Co-developed-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Matthew Wilcox <willy@infradead.org>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- kernel/kallsyms.c  | 26 ++++++++++++++++++++++----
- scripts/kallsyms.c | 29 ++++++++++++++++++++++++++---
- 2 files changed, 48 insertions(+), 7 deletions(-)
+ include/linux/kallsyms.h            | 2 +-
+ kernel/livepatch/core.c             | 4 ++--
+ scripts/kallsyms.c                  | 4 ++--
+ tools/include/linux/kallsyms.h      | 2 +-
+ tools/lib/perf/include/perf/event.h | 2 +-
+ tools/lib/symbol/kallsyms.h         | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index fbdf8d3279ac..87e2b1638115 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -70,12 +70,20 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
- 	data = &kallsyms_names[off];
- 	len = *data;
- 	data++;
-+	off++;
-+
-+	/* If MSB is 1, it is a "big" symbol, so needs an additional byte. */
-+	if ((len & 0x80) != 0) {
-+		len = (len & 0x7F) | (*data << 7);
-+		data++;
-+		off++;
-+	}
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index ad39636e0c3f..649faac31ddb 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -15,7 +15,7 @@
  
- 	/*
- 	 * Update the offset to return the offset for the next symbol on
- 	 * the compressed stream.
+ #include <asm/sections.h>
+ 
+-#define KSYM_NAME_LEN 128
++#define KSYM_NAME_LEN 512
+ #define KSYM_SYMBOL_LEN (sizeof("%s+%#lx/%#lx [%s %s]") + \
+ 			(KSYM_NAME_LEN - 1) + \
+ 			2*(BITS_PER_LONG*3/10) + (MODULE_NAME_LEN - 1) + \
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index bc475e62279d..ec06ce59d728 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -213,7 +213,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
+ 	 * we use the smallest/strictest upper bound possible (56, based on
+ 	 * the current definition of MODULE_NAME_LEN) to prevent overflows.
  	 */
--	off += len + 1;
-+	off += len;
+-	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 128);
++	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 512);
  
- 	/*
- 	 * For every byte on the compressed symbol data, copy the table
-@@ -128,7 +136,7 @@ static char kallsyms_get_symbol_type(unsigned int off)
- static unsigned int get_symbol_offset(unsigned long pos)
- {
- 	const u8 *name;
--	int i;
-+	int i, len;
+ 	relas = (Elf_Rela *) relasec->sh_addr;
+ 	/* For each rela in this klp relocation section */
+@@ -227,7 +227,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
  
- 	/*
- 	 * Use the closest marker we have. We have markers every 256 positions,
-@@ -142,8 +150,18 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 	 * so we just need to add the len to the current pointer for every
- 	 * symbol we wish to skip.
- 	 */
--	for (i = 0; i < (pos & 0xFF); i++)
--		name = name + (*name) + 1;
-+	for (i = 0; i < (pos & 0xFF); i++) {
-+		len = *name;
-+
-+		/*
-+		 * If MSB is 1, it is a "big" symbol, so we need to look into
-+		 * the next byte (and skip it, too).
-+		 */
-+		if ((len & 0x80) != 0)
-+			len = ((len & 0x7F) | (name[1] << 7)) + 1;
-+
-+		name = name + len + 1;
-+	}
- 
- 	return name - kallsyms_names;
- }
+ 		/* Format: .klp.sym.sym_objname.sym_name,sympos */
+ 		cnt = sscanf(strtab + sym->st_name,
+-			     ".klp.sym.%55[^.].%127[^,],%lu",
++			     ".klp.sym.%55[^.].%511[^,],%lu",
+ 			     sym_objname, sym_name, &sympos);
+ 		if (cnt != 3) {
+ 			pr_err("symbol %s has an incorrectly formatted name\n",
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index f543b1c4f99f..9da3b7767e9d 100644
+index 9da3b7767e9d..3b64dda7e4cc 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -481,12 +481,35 @@ static void write_src(void)
- 		if ((i & 0xFF) == 0)
- 			markers[i >> 8] = off;
+@@ -30,10 +30,10 @@
+ #define _stringify_1(x)	#x
+ #define _stringify(x)	_stringify_1(x)
  
--		printf("\t.byte 0x%02x", table[i]->len);
-+		/* There cannot be any symbol of length zero. */
-+		if (table[i]->len == 0) {
-+			fprintf(stderr, "kallsyms failure: "
-+				"unexpected zero symbol length\n");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		/* Only lengths that fit in up-to-two-byte ULEB128 are supported. */
-+		if (table[i]->len > 0x3FFF) {
-+			fprintf(stderr, "kallsyms failure: "
-+				"unexpected huge symbol length\n");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		/* Encode length with ULEB128. */
-+		if (table[i]->len <= 0x7F) {
-+			/* Most symbols use a single byte for the length. */
-+			printf("\t.byte 0x%02x", table[i]->len);
-+			off += table[i]->len + 1;
-+		} else {
-+			/* "Big" symbols use two bytes. */
-+			printf("\t.byte 0x%02x, 0x%02x",
-+				(table[i]->len & 0x7F) | 0x80,
-+				(table[i]->len >> 7) & 0x7F);
-+			off += table[i]->len + 2;
-+		}
- 		for (k = 0; k < table[i]->len; k++)
- 			printf(", 0x%02x", table[i]->sym[k]);
- 		printf("\n");
--
--		off += table[i]->len + 1;
- 	}
- 	printf("\n");
+-#define KSYM_NAME_LEN		128
++#define KSYM_NAME_LEN		512
  
+ /* A substantially bigger size than the current maximum. */
+-#define KSYM_NAME_LEN_BUFFER	512
++#define KSYM_NAME_LEN_BUFFER	2048
+ _Static_assert(
+ 	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
+ 	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
+diff --git a/tools/include/linux/kallsyms.h b/tools/include/linux/kallsyms.h
+index efb6c3f5f2a9..5a37ccbec54f 100644
+--- a/tools/include/linux/kallsyms.h
++++ b/tools/include/linux/kallsyms.h
+@@ -6,7 +6,7 @@
+ #include <stdio.h>
+ #include <unistd.h>
+ 
+-#define KSYM_NAME_LEN 128
++#define KSYM_NAME_LEN 512
+ 
+ struct module;
+ 
+diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+index e7758707cadd..116a80c31675 100644
+--- a/tools/lib/perf/include/perf/event.h
++++ b/tools/lib/perf/include/perf/event.h
+@@ -95,7 +95,7 @@ struct perf_record_throttle {
+ };
+ 
+ #ifndef KSYM_NAME_LEN
+-#define KSYM_NAME_LEN 256
++#define KSYM_NAME_LEN 512
+ #endif
+ 
+ struct perf_record_ksymbol {
+diff --git a/tools/lib/symbol/kallsyms.h b/tools/lib/symbol/kallsyms.h
+index 72ab9870454b..542f9b059c3b 100644
+--- a/tools/lib/symbol/kallsyms.h
++++ b/tools/lib/symbol/kallsyms.h
+@@ -7,7 +7,7 @@
+ #include <linux/types.h>
+ 
+ #ifndef KSYM_NAME_LEN
+-#define KSYM_NAME_LEN 256
++#define KSYM_NAME_LEN 512
+ #endif
+ 
+ static inline u8 kallsyms2elf_binding(char type)
 -- 
 2.37.1
 

@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B083C587589
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCC958758A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235658AbiHBC1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S235688AbiHBC3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235381AbiHBC06 (ORCPT
+        with ESMTP id S231416AbiHBC3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:26:58 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0FF3334F;
-        Mon,  1 Aug 2022 19:26:57 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id u8so7737377qvv.1;
-        Mon, 01 Aug 2022 19:26:57 -0700 (PDT)
+        Mon, 1 Aug 2022 22:29:54 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05879326FA
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 19:29:53 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id s11so4501956edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 19:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=feedback-id:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=u28fU+R+WkgdZ5gz5xlAlhxJAk8+lyXhIpNWs/Glats=;
-        b=Aa1C+05f4YxiyfU5sU+7I8eAX+hOoGVREp0LuGol5AfJ0d3TKqx4yfdlD0RxKMwWag
-         ixVS5lXND1ngqkjC1z2/oxuKr/Q41NZ5SPPF3VGdxr4rN+7hHq0PB9Ntp6C7nAjMdfpN
-         S0ZjJYx6dFOpU162ZxjMW1JTms6f4ELG5Y45rNG5i1QmHsdLK7SsxsMflMVc5kSuNxq5
-         9HG+yCrlJGc3/HiLwyEiBobzJVXhVX1Vrrp+Z0YnTQAgTuGtW5wR7EQgfp8WrgZQod73
-         1S49EYF7AOqhhmZN8M6iOKzhq8rNd4pkFMJOG10FaPEYR46Co9TMFpSfpIngaciHhFsr
-         hujA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Saw05UbzeLU4x42pdH6Ov1+fGLmaoiI2fVR2aA4FGOI=;
+        b=PuWABKd9mqgWfOp3GFE6NSnZwEdPEog9wdEbqUKAbcfJgAT5VVgPyUkUhkZ5akacVt
+         pzc7EY+92Mp8v4kT0hDpUhWsy/bfeqeseMPsaCqgLFsHfHWWqf77H7jrG+8foGShZDn7
+         BrlHtFb1POlCymwP5emBo6OPa0Qo0qFYHetX9oup9YlBQaYhP6YcaPJf8aVG8QxzeRfT
+         vZpvqfF4r+V75F/uQ4b7j/2ApDv5c+9DY9fzZZkywjp6zH8fTjxSVkAu0tNyBOSUegeM
+         sGF6IoQUSWdcTBI2inVPRxSID2rKZVXPhw1LYzlHywbUQhx6CZ+yOzWDU7I7fzY5VEsP
+         5ceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=u28fU+R+WkgdZ5gz5xlAlhxJAk8+lyXhIpNWs/Glats=;
-        b=4uubVYbI+CQpunmlBwGa4jSjAzn6UOB24PXHb9W1MjZN7mZ0XbTNTY/JvJfHhhyQjO
-         g9tqnjkixTlDgtAgi/mk37uXG96j5s++bR9RwunYV5sLetiwrO2/9+Pij4ULHKzG7dAm
-         6g2lZuvJ4fWIkORJLFACtjcGUTTEeeFhKsfVu2UYxO3gF+HyBPFUBi7c9qu+QTPnFNgr
-         vldXst/AYheVGtRin0G+cY+SzfvWVGUiVv8eLo1oESP2Q14vjaKufHGpV4JGiu5zi1GO
-         9HWaRsqx34z+PDJr9P9aDVQDaWVK/hgs/STJexv2bVhLZdIPHx4lMpHMQXpy3eDbKXqk
-         R/6Q==
-X-Gm-Message-State: ACgBeo16vagEQZzgAhGxXifKjkllslRRy63Kx60zrU+45XypqRsgOSzQ
-        YG6JItdN8LkB/pFyd1Mqbvc=
-X-Google-Smtp-Source: AA6agR6nD2Bp+uyWh97Nql8sC/wG7nk1w3U7QXnt2trf9sOEolxXG7rmKnjBDfCp14XbNxCHLHaq8g==
-X-Received: by 2002:a0c:ab07:0:b0:474:9c36:413e with SMTP id h7-20020a0cab07000000b004749c36413emr13197580qvb.56.1659407216557;
-        Mon, 01 Aug 2022 19:26:56 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id w16-20020ac857d0000000b0031f0b43629dsm8522404qta.23.2022.08.01.19.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 19:26:55 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 3506127C0054;
-        Mon,  1 Aug 2022 22:26:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 01 Aug 2022 22:26:55 -0400
-X-ME-Sender: <xms:bovoYkxwkD_v34-ab_5DweaJYssJqGhdld2Ccadx2rbkDKzb4ow6PA>
-    <xme:bovoYoQ0aouSZX5Lte8ymFjz7s1k9jRCjl5iBYRpUNb7xL1KDJ_KzffZv1OmamlP-
-    5Wq1ar1dow21IAYig>
-X-ME-Received: <xmr:bovoYmVMd6Ayez-qGcpRE7vaeNsTA6vQvP1sXQKIHsyY-aNm7v81PDwcx1MSBg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepleetgfefieffieffgeduudeigfefgefgieevveetudfgveeigfehgeei
-    hfdvkeetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:bovoYiixbcnNnJ_oWmbzZq_CRTh3xPouZ7Jn1weF70CKx3igTXw4Sg>
-    <xmx:bovoYmAiAo7ZuZ1Mzs6nSPJiQk-ZbGorwZ6p4FRr6KiebRABf5ohmA>
-    <xmx:bovoYjJ_MdNqHu9WpyaPe08he2PcVuI2lBE3Kn2fJluIzUIEeJioBQ>
-    <xmx:bovoYq4MtjbhCs6ZTD67rpi5XwTUysbVZLCn1Xv3BRecI3oflQKWkA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 Aug 2022 22:26:53 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 19:25:55 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v8 29/31] MAINTAINERS: Rust
-Message-ID: <YuiLM6ca8Ih0WiS3@boqun-archlinux>
-References: <20220802015052.10452-1-ojeda@kernel.org>
- <20220802015052.10452-30-ojeda@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Saw05UbzeLU4x42pdH6Ov1+fGLmaoiI2fVR2aA4FGOI=;
+        b=WsFnIOlk2jWqIJpeWv30JHoIOKlEcj7VvexvEC+0JUyTeZMDCi4kB5V8EXMKlKi9v0
+         M/ylRIaKSaocn3XfHzO6VcWQ6+K+TUOHIfRsGuZHume1r6/h8sRA8HY0i3Z4L16rFwaK
+         dGPMi2AvvMbbzpayMEmBpeK4G6uQnS+KKotzAB8IGfmAy4XBcolAXiD0YcityhQHGNiP
+         hPfXJNam0Oz5BOML4GIGk2PhNWZoZ7GVRtdeMCH9+SnPP+nD0dvQTgbmTJVB91wPN6MC
+         eKzcbfp0irnWfhTyqize7kkqVxL1sZivXb/qTZiZKNTlVKJauazIzj+1o/SUtzo1om2w
+         0RNQ==
+X-Gm-Message-State: ACgBeo2OmjAZAPrSMVsCpI3EOYMMXYGSy1T4C3GxXzSTZX2hvqzBz1Al
+        Bhmmz8dizDpO4tKIpN3lnGk20WT2jwU593AL4V4=
+X-Google-Smtp-Source: AA6agR7UrWWcdefjI5jUoxo77LkjqTPIhxNnO4p1T26x2Mt+qW+0cnDlhMncW2H1YORPKYARPrDRD0mMizgKXkCDXao=
+X-Received: by 2002:a05:6402:1e8c:b0:43d:db52:78a8 with SMTP id
+ f12-20020a0564021e8c00b0043ddb5278a8mr3233023edf.324.1659407391399; Mon, 01
+ Aug 2022 19:29:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220802015052.10452-30-ojeda@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+ <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
+ <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com> <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
+In-Reply-To: <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 1 Aug 2022 21:29:40 -0500
+Message-ID: <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,61 +87,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 03:50:16AM +0200, Miguel Ojeda wrote:
-> Miguel, Alex and Wedson will be maintaining the Rust support.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  MAINTAINERS | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 64379c699903..a4f90593b59c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17477,6 +17477,21 @@ L:	linux-rdma@vger.kernel.org
->  S:	Maintained
->  F:	drivers/infiniband/ulp/rtrs/
->  
-> +RUST
-> +M:	Miguel Ojeda <ojeda@kernel.org>
-> +M:	Alex Gaynor <alex.gaynor@gmail.com>
-> +M:	Wedson Almeida Filho <wedsonaf@google.com>
+On Mon, Aug 1, 2022 at 8:53 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> On Mon, Aug 1, 2022 at 10:39 PM Adam Ford <aford173@gmail.com> wrote:
+>
+> > I managed to get my HDMI output working. I had the lanes set to 2
+> > instead of 4.  Once I switched to 4-lanes, the monitor came up in
+> > 1080p.  I haven't yet been able to get other modes to work.
+>
+> Ok, good. On another thread, you mentioned that you were also trying
+> to get LVDS to work via SN65DSI83.
+>
+> Does LVDS work for you on this branch?
 
-May I join the party and become a reviewer?
+I haven't tried with Marek's latest suggestion.  In the other thread
+he mentioned a burst mode and setting the DSI speeds to higher
+frequencies, but the patch he had didn't look like it would apply
+cleanly, so I will need to dig into that a bit further.  Since my
+company doesn't really ship the LVDS displays with the kits, the HDMI
+is the default video, so I've been focusing on it.
 
-R: Boqun Feng <boqun.feng@gmail.com>
+To answer Marco's question, I was able to revert "MLK-21958-13:
+drm/bridge: adv7511: Limit supported clocks" and still get a display
+at 1080p, but all the other resolutions I tried appear to come up
+blank.  I didn't try every one.  With that revert, more options come
+available, but 1440x900 and 800x600 were options I tried
+unsuccessfullyl.
 
-Also given their activities on GitHub, I'd like to encourge Björn Roy
-Baron and Gary Guo to become reviewers as well. Of course, they need
-to be aware of the possible upcoming email volume and sign up themselves
-;-)
-
-More eyes (especially from Rust language experts) are helpful ;-)
-
-Regards,
-Boqun
-
-> +L:	rust-for-linux@vger.kernel.org
-> +S:	Supported
-> +W:	https://github.com/Rust-for-Linux/linux
-> +B:	https://github.com/Rust-for-Linux/linux/issues
-> +T:	git https://github.com/Rust-for-Linux/linux.git rust-next
-> +F:	Documentation/rust/
-> +F:	rust/
-> +F:	samples/rust/
-> +F:	scripts/*rust*
-> +K:	\b(?i:rust)\b
-> +
->  RXRPC SOCKETS (AF_RXRPC)
->  M:	David Howells <dhowells@redhat.com>
->  M:	Marc Dionne <marc.dionne@auristor.com>
-> -- 
-> 2.37.1
-> 
-> 
+adam

@@ -2,117 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087C55881A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1525881A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237059AbiHBSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S237303AbiHBSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236916AbiHBSE0 (ORCPT
+        with ESMTP id S230188AbiHBSFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:04:26 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7B118E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:04:25 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t22so23095661lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/DT1Fy6516QHYclkQUbxl4Uh7gxM9Qp3F1M1t05YgLg=;
-        b=rF0SUPED2ACYPQZq1h5mNpta4oJoviVm17CUjbyoD1axNgFVSREzmdgRmOVX2kBu3D
-         kPuOSYwU0htUfwM9LrbI7oqV1Pw2FfDzf7AqqsiavpxLq5pRtxzFPaZpRS5vPxZksFT1
-         Mmh3NH6283K5IYzbMfmuy/cKN1bh4YwpRPGIMK4A7mFlTxPrr1B6JpXcA8T07WLRtyHx
-         4Q3rJfosX07DgZOametHSsDOQNZrBkA2WtO6qZnYJ3K35FnIbwj/OJ5AJG/nRWEopU5e
-         f+VRpHtZqOXdx0KWRRs9d4Eo83HJpI0O0Er4Y6VkNcxh3DeL3dwjXM3zPx79avTMI362
-         SBCg==
+        Tue, 2 Aug 2022 14:05:22 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE910113A;
+        Tue,  2 Aug 2022 11:05:20 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so18037019fac.13;
+        Tue, 02 Aug 2022 11:05:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/DT1Fy6516QHYclkQUbxl4Uh7gxM9Qp3F1M1t05YgLg=;
-        b=ugA+isNwrLB0l3YjH4VqR2ICEACRaWAE5U2c/ouE7Ba7+WB/184loCnBSESTL3mgUR
-         LsaZAj7PeNqgrkhP1TdTt3QT9WUx5LcoqRepm6sDB8mXhjCdeyjqcgadeuaowTJ9cJk2
-         80prljhNxfxEy1YNV5+5tt50V82AGTzpXDK/4OenKkwtlalI9bLchB49PQqk6vASLBf7
-         KxZmwwZgXumXOHyviaLUiq/uGzK/XzFfXSQpFO5ySPWPe2ZujAQ9hux7j3ElKPkCtKnl
-         Uh4l/AXnFwDNpcGXjKmKqI2eWfqB9RN/GqRIko9HkyPkNN+90XsxjIb+vHULGPK9YxAW
-         U69w==
-X-Gm-Message-State: AJIora+s7ElildK6S7Pox7aOxFbADLZzO9wMjh7GZ/IqkjtHvNn3gqqa
-        VnNTmgMa4Yix2wSylhjTjW/ebD6tUgdd91tI/95mnw==
-X-Google-Smtp-Source: AGRyM1vu0sUfmiHEHs+AbWugSM1Hy1w9DSdDY4CfuIAb+XNsl36yCC0sqbLUTpYAdo5k4VuT7bIk0WhXsX/2W8EaSvY=
-X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
- x7-20020a056512130700b0047fbaa452c5mr7342378lfu.103.1659463463620; Tue, 02
- Aug 2022 11:04:23 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UHeuO4m1+0J5UAlSgd6a8rj3eBaXa+1Xip7NqoHiSmg=;
+        b=NGrthaA8IXRcLwThaq0CE0GNaIEMB/4kzBAKzYrdS9YZBG89CeF7+5COgWR8oyg9de
+         wrOFJBXEWjPLxNGdPr5WAdNIVrzkwEvxaDRmkVy9rooxfiXx+z0sAQWuzZqdMs1PXeCM
+         0QEO/hcrtcObr+qIwPM8Pe0riQBQntLamG0aIDBGEnKED9JoPDIc4ES3u7Ok1d8NYz7J
+         Fcdi/t/+kdLsMenrM9xxq5iODYfdL4Pm1vDSfhg0pO6QdmJpuVqAELxPmgjOfZt3z3Zd
+         fvOO2NsVy2g33O4t6cI6oNPVZ9u+iWScxI3+lmizht8SwgWcFmeIdbcpb+iVral6HTU2
+         I6kQ==
+X-Gm-Message-State: ACgBeo23cnuwqozp9lHnqQ8dH6RbDcc+0OeYo06CeRHqwC9KT2v4suWR
+        82hxGr+ABpsokxru6S1ThJKWvAROy46IlQ9UuAeozWGd
+X-Google-Smtp-Source: AA6agR4jnsOeta38tYWDtd4Yqm1aG3kaThX1Nbcmx08uVJCpjEDUj5U8hpXpb0zZWYrLeCa+xwTKJPdrp1x5jy7WsQ0=
+X-Received: by 2002:a05:6870:a182:b0:10b:efbe:e65d with SMTP id
+ a2-20020a056870a18200b0010befbee65dmr310078oaf.5.1659463520100; Tue, 02 Aug
+ 2022 11:05:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220730173636.1303357-1-masahiroy@kernel.org> <20220730173636.1303357-3-masahiroy@kernel.org>
-In-Reply-To: <20220730173636.1303357-3-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 2 Aug 2022 11:04:12 -0700
-Message-ID: <CAKwvOdkq1or=UOWJLU2DaS=MFGO9OmH7HG6=FDKS6h_saoKLAw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Revert "Kbuild, lto, workaround: Don't warn for
- initcall_reference in modpost"
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        "H. Peter Anvin" <hpa@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>
+References: <20220802073511.299459-1-namhyung@kernel.org> <20220802073511.299459-2-namhyung@kernel.org>
+ <YuliN2UDbls5uW3u@kernel.org>
+In-Reply-To: <YuliN2UDbls5uW3u@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 2 Aug 2022 11:05:09 -0700
+Message-ID: <CAM9d7chZT-mociK=+iF_6SO=1JuD2xaL1HpE4eeo=myngq9vTw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] perf lock: Add -m/--map-length option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 10:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Tue, Aug 2, 2022 at 10:43 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> This reverts commit 77ab21adae509c5540956729e2d03bc1a59bc82a.
+> Em Tue, Aug 02, 2022 at 12:35:10AM -0700, Namhyung Kim escreveu:
+> > The -m/--map-length option is to control number of max entries in the
+> > perf lock contention BPF maps.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  tools/perf/Documentation/perf-lock.txt |  4 ++++
+> >  tools/perf/builtin-lock.c              | 23 ++++++++++++++++++++++-
+> >  tools/perf/util/bpf_lock_contention.c  |  3 +++
+> >  tools/perf/util/lock-contention.h      |  1 +
+> >  4 files changed, 30 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+> > index 7949d2e6891b..2101644785e0 100644
+> > --- a/tools/perf/Documentation/perf-lock.txt
+> > +++ b/tools/perf/Documentation/perf-lock.txt
+> > @@ -145,6 +145,10 @@ CONTENTION OPTIONS
+> >  --tid=::
+> >          Record events on existing thread ID (comma separated list).
+> >
+> > +-m::
+> > +--map-length::
+> > +     Maximum number of BPF map entries (default: 10240).
 >
-> That commit was 8 years old, and it said "This is a workaround".
-> If this is needed for GCC LTO, it should be added in a proper way.
+> --map-nr-entries?
 >
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> I think we use this jargon "nr-entries" for arrays, lists, etc, better
+> try to stick to it.
 
-Please don't forget to cc the author & reviewers for a patch when
-submitting a revert.
+Makes sense, will change.
 
-+ Jiri in case a patch needs to be carried in any downstream trees for
-re-application.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-
-> ---
 >
->  scripts/mod/modpost.c | 3 ---
->  1 file changed, 3 deletions(-)
+> Also what do you think about not using single letter options for things
+> that are not that used?
 >
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index c6a055c0291e..a8ee27496da7 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1462,9 +1462,6 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
->         from = find_elf_symbol2(elf, r->r_offset, fromsec);
->         fromsym = sym_name(elf, from);
->
-> -       if (strstarts(fromsym, "reference___initcall"))
-> -               return;
-> -
->         tosec = sec_name(elf, get_secindex(elf, sym));
->         to = find_elf_symbol(elf, r->r_addend, sym);
->         tosym = sym_name(elf, to);
-> --
-> 2.34.1
->
+> The map size has a default, one that seems generous, so changing it
+> should be something uncommon, and then, if it becomes common that more
+> entries are needed by default, we can change the default in the tool.
 
+Fair enough, I'll remove the single letter option.
 
--- 
 Thanks,
-~Nick Desaulniers
+Namhyung

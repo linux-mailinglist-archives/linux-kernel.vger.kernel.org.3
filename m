@@ -2,122 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE34B587B4E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1518D587B50
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236828AbiHBLEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S236782AbiHBLE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236823AbiHBLDr (ORCPT
+        with ESMTP id S236766AbiHBLEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:03:47 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626DC50713
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:03:46 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id tk8so25263232ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 04:03:46 -0700 (PDT)
+        Tue, 2 Aug 2022 07:04:20 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750BA4F6B3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:04:18 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t1so21392698lft.8
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 04:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P0Jfd7tAzAuxX0y7WjLxKt/TPIgKGV9Dv1ZKmVWbSV8=;
-        b=Dvs/l5xyUz6w9U57X/ujdUBFkpw4TNVuVO76eJhfi8+zydKcIExuO4AmEDGYWHuS/2
-         bWVAtw0iOX+ADb8frAysBBu8Y/D1CMb6ySHt6NDVfQnTVgHxz6AQTGcUb/1612lYdqol
-         ak9uPgFPAoCmQcLtbv96c75hwc1D7vec5KDbKHPM36cxg3XOEPocZOA3kvnuihuIbLHO
-         IR0A2sx3qkhotB2Lz41pEtAnX26NBLt/T7AlOjA8FK/7F3n+u3/bqtF5+qFj7VjdsZp+
-         6iqEmy5J7ECjYVUc8KO4lbUUQnBL95vmI68uhhk+sQKpemh7E4cltYAv5lLSMHC7QWX5
-         qelA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0smktc1i0A3Xsq8E5SsJkGwUEry38DF9VxbACT8dluE=;
+        b=ffxwRc38XQqx/D5KKVUner6cIm1BVZ4NuRd9atFW7wVvoRk+2bs5638y7vfXxHmAKC
+         qQINIHs+kojYYFWq3OTO4S9wqqYIyh+f8PTg2fV2p36dgjCSseYGLmxlAzPTQx9xC49w
+         TsmHRQ4saWQZTA9cGjljZ4yTZxtSjeiLtw199h8y/g2+Q8vNy7NSID5ILtl0yRJqTrLk
+         jw7KHGFNAVO9fDU9kJSeXBS6+Zec8aJquGLtDGnjOO53J9FWjiBVY76UnpmlW9tgb2wi
+         Is7vnnyfnleCsXLUS/qsC5doA2bfS9B1tezSF8lJ6qwtSP0gUqJIqmW7FLDpk72GOZ0n
+         dhsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=P0Jfd7tAzAuxX0y7WjLxKt/TPIgKGV9Dv1ZKmVWbSV8=;
-        b=WQ89AYEq/9+DL8Js6KWulcgpqFNH8926xJsIagtevD0tddjSjUXIq/wmLFsUbGw3+q
-         rVaH6PbzNjqvx3lJi8ELfEugMElGVTGGTCog/pSPBjZwbz4nEDwFHXRlXZaM1jP4huim
-         +oijE9gyQPXIEC9Oin3FC1kIfRdvHiwIe8fDmH9wQACfsn+aEJ3cre5/PNVBjRDeTaSP
-         W1X6w8RSrQn50VLRnDBR59rSdvMYz4OZhkI2db17xtfLetckD8MJFIG59qGQ8lBz55yy
-         aEMUtUootIXHh34hwmKHhhN4ZdYYMJbcY/31XGTNglmFS2jndOG9pxZnd9ffCvE7bA5j
-         IqDg==
-X-Gm-Message-State: ACgBeo1JkAH2IMRZu+Mm2CTztSQnBKpiGXtNwXC5JjiNJUyJRU/+Ll4v
-        25V6og1R6+lNSJWOVKidxeg=
-X-Google-Smtp-Source: AA6agR6QKypEUHeom0CcRA0ARtr5TOJA+z93ia3eGX/HpeUkZ/cJtZ1l2R+AYjcOBR90kBz5F7geqw==
-X-Received: by 2002:a17:906:4793:b0:730:853a:e3ac with SMTP id cw19-20020a170906479300b00730853ae3acmr7274431ejc.652.1659438224906;
-        Tue, 02 Aug 2022 04:03:44 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id qc19-20020a170906d8b300b007305d408b3dsm3366884ejb.78.2022.08.02.04.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 04:03:44 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 2 Aug 2022 13:03:42 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Yi Sun <yi.sun@intel.com>
-Cc:     dave.hansen@intel.com, sohil.mehta@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        david.laight@aculab.com, heng.su@intel.com
-Subject: Re: [PATCH v2 2/2] scripts/x86: Add script to consume trace log of
- xsave latency
-Message-ID: <YukEjqcU9UK8IVgf@gmail.com>
-References: <20220729095608.1475138-1-yi.sun@intel.com>
- <20220729095608.1475138-3-yi.sun@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0smktc1i0A3Xsq8E5SsJkGwUEry38DF9VxbACT8dluE=;
+        b=XO3CkvfxkCQ6M8eShHxcdmxtS6Pmy+VsPn+ZHyRz70qrF6IeZhfj98YVBDTn0YfD2X
+         rEf7VfiL1GNdnnJMbikrs0KUlZgO65Ic2p7Kr71k8+0YnN34qeL7pANzAuIKhV0ecbvn
+         XGV7AS8ZsMHC2Zl6mycxszkOH9DPsecPP99e3yGUxp/ZElMO2trb7S6V5J1RFjoR2iCl
+         zzXgr28BCmxJCgrvXY2QyYQjEFxRCq7SJvJ604maVRpHrl0a5x7TAnOy1oiz5jyKuoa2
+         2v8cqO6TQvAiy1czMIokJl7dmiwR1npIMh7Bqjb5Zy6Hu8Ypd2mykvTh7B7upt2YO6Ac
+         NZ0g==
+X-Gm-Message-State: ACgBeo248lxt99MeFpnV4mnvOGn8MLAtxdOV4ZBCPMIeg6iGhnWdu7WN
+        h49zBhEpq13KXy2LrwSNZeGXCg==
+X-Google-Smtp-Source: AA6agR5b9oU2xoKju8HeD8PuauS95yIhWJVqMShOIbOv0jkeRvynBug8ZRAnKAqZU2/J1Yg0izSVFA==
+X-Received: by 2002:a05:6512:128f:b0:48b:b0:8da9 with SMTP id u15-20020a056512128f00b0048b00b08da9mr2709627lfs.377.1659438256687;
+        Tue, 02 Aug 2022 04:04:16 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac25f0a000000b0048a27abcc34sm1777993lfq.202.2022.08.02.04.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 04:04:16 -0700 (PDT)
+Message-ID: <8f04b8c8-620c-3b32-ce4a-2d4b1aa484d9@linaro.org>
+Date:   Tue, 2 Aug 2022 13:04:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729095608.1475138-3-yi.sun@intel.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 3/3] dt-bindings: bus: Add Freescale i.MX8qxp pixel link
+ MSI bus binding
+Content-Language: en-US
+To:     Liu Ying <victor.liu@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, saravanak@google.com,
+        gregkh@linuxfoundation.org, geert+renesas@glider.be
+References: <20220802071310.2650864-1-victor.liu@nxp.com>
+ <20220802071310.2650864-4-victor.liu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220802071310.2650864-4-victor.liu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Yi Sun <yi.sun@intel.com> wrote:
-
-> Consume the trace log dumped by trace points x86_fpu_latency_xsave and
-> x86_fpu_latency_xrstor, calculate latency ranges for each RFBM and
-> XINUSE combination including min, max, average and 97% tail latency.
+On 02/08/2022 09:13, Liu Ying wrote:
+> Freescale i.MX8qxp pixel link MSI bus is a simple memory-mapped bus.
+> It is used to access peripherals in i.MX8qm/qxp imaging, LVDS, MIPI
+> DSI and HDMI TX subsystems, like I2C controller, PWM controller,
+> MIPI DSI controller and Control and Status Registers (CSR) module.
 > 
-> Add the average of 97% tail latency to remove the unreasonable
-> data which is introduced by interrupts or other noise. By adding the
-> experimental code disabling interrupts before the calculation of
-> latency, it's obvious to get the 3% tail latency has been filtered.
+> Reference simple-pm-bus bindings and add Freescale i.MX8qxp pixel
+> link MSI bus specific bindings.
 > 
-> Make use of sqlite3 to make the data statistics more efficient and
-> concise. The output looks like following:
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+>  .../bus/fsl,imx8qxp-pixel-link-msi-bus.yaml   | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
 > 
-> EVENTs                	RFBM   	XINUSE	lat_min	lat_max	lat_avg	lat_avg(97%)
-> ----------------------	-------	------	-------	-------	-------	------------
-> x86_fpu_latency_xrstor	0x206e7	0x0   	364    	364    	364    	364
-> x86_fpu_latency_xrstor	0x206e7	0x202 	112    	1152   	300    	276
-> x86_fpu_latency_xsave 	0x206e7	0x202 	80     	278    	141    	137
-> x86_fpu_latency_xsave 	0x206e7	0x246 	108    	234    	180    	177
-> 
-> The XSAVE/XRSTOR latency trace log can be got by two ways:
-> 1. Generated by Kernel debugfs
->   echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable
->   cat /sys/kernel/debug/tracing/trace_pipe > trace-log
-> 
-> 2. Generated by helper tool like 'trace-cmd'
->    trace-cmd record -e x86_fpu -F <command>
->    trace-cmd report > trace-log
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Yi Sun <yi.sun@intel.com>
-> 
-> diff --git a/scripts/x86/xsave-latency-trace.sh b/scripts/x86/xsave-latency-trace.sh
-> new file mode 100755
-> index 000000000000..d45563984fd6
+> diff --git a/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
+> new file mode 100644
+> index 000000000000..24f50535f5c2
 > --- /dev/null
-> +++ b/scripts/x86/xsave-latency-trace.sh
+> +++ b/Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX8qxp Pixel Link Medium Speed Interconnect (MSI) Bus
 
-The patchset looks mostly good to me, but I don't think we are supposed to 
-add arch dependent instrumentation scripts to scripts/, please put this new 
-script somewhere in tools/testing/x86/ or so.
+Shouldn't this be interconnect, not a bus? Not only located in
+interconnect directory but actually being proper interconnect? Although
+you mentioned that the firmware controls it, so maybe that would explain
+this being only a resource provider.
 
-Thanks,
+You should be sure of it, because later if you want to add proper
+interconnect properties (e.g. bandwidth voting, paths) *you will not be
+able*. Ever.
 
-	Ingo
+> +
+> +maintainers:
+> +  - Liu Ying <victor.liu@nxp.com>
+> +
+> +description: |
+> +  i.MX8qxp pixel link MSI bus is used to control settings of PHYs, I/Os
+> +  sitting together with the PHYs.  It is not the same as the MSI bus coming
+> +  from i.MX8 System Controller Unit (SCU) which is used to control power,
+> +  clock and reset through the i.MX8 Distributed Slave System Controller (DSC).
+> +
+> +  i.MX8qxp pixel link MSI bus is a simple memory-mapped bus. Two input clocks,
+> +  that is, MSI clock and AHB clock, need to be enabled so that peripherals
+> +  connected to the bus can be accessed. Also, the bus is part of a power
+> +  domain. The power domain needs to be enabled before the peripherals can
+> +  be accessed.
+> +
+> +  Peripherals in i.MX8qm/qxp imaging, LVDS, MIPI DSI and HDMI TX subsystems,
+> +  like I2C controller, PWM controller, MIPI DSI controller and Control and
+> +  Status Registers (CSR) module, are accessed through the bus.
+> +
+> +  The i.MX System Controller Firmware (SCFW) owns and uses the i.MX8qm/qxp
+> +  pixel link MSI bus controller and does not allow SCFW user to control it.
+> +  So, the controller's registers cannot be accessed by SCFW user. Hence,
+> +  the interrupts generated by the controller don't make any sense from SCFW
+> +  user's point of view.
+> +
+> +allOf:
+> +  - $ref: simple-pm-bus.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,imx8qxp-display-pixel-link-msi-bus
+> +          - fsl,imx8qm-display-pixel-link-msi-bus
+> +      - {} # simple-pm-bus, but not listed here to avoid false select
+
+simple-pm-bus must be here. You need to sort out the select instead,
+just like we do it for other devices (e.g. primecell).
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: master gated clock from system
+> +      - description: AHB clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: msi
+> +      - const: ahb
+> +
+> +required:
+
+compatible and reg as well.
+
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8-lpcg.h>
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +    bus@56200000 {
+> +        compatible = "fsl,imx8qxp-display-pixel-link-msi-bus", "simple-pm-bus";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        reg = <0x56200000 0x20000>;
+
+put reg just after compatible.
+
+> +        interrupt-parent = <&dc0_irqsteer>;
+> +        interrupts = <320>;
+> +        ranges;
+> +        clocks = <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>,
+> +                 <&dc0_disp_ctrl_link_mst0_lpcg IMX_LPCG_CLK_4>;
+> +        clock-names = "msi", "ahb";
+> +        power-domains = <&pd IMX_SC_R_DC_0>;
+> +    };
+
+
+Best regards,
+Krzysztof

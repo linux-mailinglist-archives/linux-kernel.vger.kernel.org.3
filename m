@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0717587B49
+	by mail.lfdr.de (Postfix) with ESMTP id A3CA4587B48
 	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiHBLDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S236771AbiHBLD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236746AbiHBLDT (ORCPT
+        with ESMTP id S236750AbiHBLDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:03:19 -0400
+        Tue, 2 Aug 2022 07:03:21 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B901A5006A;
-        Tue,  2 Aug 2022 04:03:18 -0700 (PDT)
-Date:   Tue, 02 Aug 2022 11:03:16 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D874B0F2;
+        Tue,  2 Aug 2022 04:03:19 -0700 (PDT)
+Date:   Tue, 02 Aug 2022 11:03:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659438197;
+        s=2020; t=1659438198;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hCBHIINU2YjsU2hp1/1iHB3HY6e1ePfW6cBjqq38S94=;
-        b=0STiaicGN6MYJg/hGEAAWZh2C7sjEFTX+MLsgOyKbLg8oeOpgLf/FUgXWnZDtXo70V+YG9
-        z0bJm1qyiIZARZnGKXE2TcovyrDH136nzmQLq26YYhQSkpiJXjrnSdrDDSqzZhIF/HSsYN
-        L2Plq87XT9T+U9M3OeZFz2v0dQcX7vMAo1tozEEWC02wLh9x6rkg/HL0h1J7vgbuOIPvlD
-        rY0SW1qFCewhllzzH4I2onz+qgYAqKnNG4jSeu35L0DoXx7+Pzbk7mdpmg6+1Yk2qo06g8
-        IWtUtBer33UXl5BWuXVzh1eAgRWi8oTSY1rmRb/GJpO7Vg3V1pMNOZ7HaVYNFQ==
+        bh=fRjqNDbAvx25+dXbpS9tJmbsWZem37xTRKdAdYltVtg=;
+        b=xRJ0x/ELXnwEKhuCcP9R3khQidIPmMoHsScgPqdlwukSZJ1lcsfYkjK8vAaxCFl7M7fb9x
+        LZZu25P27/m55VLG6Ply4cbEiiG2nx/BTqLP/e5xhK/x1sGEyGJNdUIp/EQGlBwAMEbI8g
+        H1wrn30qvpb33R5f/8670XW80KWruBF3q6wZz8uz7odzkvvYeMvZ3njCwNPBGK03wRXplZ
+        UTBBOo3UjaPLTiyWOUfgHTuMG3QimkJV4z80AMaOXrwrlRkbBX+E2uDex3QS+g9SyR0pOl
+        6bqMIRgw+touGurPJL96fGOgRuvVvfmzP69QloDcP2zzVy0udVrUPUjBtC4pnQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659438197;
+        s=2020e; t=1659438198;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hCBHIINU2YjsU2hp1/1iHB3HY6e1ePfW6cBjqq38S94=;
-        b=9/3YpoKwhG4SpskrT00BXtXYzyT56Oqs2C6rxttD+gD67uM76ifet6ZoOEC5sdbrcRucfJ
-        U0uuzcDpFXNrMpDw==
+        bh=fRjqNDbAvx25+dXbpS9tJmbsWZem37xTRKdAdYltVtg=;
+        b=t7VPVQeUT5mCzNlDogiNIouMIY5qRiNRJhXa9U6Wf4eoHBTp6snUAW8iaPKaF1lBbLdsuX
+        Cuuyz6Z1XWOaDJDw==
 From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/deadline: Make dl_cpuset_cpumask_can_shrink()
- capacity-aware
+Subject: [tip: sched/core] sched/core: Introduce sched_asym_cpucap_active()
 Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220729111305.1275158-3-dietmar.eggemann@arm.com>
-References: <20220729111305.1275158-3-dietmar.eggemann@arm.com>
+In-Reply-To: <20220729111305.1275158-2-dietmar.eggemann@arm.com>
+References: <20220729111305.1275158-2-dietmar.eggemann@arm.com>
 MIME-Version: 1.0
-Message-ID: <165943819623.15455.1128171165437845604.tip-bot2@tip-bot2>
+Message-ID: <165943819723.15455.17826453553444162920.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,93 +66,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     6092478bcbf4021d3c52144bd456378de043fe58
-Gitweb:        https://git.kernel.org/tip/6092478bcbf4021d3c52144bd456378de043fe58
+Commit-ID:     740cf8a760b73e8375bfb4bedcbe9746183350f9
+Gitweb:        https://git.kernel.org/tip/740cf8a760b73e8375bfb4bedcbe9746183350f9
 Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
-AuthorDate:    Fri, 29 Jul 2022 13:13:04 +02:00
+AuthorDate:    Fri, 29 Jul 2022 13:13:03 +02:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Tue, 02 Aug 2022 12:32:45 +02:00
 
-sched/deadline: Make dl_cpuset_cpumask_can_shrink() capacity-aware
+sched/core: Introduce sched_asym_cpucap_active()
 
-dl_cpuset_cpumask_can_shrink() is used to validate whether there is
-still enough CPU capacity for DL tasks in the reduced cpuset.
-
-Currently it still operates on `# remaining CPUs in the cpuset` (1).
-Change this to use the already capacity-aware DL admission control
-__dl_overflow() for the `cpumask can shrink` test.
-
-  dl_b->bw = sched_rt_period << BW_SHIFT / sched_rt_period
-
-  dl_b->bw * (1) >= currently allocated bandwidth in root_domain (rd)
-
-  Replace (1) w/ `\Sum CPU capacity in rd >> SCHED_CAPACITY_SHIFT`
-
-Adapt __dl_bw_capacity() to take a cpumask instead of a CPU number
-argument so that `rd->span` and `cpumask of the reduced cpuset` can
-be used here.
+Create an inline helper for conditional code to be only executed on
+asymmetric CPU capacity systems. This makes these (currently ~10 and
+future) conditions a lot more readable.
 
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220729111305.1275158-3-dietmar.eggemann@arm.com
+Link: https://lore.kernel.org/r/20220729111305.1275158-2-dietmar.eggemann@arm.com
 ---
- kernel/sched/deadline.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ kernel/sched/cpudeadline.c | 2 +-
+ kernel/sched/deadline.c    | 4 ++--
+ kernel/sched/fair.c        | 8 ++++----
+ kernel/sched/rt.c          | 4 ++--
+ kernel/sched/sched.h       | 5 +++++
+ 5 files changed, 14 insertions(+), 9 deletions(-)
 
+diff --git a/kernel/sched/cpudeadline.c b/kernel/sched/cpudeadline.c
+index 02d970a..57c92d7 100644
+--- a/kernel/sched/cpudeadline.c
++++ b/kernel/sched/cpudeadline.c
+@@ -123,7 +123,7 @@ int cpudl_find(struct cpudl *cp, struct task_struct *p,
+ 		unsigned long cap, max_cap = 0;
+ 		int cpu, max_cpu = -1;
+ 
+-		if (!static_branch_unlikely(&sched_asym_cpucapacity))
++		if (!sched_asym_cpucap_active())
+ 			return 1;
+ 
+ 		/* Ensure the capacity of the CPUs fits the task. */
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 8bebc36..1d9c909 100644
+index 0ab79d8..8bebc36 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -124,15 +124,12 @@ static inline int dl_bw_cpus(int i)
- 	return cpus;
- }
- 
--static inline unsigned long __dl_bw_capacity(int i)
-+static inline unsigned long __dl_bw_capacity(const struct cpumask *mask)
+@@ -144,7 +144,7 @@ static inline unsigned long __dl_bw_capacity(int i)
+  */
+ static inline unsigned long dl_bw_capacity(int i)
  {
--	struct root_domain *rd = cpu_rq(i)->rd;
- 	unsigned long cap = 0;
-+	int i;
- 
--	RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
--			 "sched RCU must be held");
--
--	for_each_cpu_and(i, rd->span, cpu_active_mask)
-+	for_each_cpu_and(i, mask, cpu_active_mask)
- 		cap += capacity_orig_of(i);
- 
- 	return cap;
-@@ -148,7 +145,10 @@ static inline unsigned long dl_bw_capacity(int i)
+-	if (!static_branch_unlikely(&sched_asym_cpucapacity) &&
++	if (!sched_asym_cpucap_active() &&
  	    capacity_orig_of(i) == SCHED_CAPACITY_SCALE) {
  		return dl_bw_cpus(i) << SCHED_CAPACITY_SHIFT;
  	} else {
--		return __dl_bw_capacity(i);
-+		RCU_LOCKDEP_WARN(!rcu_read_lock_sched_held(),
-+				 "sched RCU must be held");
-+
-+		return __dl_bw_capacity(cpu_rq(i)->rd->span);
- 	}
- }
+@@ -1849,7 +1849,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
+ 	 * Take the capacity of the CPU into account to
+ 	 * ensure it fits the requirement of the task.
+ 	 */
+-	if (static_branch_unlikely(&sched_asym_cpucapacity))
++	if (sched_asym_cpucap_active())
+ 		select_rq |= !dl_task_fits_capacity(p, cpu);
  
-@@ -3007,17 +3007,15 @@ bool dl_param_changed(struct task_struct *p, const struct sched_attr *attr)
- int dl_cpuset_cpumask_can_shrink(const struct cpumask *cur,
- 				 const struct cpumask *trial)
+ 	if (select_rq) {
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 914096c..41486d9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4262,7 +4262,7 @@ static inline int task_fits_capacity(struct task_struct *p,
+ 
+ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
  {
--	int ret = 1, trial_cpus;
-+	unsigned long flags, cap;
- 	struct dl_bw *cur_dl_b;
--	unsigned long flags;
-+	int ret = 1;
+-	if (!static_branch_unlikely(&sched_asym_cpucapacity))
++	if (!sched_asym_cpucap_active())
+ 		return;
  
- 	rcu_read_lock_sched();
- 	cur_dl_b = dl_bw_of(cpumask_any(cur));
--	trial_cpus = cpumask_weight(trial);
--
-+	cap = __dl_bw_capacity(trial);
- 	raw_spin_lock_irqsave(&cur_dl_b->lock, flags);
--	if (cur_dl_b->bw != -1 &&
--	    cur_dl_b->bw * trial_cpus < cur_dl_b->total_bw)
-+	if (__dl_overflow(cur_dl_b, cap, 0, 0))
- 		ret = 0;
- 	raw_spin_unlock_irqrestore(&cur_dl_b->lock, flags);
- 	rcu_read_unlock_sched();
+ 	if (!p || p->nr_cpus_allowed == 1) {
+@@ -6506,7 +6506,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+ 
+ static inline bool asym_fits_capacity(unsigned long task_util, int cpu)
+ {
+-	if (static_branch_unlikely(&sched_asym_cpucapacity))
++	if (sched_asym_cpucap_active())
+ 		return fits_capacity(task_util, capacity_of(cpu));
+ 
+ 	return true;
+@@ -6526,7 +6526,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	 * On asymmetric system, update task utilization because we will check
+ 	 * that the task fits with cpu's capacity.
+ 	 */
+-	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
++	if (sched_asym_cpucap_active()) {
+ 		sync_entity_load_avg(&p->se);
+ 		task_util = uclamp_task_util(p);
+ 	}
+@@ -6580,7 +6580,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	 * For asymmetric CPU capacity systems, our domain of interest is
+ 	 * sd_asym_cpucapacity rather than sd_llc.
+ 	 */
+-	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
++	if (sched_asym_cpucap_active()) {
+ 		sd = rcu_dereference(per_cpu(sd_asym_cpucapacity, target));
+ 		/*
+ 		 * On an asymmetric CPU capacity system where an exclusive
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 55f39c8..054b671 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -509,7 +509,7 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
+ 	unsigned int cpu_cap;
+ 
+ 	/* Only heterogeneous systems can benefit from this check */
+-	if (!static_branch_unlikely(&sched_asym_cpucapacity))
++	if (!sched_asym_cpucap_active())
+ 		return true;
+ 
+ 	min_cap = uclamp_eff_value(p, UCLAMP_MIN);
+@@ -1897,7 +1897,7 @@ static int find_lowest_rq(struct task_struct *task)
+ 	 * If we're on asym system ensure we consider the different capacities
+ 	 * of the CPUs when searching for the lowest_mask.
+ 	 */
+-	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
++	if (sched_asym_cpucap_active()) {
+ 
+ 		ret = cpupri_find_fitness(&task_rq(task)->rd->cpupri,
+ 					  task, lowest_mask,
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index aad7f5e..86fc360 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1813,6 +1813,11 @@ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+ extern struct static_key_false sched_asym_cpucapacity;
+ 
++static __always_inline bool sched_asym_cpucap_active(void)
++{
++	return static_branch_unlikely(&sched_asym_cpucapacity);
++}
++
+ struct sched_group_capacity {
+ 	atomic_t		ref;
+ 	/*

@@ -2,78 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC3E58756E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3497F587569
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiHBCLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S235490AbiHBCIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiHBCLC (ORCPT
+        with ESMTP id S232390AbiHBCIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:11:02 -0400
-Received: from out29-77.mail.aliyun.com (out29-77.mail.aliyun.com [115.124.29.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCC1B84E;
-        Mon,  1 Aug 2022 19:10:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08153923|-1;BR=01201311R701S18rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00132903-2.06163e-05-0.99865;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.Ojh14Qc_1659406238;
-Received: from SunxiBot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.Ojh14Qc_1659406238)
-          by smtp.aliyun-inc.com;
-          Tue, 02 Aug 2022 10:10:39 +0800
-From:   Michael Wu <michael@allwinnertech.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-Subject: [PATCH] ext4: fix error when itable blocks is greater than s_itb_per_group
-Date:   Tue,  2 Aug 2022 10:10:29 +0800
-Message-Id: <20220802021029.16046-1-michael@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Mon, 1 Aug 2022 22:08:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0B341D10
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 19:08:02 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lxdd93KQqzmVnK;
+        Tue,  2 Aug 2022 10:06:05 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 10:08:00 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 10:08:00 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] mm: memory-failure: cleanup try_to_split_thp_page()
+Date:   Tue, 2 Aug 2022 10:12:56 +0800
+Message-ID: <20220802021256.162269-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <e699cd23-3eeb-7920-accd-b30622efa551@huawei.com>
+References: <e699cd23-3eeb-7920-accd-b30622efa551@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following error occurs when mounting the ext4 image made by image
-making tool:
-"ext4_init_inode_table:1301:comm ext4lazyinit:Something is wrong with group
-0: used itable blocks: 491; itable unused count: 0."
+Since commit 5d1fd5dc877b ("mm,hwpoison: introduce MF_MSG_UNSPLIT_THP"),
+the action_result() called to show memory error event in memory_failure(),
+so the pr_info() in try_to_split_thp_page() is only needed in
+soft_offline_in_use_page().
 
-Currently all the inodes in block group0 and ext4 image is divided by
-s_inodes_per_group. That leads to a hazard: we can't ensure all
-s_inodes_per_group are divisible by s_inodes_per_block. For example, when
-the s_inodes_per_group (equals to 7851) is divided by s_inodes_per_block
-(which is 16), because 7851 is undivisible by 16, we get the wrong result
-490, while 491 is expected.
-
-So, we suggest that s_itb_per_group should equal to
-DIV_ROUND_UP(s_inodes_per_group, s_inodes_per_block) instead of directly
-getting the result from s_inodes_per_group/s_inodes_per_block.
-
-Signed-off-by: Michael Wu <michael@allwinnertech.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- fs/ext4/super.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/memory-failure.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 845f2f8aee5f..76cbd638ea10 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4796,8 +4796,8 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 			 sbi->s_inodes_per_group);
- 		goto failed_mount;
- 	}
--	sbi->s_itb_per_group = sbi->s_inodes_per_group /
--					sbi->s_inodes_per_block;
-+	sbi->s_itb_per_group = DIV_ROUND_UP(sbi->s_inodes_per_group,
-+					    sbi->s_inodes_per_block);
- 	sbi->s_desc_per_block = blocksize / EXT4_DESC_SIZE(sb);
- 	sbi->s_sbh = bh;
- 	sbi->s_mount_state = le16_to_cpu(es->s_state) & ~EXT4_FC_REPLAY;
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index f0e1961d4482..59633a617a0a 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1524,20 +1524,18 @@ static int identify_page_state(unsigned long pfn, struct page *p,
+ 	return page_action(ps, p, pfn);
+ }
+ 
+-static int try_to_split_thp_page(struct page *page, const char *msg)
++static int try_to_split_thp_page(struct page *page)
+ {
++	int ret;
++
+ 	lock_page(page);
+-	if (unlikely(split_huge_page(page))) {
+-		unsigned long pfn = page_to_pfn(page);
++	ret = split_huge_page(page);
++	unlock_page(page);
+ 
+-		unlock_page(page);
+-		pr_info("%s: %#lx: thp split failed\n", msg, pfn);
++	if (unlikely(ret))
+ 		put_page(page);
+-		return -EBUSY;
+-	}
+-	unlock_page(page);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static void unmap_and_kill(struct list_head *to_kill, unsigned long pfn,
+@@ -2079,7 +2077,7 @@ int memory_failure(unsigned long pfn, int flags)
+ 		 * page is a valid handlable page.
+ 		 */
+ 		SetPageHasHWPoisoned(hpage);
+-		if (try_to_split_thp_page(p, "Memory Failure") < 0) {
++		if (try_to_split_thp_page(p) < 0) {
+ 			action_result(pfn, MF_MSG_UNSPLIT_THP, MF_IGNORED);
+ 			res = -EBUSY;
+ 			goto unlock_mutex;
+@@ -2503,8 +2501,11 @@ static int soft_offline_in_use_page(struct page *page)
+ 	struct page *hpage = compound_head(page);
+ 
+ 	if (!PageHuge(page) && PageTransHuge(hpage))
+-		if (try_to_split_thp_page(page, "soft offline") < 0)
++		if (try_to_split_thp_page(page) < 0) {
++			pr_info("soft offline: %#lx: thp split failed\n",
++				page_to_pfn(page));
+ 			return -EBUSY;
++		}
+ 	return __soft_offline_page(page);
+ }
+ 
 -- 
-2.29.0
+2.35.3
 

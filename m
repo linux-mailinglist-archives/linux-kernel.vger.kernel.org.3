@@ -2,185 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78153587E81
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FFF587E82
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbiHBPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 11:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S237280AbiHBPCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiHBPBZ (ORCPT
+        with ESMTP id S233060AbiHBPCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 11:01:25 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722DDB1E3;
-        Tue,  2 Aug 2022 08:01:22 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id BF7DE3B95B7;
-        Tue,  2 Aug 2022 11:01:20 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OsEnzjYzB6w4; Tue,  2 Aug 2022 11:01:20 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id F3EAB3B94D0;
-        Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F3EAB3B94D0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1659452480;
-        bh=bVG2zyAAyFZSYcpouAX+4anDt1x5+l+apwXOG9Uq0l8=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=VGcoTt3+r5S+Xff6eEGdSbW5xVsSjtZupC7Yc1jt9zHv50xJLJCskRc3mTER23RGI
-         SFMMBZBSecknVn/HbWgRX5H0fta4CcLp1B7QeEM4FflhAqjklZpcuhy8lZWOZXZ6mK
-         RBnkPnY/RhJ4sfmMAd4Z/Br4w9gBt2soYXeXnpr12jeu4htyhG10GfXuF5cSSbh24v
-         zaBCR4irk780nF7KcgQM8L+iEK9ZKCkm0c6EPxfKHY66DaE+ehtNHYKqfNMMPXSKJ3
-         IebBXBi7+5nVRdykbWmwiqBN+WOJNdFutEtykSYSswxAed22xfx9txkoRwoqfFmP0s
-         OnC7VWVwloGhw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id a_9Zkqfwy8ch; Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id E12DA3B9371;
-        Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
-Date:   Tue, 2 Aug 2022 11:01:19 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@aculab.com>,
-        carlos <carlos@redhat.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        Peter Oskolkov <posk@google.com>
-Message-ID: <500891137.95782.1659452479846.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAFTs51UAyc4Z5WUFdMXCTYR6zji6NwLeBxYsp9GQZvFdEtUm1w@mail.gmail.com>
-References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com> <CAFTs51UAyc4Z5WUFdMXCTYR6zji6NwLeBxYsp9GQZvFdEtUm1w@mail.gmail.com>
-Subject: Re: [PATCH v3 00/23] RSEQ node id and virtual cpu id extensions
+        Tue, 2 Aug 2022 11:02:02 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A62B1E3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:02:01 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so10331761otf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 08:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=uKqb6PaUkYrBfbM6a6MGXXS4D4m12oIAPT3k08dh9BE=;
+        b=gXkIQzzfDTQXvsoALPrZvmxmyhBrvsTnC6vfXHPIWyycmy2E3UYVKtGGRIhanYf6II
+         ckgNlh+mqhO9LRWE64p4t/YUUzwO4jGbEHV3233fDb06SktBOVbGM0wsfeC3cvx3yA5n
+         k+xChpWg6vmjEq/7cXROWy7S84ZzYvkCRjtYPOkAkgN3vhckj06FVwd/Pp4EI82YZsj4
+         iwjrvUJD1aEfVIxax9Leh0WegZQpE7Prie0dx1jyXF0I6G8zCs9lhr+djQ/VY/yduH2h
+         0ktfHsjz0/2wF1s0UHhRZfFC5OA9eiEhMY2gpMvZMiE+mJZ6pNC+Frah1ncE94yunhzs
+         BiOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=uKqb6PaUkYrBfbM6a6MGXXS4D4m12oIAPT3k08dh9BE=;
+        b=6u056WCkeTZwnTcLWpOTwL4BO+0cHQtzRjiBYJDFnyO4NqqS4N2Dauu6TvtcbPktwQ
+         6R1POYlwNF6TAgKKn9PTDy2KoyeFocYTIRkCgv57JNxVXrL8qdKHPj931Y/Wd6p08aup
+         t9QLPWTtYxng/F5yWtTRovX8wGOEZNtXZmzrhx+Df5am8vKrT/hjX+n4Ov+c/xTrRGP6
+         sdigQHjEHDtC7Yb0+OEgKCnkWwg937jndkKkaiayUxl7mArFwAWcjVJXJnVUJGZfp7ys
+         uEDFUBdzdZcDnHwXqGWmVdS1FII/T6A6riEDFspCc2pE6/+O62zRETUb948p5Y6nKUhZ
+         bz7Q==
+X-Gm-Message-State: AJIora9pFxW21nt+blzvAo/2OEUeiCwwrpxvzTfWQRb/Q/TFATDjnCpy
+        iJykjjKG70YOB1BbRDjMcRW4UXnyFMw=
+X-Google-Smtp-Source: AGRyM1vrDpr5OKiG/q0avH8adnyXZc6OQGk+2OqxINidcJaLQRvnIJ0Ax6N8TMjuGWbtYgisTJLE4w==
+X-Received: by 2002:a9d:784f:0:b0:61c:7817:3d8f with SMTP id c15-20020a9d784f000000b0061c78173d8fmr7707974otm.271.1659452519983;
+        Tue, 02 Aug 2022 08:01:59 -0700 (PDT)
+Received: from [192.168.1.108] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id k22-20020a056870149600b0010e63d0afbbsm2473054oab.55.2022.08.02.08.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 08:01:59 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <c82114b6-1003-bfb5-0550-98dcbf1a3761@lwfinger.net>
+Date:   Tue, 2 Aug 2022 10:01:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Topic: RSEQ node id and virtual cpu id extensions
-Thread-Index: 56GbPqtcNuVVI1uvQlqn/jwXHtFfHg==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: The r8188eu kernel module does not depend on the
+ rtlwifi/rtl8188eufw.bin firmware file
+Content-Language: en-US
+To:     Grzegorz Szymaszek <gszymaszek@short.pl>, Greg KH <greg@kroah.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <YukkBu3TNODO3or9@nx64de-df6d00> <YukvnVWuhUeOgRyZ@kroah.com>
+ <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Aug 1, 2022, at 1:07 PM, Peter Oskolkov posk@posk.io wrote:
-
-> On Fri, Jul 29, 2022 at 12:02 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> Extend the rseq ABI to expose a NUMA node ID and a vm_vcpu_id field.
+On 8/2/22 09:17, Grzegorz Szymaszek wrote:
+> On Tue, Aug 02, 2022 at 04:07:25PM +0200, Greg KH wrote:
+>> Looks like someone needs to add a line to the driver that looks like:
+>> 	MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
+>> […] Can you make a patch that does this?
 > 
-> Thanks a lot, Mathieu - it is really exciting to see this happening!
-> 
-> I'll share our experiences here, with the hope that it may be useful.
-> I've also cc-ed
-> Chris Kennelly, who worked on the userspace/tcmalloc side, as he can provide
-> more context/details if I miss or misrepresent something.
+> Sure, I will prepare and send one later (hopefully today), assuming no
+> one objects in the meantime. Thanks for quick response.
 
-Thanks for sharing your experiences at Google. This helps put things in
-perspective.
+There will be no objections. All 8188eu-based devices need that firmware. 
+Omitting the MODULE_FIRMWARE macro was simply an oversight.
 
-> 
-> The problem:
-> 
-> tcmalloc maintains per-cpu freelists in the userspace to make userspace
-> memory allocations fast and efficient; it relies on rseq to do so, as
-> any manipulation
-> of the freelists has to be protected vs thread migrations.
-> 
-> However, as a typical userspace process at a Google datacenter is confined to
-> a relatively small number of CPUs (8-16) via cgroups, while the
-> servers typically
-> have a much larger number of physical CPUs, the per-cpu freelist model
-> is somewhat
-> wasteful: if a process has only at most 10 threads running, for
-> example, but these threads
-> can "wander" across 100 CPUs over the lifetime of the process, keeping 100
-> freelists instead of 10 noticeably wastes memory.
-> 
-> Note that although a typical process at Google has a limited CPU
-> quota, thus using
-> only a small number of CPUs at any given time, the process may often have many
-> hundreds or thousands of threads, so per-thread freelists are not a viable
-> solution to the problem just described.
-> 
-> Our current solution:
-> 
-> As you outlined in patch 9, tracking the number of currently running threads per
-> address space and exposing this information via a vcpu_id abstraction helps
-> tcmalloc to noticeably reduce its freelist overhead in the "narrow
-> process running
-> on a wide server" situation, which is typical at Google.
-> 
-> We have experimented with several approaches here. The one that we are
-> currently using is the "flat" model: we allocate vcpu IDs ignoring numa nodes.
-> 
-> We did try per-numa-node vcpus, but it did not show any material improvement
-> over the "flat" model, perhaps because on our most "wide" servers the CPU
-> topology is multi-level. Chris Kennelly may provide more details here.
+Larry
 
-I would really like to know more about Google's per-numa-node vcpus implementation.
-I suspect you guys may have taken a different turn somewhere in the design which
-led to these results. But having not seen that implementation, I can only guess.
-
-I notice the following Google-specific prototype extension in tcmalloc:
-
-  // This is a prototype extension to the rseq() syscall.  Since a process may
-  // run on only a few cores at a time, we can use a dense set of "v(irtual)
-  // cpus."  This can reduce cache requirements, as we only need N caches for
-  // the cores we actually run on simultaneously, rather than a cache for every
-  // physical core.
-  union {
-    struct {
-      short numa_node_id;
-      short vcpu_id;
-    };
-    int vcpu_flat;
-  };
-
-Can you tell me more about the way the numa_node_id and vcpu_id are allocated
-internally, and how they are expected to be used by userspace ?
-
-> 
-> On a more technical note, we do use atomic operations extensively in
-> the kernel to make sure
-> vcpu IDs are "tightly packed", i.e. if only N threads of a process are currently
-> running on physical CPUs, vcpu IDs will be in the range [0, N-1], i.e. no gaps,
-> no going to N and above; this does consume some extra CPU cycles, but the
-> RAM savings we gain far outweigh the extra CPU cost; it will be interesting to
-> see what you can do with the optimizations you propose in this patchset.
-
-The optimizations I propose keep those "tightly packed" characteristics, but skip
-the atomic operations in common scenarios. I'll welcome benchmarks of the added
-overhead in representative workloads.
-
-> Again, thanks a lot for this effort!
-
-Thanks for your input. It really helps steering the effort in the right direction.
-
-Mathieu
-
-> 
-> Peter
-> 
-> [...]
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com

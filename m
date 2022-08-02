@@ -2,138 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4D9587C89
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB23B587C8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiHBMjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S236153AbiHBMjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiHBMjS (ORCPT
+        with ESMTP id S231797AbiHBMjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:39:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C64E1FCDD;
-        Tue,  2 Aug 2022 05:39:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A166B81EF7;
-        Tue,  2 Aug 2022 12:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B945C433D6;
-        Tue,  2 Aug 2022 12:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659443954;
-        bh=czjqSbGtpIYmswV/Rh3E0u4EPRbeo8kro8V9wiWdp5k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GzvWjGshRogL5da+jhHTw7kSXC/ItA43Eelv5Fg5fhWHujny4CORKbWe3G8cl6dmv
-         rWDUl1TZNX6WUGK3WmTrBjdB0J0lGa/AWWNQbJsBqmgHDiAMb+ULVxWfmtDnZO/NhY
-         mONuZthsFIplbOHBEv6BspaNrSEQTKlZ8YXYJ+xDGL54Bmzg8tzaEpWzPFnf3cS8HH
-         ykbPOMNvbi6SXS5gkp/kv/9cembG4Nk0MpWeFo3ghK6CDKZsffLJM8T7yqTmuRPLll
-         oJMxIGznROtPB7+wi3zpKTh9xPVZCFnPG60O7he/CRWBUUhjNE5eioQjhGudIdGDAV
-         o1uy/9X1hpKAQ==
-Received: by pali.im (Postfix)
-        id F224DF81; Tue,  2 Aug 2022 14:39:10 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Elad Nachman <enachman@marvell.com>
-Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Remi Pommarel <repk@triplefau.lt>, Xogium <contact@xogium.me>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>
-Subject: [PATCH v2] PCI: aardvark: Implement workaround for PCIe Completion Timeout
-Date:   Tue,  2 Aug 2022 14:38:16 +0200
-Message-Id: <20220802123816.21817-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Tue, 2 Aug 2022 08:39:42 -0400
+Received: from wp126.webpack.hosteurope.de (wp126.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8485::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6B20BC2
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:39:40 -0700 (PDT)
+Received: from p5098d998.dip0.t-ipconnect.de ([80.152.217.152] helo=hermes.fivetechno.de); authenticated
+        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1oIrBR-0003Qp-Dc; Tue, 02 Aug 2022 14:39:37 +0200
+X-Virus-Scanned: by amavisd-new 2.12.2 using newest ClamAV at
+        linuxbbg.five-lan.de
+Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
+        (authenticated bits=0)
+        by hermes.fivetechno.de (8.15.2/8.16.1/SUSE Linux 0.8) with ESMTPSA id 272CdYrP002926
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 2 Aug 2022 14:39:35 +0200
+Message-ID: <88f2de00-32e3-ed74-082f-c0972a81f0f8@fivetechno.de>
+Date:   Tue, 2 Aug 2022 14:39:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [BUG BISECT] phy: rockchip-inno-usb2: Sync initial otg state
+Content-Language: de-DE
+To:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220622003140.30365-1-pgwipeout@gmail.com>
+From:   Markus Reichl <m.reichl@fivetechno.de>
+Organization: five technologies GmbH
+In-Reply-To: <20220622003140.30365-1-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1659443980;411e59fa;
+X-HE-SMSGID: 1oIrBR-0003Qp-Dc
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marvell Armada 3700 Functional Errata, Guidelines, and Restrictions
-document describes in erratum 3.12 PCIe Completion Timeout (Ref #: 251),
-that PCIe IP does not support a strong-ordered model for inbound posted vs.
-outbound completion.
+Hi,
 
-As a workaround for this erratum, DIS_ORD_CHK flag in Debug Mux Control
-register must be set. It disables the ordering check in the core between
-Completions and Posted requests received from the link.
+with linux-next-20220728 rk3399-roc-pc does not boot.
+Bisecting pointed to this commit.
+By reverting this commit the board boots again.
 
-Marvell also suggests to do full memory barrier at the beginning of
-aardvark summary interrupt handler before calling interrupt handlers of
-endpoint drivers in order to minimize the risk for the race condition
-documented in the Erratum between the DMA done status reading and the
-completion of writing to the host memory.
+[    2.398700] Unable to handle kernel NULL pointer dereference at virtual address 
+0000000000000008
+[    2.399517] Mem abort info:
+[    2.399772]   ESR = 0x0000000096000004
+[    2.400114]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    2.400594]   SET = 0, FnV = 0
+[    2.400873]   EA = 0, S1PTW = 0
+[    2.401161]   FSC = 0x04: level 0 translation fault
+[    2.401602] Data abort info:
+[    2.401864]   ISV = 0, ISS = 0x00000004
+[    2.402212]   CM = 0, WnR = 0
+[    2.402484] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000001376000
+[    2.403071] [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+[    2.403687] Internal error: Oops: 96000004 [#1] SMP
+[    2.404130] Modules linked in: ip_tables x_tables ipv6 xhci_plat_hcd xhci_hcd 
+dwc3 rockchipdrm drm_cma_helper analogix_dp dw_hdmi realtek drm_display_helper 
+dwc3_of_simple dw_mipi_dsi ehci_platform ohci_platform ohci_hcd ehci_hcd 
+drm_kms_helper dwmac_rk syscopyarea sysfillrect stmmac_platform sysimgblt 
+fb_sys_fops usbcore stmmac pcs_xpcs drm phylink drm_panel_orientation_quirks
+[    2.407155] CPU: 4 PID: 71 Comm: kworker/4:6 Not tainted 
+5.19.0-rc8-next-20220728 #437
+[    2.407868] Hardware name: Firefly ROC-RK3399-PC Mezzanine Board (DT)
+[    2.408448] Workqueue: events rockchip_usb2phy_otg_sm_work
+[    2.408958] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    2.411634] pc : rockchip_usb2phy_otg_sm_work+0x50/0x330
+[    2.414332] lr : process_one_work+0x1d8/0x380
+[    2.416948] sp : ffff800009373d60
+[    2.419406] x29: ffff800009373d60 x28: 0000000000000000 x27: 0000000000000000
+[    2.422199] x26: ffff0000f779fcb8 x25: ffff0000f77a3a05 x24: 000000000000000c
+[    2.424978] x23: 0000000000000000 x22: ffff0000010c8258 x21: ffff80000888ec10
+[    2.427768] x20: ffff0000010c82f0 x19: 000000000000000c x18: 0000000000000001
+[    2.430604] x17: 000000040044ffff x16: 00400034b5503510 x15: 0000000000000000
+[    2.433390] x14: ffff000000708000 x13: ffff8000eec96000 x12: 0000000034d4d91d
+[    2.436185] x11: 0000000000000000 x10: 0000000000000a10 x9 : ffff000001aa7a74
+[    2.438958] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff000001aa7a74
+[    2.441668] x5 : 000073746e657665 x4 : 000000000000002f x3 : ffff00000356c808
+[    2.444407] x2 : ffff800009373da4 x1 : 000000000000e2ac x0 : ffff80000888eb34
+[    2.447190] Call trace:
+[    2.449557]  rockchip_usb2phy_otg_sm_work+0x50/0x330
+[    2.452169]  process_one_work+0x1d8/0x380
+[    2.454684]  worker_thread+0x170/0x4e0
+[    2.457056]  kthread+0xd8/0xdc
+[    2.459354]  ret_from_fork+0x10/0x20
+[    2.461728] Code: 91037015 295be001 f9403c77 b940e413 (f94006e0)
+[    2.464338] ---[ end trace 0000000000000000 ]---
 
-More details about this issue and suggested workarounds are in discussion:
-https://lore.kernel.org/linux-pci/BN9PR18MB425154FE5019DCAF2028A1D5DB8D9@BN9PR18MB4251.namprd18.prod.outlook.com/t/#u
+Am 22.06.22 um 02:31 schrieb Peter Geis:
+> The initial otg state for the phy defaults to device mode. The actual
+> state isn't detected until an ID IRQ fires. Fix this by syncing the ID
+> state during initialization.
+> 
+> Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>   drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> index 6711659f727c..6e44069617df 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+> @@ -1162,6 +1162,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
+>   					EXTCON_USB_HOST, &rport->event_nb);
+>   		if (ret)
+>   			dev_err(rphy->dev, "register USB HOST notifier failed\n");
+> +
+> +		if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
+> +			/* do initial sync of usb state */
+> +			ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
+> +			extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
+> +		}
+>   	}
+>   
+>   out:
 
-It was reported that enabling this workaround fixes instability issues and
-"Unhandled fault" errors when using 60 GHz WiFi 802.11ad card with Qualcomm
-QCA6335 chip under significant load which were caused by interrupt status
-stuck in the outbound CMPLT queue traced back to this erratum.
-
-This workaround fixes also kernel panic triggered after some minutes of
-usage 5 GHz WiFi 802.11ax card with Mediatek MT7915 chip:
-
-    Internal error: synchronous external abort: 96000210 [#1] SMP
-    Kernel panic - not syncing: Fatal exception in interrupt
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-Cc: stable@vger.kernel.org
----
- drivers/pci/controller/pci-aardvark.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index 060936ef01fe..3ae8a85ec72e 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -210,6 +210,8 @@ enum {
- };
- 
- #define VENDOR_ID_REG				(LMI_BASE_ADDR + 0x44)
-+#define DEBUG_MUX_CTRL_REG			(LMI_BASE_ADDR + 0x208)
-+#define     DIS_ORD_CHK				BIT(30)
- 
- /* PCIe core controller registers */
- #define CTRL_CORE_BASE_ADDR			0x18000
-@@ -558,6 +560,11 @@ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
- 		PCIE_CORE_CTRL2_TD_ENABLE;
- 	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
- 
-+	/* Disable ordering checks, workaround for erratum 3.12 "PCIe completion timeout" */
-+	reg = advk_readl(pcie, DEBUG_MUX_CTRL_REG);
-+	reg |= DIS_ORD_CHK;
-+	advk_writel(pcie, reg, DEBUG_MUX_CTRL_REG);
-+
- 	/* Set lane X1 */
- 	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
- 	reg &= ~LANE_CNT_MSK;
-@@ -1581,6 +1588,9 @@ static irqreturn_t advk_pcie_irq_handler(int irq, void *arg)
- 	struct advk_pcie *pcie = arg;
- 	u32 status;
- 
-+	/* Full memory barrier (ARM dsb sy), workaround for erratum 3.12 "PCIe completion timeout" */
-+	mb();
-+
- 	status = advk_readl(pcie, HOST_CTRL_INT_STATUS_REG);
- 	if (!(status & PCIE_IRQ_CORE_INT))
- 		return IRQ_NONE;
+Gruß,
 -- 
-2.20.1
-
+Markus Reichl

@@ -2,31 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDC7587A1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2344587A1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbiHBJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S236130AbiHBJxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbiHBJxS (ORCPT
+        with ESMTP id S232762AbiHBJxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:53:18 -0400
+        Tue, 2 Aug 2022 05:53:22 -0400
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AE215833;
-        Tue,  2 Aug 2022 02:53:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6510A167C7;
+        Tue,  2 Aug 2022 02:53:20 -0700 (PDT)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6151DFF811;
-        Tue,  2 Aug 2022 09:53:13 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4FF8CFF808;
+        Tue,  2 Aug 2022 09:53:15 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 Cc:     linus.walleij@linaro.org, heiko@sntech.de,
         linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: [RFC PATCH 0/1] Making Rockchip IO domains dependency from other devices explicit
-Date:   Tue,  2 Aug 2022 11:52:51 +0200
-Message-Id: <20220802095252.2486591-1-foss+kernel@0leil.net>
+Subject: [RFC PATCH 1/1] pinctrl: rockchip: add support for per-pinmux io-domain dependency
+Date:   Tue,  2 Aug 2022 11:52:52 +0200
+Message-Id: <20220802095252.2486591-2-foss+kernel@0leil.net>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220802095252.2486591-1-foss+kernel@0leil.net>
+References: <20220802095252.2486591-1-foss+kernel@0leil.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
@@ -40,15 +42,6 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-
-This is a follow-up to the mail sent almost two months ago asking for
-guidance: https://lore.kernel.org/lkml/778790a4-1239-e9d9-0549-6760a8792ceb@theobroma-systems.com/
-
-This is what I could come up with but I'm not too happy about it so feel
-free to give some ideas or other possible implementations that would
-have less downsides than this one.
-
-Some background on IO domains on Rockchip:
 
 On some Rockchip SoCs, some SoC pins are split in what are called IO
 domains.
@@ -78,59 +71,78 @@ pins and not add Rockchip-specific code to third party drivers (a camera
 driver in our case), it is hooked into the pinctrl driver which is
 Rockchip-specific obviously.
 
-Unfortunately, the dependency is not about the ultimate presence of the
-io-domain devices but more that prior to being able to use pins,
-the io-domain devices need to be probed. However of_find_device_by_node
-does not provide this information, hence the check whether the
-platform_device actually has its drvdata structure set (it defaults to
-NULL until it is filled by the driver during the probe of the device).
-
-Moreover, this dependency needs to be explicit on a pinmux level
-and postponed after the probe of the pinctrl driver because a circular
-dependency is observed otherwise with the following:
-pinctrl device depends on the io-domain device which depends on
-regulators from a PMIC on i2c which requires the i2c bus pins to be
-muxed from the pinctrl device.
-Instead, the pinmux dependency on IO domain is checked in set_mux
-callback and returns EPROBE_DEFER if the IO domain device hasn't probed
-yet.
-
-I wanted to add the appropriate rockchip,io-domains DT property to
-existing pinmux DT node. However, *all* of PX30's belong to an IO
-domain, including the i2c bus on which the PMIC supplying the power to
-the IO domain is on. Since the PMIC can be virtually on any i2c bus, a
-specific pinmux cannot be omitted or ignored, therefore none are added
-and it's up to the board maintainers to add them themselves. This is
-also assumed only necessary for IO domain that are configured
-differently by the bootloader or by register defaults (3V3 for
-RK3399/PX30) than their expected values in Linux and whose supplied
-power is fixed (e.g. not expected to be able to change from 3V3 to 1V8).
-
-The hope is to not have to handle the io domain configuration in
-the bootloader as it is currently done, c.f.
-https://elixir.bootlin.com/u-boot/latest/source/board/theobroma-systems/puma_rk3399/puma-rk3399.c#L28
-(we'll need an additional IO domain configuration for a camera soon).
-
-However, this still relies on IO domains defaults or bootloader
-configuration to be able to omit some IO domain<->pinmux relationships
-to avoid circular dependencies.
-
-I don't know how well this RFC implementation would work with
-suspend/resume.
-
 [1] drivers/soc/rockchip/io-domain.c
 [2] Documentation/devicetree/bindings/power/rockchip-io-domain.yaml
 
-Cheers,
-Quentin
-
-Quentin Schulz (1):
-  pinctrl: rockchip: add support for per-pinmux io-domain dependency
-
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
  drivers/pinctrl/pinctrl-rockchip.c | 19 +++++++++++++++++++
  drivers/pinctrl/pinctrl-rockchip.h |  1 +
  2 files changed, 20 insertions(+)
 
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index 32e41395fc76..c3c2801237b5 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -24,6 +24,8 @@
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/pinctrl/machine.h>
+ #include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+@@ -2370,6 +2372,12 @@ static int rockchip_pmx_set(struct pinctrl_dev *pctldev, unsigned selector,
+ 	dev_dbg(dev, "enable function %s group %s\n",
+ 		info->functions[selector].name, info->groups[group].name);
+ 
++	if (info->groups[group].io_domain &&
++	    !platform_get_drvdata(info->groups[group].io_domain)) {
++		dev_err(info->dev, "IO domain device is required but not probed yet, deferring...");
++		return -EPROBE_DEFER;
++	}
++
+ 	/*
+ 	 * for each pin in the pin group selected, program the corresponding
+ 	 * pin function number in the config register.
+@@ -2663,6 +2671,7 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
+ {
+ 	struct device *dev = info->dev;
+ 	struct rockchip_pin_bank *bank;
++	struct device_node *node;
+ 	int size;
+ 	const __be32 *list;
+ 	int num;
+@@ -2684,6 +2693,16 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
+ 	if (!size || size % 4)
+ 		return dev_err_probe(dev, -EINVAL, "wrong pins number or pins and configs should be by 4\n");
+ 
++	node = of_parse_phandle(np, "rockchip,io-domains", 0);
++	if (node) {
++		grp->io_domain = of_find_device_by_node(node);
++		of_node_put(node);
++		if (!grp->io_domain) {
++			dev_err(info->dev, "couldn't find IO domain device\n");
++			return -ENODEV;
++		}
++	}
++
+ 	grp->npins = size / 4;
+ 
+ 	grp->pins = devm_kcalloc(dev, grp->npins, sizeof(*grp->pins), GFP_KERNEL);
+diff --git a/drivers/pinctrl/pinctrl-rockchip.h b/drivers/pinctrl/pinctrl-rockchip.h
+index ec46f8815ac9..56bc008eb7df 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.h
++++ b/drivers/pinctrl/pinctrl-rockchip.h
+@@ -434,6 +434,7 @@ struct rockchip_pin_group {
+ 	unsigned int			npins;
+ 	unsigned int			*pins;
+ 	struct rockchip_pin_config	*data;
++	struct platform_device		*io_domain;
+ };
+ 
+ /**
 -- 
 2.37.1
 

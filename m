@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356F45880CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFDF5880C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbiHBRKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S230218AbiHBRJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233741AbiHBRKt (ORCPT
+        with ESMTP id S230126AbiHBRJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:10:49 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7D41EAE6;
-        Tue,  2 Aug 2022 10:10:47 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 272HAXwx017499;
-        Wed, 3 Aug 2022 02:10:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 272HAXwx017499
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1659460234;
-        bh=H30PAH1MVagmr+DocuLDEfTLf80xpGIilp7LXmrFWDA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Kb7f/tdIPYeAHcEGjMrCdmaIM2M9EG8Ly7RLUOr2UAzE0w57Xq2sClimpSdWb+wkZ
-         bf2pDsUHWWiOaIpUOukO1DRdMEednH8giZDq2UpSlzSVkL6yZYt+qCTS9rW0o0VnQi
-         b2VwymG8p3tVOOWTLPsTXWHo4R+eRy7VohKIfQ4MvctTa433DPSYL/rDMubeNYoT13
-         vjfCwtMoaKMph9QGVqds8pA+o8KQ7GpcQFjoVe3FzqqgK2FwwWywDUgRMjqhwuYoSB
-         IvX0MTLYC2j34pXQvy1uz/GDDE5xkdi4H3h3k8xMg1m8mpbuv0e5gmvu4GP3gI5WbK
-         I29dbh7WAjWKA==
-X-Nifty-SrcIP: [209.85.128.53]
-Received: by mail-wm1-f53.google.com with SMTP id i128-20020a1c3b86000000b003a3a22178beso571554wma.3;
-        Tue, 02 Aug 2022 10:10:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2YWwwIYhxP6PtDutZVJSXPJn+IY7fAGomi4czdi0GW74DKtKzK
-        LXv+fST+WxuNqfycaIrREd4Knxvrn5n86CL2xfg=
-X-Google-Smtp-Source: AA6agR4WDUvwILyzHBc8Y5fxbKXqaQqBUelJlkN0GZTbZz+5ss+2UTV07uzo3adpUpnkYrQQFpyUXJIxFkhMEkdX/zM=
-X-Received: by 2002:a05:600c:35ce:b0:3a3:1b7f:bbd8 with SMTP id
- r14-20020a05600c35ce00b003a31b7fbbd8mr288103wmq.22.1659460232334; Tue, 02 Aug
- 2022 10:10:32 -0700 (PDT)
+        Tue, 2 Aug 2022 13:09:54 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61BD33E30
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:09:53 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id b7so9803481qvq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=K9kEd2GPyCLccFvieYdAFisgtz04Q+n9mP7468SvJiY=;
+        b=UBJRjzHxcQ0IqTf/Q1+Zfvr6T8kYy0ryJicFBsczPkuPf3ir2NPfb17F4aqq0wc3ta
+         LWckoUkU+hsO+iqA8avS/mpqxGRr+gGUvON4M9wcD0gZxjGfWVdhxzJWGzJVgHOv1dAL
+         prZQd3uukKks9AmWOHKO+gF/OTW2tf8+mL4BI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=K9kEd2GPyCLccFvieYdAFisgtz04Q+n9mP7468SvJiY=;
+        b=tdfRhfqL/zX7tOEoQP91n2eOQblRS6WouJ6cAjs7HtefRUVQmoiuCEs3CrEsa6cDHY
+         FXet2YLOjRvx1HjttjMuDotzGf2rX2v11UTFCi6JY5JD5fJdImA+qI/NDUakj1SNPJV8
+         C6OvfnpKWPNFtpSDfhXMA3eJ/Xt8lAgpTNhLcSDEtlizRNKa1XSyhC3XRLUI97F031yR
+         XRNOqPHLKs+QHRs94q5l/Ejomuvnu5Bp53a+EkLVjhMr7C9f/g8+rNcnapgej/NPULGT
+         32ZcKreJcA8zMqHm5JePqAE2h3OldoAoqtfrf8TcAmxC2tfjI+Xz7MgaJeGrqJ7dRqCG
+         LlIA==
+X-Gm-Message-State: ACgBeo0aZfYdktKCvYc8xg57J0g/ggCe6VQ7+6/aAbuFX+2fbT3yNWk8
+        cXo0/MEEIlOw3nYChjTUf/x8mA==
+X-Google-Smtp-Source: AA6agR7eM3+Gbg5TiO3WTJi++AGoF3I0zAKD7cvf9rBlDvf6omVmi8ylchUBe7S4Ysrt8kYJXcwgVw==
+X-Received: by 2002:a05:6214:20a2:b0:476:9071:2e60 with SMTP id 2-20020a05621420a200b0047690712e60mr9234833qvd.110.1659460192878;
+        Tue, 02 Aug 2022 10:09:52 -0700 (PDT)
+Received: from nitro.local (host-142-67-156-76.public.eastlink.ca. [142.67.156.76])
+        by smtp.gmail.com with ESMTPSA id x29-20020a05620a0b5d00b006b5652edb93sm10776025qkg.48.2022.08.02.10.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:09:52 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:09:50 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 5/5] maintainer-pgp-guide: minor wording tweaks
+Message-ID: <20220802170950.l4xs6r5c6nfqlop5@nitro.local>
+References: <20220727-docs-pgp-guide-v1-0-c48fb06cb9af@linuxfoundation.org>
+ <20220727-docs-pgp-guide-v1-5-c48fb06cb9af@linuxfoundation.org>
+ <7107b5c5-d392-db1f-d5cb-6cae638c0b31@infradead.org>
 MIME-Version: 1.0
-References: <20220730173636.1303357-1-masahiroy@kernel.org> <b655dfc5-f490-9722-6ac6-ac4b7e8b7b5b@quicinc.com>
-In-Reply-To: <b655dfc5-f490-9722-6ac6-ac4b7e8b7b5b@quicinc.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 3 Aug 2022 02:09:29 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATWYdcUkRXVANG4Dc-3Fr-qyh1y8ZcM0knY1f3KEsKspw@mail.gmail.com>
-Message-ID: <CAK7LNATWYdcUkRXVANG4Dc-3Fr-qyh1y8ZcM0knY1f3KEsKspw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] modpost: add array range check to sec_name()
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7107b5c5-d392-db1f-d5cb-6cae638c0b31@infradead.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 5:29 AM Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
->
-> On 7/30/2022 10:36 AM, Masahiro Yamada wrote:
-> > The section index is always positive, so the argunent, secindex, should
->
-> nit: s/argunent/argument/
+On Fri, Jul 29, 2022 at 03:55:45PM -0700, Randy Dunlap wrote:
+> >  The files in our home directory are not as well protected as we like to
+> > -think.  They can be leaked or stolen via many different means:
+> > +think. They can be leaked or stolen via many different means:
+> 
+> One or 2 spaces after a period is one of the things that we historically
+> don't care about (can go either way).
 
-Thanks.
-I will not send v2 just because of this typo.
-I locally fixed it.
+Hm... I didn't know that applied within the context of a single file. Anyway,
+I'm happy to drop this change -- pretty sure it's only there because my vim is
+configured to replace ".  " with ". " on "gq" operations.
 
--- 
-Best Regards
-Masahiro Yamada
+-K

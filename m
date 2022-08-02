@@ -2,139 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491F7587B29
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1972F587B2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiHBK7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S236219AbiHBK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236219AbiHBK7i (ORCPT
+        with ESMTP id S236649AbiHBK7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:59:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C272102F;
-        Tue,  2 Aug 2022 03:59:37 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id s11so5697680edd.13;
-        Tue, 02 Aug 2022 03:59:37 -0700 (PDT)
+        Tue, 2 Aug 2022 06:59:41 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F543286CC;
+        Tue,  2 Aug 2022 03:59:39 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id dc19so2540395ejb.12;
+        Tue, 02 Aug 2022 03:59:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=OoOjj2ZKfm+aKI2XCz2uW/zV54aqeuaDJtU0JfcCK5E=;
-        b=BQKJG+lMQFqqR5u9jSq85ByIMbXSY75N7rX+qutL9ytJ7mJJUrFj8xY2dqKMpv4Ueq
-         HFWQAt1D74J8OAEpzcZ/lQ9hDrybyiihp9wpum6QUR84QziYBdHCVb9BXJi91B0wi3ro
-         jFNhoG1Ndj/wB+urRa0WhG1z36rhCiVdQEfQa4+whvEWDNIhvk2bOqdcAVjjEGP1fcmK
-         qMVzx1OmJ/aXRVrZSFs3LxLF3k6FJgfouWjS0r63LMuqPPz+WjSpiprlUYbvTEG8hl9t
-         UQ5UHnLJFA+XF0iW0fHmFgulmM6uauQxCZk9N90DHVa0PlYNI79yIrSoQCdWctAmg4rc
-         n2/Q==
+        bh=IX4JVwOdpTF1p2CR8tKM1WnNVnt9/39lsNOtwtKbZTI=;
+        b=okC4YO5KqwR9XvSJlxxzLdjbMGPqY4ggh+sbxBKViwN0qc4labM+BAK6I+z5uQDgcS
+         zMS8OfuiiWdahBE6PkzLmKCVqo91qzDL8mUAv28dK3ffrUalm/1P9p2O/dwDaZC5LP1W
+         /wZxkxHMJXiHi9s1wRjDfMzWDMnThKepbqZ3WrR4FE9jN+Zve3iTrDhv0iaEdSDMzthF
+         sLeyfED8rsc4CA8FGBzlYPIToruTJS5E7+hYB7FwmPHhK7207ne93/bLk2BMa9vfgbOl
+         UdSTdLyIN18xkLSYYvNjQLLEatefcNWCGCmlUi1Tp73Ee/7oANT0BleOHtzSSdpiqham
+         6SmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=OoOjj2ZKfm+aKI2XCz2uW/zV54aqeuaDJtU0JfcCK5E=;
-        b=I2kZjobd0+MoFJH6PGxa0NKD8Zpn+9MJ6MO+VqRdeNcmvXHhOIsIaSgILJTE0DQX5l
-         yr/MtdERXW0kCkmltdBZt5GYVEAQO0UDPUZXyEe2XkGxqbRUJIqI5qJBMkysC6598mDo
-         0Pg53N78AOtp9S2pfs57MyNRnuYzCC6kKxRzgvcoQ+GWmKh2M5qQn24kDngPfDEBXOhK
-         5Um/inzqtxHegPo93hmQD+VLmU2Wd7ws3j5rC0REjqft0XZAxE2++CN8sl8XYTtSEVzk
-         CBEvOOhImd/CTs2lj5GlA8YuEmPiTQLeUna4yDM6Hu3/77QfSp/ynrwM9I31uMvxIuzI
-         pRSw==
-X-Gm-Message-State: AJIora/0n+aax9zK7URM767EYPf+lfVRoM6eh2vddOrRiW2D/bT0rCMn
-        uuAeUZU1/kOpi9iL05C+R4o=
-X-Google-Smtp-Source: AGRyM1slWsFtBGYQGRf9JsGLxptO6wteWd0849lQuQzFHhHumIbPQkQUQOOt+b/HreL9OuzslVtZvA==
-X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id eb5-20020a0564020d0500b00425b5c8faebmr19475384edb.273.1659437976136;
-        Tue, 02 Aug 2022 03:59:36 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id a9-20020a50ff09000000b0043d1c639e15sm6718213edu.65.2022.08.02.03.59.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IX4JVwOdpTF1p2CR8tKM1WnNVnt9/39lsNOtwtKbZTI=;
+        b=SCpRW6xXqslPt92X0FNFtjW4ZsmuW20uH6h6i8K1qAqOklPUeBxunZWiDVA9I8SCnJ
+         NtHGOIw0OMiHqxY38G2yJT4KmWA2FLiSHjDRixXJnG512JUg4jlj77LxHEKuG6jg55/j
+         nmgeW5iDWT/NwqdB80G1LyQA3ZB8o3d0L4XArDzApbYs21UMPxAPhNewPzBYYQ/t9DCc
+         mvVegGOLxnM5MdBpNX3lUBxxXJZ4NwH1r1bfQbjBwFfy5lVRUqH1ZW1RdzuB+yK1DXAc
+         hiPAC8TzMS257oMUGkABhJeGSg0tkthXP9hfv3ZJSLARNA+lVEObHniXv7JMHMgfF/XA
+         gzAg==
+X-Gm-Message-State: AJIora/vLYGi2b5ux/L+22NBurGLk0SK984gvPpzbSj1vI4zb+TzuQ7C
+        97FT/BQ84NhFjRXH+oWqa+8=
+X-Google-Smtp-Source: AGRyM1tZgR7N0/W51//RcfTMdjMbEhbjvSP+OgU0K5WcH8OJoAj/n2HnvnkqA+Ppl+h8iJb/bPqYaA==
+X-Received: by 2002:a17:906:844c:b0:72b:4d77:fd83 with SMTP id e12-20020a170906844c00b0072b4d77fd83mr15757356ejy.151.1659437977918;
+        Tue, 02 Aug 2022 03:59:37 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id ku7-20020a170907788700b0073092b543c3sm1741009ejc.141.2022.08.02.03.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 03:59:35 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 2 Aug 2022 12:59:33 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-edac@vger.kernel.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, hch@lst.de, nvdimm@lists.linux.dev
-Subject: Re: [PATCH v6] x86/mce: retrieve poison range from hardware
-Message-ID: <YukDlb9SsZ2UlX8o@gmail.com>
-References: <20220802000614.3769714-1-jane.chu@oracle.com>
+        Tue, 02 Aug 2022 03:59:37 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:59:35 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [Patch RFC net-next 4/4] net: dsa: microchip: use private pvid
+ for bridge_vlan_unwaware
+Message-ID: <20220802105935.gjjc3ft6zf35xrhr@skbuf>
+References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
+ <20220729151733.6032-1-arun.ramadoss@microchip.com>
+ <20220729151733.6032-5-arun.ramadoss@microchip.com>
+ <20220729151733.6032-5-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802000614.3769714-1-jane.chu@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220729151733.6032-5-arun.ramadoss@microchip.com>
+ <20220729151733.6032-5-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 29, 2022 at 08:47:33PM +0530, Arun Ramadoss wrote:
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index 516fb9d35c87..8a5583b1f2f4 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -161,6 +161,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
+>  	.vlan_filtering = ksz8_port_vlan_filtering,
+>  	.vlan_add = ksz8_port_vlan_add,
+>  	.vlan_del = ksz8_port_vlan_del,
+> +	.drop_untagged = ksz8_port_enable_pvid,
 
-* Jane Chu <jane.chu@oracle.com> wrote:
+You'll have to explain this one. What impact does PVID insertion on KSZ8
+have upon dropping/not dropping untagged packets? This patch is saying
+that when untagged packets should be dropped, PVID insertion should be
+enabled, and when untagged packets should be accepted, PVID insertion
+should be disabled. How come?
 
-> With Commit 7917f9cdb503 ("acpi/nfit: rely on mce->misc to determine
-> poison granularity") that changed nfit_handle_mce() callback to report
-> badrange according to 1ULL << MCI_MISC_ADDR_LSB(mce->misc), it's been
-> discovered that the mce->misc LSB field is 0x1000 bytes, hence injecting
-> 2 back-to-back poisons and the driver ends up logging 8 badblocks,
-> because 0x1000 bytes is 8 512-byte.
-> 
-> Dan Williams noticed that apei_mce_report_mem_error() hardcode
-> the LSB field to PAGE_SHIFT instead of consulting the input
-> struct cper_sec_mem_err record.  So change to rely on hardware whenever
-> support is available.
-> 
-> Link: https://lore.kernel.org/r/7ed50fd8-521e-cade-77b1-738b8bfb8502@oracle.com
-> 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  arch/x86/kernel/cpu/mce/apei.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-> index 717192915f28..e2439c7872ba 100644
-> --- a/arch/x86/kernel/cpu/mce/apei.c
-> +++ b/arch/x86/kernel/cpu/mce/apei.c
-> @@ -29,15 +29,27 @@
->  void apei_mce_report_mem_error(int severity, struct cper_sec_mem_err *mem_err)
+>  	.mirror_add = ksz8_port_mirror_add,
+>  	.mirror_del = ksz8_port_mirror_del,
+>  	.get_caps = ksz8_get_caps,
+> @@ -187,6 +188,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
+>  	.vlan_filtering = ksz9477_port_vlan_filtering,
+>  	.vlan_add = ksz9477_port_vlan_add,
+>  	.vlan_del = ksz9477_port_vlan_del,
+> +	.drop_untagged = ksz9477_port_drop_untagged,
+>  	.mirror_add = ksz9477_port_mirror_add,
+>  	.mirror_del = ksz9477_port_mirror_del,
+>  	.get_caps = ksz9477_get_caps,
+> @@ -220,6 +222,7 @@ static const struct ksz_dev_ops lan937x_dev_ops = {
+>  	.vlan_filtering = ksz9477_port_vlan_filtering,
+>  	.vlan_add = ksz9477_port_vlan_add,
+>  	.vlan_del = ksz9477_port_vlan_del,
+> +	.drop_untagged = ksz9477_port_drop_untagged,
+>  	.mirror_add = ksz9477_port_mirror_add,
+>  	.mirror_del = ksz9477_port_mirror_del,
+>  	.get_caps = lan937x_phylink_get_caps,
+> @@ -1254,6 +1257,9 @@ static int ksz_enable_port(struct dsa_switch *ds, int port,
 >  {
->  	struct mce m;
-> +	int lsb;
+>  	struct ksz_device *dev = ds->priv;
 >  
->  	if (!(mem_err->validation_bits & CPER_MEM_VALID_PA))
->  		return;
+> +	dev->dev_ops->vlan_add(dev, port, KSZ_DEFAULT_VLAN,
+> +			       BRIDGE_VLAN_INFO_UNTAGGED);
+> +
+
+How many times can this be executed before the VLAN add operation fails
+due to the VLAN already being present on the port? I notice you're
+ignoring the return code. Wouldn't it be better to do this at
+port_setup() time instead?
+
+(side note, the PVID for standalone mode can be added at port_setup
+time. The PVID to use for bridges in VLAN-unaware mode can be allocated
+at port_bridge_join time)
+
+>  	if (!dsa_is_user_port(ds, port))
+>  		return 0;
 >  
-> +	/*
-> +	 * Even if the ->validation_bits are set for address mask,
-> +	 * to be extra safe, check and reject an error radius '0',
-> +	 * and fallback to the default page size.
-> +	 */
+> +static int ksz_commit_pvid(struct dsa_switch *ds, int port)
+> +{
+> +	struct dsa_port *dp = dsa_to_port(ds, port);
+> +	struct net_device *br = dsa_port_bridge_dev_get(dp);
+> +	struct ksz_device *dev = ds->priv;
+> +	u16 pvid = KSZ_DEFAULT_VLAN;
+> +	bool drop_untagged = false;
+> +	struct ksz_port *p;
+> +
+> +	p = &dev->ports[port];
+> +
+> +	if (br && br_vlan_enabled(br)) {
+> +		pvid = p->bridge_pvid.vid;
+> +		drop_untagged = !p->bridge_pvid.valid;
+> +	}
 
-speling nit:
+This is better in the sense that it resolves the need for the
+configure_vlan_while_not_filtering hack. But standalone and VLAN-unaware
+bridge ports still share the same PVID. Even more so, standalone ports
+have address learning enabled, which will poison the address database of
+VLAN-unaware bridge ports (and of other standalone ports):
+https://patchwork.kernel.org/project/netdevbpf/patch/20220802002636.3963025-1-vladimir.oltean@nxp.com/
 
-  s/fallback/fall back
+Are you going to do further work in this area?
 
-> +	if (mem_err->validation_bits & CPER_MEM_VALID_PA_MASK)
-> +		lsb = find_first_bit((const unsigned long *)
-> +			&mem_err->physical_addr_mask, PAGE_SHIFT);
-
-I think we can write this in a shorter form and in a single line:
-
-		lsb = find_first_bit((void *)&mem_err->physical_addr_mask, PAGE_SHIFT);
-
-(Ignore checkpatch if it wants to break the line.)
-
-Untested.
-
-Assuming my suggestion is correct and with those addressed:
-
-  Reviewed-by: Ingo Molnar <mingo@kernel.org>
-
-Thanks,
-
-	Ingo
+> +
+> +	ksz_set_pvid(dev, port, pvid);
+> +
+> +	if (dev->dev_ops->drop_untagged)
+> +		dev->dev_ops->drop_untagged(dev, port, drop_untagged);
+> +
+> +	return 0;
+> +}

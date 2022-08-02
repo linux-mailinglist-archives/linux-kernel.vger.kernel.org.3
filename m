@@ -2,109 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18806587CEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB2B587CEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbiHBNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
+        id S236578AbiHBNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiHBNRz (ORCPT
+        with ESMTP id S232425AbiHBNSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:17:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21AB12D19;
-        Tue,  2 Aug 2022 06:17:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B345B81EF3;
-        Tue,  2 Aug 2022 13:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3833C433C1;
-        Tue,  2 Aug 2022 13:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659446271;
-        bh=p4m28G7V5HhenGiD2H4zOI1QhZVoWGXr14bSJRSRAdg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PFXQbQPz1/L9eDzHSURbtzxxo3qdNlR+j2Fxcv8i/YkMjW80rur039virDvzrjCQt
-         7wbJawZkiTY9bGFbkjWmxkqbBXJJIlkygGCk+/MQ3wa7tMw6M5CzJtX2gfH7pOfocZ
-         fY2AFs7BiDwWiutDOasuNvlzogaKtRaFe2gkZZWb4Tp3xNZVvOfA/lcWWNd0F/h7pG
-         HVtafQyh7mmzugH4aCjIWzgvA7Ys3WfibMfMmXQRtfV2rl/Bc1Oo1NdyS3M1dior20
-         6bW+NAdletbIl5XB/HzrwQVM+tQzMYtXqYQJqUFSY4Ax4AJb9WeJoZSR1+d9ARkOdH
-         eOQnyY+qcd7ng==
-Date:   Tue, 2 Aug 2022 14:17:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Adam Skladowski <a39.skl@gmail.com>
-Subject: Re: [PATCH v3 05/13] regulator: qcom_spmi: Add support for new
- regulator types
-Message-ID: <Yukj9bjX+O0Yab3q@sirena.org.uk>
-References: <20220731223736.1036286-1-iskren.chernev@gmail.com>
- <20220731223736.1036286-6-iskren.chernev@gmail.com>
- <3f56541a-29c1-af76-0de3-b20eb81a5fa8@linaro.org>
+        Tue, 2 Aug 2022 09:18:18 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6876A12D19;
+        Tue,  2 Aug 2022 06:18:10 -0700 (PDT)
+Message-ID: <0a073674-cb3b-96f5-8af6-779f681a05d0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1659446288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=px8ybqGB8lVsEkoR1fXo4n81yqEsz0zAAzD8kDgD+zQ=;
+        b=EOOlHjuSyES/QjQ7KnBPtt9XSjJayho7izkNJitc9wYxDWVl343ZJlV9qAK4T+2ZfBMLDl
+        Owsn0cgAzaGPMI4Ff5TXFkaix03MekSxvSbHpJkWbVeewNP6BdvZM7QIWkrXqykuwhE62p
+        hXOWDF+bHu3yqADCns87C2qfg1cfyfM=
+Date:   Tue, 2 Aug 2022 21:17:57 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TszTQpVlg1sWIkv4"
-Content-Disposition: inline
-In-Reply-To: <3f56541a-29c1-af76-0de3-b20eb81a5fa8@linaro.org>
-X-Cookie: Stay on the trail.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] RDMA/RXE: Add send_common_ack() helper
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
+ <CAD=hENfqCKs3jk7pUNJq0Urqx1ZCSU2KpDcipgz_ORJs_43C=g@mail.gmail.com>
+ <b47219be-b6e0-9a18-5d84-5546c08d721e@fujitsu.com>
+ <CAD=hENfZN43c4ZBmXwdru61=341bZgfYa8VJeKaBQYF5KKFA2A@mail.gmail.com>
+ <02c52efa-61fd-5e27-9f98-46e0384d81e7@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <02c52efa-61fd-5e27-9f98-46e0384d81e7@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+在 2022/8/2 13:52, lizhijian@fujitsu.com 写道:
+> 
+> 
+> On 01/08/2022 15:47, Zhu Yanjun wrote:
+>> On Mon, Aug 1, 2022 at 3:28 PM lizhijian@fujitsu.com
+>> <lizhijian@fujitsu.com> wrote:
+>>>
+>>>
+>>> On 01/08/2022 15:11, Zhu Yanjun wrote:
+>>>> On Mon, Aug 1, 2022 at 2:16 PM Li Zhijian <lizhijian@fujitsu.com> wrote:
+>>>>> Most code in send_ack() and send_atomic_ack() are duplicate, move them
+>>>>> to a new helper send_common_ack().
+>>>>>
+>>>>> In newer IBA SPEC, some opcodes require acknowledge with a zero-length read
+>>>>> response, with this new helper, we can easily implement it later.
+>>>>>
+>>>>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+>>>>> ---
+>>>>>     drivers/infiniband/sw/rxe/rxe_resp.c | 43 ++++++++++++++----------------------
+>>>>>     1 file changed, 17 insertions(+), 26 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+>>>>> index b36ec5c4d5e0..4c398fa220fa 100644
+>>>>> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+>>>>> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+>>>>> @@ -1028,50 +1028,41 @@ static enum resp_states do_complete(struct rxe_qp *qp,
+>>>>>                    return RESPST_CLEANUP;
+>>>>>     }
+>>>>>
+>>>>> -static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
+>>>>> +
+>>>>> +static int send_common_ack(struct rxe_qp *qp, u8 syndrome, u32 psn,
+>>>> The function is better with rxe_send_common_ack?
+>>> I'm not clear the exact rule about the naming prefix. if it has, please let me know :)
+>>>
+>>> IMHO, if a function is either a public API(export function) or a callback to a upper layer,  it's a good idea to a fixed prefix.
+>>> Instead, if they are just static, no prefix is not too bad.
+>> When debug, a rxe_ prefix can help us filter the functions whatever
+>> the function static or public.
+>>
+>>> BTW, current RXE are mixing the two rules, it should be another standalone patch to do the cleanup if needed.
+>> Yes. Please make this standalone patch to complete this.
+> 
+> i tried to do a rough statistic.
+> 
+> all functions:
+> $ git grep -E '^[a-z].*\(' drivers/infiniband/sw/rxe | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | wc -l
+> 474
+> 
+> without rxe_ prefix:
+> git grep -E '^[a-z].*\(' drivers/infiniband/sw/rxe | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | grep -v -e ^rxe | wc -l
+> 199
+The followings are the no rxe_ prefix functions. About 22 functions.
 
---TszTQpVlg1sWIkv4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+do_complete
+retransmit_timer
+next_opcode
+rnr_nak_timer
+find_resource
+send_data_in
+prepare_ack_packet
+send_ack
+check_keys
+check_type_state
+resize_finish
+do_mmap_info
+parent_show
+post_one_recv
+free_rd_atomic_resources
+free_rd_atomic_resource
+lookup_iova
+mr_check_range
+iova_to_vaddr
+advance_dma_data
+lookup_mr
+copy_data
 
-On Tue, Aug 02, 2022 at 12:46:48PM +0200, Krzysztof Kozlowski wrote:
-> On 01/08/2022 00:37, Iskren Chernev wrote:
+Zhu Yanjun
 
-> > +/*
-> > + * Third common register layout
-> > + */
-> > +enum spmi_ftsmps3_regulator_registers {
-> > +	SPMI_FTSMPS3_REG_STEP_CTRL		=3D 0x3c,
-> > +};
-> > +
-> > +
->=20
-> Just one blank line.
+> 
+> Similarly, the mlx5 have the same situations.
+> $ git grep -h -E '^[a-z].*\(' drivers/infiniband/hw/mlx5 | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | wc -l
+> 1083
+> $ git grep -h -E '^[a-z].*\(' drivers/infiniband/hw/mlx5 | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | grep -v -e ^mlx5 | wc -l
+> 476
+> 
+> TBH, i have no strong stomach to do such cleanup so far :)
+> 
+> Thanks
+> Zhijian
+> 
+> 
+>>
+>> Thanks and Regards,
+>> Zhu Yanjun
+>>
+>>> Thanks
+>>> Zhijian
+>>>
+>>>
+>>>> So when debug, rxe_ prefix can help us.
+>>>>
+>>>>> +                                 int opcode, const char *msg)
+>>>>>     {
+>>>>> -       int err = 0;
+>>>>> +       int err;
+>>>>>            struct rxe_pkt_info ack_pkt;
+>>>>>            struct sk_buff *skb;
+>>>>>
+>>>>> -       skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ACKNOWLEDGE,
+>>>>> -                                0, psn, syndrome);
+>>>>> -       if (!skb) {
+>>>>> -               err = -ENOMEM;
+>>>>> -               goto err1;
+>>>>> -       }
+>>>>> +       skb = prepare_ack_packet(qp, &ack_pkt, opcode, 0, psn, syndrome);
+>>>>> +       if (!skb)
+>>>>> +               return -ENOMEM;
+>>>>>
+>>>>>            err = rxe_xmit_packet(qp, &ack_pkt, skb);
+>>>>>            if (err)
+>>>>> -               pr_err_ratelimited("Failed sending ack\n");
+>>>>> +               pr_err_ratelimited("Failed sending %s\n", msg);
+>>>>>
+>>>>> -err1:
+>>>>>            return err;
+>>>>>     }
+>>>>>
+>>>>> -static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
+>>>>> +static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
+>>>> rxe_send_ack
+>>>>
+>>>>>     {
+>>>>> -       int err = 0;
+>>>>> -       struct rxe_pkt_info ack_pkt;
+>>>>> -       struct sk_buff *skb;
+>>>>> -
+>>>>> -       skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE,
+>>>>> -                                0, psn, syndrome);
+>>>>> -       if (!skb) {
+>>>>> -               err = -ENOMEM;
+>>>>> -               goto out;
+>>>>> -       }
+>>>>> +       return send_common_ack(qp, syndrome, psn,
+>>>>> +                       IB_OPCODE_RC_ACKNOWLEDGE, "ACK");
+>>>>> +}
+>>>>>
+>>>>> -       err = rxe_xmit_packet(qp, &ack_pkt, skb);
+>>>>> -       if (err)
+>>>>> -               pr_err_ratelimited("Failed sending atomic ack\n");
+>>>>> +static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
+>>>> rxe_send_atomic_ack
+>>>>
+>>>> Thanks and Regards,
+>>>> Zhu Yanjun
+>>>>> +{
+>>>>> +       int ret = send_common_ack(qp, syndrome, psn,
+>>>>> +                       IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE, "ATOMIC ACK");
+>>>>>
+>>>>>            /* have to clear this since it is used to trigger
+>>>>>             * long read replies
+>>>>>             */
+>>>>>            qp->resp.res = NULL;
+>>>>> -out:
+>>>>> -       return err;
+>>>>> +       return ret;
+>>>>>     }
+>>>>>
+>>>>>     static enum resp_states acknowledge(struct rxe_qp *qp,
+>>>>> --
+>>>>> 1.8.3.1
+>>>>>
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
-
---TszTQpVlg1sWIkv4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpI/QACgkQJNaLcl1U
-h9CIzQf+NuTTebaileZ8U06bnAkY26XDIkyB3jsbaiecRfzdZzXZw+icUg3nKpAG
-eZhtg6qhX9zUSrvy0e2yjmXuvfplFxgRM1kk+YNe4vUJ1NEn+K5Rq71mgUJP5djN
-vetDDdZmJ78dSTNPLLZNpNnPR2fkzFKdeBjxs2I/4N2Ci3MaGol+Tse41H34lGQX
-myMJ9KHpGHKC8I/s8rBporzSxK4L/q60srqhutdJIcOT4lyqumKbSzLBfEZwRfFv
-EWDyr0ea9Qs9RHtEVOag5+DDRqXTV40iK756MlRQic9a4ngw1l6SfB92iwalC5pV
-KKk62Ean6wM2YOVdq5jLxaTbVY0zKQ==
-=HoLP
------END PGP SIGNATURE-----
-
---TszTQpVlg1sWIkv4--

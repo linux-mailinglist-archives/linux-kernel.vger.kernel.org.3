@@ -2,294 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890B6587923
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A91858792D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiHBIiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S235971AbiHBIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiHBIiA (ORCPT
+        with ESMTP id S233888AbiHBIk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:38:00 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5C311C37;
-        Tue,  2 Aug 2022 01:37:58 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 10:37:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1659429475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hs8uwZgmEtFXTdbv8NhFsIdGEZ4DoiEdEJpa7449Sgg=;
-        b=AbSw8bbkGLHrIOq+u358DWaJvgsM7FyYeasj4V/NFmpQlqLEasv1Ta6FkvzKmB/vEHJjGJ
-        hznCGBj5A36HRBhk0IFOJJo4Yc8VNbmTeGJ5UtFGMkc4ruPnHvOh/L7JE7zKybQ19xHTTa
-        ibzzg16zwqUzScm7dYj91gs8Y2JYVAQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, seanjc@google.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, joro@8bytes.org, mizhang@google.com,
-        pbonzini@redhat.com
-Subject: Re: [V2 07/11] KVM: selftests: Consolidate boilerplate code in
- get_ucall()
-Message-ID: <20220802083754.4jw7cijpfqi7hoy7@kamzik>
-References: <20220801201109.825284-1-pgonda@google.com>
- <20220801201109.825284-8-pgonda@google.com>
+        Tue, 2 Aug 2022 04:40:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3AFDF2E;
+        Tue,  2 Aug 2022 01:40:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 643AC60B2F;
+        Tue,  2 Aug 2022 08:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EFDC433C1;
+        Tue,  2 Aug 2022 08:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659429623;
+        bh=rbPayMUNRP+UW1L0745xa3YzYtRl5oydAMq3hSkE6vw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FiDO17vWUmS1Z8jtkPzKkyvSaZpJ7ba8MmIocSTM9w2aklYKg5e7Wtw3u7w/f6+VK
+         LIziq0FVkDYgIjPpk94igb3yFJ0bXIrT7HfJwt70GEfDcfHDcHotw+CLO9ersYdL8L
+         mMQzlGBgQUFgV6rO4cfbPvjVWjR6d8wmQ0c4jrTSQl8kjn2SFxRe/DXrJGyGwlOZE8
+         RuTcY4uuQiERasm7s6MphVD+hXI84He3HRqVjv4qHS3+BKkG0b5+kieiq5/8BRECqW
+         x6os6UN2aF3IM5cfZihjQekTnjpK9VulnTmFrbdhCvGVnyEMAp5hUKPaYqqyP8gx1+
+         KyNA2GQp+KCRw==
+Date:   Tue, 2 Aug 2022 09:40:16 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Message-ID: <20220802084015.GB26962@willie-the-truck>
+References: <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220801155421.GB26280@willie-the-truck>
+ <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801201109.825284-8-pgonda@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 01:11:05PM -0700, Peter Gonda wrote:
-> From: Sean Christopherson <seanjc@google.com>
+On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
+> On Mon, 1 Aug 2022, Will Deacon wrote:
+> > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> > 
+> > > Index: linux-2.6/arch/x86/include/asm/bitops.h
+> > > ===================================================================
+> > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+> > >  
+> > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+> > >  {
+> > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> > > +	barrier();
+> > > +	return r;
+> > 
+> > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+> > volatile and we don't need a barrier() like this in the definition of
+> > READ_ONCE(), for example.
 > 
-> Consolidate the actual copying of a ucall struct from guest=>host into
-> the common get_ucall().  Return a host virtual address instead of a guest
-> virtual address even though the addr_gva2hva() part could be moved to
-> get_ucall() too.  Conceptually, get_ucall() is invoked from the host and
-> should return a host virtual address (and returning NULL for "nothing to
-> see here" is far superior to returning 0).
+> gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
+> accesses around volatile accesses.
 > 
-> Use pointer shenanigans instead of an unnecessary bounce buffer when the
-> caller of get_ucall() provides a valid pointer.
+> The purpose of the compiler barrier is to make sure that the non-volatile 
+> accesses that follow test_bit are not reordered by the compiler before the 
+> volatile access to addr.
+
+If we need these accesses to be ordered reliably, then we need a CPU barrier
+and that will additionally prevent the compiler reordering. So I still don't
+think we need the barrier() here.
+
+> > > Index: linux-2.6/include/linux/wait_bit.h
+> > > ===================================================================
+> > > --- linux-2.6.orig/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> > > +++ linux-2.6/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> > > @@ -71,7 +71,7 @@ static inline int
+> > >  wait_on_bit(unsigned long *word, int bit, unsigned mode)
+> > >  {
+> > >  	might_sleep();
+> > > -	if (!test_bit(bit, word))
+> > > +	if (!test_bit_acquire(bit, word))
+> > >  		return 0;
+> > >  	return out_of_line_wait_on_bit(word, bit,
+> > >  				       bit_wait,
+> > 
+> > Yet another approach here would be to leave test_bit as-is and add a call to
+> > smp_acquire__after_ctrl_dep() since that exists already -- I don't have
+> > strong opinions about it, but it saves you having to add another stub to
+> > x86.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  .../selftests/kvm/include/ucall_common.h      |  8 ++------
->  .../testing/selftests/kvm/lib/aarch64/ucall.c | 13 +++----------
->  tools/testing/selftests/kvm/lib/riscv/ucall.c | 19 +++----------------
->  tools/testing/selftests/kvm/lib/s390x/ucall.c | 16 +++-------------
->  .../testing/selftests/kvm/lib/ucall_common.c  | 19 +++++++++++++++++++
->  .../testing/selftests/kvm/lib/x86_64/ucall.c  | 16 +++-------------
->  6 files changed, 33 insertions(+), 58 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-> index 5a85f5318bbe..c1bc8e33ef3f 100644
-> --- a/tools/testing/selftests/kvm/include/ucall_common.h
-> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
-> @@ -27,9 +27,10 @@ struct ucall {
->  void ucall_arch_init(struct kvm_vm *vm, void *arg);
->  void ucall_arch_uninit(struct kvm_vm *vm);
->  void ucall_arch_do_ucall(vm_vaddr_t uc);
-> -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+> It would be the same as my previous patch with smp_rmb() that Linus didn't 
+> like. But I think smp_rmb (or smp_acquire__after_ctrl_dep) would be 
+> correct here.
 
-This should now return a vm_vaddr_t instead of a uint64_t.
+Right, I saw Linus' objection to smp_rmb() and I'm not sure where
+smp_acquire__after_ctrl_dep() fits in with his line of reasoning. On the one
+hand, it's talking about acquire ordering, but on the other, it's ugly as
+sin :)
 
->  
->  void ucall(uint64_t cmd, int nargs, ...);
-> +uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
->  
->  static inline void ucall_init(struct kvm_vm *vm, void *arg)
->  {
-> @@ -41,11 +42,6 @@ static inline void ucall_uninit(struct kvm_vm *vm)
->  	ucall_arch_uninit(vm);
->  }
->  
-> -static inline uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> -{
-> -	return ucall_arch_get_ucall(vcpu, uc);
-> -}
-> -
->  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
->  				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
->  #define GUEST_SYNC(stage)	ucall(UCALL_SYNC, 2, "hello", stage)
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> index 1c81a6a5c1f2..d2f099caa9ab 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> @@ -78,24 +78,17 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
->  uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-
-Need to drop uc from the parameters.
-
->  {
->  	struct kvm_run *run = vcpu->run;
-> -	struct ucall ucall = {};
-> -
-> -	if (uc)
-> -		memset(uc, 0, sizeof(*uc));
->  
->  	if (run->exit_reason == KVM_EXIT_MMIO &&
->  	    run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
-> -		vm_vaddr_t gva;
-> +		uint64_t ucall_addr;
->  
->  		TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
->  			    "Unexpected ucall exit mmio address access");
->  		memcpy(&gva, run->mmio.data, sizeof(gva));
-
-We just dropped the gva variable, so this can't compile. We don't want
-to return a uint64_t anyway, though, so we shouldn't replace gva, we
-should return it.
-
-> -		memcpy(&ucall, addr_gva2hva(vcpu->vm, gva), sizeof(ucall));
->  
-> -		vcpu_run_complete_io(vcpu);
-> -		if (uc)
-> -			memcpy(uc, &ucall, sizeof(ucall));
-> +		return ucall_addr;
->  	}
->  
-> -	return ucall.cmd;
-> +	return 0;
->  }
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> index b1598f418c1f..3f000d0b705f 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> @@ -51,27 +51,15 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
->  		  uc, 0, 0, 0, 0, 0);
->  }
->  
-> -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_run *run = vcpu->run;
-> -	struct ucall ucall = {};
-> -
-> -	if (uc)
-> -		memset(uc, 0, sizeof(*uc));
->  
->  	if (run->exit_reason == KVM_EXIT_RISCV_SBI &&
->  	    run->riscv_sbi.extension_id == KVM_RISCV_SELFTESTS_SBI_EXT) {
->  		switch (run->riscv_sbi.function_id) {
->  		case KVM_RISCV_SELFTESTS_SBI_UCALL:
-> -			memcpy(&ucall,
-> -			       addr_gva2hva(vcpu->vm, run->riscv_sbi.args[0]),
-> -			       sizeof(ucall));
-> -
-> -			vcpu_run_complete_io(vcpu);
-> -			if (uc)
-> -				memcpy(uc, &ucall, sizeof(ucall));
-> -
-> -			break;
-> +			return vcpu->vm, run->riscv_sbi.args[0];
-
-The "vcpu->vm," needs to go away.
-
->  		case KVM_RISCV_SELFTESTS_SBI_UNEXP:
->  			vcpu_dump(stderr, vcpu, 2);
->  			TEST_ASSERT(0, "Unexpected trap taken by guest");
-> @@ -80,6 +68,5 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  			break;
->  		}
->  	}
-> -
-> -	return ucall.cmd;
-> +	return 0;
->  }
-> diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> index 114cb4af295f..f7a5a7eb4aa8 100644
-> --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> @@ -20,13 +20,9 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
->  	asm volatile ("diag 0,%0,0x501" : : "a"(uc) : "memory");
->  }
->  
-> -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_run *run = vcpu->run;
-> -	struct ucall ucall = {};
-> -
-> -	if (uc)
-> -		memset(uc, 0, sizeof(*uc));
->  
->  	if (run->exit_reason == KVM_EXIT_S390_SIEIC &&
->  	    run->s390_sieic.icptcode == 4 &&
-> @@ -34,13 +30,7 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  	    (run->s390_sieic.ipb >> 16) == 0x501) {
->  		int reg = run->s390_sieic.ipa & 0xf;
->  
-> -		memcpy(&ucall, addr_gva2hva(vcpu->vm, run->s.regs.gprs[reg]),
-> -		       sizeof(ucall));
-> -
-> -		vcpu_run_complete_io(vcpu);
-> -		if (uc)
-> -			memcpy(uc, &ucall, sizeof(ucall));
-> +		return run->s.regs.gprs[reg];
->  	}
-> -
-> -	return ucall.cmd;
-> +	return 0;
->  }
-> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> index 749ffdf23855..a060252bab40 100644
-> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
-> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> @@ -18,3 +18,22 @@ void ucall(uint64_t cmd, int nargs, ...)
->  
->  	ucall_arch_do_ucall((vm_vaddr_t)&uc);
->  }
-> +
-> +uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +{
-> +	struct ucall ucall;
-> +	void *addr;
-> +
-> +	if (!uc)
-> +		uc = &ucall;
-> +
-> +	addr = addr_gva2hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
-> +	if (addr) {
-> +		memcpy(uc, addr, sizeof(*uc));
-> +		vcpu_run_complete_io(vcpu);
-> +	} else {
-> +		memset(uc, 0, sizeof(*uc));
-> +	}
-> +
-> +	return uc->cmd;
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> index 9f532dba1003..24746120a593 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> @@ -22,25 +22,15 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
->  		: : [port] "d" (UCALL_PIO_PORT), "D" (uc) : "rax", "memory");
->  }
->  
-> -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_run *run = vcpu->run;
-> -	struct ucall ucall = {};
-> -
-> -	if (uc)
-> -		memset(uc, 0, sizeof(*uc));
->  
->  	if (run->exit_reason == KVM_EXIT_IO && run->io.port == UCALL_PIO_PORT) {
->  		struct kvm_regs regs;
->  
->  		vcpu_regs_get(vcpu, &regs);
-> -		memcpy(&ucall, addr_gva2hva(vcpu->vm, (vm_vaddr_t)regs.rdi),
-> -		       sizeof(ucall));
-> -
-> -		vcpu_run_complete_io(vcpu);
-> -		if (uc)
-> -			memcpy(uc, &ucall, sizeof(ucall));
-> +		return regs.rdi;
->  	}
-> -
-> -	return ucall.cmd;
-> +	return 0;
->  }
-> -- 
-> 2.37.1.455.g008518b4e5-goog
->
-
-Thanks,
-drew
+Will

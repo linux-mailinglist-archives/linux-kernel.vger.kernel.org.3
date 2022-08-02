@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71357587D3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A32587D3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbiHBNg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S236769AbiHBNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbiHBNgx (ORCPT
+        with ESMTP id S236860AbiHBNhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:36:53 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20E5820189;
-        Tue,  2 Aug 2022 06:36:52 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 02 Aug 2022 22:36:51 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 8FA632059027;
-        Tue,  2 Aug 2022 22:36:51 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 2 Aug 2022 22:36:51 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 4B149B62A4;
-        Tue,  2 Aug 2022 22:36:51 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     stable@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] arm64: dts: uniphier: Fix USB interrupts for PXs3 SoC
-Date:   Tue,  2 Aug 2022 22:36:47 +0900
-Message-Id: <1659447407-19225-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 09:37:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20811FCE8;
+        Tue,  2 Aug 2022 06:37:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBEC61386;
+        Tue,  2 Aug 2022 13:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F27EC433C1;
+        Tue,  2 Aug 2022 13:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659447420;
+        bh=ZlMhRfPhc4uGPBAikMBqcUj88XgI6PHU0uG5CpAx4/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kSBbnspvYPUyDRKaaXWUC0c7X1DnR9vrhVLe+9f5G9nrQHMFGFWYqZjDnLXVKWI4W
+         YopJcceW7IVAxkeDprutNuwpypkV0FVVsKACSY+FUBoXFDU+baAXPaYLvaNTNuj7QI
+         Ot6YJzqkSVy246b8+6lga4qN5U1YXVOSeK506OUZmmWzDXDDfuNZKDOQ0me7iGII+R
+         8H1YdtRAwYHBYbbuJOpHsH0KIuXT1tapPMcuqF1gLED2GXctT72YSQzg0J3ysoRO1w
+         lr8NahCmGGd07RqP13zCDCeNPV48GrCXnFkJesdGQe1mCDtCCffg0aYVEfeyOb5lo9
+         i005K8+IhtFGg==
+Date:   Tue, 2 Aug 2022 14:36:53 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Message-ID: <20220802133652.GA27253@willie-the-truck>
+References: <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220801155421.GB26280@willie-the-truck>
+ <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220802084015.GB26962@willie-the-truck>
+ <alpine.LRH.2.02.2208020726220.6971@file01.intranet.prod.int.rdu2.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2208020726220.6971@file01.intranet.prod.int.rdu2.redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An interrupt for USB device are shared with USB host. Set interrupt-names
-property to common "dwc_usb3" instead of "host" and "peripheral".
+On Tue, Aug 02, 2022 at 07:38:17AM -0400, Mikulas Patocka wrote:
+> 
+> 
+> On Tue, 2 Aug 2022, Will Deacon wrote:
+> 
+> > On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
+> > > On Mon, 1 Aug 2022, Will Deacon wrote:
+> > > > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> > > > 
+> > > > > Index: linux-2.6/arch/x86/include/asm/bitops.h
+> > > > > ===================================================================
+> > > > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+> > > > >  
+> > > > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+> > > > >  {
+> > > > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> > > > > +	barrier();
+> > > > > +	return r;
+> > > > 
+> > > > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+> > > > volatile and we don't need a barrier() like this in the definition of
+> > > > READ_ONCE(), for example.
+> > > 
+> > > gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
+> > > accesses around volatile accesses.
+> > > 
+> > > The purpose of the compiler barrier is to make sure that the non-volatile 
+> > > accesses that follow test_bit are not reordered by the compiler before the 
+> > > volatile access to addr.
+> > 
+> > If we need these accesses to be ordered reliably, then we need a CPU barrier
+> > and that will additionally prevent the compiler reordering. So I still don't
+> > think we need the barrier() here.
+> 
+> This is x86-specific code. x86 has strong memory ordering, so we only care 
+> about compiler reordering.
 
-Cc: stable@vger.kernel.org
-Fixes: d7b9beb830d7 ("arm64: dts: uniphier: Add USB3 controller nodes")
-Reported-by: Ryuta NAKANISHI <nakanishi.ryuta@socionext.com>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Indeed, but what I'm trying to say is that the _caller_ would have a memory
+barrier in this case, and so there's no need for one in here. test_bit() does
+not have ordering semantics.
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index be97da132258..ba75adedbf79 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -599,8 +599,8 @@ usb0: usb@65a00000 {
- 			compatible = "socionext,uniphier-dwc3", "snps,dwc3";
- 			status = "disabled";
- 			reg = <0x65a00000 0xcd00>;
--			interrupt-names = "host", "peripheral";
--			interrupts = <0 134 4>, <0 135 4>;
-+			interrupt-names = "dwc_usb3";
-+			interrupts = <0 134 4>;
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_usb0>, <&pinctrl_usb2>;
- 			clock-names = "ref", "bus_early", "suspend";
-@@ -701,8 +701,8 @@ usb1: usb@65c00000 {
- 			compatible = "socionext,uniphier-dwc3", "snps,dwc3";
- 			status = "disabled";
- 			reg = <0x65c00000 0xcd00>;
--			interrupt-names = "host", "peripheral";
--			interrupts = <0 137 4>, <0 138 4>;
-+			interrupt-names = "dwc_usb3";
-+			interrupts = <0 137 4>;
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_usb1>, <&pinctrl_usb3>;
- 			clock-names = "ref", "bus_early", "suspend";
--- 
-2.25.1
-
+Will

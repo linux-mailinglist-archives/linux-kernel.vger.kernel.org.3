@@ -2,169 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058625875CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852795875D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbiHBDEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 23:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S235526AbiHBDIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 23:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiHBDEE (ORCPT
+        with ESMTP id S231215AbiHBDH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 23:04:04 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D042C12D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:03:52 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VL9PAYh_1659409430;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VL9PAYh_1659409430)
-          by smtp.aliyun-inc.com;
-          Tue, 02 Aug 2022 11:03:50 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com
-Cc:     linux-kernel@vger.kernel.org, xiang@kernel.org
-Subject: [PATCH RFC 9/9] cachefiles: cull content map file on cull
-Date:   Tue,  2 Aug 2022 11:03:42 +0800
-Message-Id: <20220802030342.46302-10-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220802030342.46302-1-jefflexu@linux.alibaba.com>
-References: <20220802030342.46302-1-jefflexu@linux.alibaba.com>
+        Mon, 1 Aug 2022 23:07:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B43C31DDB
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659409620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5zQia0Oassrqu4Y+65KjGvbcaoFf/cSiBHiey4HDVUY=;
+        b=RAQl7y2lQwE9rTiv0xyuxOgLTBr0oGqsrKnnQV6shxp5LzFJljgIVU9ekMXTGPaBlM5ucL
+        Rknsi4WeAxvwkuE9BY7gbrFgOymUXx0jlzHNMQUoAf/MNIKiy0rtsungcBlHaPF2rpB/rt
+        yKuxp3P0OWeNnsR4Gz+ZCwNqPaeIZXY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-12-SiwiOuq3OiSEzAI25UpcQA-1; Mon, 01 Aug 2022 23:06:59 -0400
+X-MC-Unique: SiwiOuq3OiSEzAI25UpcQA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B33FD294EDCC;
+        Tue,  2 Aug 2022 03:06:58 +0000 (UTC)
+Received: from localhost (ovpn-13-104.pek2.redhat.com [10.72.13.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DB6A32026D64;
+        Tue,  2 Aug 2022 03:06:57 +0000 (UTC)
+Date:   Tue, 2 Aug 2022 11:06:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] kexec: Replace kmap() with kmap_local_page()
+Message-ID: <YuiUzodsyv3hZAgs@MiWiFi-R3L-srv>
+References: <20220707231550.1484-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707231550.1484-1-fmdefrancesco@gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also hole punch the backing content map file when the backing object
-gets culled.
+On 07/08/22 at 01:15am, Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+> 
+> With kmap_local_page(), the mappings are per thread, CPU local and not
+> globally visible. Furthermore, the mappings can be acquired from any
+> context (including interrupts).
+> 
+> Therefore, use kmap_local_page() in kexec_core.c because these mappings are
+> per thread, CPU local, and not globally visible.
+> 
+> Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
+> enabled.
 
-When cacehfilesd is going to cull a whole directory, the whole
-directory will be moved to the graveyard and then cacehfilesd itself
-will remove all files under the directory one by one. Since each
-sub-directory under one volume maintains one backing content map file,
-cacehfilesd already works well with this bitmap-based mechanism and
-doesn't need any refactoring.
+Wondering what arch you tested with. 
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/cachefiles/content-map.c | 37 +++++++++++++++++++++++++++++++++++++
- fs/cachefiles/internal.h    |  4 ++++
- fs/cachefiles/namei.c       |  4 ++++
- fs/cachefiles/xattr.c       | 17 +++++++++++++++++
- 4 files changed, 62 insertions(+)
+This looks good, but may not benefit much. Say so because I doubt
+how many 32bit systems are using kexec/kdump mechanism.
 
-diff --git a/fs/cachefiles/content-map.c b/fs/cachefiles/content-map.c
-index 360c59b06670..5584a0182df9 100644
---- a/fs/cachefiles/content-map.c
-+++ b/fs/cachefiles/content-map.c
-@@ -294,3 +294,40 @@ void cachefiles_shorten_content_map(struct cachefiles_object *object,
- out:
- 	read_unlock_bh(&object->content_map_lock);
- }
-+
-+int cachefiles_cull_content_map(struct cachefiles_cache *cache,
-+				struct dentry *dir, struct dentry *victim)
-+{
-+	struct dentry *map;
-+	struct file *map_file;
-+	size_t content_map_size = 0;
-+	loff_t content_map_off = 0;
-+	struct path path;
-+	int ret;
-+
-+	if (!d_is_reg(victim))
-+		return 0;
-+
-+	ret = cachefiles_get_content_info(victim, &content_map_size, &content_map_off);
-+	if (ret || !content_map_size)
-+		return ret;
-+
-+	map = lookup_positive_unlocked("Map", dir, strlen("Map"));
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	path.mnt = cache->mnt;
-+	path.dentry = map;
-+	map_file = open_with_fake_path(&path, O_RDWR | O_LARGEFILE,
-+			d_backing_inode(map), cache->cache_cred);
-+	if (IS_ERR(map_file)) {
-+		dput(map);
-+		return PTR_ERR(map_file);
-+	}
-+
-+	ret = vfs_fallocate(map_file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-+			      content_map_off, content_map_size);
-+
-+	fput(map_file);
-+	return ret;
-+}
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index 7747f99f00c1..9c36631ee051 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -190,6 +190,8 @@ extern loff_t cachefiles_find_next_hole(struct cachefiles_object *object,
- extern void cachefiles_invalidate_content_map(struct cachefiles_object *object);
- extern void cachefiles_shorten_content_map(struct cachefiles_object *object,
- 					   loff_t new_size);
-+extern int cachefiles_cull_content_map(struct cachefiles_cache *cache,
-+				struct dentry *dir, struct dentry *victim);
- 
- /*
-  * daemon.c
-@@ -384,6 +386,8 @@ extern int cachefiles_remove_object_xattr(struct cachefiles_cache *cache,
- extern void cachefiles_prepare_to_write(struct fscache_cookie *cookie);
- extern bool cachefiles_set_volume_xattr(struct cachefiles_volume *volume);
- extern int cachefiles_check_volume_xattr(struct cachefiles_volume *volume);
-+extern int cachefiles_get_content_info(struct dentry *dentry,
-+		size_t *content_map_size, loff_t *content_map_off);
- 
- /*
-  * Error handling
-diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
-index f5e1ec1d9445..79c759468ab3 100644
---- a/fs/cachefiles/namei.c
-+++ b/fs/cachefiles/namei.c
-@@ -923,6 +923,10 @@ int cachefiles_cull(struct cachefiles_cache *cache, struct dentry *dir,
- 	if (ret < 0)
- 		goto error_unlock;
- 
-+	ret = cachefiles_cull_content_map(cache, dir, victim);
-+	if (ret < 0)
-+		goto error;
-+
- 	ret = cachefiles_bury_object(cache, NULL, dir, victim,
- 				     FSCACHE_OBJECT_WAS_CULLED);
- 	if (ret < 0)
-diff --git a/fs/cachefiles/xattr.c b/fs/cachefiles/xattr.c
-index 05ac6b70787a..b7091c8e4262 100644
---- a/fs/cachefiles/xattr.c
-+++ b/fs/cachefiles/xattr.c
-@@ -283,3 +283,20 @@ int cachefiles_check_volume_xattr(struct cachefiles_volume *volume)
- 	_leave(" = %d", ret);
- 	return ret;
- }
-+
-+int cachefiles_get_content_info(struct dentry *dentry, size_t *content_map_size,
-+				loff_t *content_map_off)
-+{
-+	struct cachefiles_xattr buf;
-+	ssize_t xlen, tlen = sizeof(buf);
-+
-+	xlen = vfs_getxattr(&init_user_ns, dentry, cachefiles_xattr_cache, &buf, tlen);
-+	if (xlen != tlen)
-+		return -ESTALE;
-+
-+	if (buf.content == CACHEFILES_CONTENT_MAP) {
-+		*content_map_off = be64_to_cpu(buf.content_map_off);
-+		*content_map_size = be64_to_cpu(buf.content_map_size);
-+	}
-+	return 0;
-+}
--- 
-2.27.0
+Anyway, 
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> v1->v2: A sentence of the commit message contained an error due to a
+> mistake in copy-pasting from a previous patch. Replace "aio.c" with
+> "kexec_core.c".
+> 
+>  kernel/kexec_core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 4d34c78334ce..6f98274765d4 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+>  		if (result < 0)
+>  			goto out;
+>  
+> -		ptr = kmap(page);
+> +		ptr = kmap_local_page(page);
+>  		/* Start with a clear page */
+>  		clear_page(ptr);
+>  		ptr += maddr & ~PAGE_MASK;
+> @@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+>  			memcpy(ptr, kbuf, uchunk);
+>  		else
+>  			result = copy_from_user(ptr, buf, uchunk);
+> -		kunmap(page);
+> +		kunmap_local(ptr);
+>  		if (result) {
+>  			result = -EFAULT;
+>  			goto out;
+> @@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+>  			goto out;
+>  		}
+>  		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
+> -		ptr = kmap(page);
+> +		ptr = kmap_local_page(page);
+>  		ptr += maddr & ~PAGE_MASK;
+>  		mchunk = min_t(size_t, mbytes,
+>  				PAGE_SIZE - (maddr & ~PAGE_MASK));
+> @@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+>  		else
+>  			result = copy_from_user(ptr, buf, uchunk);
+>  		kexec_flush_icache_page(page);
+> -		kunmap(page);
+> +		kunmap_local(ptr);
+>  		arch_kexec_pre_free_pages(page_address(page), 1);
+>  		if (result) {
+>  			result = -EFAULT;
+> -- 
+> 2.36.1
+> 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 

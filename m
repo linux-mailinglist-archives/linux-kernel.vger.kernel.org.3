@@ -2,178 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E321958804B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0F4588052
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiHBQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S233355AbiHBQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiHBQbn (ORCPT
+        with ESMTP id S229517AbiHBQdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:31:43 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B781582B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:31:42 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id s206so12782242pgs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=tZSf07sg0fk/9dgcqNB6Ry/A8jgISpdwbk+jhT7aWZ8=;
-        b=RB37ZYHOrAQN2jfUAsUDBGcG5RLo8Yzn0dRBJvLM4XmpEQz1QhZBtA6kcNEQpNLm9L
-         YOj3HfN+rEiyPkMSt9Cy2pdC6enxOgXO8YTlaWEqliXWbciVKD7diUxzJCR+wCZsGqnL
-         +4Sy7qJaUKBx5zbhO5T+5hzuePieKWbwU1c0NekYSDDEvLAuVCsvCJYOc+ioyQxU7X0/
-         bnkYd/ObTavMHAy1YFdTPaEIOcMr6fAGMtu4G6Lfgfy2YuTx7ju4btLxqTx6jLjEm6Uo
-         tpuRn/DKQKaOaXhiIr7xRBbTFyvHjeTpsFnVL/bPeZHfG+7B5Ch68+lFf8gLmMn9tI4K
-         ZSAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=tZSf07sg0fk/9dgcqNB6Ry/A8jgISpdwbk+jhT7aWZ8=;
-        b=q23RaODENRaHtU78mDxx0VwuewmHBVO2uRn+Rhr+pPgZRMhpd9txClFeZX7+XZUlFW
-         YwPfce2erw/IM9IXVmekgxq/+Yr1KnSV+Yn0dDgGNbFI90Onh8WQqjMobeFXqC0hrLpf
-         gErlI0f+ktqvlT4D1gt/RxXUqTa3hvXbFAldB0j7VNSik8M3CQNAGif8CZJDDhwwiEGm
-         AVwoNuA97jD/o6aMdreQfGwCUIzJHdouLSByuw53AePEDcGU9XNsH5hN1a0F86L6zp9w
-         Jx0e15SDV/FDDrBqIlqus3WfOOSLaPLgGuXrtq8J9v1Pnqz8pnJl1XEoq22KPR0+PQyW
-         qaXQ==
-X-Gm-Message-State: AJIora+kaNzYTejw3+3nxwnoctw0yDzuqHYbBK57uNT1pcYnuBMzcAnT
-        kZLFmowIQMsAT1rHeOsvagY0iA==
-X-Google-Smtp-Source: AGRyM1vtZ/s/QFATV2Lm1/TA0aK3QErLVxPsa4bq3CKtaWgQ3jjed101jiS2kerJCYN2jmGEqBKYFA==
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:630e with SMTP id b12-20020a056a00114c00b005282c7a630emr21594186pfm.86.1659457901419;
-        Tue, 02 Aug 2022 09:31:41 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id k2-20020aa79722000000b005289bfcee91sm11035213pfg.59.2022.08.02.09.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 09:31:40 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 09:31:35 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
- NUMA aware
-Message-ID: <YulRZ+uXFOE1y2dj@google.com>
-References: <20220801151928.270380-1-vipinsh@google.com>
- <YuhPT2drgqL+osLl@google.com>
- <YuhoJUoPBOu5eMz8@google.com>
+        Tue, 2 Aug 2022 12:33:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD817E16;
+        Tue,  2 Aug 2022 09:33:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0D411CE2017;
+        Tue,  2 Aug 2022 16:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63BCC433D6;
+        Tue,  2 Aug 2022 16:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659458000;
+        bh=wvCuCNOjRSMOixoJFZ19V50Uqrz6WXVshhwx5kuDuAQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rhx22xzDRr5SQtI8UcUj+PkAqia5W0S+aT0Muk+9TNLMSlppNcAsqxFQZoF9mtyCu
+         PUOe5GGmGgwl5clH5K+V9dBko2+MbHK9F6tyC/w6rVNSIsqR+cbRMG9HDecruvhX8z
+         gNNPKtvoU7S1hGzSY75g4QaDtio0M0am3W8UZzPqkemR266Y2fHc08GvD/JypyHSc1
+         6p0sA+X3cKgKCsbs3Rmifv0o/SC+4ZzKHnmtivKWBZKI66uFzh8cWUZb3HS5hNrcyS
+         4BKb0jUszU167LsvXnuZbFCrY9A3wZz+e8ssZ7IuzwxkIhQx2xdo4QViroRPa/OvVX
+         rwPQgq1ApTuGw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oIupr-0002Vn-Cf; Tue, 02 Aug 2022 18:33:36 +0200
+Date:   Tue, 2 Aug 2022 18:33:35 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: qcom: Provide stubs for
+ dwc3_qcom_read_usb2_speed function
+Message-ID: <YulR31pEq9wjCBg8@hovoldconsulting.com>
+References: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YuhoJUoPBOu5eMz8@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 11:56:21PM +0000, Sean Christopherson wrote:
-> On Mon, Aug 01, 2022, David Matlack wrote:
-> > On Mon, Aug 01, 2022 at 08:19:28AM -0700, Vipin Sharma wrote:
-> > That being said, KVM currently has a gap where a guest doing a lot of
-> > remote memory accesses when touching memory for the first time will
-> > cause KVM to allocate the TDP page tables on the arguably wrong node.
-> 
-> Userspace can solve this by setting the NUMA policy on a VMA or shared-object
-> basis.  E.g. create dedicated memslots for each NUMA node, then bind each of the
-> backing stores to the appropriate host node.
-> 
-> If there is a gap, e.g. a backing store we want to use doesn't properly support
-> mempolicy for shared mappings, then we should enhance the backing store.
+On Mon, Aug 01, 2022 at 12:30:15PM +0530, Krishna Kurapati wrote:
+> Dwc3 Qcom driver makes use of usb_hub_find_child API in its efforts
+> to get speed of connected devices (HS/LS/FS) and enable interrupts
+> accordingly.
 
-Just to clarify: this patch, and my comment here, is about the NUMA
-locality of KVM's page tables, not guest memory.
+> usb_hub_find_child API is a part of usb core compiled
+> either into the kernel or as a module (CONFIG_USB= Y or M). In some
+> builds (make randconfig for i386) CONFIG_USB is not enabled and the
+> usb core is not compiled resulting in linking errors.
 
-KVM allocates all page tables through __get_free_page() which uses the
-current task's mempolicy. This means the only way for userspace to
-control the page table NUMA locality is to set mempolicies on the
-threads on which KVM will allocate page tables (vCPUs and any thread
-doing eager page splitting, i.e. enable dirty logging or
-KVM_CLEAR_DIRTY_LOG).
+Please replace the above with something more succinct. Whether USB core
+is built as a module or not is completely irrelevant. The problem is
+that the qcom dwc3 driver can be built and used without host support. 
 
-The ideal setup from a NUMA locality perspective would be that page
-tables are always on the local node, but that would require KVM maintain
-multiple copies of page tables (at minimum one per physical NUMA node),
-which is extra memory and complexity.
+> Provide stubs for dwc3_qcom_read_usb2_speed function to use
+> usb_hub_find_child API only if CONFIG_USB is enabled. Else return
+> USB_SPEED_UNKNOWN.
 
-With the current KVM MMU (one page table hierarchy shared by all vCPUs),
-the next best setup, I'd argue, is to co-locate the page tables with the
-memory they are mapping. This setup would ensure that a vCPU accessing
-memory in its local virtual node would primarily be accessing page
-tables in the local physical node when doing page walks. Obviously page
-tables at levels 5, 4, and 3, which likely map memory spanning multiple
-nodes, could not always be co-located with all the memory they map.
+The fact that you need to do this is an indication that something is
+wrong with the current implementation. The glue driver shouldn't be
+touching the host driver internal state directly like this.
 
-My comment here is saying that there is no way for userspace to actually
-enforce the above policy. There is no mempolicy userspace can set on
-vCPU threads to ensure that KVM co-locates page tables with the memory
-they are mapping. All userspace can do is force KVM to allocate page
-tables on the same node as the vCPU thread, or on a specific node.
+As pointed out here:
 
-For eager page splitting, userspace can control what range of memory is
-going to be split by controlling the memslot layout, so it is possible
-for userspace to set an appropriate mempolicy on that thread. But if you
-agree about my point about vCPU threads above, I think it would be a
-step in the right direction to have KVM start forcibly co-locating page
-tables with memory for eager page splitting (and we can fix the vCPU
-case later).
+	https://lore.kernel.org/all/20220802151404.1797-4-johan+linaro@kernel.org/
 
-> 
-> > > We can improve TDP MMU eager page splitting by making
-> > > tdp_mmu_alloc_sp_for_split() NUMA-aware. Specifically, when splitting a
-> > > huge page, allocate the new lower level page tables on the same node as the
-> > > huge page.
-> > > 
-> > > __get_free_page() is replaced by alloc_page_nodes(). This introduces two
-> > > functional changes.
-> > > 
-> > >   1. __get_free_page() removes gfp flag __GFP_HIGHMEM via call to
-> > >   __get_free_pages(). This should not be an issue  as __GFP_HIGHMEM flag is
-> > >   not passed in tdp_mmu_alloc_sp_for_split() anyway.
-> > > 
-> > >   2. __get_free_page() calls alloc_pages() and use thread's mempolicy for
-> > >   the NUMA node allocation. From this commit, thread's mempolicy will not
-> > >   be used and first preference will be to allocate on the node where huge
-> > >   page was present.
-> > 
-> > It would be worth noting that userspace could change the mempolicy of
-> > the thread doing eager splitting to prefer allocating from the target
-> > NUMA node, as an alternative approach.
-> > 
-> > I don't prefer the alternative though since it bleeds details from KVM
-> > into userspace, such as the fact that enabling dirty logging does eager
-> > page splitting, which allocates page tables. 
-> 
-> As above, if userspace is cares about vNUMA, then it already needs to be aware of
-> some of KVM/kernel details.  Separate memslots aren't strictly necessary, e.g.
-> userspace could stitch together contiguous VMAs to create a single mega-memslot,
-> but that seems like it'd be more work than just creating separate memslots.
-> 
-> And because eager page splitting for dirty logging runs with mmu_lock held for,
-> userspace might also benefit from per-node memslots as it can do the splitting on
-> multiple tasks/CPUs.
-> 
-> Regardless of what we do, the behavior needs to be document, i.e. KVM details will
-> bleed into userspace.  E.g. if KVM is overriding the per-task NUMA policy, then
-> that should be documented.
+dwc3_qcom_read_usb2_speed() is indeed broken and currently triggers a
+NULL-pointer dereference when the controller is used in peripheral mode.
 
-+1
+But for now I guess something like this is needed even if we try to
+avoid stubs in implementation files.
 
-> 
-> > It's also unnecessary since KVM can infer an appropriate NUMA placement
-> > without the help of userspace, and I can't think of a reason for userspace to
-> > prefer a different policy.
-> 
-> I can't think of a reason why userspace would want to have a different policy for
-> the task that's enabling dirty logging, but I also can't think of a reason why
-> KVM should go out of its way to ignore that policy.
-> 
-> IMO this is a "bug" in dirty_log_perf_test, though it's probably a good idea to
-> document how to effectively configure vNUMA-aware memslots.
+Johan

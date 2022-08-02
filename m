@@ -2,148 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D7F5880F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919065880F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiHBRWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S234426AbiHBRXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbiHBRWX (ORCPT
+        with ESMTP id S230199AbiHBRXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:22:23 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBC048E95
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:22:22 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id t2so14084126ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=XmXyg3atnOF0W1my4Azyvvp0Ty/+W6UASEOLUT0YYAo=;
-        b=hRHYGQ5hGjWVuyXA7K3jugJfYvZ5h4FXLHuEJPc1bURUzwtY3SD9oVAqhA50l2hHSE
-         JHsoEfPrRAZuzJIIfdlNWtOE0aijdbnV6YGA6OvqaSL4V7ZSdWDb6u8cmSMykQX8IHto
-         5AKdFp67IsboKYtcUAKrv/rsNdZwjA+PkG7gaM6kSZH7FbcFf5ynr8z5POtwmAYNB8qV
-         0yH/t5cF5xMwjv9jMC/V1oG3VP6eg8574xEPhyTXx8vZC9ZyDTz5D/mZpo7uJnZmnfSb
-         fX+XBqZ3pbRZVg6PzWIMGIuJE9sZmv14JunZqO6c/Sw7+DfiSre2u2uQMqcIxA2oCF+f
-         iu9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=XmXyg3atnOF0W1my4Azyvvp0Ty/+W6UASEOLUT0YYAo=;
-        b=U85hT6W6vG+bTkJp2iddinre3idKVdMhXBTBpCEVw5s1R9LOTPEdnkRiQvB+laXyJ7
-         YpON6ue0IF03p1Uk2ZME6tNGIUNLpj5/tnPqFdmuDcIlYujbpmgJ4ru22rEboNmpJ3cd
-         rXE2ovxzgqpFXYajFue9qWFngo3eaXkKG4ppTTpufNqNFS9rf5QZQ5A1ww6NP7hLOKXS
-         HESvNfxtCAFuX6ScapZxmFnnLaCGYIiwqapA+CU+PO2V6UXppw+JZ2kyTUt1C/4CpTOM
-         MV2Te/XucalM3C6xpKMoKqUMEXTKHF4/4rT8BbaNdY02FIBWx1Z7mIIzPrxQNvH3IXVX
-         XOlg==
-X-Gm-Message-State: ACgBeo0gIBzXa8aZqESCecGbAoVDl/L1i+uFN8GJejNXEcpWw+fZQUTb
-        wYzHJB/V00GHgXv9IoeFz/9g9w==
-X-Google-Smtp-Source: AA6agR59hJfH9tfXVnRaPZtA4b9uK8jX33ZeTGWxc+ZSj7+tM3LQhFHn1jNiQ1H/T66kq3F28mZ/gg==
-X-Received: by 2002:a17:903:244e:b0:16d:d5cd:c184 with SMTP id l14-20020a170903244e00b0016dd5cdc184mr20640649pls.44.1659460941545;
-        Tue, 02 Aug 2022 10:22:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b0016d1f6d1b99sm12201925plx.49.2022.08.02.10.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 10:22:21 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 17:22:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
- NUMA aware
-Message-ID: <YuldSf4T2j4rIrIo@google.com>
-References: <20220801151928.270380-1-vipinsh@google.com>
- <YuhPT2drgqL+osLl@google.com>
- <YuhoJUoPBOu5eMz8@google.com>
- <YulRZ+uXFOE1y2dj@google.com>
+        Tue, 2 Aug 2022 13:23:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A9648EA9
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659460986; x=1690996986;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sFeSnQ3Jh+eJSBpBMVT7FWaGVkgqv+hXL8zcIgQ/F98=;
+  b=V1idJGrMGnoNj9/7r3lxLDcE2UKfvCWdTuVieW8N2MoqMoOnCqilv8we
+   n6Zw9nMd9M4SXS5Jizp4FKocDrK41kCuEwxeigqMkN+0qqPWN+tdRRE7E
+   MSDFlRALrXYhdhpHYnK6KmdXWy6doYZNtBk2ZD4xQtt1vQVkmRLWyo8TL
+   AZd+MFmudC0S277IhHlNdCxizFTfbNHX9ksvIZd0ZCnjCXsbch8KVY83o
+   9jdF/0+VBRtp4RcP/yRGs392sKQfKD/sVj817rN2TLeaMi9kcWMY1S6WO
+   B1QDCM/T38RVQeVRxfi9GLcHEYBfasio5K6KA07DkkpTeg5lJDaByafyq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="290687355"
+X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
+   d="scan'208";a="290687355"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 10:23:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
+   d="scan'208";a="552993217"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 10:23:06 -0700
+Received: from [10.252.214.98] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id ED34E580AA7;
+        Tue,  2 Aug 2022 10:23:04 -0700 (PDT)
+Message-ID: <d45ac9ca-2b65-3cff-989a-99db5a6096bb@linux.intel.com>
+Date:   Tue, 2 Aug 2022 13:23:03 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YulRZ+uXFOE1y2dj@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH V2 1/5] perf/x86/intel/uncore: Parse uncore discovery
+ tables
+Content-Language: en-US
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     peterz@infradead.org, mingo@kernel.org, acme@redhat.com,
+        linux-kernel@vger.kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, eranian@google.com, namhyung@kernel.org,
+        ak@linux.intel.com, tilak.tangudu@intel.com
+References: <1616003977-90612-1-git-send-email-kan.liang@linux.intel.com>
+ <1616003977-90612-2-git-send-email-kan.liang@linux.intel.com>
+ <20220722125552.fmljascpvmi2b6ec@ldmartin-desk2>
+ <8c122462-afa5-bdf2-8bfb-910ff59ada03@linux.intel.com>
+ <20220723185617.vz3swht66lbtuwzl@ldmartin-desk2>
+ <bec1bc73-b3bc-50da-8aa7-0aab2328d62f@linux.intel.com>
+ <20220802142213.d2f6qzwl2w3sfm5g@ldmartin-desk2.lan>
+ <b0bd2b88-2ac8-42f2-22dd-587a21a7e9dd@linux.intel.com>
+ <20220802160237.uqgez4f3ctm7rpyc@ldmartin-desk2>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220802160237.uqgez4f3ctm7rpyc@ldmartin-desk2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, David Matlack wrote:
-> On Mon, Aug 01, 2022 at 11:56:21PM +0000, Sean Christopherson wrote:
-> > On Mon, Aug 01, 2022, David Matlack wrote:
-> > > On Mon, Aug 01, 2022 at 08:19:28AM -0700, Vipin Sharma wrote:
-> > > That being said, KVM currently has a gap where a guest doing a lot of
-> > > remote memory accesses when touching memory for the first time will
-> > > cause KVM to allocate the TDP page tables on the arguably wrong node.
-> > 
-> > Userspace can solve this by setting the NUMA policy on a VMA or shared-object
-> > basis.  E.g. create dedicated memslots for each NUMA node, then bind each of the
-> > backing stores to the appropriate host node.
-> > 
-> > If there is a gap, e.g. a backing store we want to use doesn't properly support
-> > mempolicy for shared mappings, then we should enhance the backing store.
+
+
+On 2022-08-02 12:02 p.m., Lucas De Marchi wrote:
+>>> 2) Trying to read the MMIOs when device is possibly in D3 state:
+>>
+>> The uncore driver skips the device which doesn't support the discovery
+>> mechanism.
+>> If 1) is fixed, the uncore driver will not touch the MMIO space of a PVC
+>> device. The power issue should be gone.
+>>
+>> I've already sent you a patch to ignore the PVC added OOBMSM device, you
+>> can double check with the patch.
 > 
-> Just to clarify: this patch, and my comment here, is about the NUMA
-> locality of KVM's page tables, not guest memory.
+> (2) is a more generic issue that I'm mentioning. Forget for a moment we
+> are talking about PVC - that will be fixed by (1). We are trying to read
+> the mmio from a device that can be in D3, either because it started in
+> D3 or because a driver, loaded before intel_uncore, moved it to that
+> state. That won't work even if the device supports the discovery
+> mechanism.
 
-Oooh, I overlooked the "TDP page tables" part in the above paragraph.
+The uncore driver is designed to only support the *PMON* discovery
+table, not all the discovery tables. The DEVSEC_ID 1 indicates the
+*PMON* discovery table.
 
-> KVM allocates all page tables through __get_free_page() which uses the
-> current task's mempolicy. This means the only way for userspace to
-> control the page table NUMA locality is to set mempolicies on the
-> threads on which KVM will allocate page tables (vCPUs and any thread
-> doing eager page splitting, i.e. enable dirty logging or
-> KVM_CLEAR_DIRTY_LOG).
-> 
-> The ideal setup from a NUMA locality perspective would be that page
-> tables are always on the local node, but that would require KVM maintain
-> multiple copies of page tables (at minimum one per physical NUMA node),
-> which is extra memory and complexity.
+For other devices which support the discovery mechanism, they should use
+another DEVSEC_ID. The uncore driver will ignore the device.
 
-Hmm, it actually wouldn't be much complexity, e.g. a few bits in the role, but
-the memory would indeed be a problem.
-
-> With the current KVM MMU (one page table hierarchy shared by all vCPUs),
-> the next best setup, I'd argue, is to co-locate the page tables with the
-> memory they are mapping. This setup would ensure that a vCPU accessing
-> memory in its local virtual node would primarily be accessing page
-> tables in the local physical node when doing page walks. Obviously page
-> tables at levels 5, 4, and 3, which likely map memory spanning multiple
-> nodes, could not always be co-located with all the memory they map.
-> 
-> My comment here is saying that there is no way for userspace to actually
-> enforce the above policy. There is no mempolicy userspace can set on
-> vCPU threads to ensure that KVM co-locates page tables with the memory
-> they are mapping. All userspace can do is force KVM to allocate page
-> tables on the same node as the vCPU thread, or on a specific node.
-> 
-> For eager page splitting, userspace can control what range of memory is
-> going to be split by controlling the memslot layout, so it is possible
-> for userspace to set an appropriate mempolicy on that thread. But if you
-> agree about my point about vCPU threads above, I think it would be a
-> step in the right direction to have KVM start forcibly co-locating page
-> tables with memory for eager page splitting (and we can fix the vCPU
-> case later).
-
-I agree that there's a gap with respect to a vCPU being the first to touch a
-remote node, but I disagree that forcibly co-locating page tables for eager page
-splitting is necessary.
-
-Userspace can already force the ideal setup for eager page splitting by configuring
-vNUMA-aware memslots and using a task with appropriate policy to toggle dirty
-logging.  And userspace really should be encouraged to do that, because otherwise
-walking the page tables in software to do the split is going to be constantly
-accessing remote memory.
-
-And if anyone ever wants to fix the aforementioned gap, the two fixes that come to
-mind would be to tie the policy to the memslot, or to do page_to_nid() on the
-underlying page (with the assumption that memory that's not backed by struct page
-isn't NUMA-aware, so fall back to task policy).  At that point, having one-off code
-to pull the node from the existing page tables is also unnecessary.
+Thanks,
+Kan

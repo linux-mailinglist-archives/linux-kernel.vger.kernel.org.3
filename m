@@ -2,170 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5061588203
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18655588205
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiHBSqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S229739AbiHBSrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHBSqc (ORCPT
+        with ESMTP id S229450AbiHBSrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:46:32 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2055.outbound.protection.outlook.com [40.107.220.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C2C33A00;
-        Tue,  2 Aug 2022 11:46:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dk9SM5W8dDkzm8aHKwMNrO4FCJRDWoza6mbU9OYwQyHore2MlPE3AWGFCA5c0vkjdVYY/ubmYT1y7FvploDnu8+mSCJbpG6/5VJCoWyt+TDDhZ9oBIi0kp8VeOve8qpm1yW89h5bQzeD0OSuu44jBMY4ww2gVjxGpSQFKq+zMpa685xSDI6RFgDqYZM3O1tRcKUykAOK1u21JAxw4Glr1kL8F00iN/dLGmHiOIvqO+PWz9DULRXoRAlAPn8vCnD+XpikKLzNE80O+S3N2vKbZWRfR10AZskOnFmTdl0oeQhTxNwzFjXbxTSQqIed5sK9ujm+NOjHM9Jsd+5E+VBtZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HQ5dJArsu/4zOi4NljI5OXsqB0sst2LL2+rvUuJ9SB0=;
- b=YYuwb/oj4jC1cs8mDXh97WRyugXIvtC1Fn1T86hrrlZv7y/svSzDMy8pH03D/QbOZzuPSbVCKkKD1HuWGqh1URPI5k7zxPMHZDspKsJFAGDYjwSRHTT0oAQ79V6KzMHYq3w3UQEm/gKLBlLkE3qSZ9UCYl24HdkN16TXuoVb+rDNxAFxl7nxn2wHXzPEipZIRpLjBjxZII/PGT+LaEbrkvYaq2DHKz3g3V031FPVuOB+1zZ3jFEgF4qPt+zxz6xiBKRd6YomCFTwrANpnmXZlW858l+MtTYAXYoZwPJbXwPJkUSqmuXkbw2g7u2TeaqVWEiFYLhu70BqWw1ZBixo+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HQ5dJArsu/4zOi4NljI5OXsqB0sst2LL2+rvUuJ9SB0=;
- b=1TGi4rBqmZjGHz0Vq3D8EF+RXV/HU4DnDeMCg2T+LTUyrYgSc6F8tWS4GSYZS5ddtg9qXUvRnwfeT4j+BpeZSkm848Zx0hpv6wGTt8t6l+B9z4K8SH8Wjsjh35AiBsEBO7wDgrnvsTvcwj3H8o70ZeUrV7UCmMOa8dM0ELmyCQY=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by SN4PR0501MB3727.namprd05.prod.outlook.com (2603:10b6:803:48::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 2 Aug
- 2022 18:46:29 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::d813:9300:4877:39d0]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::d813:9300:4877:39d0%8]) with mapi id 15.20.5504.014; Tue, 2 Aug 2022
- 18:46:29 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-Thread-Topic: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Thread-Index: AQHYm6msXDLL/Bu+aECRDX4d27LWyK2cCQaA
-Date:   Tue, 2 Aug 2022 18:46:29 +0000
-Message-ID: <9D80DB2B-B25E-4BF0-8831-95C24818D995@vmware.com>
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <20220719195628.3415852-3-axelrasmussen@google.com>
-In-Reply-To: <20220719195628.3415852-3-axelrasmussen@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 03c02aaa-3c42-4a06-8b58-08da74b75010
-x-ms-traffictypediagnostic: SN4PR0501MB3727:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hkqR/PLdsiDXYzwvSiUx9RQQi1M85F8R2ceia3EBy9Y65NbeZxAi7UzTkrU3QO4F7WbD2kJ4tbkQP30zlM2JjVE5USdwuNQMsW8mENFRv6hlbMf0AIa+vmHnFWA/I8+aJX7qmvTjch/GdEluZVayI8IUbiAU0kfji4I5UFkOYqjZ+lNUqoYT0IjM/0vPcSm30S6I05HxgMlFbLb3lhGX2U24XuP19Oh/DjhLnkGZ/L/el3eVsQ7R6YG70dPyWV962Dpcuy0uNcT5eXW7QPkpDWZlKVKrvIMSn8gSyQnOF0/l9JI6QwTGesKQib1gyTFT+YIhsjDiwgxKHG8ukKUoqs1HI5Iy8dptVbX9KKnkCQLwne05upOtztWk1UvVZl8nofOUB4s6yb7qo+hGfXVnuALG4xNUmBgKO39oW00iS8D52enqd9uO909zTYAczB5XNl+TEXXElmGGBFgX+mCwjNaWOwhApYhAivs/46kAZA9dtx+C1rWL42YUN2+unB4LHl1v55HduyFmps9Ws2DX2AWK7d7pH97gKPjqmzIjO6PbIwz3olFoUYl66sBuCx/dJY1utWmtZSR/u7sVBp3UQ3ZmOTAxChbeLeM/vdRW/G58FsEpZTC0ZoUr8tVJA8q60HQAkrICKUCJTa2ey0/ehUambGObhyCUbwYXgGAD67MmXheQ7kMleGJE3XaWTL0fgqDlr7PGtkQPED4pgW6wyfaHeQWemxOTcR3i/LxOJJobBpcgwrpLZHD34/PWnFsprwhyqIHCjbt8hwshMjcY/iohvQOBvlBTHXQCRlQVc+dDTf5ES1d6dW1VnYp+GAzsLKj+KVr2mbDeOiiOxn5/qw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(6512007)(478600001)(316002)(38100700002)(122000001)(71200400001)(26005)(83380400001)(186003)(6486002)(2616005)(8936002)(36756003)(53546011)(6506007)(41300700001)(76116006)(6916009)(33656002)(8676002)(2906002)(4326008)(66556008)(64756008)(66476007)(86362001)(66446008)(66946007)(5660300002)(7416002)(38070700005)(54906003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OGpwbjFnd1NqZkNuM1pCcVdJVnRDaGRLbkxsTkdyNlA0QVc2NlRUK052SHFZ?=
- =?utf-8?B?MWg0S2ppTmE1Y1lCYmZXT3Vtai9GTi9EWFp3WS9sU2xMbGM1TDd4RHJnTFRs?=
- =?utf-8?B?dGlBaUlDTEI2T3FlVXN3WjlnNmswbDRZUVZhSHZXL3lNa09CcVF3NXRJMGZH?=
- =?utf-8?B?TGdINVh0SVlCS0VEWmsyRmovVmw3eURtUDA0NFBXM2pWZ2dMdHljOHZlWVVR?=
- =?utf-8?B?bEV2TEFMZ3k5Z1ZnTEdkQ0tkUDd4bTRmTkxLa2d1cmNZK0hHZjZ0ZXNLWnNU?=
- =?utf-8?B?dm1mNnlYdm43c1poNGRrRGtia0xnMEJ6MDZQdHd3VW11SmxEcmpReEZrcER6?=
- =?utf-8?B?cGxERGR1bEJscHJ3d1dDMVlZNzZBM3NVaFluR3c2S3NpMHFVZzNPZk9OR1Jh?=
- =?utf-8?B?M2IyREY5UkMvY3Z1K1dHSEV1cVFJalRBaGs5YjFmTHp5ZmVxeXN4UlFGUDZ4?=
- =?utf-8?B?REZZdEhZUmJBRmU5SllaenplNjVOT0xWdGxDVUs4b2lwQTdCTHc5cTQ2cHM4?=
- =?utf-8?B?RlJDYmtieEV6TzdhcEJQRXN2OE1yME5WQ1JNQWRBV2p3TEQyYTEvQWJCb2dv?=
- =?utf-8?B?R2VtR0RYVndHVzErLzNxTlNzVTZaYjR2Y1Q1YjVvMWp4cjhsVlNydElGZFcr?=
- =?utf-8?B?MzRmamxWdis5OG9PVC9nTjdRN2d3cHpVeFNMNDJzUEtnWmpsaEw3MjAyTFgr?=
- =?utf-8?B?NDFZNEV6cDl2c1FkV1RUL2NZaE92T0J6YnpnU1ZwUko0c3F5NGd2L1UxcWVl?=
- =?utf-8?B?SnVZQlBwODVvd0Z4Zjl6RUlHQkVpM1RHbGUvVndsSklPVzcvbU9VaFhLaGd6?=
- =?utf-8?B?YXJZK1lOc3p0aEZtakYxd1d6eEVQT2lYeW1nYWVzeGZlMGdSKzFHaUlJTFl0?=
- =?utf-8?B?ZmNsRlhoUERiV1IvSlAyUEl3dE5jV1d1Z0lWRGRZZ2VLTXBRZGVSVUdqWW9q?=
- =?utf-8?B?L0pGc2VvZU9KbzJmVWZWUkxRKzJwMWVhV2VYNExXTjh1VWdObmRwNUdwa0FH?=
- =?utf-8?B?SkVybjVGV0UxTUpzZVlraE5MamJ3RUJPUk1ncGhUdHBQem9zNFVzbjlXWENq?=
- =?utf-8?B?U20zWUJyR0NsckVFSkpUaHpuM1lVOFZjMVZOakNZSmUvNTdGWXNCMW5SODZF?=
- =?utf-8?B?SlQrRW93REhtcUlyYXBQSU05REhMQTAzRTZCYmhUN3R0dGdwT2t2SHA5ODRU?=
- =?utf-8?B?WVVrcUZGYWxPV0N6MXd6Nkp3cENvZ3libUxIWHp5YzJUMDVkRFdxRXRqdkN5?=
- =?utf-8?B?WkV3NEl1YWNydW16ak5qcGp1VFkvQitrNWQ5ZVR0YzVwWStEbVZUVWFWMzYv?=
- =?utf-8?B?alhvYTB0VHJSOG1OSkdYemUxVWlHN1VTc1JldFNxTFdMM3VIa2FibEtidWFZ?=
- =?utf-8?B?VVhXaG1MZWVxcGFFUUd3MXNoM2JNZ3daM1pQNkNMWk1NTkFTc0ppY1VsTldi?=
- =?utf-8?B?VDhhRmVJQ0pQTzUvMFJmeDlTWmowNU9RV2tqeHlxUVUxelBqdHo5ZkN3QldS?=
- =?utf-8?B?dGJ4dE9EZU8zTndBVVFKT216OTFobUxETmRjWHdZa3dldU5IUDl0ZHRmVTRI?=
- =?utf-8?B?ZTIwTmJrRUwyNXFIZmhjcE80cHE3eFA3VjZuc2JmQ1JXVm5XZ0FJblQ1M2ty?=
- =?utf-8?B?RkJ4bndVMCtmWm9GMHp0QkF4NjR5NWdsQW5wYmJZdUpCaXpYdHpKc1JtUUlS?=
- =?utf-8?B?NUlNSXJXRW43eEtzY2RtWWwyUkw3bi9vNk1ZM0NXZzZPWmw4TEdDTUM4M1VF?=
- =?utf-8?B?b0FMQUQ5R3F6c2RkZy9ZbVNhS3pSSDIvdEdIdkN4SUVHYnR2RHk1QUoyUFpt?=
- =?utf-8?B?cFhnNmI3K2QrY2R0dDhPaHVkQllBTHgveTc4NHR1ZFRORCtYSVNieTZpSkVS?=
- =?utf-8?B?TjloZTRmQWpUcVdjL3MvNTJHQVVPU1pQRkVFNkxFVWFaVkNKRXQyeFdBeGlK?=
- =?utf-8?B?SnhXYnhRaUFlSzVjRGdYMlZVV2xSVEZpeSt0WmY0d2R5dzkvd2NGd1VXUlZW?=
- =?utf-8?B?TFpYd1BTcU91OVBTZjhYZHMvdWM0U0NkVWVCZTlicndJYy9sNEtxWlZkUnpH?=
- =?utf-8?B?d3F4alcvWE51OEhMMldmOTk0dC9uWWVzVUpUNHQ0MGJmcUdtL0w4ZXRoSkt6?=
- =?utf-8?Q?MtgOMaVq28+2MFtTIvsHWtPxI?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B58D16A630470543B9713ACD29DE1B5B@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 2 Aug 2022 14:47:07 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1C533A3A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:47:05 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id w15so23181931lft.11
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VVMxWAFjX5uDYDqJ/cwgMU6zOm7ubEznwB1Lk2EjG8M=;
+        b=pXBZZAfie79jE38MFCODHrhDhCFwMLEMiMU3MPrOBErRey8w7GO6VLbLEmKJbh74Z+
+         KnBoo+CB0WSShjJtVuLdMbHA1nNO3RddhFBuciIIV0t/27OKUdK0c76qLRED+QcjYaMW
+         uVqJakwlShh+p6bvC8qfOo4DInxA27UhgUS4gPQASa/rwrGxqJYri2zyIfKbCrZ1S0bh
+         UsMjhaT2QwZl3w59ylr4CI+S/aaZ6b82keseYGG/pMQa2sJKA+UGt87WB6IwoOp/5Fgi
+         ko7jcbWEyKo4sMyh/1ORm91h1OJHMI2gdR4jU5plsscME6xQdQbz2fU+GbIy3Gn4cBr8
+         GKQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VVMxWAFjX5uDYDqJ/cwgMU6zOm7ubEznwB1Lk2EjG8M=;
+        b=TMgkp1BrCE0tGjx9yESJKcKL3s+H8jhvKTVFuMaPoyTpkOvnspanIWdSv2MQAIUt6e
+         pPYRZ1nhRoq2SLW8X9BbHEZMsBpwkbP/e5VX9S02nfltB5uls2Gn9srFVYPA/E1Q0WQ0
+         LaJTppb2PcoEG1Y85IYYEoa2PpKFyoSiQxFiTz174Q7VEB+8wcmPoiqo0OSWhCgRgfVm
+         IXfviUBdcO444EKIXtSfcnohN8iohOX6jKJ8/1w5aGr8FCHBjgd3QNb2ot9K/8T9eLp3
+         YuTF17Tm0OmKBAKtVcLGdVeoJQuygBAQUzqpX5wY75v8Oisw86kyujY/ocucqPrjJFT1
+         M6qg==
+X-Gm-Message-State: AJIora/q4KZO+y82GSDqPMeLy8KNZXbNaTAfbnFIR6cYn7gpTgySkEYe
+        AT5GhfhyDwlvwBefrNznldFl/G50vyikOXi5
+X-Google-Smtp-Source: AGRyM1vHbUAosHdlEAo2zeBg5S0P2Hdk+nVCtjOiCPxVkhgGrQMN8jyaMAoTcXqotz3/MhTqMM5lag==
+X-Received: by 2002:a05:6512:1153:b0:48a:201d:5f77 with SMTP id m19-20020a056512115300b0048a201d5f77mr7496227lfg.280.1659466023583;
+        Tue, 02 Aug 2022 11:47:03 -0700 (PDT)
+Received: from [10.43.1.253] ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id d10-20020a19f24a000000b0048a81bebaf8sm2180172lfk.147.2022.08.02.11.47.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 11:47:03 -0700 (PDT)
+Message-ID: <c7b7860e-ae3a-7b98-e97e-28a62470c470@semihalf.com>
+Date:   Tue, 2 Aug 2022 20:47:01 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03c02aaa-3c42-4a06-8b58-08da74b75010
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 18:46:29.6976
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dtyQ3t3aq9lIQwo2hUpXNcGmKRsnGVMxrWEvW/dHEWe6nVt1Zpxx9eOX80lu9GN7wh0h513NRPznbcd6sBjkHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0501MB3727
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] KVM: irqfd: Postpone resamplefd notify for oneshot
+ interrupts
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+References: <20220715155928.26362-1-dmy@semihalf.com>
+ <20220715155928.26362-4-dmy@semihalf.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+In-Reply-To: <20220715155928.26362-4-dmy@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gSnVsIDE5LCAyMDIyLCBhdCAxMjo1NiBQTSwgQXhlbCBSYXNtdXNzZW4gPGF4ZWxyYXNtdXNz
-ZW5AZ29vZ2xlLmNvbT4gd3JvdGU6DQoNCj4gDQo+ICtzdGF0aWMgaW50IG5ld191c2VyZmF1bHRm
-ZChib29sIGlzX3N5c2NhbGwsIGludCBmbGFncykNCj4gew0KPiAJc3RydWN0IHVzZXJmYXVsdGZk
-X2N0eCAqY3R4Ow0KPiAJaW50IGZkOw0KPiANCj4gLQlpZiAoIXN5c2N0bF91bnByaXZpbGVnZWRf
-dXNlcmZhdWx0ZmQgJiYNCj4gLQkgICAgKGZsYWdzICYgVUZGRF9VU0VSX01PREVfT05MWSkgPT0g
-MCAmJg0KPiAtCSAgICAhY2FwYWJsZShDQVBfU1lTX1BUUkFDRSkpIHsNCj4gLQkJcHJpbnRrX29u
-Y2UoS0VSTl9XQVJOSU5HICJ1ZmZkOiBTZXQgdW5wcml2aWxlZ2VkX3VzZXJmYXVsdGZkICINCj4g
-LQkJCSJzeXNjdGwga25vYiB0byAxIGlmIGtlcm5lbCBmYXVsdHMgbXVzdCBiZSBoYW5kbGVkICIN
-Cj4gLQkJCSJ3aXRob3V0IG9idGFpbmluZyBDQVBfU1lTX1BUUkFDRSBjYXBhYmlsaXR5XG4iKTsN
-Cj4gKwlpZiAoaXNfc3lzY2FsbCAmJiAhdXNlcmZhdWx0ZmRfc3lzY2FsbF9hbGxvd2VkKGZsYWdz
-KSkNCj4gCQlyZXR1cm4gLUVQRVJNOw0KPiAtCX0NCj4gDQo+IAlCVUdfT04oIWN1cnJlbnQtPm1t
-KTsNCj4gDQo+IEBAIC0yMDk4LDggKzIxMDUsNDIgQEAgU1lTQ0FMTF9ERUZJTkUxKHVzZXJmYXVs
-dGZkLCBpbnQsIGZsYWdzKQ0KPiAJcmV0dXJuIGZkOw0KPiB9DQo+IA0KPiArU1lTQ0FMTF9ERUZJ
-TkUxKHVzZXJmYXVsdGZkLCBpbnQsIGZsYWdzKQ0KPiArew0KPiArCXJldHVybiBuZXdfdXNlcmZh
-dWx0ZmQodHJ1ZSwgZmxhZ3MpOw0KPiArfQ0KDQpOb3QgY3JpdGljYWwsIGJ1dCB3aHkgbm90IHRv
-IHB1dCB0aGUgdXNlcmZhdWx0ZmRfc3lzY2FsbF9hbGxvd2VkKCkgY2hlY2sNCmhlcmU/IFlvdSB3
-b3VsZCBiZSBhYmxlIHRvIGxvc2UgdGhlIOKAnGlzX3N5c2NhbGzigJ0uDQoNCkkgYWxzbyBoYWQg
-YSBzbWFsbCBjb21tZW50IGZvciBwYXRjaCA1Lg0KDQpCdXQgdGhlc2UgYXJlIG1pbm9yIGlzc3Vl
-cywgc28gZm9yIHRoZSBzZXJpZXM6DQoNCkFja2VkLWJ5OiBOYWRhdiBBbWl0IDxuYW1pdEB2bXdh
-cmUuY29tPg0KDQoNClsgU29ycnkgYWdhaW4gZm9yIG1pc3VuZGVyc3RhbmRpbmcgdGhlIHNjaGVt
-ZSB5b3Ugd2VyZSB1c2luZyBpcyBzaW1pbGFyIHRvDQpLVk0gYW5kIHRoZXJlZm9yZSByZWFzb25h
-YmxlLiBdDQoNCg==
+On 7/15/22 17:59, Dmytro Maluka wrote:
+> The existing KVM mechanism for forwarding of level-triggered interrupts
+> using resample eventfd doesn't work quite correctly in the case of
+> interrupts that are handled in a Linux guest as oneshot interrupts
+> (IRQF_ONESHOT). Such an interrupt is acked to the device in its
+> threaded irq handler, i.e. later than it is acked to the interrupt
+> controller (EOI at the end of hardirq), not earlier.
+> 
+> Linux keeps such interrupt masked until its threaded handler finishes,
+> to prevent the EOI from re-asserting an unacknowledged interrupt.
+> However, with KVM + vfio (or whatever is listening on the resamplefd)
+> we don't check that the interrupt is still masked in the guest at the
+> moment of EOI. Resamplefd is notified regardless, so vfio prematurely
+> unmasks the host physical IRQ, thus a new (unwanted) physical interrupt
+> is generated in the host and queued for injection to the guest.
+> 
+> The fact that the virtual IRQ is still masked doesn't prevent this new
+> physical IRQ from being propagated to the guest, because:
+> 
+> 1. It is not guaranteed that the vIRQ will remain masked by the time
+>    when vfio signals the trigger eventfd.
+> 2. KVM marks this IRQ as pending (e.g. setting its bit in the virtual
+>    IRR register of IOAPIC on x86), so after the vIRQ is unmasked, this
+>    new pending interrupt is injected by KVM to the guest anyway.
+> 
+> There are observed at least 2 user-visible issues caused by those
+> extra erroneous pending interrupts for oneshot irq in the guest:
+> 
+> 1. System suspend aborted due to a pending wakeup interrupt from
+>    ChromeOS EC (drivers/platform/chrome/cros_ec.c).
+> 2. Annoying "invalid report id data" errors from ELAN0000 touchpad
+>    (drivers/input/mouse/elan_i2c_core.c), flooding the guest dmesg
+>    every time the touchpad is touched.
+> 
+> This patch fixes the issue on x86 by checking if the interrupt is
+> unmasked when we receive irq ack (EOI) and, in case if it's masked,
+> postponing resamplefd notify until the guest unmasks it.
+> 
+> Important notes:
+> 
+> 1. It doesn't fix the issue for other archs yet, due to some missing
+>    KVM functionality needed by this patch:
+>      - calling mask notifiers is implemented for x86 only
+>      - irqchip ->is_masked() is implemented for x86 only
+> 
+> 2. It introduces an additional spinlock locking in the resample notify
+>    path, since we are no longer just traversing an RCU list of irqfds
+>    but also updating the resampler state. Hopefully this locking won't
+>    noticeably slow down anything for anyone.
+> 
+> Regarding #2, there may be an alternative solution worth considering:
+> extend KVM irqfd (userspace) API to send mask and unmask notifications
+> directly to vfio/whatever, in addition to resample notifications, to
+> let vfio check the irq state on its own. There is already locking on
+> vfio side (see e.g. vfio_platform_unmask()), so this way we would avoid
+> introducing any additional locking. Also such mask/unmask notifications
+> could be useful for other cases.
+> 
+> Link: https://lore.kernel.org/kvm/31420943-8c5f-125c-a5ee-d2fde2700083@semihalf.com/
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Dmytro Maluka <dmy@semihalf.com>
+> ---
+>  include/linux/kvm_irqfd.h | 14 ++++++++++++
+>  virt/kvm/eventfd.c        | 45 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 59 insertions(+)
+> 
+> diff --git a/include/linux/kvm_irqfd.h b/include/linux/kvm_irqfd.h
+> index dac047abdba7..01754a1abb9e 100644
+> --- a/include/linux/kvm_irqfd.h
+> +++ b/include/linux/kvm_irqfd.h
+> @@ -19,6 +19,16 @@
+>   * resamplefd.  All resamplers on the same gsi are de-asserted
+>   * together, so we don't need to track the state of each individual
+>   * user.  We can also therefore share the same irq source ID.
+> + *
+> + * A special case is when the interrupt is still masked at the moment
+> + * an irq ack is received. That likely means that the interrupt has
+> + * been acknowledged to the interrupt controller but not acknowledged
+> + * to the device yet, e.g. it might be a Linux guest's threaded
+> + * oneshot interrupt (IRQF_ONESHOT). In this case notifying through
+> + * resamplefd is postponed until the guest unmasks the interrupt,
+> + * which is detected through the irq mask notifier. This prevents
+> + * erroneous extra interrupts caused by premature re-assert of an
+> + * unacknowledged interrupt by the resamplefd listener.
+>   */
+>  struct kvm_kernel_irqfd_resampler {
+>  	struct kvm *kvm;
+> @@ -28,6 +38,10 @@ struct kvm_kernel_irqfd_resampler {
+>  	 */
+>  	struct list_head list;
+>  	struct kvm_irq_ack_notifier notifier;
+> +	struct kvm_irq_mask_notifier mask_notifier;
+> +	bool masked;
+> +	bool pending;
+> +	spinlock_t lock;
+>  	/*
+>  	 * Entry in list of kvm->irqfd.resampler_list.  Use for sharing
+>  	 * resamplers among irqfds on the same gsi.
+> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+> index 50ddb1d1a7f0..9ff47ac33790 100644
+> --- a/virt/kvm/eventfd.c
+> +++ b/virt/kvm/eventfd.c
+> @@ -75,6 +75,44 @@ irqfd_resampler_ack(struct kvm_irq_ack_notifier *kian)
+>  	kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
+>  		    resampler->notifier.gsi, 0, false);
+>  
+> +	spin_lock(&resampler->lock);
+> +	if (resampler->masked) {
+> +		resampler->pending = true;
+> +		spin_unlock(&resampler->lock);
+> +		return;
+> +	}
+> +	spin_unlock(&resampler->lock);
+> +
+> +	idx = srcu_read_lock(&kvm->irq_srcu);
+> +
+> +	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+> +	    srcu_read_lock_held(&kvm->irq_srcu))
+> +		eventfd_signal(irqfd->resamplefd, 1);
+> +
+> +	srcu_read_unlock(&kvm->irq_srcu, idx);
+> +}
+> +
+> +static void
+> +irqfd_resampler_mask(struct kvm_irq_mask_notifier *kimn, bool masked)
+> +{
+> +	struct kvm_kernel_irqfd_resampler *resampler;
+> +	struct kvm *kvm;
+> +	struct kvm_kernel_irqfd *irqfd;
+> +	int idx;
+> +
+> +	resampler = container_of(kimn,
+> +			struct kvm_kernel_irqfd_resampler, mask_notifier);
+> +	kvm = resampler->kvm;
+> +
+> +	spin_lock(&resampler->lock);
+> +	resampler->masked = masked;
+> +	if (masked || !resampler->pending) {
+> +		spin_unlock(&resampler->lock);
+> +		return;
+> +	}
+> +	resampler->pending = false;
+> +	spin_unlock(&resampler->lock);
+> +
+>  	idx = srcu_read_lock(&kvm->irq_srcu);
+>  
+>  	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+> @@ -98,6 +136,8 @@ irqfd_resampler_shutdown(struct kvm_kernel_irqfd *irqfd)
+>  	if (list_empty(&resampler->list)) {
+>  		list_del(&resampler->link);
+>  		kvm_unregister_irq_ack_notifier(kvm, &resampler->notifier);
+> +		kvm_unregister_irq_mask_notifier(kvm, resampler->mask_notifier.irq,
+> +						 &resampler->mask_notifier);
+>  		kvm_set_irq(kvm, KVM_IRQFD_RESAMPLE_IRQ_SOURCE_ID,
+>  			    resampler->notifier.gsi, 0, false);
+>  		kfree(resampler);
+> @@ -367,11 +407,16 @@ kvm_irqfd_assign(struct kvm *kvm, struct kvm_irqfd *args)
+>  			INIT_LIST_HEAD(&resampler->list);
+>  			resampler->notifier.gsi = irqfd->gsi;
+>  			resampler->notifier.irq_acked = irqfd_resampler_ack;
+> +			resampler->mask_notifier.func = irqfd_resampler_mask;
+> +			kvm_irq_is_masked(kvm, irqfd->gsi, &resampler->masked);
+> +			spin_lock_init(&resampler->lock);
+>  			INIT_LIST_HEAD(&resampler->link);
+>  
+>  			list_add(&resampler->link, &kvm->irqfds.resampler_list);
+>  			kvm_register_irq_ack_notifier(kvm,
+>  						      &resampler->notifier);
+> +			kvm_register_irq_mask_notifier(kvm, irqfd->gsi,
+> +						       &resampler->mask_notifier);
+
+I realized this is a bit racy: we may miss a mask or unmask event just
+before kvm_register_irq_ack_notifier(), so irqfd_resampler_ack() may
+see an outdated irq mask state.
+
+Moving kvm_register_irq_mask_notifier() before
+kvm_register_irq_ack_notifier() isn't enough, since a mask or unmask
+may still happen just before kvm_register_irq_mask_notifier().
+
+This race can be avoided by moving also resampler->masked initialization
+(kvm_irq_is_masked()) after kvm_register_irq_mask_notifier(). But then
+kvm_irq_is_masked() would need to be called under resampler->lock,
+which could cause a deadlock, since kvm_irq_is_masked() locks
+ioapic->lock while irqfd_resampler_mask() is called under ioapic->lock
+(or correspondingly pic->lock).
+
+So for v2 I'm considering replacing kvm_irq_is_masked() with a function
+like the following, for registering & initializing mask notifier in a
+presumably race-free deadlock-free way. (The below is just a sketch
+showing the locking order; the actual code would be more complicated
+due to irq -> pin mapping etc.)
+
+void kvm_register_and_fire_irq_mask_notifier(struct kvm *kvm, int irq,
+                                             struct kvm_irq_mask_notifier *kimn)
+{
+        struct kvm_pic *pic = kvm->arch.vpic;
+        struct kvm_ioapic *ioapic = kvm->arch.vioapic;
+        bool masked;
+
+        mutex_lock(&kvm->irq_lock);
+        spin_lock(&pic->lock);
+        spin_lock(&ioapic->lock);
+
+        kimn->irq = irq;
+        hlist_add_head_rcu(&kimn->link, &kvm->arch.mask_notifier_list);
+
+        masked = kvm_pic_irq_is_masked(pic, irq) &&
+                 kvm_ioapic_irq_is_masked(ioapic, irq);
+        kimn->func(kimn, masked);
+
+        spin_unlock(&ioapic->lock);
+        spin_unlock(&pic->lock);
+        mutex_unlock(&kvm->irq_lock);
+}
+
+
+This implies that I'll probably go with moving the mask notifiers stuff
+back to x86-specific code, and just add a weak no-op version for other
+architectures.
+
+Thanks,
+Dmytro
+
+>  			irqfd->resampler = resampler;
+>  		}
+>  

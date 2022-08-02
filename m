@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD3B5882F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7175B5882FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiHBUKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S234301AbiHBULe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234183AbiHBUKl (ORCPT
+        with ESMTP id S229684AbiHBULb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:10:41 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA5AFD39
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:10:40 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h12so16788378ljg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=CixUSBcZNq9i0WpR8GtdvttXmNXU/G94pZeb65hTEM0=;
-        b=WyNxtYqk3qeNX2OkEahMvbK034jsOfS/qAlqgpXcbok6ytj9bMkyg7zn1hiX32tp+/
-         OEVHYAeSEdlMmm7Sc6SbDiw7Mx9W1vaadsB4Xkk/WBkl2toPvBPIHlr7yGzeFohoua9s
-         dLAK1biH6/qLzRReNqLfwDG/bZnlOSo70OtmxpvLAoHfCyrlv6ycBip2qW/PYgBsxN1o
-         jbkkIjkImEBZ8wQkzDMZdPt67/kUDDu7twHPSTzIhgHP+v+a8/ujqcNZZ++psR7/4hPh
-         occvRR2zXeSz/WK65qdff/r4nsCevELyHFnBXmFme4DtRavFn/LwK+ImehnrnaZxbfs9
-         hDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=CixUSBcZNq9i0WpR8GtdvttXmNXU/G94pZeb65hTEM0=;
-        b=4K++eI5YdVLDi1Ddot/MVzo600XYgyNPeldeWcLHrHzI7+Ar5hxOYDsay36PtCN0pG
-         lTkNFLa/US1V42JtCxPXntfelZy64hgFrY3bkTYE21yV9tBCd6rzdNXGJMmwPd0eToJo
-         +0vCbQ1TBVZEyra6o6RMWUJgtblSxN6OrnAkCJFm0TkORrcgS+ssVuobZWJvapxZVYVG
-         pmQXzFPwNg1sI3cEP8kexiqa0eO+/aD0Tagd8SUiJs/O0ozZKgVmZVRkxwyIyu2aw/Ol
-         Rgxl1Qp1CDHimrgMJAInNcL+G/Z+7/SLRPiK0K+pU3JlZ5UJwCtsvkgVyDMHdf25pKqF
-         WWJg==
-X-Gm-Message-State: AJIora9bAu4wlATE+nBr3pk33HG71gpmCruquWzEE7wXnjbNTuWtsH5P
-        POSE69ka7efn7s9bqdzG0GY=
-X-Google-Smtp-Source: AGRyM1t1sO0Omp3yxQjOR809RdRPIRBJhuRvsggT+FA6u4dXikm/vOHoeh7Yy9QJQO8lUgJaMi1KfQ==
-X-Received: by 2002:a05:651c:11c5:b0:25e:22c9:19e1 with SMTP id z5-20020a05651c11c500b0025e22c919e1mr6791233ljo.428.1659471038665;
-        Tue, 02 Aug 2022 13:10:38 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.227.117])
-        by smtp.gmail.com with ESMTPSA id o18-20020ac24352000000b0048af397c827sm1161237lfl.218.2022.08.02.13.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 13:10:28 -0700 (PDT)
-Message-ID: <2e838551-e6a3-df5d-a889-baf60c7f99fd@gmail.com>
-Date:   Tue, 2 Aug 2022 23:10:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] staging: r8188eu: convert rtw_set_802_11_add_wep
- error code semantics
-Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
-        martin@kaiser.cx, straube.linux@gmail.com, fmdefrancesco@gmail.com,
-        abdun.nihaal@gmail.com, linux-staging@lists.linux.dev,
+        Tue, 2 Aug 2022 16:11:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB044FD39;
+        Tue,  2 Aug 2022 13:11:30 -0700 (PDT)
+Date:   Tue, 02 Aug 2022 20:11:28 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659471089;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=30l/G2OftEuc9xAsmIsf/rQ3/w2aA97NhlrRZOnGOFM=;
+        b=RHmlfRd3i0T05ME4j0+VFvH80apYhWw7WenjBOx7zhxL4/A7trkbfuBYhLirnuYLr2N+yx
+        i4sYRjoBSV89QeN6KYhs+qPc8z4twXxXfl288rDzuuM5CXebI8aFvsNjCph9FuePxcdm0i
+        MbNMIMcFnkTcP/ErJpFyu2pxC6sPcE2sqQ1wrP5//nGjBEa2KULJpqmZMkcc61Bajzp72u
+        TtfuKLoHouIPDVsFriIqjTH15EK3QFq/+TVNGNDQuh+ztQ1ToapS5FvcJ0268IU7Z38BP8
+        ZyLPvPZaAZnI4t74ENW1FckGyctcXxQJ6LYhJ3gLon5nmanTr/aOUsrLyUwufg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659471089;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=30l/G2OftEuc9xAsmIsf/rQ3/w2aA97NhlrRZOnGOFM=;
+        b=Y8KB7L1wBo6mvCU7SDYNLgQ1kaQfjfgHxizojzfh2Ok5eNhYlmtoiBuTa8Tg7rJYLFR5R0
+        nEUAfyxw59bl6FBQ==
+From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] scripts/faddr2line: Add CONFIG_DEBUG_INFO check
+Cc:     John Garry <john.garry@huawei.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220728231150.972-1-phil@philpotter.co.uk>
- <20220728231150.972-3-phil@philpotter.co.uk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220728231150.972-3-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <ffa7734c929445caa374bf9e68078300174f09b4.1658426357.git.jpoimboe@kernel.org>
+References: <ffa7734c929445caa374bf9e68078300174f09b4.1658426357.git.jpoimboe@kernel.org>
+MIME-Version: 1.0
+Message-ID: <165947108802.15455.111004551670168325.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+The following commit has been merged into the perf/urgent branch of tip:
 
-Phillip Potter <phil@philpotter.co.uk> says:
-> -	if (!rtw_set_802_11_add_wep(padapter, &wep)) {
-> +	if (rtw_set_802_11_add_wep(padapter, &wep)) {
->   		if (rf_on == pwrpriv->rf_pwrstate)
->   			ret = -EOPNOTSUPP;
->   		goto exit;
+Commit-ID:     a41a2e2e34a907bd8979a53c58f44287630616e8
+Gitweb:        https://git.kernel.org/tip/a41a2e2e34a907bd8979a53c58f44287630616e8
+Author:        Josh Poimboeuf <jpoimboe@kernel.org>
+AuthorDate:    Thu, 21 Jul 2022 11:01:24 -07:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Tue, 02 Aug 2022 22:08:17 +02:00
 
-is it intentional to ignore an error in case of rf_on != 
-pwrpriv->rf_pwrstate?
+scripts/faddr2line: Add CONFIG_DEBUG_INFO check
 
+Otherwise without DWARF it spits out gibberish and gives no indication
+of what the problem is.
 
+Suggested-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: John Garry <john.garry@huawei.com>
+Link: https://lore.kernel.org/r/ffa7734c929445caa374bf9e68078300174f09b4.1658426357.git.jpoimboe@kernel.org
+---
+ scripts/faddr2line | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-With regards,
-Pavel Skripkin
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 5709968..5514c23 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -61,6 +61,7 @@ die() {
+ READELF="${CROSS_COMPILE:-}readelf"
+ ADDR2LINE="${CROSS_COMPILE:-}addr2line"
+ AWK="awk"
++GREP="grep"
+ 
+ command -v ${AWK} >/dev/null 2>&1 || die "${AWK} isn't installed"
+ command -v ${READELF} >/dev/null 2>&1 || die "${READELF} isn't installed"
+@@ -271,6 +272,8 @@ LIST=0
+ [[ ! -f $objfile ]] && die "can't find objfile $objfile"
+ shift
+ 
++${READELF} --section-headers --wide $objfile | ${GREP} -q '\.debug_info' || die "CONFIG_DEBUG_INFO not enabled"
++
+ DIR_PREFIX=supercalifragilisticexpialidocious
+ find_dir_prefix $objfile
+ 

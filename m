@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA325877EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8345877EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235952AbiHBHfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S235962AbiHBHfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiHBHfV (ORCPT
+        with ESMTP id S235951AbiHBHfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:35:21 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121A9307;
-        Tue,  2 Aug 2022 00:35:14 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bh13so11676293pgb.4;
-        Tue, 02 Aug 2022 00:35:14 -0700 (PDT)
+        Tue, 2 Aug 2022 03:35:22 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552D9BB3;
+        Tue,  2 Aug 2022 00:35:16 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id w7so12670745ply.12;
+        Tue, 02 Aug 2022 00:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc;
-        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
-        b=lAoYzTGSkC8SEsXta60yxrUe2IMIzfGd7Us5ZtbZYnGk7+b2Cxf4JfEDUhcMHF1GPl
-         xktZiuHju3cS5EgAwbEo1ZmcYAXXqqDttlHHlX4jSFS8QmMGqF1UvF/s9/fb5TxURteW
-         9YZkhlWISR8cjDpVfupIqAP+w2X5q6on1+QtOplW6TUDqdR0wwtMGf1muj8MTu5LJf8S
-         rYHAtggwzTg0MIMSRO5/lIaaDjiw+lZlJGtJ+bAMMKc6tC/8HN8J32/CKFwfYlQdUCZ+
-         185GW2LB6rqzu4MOBBtnQNaxc0U1Cf3a+Z59Bnk3oRNfvL3xTbpF1OD2OozNzjDjQ89+
-         3NXA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc;
+        bh=vAzhrMBx41KR5/QG49vw9E4uZBLDwRnUFTHGl01xlEo=;
+        b=RVoX+oNvi3wLv+gFmrUDMvRnRcajnaVlHF1+LRCCNEafSkBuFdDkheCPjeQwkvD8AX
+         rP+QLJAZ1hk+Mc1FPVvig3j7oyiCX+mXCD1kxvT2hVI4lWu+emV8pbDHBvRH8jAjBoa5
+         XJqrv21XW10YxTxfZNS5lP3nnCqbtFFBdbT5vjtAzAR4jLcaqg0Fxf7DmVoidqa9WzSs
+         OwbcuZzI4aho5iu5UCTicihTnlKTI+W8u2GmOldE0dE0h0JIYmUO7IQwV2O54cCXFzCk
+         jeeJgGcaCm2rJwyCaqFj8wS+BkRVVKzp0sOOwSQYCBECc3XYM0bV4CP8D1YZygo6rT21
+         VNRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc;
-        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
-        b=jeHPk0oR85kQXUg0bIjbsT8e6WfvmOB4Fdf7Ek/b8hhLkokEWSrz8F5Q/0fEjt2SqG
-         pnu1lWym3Hg4Q4USpMOtndmx5rFZ5HeJ96rCiv6v4hiJSh13fQ130x809Z+uXdFBhnhO
-         zFIR2P1AJlx1n39nvL65XOBrODxDhIBI+xBx2aL7u3REB7z5QQVBjW/267mEZsZp6tk9
-         5ruGy3vzL241o4ayJ02nZoJ6KkmPFx8s2kKMqCOwEXX0EULA0AAsW/0WFH2zTNxyr/hY
-         B9W4ZS4in9xQ3ew6i3PQPm7RorECgb1E9/DBPVQi6vguSh2jyXrZrv4tzrOCUihBPvb7
-         tlhg==
-X-Gm-Message-State: AJIora978+/46rp/dHMzvWyOhw4IoqPAD07fWTokVGTLEppGJrOySAUi
-        9kZAUGyA3jZfO2KEiWs7aXw=
-X-Google-Smtp-Source: AGRyM1snNTp6Oq00DrZzYYHLxQo+Ii74tmFr50PQS42tdricKjBI7IzM9gygLfu4el88Rh1yznMXlA==
-X-Received: by 2002:a63:fd14:0:b0:41a:20e8:c1e2 with SMTP id d20-20020a63fd14000000b0041a20e8c1e2mr16086488pgh.286.1659425714175;
-        Tue, 02 Aug 2022 00:35:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc;
+        bh=vAzhrMBx41KR5/QG49vw9E4uZBLDwRnUFTHGl01xlEo=;
+        b=xEvF8xCIbYJIZf1iaW9VH3ROC5CdeUuUvoQl9fjm/+iCCPbVYOtNQ3RdnNgprTC6lk
+         oeVv1/Ge5NIbHjATnY5tjASfQ3z+J3IP+80JP11o/7H2nUJU2oZLfjvbFoiWZt2vzCxB
+         gJpVdrr/QOKyIPbvk5TvkDq3DWwSaFWTMOGmNWVA/HiIPhhIpgvanq1SWOKMjd3yeyzC
+         qZzbepcrWEctM6AfpJYWbA7keg9p5y2NE2fW83gBiF5fqCzjgs/QCZX2UKDnCqUoJrPQ
+         O7qIHv7yX15Bwrh21rUHR8fhvKwR0Byb1o0fABUW7o+rl0CMuDU43fYuynbpwBFQ8Qnp
+         k0jQ==
+X-Gm-Message-State: ACgBeo0SZ+a5sbYRcnqv9elxrNqcEhyViuP+I94xwBoVuxDwZSvAjW1U
+        v1qPJGq9nT9ajPAjkdY1XSw=
+X-Google-Smtp-Source: AA6agR4JLhNrB9e/Ypel7vrYIOsBmhaYjmC00U2EzNV4RpDycq71/0jAM90ukDYzPVPibMaGtF9G7A==
+X-Received: by 2002:a17:903:230e:b0:16f:784:ea3f with SMTP id d14-20020a170903230e00b0016f0784ea3fmr1155785plh.160.1659425715684;
+        Tue, 02 Aug 2022 00:35:15 -0700 (PDT)
 Received: from balhae.roam.corp.google.com (rrcs-173-196-215-70.west.biz.rr.com. [173.196.215.70])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902e14c00b0016be368fb30sm10802896pla.212.2022.08.02.00.35.12
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902e14c00b0016be368fb30sm10802896pla.212.2022.08.02.00.35.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 00:35:13 -0700 (PDT)
+        Tue, 02 Aug 2022 00:35:15 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -62,10 +63,12 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Song Liu <songliubraving@fb.com>,
         Blake Jones <blakejones@google.com>
-Subject: [PATCH 1/3] perf lock: Introduce struct lock_contention
-Date:   Tue,  2 Aug 2022 00:35:09 -0700
-Message-Id: <20220802073511.299459-1-namhyung@kernel.org>
+Subject: [PATCH 2/3] perf lock: Add -m/--map-length option
+Date:   Tue,  2 Aug 2022 00:35:10 -0700
+Message-Id: <20220802073511.299459-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+In-Reply-To: <20220802073511.299459-1-namhyung@kernel.org>
+References: <20220802073511.299459-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,174 +81,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lock_contention struct is to carry related fields together and to
-minimize the change when we add new config options.
+The -m/--map-length option is to control number of max entries in the
+perf lock contention BPF maps.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-lock.c             | 23 ++++++++++++++---------
- tools/perf/util/bpf_lock_contention.c |  9 ++++++---
- tools/perf/util/lock-contention.h     | 17 +++++++++++------
- 3 files changed, 31 insertions(+), 18 deletions(-)
+ tools/perf/Documentation/perf-lock.txt |  4 ++++
+ tools/perf/builtin-lock.c              | 23 ++++++++++++++++++++++-
+ tools/perf/util/bpf_lock_contention.c  |  3 +++
+ tools/perf/util/lock-contention.h      |  1 +
+ 4 files changed, 30 insertions(+), 1 deletion(-)
 
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 7949d2e6891b..2101644785e0 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -145,6 +145,10 @@ CONTENTION OPTIONS
+ --tid=::
+         Record events on existing thread ID (comma separated list).
+ 
++-m::
++--map-length::
++	Maximum number of BPF map entries (default: 10240).
++
+ 
+ SEE ALSO
+ --------
 diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 7897a33fec1b..eef778b7d33d 100644
+index eef778b7d33d..e32fdcd497e0 100644
 --- a/tools/perf/builtin-lock.c
 +++ b/tools/perf/builtin-lock.c
-@@ -1594,7 +1594,10 @@ static int __cmd_contention(int argc, const char **argv)
- 		.mode  = PERF_DATA_MODE_READ,
- 		.force = force,
+@@ -55,6 +55,7 @@ static struct rb_root		thread_stats;
+ static bool combine_locks;
+ static bool show_thread_stats;
+ static bool use_bpf;
++static unsigned long bpf_map_len = 10240;
+ 
+ static enum {
+ 	LOCK_AGGR_ADDR,
+@@ -1597,6 +1598,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 	struct lock_contention con = {
+ 		.target = &target,
+ 		.result = &lockhash_table[0],
++		.map_len = bpf_map_len,
  	};
--	struct evlist *evlist = NULL;
-+	struct lock_contention con = {
-+		.target = &target,
-+		.result = &lockhash_table[0],
-+	};
  
  	session = perf_session__new(use_bpf ? NULL : &data, &eops);
- 	if (IS_ERR(session)) {
-@@ -1620,24 +1623,26 @@ static int __cmd_contention(int argc, const char **argv)
- 		signal(SIGCHLD, sighandler);
- 		signal(SIGTERM, sighandler);
+@@ -1786,6 +1788,24 @@ static int __cmd_record(int argc, const char **argv)
+ 	return ret;
+ }
  
--		evlist = evlist__new();
--		if (evlist == NULL) {
-+		con.machine = &session->machines.host;
++static int parse_map_length(const struct option *opt, const char *str,
++			    int unset __maybe_unused)
++{
++	unsigned long *len = (unsigned long *)opt->value;
++	unsigned long val;
++	char *endptr;
 +
-+		con.evlist = evlist__new();
-+		if (con.evlist == NULL) {
- 			err = -ENOMEM;
- 			goto out_delete;
- 		}
++	errno = 0;
++	val = strtoul(str, &endptr, 0);
++	if (*endptr != '\0' || errno != 0) {
++		pr_err("invalid BPF map length: %s\n", str);
++		return -1;
++	}
++
++	*len = val;
++	return 0;
++}
++
+ int cmd_lock(int argc, const char **argv)
+ {
+ 	const struct option lock_options[] = {
+@@ -1835,9 +1855,10 @@ int cmd_lock(int argc, const char **argv)
+ 		    "List of cpus to monitor"),
+ 	OPT_STRING('p', "pid", &target.pid, "pid",
+ 		   "Trace on existing process id"),
+-	/* TODO: Add short option -t after -t/--tracer can be removed. */
+ 	OPT_STRING(0, "tid", &target.tid, "tid",
+ 		   "Trace on existing thread id (exclusive to --pid)"),
++	OPT_CALLBACK('m', "map-length", &bpf_map_len, "len",
++		     "Max number of BPF map entries", parse_map_length),
+ 	OPT_PARENT(lock_options)
+ 	};
  
--		err = evlist__create_maps(evlist, &target);
-+		err = evlist__create_maps(con.evlist, &target);
- 		if (err < 0)
- 			goto out_delete;
- 
- 		if (argc) {
--			err = evlist__prepare_workload(evlist, &target,
-+			err = evlist__prepare_workload(con.evlist, &target,
- 						       argv, false, NULL);
- 			if (err < 0)
- 				goto out_delete;
- 		}
- 
--		if (lock_contention_prepare(evlist, &target) < 0) {
-+		if (lock_contention_prepare(&con) < 0) {
- 			pr_err("lock contention BPF setup failed\n");
- 			goto out_delete;
- 		}
-@@ -1672,13 +1677,13 @@ static int __cmd_contention(int argc, const char **argv)
- 	if (use_bpf) {
- 		lock_contention_start();
- 		if (argc)
--			evlist__start_workload(evlist);
-+			evlist__start_workload(con.evlist);
- 
- 		/* wait for signal */
- 		pause();
- 
- 		lock_contention_stop();
--		lock_contention_read(&session->machines.host, &lockhash_table[0]);
-+		lock_contention_read(&con);
- 	} else {
- 		err = perf_session__process_events(session);
- 		if (err)
-@@ -1691,7 +1696,7 @@ static int __cmd_contention(int argc, const char **argv)
- 	print_contention_result();
- 
- out_delete:
--	evlist__delete(evlist);
-+	evlist__delete(con.evlist);
- 	lock_contention_finish();
- 	perf_session__delete(session);
- 	return err;
 diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index 16b7451b4b09..f5e2b4f19a72 100644
+index f5e2b4f19a72..26128e5bb659 100644
 --- a/tools/perf/util/bpf_lock_contention.c
 +++ b/tools/perf/util/bpf_lock_contention.c
-@@ -27,10 +27,12 @@ struct lock_contention_data {
- 	u32 flags;
- };
- 
--int lock_contention_prepare(struct evlist *evlist, struct target *target)
-+int lock_contention_prepare(struct lock_contention *con)
- {
- 	int i, fd;
- 	int ncpus = 1, ntasks = 1;
-+	struct evlist *evlist = con->evlist;
-+	struct target *target = con->target;
- 
- 	skel = lock_contention_bpf__open();
- 	if (!skel) {
-@@ -102,12 +104,13 @@ int lock_contention_stop(void)
- 	return 0;
- }
- 
--int lock_contention_read(struct machine *machine, struct hlist_head *head)
-+int lock_contention_read(struct lock_contention *con)
- {
- 	int fd, stack;
- 	u32 prev_key, key;
- 	struct lock_contention_data data;
- 	struct lock_stat *st;
-+	struct machine *machine = con->machine;
- 	u64 stack_trace[CONTENTION_STACK_DEPTH];
- 
- 	fd = bpf_map__fd(skel->maps.lock_stat);
-@@ -163,7 +166,7 @@ int lock_contention_read(struct machine *machine, struct hlist_head *head)
- 			return -1;
- 		}
- 
--		hlist_add_head(&st->hash_entry, head);
-+		hlist_add_head(&st->hash_entry, con->result);
- 		prev_key = key;
+@@ -40,6 +40,9 @@ int lock_contention_prepare(struct lock_contention *con)
+ 		return -1;
  	}
  
++	bpf_map__set_max_entries(skel->maps.stacks, con->map_len);
++	bpf_map__set_max_entries(skel->maps.lock_stat, con->map_len);
++
+ 	if (target__has_cpu(target))
+ 		ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
+ 	if (target__has_task(target))
 diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-index 092c84441f9f..a0df5308cca4 100644
+index a0df5308cca4..b09fd6eb978a 100644
 --- a/tools/perf/util/lock-contention.h
 +++ b/tools/perf/util/lock-contention.h
-@@ -107,18 +107,24 @@ struct evlist;
- struct machine;
- struct target;
+@@ -112,6 +112,7 @@ struct lock_contention {
+ 	struct target *target;
+ 	struct machine *machine;
+ 	struct hlist_head *result;
++	unsigned long map_len;
+ };
  
-+struct lock_contention {
-+	struct evlist *evlist;
-+	struct target *target;
-+	struct machine *machine;
-+	struct hlist_head *result;
-+};
-+
  #ifdef HAVE_BPF_SKEL
- 
--int lock_contention_prepare(struct evlist *evlist, struct target *target);
-+int lock_contention_prepare(struct lock_contention *con);
- int lock_contention_start(void);
- int lock_contention_stop(void);
--int lock_contention_read(struct machine *machine, struct hlist_head *head);
-+int lock_contention_read(struct lock_contention *con);
- int lock_contention_finish(void);
- 
- #else  /* !HAVE_BPF_SKEL */
- 
--static inline int lock_contention_prepare(struct evlist *evlist __maybe_unused,
--					  struct target *target __maybe_unused)
-+static inline int lock_contention_prepare(struct lock_contention *con __maybe_unused)
- {
- 	return 0;
- }
-@@ -127,8 +133,7 @@ static inline int lock_contention_start(void) { return 0; }
- static inline int lock_contention_stop(void) { return 0; }
- static inline int lock_contention_finish(void) { return 0; }
- 
--static inline int lock_contention_read(struct machine *machine __maybe_unused,
--				       struct hlist_head *head __maybe_unused)
-+static inline int lock_contention_read(struct lock_contention *con __maybe_unused)
- {
- 	return 0;
- }
 -- 
 2.37.1.455.g008518b4e5-goog
 

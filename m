@@ -2,117 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857C6587B5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06379587B5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236781AbiHBLJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S236825AbiHBLJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiHBLJB (ORCPT
+        with ESMTP id S236713AbiHBLJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:09:01 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E12D481D3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:09:01 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id AA6DC100482EE
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:08:50 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id Iplaozl7EUff9IplaoQVnD; Tue, 02 Aug 2022 11:08:50 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62e905c2
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=biHskzXt2R4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=W6HeGuRYOc2/889zLvAcFcohwzsulR/MbtLOcDVOcjg=; b=romBFgyfCf9TWurlz372vYjD+4
-        L4A5fyEfzJkfuo0ZljpH/bsh0cG/MHO1rtDUZ+NsKPtyXhMtuzJfin6yMwWUZrNu8R53r9LVTWISs
-        D1XiUQvOefWwH2QJGqDC8+3EUA3SKaQfvZe2Y4spjOBqFzR5HLiqIGhz94y+aIPvlNqtcw+xWTTNZ
-        67Dp5gCL1nVCCAQbdmRdga5iWgaD3STGOh4fGcfSDMi5xJ6uYVAXCxVxNy+VxE9VsPcfbWZdqYCuV
-        joC0DVn8/10vvpvC87eE/FZfYK6E/DmD7cyUJvrts9YjL+ejAF7uBJ8Ufny3Z4ZzsCuWs623QcK5b
-        fsp/9X3w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:38294 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oIplY-002TZC-W2;
-        Tue, 02 Aug 2022 05:08:49 -0600
-Subject: Re: [PATCH 5.15 00/69] 5.15.59-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220801114134.468284027@linuxfoundation.org>
-In-Reply-To: <20220801114134.468284027@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8baa3e05-7eda-269f-76c2-6a494908fc40@w6rz.net>
-Date:   Tue, 2 Aug 2022 04:08:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 2 Aug 2022 07:09:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90BD748E8F
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659438579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6BifT43D9freggl3HgwGtguwbmiNbluqDwwULzzJtpQ=;
+        b=IzYz6VSSBCnWfYgCSj0BmhcDoFHmb5RPYLModdgsyH0u9PFBqfkXA4h/jVNAv6U5Hl5I3o
+        7EwnJBlP5HS3VeDA7zjPgbNV/+M909tR4Y0F7V1AuP1MuGKPk4QQ5OH1H1ZPipThGEYZ6H
+        8hb0GsI7wWUjQ816lxYJAQJQqW4hSZQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-29-xGYX-xyQN5mod1CptFnngw-1; Tue, 02 Aug 2022 07:09:38 -0400
+X-MC-Unique: xGYX-xyQN5mod1CptFnngw-1
+Received: by mail-ed1-f72.google.com with SMTP id v19-20020a056402349300b0043d42b7ddefso5721959edc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 04:09:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6BifT43D9freggl3HgwGtguwbmiNbluqDwwULzzJtpQ=;
+        b=LAfrG6TT+D/f0oaA3PZDM8vwSG6qmnzgbHNwk7R7TuHXzTjh740Zi18xn3YvTaXBXw
+         UONDPh3AV5t0vvVWB50dX3gpiFQcaJIT6okekx3tuVreNofeAgLnDE6c+OWrkswLQRuw
+         D7gw9vaih16dSM5UoNJ1+uVnfkHm4qpxsf3qpwN/5SfyAvEI+sTznZup4kE2q4k8hu3t
+         9v8Gk/APEBet2nqfLSNLFM6MhiZPnEzfNXOH4IjdjWdfqKwY/Tqp3QlZz0mo9Dkwream
+         o2JjGx5ZnsPZfmK+W/A6o8pxOkJJcSd/kIfXEBnIjI/iBlvl8iU2l8/X6AeZmCOr3gUg
+         Mylw==
+X-Gm-Message-State: AJIora/jp8j8IeAeBVexM0Nte1yjGEhERUSehlhv4Uef6IryQO5NWv6D
+        F+PrHabxyKy2pUQk1KU5ngDOIvAEPx9bux9TMO8x3fLBbhQCIlmOf+aK7lKr8/rMdxhVIIUYXp8
+        zMqJORoeCSvnocwAhx5EkfYJ0
+X-Received: by 2002:a17:906:7482:b0:722:edf9:e72f with SMTP id e2-20020a170906748200b00722edf9e72fmr15625727ejl.92.1659438577254;
+        Tue, 02 Aug 2022 04:09:37 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uq2ekdaNit9efw2ckO/parj6gVLp//Nsu4D/ZPzj6dYKWh7G3lCW04SG2a2ByGFq4LcDNNNA==
+X-Received: by 2002:a17:906:7482:b0:722:edf9:e72f with SMTP id e2-20020a170906748200b00722edf9e72fmr15625713ejl.92.1659438577031;
+        Tue, 02 Aug 2022 04:09:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id k19-20020aa7c393000000b0043bbcd94ee4sm8071099edq.51.2022.08.02.04.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 04:09:36 -0700 (PDT)
+Message-ID: <e6c0ca61-97d3-328b-f50e-7cdac50eb083@redhat.com>
+Date:   Tue, 2 Aug 2022 13:09:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] asus-wmi: Add support for TUF laptop keyboard RGB
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oIplY-002TZC-W2
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:38294
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     corentin.chary@gmail.com, markgross@kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+References: <20220802045942.1565559-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220802045942.1565559-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 4:46 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.59 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.59-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Luke,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+On 8/2/22 06:59, Luke D. Jones wrote:
+> Adds support for TUF laptop RGB control. This creates two sysfs
+> paths to add control of basic keyboard LEDs, and power states.
+> 
+> /sys/devices/platform/asus-nb-wmi/tuf_krgb_mode has the following
+> as input options via U8 "n n n n n n":
+> - Save or set, if set, then settings revert on cold boot
+> - Mode, 0-8 for regular modes (if supported), 10-12 for "warning" styles
+> - Red, 0-255
+> - Green, 0-255
+> - Blue, 0-255
+> - Speed, 0 = Slow, 1 = Medium, 2 = Fast
+> 
+> /sys/devices/platform/asus-nb-wmi/tuf_krgb_state has the following
+> as input options via boolean "b b b b b":
+> - Save or set, if set, then settings revert on cold boot
+> - Boot, if true, the keyboard displays animation on boot
+> - Awake, if true, the keyboard LED's are on while device is awake
+> - Sleep, if true, the keyboard shows animation while device is suspended
+> - Keybaord, appears to have no effect
 
-Tested-by: Ron Economos <re@w6rz.net>
+Typo in Keybaord here.
+
+Thank you for your patch. I really appreciate your continued
+efforts to make Asus laptops work well with Linux.
+
+For keyboard backlight support Linux has standardized on
+using the /sys/class/leds API. So I'm afraid that this patch
+will need to be rewritten to use the standard LED API
+and then specifically the somewhat new multicolor LED API
+at least for setting the RGB values (within the current mode)
+
+Any extra functionality can then be added as extra sysfs
+attributes under the /sys/class/leds/asus::kbd_backlight
+device, see e.g. the use of kbd_led_groups in:
+drivers/platform/x86/dell/dell-laptop.c
+
+Note the kbd_backlight part of the name is important this
+will allow upower to recognize this as a keyboard backlight
+and will then enable desktop-environments which use
+upower for kbd backlight control to at least control
+the overall brightness of the kbd-backlight.
+
+I realize that this means that you need to redo a whole
+bunch of work here; and I presume also in your
+asusctl userspace utility, sorry about that. But it
+really is important that standard userspace APIs are
+used for things like this where ever possible.
+
+Regards,
+
+Hans
+
+
+
+
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+> ---
+>  drivers/platform/x86/asus-wmi.c            | 168 +++++++++++++++++++++
+>  include/linux/platform_data/x86/asus-wmi.h |   6 +
+>  2 files changed, 174 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 62ce198a3463..09277bd98249 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -234,6 +234,9 @@ struct asus_wmi {
+>  	bool dgpu_disable_available;
+>  	bool dgpu_disable;
+>  
+> +	bool tuf_kb_rgb_mode_available;
+> +	bool tuf_kb_rgb_state_available;
+> +
+>  	bool throttle_thermal_policy_available;
+>  	u8 throttle_thermal_policy_mode;
+>  
+> @@ -734,6 +737,153 @@ static ssize_t egpu_enable_store(struct device *dev,
+>  
+>  static DEVICE_ATTR_RW(egpu_enable);
+>  
+> +/* TUF Laptop Keyboard RGB Modes **********************************************/
+> +static int tuf_kb_rgb_mode_check_present(struct asus_wmi *asus)
+> +{
+> +	u32 result;
+> +	int err;
+> +
+> +	asus->tuf_kb_rgb_mode_available = false;
+> +
+> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_TUF_RGB_MODE, &result);
+> +	if (err) {
+> +		if (err == -ENODEV)
+> +			return 0;
+> +		return err;
+> +	}
+> +
+> +	if (result & ASUS_WMI_DSTS_PRESENCE_BIT)
+> +		asus->tuf_kb_rgb_mode_available = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t tuf_kb_rgb_mode_store(struct device *dev,
+> +				 struct device_attribute *attr,
+> +				 const char *buf, size_t count)
+> +{
+> +	int err;
+> +	u32 ret;
+> +	u8 res, tmp, arg_num;
+> +	char *data, *part, *end;
+> +	u8 cmd, mode, r, g,  b,  speed;
+> +
+> +	data = end = kstrdup(buf, GFP_KERNEL);
+> +	cmd = mode = r = g = b = speed = arg_num = 0;
+> +
+> +	while ((part = strsep(&end, " ")) != NULL) {
+> +		if (part == NULL)
+> +			return -1;
+> +
+> +		res = kstrtou8(part, 10, &tmp);
+> +		if (res)
+> +			return -1;
+> +
+> +		if (arg_num == 0)
+> +			// apply : set
+> +			cmd = tmp == 1 ? 0xb5 : 0xb4;
+> +		else if (arg_num == 1)
+> +			// From 0-8 are valid modes with 10-12 being "warning"
+> +			// style modes. All models have "pulse" mode 10.
+> +			mode = (tmp <= 12 && tmp != 9) ? tmp : 10;
+> +		else if (arg_num == 2)
+> +			r = tmp;
+> +		else if (arg_num == 3)
+> +			g = tmp;
+> +		else if (arg_num == 4)
+> +			b = tmp;
+> +		else if (arg_num == 5) {
+> +			if (tmp == 0)
+> +				speed = 0xe1;
+> +			else if (tmp == 1)
+> +				speed = 0xeb;
+> +			else if (tmp == 2)
+> +				speed = 0xf5;
+> +		}
+> +
+> +		arg_num += 1;
+> +	}
+> +
+> +	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, ASUS_WMI_DEVID_TUF_RGB_MODE,
+> +			cmd | (mode << 8) | (r << 16) | (g << 24), (b) | (speed << 8), &ret);
+> +	if (err)
+> +		return err;
+> +
+> +	kfree(data);
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_WO(tuf_kb_rgb_mode);
+> +
+> +/* TUF Laptop Keyboard RGB States *********************************************/
+> +static int tuf_kb_rgb_state_check_present(struct asus_wmi *asus)
+> +{
+> +	u32 result;
+> +	int err;
+> +
+> +	asus->tuf_kb_rgb_state_available = false;
+> +
+> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_TUF_RGB_STATE, &result);
+> +	if (err) {
+> +		if (err == -ENODEV)
+> +			return 0;
+> +		return err;
+> +	}
+> +
+> +	if (result & ASUS_WMI_DSTS_PRESENCE_BIT)
+> +		asus->tuf_kb_rgb_state_available = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t tuf_kb_rgb_state_store(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   const char *buf, size_t count)
+> +{
+> +	int err;
+> +	u32 ret;
+> +	bool tmp;
+> +	char *data, *part, *end;
+> +	u8 save, flags, res, arg_num;
+> +
+> +	save = flags = arg_num = 0;
+> +	data = end = kstrdup(buf, GFP_KERNEL);
+> +
+> +	while ((part = strsep(&end, " ")) != NULL) {
+> +		if (part == NULL)
+> +			return -1;
+> +
+> +		res = kstrtobool(part, &tmp);
+> +		if (res)
+> +			return -1;
+> +
+> +		if (tmp) {
+> +			if (arg_num == 0) // save  :  set
+> +				save = tmp == 0 ? 0x0100 : 0x0000;
+> +			else if (arg_num == 1)
+> +				flags |= 0x02; // boot
+> +			else if (arg_num == 2)
+> +				flags |= 0x08; // awake
+> +			else if (arg_num == 3)
+> +				flags |= 0x20; // sleep
+> +			else if (arg_num == 4)
+> +				flags |= 0x80; // keyboard
+> +		}
+> +
+> +		arg_num += 1;
+> +	}
+> +
+> +	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS,
+> +			ASUS_WMI_DEVID_TUF_RGB_STATE, 0xBD | save | (flags << 16), 0, &ret);
+> +	if (err)
+> +		return err;
+> +
+> +	kfree(data);
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_WO(tuf_kb_rgb_state);
+> +
+>  /* Battery ********************************************************************/
+>  
+>  /* The battery maximum charging percentage */
+> @@ -3258,6 +3408,8 @@ static struct attribute *platform_attributes[] = {
+>  	&dev_attr_touchpad.attr,
+>  	&dev_attr_egpu_enable.attr,
+>  	&dev_attr_dgpu_disable.attr,
+> +	&dev_attr_tuf_kb_rgb_mode.attr,
+> +	&dev_attr_tuf_kb_rgb_state.attr,
+>  	&dev_attr_lid_resume.attr,
+>  	&dev_attr_als_enable.attr,
+>  	&dev_attr_fan_boost_mode.attr,
+> @@ -3286,6 +3438,12 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
+>  		devid = ASUS_WMI_DEVID_ALS_ENABLE;
+>  	else if (attr == &dev_attr_egpu_enable.attr)
+>  		ok = asus->egpu_enable_available;
+> +	else if (attr == &dev_attr_tuf_kb_rgb_mode.attr)
+> +		ok = asus->tuf_kb_rgb_mode_available;
+> +	else if (attr == &dev_attr_tuf_kb_rgb_state.attr)
+> +		ok = asus->tuf_kb_rgb_state_available;
+> +	else if (attr == &dev_attr_dgpu_disable.attr)
+> +		ok = asus->dgpu_disable_available;
+>  	else if (attr == &dev_attr_dgpu_disable.attr)
+>  		ok = asus->dgpu_disable_available;
+>  	else if (attr == &dev_attr_fan_boost_mode.attr)
+> @@ -3557,6 +3715,14 @@ static int asus_wmi_add(struct platform_device *pdev)
+>  	if (err)
+>  		goto fail_dgpu_disable;
+>  
+> +	err = tuf_kb_rgb_mode_check_present(asus);
+> +	if (err)
+> +		goto fail_tuf_kb_rgb_mode;
+> +
+> +	err = tuf_kb_rgb_state_check_present(asus);
+> +	if (err)
+> +		goto fail_tuf_kb_rgb_state;
+> +
+>  	err = fan_boost_mode_check_present(asus);
+>  	if (err)
+>  		goto fail_fan_boost_mode;
+> @@ -3671,6 +3837,8 @@ static int asus_wmi_add(struct platform_device *pdev)
+>  fail_fan_boost_mode:
+>  fail_egpu_enable:
+>  fail_dgpu_disable:
+> +fail_tuf_kb_rgb_mode:
+> +fail_tuf_kb_rgb_state:
+>  fail_platform:
+>  fail_panel_od:
+>  	kfree(asus);
+> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
+> index a571b47ff362..af4191fb0508 100644
+> --- a/include/linux/platform_data/x86/asus-wmi.h
+> +++ b/include/linux/platform_data/x86/asus-wmi.h
+> @@ -98,6 +98,12 @@
+>  /* dgpu on/off */
+>  #define ASUS_WMI_DEVID_DGPU		0x00090020
+>  
+> +/* TUF laptop RGB modes/colours */
+> +#define ASUS_WMI_DEVID_TUF_RGB_MODE	0x00100056
+> +
+> +/* TUF laptop RGB power/state */
+> +#define ASUS_WMI_DEVID_TUF_RGB_STATE	0x00100057
+> +
+>  /* DSTS masks */
+>  #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
+>  #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
 

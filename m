@@ -2,92 +2,603 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0035758841D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52BB58842C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbiHBWUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S235652AbiHBWVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiHBWUG (ORCPT
+        with ESMTP id S235109AbiHBWV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:20:06 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE75041997
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:20:04 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id tk8so28309819ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3w2KqqM6Jon4wwPxOegeac+q79TdKrQ7N+AdrcSklFg=;
-        b=H9BrTRLxOTaQlJ7/9iMdxEhU56cAjt38vgP4aXI9tjpNEj7NTnaimqQOHdoBqgS2WK
-         G0vC8ZgWAYr843jGgPK9tLYckA6+aM+Iadoi+3epi1lmi/foBRdrxAob0URoiFr02BUA
-         DF4HBlqMRXMHisqqe7OY1TXHjYw49r1kimsZE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3w2KqqM6Jon4wwPxOegeac+q79TdKrQ7N+AdrcSklFg=;
-        b=jymJdfQjvIzdpDxLe4Xjd3ZukPzN8LBlChHSHD2yXfvwwyl6/TFRIA3rQnTs2ENQMs
-         MEztOFGrj6tDNdbZGObzmY9AuwaVehjtPCqezScDzbkliQ+9b89cCJm5v2p3Tj4SMPre
-         ifZ3LEu7n+wjRS6IxbXsw6jKY0AkMQYiMriEJkrWzgDeDybkaj7+vt1wte53AmMyqzY9
-         hgPte+OavVLWOw+AMKSq/7E4runk/UYyeRY39Q3cWnOUSkUY6AFYBKj7imReMUwI7d4m
-         yXTqBrX+WrhIMu60R4PWl7/5hbShSPthFtXAfGgiJnbYSBTumZGyIib3Y+pwC9rCXmkC
-         rHrA==
-X-Gm-Message-State: ACgBeo2PvYRssSJLoLKgGv9ugb2kYictGvGppM+3dRoPV5BZXq1M1FD1
-        mdwx6MWt178B61ZtfU8hLdhv40qlF13zfpt0
-X-Google-Smtp-Source: AGRyM1svmzotAqyOsgg2CHkX8IvFLA9Ph69QRFGCP015WqSQqZbln8I1mokCq3RNOoseiIvehQ0fdQ==
-X-Received: by 2002:a17:907:1608:b0:730:5ad0:ae1a with SMTP id hb8-20020a170907160800b007305ad0ae1amr12817462ejc.222.1659478802736;
-        Tue, 02 Aug 2022 15:20:02 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id la21-20020a170907781500b007030c97ae62sm6634179ejc.191.2022.08.02.15.20.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 15:20:02 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id n20-20020a05600c3b9400b003a4f2261a7eso47365wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:20:02 -0700 (PDT)
-X-Received: by 2002:a05:600c:3553:b0:3a3:2b65:299e with SMTP id
- i19-20020a05600c355300b003a32b65299emr824925wmq.145.1659478801765; Tue, 02
- Aug 2022 15:20:01 -0700 (PDT)
+        Tue, 2 Aug 2022 18:21:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5DD46D86
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659478888; x=1691014888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NO2WtrOKar5ANWVFrOOMHlFXmySyEsGE0Oy4esliW9U=;
+  b=CPT+e/WYksdTlxH+eVnTaW5uM7zLfhekpBZRg09rYZvigLcMoANYj2Ik
+   MJTrdxuZpgHaxvZ6Xe8rNJ0nYlH93Nz5dbakT7E/Ed4GgIMYoo1OAyunc
+   nimfHirVg3KDurHNyXXkOzpitItJdqnXb3PoYuaLe5XyX7RwS7dWt4r+f
+   YKwgaPJMgg8AJU8L3sI15AZ1HNEWHObV9K24Yi6oLOtV+p/cvO6BHo3Kr
+   chvjqoncih+0+Yur6eVxQEQPaKON8daXC2g8ACEbdtMT3Qs6QJYAC3QqM
+   Lmf7kTZTwwwtEqRssb3KcGg9Mlt5dIkKGHIQewfMwcDEF1W90CYQvFhkd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269301788"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="269301788"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 15:21:28 -0700
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="670618105"
+Received: from nvishwa1-desk.sc.intel.com (HELO nvishwa1-DESK) ([172.25.29.76])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 15:21:28 -0700
+Date:   Tue, 2 Aug 2022 15:21:08 -0700
+From:   Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Matthew Auld <matthew.auld@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v2 1/2] drm/i915/gt: Move TLB invalidation to
+ its own file
+Message-ID: <20220802222108.GK14039@nvishwa1-DESK>
+References: <cover.1659077372.git.mchehab@kernel.org>
+ <f4d7b534511b57336eaea0ce696afdf675cf5892.1659077372.git.mchehab@kernel.org>
 MIME-Version: 1.0
-References: <CAJ-EccPH46FGKQj8gYEg5HGpmmRiqzrZouTZauwpvX-+2j4GNA@mail.gmail.com>
-In-Reply-To: <CAJ-EccPH46FGKQj8gYEg5HGpmmRiqzrZouTZauwpvX-+2j4GNA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 2 Aug 2022 15:19:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wim4B671BOPfxoXDSz0xfOruqoKCMQrjAX0R95PH5Wy4g@mail.gmail.com>
-Message-ID: <CAHk-=wim4B671BOPfxoXDSz0xfOruqoKCMQrjAX0R95PH5Wy4g@mail.gmail.com>
-Subject: Re: [GIT PULL] SafeSetID changes for v6.0
-To:     Micah Morton <mortonm@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f4d7b534511b57336eaea0ce696afdf675cf5892.1659077372.git.mchehab@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 7:40 PM Micah Morton <mortonm@chromium.org> wrote:
+On Fri, Jul 29, 2022 at 09:03:54AM +0200, Mauro Carvalho Chehab wrote:
+>From: Chris Wilson <chris.p.wilson@intel.com>
 >
-> This pull request contains one commit that touches common kernel code,
+>Prepare for supporting more TLB invalidation scenarios by moving
+>the current MMIO invalidation to its own file.
+
+And looks like,
+1. Rename intel_gt_invalidate_tlb() to intel_gt_invalidate_tlb_full()
+2. Add intel_gt_init_tlb() and intel_gt_fini_tlb() abstracts.
+
+Reviewed-by: Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>
+
 >
-> one that adds functionality internal to the SafeSetID LSM code, and a
+>Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+>Cc: Fei Yang <fei.yang@intel.com>
+>Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>---
 >
-> few other commits that only modify the SafeSetID LSM selftest.
-[...]
-
-What odd MUA do you use that causes this double-spaced text email?
-
-I can read it, but it really is a bit strange. It was all plain text,
-and marked as utf-8, and otherwise looked normal except for that
-double spacing.
-
-I get flashbacks to my "writing papers at university" days.
-
-             Linus
+>To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+>See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1659077372.git.mchehab@kernel.org/
+>
+> drivers/gpu/drm/i915/Makefile             |   1 +
+> drivers/gpu/drm/i915/gem/i915_gem_pages.c |   4 +-
+> drivers/gpu/drm/i915/gt/intel_gt.c        | 168 +-------------------
+> drivers/gpu/drm/i915/gt/intel_gt.h        |  12 --
+> drivers/gpu/drm/i915/gt/intel_tlb.c       | 183 ++++++++++++++++++++++
+> drivers/gpu/drm/i915/gt/intel_tlb.h       |  29 ++++
+> drivers/gpu/drm/i915/i915_vma.c           |   1 +
+> 7 files changed, 219 insertions(+), 179 deletions(-)
+> create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.c
+> create mode 100644 drivers/gpu/drm/i915/gt/intel_tlb.h
+>
+>diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+>index 522ef9b4aff3..d3df9832d1f7 100644
+>--- a/drivers/gpu/drm/i915/Makefile
+>+++ b/drivers/gpu/drm/i915/Makefile
+>@@ -126,6 +126,7 @@ gt-y += \
+> 	gt/intel_sseu.o \
+> 	gt/intel_sseu_debugfs.o \
+> 	gt/intel_timeline.o \
+>+	gt/intel_tlb.o \
+> 	gt/intel_workarounds.o \
+> 	gt/shmem_utils.o \
+> 	gt/sysfs_engines.o
+>diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>index 8357dbdcab5c..1cd76cc5d9f3 100644
+>--- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>+++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+>@@ -7,7 +7,7 @@
+> #include <drm/drm_cache.h>
+>
+> #include "gt/intel_gt.h"
+>-#include "gt/intel_gt_pm.h"
+>+#include "gt/intel_tlb.h"
+>
+> #include "i915_drv.h"
+> #include "i915_gem_object.h"
+>@@ -199,7 +199,7 @@ static void flush_tlb_invalidate(struct drm_i915_gem_object *obj)
+> 	if (!obj->mm.tlb)
+> 		return;
+>
+>-	intel_gt_invalidate_tlb(gt, obj->mm.tlb);
+>+	intel_gt_invalidate_tlb_full(gt, obj->mm.tlb);
+> 	obj->mm.tlb = 0;
+> }
+>
+>diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
+>index f435e06125aa..18d82cd620bd 100644
+>--- a/drivers/gpu/drm/i915/gt/intel_gt.c
+>+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+>@@ -11,9 +11,7 @@
+> #include "pxp/intel_pxp.h"
+>
+> #include "i915_drv.h"
+>-#include "i915_perf_oa_regs.h"
+> #include "intel_context.h"
+>-#include "intel_engine_pm.h"
+> #include "intel_engine_regs.h"
+> #include "intel_ggtt_gmch.h"
+> #include "intel_gt.h"
+>@@ -31,6 +29,7 @@
+> #include "intel_renderstate.h"
+> #include "intel_rps.h"
+> #include "intel_gt_sysfs.h"
+>+#include "intel_tlb.h"
+> #include "intel_uncore.h"
+> #include "shmem_utils.h"
+>
+>@@ -48,8 +47,7 @@ static void __intel_gt_init_early(struct intel_gt *gt)
+> 	intel_gt_init_reset(gt);
+> 	intel_gt_init_requests(gt);
+> 	intel_gt_init_timelines(gt);
+>-	mutex_init(&gt->tlb.invalidate_lock);
+>-	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
+>+	intel_gt_init_tlb(gt);
+> 	intel_gt_pm_init_early(gt);
+>
+> 	intel_uc_init_early(&gt->uc);
+>@@ -770,7 +768,7 @@ void intel_gt_driver_late_release_all(struct drm_i915_private *i915)
+> 		intel_gt_fini_requests(gt);
+> 		intel_gt_fini_reset(gt);
+> 		intel_gt_fini_timelines(gt);
+>-		mutex_destroy(&gt->tlb.invalidate_lock);
+>+		intel_gt_fini_tlb(gt);
+> 		intel_engines_free(gt);
+> 	}
+> }
+>@@ -881,163 +879,3 @@ void intel_gt_info_print(const struct intel_gt_info *info,
+>
+> 	intel_sseu_dump(&info->sseu, p);
+> }
+>-
+>-struct reg_and_bit {
+>-	i915_reg_t reg;
+>-	u32 bit;
+>-};
+>-
+>-static struct reg_and_bit
+>-get_reg_and_bit(const struct intel_engine_cs *engine, const bool gen8,
+>-		const i915_reg_t *regs, const unsigned int num)
+>-{
+>-	const unsigned int class = engine->class;
+>-	struct reg_and_bit rb = { };
+>-
+>-	if (drm_WARN_ON_ONCE(&engine->i915->drm,
+>-			     class >= num || !regs[class].reg))
+>-		return rb;
+>-
+>-	rb.reg = regs[class];
+>-	if (gen8 && class == VIDEO_DECODE_CLASS)
+>-		rb.reg.reg += 4 * engine->instance; /* GEN8_M2TCR */
+>-	else
+>-		rb.bit = engine->instance;
+>-
+>-	rb.bit = BIT(rb.bit);
+>-
+>-	return rb;
+>-}
+>-
+>-static void mmio_invalidate_full(struct intel_gt *gt)
+>-{
+>-	static const i915_reg_t gen8_regs[] = {
+>-		[RENDER_CLASS]			= GEN8_RTCR,
+>-		[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
+>-		[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
+>-		[COPY_ENGINE_CLASS]		= GEN8_BTCR,
+>-	};
+>-	static const i915_reg_t gen12_regs[] = {
+>-		[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
+>-		[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
+>-		[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
+>-		[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
+>-		[COMPUTE_CLASS]			= GEN12_COMPCTX_TLB_INV_CR,
+>-	};
+>-	struct drm_i915_private *i915 = gt->i915;
+>-	struct intel_uncore *uncore = gt->uncore;
+>-	struct intel_engine_cs *engine;
+>-	intel_engine_mask_t awake, tmp;
+>-	enum intel_engine_id id;
+>-	const i915_reg_t *regs;
+>-	unsigned int num = 0;
+>-
+>-	if (GRAPHICS_VER(i915) == 12) {
+>-		regs = gen12_regs;
+>-		num = ARRAY_SIZE(gen12_regs);
+>-	} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
+>-		regs = gen8_regs;
+>-		num = ARRAY_SIZE(gen8_regs);
+>-	} else if (GRAPHICS_VER(i915) < 8) {
+>-		return;
+>-	}
+>-
+>-	if (drm_WARN_ONCE(&i915->drm, !num,
+>-			  "Platform does not implement TLB invalidation!"))
+>-		return;
+>-
+>-	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
+>-
+>-	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
+>-
+>-	awake = 0;
+>-	for_each_engine(engine, gt, id) {
+>-		struct reg_and_bit rb;
+>-
+>-		if (!intel_engine_pm_is_awake(engine))
+>-			continue;
+>-
+>-		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
+>-		if (!i915_mmio_reg_offset(rb.reg))
+>-			continue;
+>-
+>-		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+>-		awake |= engine->mask;
+>-	}
+>-
+>-	GT_TRACE(gt, "invalidated engines %08x\n", awake);
+>-
+>-	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
+>-	if (awake &&
+>-	    (IS_TIGERLAKE(i915) ||
+>-	     IS_DG1(i915) ||
+>-	     IS_ROCKETLAKE(i915) ||
+>-	     IS_ALDERLAKE_S(i915) ||
+>-	     IS_ALDERLAKE_P(i915)))
+>-		intel_uncore_write_fw(uncore, GEN12_OA_TLB_INV_CR, 1);
+>-
+>-	spin_unlock_irq(&uncore->lock);
+>-
+>-	for_each_engine_masked(engine, gt, awake, tmp) {
+>-		struct reg_and_bit rb;
+>-
+>-		/*
+>-		 * HW architecture suggest typical invalidation time at 40us,
+>-		 * with pessimistic cases up to 100us and a recommendation to
+>-		 * cap at 1ms. We go a bit higher just in case.
+>-		 */
+>-		const unsigned int timeout_us = 100;
+>-		const unsigned int timeout_ms = 4;
+>-
+>-		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
+>-		if (__intel_wait_for_register_fw(uncore,
+>-						 rb.reg, rb.bit, 0,
+>-						 timeout_us, timeout_ms,
+>-						 NULL))
+>-			drm_err_ratelimited(&gt->i915->drm,
+>-					    "%s TLB invalidation did not complete in %ums!\n",
+>-					    engine->name, timeout_ms);
+>-	}
+>-
+>-	/*
+>-	 * Use delayed put since a) we mostly expect a flurry of TLB
+>-	 * invalidations so it is good to avoid paying the forcewake cost and
+>-	 * b) it works around a bug in Icelake which cannot cope with too rapid
+>-	 * transitions.
+>-	 */
+>-	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
+>-}
+>-
+>-static bool tlb_seqno_passed(const struct intel_gt *gt, u32 seqno)
+>-{
+>-	u32 cur = intel_gt_tlb_seqno(gt);
+>-
+>-	/* Only skip if a *full* TLB invalidate barrier has passed */
+>-	return (s32)(cur - ALIGN(seqno, 2)) > 0;
+>-}
+>-
+>-void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
+>-{
+>-	intel_wakeref_t wakeref;
+>-
+>-	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+>-		return;
+>-
+>-	if (intel_gt_is_wedged(gt))
+>-		return;
+>-
+>-	if (tlb_seqno_passed(gt, seqno))
+>-		return;
+>-
+>-	with_intel_gt_pm_if_awake(gt, wakeref) {
+>-		mutex_lock(&gt->tlb.invalidate_lock);
+>-		if (tlb_seqno_passed(gt, seqno))
+>-			goto unlock;
+>-
+>-		mmio_invalidate_full(gt);
+>-
+>-		write_seqcount_invalidate(&gt->tlb.seqno);
+>-unlock:
+>-		mutex_unlock(&gt->tlb.invalidate_lock);
+>-	}
+>-}
+>diff --git a/drivers/gpu/drm/i915/gt/intel_gt.h b/drivers/gpu/drm/i915/gt/intel_gt.h
+>index 40b06adf509a..b4bba16cdb53 100644
+>--- a/drivers/gpu/drm/i915/gt/intel_gt.h
+>+++ b/drivers/gpu/drm/i915/gt/intel_gt.h
+>@@ -101,16 +101,4 @@ void intel_gt_info_print(const struct intel_gt_info *info,
+>
+> void intel_gt_watchdog_work(struct work_struct *work);
+>
+>-static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
+>-{
+>-	return seqprop_sequence(&gt->tlb.seqno);
+>-}
+>-
+>-static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
+>-{
+>-	return intel_gt_tlb_seqno(gt) | 1;
+>-}
+>-
+>-void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno);
+>-
+> #endif /* __INTEL_GT_H__ */
+>diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.c b/drivers/gpu/drm/i915/gt/intel_tlb.c
+>new file mode 100644
+>index 000000000000..af8cae979489
+>--- /dev/null
+>+++ b/drivers/gpu/drm/i915/gt/intel_tlb.c
+>@@ -0,0 +1,183 @@
+>+// SPDX-License-Identifier: MIT
+>+/*
+>+ * Copyright © 2022 Intel Corporation
+>+ */
+>+
+>+#include "i915_drv.h"
+>+#include "i915_perf_oa_regs.h"
+>+#include "intel_engine_pm.h"
+>+#include "intel_gt.h"
+>+#include "intel_gt_pm.h"
+>+#include "intel_gt_regs.h"
+>+#include "intel_tlb.h"
+>+
+>+struct reg_and_bit {
+>+	i915_reg_t reg;
+>+	u32 bit;
+>+};
+>+
+>+static struct reg_and_bit
+>+get_reg_and_bit(const struct intel_engine_cs *engine, const bool gen8,
+>+		const i915_reg_t *regs, const unsigned int num)
+>+{
+>+	const unsigned int class = engine->class;
+>+	struct reg_and_bit rb = { };
+>+
+>+	if (drm_WARN_ON_ONCE(&engine->i915->drm,
+>+			     class >= num || !regs[class].reg))
+>+		return rb;
+>+
+>+	rb.reg = regs[class];
+>+	if (gen8 && class == VIDEO_DECODE_CLASS)
+>+		rb.reg.reg += 4 * engine->instance; /* GEN8_M2TCR */
+>+	else
+>+		rb.bit = engine->instance;
+>+
+>+	rb.bit = BIT(rb.bit);
+>+
+>+	return rb;
+>+}
+>+
+>+static bool tlb_seqno_passed(const struct intel_gt *gt, u32 seqno)
+>+{
+>+	u32 cur = intel_gt_tlb_seqno(gt);
+>+
+>+	/* Only skip if a *full* TLB invalidate barrier has passed */
+>+	return (s32)(cur - ALIGN(seqno, 2)) > 0;
+>+}
+>+
+>+static void mmio_invalidate_full(struct intel_gt *gt)
+>+{
+>+	static const i915_reg_t gen8_regs[] = {
+>+		[RENDER_CLASS]			= GEN8_RTCR,
+>+		[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
+>+		[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
+>+		[COPY_ENGINE_CLASS]		= GEN8_BTCR,
+>+	};
+>+	static const i915_reg_t gen12_regs[] = {
+>+		[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
+>+		[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
+>+		[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
+>+		[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
+>+		[COMPUTE_CLASS]			= GEN12_COMPCTX_TLB_INV_CR,
+>+	};
+>+	struct drm_i915_private *i915 = gt->i915;
+>+	struct intel_uncore *uncore = gt->uncore;
+>+	struct intel_engine_cs *engine;
+>+	intel_engine_mask_t awake, tmp;
+>+	enum intel_engine_id id;
+>+	const i915_reg_t *regs;
+>+	unsigned int num = 0;
+>+
+>+	if (GRAPHICS_VER(i915) == 12) {
+>+		regs = gen12_regs;
+>+		num = ARRAY_SIZE(gen12_regs);
+>+	} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
+>+		regs = gen8_regs;
+>+		num = ARRAY_SIZE(gen8_regs);
+>+	} else if (GRAPHICS_VER(i915) < 8) {
+>+		return;
+>+	}
+>+
+>+	if (drm_WARN_ONCE(&i915->drm, !num,
+>+			  "Platform does not implement TLB invalidation!"))
+>+		return;
+>+
+>+	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
+>+
+>+	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
+>+
+>+	awake = 0;
+>+	for_each_engine(engine, gt, id) {
+>+		struct reg_and_bit rb;
+>+
+>+		if (!intel_engine_pm_is_awake(engine))
+>+			continue;
+>+
+>+		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
+>+		if (!i915_mmio_reg_offset(rb.reg))
+>+			continue;
+>+
+>+		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+>+		awake |= engine->mask;
+>+	}
+>+
+>+	GT_TRACE(gt, "invalidated engines %08x\n", awake);
+>+
+>+	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
+>+	if (awake &&
+>+	    (IS_TIGERLAKE(i915) ||
+>+	     IS_DG1(i915) ||
+>+	     IS_ROCKETLAKE(i915) ||
+>+	     IS_ALDERLAKE_S(i915) ||
+>+	     IS_ALDERLAKE_P(i915)))
+>+		intel_uncore_write_fw(uncore, GEN12_OA_TLB_INV_CR, 1);
+>+
+>+	spin_unlock_irq(&uncore->lock);
+>+
+>+	for_each_engine_masked(engine, gt, awake, tmp) {
+>+		struct reg_and_bit rb;
+>+
+>+		/*
+>+		 * HW architecture suggest typical invalidation time at 40us,
+>+		 * with pessimistic cases up to 100us and a recommendation to
+>+		 * cap at 1ms. We go a bit higher just in case.
+>+		 */
+>+		const unsigned int timeout_us = 100;
+>+		const unsigned int timeout_ms = 4;
+>+
+>+		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
+>+		if (__intel_wait_for_register_fw(uncore,
+>+						 rb.reg, rb.bit, 0,
+>+						 timeout_us, timeout_ms,
+>+						 NULL))
+>+			drm_err_ratelimited(&gt->i915->drm,
+>+					    "%s TLB invalidation did not complete in %ums!\n",
+>+					    engine->name, timeout_ms);
+>+	}
+>+
+>+	/*
+>+	 * Use delayed put since a) we mostly expect a flurry of TLB
+>+	 * invalidations so it is good to avoid paying the forcewake cost and
+>+	 * b) it works around a bug in Icelake which cannot cope with too rapid
+>+	 * transitions.
+>+	 */
+>+	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
+>+}
+>+
+>+void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno)
+>+{
+>+	intel_wakeref_t wakeref;
+>+
+>+	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+>+		return;
+>+
+>+	if (intel_gt_is_wedged(gt))
+>+		return;
+>+
+>+	if (tlb_seqno_passed(gt, seqno))
+>+		return;
+>+
+>+	with_intel_gt_pm_if_awake(gt, wakeref) {
+>+		mutex_lock(&gt->tlb.invalidate_lock);
+>+		if (tlb_seqno_passed(gt, seqno))
+>+			goto unlock;
+>+
+>+		mmio_invalidate_full(gt);
+>+
+>+		write_seqcount_invalidate(&gt->tlb.seqno);
+>+unlock:
+>+		mutex_unlock(&gt->tlb.invalidate_lock);
+>+	}
+>+}
+>+
+>+void intel_gt_init_tlb(struct intel_gt *gt)
+>+{
+>+	mutex_init(&gt->tlb.invalidate_lock);
+>+	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
+>+}
+>+
+>+void intel_gt_fini_tlb(struct intel_gt *gt)
+>+{
+>+	mutex_destroy(&gt->tlb.invalidate_lock);
+>+}
+>diff --git a/drivers/gpu/drm/i915/gt/intel_tlb.h b/drivers/gpu/drm/i915/gt/intel_tlb.h
+>new file mode 100644
+>index 000000000000..46ce25bf5afe
+>--- /dev/null
+>+++ b/drivers/gpu/drm/i915/gt/intel_tlb.h
+>@@ -0,0 +1,29 @@
+>+/* SPDX-License-Identifier: MIT */
+>+/*
+>+ * Copyright © 2022 Intel Corporation
+>+ */
+>+
+>+#ifndef INTEL_TLB_H
+>+#define INTEL_TLB_H
+>+
+>+#include <linux/seqlock.h>
+>+#include <linux/types.h>
+>+
+>+#include "intel_gt_types.h"
+>+
+>+void intel_gt_invalidate_tlb_full(struct intel_gt *gt, u32 seqno);
+>+
+>+void intel_gt_init_tlb(struct intel_gt *gt);
+>+void intel_gt_fini_tlb(struct intel_gt *gt);
+>+
+>+static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
+>+{
+>+	return seqprop_sequence(&gt->tlb.seqno);
+>+}
+>+
+>+static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
+>+{
+>+	return intel_gt_tlb_seqno(gt) | 1;
+>+}
+>+
+>+#endif /* INTEL_TLB_H */
+>diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
+>index 84a9ccbc5fc5..fe947d1456d5 100644
+>--- a/drivers/gpu/drm/i915/i915_vma.c
+>+++ b/drivers/gpu/drm/i915/i915_vma.c
+>@@ -33,6 +33,7 @@
+> #include "gt/intel_engine_heartbeat.h"
+> #include "gt/intel_gt.h"
+> #include "gt/intel_gt_requests.h"
+>+#include "gt/intel_tlb.h"
+>
+> #include "i915_drv.h"
+> #include "i915_gem_evict.h"
+>-- 
+>2.36.1
+>

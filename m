@@ -2,115 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EEF587DD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2560587DD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbiHBOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S237014AbiHBODE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbiHBOCF (ORCPT
+        with ESMTP id S237219AbiHBOCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:02:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BB81EC4B;
-        Tue,  2 Aug 2022 07:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=V0bxhMuFGVpCNNCF4xZRTUKyf/IayXy8Ya6lnRp3eRM=; b=c+eAFf5yhUXd9GX0Xjgrlhci7w
-        u2nOpt7L7zHbqejW/W8vk/nWgJn+ectptRURVYjT9GuMuXoEVJIaCYb4G5Ck4ZpHR4CLsKuu3OqN/
-        UOuPSi+rY3emlnof227LYCgd9DmHLebeowaDY2JGOUaE4Fm34ooWGqBKlCBs/xEoS0YNkRIqLWa/v
-        I8vAY7O/oQOUU4gQL9rUsv8JBoGFsCmC+/8CJhQ7W26arJc4Cjd48pz0Kcqam8A8TcpciOihHNlee
-        PzeqvSu311ay0SXY7CEZwHekoJZFc2qRIlA9vp82SOEaYgiZxu950tHs7KZpBGWstkWLgZ8CyQzyu
-        S3Zudeiw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oIsT4-008PBV-Tf; Tue, 02 Aug 2022 14:01:54 +0000
-Date:   Tue, 2 Aug 2022 15:01:54 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v8 00/31] Rust support
-Message-ID: <YukuUtuXm/xPUuoP@casper.infradead.org>
-References: <20220802015052.10452-1-ojeda@kernel.org>
- <YukYByl76DKqa+iD@casper.infradead.org>
- <CANiq72k7JKqq5-8Nqf3Q2r2t_sAffC8g86A+v8yBc=W-1--_Tg@mail.gmail.com>
+        Tue, 2 Aug 2022 10:02:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA3C2CCBB;
+        Tue,  2 Aug 2022 07:02:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18B8861470;
+        Tue,  2 Aug 2022 14:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E3FC433C1;
+        Tue,  2 Aug 2022 14:02:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659448949;
+        bh=9x8ASZ0DiQgO5GNP2Mu6gvzA5hkYQ45AJslM0qDehok=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vDblaSuPvLl+nPY4rTYEgQYQmOu7xnBbaFZQ1DS6DpW29hypZFzjTo2dZORIMQEog
+         4HYtAhBYTBUHrqnwX/sK65wjMCec1VYVM9xeYqSkHAM+tuYfFWkhVugNJceDjeSxx2
+         +jxKBkyJL0xsfBLV5Hh3Rj8rrrgBQcdrr7eSgKOPQfB5hcXLxPaTwdrTFGkTHJvkWZ
+         3Sh6/9Kq8A1kw5sRKBt5gybbcyKhv/loE5AzXiPldDsyw5m65F7i2n8+atBot+PQT3
+         Vo6MS0yKGg2sZQTVgEGetNeb/0YeM4PJnmT5Q45y1mrRD6mPcigGptJ/a67+ntU3L9
+         Vv+ElTHoEuMbw==
+Received: by mail-oi1-f179.google.com with SMTP id u9so16582429oiv.12;
+        Tue, 02 Aug 2022 07:02:29 -0700 (PDT)
+X-Gm-Message-State: AJIora9hc1sl82UhiFy6Qwj1Kfs7ZppOdS4j53UnNfxTzw1hrBoQP7d+
+        9fovh1dVVbcjotOPQ6qUy7o8mq11Xve3bE6biSQ=
+X-Google-Smtp-Source: AGRyM1vhdcxaJSMtWocwq78kAx7+XyhE96BKlFzWeNKFk3pe34YuksL1BZV9jZwcA2lETmfrhztmwIL9yTNqxjT8Lg0=
+X-Received: by 2002:a05:6808:1489:b0:33a:861c:838e with SMTP id
+ e9-20020a056808148900b0033a861c838emr8253279oiw.228.1659448948586; Tue, 02
+ Aug 2022 07:02:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72k7JKqq5-8Nqf3Q2r2t_sAffC8g86A+v8yBc=W-1--_Tg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org> <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
+In-Reply-To: <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 2 Aug 2022 16:02:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXExyKKHK0A48vmqxqRHrT+xgDt3qB1gHvJ31gPAeE2KSA@mail.gmail.com>
+Message-ID: <CAMj1kXExyKKHK0A48vmqxqRHrT+xgDt3qB1gHvJ31gPAeE2KSA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure Application
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 03:45:50PM +0200, Miguel Ojeda wrote:
-> Hi Willy,
-> 
-> On Tue, Aug 2, 2022 at 2:26 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Tue, 2 Aug 2022 at 15:22, Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>
+>
+>
+> On 8/2/22 13:51, Srinivas Kandagatla wrote:
+> > Hi Maximilian,
 > >
-> > None of this (afaict) has been discussed on linux-fsdevel.  And I may
-> > have missed somethiing, but I don't see the fs module in this series
-> > of patches.  Could linux-fsdevel be cc'd on the development of Rust
-> > support for filesystems in the future?
-> 
-> In order to provide example drivers and kernel modules, we need to
-> have some safe abstractions for them, thus we are adding some as we
-> need them.
-> 
-> More importantly, the abstractions also serve as a showcase of how
-> they may be written in the future if Rust support is merged.
-> 
-> This does not mean these abstractions are a final design or that we
-> plan to develop them independently of subsystem maintainers. In fact,
-> we would prefer the opposite: in the future, when the support is
-> merged and more people start having more experience with Rust, we hope
-> that the respective kernel maintainers start developing and
-> maintaining the abstractions themselves.
-> 
-> But we have to start somewhere, and at least provide enough examples
-> to serve as guidance and to show that it is actually possible to write
-> abstractions that restrict the amount of unsafe code.
-> 
-> And, of course, if you are already interested in developing them, that
-> would be actually great and we would love your input and/or that you
-> join us.
+> > On 23/07/2022 23:49, Maximilian Luz wrote:
+> >> On modern Qualcomm platforms, access to EFI variables is restricted to
+> >> the secure world / TrustZone, i.e. the Trusted Execution Environment
+> >> (TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
+> >> therefore need to talk to the UEFI Secure Application (uefisecapp),
+> >> residing in the TrEE.
+> >>
+> >> This series adds support for accessing EFI variables on those platforms.
+> >>
+> >> To do this, we first need to add some SCM call functions used to manage
+> >> and talk to Secure Applications. A very small subset of this interface
+> >> is added in the second patch (whereas the first one exports the required
+> >> functions for that). Interface specifications are extracted from [1].
+> >> While this does not (yet) support re-entrant SCM calls (including
+> >> callbacks and listeners), this is enough to talk to the aforementioned
+> >> uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
+> >> and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
+> >> Yoga C630 devices).
+> >>
+> >> The third patch adds a client driver for uefisecapp, installing the
+> >> respective efivar operations. The application interface has been reverse
+> >> engineered from the Windows QcTrEE8180.sys driver.
+> >>
+> >> Apart from uefisecapp, there are more Secure Applications running that
+> >> we might want to support in the future. For example, on the Surface Pro
+> >> X (sc8180x-based), the TPM is also managed via one.
+> >>
+> >> I'm not sure whether this should go to drivers/firmware or to
+> >> drivers/soc/qcom. I've put this into firmware as all of this is
+> >> essentially an interface to the secure firmware running in the TrustZone
+> >> (and SCM stuff is handled here already), but please let me know if I
+> >> should move this.
+> >
+> >  From what I see so far is that this is adapted from downstream qseecom driver, this approach could work for a limited usecases but not scalable, as we cannot add drivers for each Qualcomm specific TA in kernel.
+> > This has to be handled in much generic way using Linux TEE framework, and let the userspace side deal with TA specific bits.
+>
+> I generally agree with the sentiment, however UEFI variables should IMHO be
+> handled by the kernel. Moving handling of those to userspace breaks things like
+> EFI-based pstore and efivarfs. The latter will in turn break some user-space
+> tools (most notably efibootmgr used by e.g. GRUB and I think fwupdmgr which
+> needs to set some capsule variables). Ideally, we would find a way to not break
+> these, i.e. have them work out-of-the-box.
+>
 
-No objections to any of this.  I love the idea of being able to write
-filesystems in Rust.  I just think it would go more smoothly if
-linux-fsdevel were involved more closely so people at least have the
-option of being able to follow design decisions, and hopefully influence
-them.  That goes both ways, of course; I hardly think our current
-operations structures are the optimum way to implement a filesystem,
-and having fresh eyes say things like "But that shouldn't be part of the
-address_space_operations" can impel better abstractions.
+Only capsule-on-disk requires SetVariable() at runtime, and I doubt
+whether these platforms implement any of that.
 
-> As for the `fs` module, I see in lore 2 patches didn't make it
-> through, but I didn't get a bounce (I do get bounces for the
-> rust-for-linux ML, but I was told that was fine as long as LKML got
-> them). Sorry about that... I will ask what to do.
+> A similar argumentation might apply to the TPM app.
+>
 
-The obvious answer is to split out the 'fs module' into its own patch
-;-)  I presume it was part of the kernel crate which would have been
-either patch 17 or 11 in that series?
+There is a difference, though - the TPM is modeled as a device and
+runtime access to it is implemented as a device driver, which is only
+accessed from user space.
 
-> Meanwhile, you can see the patches in this branch:
-> 
->     https://github.com/Rust-for-Linux/linux.git rust-next
-> 
-> Cheers,
-> Miguel
+> > AFAIU, Qualcomm is moving away from qseecom interface to new smc-invoke interface, most of Qualcomm SoCs starting from SDM660 already have support to this.
+> >
+> > This interface provides a better abstracted IPC mechanism to talk to TA. Most of these TA specific interfaces are packed in closed userspace source.
+> > Having said that QTEE smcinvoke driver can be modeled as a proper TEE driver with Userspace driving the TA specific bits using existing tee uapis.
+> > This also brings in other features like loading, Listeners aka callbacks, secure memory allocations..etc.
+> >
+> > In the past, I have tried to do a prototype of this smcinvoke driver as a proper tee driver, incase you are interested patches are at https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-qcomtee
+> > Plan is to discuss with Qualcomm and send it for upstream review.
+>
+> Thanks for this information! So as far as I understand it, this is currently an
+> interface to user-space only, i.e. does not allow in-kernel drivers for apps?
+> It would be great if this could then be extended to handle (the bare minimum
+> of) in-kernel drivers (i.e. only things that the kernel itself needs, like EFI
+> variables). Alternatively, I'm happy to hear suggestions on how we not break
+> the aforementioned things while moving handling off to userspace.
+>
+> > I think its worth exploring if uefisecapp can talk smcinvoke.
+> > I can ping Qualcomm engineers to see if that is doable.
+>
+> I think that would be great! Thanks!
+>
+> Regards,
+> Max

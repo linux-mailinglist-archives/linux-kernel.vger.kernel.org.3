@@ -2,209 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D038587CA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26164587CA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236675AbiHBMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S236508AbiHBMvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236668AbiHBMuu (ORCPT
+        with ESMTP id S232569AbiHBMvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:50:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395DF65D5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:50:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b16so9980448edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 05:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RoJV2wJ4KbDqOj+E/M+uEoPsAjfRx5p0+xqH+Wf97C0=;
-        b=EZjGz9cfSrUEb1g8RAmPgEIWsC4LAV2uUdBVDNifF7PPrFK3EAlVctkaszK1xgEJu9
-         MVMAG5Vx/10aMpdUbXoqblltfzcM9vHPhYTWtZy9Wu6T3uAat5FahAwzaZ60PEI7filB
-         +bOIMahCrr1i51ZNdw/Xs5kvBLogAp+InEdpE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RoJV2wJ4KbDqOj+E/M+uEoPsAjfRx5p0+xqH+Wf97C0=;
-        b=Sp331CSjuXQEuuI6etcAijbwRK8YnPCgGq03Q6WNJmdWgWa5hDqs9IdnLyjNSS2UXm
-         T5wr/eRcSXicfIpU7M4l3DiGSHMcyCmK+/TgWkoApj9NafdS3NeHJZjr1Q67JkJETv58
-         tu2YZHHvsqDfw3t9TcU/XsJ5/LmTTMpuDPQj1taqUhWcP/otKw0x9IZV3FqE20wZDc4Q
-         as6XuauK0ioOkIqwr9wbQnaT/+wZjyW1u1P0ygzR72fQ3wpB8vRKDXhAuNAeQlssXqRj
-         Plqw0XZYzJZrtzk9/mDu8VwRnqhFDaFK5KdlHRRN9ejz6a7+6Kh4Fz3ERMn2qKBRz936
-         BopQ==
-X-Gm-Message-State: AJIora92VLDwPyc3/5ofv2Zs8PYeOyStk8p4RQDv7llaTJGbo7dBJ8vo
-        TKWgn4EIJxwWM7WVuOulSyPqmuqTku5Wt/oEdi+rig==
-X-Google-Smtp-Source: AGRyM1usnWfdQvEVZVYX75vJe2yLJEQa7jM3TmANtN36PTwsLRnqFCGbyBmZc0W/KRjSQuI+QiQVbqjyrtaqiTWogG8=
-X-Received: by 2002:a05:6402:2b8d:b0:43a:5410:a9fc with SMTP id
- fj13-20020a0564022b8d00b0043a5410a9fcmr21254484edb.99.1659444643810; Tue, 02
- Aug 2022 05:50:43 -0700 (PDT)
+        Tue, 2 Aug 2022 08:51:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10701DFC5;
+        Tue,  2 Aug 2022 05:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659444682; x=1690980682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OmAWyGmKcIghX+hLvGMM11Dgc6+5nsQXlAGINkiy/O0=;
+  b=ja6gFipYJLXY7hm0g/493EYhCipbpSLAY6wJZ6oAS/as6KQKenxt6BHf
+   WBD+rdGGc9+kstWnxu/gsYSA2c+FuSbFohprplVmjEmiBXtzjVQF+SqTU
+   uFqinm7V1Y6hfyMkoV1+lkR5FRlOqrj4w74yAUuyblgYazK/rSQuORzah
+   cnJiyidtctr9AafvAlHlf2Dcu3IFiNJj/+1ZiUBrDVq3TnOusy/MFObWW
+   tj/PlKhOqrqzh+NRUMIxGk71uF0hw9Z5+XSacX62YjKfQo4RG+1VRi+bB
+   6buR7X8TJrATH4rv0yhMS4OD+Glg2bHzYMbn2nFYMz+lPomAypxHEsFW7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="289411276"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="289411276"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 05:51:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="691835530"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2022 05:51:18 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIrMk-000G3b-11;
+        Tue, 02 Aug 2022 12:51:18 +0000
+Date:   Tue, 2 Aug 2022 20:50:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ajit Khaparde <ajit.khaparde@broadcom.com>,
+        michael.chan@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
+        selvin.xavier@broadcom.com, leon@kernel.org,
+        linux-rdma@vger.kernel.org, andrew.gospodarek@broadcom.com
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH 1/2] net/bnxt: Add auxiliary driver support
+Message-ID: <202208022009.CPnSrR8H-lkp@intel.com>
+References: <20220724231458.93830-2-ajit.khaparde@broadcom.com>
 MIME-Version: 1.0
-References: <20220727191949.GD18822@redhat.com> <YuGUyayVWDB7R89i@tycho.pizza>
- <20220728091220.GA11207@redhat.com> <YuL9uc8WfiYlb2Hw@tycho.pizza>
- <87pmhofr1q.fsf@email.froward.int.ebiederm.org> <YuPlqp0jSvVu4WBK@tycho.pizza>
- <87v8rfevz3.fsf@email.froward.int.ebiederm.org> <YuQPc51yXhnBHjIx@tycho.pizza>
- <87h72zes14.fsf_-_@email.froward.int.ebiederm.org> <20220729204730.GA3625@redhat.com>
- <YuR4MRL8WxA88il+@ZenIV> <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 2 Aug 2022 14:50:32 +0200
-Message-ID: <CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2] fuse: In fuse_flush only wait if someone wants
- the return code
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Oleg Nesterov <oleg@redhat.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220724231458.93830-2-ajit.khaparde@broadcom.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Jul 2022 at 07:11, Eric W. Biederman <ebiederm@xmission.com> wrote:
->
->
-> In my very light testing this resolves a hang where a thread of the
-> fuse server was accessing the fuse filesystem (the fuse server is
-> serving up), when the fuse server is killed.
->
-> The practical problem is that the fuse server file descriptor was
-> being closed after the file descriptor into the fuse filesystem so
-> that the fuse filesystem operations were being blocked for instead of
-> being aborted.  Simply skipping the unnecessary wait resolves this
-> issue.
->
-> This is just a proof of concept and someone should look to see if the
-> fuse max_background limit could cause a problem with this approach.
+Hi Ajit,
 
-max_background just throttles the number of background requests that
-the userspace filesystem can *unqueue*.   It doesn't affect queuing in
-any way.
+I love your patch! Yet something to improve:
 
-> Additionally testing PF_EXITING is a very crude way to tell if someone
-> wants the return code from the vfs flush operation.  As such in the
-> long run it probably makes sense to get some direct vfs support for
-> knowing if flush needs to block until all of the flushing is complete
-> and a status/return code can be returned.
->
-> Unless I have missed something this is a generic optimization that can
-> apply to many network filesystems.
->
-> Al, vfs folks? (igrab/iput sorted so as not to be distractions).
->
-> Perhaps a .flush_async method without a return code and a
-> filp_close_async function without a return code to take advantage of
-> this in the general sense.
->
-> Waiting potentially indefinitely for user space in do_exit seems like a
-> bad idea.  Especially when all that the wait is for is to get a return
-> code that will never be examined.
+[auto build test ERROR on net-next/master]
+[also build test ERROR on net/master horms-ipvs/master linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The wait is for posix locks to get unlocked.  But "remote" posix locks
-are almost never used due to problems like this, so I think it's safe
-to do this.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajit-Khaparde/Add-Auxiliary-driver-support/20220725-071610
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 502c6f8cedcce7889ccdefeb88ce36b39acd522f
+config: riscv-randconfig-c043-20220801 (https://download.01.org/0day-ci/archive/20220802/202208022009.CPnSrR8H-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c93534ee352bf1888f05720b89a915f15d49fc51
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajit-Khaparde/Add-Auxiliary-driver-support/20220725-071610
+        git checkout c93534ee352bf1888f05720b89a915f15d49fc51
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  fs/fuse/file.c | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
->
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index 05caa2b9272e..2bd94acd761f 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -464,6 +464,62 @@ static void fuse_sync_writes(struct inode *inode)
->         fuse_release_nowrite(inode);
->  }
->
-> +struct fuse_flush_args {
-> +       struct fuse_args args;
-> +       struct fuse_flush_in inarg;
-> +       struct inode *inode;
-> +};
-> +
-> +static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
-> +{
-> +       struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
-> +
-> +       if (err == -ENOSYS) {
-> +               fm->fc->no_flush = 1;
-> +               err = 0;
-> +       }
-> +
-> +       /*
-> +        * In memory i_blocks is not maintained by fuse, if writeback cache is
-> +        * enabled, i_blocks from cached attr may not be accurate.
-> +        */
-> +       if (!err && fm->fc->writeback_cache)
-> +               fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
-> +
-> +       iput(fa->inode);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Filesystems might expect not just he inode to not be destroyed but
-also the file, so do what other file operations do, keep a ref on ff:
+All errors (new ones prefixed by >>):
 
-fuse_file_put(fa->ff, false, false);
+   riscv32-linux-ld: drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.o: in function `.L0 ':
+>> bnxt_ulp.c:(.text+0xed2): undefined reference to `auxiliary_device_init'
+   riscv32-linux-ld: drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.o: in function `.L248':
+>> bnxt_ulp.c:(.text+0xf12): undefined reference to `__auxiliary_device_add'
 
-> +       kfree(fa);
-> +}
-> +
-> +static int fuse_flush_async(struct file *file, fl_owner_t id)
-> +{
-> +       struct inode *inode = file_inode(file);
-> +       struct fuse_mount *fm = get_fuse_mount(inode);
-> +       struct fuse_file *ff = file->private_data;
-> +       struct fuse_flush_args *fa;
-> +       int err;
-> +
-> +       fa = kzalloc(sizeof(*fa), GFP_KERNEL);
-> +       if (!fa)
-> +               return -ENOMEM;
-> +
-> +       fa->inarg.fh = ff->fh;
-> +       fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-> +       fa->args.opcode = FUSE_FLUSH;
-> +       fa->args.nodeid = get_node_id(inode);
-> +       fa->args.in_numargs = 1;
-> +       fa->args.in_args[0].size = sizeof(fa->inarg);
-> +       fa->args.in_args[0].value = &fa->inarg;
-> +       fa->args.force = true;
-> +       fa->args.end = fuse_flush_end;
-> +       fa->inode = igrab(inode);
-
-fa->ff = fuse_file_get(ff);
-
-> +
-> +       err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
-> +       if (err)
-> +               fuse_flush_end(fm, &fa->args, err);
-> +
-> +       return err;
-> +}
-> +
->  static int fuse_flush(struct file *file, fl_owner_t id)
->  {
->         struct inode *inode = file_inode(file);
-> @@ -495,6 +551,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
->         if (fm->fc->no_flush)
->                 goto inval_attr_out;
->
-> +       if (current->flags & PF_EXITING)
-> +               return fuse_flush_async(file, id);
-> +
->         memset(&inarg, 0, sizeof(inarg));
->         inarg.fh = ff->fh;
->         inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-> --
-> 2.35.3
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

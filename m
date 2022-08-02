@@ -2,170 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7DD5876C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C1E5876D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiHBFgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S235860AbiHBFip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiHBFgH (ORCPT
+        with ESMTP id S235725AbiHBFia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:36:07 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B833A1D;
-        Mon,  1 Aug 2022 22:35:59 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id C770B5FD18;
-        Tue,  2 Aug 2022 08:35:56 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659418556;
-        bh=s0r/iXvFD+efR/87tJWYy1/jn0Av1q3wDPXPXDWSn7Q=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=EDUhQ89at6HrJPo/K+zklY7mnKfUpKDibHga9HiC4EWsfGOqyYRzyQ2eSZgUL259j
-         p4h+4Sss+mwC18BLvpw4XLEbJWsTjAHeDEILAPAkaU+mixdu9oWa7cwrCF9gy07mWh
-         FAaUmJbgPi9y6ZgegaKn9vbbciybt2ofA10PGSU84LjP/nHNIaxd/1DXrv2UHJdvKl
-         5FaQM921wGKlWFsOO5SMSQn+mPxTU4SmnpBxRFraJFpmtuikVa+AatTMNzI6raMdCU
-         x75s6sQQWgJAHqfpsHIda8iX6BIpWMHr6S10taXBOHGoEInbZ7hjNPLtszLSMPmYUK
-         zM7Mz77AujWaA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  2 Aug 2022 08:35:51 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Vishnu Dasa <vdasa@vmware.com>
-CC:     Stefano Garzarella <sgarzare@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v2 0/9] vsock: updates for SO_RCVLOWAT handling
-Thread-Topic: [RFC PATCH v2 0/9] vsock: updates for SO_RCVLOWAT handling
-Thread-Index: AQHYn/u277di/gNdd06E3+5muuhZo62R+OsAgAEl3oCAB9EsAIAAATsA
-Date:   Tue, 2 Aug 2022 05:35:48 +0000
-Message-ID: <29ac3503-87e9-7236-bc9b-b1ac50c19f04@sberdevices.ru>
-References: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
- <20220727123710.pwzy6ag3gavotxda@sgarzare-redhat>
- <d5166d4e-4892-4cdf-df01-4da43b8e269d@sberdevices.ru>
- <B67A3903-3AF5-40D0-9887-F2253F55C7EB@vmware.com>
-In-Reply-To: <B67A3903-3AF5-40D0-9887-F2253F55C7EB@vmware.com>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7A592B319152FC41B33B0F21D1CF39E2@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Tue, 2 Aug 2022 01:38:30 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D05343313;
+        Mon,  1 Aug 2022 22:38:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxoM5KuOhiZCABAA--.2520S2;
+        Tue, 02 Aug 2022 13:38:19 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>, hejinyang@loongson.cn,
+        tangyouling@loongson.cn, zhangqing@loongson.cn
+Subject: [PATCH v3 0/4] Add unwinder support
+Date:   Tue,  2 Aug 2022 13:38:14 +0800
+Message-Id: <20220802053818.18051-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/02 03:42:00 #20031579
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxoM5KuOhiZCABAA--.2520S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF4UJFWkZryxtw13Aw4ktFb_yoW5GF1rpF
+        ZrurnxGF4DGrySvrnxtw18urn5Jw4kG3y2qa9FyryrCF4aqF17ZrnYvF9rZ3WDt395Jry0
+        qFn5G3s0ga1jqaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUjWxRDUUUUU==
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDIuMDguMjAyMiAwODozMSwgVmlzaG51IERhc2Egd3JvdGU6DQo+IA0KPiANCj4+IE9uIEp1
-bCAyNywgMjAyMiwgYXQgMTE6MDggUE0sIEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJk
-ZXZpY2VzLnJ1PiB3cm90ZToNCj4+DQo+PiBPbiAyNy4wNy4yMDIyIDE1OjM3LCBTdGVmYW5vIEdh
-cnphcmVsbGEgd3JvdGU6DQo+Pj4gSGkgQXJzZW5peSwNCj4+Pg0KPj4+IE9uIE1vbiwgSnVsIDI1
-LCAyMDIyIGF0IDA3OjU0OjA1QU0gKzAwMDAsIEFyc2VuaXkgS3Jhc25vdiB3cm90ZToNCj4+Pj4g
-SGVsbG8sDQo+Pj4+DQo+Pj4+IFRoaXMgcGF0Y2hzZXQgaW5jbHVkZXMgc29tZSB1cGRhdGVzIGZv
-ciBTT19SQ1ZMT1dBVDoNCj4+Pj4NCj4+Pj4gMSkgYWZfdnNvY2s6DQo+Pj4+IER1cmluZyBteSBl
-eHBlcmltZW50cyB3aXRoIHplcm9jb3B5IHJlY2VpdmUsIGkgZm91bmQsIHRoYXQgaW4gc29tZQ0K
-Pj4+PiBjYXNlcywgcG9sbCgpIGltcGxlbWVudGF0aW9uIHZpb2xhdGVzIFBPU0lYOiB3aGVuIHNv
-Y2tldCBoYXMgbm9uLQ0KPj4+PiBkZWZhdWx0IFNPX1JDVkxPV0FUKGUuZy4gbm90IDEpLCBwb2xs
-KCkgd2lsbCBhbHdheXMgc2V0IFBPTExJTiBhbmQNCj4+Pj4gUE9MTFJETk9STSBiaXRzIGluICdy
-ZXZlbnRzJyBldmVuIG51bWJlciBvZiBieXRlcyBhdmFpbGFibGUgdG8gcmVhZA0KPj4+PiBvbiBz
-b2NrZXQgaXMgc21hbGxlciB0aGFuIFNPX1JDVkxPV0FUIHZhbHVlLiBJbiB0aGlzIGNhc2UsdXNl
-ciBzZWVzDQo+Pj4+IFBPTExJTiBmbGFnIGFuZCB0aGVuIHRyaWVzIHRvIHJlYWQgZGF0YShmb3Ig
-ZXhhbXBsZSB1c2luZyAncmVhZCgpJw0KPj4+PiBjYWxsKSwgYnV0IHJlYWQgY2FsbCB3aWxsIGJl
-IGJsb2NrZWQsIGJlY2F1c2UgU09fUkNWTE9XQVQgbG9naWMgaXMNCj4+Pj4gc3VwcG9ydGVkIGlu
-IGRlcXVldWUgbG9vcCBpbiBhZl92c29jay5jLiBCdXQgdGhlIHNhbWUgdGltZSwgUE9TSVgNCj4+
-Pj4gcmVxdWlyZXMgdGhhdDoNCj4+Pj4NCj4+Pj4gIlBPTExJTiBEYXRhIG90aGVyIHRoYW4gaGln
-aC1wcmlvcml0eSBkYXRhIG1heSBiZSByZWFkIHdpdGhvdXQNCj4+Pj4gYmxvY2tpbmcuDQo+Pj4+
-IFBPTExSRE5PUk0gTm9ybWFsIGRhdGEgbWF5IGJlIHJlYWQgd2l0aG91dCBibG9ja2luZy4iDQo+
-Pj4+DQo+Pj4+IFNlZSBodHRwczovL25hbTA0LnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2su
-Y29tLz91cmw9aHR0cHMlM0ElMkYlMkZ3d3cub3Blbi1zdGQub3JnJTJGanRjMSUyRnNjMjIlMkZv
-cGVuJTJGbjQyMTcucGRmJmFtcDtkYXRhPTA1JTdDMDElN0N2ZGFzYSU0MHZtd2FyZS5jb20lN0Nh
-ZTgzNjIxZDg3MDk0MjFkZTE0YjA4ZGE3MDVmYWE5YyU3Q2IzOTEzOGNhM2NlZTRiNGFhNGQ2Y2Q4
-M2Q5ZGQ2MmYwJTdDMCU3QzElN0M2Mzc5NDU4NTM0NzM3NDAyMzUlN0NVbmtub3duJTdDVFdGcGJH
-WnNiM2Q4ZXlKV0lqb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3
-aUxDSlhWQ0k2TW4wJTNEJTdDMzAwMCU3QyU3QyU3QyZhbXA7c2RhdGE9TnJieWNDY1ZYVjlUejhO
-UkRZQnBuRHg3S3BGRjZCWnBTUmJ1aHoxSWZKNCUzRCZhbXA7cmVzZXJ2ZWQ9MCwgcGFnZSAyOTMu
-DQo+Pj4+DQo+Pj4+IFNvLCB3ZSBoYXZlLCB0aGF0IHBvbGwoKSBzeXNjYWxsIHJldHVybnMgUE9M
-TElOLCBidXQgcmVhZCBjYWxsIHdpbGwNCj4+Pj4gYmUgYmxvY2tlZC4NCj4+Pj4NCj4+Pj4gQWxz
-byBpbiBtYW4gcGFnZSBzb2NrZXQoNykgaSBmb3VuZCB0aGF0Og0KPj4+Pg0KPj4+PiAiU2luY2Ug
-TGludXggMi42LjI4LCBzZWxlY3QoMiksIHBvbGwoMiksIGFuZCBlcG9sbCg3KSBpbmRpY2F0ZSBh
-DQo+Pj4+IHNvY2tldCBhcyByZWFkYWJsZSBvbmx5IGlmIGF0IGxlYXN0IFNPX1JDVkxPV0FUIGJ5
-dGVzIGFyZSBhdmFpbGFibGUuIg0KPj4+Pg0KPj4+PiBJIGNoZWNrZWQgVENQIGNhbGxiYWNrIGZv
-ciBwb2xsKCkobmV0L2lwdjQvdGNwLmMsIHRjcF9wb2xsKCkpLCBpdA0KPj4+PiB1c2VzIFNPX1JD
-VkxPV0FUIHZhbHVlIHRvIHNldCBQT0xMSU4gYml0LCBhbHNvIGkndmUgdGVzdGVkIFRDUCB3aXRo
-DQo+Pj4+IHRoaXMgY2FzZSBmb3IgVENQIHNvY2tldCwgaXQgd29ya3MgYXMgUE9TSVggcmVxdWly
-ZWQuDQo+Pj4+DQo+Pj4+IEkndmUgYWRkZWQgc29tZSBmaXhlcyB0byBhZl92c29jay5jIGFuZCB2
-aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jLA0KPj4+PiB0ZXN0IGlzIGFsc28gaW1wbGVtZW50ZWQu
-DQo+Pj4+DQo+Pj4+IDIpIHZpcnRpby92c29jazoNCj4+Pj4gSXQgYWRkcyBzb21lIG9wdGltaXph
-dGlvbiB0byB3YWtlIHVwcywgd2hlbiBuZXcgZGF0YSBhcnJpdmVkLiBOb3csDQo+Pj4+IFNPX1JD
-VkxPV0FUIGlzIGNvbnNpZGVyZWQgYmVmb3JlIHdha2UgdXAgc2xlZXBlcnMgd2hvIHdhaXQgbmV3
-IGRhdGEuDQo+Pj4+IFRoZXJlIGlzIG5vIHNlbnNlLCB0byBraWNrIHdhaXRlciwgd2hlbiBudW1i
-ZXIgb2YgYXZhaWxhYmxlIGJ5dGVzDQo+Pj4+IGluIHNvY2tldCdzIHF1ZXVlIDwgU09fUkNWTE9X
-QVQsIGJlY2F1c2UgaWYgd2Ugd2FrZSB1cCByZWFkZXIgaW4NCj4+Pj4gdGhpcyBjYXNlLCBpdCB3
-aWxsIHdhaXQgZm9yIFNPX1JDVkxPV0FUIGRhdGEgYW55d2F5IGR1cmluZyBkZXF1ZXVlLA0KPj4+
-PiBvciBpbiBwb2xsKCkgY2FzZSwgUE9MTElOL1BPTExSRE5PUk0gYml0cyB3b24ndCBiZSBzZXQs
-IHNvIHN1Y2gNCj4+Pj4gZXhpdCBmcm9tIHBvbGwoKSB3aWxsIGJlICJzcHVyaW91cyIuIFRoaXMg
-bG9naWMgaXMgYWxzbyB1c2VkIGluIFRDUA0KPj4+PiBzb2NrZXRzLg0KPj4+DQo+Pj4gTmljZSwg
-aXQgbG9va3MgZ29vZCENCj4+IFRoYW5rIFlvdSENCj4+Pg0KPj4+Pg0KPj4+PiAzKSB2bWNpL3Zz
-b2NrOg0KPj4+PiBTYW1lIGFzIDIpLCBidXQgaSdtIG5vdCBzdXJlIGFib3V0IHRoaXMgY2hhbmdl
-cy4gV2lsbCBiZSB2ZXJ5IGdvb2QsDQo+Pj4+IHRvIGdldCBjb21tZW50cyBmcm9tIHNvbWVvbmUg
-d2hvIGtub3dzIHRoaXMgY29kZS4NCj4+Pg0KPj4+IEkgQ0NlZCBWTUNJIG1haW50YWluZXJzIHRv
-IHRoZSBwYXRjaCBhbmQgYWxzbyB0byB0aGlzIGNvdmVyLCBtYXliZSBiZXR0ZXIgdG8ga2VlcCB0
-aGVtIGluIHRoZSBsb29wIGZvciBuZXh0IHZlcnNpb25zLg0KPj4+DQo+Pj4gKEpvcmdlbidzIGFu
-ZCBSYWplc2gncyBlbWFpbHMgYm91bmNlZCBiYWNrLCBzbyBJJ20gQ0NpbmcgaGVyZSBvbmx5IEJy
-eWFuLCBWaXNobnUsIGFuZCBwdi1kcml2ZXJzQHZtd2FyZS5jb20pDQo+PiBPaywgaSdsbCBDQyB0
-aGVtIGluIHRoZSBuZXh0IHZlcnNpb24NCj4+Pg0KPj4+Pg0KPj4+PiA0KSBIeXBlci1WOg0KPj4+
-PiBBcyBEZXh1YW4gQ3VpIG1lbnRpb25lZCwgZm9yIEh5cGVyLVYgdHJhbnNwb3J0IGl0IGlzIGRp
-ZmZpY3VsdCB0bw0KPj4+PiBzdXBwb3J0IFNPX1JDVkxPV0FULCBzbyBoZSBzdWdnZXN0ZWQgdG8g
-ZGlzYWJsZSB0aGlzIGZlYXR1cmUgZm9yDQo+Pj4+IEh5cGVyLVYuDQo+Pj4NCj4+PiBJIGxlZnQg
-YSBjb3VwbGUgb2YgY29tbWVudHMgaW4gc29tZSBwYXRjaGVzLCBidXQgaXQgc2VlbXMgdG8gbWUg
-dG8gYmUgaW4gYSBnb29kIHN0YXRlIDotKQ0KPj4+DQo+Pj4gSSB3b3VsZCBqdXN0IHN1Z2dlc3Qg
-YSBiaXQgb2YgYSByZS1vcmdhbml6YXRpb24gb2YgdGhlIHNlcmllcyAodGhlIHBhdGNoZXMgYXJl
-IGZpbmUsIGp1c3QgdGhlIG9yZGVyKToNCj4+PiAtIGludHJvZHVjZSB2c29ja19zZXRfcmN2bG93
-YXQoKQ0KPj4+IC0gZGlzYWJsaW5nIGl0IGZvciBodl9zb2NrDQo+Pj4gLSB1c2UgJ3RhcmdldCcg
-aW4gdmlydGlvIHRyYW5zcG9ydHMNCj4+PiAtIHVzZSAndGFyZ2V0JyBpbiB2bWNpIHRyYW5zcG9y
-dHMNCj4+PiAtIHVzZSBzb2NrX3Jjdmxvd2F0IGluIHZzb2NrX3BvbGwoKQ0KPj4+IEkgdGhpbmsg
-aXMgYmV0dGVyIHRvIHBhc3Mgc29ja19yY3Zsb3dhdCgpIGFzICd0YXJnZXQnIHdoZW4gdGhlDQo+
-Pj4gdHJhbnNwb3J0cyBhcmUgYWxyZWFkeSBhYmxlIHRvIHVzZSBpdA0KPj4+IC0gYWRkIHZzb2Nr
-X2RhdGFfcmVhZHkoKQ0KPj4+IC0gdXNlIHZzb2NrX2RhdGFfcmVhZHkoKSBpbiB2aXJ0aW8gdHJh
-bnNwb3J0cw0KPj4+IC0gdXNlIHZzb2NrX2RhdGFfcmVhZHkoKSBpbiB2bWNpIHRyYW5zcG9ydHMN
-Cj4+PiAtIHRlc3RzDQo+Pj4NCj4+PiBXaGF0IGRvIHlvdSB0aGluaz8NCj4+IE5vIHByb2JsZW0h
-IEkgdGhpbmsgaSBjYW4gd2FpdCBmb3IgcmVwbHkgZnJvbSBWTVdhcmUgZ3V5cyBiZWZvcmUgcHJl
-cGFyaW5nIHYzDQo+IA0KPiBMb29rcyBmaW5lIHRvIG1lLCBlc3BlY2lhbGx5IHRoZSBWTUNJIHBh
-cnRzLiAgUGxlYXNlIHNlbmQgdjMsIGFuZCB3ZSBjYW4gdGVzdCBpdA0KPiBmcm9tIFZNQ0kgcG9p
-bnQgb2YgdmlldyBhcyB3ZWxsLg0KR3JlYXQsIHRoYW5rIHlvdSBmb3IgcmVwbHkuIEknbGwgcHJl
-cGFyZSB2MyBBU0FQIGFuZCBZb3Ugd2lsbCBiZSBDQ2VkDQoNClRoYW5rcywNCkFyc2VuaXkNCj4g
-DQo+IFRoYW5rcywNCj4gVmlzaG51DQoNCg==
+This series in order to add stacktrace support, Some upcoming features require
+these changes, like trace, divide unwinder into guess unwinder and prologue
+unwinder is to add new unwinders in the future, eg:unwind_frame, unwind_orc .etc.
+Three stages when we do unwind,
+  1) unwind_start(), the prapare of unwinding, fill unwind_state.
+  2) unwind_done(), judge whether the unwind process is finished or not.
+  3) unwind_next_frame(), unwind the next frame.
+
+you can test them by:
+  1) echo t > /proc/sysrq-trigger
+  2) cat /proc/*/stack
+  4) ftrace: function graph
+  5) uprobe: echo 1 > ./options/userstacktrace
+
+Changes from v1 to v2:
+
+- Add the judgment of the offset value of ra in the prologue.
+  (Suggested by Youling).
+- Create an inline function to check the sign bit, which is convenient
+  for extending other types of immediates.  (Suggested by Jinyang).
+- Fix sparse warning :
+    arch/loongarch/include/asm/uaccess.h:232:32: sparse: sparse: incorrect
+    type in argument 2 (different address spaces) @@     expected void const
+    *from @@     got void const [noderef] __user *from @@
+- Add USER_STACKTRACE support as a series.
+
+Changes from v2 to v3:
+
+- Move unwind_start definition and use location, remove #ifdef in unwind_state
+  and use type instead of enable. (Suggested by Huacai).
+- Separated fixes for uaccess.h. (Suggested by Huacai).
+
+Qing Zhang (4):
+  LoongArch: Add guess unwinder support
+  LoongArch: Add prologue unwinder support
+  LoongArch: Add stacktrace support
+  LoongArch: Add USER_STACKTRACE support
+
+ arch/loongarch/Kconfig                  |   6 +
+ arch/loongarch/Kconfig.debug            |  28 ++++
+ arch/loongarch/include/asm/inst.h       |  52 +++++++
+ arch/loongarch/include/asm/processor.h  |   9 ++
+ arch/loongarch/include/asm/stacktrace.h |  22 +++
+ arch/loongarch/include/asm/switch_to.h  |  14 +-
+ arch/loongarch/include/asm/unwind.h     |  47 +++++++
+ arch/loongarch/kernel/Makefile          |   4 +
+ arch/loongarch/kernel/asm-offsets.c     |   2 +
+ arch/loongarch/kernel/process.c         |  64 +++++++++
+ arch/loongarch/kernel/stacktrace.c      |  78 +++++++++++
+ arch/loongarch/kernel/switch.S          |   2 +
+ arch/loongarch/kernel/traps.c           |  24 ++--
+ arch/loongarch/kernel/unwind_guess.c    |  65 +++++++++
+ arch/loongarch/kernel/unwind_prologue.c | 172 ++++++++++++++++++++++++
+ 15 files changed, 573 insertions(+), 16 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/unwind.h
+ create mode 100644 arch/loongarch/kernel/stacktrace.c
+ create mode 100644 arch/loongarch/kernel/unwind_guess.c
+ create mode 100644 arch/loongarch/kernel/unwind_prologue.c
+
+-- 
+2.20.1
+

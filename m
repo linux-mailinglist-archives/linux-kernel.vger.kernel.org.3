@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720665882DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493D85882E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiHBTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S231892AbiHBT4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiHBTzt (ORCPT
+        with ESMTP id S229504AbiHBT4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:55:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C49EDE9E;
-        Tue,  2 Aug 2022 12:55:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCBF5B8205F;
-        Tue,  2 Aug 2022 19:55:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6185FC433D6;
-        Tue,  2 Aug 2022 19:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659470146;
-        bh=peWWzehbf3IqEKCxVqXKq+x7rnMhBy0XuoXBw32BqhY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gKnUVA6T53A+zKuxotZrppQbDFgusMgjj3GmR2Qo57NEKyv5oVQLpPjkE+qGvW+xl
-         ySO/W1xl5ZyoShzLwWIaOkq/SKGEHuAp93JNlHoToveZmM5mga8VRUKujCkk3pxAfq
-         XCruKTAF6+cH06/oI0RqCuG8gWdjkiCXtzphRI9zFmE7f5x+9Mqqw2KiA/Yz13gQAW
-         OelJETWaqiI+NmP5MguVbayOJLlHidqlyPS9HyGuiIeaR86U4W2ZbgaH+LsY+me6iQ
-         r1BNi/Yqraju1rywywqrA64JNpuHHAU79KwiLG1Yi82r1Sdq2+vr4im9hLPzkxlI9y
-         H0nFGsQqCIoKg==
-Date:   Tue, 2 Aug 2022 12:55:44 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] fsverity update for 5.20
-Message-ID: <YumBQPF6U9b6wGV9@sol.localdomain>
+        Tue, 2 Aug 2022 15:56:11 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1E7FD1A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:56:10 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 206so9757429pgb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 12:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ifexnCMHYvvlc34nu1xb2qsCA6kxwpy+X5K2hbG8gi8=;
+        b=PHXYjGFlIIXjhXIBuPjNt53vqsnJaXzf/SlvkNEMo+ps28jBD6Ez/yl7i4fDsL/ODz
+         RGKdOQr+K3zKh7Qn+pPq6ceQ3B7cbr7+M1Qfb3odpg8oYs/KZDQ8kjFzsTRDaU3/xtfs
+         IgLMDz7I/u8hact9Ohz75x2gbWl1DKRhxV2dau4ueFhopzIfAUZUGBRROy8GnjHK9RKE
+         SoFluR8JyeawX0BHnCOJ1RpyE56kC0uo/W+1r9hi/HWHJYr1P19Ngr5Bh/TN5EFhAElo
+         mUBDlZQRgq5TYKts03lE/vTqHac2FwQeK495/HqSD0w3oAbcc21xMFG3+AgALrmD8X1X
+         By4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ifexnCMHYvvlc34nu1xb2qsCA6kxwpy+X5K2hbG8gi8=;
+        b=gvP8u2SzRkCeRDkuBx7DtYY2/sldNEB/8VKqvJvopso57J3XI4ykfg+XUR+1pk43aX
+         0/IS4XLY7zuBnZUT1sHgZVY7spSwRSS1mI+MKuypRjfpS8u+SIYSMfqLOsTFmw0XwW6Q
+         Ej/cEZJBFmUPUDnANbyy/ke8QSmsbVhITwfG2t2m6+fbfp8uoLE/dtkgOzyPV1deX57j
+         xM/1NYwSrqFDyHsKiBWBiCejpJjdjoG9y3Tt/Zesb9I1JDNJhaWjOeC0OIZP+yKpRsJj
+         BchG/PUA2zCc0WAn5hqGJGGWE75/TMKHu590JOcFDenJzuIBP97jiY4J9yQBDmep3TOF
+         mX7Q==
+X-Gm-Message-State: AJIora+cCDI9jHyySVqmKPJLVxOXdBCGFS8y3yIy0at5VHvp7xP/8eUQ
+        Nhih8ASzlA90dm1V9Ft7aVaGkg==
+X-Google-Smtp-Source: AGRyM1u6USAMGnNDWbX+/eMDa6MiHd8/m4L9+0+lgc8NQu+auOJQxzlr1CTmszwb5mlU40S2nv8NAw==
+X-Received: by 2002:a05:6a00:248b:b0:52b:f07b:796c with SMTP id c11-20020a056a00248b00b0052bf07b796cmr21929332pfv.47.1659470170306;
+        Tue, 02 Aug 2022 12:56:10 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t14-20020aa7946e000000b0052d9b4bd8fasm4229798pfq.38.2022.08.02.12.56.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 12:56:09 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 19:56:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 028/102] KVM: TDX: allocate/free TDX vcpu structure
+Message-ID: <YumBVb0yZ1VP1cRA@google.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <cfc7cfc72ea187b31e1c39df379a20545ca9b686.1656366338.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cfc7cfc72ea187b31e1c39df379a20545ca9b686.1656366338.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+On Mon, Jun 27, 2022, isaku.yamahata@intel.com wrote:
+> +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +	int ret, i;
+> +
+> +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
+> +	if (!vcpu->arch.apic)
+> +		return -EINVAL;
+> +
+> +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
+> +
+> +	ret = tdx_alloc_td_page(&tdx->tdvpr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tdx->tdvpx = kcalloc(tdx_caps.tdvpx_nr_pages, sizeof(*tdx->tdvpx),
+> +			GFP_KERNEL_ACCOUNT);
+> +	if (!tdx->tdvpx) {
+> +		ret = -ENOMEM;
+> +		goto free_tdvpr;
+> +	}
+> +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
+> +		ret = tdx_alloc_td_page(&tdx->tdvpx[i]);
+> +		if (ret)
+> +			goto free_tdvpx;
+> +	}
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/fs/fscrypt/fscrypt.git tags/fsverity-for-linus
-
-for you to fetch changes up to 8da572c52a9be6d006bae290339c629fc6501910:
-
-  fs-verity: mention btrfs support (2022-07-15 23:42:30 -0700)
-
-----------------------------------------------------------------
-
-Just a small documentation update to mention the btrfs support.
-
-----------------------------------------------------------------
-Eric Biggers (1):
-      fs-verity: mention btrfs support
-
- Documentation/filesystems/fsverity.rst | 53 +++++++++++++++++++---------------
- fs/verity/Kconfig                      | 10 +++----
- 2 files changed, 35 insertions(+), 28 deletions(-)
+Similar to HKID allocation for intrahost migration, can the TDVPX allocations be
+moved to KVM_TDX_INIT_VCPU?

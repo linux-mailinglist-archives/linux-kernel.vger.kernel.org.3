@@ -2,207 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352EC5874BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046EF5874C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbiHBAOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S235385AbiHBAYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 20:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiHBAN7 (ORCPT
+        with ESMTP id S230203AbiHBAX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:13:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F131474F1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:13:58 -0700 (PDT)
+        Mon, 1 Aug 2022 20:23:59 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2283F27
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:23:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659399238; x=1690935238;
+  t=1659399838; x=1690935838;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mH9QTsymrrUuRjEBtWASBE/TGJtDu1kPtUpfsETj/Y8=;
-  b=mSWXZqd+q0dv1SCND9BteWzbd9/ZRKDyhq8uCEEKzKjQ40niOQ56g3iQ
-   O03Gdg2S8RcyW6rGavXC6OsVW/H2/tWcTKRHzgJ1OY1rYM0cZPMM60VJq
-   o3lXo66a/PnT0/rpbZPgED3uXqZTKk8LrQmj4T3U7cUps0rNni/uWr6W2
-   FofRzAVLAXnh72epNyjAFps1Mac4a2Ho9W2D8MuNIPZuN3YZWQs4m+PfI
-   D2KNcjg/iFFiKRXyrSwpJzhXSjGFQdydH+EjRbltZJjoHsUs4p8hvQuvi
-   a+3I1yGPYjFCTCqgyUVt01balcQKkiNB9IdKeNj6cpzbVcD/rDJtItr+V
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="288037009"
+  bh=8siIZYIvJgQacjUBU8FoE+u5AO0D3uOwTzZGvH99QHY=;
+  b=VtZR9vrCTYLNg9wZ9cd5j9knbZSGW1S78DxXxx/ptcqEjnzTWkJ9B1kX
+   kNuXB3XSXNWpHz/O7JFwFOMpSY6E1wDuq6r1lTDOXQBIqD1uVjl+Dzenn
+   J1Zj3l8lFSjen444oG+4pu9u0kTrQHbd2pTaI/24YRUZigW8/goI2rmY9
+   JlAidRg4CGKXz1wCjbwbSgpZRwCR7W7S0ZP/3+DyQSeE2rr6/fZfjmC0V
+   VhAegIDOEV+hGjr3xpJCwaz9U/1jLUMMxYspv2eBix/UNjwHm4v6AbCJL
+   Tw6eA3T5YpT4167QrWQiyaZfoX+qh2wsmZXwllyxOo9i6y8Gyq05bgxzg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="315118015"
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="288037009"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 17:13:57 -0700
+   d="scan'208";a="315118015"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 17:23:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="661385791"
+   d="scan'208";a="577991448"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Aug 2022 17:13:56 -0700
+  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2022 17:23:56 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oIfXn-000FVL-32;
-        Tue, 02 Aug 2022 00:13:55 +0000
-Date:   Tue, 2 Aug 2022 08:13:01 +0800
+        id 1oIfhU-000FVn-0W;
+        Tue, 02 Aug 2022 00:23:56 +0000
+Date:   Tue, 2 Aug 2022 08:23:31 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Manisha Chinthapally <manisha.chinthapally@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mchinth:sep_socwatch_linux_5_16 1/1]
- drivers/platform/x86/socperf/socperfdrv.c:1551:13: sparse: sparse: function
- 'socperf_Device_Control_Compat' with external linkage has definition
-Message-ID: <202208020830.a08LyvcZ-lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: drivers/irqchip/irq-loongson-eiointc.c:305:42: error: invalid use of
+ undefined type 'struct acpi_madt_bio_pic'
+Message-ID: <202208020817.G8vpKIfp-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/mchinth/linux sep_socwatch_linux_5_16
-head:   4cbfca15a262729ae8557758b49226fe4769f582
-commit: 4cbfca15a262729ae8557758b49226fe4769f582 [1/1] Platform/x86 Updated SEP/SOCPERF drivers to latest version
-config: x86_64-randconfig-s023 (https://download.01.org/0day-ci/archive/20220802/202208020830.a08LyvcZ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/mchinth/linux/commit/4cbfca15a262729ae8557758b49226fe4769f582
-        git remote add mchinth https://github.com/mchinth/linux
-        git fetch --no-tags mchinth sep_socwatch_linux_5_16
-        git checkout 4cbfca15a262729ae8557758b49226fe4769f582
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9de1f9c8ca5100a02a2e271bdbde36202e251b4b
+commit: dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7 irqchip: Add Loongson Extended I/O interrupt controller support
+date:   13 days ago
+config: loongarch-randconfig-r032-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020817.G8vpKIfp-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/platform/x86/socperf/socperfdrv.c:208:13: sparse: sparse: function 'SOCPERF_Read_Data3' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: function 'lwpmudrv_Stop_Mem' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: function 'socperf_Service_IOCTL' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: function 'socperf_Device_Control' with external linkage has definition
->> drivers/platform/x86/socperf/socperfdrv.c:1551:13: sparse: sparse: function 'socperf_Device_Control_Compat' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: function 'SOCPERF_Abnormal_Terminate' with external linkage has definition
-   drivers/platform/x86/socperf/socperfdrv.c:104:22: sparse: sparse: symbol 'socperf_drv_version' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:105:5: sparse: sparse: symbol 'read_unc_ctr_info' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:106:10: sparse: sparse: symbol 'dispatch_uncore' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:108:14: sparse: sparse: symbol 'socperf_global_ec' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:109:14: sparse: sparse: symbol 'socperf_abnormal_terminate' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:110:11: sparse: sparse: symbol 'socperf_control' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:114:8: sparse: sparse: symbol 'socperf_pcb_size' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __user *ptr @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void const volatile [noderef] __user *ptr
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *__ptr_pu @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     expected void [noderef] __user *__ptr_pu
-   drivers/platform/x86/socperf/socperfdrv.c:246:18: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:328:37: sparse:     got void *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got void *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:407:62: sparse:     got void *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:559:63: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:641:39: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:742:64: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned int [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1043:43: sparse:     got unsigned int [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1066:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1089:28: sparse: sparse: Using plain integer as NULL pointer
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1100:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got unsigned long long [usertype] * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1135:45: sparse:     got unsigned long long [usertype] *
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1154:29: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1175:13: sparse: sparse: symbol 'lwpmudrv_Stop_Mem' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char *[usertype] buf_usr_to_drv @@
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1286:54: sparse:     got char *[usertype] buf_usr_to_drv
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *[usertype] buf_drv_to_usr @@
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1310:30: sparse:     got char *[usertype] buf_drv_to_usr
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got char *buf @@
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     expected void [noderef] __user *to
-   drivers/platform/x86/socperf/socperfdrv.c:1348:26: sparse:     got char *buf
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const * @@
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1368:76: sparse:     got char const *
-   drivers/platform/x86/socperf/socperfdrv.c:1392:22: sparse: sparse: symbol 'socperf_Service_IOCTL' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype] @@
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1537:55: sparse:     got struct IOCTL_ARGS_NODE_S [usertype] *[usertype]
-   drivers/platform/x86/socperf/socperfdrv.c:1516:13: sparse: sparse: symbol 'socperf_Device_Control' was not declared. Should it be static?
->> drivers/platform/x86/socperf/socperfdrv.c:1570:42: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got struct IOCTL_COMPAT_ARGS_NODE_S [usertype] *[usertype] @@
-   drivers/platform/x86/socperf/socperfdrv.c:1570:42: sparse:     expected void const [noderef] __user *from
-   drivers/platform/x86/socperf/socperfdrv.c:1570:42: sparse:     got struct IOCTL_COMPAT_ARGS_NODE_S [usertype] *[usertype]
-   drivers/platform/x86/socperf/socperfdrv.c:1576:18: sparse: sparse: cast removes address space '__user' of expression
-   drivers/platform/x86/socperf/socperfdrv.c:1578:18: sparse: sparse: cast removes address space '__user' of expression
-   drivers/platform/x86/socperf/socperfdrv.c:1551:13: sparse: sparse: symbol 'socperf_Device_Control_Compat' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1602:12: sparse: sparse: symbol 'SOCPERF_Abnormal_Terminate' was not declared. Should it be static?
-   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *read )( ... ) @@     got long ( * )( ... ) @@
-   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     expected long ( *read )( ... )
-   drivers/platform/x86/socperf/socperfdrv.c:1637:17: sparse:     got long ( * )( ... )
-   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *write )( ... ) @@     got long ( * )( ... ) @@
-   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     expected long ( *write )( ... )
-   drivers/platform/x86/socperf/socperfdrv.c:1638:18: sparse:     got long ( * )( ... )
+All errors (new ones prefixed by >>):
 
-vim +/socperf_Device_Control_Compat +1551 drivers/platform/x86/socperf/socperfdrv.c
+   drivers/irqchip/irq-loongson-eiointc.c:289:20: warning: no previous prototype for 'acpi_get_vec_parent' [-Wmissing-prototypes]
+     289 | struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+         |                    ^~~~~~~~~~~~~~~~~~~
+   drivers/irqchip/irq-loongson-eiointc.c:301:26: warning: 'union acpi_subtable_headers' declared inside parameter list will not be visible outside of this definition or declaration
+     301 | pch_pic_parse_madt(union acpi_subtable_headers *header,
+         |                          ^~~~~~~~~~~~~~~~~~~~~
+   drivers/irqchip/irq-loongson-eiointc.c: In function 'pch_pic_parse_madt':
+>> drivers/irqchip/irq-loongson-eiointc.c:305:42: error: invalid use of undefined type 'struct acpi_madt_bio_pic'
+     305 |         unsigned int node = (pchpic_entry->address >> 44) & 0xf;
+         |                                          ^~
+   drivers/irqchip/irq-loongson-eiointc.c: At top level:
+   drivers/irqchip/irq-loongson-eiointc.c:315:26: warning: 'union acpi_subtable_headers' declared inside parameter list will not be visible outside of this definition or declaration
+     315 | pch_msi_parse_madt(union acpi_subtable_headers *header,
+         |                          ^~~~~~~~~~~~~~~~~~~~~
+   drivers/irqchip/irq-loongson-eiointc.c: In function 'acpi_cascade_irqdomain_init':
+>> drivers/irqchip/irq-loongson-eiointc.c:329:9: error: implicit declaration of function 'acpi_table_parse_madt'; did you mean 'acpi_table_parse'? [-Werror=implicit-function-declaration]
+     329 |         acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         acpi_table_parse
+>> drivers/irqchip/irq-loongson-eiointc.c:329:31: error: 'ACPI_MADT_TYPE_BIO_PIC' undeclared (first use in this function); did you mean 'ACPI_MADT_TYPE_IO_APIC'?
+     329 |         acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+         |                               ^~~~~~~~~~~~~~~~~~~~~~
+         |                               ACPI_MADT_TYPE_IO_APIC
+   drivers/irqchip/irq-loongson-eiointc.c:329:31: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/irqchip/irq-loongson-eiointc.c:331:31: error: 'ACPI_MADT_TYPE_MSI_PIC' undeclared (first use in this function); did you mean 'ACPI_MADT_TYPE_IO_APIC'?
+     331 |         acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC,
+         |                               ^~~~~~~~~~~~~~~~~~~~~~
+         |                               ACPI_MADT_TYPE_IO_APIC
+   drivers/irqchip/irq-loongson-eiointc.c: In function 'eiointc_acpi_init':
+>> drivers/irqchip/irq-loongson-eiointc.c:353:34: error: invalid use of undefined type 'struct acpi_madt_eio_pic'
+     353 |         priv->node = acpi_eiointc->node;
+         |                                  ^~
+   drivers/irqchip/irq-loongson-eiointc.c:354:32: error: invalid use of undefined type 'struct acpi_madt_eio_pic'
+     354 |         node_map = acpi_eiointc->node_map ? : -1ULL;
+         |                                ^~
+   drivers/irqchip/irq-loongson-eiointc.c:375:61: error: invalid use of undefined type 'struct acpi_madt_eio_pic'
+     375 |         parent_irq = irq_create_mapping(parent, acpi_eiointc->cascade);
+         |                                                             ^~
+   drivers/irqchip/irq-loongson-eiointc.c:382:41: error: invalid use of undefined type 'struct acpi_madt_eio_pic'
+     382 |         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
+         |                                         ^~
+   drivers/irqchip/irq-loongson-eiointc.c:383:41: error: invalid use of undefined type 'struct acpi_madt_eio_pic'
+     383 |         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
+         |                                         ^~
+   cc1: some warnings being treated as errors
 
-  1549	
-  1550	#if defined(CONFIG_COMPAT) && defined(DRV_EM64T)
-> 1551	extern long socperf_Device_Control_Compat(struct file *filp, unsigned int cmd,
-  1552						  unsigned long arg)
-  1553	{
-  1554		int status = OS_SUCCESS;
-  1555		IOCTL_COMPAT_ARGS_NODE local_args_compat;
-  1556		IOCTL_ARGS_NODE local_args;
-  1557	
-  1558		memset(&local_args_compat, 0, sizeof(IOCTL_COMPAT_ARGS_NODE));
-  1559		SOCPERF_PRINT_DEBUG("Compat: type: %d, subcommand: %d\n",
-  1560				    _IOC_TYPE(cmd), _IOC_NR(cmd));
-  1561	
-  1562		if (_IOC_TYPE(cmd) != LWPMU_IOC_MAGIC) {
-  1563			SOCPERF_PRINT_ERROR("Unknown IOCTL magic:%d\n", _IOC_TYPE(cmd));
-  1564			return OS_ILLEGAL_IOCTL;
-  1565		}
-  1566	
-  1567		MUTEX_LOCK(ioctl_lock);
-  1568		if (arg) {
-  1569			status = copy_from_user(&local_args_compat,
-> 1570						(IOCTL_COMPAT_ARGS)arg,
-  1571						sizeof(IOCTL_COMPAT_ARGS_NODE));
-  1572		}
-  1573		local_args.len_drv_to_usr = local_args_compat.len_drv_to_usr;
-  1574		local_args.len_usr_to_drv = local_args_compat.len_usr_to_drv;
-  1575		local_args.buf_drv_to_usr =
-  1576			(char *)compat_ptr(local_args_compat.buf_drv_to_usr);
-  1577		local_args.buf_usr_to_drv =
-  1578			(char *)compat_ptr(local_args_compat.buf_usr_to_drv);
-  1579	
-  1580		status = socperf_Service_IOCTL(filp, _IOC_NR(cmd), local_args);
-  1581		MUTEX_UNLOCK(ioctl_lock);
-  1582	
-  1583		return status;
-  1584	}
-  1585	#endif
-  1586	
+
+vim +305 drivers/irqchip/irq-loongson-eiointc.c
+
+   288	
+ > 289	struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+   290	{
+   291		int i;
+   292	
+   293		for (i = 0; i < MAX_IO_PICS; i++) {
+   294			if (node == vec_group[i].node)
+   295				return vec_group[i].parent;
+   296		}
+   297		return NULL;
+   298	}
+   299	
+   300	static int __init
+   301	pch_pic_parse_madt(union acpi_subtable_headers *header,
+   302			       const unsigned long end)
+   303	{
+   304		struct acpi_madt_bio_pic *pchpic_entry = (struct acpi_madt_bio_pic *)header;
+ > 305		unsigned int node = (pchpic_entry->address >> 44) & 0xf;
+   306		struct irq_domain *parent = acpi_get_vec_parent(node, pch_group);
+   307	
+   308		if (parent)
+   309			return pch_pic_acpi_init(parent, pchpic_entry);
+   310	
+   311		return -EINVAL;
+   312	}
+   313	
+   314	static int __init
+ > 315	pch_msi_parse_madt(union acpi_subtable_headers *header,
+   316			       const unsigned long end)
+   317	{
+   318		struct acpi_madt_msi_pic *pchmsi_entry = (struct acpi_madt_msi_pic *)header;
+   319		struct irq_domain *parent = acpi_get_vec_parent(eiointc_priv[nr_pics - 1]->node, msi_group);
+   320	
+   321		if (parent)
+   322			return pch_msi_acpi_init(parent, pchmsi_entry);
+   323	
+   324		return -EINVAL;
+   325	}
+   326	
+   327	static int __init acpi_cascade_irqdomain_init(void)
+   328	{
+ > 329		acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+   330				      pch_pic_parse_madt, 0);
+ > 331		acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC,
+   332				      pch_msi_parse_madt, 1);
+   333		return 0;
+   334	}
+   335	
+   336	int __init eiointc_acpi_init(struct irq_domain *parent,
+   337					     struct acpi_madt_eio_pic *acpi_eiointc)
+   338	{
+   339		int i, parent_irq;
+   340		unsigned long node_map;
+   341		struct eiointc_priv *priv;
+   342	
+   343		priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+   344		if (!priv)
+   345			return -ENOMEM;
+   346	
+   347		priv->domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_eiointc);
+   348		if (!priv->domain_handle) {
+   349			pr_err("Unable to allocate domain handle\n");
+   350			goto out_free_priv;
+   351		}
+   352	
+ > 353		priv->node = acpi_eiointc->node;
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,150 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46195588291
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532EE588299
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbiHBTg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S233188AbiHBThC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiHBTg0 (ORCPT
+        with ESMTP id S229585AbiHBTgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:36:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C2E1903B;
-        Tue,  2 Aug 2022 12:36:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D192A3874B;
-        Tue,  2 Aug 2022 19:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659468983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKwulhIx515tBs9KarM3vkMSrD1Pc01HY8nx9DrB6Ko=;
-        b=lIxgGmgiJjHkY4CpdyLYOyrlEZr6WXWjSxUXwr7T3l6G3upE9bl6mkc06qVICbyJV25D5j
-        NN6IMBnVJ2ikFzF6e3VxiEeAurK54PYq8864I4xh6dLh4NxwezB7QvuJh7TqP2aaMbzwUo
-        7jVXeZ1t2Lcu0SuoH5FUysm4N4xDEv4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659468983;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKwulhIx515tBs9KarM3vkMSrD1Pc01HY8nx9DrB6Ko=;
-        b=NQfgJ+ZFnqEBYm9kVtWA/ahzEUqSBoH97VXJ/OSSWF6JgIYf9eKq87vwjCYHFcq5dZwe0B
-        VtNvgOR948PO1lAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4438713A8E;
-        Tue,  2 Aug 2022 19:36:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qliOAbd86WItbAAAMHmgww
-        (envelope-from <ematsumiya@suse.de>); Tue, 02 Aug 2022 19:36:23 +0000
-Date:   Tue, 2 Aug 2022 16:36:20 -0300
-From:   Enzo Matsumiya <ematsumiya@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     linux-cifs@vger.kernel.org, smfrench@gmail.com, pc@cjr.nz,
-        ronniesahlberg@gmail.com, nspmangalore@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tom@talpey.com, samba-technical@lists.samba.org,
-        pshilovsky@samba.org
-Subject: Re: [RFC PATCH 0/3] Rename "cifs" module to "smbfs"
-Message-ID: <20220802193620.dyvt5qiszm2pobsr@cyberdelia>
-References: <20220801190933.27197-1-ematsumiya@suse.de>
- <c05f4fc668fa97e737758ab03030d7170c0edbd9.camel@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+        Tue, 2 Aug 2022 15:36:52 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B2052FCA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:36:47 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272JJUiw029881;
+        Tue, 2 Aug 2022 19:36:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2022-7-12;
+ bh=XTZUY1ZURsvPtPltYJtKyQsYkFMaV9qii149zHxo7Jw=;
+ b=A77+sUm2KjA8WStyYYmKOw835P7qmVJuNaeUqiOnDaFxKHUv5KLb1SkV50RqCqXFdhiE
+ lELbbcXOC+3D1QtR0/TVqaZv5tYW8CaHMPgMqLEOJgQffeA7J2Tpy1ktYu27E7FuO9Gj
+ jglw8tgVgUTXLG6DsNZpc5pph1axT4e0sewVKdkpAfJyDKgB21P3UfsGWEBG3l3xAWYC
+ HGP8wXzwrj5fbnkYyyWeBfJUvGNryjVLM3BvBRh9DJHESSZdcPxsClRuzfGaUlX5UOF3
+ eW9HudvVmAZcyuz1vXRh0k5aRy13CDRI0Reo2j/58H28qiencRXw9PwWa/E0c8oxffDD kw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmvh9qsbs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Aug 2022 19:36:28 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 272HorJt014152;
+        Tue, 2 Aug 2022 19:36:26 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu32nk6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Aug 2022 19:36:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l2dny4rXztJXg/Lpltajgu4oVvHfQF1rR6zch1k+Yr3BUTCGdNIPugnd6Ip8XgwH2zZsMLyn7SAWwqpdpuO35omK2ifNf5CDgyxXSNxOMZwITQTWEDTM1uo4ZSxEOIIja0zBzkzKgYy5hk36JP+79TfLIXY5k3PU7Fe09qTqHAAk2soK0fjawIQGiSLtIz6tVKD4wHt5zxjW0ArG/aHB5YBOFCYwmRpFt7MxPPkapXzTW8SYMtQ5lHlL3+mm4ASd1vVrO2T59r7vCWXwBGBhz4WUk7Nyoc7yXi73trLkx9inPbGYblwGuTVD0UuOGDtQPYJ/pBfySu7N6EGMb5ZwwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XTZUY1ZURsvPtPltYJtKyQsYkFMaV9qii149zHxo7Jw=;
+ b=HXhITeGeDnm3uUyOedHg/Q0t+bVbkcm9SDLydrPx8IGTWd24L1vd1vPP/RZGjoyU6+pqIUHcpDpyJlBNiH4Pnyzyq4/4b+OtPScQqy9czrlbPZsuM5snBa5bo439hcA0kUFFCOHBeZ455npHhrf7u0p4KL+rM1iUlfFfUcvEIFEng7JIG8+Kikx5kRUazBkO0jijiZPkhGUusRdIeEUHZhQ9itSwo7QBfCRol7HXRpL0szKUzg//u+GJEXVgx9d9qUGu1DMVmU/GYJpgo5IGcbSWRZD0DrUDAAdJGWVl7Z7Et46f4tWmM93abHHwKrFDi8PHrLx3hBxCipL9Ai3OQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XTZUY1ZURsvPtPltYJtKyQsYkFMaV9qii149zHxo7Jw=;
+ b=q9QHkkLpytGfKdqBT3I1BcrOIhxCO/ITBr0PmT5IeBts7YFqNtAwl/uAP97+XZIZSh2W5F9jF4joGpPJLWmRXXS8Qvu4If5V/YYNNqyOQvIosIRJZ+oFywME0Ujvsn0mEtBR5+GBwVHmnHUCZIbBNGtgvAWQtSHOySCJKwETtEc=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM6PR10MB2985.namprd10.prod.outlook.com (2603:10b6:5:71::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Tue, 2 Aug
+ 2022 19:36:24 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 19:36:24 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: [PATCH] maple_tree: Fix mas_alloc_nodes()
+Thread-Topic: [PATCH] maple_tree: Fix mas_alloc_nodes()
+Thread-Index: AQHYpqcmPt7CdAaAQ06YVNNnxmjt4w==
+Date:   Tue, 2 Aug 2022 19:36:24 +0000
+Message-ID: <20220802193612.2886170-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5a45c4ef-c631-451a-980f-08da74be494d
+x-ms-traffictypediagnostic: DM6PR10MB2985:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MSPsRj5ufD3YlmujNLmduOc04Tcs1ZqbrInEELbxle5CClO1DhtD7hi3U7Itr+ZWZaWmZ+2by6jK4DR+7fEbboZbt8d3DqPo+Ky5bDJX75VcYPEhSQXxN1A+gzDpsCSWp+CtoukYeKye5s/ej5RguudtGahgPZ/6+QLnlfY5bbaJ25ojSBeh12AgbiSU+odfN8+7XUfDnHej0zU4CXmKUNyGHN2LrQMucPdfNQSUNxMTTIZYsoLp/OksJx0rJ+2gHICiFsHPT0R+BCp4J071FNzG1+MZPeaH+rYgy7Tc6XDsmvaflmBYU+seW2zWtxB61nKR9GBTYTToKgjUPPDQLln1xRE0guuxA/Oim14RgIGnZModPVSWRJuuzoBaB9neEubFJLyk41ZAmgIkawQW1vAirB3Q7IBDBdIElZGTbglDdTVinXGnPxJKKfEJwbL3Np5jkR99RjMoBUiB7+F16GwR1mItMFZfJhRjdTsNXGzqk0vQG1mJ5hNTho9pNb41+9VxZHRyAYbDzuLBy3XvshFXsyXiIVQ585zRhb7xSTZCZ4jPGWRK5nG0c6uQVuRuYAEswaqX4tE/v9P6VTfML2kidk3qgIZ/A49N755jUFNurTNGrw8GHtCMfczYNsrD87I0vrXi8oJkKRPfW37FUaVfrbcyBrX0orogZ2WK3m4qhx7sG1+y6HlKQzFJG5MeoHcGs1eGYCJUonU0Zqo0QGnIMTkDo6yGeWIq2dj84t+oTvPn9NsfZPLWzEFciVZuCnoVreW0fcdGgXweFgv9fc8BPAfQ1r77FuVdxZtOUr4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(136003)(39860400002)(366004)(376002)(316002)(26005)(478600001)(38100700002)(122000001)(83380400001)(71200400001)(6512007)(110136005)(6486002)(186003)(1076003)(2616005)(8936002)(6506007)(36756003)(41300700001)(4744005)(76116006)(8676002)(2906002)(66476007)(66446008)(64756008)(66556008)(86362001)(91956017)(66946007)(5660300002)(44832011)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?9ZDW431QX7/gigK0eWzeqQ62Ff402CZs+XA7b5h1FvWi52ke23k9sZkz9Q?=
+ =?iso-8859-1?Q?XfqI1FjFQHfvaTVYmR7h+0W3OvRNRCP6um0TFOgETn1RmxzfAKYQGnFU7E?=
+ =?iso-8859-1?Q?Hb+NlsoOZyZG2xyXsGXjPSVfWsUEac7Btmnv1EeZhRe5sDcdRWEDAtJHGj?=
+ =?iso-8859-1?Q?RiiHM4TWxKKh2WCMH5I/4GePNFw/hrgsSh/BtFa0bMvM0FWtY9YUGjR7fk?=
+ =?iso-8859-1?Q?NHwNmzM9Wpr8uDRlB4JT45S7P/7oKGc5swVc/NS2t0H/YyvmBOMGUGHeBH?=
+ =?iso-8859-1?Q?NhDDlgCq9KzVa132XRmhWRDwgDKbsT3jotCfaCaoqyn1VY0yv6io1O1kG4?=
+ =?iso-8859-1?Q?lWjfAn4Hebw2coaTvyCV9H2vEMC8u2vCmAblIhmGUbajxLxc+oHwlhURZY?=
+ =?iso-8859-1?Q?4bHnFEwlbv+YbRm4bQhzPkcC3cRuHHn8CkeGynTI4C0pThZyNSbzhxhgoG?=
+ =?iso-8859-1?Q?6gdDkjUwIb4LvPgBTCKXaZYJc9d5N1e86LBm8iC1NSYEJjURTwUDZ90rS5?=
+ =?iso-8859-1?Q?scnQxdjFizu7bNCr0rzBuf2PEhz64yz4LLky46HvHQ28hqqEJb9ivhhwmu?=
+ =?iso-8859-1?Q?UkPgVpg1CsVYwqXzD4+lQr6yOA1JOe1SyCN7z6qwHAyB1ntbaxMW17VXim?=
+ =?iso-8859-1?Q?2586dwwzQ1k6lt12wb1rILmFDcwl2NTLx4s0xc4wWm7pttCbTG+kr6KNWV?=
+ =?iso-8859-1?Q?ngqCOM6d/ywu0shC3O5z4KORem5+ImvrYw/BOeYLTHTKsQ+6mtIi1Gp3aj?=
+ =?iso-8859-1?Q?2u0zB72SKRtD0fJZdplWJGdF/o8LDHb2kDQ8Vf3f+xj6/178SVQ+22M0oj?=
+ =?iso-8859-1?Q?LG/XgtbsPexnp8iYgdKKW+eTqYoPMZaD8WIyNYRACO8aT5r0CX0ETcn/j8?=
+ =?iso-8859-1?Q?SK8neab2nPZ6O7QaxH/DpwR6HwImDp3/QnSCUzMvezSuvH1cYbTfIGbqI/?=
+ =?iso-8859-1?Q?3Cm8Fq0R3v2Vjw/WdubPG6FJYQu21n/3jSg9E+UQgFi6of7CEzvBGlLNlA?=
+ =?iso-8859-1?Q?7OkiqEV4u+55gE1zdksq5DYOyWISte5Uqt1GNX3fcC7q1SwkN573o5JkI6?=
+ =?iso-8859-1?Q?jg29W1BzsCqGA9n8mbnyw945L68lN6M2vdcy52FFEg3sAXUTSSID3ML3Ji?=
+ =?iso-8859-1?Q?Hv5npV3F4WWbbP7iqXpE5IBvHs5XWyn6lKoURDBXNUn8cS/Ww9qt3OoR8R?=
+ =?iso-8859-1?Q?8uiNU158qveDOdAI85L9CWIOlisQeuaQHFxl4T8iQ0xn0wisvjlkLmcZuO?=
+ =?iso-8859-1?Q?3/WHii3I1/pVlaJfIjl1tfodtDw/40g2DlAvJwFiVHy9Xz9oUDKQYyCPK4?=
+ =?iso-8859-1?Q?e5Z4v7zUIp9PutrRCah+DJYZTS6QvTBH2Uq5y8eOevWxLbXkNC+bmPWPwa?=
+ =?iso-8859-1?Q?43A5N+hsR7a+92ZsfVZyxGzXxTIme8bMhYqvpskqmrQ+/2W9zs6rh7DxCp?=
+ =?iso-8859-1?Q?sgxilnAHR6UlCi8xqeahntBvm2GSCH+5rtGqE6h+raSXpP/Pe9YrHZb6U2?=
+ =?iso-8859-1?Q?uLfXdiEErMa40cWKw0V+b92VWIjlkLHzbtTHjYWkg0rnCQy13ecEJxjSFB?=
+ =?iso-8859-1?Q?+RWmWnvExm+BzRo4c+LdyFDuv64wlJdR7KCMZHvx1Zbx+a7x8OQqfw5H96?=
+ =?iso-8859-1?Q?kEgMxkHj9M1JNiuioxwHo33PI+j8ONKKN7XRlNDOL6YpG01m2B3Wl2Sw?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <c05f4fc668fa97e737758ab03030d7170c0edbd9.camel@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a45c4ef-c631-451a-980f-08da74be494d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 19:36:24.8464
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CTroW4Dd9r4wkH/MKikcYldIWuImNzh9CeUI2MCLfiaE8ihm+YkJf7NgTjRMI/VFUleUlDqVcuyQxpiS07V3YQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2985
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208020092
+X-Proofpoint-ORIG-GUID: K83p2HAFPK9HS8k1i5nQVflDQAaaxntS
+X-Proofpoint-GUID: K83p2HAFPK9HS8k1i5nQVflDQAaaxntS
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02, Jeff Layton wrote:
->On Mon, 2022-08-01 at 16:09 -0300, Enzo Matsumiya wrote:
->> Hi,
->>
->> As part of the ongoing effort to remove the "cifs" nomenclature from the
->> Linux SMB client, I'm proposing the rename of the module to "smbfs".
->>
->> As it's widely known, CIFS is associated to SMB1.0, which, in turn, is
->> associated with the security issues it presented in the past. Using
->> "SMBFS" makes clear what's the protocol in use for outsiders, but also
->> unties it from any particular protocol version. It also fits in the
->> already existing "fs/smbfs_common" and "fs/ksmbd" naming scheme.
->>
->> This short patch series only changes directory names and includes/ifdefs=
- in
->> headers and source code, and updates docs to reflect the rename. Other
->> than that, no source code/functionality is modified (WIP though).
->>
->> Patch 1/3: effectively changes the module name to "smbfs" and create a
->> 	   "cifs" module alias to maintain compatibility (a warning
->> 	   should be added to indicate the complete removal/isolation of
->> 	   CIFS/SMB1.0 code).
->> Patch 2/3: rename the source-code directory to align with the new module
->> 	   name
->> Patch 3/3: update documentation references to "fs/cifs" or "cifs.ko" or
->> 	   "cifs module" to use the new name
->>
->> Enzo Matsumiya (3):
->>   cifs: change module name to "smbfs.ko"
->>   smbfs: rename directory "fs/cifs" -> "fs/smbfs"
->>   smbfs: update doc references
->> ...
->
->Why do this? My inclination is to say NAK here.
->
->This seems like a lot of change for not a lot of benefit. Renaming the
->directory like this pretty much guarantees that backporting patches
->after this change to kernels that existed before it will be very
->difficult.
+Use MAPLE_ALLOC_SLOTS, which differs on 32bit.  This was causing an
+out of bounds issue on 32bit bulk allocations
 
-Hi Jeff, yes that's a big concern that I've discussed internally with my
-team as well, since we'll also suffer from those future backports.
+Fixes: 06b152b7980a (Maple Tree: add new data structure)
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+---
+ lib/maple_tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But, as stated in the commit message, and from what I gathered from
-Steve, it has been an ongoing wish to have the "cifs" name no longer
-associated with a module handling SMB2.0 and SMB3.0, as the name brings
-back old bad memories for several users.
-
-There really is no functional benefit for this change, and I have no
-argument against that.
-
->Also, bear in mind that there used to be an smbfs in the kernel that
->predated cifs.ko. That was removed ~2010 though, which is long enough
->ago that it shouldn't produce conflicts in currently shipping releases.=A0
-
-Yes, I was aware of this before sending v1, and it got raised again in
-https://lore.kernel.org/all/20220802135201.4vm36drd5mp57nvv@cyberdelia/
-
-I have no experience on what kind of issues/problems could arise of
-that, aside from the git commit history being weird. If you ever seen
-any problems with that happening, please do share.
-
->Jeff Layton <jlayton@kernel.org>
-
-I sent a v2 with a new "fs/smb" directory name, but kept "smbfs" as the
-module name.
-
-Sorry I didn't reply to you before that, I got confused as the thread
-replies all went to different folders in my mailbox.
-
-
-Cheers,
-
-Enzo
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 4e41f3394114..032e7bb0d44f 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -1242,7 +1242,7 @@ static inline void mas_alloc_nodes(struct ma_state *m=
+as, gfp_t gfp)
+=20
+ 	node =3D mas->alloc;
+ 	while (requested) {
+-		max_req =3D MAPLE_NODE_SLOTS - 1;
++		max_req =3D MAPLE_ALLOC_SLOTS;
+ 		if (node->slot[0]) {
+ 			unsigned int offset =3D node->node_count + 1;
+=20
+--=20
+2.35.1

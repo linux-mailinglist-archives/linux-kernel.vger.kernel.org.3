@@ -2,193 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD7F587511
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D1587512
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbiHBBag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S234358AbiHBBau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiHBBae (ORCPT
+        with ESMTP id S234848AbiHBBak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:30:34 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583D8324
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:30:33 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31f445bd486so126094637b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 18:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hrCLnMRd56C0uKq9Xt+6DMM0LjkZgl31pvDWpB/p6Uk=;
-        b=K5DC4PBZMQ0QfXuHhX/1Ps/QJsw11zK8BhmbsPKGxbegUZwqWUm6pHHD35zVJuVd6w
-         lFk/LcqjloMTUP1FMC8MpLWhRxTGCmjHlRL+u54idLaGbnG1LtB2TX1pwkmYAlRWlKbF
-         0n1IvSJaP7OkW6PAaVF2aeToc6oeBVaXplJ8y8VCgusd/XnEhxaWUAzrjaGKKv0DfYH2
-         i5VqhtLOozeSpZJ6i54Yc72xUtIdPRWrFzPi5LwhYmehci+sgA9hkDC4QuKYq58Tofm6
-         waCFgbxcb1nF0bR/Y1LfZL6X+wrjEKe6Hz3GpjScH1yxgecWTxow/ROCgi4RNhxD7Dx4
-         MpAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hrCLnMRd56C0uKq9Xt+6DMM0LjkZgl31pvDWpB/p6Uk=;
-        b=bdcEiouyXc+wDKdel2gIfRQCUKZb+PWPCmhYiJRCN8B/UreA7n+dLO4PrusPF1mGib
-         RhJhgQjcwszTdetWJfyZ790WWyYcFabFLpNgHeizCqNkykdnQT/f30c6nAfaf6m5lAwj
-         ToKRaqp0SS5al/nGpow8qIjngL9fFPyeHFVbcLfJOBuxsNRkPn4HKY6cVQ0lI/nOy8fz
-         rO8aD/78jgrBxZ9lXRXe1nTtjWACbtcYub0Flx2sZ/SqfUEOcv0gyEhDCviGASRpYNr+
-         aycYV7wTbBnUCJOqSg50/1z0JBSgmbfVC9yJ8Yb9H/X9U+PIekjsEpIvUyNbT/CUl8gp
-         drFw==
-X-Gm-Message-State: ACgBeo0Ru+Kmr1hFkOuQYpmM0WE78VfHpMMPlowz2yQsvTSc23zDKXxY
-        meqwdTjERvvLv8az+AdE5FuPsUZXbKAKKiJq//k=
-X-Google-Smtp-Source: AA6agR5Gqeg+KwjmHKNjezWbfmdmNrwr01emOToQvsPw2cGtvYuRoYceUu5tOiQzxJttiAminrnzlhNL6mUM/7AgvPE=
-X-Received: by 2002:a81:588a:0:b0:31f:645a:e22 with SMTP id
- m132-20020a81588a000000b0031f645a0e22mr16123952ywb.430.1659403832424; Mon, 01
- Aug 2022 18:30:32 -0700 (PDT)
+        Mon, 1 Aug 2022 21:30:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B963A1154
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:30:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65AE5B81910
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:30:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19991C433B5
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659403836;
+        bh=JEUXUjvWpoYqhZ1GKJd3NPpvi9zssDdyYvhYz1KnSBA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cK6OOwZF8ti1lbS8aOHE1Iu+lmH6lKHgaWf9BeCWDaf0DE7dexc4DoRoCvzLP/UFq
+         eIBGtfaR8fTCj3iWnGXulTAg59lYIRxWQs63Gna9ZupgoGMNbc1Z8jQeNLDlFYOx76
+         7ilKxntjVmhmWc7Jz/LznZfA1DupAWZzfK3GnUqtxWP80i0TbDPR5KFlZwvgqh9HK+
+         Tt3z+09DLd9BE0Ahtr1j0T5xkc6QY+xjb5rUsqELt7V2MF+VwnaCFsQ9E7IArmCOYX
+         KrFJPMLkQdbfMIqzWHDH9jGXYjeie9BwrkAVxX5Pdsmj/VBQFqvxe77TgX/sDNnreO
+         rjHDKMpD5jLdg==
+Received: by mail-vs1-f53.google.com with SMTP id 125so13111168vsd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 18:30:36 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3IW4NtCjEXTR/OCX+gqmunXQMP0QofS0AcZbS0BAgwvOV/5UKz
+        0ckNjMMdjGd7hYEY6t710r+kZQQCwuA5PPamabg=
+X-Google-Smtp-Source: AA6agR4EqJtJecZxlBtqEwhgAhcg0aAQpjAyZjXLdHSHUP3WjNoRhq5nvJQCm1SEAYOQnTkrpu/2mdU+6L8fjkF+2uY=
+X-Received: by 2002:a05:6102:390d:b0:387:78b9:bf9c with SMTP id
+ e13-20020a056102390d00b0038778b9bf9cmr1360406vsu.43.1659403834985; Mon, 01
+ Aug 2022 18:30:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801112604.3406642-1-yebin10@huawei.com>
-In-Reply-To: <20220801112604.3406642-1-yebin10@huawei.com>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Mon, 1 Aug 2022 18:30:21 -0700
-Message-ID: <CACOAw_yes-aq2EMvXA6hCmV9FLXtRXXwaMW2iB3d7ynjPKa78Q@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH -next v2] f2fs: fix null-ptr-deref in f2fs_get_dnode_of_data
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
+References: <20220801121726.9681-1-zhangqing@loongson.cn> <20220801121726.9681-4-zhangqing@loongson.cn>
+ <CAAhV-H6Az_X1afvAO+JxnDaW-Ey_8wmozehd++qOZoGmimM+6g@mail.gmail.com> <3cc6aebc-87e7-f0d0-2a88-e7e742e1e5ee@loongson.cn>
+In-Reply-To: <3cc6aebc-87e7-f0d0-2a88-e7e742e1e5ee@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 2 Aug 2022 09:30:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H61ZXvF2xvXsyrxRYj6impet0w83svkt94FUhJhzj-2EQ@mail.gmail.com>
+Message-ID: <CAAhV-H61ZXvF2xvXsyrxRYj6impet0w83svkt94FUhJhzj-2EQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] LoongArch: Add stacktrace support
+To:     zhangqing <zhangqing@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jinyang He <hejinyang@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 4:15 AM Ye Bin via Linux-f2fs-devel
-<linux-f2fs-devel@lists.sourceforge.net> wrote:
->
-> There is issue as follows when test f2fs atomic write:
-> F2FS-fs (loop0): Can't find valid F2FS filesystem in 2th superblock
-> F2FS-fs (loop0): invalid crc_offset: 0
-> F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=1, run fsck to fix.
-> F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=2, run fsck to fix.
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in f2fs_get_dnode_of_data+0xac/0x16d0
-> Read of size 8 at addr 0000000000000028 by task rep/1990
->
-> CPU: 4 PID: 1990 Comm: rep Not tainted 5.19.0-rc6-next-20220715 #266
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x6e/0x91
->  print_report.cold+0x49a/0x6bb
->  kasan_report+0xa8/0x130
->  f2fs_get_dnode_of_data+0xac/0x16d0
->  f2fs_do_write_data_page+0x2a5/0x1030
->  move_data_page+0x3c5/0xdf0
->  do_garbage_collect+0x2015/0x36c0
->  f2fs_gc+0x554/0x1d30
->  f2fs_balance_fs+0x7f5/0xda0
->  f2fs_write_single_data_page+0xb66/0xdc0
->  f2fs_write_cache_pages+0x716/0x1420
->  f2fs_write_data_pages+0x84f/0x9a0
->  do_writepages+0x130/0x3a0
->  filemap_fdatawrite_wbc+0x87/0xa0
->  file_write_and_wait_range+0x157/0x1c0
->  f2fs_do_sync_file+0x206/0x12d0
->  f2fs_sync_file+0x99/0xc0
->  vfs_fsync_range+0x75/0x140
->  f2fs_file_write_iter+0xd7b/0x1850
->  vfs_write+0x645/0x780
->  ksys_write+0xf1/0x1e0
->  do_syscall_64+0x3b/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> As 3db1de0e582c commit changed atomic write way which new a cow_inode for
-> atomic write file, and also mark cow_inode as FI_ATOMIC_FILE.
-> When f2fs_do_write_data_page write cow_inode will use cow_inode's cow_inode
-> which is NULL. Then will trigger null-ptr-deref.
-> To solve above issue, introduce FI_COW_FILE flag for COW inode.
->
-> Fiexes: 3db1de0e582c("f2fs: change the current atomic write way")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/f2fs/f2fs.h    | 6 ++++++
->  fs/f2fs/file.c    | 2 +-
->  fs/f2fs/segment.c | 5 +++--
->  3 files changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 8579b59b8a05..101f0064ee25 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -758,6 +758,7 @@ enum {
->         FI_ENABLE_COMPRESS,     /* enable compression in "user" compression mode */
->         FI_COMPRESS_RELEASED,   /* compressed blocks were released */
->         FI_ALIGNED_WRITE,       /* enable aligned write */
-> +       FI_COW_FILE,            /* indicate COW file */
->         FI_MAX,                 /* max flag, never be used */
->  };
->
-> @@ -3207,6 +3208,11 @@ static inline bool f2fs_is_atomic_file(struct inode *inode)
->         return is_inode_flag_set(inode, FI_ATOMIC_FILE);
->  }
->
-> +static inline bool f2fs_is_cow_file(struct inode *inode)
-> +{
-> +       return is_inode_flag_set(inode, FI_COW_FILE);
-> +}
-> +
->  static inline bool f2fs_is_first_block_written(struct inode *inode)
->  {
->         return is_inode_flag_set(inode, FI_FIRST_BLOCK_WRITTEN);
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index a90184900698..973a479f9a3d 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2062,7 +2062,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
->         spin_unlock(&sbi->inode_lock[ATOMIC_FILE]);
->
->         set_inode_flag(inode, FI_ATOMIC_FILE);
-> -       set_inode_flag(fi->cow_inode, FI_ATOMIC_FILE);
-> +       set_inode_flag(fi->cow_inode, FI_COW_FILE);
->         clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
->         f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
->
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 44a04a832e24..6d5fc221ef35 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -193,7 +193,7 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
->         if (f2fs_is_atomic_file(inode)) {
->                 if (clean)
->                         truncate_inode_pages_final(inode->i_mapping);
-> -               clear_inode_flag(fi->cow_inode, FI_ATOMIC_FILE);
-> +               clear_inode_flag(fi->cow_inode, FI_COW_FILE);
->                 iput(fi->cow_inode);
->                 fi->cow_inode = NULL;
->                 clear_inode_flag(inode, FI_ATOMIC_FILE);
-> @@ -3166,7 +3166,8 @@ static int __get_segment_type_6(struct f2fs_io_info *fio)
->                         return CURSEG_COLD_DATA;
->                 if (file_is_hot(inode) ||
->                                 is_inode_flag_set(inode, FI_HOT_DATA) ||
-> -                               f2fs_is_atomic_file(inode))
-> +                               f2fs_is_atomic_file(inode) ||
+Hi, Qing,
 
-I think we can remove f2fs_is_atomic_file(inode) now.
+On Tue, Aug 2, 2022 at 9:20 AM zhangqing <zhangqing@loongson.cn> wrote:
+>
+>
+>
+> On 2022/8/1 =E4=B8=8B=E5=8D=8811:30, Huacai Chen wrote:
+> > Hi, Qing,
+> >
+> > On Mon, Aug 1, 2022 at 8:17 PM Qing Zhang <zhangqing@loongson.cn> wrote=
+:
+> >>
+> >> Use common arch_stack_walk infrastructure to avoid duplicated code and
+> >> avoid taking care of the stack storage and filtering.
+> >> Add sra (means __schedule return address) and scfa (means __schedule c=
+all
+> >> frame address) to thread_info and store it in switch_to().
+> >>
+> >> Now we can print the process stack by cat /proc/*/stack and can better
+> >> support ftrace.
+> >>
+> >> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> >> ---
+> >>   arch/loongarch/Kconfig                 |  5 ++++
+> >>   arch/loongarch/include/asm/processor.h |  9 +++++++
+> >>   arch/loongarch/include/asm/switch_to.h | 14 ++++++----
+> >>   arch/loongarch/include/asm/uaccess.h   |  4 +--
+> >>   arch/loongarch/kernel/Makefile         |  1 +
+> >>   arch/loongarch/kernel/asm-offsets.c    |  2 ++
+> >>   arch/loongarch/kernel/process.c        |  3 +++
+> >>   arch/loongarch/kernel/stacktrace.c     | 37 ++++++++++++++++++++++++=
+++
+> >>   arch/loongarch/kernel/switch.S         |  2 ++
+> >>   9 files changed, 70 insertions(+), 7 deletions(-)
+> >>   create mode 100644 arch/loongarch/kernel/stacktrace.c
+> >>
+> >> diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/inc=
+lude/asm/uaccess.h
+> >> index 2b44edc604a2..a8ae2af4025a 100644
+> >> --- a/arch/loongarch/include/asm/uaccess.h
+> >> +++ b/arch/loongarch/include/asm/uaccess.h
+> >> @@ -229,13 +229,13 @@ extern unsigned long __copy_user(void *to, const=
+ void *from, __kernel_size_t n);
+> >>   static inline unsigned long __must_check
+> >>   raw_copy_from_user(void *to, const void __user *from, unsigned long =
+n)
+> >>   {
+> >> -       return __copy_user(to, from, n);
+> >> +       return __copy_user(to, (__force const void *)from, n);
+> >>   }
+> >>
+> >>   static inline unsigned long __must_check
+> >>   raw_copy_to_user(void __user *to, const void *from, unsigned long n)
+> >>   {
+> >> -       return __copy_user(to, from, n);
+> >> +       return __copy_user((__force void *)to, from, n);
+> > Why this? Does it have something to do with stacktrace?
+> >
+> > Huacai
+>
+> Hi, huacai
+>
+> This is kernel test robot report sparse warnings:
+> I reproduced locally and found that other architectures calling
+> __copy_user also use __force conversion, Is this modification appropriate=
+?
+>
+> kernel/trace/trace_events_user.c: note: in included file (through
+> include/linux/uaccess.h, include/linux/sched/task.h,
+> include/linux/sched/signal.h, ...):
+>     arch/loongarch/include/asm/uaccess.h:232:32: sparse: sparse:
+> incorrect type in argument 2 (different address spaces) @@     expected
+> void const *from @@     got void const [noderef] __user *from @@
+>     arch/loongarch/include/asm/uaccess.h:232:32: sparse:     expected
+> void const *from
+>     arch/loongarch/include/asm/uaccess.h:232:32: sparse:     got void
+> const [noderef] __user *from
+The modification might be correct, but should it be in this patch?
 
-> +                               f2fs_is_cow_file(inode))
->                         return CURSEG_HOT_DATA;
->                 return f2fs_rw_hint_to_seg_type(inode->i_write_hint);
->         } else {
-> --
-> 2.31.1
+Huacai
+>
+> Thanks,
+> -Qing
 >
 >
 >
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

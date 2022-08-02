@@ -2,243 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B085876E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4DE5876EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbiHBFxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S233354AbiHBF4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiHBFx3 (ORCPT
+        with ESMTP id S230298AbiHBF4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:53:29 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 Aug 2022 22:53:27 PDT
-Received: from esa14.fujitsucc.c3s2.iphmx.com (esa14.fujitsucc.c3s2.iphmx.com [68.232.156.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8E546DBD
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 22:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1659419608; x=1690955608;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0+od5r0mtKBRVdZ0NuNeNkM5Yy5Aqdv3CdpSIMQH5GQ=;
-  b=TUh7PlAqUONbeUFynMI2+fdEuz3DCssVpe5Yd7kcUNj8rm+Ln3RmAPfK
-   RfUmZxMHa9V9QpcZq4cCt2a+YqHqV3a3b6Uq2mNpOQ5XscoSLQ+v2wRVa
-   AksmjfyATe1t752OvttQxOc1C0LwlnKdJ9Bw9SdgrDlrI2wjPPcGFDkCe
-   hrqDaPBzFa3GqP3chKS7PoZno2qf++n86tKjoNrI/0nOyLTQEGCNkvHjm
-   UMf+Jb000mt/Z6H/YV7A6Q97kjUn6LOGyW5npFRF3Ap/xkyxKLjn5ggNk
-   FYgrdgY3Vajz7CwpootT3qX6kJtRjF42DOWBNpKRbtVS8jYb8oGqnOAEm
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="61616589"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654527600"; 
-   d="scan'208";a="61616589"
-Received: from mail-tycjpn01lp2169.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.169])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 14:52:20 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iAaL1YHS2obFmgVke3699eJGkbV+J51EMYGUpSnX/urRj0qkcr7CzltDssg64rmOzoO/q9Io/wwCp/CwUUW0HYxcFbmqp8q+et8V7776cg7vHNxKExyZIdElLXP2vtroWqn9YGujKnzrZYeqGBrYvsQDaPta7Cr6Jnt2GNt5nu19kwtEEKhDvzH3o4CpUJ/unoAt8fQlmpsv427OX+AiHMK4nNglK6jGMLKE1lkDhfadSSd3Pth21GxzYqMJQ2uG0LihCGGtx9MDhNkytjU5X59WT6+WGooH9wA558wK1wNno1nKJEwEbgwXKcKorYNxVxuT9Q2AOcsF18IBH5Ld9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0+od5r0mtKBRVdZ0NuNeNkM5Yy5Aqdv3CdpSIMQH5GQ=;
- b=Mj/lhw5xZCkaW5iPNIxPPznydpSv07n13jKC2E76+GMQrsLOWq8TRvllBnbc2yNdPuVwHnTXcH9YVNn3s8fK/YYg9/L75S7pe3dKve9G4fi5pUvQ/YTa3Z1ancDBFdHhMj0AVNvKSBWYQaT0x2R0q4iL2bthu4wMiwT+gppzSgIfuaT7OZG6TLbWSjoUETVknK1TDx2pmuN+nC2TUOFeibjiwDugnTRxlH/gQ2MCw1RlYtz9VatU2Vu3kvrQ/9te9O/aJBu9I6TX9GcVLyJagRa22SjZ5iKw+UniF7bGpia7oHkjeXdjkMzb8Kdg6SFzKuf4unq89xWhX2uGDuv+wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com (2603:1096:400:196::10)
- by TYCPR01MB7292.jpnprd01.prod.outlook.com (2603:1096:400:f2::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 05:52:17 +0000
-Received: from TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::1924:fa15:c8ce:8820]) by TYCPR01MB9305.jpnprd01.prod.outlook.com
- ([fe80::1924:fa15:c8ce:8820%6]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 05:52:17 +0000
-From:   "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>
-CC:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] RDMA/RXE: Add send_common_ack() helper
-Thread-Topic: [PATCH] RDMA/RXE: Add send_common_ack() helper
-Thread-Index: AQHYpW5JtoVnjzUx3EukIV84mOfaXK2ZoQcAgAAErQCAAAV0gIABcfiA
-Date:   Tue, 2 Aug 2022 05:52:17 +0000
-Message-ID: <02c52efa-61fd-5e27-9f98-46e0384d81e7@fujitsu.com>
-References: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
- <CAD=hENfqCKs3jk7pUNJq0Urqx1ZCSU2KpDcipgz_ORJs_43C=g@mail.gmail.com>
- <b47219be-b6e0-9a18-5d84-5546c08d721e@fujitsu.com>
- <CAD=hENfZN43c4ZBmXwdru61=341bZgfYa8VJeKaBQYF5KKFA2A@mail.gmail.com>
-In-Reply-To: <CAD=hENfZN43c4ZBmXwdru61=341bZgfYa8VJeKaBQYF5KKFA2A@mail.gmail.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bf6cfc93-23b0-4450-3315-08da744b283d
-x-ms-traffictypediagnostic: TYCPR01MB7292:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fZbB1KbqiKwbzbEQFeJZNPe6Y5pSOOgdiY/MOCr5CoVoVEUQtmrB78ReaHY3LWsP1h0BZkdWTXXgEnxeMeq+9ohpOabvDpVL0GFcIm+60H8HWGT0HVqotH8xg1ZMaw/U2DtmUho7GDjUk1dWz7rJVsOUFiUgM5TJvFIFystzAVA+WLSLsDJ0YSJbwX7p+T90QhkyubnsHJqx+y3yL64zMDgVaVTt36U+VUYF1KB9hJrLxte8wmZEiodbB0fzqJruJ5Wc151AoYUdNborAcdNxJ1ibk25R+3477iFzB0o+76XIrUkB8tt1IpNnEZpO5cr/lrQ25S122JBmEUdR9YYWombLcAniZA2m6BU6XM9qzzdUhLwKeGXqXr0Prp0ULo1J+tn3XlECJw6ZCGM2B/IiovRy7dm5YWFGUgd572x2DNq/RSPTDnpg7OUi9JJiabEStFgfrKnwXkEXl6SJU2XUAEEtHjPPdsrNlAcBeZvrgqLhZ4lhbmQJoAkq4YkYSLW2X5YlVBpxUY+CkC3zGroItGOjxxSwKBDelSlXxrF3Fx/wZiU65yMcB1/Ofc1FwFZLalem0B4o1s2N6tb92WD6kxeQFhBdGvw0/55rhRDkCvPgyGBVKIr8lEqpqEWgsuAUuI1EHq+T17RV2x6rNBqx6/nMnm+mweLrbVKt/IRNnC99UDmgdMk+plIDqpLL35Nbj0JkJYUAIry0SwJP2L3Ku7wTNUDao/PkTbSexe0G6WNV/oz+2d0Gdsi/N1Ox/tykSqBwTKvjACNo6HSS4Dp0zEpm7bQ9vu2yTKUMJbjL9XSA804t2S9Gz8Ezzzc9+VjO8LPYPIpJP+mjcDK9lBkzBsgD3KNK9co6CCaVMgu+rmyl5isFz0wQ9ee3St5KeAH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB9305.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(91956017)(186003)(6486002)(38100700002)(478600001)(122000001)(38070700005)(83380400001)(5660300002)(66946007)(86362001)(76116006)(66556008)(4326008)(8676002)(64756008)(66446008)(66476007)(31696002)(53546011)(6506007)(82960400001)(2616005)(41300700001)(36756003)(71200400001)(6916009)(54906003)(31686004)(2906002)(6512007)(316002)(85182001)(26005)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZEQ3SkM1a0xQNWdrbU5qeVpBbkhLZ3p6dmhSQjUyZjE1dGd0NThGUVczTmpU?=
- =?utf-8?B?UXdZRlp0NXljRkJNL0QxL0crZ2E1QkRTeE9kRC9DUFFUTXBrUWhMRC8xakZh?=
- =?utf-8?B?UDd5U3JieGwvRE9kNTd2YU9DSVJSTlBXeHdqSnpKM2Y2RnR5amEyOEpwbzJw?=
- =?utf-8?B?bGtYaS8vRGl5UE9PeVc4YklKWWFxenE4THVFd2ZBMU5JcDYwVDJEd1k2MEZ0?=
- =?utf-8?B?NnFaTWQ5UU92bnQ1RmRDZnpGbVlySktJSzJzQ0ZQdHNNSURZaUs5YkRQR1Fz?=
- =?utf-8?B?aXNzVGhFTTRzNHRlV1B0OE8xOE4vMFcyRlFiYWovNzhBL2FCRFJ5ODFpUU8y?=
- =?utf-8?B?SFVza0RSTHlnU2hHTTUyNmVZT08rOEMrRzlMOXFZbCtmeTZzOUk0MWE2MENU?=
- =?utf-8?B?RCtra1drRmpTOEgzWUt1MjVQRmdzZVluZWhsbnE0ZW1TVEVvQUNFaDhVdVY0?=
- =?utf-8?B?ZXlPWGxnT1A1UWxROC81VmVrRUVtRExWSklFemFJaTZMeGRuRS91WXRxT3A2?=
- =?utf-8?B?WHBGVW9MMFR5YmZGRHRXdFRmY2lCemNFcGdCUUlBdlJJSmRkL2I3NVo3NTJi?=
- =?utf-8?B?UzNoWm9tRFVJZ1FYSEoyU0hwRlh5dmNIbGFtVXYzU25lYjYweXVBeDFGYzRV?=
- =?utf-8?B?ZGZOM1pUMThIZWNkYUpaaWk3OTFTTFpNSjdqSjkzUmRYajVEbldGNW84MFNu?=
- =?utf-8?B?amtYNmpNR0RwSUhJQnpqeVhYQmhkMloyMmhEc1RVc1hneFNRbUtaMlM1VFE0?=
- =?utf-8?B?VGRpQXVhRFQyaE4xWDhIYkdpNFY1SENFNFRFL2Q5VFpiT2NTa2Jmc1RmTFFE?=
- =?utf-8?B?SVhrUjRkZEw3Ung0OEtSZ3QzcTloV1JWLzB6OXQya1JrbUJvRHdiL2tyeW5N?=
- =?utf-8?B?TXVxOGZzUGhOdXVqV1VwN3Z1alpWQlZLL0JuQ2VRNEREaXFuKythdGcvMUdH?=
- =?utf-8?B?MnBvRlJGRmlzaVloVklZWUVyMEx1UmNyNFhGWVNxdHZQTWlsbmhuZktVQW95?=
- =?utf-8?B?RUQvaG1uZTJud3R3ai9XYW9BL1pFYU81ZWRoSVlzWTc5dnFBbi9FaHpCcDdk?=
- =?utf-8?B?OWtxQzVrK0x2cUJCeDhUWTZZbmpFWnpLNlpDQTlLZnBCdWdIK0dMUEE2Z0t6?=
- =?utf-8?B?aisxOS8zdjRRbUJOSGlpNTNZWU5mb0ZmbTlOUmRjMy95WVo2YU5JbVhpRzM2?=
- =?utf-8?B?d2NobXNhSTlpS2NBR3J4emEwa0ZrRnFlZFhtclhHMkFkQ0FxMGVSSFdDV05r?=
- =?utf-8?B?akZIQk4yRXNMV3Y2UkR5ZDVucmFXU0ZNMEp4MDVxMjgxREZJejIxa1JveHl2?=
- =?utf-8?B?QVFMMTZFU1lMRzl0NnQ5VTE5dGtzdGk4d0psR1h1cy9OMWR5Rm40aTZaZmR3?=
- =?utf-8?B?RzVNTmZmV3FNS1g2elcyRXEzSnZPT3VHWEliaHlSaEliSG52MjFKWldQT3Yw?=
- =?utf-8?B?WWRCYjRNTDBrZWJGSGVPbXVyT2VwV0RRL3luNGkzeG9JQjVJTnB0dWRNOTlT?=
- =?utf-8?B?dFYxMWlCdmUyVzVRcXVIaEtteWFmSm9UaHAxQ3E5MG1kam92T0xFWlF4Q051?=
- =?utf-8?B?REJldGFzQVhSTmF4TWF3QktNbVNnU3dUTm9uZlRwbWJ4bjJURW5lTnVWSlU1?=
- =?utf-8?B?UGV4SlBqalVXNHdMOTFPY2dFamhkUlczRzdDK01Ea3NkTERadTJWbU9maWNO?=
- =?utf-8?B?MjN4dXJDM0Z0S2tKQTQyc0FHTHptTCtTN04rVXdwUEUrbUY4SzQzbS85TFdO?=
- =?utf-8?B?NmxnaVVPdWRPOWlOd2ZPUGF1eEg2ZVR0K3JBNjB0OWFlMEZUS0ZDdG9wMFpX?=
- =?utf-8?B?ZFAyd2NaZlB3bS9wT0FCak9HQUtTUzRJZ1JjUXplSERNd1RHSG1WQ3UxOGtq?=
- =?utf-8?B?c3hrK0YvVjRRTEc3UWkxUU1SNmZrNStrQUFod3RjT2ZNWjRJTitJZmVOdllm?=
- =?utf-8?B?ZzJaZVMrQ2tka21Yakp5N1AyNkpGaUtzVUdPRFM0UmpMSEI1elJVODdmZkpK?=
- =?utf-8?B?OEQ3QlVuYUpZOHhweHRZayttMjRmbHRCUzY4Ylhyd1gxOGdaa29HVTdMUExQ?=
- =?utf-8?B?blU2MHdPNWs1aDlYUUs4UnVITU1pNXdEZCtkZzdrZVZZQVBnZXFBZEw0bE1i?=
- =?utf-8?B?QzRicHlaNG5DSGJCMTAwaTIwellJUFJjZGR3ZjJRUkdEYlM0ZmNzK1dSMUYz?=
- =?utf-8?B?WFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6DC907C71AAAA840AA0C46A2EFF90BA5@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 2 Aug 2022 01:56:36 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D117C1BEBE;
+        Mon,  1 Aug 2022 22:56:34 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id o3so12505072ple.5;
+        Mon, 01 Aug 2022 22:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5kORmtTvgKG66VW6uuUrG1tf2ELc8v1lDuMJWmVT1kk=;
+        b=n/DAqDErekDYlPiDZHfZENWFr/WUWWLIGG8ftmZNDe5Y9e0el7qhRVzOUJIvAwJ22b
+         mYGU8Q45czxFdMzJg6fw4dmpynykfZ09oidR6XkbUCeGyEGlBwnkBactNN1LWVkKahvB
+         3rzilYtm4fkfpC+T8jkytiydwMWH0U0Z1b2tSbXdsPCyPIylmdDKYGPwCTqYVK+wj6Js
+         XNaiO3+5HB1PhloWGwUq4S8nMpT8hezwWxFEGNGtGNe6Zyb5UDpDz4QU6Vuo0XC3eyyE
+         HW2sQNKUcqCK13QiW5fbO1Xfprx+x3qCudFGV8746YF4KBhkjaltgqexEjPOCGYzcy3q
+         pUpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5kORmtTvgKG66VW6uuUrG1tf2ELc8v1lDuMJWmVT1kk=;
+        b=DGq2am+do006iUfj8nf5zVrALEgZ/aPK89irOJjb4wz5V9HwjMZnXrjuAU7ML1uqqd
+         1GlpGaHAOq4r++sja/TdmP3B7iVxgKu/zHAWQi+TO4bp+a3JuK55DCsLcRVZ9L04SwZj
+         b/93jKKF47hxC2K/mG9wj9ewlp97eDloHiXhanCl06nLFBB4Wc/qLEQgs44D6vpCV4XI
+         dR6bJI7/ShTU0/o/XCrNBD9lhGj9T6/9cQAqlGU+E+zpiXM8IYzlL/tEckQ+7GPBtxJU
+         iOMmXRX3TYZ4L3kdxB9Njh6cmQvRIObcuQfxcfrwBeutIjnxRkli0zrc4kvl+ymNVwpu
+         Owzw==
+X-Gm-Message-State: ACgBeo11HlqNWzwCAj32y47agX16ctBsX010BZvg6lz0sDe7zYAdm65t
+        J1zOEvmi+YCJK+GBDO242UDvjzwTscnblYs5
+X-Google-Smtp-Source: AA6agR4Uq6pRu/GVLj3u7uiBDVmb/uZbKbmA4WgIVb6BTfhkvsPmsA6NZlkUIlavy6CU/9BP6tBUFw==
+X-Received: by 2002:a17:902:8f92:b0:16c:e485:7cd2 with SMTP id z18-20020a1709028f9200b0016ce4857cd2mr20365261plo.50.1659419794042;
+        Mon, 01 Aug 2022 22:56:34 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4050:e96:467e:d56f:ae53:bbb0:f63a])
+        by smtp.googlemail.com with ESMTPSA id q30-20020a631f5e000000b0041c6541383dsm571068pgm.60.2022.08.01.22.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 22:56:33 -0700 (PDT)
+From:   Utkarsh Verma <utkarshverma294@gmail.com>
+To:     Dwaipayan Ray <dwaipayanray1@gmail.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Utkarsh Verma <utkarshverma294@gmail.com>
+Subject: [PATCH] docs: checkpatch: add some new checkpatch documentation messages
+Date:   Tue,  2 Aug 2022 11:25:28 +0530
+Message-Id: <20220802055528.13726-1-utkarshverma294@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB9305.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf6cfc93-23b0-4450-3315-08da744b283d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 05:52:17.2346
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nGll7abYQMJlWxK4It377GXawN+NLWEtgXPfydP+W7jE/If9NgZmr6edQtdkekLKAGMFgSF+1rH9w6qfrp+eUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB7292
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCk9uIDAxLzA4LzIwMjIgMTU6NDcsIFpodSBZYW5qdW4gd3JvdGU6DQo+IE9uIE1vbiwgQXVn
-IDEsIDIwMjIgYXQgMzoyOCBQTSBsaXpoaWppYW5AZnVqaXRzdS5jb20NCj4gPGxpemhpamlhbkBm
-dWppdHN1LmNvbT4gd3JvdGU6DQo+Pg0KPj4NCj4+IE9uIDAxLzA4LzIwMjIgMTU6MTEsIFpodSBZ
-YW5qdW4gd3JvdGU6DQo+Pj4gT24gTW9uLCBBdWcgMSwgMjAyMiBhdCAyOjE2IFBNIExpIFpoaWpp
-YW4gPGxpemhpamlhbkBmdWppdHN1LmNvbT4gd3JvdGU6DQo+Pj4+IE1vc3QgY29kZSBpbiBzZW5k
-X2FjaygpIGFuZCBzZW5kX2F0b21pY19hY2soKSBhcmUgZHVwbGljYXRlLCBtb3ZlIHRoZW0NCj4+
-Pj4gdG8gYSBuZXcgaGVscGVyIHNlbmRfY29tbW9uX2FjaygpLg0KPj4+Pg0KPj4+PiBJbiBuZXdl
-ciBJQkEgU1BFQywgc29tZSBvcGNvZGVzIHJlcXVpcmUgYWNrbm93bGVkZ2Ugd2l0aCBhIHplcm8t
-bGVuZ3RoIHJlYWQNCj4+Pj4gcmVzcG9uc2UsIHdpdGggdGhpcyBuZXcgaGVscGVyLCB3ZSBjYW4g
-ZWFzaWx5IGltcGxlbWVudCBpdCBsYXRlci4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogTGkg
-WmhpamlhbiA8bGl6aGlqaWFuQGZ1aml0c3UuY29tPg0KPj4+PiAtLS0NCj4+Pj4gICAgZHJpdmVy
-cy9pbmZpbmliYW5kL3N3L3J4ZS9yeGVfcmVzcC5jIHwgNDMgKysrKysrKysrKysrKystLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tDQo+Pj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCsp
-LCAyNiBkZWxldGlvbnMoLSkNCj4+Pj4NCj4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaW5maW5p
-YmFuZC9zdy9yeGUvcnhlX3Jlc3AuYyBiL2RyaXZlcnMvaW5maW5pYmFuZC9zdy9yeGUvcnhlX3Jl
-c3AuYw0KPj4+PiBpbmRleCBiMzZlYzVjNGQ1ZTAuLjRjMzk4ZmEyMjBmYSAxMDA2NDQNCj4+Pj4g
-LS0tIGEvZHJpdmVycy9pbmZpbmliYW5kL3N3L3J4ZS9yeGVfcmVzcC5jDQo+Pj4+ICsrKyBiL2Ry
-aXZlcnMvaW5maW5pYmFuZC9zdy9yeGUvcnhlX3Jlc3AuYw0KPj4+PiBAQCAtMTAyOCw1MCArMTAy
-OCw0MSBAQCBzdGF0aWMgZW51bSByZXNwX3N0YXRlcyBkb19jb21wbGV0ZShzdHJ1Y3QgcnhlX3Fw
-ICpxcCwNCj4+Pj4gICAgICAgICAgICAgICAgICAgcmV0dXJuIFJFU1BTVF9DTEVBTlVQOw0KPj4+
-PiAgICB9DQo+Pj4+DQo+Pj4+IC1zdGF0aWMgaW50IHNlbmRfYWNrKHN0cnVjdCByeGVfcXAgKnFw
-LCB1OCBzeW5kcm9tZSwgdTMyIHBzbikNCj4+Pj4gKw0KPj4+PiArc3RhdGljIGludCBzZW5kX2Nv
-bW1vbl9hY2soc3RydWN0IHJ4ZV9xcCAqcXAsIHU4IHN5bmRyb21lLCB1MzIgcHNuLA0KPj4+IFRo
-ZSBmdW5jdGlvbiBpcyBiZXR0ZXIgd2l0aCByeGVfc2VuZF9jb21tb25fYWNrPw0KPj4gSSdtIG5v
-dCBjbGVhciB0aGUgZXhhY3QgcnVsZSBhYm91dCB0aGUgbmFtaW5nIHByZWZpeC4gaWYgaXQgaGFz
-LCBwbGVhc2UgbGV0IG1lIGtub3cgOikNCj4+DQo+PiBJTUhPLCBpZiBhIGZ1bmN0aW9uIGlzIGVp
-dGhlciBhIHB1YmxpYyBBUEkoZXhwb3J0IGZ1bmN0aW9uKSBvciBhIGNhbGxiYWNrIHRvIGEgdXBw
-ZXIgbGF5ZXIsICBpdCdzIGEgZ29vZCBpZGVhIHRvIGEgZml4ZWQgcHJlZml4Lg0KPj4gSW5zdGVh
-ZCwgaWYgdGhleSBhcmUganVzdCBzdGF0aWMsIG5vIHByZWZpeCBpcyBub3QgdG9vIGJhZC4NCj4g
-V2hlbiBkZWJ1ZywgYSByeGVfIHByZWZpeCBjYW4gaGVscCB1cyBmaWx0ZXIgdGhlIGZ1bmN0aW9u
-cyB3aGF0ZXZlcg0KPiB0aGUgZnVuY3Rpb24gc3RhdGljIG9yIHB1YmxpYy4NCj4NCj4+IEJUVywg
-Y3VycmVudCBSWEUgYXJlIG1peGluZyB0aGUgdHdvIHJ1bGVzLCBpdCBzaG91bGQgYmUgYW5vdGhl
-ciBzdGFuZGFsb25lIHBhdGNoIHRvIGRvIHRoZSBjbGVhbnVwIGlmIG5lZWRlZC4NCj4gWWVzLiBQ
-bGVhc2UgbWFrZSB0aGlzIHN0YW5kYWxvbmUgcGF0Y2ggdG8gY29tcGxldGUgdGhpcy4NCg0KaSB0
-cmllZCB0byBkbyBhIHJvdWdoIHN0YXRpc3RpYy4NCg0KYWxsIGZ1bmN0aW9uczoNCiQgZ2l0IGdy
-ZXAgLUUgJ15bYS16XS4qXCgnIGRyaXZlcnMvaW5maW5pYmFuZC9zdy9yeGUgfCBhd2sgLUYnKCcg
-J3twcmludCAkMX0nIHwgYXdrICd7cHJpbnQgJE5GfScgfCB0ciAtZCAnXConIHwgZ3JlcCAtRSBe
-W2Etel0rIHwgd2MgLWwNCjQ3NA0KDQp3aXRob3V0IHJ4ZV8gcHJlZml4Og0KZ2l0IGdyZXAgLUUg
-J15bYS16XS4qXCgnIGRyaXZlcnMvaW5maW5pYmFuZC9zdy9yeGUgfCBhd2sgLUYnKCcgJ3twcmlu
-dCAkMX0nIHwgYXdrICd7cHJpbnQgJE5GfScgfCB0ciAtZCAnXConIHwgZ3JlcCAtRSBeW2Etel0r
-IHwgZ3JlcCAtdiAtZSBecnhlIHwgd2MgLWwNCjE5OQ0KDQpTaW1pbGFybHksIHRoZSBtbHg1IGhh
-dmUgdGhlIHNhbWUgc2l0dWF0aW9ucy4NCiQgZ2l0IGdyZXAgLWggLUUgJ15bYS16XS4qXCgnIGRy
-aXZlcnMvaW5maW5pYmFuZC9ody9tbHg1IHwgYXdrIC1GJygnICd7cHJpbnQgJDF9JyB8IGF3ayAn
-e3ByaW50ICRORn0nIHwgdHIgLWQgJ1wqJyB8IGdyZXAgLUUgXlthLXpdKyB8IHdjIC1sDQoxMDgz
-DQokIGdpdCBncmVwIC1oIC1FICdeW2Etel0uKlwoJyBkcml2ZXJzL2luZmluaWJhbmQvaHcvbWx4
-NSB8IGF3ayAtRicoJyAne3ByaW50ICQxfScgfCBhd2sgJ3twcmludCAkTkZ9JyB8IHRyIC1kICdc
-KicgfCBncmVwIC1FIF5bYS16XSsgfCBncmVwIC12IC1lIF5tbHg1IHwgd2MgLWwNCjQ3Ng0KDQpU
-QkgsIGkgaGF2ZSBubyBzdHJvbmcgc3RvbWFjaCB0byBkbyBzdWNoIGNsZWFudXAgc28gZmFyIDop
-DQoNClRoYW5rcw0KWmhpamlhbg0KDQoNCj4NCj4gVGhhbmtzIGFuZCBSZWdhcmRzLA0KPiBaaHUg
-WWFuanVuDQo+DQo+PiBUaGFua3MNCj4+IFpoaWppYW4NCj4+DQo+Pg0KPj4+IFNvIHdoZW4gZGVi
-dWcsIHJ4ZV8gcHJlZml4IGNhbiBoZWxwIHVzLg0KPj4+DQo+Pj4+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBpbnQgb3Bjb2RlLCBjb25zdCBjaGFyICptc2cpDQo+Pj4+ICAgIHsN
-Cj4+Pj4gLSAgICAgICBpbnQgZXJyID0gMDsNCj4+Pj4gKyAgICAgICBpbnQgZXJyOw0KPj4+PiAg
-ICAgICAgICAgc3RydWN0IHJ4ZV9wa3RfaW5mbyBhY2tfcGt0Ow0KPj4+PiAgICAgICAgICAgc3Ry
-dWN0IHNrX2J1ZmYgKnNrYjsNCj4+Pj4NCj4+Pj4gLSAgICAgICBza2IgPSBwcmVwYXJlX2Fja19w
-YWNrZXQocXAsICZhY2tfcGt0LCBJQl9PUENPREVfUkNfQUNLTk9XTEVER0UsDQo+Pj4+IC0gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAsIHBzbiwgc3luZHJvbWUpOw0KPj4+PiAtICAg
-ICAgIGlmICghc2tiKSB7DQo+Pj4+IC0gICAgICAgICAgICAgICBlcnIgPSAtRU5PTUVNOw0KPj4+
-PiAtICAgICAgICAgICAgICAgZ290byBlcnIxOw0KPj4+PiAtICAgICAgIH0NCj4+Pj4gKyAgICAg
-ICBza2IgPSBwcmVwYXJlX2Fja19wYWNrZXQocXAsICZhY2tfcGt0LCBvcGNvZGUsIDAsIHBzbiwg
-c3luZHJvbWUpOw0KPj4+PiArICAgICAgIGlmICghc2tiKQ0KPj4+PiArICAgICAgICAgICAgICAg
-cmV0dXJuIC1FTk9NRU07DQo+Pj4+DQo+Pj4+ICAgICAgICAgICBlcnIgPSByeGVfeG1pdF9wYWNr
-ZXQocXAsICZhY2tfcGt0LCBza2IpOw0KPj4+PiAgICAgICAgICAgaWYgKGVycikNCj4+Pj4gLSAg
-ICAgICAgICAgICAgIHByX2Vycl9yYXRlbGltaXRlZCgiRmFpbGVkIHNlbmRpbmcgYWNrXG4iKTsN
-Cj4+Pj4gKyAgICAgICAgICAgICAgIHByX2Vycl9yYXRlbGltaXRlZCgiRmFpbGVkIHNlbmRpbmcg
-JXNcbiIsIG1zZyk7DQo+Pj4+DQo+Pj4+IC1lcnIxOg0KPj4+PiAgICAgICAgICAgcmV0dXJuIGVy
-cjsNCj4+Pj4gICAgfQ0KPj4+Pg0KPj4+PiAtc3RhdGljIGludCBzZW5kX2F0b21pY19hY2soc3Ry
-dWN0IHJ4ZV9xcCAqcXAsIHU4IHN5bmRyb21lLCB1MzIgcHNuKQ0KPj4+PiArc3RhdGljIGludCBz
-ZW5kX2FjayhzdHJ1Y3QgcnhlX3FwICpxcCwgdTggc3luZHJvbWUsIHUzMiBwc24pDQo+Pj4gcnhl
-X3NlbmRfYWNrDQo+Pj4NCj4+Pj4gICAgew0KPj4+PiAtICAgICAgIGludCBlcnIgPSAwOw0KPj4+
-PiAtICAgICAgIHN0cnVjdCByeGVfcGt0X2luZm8gYWNrX3BrdDsNCj4+Pj4gLSAgICAgICBzdHJ1
-Y3Qgc2tfYnVmZiAqc2tiOw0KPj4+PiAtDQo+Pj4+IC0gICAgICAgc2tiID0gcHJlcGFyZV9hY2tf
-cGFja2V0KHFwLCAmYWNrX3BrdCwgSUJfT1BDT0RFX1JDX0FUT01JQ19BQ0tOT1dMRURHRSwNCj4+
-Pj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMCwgcHNuLCBzeW5kcm9tZSk7DQo+
-Pj4+IC0gICAgICAgaWYgKCFza2IpIHsNCj4+Pj4gLSAgICAgICAgICAgICAgIGVyciA9IC1FTk9N
-RU07DQo+Pj4+IC0gICAgICAgICAgICAgICBnb3RvIG91dDsNCj4+Pj4gLSAgICAgICB9DQo+Pj4+
-ICsgICAgICAgcmV0dXJuIHNlbmRfY29tbW9uX2FjayhxcCwgc3luZHJvbWUsIHBzbiwNCj4+Pj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgSUJfT1BDT0RFX1JDX0FDS05PV0xFREdFLCAiQUNLIik7
-DQo+Pj4+ICt9DQo+Pj4+DQo+Pj4+IC0gICAgICAgZXJyID0gcnhlX3htaXRfcGFja2V0KHFwLCAm
-YWNrX3BrdCwgc2tiKTsNCj4+Pj4gLSAgICAgICBpZiAoZXJyKQ0KPj4+PiAtICAgICAgICAgICAg
-ICAgcHJfZXJyX3JhdGVsaW1pdGVkKCJGYWlsZWQgc2VuZGluZyBhdG9taWMgYWNrXG4iKTsNCj4+
-Pj4gK3N0YXRpYyBpbnQgc2VuZF9hdG9taWNfYWNrKHN0cnVjdCByeGVfcXAgKnFwLCB1OCBzeW5k
-cm9tZSwgdTMyIHBzbikNCj4+PiByeGVfc2VuZF9hdG9taWNfYWNrDQo+Pj4NCj4+PiBUaGFua3Mg
-YW5kIFJlZ2FyZHMsDQo+Pj4gWmh1IFlhbmp1bg0KPj4+PiArew0KPj4+PiArICAgICAgIGludCBy
-ZXQgPSBzZW5kX2NvbW1vbl9hY2socXAsIHN5bmRyb21lLCBwc24sDQo+Pj4+ICsgICAgICAgICAg
-ICAgICAgICAgICAgIElCX09QQ09ERV9SQ19BVE9NSUNfQUNLTk9XTEVER0UsICJBVE9NSUMgQUNL
-Iik7DQo+Pj4+DQo+Pj4+ICAgICAgICAgICAvKiBoYXZlIHRvIGNsZWFyIHRoaXMgc2luY2UgaXQg
-aXMgdXNlZCB0byB0cmlnZ2VyDQo+Pj4+ICAgICAgICAgICAgKiBsb25nIHJlYWQgcmVwbGllcw0K
-Pj4+PiAgICAgICAgICAgICovDQo+Pj4+ICAgICAgICAgICBxcC0+cmVzcC5yZXMgPSBOVUxMOw0K
-Pj4+PiAtb3V0Og0KPj4+PiAtICAgICAgIHJldHVybiBlcnI7DQo+Pj4+ICsgICAgICAgcmV0dXJu
-IHJldDsNCj4+Pj4gICAgfQ0KPj4+Pg0KPj4+PiAgICBzdGF0aWMgZW51bSByZXNwX3N0YXRlcyBh
-Y2tub3dsZWRnZShzdHJ1Y3QgcnhlX3FwICpxcCwNCj4+Pj4gLS0NCj4+Pj4gMS44LjMuMQ0KPj4+
-Pg0K
+Added and documented the following new message types:
+- JIFFIES_COMPARISON
+- LONG_UDELAY
+- MSLEEP
+- INDENTED_LABEL
+- IF_0
+- IF_1
+- MISORDERED_TYPE
+- UNNECESSARY_BREAK
+- UNNECESSARY_ELSE
+- UNNECESSARY_INT
+- UNSPECIFIED_INT
+
+Signed-off-by: Utkarsh Verma <utkarshverma294@gmail.com>
+---
+ Documentation/dev-tools/checkpatch.rst | 300 +++++++++++++++++++++++++
+ 1 file changed, 300 insertions(+)
+
+diff --git a/Documentation/dev-tools/checkpatch.rst b/Documentation/dev-tools/checkpatch.rst
+index b52452bc2963..78abcadb5228 100644
+--- a/Documentation/dev-tools/checkpatch.rst
++++ b/Documentation/dev-tools/checkpatch.rst
+@@ -445,6 +445,34 @@ API usage
+ 
+     See: https://lore.kernel.org/lkml/20080320201723.b87b3732.akpm@linux-foundation.org/
+ 
++  **JIFFIES_COMPARISON**
++    Doing time comparison by directly using relational operators with jiffies
++    or get_jiffies_64() is wrong. Example::
++
++      if (jiffies > timeout)
++              do_something;
++
++    The above code is wrong because when the jiffies value reaches its maximum
++    limit, then it overflows and wraps around zero, so the above code will
++    not work as intended. To correctly handle this jiffies overflow condition,
++    the kernel provides some helper macros defined in <linux/jiffies.h>.
++    Some of the important macros are::
++
++      int time_after(unsigned long a, unsigned long b);
++      int time_before(unsigned long a, unsigned long b);
++      int time_after_eq(unsigned long a, unsigned long b);
++      int time_before_eq(unsigned long a, unsigned long b);
++
++    So the above code can be corrected by::
++
++      if (time_after(jiffies, timeout))
++              do_something;
++
++    Also, by using these macros, the code is easier to maintain and
++    future-proof because if the timer wrap changes in the future, then there
++    will be no need to alter the driver code. So it is strongly recommended
++    to always use these macros instead of direct comparison with jiffies.
++
+   **LOCKDEP**
+     The lockdep_no_validate class was added as a temporary measure to
+     prevent warnings on conversion of device->sem to device->mutex.
+@@ -452,11 +480,68 @@ API usage
+ 
+     See: https://lore.kernel.org/lkml/1268959062.9440.467.camel@laptop/
+ 
++  **LONG_UDELAY**
++    Passing large arguments to udelay() results in integer overflow in the
++    internal loop calculation of udelay() and the driver code will display
++    an error of unresolved symbol, __bad_udelay.
++
++    Different CPU architectures have different threshold values for udelay()
++    after which they call __bad_udelay(). For ARM architecture, the threshold
++    value is 2000us. For the exact maths behind this limit see
++    arch/arm/include/asm/delay.h
++
++    This checkpatch warning is triggered when the argument passed to udelay()
++    is greater than 2000us. Though for some architectures this threshold
++    value is more than 2000us, but as a general rule if the wanted delay is
++    in thousand of micro seconds, then use mdelay().
++
++    mdelay() is a wrapper around udelay() that accounts for the overflow
++    condition when passing large arguments to udelay(). Also, note that the
++    udelay() and mdelay() are busy-waiting, other tasks cannot run during
++    that time. So if the hardware supports hrtimers, then a better approach
++    would be to use usleep_range() function. For delaying 10us - 20ms,
++    usleep_range() is the recommended API. But make a change to usleep_range()
++    only if the hardware supports hrtimers, along with proper testing on a
++    real hardware.
++
++    If the delay is more than 20ms then use msleep(). msleep() is the
++    recommended API for delaying more than 20ms because it is implemented
++    using the jiffies timer and does not involve busy-waiting.
++
++    See: https://www.kernel.org/doc/html/latest/timers/timers-howto.html
++
+   **MALFORMED_INCLUDE**
+     The #include statement has a malformed path.  This has happened
+     because the author has included a double slash "//" in the pathname
+     accidentally.
+ 
++  **MSLEEP**
++    msleep() is implemented using the jiffies counter. When msleep() is
++    called it stops for a minimum of 2 jiffies. So, depending on the value
++    of HZ the mleep will atleast stop for 1-20ms. In worst case, if HZ=100
++    then msleep() will delay for a minimum of 20ms
++    (https://lore.kernel.org/all/15327.1186166232@lwn.net/). So for
++    sleeping for 10us-20ms it is recommended to use usleep_range() and not
++    msleep().
++
++    But ignore this warning, if the change to usleep_range() cannot be tested
++    on a real hardware.
++
++    usleep_range() is implemented using the hrtimer. Some hardware doesn't
++    support hrtimer, so no sense in making the change to usleep_range().
++
++    Also, the min and max value in usleep_range(unsigned long min, unsigned
++    long max) must be selected by understanding the driver code, and the
++    hardware with lots of testing and verification. One can see these timing
++    changes that others have made to get some approximate min and max values,
++    and then test to get the best possible values.
++
++    See:
++
++      1. https://lore.kernel.org/all/alpine.DEB.2.22.394.2110171140040.3026@hadrien/
++      2. https://lore.kernel.org/linux-staging/260b38b8-6f3f-f6cc-0388-09a269ead507@i2se.com/
++      3. https://lore.kernel.org/all/1357253791.2685.48.camel@bwh-desktop.uk.solarflarecom.com/
++
+   **USE_LOCKDEP**
+     lockdep_assert_held() annotations should be preferred over
+     assertions based on spin_is_locked()
+@@ -661,6 +746,30 @@ Indentation and Line Breaks
+ 
+     See: https://lore.kernel.org/lkml/1328311239.21255.24.camel@joe2Laptop/
+ 
++  **INDENTED_LABEL**
++    goto labels either should not have any indentation or only a single
++    space indentation (https://lore.kernel.org/all/20070527171817.4ce9d40d.akpm@linux-foundation.org/).
++    The Linux Kernel Coding Style does not indent the goto labels. Since
++    the program control can directly jump from one part of the program to a
++    pre-defined goto label, so making these labels easy to spot is important.
++    By flushing the goto labels to the left, these labels are more visible
++    and easier to identify.
++
++    Since the checkpatch only uses the regular expressions for finding the
++    possible coding style violation in a patch, and does not track the logic
++    or flow of the program, so there can be some false positives. Though for
++    this rule it is rare, still do not blindly follow the checkpatch advice.
++
++    Suppose if there is a conditional (ternary) operator across multiple
++    lines and there is no space around the “:” then this warning can be
++    triggered. Example::
++
++      return_value = (function1(value1) && function2(value2)) ?
++              NULL: some_other_value;
++
++    Here the checkpatch will give this label warning along with the spacing
++    warning.
++
+   **SWITCH_CASE_INDENT_LEVEL**
+     switch should be at the same indent as case.
+     Example::
+@@ -823,6 +932,19 @@ Macros, Attributes and Symbols
+   **DO_WHILE_MACRO_WITH_TRAILING_SEMICOLON**
+     do {} while(0) macros should not have a trailing semicolon.
+ 
++  **IF_0**
++    The code enclosed within #if 0 and #endif is not executed and is used
++    for temporarily removing the segments of code with the intention of
++    using it in the future, much like comments. But comments cannot be
++    nested, so #if 0 is preferred. But if the code inside #if 0 and #endif
++    doesn't seem to be anymore required then remove it.
++
++  **IF_1**
++    The code enclosed within #if 1 and #endif is always executed, so the
++    #if 1 and #endif statements are redundant, thus remove it.
++    It is only useful for debugging purposes, it can quickly disable the
++    code enclosed within itself by changing #if 1 to #if 0
++
+   **INIT_ATTRIBUTE**
+     Const init definitions should use __initconst instead of
+     __initdata.
+@@ -1231,6 +1353,49 @@ Others
+     The memset use appears to be incorrect.  This may be caused due to
+     badly ordered parameters.  Please recheck the usage.
+ 
++  **MISORDERED_TYPE**
++    According to section “6.7.2 Type Specifiers” in C90 standard, “type
++    specifiers may occur in any order.” This means that "signed long long
++    int" is same as "long long int signed". But to avoid confusion and make
++    the code easier to read, the declaration type should use the following
++    format::
++
++      [[un]signed] [short|int|long|long long]
++
++    Below is the list of standard integer types. Each row lists all the
++    different ways of specifying a particular type delimited by commas.
++    Note: Also include all the permutations of a particular type
++    on the left column delimited by comma. For example, the permutations
++    for "signed long int" are "signed int long", "long signed int",
++    "long int signed", "int signed long", and "int long signed".
++
++    +--------------------------------------------------+--------------------+
++    |                       Types                      |   Recommended Way  |
++    +=======================================================================+
++    | char                                             | char               |
++    +-----------------------------------------------------------------------+
++    | signed char                                      | signed char        |
++    +-----------------------------------------------------------------------+
++    | unsigned char                                    | unsigned char      |
++    +-----------------------------------------------------------------------+
++    | signed, int, signed int                          | int                |
++    +-----------------------------------------------------------------------+
++    | unsigned, unsigned int                           | unsigned int       |
++    +-----------------------------------------------------------------------+
++    | short, signed short, short int, signed short int | short              |
++    +-----------------------------------------------------------------------+
++    | unsigned short, unsigned short int               | unsigned short     |
++    +-----------------------------------------------------------------------+
++    | long, signed long, long int, signed long int     | long               |
++    +-----------------------------------------------------------------------+
++    | unsigned long, unsigned long int                 | unsigned long      |
++    +-----------------------------------------------------------------------|
++    | long long, signed long long, long long int,      | long long          |
++    | signed long long int                             |                    |
++    +-----------------------------------------------------------------------+
++    | unsigned long long, unsigned long long int       | unsigned long long |
++    +-----------------------------------------------------------------------+
++
+   **NOT_UNIFIED_DIFF**
+     The patch file does not appear to be in unified-diff format.  Please
+     regenerate the patch file before sending it to the maintainer.
+@@ -1247,3 +1412,138 @@ Others
+ 
+   **TYPO_SPELLING**
+     Some words may have been misspelled.  Consider reviewing them.
++
++  **UNNECESSARY_BREAK**
++    Using break statement just after a goto, return or break is unnecessary.
++    For example::
++
++      switch (foo) {
++      case 1:
++              goto err;
++              break;
++      }
++
++    Here, the break statement is completely unnecessary, because it will
++    never be executed. So it is better to remove it.
++
++    It is not a bug or syntactically incorrect, but it should be removed
++    because it is an unreachable statement that will never be executed
++    (https://lore.kernel.org/lkml/18981cad4ac27b4a22b2e38d40bd112432d4a4e7.camel@perches.com/).
++
++    Note there can be some false positives, which happen because of the way
++    this rule is implemented in the checkpatch script. The checkpatch script
++    throws this warning message if it finds a break statement and the line
++    above it is a goto/return/break statement with the same indentation
++    (same number of tabs). It only relies on the same indentation and does
++    not care about the logic of the code. For example::
++
++      if (foo)
++              break;
++              break;
++
++    Here the checkpatch will throw this warning message, because both the
++    break statements are at the same indentation. The second break statement
++    is unnecessarily indented, which causes this false positive. So do not
++    blindly follow the checkpatch advice here, instead consider the logic of
++    the code before making the changes. In the above example, correct the
++    indentation of the second break statement instead of following the
++    checkpatch advice.
++
++  **UNNECESSARY_ELSE**
++    Using an else statement just after a return/break/continue statement is
++    unnecessary. For example::
++
++      if (foo)
++              break;
++      else
++              usleep(1);
++
++    is generally better written as::
++
++      if (foo)
++              break;
++      usleep(1);
++
++    It helps to reduce the indentation and removes the unnecessary else
++    statement. But do not blindly follow checkpatch's advice here, as blind
++    changes due to this rule have already caused some disturbance, see commit
++    98fe05e21a6e ("staging: rtl8712: Remove unnecesary else after return
++    statement."). That commit made it to the mainline which had to be
++    reverted and fixed.
++
++    These false positives happen because of the way this rule is implemented
++    in the checkpatch script. The checkpatch script throws this warning
++    message if it finds an else statement and the line above it is a
++    break/continue/return statement indented at one tab more than the else
++    statement. So there can be some false positives like::
++
++      int n = 15;
++      if (n > 10)
++              n--;
++      else if (n == 10)
++              return 0;
++      else
++              n++;
++
++    Now the checkpatch will give a warning for the use of else after return
++    statement. If the else statement is removed then::
++
++      int n = 15;
++      if (n > 10)
++              n--;
++      else if (n == 10)
++              return 0;
++      n++;
++
++    Now both the n-- and n++ statements will be executed which is different
++    from the logic in the first case. As the if block doesn't have a return
++    statement, so removing the else statement is wrong. So always check the
++    previous if/else if blocks, for break/continue/return statements, before
++    following this rule.
++
++    Also, do not change the code if there is only a single return statement
++    inside if-else block, like::
++
++      if (a > b)
++              return a;
++      else
++              return b;
++
++    now if the else statement is removed::
++
++      if (a > b)
++              return a;
++      return b;
++
++    there is no considerable increase in the readability and one can argue
++    that the first form is more readable because of the indentation. So
++    do not remove the else statement in case of a single return statement
++    inside the if-else block.
++
++    See: https://lore.kernel.org/lkml/20140925032215.GK7996@ZenIV.linux.org.uk/
++
++  **UNNECESSARY_INT**
++    On Sun, 2018-08-05 at 08:52 -0700, Linus Torvalds wrote:
++    > "long unsigned int" isn't _technically_ wrong. But we normally
++    > call that type "unsigned long".
++
++    Using "int" type-specifier with "short", "long", and "long long" is
++    optional. So "short int" is same as "short", "long int" is same as
++    "long", and "long long int" is same as "long long". Similary for
++    their unsigned counterparts also.
++
++    To avoid confusion so that people do not interpret these synonymous
++    types as different types, and also to make the code uniform, clean and
++    more readable usage of "int" should be avoided with "short", "long",
++    and "long long".
++
++    See: https://lore.kernel.org/all/7bbd97dc0a1e5896a0251fada7bb68bb33643f77.camel@perches.com/T/#m1fa34198ce2bd088b3520b74326468a2ab314ce7
++
++  **UNSPECIFIED_INT**
++    "signed", "signed int", and "int" are all the same types. Similarly,
++    "unsigned" and "unsigned int" are also the same.
++    So using type-specifier "signed" and "unsigned" with or without "int"
++    is the same type only. But to avoid confusion so that people do not
++    interpret these synonymous types as different types, and also to make
++    the code uniform, clean, and more readable prefer using the "signed int"
++    or "int" in place of "signed" and "unsigned int" in place of "unsigned".
+-- 
+2.25.1
+

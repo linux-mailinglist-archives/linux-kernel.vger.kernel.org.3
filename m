@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD668587ECF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADB4587EC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbiHBPOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 11:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S237097AbiHBPOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbiHBPOT (ORCPT
+        with ESMTP id S234780AbiHBPOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 2 Aug 2022 11:14:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B66417E12;
-        Tue,  2 Aug 2022 08:14:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3875C17581;
+        Tue,  2 Aug 2022 08:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C9D60682;
-        Tue,  2 Aug 2022 15:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A83C43470;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB23C60303;
+        Tue,  2 Aug 2022 15:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04ED5C433D7;
         Tue,  2 Aug 2022 15:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659453257;
-        bh=hWf/PttupFOeNrraP/UCkmJULP8/JeCaWQYuByvGBJ4=;
+        s=k20201202; t=1659453256;
+        bh=m0f8snPhaM+LiCifg3cCGC6xDAvaa10HN0gcVGJbM74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WsMAAOaNz6It61LU7U0hj9yT6Jep64APeNUprgTkP4sBE6sH2iXKoQPlLgi5QPAgg
-         L3YRjT8D6TKyYsPhlDTp9gCpMWOTt+rfAVfQVrKBTwU48lxPycwXcKYgeNf+t0bx5U
-         //toRJ0q/OL8TBrgKBfc9EqA5WbE+3RyLsdicjdpBhv39LNIf1Ypx5Qloq8P6JjBUz
-         qBghT+50Z+FNYALrbWWltqjTFSdnBH1bbgnLRseSbK337upz4HXhKHpou3VgnNK080
-         lnQnw01yN+sMp+ySHAVciPORh69LtKVjN0YF8S7HM+ourkQQYYBHYlngyKlzYxvlyh
-         k/4OrrZfqN0hQ==
+        b=j7Za+fK2PUc7lGtw2mlIm40rw6IKQY2EH+JUBHOXhFtsHkedF6k9sc4Vq6bggDgT0
+         yqLDr2W6dhfdduqPF3RYj2+RxJsk9tVpuBzAviH+6iaa9Xaf+wIOZ+w1xizG1p8gGS
+         bAasM/1+SX3v9WAoaHieWTt/WZxsAXAyAvhaSLJ4yw1PaysJQFSvsJYT025a0CkWHr
+         l5fzfFhtFcYYDXdY3/SJ9c4szQaxhtiuNwlxgFsoZDRmq7j6Jak8S6vnhCf6gCeDwJ
+         9ylQFcxfi6qA9DS2++7Jbfm2AwK8g1MB5k5I5T2hU6cZl04zHCYoOvsXatLqIutjic
+         FXGP1AfX81uPQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oItbM-0000Tc-EW; Tue, 02 Aug 2022 17:14:32 +0200
+        id 1oItbM-0000Te-H1; Tue, 02 Aug 2022 17:14:32 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
@@ -53,9 +53,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5/8] Revert "dt-bindings: usb: dwc3: Add wakeup-source property support"
-Date:   Tue,  2 Aug 2022 17:14:01 +0200
-Message-Id: <20220802151404.1797-6-johan+linaro@kernel.org>
+Subject: [PATCH 6/8] dt-bindings: usb: qcom,dwc3: add wakeup-source property
+Date:   Tue,  2 Aug 2022 17:14:02 +0200
+Message-Id: <20220802151404.1797-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220802151404.1797-1-johan+linaro@kernel.org>
 References: <20220802151404.1797-1-johan+linaro@kernel.org>
@@ -70,43 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 098c4d43b91a269e89f60331a26a3f3b914677ed.
+Add a wakeup-source property to the binding to describe whether the
+wakeup interrupts can wake the system from suspend.
 
-A devicetree binding should describe hardware capabilities and not be
-used to configure power-management policies (even if things are a bit
-blurry when it comes to "wakeup-source"). It should also not be used to
-work around Linux driver implementation issues such as how to coordinate
-the glue and core dwc3 drivers.
-
-For the Qualcomm dwc3 controllers, it is the glue device that manages
-the wakeup interrupts, which may or may not be able to wake the system
-up from system suspend.
-
-Also note that USB remote wakeup is always enabled during runtime
-suspend.
-
-Fixes: 098c4d43b91a ("dt-bindings: usb: dwc3: Add wakeup-source property support")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 -----
- 1 file changed, 5 deletions(-)
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 1779d08ba1c0..d41265ba8ce2 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -343,11 +343,6 @@ properties:
-       This port is used with the 'usb-role-switch' property  to connect the
-       dwc3 to type C connector.
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index fea3e7092ace..f6e118bf04f6 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -108,6 +108,8 @@ properties:
+       HS/FS/LS modes are supported.
+     type: boolean
  
--  wakeup-source:
--    $ref: /schemas/types.yaml#/definitions/flag
--    description:
--      Enable USB remote wakeup.
--
- unevaluatedProperties: false
++  wakeup-source: true
++
+ # Required child node:
  
- required:
+ patternProperties:
 -- 
 2.35.1
 

@@ -2,350 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099D4587CF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAFA587CFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbiHBNT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        id S235960AbiHBNWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiHBNT4 (ORCPT
+        with ESMTP id S232425AbiHBNWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:19:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A70813E3D;
-        Tue,  2 Aug 2022 06:19:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C64946134F;
-        Tue,  2 Aug 2022 13:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4184C433D7;
-        Tue,  2 Aug 2022 13:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659446393;
-        bh=QpcAUsewd/+KMI+EaDJ9tjM4TNeoV2RTu8Kl+bvpWxA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IW6a0pBIbsC5aevWoSvnCQw/mnUVKyYeXk22PgTJrLMOVjWuVKvxYHoJNu+XaOHGT
-         KX/BQQ3WevV4ImfzdxOhGW2VvY68hI7gVN/iEIHt4jCIbkg9PPG8z1MmmB0XAkbvIx
-         KQj5HmrDrwJWCvn8lpneqdu+BnUuBHv4yyh2zAWwr6x4k3iPI0CUjrfehS0MDbVOHZ
-         qWdDrluYFRNt0jpoza17eCzqQ5KF410Es93UkKJfyJ02SOiyeUoYdtuG6ixRfnaTeU
-         yxaUdedITpu2h5PZVWrj3BGH71at0ojTMovVf9bB5drUTA7vDAfZRPzmjToDJTzB6R
-         kGakJmiL3h0Dw==
-Date:   Tue, 2 Aug 2022 16:19:49 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com
-Subject: Re: [PATCH Part2 v6 24/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_START
- command
-Message-ID: <YukkdQJS4K+V2Nkn@kernel.org>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <6d5c899030b113755e6c093e8bb9ad123280edc6.1655761627.git.ashish.kalra@amd.com>
+        Tue, 2 Aug 2022 09:22:45 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5114036;
+        Tue,  2 Aug 2022 06:22:44 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id tl27so8061718ejc.1;
+        Tue, 02 Aug 2022 06:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s3FK7mQPNn8j8Six5edf3/NjZ+hzFIigo3x+IFlhAl0=;
+        b=N8NlMxJIhVZDuK1OlyajxXvsLry5BavyKbCf+XpEqtjVol9fy0DkELNK7gBn8ShSRr
+         vfzpSGxhxX8MBbH1hSstoIDwXKaJDZTY3RJPiPAXSd51fIfd1HIcrwktkWcT05AUd8LV
+         XLDg/gcgvExoN0N9RMsqxngACo8m0yo/SnD/ktBJk4dcsFNXXUwmp6rAO+fqsuij8J0d
+         D3UQZyD4Ks6ZWHXX7XNC3IwWv46CqubQTKgUDUGAqTI8YVuBmsp3juCcJtlsLugBESVj
+         4rGMaS2JG1N3txZ6XeIJhw2ScDnL/6P2KyCiA1ROWAcZUQ8BdK8z6WU+3qi5NOXRnGms
+         C3tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s3FK7mQPNn8j8Six5edf3/NjZ+hzFIigo3x+IFlhAl0=;
+        b=5h9tDI4UaP+p4jFVHbbCKyoIVdbECcdGQJcMvOtiIe0mYvJgRwizbJTqsA1ibuS5sU
+         B7JZAVRHiXKdvlUEOmUVsN7XT09yx98nZuNJu7Xnm2u1eSncohufyFHQw9ZpTSE45kku
+         GrSGmdX67VAaB1vFW9r2xVkhDXKF9xvR5YBfkXuciT4f/PYf0w4vbw1i8/HF/C7+p9VE
+         HzFYJ16u1I1m9RGSpeFo2pbeKuhP0rJCJIYpikZd/D/WL535N/EKbJP8RwPBK1tK1mvW
+         cZOLiqA0sSwmXepDGJruvEWJKDl3lRI+TOTFIdb/S2gTQ2ubomcJz5EGqtQmJ9HOwPWq
+         G5eg==
+X-Gm-Message-State: ACgBeo0T3NDWjzZgLoUNDQbrB7qacWa5UAKe+8dTLQ1ll/OO5TcFYy4+
+        NzpbKmX16kGgpqigeGf8dv0=
+X-Google-Smtp-Source: AA6agR6lweVY6inGtYktpi3NOi1GaLn6GVF3FNPsNArznBe9UTHG+vMm0/HtuqES69pOwtYYykJseA==
+X-Received: by 2002:a17:906:478d:b0:730:a5ed:1bf3 with SMTP id cw13-20020a170906478d00b00730a5ed1bf3mr1019481ejc.255.1659446562438;
+        Tue, 02 Aug 2022 06:22:42 -0700 (PDT)
+Received: from [10.22.0.4] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170906175100b00718e4e64b7bsm6262602eje.79.2022.08.02.06.22.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 06:22:41 -0700 (PDT)
+Message-ID: <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
+Date:   Tue, 2 Aug 2022 15:22:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d5c899030b113755e6c093e8bb9ad123280edc6.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+ <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:07:35PM +0000, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
+
+
+On 8/2/22 13:51, Srinivas Kandagatla wrote:
+> Hi Maximilian,
 > 
-> KVM_SEV_SNP_LAUNCH_START begins the launch process for an SEV-SNP guest.
-> The command initializes a cryptographic digest context used to construct
-> the measurement of the guest. If the guest is expected to be migrated,
-> the command also binds a migration agent (MA) to the guest.
+> On 23/07/2022 23:49, Maximilian Luz wrote:
+>> On modern Qualcomm platforms, access to EFI variables is restricted to
+>> the secure world / TrustZone, i.e. the Trusted Execution Environment
+>> (TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
+>> therefore need to talk to the UEFI Secure Application (uefisecapp),
+>> residing in the TrEE.
+>>
+>> This series adds support for accessing EFI variables on those platforms.
+>>
+>> To do this, we first need to add some SCM call functions used to manage
+>> and talk to Secure Applications. A very small subset of this interface
+>> is added in the second patch (whereas the first one exports the required
+>> functions for that). Interface specifications are extracted from [1].
+>> While this does not (yet) support re-entrant SCM calls (including
+>> callbacks and listeners), this is enough to talk to the aforementioned
+>> uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
+>> and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
+>> Yoga C630 devices).
+>>
+>> The third patch adds a client driver for uefisecapp, installing the
+>> respective efivar operations. The application interface has been reverse
+>> engineered from the Windows QcTrEE8180.sys driver.
+>>
+>> Apart from uefisecapp, there are more Secure Applications running that
+>> we might want to support in the future. For example, on the Surface Pro
+>> X (sc8180x-based), the TPM is also managed via one.
+>>
+>> I'm not sure whether this should go to drivers/firmware or to
+>> drivers/soc/qcom. I've put this into firmware as all of this is
+>> essentially an interface to the secure firmware running in the TrustZone
+>> (and SCM stuff is handled here already), but please let me know if I
+>> should move this.
 > 
-> For more information see the SEV-SNP specification.
+>  From what I see so far is that this is adapted from downstream qseecom driver, this approach could work for a limited usecases but not scalable, as we cannot add drivers for each Qualcomm specific TA in kernel.
+> This has to be handled in much generic way using Linux TEE framework, and let the userspace side deal with TA specific bits.
+
+I generally agree with the sentiment, however UEFI variables should IMHO be
+handled by the kernel. Moving handling of those to userspace breaks things like
+EFI-based pstore and efivarfs. The latter will in turn break some user-space
+tools (most notably efibootmgr used by e.g. GRUB and I think fwupdmgr which
+needs to set some capsule variables). Ideally, we would find a way to not break
+these, i.e. have them work out-of-the-box.
+
+A similar argumentation might apply to the TPM app.
+
+> AFAIU, Qualcomm is moving away from qseecom interface to new smc-invoke interface, most of Qualcomm SoCs starting from SDM660 already have support to this.
 > 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  .../virt/kvm/x86/amd-memory-encryption.rst    |  24 ++++
->  arch/x86/kvm/svm/sev.c                        | 115 +++++++++++++++++-
->  arch/x86/kvm/svm/svm.h                        |   1 +
->  include/uapi/linux/kvm.h                      |  10 ++
->  4 files changed, 147 insertions(+), 3 deletions(-)
+> This interface provides a better abstracted IPC mechanism to talk to TA. Most of these TA specific interfaces are packed in closed userspace source.
+> Having said that QTEE smcinvoke driver can be modeled as a proper TEE driver with Userspace driving the TA specific bits using existing tee uapis.
+> This also brings in other features like loading, Listeners aka callbacks, secure memory allocations..etc.
 > 
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index 903023f524af..878711f2dca6 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -462,6 +462,30 @@ The flags bitmap is defined as::
->  If the specified flags is not supported then return -EOPNOTSUPP, and the supported
->  flags are returned.
->  
-> +19. KVM_SNP_LAUNCH_START
-> +------------------------
-> +
-> +The KVM_SNP_LAUNCH_START command is used for creating the memory encryption
-> +context for the SEV-SNP guest. To create the encryption context, user must
-> +provide a guest policy, migration agent (if any) and guest OS visible
-> +workarounds value as defined SEV-SNP specification.
-> +
-> +Parameters (in): struct  kvm_snp_launch_start
-> +
-> +Returns: 0 on success, -negative on error
-> +
-> +::
-> +
-> +        struct kvm_sev_snp_launch_start {
-> +                __u64 policy;           /* Guest policy to use. */
-> +                __u64 ma_uaddr;         /* userspace address of migration agent */
-> +                __u8 ma_en;             /* 1 if the migtation agent is enabled */
-> +                __u8 imi_en;            /* set IMI to 1. */
-> +                __u8 gosvw[16];         /* guest OS visible workarounds */
-> +        };
-> +
-> +See the SEV-SNP specification for further detail on the launch input.
-> +
->  References
->  ==========
->  
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 813bda7f7b55..9e6fc7a94ed7 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -21,6 +21,7 @@
->  #include <asm/pkru.h>
->  #include <asm/trapnr.h>
->  #include <asm/fpu/xcr.h>
-> +#include <asm/sev.h>
->  
->  #include "x86.h"
->  #include "svm.h"
-> @@ -73,6 +74,8 @@ static unsigned int nr_asids;
->  static unsigned long *sev_asid_bitmap;
->  static unsigned long *sev_reclaim_asid_bitmap;
->  
-> +static int snp_decommission_context(struct kvm *kvm);
-> +
->  struct enc_region {
->  	struct list_head list;
->  	unsigned long npages;
-> @@ -98,12 +101,17 @@ static int sev_flush_asids(int min_asid, int max_asid)
->  	down_write(&sev_deactivate_lock);
->  
->  	wbinvd_on_all_cpus();
-> -	ret = sev_guest_df_flush(&error);
-> +
-> +	if (sev_snp_enabled)
-> +		ret = snp_guest_df_flush(&error);
-> +	else
-> +		ret = sev_guest_df_flush(&error);
->  
->  	up_write(&sev_deactivate_lock);
->  
->  	if (ret)
-> -		pr_err("SEV: DF_FLUSH failed, ret=%d, error=%#x\n", ret, error);
-> +		pr_err("SEV%s: DF_FLUSH failed, ret=%d, error=%#x\n",
-> +			sev_snp_enabled ? "-SNP" : "", ret, error);
->  
->  	return ret;
->  }
-> @@ -1825,6 +1833,74 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
->  	return ret;
->  }
->  
-> +static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct sev_data_snp_gctx_create data = {};
-> +	void *context;
-> +	int rc;
-> +
-> +	/* Allocate memory for context page */
+> In the past, I have tried to do a prototype of this smcinvoke driver as a proper tee driver, incase you are interested patches are at https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-qcomtee
+> Plan is to discuss with Qualcomm and send it for upstream review.
 
-Nit: this comment has very little value, if any. It's just stating
-the obvious.
+Thanks for this information! So as far as I understand it, this is currently an
+interface to user-space only, i.e. does not allow in-kernel drivers for apps?
+It would be great if this could then be extended to handle (the bare minimum
+of) in-kernel drivers (i.e. only things that the kernel itself needs, like EFI
+variables). Alternatively, I'm happy to hear suggestions on how we not break
+the aforementioned things while moving handling off to userspace.
 
-Instead, I'd add a description for the function:
+> I think its worth exploring if uefisecapp can talk smcinvoke.
+> I can ping Qualcomm engineers to see if that is doable.
 
-/*
- * Allocate and initialize a digest for the guest measurement.
- */
-static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
+I think that would be great! Thanks!
 
-This would be much more helpful to get a grasp on "what I'm looking at".
-
-> +	context = snp_alloc_firmware_page(GFP_KERNEL_ACCOUNT);
-> +	if (!context)
-> +		return NULL;
-> +
-> +	data.gctx_paddr = __psp_pa(context);
-> +	rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_GCTX_CREATE, &data, &argp->error);
-> +	if (rc) {
-> +		snp_free_firmware_page(context);
-> +		return NULL;
-> +	}
-> +
-> +	return context;
-> +}
-> +
-> +static int snp_bind_asid(struct kvm *kvm, int *error)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_activate data = {0};
-> +
-> +	data.gctx_paddr = __psp_pa(sev->snp_context);
-> +	data.asid   = sev_get_asid(kvm);
-> +	return sev_issue_cmd(kvm, SEV_CMD_SNP_ACTIVATE, &data, error);
-> +}
-> +
-> +static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_launch_start start = {0};
-> +	struct kvm_sev_snp_launch_start params;
-> +	int rc;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	sev->snp_context = snp_context_create(kvm, argp);
-> +	if (!sev->snp_context)
-> +		return -ENOTTY;
-> +
-> +	start.gctx_paddr = __psp_pa(sev->snp_context);
-> +	start.policy = params.policy;
-> +	memcpy(start.gosvw, params.gosvw, sizeof(params.gosvw));
-> +	rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_START, &start, &argp->error);
-> +	if (rc)
-> +		goto e_free_context;
-> +
-> +	sev->fd = argp->sev_fd;
-> +	rc = snp_bind_asid(kvm, &argp->error);
-> +	if (rc)
-> +		goto e_free_context;
-> +
-> +	return 0;
-> +
-> +e_free_context:
-> +	snp_decommission_context(kvm);
-> +
-> +	return rc;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
-> @@ -1915,6 +1991,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  	case KVM_SEV_RECEIVE_FINISH:
->  		r = sev_receive_finish(kvm, &sev_cmd);
->  		break;
-> +	case KVM_SEV_SNP_LAUNCH_START:
-> +		r = snp_launch_start(kvm, &sev_cmd);
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		goto out;
-> @@ -2106,6 +2185,28 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
->  	return ret;
->  }
->  
-> +static int snp_decommission_context(struct kvm *kvm)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_decommission data = {};
-> +	int ret;
-> +
-> +	/* If context is not created then do nothing */
-> +	if (!sev->snp_context)
-> +		return 0;
-> +
-> +	data.gctx_paddr = __sme_pa(sev->snp_context);
-> +	ret = snp_guest_decommission(&data, NULL);
-> +	if (WARN_ONCE(ret, "failed to release guest context"))
-> +		return ret;
-> +
-> +	/* free the context page now */
-> +	snp_free_firmware_page(sev->snp_context);
-> +	sev->snp_context = NULL;
-> +
-> +	return 0;
-> +}
-> +
->  void sev_vm_destroy(struct kvm *kvm)
->  {
->  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> @@ -2147,7 +2248,15 @@ void sev_vm_destroy(struct kvm *kvm)
->  		}
->  	}
->  
-> -	sev_unbind_asid(kvm, sev->handle);
-> +	if (sev_snp_guest(kvm)) {
-> +		if (snp_decommission_context(kvm)) {
-> +			WARN_ONCE(1, "Failed to free SNP guest context, leaking asid!\n");
-> +			return;
-> +		}
-> +	} else {
-> +		sev_unbind_asid(kvm, sev->handle);
-> +	}
-> +
->  	sev_asid_free(sev);
->  }
->  
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 2f45589ee596..71c011af098e 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -91,6 +91,7 @@ struct kvm_sev_info {
->  	struct misc_cg *misc_cg; /* For misc cgroup accounting */
->  	atomic_t migration_in_progress;
->  	u64 snp_init_flags;
-> +	void *snp_context;      /* SNP guest context page */
->  };
->  
->  struct kvm_svm {
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 0f912cefc544..0cb119d66ae5 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1812,6 +1812,7 @@ enum sev_cmd_id {
->  
->  	/* SNP specific commands */
->  	KVM_SEV_SNP_INIT,
-> +	KVM_SEV_SNP_LAUNCH_START,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -1919,6 +1920,15 @@ struct kvm_snp_init {
->  	__u64 flags;
->  };
->  
-> +struct kvm_sev_snp_launch_start {
-> +	__u64 policy;
-> +	__u64 ma_uaddr;
-> +	__u8 ma_en;
-> +	__u8 imi_en;
-> +	__u8 gosvw[16];
-> +	__u8 pad[6];
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
-> -- 
-> 2.25.1
-> 
-
-BR, Jarkko
+Regards,
+Max

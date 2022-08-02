@@ -2,85 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B2C587B2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260D5587B31
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiHBLAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S236679AbiHBLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiHBLAU (ORCPT
+        with ESMTP id S236713AbiHBLA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:00:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE38272B;
-        Tue,  2 Aug 2022 04:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6C08DCE1C40;
-        Tue,  2 Aug 2022 11:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB801C433D7;
-        Tue,  2 Aug 2022 11:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659438013;
-        bh=0ASmGze/PTUrX6y2Ztjb7HH/oEgrz8ukg+sZwDf7hGk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GZptDqETzwQOf5E7/MyhTrC2bLncMioK3JtTQ6JTSZjnjbTC+n4Dsmj4912TlguAF
-         tP4YmhCv5qn6f8KP1Ir8llO0hkMmEm7y5Cg82VCJHP54o1HUiAizalhz1L5cXQ70Tv
-         7uBmwPJZGpQYffrELWAp+I6DUdAYQkgCqHUkQVO6EB302UcFPzgYwj6lNRwlYmyyZL
-         BKSmqbiL5UVjH9yxWmcN1UnvNxhSjRLF8urRRI5/S97S73dd6VqZpbYSivUOTfiBbI
-         cShpcE0E0t8WUvEcZSMzWi/MzoZKLZtR3sFpHa/RjlRN9G/3DWNG4mD5ZODr6+yHPW
-         EVU4IUZIjE1SA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C361C43143;
-        Tue,  2 Aug 2022 11:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 2 Aug 2022 07:00:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28B4013E37
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659438026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xJ6goYLsX5C+yTaCJPNre3d6qfx4iGoRBFFTCYqO9mg=;
+        b=TOjngPX3m82/AgOWtf2YL54DLHHOXlKXtBs6rJ4ShpWHmc+b9pG+DFPHs4zCTCOy6FSLjs
+        quxm8UwHW6AJCJkrXGjNMZb29z4cZBAwCPnnXJCczjsAcQIxSjckjwoaTaGGA/3bdelGf0
+        n0+B4EE6EtrqcXK1WKflAuXUi8vR77U=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-033l12qZOCqYpH8K4bmkKw-1; Tue, 02 Aug 2022 07:00:25 -0400
+X-MC-Unique: 033l12qZOCqYpH8K4bmkKw-1
+Received: by mail-ed1-f71.google.com with SMTP id j19-20020a05640211d300b0043ddce5c23aso1956701edw.14
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 04:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xJ6goYLsX5C+yTaCJPNre3d6qfx4iGoRBFFTCYqO9mg=;
+        b=w6N57K+My+eClgkyz00GZL+dlMRz5jKH6v6wWRNXnxzmcEatmNh0FODGdkl0/x55qi
+         hLY1BI4TXoIgYQzEmLT3hoeipms3yn1WSqJZW57E54joE4vZsc1I/vYwTiL6sIKXB+81
+         9YmwVxDKbmEYWZVdtoi/T8bVhku0a1KHCX29MLcEZeiW9P1IPEQ7fjIDHOUR3kxlEmDB
+         2tkfTVGK1jmoVK6Gjr3CQGKIKDq7SEcs+whmBVWv1pJFcG41xqecCP7zahEqIlFPJh2L
+         yi0KvCQqwEGYeC/SGSIEiUTJWakVOUTqbvWe2wZdbmXbzTnTJSJaYQhbtFR+u0tBhsuh
+         kpEw==
+X-Gm-Message-State: ACgBeo39IcP8qkQKWZd9Vt+TiHazfrbtMaCfBAbjl15qzioIok74jT5l
+        gh7icFdwfdlhDpZuByhuIMy0PwI29DjYQpCATdbQP0tbAyhDIfx1TJ6T3vNsHBAyEFrCXmX5HXZ
+        ljVSGaxWjuq0d1GawSyb/qmYC
+X-Received: by 2002:a05:6402:2755:b0:43d:7568:c78e with SMTP id z21-20020a056402275500b0043d7568c78emr12185420edd.104.1659438024024;
+        Tue, 02 Aug 2022 04:00:24 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7wenvZ6H4t+/xkk0JBUWMSDv2NZrtbupC0xYJYdLYkbUs+HEkLnUxumivyHZaRuNQ1ouWezA==
+X-Received: by 2002:a05:6402:2755:b0:43d:7568:c78e with SMTP id z21-20020a056402275500b0043d7568c78emr12185409edd.104.1659438023864;
+        Tue, 02 Aug 2022 04:00:23 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id u25-20020a17090617d900b0072f4f4dc038sm6116478eje.42.2022.08.02.04.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 04:00:23 -0700 (PDT)
+Message-ID: <6820bd94-1476-b1dc-e325-22b958aea696@redhat.com>
+Date:   Tue, 2 Aug 2022 13:00:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4] net: usb: ax88179_178a: Bind only to vendor-specific
- interface
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165943801356.21664.8346442629133964190.git-patchwork-notify@kernel.org>
-Date:   Tue, 02 Aug 2022 11:00:13 +0000
-References: <20220731072209.45504-1-marcan@marcan.st>
-In-Reply-To: <20220731072209.45504-1-marcan@marcan.st>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     jackychou@asix.com.tw, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/4] platform/x86: pmc_atom: Fix SLP_TYPx bitfield mask
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>
+References: <20220801113734.36131-1-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220801113734.36131-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun, 31 Jul 2022 16:22:09 +0900 you wrote:
-> The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
-> chipset, but exposes CDC Ethernet configurations as well as the
-> vendor specific one. This driver tries to bind by PID:VID
-> unconditionally and ends up picking up the CDC configuration, which
-> is supposed to be handled by the class driver. To make things even
-> more confusing, it sees both of the CDC class interfaces and tries
-> to bind twice, resulting in two broken Ethernet devices.
+On 8/1/22 13:37, Andy Shevchenko wrote:
+> On Intel hardware the SLP_TYPx bitfield occupies bits 10-12 as per ACPI
+> specification (see Table 4.13 "PM1 Control Registers Fixed Hardware
+> Feature Control Bits" for the details).
 > 
-> [...]
+> Fix the mask and other related definitions accordingly.
+> 
+> Fixes: 93e5eadd1f6e ("x86/platform: New Intel Atom SOC power management controller driver")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Here is the summary with links:
-  - [v4] net: usb: ax88179_178a: Bind only to vendor-specific interface
-    https://git.kernel.org/netdev/net/c/c67cc4315a8e
+Thank you for your patch-series, I've applied this series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
+Patches which are added to review-hans now are intended for
+the next rc1. This branch will get rebased to the next rc1 when
+it is out and after the rebasing the contents of review-hans
+will be pushed to the platform-drivers-x86/for-next branch.
+
+Regards,
+
+Hans
+
+
+> ---
+> v2: addressed compilation error
+>  drivers/platform/x86/pmc_atom.c            | 2 +-
+>  include/linux/platform_data/x86/pmc_atom.h | 6 ++++--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
+> index b8b1ed1406de..c220172fefbb 100644
+> --- a/drivers/platform/x86/pmc_atom.c
+> +++ b/drivers/platform/x86/pmc_atom.c
+> @@ -232,7 +232,7 @@ static void pmc_power_off(void)
+>  	pm1_cnt_port = acpi_base_addr + PM1_CNT;
+>  
+>  	pm1_cnt_value = inl(pm1_cnt_port);
+> -	pm1_cnt_value &= SLEEP_TYPE_MASK;
+> +	pm1_cnt_value &= ~SLEEP_TYPE_MASK;
+>  	pm1_cnt_value |= SLEEP_TYPE_S5;
+>  	pm1_cnt_value |= SLEEP_ENABLE;
+>  
+> diff --git a/include/linux/platform_data/x86/pmc_atom.h b/include/linux/platform_data/x86/pmc_atom.h
+> index 6807839c718b..ea01dd80153b 100644
+> --- a/include/linux/platform_data/x86/pmc_atom.h
+> +++ b/include/linux/platform_data/x86/pmc_atom.h
+> @@ -7,6 +7,8 @@
+>  #ifndef PMC_ATOM_H
+>  #define PMC_ATOM_H
+>  
+> +#include <linux/bits.h>
+> +
+>  /* ValleyView Power Control Unit PCI Device ID */
+>  #define	PCI_DEVICE_ID_VLV_PMC	0x0F1C
+>  /* CherryTrail Power Control Unit PCI Device ID */
+> @@ -139,9 +141,9 @@
+>  #define	ACPI_MMIO_REG_LEN	0x100
+>  
+>  #define	PM1_CNT			0x4
+> -#define	SLEEP_TYPE_MASK		0xFFFFECFF
+> +#define	SLEEP_TYPE_MASK		GENMASK(12, 10)
+>  #define	SLEEP_TYPE_S5		0x1C00
+> -#define	SLEEP_ENABLE		0x2000
+> +#define	SLEEP_ENABLE		BIT(13)
+>  
+>  extern int pmc_atom_read(int offset, u32 *value);
+>  
 

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE48587550
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9043A58755C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiHBBzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S235843AbiHBBzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235735AbiHBByy (ORCPT
+        with ESMTP id S235740AbiHBByy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 Aug 2022 21:54:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C2A48CA4;
-        Mon,  1 Aug 2022 18:53:25 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756C491C5;
+        Mon,  1 Aug 2022 18:53:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2BD7CE19F4;
-        Tue,  2 Aug 2022 01:53:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F69C433D7;
-        Tue,  2 Aug 2022 01:53:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B362AB81910;
+        Tue,  2 Aug 2022 01:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3072AC433C1;
+        Tue,  2 Aug 2022 01:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659405202;
-        bh=NuOpRdMsihtMLYOwhaS3C4UEtVr+be11RVn2cwjc27A=;
+        s=k20201202; t=1659405205;
+        bh=PsjJEscwfqiEIk6jnESsddoju9xgCRns2EXUi58QroI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X8B0Rnx5hiPLbSQoil8jKzXGRaRTnT8LMR36JCM47QXX1Ycf4AmUmgZdAiE+oV1D3
-         o4p5tpjKvbuIxvWblx+XLusOwnoMU6JVRIQeGkHMDX7LDIKgYgCp8SdvuisfDOAcHI
-         /K2RzIhggO2YLXfENgxZqpouWFDB5+RNR1Tf24TW6np5BTFSNusinvIZd8My4lONp9
-         SWViyeJwWFo86tWZWFMvYJrTd05pVn+TFyzn7AVIYFadgj9MKTzf+yRbEiYyc9O3IT
-         dOQ5kkp0mkxS32epGd7W7pL6UdRODLdr8vuOSssLVHbsHfujhuZmldPwtkSpgM4U97
-         zQVwM3n+zstIw==
+        b=CuZWVJhICWqRc9EDLzclZryn6L/AoqP8sC8+o/riXbBmNujCAKm8wb1YIRxojmXH2
+         7U94MjeHsW2ujQyzyJQGn+Ws+8qkw0Up8iAGw7OSMIVDmbbIYpRuMV1HdatOXWPEe1
+         ki3Yzb76aBRIk2/oK0aVPbcpJMIpCUQBqTtWf3z6L3zgl4rTiChYFPwBl42WuN2VI6
+         V1yKS64H5gsaauWDTVIC6o3IzZLm64089oz+/n9jt7eK+4K+hS+UkiP+V4XBe99aoE
+         ZinuOFDk7TL1lfrXtUr1OYK/ELeQBV3WET+0m+D+SSAR+HQEtPjLvVqdQIeU76BccT
+         db/wmZ/mZQ4Hg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: [PATCH v8 24/31] scripts: decode_stacktrace: demangle Rust symbols
-Date:   Tue,  2 Aug 2022 03:50:11 +0200
-Message-Id: <20220802015052.10452-25-ojeda@kernel.org>
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Subject: [PATCH v8 25/31] configs: add `rust` config
+Date:   Tue,  2 Aug 2022 03:50:12 +0200
+Message-Id: <20220802015052.10452-26-ojeda@kernel.org>
 In-Reply-To: <20220802015052.10452-1-ojeda@kernel.org>
 References: <20220802015052.10452-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -57,51 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent versions of both Binutils (`c++filt`) and LLVM (`llvm-cxxfilt`)
-provide Rust v0 mangling support.
+From: Wedson Almeida Filho <wedsonaf@google.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+This allows us to enable Rust while creating a configuration file, for
+example, we can run `make defconfig rust.config` from the command line
+to create the default configuration plus enable Rust.
+
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- scripts/decode_stacktrace.sh | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/configs/rust.config | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 kernel/configs/rust.config
 
-diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
-index 7075e26ab2c4..564c5632e1a2 100755
---- a/scripts/decode_stacktrace.sh
-+++ b/scripts/decode_stacktrace.sh
-@@ -8,6 +8,14 @@ usage() {
- 	echo "	$0 -r <release> | <vmlinux> [<base path>|auto] [<modules path>]"
- }
- 
-+# Try to find a Rust demangler
-+if type llvm-cxxfilt >/dev/null 2>&1 ; then
-+	cppfilt=llvm-cxxfilt
-+elif type c++filt >/dev/null 2>&1 ; then
-+	cppfilt=c++filt
-+	cppfilt_opts=-i
-+fi
-+
- if [[ $1 == "-r" ]] ; then
- 	vmlinux=""
- 	basepath="auto"
-@@ -180,6 +188,12 @@ parse_symbol() {
- 	# In the case of inlines, move everything to same line
- 	code=${code//$'\n'/' '}
- 
-+	# Demangle if the name looks like a Rust symbol and if
-+	# we got a Rust demangler
-+	if [[ $name =~ ^_R && $cppfilt != "" ]] ; then
-+		name=$("$cppfilt" "$cppfilt_opts" "$name")
-+	fi
-+
- 	# Replace old address with pretty line numbers
- 	symbol="$segment$name ($code)"
- }
+diff --git a/kernel/configs/rust.config b/kernel/configs/rust.config
+new file mode 100644
+index 000000000000..38a7c5362c9c
+--- /dev/null
++++ b/kernel/configs/rust.config
+@@ -0,0 +1 @@
++CONFIG_RUST=y
 -- 
 2.37.1
 

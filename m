@@ -2,211 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2DA587DF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E743A587DF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbiHBOMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S237254AbiHBOMl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 2 Aug 2022 10:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiHBOMT (ORCPT
+        with ESMTP id S237239AbiHBOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:12:19 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47A51B7A1;
-        Tue,  2 Aug 2022 07:12:17 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bq11so17028982lfb.5;
-        Tue, 02 Aug 2022 07:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=RDs6awO6VCv+ESUehDACchXulBPRYE1xCdDOQIT00OU=;
-        b=ilqTGIgIgHGQ+3zthdqUAJskTvQ+6/u5bNroSJgRtYecDJ7LkMhgjtk87W1TnWNoxU
-         aIhsMpzaPh1wJbXeCKGIVo8sP+UjMeK3yAJ28NUGLdXjZFASVErUewWisLsoW/6SCr1P
-         tVlFRU/1nU03UybLsg6d14h+2NUvDog7DrWyAl4sht6+eeso9WLpflVxV15vVRl8PGkI
-         J2qEPBpolzJ7CFIt2Yldvo/9AMvS6idj2LGcvlGIyTiPonXBLcdYJfa8N/Hz3GrqTylB
-         9LBFv2iEzvAPm2oYyCGWeWYLKLFXCK6p6jHT7X7f+7OtBHH0XMrOXNyGJNL6ETYp5rx0
-         ZoIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=RDs6awO6VCv+ESUehDACchXulBPRYE1xCdDOQIT00OU=;
-        b=ie0ZGqUb6m9ipgKSNNWjJbzw69ZfhRfKrx0Qa/T8FAaRMpaJlNH+jVk+bqNVzfk6sw
-         mRgJnzwESHO5y4dIcNpWJT8EGqixfjpGLkMAfxnQ5W2kvD1OgbwAMuW7V5cycrw11r4q
-         oFcYEWFWUsr/MrRmdR/YIyHJ9aAUQT1aAx96NbRp0KbxBxbwBhbBitT6tI8sKXhV5xG3
-         V/mJDSCEKUtBMQS+O7PxcOt/GDThkFsSbWCz16CpCduCxEIxlQF0GdT1lTw5SAM+gQ4P
-         5V7+VYhleMbgaa8nGctu9lQ+D4P1pP59sEavy7O6hbaPro4YN9s25k6pg2m823JTh+hz
-         QMiw==
-X-Gm-Message-State: AJIora8K+TnBMopnjR/SdOS807k7/4u/W1Hixlt3cKuth+KmkwCsGGAS
-        iHcx4egYQ3/80NNW/86eLk3SBVAApC5UNCgG/g==
-X-Google-Smtp-Source: AGRyM1uPPqPT0ZregMnVxFvJs3ge9dtMLnuP+VmBdV4ZlWgha0GV8WBL9m5bvAh/H15HyQucBIDvYnv79sMb4arx4bw=
-X-Received: by 2002:a05:6512:1694:b0:48a:9d45:763f with SMTP id
- bu20-20020a056512169400b0048a9d45763fmr7228575lfb.662.1659449535538; Tue, 02
- Aug 2022 07:12:15 -0700 (PDT)
+        Tue, 2 Aug 2022 10:12:36 -0400
+Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9DA2CC83;
+        Tue,  2 Aug 2022 07:12:31 -0700 (PDT)
+Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
+        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id 4341010087D61;
+        Tue,  2 Aug 2022 22:12:29 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id F1A5737C840;
+        Tue,  2 Aug 2022 22:12:28 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta91.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id smPo4zYW0rFd; Tue,  2 Aug 2022 22:12:28 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id C559637C83E;
+        Tue,  2 Aug 2022 22:12:28 +0800 (CST)
+Date:   Tue, 2 Aug 2022 22:12:28 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <682271447.4491372.1659449548731.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <CACGkMEuwgZRt=J_2i-XugMZtcG-xZ7ZF1RpTjmErT5+RCcZ1OQ@mail.gmail.com>
+References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn> <20220721084341.24183-2-qtxuning1999@sjtu.edu.cn> <16a232ad-e0a1-fd4c-ae3e-27db168daacb@redhat.com> <2a8838c4-2e6f-6de7-dcdc-572699ff3dc9@sjtu.edu.cn> <CACGkMEuwgZRt=J_2i-XugMZtcG-xZ7ZF1RpTjmErT5+RCcZ1OQ@mail.gmail.com>
+Subject: Re: [RFC 1/5] vhost: reorder used descriptors in a batch
 MIME-Version: 1.0
-References: <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p1>
- <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2> <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
-In-Reply-To: <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 2 Aug 2022 22:12:03 +0800
-Message-ID: <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com>
-Subject: Re: [PATCH v6 5/6] scsi: ufs: wb: Modify messages
-To:     j-young.choi@samsung.com
-Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [202.120.40.82]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
+Thread-Topic: vhost: reorder used descriptors in a batch
+Thread-Index: gYSHAypU71dHjeHu3qHrKll86luNWw==
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Aug 2, 2022 at 4:29 PM Jinyoung CHOI <j-young.choi@samsung.com> wro=
-te:
->
-> Messages are modified to fit the format of others.
->
-> Reviewed-by: Avri Altman <avri.altman@wdc.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
-> ---
->  drivers/ufs/core/ufs-sysfs.c |  2 +-
->  drivers/ufs/core/ufshcd.c    | 23 +++++++++++------------
->  2 files changed, 12 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-> index 2c0b7f45de4b..117272cf7d61 100644
-> --- a/drivers/ufs/core/ufs-sysfs.c
-> +++ b/drivers/ufs/core/ufs-sysfs.c
-> @@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct=
- device_attribute *attr,
->                  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn =
-WB
->                  * on/off will be done while clock scaling up/down.
->                  */
-> -               dev_warn(dev, "To control WB through wb_on is not allowed=
-!\n");
-> +               dev_warn(dev, "It is not allowed to configure WB!\n");
->                 return -EOPNOTSUPP;
->         }
->
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 5099d161f115..dcd7f03db2a2 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -5737,13 +5737,13 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool en=
-able)
->
->         ret =3D __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
->         if (ret) {
-> -               dev_err(hba->dev, "%s Write Booster %s failed %d\n",
-> -                       __func__, enable ? "enable" : "disable", ret);
-> +               dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
-> +                       __func__, enable ? "enabling" : "disabling", ret)=
-;
->                 return ret;
->         }
->
->         hba->dev_info.wb_enabled =3D enable;
-> -       dev_info(hba->dev, "%s Write Booster %s\n",
-> +       dev_info(hba->dev, "%s: Write Booster %s\n",
->                         __func__, enable ? "enabled" : "disabled");
-
-You need to rebase this patch to follow the latest change as
-https://lore.kernel.org/all/20220709000027.3929970-1-bjorn.andersson@linaro=
-.org/
-
->
->         return ret;
-> @@ -5757,11 +5757,11 @@ static void ufshcd_wb_toggle_buf_flush_during_h8(=
-struct ufs_hba *hba,
->         ret =3D __ufshcd_wb_toggle(hba, enable,
->                         QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
->         if (ret) {
-> -               dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: =
-%d\n",
-> -                       __func__, enable ? "enable" : "disable", ret);
-> +               dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed %=
-d\n",
-> +                       __func__, enable ? "enabling" : "disabling", ret)=
-;
->                 return;
->         }
-> -       dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
-> +       dev_info(hba->dev, "%s: WB-Buf Flush during H8 %s\n",
->                         __func__, enable ? "enabled" : "disabled");
->  }
->
-> @@ -5775,14 +5775,13 @@ int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hb=
-a, bool enable)
->
->         ret =3D __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FL=
-USH_EN);
->         if (ret) {
-> -               dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __fun=
-c__,
-> -                       enable ? "enable" : "disable", ret);
-> +               dev_err(hba->dev, "%s: WB-Buf Flush %s failed %d\n",
-> +                       __func__, enable ? "enabling" : "disabling", ret)=
-;
->                 return ret;
->         }
->
->         hba->dev_info.wb_buf_flush_enabled =3D enable;
-> -
-> -       dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
-> +       dev_info(hba->dev, "%s: WB-Buf Flush %s\n",
->                         __func__, enable ? "enabled" : "disabled");
->
->         return ret;
-> @@ -5800,7 +5799,7 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(str=
-uct ufs_hba *hba,
->                                               QUERY_ATTR_IDN_CURR_WB_BUFF=
-_SIZE,
->                                               index, 0, &cur_buf);
->         if (ret) {
-> -               dev_err(hba->dev, "%s dCurWriteBoosterBufferSize read fai=
-led %d\n",
-> +               dev_err(hba->dev, "%s: dCurWriteBoosterBufferSize read fa=
-iled %d\n",
->                         __func__, ret);
->                 return false;
->         }
-> @@ -5885,7 +5884,7 @@ static bool ufshcd_wb_need_flush(struct ufs_hba *hb=
-a)
->                                       QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE,
->                                       index, 0, &avail_buf);
->         if (ret) {
-> -               dev_warn(hba->dev, "%s dAvailableWriteBoosterBufferSize r=
-ead failed %d\n",
-> +               dev_warn(hba->dev, "%s: dAvailableWriteBoosterBufferSize =
-read failed %d\n",
->                          __func__, ret);
->                 return false;
->         }
-> --
-> 2.25.1
 
 
+----- Original Message -----
+> From: "jasowang" <jasowang@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
+> Cc: "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael Tsirkin" <mst@redhat.com>, "netdev"
+> <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Friday, July 29, 2022 3:32:02 PM
+> Subject: Re: [RFC 1/5] vhost: reorder used descriptors in a batch
 
---=20
-Yours truly,
+> On Thu, Jul 28, 2022 at 4:26 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+>>
+>> On 2022/7/26 15:36, Jason Wang wrote:
+>>
+>>
+>> ÔÚ 2022/7/21 16:43, Guo Zhi Ð´µÀ:
+>>
+>> Device may not use descriptors in order, for example, NIC and SCSI may
+>> not call __vhost_add_used_n with buffers in order.  It's the task of
+>> __vhost_add_used_n to order them.
+>>
+>>
+>>
+>> I'm not sure this is ture. Having ooo descriptors is probably by design to have
+>> better performance.
+>>
+>> This might be obvious for device that may have elevator or QOS stuffs.
+>>
+>> I suspect the right thing to do here is, for the device that can't perform
+>> better in the case of IN_ORDER, let's simply not offer IN_ORDER (zerocopy or
+>> scsi). And for the device we know it can perform better, non-zercopy ethernet
+>> device we can do that.
+>>
+>>
+>>   This commit reorder the buffers using
+>> vq->heads, only the batch is begin from the expected start point and is
+>> continuous can the batch be exposed to driver.  And only writing out a
+>> single used ring for a batch of descriptors, according to VIRTIO 1.1
+>> spec.
+>>
+>>
+>>
+>> So this sounds more like a "workaround" of the device that can't consume buffer
+>> in order, I suspect it can help in performance.
+>>
+>> More below.
+>>
+>>
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/vhost/vhost.c | 44 +++++++++++++++++++++++++++++++++++++++++--
+>>   drivers/vhost/vhost.h |  3 +++
+>>   2 files changed, 45 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+>> index 40097826c..e2e77e29f 100644
+>> --- a/drivers/vhost/vhost.c
+>> +++ b/drivers/vhost/vhost.c
+>> @@ -317,6 +317,7 @@ static void vhost_vq_reset(struct vhost_dev *dev,
+>>       vq->used_flags = 0;
+>>       vq->log_used = false;
+>>       vq->log_addr = -1ull;
+>> +    vq->next_used_head_idx = 0;
+>>       vq->private_data = NULL;
+>>       vq->acked_features = 0;
+>>       vq->acked_backend_features = 0;
+>> @@ -398,6 +399,8 @@ static long vhost_dev_alloc_iovecs(struct vhost_dev *dev)
+>>                         GFP_KERNEL);
+>>           if (!vq->indirect || !vq->log || !vq->heads)
+>>               goto err_nomem;
+>> +
+>> +        memset(vq->heads, 0, sizeof(*vq->heads) * dev->iov_limit);
+>>       }
+>>       return 0;
+>>   @@ -2374,12 +2377,49 @@ static int __vhost_add_used_n(struct vhost_virtqueue
+>>   *vq,
+>>                   unsigned count)
+>>   {
+>>       vring_used_elem_t __user *used;
+>> +    struct vring_desc desc;
+>>       u16 old, new;
+>>       int start;
+>> +    int begin, end, i;
+>> +    int copy_n = count;
+>> +
+>> +    if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+>>
+>>
+>>
+>> How do you guarantee that ids of heads are contiguous?
+>>
+>> There is no need to be contiguous for ids of heads.
+>>
+>> For example, I have three buffer { .id = 0, 15}, {.id = 20, 30} {.id = 15, 20}
+>> for vhost_add_used_n. Then I will let the vq->heads[0].len=15.
+>> vq->heads[15].len=5, vq->heads[20].len=10 as reorder. Once I found there is no
+>> hold in the batched descriptors. I will expose them to driver.
+> 
+> So spec said:
+> 
+> "If VIRTIO_F_IN_ORDER has been negotiated, driver uses descriptors in
+> ring order: starting from offset 0 in the table, and wrapping around
+> at the end of the table."
+> 
+> And
+> 
+> "VIRTIO_F_IN_ORDER(35)This feature indicates that all buffers are used
+> by the device in the same order in which they have been made
+> available."
+> 
+> This means your example is not an IN_ORDER device.
+> 
+> The driver should submit buffers (assuming each buffer have one
+> descriptor) in order {id = 0, 15}, {id = 1, 30} and {id = 2, 20}.
+> 
+> And even if it is submitted in order, we can not use a batch because:
+> 
+> "The skipped buffers (for which no used ring entry was written) are
+> assumed to have been used (read or written) by the device completely."
+> 
+> This means for TX we are probably ok, but for rx, unless we know the
+> buffers were written completely, we can't write them in a batch.
+> 
+> I'd suggest to do cross testing for this series:
+> 
+> 1) testing vhost IN_ORDER support with DPDK virtio PMD
+> 2) testing virtio IN_ORDER with DPDK vhost-user via testpmd
+> 
+> Thanks
+> 
+You are correct, for rx we can't do a batch because we have to let the driver know the length of buffers.
 
-=E6=9C=B1=E5=8E=9F=E9=99=9E (Stanley Chu)
+I think these circumstances can offer batch:
+1. tx
+2. rx with RX_MRGBUF feature, which introduce a header for each received buffer
+
+Consider batch is not a mandatory requirement for in order feature according to spec.
+I'd like to let current RFC patch focus on in order implementation, and send another 
+patch series to improve performance by batching on above circumstances.
+
+What's your opinon.
+
+Thanks
+> 
+>>
+>>
+>> +        /* calculate descriptor chain length for each used buffer */
+>>
+>>
+>>
+>> I'm a little bit confused about this comment, we have heads[i].len for this?
+>>
+>> Maybe I should not use vq->heads, some misleading.
+>>
+>>
+>> +        for (i = 0; i < count; i++) {
+>> +            begin = heads[i].id;
+>> +            end = begin;
+>> +            vq->heads[begin].len = 0;
+>>
+>>
+>>
+>> Does this work for e.g RX virtqueue?
+>>
+>>
+>> +            do {
+>> +                vq->heads[begin].len += 1;
+>> +                if (unlikely(vhost_get_desc(vq, &desc, end))) {
+>>
+>>
+>>
+>> Let's try hard to avoid more userspace copy here, it's the source of performance
+>> regression.
+>>
+>> Thanks
+>>
+>>
+>> +                    vq_err(vq, "Failed to get descriptor: idx %d addr %p\n",
+>> +                           end, vq->desc + end);
+>> +                    return -EFAULT;
+>> +                }
+>> +            } while ((end = next_desc(vq, &desc)) != -1);
+>> +        }
+>> +
+>> +        count = 0;
+>> +        /* sort and batch continuous used ring entry */
+>> +        while (vq->heads[vq->next_used_head_idx].len != 0) {
+>> +            count++;
+>> +            i = vq->next_used_head_idx;
+>> +            vq->next_used_head_idx = (vq->next_used_head_idx +
+>> +                          vq->heads[vq->next_used_head_idx].len)
+>> +                          % vq->num;
+>> +            vq->heads[i].len = 0;
+>> +        }
+>> +        /* only write out a single used ring entry with the id corresponding
+>> +         * to the head entry of the descriptor chain describing the last buffer
+>> +         * in the batch.
+>> +         */
+>> +        heads[0].id = i;
+>> +        copy_n = 1;
+>> +    }
+>>         start = vq->last_used_idx & (vq->num - 1);
+>>       used = vq->used->ring + start;
+>> -    if (vhost_put_used(vq, heads, start, count)) {
+>> +    if (vhost_put_used(vq, heads, start, copy_n)) {
+>>           vq_err(vq, "Failed to write used");
+>>           return -EFAULT;
+>>       }
+>> @@ -2410,7 +2450,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq, struct
+>> vring_used_elem *heads,
+>>         start = vq->last_used_idx & (vq->num - 1);
+>>       n = vq->num - start;
+>> -    if (n < count) {
+>> +    if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+>>           r = __vhost_add_used_n(vq, heads, n);
+>>           if (r < 0)
+>>               return r;
+>> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+>> index d9109107a..7b2c0fbb5 100644
+>> --- a/drivers/vhost/vhost.h
+>> +++ b/drivers/vhost/vhost.h
+>> @@ -107,6 +107,9 @@ struct vhost_virtqueue {
+>>       bool log_used;
+>>       u64 log_addr;
+>>   +    /* Sort heads in order */
+>> +    u16 next_used_head_idx;
+>> +
+>>       struct iovec iov[UIO_MAXIOV];
+>>       struct iovec iotlb_iov[64];
+>>       struct iovec *indirect;
+>>
+>>
+>>

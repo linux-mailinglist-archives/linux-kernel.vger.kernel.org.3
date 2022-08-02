@@ -2,250 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A2058824A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C770F588248
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiHBTKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S231594AbiHBTKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiHBTKH (ORCPT
+        with ESMTP id S229864AbiHBTKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 2 Aug 2022 15:10:07 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D548120F4A;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C81DF83;
         Tue,  2 Aug 2022 12:10:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so14618398pjn.3;
-        Tue, 02 Aug 2022 12:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc;
-        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
-        b=NYtgEeoaghrU8qVNeAfEHo+hiWygoLHGe//I9QBLPEGWow2BDRS8mlPg039Qwlm+6O
-         rj/B+ErN+huUUT7qffmxSE5KswZ3t8EQhNEn74BB52bxZz0YeQDF/S9fuxp5OATuE/ZY
-         rSZ90x3fx02nuHv8MUAA/dc90g1twsKvnCXcDj64bD2rsOYhKlxPdjjxoJCc/Ov4/AZX
-         TyKgYKrXKmu3Z44yfagde8dmG8L7Mqemq0t9/qwyf7CGt30IclT7g9b6uaztpOfZbROU
-         p2C+2CLNTKwvlPzvGzaIeHeB69cldZ0PdSJZ27BB5fFf2+IN5YmFQFeNY43FnWmaHXpU
-         FvnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc;
-        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
-        b=jWlfGyBQazDBoYkgAB6ePnGTqJYbteaVoWxdX3MrDqvSkHU98g4dJLNGOGORvMC+aK
-         CFTVR0/t2/MfEZarCxvQzKCrWOsm2t5rSK2BsAlnPE/S4GI5QHHC6k8NQNHTD0mmxz9u
-         FycNLdlHkADCtpc8mmZeYe+r02sj7TFPp5SaFdKVFq63KyulAUpWD2eO6QN+9ve5DhLj
-         pBzxHlLmEQ5jg/Cxru0VVoUjugnRhr6UMHXgnRlcT8QuXR+zZg917S+Atk/cWOgJMwJZ
-         L5KkiUCa0YWTjL8E3AoeyOYAJgp09KRVWLyKQjsFmSJkdAFCX+qcNe1gCZ/zPmWQIRBS
-         Vyvg==
-X-Gm-Message-State: ACgBeo3W74ttcWunFFtilLQOe6p6Kx3O8/ijR9g0obn/L1Qt2+rlDXwQ
-        JSnpGzKYBnGHGhD7A/x46NE=
-X-Google-Smtp-Source: AA6agR6c5d/eGDZnvXii4j134GP/53rWW/DvN9lfXS8jWY5N9Vn0RcwB4+wjZULSragax6pLfvCHmQ==
-X-Received: by 2002:a17:90b:17ca:b0:1f2:df3d:593c with SMTP id me10-20020a17090b17ca00b001f2df3d593cmr921029pjb.205.1659467406115;
-        Tue, 02 Aug 2022 12:10:06 -0700 (PDT)
-Received: from balhae.roam.corp.google.com (rrcs-173-196-215-70.west.biz.rr.com. [173.196.215.70])
-        by smtp.gmail.com with ESMTPSA id u9-20020a170902714900b0016a091eb88esm46784plm.126.2022.08.02.12.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 12:10:05 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Song Liu <songliubraving@fb.com>,
-        Blake Jones <blakejones@google.com>
-Subject: [PATCH v2 1/3] perf lock: Introduce struct lock_contention
-Date:   Tue,  2 Aug 2022 12:10:02 -0700
-Message-Id: <20220802191004.347740-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1688C6145D;
+        Tue,  2 Aug 2022 19:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6F1C433D6;
+        Tue,  2 Aug 2022 19:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659467405;
+        bh=FjoeZzzk1IzB3OU/5rf9Bn7kBcKlBx8DdUOpNoI+29M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SAU3uYYYWc+Cvh90gsfebNVhmo0a903dG1YSM4Wmps4cLy6Ks5G2G5bDlwqqzpB7I
+         +Zp03dcI8GcDKGyP6FHM5MnBy9j4OUBP/ZA1gNmNLz/zvK+ueJP8lOe9T8DYT4H80+
+         vXyRDULeyI9aVi8PzR3soQ5peyjfVU/IT1eMdv9Vuk5LZDqapz/n6AnKW1hrOpa/Qp
+         KVy1R7AT84C4ZZ9fiaacLJGNm5EiscZxq6d0IeJBZeGxacd1bhM9bAZapGO7eytmBk
+         2H9lkgingWXOA7r4wtjeIBQo0I/VymM0GgzPLGK44Ke+HvQwPt7F6/buwLyyrZOL78
+         Pdux2tg4v8yVg==
+Received: by pali.im (Postfix)
+        id 30CF7F81; Tue,  2 Aug 2022 21:10:02 +0200 (CEST)
+Date:   Tue, 2 Aug 2022 21:10:02 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] powerpc: Fix eh field when calling lwarx on PPC32
+Message-ID: <20220802191002.h5pzq5goo34owqfv@pali>
+References: <a1176e19e627dd6a1b8d24c6c457a8ab874b7d12.1659430931.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <a1176e19e627dd6a1b8d24c6c457a8ab874b7d12.1659430931.git.christophe.leroy@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lock_contention struct is to carry related fields together and to
-minimize the change when we add new config options.
+On Tuesday 02 August 2022 11:02:36 Christophe Leroy wrote:
+> Commit 9401f4e46cf6 ("powerpc: Use lwarx/ldarx directly instead of
+> PPC_LWARX/LDARX macros") properly handled the eh field of lwarx
+> in asm/bitops.h but failed to clear it for PPC32 in
+> asm/simple_spinlock.h
+> 
+> So, do as in arch_atomic_try_cmpxchg_lock(), set it to 1 if PPC64
+> but set it to 0 if PPC32. For that use IS_ENABLED(CONFIG_PPC64) which
+> returns 1 when CONFIG_PPC64 is set and 0 otherwise.
+> 
+> Reported-by: Pali Rohár <pali@kernel.org>
+> Fixes: 9401f4e46cf6 ("powerpc: Use lwarx/ldarx directly instead of PPC_LWARX/LDARX macros")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/builtin-lock.c             | 23 ++++++++++++++---------
- tools/perf/util/bpf_lock_contention.c |  9 ++++++---
- tools/perf/util/lock-contention.h     | 17 +++++++++++------
- 3 files changed, 31 insertions(+), 18 deletions(-)
+This fix works perfectly. Thanks!
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 7897a33fec1b..eef778b7d33d 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1594,7 +1594,10 @@ static int __cmd_contention(int argc, const char **argv)
- 		.mode  = PERF_DATA_MODE_READ,
- 		.force = force,
- 	};
--	struct evlist *evlist = NULL;
-+	struct lock_contention con = {
-+		.target = &target,
-+		.result = &lockhash_table[0],
-+	};
- 
- 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
- 	if (IS_ERR(session)) {
-@@ -1620,24 +1623,26 @@ static int __cmd_contention(int argc, const char **argv)
- 		signal(SIGCHLD, sighandler);
- 		signal(SIGTERM, sighandler);
- 
--		evlist = evlist__new();
--		if (evlist == NULL) {
-+		con.machine = &session->machines.host;
-+
-+		con.evlist = evlist__new();
-+		if (con.evlist == NULL) {
- 			err = -ENOMEM;
- 			goto out_delete;
- 		}
- 
--		err = evlist__create_maps(evlist, &target);
-+		err = evlist__create_maps(con.evlist, &target);
- 		if (err < 0)
- 			goto out_delete;
- 
- 		if (argc) {
--			err = evlist__prepare_workload(evlist, &target,
-+			err = evlist__prepare_workload(con.evlist, &target,
- 						       argv, false, NULL);
- 			if (err < 0)
- 				goto out_delete;
- 		}
- 
--		if (lock_contention_prepare(evlist, &target) < 0) {
-+		if (lock_contention_prepare(&con) < 0) {
- 			pr_err("lock contention BPF setup failed\n");
- 			goto out_delete;
- 		}
-@@ -1672,13 +1677,13 @@ static int __cmd_contention(int argc, const char **argv)
- 	if (use_bpf) {
- 		lock_contention_start();
- 		if (argc)
--			evlist__start_workload(evlist);
-+			evlist__start_workload(con.evlist);
- 
- 		/* wait for signal */
- 		pause();
- 
- 		lock_contention_stop();
--		lock_contention_read(&session->machines.host, &lockhash_table[0]);
-+		lock_contention_read(&con);
- 	} else {
- 		err = perf_session__process_events(session);
- 		if (err)
-@@ -1691,7 +1696,7 @@ static int __cmd_contention(int argc, const char **argv)
- 	print_contention_result();
- 
- out_delete:
--	evlist__delete(evlist);
-+	evlist__delete(con.evlist);
- 	lock_contention_finish();
- 	perf_session__delete(session);
- 	return err;
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index 16b7451b4b09..f5e2b4f19a72 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -27,10 +27,12 @@ struct lock_contention_data {
- 	u32 flags;
- };
- 
--int lock_contention_prepare(struct evlist *evlist, struct target *target)
-+int lock_contention_prepare(struct lock_contention *con)
- {
- 	int i, fd;
- 	int ncpus = 1, ntasks = 1;
-+	struct evlist *evlist = con->evlist;
-+	struct target *target = con->target;
- 
- 	skel = lock_contention_bpf__open();
- 	if (!skel) {
-@@ -102,12 +104,13 @@ int lock_contention_stop(void)
- 	return 0;
- }
- 
--int lock_contention_read(struct machine *machine, struct hlist_head *head)
-+int lock_contention_read(struct lock_contention *con)
- {
- 	int fd, stack;
- 	u32 prev_key, key;
- 	struct lock_contention_data data;
- 	struct lock_stat *st;
-+	struct machine *machine = con->machine;
- 	u64 stack_trace[CONTENTION_STACK_DEPTH];
- 
- 	fd = bpf_map__fd(skel->maps.lock_stat);
-@@ -163,7 +166,7 @@ int lock_contention_read(struct machine *machine, struct hlist_head *head)
- 			return -1;
- 		}
- 
--		hlist_add_head(&st->hash_entry, head);
-+		hlist_add_head(&st->hash_entry, con->result);
- 		prev_key = key;
- 	}
- 
-diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-index 092c84441f9f..a0df5308cca4 100644
---- a/tools/perf/util/lock-contention.h
-+++ b/tools/perf/util/lock-contention.h
-@@ -107,18 +107,24 @@ struct evlist;
- struct machine;
- struct target;
- 
-+struct lock_contention {
-+	struct evlist *evlist;
-+	struct target *target;
-+	struct machine *machine;
-+	struct hlist_head *result;
-+};
-+
- #ifdef HAVE_BPF_SKEL
- 
--int lock_contention_prepare(struct evlist *evlist, struct target *target);
-+int lock_contention_prepare(struct lock_contention *con);
- int lock_contention_start(void);
- int lock_contention_stop(void);
--int lock_contention_read(struct machine *machine, struct hlist_head *head);
-+int lock_contention_read(struct lock_contention *con);
- int lock_contention_finish(void);
- 
- #else  /* !HAVE_BPF_SKEL */
- 
--static inline int lock_contention_prepare(struct evlist *evlist __maybe_unused,
--					  struct target *target __maybe_unused)
-+static inline int lock_contention_prepare(struct lock_contention *con __maybe_unused)
- {
- 	return 0;
- }
-@@ -127,8 +133,7 @@ static inline int lock_contention_start(void) { return 0; }
- static inline int lock_contention_stop(void) { return 0; }
- static inline int lock_contention_finish(void) { return 0; }
- 
--static inline int lock_contention_read(struct machine *machine __maybe_unused,
--				       struct hlist_head *head __maybe_unused)
-+static inline int lock_contention_read(struct lock_contention *con __maybe_unused)
- {
- 	return 0;
- }
--- 
-2.37.1.455.g008518b4e5-goog
+Tested-by: Pali Rohár <pali@kernel.org>
 
+> ---
+>  arch/powerpc/include/asm/simple_spinlock.h | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/simple_spinlock.h b/arch/powerpc/include/asm/simple_spinlock.h
+> index 7ae6aeef8464..5095c636a680 100644
+> --- a/arch/powerpc/include/asm/simple_spinlock.h
+> +++ b/arch/powerpc/include/asm/simple_spinlock.h
+> @@ -48,10 +48,11 @@ static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>  static inline unsigned long __arch_spin_trylock(arch_spinlock_t *lock)
+>  {
+>  	unsigned long tmp, token;
+> +	unsigned int eh = IS_ENABLED(CONFIG_PPC64);
+>  
+>  	token = LOCK_TOKEN;
+>  	__asm__ __volatile__(
+> -"1:	lwarx		%0,0,%2,1\n\
+> +"1:	lwarx		%0,0,%2,%3\n\
+>  	cmpwi		0,%0,0\n\
+>  	bne-		2f\n\
+>  	stwcx.		%1,0,%2\n\
+> @@ -59,7 +60,7 @@ static inline unsigned long __arch_spin_trylock(arch_spinlock_t *lock)
+>  	PPC_ACQUIRE_BARRIER
+>  "2:"
+>  	: "=&r" (tmp)
+> -	: "r" (token), "r" (&lock->slock)
+> +	: "r" (token), "r" (&lock->slock), "i" (eh)
+>  	: "cr0", "memory");
+>  
+>  	return tmp;
+> @@ -156,9 +157,10 @@ static inline void arch_spin_unlock(arch_spinlock_t *lock)
+>  static inline long __arch_read_trylock(arch_rwlock_t *rw)
+>  {
+>  	long tmp;
+> +	unsigned int eh = IS_ENABLED(CONFIG_PPC64);
+>  
+>  	__asm__ __volatile__(
+> -"1:	lwarx		%0,0,%1,1\n"
+> +"1:	lwarx		%0,0,%1,%2\n"
+>  	__DO_SIGN_EXTEND
+>  "	addic.		%0,%0,1\n\
+>  	ble-		2f\n"
+> @@ -166,7 +168,7 @@ static inline long __arch_read_trylock(arch_rwlock_t *rw)
+>  	bne-		1b\n"
+>  	PPC_ACQUIRE_BARRIER
+>  "2:"	: "=&r" (tmp)
+> -	: "r" (&rw->lock)
+> +	: "r" (&rw->lock), "i" (eh)
+>  	: "cr0", "xer", "memory");
+>  
+>  	return tmp;
+> @@ -179,17 +181,18 @@ static inline long __arch_read_trylock(arch_rwlock_t *rw)
+>  static inline long __arch_write_trylock(arch_rwlock_t *rw)
+>  {
+>  	long tmp, token;
+> +	unsigned int eh = IS_ENABLED(CONFIG_PPC64);
+>  
+>  	token = WRLOCK_TOKEN;
+>  	__asm__ __volatile__(
+> -"1:	lwarx		%0,0,%2,1\n\
+> +"1:	lwarx		%0,0,%2,%3\n\
+>  	cmpwi		0,%0,0\n\
+>  	bne-		2f\n"
+>  "	stwcx.		%1,0,%2\n\
+>  	bne-		1b\n"
+>  	PPC_ACQUIRE_BARRIER
+>  "2:"	: "=&r" (tmp)
+> -	: "r" (token), "r" (&rw->lock)
+> +	: "r" (token), "r" (&rw->lock), "i" (eh)
+>  	: "cr0", "memory");
+>  
+>  	return tmp;
+> -- 
+> 2.36.1
+> 

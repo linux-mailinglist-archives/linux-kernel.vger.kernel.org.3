@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B62587AC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04276587AC6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiHBKcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S235668AbiHBKdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbiHBKcA (ORCPT
+        with ESMTP id S232600AbiHBKc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:32:00 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65FBB7F8
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:31:55 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y11so21278468lfs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 03:31:55 -0700 (PDT)
+        Tue, 2 Aug 2022 06:32:58 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A73B7F8;
+        Tue,  2 Aug 2022 03:32:58 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b96so6726594edf.0;
+        Tue, 02 Aug 2022 03:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=RK5pl1uOPXDiR845YvQnUJkdblCt/aXef4YDWk2HeBk=;
-        b=o4RrJRr+Z0jIzZctF2ECoxc11CfkNv1Y8zs7NQzU1+hgHcqRXLDuZYZmqMDvZyUiMg
-         TzveH8iptIT0viRfIq43c2rckHoMtr+GedEHil0bl6khFHuyKGojuUk1TCI/Yva9w2Sv
-         o+x5ogr792yGen/pdhDNSn3zhmIBTUS22+1oXvV1sbLDhk92Mq5xISAnjjZCHWlteCjm
-         8TeoYkJfqz2Si9ndvlXt+3gPSfN5P4myJThxPia1Swna3B4HC8CPHxYnLrtIMe/ep33p
-         oM0wHB8LVtqQ1/UNp0TCHG4bM4FD8m0K8TWsrS2qN6UB9fB9Ftpx2r/9SmOl6uxR0sit
-         qJVA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bkidQQTL4ByERxgSKW8Xd149iagPvKvBVb7oyCiXx1k=;
+        b=omxvNSeHrlrzpuIqWb4BRBUU+S6bOdd6aPa9nM0t44Slqd3oc9tWUwXqVomZYFLgVC
+         NPYbo7x8Dw9vqt5TcEPYw7JUssOenkWXiGR+LZBqdVmmXcoSfIhSUAFH5zdXckjjkAbx
+         0JdstTEa2ZwpG7ybfKrzLosHYkbQxqYphNLMXgmH0d9ktyAxHkMshUyj2Swowuo6gKO9
+         GUDgADAgs0pf7nleq9gVOP1P608fM7puL7V2piOA65ArHV3IcdTGo4Ygtt5Lxwyb8aA/
+         DOjEW3QNEvBCKHPVFBqiFX/uB+PeqBbq0LnWhtqO3CKFOaHsj3/EjsWefQ8wUT2v8tyD
+         E/RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RK5pl1uOPXDiR845YvQnUJkdblCt/aXef4YDWk2HeBk=;
-        b=fvBortLcnfXhB9wOjHxsegu+XxDP8n6D1l/X0+YOTwpJWjizPZ2fMriBOhMTku0CVM
-         41H4yqSTR8NjPWehWj4AS0qROKJfUfiekFxxywrBNQG0hNtBkzb2mUt8m2fpHs8mYY8K
-         x2etkbo+SMV6K4oRqbQlenNWrM10PFgVdkoMks/B+fT2NG0gQH6xHrAAQHbwhnHuE140
-         DPw8kPj9ZzFv1QRWlVT63IMZ5lM8c71pVboVlIccWzEtVDZcjp1zEJ4aHwp+xFycM3ds
-         lZlC6nk+EPP2bC6UO9h/P/ApTkgFuDufchZ9JDCflZdIR3Bn/leIBpQLKfy7TtpYswRF
-         UrBQ==
-X-Gm-Message-State: ACgBeo0a4ntpCMV7RgCgFQjPQTU/Al+SCWRQqE7EHwmKIPrMxJeZ9x1X
-        Vdxy0UknEwNUPaA3iCFKIbrRZTACKRoafpUyrh4JCg==
-X-Google-Smtp-Source: AA6agR4JTi1SGOCRCQBlGoHqwl+CtgH81YnRiaG0Rdref3rfjrKkl7QMXeQprYAUNPAz3oPSUq6idzM/e98+6vEkwLU=
-X-Received: by 2002:a05:6512:1095:b0:48a:f9b5:a566 with SMTP id
- j21-20020a056512109500b0048af9b5a566mr2864785lfg.540.1659436314088; Tue, 02
- Aug 2022 03:31:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bkidQQTL4ByERxgSKW8Xd149iagPvKvBVb7oyCiXx1k=;
+        b=KVPM0WfPyDtA7OCwAnO5kExczNlhE3j3WrPeDpeALwEDxB3x44vRfRZxxue7ITASKK
+         wjX1ne67Q8ZhV8Xay7+kXSw0xEmqGjLonTkABzKqIwTkVkGj4A+l6deGey2dmaxGBdUQ
+         8hhBV4By77PtxPzDmxKn7XeMgWGvd33HeK1xFZb7+yP1uX09Q7fAV2Cm2Sd7DWb/y/kb
+         CxZdf4wRQh8zUIwXPBmPWZr3QDJ1yG4a0W6eR5kR6RuFB45SYQPWKshituw16vsfWZsb
+         0ILHnC7EsbEHHcJ4x5kweXmp87yF7JFe0fGZjDsc7GwYLf2vVfqytwWVHMGkB20w80Sj
+         bkLg==
+X-Gm-Message-State: AJIora9Gkpoz/HvD7tmk1VnUxLfxg+HbJt7yCOe0NgR5CGxJQsWX2sPT
+        mjgfHReNRJBrwYMgsPvzVSo=
+X-Google-Smtp-Source: AGRyM1u22TSEcD+Q34CaxMUtOGG2oQGwd2G+A9UoEmvCXwMLUkk1LZuYsLvXZwG3w6yxSN/GYNmETw==
+X-Received: by 2002:a05:6402:5489:b0:43b:b935:db37 with SMTP id fg9-20020a056402548900b0043bb935db37mr20352184edb.347.1659436376450;
+        Tue, 02 Aug 2022 03:32:56 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id fw16-20020a170907501000b007306d3c338dsm2785962ejc.164.2022.08.02.03.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 03:32:55 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:32:53 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [Patch RFC net-next 1/4] net: dsa: microchip: modify vlan_add
+ function prototype
+Message-ID: <20220802103253.z7jryvmnef5bzdww@skbuf>
+References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
+ <20220729151733.6032-2-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-References: <20220727071042.8796-4-feng.tang@intel.com> <YuYm3dWwpZwH58Hu@xsang-OptiPlex-9020>
- <YuY6Wc39DbL3YmGi@feng-skl> <Yudw5ge/lJ26Hksk@feng-skl> <0e545088-d140-4c84-bbb2-a3be669740b2@suse.cz>
- <YujKCxu2lJJFm73P@feng-skl> <CACT4Y+Zwg8BP=6WJpQ5cCbJxLu4HcnCjx8e53aDEbTZ5uzpUyg@mail.gmail.com>
- <85ec4ea8-ae4c-3592-5491-3db6d0ad8c59@suse.cz>
-In-Reply-To: <85ec4ea8-ae4c-3592-5491-3db6d0ad8c59@suse.cz>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 2 Aug 2022 12:31:42 +0200
-Message-ID: <CACT4Y+aJOLZpdHhYLQEwzmUkLTCDSQWDqs3wN_J_ZcTouGqO=A@mail.gmail.com>
-Subject: Re: [mm/slub] 3616799128: BUG_kmalloc-#(Not_tainted):kmalloc_Redzone_overwritten
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        "Sang, Oliver" <oliver.sang@intel.com>, lkp <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729151733.6032-2-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,113 +80,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 at 11:43, Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 8/2/22 09:06, Dmitry Vyukov wrote:
-> > On Tue, 2 Aug 2022 at 08:55, Feng Tang <feng.tang@intel.com> wrote:
-> >>
-> >> On Mon, Aug 01, 2022 at 10:23:23PM +0800, Vlastimil Babka wrote:
-> >> > On 8/1/22 08:21, Feng Tang wrote:
-> >> [snip]
-> >> > > Cc kansan  mail list.
-> >> > >
-> >> > > This is really related with KASAN debug, that in free path, some
-> >> > > kmalloc redzone ([orig_size+1, object_size]) area is written by
-> >> > > kasan to save free meta info.
-> >> > >
-> >> > > The callstack is:
-> >> > >
-> >> > >   kfree
-> >> > >     slab_free
-> >> > >       slab_free_freelist_hook
-> >> > >           slab_free_hook
-> >> > >             __kasan_slab_free
-> >> > >               ____kasan_slab_free
-> >> > >                 kasan_set_free_info
-> >> > >                   kasan_set_track
-> >> > >
-> >> > > And this issue only happens with "kmalloc-16" slab. Kasan has 2
-> >> > > tracks: alloc_track and free_track, for x86_64 test platform, most
-> >> > > of the slabs will reserve space for alloc_track, and reuse the
-> >> > > 'object' area for free_track.  The kasan free_track is 16 bytes
-> >> > > large, that it will occupy the whole 'kmalloc-16's object area,
-> >> > > so when kmalloc-redzone is enabled by this patch, the 'overwritten'
-> >> > > error is triggered.
-> >> > >
-> >> > > But it won't hurt other kmalloc slabs, as kasan's free meta won't
-> >> > > conflict with kmalloc-redzone which stay in the latter part of
-> >> > > kmalloc area.
-> >> > >
-> >> > > So the solution I can think of is:
-> >> > > * skip the kmalloc-redzone for kmalloc-16 only, or
-> >> > > * skip kmalloc-redzone if kasan is enabled, or
-> >> > > * let kasan reserve the free meta (16 bytes) outside of object
-> >> > >   just like for alloc meta
-> >> >
-> >> > Maybe we could add some hack that if both kasan and SLAB_STORE_USER is
-> >> > enabled, we bump the stored orig_size from <16 to 16? Similar to what
-> >> > __ksize() does.
-> >>
-> >> How about the following patch:
-> >>
-> >> ---
-> >> diff --git a/mm/slub.c b/mm/slub.c
-> >> index added2653bb0..33bbac2afaef 100644
-> >> --- a/mm/slub.c
-> >> +++ b/mm/slub.c
-> >> @@ -830,6 +830,16 @@ static inline void set_orig_size(struct kmem_cache *s,
-> >>         if (!slub_debug_orig_size(s))
-> >>                 return;
-> >>
-> >> +#ifdef CONFIG_KASAN
-> >> +       /*
-> >> +        * When kasan is enabled, it could save its free meta data in the
-> >> +        * start part of object area, so skip the kmalloc redzone check
-> >> +        * for small kmalloc slabs to avoid the data conflict.
-> >> +        */
-> >> +       if (s->object_size <= 32)
-> >> +               orig_size = s->object_size;
-> >> +#endif
-> >> +
-> >>         p += get_info_end(s);
-> >>         p += sizeof(struct track) * 2;
-> >>
-> >> I extend the size to 32 for potential's kasan meta data size increase.
-> >> This is tested locally, if people are OK with it, I can ask for 0Day's
-> >> help to verify this.
->
-> Is there maybe some KASAN macro we can use instead of hardcoding 32?
->
-> >
-> > Where is set_orig_size() function defined? Don't see it upstream nor
-> > in linux-next.
-> > This looks fine but my only concern is that this should not increase
-> > memory consumption when slub debug tracking is not enabled, which
-> > should be the main operation mode when KASAN is enabled. But I can't
-> > figure this out w/o context.
->
-> It won't increase memory consumption even if slub_debug tracking is enabled.
-> It just fakes a bit the size that was passed to kmalloc() and which we newly
-> store (thanks to Feng's patches) for statistics and debugging purposes.
+On Fri, Jul 29, 2022 at 08:47:30PM +0530, Arun Ramadoss wrote:
+> diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
+> index 42c50cc4d853..6529f2e2426a 100644
+> --- a/drivers/net/dsa/microchip/ksz8.h
+> +++ b/drivers/net/dsa/microchip/ksz8.h
+> @@ -38,9 +38,8 @@ int ksz8_mdb_del(struct ksz_device *dev, int port,
+>  		 const struct switchdev_obj_port_mdb *mdb, struct dsa_db db);
+>  int ksz8_port_vlan_filtering(struct ksz_device *dev, int port, bool flag,
+>  			     struct netlink_ext_ack *extack);
+> -int ksz8_port_vlan_add(struct ksz_device *dev, int port,
+> -		       const struct switchdev_obj_port_vlan *vlan,
+> -		       struct netlink_ext_ack *extack);
+> +int ksz8_port_vlan_add(struct ksz_device *dev, int port, u16 vlan_vid,
 
-Then it looks good to me. Thanks for double checking.
+I don't see an impediment to naming "vlan_vid" just "vid".
 
+> +		       u16 flags);
+>  int ksz8_port_vlan_del(struct ksz_device *dev, int port,
+>  		       const struct switchdev_obj_port_vlan *vlan);
 
-> >> Thanks,
-> >> Feng
-> >>
-> >> >
-> >> > > I don't have way to test kasan's SW/HW tag configuration, which
-> >> > > is only enabled on arm64 now. And I don't know if there will
-> >> > > also be some conflict.
-> >> > >
-> >> > > Thanks,
-> >> > > Feng
-> >> > >
-> >> >
-> >>
-> >> --
-> >> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> >> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> >> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/YujKCxu2lJJFm73P%40feng-skl.
->
+Won't you convert vlan_del too?

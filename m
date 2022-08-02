@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C5B5877A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDED5877A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiHBHPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S235794AbiHBHPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbiHBHPc (ORCPT
+        with ESMTP id S235877AbiHBHPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:15:32 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBFF32DA3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:15:30 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t1so20666487lft.8
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=c61IBeGENLBrfZtlLVNhveGWmLmYNBW+8+c+xekhbN4=;
-        b=xisHHreQsg8+3CNQvjUzLiFcibwj9uUxJ2QlQewRTagHGQoP36+CZbvfc/rrpsOTsr
-         5esKvZs4yhrgNcCEKQfRA3I3wq+Z+aiJ4Y9V4JV9TjrlXTOYVgTtCTsuw7qLBwDyRZ8r
-         WFsaNN8T6wlUS6CDzl9oPjiDS/FhO/T5pJ2zo8hhy/FhwQRYsHZfYcgHV10LIKiWJ/Po
-         lUoNmmJpUGJxZvrh8NRphScyouZmrcNiWwwzMayOFyD/ettTncNk4fs4mGCUJ4OyrRKU
-         1kIDK3/XM4M0j7gW7SDCyhs9oNuaWY1jF6MdTEPNM1s52BlkfE+Zztk6ElhqAeojqbnP
-         NYYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=c61IBeGENLBrfZtlLVNhveGWmLmYNBW+8+c+xekhbN4=;
-        b=3n9J4OLErmEcLjHgCxg3V3ZBCMD7y7mDhM+EQeRxNRtweqjQavaPQ37Zb3APz3NKf1
-         kAHhbt24NOQoxgqSHyYH0YJHk7n0KFUGeHJuBjND34eE49koZv5g+DRrCDr1PFG1DhI3
-         q9otHByLc3U3jIUBwCNYtWAz58IUiVAQ3Vfl81KI0hXrQxFtTuTHAnrj0aoeLsvXF+VI
-         8lqpEcAGzHVc/51/LLvwuhT2c9izUgMPEKpsCTXoK4mkMX5pSLpgsb7p2DIZGvYAs8hA
-         8h0i2u4J2FzJQK4B616TwyeCZ2kicTeOoVeO1IcW2lAxOB147HYDGqbDc8DVE+Bce9Xj
-         pbJw==
-X-Gm-Message-State: ACgBeo1xgzpAIQz4FYzpwveuL+B3eicsFSq6/syxO4Nxh+4Z9YzA4f75
-        c54xbTfZzE/wDsJQ/xWKLgv3JA==
-X-Google-Smtp-Source: AA6agR4DKQ54iF2lBgq5cgDu5t0vw5ELL8IbGd6dlICfMebN3W4GFM72tUtCrYKW0uIY59zfuFAv0Q==
-X-Received: by 2002:a05:6512:3c8d:b0:48a:f74a:67b6 with SMTP id h13-20020a0565123c8d00b0048af74a67b6mr3619423lfv.231.1659424528774;
-        Tue, 02 Aug 2022 00:15:28 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id g12-20020a2ea4ac000000b0025e48907929sm922293ljm.23.2022.08.02.00.15.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 00:15:28 -0700 (PDT)
-Message-ID: <9098554e-5327-0b7f-f4d0-a81880556136@linaro.org>
-Date:   Tue, 2 Aug 2022 10:15:27 +0300
+        Tue, 2 Aug 2022 03:15:45 -0400
+Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A163B4BF;
+        Tue,  2 Aug 2022 00:15:44 -0700 (PDT)
+Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.113]); authenticated
+        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oIm7w-00072o-FH; Tue, 02 Aug 2022 09:15:40 +0200
+Message-ID: <85f3afd9-0a16-a022-fcc5-18c64e3f90f2@birger-koblitz.de>
+Date:   Tue, 2 Aug 2022 09:15:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/5] clk: qcom: gpucc-sc7280: Add cx collapse reset
- support
-Content-Language: en-GB
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] MIPS: smp-mt: enable all hardware interrupts on second
+ VPE
+Content-Language: en-US
+To:     Sander Vanheule <sander@svanheule.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Aleksander Jan Bajkowski <olek2@wp.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220730144713.3.I5e64ff4b77bb9079eb2edeea8a02585c9e76778f@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220730144713.3.I5e64ff4b77bb9079eb2edeea8a02585c9e76778f@changeid>
+References: <20220702190705.5319-1-olek2@wp.pl>
+ <3c9a032edd0fb9b9608ad3ca08d6e3cc38f21464.camel@svanheule.net>
+ <87fsjen2kl.wl-maz@kernel.org> <20220706081901.GA10797@alpha.franken.de>
+ <CAFBinCAsj=RNvitj2tXJU6pTLSbanRXdKM9H4vyF=N9N=PP06g@mail.gmail.com>
+ <20220707100630.GC9894@alpha.franken.de>
+ <CAFBinCBn3+MbKFE84Y0KjW4qG_88+HuBTzRhPQSDqzqGhyhhZw@mail.gmail.com>
+ <20220707143930.GA14693@alpha.franken.de>
+ <CAFBinCBq3ydoxtj1VG=kjqbq5NjP1ZnQe_dOAS2Gjm2fNkK9Yg@mail.gmail.com>
+ <20220801152559.GA9041@alpha.franken.de>
+ <0dbe47388183bf17830e5c77513ca78c58e32612.camel@svanheule.net>
+From:   Birger Koblitz <git@birger-koblitz.de>
+In-Reply-To: <0dbe47388183bf17830e5c77513ca78c58e32612.camel@svanheule.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;git@birger-koblitz.de;1659424544;4a2b01a6;
+X-HE-SMSGID: 1oIm7w-00072o-FH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/07/2022 12:17, Akhil P Oommen wrote:
-> Allow a consumer driver to poll for cx gdsc collapse through Reset
-> framework.
+Hi,
+
+On 8/1/22 18:02, Sander Vanheule wrote:
+> Hi Thomas,
 > 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
+> On Mon, 2022-08-01 at 17:25 +0200, Thomas Bogendoerfer wrote:
+>> On Thu, Jul 28, 2022 at 05:50:10PM +0200, Martin Blumenstingl wrote:
+>>> I think for the Realtek SoC's this would be problematic because it's
+>>> using MIPS_GENERIC. My understanding is that in an ideal world all
+>>
+>> which SOC are these ?
 > 
->   drivers/clk/qcom/gpucc-sc7280.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gpucc-sc7280.c b/drivers/clk/qcom/gpucc-sc7280.c
-> index 9a832f2..f5df51d 100644
-> --- a/drivers/clk/qcom/gpucc-sc7280.c
-> +++ b/drivers/clk/qcom/gpucc-sc7280.c
-> @@ -433,12 +433,18 @@ static const struct regmap_config gpu_cc_sc7280_regmap_config = {
->   	.fast_io = true,
->   };
->   
-> +static const struct qcom_reset_map gpucc_sc7280_resets[] = {
-> +	[GPU_CX_COLLAPSE] = { .op = gdsc_wait_for_collapse, .priv = &cx_gdsc },
-> +};
-> +
->   static const struct qcom_cc_desc gpu_cc_sc7280_desc = {
->   	.config = &gpu_cc_sc7280_regmap_config,
->   	.clks = gpu_cc_sc7280_clocks,
->   	.num_clks = ARRAY_SIZE(gpu_cc_sc7280_clocks),
->   	.gdscs = gpu_cc_sc7180_gdscs,
->   	.num_gdscs = ARRAY_SIZE(gpu_cc_sc7180_gdscs),
-> +	.resets = gpucc_sc7280_resets,
-> +	.num_resets = ARRAY_SIZE(gpucc_sc7280_resets),
+> That would be the SoCs supported by MACH_REALTEK_RTL. More specifically, the
+> ones affected by this issue are the RTL8391M, RTL8392M, RTL8393M, and RTL8396M
+> which have two VPEs.
 
-An implementation question. Do we have to poll for the GDSC on platforms 
-like sm8150/sm8250 which have the plain BCR resets?
+There is also a multitude of RTL930x SoCs, which have the same setup as the
+RTL839x SoCs regarding the VPEs and the same IRQ controller.
+But they also have a broken MIPS Timer IRQ and we are not able at the moment
+to get the second VPE up without running into immediate trouble.
+For the moment we only need to take care of the RTL839x, though.
 
->   };
->   
->   static const struct of_device_id gpu_cc_sc7280_match_table[] = {
+Cheers,
+   Birger
 
-
--- 
-With best wishes
-Dmitry

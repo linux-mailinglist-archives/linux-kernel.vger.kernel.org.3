@@ -2,116 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E6F588048
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759A1588046
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiHBQa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        id S232487AbiHBQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237056AbiHBQax (ORCPT
+        with ESMTP id S230482AbiHBQaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:30:53 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9764E12AFB
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:30:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1659457757; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=Djhgp8iXUCsOnH9BSyQXz7FMb/CCtRzW70p2rAlremDefOEUPhcd/lYHd1VRKZeM3YRLOGNNeSKuekz/r9J/Cn49yzNpUMEQk/U7HZ0F0dU6qL7jlpWZjfkeguXXmjpQVrk1nA5k/YeazDLsBEZWRk3lLjVla5iWdRN+d0OlXcI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1659457757; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=tIaoKZqeKwVm3YXlgfzkmmqa+keWxZ5MypfokfBzu1Q=; 
-        b=AOGAeRcesujq661zWHJWre5A0KEV7ftyIYUHwYhdkcRYgQoTz9AQSSgrxHs1NK9LGIbrboePn5bSh0gR8XBKh6erYOYNUqne/4m0siUOyp+1bs6fuW0+fY4votXtTHTN4gDECXJjXx3b9ZFHqxsyn3XwIq95LbbN7L3HGe9ZlzY=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659457757;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=tIaoKZqeKwVm3YXlgfzkmmqa+keWxZ5MypfokfBzu1Q=;
-        b=oEJBR4ucJWNOr8jLGXAYjnRdA3ARGIT+6lE5L1REVDeYjJryM5Mj3+UeC4HtJ+nz
-        4FEmI2NUKoT5AtsnyZJn4ho0wiCZs8S6B37xp/HmIEanfBVL8r0P40viL3GNKW0cONb
-        /IlFqk+1C4+5t5EqcQkD4v2y1gzj2W7WIFrkVA4I=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1659457745264923.42593622627; Tue, 2 Aug 2022 21:59:05 +0530 (IST)
-Date:   Tue, 02 Aug 2022 21:59:05 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Ingo Molnar" <mingo@kernel.org>
-Cc:     "x86" <x86@kernel.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Message-ID: <1825f63b142.8968bde3116633.1242410031840350968@siddh.me>
-In-Reply-To: <YukFgFTaq4Aw+uht@gmail.com>
-References: <20220731160913.632092-1-code@siddh.me> <YukFgFTaq4Aw+uht@gmail.com>
-Subject: Re: [PATCH] x86/numa: Use cpumask_available instead of hardcoded
- NULL check
+        Tue, 2 Aug 2022 12:30:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACE56262;
+        Tue,  2 Aug 2022 09:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C904B81FA1;
+        Tue,  2 Aug 2022 16:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1FF4C433D7;
+        Tue,  2 Aug 2022 16:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659457815;
+        bh=VeLurwGxR30GtM5SeSZWafh3FNbK4ffoLCs50abMsyI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bLfA82nLK7vOkso4Uh48U0ipF3AZFk4DroBfT0hYZIDZQ0RbCdxSRGKYmi3sLQzIb
+         1GiIjJVtrDl0HEb71zgQZPRnEU6esdUo21sFgYP88FUSW3HhYURoye4cIlr0fku2Hv
+         CUWvWyxxwe13xPoXsXtk2aJxoIiLL3LqtVr/TSt4MhePhCfuNdX7SkdWrZPhLYyHzT
+         kU+KkhY0oRvCtCsr6bMl27Nn6byziJ8Dp60lKoSJcQQXCnV5Nbrk0ism7Stnzv1/e+
+         LDSBP/2Mx0RjnCJ9kNaLCsAceVQUuaZPSb2Cw1GJ9e3FAVUBA6sgWyDQ652KCdWB+2
+         Jn5rvhu5HUb5Q==
+Received: by mail-yb1-f170.google.com with SMTP id 7so24444333ybw.0;
+        Tue, 02 Aug 2022 09:30:15 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3o73Rb3OW5Q3nkNFyEVjwSOE0R1JNgjR587XziA4L1DYSMQyMI
+        hIoIcfH1HoFNNmW1/hJAeZnd2B6jKA8kDs0frT8=
+X-Google-Smtp-Source: AA6agR6PSSqZ7q1ceG6hzbb78ReaWO2Pt+7JC8R0WOtp4QIqJwfIq5Lxxb5H2W3s//8Igj7ToX2ruWrko7AbmuMAGtM=
+X-Received: by 2002:a25:41d6:0:b0:673:817c:e163 with SMTP id
+ o205-20020a2541d6000000b00673817ce163mr14789383yba.561.1659457814933; Tue, 02
+ Aug 2022 09:30:14 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220721175147.214642-1-song@kernel.org> <20220726233302.zwloxsammnu7clu4@treble>
+ <CAPhsuW7tmRt=yx1+i62HPRJJ4Gp8xB_3XvpVxUC=SyGv6iCBEQ@mail.gmail.com>
+ <CAPhsuW4F8f9GLHF9C54oWyFiyJ0eT5HOwfhmoxSJ3HeRr8zCSw@mail.gmail.com>
+ <CAPhsuW4VFjyoYta6fEGXg4S1dbg8ynkdKZzuwYSp3FMEGPP0aA@mail.gmail.com>
+ <Yuep+uKnDc0L2ICi@alley> <CAPhsuW7FLVQ4CeBp0crTh5TQk30E113=ZMz_iHh5xK-QGNcT+g@mail.gmail.com>
+ <d216c822-aa79-7ad8-2f6c-d74406ee8632@redhat.com>
+In-Reply-To: <d216c822-aa79-7ad8-2f6c-d74406ee8632@redhat.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 2 Aug 2022 09:30:04 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5sQX53W8_8vvPk_Uhj5LCF-k_7-b8uCnOu-safdRRi=A@mail.gmail.com>
+Message-ID: <CAPhsuW5sQX53W8_8vvPk_Uhj5LCF-k_7-b8uCnOu-safdRRi=A@mail.gmail.com>
+Subject: Re: [PATCH v3] livepatch: Clear relocation targets on a module removal
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, X86 ML <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 02 Aug 2022 16:37:44 +0530  Ingo Molnar <mingo@kernel.org> wrote:
-> Your fix makes sense I suppose, but I'm wondering how testing didn't 
-> trigger this warning.
-> 
-> Off-stack isn't a rare config option:
-> 
->   kepler:~/tip> make allmodconfig
->   #
->   # No change to .config
->   #
->   kepler:~/tip> grep CPUMASK_OFFSTACK .config
->   CONFIG_CPUMASK_OFFSTACK=y
->   kepler:~/tip> 
-> 
-> What am I missing?
+Hi Joe,
 
-Maybe this triggers on certain config options set, or maybe due to new
-gcc version? (I'm using gcc-12, I also likely saw while on gcc-11.)
-It nevertheless is a helpful warning.
+On Tue, Aug 2, 2022 at 5:31 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
+>
+> On 8/1/22 17:19, Song Liu wrote:
+> > On Mon, Aug 1, 2022 at 3:25 AM Petr Mladek <pmladek@suse.com> wrote:
+> >>
+> >> On Sat 2022-07-30 20:20:22, Song Liu wrote:
+> >>> On Sat, Jul 30, 2022 at 3:32 PM Song Liu <song@kernel.org> wrote:
+> >>>>
+> >>>> On Tue, Jul 26, 2022 at 8:54 PM Song Liu <song@kernel.org> wrote:
+> >>>>>
+> >>>>> On Tue, Jul 26, 2022 at 4:33 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> >>>>>>
+> >>>>>> On Thu, Jul 21, 2022 at 10:51:47AM -0700, Song Liu wrote:
+> >>>>>>> From: Miroslav Benes <mbenes@suse.cz>
+> >>>>>>>
+> >>>>>>> Josh reported a bug:
+> >>>>>>>
+> >>>>>>>   When the object to be patched is a module, and that module is
+> >>>>>>>   rmmod'ed and reloaded, it fails to load with:
+> >>>>>>>
+> >>>>>>>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> >>>>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> >>>>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> >>>>>>>
+> >>>>>>>   The livepatch module has a relocation which references a symbol
+> >>>>>>>   in the _previous_ loading of nfsd. When apply_relocate_add()
+> >>>>>>>   tries to replace the old relocation with a new one, it sees that
+> >>>>>>>   the previous one is nonzero and it errors out.
+> >>>>>>>
+> >>>>>>>   On ppc64le, we have a similar issue:
+> >>>>>>>
+> >>>>>>>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> >>>>>>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> >>>>>>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> >>>>>>>
+> >>>>>> 3) A selftest would be a good idea.
+> >>>>>
+> >>>>
+> >>>> I found it is pretty tricky to run the selftests inside a qemu VM. How about
+> >>>> we test it with modules in samples/livepatch? Specifically, we can add a
+> >>>> script try to reload livepatch-shadow-mod.ko.
+> >>>
+> >>> Actually, livepatch-shadow-mod.ko doesn't have the reload problem before
+> >>> the fix. Is this expected?
+> >>
+> >> Good question. I am afraid that there is no easy way to prepare
+> >> the selftest at the moment.
+> >>
+> >> There are two situations when a symbol from the livepatched module is
+> >> relocated:
+> >>
+> >>
+> >> 1. The livepatch might access a symbol exported by the module via
+> >>    EXPORT_SYMBOL(). In this case, it is "normal" external symbol
+> >>    and it gets relocated by the module loader.
+> >>
+> >>    But EXPORT_SYMBOL() will create an explicit dependency between the
+> >>    livepatch and livepatched module. As a result, the livepatch
+> >>    module could be loaded only when the livepatched module is loaded.
+> >>    And the livepatched module could not be removed when the livepatch
+> >>    module is loaded.
+> >>
+> >>    In this case, the problem will not exist. Well, the developers
+> >>    of the livepatch module will probably want to avoid this
+> >>    dependency.
+> >>
+> >>
+> >> 2. The livepatch module might access a non-exported symbol from another
+> >>    module using the special elf section for klp relocation, see
+> >>    section, see Documentation/livepatch/module-elf-format.rst
+> >>
+> >>    These symbols are relocated in klp_apply_section_relocs().
+> >>
+> >>    The problem is that upstream does not have a support to
+> >>    create this elf section. There is a patchset for this, see
+> >>    https://lore.kernel.org/all/20220216163940.228309-1-joe.lawrence@redhat.com/
+> >>    It requires some more review.
+> >>
+> >>
+> >> Resume: I think that we could not prepare the selftest without
+> >>         upstreaming klp-convert tool.
+> >
+> > Thanks for the explanation! I suspected the same issue, but couldn't
+> > connect all the logic.
+> >
+> > I guess the selftests can wait until the klp-convert tool.
+> >
+>
+> Hi Song,
+>
+> Petr is correct about selftests and these relocations.  Let me know if
+> rebasing the klp-convert patchset would be helpful in your testing.
+> Otherwise kpatch-build is the only (easy?) way to create klp-relocations
+> as far as I know.  (For limited arches anyway.)
 
-I just now tried `make defconfig` (default configuration based on
-'x86_64_defconfig') and compiling with `make -j13 all`, and gcc doesn't
-give any warning. (CONFIG_CPUMASK_OFFSTACK isn't even listed in the
-.config file produced, grep fails.)
+I was able to test the patch on x86_64 with kpatch-build. I will look into
+klp-convert later (after I fix kpatch-build for some OOT modules..)
 
-The config on which I can reproduce the warning can be found here:
-https://gist.github.com/siddhpant/0197ea2b9873e8719d5d7ef991e2cd89
-(It has 8969 lines, thus uploaded as a gist.)
-
-This is a modification of a config found on syzkaller, which I was using
-to compile and test some bug. I had noticed the gcc warning earlier while
-on similar detours and usually ignored it, but now I finally took a look.
-
-I tested compiling with it 5 times (`make clean` and `make -j13 all`),
-and gcc gave the warning in all attempts. I also tried `make -j1 all`,
-which also had gcc spitting out the warning, so it cannot be any race.
-
-> > Fixes: c032ef60d1aa ("cpumask: convert node_to_cpumask_map[] to cpumask_var_t")
-> > Fixes: de2d9445f162 ("x86: Unify node_to_cpumask_map handling between 32 and 64bit")
-> 
-> These are ancient commits from 2009 & 2011.
-
-Yes, that's where blaming the file leads me to.
+I the meanwhile, I guess this patch doesn't need to wait for klp-convert
+and the selftest?
 
 Thanks,
-Siddh
+Song

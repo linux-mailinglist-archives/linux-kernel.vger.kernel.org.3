@@ -2,405 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C109587CA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D038587CA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbiHBMuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S236675AbiHBMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiHBMuf (ORCPT
+        with ESMTP id S236668AbiHBMuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:50:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3550CCC;
-        Tue,  2 Aug 2022 05:50:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 937F7B819A1;
-        Tue,  2 Aug 2022 12:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1E1C433D6;
-        Tue,  2 Aug 2022 12:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659444631;
-        bh=fKvVypfFH+JdjXExshpBu+/wwf6r289/dR4kaa6y89Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oh/y9mS8nTihVUTuHoEk8BDmxcPGiO/d5C2TG66DpBrwOAVnzorFJUs308bSWbSwA
-         9I54AvkKySbc53ZxUkr/vioMZLaqCMfxDgxSfdNOAYMe0IOW3jvLth1i94Vipn4wYl
-         6skR1UbzEcl7Ebj8zmjkM4isySpAsiBt7flXgSSqK+6weRNwGGJHWwTSJfu6TXr8Ss
-         XtbsBzF6CN9AaqCTr2gHS8s49ex9rnpHAqjLYPRRPUc7DrHbSNf8I2n00FMaC+tYlT
-         VQnGAlz/xzRMhpYMAnM5++znp/m3Da4AdUfWay7+eaGrPuc+l4HOwyVGnVlSyUO/wM
-         3liCWBTOkWLCQ==
-Date:   Tue, 2 Aug 2022 15:50:28 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com
-Subject: Re: [PATCH Part2 v6 26/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE
- command
-Message-ID: <YukdgY/XThzrClah@kernel.org>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
+        Tue, 2 Aug 2022 08:50:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395DF65D5
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:50:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b16so9980448edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 05:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RoJV2wJ4KbDqOj+E/M+uEoPsAjfRx5p0+xqH+Wf97C0=;
+        b=EZjGz9cfSrUEb1g8RAmPgEIWsC4LAV2uUdBVDNifF7PPrFK3EAlVctkaszK1xgEJu9
+         MVMAG5Vx/10aMpdUbXoqblltfzcM9vHPhYTWtZy9Wu6T3uAat5FahAwzaZ60PEI7filB
+         +bOIMahCrr1i51ZNdw/Xs5kvBLogAp+InEdpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RoJV2wJ4KbDqOj+E/M+uEoPsAjfRx5p0+xqH+Wf97C0=;
+        b=Sp331CSjuXQEuuI6etcAijbwRK8YnPCgGq03Q6WNJmdWgWa5hDqs9IdnLyjNSS2UXm
+         T5wr/eRcSXicfIpU7M4l3DiGSHMcyCmK+/TgWkoApj9NafdS3NeHJZjr1Q67JkJETv58
+         tu2YZHHvsqDfw3t9TcU/XsJ5/LmTTMpuDPQj1taqUhWcP/otKw0x9IZV3FqE20wZDc4Q
+         as6XuauK0ioOkIqwr9wbQnaT/+wZjyW1u1P0ygzR72fQ3wpB8vRKDXhAuNAeQlssXqRj
+         Plqw0XZYzJZrtzk9/mDu8VwRnqhFDaFK5KdlHRRN9ejz6a7+6Kh4Fz3ERMn2qKBRz936
+         BopQ==
+X-Gm-Message-State: AJIora92VLDwPyc3/5ofv2Zs8PYeOyStk8p4RQDv7llaTJGbo7dBJ8vo
+        TKWgn4EIJxwWM7WVuOulSyPqmuqTku5Wt/oEdi+rig==
+X-Google-Smtp-Source: AGRyM1usnWfdQvEVZVYX75vJe2yLJEQa7jM3TmANtN36PTwsLRnqFCGbyBmZc0W/KRjSQuI+QiQVbqjyrtaqiTWogG8=
+X-Received: by 2002:a05:6402:2b8d:b0:43a:5410:a9fc with SMTP id
+ fj13-20020a0564022b8d00b0043a5410a9fcmr21254484edb.99.1659444643810; Tue, 02
+ Aug 2022 05:50:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727191949.GD18822@redhat.com> <YuGUyayVWDB7R89i@tycho.pizza>
+ <20220728091220.GA11207@redhat.com> <YuL9uc8WfiYlb2Hw@tycho.pizza>
+ <87pmhofr1q.fsf@email.froward.int.ebiederm.org> <YuPlqp0jSvVu4WBK@tycho.pizza>
+ <87v8rfevz3.fsf@email.froward.int.ebiederm.org> <YuQPc51yXhnBHjIx@tycho.pizza>
+ <87h72zes14.fsf_-_@email.froward.int.ebiederm.org> <20220729204730.GA3625@redhat.com>
+ <YuR4MRL8WxA88il+@ZenIV> <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <875yjfdw3a.fsf_-_@email.froward.int.ebiederm.org>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 2 Aug 2022 14:50:32 +0200
+Message-ID: <CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2] fuse: In fuse_flush only wait if someone wants
+ the return code
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Oleg Nesterov <oleg@redhat.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:08:05PM +0000, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> The KVM_SEV_SNP_LAUNCH_UPDATE command can be used to insert data into the
-> guest's memory. The data is encrypted with the cryptographic context
-> created with the KVM_SEV_SNP_LAUNCH_START.
-> 
-> In addition to the inserting data, it can insert a two special pages
-> into the guests memory: the secrets page and the CPUID page.
-> 
-> While terminating the guest, reclaim the guest pages added in the RMP
-> table. If the reclaim fails, then the page is no longer safe to be
-> released back to the system and leak them.
+On Sat, 30 Jul 2022 at 07:11, Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+>
+> In my very light testing this resolves a hang where a thread of the
+> fuse server was accessing the fuse filesystem (the fuse server is
+> serving up), when the fuse server is killed.
+>
+> The practical problem is that the fuse server file descriptor was
+> being closed after the file descriptor into the fuse filesystem so
+> that the fuse filesystem operations were being blocked for instead of
+> being aborted.  Simply skipping the unnecessary wait resolves this
+> issue.
+>
+> This is just a proof of concept and someone should look to see if the
+> fuse max_background limit could cause a problem with this approach.
 
-From this paragraph I get a picture that reclaimer is failing "all the
-time", and that is totally normal and legit behaviour. Is this the case?
+max_background just throttles the number of background requests that
+the userspace filesystem can *unqueue*.   It doesn't affect queuing in
+any way.
 
-Stimuli/conditions/something is mandatory if failure is mentioned in any
-context.
+> Additionally testing PF_EXITING is a very crude way to tell if someone
+> wants the return code from the vfs flush operation.  As such in the
+> long run it probably makes sense to get some direct vfs support for
+> knowing if flush needs to block until all of the flushing is complete
+> and a status/return code can be returned.
+>
+> Unless I have missed something this is a generic optimization that can
+> apply to many network filesystems.
+>
+> Al, vfs folks? (igrab/iput sorted so as not to be distractions).
+>
+> Perhaps a .flush_async method without a return code and a
+> filp_close_async function without a return code to take advantage of
+> this in the general sense.
+>
+> Waiting potentially indefinitely for user space in do_exit seems like a
+> bad idea.  Especially when all that the wait is for is to get a return
+> code that will never be examined.
 
-> 
-> For more information see the SEV-SNP specification.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+The wait is for posix locks to get unlocked.  But "remote" posix locks
+are almost never used due to problems like this, so I think it's safe
+to do this.
+
+>
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 > ---
->  .../virt/kvm/x86/amd-memory-encryption.rst    |  29 +++
->  arch/x86/kvm/svm/sev.c                        | 187 ++++++++++++++++++
->  include/uapi/linux/kvm.h                      |  19 ++
->  3 files changed, 235 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index 878711f2dca6..62abd5c1f72b 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -486,6 +486,35 @@ Returns: 0 on success, -negative on error
->  
->  See the SEV-SNP specification for further detail on the launch input.
->  
-> +20. KVM_SNP_LAUNCH_UPDATE
-> +-------------------------
-> +
-> +The KVM_SNP_LAUNCH_UPDATE is used for encrypting a memory region. It also
-> +calculates a measurement of the memory contents. The measurement is a signature
-> +of the memory contents that can be sent to the guest owner as an attestation
-> +that the memory was encrypted correctly by the firmware.
-> +
-> +Parameters (in): struct  kvm_snp_launch_update
-> +
-> +Returns: 0 on success, -negative on error
-> +
-> +::
-> +
-> +        struct kvm_sev_snp_launch_update {
-> +                __u64 start_gfn;        /* Guest page number to start from. */
-> +                __u64 uaddr;            /* userspace address need to be encrypted */
-> +                __u32 len;              /* length of memory region */
-> +                __u8 imi_page;          /* 1 if memory is part of the IMI */
-> +                __u8 page_type;         /* page type */
-> +                __u8 vmpl3_perms;       /* VMPL3 permission mask */
-> +                __u8 vmpl2_perms;       /* VMPL2 permission mask */
-> +                __u8 vmpl1_perms;       /* VMPL1 permission mask */
-> +        };
-> +
-> +See the SEV-SNP spec for further details on how to build the VMPL permission
-> +mask and page type.
-> +
-> +
->  References
->  ==========
->  
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 41b83aa6b5f4..b5f0707d7ed6 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -18,6 +18,7 @@
->  #include <linux/processor.h>
->  #include <linux/trace_events.h>
->  #include <linux/hugetlb.h>
-> +#include <linux/sev.h>
->  
->  #include <asm/pkru.h>
->  #include <asm/trapnr.h>
-> @@ -233,6 +234,49 @@ static void sev_decommission(unsigned int handle)
->  	sev_guest_decommission(&decommission, NULL);
+>  fs/fuse/file.c | 59 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 05caa2b9272e..2bd94acd761f 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -464,6 +464,62 @@ static void fuse_sync_writes(struct inode *inode)
+>         fuse_release_nowrite(inode);
 >  }
->  
-> +static inline void snp_leak_pages(u64 pfn, enum pg_level level)
-> +{
-> +	unsigned int npages = page_level_size(level) >> PAGE_SHIFT;
-> +
-> +	WARN(1, "psc failed pfn 0x%llx pages %d (leaking)\n", pfn, npages);
-> +
-> +	while (npages) {
-> +		memory_failure(pfn, 0);
-> +		dump_rmpentry(pfn);
-> +		npages--;
-> +		pfn++;
-> +	}
-> +}
-> +
-> +static int snp_page_reclaim(u64 pfn)
-> +{
-> +	struct sev_data_snp_page_reclaim data = {0};
-> +	int err, rc;
-> +
-> +	data.paddr = __sme_set(pfn << PAGE_SHIFT);
-> +	rc = snp_guest_page_reclaim(&data, &err);
-> +	if (rc) {
-> +		/*
-> +		 * If the reclaim failed, then page is no longer safe
-> +		 * to use.
-> +		 */
-> +		snp_leak_pages(pfn, PG_LEVEL_4K);
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static int host_rmp_make_shared(u64 pfn, enum pg_level level, bool leak)
-> +{
-> +	int rc;
-> +
-> +	rc = rmp_make_shared(pfn, level);
-> +	if (rc && leak)
-> +		snp_leak_pages(pfn, level);
-> +
-> +	return rc;
-> +}
-> +
->  static void sev_unbind_asid(struct kvm *kvm, unsigned int handle)
->  {
->  	struct sev_data_deactivate deactivate;
-> @@ -1902,6 +1946,123 @@ static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	return rc;
->  }
->  
-> +static bool is_hva_registered(struct kvm *kvm, hva_t hva, size_t len)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct list_head *head = &sev->regions_list;
-> +	struct enc_region *i;
-> +
-> +	lockdep_assert_held(&kvm->lock);
-> +
-> +	list_for_each_entry(i, head, list) {
-> +		u64 start = i->uaddr;
-> +		u64 end = start + i->size;
-> +
-> +		if (start <= hva && end >= (hva + len))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct sev_data_snp_launch_update data = {0};
-> +	struct kvm_sev_snp_launch_update params;
-> +	unsigned long npages, pfn, n = 0;
-> +	int *error = &argp->error;
-> +	struct page **inpages;
-> +	int ret, i, level;
-> +	u64 gfn;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	/* Verify that the specified address range is registered. */
-> +	if (!is_hva_registered(kvm, params.uaddr, params.len))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * The userspace memory is already locked so technically we don't
-> +	 * need to lock it again. Later part of the function needs to know
-> +	 * pfn so call the sev_pin_memory() so that we can get the list of
-> +	 * pages to iterate through.
-> +	 */
-> +	inpages = sev_pin_memory(kvm, params.uaddr, params.len, &npages, 1);
-> +	if (!inpages)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * Verify that all the pages are marked shared in the RMP table before
-> +	 * going further. This is avoid the cases where the userspace may try
-> +	 * updating the same page twice.
-> +	 */
-> +	for (i = 0; i < npages; i++) {
-> +		if (snp_lookup_rmpentry(page_to_pfn(inpages[i]), &level) != 0) {
-> +			sev_unpin_memory(kvm, inpages, npages);
-> +			return -EFAULT;
-> +		}
-> +	}
-> +
-> +	gfn = params.start_gfn;
-> +	level = PG_LEVEL_4K;
-> +	data.gctx_paddr = __psp_pa(sev->snp_context);
-> +
-> +	for (i = 0; i < npages; i++) {
-> +		pfn = page_to_pfn(inpages[i]);
-> +
-> +		ret = rmp_make_private(pfn, gfn << PAGE_SHIFT, level, sev_get_asid(kvm), true);
-> +		if (ret) {
-> +			ret = -EFAULT;
-> +			goto e_unpin;
-> +		}
-> +
-> +		n++;
-> +		data.address = __sme_page_pa(inpages[i]);
-> +		data.page_size = X86_TO_RMP_PG_LEVEL(level);
-> +		data.page_type = params.page_type;
-> +		data.vmpl3_perms = params.vmpl3_perms;
-> +		data.vmpl2_perms = params.vmpl2_perms;
-> +		data.vmpl1_perms = params.vmpl1_perms;
-> +		ret = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_UPDATE, &data, error);
-> +		if (ret) {
-> +			/*
-> +			 * If the command failed then need to reclaim the page.
-> +			 */
-> +			snp_page_reclaim(pfn);
-> +			goto e_unpin;
-> +		}
-> +
-> +		gfn++;
-> +	}
-> +
-> +e_unpin:
-> +	/* Content of memory is updated, mark pages dirty */
-> +	for (i = 0; i < n; i++) {
-> +		set_page_dirty_lock(inpages[i]);
-> +		mark_page_accessed(inpages[i]);
-> +
-> +		/*
-> +		 * If its an error, then update RMP entry to change page ownership
-> +		 * to the hypervisor.
-> +		 */
-> +		if (ret)
-> +			host_rmp_make_shared(pfn, level, true);
-> +	}
-> +
-> +	/* Unlock the user pages */
-> +	sev_unpin_memory(kvm, inpages, npages);
-> +
-> +	return ret;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
-> @@ -1995,6 +2156,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  	case KVM_SEV_SNP_LAUNCH_START:
->  		r = snp_launch_start(kvm, &sev_cmd);
->  		break;
-> +	case KVM_SEV_SNP_LAUNCH_UPDATE:
-> +		r = snp_launch_update(kvm, &sev_cmd);
-> +		break;
->  	default:
->  		r = -EINVAL;
->  		goto out;
-> @@ -2113,6 +2277,29 @@ find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
->  static void __unregister_enc_region_locked(struct kvm *kvm,
->  					   struct enc_region *region)
->  {
-> +	unsigned long i, pfn;
-> +	int level;
-> +
-> +	/*
-> +	 * The guest memory pages are assigned in the RMP table. Unassign it
-> +	 * before releasing the memory.
-> +	 */
-> +	if (sev_snp_guest(kvm)) {
-> +		for (i = 0; i < region->npages; i++) {
-> +			pfn = page_to_pfn(region->pages[i]);
-> +
-> +			if (!snp_lookup_rmpentry(pfn, &level))
-> +				continue;
-> +
-> +			cond_resched();
-> +
-> +			if (level > PG_LEVEL_4K)
-> +				pfn &= ~(KVM_PAGES_PER_HPAGE(PG_LEVEL_2M) - 1);
-> +
-> +			host_rmp_make_shared(pfn, level, true);
-> +		}
-> +	}
-> +
->  	sev_unpin_memory(kvm, region->pages, region->npages);
->  	list_del(&region->list);
->  	kfree(region);
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 0cb119d66ae5..9b36b07414ea 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1813,6 +1813,7 @@ enum sev_cmd_id {
->  	/* SNP specific commands */
->  	KVM_SEV_SNP_INIT,
->  	KVM_SEV_SNP_LAUNCH_START,
-> +	KVM_SEV_SNP_LAUNCH_UPDATE,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -1929,6 +1930,24 @@ struct kvm_sev_snp_launch_start {
->  	__u8 pad[6];
->  };
->  
-> +#define KVM_SEV_SNP_PAGE_TYPE_NORMAL		0x1
-> +#define KVM_SEV_SNP_PAGE_TYPE_VMSA		0x2
-> +#define KVM_SEV_SNP_PAGE_TYPE_ZERO		0x3
-> +#define KVM_SEV_SNP_PAGE_TYPE_UNMEASURED	0x4
-> +#define KVM_SEV_SNP_PAGE_TYPE_SECRETS		0x5
-> +#define KVM_SEV_SNP_PAGE_TYPE_CPUID		0x6
-> +
-> +struct kvm_sev_snp_launch_update {
-> +	__u64 start_gfn;
-> +	__u64 uaddr;
-> +	__u32 len;
-> +	__u8 imi_page;
-> +	__u8 page_type;
-> +	__u8 vmpl3_perms;
-> +	__u8 vmpl2_perms;
-> +	__u8 vmpl1_perms;
+>
+> +struct fuse_flush_args {
+> +       struct fuse_args args;
+> +       struct fuse_flush_in inarg;
+> +       struct inode *inode;
 > +};
 > +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
-> -- 
-> 2.25.1
-> 
+> +static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
+> +{
+> +       struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
+> +
+> +       if (err == -ENOSYS) {
+> +               fm->fc->no_flush = 1;
+> +               err = 0;
+> +       }
+> +
+> +       /*
+> +        * In memory i_blocks is not maintained by fuse, if writeback cache is
+> +        * enabled, i_blocks from cached attr may not be accurate.
+> +        */
+> +       if (!err && fm->fc->writeback_cache)
+> +               fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
+> +
+> +       iput(fa->inode);
 
-BR, Jarkko
+Filesystems might expect not just he inode to not be destroyed but
+also the file, so do what other file operations do, keep a ref on ff:
+
+fuse_file_put(fa->ff, false, false);
+
+> +       kfree(fa);
+> +}
+> +
+> +static int fuse_flush_async(struct file *file, fl_owner_t id)
+> +{
+> +       struct inode *inode = file_inode(file);
+> +       struct fuse_mount *fm = get_fuse_mount(inode);
+> +       struct fuse_file *ff = file->private_data;
+> +       struct fuse_flush_args *fa;
+> +       int err;
+> +
+> +       fa = kzalloc(sizeof(*fa), GFP_KERNEL);
+> +       if (!fa)
+> +               return -ENOMEM;
+> +
+> +       fa->inarg.fh = ff->fh;
+> +       fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
+> +       fa->args.opcode = FUSE_FLUSH;
+> +       fa->args.nodeid = get_node_id(inode);
+> +       fa->args.in_numargs = 1;
+> +       fa->args.in_args[0].size = sizeof(fa->inarg);
+> +       fa->args.in_args[0].value = &fa->inarg;
+> +       fa->args.force = true;
+> +       fa->args.end = fuse_flush_end;
+> +       fa->inode = igrab(inode);
+
+fa->ff = fuse_file_get(ff);
+
+> +
+> +       err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
+> +       if (err)
+> +               fuse_flush_end(fm, &fa->args, err);
+> +
+> +       return err;
+> +}
+> +
+>  static int fuse_flush(struct file *file, fl_owner_t id)
+>  {
+>         struct inode *inode = file_inode(file);
+> @@ -495,6 +551,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
+>         if (fm->fc->no_flush)
+>                 goto inval_attr_out;
+>
+> +       if (current->flags & PF_EXITING)
+> +               return fuse_flush_async(file, id);
+> +
+>         memset(&inarg, 0, sizeof(inarg));
+>         inarg.fh = ff->fh;
+>         inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
+> --
+> 2.35.3
+>

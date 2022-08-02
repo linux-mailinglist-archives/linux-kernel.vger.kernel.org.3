@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6298658830C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451CC58830E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234509AbiHBUQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S234444AbiHBUQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234390AbiHBUQN (ORCPT
+        with ESMTP id S234530AbiHBUQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:16:13 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFF24D4D0
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:16:12 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id o3so14463034ple.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:16:12 -0700 (PDT)
+        Tue, 2 Aug 2022 16:16:18 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0759D54653
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:16:16 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id w14so1404549plp.9
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=nC6Hx+qiMFP0kKK+gIayIBAMJyU5NtZQrF2GRnpsTMA=;
-        b=KYjbiOhxaNQ9mFkKfgNioYpb2Oev3w3SfsxtbC6ttjwc+M/vWt0mEA372FciOnZ/NN
-         xth3FspJHg+5z1HYbIBHDX0pvSJRggWnAun73cBgnyu/NBqzbXoUWEfTLxwEk2LsBcpW
-         447qEuyG+m8StQUqexnVF6lDHm5rKtdwz0b1U=
+        bh=/MAG9t6WYn5YwOOz8KJK3JJWRPzE1bp64265jp1tLTQ=;
+        b=eq1yzcWro6QZgfUShmNXxn/PjqlKKO62h83y8DGSuByLxH/elZngN0EtT4odDbzddm
+         7aXtmn/4R4ypBmy7rbLF8lug41WPx4sSk1VDZF1c2Y+EWsvE43+h7Xlwgss8K5fPe/Ye
+         9gOeubsxx2mvZgehgHed+EeqOUvbdeg0mzouo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=nC6Hx+qiMFP0kKK+gIayIBAMJyU5NtZQrF2GRnpsTMA=;
-        b=TZEikiZxtvj2xGDbCDPQmXDc8zryudjaFfux6MIWsZ8hCq6txGCxEpyRDYw7qNB6vs
-         nPbx+tjPSfCSHHEMjks1srmHUpvWlU3vII6W7oSY9Tsn3qJELy8uSHSiez/9KRV0gjW6
-         eH3vmtToiXRNipYPd0lF3Kbn9i6j7jYKLWmB57VDRcMftkXgWTZckSNvs4aWpL2DM4Pj
-         FpoEh2MmqhfvCxJTaGOnSI2Lgj119IXonF4OUDhx8keVcAaEhNOoAVl4lBU1SRpnm5ck
-         fNi1Jylw4McX3QJ28enFruCFNoSJ0z6oGDwR1cyZKNdHY0uFvsMyMrTXojV5JMBse/Fw
-         ZVdw==
-X-Gm-Message-State: ACgBeo1qvNMacWQOPwYTOsyiy2z6xYbdtJBgPlokY/FBFROf9MtJcBCx
-        hmFi9PIKZSvzGQ4lCzzd8vmC5A==
-X-Google-Smtp-Source: AA6agR42Uixt4w/tXOci7Vlkr/HLqtdEZQtCdblMMrEMdGGCrn3m3AcZr3byoGzuveAoRUrn+xrqew==
-X-Received: by 2002:a17:902:b08a:b0:16c:68b6:311 with SMTP id p10-20020a170902b08a00b0016c68b60311mr21685501plr.166.1659471371483;
-        Tue, 02 Aug 2022 13:16:11 -0700 (PDT)
+        bh=/MAG9t6WYn5YwOOz8KJK3JJWRPzE1bp64265jp1tLTQ=;
+        b=VEtIyVa3MLOldn9fobJTNHdOD86Fs6C6FrTWcMSJoAyCF5VXAxIqbc5fph7WfDsCy4
+         X07NSFlBEroy98YgG2b2knECF/2axl3fHL6Nwsdxr2R2HFphimAoFuyaVvljoXeN2cwu
+         5hOHauzTkEEjZoftcJ6KZY55aoYyt35TWI5MiVOsDEKXKFcQXk4a8iCbYuvtpuccUePa
+         T0oLPAUuDpVSyJ0Vi8Lep7jJ3/aGoPWy9baBYJ1S7SP0cu1XTC9tcj1DeyCkEZK70M0c
+         /vhUfdE/wIKOQAYZtmVkmZ82kh3xBVqkDg1FfPivq5YHnOhUAeB+vGCk3QZPAV1ST1Ju
+         W+/A==
+X-Gm-Message-State: ACgBeo2SqqP7PD+PAeWZawihOERp80LCgY4DNlTTC+w/m5Kwn+x5rp/R
+        BGZLPkFK0O/jfITXTxG3uuFz+w==
+X-Google-Smtp-Source: AA6agR49p4VyEMHRKiOKE5JpDnlS7wZ/jQa/eeH2eoeBKCCwhQTPuHnx+QYK8ChtXuRJqeYK63318A==
+X-Received: by 2002:a17:902:ce0a:b0:16d:737b:feed with SMTP id k10-20020a170902ce0a00b0016d737bfeedmr22772225plg.152.1659471375383;
+        Tue, 02 Aug 2022 13:16:15 -0700 (PDT)
 Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id w18-20020a170902a71200b0016ee26224a4sm80863plq.305.2022.08.02.13.16.08
+        by smtp.gmail.com with ESMTPSA id w18-20020a170902a71200b0016ee26224a4sm80863plq.305.2022.08.02.13.16.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 13:16:11 -0700 (PDT)
+        Tue, 02 Aug 2022 13:16:15 -0700 (PDT)
 From:   Suniel Mahesh <sunil@amarulasolutions.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -56,9 +56,9 @@ To:     Felipe Balbi <balbi@kernel.org>,
         David Sands <David.Sands@biamp.com>
 Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
         USB list <linux-usb@vger.kernel.org>
-Subject: [RFC v2 1/2] usb: gadget: f_hid: Extend functionality for GET_REPORT mode
-Date:   Wed,  3 Aug 2022 01:45:55 +0530
-Message-Id: <20220802201556.1510069-2-sunil@amarulasolutions.com>
+Subject: [RFC v2 2/2] HID: ghid: add example program for GET_REPORT
+Date:   Wed,  3 Aug 2022 01:45:56 +0530
+Message-Id: <20220802201556.1510069-3-sunil@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220802201556.1510069-1-sunil@amarulasolutions.com>
 References: <20220802201556.1510069-1-sunil@amarulasolutions.com>
@@ -66,308 +66,220 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current kernel implementation for GET_REPORT is that the kernel
-sends back a zero filled report (of length == report_length), when
-the Host request's a particular report from the device/gadget.
+This adds a user-space ghid sample get report program at
+gadget side. This program sends reports from userspace(gadget side)
+which are saved in the kernel in a list.
 
-This changeset extends functionality for GET_REPORT by sending a
-particular report based on report type and report number.
+When a host requests a particular report based on report number
+and type, corresponding report can be send to host, instead of a
+zero filled in report.
 
-corresponding ioctl is also implemented.
+This program can add, delete reports and modify an existing report.
 
 Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
 Changes for v2:
-- Map report type coming from userspace reports to the ones
-  defined in kernel headers.
+- no changes
 ---
- drivers/usb/gadget/function/f_hid.c  | 184 ++++++++++++++++++++++++++-
- include/{ => uapi}/linux/usb/g_hid.h |  10 ++
- 2 files changed, 192 insertions(+), 2 deletions(-)
- rename include/{ => uapi}/linux/usb/g_hid.h (72%)
+ samples/Kconfig         |  10 +++
+ samples/Makefile        |   1 +
+ samples/ghid/Makefile   |   4 ++
+ samples/ghid/test-hid.c | 134 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 149 insertions(+)
+ create mode 100644 samples/ghid/Makefile
+ create mode 100644 samples/ghid/test-hid.c
 
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index ca0a7d9eaa34..e1da4fb10ab3 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -16,6 +16,7 @@
- #include <linux/wait.h>
- #include <linux/sched.h>
- #include <linux/usb/g_hid.h>
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 470ee3baf2e1..f3d7873bb966 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -86,6 +86,16 @@ config SAMPLE_FPROBE
+ 	  This builds a fprobe example module. This module has an option 'symbol'.
+ 	  You can specify a probed symbol or symbols separated with ','.
+ 
++config SAMPLE_GHID_GET_REPORT
++        bool "GHID sample get report"
++        depends on CC_CAN_LINK && HEADERS_INSTALL
++        help
++          Build GHID sample get report program. This program can send reports from
++	  userspace(gadget side) which are saved in the kernel in a linked list.
++	  When a host requests a particular report based on report number and type,
++	  corresponding report can be send to host, instead of a zero filled in report.
++	  This program can add, delete reports and modify an existing report.
++
+ config SAMPLE_KFIFO
+ 	tristate "Build kfifo examples -- loadable modules only"
+ 	depends on m
+diff --git a/samples/Makefile b/samples/Makefile
+index 701e912ab5af..1d58f7a0381e 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -6,6 +6,7 @@ subdir-$(CONFIG_SAMPLE_ANDROID_BINDERFS) += binderfs
+ obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
+ obj-$(CONFIG_SAMPLE_CONNECTOR)		+= connector/
+ obj-$(CONFIG_SAMPLE_FANOTIFY_ERROR)	+= fanotify/
++subdir-$(SAMPLE_GHID_GET_REPORT)	+= ghid
+ subdir-$(CONFIG_SAMPLE_HIDRAW)		+= hidraw
+ obj-$(CONFIG_SAMPLE_HW_BREAKPOINT)	+= hw_breakpoint/
+ obj-$(CONFIG_SAMPLE_KDB)		+= kdb/
+diff --git a/samples/ghid/Makefile b/samples/ghid/Makefile
+new file mode 100644
+index 000000000000..8c93ded625c1
+--- /dev/null
++++ b/samples/ghid/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++userprogs-always-y += test-hid
++
++userccflags += -I usr/include
+diff --git a/samples/ghid/test-hid.c b/samples/ghid/test-hid.c
+new file mode 100644
+index 000000000000..f76786509047
+--- /dev/null
++++ b/samples/ghid/test-hid.c
+@@ -0,0 +1,134 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * usb hidg GET_REPORT example, device/gadget side
++ * This program tests the newly implemented GET_REPORT feature
++ *
++ * Copyright (c) 2022 Amarula Solutions India PVT LTD
++ *
++ * Authors:
++ * Copyright (c) 2022 Suniel Mahesh <sunil@amarulasolutions.com>
++ *
++ */
++
++#include <pthread.h>
++/* Linux */
++#include <linux/types.h>
++#include <linux/input.h>
++#include <linux/hidraw.h>
 +#include <linux/uhid.h>
- 
- #include "u_f.h"
- #include "u_hid.h"
-@@ -27,6 +28,11 @@ static struct class *hidg_class;
- static DEFINE_IDA(hidg_ida);
- static DEFINE_MUTEX(hidg_ida_lock); /* protects access to hidg_ida */
- 
-+struct report_entry {
-+	struct uhid_set_report_req report_data;
-+	struct list_head node;
-+};
++#include <uapi/linux/usb/g_hid.h>
 +
- /*-------------------------------------------------------------------------*/
- /*                            HID gadget struct                            */
- 
-@@ -71,6 +77,10 @@ struct f_hidg {
- 	wait_queue_head_t		write_queue;
- 	struct usb_request		*req;
- 
-+	/* hid report list */
-+	spinlock_t			report_spinlock;
-+	struct list_head		report_list;
++/* Unix */
++#include <sys/ioctl.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
 +
- 	int				minor;
- 	struct cdev			cdev;
- 	struct usb_function		func;
-@@ -553,6 +563,154 @@ static int f_hidg_open(struct inode *inode, struct file *fd)
- 	return 0;
- }
- 
-+static enum uhid_report_type f_hidg_from_report_to_type(__u8 r_type)
-+{
-+	switch (r_type) {
-+		case 1:
-+			return UHID_FEATURE_REPORT;
-+		case 2:
-+			return UHID_OUTPUT_REPORT;
-+		case 3:
-+			return UHID_INPUT_REPORT;
-+		default:
-+			break;
-+	}
-+	return -EINVAL;
-+}
++/* C */
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <errno.h>
 +
-+static bool f_hidg_param_valid(struct report_entry *entry)
-+{
-+	enum uhid_report_type report_type;
-+
-+	if (entry->report_data.size > UHID_DATA_MAX)
-+		return false;
-+
-+	report_type = f_hidg_from_report_to_type(entry->report_data.rtype);
-+
-+	switch (report_type) {
-+	case UHID_FEATURE_REPORT:
-+	case UHID_OUTPUT_REPORT:
-+	case UHID_INPUT_REPORT:
-+		return true;
-+	default:
-+		break;
-+	}
-+
-+	return false;
-+}
-+
-+static struct report_entry *f_hidg_search_for_report(struct f_hidg *hidg, u8 rnum, u8 rtype)
-+{
-+	struct list_head *ptr;
-+	struct report_entry *entry;
-+
-+	list_for_each(ptr, &hidg->report_list) {
-+		entry = list_entry(ptr, struct report_entry, node);
-+		if (entry->report_data.rnum == rnum &&
-+		    entry->report_data.rtype == rtype) {
-+			return entry;
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static long f_hidg_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+{
-+	struct f_hidg *hidg = file->private_data;
-+	struct report_entry *entry;
-+	struct report_entry *ptr;
-+	unsigned long flags;
-+	struct uhid_get_report_req report;
-+	u16 size;
-+
-+	switch (cmd) {
-+	case GADGET_ADD_REPORT_STATUS:
-+		entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+		if (!entry)
-+			return -ENOMEM;
-+
-+		if (copy_from_user(&entry->report_data, (struct uhid_set_report_req *)arg,
-+					sizeof(struct uhid_set_report_req))) {
-+			kfree(entry);
-+			return -EFAULT;
-+		}
-+
-+		if (f_hidg_param_valid(entry) == false) {
-+			kfree(entry);
-+			return -EINVAL;
-+		}
-+
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+		ptr = f_hidg_search_for_report(hidg, entry->report_data.rnum,
-+						entry->report_data.rtype);
-+		if (ptr) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			kfree(ptr);
-+			return -EEXIST;
-+		}
-+		list_add_tail(&entry->node, &hidg->report_list);
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+		break;
-+	case GADGET_REMOVE_REPORT_STATUS:
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+		if (list_empty(&hidg->report_list)) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			return -ENODATA;
-+		}
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+
-+		if (copy_from_user(&report, (struct uhid_get_report_req *)arg, sizeof(report)))
-+			return -EFAULT;
-+
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+
-+		ptr = f_hidg_search_for_report(hidg, report.rnum, report.rtype);
-+		if (ptr) {
-+			list_del(&ptr->node);
-+		} else {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			return -ENODATA;
-+		}
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+		kfree(ptr);
-+		break;
-+	case GADGET_UPDATE_REPORT_STATUS:
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+		if (list_empty(&hidg->report_list)) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			return -ENODATA;
-+		}
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+
-+		if (copy_from_user(&report, (struct uhid_get_report_req *)arg, sizeof(report)))
-+			return -EFAULT;
-+
-+		if (copy_from_user(&size, (void __user *)(arg + sizeof(report)), sizeof(size)))
-+			return -EFAULT;
-+
-+		if (size > UHID_DATA_MAX)
-+			return -EINVAL;
-+
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+
-+		ptr = f_hidg_search_for_report(hidg, report.rnum, report.rtype);
-+		if (!ptr) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			return -ENODATA;
-+		}
-+
-+		if (copy_from_user(&ptr->report_data, (struct uhid_set_report_req *)arg,
-+					sizeof(struct uhid_set_report_req))) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			return -EFAULT;
-+		}
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+		break;
-+	}
-+	return 0;
-+}
-+
- /*-------------------------------------------------------------------------*/
- /*                                usb_function                             */
- 
-@@ -634,6 +792,8 @@ static int hidg_setup(struct usb_function *f,
- 	struct f_hidg			*hidg = func_to_hidg(f);
- 	struct usb_composite_dev	*cdev = f->config->cdev;
- 	struct usb_request		*req  = cdev->req;
-+	struct report_entry		*entry;
-+	unsigned long			flags;
- 	int status = 0;
- 	__u16 value, length;
- 
-@@ -649,9 +809,25 @@ static int hidg_setup(struct usb_function *f,
- 		  | HID_REQ_GET_REPORT):
- 		VDBG(cdev, "get_report\n");
- 
--		/* send an empty report */
- 		length = min_t(unsigned, length, hidg->report_length);
--		memset(req->buf, 0x0, length);
-+		spin_lock_irqsave(&hidg->report_spinlock, flags);
-+		if (list_empty(&hidg->report_list)) {
-+			spin_unlock_irqrestore(&hidg->report_spinlock, flags);
-+			memset(req->buf, 0x0, length);
-+			goto respond;
-+		}
-+
-+		entry = f_hidg_search_for_report(hidg, value & 0xf,
-+						 value >> 8);
-+
-+		/* send a report */
-+		if (entry) {
-+			length = min_t(unsigned, length, entry->report_data.size);
-+			memcpy(req->buf, entry->report_data.data, length);
-+		} else {
-+			memset(req->buf, 0x0, length);
-+		}
-+		spin_unlock_irqrestore(&hidg->report_spinlock, flags);
- 
- 		goto respond;
- 		break;
-@@ -893,6 +1069,7 @@ static const struct file_operations f_hidg_fops = {
- 	.owner		= THIS_MODULE,
- 	.open		= f_hidg_open,
- 	.release	= f_hidg_release,
-+	.unlocked_ioctl = f_hidg_ioctl,
- 	.write		= f_hidg_write,
- 	.read		= f_hidg_read,
- 	.poll		= f_hidg_poll,
-@@ -997,6 +1174,9 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 	init_waitqueue_head(&hidg->read_queue);
- 	INIT_LIST_HEAD(&hidg->completed_out_req);
- 
-+	spin_lock_init(&hidg->report_spinlock);
-+	INIT_LIST_HEAD(&hidg->report_list);
-+
- 	/* create char device */
- 	cdev_init(&hidg->cdev, &f_hidg_fops);
- 	dev = MKDEV(major, hidg->minor);
-diff --git a/include/linux/usb/g_hid.h b/include/uapi/linux/usb/g_hid.h
-similarity index 72%
-rename from include/linux/usb/g_hid.h
-rename to include/uapi/linux/usb/g_hid.h
-index 7581e488c237..ba3e47f076bb 100644
---- a/include/linux/usb/g_hid.h
-+++ b/include/uapi/linux/usb/g_hid.h
-@@ -22,6 +22,8 @@
- #ifndef __LINUX_USB_G_HID_H
- #define __LINUX_USB_G_HID_H
- 
-+#include <linux/uhid.h>
-+
- struct hidg_func_descriptor {
- 	unsigned char		subclass;
- 	unsigned char		protocol;
-@@ -30,4 +32,12 @@ struct hidg_func_descriptor {
- 	unsigned char		report_desc[];
- };
- 
-+/* The 'g' code is also used by gadgetfs and printer ioctl requests.
-+ * Don't add any colliding codes to either driver, and keep
-+ * them in unique ranges (size 0x40 for now).
++/*
++ * fix for failing compilation on systems that don't
++ * yet populate new version of uapi/linux/usb/g_hid.h
++ * to userspace.
 + */
 +#define GADGET_ADD_REPORT_STATUS	_IOWR('g', 0x41, struct uhid_set_report_req)
 +#define GADGET_REMOVE_REPORT_STATUS	_IOWR('g', 0x42, struct uhid_get_report_req)
 +#define GADGET_UPDATE_REPORT_STATUS	_IOWR('g', 0x43, struct uhid_set_report_req)
 +
- #endif /* __LINUX_USB_G_HID_H */
++struct uhid_set_report_req *create_report(void)
++{
++	struct uhid_set_report_req *rep;
++	int i;
++
++	rep = (struct uhid_set_report_req *)calloc(1, sizeof(struct uhid_set_report_req));
++	if (rep == NULL) {
++		perror("calloc() failed");
++		exit(EXIT_FAILURE);
++	}
++
++	printf("enter report id:\n");
++	scanf("%u", &rep->id);
++	printf("enter report number:\n");
++	scanf("%hhu", &rep->rnum);
++	printf("enter report type:\n");
++	scanf("%hhu", &rep->rtype);
++	printf("enter report size:\n");
++	scanf("%hu", &rep->size);
++	printf("enter report data:\n");
++
++	for (i = 0; i < rep->size; i++)
++		scanf("%hhu", &rep->data[i]);
++
++	return rep;
++}
++
++int main(int argc, char **argv)
++{
++	const char *filename = NULL;
++	struct uhid_set_report_req *report;
++	int fd = 0, res = 0, i, reports;
++
++	if (argc < 1) {
++		fprintf(stderr, "Usage: %s /dev/hidg0\n", argv[0]);
++		return -1;
++	}
++
++	filename = argv[1];
++	fd = open(filename, O_RDWR, 0666);
++
++	if (fd == -1) {
++		perror(filename);
++		return -2;
++	}
++
++	printf("enter no of reports to send from userspace:\n");
++	scanf("%d", &reports);
++
++	if (reports == 0)
++		goto out;
++
++	for (i = 0; i < reports; i++) {
++		report = create_report();
++/* send reports to device */
++		res = ioctl(fd, GADGET_ADD_REPORT_STATUS, report);
++		if (res < 0) {
++			perror("GADGET_ADD_REPORT_STATUS");
++			res = -3;
++			goto test_end;
++		}
++		free(report);
++	}
++
++/* delete report with report number specified */
++	printf("deleting report w.r.t rtype and rnum:\n");
++	report = create_report();
++	res = ioctl(fd, GADGET_REMOVE_REPORT_STATUS, report);
++	if (res < 0) {
++		perror("GADGET_REMOVE_REPORT_STATUS");
++		res = -4;
++		goto test_end;
++	}
++	free(report);
++
++/* modify an existing report identified by report number */
++	printf("modify report w.r.t rtype and rnum:\n");
++	report = create_report();
++	res = ioctl(fd, GADGET_UPDATE_REPORT_STATUS, report);
++	if (res < 0) {
++		perror("GADGET_UPDATE_REPORT_STATUS");
++		res = -5;
++	}
++
++test_end:
++	free(report);
++	report = NULL;
++out:
++	close(fd);
++	return res;
++}
 -- 
 2.25.1
 

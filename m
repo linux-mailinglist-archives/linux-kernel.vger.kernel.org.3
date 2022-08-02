@@ -2,126 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ED1588032
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E184758803B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiHBQ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S236599AbiHBQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiHBQ0Q (ORCPT
+        with ESMTP id S229513AbiHBQ2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:26:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776EE1E3FB
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:26:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ygm9WdPpw3QlLY/Xmid5PcHg9oZ2FULIywrMSqDxWQ20Yy7xnxjosA02zvsuFL3UygZWWD30kdP6ukp2e7aeInCvo5MFBTHyKmMedymb5C0uuERBJFAe9rJEWOdirxm3jwl9fENnC4Ycx2dGfUANu7PGKTPFMdg5D+f71n6zmS/EWmhmYQM+jEQYW7JMhvLLZpnuA0amVzDt6FGkvxC72/UqMCs6Gbgdk5+x8Vb9eaFvTJnv4vGzfmoZLXBHocckTC3t/7L2nappDfeXvwKo1SohE3ReddiLJAw4guuLrwc4snDHKZQBj/ZEYCAuzdnmdtg9+A9KLelG0Y4X+RD/jA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qsp2YGNaGF/A1ziGW/pgjOOS3lSVUmZjkXm3r0rVlsA=;
- b=B/FsHKDsrDgZjIpTLdTZ0qB4JGpXluqLXCmoqSU8RewCdSNL5n+mpOmNae02pMAcJfF/iX8S9vb1iMysV1R7RnKDIeVZ0gw5X23SUnexT2AUgvc1UliUIp3PD6srRvoN40CBKHbUKHTwhZZhc6fTELDOIYu3cnrswaioYQ5IF+hIfiNS/hbbEECvcRpPWz1pP7U06I8sD4sispqKzMPmVxUXTd+HmUjMEc4Wx4ZqkMirc37AWL/ppU+Y0cGlTvns0Np0t18mrws0c3bq0SUgH/nxmYZxQJe+S5xH1qBeT+nTsht6Q6wpB6hv9xbm4nz0R3ox/j53AMvQ+BNuYrMAYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qsp2YGNaGF/A1ziGW/pgjOOS3lSVUmZjkXm3r0rVlsA=;
- b=4EvMn3N3/nSiUgMKNNL3jcLp+qc56Mj2aPaBt8COj1vlcx6Ln0IBjuSPPT6CkTbEU1TZx7QIOxi7JFrK1Nh4sNR7i4mBAis+Va8cX/b9TdcWdFlm+zIipH3E8NQL/yfgOj85NorvHaXGd/Dj+p9o34BiS9h93vmgF4kw/Lx8Lo0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by DM6PR12MB4532.namprd12.prod.outlook.com (2603:10b6:5:2af::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 16:26:13 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::d122:1dae:8445:2e43]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::d122:1dae:8445:2e43%7]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 16:26:12 +0000
-Message-ID: <25f53aa0-a84d-9d81-48b8-9bc9e3de707e@amd.com>
-Date:   Tue, 2 Aug 2022 12:26:11 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drm/amd/display: remove DML Makefile duplicate lines
-Content-Language: en-US
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Magali Lemes <magalilemes00@gmail.com>, sunpeng.li@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
-Cc:     mwen@igalia.com, mairacanal@riseup.net, isabbasso@riseup.net,
-        siqueirajordao@riseup.net, andrealmeid@riseup.net,
-        tales.aparecida@gmail.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220802120406.88845-1-magalilemes00@gmail.com>
- <a79c4c60-6179-1cdf-77ff-6c45d6b7cd87@amd.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <a79c4c60-6179-1cdf-77ff-6c45d6b7cd87@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR01CA0002.prod.exchangelabs.com (2603:10b6:208:71::15)
- To MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+        Tue, 2 Aug 2022 12:28:15 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7211EADC
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:28:13 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id e16so11000218qka.5
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=2DU8LSMpwhI42VEzkmQDivhyfVLUKtdex6r6frtpBtk=;
+        b=Hz4tGLPdmHI5Ynw233elpIWwl+IpLPuYjEvvnz6WSDcQf/94BXv1qgzKy6MtcKo+HZ
+         eNS8xFEqLWEuuwbCRwG2IeGzNAFntMpC9A0GN+YBE5W7rNHzxYS6ZDJBfGrcS8NXYJUM
+         SFDA7qBUDy6tHx/JcMqsgK8Ow06+7TBgxtqXINm/IZlQ67HmYMjUtNXfySPL+uYqXTpd
+         EWn4IsyAIpub0d1CdHY2kLyluZ0t0ycl1OBkIRjRLY69ysaAufC1IeKQR4a4S/87JLEL
+         ygLw7I5gpuioDUuEWc+vZZk/20Ybjbv2kXGva9wdJHBp867smljqHOYLC72XM3Ejgp/s
+         c2fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=2DU8LSMpwhI42VEzkmQDivhyfVLUKtdex6r6frtpBtk=;
+        b=JzyIoRP07GiP03rWwGa6Mr+25ON1ZEw0rQ6RPltvGEEIzQU6liqrPUQpZY3qik5SCJ
+         906sPwCcbMW6SxvpaY+Fp99AFuQaMxQsw7tmkhzRygZ5qNdKEmEI1FbQrbBi9UCtHfdM
+         dOxhyNTWt1s60SZYge1ouDRC67jg9bgWe7IhDwj0HIX+9F5vzZHNGmfne/NAcxEDPQxM
+         FsmNeI+o5gppvb58wzkU9GTYDrcW++Abf9UWuMa8MAANFHrMaSGq+Ww8lX7U4e8NsYBU
+         f91XW6wdh6uh0oYBGuFsKz3XFcGoGRI7UT4lf5YDbWi8aeNNkk/wgkfWQEvSaa4CriQG
+         nqBA==
+X-Gm-Message-State: AJIora9dwlAtTzhohstmw9GDc6NULhO9n1Gty5vjjr55kp91dTTKYW/E
+        F5YbQTcRv94SQyd7Uo4eA9oY1A==
+X-Google-Smtp-Source: AGRyM1vX3o1EcrOzawr4QvYYmJcA8+LAKFnQxVBxckSLXHI9X12qP84pcIaArycJDHZVaP7nIPdUIQ==
+X-Received: by 2002:a05:620a:143c:b0:6b8:8d43:5581 with SMTP id k28-20020a05620a143c00b006b88d435581mr10928966qkj.179.1659457692698;
+        Tue, 02 Aug 2022 09:28:12 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::ad0f])
+        by smtp.gmail.com with ESMTPSA id b23-20020ac86797000000b0031ee34ca176sm9394404qtp.59.2022.08.02.09.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 09:28:12 -0700 (PDT)
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Hugh Dickins <hughd@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH] mm: vmscan: fix extreme overreclaim and swap floods
+Date:   Tue,  2 Aug 2022 12:28:11 -0400
+Message-Id: <20220802162811.39216-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fc49b5e2-62b2-4f33-df0b-08da74a3b711
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4532:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +oTK9mL8bP8lTHDt2XkjJXppGPls2x3XfNc+LyMs5+6i0kK2Qq/yvxGNiuqXSNzh909Zt30CfatVtu1mEoCXdO5pA/doU8+IhJ9kuLFNW5P3a8EGpuv7B2dVHXbFBbny9G3t2SmhHIcalkP1Nc+k1JoJrrKBR+aji6gew2YJtiQ9sE4YOwqeSYhXUJLH+R2nXWIotCIGuSIrodHVjgZtCHBWoEly8mfMxxSXGNtD1KeSKCx390EFBHRi2V1GLdYXLiS2yCV/ZxLxI0I6kr7IMV50ga+yO+PqoN2/4MTMcEY32sWkK9W2flnZmgtDNSnA/YSRK4G6a8GUCm7t8k2qmrq0Q7BM/swRlYmBmDe66VPCarAb6rRTKNs/3zNkthZnfcf5l5x6V2Rp6l5bHauWkaJcMw2sF4TpvhfEKn4Xm2DhhdqOpd2odPIaIFfv5pEIAcmuS50qiY7rJHWaY6meErEp+YVrQMAN3h+cN7isNU/pt4kpst8mUIZn7wcZAOpRRw2IbeCsRt05wEEOWNyUkDwsYjl7KJYU17zJNu9gLOUz+ZLkmDvm/9WcnfXfnzkmkVgv3R70bLGIYRmnzMflvBhNyLZsh6OumESGIlr3zDIZ5A0+rbUClVanOhYtxS6UwPFYE7q11QKpwMDOX44ywnnDHYHmpsKbySBxAaUoWqMr7CVyiFONCRtRy54YK8gbeu8K5DH5S9Xq72ctMzjJgOkJT+5P02RKsUkhnZPWJeW+TAAFdss45Wr3DEo3/V04rnoQ3Dx4B1kaXHvN0PNziOkj4jmvIoS6l5s8dSF6/rWBPkTcD6hDzP6vuYXTzO5NGIjkM9RTMg/gr+pvhjMCbQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(39860400002)(136003)(396003)(366004)(478600001)(38100700002)(6486002)(36756003)(41300700001)(6512007)(2616005)(26005)(31686004)(186003)(2906002)(316002)(6506007)(53546011)(83380400001)(31696002)(110136005)(8936002)(66556008)(66476007)(86362001)(7416002)(66946007)(5660300002)(8676002)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzRPSlVwZFdWdWtYNWJDVXI4THFWYzVyNUZZZnViYU9kdG5XM0g0eStPR2oz?=
- =?utf-8?B?RXRidXlwcFprallKQXZWbXZBT1llQ3pQcElVbzNDZ1p6RnY5UktpdVRwRTg2?=
- =?utf-8?B?dyszQ3ZkQjVXTUlrcXJyRFRoSE5pZjlYSEo4cEpmajVsNWFGYWJRaVJDbmZa?=
- =?utf-8?B?cVAwY1pQYmY0RmdHT0RnajdnNVVNSzFRcnpFdDJjaXg5eGN0YlIveENLK3Vj?=
- =?utf-8?B?c0puY0VPcUpHd2tOUmJRa3VUemZhMXBaTzdFWGgrb0h3MnEwRnF3MEU5U0VX?=
- =?utf-8?B?WUJvK2tPVDhab09RcHVqWHQyT05YaS9rQm0yRFN6MDg4MTlyeExXdzlsL2pH?=
- =?utf-8?B?M1FHWTZwb1N1NWhqYitsNCtoWjc1OVQ3bDdTZVV6SXdBbks5YUdudG0zYTRa?=
- =?utf-8?B?cFZKeHNEWWw0M09zU3pqMFVwOVdmL05XYUxWU2ppYVU5enhPVE02ZjFOaklm?=
- =?utf-8?B?amh0RUtTTm50SnVXMU9QU2J3cWp5YVk4R3QxMmZqTHY5OG1vcGxyb0FRQnNF?=
- =?utf-8?B?YU1Rb1VXemtGQTZIaW5Oald1TGx1OFFtdS9xaWJiaHpWRWRmaUxzM0JVcGM4?=
- =?utf-8?B?c29QQXRhMVZKWmdYek9ybG1iKzJvVDEweWdua3BpcXlHVU9uSXVUd1Z1SXpK?=
- =?utf-8?B?RVRMNXFVV0dhMHhHTHlIMEs1WUhJNWpoNmUvZmljcVZzcnNWQitCL0RnWWhD?=
- =?utf-8?B?bGx5QSs3ME5JNDFpU1hMenZtaHdCUGI3em8zR2orZmljNml5ZVdUekZJakg5?=
- =?utf-8?B?Zy95dUI3YzlaZ0JGTHNDOWVHaUlFbXpSRkJwTVlsL1BwUUJ0VWp0ZHdzSEVk?=
- =?utf-8?B?RmF0VGt2bm9qbU1IVFN5QnpwaVI1bi9HNnd5c21CbjR6OXFKNFhXNms1bUg1?=
- =?utf-8?B?UDFLU052b0N1VXcxblpGV0RYeXNnb3NMK2FXSEYzb3ZuMkZHUmxUSUtMeTlL?=
- =?utf-8?B?eldVRUZwdnJJRXRtdENMSTBxUXlqWGMyYko1MDdTdjBsSG9Qb0tsMzZpVTNK?=
- =?utf-8?B?aUNWcFc1TCtxYjM1U2N5Z0RJdWNXTEpjUmg0NGNnNGxSUWt3Z1FmU3RQKzI2?=
- =?utf-8?B?YlVaR3laYkJ3NHA3NjR1YjhCM3RMd1N3a3pzTXBLTWZNdWQ4MXAxenpVcFdU?=
- =?utf-8?B?UG5BenRYVkxtTUFJdzVmQ1VpbHZOUEdvajJ4dVZ3elZ6RzN3QmlUM1NUZHFQ?=
- =?utf-8?B?UktXMDdyaXdIeWxEOFhIcXl1Sk45T3FObkRJQ2M3NTM2Tk9lak92VlBDYUdJ?=
- =?utf-8?B?QkplVU5JMmxDWmpEYVhmREpacDRVTGFXLzZ4R2FwWXIxLzNYMzVGb21wSVNY?=
- =?utf-8?B?VCtuYVhTWXgvMXkzVjhrWFVjKy9VN0h2b0FJRjhSSEZsTXBURHhKNHpnZThu?=
- =?utf-8?B?RTN3RlVmK0EzQTFyRE9vWVExcFN2eEpEVXN6ak5Jb21LdkN6U2lDRU5DOUM0?=
- =?utf-8?B?TnhWZ0llS2lNS1J1bldXY0V2NDhDR3EvbncyVlFHQzM3YzREdWVNZHZmK1J1?=
- =?utf-8?B?SjdkUEdEa2F2YUNkLzQyR3k4emRKL1QxNndhUWdmT0FzbWgybXJDWmdUMFpL?=
- =?utf-8?B?SHBXQ3B1cDdIdG1WMCs4dzJ6V1VaY1RHMFc0TzUxVjRtcnFDMS92RTE4WVo5?=
- =?utf-8?B?TVU5dThzaUpVQlBkT3BpODBWWWxJbG53emQ0cGI0NUoyOEIwSy92cVY1MXNn?=
- =?utf-8?B?T2g5MUNRaDJYOTA2MmtHejcyOHU2VVhudGpHeUFkZjNwSFRLcGdrOGhPM0s5?=
- =?utf-8?B?U1NWVGY2VUtkMDJvWUFtRFJzNHljNXRTUVVOUXUrN0FnOTBkS0Ewa3FjMU9w?=
- =?utf-8?B?T0dyWTZoQ0ZQQVVnczhibUdBSkErTFE0aE9tWXVzQlQ1MkxhVzg2SmFOMU9X?=
- =?utf-8?B?LzlDYkRob2s0Z3B3ZTUrbGNCZU4xamUyR052UU1ldXh2N2tNa3ExVGh1c2Zz?=
- =?utf-8?B?OHRVU0JITzhSbnpSaXc5a1Fha0g2MGJqVExIdEQ5akFnNzV0WkVLMUtqYXg5?=
- =?utf-8?B?RGtVVkd2WjBLWFp3L3FSVVpZa1lIaE5nbm1PVnEwOStHOUpLNE50VzRBWktM?=
- =?utf-8?B?SnBRZzBTSis4NmxKTGs2UXBaY0QwNEVrb20zZkQzdmNkeGlNRjcrU2J0NWpm?=
- =?utf-8?Q?9UzEiui0UHHGk0EiTsJp4M5vA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc49b5e2-62b2-4f33-df0b-08da74a3b711
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 16:26:12.7801
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gQcCfKl/AWBhCD1Ip2+1QLRoYAd3FsZ1k2iyQMqfuEdK7gweVUpYxjUzsJNBs3mT9j+iWwl1RkomhRtbaga23g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4532
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,51 +69,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+During proactive reclaim, we sometimes observe severe overreclaim,
+with several thousand times more pages reclaimed than requested.
 
+This trace was obtained from shrink_lruvec() during such an instance:
 
-On 2022-08-02 09:05, Harry Wentland wrote:
-> On 2022-08-02 08:04, Magali Lemes wrote:
->> There are two identical CFLAGS entries for "display_mode_vba_20.o", so
->> remove one of them. Also, as there's already an entry for
->> "display_mode_lib.o" CFLAGS, regardless of CONFIG_DRM_AMD_DC_DCN being
->> defined or not, remove the one entry between CONFIG_DRM_AMD_DC_DCN ifdef
->> guards.
->>
->> Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
-> 
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-> 
-> Harry
-> 
+    prio:0 anon_cost:1141521 file_cost:7767
+    nr_reclaimed:4387406 nr_to_reclaim:1047 (or_factor:4190)
+    nr=[7161123 345 578 1111]
 
-Applied to amd-staging-drm-next.
+While he reclaimer requested 4M, vmscan reclaimed close to 16G, most
+of it by swapping. These requests take over a minute, during which the
+write() to memory.reclaim is unkillably stuck inside the kernel.
 
-Thanks
-Siqueira
+Digging into the source, this is caused by the proportional reclaim
+bailout logic. This code tries to resolve a fundamental conflict: to
+reclaim roughly what was requested, while also aging all LRUs fairly
+and in accordance to their size, swappiness, refault rates etc. The
+way it attempts fairness is that once the reclaim goal has been
+reached, it stops scanning the LRUs with the smaller remaining scan
+targets, and adjusts the remainder of the bigger LRUs according to how
+much of the smaller LRUs was scanned. It then finishes scanning that
+remainder regardless of the reclaim goal.
 
->> ---
->>   drivers/gpu/drm/amd/display/dc/dml/Makefile | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> index 359f6e9a1da0..41bb6c3cc2d8 100644
->> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> @@ -61,7 +61,6 @@ CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_vba.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn10/dcn10_fpu.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/dcn20_fpu.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags)
->> -CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_mode_vba_20v2.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn20/display_rq_dlg_calc_20v2.o := $(dml_ccflags)
->> @@ -82,7 +81,6 @@ CFLAGS_$(AMDDALPATH)/dc/dml/dcn301/dcn301_fpu.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn302/dcn302_fpu.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dcn303/dcn303_fpu.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/dsc/rc_calc_fpu.o := $(dml_ccflags)
->> -CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_lib.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/calcs/dcn_calcs.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/calcs/dcn_calc_auto.o := $(dml_ccflags)
->>   CFLAGS_$(AMDDALPATH)/dc/dml/calcs/dcn_calc_math.o := $(dml_ccflags) -Wno-tautological-compare
-> 
+This works fine if priority levels are low and the LRU lists are
+comparable in size. However, in this instance, the cgroup that is
+targeted by proactive reclaim has almost no files left - they've
+already been squeezed out by proactive reclaim earlier - and the
+remaining anon pages are hot. Anon rotations cause the priority level
+to drop to 0, which results in reclaim targeting all of anon (a lot)
+and all of file (almost nothing). By the time reclaim decides to bail,
+it has scanned most or all of the file target, and therefor must also
+scan most or all of the enormous anon target. This target is thousands
+of times larger than the reclaim goal, thus causing the overreclaim.
+
+The bailout code hasn't changed in years, why is this failing now?
+The most likely explanations are two other recent changes in anon
+reclaim:
+
+1. Before the series starting with commit 5df741963d52 ("mm: fix LRU
+   balancing effect of new transparent huge pages"), the VM was
+   overall relatively reluctant to swap at all, even if swap was
+   configured. This means the LRU balancing code didn't come into play
+   as often as it does now, and mostly in high pressure situations
+   where pronounced swap activity wouldn't be as surprising.
+
+2. For historic reasons, shrink_lruvec() loops on the scan targets of
+   all LRU lists except the active anon one, meaning it would bail if
+   the only remaining pages to scan were active anon - even if there
+   were a lot of them.
+
+   Before the series starting with commit ccc5dc67340c ("mm/vmscan:
+   make active/inactive ratio as 1:1 for anon lru"), most anon pages
+   would live on the active LRU; the inactive one would contain only a
+   handful of preselected reclaim candidates. After the series, anon
+   gets aged similarly to file, and the inactive list is the default
+   for new anon pages as well, making it often the much bigger list.
+
+   As a result, the VM is now more likely to actually finish large
+   anon targets than before.
+
+Change the code such that only one SWAP_CLUSTER_MAX-sized nudge toward
+the larger LRU lists is made before bailing out on a met reclaim goal.
+
+This fixes the extreme overreclaim problem.
+
+Fairness is more subtle and harder to evaluate. No obvious misbehavior
+was observed on the test workload, in any case. Conceptually, fairness
+should primarily be a cumulative effect from regular, lower priority
+scans. Once the VM is in trouble and needs to escalate scan targets to
+make forward progress, fairness needs to take a backseat. This is also
+acknowledged by the myriad exceptions in get_scan_count(). This patch
+makes fairness decrease gradually, as it keeps fairness work static
+over increasing priority levels with growing scan targets. This should
+make more sense - although we may have to re-visit the exact values.
+
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ mm/vmscan.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index f7d9a683e3a7..1cc0c6666787 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2897,8 +2897,8 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+ 	enum lru_list lru;
+ 	unsigned long nr_reclaimed = 0;
+ 	unsigned long nr_to_reclaim = sc->nr_to_reclaim;
++	bool proportional_reclaim;
+ 	struct blk_plug plug;
+-	bool scan_adjusted;
+ 
+ 	get_scan_count(lruvec, sc, nr);
+ 
+@@ -2916,8 +2916,8 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+ 	 * abort proportional reclaim if either the file or anon lru has already
+ 	 * dropped to zero at the first pass.
+ 	 */
+-	scan_adjusted = (!cgroup_reclaim(sc) && !current_is_kswapd() &&
+-			 sc->priority == DEF_PRIORITY);
++	proportional_reclaim = (!cgroup_reclaim(sc) && !current_is_kswapd() &&
++				sc->priority == DEF_PRIORITY);
+ 
+ 	blk_start_plug(&plug);
+ 	while (nr[LRU_INACTIVE_ANON] || nr[LRU_ACTIVE_FILE] ||
+@@ -2937,7 +2937,7 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+ 
+ 		cond_resched();
+ 
+-		if (nr_reclaimed < nr_to_reclaim || scan_adjusted)
++		if (nr_reclaimed < nr_to_reclaim || proportional_reclaim)
+ 			continue;
+ 
+ 		/*
+@@ -2988,8 +2988,6 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+ 		nr_scanned = targets[lru] - nr[lru];
+ 		nr[lru] = targets[lru] * (100 - percentage) / 100;
+ 		nr[lru] -= min(nr[lru], nr_scanned);
+-
+-		scan_adjusted = true;
+ 	}
+ 	blk_finish_plug(&plug);
+ 	sc->nr_reclaimed += nr_reclaimed;
+-- 
+2.37.1
 

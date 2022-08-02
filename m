@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7640C588103
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEEB588106
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiHBR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S234750AbiHBR3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiHBR2o (ORCPT
+        with ESMTP id S234672AbiHBR3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:28:44 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532D48E96;
-        Tue,  2 Aug 2022 10:28:43 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso9049205pjq.0;
-        Tue, 02 Aug 2022 10:28:43 -0700 (PDT)
+        Tue, 2 Aug 2022 13:29:01 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB2E49B7E;
+        Tue,  2 Aug 2022 10:29:00 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id tl27so9320711ejc.1;
+        Tue, 02 Aug 2022 10:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fG01VtUQWDj2G8XLV85uGypDOMVsGyzXJZJeDD96RAU=;
+        b=CudTMV1iKdUHGiDVdV7lhFWDU8JAGnxTMWs4/iUZh0aRx3/wLccMOVk/DrfLAW2ql+
+         eqiAqsGhN0zpcgq9lUgQSXDA3iN+rGTDJwcd7AuUTi980OFOi46Okl2TSAMvHZOPloQJ
+         diLs8pZ/+ia+Imhya8uTRGbbzI0wnsspNLokCHIO4ZDYg3i0M9qaxJvhGR9/vAHGqps/
+         ACcehG9qvRvL9vf+zSEs3uj3jq3CoLPavsKFJv2l2Ycxc9l/2DSw48HGOxgiImM/58g8
+         mxmvKvw6STlI1muk6MvG/Y8oz6Lxr+5kG67lBW3Dy9eKkA4iOb3QSN+BKDOcYw1Ee4ft
+         VlWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6d45g8YxgzfmSxBicyPqIYIzq8Y324sqlVxs4AZJWpM=;
-        b=nVxICO8o7OcEA6lr4emu8o6UrNiKnc9WKbmtMGDGdm39sT4Ah4sMKpzrV4jw2oxI7p
-         RcygyWNoOfW0bxpT3bo+iOivv+MD/v+vr8Q4SKxsKkXfdPkT49WuGphhBT1/lsFbQdWs
-         zPxLST+WopU0gmkzFL5ToiT9S8D9VGpM5rSRnklqA+Rftt7ZCGIv4iTQs/UDwblBwp1D
-         WEGRmHGeqdGkbDphWhqMTnmOfhaFGESwfXz3iMjBCz3+ft34ed+J8v1Ui5I15t6czaOR
-         NSKkm/JkdH/+rVC1a8h6JfVpw1a4Z02OFzPEhYdglIYfMx6ggebmOI7MYLepzXVc8pVn
-         jcOw==
-X-Gm-Message-State: ACgBeo1Qph/8Nv/ldCCvAtcPwjzfdaLtVByEhf6i68C2DgP1bemCDMM7
-        vtnqAGDVEolr0r1ncfqocEE=
-X-Google-Smtp-Source: AA6agR5VxGYxDPxcI0XQsfdV7DY3CJ0qhe24Z6iA6SHSZy7JoQsYLBH6a5omlRLfW+04ztL79Aadiw==
-X-Received: by 2002:a17:902:edc4:b0:16c:d2ef:7fd2 with SMTP id q4-20020a170902edc400b0016cd2ef7fd2mr22023804plk.160.1659461322908;
-        Tue, 02 Aug 2022 10:28:42 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:5297:9162:3271:e5df? ([2620:15c:211:201:5297:9162:3271:e5df])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170903110800b0016bdeb58611sm12398511plh.112.2022.08.02.10.28.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 10:28:42 -0700 (PDT)
-Message-ID: <c4153499-fc79-15a2-57e7-b82dc6c5ea5a@acm.org>
-Date:   Tue, 2 Aug 2022 10:28:40 -0700
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=fG01VtUQWDj2G8XLV85uGypDOMVsGyzXJZJeDD96RAU=;
+        b=iUcSe387zOlQRzj5niqFY1KgjhCRRRvqt3BrMMaqwa8SltqN98D5TPQYygTMAZnIDL
+         zsQtBrmQJ8f/mIkkQgGvwT69lBK7GBFLbjrtdBlGRooliLQdZOPCse4nTOSOTIEfWywe
+         fVGTenOiwJsJq+clkrVNcils3ABiVjgY/uZOPzH3L0rbRuCMzENux+NjS27A6B6+zZcn
+         l8ypPEucWGrVyZZKGtz/mAFROmWAqtwm+3HzoUK2LUhbo88wj/rnE1YPvG7x6JAQDEqP
+         cEPnkLc7KnIxONwwdzrW9xyBeS8ND1mHheZEfs5Gs6Qs9hYqZDjEtL8V3YB2Zywect75
+         8Wzg==
+X-Gm-Message-State: ACgBeo2a1Z10C3o/+rSrSr6CDvyc4O99cEF+JL6Fp2/wwsQIVlDGLdIU
+        T+/nFMwZQ2D6h/rsF8BX+lw=
+X-Google-Smtp-Source: AA6agR4nOHE9GdQzapRL6UPnQdOGydmJQ+w040Ps7whhbs2UsMYWS00BBj4QEXTQFOnfoPFIwjQ5ug==
+X-Received: by 2002:a17:906:4fd4:b0:730:a685:d27c with SMTP id i20-20020a1709064fd400b00730a685d27cmr1682599ejw.595.1659461338945;
+        Tue, 02 Aug 2022 10:28:58 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id y8-20020aa7c248000000b0043c7efb8badsm8463219edo.61.2022.08.02.10.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:28:58 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 2 Aug 2022 19:28:56 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>
+Subject: Re: [PATCH] x86/kprobes: Fix to update kcb status flag after
+ singlestepping
+Message-ID: <Yule2F3i+Qj6Cdxc@gmail.com>
+References: <165942025658.342061.12452378391879093249.stgit@devnote2>
+ <20220802105230.43bb6079@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] RDMA/ib_srpt: unify checking rdma_cm_id condition in
- srpt_cm_req_recv()
-Content-Language: en-US
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
- <bb20de72-fc15-feb1-541a-91454593e043@acm.org>
- <c37397fc-f406-db4a-64db-294457384c40@fujitsu.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <c37397fc-f406-db4a-64db-294457384c40@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220802105230.43bb6079@gandalf.local.home>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/1/22 20:35, lizhijian@fujitsu.com wrote:
-> On 02/08/2022 00:46, Bart Van Assche wrote:
->> Although the above patch looks fine to me, I'm not sure this kind
->> of changes should be considered as useful or as churn?
+
+* Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Tue,  2 Aug 2022 15:04:16 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> Just want to make it more clear :). you can see below cleanup path,
-> it's checking rdma_cm_id instead. When i first saw these conditions,
-> i was confused until i realized rdma_cm_id and ib_cm_id are always
-> exclusive currently after looking into its callers
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Fix kprobes to update kcb (kprobes control block) status flag to
+> > KPROBE_HIT_SSDONE even if the kp->post_handler is not set.
+> > This may cause a kernel panic if another int3 user runs right
+> > after kprobes because kprobe_int3_handler() misunderstands the
+> > int3 is kprobe's single stepping int3.
+> > 
+> > Fixes: 6256e668b7af ("x86/kprobes: Use int3 instead of debug trap for single-step")
+> > Reported-by: Daniel Müller <deso@posteo.net>
+> > Tested-by: Daniel Müller <deso@posteo.net>
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > Link: https://lore.kernel.org/all/20220727210136.jjgc3lpqeq42yr3m@muellerd-fedora-PC2BDTX9
+> > ---
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> I guess this will go through the tip tree?
 
-Ah, that's right. Thanks for the clarification.
+Yeah, it's already in tip:perf/urgent.
 
-Bart.
+Thanks,
+
+	Ingo

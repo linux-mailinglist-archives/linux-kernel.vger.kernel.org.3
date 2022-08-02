@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC16588066
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A7B58806B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239124AbiHBQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S237783AbiHBQke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239087AbiHBQjL (ORCPT
+        with ESMTP id S237714AbiHBQka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:39:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC21DB3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:39:00 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id y15so13950575plp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:39:00 -0700 (PDT)
+        Tue, 2 Aug 2022 12:40:30 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAEA99
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:40:28 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id o15so24322335yba.10
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:40:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=YLolmPC/4W6Ekt5KXSGhTlaQ+SvTrN9uL1784FHTktA=;
-        b=DEczoNtVTMwIsaw8yg11wYkQuI9LeTuQwFeOQ0oJ03m1tMW/YgHdOnTv17v8+A6WTV
-         U7hpMystc0MLLmDXYDMaROWkoGrECN3+IY7Ia+Z09cQyp/+2thONhPGLIYnqECJRrXhr
-         dDHRlXhlBA0o0w24sHNoK99DkncCME85F/XcNTjXnZbY1/vtUg34rxTUMG/OWYQ4HMcI
-         iIFe/Qw/lNcBgMnxPgPuAhy90CFyCy84wOdE8NkRPB91ulC5zTuJcdVgjk8H0EgOjoUm
-         FnlRd5MiMQxVvv/M1kuZRL91q7QvdBIT05QOREIPMw2HWyehKvsTbH9WC464J4D8ov37
-         YsWg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=TKCfFaRwxtnk/rQVtVgmwJGR+kFqLe+E3ZNMs5uStiU=;
+        b=fQz6bCpBWDz1U2UNZ+ogvEaeGM0+TQSUCvJjHgOxzKyVR10AMWmDx2/OC2IM/oT8VK
+         ZxZKOlmmxDys3j4TmR3QotmUtsWfi3fa0qHZP3uYqAmgwuTmmrhfF+Sb0Zi2pnIfXWuz
+         xVyYZy+CCqbxXYfrjVFlsFK3a6SCD0iuq2Vvzf2fE3rT8ks85BnVKYRK3UP96wOVF4W4
+         nWzU9CVw619B+vCINNCA4+USGc+0+cRit4d94xnRthJdJRHWZqSsunW56JDBHrs52Ysa
+         DGmPhv4wPDr00SDCFO8E8sRLT6HcOQbyKFcaeyQ5Pz4kH0WGi6hfR/8Q+qWq1jGBCTtr
+         eUEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YLolmPC/4W6Ekt5KXSGhTlaQ+SvTrN9uL1784FHTktA=;
-        b=KaSIOB7mNo0SruJ3PmrVXXgINyq9ANMx+CAKYSwJQA7m3rAcTPhCiHEaQzp+SAPj9W
-         IQAM3fBgYSikEC39EJkMahtPPN+jXBUrn5V+7oyEkINyRcF9GPLZ3Kuq+FUrv8KpoVBt
-         o9jx9ElDja9KvFBsqf1mJMTyqVnh0BGtdrD+NUh3oC7nKYYrRwy6ialQAOJBnwpvVXmX
-         rzOl7807GLoDONAgrI4cKSt64WQzGMDCJmRC8R3NET2Vb/2EgrSGrnL9VEQZrPtJIzNU
-         5vrywj7fhvOUFozx7B9iJN+4F/UipTJJGN74oBtBqL0xxOGiYLcvYBCAKMUhbPUp/J3W
-         kwMQ==
-X-Gm-Message-State: ACgBeo2nRzayV1pG8bnj7n7FLs7FJwIoZp9RwZ0gboWS5pR/pBjNeA7q
-        2s2f8natrPLHTkKpUv+n5w/DRQ==
-X-Google-Smtp-Source: AA6agR5iAjFP2q7X1PbZvwrW6P6B4ILkh92ieVBGwE4LPz6Qma2k0ZREMBEhxOJKazpAhnjrSGkWTg==
-X-Received: by 2002:a17:902:dac6:b0:16d:bdf5:7084 with SMTP id q6-20020a170902dac600b0016dbdf57084mr22165713plx.55.1659458340177;
-        Tue, 02 Aug 2022 09:39:00 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l15-20020a17090aec0f00b001f216407204sm11136513pjy.36.2022.08.02.09.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 09:38:59 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 16:38:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <YulTH7bL4MwT5v5K@google.com>
-References: <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
- <YtmT2irvgInX1kPp@google.com>
- <20220725130417.GA304216@chaop.bj.intel.com>
- <YuQ64RgWqdoAAGdY@google.com>
- <Yuh0ikhoh+tCK6VW@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=TKCfFaRwxtnk/rQVtVgmwJGR+kFqLe+E3ZNMs5uStiU=;
+        b=RpgpLPSrLawPebF7hsulApp6Du/c83+kaJTU0sYSEzoFDGbyaBgjNkduBcy8nw24KP
+         klH6/5aoaXNDmqg0sRzOXRMoPbyPUfKfI/fF3XtMmTwzgJWztJ8rGaIZFcfWm/b0o6/U
+         gXtgUhyYpPjrcQXMjah3/jgVjnyH0bFcuQmB1lbrsrO0hzpyQQVLooT5KG1GcNUn0AMQ
+         DkfY1ahiXL6BKHNpRYXNLhi21cU3EJvt3Ls9Lb+inDJ0VVvrBgUAALd4bS43iUZnycwv
+         q+xZaDmz9H4abpRuwrSVVwQLYept/VKmtk7cYgWLwpLvV9eqOihoozlved+QSdMKaQ3I
+         sU0w==
+X-Gm-Message-State: ACgBeo3fIGW72ixmHMCiWJUkqHFM+VgRtNhnclA6nIrrugP4EihhUGMQ
+        Xg5+rscr7I1Dw7FPtN+qCxtwjJig14YrJX1UIUkM6g==
+X-Google-Smtp-Source: AA6agR5Gr6ZR3RM0aH8kASevKllDwtedqw0828kHHV1gmi+nYLK8FHDGmtXNVJqNcM1yQPB8Q5uxXbQyYEibGICYWso=
+X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
+ 186-20020a250bc3000000b00673bc78c095mr15523307ybl.376.1659458427960; Tue, 02
+ Aug 2022 09:40:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yuh0ikhoh+tCK6VW@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-14-glider@google.com>
+ <CANpmjNN1KVteEi4HPTqa_V78iQ1e2iNZ=rguLSE6aqyca7w_zA@mail.gmail.com>
+In-Reply-To: <CANpmjNN1KVteEi4HPTqa_V78iQ1e2iNZ=rguLSE6aqyca7w_zA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 2 Aug 2022 18:39:51 +0200
+Message-ID: <CAG_fn=WDr1HnQG+Np9Q4waurnJgiS=3Z-ww2M1oW0To=1LivZg@mail.gmail.com>
+Subject: Re: [PATCH v4 13/45] MAINTAINERS: add entry for KMSAN
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,28 +99,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Sean Christopherson wrote:
-> I think we should avoid UNMAPPABLE even on the KVM side of things for the core
-> memslots functionality and instead be very literal, e.g.
-> 
-> 	KVM_HAS_FD_BASED_MEMSLOTS
-> 	KVM_MEM_FD_VALID
-> 
-> We'll still need KVM_HAS_USER_UNMAPPABLE_MEMORY, but it won't be tied directly to
-> the memslot.  Decoupling the two thingis will require a bit of extra work, but the
-> code impact should be quite small, e.g. explicitly query and propagate
-> MEMFILE_F_USER_INACCESSIBLE to kvm_memory_slot to track if a memslot can be private.
-> And unless I'm missing something, it won't require an additional memslot flag.
-> The biggest oddity (if we don't also add KVM_MEM_PRIVATE) is that KVM would
-> effectively ignore the hva for fd-based memslots for VM types that don't support
-> private memory, i.e. userspace can't opt out of using the fd-based backing, but that
-> doesn't seem like a deal breaker.
+> >
+> > +KMSAN
+> > +M:     Alexander Potapenko <glider@google.com>
+> > +R:     Marco Elver <elver@google.com>
+> > +R:     Dmitry Vyukov <dvyukov@google.com>
+> > +L:     kasan-dev@googlegroups.com
+> > +S:     Maintained
+> > +F:     Documentation/dev-tools/kmsan.rst
+> > +F:     include/linux/kmsan*.h
+> > +F:     lib/Kconfig.kmsan
+> > +F:     mm/kmsan/
+> > +F:     scripts/Makefile.kmsan
+> > +
+>
+> It's missing:
+>
+>   arch/*/include/asm/kmsan.h
 
-Hrm, but basing private memory on top of a generic FD_VALID would effectively require
-shared memory to use hva-based memslots for confidential VMs.  That'd yield a very
-weird API, e.g. non-confidential VMs could be backed entirely by fd-based memslots,
-but confidential VMs would be forced to use hva-based memslots.
+Done
 
-Ignore this idea for now.  If there's an actual use case for generic fd-based memory
-then we'll want a separate flag, fd, and offset, i.e. that support could be added
-independent of KVM_MEM_PRIVATE.
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

@@ -2,89 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4325883EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912125883FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235453AbiHBWLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S235450AbiHBWNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiHBWLi (ORCPT
+        with ESMTP id S235369AbiHBWMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:11:38 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9657332DB6
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:11:36 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id kb8so13730787ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=k6pIxoS6xr69cL31tnJGd/edjv23VUk7urmVJKHeHw8=;
-        b=FwrSh8M2yilbskdsO4gXxUoC2Ed+FeryminZgruVH00UecbUpXqRgNsVHrZfOtz6xc
-         ib05vYtYPKWhkIqV87INC126FLDR+3Wl/KgQ7OB87pUtFbUh3h4sX0GHaJUVqmIocbuN
-         5gXLQkyeN80KnkVUepMPBUS/nqR8X4BXEHwZ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=k6pIxoS6xr69cL31tnJGd/edjv23VUk7urmVJKHeHw8=;
-        b=2FK8DCGSsG57kXW1cRx/fuEt9ctcbi4ZReBptye70GjUFSNf7RTLONpQTUL9cAhsfz
-         aIyAyUs1jLz1kbAwc6Yr94urILKFI4QxFg+OP8u6myn4FqhElvsoKCulThSGEFLrgQl9
-         ZLayfJ0yQHK3o97JguCc8y3+Kz6G7yBgfNUQK5zbOWOP7odhzZp4w+2UEQ527VpEbG6Z
-         jCwHOUTGRKveAfQT2G2gNDtUGKr0XmyuwKIZbqZS+aCrQLXL9KnNg3bDO/z6a0lky2bB
-         2yWCWH0hM5vE/hiGlTdimSyMi164GA300bJ9qhxVBrWuVnWYi9I4wt8XQ9uWN1fQnQ45
-         988A==
-X-Gm-Message-State: ACgBeo05BIpZqyOKx6ZB0229R8VSDnC0WnOMv1J6i+o68CfAvGrdedwD
-        IBmNMjY/baH+MkV+kDvzQMbZ1V1sPb+AJGyA
-X-Google-Smtp-Source: AA6agR7PQopi89Lcy3aQIOiMg4duSwjQMqI8yZypKnF+m97EQ0J0XUdPbmHH1FO61E73DdREdje3TA==
-X-Received: by 2002:a17:906:8a6c:b0:730:a322:6f69 with SMTP id hy12-20020a1709068a6c00b00730a3226f69mr3182641ejc.585.1659478295893;
-        Tue, 02 Aug 2022 15:11:35 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id x25-20020aa7d6d9000000b0043bc4b28464sm8759758edr.34.2022.08.02.15.11.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 15:11:35 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id v131-20020a1cac89000000b003a4bb3f786bso54749wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:11:35 -0700 (PDT)
-X-Received: by 2002:a05:600c:21d7:b0:3a3:2088:bbc6 with SMTP id
- x23-20020a05600c21d700b003a32088bbc6mr843858wmj.68.1659478294886; Tue, 02 Aug
- 2022 15:11:34 -0700 (PDT)
+        Tue, 2 Aug 2022 18:12:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B1D54C90;
+        Tue,  2 Aug 2022 15:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659478320; x=1691014320;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dhv6+T0m4BozChdUSL5UsmZ7sbExT/0ShfHnoMLEeRA=;
+  b=igfjoPJcCkSNj2jgbjFWTNjv3yqAqfBqkL4gwHcjHYXvuHIq28LNziSx
+   pBCNz+BNYVSsaR7tRS+NjJ9pdEyPZdG+VeSqp6zvCkoEtdkoCgwE39Chz
+   B/apC7IKoT9clRSRKTv8ijAWRvAuRvdPTzJLnpWgSyOKrb1vv0hnE9HsQ
+   dj9ZRRCfpyiy9WBw4H9b57/NpmFPkY5fjgl+kXyy8FKTGydcP/SAYzLgy
+   5qOFWEHRAsYUY3ZMmPIawWWtXPttyKoCKyXrOn1/ZYSYHjbOo8M1nzpvy
+   opEHYYgceZQqsd09krsmAqH1/kL3Qoj5pyPvZlFKTSIV/RCeUlx+CjidK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269909724"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="269909724"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 15:11:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="728989347"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 02 Aug 2022 15:11:36 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ06y-000GVS-0r;
+        Tue, 02 Aug 2022 22:11:36 +0000
+Date:   Wed, 3 Aug 2022 06:11:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Jinlin <lijinlin3@huawei.com>, lduncan@suse.com,
+        cleech@redhat.com, michael.christie@oracle.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, mark.mielke@gmail.com
+Cc:     kbuild-all@lists.01.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linfeilong@huawei.com, liuzhiqiang26@huawei.com
+Subject: Re: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
+ getpeername()
+Message-ID: <202208030633.x2jgVRIa-lkp@intel.com>
+References: <20220802101939.3972556-1-lijinlin3@huawei.com>
 MIME-Version: 1.0
-References: <827a0fe0-03a3-b5ca-db34-daff17095b8f.ref@schaufler-ca.com> <827a0fe0-03a3-b5ca-db34-daff17095b8f@schaufler-ca.com>
-In-Reply-To: <827a0fe0-03a3-b5ca-db34-daff17095b8f@schaufler-ca.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 2 Aug 2022 15:11:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjsM9cUHfmGMcco5zCuBqMpM-97hBkBX5_vzoRLm5SvJw@mail.gmail.com>
-Message-ID: <CAHk-=wjsM9cUHfmGMcco5zCuBqMpM-97hBkBX5_vzoRLm5SvJw@mail.gmail.com>
-Subject: Re: [GIT PULL] Smack patches for v6.0
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     LSM List <linux-security-module@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802101939.3972556-1-lijinlin3@huawei.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 1:13 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> There are two minor code clean-ups. One removes a touch of
-> dead code and the other replaces an instance of kzalloc + strncpy
-> with kstrndup.
+Hi Li,
 
-Hmm. That second one looks like it really should have just used
-"kmemdup()" (and a zero termination) instead, since it has already
-done all the string length calculations.
+Thank you for the patch! Perhaps something to improve:
 
-Oh well. I guess the strndup() works too, but it seems kind of odd to
-do a strnlen() there when you have literally limited 'len' to smaller
-than the string you are going to duplicate.
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-                   Linus
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: loongarch-randconfig-s041-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030633.x2jgVRIa-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/ccc367df3fdba07b24eeda721ca928cce50f40d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+        git checkout ccc367df3fdba07b24eeda721ca928cce50f40d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/scsi/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/scsi/iscsi_tcp.c:798:26: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int fd @@     got struct file *file @@
+   drivers/scsi/iscsi_tcp.c:798:26: sparse:     expected unsigned int fd
+   drivers/scsi/iscsi_tcp.c:798:26: sparse:     got struct file *file
+   drivers/scsi/iscsi_tcp.c:852:26: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int fd @@     got struct file *file @@
+   drivers/scsi/iscsi_tcp.c:852:26: sparse:     expected unsigned int fd
+   drivers/scsi/iscsi_tcp.c:852:26: sparse:     got struct file *file
+>> drivers/scsi/iscsi_tcp.c:798:22: sparse: sparse: non size-preserving pointer to integer cast
+   drivers/scsi/iscsi_tcp.c:852:22: sparse: sparse: non size-preserving pointer to integer cast
+
+vim +798 drivers/scsi/iscsi_tcp.c
+
+   777	
+   778	static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+   779					       enum iscsi_param param, char *buf)
+   780	{
+   781		struct iscsi_conn *conn = cls_conn->dd_data;
+   782		struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+   783		struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+   784		struct sockaddr_in6 addr;
+   785		struct socket *sock;
+   786		int rc;
+   787	
+   788		switch(param) {
+   789		case ISCSI_PARAM_CONN_PORT:
+   790		case ISCSI_PARAM_CONN_ADDRESS:
+   791		case ISCSI_PARAM_LOCAL_PORT:
+   792			spin_lock_bh(&conn->session->frwd_lock);
+   793			if (!tcp_sw_conn || !tcp_sw_conn->sock) {
+   794				spin_unlock_bh(&conn->session->frwd_lock);
+   795				return -ENOTCONN;
+   796			}
+   797			sock = tcp_sw_conn->sock;
+ > 798			fget(sock->file);
+   799			spin_unlock_bh(&conn->session->frwd_lock);
+   800	
+   801			if (param == ISCSI_PARAM_LOCAL_PORT)
+   802				rc = kernel_getsockname(sock,
+   803							(struct sockaddr *)&addr);
+   804			else
+   805				rc = kernel_getpeername(sock,
+   806							(struct sockaddr *)&addr);
+   807			spin_lock_bh(&conn->session->frwd_lock);
+   808			sockfd_put(sock);
+   809			spin_unlock_bh(&conn->session->frwd_lock);
+   810			if (rc < 0)
+   811				return rc;
+   812	
+   813			return iscsi_conn_get_addr_param((struct sockaddr_storage *)
+   814							 &addr, param, buf);
+   815		default:
+   816			return iscsi_conn_get_param(cls_conn, param, buf);
+   817		}
+   818	
+   819		return 0;
+   820	}
+   821	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

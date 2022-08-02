@@ -2,126 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431E4587708
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5C458770F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiHBGRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 02:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S235326AbiHBGVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 02:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiHBGRn (ORCPT
+        with ESMTP id S230298AbiHBGVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 02:17:43 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2068.outbound.protection.outlook.com [40.107.95.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9638AF5A0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:17:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E4/fnrxTsDWbjA7Ku8qnZtIw6myTOD+pBIlHKRxvVG7DNBstSGkMaPF3X6tlR+XiDuTo6aX4er1b2zUm6amw9QjvucK2z+rnKrXhbcXHjF4GuknVAFhcYsGXKkML9nz+z2InHsEEnYsNC1VvcA06xctZnQnfqFuM5Owiw0006W7yWoMLFaM0tgMo7JLxOtP/Bke8z6LfV/B3MhGQPpnOVnmIk1VKofgzGqPIMi4vgy3lUyAqDbq4Ws93UEerRJb3IExNsAyp6CiahvHbHXJ+TK2IKRF3ePjY36Q8j+Nv8sq/+p1PG8DI3NqH3Ug9pFxwafxKxF98E1M8mbwRt/yBFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/c+0ja1qPuzmoI0jbFE9RT79+saqPLx/PQ4cRxJldA=;
- b=hpsdtZWs2WZ1n9x+WE8I+CKM7gnty77Xdqoj2V7RjP4wCJT6OWe1/LiDDQ5GMmVijdLlkPuhvl8Jd3tXP0XLquV1Nzc1YUJfhgMEPJ4nx6vVaFqJOl+gGzXLgwHDnydHEQi+XYta6pOVFYXyYPgfbk8X9Mz56ogu0x0Y1Y/4BMqoHXocOLNlWDMylj0g9/jsPGCM0xPxSqaTx1AUEvlhPpfuOlmAMtqSYSuJG9zh4GcNyK8UVzyJ2JUaSGYOHFGJHpLsjA4UmrHWKP0Vd07SnmeV+fzqNuiZJiUh8LrzjDuetT7pkjP3Qam/hWOp4FeboOilqMaJF61dmJplmPx11A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f/c+0ja1qPuzmoI0jbFE9RT79+saqPLx/PQ4cRxJldA=;
- b=oEYXIhJKg9C6WBbTeZpmXdxovh42L3mOv9gSwId7fsEsKLDV1hwyXIpy+s+UCuA9otl8KgBKdpz1REdBQZehCMy3HCQPgkD5av0tsav++az+GsWpECyXLoeXaCVuQWRoOFfFpT3F37qhtYV6TP8/yDhCODa9LmY2KHtjddcwy2M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by BYAPR12MB3095.namprd12.prod.outlook.com (2603:10b6:a03:a9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 06:17:39 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9%3]) with mapi id 15.20.5482.011; Tue, 2 Aug 2022
- 06:17:39 +0000
-Message-ID: <a7b87da8-cd78-77ef-dd93-7886d4197050@amd.com>
-Date:   Tue, 2 Aug 2022 11:47:24 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-To:     peterz@infradead.org
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com, ravi.bangoria@amd.com
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
-Content-Language: en-US
-In-Reply-To: <20220113134743.1292-1-ravi.bangoria@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0039.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::15) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Tue, 2 Aug 2022 02:21:04 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B721162CB
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:21:01 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id l4so16568578wrm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 23:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kSse5FKWL5kgJ+ejLrneA4q2v7qyL79FOUMp7CrCCXs=;
+        b=BcjRUF9h+NwxPb28S85WIalzQC2VbdN+D8R/grvLJn86rcmyW+Pht6z84HK+GRJHyW
+         Fj/VSfr8Qq9UDP1Amzvd6Av6ynuA5xRB9Cs3MTlz6/wRiP6VChiR5sNpwRHKX7KpOKU4
+         vfdGGOEQclsTz7QS+LSeYZhT3MNIkX6Yp+D3c9ldqWqX9sR8YhH5ZA01XcG5M6LEeQph
+         X9jSmnbQWcnXwVA54GY3KHHHkQYvDgBnTfDgiDSfnREniDa1fEmmPTZ2kfEZDQA6fI/v
+         aAXjoUrmhAJSYk0y1PmX10wLhIzxqOROqRv0vIPzWn9CsDIQg21UbDXztj6DeFQjACEh
+         U7MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kSse5FKWL5kgJ+ejLrneA4q2v7qyL79FOUMp7CrCCXs=;
+        b=cY77GmIN2KsZWvdbf/IhpX8agJVDm1XHh5HFYq/XpEsh4+PhrG6tZJtq2t3LZ0xR5W
+         dQGJs+1+O3Qw6ry/p5te7sk166j4x0surqTpe+Yxf8GH5l8NdlBd58F1Y22LgF9+N3K3
+         EabsIlrKkqcpjhSi3BZVziwf4LT9amalBr4PG17CIdpFdTtKXc8gbrl13hpjuIG1f1FW
+         02AJJxp/pF/tCdL2949zGebOZFvnX6I9I+IfTGz511UhLDv35w8PCqG2p9yenBc7GCgt
+         ChohsMWVgAi7S4qeoFNs8RSDqaRSzLI3LbbuUOf03KCDY5oNO1LFRCT7Oa3zNQJxlk3N
+         TyBw==
+X-Gm-Message-State: ACgBeo2JgYsI9/EWIpUqlpC68Dl/nPW7M7QqE/5Hm2KzXMd2QhxWdu7k
+        B5i5+Z9eRyy6P+JQP0OBrTw=
+X-Google-Smtp-Source: AA6agR4T3FIeyScX994uVLbWgpN5xhMLL0YKTgi3q9YLQTHazQmN2/yWlyOy9rpBthuuQT0yBTWrAQ==
+X-Received: by 2002:a5d:4907:0:b0:21f:bc42:989 with SMTP id x7-20020a5d4907000000b0021fbc420989mr8729711wrq.375.1659421260272;
+        Mon, 01 Aug 2022 23:21:00 -0700 (PDT)
+Received: from opensuse.localnet (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
+        by smtp.gmail.com with ESMTPSA id a1-20020adfe5c1000000b0021e491fd250sm7768696wrn.89.2022.08.01.23.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 23:20:58 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] kexec: Replace kmap() with kmap_local_page()
+Date:   Tue, 02 Aug 2022 08:20:57 +0200
+Message-ID: <1923146.PYKUYFuaPT@opensuse>
+In-Reply-To: <YuiUzodsyv3hZAgs@MiWiFi-R3L-srv>
+References: <20220707231550.1484-1-fmdefrancesco@gmail.com> <YuiUzodsyv3hZAgs@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fc285aa7-8a51-4c24-1e6c-08da744eb30d
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3095:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tK3RZ6/w8UDhkTYIRKCxcVxqI93gfC+FY/4qIKCdONPBJA5ZslAt+7F7rmKnxo4DMUgA5pO4xJjoSYsb3aVU7OjFuarU2cRZDYIPXURHSfnNAThPG0zbSw/3qdOBEAOurJQnVFEKc8MCI2YOkkC7KBzbgTkKw+YpVSWg3ptC0Dy7IJIa3YA4BMQ3+Z3xfA6RIebHbMGdhr5QoARMOBrABNAu1Ci+f1G2Fp3RoqnIcpr66ENJX2VyrhBN/J9LAwlsrEy8kL1YQ6tBEUkKfryaVlodk/jquvWVt3JFxmWRaBTFiikgojtZmmzWUJ1AL25HiV4mrSetKLvKDeWYZTIO5l9L9AepU7+esqKMfQ3cgHe8/7kd4cWLLMicGO5Zz+aZNc4mzo3A5swMQ5Dx+DXjKlvH8lZejk26Y9JFAShWHARzQiztxW3QFJPk2ev/popECQiYuljqJtzD7y0doQQASKpui+FJL/KdcrNyE9zqziBhRL8BeibqVBVewdMti7xcAQXlrOuT4qgML3HyLLgQlYcfIhMa5ZORYMXdcunqeS5Llr9LYJA69m6MxCgIRAoQz/rPKh7XRWZ5WCfPIYvYwKhgdbl37qOes/1F2U3fxEL/92eRGFQj8JacPNiXCi0xH/kpHLnkShQGQuRsDGRCs+vck9lxkEFsX3thhsjtmMLlyBbIPdGJ+EBQKbk1GZRYWBQezq+j0J3Z6i7nyFjK5Ag15WjqzFlWRPoqlsVI9c/iJpxdH56Y+u3S6zkLntQphYVL51gn+GTEivloS0zTplO/26M7YwTtzxC7+93sdazxw4dbfGVOD79J6oFUZyDZvKTI5NYRJP+LvXvw+wTuvY+JK++2bKya8p7F5urRArI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(366004)(396003)(39860400002)(346002)(4744005)(6666004)(41300700001)(478600001)(5660300002)(7416002)(2906002)(6916009)(6486002)(316002)(8936002)(44832011)(38100700002)(2616005)(66946007)(66556008)(66476007)(31696002)(86362001)(186003)(36756003)(8676002)(26005)(6512007)(4326008)(31686004)(6506007)(83380400001)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1VFY0tCaXc5UEJnQ2taMDBuS0FQVEc2aTlnMjd1K3pJVjdCZFd0bGN4MzhT?=
- =?utf-8?B?aVJmdjZPUTAvWG1LRThrOFhMSEpYT09VbVN0K1lmOHZEV0FJRm83blhUQlNv?=
- =?utf-8?B?elh5d3lhbkJXak1FVHA4cWdPTms2UVVTOWNNQkJVajNOajlnM3VKRlBjOXQ5?=
- =?utf-8?B?MVU0RnU2V2EwWjFkK1BFZkJGQVZqb2tjNlh3R1VQeXFpMDhzelBqMWtMekxs?=
- =?utf-8?B?emhJSmxSZ1ZkSUdpT3A2TGNtY01ZR1pTSG1PWTl1cDFFemJiZU1uTzBwbXpm?=
- =?utf-8?B?R3FSVHpIU09zNTlzc0MzV2VsZXlYY0pDcC9NcTJzS0xtZkZQRkRBSXJVd0Vj?=
- =?utf-8?B?MHdvZUJtK0x6NVZhK1IwY0F6RllqQ1FSUW0rOEszd052Tk1jUVZsL012SjNF?=
- =?utf-8?B?WVJjWjdESFRoRk1veXpZT2loWWRscEJjSkZLdStCQXBpZHFUVU96M2NCaEtn?=
- =?utf-8?B?UFhFL2o3QTk2bXA0U09IYUxzeUNqbGN0ZWR6ZTh0aGF3MHZiNlNSTUlvNS81?=
- =?utf-8?B?RDhQME00MWg3YTRSNVBLaEUwMDE0dmpkQytrTjBKSGNDQ2JabjZTOS95dGZk?=
- =?utf-8?B?NDd2dG90NkpIeHV4QnBXRjFwbGp1bkJXQ3U2NUU1bkRrL0RRY1dCd2hxcGps?=
- =?utf-8?B?NDMxeVNxK3B0QlY1ME13SG5MOW5vc1NEWk1ULzhraDFOM1g1L0pJb2hCRi85?=
- =?utf-8?B?cWFxTGsxL3pmMmUyTjdKc1g2TXJZN2s5Q0c0RVgvT3FLcGx2cFJiNFBML1Rs?=
- =?utf-8?B?bklDL3JOdk93aWtSRGRZZ28rQklIVmtvaVVDSjgyQ0R2dFh3K2pOcnZXck4y?=
- =?utf-8?B?OFdiNUFuWFoyUHJEOWVCR2hoSDF5bFRTNUtoMHA2UlEwenZwTDVxQnN5WGkw?=
- =?utf-8?B?OVRRalVZRHV1K2NFMitpMnVxU1pDYy96bVNCblc1K0s0RjBXdVNpTDdsSDJW?=
- =?utf-8?B?aHNtemsxSGl4VmdGbUdPL05QWXNpbk5MTENDMHJ1NWYrVndiWEFNcmpzQ0Qr?=
- =?utf-8?B?Y2FhT1d2UEFEUEs0K0ZzRnpFYWsvQUg1VEV2Yit4NW80U2x6NFhNcWhoc3hN?=
- =?utf-8?B?bmloT3hIcXhGNk85VjBNUDZZWk84Y09xMTJvS0NPaXJGOVFJeDJDbFl0UHp5?=
- =?utf-8?B?UnBFQUlkRTRQcUZ2SkNsRU4zL0FrY3VpTWZiU2pxN2ZyWS91N2Z1ditjZjBP?=
- =?utf-8?B?cjVlcjdEcm8zOUMxeDF1UXhrU2d4UmRYdXRwZSs4WjVQUURLTVRzTU1TQllN?=
- =?utf-8?B?Z1NPN0lOc1BvRm94Slh0Mm9iU3VTZmJoZEtTTDhyTmNCSStWNkhSUlZXaXZm?=
- =?utf-8?B?Q0FwWUpRdGtCNmhRV0FHSHZHKzhsNUhSNDl4SFRLc3VlZ3Y5UmQ1RzBKMlFs?=
- =?utf-8?B?ZzVtcWZ0WHlrb2lEenUrYnVlZm9XZytuSUg0U2NVU3huRFdzRDg0aDdnQytY?=
- =?utf-8?B?ZzNEV3k3WWZobXRPWmtRRGJ6TmRtREUwNlNhNUZ0STVEMmJQRWpaOWg1eHdu?=
- =?utf-8?B?dHdtWUtFRWZVN3pwK1hmZjJHbC9RTlJySFk1YTdmNmx6cEsvNnBnQm4wSDRy?=
- =?utf-8?B?Q2phUzY0UzJrVFFGMlVPRG5tdGVNaGNmR0o5SHJlUm11Ly91aXN1d1RMMHoz?=
- =?utf-8?B?bk5SblBMdWdHNy9PV2UwbWEzaGV0N3RPY3JMZ0ZPTHREY055aEE1MHBBMVJM?=
- =?utf-8?B?ZFNOYkczbGxla2VjNm0vMXV5VWd2UXhocU55aiswZ3RMalJpNFQ3SEhBNmVx?=
- =?utf-8?B?ekEwbHZiRllMSHkrN2F0K2NWT0JRYVpIaG1KcVJKRzFjQS9HL0RVeUN4NDFK?=
- =?utf-8?B?R0g5MEhMcnBHL0l4MGRGQTRCNTVKVC9vNVJyVUFYTGVmQ0lhUjhCY09RQnpX?=
- =?utf-8?B?eWdybEp0WjdNQ2Q1UERRcHRLNzFjcjlFeG1OOXI5UGFQZUYwd29tdUZGMzhE?=
- =?utf-8?B?Q2dFbzdiUktDNzhXMWdvVW0wUmdsL3FhL0RNbityY0lULzJXaFR5SWp6VWlT?=
- =?utf-8?B?VzFIRHAzSkR3cllUVmNCbkF0dVo0eTNZcDRreEtYQVJTQVNDMmR6MDRpVTUw?=
- =?utf-8?B?dnBDNzJvaWNGMHdQODlXRGphdTB6R1VkZWJqbGdtdjNqeWVYYXdKYmtxc1N2?=
- =?utf-8?Q?Jqytwf4VlgnyaUxfAZFHRwNSg?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc285aa7-8a51-4c24-1e6c-08da744eb30d
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 06:17:38.9879
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YvJekPAB052SzBXS9jm1QeXfRCEm2+08p2qsAmYld1xCfh8jidGbo6XgeKlleCOF4OQsNYL+o/70KHIM2veGnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3095
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,33 +71,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On marted=C3=AC 2 agosto 2022 05:06:54 CEST Baoquan He wrote:
+> On 07/08/22 at 01:15am, Fabio M. De Francesco wrote:
+> > The use of kmap() and kmap_atomic() are being deprecated in favor of
+> > kmap_local_page().
+> >=20
+> > With kmap_local_page(), the mappings are per thread, CPU local and not
+> > globally visible. Furthermore, the mappings can be acquired from any
+> > context (including interrupts).
+> >=20
+> > Therefore, use kmap_local_page() in kexec_core.c because these mappings=
+=20
+are
+> > per thread, CPU local, and not globally visible.
+> >=20
+> > Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
+> > enabled.
+>=20
+> Wondering what arch you tested with.
 
->  static void
-> -ctx_sched_in(struct perf_event_context *ctx,
-> -	     struct perf_cpu_context *cpuctx,
-> -	     enum event_type_t event_type,
-> +ctx_sched_in(struct perf_event_context *ctx, enum event_type_t event_type,
->  	     struct task_struct *task)
->  {
-> +	struct perf_cpu_context *cpuctx = this_cpu_ptr(&cpu_context);
->  	int is_active = ctx->is_active;
->  	u64 now;
->  
-> @@ -3818,6 +3905,7 @@ ctx_sched_in(struct perf_event_context *ctx,
->  		/* start ctx time */
->  		now = perf_clock();
->  		ctx->timestamp = now;
-> +		// XXX ctx->task =? task
+I'm sorry, I forgot to say that I use x86_32 with 4GB to 6GB RAM.
+This is usually an information that I add in the commit messages of all the=
+=20
+recent conversions I'm working on across the entire kernel.
 
-Couldn't get this XXX, it's from your original patch. If you can recall, it
-would be helpful.
+Another important information (overlooked again this time) is that (1)=20
+kmap() comes with an overhead as mapping space is restricted and protected=
+=20
+by a global lock for synchronization and (2) it also requires global TLB=20
+invalidation when the kmap=E2=80=99s pool wraps and it might block when the=
+ mapping=20
+space is fully utilized until a slot becomes available.
 
->  		perf_cgroup_set_timestamp(task, ctx);
->  	}
+More information about why these kmap() to kmap_local_page() conversions=20
+are needed / preferred can be found in the recent changes I made to=20
+highmem.rst. They are already in mainline since about two months.
 
-Also, this hunk is under if (is_active ^ EVENT_TIME), which effectively is
-(is_active != EVENT_TIME). I'm assuming it should be (is_active & EVENT_TIME)?
+A second round of additional changes has been taken by Andrew M. just few=20
+days ago.
 
-Thanks,
-Ravi
+My goal is to convert the most of the kmap() call sites that are still left=
+=20
+across the whole kernel. I'm not yet sure that these kinds of conversions=20
+can be done everywhere, especially if the kernel virtual address of the=20
+mapping is handed to other contexts, because this would invalidate the=20
+pointer returned by kmap_local_page(). =20
+
+> This looks good, but may not benefit much. Say so because I doubt
+> how many 32bit systems are using kexec/kdump mechanism.
+
+I really cannot say nothing about how many 32 bits systems are using kexec/
+kdump mechanism, however I still think that the conversions are worth=20
+everywhere.=20
+
+> Anyway,=20
+>=20
+> Acked-by: Baoquan He <bhe@redhat.com>
+>=20
+
+Thank you so much!
+
+=46abio
+
+> >=20
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >=20
+> > v1->v2: A sentence of the commit message contained an error due to a
+> > mistake in copy-pasting from a previous patch. Replace "aio.c" with
+> > "kexec_core.c".
+> >=20
+> >  kernel/kexec_core.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> > index 4d34c78334ce..6f98274765d4 100644
+> > --- a/kernel/kexec_core.c
+> > +++ b/kernel/kexec_core.c
+> > @@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage=
+=20
+*image,
+> >  		if (result < 0)
+> >  			goto out;
+> > =20
+> > -		ptr =3D kmap(page);
+> > +		ptr =3D kmap_local_page(page);
+> >  		/* Start with a clear page */
+> >  		clear_page(ptr);
+> >  		ptr +=3D maddr & ~PAGE_MASK;
+> > @@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage=
+=20
+*image,
+> >  			memcpy(ptr, kbuf, uchunk);
+> >  		else
+> >  			result =3D copy_from_user(ptr, buf, uchunk);
+> > -		kunmap(page);
+> > +		kunmap_local(ptr);
+> >  		if (result) {
+> >  			result =3D -EFAULT;
+> >  			goto out;
+> > @@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage=
+=20
+*image,
+> >  			goto out;
+> >  		}
+> >  		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
+> > -		ptr =3D kmap(page);
+> > +		ptr =3D kmap_local_page(page);
+> >  		ptr +=3D maddr & ~PAGE_MASK;
+> >  		mchunk =3D min_t(size_t, mbytes,
+> >  				PAGE_SIZE - (maddr & ~PAGE_MASK));
+> > @@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage=
+=20
+*image,
+> >  		else
+> >  			result =3D copy_from_user(ptr, buf, uchunk);
+> >  		kexec_flush_icache_page(page);
+> > -		kunmap(page);
+> > +		kunmap_local(ptr);
+> >  		arch_kexec_pre_free_pages(page_address(page), 1);
+> >  		if (result) {
+> >  			result =3D -EFAULT;
+> > --=20
+> > 2.36.1
+> >=20
+> >=20
+> > _______________________________________________
+> > kexec mailing list
+> > kexec@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kexec
+> >=20
+>=20
+>=20
+
+
+
+

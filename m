@@ -2,148 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B033B5874D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FA95874D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbiHBAb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S235389AbiHBAdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 20:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiHBAb1 (ORCPT
+        with ESMTP id S232122AbiHBAc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:31:27 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ACE29822;
-        Mon,  1 Aug 2022 17:31:26 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u1so9495270lfq.4;
-        Mon, 01 Aug 2022 17:31:26 -0700 (PDT)
+        Mon, 1 Aug 2022 20:32:58 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A22A431
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:32:57 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id y15so11951725plp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=P896A15ebEpZdNo5vHx5OEHcywwIEWdjK6w2RcDQzYQ=;
-        b=ktHCjpZb1Z2kJDU0u5GRsUdvWmKhZDoEFQglUL5YDs0RgWXLUpkCfU5c2oJk8hVU8L
-         PvaN8QUdTiHPmL+VZ6duW2eOJ4Kt094QfG3L5QkSzO+/CTx9JuWJhwS4SLXIYlEXq6ZA
-         if1yzvHY79LaXpeQFej7d+KILUayCixXFqpmJ9ymbt7BYHTWR9Jwo2CIGmBlbjABXCcH
-         nDbgwDCjb3wbPral3S6n5A4oGkccO9dcJ2pya29O58tY6xEZP1OIHbpDahtsvxiOn86O
-         g2HJE6kfJh909goeO91eWtgY9LW4lWLzKaeeRtbExno1jtgrPNmqc8ZrzhJ6xECyXdhZ
-         nT8A==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S7DNijVESn0SQkYeT3HX2odpK4m3UtmixO49ipbaF9k=;
+        b=Qll8kx87hY0OMXBocmMfOUol1nONH1o/U8+hQ7pZeI6lCr30l7wO5u+uUGh4ybg+CV
+         KL3Yu4mpYxLLD1suh9TFVlITZQzq56thh/+9qB0T1R2SxJNR+ngZqgB0mQvDlTdW8hiX
+         MVaaUIUT02G6xhywxjRi3Vfsdxw1xf2TviBxI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=P896A15ebEpZdNo5vHx5OEHcywwIEWdjK6w2RcDQzYQ=;
-        b=CsvGa0ASIVZ/wTDY0/KPYVQMGMH9Yjxxit5MR+0cqL2S4WE3S2zIvh0FKnsbzkuBBt
-         b1Jhdv6ZvL6Eh2Q2g3ruyJOjV3SzvzzKJlaDyJdHjB0bzK9Nz2P+2bfmsyVk2SuOJjUv
-         SAqITXRgDwtGDTi2GmlY2ZpniPZL2VYbQsNTWNncEfbUyL6nNmuBpBGgnzeOH/yJ4UsI
-         FJUTQqLtNj76C0v6o3FIPIdWzsBBjCA8r/5AGoFd4M7V7jcrXM73ydsBylt5AsFY8I+Y
-         dkC6HVlZwDAkvfHf6LF9zpCT4xyLRPC8WZXtfqs6c5jRwNYmIbvKTcyhMl9qZBD/PR69
-         DK6g==
-X-Gm-Message-State: ACgBeo3OxaApNky4P+pwZ70hyTlLKcwglFyYZHklcOte4jqWMF34KQBG
-        +Gt4TGFhNhQPzFq/NTvrx5MaqpgVtOmOHpdovg==
-X-Google-Smtp-Source: AA6agR6+SnMnOlDR3MdTsPi6AjVjKiKhlL4B1ectWpNGNkXuAa3XgrcLeFw8c/lruUStpnyS4bpz/UieGTRQnJwnljU=
-X-Received: by 2002:a05:6512:3dac:b0:48b:694:bb35 with SMTP id
- k44-20020a0565123dac00b0048b0694bb35mr1059764lfv.215.1659400284735; Mon, 01
- Aug 2022 17:31:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220729075519.4665-1-stanley.chu@mediatek.com>
- <7e8c58cf-64c1-8426-bf22-97d3df85ed38@acm.org> <CAGaU9a_G1kH8VezozhZ3-S6-GvMr=EUVc4btU8Dwdo+cCJDxUg@mail.gmail.com>
- <b92ef74c-1068-b86e-c3c2-a95f057e2494@acm.org>
-In-Reply-To: <b92ef74c-1068-b86e-c3c2-a95f057e2494@acm.org>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 2 Aug 2022 08:31:12 +0800
-Message-ID: <CAGaU9a97KYYJNy2wPWZXX8sjB4NMbX1KB1sVQ95GWHGfn27iEg@mail.gmail.com>
-Subject: Re: [PATCH v1] scsi: ufs: Fix ufshcd_scale_clks decision in recovery flow
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S7DNijVESn0SQkYeT3HX2odpK4m3UtmixO49ipbaF9k=;
+        b=tPqL4cak5cMjGD02gGXV6eRAdbdzwQgSO1a9Hj7OhnOqTE1FAB3Xh907yhDjXgpJvr
+         Nd2NIPcgcg/+jCKlY0BZxbJftw1sU33bl0aZFiXJMgN+bXXGOVvA+ZZrJUeHa6We5mPC
+         vFDv4RqOnIlozdtlsmUsNhua88vsjgBW2jLBn3PUGLMWib9ShQseR/sdaMYVcKkLxkBV
+         lp8wNDhF8k6583u7CaDY6jWZG3Cs8FbkGa3RclpcIqVE2c9geTrTiL2pCpps+v+iZkKk
+         bgYd7UxctQbX44gJVjtrPjuFT7gSzIb54gGgLSQRMGWNhS+9nh4OXFsN4jjd8CN4elWV
+         AUNA==
+X-Gm-Message-State: ACgBeo2LC1OiLiV8RwlOa0pqpjqOBJX0yI3bpDrH3RIRf/XtQQH5h9S4
+        WIQUHCLj9qYjUt/dO0G5E6F1ug==
+X-Google-Smtp-Source: AA6agR4fkdhC2YtjxJmOItlsU/Y879mHDKcNdGmF2Y6jUgRIZPU1jE212T3fJjGI8GiQnUrGHGIUqw==
+X-Received: by 2002:a17:90b:4a06:b0:1f4:d8c9:7073 with SMTP id kk6-20020a17090b4a0600b001f4d8c97073mr14527751pjb.246.1659400376674;
+        Mon, 01 Aug 2022 17:32:56 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id ot10-20020a17090b3b4a00b001f326ead012sm8943667pjb.37.2022.08.01.17.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 17:32:56 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Stanley Chu <chu.stanley@gmail.com>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        peter.wang@mediatek.com, Chun-Hung Wu <chun-hung.wu@mediatek.com>,
-        alice.chao@mediatek.com, powen.kao@mediatek.com,
-        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, eddie.huang@mediatek.com,
-        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v3] ufs: core: ufshcd: use local_clock() for debugging timestamps
+Date:   Tue,  2 Aug 2022 10:32:47 +1000
+Message-Id: <20220802103230.v3.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
+X-Mailer: git-send-email 2.31.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+CLOCK_MONOTONIC is not advanced when the system is in suspend. This
+becomes problematic when debugging issues related to suspend-resume:
+the timestamps printed by ufshcd_print_trs can not be correlated with
+dmesg entries, which are timestamped with local_clock().
 
-On Tue, Aug 2, 2022 at 1:34 AM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 7/30/22 00:08, Stanley Chu wrote:
-> > Hi Bart,
-> >
-> > On Sat, Jul 30, 2022 at 4:12 AM Bart Van Assche <bvanassche@acm.org> wrote:
-> >>
-> >> On 7/29/22 00:55, Stanley Chu wrote:
-> >>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> >>> index 581d88af07ab..dc57a7988023 100644
-> >>> --- a/drivers/ufs/core/ufshcd.c
-> >>> +++ b/drivers/ufs/core/ufshcd.c
-> >>> @@ -1574,8 +1574,6 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
-> >>>        ufshcd_rpm_get_sync(hba);
-> >>>        ufshcd_hold(hba, false);
-> >>>
-> >>> -     hba->clk_scaling.is_enabled = value;
-> >>> -
-> >>>        if (value) {
-> >>>                ufshcd_resume_clkscaling(hba);
-> >>>        } else {
-> >>> @@ -1586,6 +1584,8 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
-> >>>                                        __func__, err);
-> >>>        }
-> >>>
-> >>> +     hba->clk_scaling.is_enabled = value;
-> >>> +
-> >>>        ufshcd_release(hba);
-> >>>        ufshcd_rpm_put_sync(hba);
-> >>>    out:
-> >>> @@ -7259,7 +7259,8 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
-> >>>        hba->silence_err_logs = false;
-> >>>
-> >>>        /* scale up clocks to max frequency before full reinitialization */
-> >>> -     ufshcd_scale_clks(hba, true);
-> >>> +     if (ufshcd_is_clkscaling_supported(hba) && hba->clk_scaling.is_enabled)
-> >>> +             ufshcd_scale_clks(hba, true);
-> >>>
-> >>>        err = ufshcd_hba_enable(hba);
-> >>
-> >> I see a race condition between the hba->clk_scaling.is_enabled check in
-> >> ufshcd_host_reset_and_restore() and the code that sets
-> >> ufshcd_clkscale_enable_store(). Shouldn't the code in
-> >> ufshcd_host_reset_and_restore() that scales up the clocks be serialized
-> >> against ufshcd_clkscale_enable_store()?
-> >
-> > Both check and set paths are serialized by hba->host_sem currently.
-> >
-> > Would I miss any other unserialized paths?
->
-> Where in ufshcd_host_reset_and_restore() or in its callers is
-> hba->host_sem obtained? I don't see it. Am I perhaps overlooking something?
+This CL changes the used clock to local_clock() for the informational
+timestamp variables and adds mirroring *_local_clock instances for
+variables used in subsequent derevations (to not change the semantics of
+those derevations).
 
-It looks like that some callers do not obtain hba->host_sem. I will
-fix this in the next version.
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-The direct callers of ufshcd_host_reset_and_restore() are,
+---
 
-- ufshcd_link_recovery(), host_sem is obtained by its callers:
-ufshcd_err_handler() and ufshcd_wl_resume()
-- ufshcd_reset_and_restore(): the same as above
-- __ufshcd_wl_suspend(): host_sem is obtained by the caller
-ufshcd_wl_suspend() but not obtained by other callers.
+Changes in v3:
+- Add missing header
 
-Thanks,
+Changes in v2:
+- Use local clock to better align with dmesg
+- Correct commit message
 
-Stanley
+ drivers/ufs/core/ufshcd.c | 20 ++++++++++++--------
+ include/ufs/ufshcd.h      | 14 +++++++++-----
+ 2 files changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index ce86d1b790c05..e61dafb93986f 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -21,6 +21,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/sched/clock.h>
+ #include <scsi/scsi_cmnd.h>
+ #include <scsi/scsi_dbg.h>
+ #include <scsi/scsi_driver.h>
+@@ -460,7 +461,7 @@ static void ufshcd_print_evt(struct ufs_hba *hba, u32 id,
+ 		if (e->tstamp[p] == 0)
+ 			continue;
+ 		dev_err(hba->dev, "%s[%d] = 0x%x at %lld us\n", err_name, p,
+-			e->val[p], ktime_to_us(e->tstamp[p]));
++			e->val[p], e->tstamp[p] / 1000);
+ 		found = true;
+ 	}
+ 
+@@ -505,9 +506,9 @@ void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
+ 		lrbp = &hba->lrb[tag];
+ 
+ 		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
+-				tag, ktime_to_us(lrbp->issue_time_stamp));
++				tag, lrbp->issue_time_stamp_local_clock / 1000);
+ 		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
+-				tag, ktime_to_us(lrbp->compl_time_stamp));
++				tag, lrbp->compl_time_stamp_local_clock / 1000);
+ 		dev_err(hba->dev,
+ 			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
+ 			tag, (u64)lrbp->utrd_dma_addr);
+@@ -569,10 +570,10 @@ static void ufshcd_print_host_state(struct ufs_hba *hba)
+ 	dev_err(hba->dev, "Clk gate=%d\n", hba->clk_gating.state);
+ 	dev_err(hba->dev,
+ 		"last_hibern8_exit_tstamp at %lld us, hibern8_exit_cnt=%d\n",
+-		ktime_to_us(hba->ufs_stats.last_hibern8_exit_tstamp),
++		hba->ufs_stats.last_hibern8_exit_tstamp / 1000,
+ 		hba->ufs_stats.hibern8_exit_cnt);
+ 	dev_err(hba->dev, "last intr at %lld us, last intr status=0x%x\n",
+-		ktime_to_us(hba->ufs_stats.last_intr_ts),
++		hba->ufs_stats.last_intr_ts / 1000,
+ 		hba->ufs_stats.last_intr_status);
+ 	dev_err(hba->dev, "error handling flags=0x%x, req. abort count=%d\n",
+ 		hba->eh_flags, hba->req_abort_count);
+@@ -2142,7 +2143,9 @@ void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
+ 	unsigned long flags;
+ 
+ 	lrbp->issue_time_stamp = ktime_get();
++	lrbp->issue_time_stamp_local_clock = local_clock();
+ 	lrbp->compl_time_stamp = ktime_set(0, 0);
++	lrbp->compl_time_stamp_local_clock = 0;
+ 	ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
+ 	ufshcd_clk_scaling_start_busy(hba);
+ 	if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
+@@ -4199,7 +4202,7 @@ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
+ 	} else {
+ 		ufshcd_vops_hibern8_notify(hba, UIC_CMD_DME_HIBER_EXIT,
+ 								POST_CHANGE);
+-		hba->ufs_stats.last_hibern8_exit_tstamp = ktime_get();
++		hba->ufs_stats.last_hibern8_exit_tstamp = local_clock();
+ 		hba->ufs_stats.hibern8_exit_cnt++;
+ 	}
+ 
+@@ -4696,7 +4699,7 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val)
+ 
+ 	e = &hba->ufs_stats.event[id];
+ 	e->val[e->pos] = val;
+-	e->tstamp[e->pos] = ktime_get();
++	e->tstamp[e->pos] = local_clock();
+ 	e->cnt += 1;
+ 	e->pos = (e->pos + 1) % UFS_EVENT_HIST_LENGTH;
+ 
+@@ -5329,6 +5332,7 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
+ 	for_each_set_bit(index, &completed_reqs, hba->nutrs) {
+ 		lrbp = &hba->lrb[index];
+ 		lrbp->compl_time_stamp = ktime_get();
++		lrbp->compl_time_stamp_local_clock = local_clock();
+ 		cmd = lrbp->cmd;
+ 		if (cmd) {
+ 			if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
+@@ -6617,7 +6621,7 @@ static irqreturn_t ufshcd_intr(int irq, void *__hba)
+ 
+ 	intr_status = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+ 	hba->ufs_stats.last_intr_status = intr_status;
+-	hba->ufs_stats.last_intr_ts = ktime_get();
++	hba->ufs_stats.last_intr_ts = local_clock();
+ 
+ 	/*
+ 	 * There could be max of hba->nutrs reqs in flight and in worst case
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index a92271421718e..2de73196bb779 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -160,8 +160,10 @@ struct ufs_pm_lvl_states {
+  * @task_tag: Task tag of the command
+  * @lun: LUN of the command
+  * @intr_cmd: Interrupt command (doesn't participate in interrupt aggregation)
+- * @issue_time_stamp: time stamp for debug purposes
+- * @compl_time_stamp: time stamp for statistics
++ * @issue_time_stamp: time stamp for debug purposes (CLOCK_MONOTONIC)
++ * @issue_time_stamp_local_clock: time stamp for debug purposes (local_clock)
++ * @compl_time_stamp: time stamp for statistics (CLOCK_MONOTONIC)
++ * @compl_time_stamp_local_clock: time stamp for debug purposes (local_clock)
+  * @crypto_key_slot: the key slot to use for inline crypto (-1 if none)
+  * @data_unit_num: the data unit number for the first block for inline crypto
+  * @req_abort_skip: skip request abort task flag
+@@ -185,7 +187,9 @@ struct ufshcd_lrb {
+ 	u8 lun; /* UPIU LUN id field is only 8-bit wide */
+ 	bool intr_cmd;
+ 	ktime_t issue_time_stamp;
++	u64 issue_time_stamp_local_clock;
+ 	ktime_t compl_time_stamp;
++	u64 compl_time_stamp_local_clock;
+ #ifdef CONFIG_SCSI_UFS_CRYPTO
+ 	int crypto_key_slot;
+ 	u64 data_unit_num;
+@@ -430,7 +434,7 @@ struct ufs_clk_scaling {
+ struct ufs_event_hist {
+ 	int pos;
+ 	u32 val[UFS_EVENT_HIST_LENGTH];
+-	ktime_t tstamp[UFS_EVENT_HIST_LENGTH];
++	u64 tstamp[UFS_EVENT_HIST_LENGTH];
+ 	unsigned long long cnt;
+ };
+ 
+@@ -446,10 +450,10 @@ struct ufs_event_hist {
+  */
+ struct ufs_stats {
+ 	u32 last_intr_status;
+-	ktime_t last_intr_ts;
++	u64 last_intr_ts;
+ 
+ 	u32 hibern8_exit_cnt;
+-	ktime_t last_hibern8_exit_tstamp;
++	u64 last_hibern8_exit_tstamp;
+ 	struct ufs_event_hist event[UFS_EVT_CNT];
+ };
+ 
+-- 
+2.31.0
+

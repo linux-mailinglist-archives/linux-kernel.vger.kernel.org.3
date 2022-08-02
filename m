@@ -2,229 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8BE587D16
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BBB587D1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiHBN2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S236749AbiHBN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiHBN2P (ORCPT
+        with ESMTP id S233142AbiHBN2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:28:15 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A71165A7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:28:13 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j7so17898656wrh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 06:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=zhQV6KklANoXAExR2SdxpOLIazXCUZND/JNIe+QuHXc=;
-        b=Ain8zt4q7eV7NL2VgVzu8tHPSmzLHBe2hlUNvqd30pvxjhbHbgdoyTEdzqnfozWlv1
-         8WK3K+/5FS9QkKqUBTR2sjb8MogLMszoK2fpRlRNv78dQ6o9rBDJwdOWwnMBpkKyasg1
-         8uGkcJvylDuzhbyBuCDbMdjtnqQVtvKWzGz88Ww1DdQjG7bN3HM9Vy6q1/5NmMMnZ23L
-         MQ3fxTgAE2hkUP9fduJHzfRhkUUe/OEQBUVkBjhPWe1dyMWzxgAxWlB/+IZ7lTVW1Q1H
-         5TAECFYVlHQC0liH1ZwhF+9qMfQz8nZ1XuIwhjoj5NXbGC1M0Sj/hRZp393I4IiVz2bU
-         x6MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=zhQV6KklANoXAExR2SdxpOLIazXCUZND/JNIe+QuHXc=;
-        b=Pf3PAh3huBA/bJTxnA/xfvnWFWfejkBa1pgmZT9fZxmpMQlSRBJZWsTQe2nYzW6mB5
-         c/jJJpeCzudhZtTDrkPCgBpf2wyRmAySHjl77bOi9wEHnScktEF13AckuHeZIBFh+VEA
-         +QWL6M5a7HtgL1alCCo+kIsooAkY2SmEB09qjrkzeazuezzMoM4Zilo0g628rOzqgx6q
-         hbKnh4C7lOAip6lXWrubMuoMgIYcPMctal4Z145rlt9t0AkF4IYxuv1xInOTv45XGuLc
-         /6xRQ4rThsb+khxCPvK/V3xQ6UGbeW3g35L8kYf7Zx6T8+l39LV8PqObCgcwTcPRf8qA
-         VIxA==
-X-Gm-Message-State: ACgBeo0enYEMqMcNjra+MiimiwsBhiBGrmRs4yWqvwKXNwowGCHrjcWD
-        PI05e8lAI7nRER77nnb47/vhxg==
-X-Google-Smtp-Source: AA6agR4cSFplWRmJFt46bFuJLRjHgyuj120RsB6jAgbcAkjmDxvGeNISURre7kRy/h6qlASE0FOvUg==
-X-Received: by 2002:adf:d1ea:0:b0:220:6334:25e with SMTP id g10-20020adfd1ea000000b002206334025emr6527722wrd.32.1659446891922;
-        Tue, 02 Aug 2022 06:28:11 -0700 (PDT)
-Received: from [192.168.1.69] (32.31.102.84.rev.sfr.net. [84.102.31.32])
-        by smtp.gmail.com with ESMTPSA id i16-20020a05600c401000b003a305c0ab06sm22618640wmm.31.2022.08.02.06.28.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 06:28:11 -0700 (PDT)
-Message-ID: <98d17617-72b5-6330-d4f5-1bece928ceab@baylibre.com>
-Date:   Tue, 2 Aug 2022 15:28:09 +0200
+        Tue, 2 Aug 2022 09:28:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FED18B2D;
+        Tue,  2 Aug 2022 06:28:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C5F6135B;
+        Tue,  2 Aug 2022 13:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163EDC433D6;
+        Tue,  2 Aug 2022 13:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659446910;
+        bh=wQn9OVcZJqoheqb/OJcXzDy32lvg6/mhV7TudP7lFWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IOpeHBQzbcKQpZ61IOdSi0Hs98+ou9OxXnl8x31o7kyHJ/dFF+xRdNxipXPeqghI6
+         Su80bLIbf757U+orfSyucOKxchUXub9bM+7RjbBJsalztIfL8Wn9qNnJhY4SyIuobA
+         ngJcQvcHEf3KSQ7GwK7OMi4PdO5d+KUKPawhQPyRpncLdLc/qO46cX8fVzNcdC0w5x
+         IA8K6xcUaj7Xf7QiTgRPKxxdonsPcJuZSHgpDtgbNhW/7CWhBptHYxflmWjpC+fKa1
+         vAzoPwZdYGiRqlQN4H091R3Zd1Guid4G+sNP588WRajmGlIypb4NgJBP1lWmUSVjYt
+         AMTnYt4JXKRZQ==
+Date:   Tue, 2 Aug 2022 16:28:27 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 28/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_FINISH
+ command
+Message-ID: <Yukme8MD/x1W17SL@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v3 2/2] iio: time: capture-tiecap: capture driver support
- for ECAP
-Content-Language: en-US
-From:   Julien Panis <jpanis@baylibre.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mranostay@ti.com
-References: <20220728175124.468461-1-jpanis@baylibre.com>
- <20220728175124.468461-3-jpanis@baylibre.com>
- <20220731164116.30e91f34@jic23-huawei>
- <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
-In-Reply-To: <11b7436b-5c31-671e-ba77-435fe8e3b767@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a513cf79bf71c479dbd72165faf1d804d77b3af.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 20, 2022 at 11:08:38PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> The KVM_SEV_SNP_LAUNCH_FINISH finalize the cryptographic digest and stores
+> it as the measurement of the guest at launch.
+> 
+> While finalizing the launch flow, it also issues the LAUNCH_UPDATE command
+> to encrypt the VMSA pages.
 
+Nit: for completeness sake it would nice to fully conclude whether
+LAUNCH_UPDATE is usable after LAUNCH_FINISH in this paragraph.
 
-On 01/08/2022 16:08, Julien Panis wrote:
->
->
-> On 31/07/2022 17:41, Jonathan Cameron wrote:
->> On Thu, 28 Jul 2022 19:51:24 +0200
->> Julien Panis <jpanis@baylibre.com> wrote:
->>
->>> ECAP hardware on AM62x SoC supports capture feature. It can be used
->>> to timestamp events (falling/rising edges) detected on signal input 
->>> pin.
->>>
->>> This commit adds capture driver support for ECAP hardware on AM62x SoC.
->>>
->>> In the ECAP hardware, capture pin can also be configured to be in
->>> PWM mode. Current implementation only supports capture operating mode.
->>> Hardware also supports timebase sync between multiple instances, but
->>> this driver supports simple independent capture functionality.
->>>
->>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
->> Hi Julien,
->>
->> So this isn't the first ecap driver we've had proposed, but the previous
->> one was a few years ago and never reached v2.
->> https://lore.kernel.org/all/20200818153614.6438-1-dts86@cornell.edu/
->>
->> Honestly I can't remember much about it, but maybe the discussion around
->> that will be worth a reread.
->
-> Hi Jonathan, thank you for your review.
->
-> I read the discussion about previous attempt, before submitting this 
-> patch. There were
-> interesting comments indeed.
->
-> But in this previous attempt, only one-shot pulses were handled 
-> (moreover, global IRQ flag
-> was not cleared, so I'm not sure that IRQ could be raised more than 
-> once).
->
-> However, ECAP can be used to make time measurements for any type of 
-> "square waveform".
-> That's why I tried to make this event mode configurable. Besides, 
-> using a continuous mode allows
-> handling much more signal types (not only single pulses).
->
->>
->> The use of ABI here is unusual. So I'd definitely like to see some 
->> documentation
->> probably as a file in the main kernel documentation to explain what 
->> the interface
->> is an how that relates to what is being captured.
->
-> OK, I will add some userspace documentation.
->
->>
->> First thing to note here is the channel type of IIO_INDEX is now not 
->> actually
->> used any more because we moved all the relevant drivers over to the 
->> counter
->> subsystem (and we failed to mark it deprecated).
->
-> I evaluated this counter subsystem before starting development. 
-> Counting events is not "a priori"
-> the goal when using ECAP.
->
-> Nevertheless, maybe "counter_push_event" function could do the job. If 
-> I use counter API :
-> # Option 1 : CAP1/2/3/4 registers could be seen as 4 channels of the 
-> same counter...
-> but there are not channels, there are just sequential timestamps 
-> actually. So I'm afraid this leads
-> to misunderstanding for the user.
-> Moreover, the user will have to read several entries (counts 1/2/3/4) 
-> to gather timestamps from
-> the same input signal, which is not very convenient.
-> # Option 2 : Either CAP 1/2/3/4 events could be gathered in a single 
-> channel...but then it will not
-> be possible to configure their polarity (rising/falling edge) 
-> individually (unless I did
-> not understand well counter framework documentation).
->
-> So, even with counter framework, it will lead to some diverted use of 
-> the framwork, since ECAP
-> is a very specific hardware that do not fit 100% counter philosophy.
->
-> I admit that ECAP do not fit 100% IIO philosophy either.
->
-> Maybe misc API would be more relevant actually. Any opinion about it 
-> will be welcome. :-)
+> 
+> If its an SNP guest, then VMSA was added in the RMP entry as
+> a guest owned page and also removed from the kernel direct map
+> so flush it later after it is transitioned back to hypervisor
+> state and restored in the direct map.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> ---
+>  .../virt/kvm/x86/amd-memory-encryption.rst    |  22 ++++
+>  arch/x86/kvm/svm/sev.c                        | 119 ++++++++++++++++++
+>  include/uapi/linux/kvm.h                      |  14 +++
+>  3 files changed, 155 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> index 62abd5c1f72b..750162cff87b 100644
+> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> @@ -514,6 +514,28 @@ Returns: 0 on success, -negative on error
+>  See the SEV-SNP spec for further details on how to build the VMPL permission
+>  mask and page type.
+>  
+> +21. KVM_SNP_LAUNCH_FINISH
+> +-------------------------
+> +
+> +After completion of the SNP guest launch flow, the KVM_SNP_LAUNCH_FINISH command can be
+> +issued to make the guest ready for the execution.
 
-[Answering my own mail]
+Some remark about LAUNCH_UPDATE post-LAUNCH_FINISH would be nice.
 
-I got a closer look at counter framework. It is not suitable at all for 
-ECAP. Initially, I thought that
-"counter_push_event" function could be used, but the only timestamp 
-handled by this function
-is a software timestamp. I strongly doubt that counter framework 
-maintainer would accept
-some modification here to support hardware timestamp : a patch rejection 
-would be
-legitimate, since a counter is dedicated to "event counting". Whereas 
-ECAP is dedicated to
-"event timestamping".
+> +
+> +Parameters (in): struct kvm_sev_snp_launch_finish
+> +
+> +Returns: 0 on success, -negative on error
+> +
+> +::
+> +
+> +        struct kvm_sev_snp_launch_finish {
+> +                __u64 id_block_uaddr;
+> +                __u64 id_auth_uaddr;
+> +                __u8 id_block_en;
+> +                __u8 auth_key_en;
+> +                __u8 host_data[32];
+> +        };
+> +
+> +
+> +See SEV-SNP specification for further details on launch finish input parameters.
+>  
+>  References
+>  ==========
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index a9461d352eda..a5b90469683f 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2095,6 +2095,106 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  	return ret;
+>  }
+>  
+> +static int snp_launch_update_vmsa(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> +{
+> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +	struct sev_data_snp_launch_update data = {};
+> +	int i, ret;
+> +
+> +	data.gctx_paddr = __psp_pa(sev->snp_context);
+> +	data.page_type = SNP_PAGE_TYPE_VMSA;
+> +
+> +	for (i = 0; i < kvm->created_vcpus; i++) {
+> +		struct vcpu_svm *svm = to_svm(xa_load(&kvm->vcpu_array, i));
+> +		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+> +
+> +		/* Perform some pre-encryption checks against the VMSA */
+> +		ret = sev_es_sync_vmsa(svm);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Transition the VMSA page to a firmware state. */
+> +		ret = rmp_make_private(pfn, -1, PG_LEVEL_4K, sev->asid, true);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Issue the SNP command to encrypt the VMSA */
+> +		data.address = __sme_pa(svm->sev_es.vmsa);
+> +		ret = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_UPDATE,
+> +				      &data, &argp->error);
+> +		if (ret) {
+> +			snp_page_reclaim(pfn);
+> +			return ret;
+> +		}
+> +
+> +		svm->vcpu.arch.guest_state_protected = true;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int snp_launch_finish(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> +{
+> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +	struct sev_data_snp_launch_finish *data;
+> +	void *id_block = NULL, *id_auth = NULL;
+> +	struct kvm_sev_snp_launch_finish params;
 
-Beside, ECAP has 4 timestamp registers but they are used to capture 
-timestamps for a
-single input pin (only 1 channel). In ECAP context, 'index X" is used to 
-identify CAP X
-(used to capture event X detected on a single pin, with X = 0/1/2/3/0...).
-In counter framework, "index X" is used to identify channel X (among 
-several pins).
-So, the word "index" has not the same meaning in counter framework than 
-in ECAP device.
-Somehow, this ECAP index (0/1/2/3 for CAP1/2/3/4 registers) must be 
-logged with timestamp
-because it is an important part of signal info for the user (raw 
-consecutive timestamps
-are not enough).
+Nit: "params" should be the 2nd declaration (reverse
+christmas tree order).
 
-So, here is my proposal for my next version :
-(1) Replace IIO_INDEX by IIO_COUNT channel (already used in 
-"stm32-timer-trigger.c" driver)
-# In ECAP documentation, the word "index" is not used. The word used to 
-speak about this
-0->1->2->3->0 sequenced counter is "Mod4 counter".
-(2) Configure event mode with 4 sysfs entries (to remove the mix of 
-buffers and events interfaces)
-# User will see 4 files (1 file for each CAP timestamp) named 
-"falling_edge_active_0/1/2/3".
-Writing 1 will select falling edge/ Writing 0 will select rising edge.
+> +	int ret;
+> +
+> +	if (!sev_snp_guest(kvm))
+> +		return -ENOTTY;
+> +
+> +	if (!sev->snp_context)
+> +		return -EINVAL;
+> +
+> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
+> +		return -EFAULT;
+> +
+> +	/* Measure all vCPUs using LAUNCH_UPDATE before we finalize the launch flow. */
+> +	ret = snp_launch_update_vmsa(kvm, argp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	data = kzalloc(sizeof(*data), GFP_KERNEL_ACCOUNT);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	if (params.id_block_en) {
+> +		id_block = psp_copy_user_blob(params.id_block_uaddr, KVM_SEV_SNP_ID_BLOCK_SIZE);
+> +		if (IS_ERR(id_block)) {
+> +			ret = PTR_ERR(id_block);
+> +			goto e_free;
+> +		}
+> +
+> +		data->id_block_en = 1;
+> +		data->id_block_paddr = __sme_pa(id_block);
+> +	}
+> +
+> +	if (params.auth_key_en) {
+> +		id_auth = psp_copy_user_blob(params.id_auth_uaddr, KVM_SEV_SNP_ID_AUTH_SIZE);
+> +		if (IS_ERR(id_auth)) {
+> +			ret = PTR_ERR(id_auth);
+> +			goto e_free_id_block;
+> +		}
+> +
+> +		data->auth_key_en = 1;
+> +		data->id_auth_paddr = __sme_pa(id_auth);
+> +	}
+> +
+> +	data->gctx_paddr = __psp_pa(sev->snp_context);
+> +	ret = sev_issue_cmd(kvm, SEV_CMD_SNP_LAUNCH_FINISH, data, &argp->error);
+> +
+> +	kfree(id_auth);
+> +
+> +e_free_id_block:
+> +	kfree(id_block);
+> +
+> +e_free:
+> +	kfree(data);
+> +
+> +	return ret;
+> +}
+> +
+>  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>  {
+>  	struct kvm_sev_cmd sev_cmd;
+> @@ -2191,6 +2291,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>  	case KVM_SEV_SNP_LAUNCH_UPDATE:
+>  		r = snp_launch_update(kvm, &sev_cmd);
+>  		break;
+> +	case KVM_SEV_SNP_LAUNCH_FINISH:
+> +		r = snp_launch_finish(kvm, &sev_cmd);
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		goto out;
+> @@ -2696,11 +2799,27 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+>  
+>  	svm = to_svm(vcpu);
+>  
+> +	/*
+> +	 * If its an SNP guest, then VMSA was added in the RMP entry as
+> +	 * a guest owned page. Transition the page to hypervisor state
+> +	 * before releasing it back to the system.
+> +	 * Also the page is removed from the kernel direct map, so flush it
+> +	 * later after it is transitioned back to hypervisor state and
+> +	 * restored in the direct map.
+> +	 */
+> +	if (sev_snp_guest(vcpu->kvm)) {
+> +		u64 pfn = __pa(svm->sev_es.vmsa) >> PAGE_SHIFT;
+> +
+> +		if (host_rmp_make_shared(pfn, PG_LEVEL_4K, false))
+> +			goto skip_vmsa_free;
+> +	}
+> +
+>  	if (vcpu->arch.guest_state_protected)
+>  		sev_flush_encrypted_page(vcpu, svm->sev_es.vmsa);
+>  
+>  	__free_page(virt_to_page(svm->sev_es.vmsa));
+>  
+> +skip_vmsa_free:
+>  	if (svm->sev_es.ghcb_sa_free)
+>  		kvfree(svm->sev_es.ghcb_sa);
+>  }
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 9b36b07414ea..5a4662716b6a 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1814,6 +1814,7 @@ enum sev_cmd_id {
+>  	KVM_SEV_SNP_INIT,
+>  	KVM_SEV_SNP_LAUNCH_START,
+>  	KVM_SEV_SNP_LAUNCH_UPDATE,
+> +	KVM_SEV_SNP_LAUNCH_FINISH,
+>  
+>  	KVM_SEV_NR_MAX,
+>  };
+> @@ -1948,6 +1949,19 @@ struct kvm_sev_snp_launch_update {
+>  	__u8 vmpl1_perms;
+>  };
+>  
+> +#define KVM_SEV_SNP_ID_BLOCK_SIZE	96
+> +#define KVM_SEV_SNP_ID_AUTH_SIZE	4096
+> +#define KVM_SEV_SNP_FINISH_DATA_SIZE	32
+> +
+> +struct kvm_sev_snp_launch_finish {
+> +	__u64 id_block_uaddr;
+> +	__u64 id_auth_uaddr;
+> +	__u8 id_block_en;
+> +	__u8 auth_key_en;
+> +	__u8 host_data[KVM_SEV_SNP_FINISH_DATA_SIZE];
+> +	__u8 pad[6];
+> +};
+> +
+>  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
+>  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
+>  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
+> -- 
+> 2.25.1
+> 
 
-Would it be an acceptable alternative for you, Jonathan ? Would either 
-(1) and/or (2) be a "no-go" ?
-
->
->>
->> Anyhow, I've reviewed below, but need docs to discuss this in depth.  
->> In particular
->> the mix of buffers and events interfaces is unlikely to be an 
->> acceptable path
->> forwards.
->
-> OK, I will consider alternatives.
->
->>
->> Jonathan
-
+BR, Jarkko

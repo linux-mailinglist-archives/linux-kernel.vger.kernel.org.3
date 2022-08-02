@@ -2,116 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63463587A25
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0482587A2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236331AbiHBJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S236341AbiHBJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbiHBJzk (ORCPT
+        with ESMTP id S231958AbiHBJ6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:55:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2371F65DA;
-        Tue,  2 Aug 2022 02:55:38 -0700 (PDT)
-Date:   Tue, 02 Aug 2022 09:55:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659434136;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PlK+/AjwBJ+jEPpZkjnGHifK9JOqSjGxvWKQwXq9xDo=;
-        b=nipJZR1RSfHSRgvstpsX1Ja2jNFMMGrMK276PahTgoACLdTDEKn2QbNnOEwZQHPzWfoRKC
-        +D4Ckfe7PQESmVi4mJTXWp9ETx7YHRkK9nRj/R7w5QmYn2nGPIKdW+TaEwjOLi5mlr2EWi
-        IcBitNjKUrYRvsY+0zSc6tJR+MQaov1uqcFwCReicvH9YOC3m2VpzpfZ90jel/UYHNEm5r
-        +f5FaI18ARidh7q5k2cjGad3e9lJ9/Ab0O2QGEzeiFqSWwS377sZPAQffOr2ZayPZDiB6s
-        PLmBi5LXhCm+YEZ1UOZR0iGiOgn3Ivl5r/KCD5ZIY9ayYJLuKZqc0G4/w/ds1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659434136;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PlK+/AjwBJ+jEPpZkjnGHifK9JOqSjGxvWKQwXq9xDo=;
-        b=Q+RoLbEe2imC4BOsI7fXXy++syBCFbtzz9Sykve7RGP0NTdcz+c88ynxxprE22Uk8WwsWk
-        MQcQoIDHLY9Z82BA==
-From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] kprobes: Forbid probing on trampoline and BPF code areas
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220801033719.228248-1-chenzhongjin@huawei.com>
-References: <20220801033719.228248-1-chenzhongjin@huawei.com>
+        Tue, 2 Aug 2022 05:58:53 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2081.outbound.protection.outlook.com [40.107.20.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BD148C9B;
+        Tue,  2 Aug 2022 02:58:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nlCKfZY8lLsI/k1DA4ldja3g8FCRMqqewV+uzFf7mfA13h83oeROB2TSB82dDwPlH72Scb4IOQD17Jsg/KpzF3J2Ey6+wtXId6qtCj7RbcOZHitpACs8831JD0KFBwZq4X2az1RTcFEEU0JNlNXqmotXDgHasTMHMuw6hQMuHQzhFXQs3QU8G0+tYZ2ugmHEI2d8r7LLd6DPzEvYeMVvvFOkuN09RxBCYI2w6DGD4rsubMVSa7Ugxc76UjW/YAe7agekHVUO3rm7E+E6k07y3Bt9iCC0Y/wuNEVhVHLVTQt77/KIWU3X9+LrVhLAgvqJ5vbzx0iZk0prI3d7O0Nmjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IC3i+47QLyTkEmEDsivk+ga+Jtsr9YcwutujgYCa7Xw=;
+ b=EHhq3moZL0tbaGBrV72hUtY5z6LFQ7ijYLhHGxZ5pLBnBZLw6JezQ08Sq5IYOmRsgQ7upEsy1z6regdwpmCX4PMXvowe4zTglby65Xc8LINoBtSQm3mAVd8Y5hDketlQK+HAzfsPoByUSIvXEZLfOqVSXZ8gTPPGlfsfBYW/j+WrPnsoW/uDk68YbDyY4acQEtd8ub7iefFcQFArqmSTaXjpvdrgP+kgoJUsLipXK94U+etzlbcxgquNfn7bl/IXeHAx2AbHXe7Ozm9LKcz4HnWS2al2uGJkXlAKrTqEw3rLMrA61tn3qxgKQhNwiSnULPSLAkX1+ttGeyCmzxZwrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IC3i+47QLyTkEmEDsivk+ga+Jtsr9YcwutujgYCa7Xw=;
+ b=onKfxLNcOIcrPZf+TVW44NAyNkh55sOl0EGIfYsO3jLgL4j7CC21OoyIHoBVFxzTY8sk6JmfH/6MA0rfW3WX/PQq7Bjoez/jzaWFghR7aKtb0GVTp506qkuvK5ISFcrWO3r0/1jAq0hZ3nCleT53a6Zw2i3dSaaA7o9gV77pMuc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6737.eurprd04.prod.outlook.com (2603:10a6:208:176::18)
+ by AS8PR04MB8341.eurprd04.prod.outlook.com (2603:10a6:20b:3b0::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
+ 2022 09:58:49 +0000
+Received: from AM0PR04MB6737.eurprd04.prod.outlook.com
+ ([fe80::6ca7:299e:d92f:7d1b]) by AM0PR04MB6737.eurprd04.prod.outlook.com
+ ([fe80::6ca7:299e:d92f:7d1b%5]) with mapi id 15.20.5482.011; Tue, 2 Aug 2022
+ 09:58:49 +0000
+From:   Olivier Masse <olivier.masse@nxp.com>
+To:     sumit.semwal@linaro.org, benjamin.gaignard@collabora.com,
+        Brian.Starkey@arm.com, christian.koenig@amd.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Cc:     clement.faure@nxp.com, olivier.masse@nxp.com
+Subject: [PATCH 0/5] Add dma-buf secure-heap
+Date:   Tue,  2 Aug 2022 11:58:38 +0200
+Message-Id: <20220802095843.14614-1-olivier.masse@nxp.com>
+X-Mailer: git-send-email 2.25.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM3PR07CA0145.eurprd07.prod.outlook.com
+ (2603:10a6:207:8::31) To AM0PR04MB6737.eurprd04.prod.outlook.com
+ (2603:10a6:208:176::18)
 MIME-Version: 1.0
-Message-ID: <165943413527.15455.6314879465363056432.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d19be9f-f665-43dc-ba39-08da746d991d
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8341:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y/EHoZBcLOeabRco/Vx+mj8UuCysnKK4zHFWJJIZXI3HUXXfs3FwrDKOqR6KWpI9FdJOEo1PeVdwMf96JVa3JOUhHcdoVAbR6ipqP2DjUMGprsBh7I3BtLm5CSf2DJbZNrWjcIQB7LdP1PvsbEHXzp/gXeOVuGEemsd9951AsMgJr+XAIC7IevaGt+STYlujv6HP9SxMBOZoINSmBTCK7rd92+mvD+fuCowOWxDGkH1iaAk9sk+6IULqc9H8aLcgf7s5nQpUo1V84sAca58v0mAClDG7rdU8R0vWZI6Whb9+kZdrhTa1SevFFMAPf6FogOm3x9d9GRqk/S+RKxs9jwt6fX0WDFtZyp49F0qzon7uOGRFIdfsvQ1ATPZRkWDb9soEkJ34ZaN9AOjsG9LHaQ7RXVTYur26OfZCY0Jsg5i33DlR93zEgkjHdSFdDRZ37fl1e6ycAFm4Xh4vY+ZmjarwS9zvuLh76gVpLjGA6tKG5EJ2XnhCuU9kCDjvAxUsqtvVbDE1IpuXrqbZbA4qlTS+28Rnn2ejceIYvvujSkuB2ZQVkaSZARDEKPyFhzx56I2bAkB6ovJycwf//WJGOTHQxszWjS8naEQsimiTE7BnAdDkLVrrHyjfdKIFRdJcyWaHzFiSMAlm6rFdKW9062NMzQ2j46KV9MDu8Cogpqz2k6FVbHAKgvrFqXZhz8FSJLnXgg1wZHP9JyBP7bEFd6x8+SkgzMJvKpJfld20zeBtKcgWYhNa5qDBOx+26onAs9HHBKZ44qjbnpMIeJUq8c0mO/Hu8DC0FRBR//wR+S4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6737.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(366004)(136003)(39860400002)(376002)(41300700001)(2906002)(83380400001)(2616005)(86362001)(6666004)(52116002)(6506007)(44832011)(1076003)(36756003)(26005)(6512007)(38100700002)(186003)(38350700002)(6486002)(5660300002)(8676002)(66556008)(66476007)(66946007)(8936002)(478600001)(4326008)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SG1DSTBHM2VDMU9HUXdZNzlGY2piMkN5ZUpnQ3NCdnVYSE10TUpCVzZlejRF?=
+ =?utf-8?B?TjZ3OGFlVUdsZnh5Vm5TcmFPVncwWHZPT1lMQmttczI5V1c1cE5sSm5MejZD?=
+ =?utf-8?B?UklTVmVtUSsyekQ5Nm5icjJoNVNLSlVWMytNYk5kblRJNFU4UURxQUd0cnB0?=
+ =?utf-8?B?ZmlMK0V5S1p5Q1VlNUNEcElyQUxxd1NVRXlDUmcxajRNVmtsdkYrQ0MwSkxQ?=
+ =?utf-8?B?UXIwNjBjWkZFcS85TkVQLzJmdUtGaEJvRzB4amlSamRpN2dDeUlvMWxFLzJI?=
+ =?utf-8?B?MGx4UVVpQkU3UXV4V2g5cGx4VjRwdmU1ZGxZb2Z4OGpNK1Zmc3Y0WTZoa0Vu?=
+ =?utf-8?B?cm5OM0k0MkNUWWkyTHZTZnJ1ejVHN1dhSkNJNlVmeHp1bVNscm9TL1p0bjdE?=
+ =?utf-8?B?eXRnbzBla3laVHd5cXF6eFgzUVpVRys5WTA2UUM1VGJxYUFSdjBCWGdBSkkw?=
+ =?utf-8?B?ZXBiUnA2bHNMclQ0dkpKZ3Nlbjh2R0ZkS0dlY2NSOVkraFBpZW1oQkcyRHhj?=
+ =?utf-8?B?M3dkM2NsSEdIK1gzVXNkNGNnbWF4bTlxS2tCbGY5eEt4ZmVtbVZVQ0hUaElj?=
+ =?utf-8?B?S0RKWTZ6R2VrK2x5dXlWNUN4TXRuRVV5eFpWSE81NmFYV3RMZkpSeFZnVEZG?=
+ =?utf-8?B?NzJyWjg5Z0VtZ0xuMFQrNEUyeW1ycDgrck1EVTVUWGVad3dtcUdLamdHcFVr?=
+ =?utf-8?B?K3JraHF5UGRLWmtDZkEvbEJ4SlBrKzRLMVZsOXZiQTU0dnZMMTFzQVkxM205?=
+ =?utf-8?B?TzAvRzQyU0svRk44Y2RrWVJrKzdFcDN0UjM0M2hONnBXV3hVbG1YMFppeGpP?=
+ =?utf-8?B?L0hmZ0d5bXJnVzNxQlZpSVg1dFpsMTFjOFNJc1hTY2R3OFg2QTBYQUZhWi8r?=
+ =?utf-8?B?bkpGN01zQncrb0E4WUZsQjFqbUs3SzFWeE0xcFJiRi9lbWtoQmZyNWxDUkF6?=
+ =?utf-8?B?eTE5dTZQRW9FQmJGcFNHSVphNGZjZnZLTWdqN3BRZFpHVUcrR29sbDFzSSsr?=
+ =?utf-8?B?LzFCM3A5QUVTbDZmeVhHVGFYcFN5VVFNam5JMWwvVjZRYUVtMVdqTE1SUjhl?=
+ =?utf-8?B?cGw5ZXlJZDZhYUwwR0NDeE1lQm1mZjhobndYOFVieGZKTUovMCtFSDY4NkNp?=
+ =?utf-8?B?Vk81a3k2VHlHWUtaNjl3M2pnV2pQcGpKWUwvOEM2YVk3N3h5YTU3WHFaa3Vo?=
+ =?utf-8?B?M1lyU2pCQ2RpY1lXaytKUUZYSjZ6RGd6a0IzNnk5b2lLaElkZldCTDJDdkJp?=
+ =?utf-8?B?QU42L1pkMlFLaEF5YWEvY29xZy82c2VMRkwxeEdiNms1MFdWZGR3dlhWWmht?=
+ =?utf-8?B?OEJrbXlpcEdYamRqcjFoQkxCZ2hGcmxuWHd6OVFoV1lVTTZZVmI2VVhmdVJ0?=
+ =?utf-8?B?cm9vRUFpZVNPSURFYUdxMUZVNHRwSUN0ZzFWUE92Wnk4b1J3WXFkN211dmNr?=
+ =?utf-8?B?ekt1VFRKUytMK3B6QUcxdlpZdklPRUpaTEdhN0dOM0JHSkFtUzNlYTJibVhp?=
+ =?utf-8?B?eHgvL3JZR01KL0VNakswZ2kvWmUzRXgwZWVNMjJYcklnMmFtL0lsazMyWlhW?=
+ =?utf-8?B?RkZqMjduakVMS3p1a0FZWE9CVUFqUGxHZTBkaXN4Z251Z3hZaFFjazlCOGhv?=
+ =?utf-8?B?NkxmdEkzT2JVc1lhQmRjaW90Njd6ZVk1UVFFV0FFOE1senhGd211Vi9NUU5G?=
+ =?utf-8?B?M0RtNDA0Lzdya3JlYnpsY2lRMVFna1VieDFkRTVqOHQ4RUdNdEhLUUxIR1BO?=
+ =?utf-8?B?ekZqRGxDU1E0Q2E0QUNobEt2R0tmb1p5dGVqWTc0M3B4SlM4N2dpR2wyZHV2?=
+ =?utf-8?B?TWk0OFBINTJGTjkwRmdoZ01pcnVwd3IrMy8vK1NNckxNVFNoZWVLTEI0VnFp?=
+ =?utf-8?B?alFNS1lKN1FicmJudGI1Uk5UWVgzb2ttVVNsRjBuK004WUpsOHNzQ3BwYVU5?=
+ =?utf-8?B?L3EyTzc1aVBzRDJUemFDaVNkVzBjK21GR25ab3dqeUFhVTlOSUttK3ZzTVcr?=
+ =?utf-8?B?anRIc1ZoUHlSdTkxb1NmUTN1WXB2YWxzWitGeE5NRjRyWjY5QXo5ZFNtK3Ry?=
+ =?utf-8?B?RlBuQTdzYjVkYjlJMVp2WEl4L1FCRWQ2MGgzLzh1VWVVc2dBQlNDQVJuMFI2?=
+ =?utf-8?Q?oShLhY7HYXreNhdsiKg+aVFQF?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d19be9f-f665-43dc-ba39-08da746d991d
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6737.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 09:58:49.7497
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hju/VEE5Tz0V1l5wLE7n3jfJd2XIFBOzTgV0QLLEQTkRVa1yFJArCWdWei5Ue14o53gKVvaWyAPzoDVCuY13xw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8341
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+Purpose of these patches is to add a new dma-buf heap: linaro,secure-heap
+Linaro OPTEE OS Secure Data Path feature is relying on a reserved memory
+defined at Linux Kernel level and OPTEE OS level.
+From Linux Kernel side, heap management is using dma-buf heaps interface.
 
-Commit-ID:     28f6c37a2910f565b4f5960df52b2eccae28c891
-Gitweb:        https://git.kernel.org/tip/28f6c37a2910f565b4f5960df52b2eccae28c891
-Author:        Chen Zhongjin <chenzhongjin@huawei.com>
-AuthorDate:    Mon, 01 Aug 2022 11:37:19 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 02 Aug 2022 11:47:29 +02:00
+John Stultz (2):
+  ANDROID: dma-buf: heaps: Add deferred-free-helper library code
+  ANDROID: dma-buf: heaps: Add a shrinker controlled page pool
 
-kprobes: Forbid probing on trampoline and BPF code areas
+Olivier Masse (3):
+  dma-buf: heaps: add Linaro secure dmabuf heap support
+  dt-bindings: reserved-memory: add linaro,secure-heap
+  plat-hikey: Add linaro,secure-heap compatible
 
-kernel_text_address() treats ftrace_trampoline, kprobe_insn_slot
-and bpf_text_address as valid kprobe addresses - which is not ideal.
+ .../reserved-memory/linaro,secure-heap.yaml   |  56 ++
+ .../arm64/boot/dts/hisilicon/hi6220-hikey.dts |  11 +
+ arch/arm64/configs/defconfig                  |   4 +
+ drivers/dma-buf/heaps/Kconfig                 |  19 +
+ drivers/dma-buf/heaps/Makefile                |   3 +
+ drivers/dma-buf/heaps/deferred-free-helper.c  | 136 ++++
+ drivers/dma-buf/heaps/deferred-free-helper.h  |  63 ++
+ drivers/dma-buf/heaps/page_pool.c             | 246 ++++++++
+ drivers/dma-buf/heaps/page_pool.h             |  55 ++
+ drivers/dma-buf/heaps/secure_heap.c           | 588 ++++++++++++++++++
+ 10 files changed, 1181 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/linaro,secure-heap.yaml
+ create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.c
+ create mode 100644 drivers/dma-buf/heaps/deferred-free-helper.h
+ create mode 100644 drivers/dma-buf/heaps/page_pool.c
+ create mode 100644 drivers/dma-buf/heaps/page_pool.h
+ create mode 100644 drivers/dma-buf/heaps/secure_heap.c
 
-These text areas are removable and changeable without any notification
-to kprobes, and probing on them can trigger unexpected behavior:
+-- 
+2.25.0
 
-  https://lkml.org/lkml/2022/7/26/1148
-
-Considering that jump_label and static_call text are already
-forbiden to probe, kernel_text_address() should be replaced with
-core_kernel_text() and is_module_text_address() to check other text
-areas which are unsafe to kprobe.
-
-[ mingo: Rewrote the changelog. ]
-
-Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
-Fixes: 74451e66d516 ("bpf: make jited programs visible in traces")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Link: https://lore.kernel.org/r/20220801033719.228248-1-chenzhongjin@huawei.com
----
- kernel/kprobes.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index f214f8c..80697e5 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 	preempt_disable();
- 
- 	/* Ensure it is not in reserved area nor out of text */
--	if (!kernel_text_address((unsigned long) p->addr) ||
-+	if (!(core_kernel_text((unsigned long) p->addr) ||
-+	    is_module_text_address((unsigned long) p->addr)) ||
- 	    within_kprobe_blacklist((unsigned long) p->addr) ||
- 	    jump_label_text_reserved(p->addr, p->addr) ||
- 	    static_call_text_reserved(p->addr, p->addr) ||

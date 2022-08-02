@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852795875D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664885875D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbiHBDIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 23:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
+        id S235619AbiHBDIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 23:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiHBDH3 (ORCPT
+        with ESMTP id S231784AbiHBDIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 23:07:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B43C31DDB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659409620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5zQia0Oassrqu4Y+65KjGvbcaoFf/cSiBHiey4HDVUY=;
-        b=RAQl7y2lQwE9rTiv0xyuxOgLTBr0oGqsrKnnQV6shxp5LzFJljgIVU9ekMXTGPaBlM5ucL
-        Rknsi4WeAxvwkuE9BY7gbrFgOymUXx0jlzHNMQUoAf/MNIKiy0rtsungcBlHaPF2rpB/rt
-        yKuxp3P0OWeNnsR4Gz+ZCwNqPaeIZXY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-12-SiwiOuq3OiSEzAI25UpcQA-1; Mon, 01 Aug 2022 23:06:59 -0400
-X-MC-Unique: SiwiOuq3OiSEzAI25UpcQA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B33FD294EDCC;
-        Tue,  2 Aug 2022 03:06:58 +0000 (UTC)
-Received: from localhost (ovpn-13-104.pek2.redhat.com [10.72.13.104])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DB6A32026D64;
-        Tue,  2 Aug 2022 03:06:57 +0000 (UTC)
-Date:   Tue, 2 Aug 2022 11:06:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH v2] kexec: Replace kmap() with kmap_local_page()
-Message-ID: <YuiUzodsyv3hZAgs@MiWiFi-R3L-srv>
-References: <20220707231550.1484-1-fmdefrancesco@gmail.com>
+        Mon, 1 Aug 2022 23:08:00 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19264136;
+        Mon,  1 Aug 2022 20:07:56 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lxfvt4B0WzWfS0;
+        Tue,  2 Aug 2022 11:03:54 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 11:07:53 +0800
+Received: from huawei.com (10.174.176.191) by dggpemm500018.china.huawei.com
+ (7.185.36.111) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 2 Aug
+ 2022 11:07:52 +0800
+From:   Tie Liu <liutie4@huawei.com>
+To:     <jstultz@google.com>, <tglx@linutronix.de>, <sboyd@kernel.org>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hewenliang4@huawei.com>, <linfeilong@huawei.com>
+Subject: [PATCH] clocksource: Resolve some coding specification issues about spaces
+Date:   Tue, 2 Aug 2022 11:07:49 +0800
+Message-ID: <20220802030749.1044-1-liutie4@huawei.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707231550.1484-1-fmdefrancesco@gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.176.191]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/08/22 at 01:15am, Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
-> 
-> With kmap_local_page(), the mappings are per thread, CPU local and not
-> globally visible. Furthermore, the mappings can be acquired from any
-> context (including interrupts).
-> 
-> Therefore, use kmap_local_page() in kexec_core.c because these mappings are
-> per thread, CPU local, and not globally visible.
-> 
-> Tested on a QEMU + KVM 32-bits VM booting a kernel with HIGHMEM64GB
-> enabled.
+Some spaces were not used in accordance with current 
+encoding specifications, so I tried to modify them.
 
-Wondering what arch you tested with. 
+Signed-off-by: Liu Tie <liutie4@huawei.com>
+---
+ kernel/time/clocksource.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-This looks good, but may not benefit much. Say so because I doubt
-how many 32bit systems are using kexec/kdump mechanism.
-
-Anyway, 
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
-> 
-> v1->v2: A sentence of the commit message contained an error due to a
-> mistake in copy-pasting from a previous patch. Replace "aio.c" with
-> "kexec_core.c".
-> 
->  kernel/kexec_core.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 4d34c78334ce..6f98274765d4 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage *image,
->  		if (result < 0)
->  			goto out;
->  
-> -		ptr = kmap(page);
-> +		ptr = kmap_local_page(page);
->  		/* Start with a clear page */
->  		clear_page(ptr);
->  		ptr += maddr & ~PAGE_MASK;
-> @@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage *image,
->  			memcpy(ptr, kbuf, uchunk);
->  		else
->  			result = copy_from_user(ptr, buf, uchunk);
-> -		kunmap(page);
-> +		kunmap_local(ptr);
->  		if (result) {
->  			result = -EFAULT;
->  			goto out;
-> @@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage *image,
->  			goto out;
->  		}
->  		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
-> -		ptr = kmap(page);
-> +		ptr = kmap_local_page(page);
->  		ptr += maddr & ~PAGE_MASK;
->  		mchunk = min_t(size_t, mbytes,
->  				PAGE_SIZE - (maddr & ~PAGE_MASK));
-> @@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage *image,
->  		else
->  			result = copy_from_user(ptr, buf, uchunk);
->  		kexec_flush_icache_page(page);
-> -		kunmap(page);
-> +		kunmap_local(ptr);
->  		arch_kexec_pre_free_pages(page_address(page), 1);
->  		if (result) {
->  			result = -EFAULT;
-> -- 
-> 2.36.1
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index cee5da1e5..46b738696 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -47,7 +47,7 @@ void
+ clocks_calc_mult_shift(u32 *mult, u32 *shift, u32 from, u32 to, u32 maxsec)
+ {
+ 	u64 tmp;
+-	u32 sft, sftacc= 32;
++	u32 sft, sftacc = 32;
+ 
+ 	/*
+ 	 * Calculate the shift factor which is limiting the conversion
+@@ -55,7 +55,7 @@ clocks_calc_mult_shift(u32 *mult, u32 *shift, u32 from, u32 to, u32 maxsec)
+ 	 */
+ 	tmp = ((u64)maxsec * from) >> 32;
+ 	while (tmp) {
+-		tmp >>=1;
++		tmp >>= 1;
+ 		sftacc--;
+ 	}
+ 
+@@ -863,7 +863,7 @@ static u32 clocksource_max_adjustment(struct clocksource *cs)
+ 	 * We won't try to correct for more than 11% adjustments (110,000 ppm),
+ 	 */
+ 	ret = (u64)cs->mult * 11;
+-	do_div(ret,100);
++	do_div(ret, 100);
+ 	return (u32)ret;
+ }
+ 
+@@ -1446,7 +1446,7 @@ device_initcall(init_clocksource_sysfs);
+  * Takes a clocksource= boot argument and uses it
+  * as the clocksource override name.
+  */
+-static int __init boot_override_clocksource(char* str)
++static int __init boot_override_clocksource(char *str)
+ {
+ 	mutex_lock(&clocksource_mutex);
+ 	if (str)
+@@ -1464,7 +1464,7 @@ __setup("clocksource=", boot_override_clocksource);
+  * DEPRECATED! Takes a clock= boot argument and uses it
+  * as the clocksource override name
+  */
+-static int __init boot_override_clock(char* str)
++static int __init boot_override_clock(char *str)
+ {
+ 	if (!strcmp(str, "pmtmr")) {
+ 		pr_warn("clock=pmtmr is deprecated - use clocksource=acpi_pm\n");
+-- 
+2.27.0
 

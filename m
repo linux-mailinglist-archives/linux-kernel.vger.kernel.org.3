@@ -2,220 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950BC587A29
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDC7587A1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236290AbiHBJ5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S235945AbiHBJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiHBJ5K (ORCPT
+        with ESMTP id S232762AbiHBJxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:57:10 -0400
-X-Greylist: delayed 350 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Aug 2022 02:57:07 PDT
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2951C3E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 02:57:07 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Lxqxs33g8zMptYk;
-        Tue,  2 Aug 2022 11:51:13 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Lxqxr590Qzlqwsl;
-        Tue,  2 Aug 2022 11:51:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1659433873;
-        bh=1zHRiAqo3P/dojkNK+hYHzjUFBL4CkZLzF7FK2fml6I=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=yubBe6Oo6HwAr99wsPmEZJALzIaciq9i8qNhdXbQ62s5yam2Z21lr4NT1c76h4xVp
-         EZndDrz2aLGgYqsCnIkP3v6gXa79Prd3jd3wRVYwWxZK9FxtMha8El+S/oYz018ZQv
-         h+Go38FAOlZssRp0+iylAHifHtozQjL+VPDlDORk=
-Message-ID: <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
-Date:   Tue, 2 Aug 2022 11:51:12 +0200
+        Tue, 2 Aug 2022 05:53:18 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AE215833;
+        Tue,  2 Aug 2022 02:53:16 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6151DFF811;
+        Tue,  2 Aug 2022 09:53:13 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     linus.walleij@linaro.org, heiko@sntech.de,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [RFC PATCH 0/1] Making Rockchip IO domains dependency from other devices explicit
+Date:   Tue,  2 Aug 2022 11:52:51 +0200
+Message-Id: <20220802095252.2486591-1-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
-In-Reply-To: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-This change breaks the Landlock test build when performed on the 
-tools/testing/selftests/landlock directory because the 
-(non-system/up-to-date) kernel headers aren't found. Looking at the use 
-of top_srcdir and HDR_PATH, it seems that multiple subsystems are using 
-this feature. I consider this change a regression.
+This is a follow-up to the mail sent almost two months ago asking for
+guidance: https://lore.kernel.org/lkml/778790a4-1239-e9d9-0549-6760a8792ceb@theobroma-systems.com/
 
-It also removes the check on up-to-date kernel headers (thanks to the 
-Makefile's target timestamp).
+This is what I could come up with but I'm not too happy about it so feel
+free to give some ideas or other possible implementations that would
+have less downsides than this one.
 
-I wasn't CCed for this change impacting Landlock [1]. Please keep in 
-mind to add at least maintainers and related mailing-lists for changes 
-on related subsystems.
+Some background on IO domains on Rockchip:
 
-The following patch almost revert commit a917dd94b832 
-("selftests/landlock: drop deprecated headers dependency") and partially 
-fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
+On some Rockchip SoCs, some SoC pins are split in what are called IO
+domains.
 
---- a/tools/testing/selftests/landlock/Makefile
-+++ b/tools/testing/selftests/landlock/Makefile
-@@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
-  TEST_GEN_PROGS_EXTENDED := true
+An IO domain is supplied power externally, by regulators from a PMIC for
+example. This external power supply is then used by the IO domain as
+"supply" for the IO pins if they are outputs.
 
-  OVERRIDE_TARGETS := 1
-+top_srcdir = ../../../..
-  include ../lib.mk
+Each IO domain can configure which voltage the IO pins will be operating
+on (1.8V or 3.3V).
 
-+khdr_dir = $(top_srcdir)/usr/include
-+
-  $(OUTPUT)/true: true.c
-  	$(LINK.c) $< $(LDLIBS) -o $@ -static
+There already exists an IO domain driver for Rockchip SoCs[1]. This
+driver allows to explicit the relationship between the external power
+supplies and IO domains[2]. This makes sure the regulators are enabled
+by the Linux kernel so the IO domains are supplied with power and
+correctly configured as per the supplied voltage.
+This driver is a regulator consumer and does not offer any other
+interface for device dependency.
 
--$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
--	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
-+$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h 
-../kselftest_harness.h common.h
-+	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+However, IO pins belonging to an IO domain need to have this IO domain
+correctly configured before they are being used otherwise they do not
+operate correctly (in our case, a pin configured as output clock was
+oscillating between 0 and 150mV instead of the expected 1V8).
 
+In order to make this dependency transparent to the consumer of those
+pins and not add Rockchip-specific code to third party drivers (a camera
+driver in our case), it is hooked into the pinctrl driver which is
+Rockchip-specific obviously.
 
-This doesn't fix the header timestamp check though.
+Unfortunately, the dependency is not about the ultimate presence of the
+io-domain devices but more that prior to being able to use pins,
+the io-domain devices need to be probed. However of_find_device_by_node
+does not provide this information, hence the check whether the
+platform_device actually has its drvdata structure set (it defaults to
+NULL until it is filled by the driver during the probe of the device).
 
-Regards,
-  Mickaël
+Moreover, this dependency needs to be explicit on a pinmux level
+and postponed after the probe of the pinctrl driver because a circular
+dependency is observed otherwise with the following:
+pinctrl device depends on the io-domain device which depends on
+regulators from a PMIC on i2c which requires the i2c bus pins to be
+muxed from the pinctrl device.
+Instead, the pinmux dependency on IO domain is checked in set_mux
+callback and returns EPROBE_DEFER if the IO domain device hasn't probed
+yet.
 
-[1] 
-https://lore.kernel.org/all/b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com/
+I wanted to add the appropriate rockchip,io-domains DT property to
+existing pinmux DT node. However, *all* of PX30's belong to an IO
+domain, including the i2c bus on which the PMIC supplying the power to
+the IO domain is on. Since the PMIC can be virtually on any i2c bus, a
+specific pinmux cannot be omitted or ignored, therefore none are added
+and it's up to the board maintainers to add them themselves. This is
+also assumed only necessary for IO domain that are configured
+differently by the bootloader or by register defaults (3V3 for
+RK3399/PX30) than their expected values in Linux and whose supplied
+power is fixed (e.g. not expected to be able to change from 3V3 to 1V8).
 
+The hope is to not have to handle the io domain configuration in
+the bootloader as it is currently done, c.f.
+https://elixir.bootlin.com/u-boot/latest/source/board/theobroma-systems/puma_rk3399/puma-rk3399.c#L28
+(we'll need an additional IO domain configuration for a camera soon).
 
-On 02/08/2022 00:03, Shuah Khan wrote:
-> Hi Linus,
-> 
-> Please pull the following Kselftest update for Linux 5.20-rc1.
-> 
-> This Kselftest update for Linux 5.20-rc1 consists of:
-> 
-> - timers test build fixes and cleanups for new tool chains
-> - removing khdr from kselftest framework and main Makefile
-> - changes to test output messages to improve reports
-> 
-> Please not that this update also included main Makefile change
-> to kselftest build logic in it.
-> 
-> diff is attached.
-> 
-> thanks,
-> -- Shuah
-> 
-> ----------------------------------------------------------------
-> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
-> 
->     Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
-> 
-> are available in the Git repository at:
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.20-rc1
-> 
-> for you to fetch changes up to 4062eba9f3d072e72645860fbc5d160428a75c50:
-> 
->     Makefile: replace headers_install with headers for kselftest (2022-07-26 18:06:33 -0600)
-> 
-> ----------------------------------------------------------------
-> linux-kselftest-next-5.20-rc1
-> 
-> This Kselftest update for Linux 5.20-rc1 consists of:
-> 
-> - timers test build fixes and cleanups for new tool chains
-> - removing khdr from kselftest framework and main Makefile
-> - changes to test output messages to improve reports
-> 
-> ----------------------------------------------------------------
-> Gautam (2):
->         kselftests: Enable the echo command to print newlines in Makefile
->         kselftests/damon: add support for cases where debugfs cannot be read
-> 
-> Gautam Menghani (3):
->         selftests: Make the usage formatting consistent in kselftest_deps.sh
->         selftests/drivers/gpu: Add error messages to drm_mm.sh
->         selftests/kcmp: Make the test output consistent and clear
-> 
-> Guillaume Tucker (6):
->         selftests: drop khdr make target
->         selftests: stop using KSFT_KHDR_INSTALL
->         selftests: drop KSFT_KHDR_INSTALL make target
->         Makefile: add headers_install to kselftest targets
->         selftests/landlock: drop deprecated headers dependency
->         Makefile: replace headers_install with headers for kselftest
-> 
-> Johannes Holland (1):
->         selftests/tpm2: increase timeout for kselftests
-> 
-> Soumya Negi (1):
->         selftests: drivers/dma-buf: Improve message in selftest summary
-> 
-> Wolfram Sang (9):
->         selftests: timers: valid-adjtimex: build fix for newer toolchains
->         selftests: timers: fix declarations of main()
->         selftests: timers: nanosleep: adapt to kselftest framework
->         selftests: timers: inconsistency-check: adapt to kselftest framework
->         selftests: timers: clocksource-switch: fix passing errors from child
->         selftests: timers: clocksource-switch: sort includes
->         selftests: timers: clocksource-switch: add command line switch to skip sanity check
->         selftests: timers: clocksource-switch: add 'runtime' command line parameter
->         selftests: timers: clocksource-switch: adapt to kselftest framework
-> 
-> Xiang wangx (1):
->         userfaultfd/selftests: Fix typo in comment
-> 
-> Zan Aziz (1):
->         selftests:timers: globals don't need initialization to 0
-> 
->    Makefile                                           |  4 +-
->    tools/testing/selftests/Makefile                   | 30 +--------
->    tools/testing/selftests/arm64/mte/Makefile         |  1 -
->    tools/testing/selftests/arm64/signal/Makefile      |  1 -
->    .../testing/selftests/arm64/signal/test_signals.h  |  4 +-
->    tools/testing/selftests/damon/_chk_dependency.sh   | 10 +++
->    tools/testing/selftests/drivers/dma-buf/udmabuf.c  |  3 +-
->    tools/testing/selftests/drivers/gpu/drm_mm.sh      |  4 +-
->    .../selftests/drivers/s390x/uvdevice/Makefile      |  1 -
->    tools/testing/selftests/futex/functional/Makefile  |  1 -
->    tools/testing/selftests/kcmp/kcmp_test.c           |  6 +-
->    tools/testing/selftests/kselftest_deps.sh          |  2 +-
->    tools/testing/selftests/kvm/Makefile               |  1 -
->    tools/testing/selftests/landlock/Makefile          | 10 +--
->    tools/testing/selftests/lib.mk                     | 38 ------------
->    tools/testing/selftests/net/Makefile               |  1 -
->    tools/testing/selftests/net/mptcp/Makefile         |  1 -
->    tools/testing/selftests/tc-testing/Makefile        |  1 -
->    tools/testing/selftests/timers/adjtick.c           |  2 +-
->    .../testing/selftests/timers/alarmtimer-suspend.c  |  2 +-
->    tools/testing/selftests/timers/change_skew.c       |  2 +-
->    .../testing/selftests/timers/clocksource-switch.c  | 71 ++++++++++++++--------
->    .../testing/selftests/timers/inconsistency-check.c | 32 +++++-----
->    tools/testing/selftests/timers/nanosleep.c         | 18 +++---
->    tools/testing/selftests/timers/raw_skew.c          |  2 +-
->    tools/testing/selftests/timers/skew_consistency.c  |  2 +-
->    tools/testing/selftests/timers/valid-adjtimex.c    |  2 +-
->    tools/testing/selftests/tpm2/settings              |  1 +
->    tools/testing/selftests/vm/Makefile                |  1 -
->    tools/testing/selftests/vm/userfaultfd.c           |  2 +-
->    30 files changed, 111 insertions(+), 145 deletions(-)
->    create mode 100644 tools/testing/selftests/tpm2/settings
-> ----------------------------------------------------------------
+However, this still relies on IO domains defaults or bootloader
+configuration to be able to omit some IO domain<->pinmux relationships
+to avoid circular dependencies.
+
+I don't know how well this RFC implementation would work with
+suspend/resume.
+
+[1] drivers/soc/rockchip/io-domain.c
+[2] Documentation/devicetree/bindings/power/rockchip-io-domain.yaml
+
+Cheers,
+Quentin
+
+Quentin Schulz (1):
+  pinctrl: rockchip: add support for per-pinmux io-domain dependency
+
+ drivers/pinctrl/pinctrl-rockchip.c | 19 +++++++++++++++++++
+ drivers/pinctrl/pinctrl-rockchip.h |  1 +
+ 2 files changed, 20 insertions(+)
+
+-- 
+2.37.1
+

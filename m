@@ -2,86 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC4E58779C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C69D5877A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbiHBHOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S235038AbiHBHPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232948AbiHBHON (ORCPT
+        with ESMTP id S235811AbiHBHPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:14:13 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B9848EA2
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:14:11 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id e11so14687941ljl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=VO7iKisYqXn9gq//Drvzc4IU8FHAbNWbiNlXqoODgOM=;
-        b=BHY9W6lthh/+SlYcXhzf70uhuZagL1J/CwBCzUmFuyXKE0AnmUk3pZJ5BbF7yrgkkz
-         4+UKPB7g/1kcN0oJ+P3369aGQq9DXdsqJCtcyvKpib8uWCA3rw/EznQmChAS18o7r2+G
-         cSSHN2xMb7QaroRC3i39Sv9zoEQQBqFhDM/sAJ1Isf4UqXHEPiE4pcCywtmDIXwugaa1
-         pn0vdICsjDOqAiZzdUe8cczXT3mzcme7KmNwtVrKJB3EKwt15P3OZkfj+Pe7ciNZD1mx
-         fC61YXxXrpsD3UibIQTCA/AfZ+y2Nf4bM12NrWSaEEpo3hI4u+g9AefaHxvN1jGXHBRh
-         xljg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VO7iKisYqXn9gq//Drvzc4IU8FHAbNWbiNlXqoODgOM=;
-        b=Drvdw90HbCA7k2R0MOwP84cdolDSAzsBbgBrTkhX/jDAu+h0eI/13UKKEQerDBmHy5
-         +w6gWA0HTFpUHyyIjJqEDkcClN2s3BfKcjCuLxmCPiOm3onteSJmRoudnsFMT3f3fnzx
-         JFBOuH1sa2xoFAWmbBAosqNe0yEmZP/8hZ9g3oBLH47h7CcDsk/EqqwVV/nOXQ2Jfz/8
-         SA7rXedSdEbGDCXPxU3Ya/5/734gp4zowjXbvGnhEUzNr9uYO+hafOriCdu2gw9B66iE
-         XxN8FX/MTWs3qkPvX/wxiDRUDo5jkS6V6yvTquEWY6qNZoSiylxjEcDIZa7e+wsVeSLn
-         kzhA==
-X-Gm-Message-State: ACgBeo1e4lpsoeWMUkNngmNZ5o3CBdh+hAaeAxmJTn21AnvhTtJGPho2
-        e0F8tF8Ve/ovieaAz+YM0iH1tg==
-X-Google-Smtp-Source: AA6agR6/Jmi2axMFmM5dshEATFksCp6XfsK+VigG+KH8Rzfsrr0wC0UgMCu/xHtn///Lcw2NpmrIKA==
-X-Received: by 2002:a2e:90c2:0:b0:25e:5d60:14b with SMTP id o2-20020a2e90c2000000b0025e5d60014bmr382110ljg.24.1659424450278;
-        Tue, 02 Aug 2022 00:14:10 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z19-20020a2ebe13000000b0025e2b567434sm1801513ljq.9.2022.08.02.00.14.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 00:14:09 -0700 (PDT)
-Message-ID: <8715e07f-9d58-1ae3-9a3a-25828b545905@linaro.org>
-Date:   Tue, 2 Aug 2022 10:14:09 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 5/8] drm/msm/a6xx: Ensure CX collapse during gpu
- recovery
-Content-Language: en-GB
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Jordan Crouse <jordan@cosmicpenguin.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
+        Tue, 2 Aug 2022 03:15:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55693B944
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:15:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB1E6B8188A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FBFC433D6;
+        Tue,  2 Aug 2022 07:15:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659424537;
+        bh=OU7TGxK68vWv69y0xszAk63+oYqYivbkurLi5vKI8cI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p83QkmjC4ZQZkA01ck97y9rqOZvhlDghckiMuN8M/OI+xpgEma8PuxR2UofjCDu+3
+         XWE6jvnf3DSKOVqRilDj3rE4MBaxEdh68WxeBsEW5Bw5JNpZ6Pg+7CVVzWI/W/0fXZ
+         a4ZTht5McBmrNY+PGtx40hIvYKt8CVtlwiS0OvZIPEanWCt5TxAwdiB4HmLZAw4V1T
+         DO88B1M8XZLcc2feUJrK+MpidqdL6J2Up3QgUUJoiWwcCuRcQheOLRac7a7B0M0vM6
+         NYrtx9KsaROennEEqeLtPB48UrpKv8+EHsBpb2gNxvWNgIUtL5PI0HDtvFaZGxv8HE
+         Ip7P3qio7MfZw==
+Date:   Tue, 2 Aug 2022 10:15:24 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     shaoqin.huang@intel.com
+Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-References: <1659174051-27816-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220730150952.v3.5.I176567525af2b9439a7e485d0ca130528666a55c@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220730150952.v3.5.I176567525af2b9439a7e485d0ca130528666a55c@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH v2] memblock test: Add test to memblock_add() 129th region
+Message-ID: <YujPDHym0Ly8sxqP@kernel.org>
+References: <20220801064901.980558-1-shaoqin.huang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801064901.980558-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,98 +55,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/07/2022 12:40, Akhil P Oommen wrote:
-> Because there could be transient votes from other drivers/tz/hyp which
-> may keep the cx gdsc enabled, we should poll until cx gdsc collapses.
-> We can use the reset framework to poll for cx gdsc collapse from gpucc
-> clk driver.
+On Mon, Aug 01, 2022 at 02:48:36PM +0800, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
-> This feature requires support from the platform's gpucc driver.
+> Add 129th region into the memblock, and this will trigger the
+> memblock_double_array() function, this needs valid memory regions. So
+> using dummy_physical_memory_init() to allocate some valid memory, when
+> memblock_double_array() choose a new memory region from memory.regions,
+> it will always choose a valid memory region if we add all valid memory
+> region, so the memblock_double_array() must success.
 > 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> Another thing should be done is to restore the memory.regions after
+> memblock_double_array(), due to now the memory.regions is pointing to a
+> memory region allocated by dummy_physical_memory_init(). And it will
+> affect the subsequent tests if we don't restore the memory region. So
+> Simply record the origin region, and restore it after the test.
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
 > ---
+> Changelog:
+> ----------
+> v2:
+>   - Use ASSERT_EQ() to replace assert().
+>   - Not to expose memory_block, and add a function get_memory_block_base() to
+>   get the memory_block.base.
+>   - Add two functions for common usage, and now it has been used by this patch
+>   to allocate many valid memory regions and free them at the end.
 > 
-> Changes in v3:
-> - Use reset interface from gpucc driver to poll for cx gdsc collapse
->    https://patchwork.freedesktop.org/series/106860/
+>  tools/testing/memblock/tests/basic_api.c | 54 ++++++++++++++++++++++++
+>  tools/testing/memblock/tests/common.c    | 38 +++++++++++++++--
+>  tools/testing/memblock/tests/common.h    |  6 +++
+>  3 files changed, 95 insertions(+), 3 deletions(-)
 > 
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 4 ++++
->   drivers/gpu/drm/msm/msm_gpu.c         | 4 ++++
->   drivers/gpu/drm/msm/msm_gpu.h         | 4 ++++
->   3 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 1b049c5..721d5e6 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -10,6 +10,7 @@
->   
->   #include <linux/bitfield.h>
->   #include <linux/devfreq.h>
-> +#include <linux/reset.h>
->   #include <linux/soc/qcom/llcc-qcom.h>
->   
->   #define GPU_PAS_ID 13
-> @@ -1224,6 +1225,9 @@ static void a6xx_recover(struct msm_gpu *gpu)
->   	/* And the final one from recover worker */
->   	pm_runtime_put_sync(&gpu->pdev->dev);
->   
-> +	/* Call into gpucc driver to poll for cx gdsc collapse */
-> +	reset_control_reset(gpu->cx_collapse);
+> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
+> index 66f46f261e66..46948d5a975e 100644
+> --- a/tools/testing/memblock/tests/basic_api.c
+> +++ b/tools/testing/memblock/tests/basic_api.c
+> @@ -326,6 +326,59 @@ static int memblock_add_twice_check(void)
+>  	return 0;
+>  }
+>  
+> +static int memblock_add_many_check(void)
+> +{
+> +	void *base[INIT_MEMBLOCK_REGIONS + 1];
+> +	void *orig_region;
+> +	struct region r = {
+> +		.base = SZ_16K,
+> +		.size = MEM_SIZE,
+> +	};
+> +
+> +	PREFIX_PUSH();
+> +
+> +	reset_memblock_regions();
+> +	memblock_allow_resize();
+> +
+> +	dummy_physical_memory_many_init(base, INIT_MEMBLOCK_REGIONS);
 
-Do we have a race between the last pm_runtime_put_sync(), this polling 
-and other voters removing their votes beforehand?
+Why do we need this?
+
+dummy_physical_memory_init() allocates the "physical" memory, so to trigger
+memblock_double_array() it's enough to memblock_add() 129 non-intersecting
+chunks in the range [memory_block.base, memory_block.base + MEM_SIZE].
+If MEM_SIZE of 16k won't be enough, it can be increased.
 
 > +
->   	pm_runtime_use_autosuspend(&gpu->pdev->dev);
->   
->   	if (active_submits)
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> index 07e55a6..4a57627 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> @@ -14,6 +14,7 @@
->   #include <generated/utsrelease.h>
->   #include <linux/string_helpers.h>
->   #include <linux/devcoredump.h>
-> +#include <linux/reset.h>
->   #include <linux/sched/task.h>
->   
->   /*
-> @@ -903,6 +904,9 @@ int msm_gpu_init(struct drm_device *drm, struct platform_device *pdev,
->   	if (IS_ERR(gpu->gpu_cx))
->   		gpu->gpu_cx = NULL;
->   
-> +	gpu->cx_collapse = devm_reset_control_get_optional(&pdev->dev,
-> +			"cx_collapse");
+> +	orig_region = memblock.memory.regions;
 > +
->   	gpu->pdev = pdev;
->   	platform_set_drvdata(pdev, &gpu->adreno_smmu);
->   
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> index 6def008..ab59fd2 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.h
-> +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> @@ -13,6 +13,7 @@
->   #include <linux/interconnect.h>
->   #include <linux/pm_opp.h>
->   #include <linux/regulator/consumer.h>
-> +#include <linux/reset.h>
->   
->   #include "msm_drv.h"
->   #include "msm_fence.h"
-> @@ -268,6 +269,9 @@ struct msm_gpu {
->   	bool hw_apriv;
->   
->   	struct thermal_cooling_device *cooling;
+> +	/* This adds the 129 memory_region, and makes it double array. */
+> +	dummy_physical_memory_init();
+> +	append_memblock();
+> +	base[INIT_MEMBLOCK_REGIONS] = get_memory_block_base();
 > +
-> +	/* To poll for cx gdsc collapse during gpu recovery */
-> +	struct reset_control *cx_collapse;
->   };
->   
->   static inline struct msm_gpu *dev_to_gpu(struct device *dev)
-
+> +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 1);
+> +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 1) * MEM_SIZE);
+> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
+> +
+> +	/* The base is very small, so it should be insert to the first region. */
+> +	memblock_add(r.base, r.size);
+> +	ASSERT_EQ(memblock.memory.regions[0].base, r.base);
+> +	ASSERT_EQ(memblock.memory.regions[0].size, r.size);
+> +
+> +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 2);
+> +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 2) * MEM_SIZE);
+> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
+> +
+> +	/* Free these allocated memory. */
+> +	dummy_physical_memory_many_cleanup(base, INIT_MEMBLOCK_REGIONS + 1);
+> +
+> +	/*
+> +	 * The current memory.regions is occupying a range of memory that
+> +	 * allocated from dummy_physical_memory_init(). After free the memory,
+> +	 * we must not use it. So restore the origin memory region to make sure
+> +	 * the tests can run as normal and not affected by the double array.
+> +	 */
+> +	memblock.memory.regions = orig_region;
+> +	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
+> +
+> +	test_pass_pop();
+> +
+> +	return 0;
+> +}
+> +
+>  static int memblock_add_checks(void)
+>  {
+>  	prefix_reset();
+> @@ -339,6 +392,7 @@ static int memblock_add_checks(void)
+>  	memblock_add_overlap_bottom_check();
+>  	memblock_add_within_check();
+>  	memblock_add_twice_check();
+> +	memblock_add_many_check();
+>  
+>  	prefix_pop();
+>  
+> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+> index e43b2676af81..960b3ce07696 100644
+> --- a/tools/testing/memblock/tests/common.c
+> +++ b/tools/testing/memblock/tests/common.c
+> @@ -5,8 +5,6 @@
+>  #include <linux/memory_hotplug.h>
+>  #include <linux/build_bug.h>
+>  
+> -#define INIT_MEMBLOCK_REGIONS			128
+> -#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  #define PREFIXES_MAX				15
+>  #define DELIM					": "
+>  
+> @@ -58,10 +56,20 @@ void reset_memblock_attributes(void)
+>  	memblock.current_limit	= MEMBLOCK_ALLOC_ANYWHERE;
+>  }
+>  
+> +void *get_memory_block_base(void)
+> +{
+> +	return memory_block.base;
+> +}
+> +
+> +void append_memblock(void)
+> +{
+> +	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
+> +}
+> +
+>  void setup_memblock(void)
+>  {
+>  	reset_memblock_regions();
+> -	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
+> +	append_memblock();
+>  }
+>  
+>  void dummy_physical_memory_init(void)
+> @@ -75,6 +83,30 @@ void dummy_physical_memory_cleanup(void)
+>  	free(memory_block.base);
+>  }
+>  
+> +void dummy_physical_memory_many_init(void *base[], int cnt)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < cnt; i++) {
+> +		dummy_physical_memory_init();
+> +		append_memblock();
+> +		base[i] = memory_block.base;
+> +
+> +		ASSERT_EQ(memblock.memory.cnt, i + 1);
+> +		ASSERT_EQ(memblock.memory.total_size, (i + 1) * MEM_SIZE);
+> +	}
+> +}
+> +
+> +void dummy_physical_memory_many_cleanup(void *base[], int cnt)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < cnt; i++) {
+> +		memory_block.base = base[i];
+> +		dummy_physical_memory_cleanup();
+> +	}
+> +}
+> +
+>  static void usage(const char *prog)
+>  {
+>  	BUILD_BUG_ON(ARRAY_SIZE(help_opts) != ARRAY_SIZE(long_opts) - 1);
+> diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+> index 3e7f23d341d7..848900aa8db6 100644
+> --- a/tools/testing/memblock/tests/common.h
+> +++ b/tools/testing/memblock/tests/common.h
+> @@ -11,6 +11,8 @@
+>  #include <../selftests/kselftest.h>
+>  
+>  #define MEM_SIZE SZ_16K
+> +#define INIT_MEMBLOCK_REGIONS			128
+> +#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  
+>  /**
+>   * ASSERT_EQ():
+> @@ -68,8 +70,12 @@ struct region {
+>  void reset_memblock_regions(void);
+>  void reset_memblock_attributes(void);
+>  void setup_memblock(void);
+> +void append_memblock(void);
+> +void *get_memory_block_base(void);
+>  void dummy_physical_memory_init(void);
+>  void dummy_physical_memory_cleanup(void);
+> +void dummy_physical_memory_many_init(void *base[], int cnt);
+> +void dummy_physical_memory_many_cleanup(void *base[], int cnt);
+>  void parse_args(int argc, char **argv);
+>  
+>  void test_fail(void);
+> -- 
+> 2.30.2
+> 
+> 
 
 -- 
-With best wishes
-Dmitry
+Sincerely yours,
+Mike.

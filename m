@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FC25880FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7640C588103
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiHBR1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S234569AbiHBR2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiHBR1k (ORCPT
+        with ESMTP id S232427AbiHBR2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:27:40 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB63E2C663;
-        Tue,  2 Aug 2022 10:27:37 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso9046241pjq.0;
-        Tue, 02 Aug 2022 10:27:37 -0700 (PDT)
+        Tue, 2 Aug 2022 13:28:44 -0400
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B532D48E96;
+        Tue,  2 Aug 2022 10:28:43 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso9049205pjq.0;
+        Tue, 02 Aug 2022 10:28:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UD93ulFy/PKutUGbZePPGVNtMYIWBzezAUK0opMtBAw=;
-        b=QiUCagWtS+9yqh3/BOzkkI+NOueNq1AqmpiCzRh8ovLUOX8FKRTYohlUNAm/zebf1T
-         NCXX3MX7EDY2286Mk0anhHfkiMbrB0CPJiK1LQckVTsOdRaZZlBI0/3TjOTvfnLtlQzz
-         sKmgYhzmvZYopBLcoqldpFVZbLy8CMz/tB3zQCxem9M/aL3kfraI4RIpWW5JHbzej/iG
-         SlLr0ACrzCFEVMpjjpq842aV0dm+ZCYEcfE2Y7Qc38Xmgd39jPJNfzr7r2ebpree/M2e
-         m1Te+Yptwq/LxkWniCJnTehTmn3OkmNdzp3OjrOe+pjeiamQxBXyPqKA7Hx2NmfuwDe1
-         shoQ==
-X-Gm-Message-State: ACgBeo0pBPddVdGEC3vFN6CGbE7tr3rWDetTG2K8VzLQIZDcdpbh0/+t
-        WDYBfWTi9ShhJQ0oGU2Yt5gx+jdLPiivYg==
-X-Google-Smtp-Source: AA6agR6FulQkk45kUs0adyteNnHJ2CERqOK9fzfK4RHzEggnvI96bc1MIKTegPOVM9h9Uj/4x5hi2g==
-X-Received: by 2002:a17:903:18a:b0:16f:e43:efdf with SMTP id z10-20020a170903018a00b0016f0e43efdfmr1611125plg.157.1659461257160;
-        Tue, 02 Aug 2022 10:27:37 -0700 (PDT)
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com. [209.85.215.177])
-        by smtp.gmail.com with ESMTPSA id x190-20020a6263c7000000b0052ac99c2c1csm11075105pfb.83.2022.08.02.10.27.36
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=6d45g8YxgzfmSxBicyPqIYIzq8Y324sqlVxs4AZJWpM=;
+        b=nVxICO8o7OcEA6lr4emu8o6UrNiKnc9WKbmtMGDGdm39sT4Ah4sMKpzrV4jw2oxI7p
+         RcygyWNoOfW0bxpT3bo+iOivv+MD/v+vr8Q4SKxsKkXfdPkT49WuGphhBT1/lsFbQdWs
+         zPxLST+WopU0gmkzFL5ToiT9S8D9VGpM5rSRnklqA+Rftt7ZCGIv4iTQs/UDwblBwp1D
+         WEGRmHGeqdGkbDphWhqMTnmOfhaFGESwfXz3iMjBCz3+ft34ed+J8v1Ui5I15t6czaOR
+         NSKkm/JkdH/+rVC1a8h6JfVpw1a4Z02OFzPEhYdglIYfMx6ggebmOI7MYLepzXVc8pVn
+         jcOw==
+X-Gm-Message-State: ACgBeo1Qph/8Nv/ldCCvAtcPwjzfdaLtVByEhf6i68C2DgP1bemCDMM7
+        vtnqAGDVEolr0r1ncfqocEE=
+X-Google-Smtp-Source: AA6agR5VxGYxDPxcI0XQsfdV7DY3CJ0qhe24Z6iA6SHSZy7JoQsYLBH6a5omlRLfW+04ztL79Aadiw==
+X-Received: by 2002:a17:902:edc4:b0:16c:d2ef:7fd2 with SMTP id q4-20020a170902edc400b0016cd2ef7fd2mr22023804plk.160.1659461322908;
+        Tue, 02 Aug 2022 10:28:42 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5297:9162:3271:e5df? ([2620:15c:211:201:5297:9162:3271:e5df])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170903110800b0016bdeb58611sm12398511plh.112.2022.08.02.10.28.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 10:27:36 -0700 (PDT)
-Received: by mail-pg1-f177.google.com with SMTP id bh13so12914340pgb.4;
-        Tue, 02 Aug 2022 10:27:36 -0700 (PDT)
-X-Received: by 2002:a62:7bd6:0:b0:52d:4773:a3de with SMTP id
- w205-20020a627bd6000000b0052d4773a3demr12785774pfc.70.1659461251723; Tue, 02
- Aug 2022 10:27:31 -0700 (PDT)
+        Tue, 02 Aug 2022 10:28:42 -0700 (PDT)
+Message-ID: <c4153499-fc79-15a2-57e7-b82dc6c5ea5a@acm.org>
+Date:   Tue, 2 Aug 2022 10:28:40 -0700
 MIME-Version: 1.0
-References: <165911277121.3745403.18238096564862303683.stgit@warthog.procyon.org.uk>
- <165911278430.3745403.16526310736054780645.stgit@warthog.procyon.org.uk>
- <CAB9dFdsSHwVo6j=+z=4yiTRSJiOeKpFB4QHf6fqrLRuuAa3+JQ@mail.gmail.com> <3733972.1659460456@warthog.procyon.org.uk>
-In-Reply-To: <3733972.1659460456@warthog.procyon.org.uk>
-From:   Marc Dionne <marc.dionne@auristor.com>
-Date:   Tue, 2 Aug 2022 14:27:20 -0300
-X-Gmail-Original-Message-ID: <CAB9dFdu2WpTf47V1HvvcU7Yhtfy4+-niQrEx1GQ2ptD5T+dmWg@mail.gmail.com>
-Message-ID: <CAB9dFdu2WpTf47V1HvvcU7Yhtfy4+-niQrEx1GQ2ptD5T+dmWg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] afs: Fix access after dec in put functions
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] RDMA/ib_srpt: unify checking rdma_cm_id condition in
+ srpt_cm_req_recv()
+Content-Language: en-US
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
+ <bb20de72-fc15-feb1-541a-91454593e043@acm.org>
+ <c37397fc-f406-db4a-64db-294457384c40@fujitsu.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <c37397fc-f406-db4a-64db-294457384c40@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 2:15 PM David Howells <dhowells@redhat.com> wrote:
->
-> Marc Dionne <marc.dionne@auristor.com> wrote:
->
-> > > -       trace_afs_server(server, r - 1, atomic_read(&server->active), reason);
-> > > +       trace_afs_server(server->debug_id, r - 1, a, reason);
-> >
-> > Don't you also want to copy server->debug_id into a local variable here?
->
-> Okay, how about the attached change?
->
-> David
-> ---
-> diff --git a/fs/afs/server.c b/fs/afs/server.c
-> index bca4b4c55c14..4981baf97835 100644
-> --- a/fs/afs/server.c
-> +++ b/fs/afs/server.c
-> @@ -399,7 +399,7 @@ struct afs_server *afs_use_server(struct afs_server *server, enum afs_server_tra
->  void afs_put_server(struct afs_net *net, struct afs_server *server,
->                     enum afs_server_trace reason)
->  {
-> -       unsigned int a;
-> +       unsigned int a, debug_id = server->debug_id;
->         bool zero;
->         int r;
->
-> @@ -408,7 +408,7 @@ void afs_put_server(struct afs_net *net, struct afs_server *server,
->
->         a = atomic_inc_return(&server->active);
->         zero = __refcount_dec_and_test(&server->ref, &r);
-> -       trace_afs_server(server->debug_id, r - 1, a, reason);
-> +       trace_afs_server(debug_id, r - 1, a, reason);
->         if (unlikely(zero))
->                 __afs_put_server(net, server);
->  }
+On 8/1/22 20:35, lizhijian@fujitsu.com wrote:
+> On 02/08/2022 00:46, Bart Van Assche wrote:
+>> Although the above patch looks fine to me, I'm not sure this kind
+>> of changes should be considered as useful or as churn?
+> 
+> Just want to make it more clear :). you can see below cleanup path,
+> it's checking rdma_cm_id instead. When i first saw these conditions,
+> i was confused until i realized rdma_cm_id and ib_cm_id are always
+> exclusive currently after looking into its callers
 
-Looks fine with that change.
+Ah, that's right. Thanks for the clarification.
 
-Marc
+Bart.

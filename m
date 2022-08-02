@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B041588363
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B9F58836B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiHBVWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S229854AbiHBVZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiHBVWD (ORCPT
+        with ESMTP id S232311AbiHBVZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:22:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F06251408
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659475320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQhPEwH3goRpU8FRyBDXxZC2WkI1FDwYRPXft+9J3uE=;
-        b=ZTG1Sx+FvItbv8eyevjwp5VAd6fSkvewaLSLH0lpfj6mogUb4yqJyqYlm7r4G/z24zpHB3
-        bfb17PCZJCWIqsgSvWeFROW8+DxY+y7c6pkXemyJvsGoxGcHMt3XgTNuR9ZnH0QxWsWaT6
-        8LdkFgG78E3qQxMV9xqIsM+6xPSgYK4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-iMVDjm1oPWSNE6qZ8Sih2A-1; Tue, 02 Aug 2022 17:21:59 -0400
-X-MC-Unique: iMVDjm1oPWSNE6qZ8Sih2A-1
-Received: by mail-qv1-f72.google.com with SMTP id er2-20020a056214190200b00474479acbcfso9050432qvb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:21:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jQhPEwH3goRpU8FRyBDXxZC2WkI1FDwYRPXft+9J3uE=;
-        b=qk0woRzxSABmNptUiIRkRtX2w8EwYbdROY2aw+o0R/ngG0FE0PwDwHQYhl8IHJNpnT
-         ZFzFkma8jIUUNzXiashCCx0KAFsiDPu05Gw62MMMoo/jtDm137ZTYIPwlgq5TcaSojfm
-         Kd0kzMvXw5CrLy9HmpJUovEoN5gbQcYhgkQXY3Xhg2Fw75tP93DzMTAhsTiGjBptzNka
-         ueZD4vM/NiYXQlmWpm7uh+8vww0nw+1anY81uIx1TD9U/FmaJkjr1LhO+J1rcF9uEbRZ
-         feGkTun4tQl+H/dkcL1O7A40gAGTEYqAUlEBWB1gSrHhtiOeb97hTiNX+oa+BRjMeXcQ
-         MtRQ==
-X-Gm-Message-State: AJIora+0v9Ac/m9LL3QhOgwOQmbR9XHlKGP/P0eIb2JJNMCWxiCMUEiP
-        oDDEsB0mhLq71CInt2mseakSJWhFR5hM6GJw8lDcvl14RbBo7JPQFBPZVfL0as/8bdEPstzk8L/
-        7JwF8nxHvrOx47tOCAfRbblwW
-X-Received: by 2002:ac8:7c4e:0:b0:31f:36ad:e809 with SMTP id o14-20020ac87c4e000000b0031f36ade809mr19580847qtv.441.1659475318577;
-        Tue, 02 Aug 2022 14:21:58 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1up+f0v7Bn9Uarm0rhHT+yPJxwAn6o3wRiFDpB+iSM6ATGR0cOoe0i5MAVMSQg4awnLzQAyQg==
-X-Received: by 2002:ac8:7c4e:0:b0:31f:36ad:e809 with SMTP id o14-20020ac87c4e000000b0031f36ade809mr19580823qtv.441.1659475318372;
-        Tue, 02 Aug 2022 14:21:58 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
-        by smtp.gmail.com with ESMTPSA id m26-20020ac866da000000b00339163a06fcsm2047794qtp.6.2022.08.02.14.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 14:21:57 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 16:21:54 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/8] usb: dwc3: fix PHY disable sequence
-Message-ID: <20220802212154.jh65gds4jpzbvqn6@halaneylaptop>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-2-johan+linaro@kernel.org>
+        Tue, 2 Aug 2022 17:25:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FB11143
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:25:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2610260C09
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5BEC433D7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659475511;
+        bh=DRcXHF+hL2akkSQuSU/bab25l1HxDgWat6fbp5QgZhU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bR/qioeYhsfMIBAQnO7sev2rDjT1MncB540KMDTiwIY8EWui0lhJiryo3qvJymfVQ
+         QPi87451GYeehG76IdrqbkcLNmwZncDuTuUEzX2yHOeT8Bf0APt53GFq9fnJMlbqbZ
+         idTn74DAL5U7R+Dm/LdrqhpTu9YHw2IpjWpIuDAm0iYmH5e5pwxUJz5aLjr97VjdaG
+         cLQYFNVR7DKcZ4yQ0kPm+0XGu5k+IO2fJf/fIPT2iVWV+MlKAa6OJC/Ryx3M0tjjA3
+         p4Du0uWZFljxAtPqvm1kNW9JmNDR02g06XLzR4RshU7hWKqZNyQstkWqCN0Lmrvzqb
+         MjlO36f9s1E+A==
+Received: by mail-ua1-f45.google.com with SMTP id z14so6279266uaq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:25:11 -0700 (PDT)
+X-Gm-Message-State: ACgBeo21ao9kVW0dW2IPmpSTSq80dn4Q+FX53L1u3xRjwX6a74oHP1Fr
+        M10UiTFYu2WiAPIQyyg+bAoswxj2CVa0nTgFjuHr/A==
+X-Google-Smtp-Source: AA6agR76IZreUuGci5NqrZubzetTIA/QdScJIvyrhjNqtyLp6A9JrFMy5bTInLzADq8lje7PLu8L4AMmL5D5TBPUlpI=
+X-Received: by 2002:a0d:f0c7:0:b0:31e:e814:e7d6 with SMTP id
+ z190-20020a0df0c7000000b0031ee814e7d6mr20401368ywe.340.1659475500117; Tue, 02
+ Aug 2022 14:25:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802151404.1797-2-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
+In-Reply-To: <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 2 Aug 2022 23:24:49 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
+Message-ID: <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
+        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,77 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:13:57PM +0200, Johan Hovold wrote:
-> Generic PHYs must be powered-off before they can be tore down.
-> 
-> Similarly, suspending legacy PHYs after having powered them off makes no
-> sense.
-> 
-> Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-> dwc3_probe() error-path sequences that got this wrong.
-> 
-> Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-> path with respect to powering off the PHYs.
-> 
-> Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-> Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-> Cc: stable@vger.kernel.org      # 4.8
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
+On Mon, Aug 1, 2022 at 5:19 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Mon, Aug 1, 2022 at 9:13 AM Frederick Lawler <fred@cloudflare.com> wrote:
+> > On 7/22/22 7:20 AM, Paul Moore wrote:
+> > > On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> > >
+> > >> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+> > >>> While creating a LSM BPF MAC policy to block user namespace creation, we
+> > >>> used the LSM cred_prepare hook because that is the closest hook to prevent
+> > >>> a call to create_user_ns().
+> > >>>
+> > >>> The calls look something like this:
+> > >>>
+> > >>> cred = prepare_creds()
+> > >>> security_prepare_creds()
+> > >>> call_int_hook(cred_prepare, ...
+> > >>> if (cred)
+> > >>> create_user_ns(cred)
+> > >>>
+> > >>> We noticed that error codes were not propagated from this hook and
+> > >>> introduced a patch [1] to propagate those errors.
+> > >>>
+> > >>> The discussion notes that security_prepare_creds()
+> > >>> is not appropriate for MAC policies, and instead the hook is
+> > >>> meant for LSM authors to prepare credentials for mutation. [2]
+> > >>>
+> > >>> Ultimately, we concluded that a better course of action is to introduce
+> > >>> a new security hook for LSM authors. [3]
+> > >>>
+> > >>> This patch set first introduces a new security_create_user_ns() function
+> > >>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> > >> Patch 1 and 4 still need review from the lsm/security side.
+> > >
+> > > This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
+> > >
+> > > I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
+> >
+> > Based on last weeks comments, should I go ahead and put up v4 for
+> > 5.20-rc1 when that drops, or do I need to wait for more feedback?
+>
+> In general it rarely hurts to make another revision, and I think
+> you've gotten some decent feedback on this draft, especially around
+> the BPF LSM tests; I think rebasing on Linus tree after the upcoming
+> io_uring changes are merged would be a good idea.  Although as a
+> reminder to the BPF LSM folks - I'm looking at you KP Singh :) - I
+> need an ACK from you guys before I merge the BPF related patches
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Apologies, I was on vacation. I am looking at the patches now.
+Reviews and acks coming soon :)
 
->  drivers/usb/dwc3/core.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index c5c238ab3083..16d1f328775f 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -833,15 +833,16 @@ static void dwc3_core_exit(struct dwc3 *dwc)
->  {
->  	dwc3_event_buffers_cleanup(dwc);
->  
-> +	usb_phy_set_suspend(dwc->usb2_phy, 1);
-> +	usb_phy_set_suspend(dwc->usb3_phy, 1);
-> +	phy_power_off(dwc->usb2_generic_phy);
-> +	phy_power_off(dwc->usb3_generic_phy);
-> +
->  	usb_phy_shutdown(dwc->usb2_phy);
->  	usb_phy_shutdown(dwc->usb3_phy);
->  	phy_exit(dwc->usb2_generic_phy);
->  	phy_exit(dwc->usb3_generic_phy);
->  
-> -	usb_phy_set_suspend(dwc->usb2_phy, 1);
-> -	usb_phy_set_suspend(dwc->usb3_phy, 1);
-> -	phy_power_off(dwc->usb2_generic_phy);
-> -	phy_power_off(dwc->usb3_generic_phy);
->  	dwc3_clk_disable(dwc);
->  	reset_control_assert(dwc->reset);
->  }
-> @@ -1879,16 +1880,16 @@ static int dwc3_probe(struct platform_device *pdev)
->  	dwc3_debugfs_exit(dwc);
->  	dwc3_event_buffers_cleanup(dwc);
->  
-> -	usb_phy_shutdown(dwc->usb2_phy);
-> -	usb_phy_shutdown(dwc->usb3_phy);
-> -	phy_exit(dwc->usb2_generic_phy);
-> -	phy_exit(dwc->usb3_generic_phy);
-> -
->  	usb_phy_set_suspend(dwc->usb2_phy, 1);
->  	usb_phy_set_suspend(dwc->usb3_phy, 1);
->  	phy_power_off(dwc->usb2_generic_phy);
->  	phy_power_off(dwc->usb3_generic_phy);
->  
-> +	usb_phy_shutdown(dwc->usb2_phy);
-> +	usb_phy_shutdown(dwc->usb3_phy);
-> +	phy_exit(dwc->usb2_generic_phy);
-> +	phy_exit(dwc->usb3_generic_phy);
-> +
->  	dwc3_ulpi_exit(dwc);
->  
->  err4:
-> -- 
-> 2.35.1
-> 
+- KP
 
+> (patches {2,3}/4).  For the record, I think the SELinux portion of
+> this patchset (path 4/4) is fine.
+>
+
+[...]
+
+>
+> --
+> paul-moore.com

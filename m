@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451CC58830E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95079588319
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiHBUQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S234720AbiHBU0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234530AbiHBUQS (ORCPT
+        with ESMTP id S234672AbiHBU0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:16:18 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0759D54653
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:16:16 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id w14so1404549plp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:16:16 -0700 (PDT)
+        Tue, 2 Aug 2022 16:26:00 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0EB1B7BF
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:25:58 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso16720507pjq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=/MAG9t6WYn5YwOOz8KJK3JJWRPzE1bp64265jp1tLTQ=;
-        b=eq1yzcWro6QZgfUShmNXxn/PjqlKKO62h83y8DGSuByLxH/elZngN0EtT4odDbzddm
-         7aXtmn/4R4ypBmy7rbLF8lug41WPx4sSk1VDZF1c2Y+EWsvE43+h7Xlwgss8K5fPe/Ye
-         9gOeubsxx2mvZgehgHed+EeqOUvbdeg0mzouo=
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=CoI+b4eQNFsd6VQQuo13RXDecKo8nUBlpQJijANZQ6s=;
+        b=Y+RkZo92dY20DXfviJHzTDwAdke5hi5C44z6J+p3LKVXAJ6vrpPqaZ9G6Q+uY/D4lC
+         eL91bYO3yjzEE3lsZOD+4sMK3fQjxPI58Z91YQ3pnJLpji1GeGFxO2LraWCphbXH01aq
+         1rEjFHxwXQtpjvAfEMiD7dBlfMFGCCrP26Z9c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=/MAG9t6WYn5YwOOz8KJK3JJWRPzE1bp64265jp1tLTQ=;
-        b=VEtIyVa3MLOldn9fobJTNHdOD86Fs6C6FrTWcMSJoAyCF5VXAxIqbc5fph7WfDsCy4
-         X07NSFlBEroy98YgG2b2knECF/2axl3fHL6Nwsdxr2R2HFphimAoFuyaVvljoXeN2cwu
-         5hOHauzTkEEjZoftcJ6KZY55aoYyt35TWI5MiVOsDEKXKFcQXk4a8iCbYuvtpuccUePa
-         T0oLPAUuDpVSyJ0Vi8Lep7jJ3/aGoPWy9baBYJ1S7SP0cu1XTC9tcj1DeyCkEZK70M0c
-         /vhUfdE/wIKOQAYZtmVkmZ82kh3xBVqkDg1FfPivq5YHnOhUAeB+vGCk3QZPAV1ST1Ju
-         W+/A==
-X-Gm-Message-State: ACgBeo2SqqP7PD+PAeWZawihOERp80LCgY4DNlTTC+w/m5Kwn+x5rp/R
-        BGZLPkFK0O/jfITXTxG3uuFz+w==
-X-Google-Smtp-Source: AA6agR49p4VyEMHRKiOKE5JpDnlS7wZ/jQa/eeH2eoeBKCCwhQTPuHnx+QYK8ChtXuRJqeYK63318A==
-X-Received: by 2002:a17:902:ce0a:b0:16d:737b:feed with SMTP id k10-20020a170902ce0a00b0016d737bfeedmr22772225plg.152.1659471375383;
-        Tue, 02 Aug 2022 13:16:15 -0700 (PDT)
-Received: from localhost.localdomain ([183.83.136.224])
-        by smtp.gmail.com with ESMTPSA id w18-20020a170902a71200b0016ee26224a4sm80863plq.305.2022.08.02.13.16.11
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=CoI+b4eQNFsd6VQQuo13RXDecKo8nUBlpQJijANZQ6s=;
+        b=YHmqi5VrXzkWlgeHKuYsyzkkwh5yUotJYX15Rwz1pH9Eu/wMWiuTdGb/+q0i9oib7C
+         13KXE1fyhZKFu71jNLn+VtJtw66Wf/uMfMQBxa6InwHYxzyWk3FXcKJq8wExuM/Twaly
+         G0HxUA1gjmdzIuix92y3Jk+GB53dmmJ9DIp383xqW06XNddE+n1xrty093JETKjn/B9R
+         eyDuz7nNCqbgSmLsWTr8Qbo9G7/rsRSj+YjQXGKGGbjgPTHYAeJ+BNkeNU/TOLuxHuvJ
+         THm/wVnZcg47Al3eBlJiu6sgnrTcIt00u/NoydytD6nq5xXFiAoMidh1b73a0+XKBsmV
+         KuFQ==
+X-Gm-Message-State: ACgBeo0l5Gwh1ePjJT4nE4d9W8vT7Kpc1a1aY+B8jDjpfTt6NVMuaQ/k
+        d+u0+RDvmpoBK91CoSbqTTl1iA==
+X-Google-Smtp-Source: AA6agR7yo2KwaNw92YLINt7gWmsCTI+mo2MZ2MCjpy8dYhL8FxAdIHrB/P6FFqBUXj26A0eGAdRGIg==
+X-Received: by 2002:a17:90b:4b0a:b0:1f2:a904:8af7 with SMTP id lx10-20020a17090b4b0a00b001f2a9048af7mr1288188pjb.76.1659471958100;
+        Tue, 02 Aug 2022 13:25:58 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:31c9:9937:c6bb:62f5])
+        by smtp.gmail.com with ESMTPSA id b66-20020a621b45000000b0052d50e14f1dsm5794435pfb.78.2022.08.02.13.25.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 13:16:15 -0700 (PDT)
-From:   Suniel Mahesh <sunil@amarulasolutions.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Zachary Holland <Zachary.Holland@biamp.com>,
-        Daniel McLean <Daniel.McLean@biamp.com>,
-        Rene Samson Ambrose <renesamson.ambrose@biamp.com>,
-        David Sands <David.Sands@biamp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com,
-        USB list <linux-usb@vger.kernel.org>
-Subject: [RFC v2 2/2] HID: ghid: add example program for GET_REPORT
-Date:   Wed,  3 Aug 2022 01:45:56 +0530
-Message-Id: <20220802201556.1510069-3-sunil@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220802201556.1510069-1-sunil@amarulasolutions.com>
-References: <20220802201556.1510069-1-sunil@amarulasolutions.com>
+        Tue, 02 Aug 2022 13:25:57 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH] tty: serial: qcom-geni-serial: Fix %lu -> %u in print statements
+Date:   Tue,  2 Aug 2022 13:23:09 -0700
+Message-Id: <20220802132250.1.Iea061e14157a17e114dbe2eca764568a02d6b889@changeid>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,212 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a user-space ghid sample get report program at
-gadget side. This program sends reports from userspace(gadget side)
-which are saved in the kernel in a list.
+When we multiply an unsigned int by a u32 we still end up with an
+unsigned int. That means we should specify "%u" not "%lu" in the
+format code.
 
-When a host requests a particular report based on report number
-and type, corresponding report can be send to host, instead of a
-zero filled in report.
+NOTE: this fix was chosen instead of somehow promoting the value to
+"unsigned long" since the max baud rate from the earlier call to
+uart_get_baud_rate() is 4000000 and the max sampling rate is 32.
+4000000 * 32 = 0x07a12000, not even close to overflowing 32-bits.
 
-This program can add, delete reports and modify an existing report.
-
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+Fixes: c474c775716e ("tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.")
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-Changes for v2:
-- no changes
----
- samples/Kconfig         |  10 +++
- samples/Makefile        |   1 +
- samples/ghid/Makefile   |   4 ++
- samples/ghid/test-hid.c | 134 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 149 insertions(+)
- create mode 100644 samples/ghid/Makefile
- create mode 100644 samples/ghid/test-hid.c
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 470ee3baf2e1..f3d7873bb966 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -86,6 +86,16 @@ config SAMPLE_FPROBE
- 	  This builds a fprobe example module. This module has an option 'symbol'.
- 	  You can specify a probed symbol or symbols separated with ','.
+ drivers/tty/serial/qcom_geni_serial.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index f754619451dc..f7c1f1807040 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1033,12 +1033,12 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+ 		sampling_rate, &clk_div);
+ 	if (!clk_rate) {
+ 		dev_err(port->se.dev,
+-			"Couldn't find suitable clock rate for %lu\n",
++			"Couldn't find suitable clock rate for %u\n",
+ 			baud * sampling_rate);
+ 		goto out_restart_rx;
+ 	}
  
-+config SAMPLE_GHID_GET_REPORT
-+        bool "GHID sample get report"
-+        depends on CC_CAN_LINK && HEADERS_INSTALL
-+        help
-+          Build GHID sample get report program. This program can send reports from
-+	  userspace(gadget side) which are saved in the kernel in a linked list.
-+	  When a host requests a particular report based on report number and type,
-+	  corresponding report can be send to host, instead of a zero filled in report.
-+	  This program can add, delete reports and modify an existing report.
-+
- config SAMPLE_KFIFO
- 	tristate "Build kfifo examples -- loadable modules only"
- 	depends on m
-diff --git a/samples/Makefile b/samples/Makefile
-index 701e912ab5af..1d58f7a0381e 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -6,6 +6,7 @@ subdir-$(CONFIG_SAMPLE_ANDROID_BINDERFS) += binderfs
- obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
- obj-$(CONFIG_SAMPLE_CONNECTOR)		+= connector/
- obj-$(CONFIG_SAMPLE_FANOTIFY_ERROR)	+= fanotify/
-+subdir-$(SAMPLE_GHID_GET_REPORT)	+= ghid
- subdir-$(CONFIG_SAMPLE_HIDRAW)		+= hidraw
- obj-$(CONFIG_SAMPLE_HW_BREAKPOINT)	+= hw_breakpoint/
- obj-$(CONFIG_SAMPLE_KDB)		+= kdb/
-diff --git a/samples/ghid/Makefile b/samples/ghid/Makefile
-new file mode 100644
-index 000000000000..8c93ded625c1
---- /dev/null
-+++ b/samples/ghid/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+userprogs-always-y += test-hid
-+
-+userccflags += -I usr/include
-diff --git a/samples/ghid/test-hid.c b/samples/ghid/test-hid.c
-new file mode 100644
-index 000000000000..f76786509047
---- /dev/null
-+++ b/samples/ghid/test-hid.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * usb hidg GET_REPORT example, device/gadget side
-+ * This program tests the newly implemented GET_REPORT feature
-+ *
-+ * Copyright (c) 2022 Amarula Solutions India PVT LTD
-+ *
-+ * Authors:
-+ * Copyright (c) 2022 Suniel Mahesh <sunil@amarulasolutions.com>
-+ *
-+ */
-+
-+#include <pthread.h>
-+/* Linux */
-+#include <linux/types.h>
-+#include <linux/input.h>
-+#include <linux/hidraw.h>
-+#include <linux/uhid.h>
-+#include <uapi/linux/usb/g_hid.h>
-+
-+/* Unix */
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+
-+/* C */
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <errno.h>
-+
-+/*
-+ * fix for failing compilation on systems that don't
-+ * yet populate new version of uapi/linux/usb/g_hid.h
-+ * to userspace.
-+ */
-+#define GADGET_ADD_REPORT_STATUS	_IOWR('g', 0x41, struct uhid_set_report_req)
-+#define GADGET_REMOVE_REPORT_STATUS	_IOWR('g', 0x42, struct uhid_get_report_req)
-+#define GADGET_UPDATE_REPORT_STATUS	_IOWR('g', 0x43, struct uhid_set_report_req)
-+
-+struct uhid_set_report_req *create_report(void)
-+{
-+	struct uhid_set_report_req *rep;
-+	int i;
-+
-+	rep = (struct uhid_set_report_req *)calloc(1, sizeof(struct uhid_set_report_req));
-+	if (rep == NULL) {
-+		perror("calloc() failed");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("enter report id:\n");
-+	scanf("%u", &rep->id);
-+	printf("enter report number:\n");
-+	scanf("%hhu", &rep->rnum);
-+	printf("enter report type:\n");
-+	scanf("%hhu", &rep->rtype);
-+	printf("enter report size:\n");
-+	scanf("%hu", &rep->size);
-+	printf("enter report data:\n");
-+
-+	for (i = 0; i < rep->size; i++)
-+		scanf("%hhu", &rep->data[i]);
-+
-+	return rep;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	const char *filename = NULL;
-+	struct uhid_set_report_req *report;
-+	int fd = 0, res = 0, i, reports;
-+
-+	if (argc < 1) {
-+		fprintf(stderr, "Usage: %s /dev/hidg0\n", argv[0]);
-+		return -1;
-+	}
-+
-+	filename = argv[1];
-+	fd = open(filename, O_RDWR, 0666);
-+
-+	if (fd == -1) {
-+		perror(filename);
-+		return -2;
-+	}
-+
-+	printf("enter no of reports to send from userspace:\n");
-+	scanf("%d", &reports);
-+
-+	if (reports == 0)
-+		goto out;
-+
-+	for (i = 0; i < reports; i++) {
-+		report = create_report();
-+/* send reports to device */
-+		res = ioctl(fd, GADGET_ADD_REPORT_STATUS, report);
-+		if (res < 0) {
-+			perror("GADGET_ADD_REPORT_STATUS");
-+			res = -3;
-+			goto test_end;
-+		}
-+		free(report);
-+	}
-+
-+/* delete report with report number specified */
-+	printf("deleting report w.r.t rtype and rnum:\n");
-+	report = create_report();
-+	res = ioctl(fd, GADGET_REMOVE_REPORT_STATUS, report);
-+	if (res < 0) {
-+		perror("GADGET_REMOVE_REPORT_STATUS");
-+		res = -4;
-+		goto test_end;
-+	}
-+	free(report);
-+
-+/* modify an existing report identified by report number */
-+	printf("modify report w.r.t rtype and rnum:\n");
-+	report = create_report();
-+	res = ioctl(fd, GADGET_UPDATE_REPORT_STATUS, report);
-+	if (res < 0) {
-+		perror("GADGET_UPDATE_REPORT_STATUS");
-+		res = -5;
-+	}
-+
-+test_end:
-+	free(report);
-+	report = NULL;
-+out:
-+	close(fd);
-+	return res;
-+}
+-	dev_dbg(port->se.dev, "desired_rate-%lu, clk_rate-%lu, clk_div-%u\n",
++	dev_dbg(port->se.dev, "desired_rate-%u, clk_rate-%lu, clk_div-%u\n",
+ 			baud * sampling_rate, clk_rate, clk_div);
+ 
+ 	uport->uartclk = clk_rate;
 -- 
-2.25.1
+2.37.1.455.g008518b4e5-goog
 

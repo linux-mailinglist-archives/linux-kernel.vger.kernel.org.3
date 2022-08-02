@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7E2587B9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8A4587B9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbiHBL3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S236438AbiHBL3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbiHBL3L (ORCPT
+        with ESMTP id S236278AbiHBL3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:29:11 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33648313AD;
-        Tue,  2 Aug 2022 04:29:11 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i14so6648487ejg.6;
-        Tue, 02 Aug 2022 04:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P+fnogDd7o4OY7BAR4CYY7dnrQWbdlhGqxBKs5TNoyM=;
-        b=p1ONeknWmH33zcO71kmb9HqzoGkHWpDgEE8atOi7MdkP7ta85QD8a1BB7FsjU9tY7M
-         znSi989DBBdAxA7cAxJ+rUrJjaz91Facm53mzh3heHvBh6kfgdV5ROMfJnBJqJOS7PBj
-         Il4YgkKrl0dXfrPICezRm+x14Mr0BcQcXrcuDFkpignNqz6BwFCSSVPTAcCsqyrlmgK6
-         S1NUPF7YA2R9B2JeHQGwy1qkftWo040uCqIzGvAgtsnVdIsZ0HBfiC01QE2+ndxR/xsa
-         xnskZt9bQ/32Fz+V0twj0V9C4yrmoZ6V3S+QcVZI2BBUyJBu45L5Pi640AKM+JIX/qbN
-         jvag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P+fnogDd7o4OY7BAR4CYY7dnrQWbdlhGqxBKs5TNoyM=;
-        b=BQhfq6BhblC1r+U0xS+zDOL0DpRuOXrfU092dv3/rBhc9DIpnCp8186/mykU/Cvv11
-         aSAWswK4KjobDsFqcrTqG52zqOEYXldsCsU2FC+6iMRb+9RULThzxACHKIyi9/8GiA7o
-         U9Aql+Bs3hP8j7CU+0i3O0Z3oaOqUk9I/+zvpHUS3NxkGX0GTdmmBQ4cD8cRViLg3R1F
-         WNVppS8eM9D5XRE2xjQcH9kqfuJ3VVvH5d9RoFdXZNZx6RYoa6Ju0Sk18LHV0XVv8wtI
-         KUHUfpR6Fd8yiZKmSHwWps2t70LTNRNlmmLnNLZSSrPku+/XItATFHhu9tVVVImoG++b
-         +65w==
-X-Gm-Message-State: AJIora+amyrZ3frTvuhPkbNXJzRjTCgzj7qujY5vzvAC1L3XYDs5Gl2x
-        Qfon406OyeKEOESlSXiSJYs=
-X-Google-Smtp-Source: AGRyM1sdiaGLJPythTDLa/EJL1jnyVY4BuMWtsDpcOqMpoYTh0p4hnVKlYviDnr3SABe/PzHYyLSZg==
-X-Received: by 2002:a17:906:8cb0:b0:72f:367e:9986 with SMTP id qr48-20020a1709068cb000b0072f367e9986mr15375087ejc.80.1659439749769;
-        Tue, 02 Aug 2022 04:29:09 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id s21-20020aa7cb15000000b0043cfda1368fsm7945225edt.82.2022.08.02.04.29.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 04:29:09 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 14:29:07 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 05/10] net: dsa: microchip: ksz8795: add
- error handling to ksz8_r/w_phy
-Message-ID: <20220802112907.ktcokf4giwgunekb@skbuf>
-References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
- <20220729130346.2961889-1-o.rempel@pengutronix.de>
- <20220729130346.2961889-6-o.rempel@pengutronix.de>
- <20220729130346.2961889-6-o.rempel@pengutronix.de>
+        Tue, 2 Aug 2022 07:29:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA445313AD
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 04:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659439774; x=1690975774;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2W0p4AOerrYk2hF7PCF4DyJlk0QZ7/ldfaGLcxCA7fM=;
+  b=cJpO2O0BBFs6JKzanEO+k1TaTH2EYIUinhe1dyLbTRhzQZwQu2tA27kX
+   j1A2h5ti+th1Xl6WkibbMzD7sgmPDgpVEHxSJqiPoh65vheP6obwCXPdH
+   YsN1DPQlFGiyzwFGb0GcEsB1rzFXiyF26b7v3vhI/9V/9EsSln+26walw
+   /bpRKlgqnC9IPWd7Po8JNvcV18E8X63NFXQ3h4foPVPSXo8x7zsZJQHCP
+   UuzCVV6x+nkcOOFcOq9HML+bi7JR12+Ar+DjvP56dbbtuopSbdTXz2qfb
+   ik9YQnwi+BJaR0rkb2zePWARtV1YAXRowGZ/DTHbE4PLYxunOYqClu0yP
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="315226398"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="315226398"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 04:29:34 -0700
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="661585782"
+Received: from cqiang-mobl.ccr.corp.intel.com (HELO [10.249.174.172]) ([10.249.174.172])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 04:29:32 -0700
+Message-ID: <897aa91c-9d45-e16a-9b09-849fab588cd7@intel.com>
+Date:   Tue, 2 Aug 2022 19:29:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220729130346.2961889-6-o.rempel@pengutronix.de>
- <20220729130346.2961889-6-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [RESEND] x86/bus_lock: Don't assume the init value of
+ DEBUGCTLMSR.BUS_LOCK_DETECT to be zero
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20220802033206.21333-1-chenyi.qiang@intel.com>
+ <YukBz6t1n3aMbznT@gmail.com>
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+In-Reply-To: <YukBz6t1n3aMbznT@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 03:03:41PM +0200, Oleksij Rempel wrote:
-> Now ksz_pread/ksz_pwrite can return error value. So, make use of it.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+
+On 8/2/2022 6:51 PM, Ingo Molnar wrote:
+> 
+> * Chenyi Qiang <chenyi.qiang@intel.com> wrote:
+> 
+>> It's possible that BIOS/firmware has set DEBUGCTLMSR_BUS_LOCK_DETECT, or
+>> this kernel has been kexec'd from a kernel that enabled bus lock
+>> detection.
+>>
+>> Disable bus lock detection explicitly if not wanted.
+> 
+> Makes sense.
+> 
+> Just curious: in what circumstances does the BIOS/firmware set
+> DEBUGCTLMSR_BUS_LOCK_DETECT? Does it use it, or does it enable it for some
+> spurious reason, without really using the feature? (Assuming you are aware
+> of instances where this happened - or was this simply a hypothetical?)
+
+Yes, It's just a hypothetical for BIOS/firmware. Kexec is the real case 
+I met with this problem.
+
+> 
+> Thanks,
+> 
+> 	Ingo

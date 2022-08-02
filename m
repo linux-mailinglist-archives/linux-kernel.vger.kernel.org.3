@@ -2,276 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7422587D6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03F0587D71
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236183AbiHBNt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S236277AbiHBNuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiHBNtZ (ORCPT
+        with ESMTP id S235977AbiHBNug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:49:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1A201AF;
-        Tue,  2 Aug 2022 06:49:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9D78B81F08;
-        Tue,  2 Aug 2022 13:49:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73025C433C1;
-        Tue,  2 Aug 2022 13:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659448161;
-        bh=zKsEQnkbeJlDAzFKonEQsrFp1x/ZO2YOyjiCSMfQkjo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ilaepzytmmWWLFKYUHbLUFUbNZuTbDWsu01I2uYKONRS7nTvYB0opjTHczNPDmyeH
-         9wAFYNPi2z8aDQ7mXXqbpvMoJEM5M7P1w4cQDTDRepgFtuXt8ZgiAxp7aw5Z4RWPrr
-         4f3+2TkZ0nmFJmO/l27VaivAlCWqNGUoUgHTqxUQ4DFtlcoVGeBHDfie9fmbCuF9MB
-         o+fWN0aih30CqpOGmiRvgT6LN5kBCxz1yUpgiiWE+D7iqVFEE8SWaKHZDq2gCL84Zt
-         GeChVLmAlQBZnugxIwXjqq6AWPeJvZt83EhLAyfGEK0A5DT9X4nmWwoFpkTBH0VXJk
-         tjcU9Zc1eAkVg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1060F5C02F9; Tue,  2 Aug 2022 06:49:21 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 06:49:21 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
-Message-ID: <20220802134921.GE2860372@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
- <20220801154108.GA26280@willie-the-truck>
- <20220801192035.GA2860372@paulmck-ThinkPad-P17-Gen-1>
- <20220802085455.GC26962@willie-the-truck>
+        Tue, 2 Aug 2022 09:50:36 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2063.outbound.protection.outlook.com [40.107.21.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2612250F;
+        Tue,  2 Aug 2022 06:50:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b/68eaU/GXboxtEoITwivodFAKWlcafB0n3nqgIBKn+em/wJ6lTYHoREQGasU25EH3a82P/SRz0DQsRy7MxsY4YQo0VDOKOAKVctrHSxatuXTXH4GPVcjoD2KKA28MjvKzXG4InAQNHYePNrZe06mo7L2wEYbV28ze/9UtnhmNzfXIAY8UGcfp+Z8AGhXkUyIruLPkqTfLGLSV9yxV7AEB+R21Z3TdFZyol68hSiQvqOVwe7s2xWinwuNr6jX0TP8qh5FUeQ6/qNFdPcd2iQ4U+sZYrgTn/KrwWcB++9ju1UMZqgBQuuDmjbvSb/L5K97GeNXgiNAewri1R8Vfg2vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SSXM4xD5r1LdQIQmg6JcnNAucqsplspvTsOeIB5A118=;
+ b=TOqUm6jkDBParX6BVcrIhTPSuIkpq4LNn3UlPu6Yc/U3tDseYTNa9BPqwyPTIk1q1rvAFvIjxavo5XmfpeEs6yVfL/Rvgyl2PZ2nT9m0zd7gd2OFRvEmUicF0ttKR/tO3ClsM5PKPfQOqbWiv4Oo8O/y+jKqPPrJJEhNgpzNjHLKRnv7HGR2StuZA48lXXegFHD/Gv5pHzdYZrbk0nuYmbaq8TIj7Exuwabh/LRMY/VWfSofqsCHKr6sKMwA27RvG2JrFPHOlZ7AAnXO0EXDzJpFX7wuUrhCzfVaRuxffqdEJHin57KwUl9yzV3AuhqUGl6ptw0rJ6EBdvmKXID41g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SSXM4xD5r1LdQIQmg6JcnNAucqsplspvTsOeIB5A118=;
+ b=J/s2N73dgzYkewW0QslBvCCepehXtADjUgFdyfggB6pWgkdWiGiKP1mIkEa0nFsVjVgNZrKjVmxPppFVrzGInr6gcfGqQ2DKSvNhZXuY8irZ2QOp9sXRp2p4AdigZXMxeuyzV02VXi6TfhylMnXGzRcF1fNtrbve/zv2ZOl3pa8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AS8PR04MB9126.eurprd04.prod.outlook.com (2603:10a6:20b:449::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
+ 2022 13:50:32 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 13:50:32 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     devicetree@vger.kernel.org
+Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] arm64: dts: ls1028a-qds-65bb: don't use in-band autoneg for 2500base-x
+Date:   Tue,  2 Aug 2022 16:50:06 +0300
+Message-Id: <20220802135006.4184820-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR05CA0093.eurprd05.prod.outlook.com
+ (2603:10a6:208:136::33) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802085455.GC26962@willie-the-truck>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9223d023-0af3-4256-9dc6-08da748df786
+X-MS-TrafficTypeDiagnostic: AS8PR04MB9126:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YrLkWHF06SEZkJM5sJhbSiit83j3hd0nTGP0t1r9NOWo/CzP6lserunolctWr4+icCI23gXoV60TC9nB8o39stXEpmPrabfX39UKk6cXPL8piSWu7CNkJvyr9JJOcYbMd82TCKABxS3U2zg9k+NDCKBidHUVIAQdPNg8kY8Kh6/kSTDVgBScgbtrBkKxPIcJcS/VTgi+rxoqttyt3JKrT/ii4iUIGTOTY/eFV0tF/7LIoxKvLPmcGN164EOypaUpKOgEX5SuyEp6+NoM1KEDezFPkNfeLaAI0vmW8EAntLDuJBimRGlANz1/3EdoQqLe76/WnMf+Q9HXfCkUrfcJadvm7Rt02J39RS2d1nz4xt+2VqEl9ihgFwg/xh1bu1joX1yZGPvZI8TfinQb7M/PGkD5fGPZ8ymgEDtoIupDVV4sW06dsSX1weC67r3quT0N3X91iG/e1rBGAesUnbWUXTIHPl9UE14UPP0HdzFVV+WEmmdHxBEp/hUzL0b28drQriGx2MX9sb0Qykpw+10juV3vFDW56/CMJ3BGh+3JvPw1lFy3ZgRHu1ap8V9hhbVLuv3ljUtVeNtCjGiYl7A7LbC0qR1jFdCsLFIFm8XtzTbdR/rRtDUVr+Cj9X3a5zXcj7gSpszJttwDG4hx7fMKxbThaDqezyYoI8P/1sW0zTywx9Hp2biVhqM6fa2mSYtxi0YIdQmVCElwtbj5aFnJFPEYqPXGJ5a3Y1s+ARa4pdl8Nrrd5CjCDKK0BgLUhuHzdA3FpM/qQhPuL8iItGA5I1FikGIbxYxjxCpObxc5bWE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(366004)(346002)(396003)(6666004)(316002)(83380400001)(2906002)(41300700001)(8936002)(86362001)(66556008)(66946007)(66476007)(478600001)(4326008)(8676002)(5660300002)(6486002)(38350700002)(44832011)(4744005)(6506007)(2616005)(1076003)(36756003)(186003)(26005)(6916009)(54906003)(6512007)(38100700002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RdHqeKKHeZdFfERp8H7JdkWsm+/9CfkU0JNGB9ks2DvIBxwquu5ykiAXjTgJ?=
+ =?us-ascii?Q?QAaBY0nMm+K77dkIYoPQFef0bwn1h+SMRmcJGriXjnpVTzKR1l0KQjFTHxRE?=
+ =?us-ascii?Q?Bo+avnw/yD7O67mCqam+gp8G5kj8kHm/nM63Tr1H4JhY+SpZXDbG/gMb82HU?=
+ =?us-ascii?Q?Ng3qN7UtybQPy0MaUksHvPHvucNVQqFXMG7lndadoJlZ+B2uYl8RQdXTaA9K?=
+ =?us-ascii?Q?Ivv8E0wmGRdw3hQV9IIJU2Eze1jO40Va5Jre1tl4pE7SLnmoxTVyReep8sG0?=
+ =?us-ascii?Q?SE2/txKxY7ZU+rkXhk8Yyeltww8EhTdnwG7SzYJuGYdRL+DfPPaDzVnsUpRQ?=
+ =?us-ascii?Q?kYNt6t5I+onB+gcEIPAIDlL5lRmN9QxODH2YRm8vXq3rzYHZdTu5Jl86E4Gk?=
+ =?us-ascii?Q?yJkR6mT9++4BpewrO7R1j3yMknMGUHPcYGhNsgYdlEj2C0owFVZNdxRYH73g?=
+ =?us-ascii?Q?8kuRnrBxhRPEGrqPzNZLEF9CdBt4JhP19ZknYmZPUyR2Wvls9mxs1sz71KJj?=
+ =?us-ascii?Q?88BpqxAFl8TPbm8ko311Je4J8Jc1PJCiIlQoncakp53o4FIgGu3sgAYq9ob1?=
+ =?us-ascii?Q?txXdnAAB7ETHmbNFtn7CMTZ3xDzzhBciouwVUki9bRGz0svhsvPM6glgqrNk?=
+ =?us-ascii?Q?BJ3yJPqH6Q7tEbkSGyDhSoCZJ7PH5CB0HcT+cAeCeBjjojM4XDjhWOMLv3d9?=
+ =?us-ascii?Q?RMjYNwIEDDhy71hTdr2tpXd5UZUFN708QfYe37DGSZTIa5nGyHU9gzHXKAqk?=
+ =?us-ascii?Q?u41CulA3bmRcvjgS+2zpK2/ln4701jfGVxpeTJiq68Dx/QTJ1V6xsw+/SIPm?=
+ =?us-ascii?Q?Fz1KC4rIp+B0m8nEPQDD0xw7RfPCI7lHXOKybWVwLpj+bYH3IhTDshaZQdFe?=
+ =?us-ascii?Q?Rqcc3ATs3vFH69RAWCmsIgu7GJiKqzxQI2SEN0vCR2Igcf4177ulAjaVz5Ry?=
+ =?us-ascii?Q?AlKQeswObRfOiXt56nOMTimlYEcw8INdX+d1dCyxTQaL9v9bZLzAPP07rl1q?=
+ =?us-ascii?Q?/145SQIIGL8yIQ2A+P5tAkF0P8FtEvubuatdHFFFUVUyFvjUEzOkKVWp1gkE?=
+ =?us-ascii?Q?qy+dn9UlNWZX/vwlbZqP2ciipaxY6y6U1HUUIPUeNAFRvRNe7STOrv6lSIMs?=
+ =?us-ascii?Q?uZJQ6SYVEjX2Xj2meQlthZRzeS6oZ9wKxzv4BaQ/YvvWsEkUjc+2l55kWzxa?=
+ =?us-ascii?Q?9pQB2b0Z/Kx080JR3u3WdxmMXT9BIKDj3zmD8zafUTlj0rt+KrQtnNVik0m9?=
+ =?us-ascii?Q?sIpQXnbvjuMhyfv23zgizyTVMZqHVRKNdHUlAcRDQnfZQCWGFgK44hdQf3DD?=
+ =?us-ascii?Q?aKMdE31b8VrxjGlrAjGO4MsWYqIJBB1tzrmbzubuHbT7opXzFGqcYh7W/cSZ?=
+ =?us-ascii?Q?PA+mkc+8ZrcpRtVcxpCqqyuhxOdAr9zqJb4bPJXxbQZ6eOP9/QeufbhMsBH2?=
+ =?us-ascii?Q?1k5oy0TFUItIxCzb/1SVIobCdC73Xr+jfnZDOGX5YyqNbHIYpuHzIN4ptEIx?=
+ =?us-ascii?Q?ZkZJhu03TznmYRX2zsJ1g6RMxdexPXdPT13XXjAufy0PETEAV7jyOW/UKcTq?=
+ =?us-ascii?Q?xt+znQCnYimbSrdOfb37hkjqZJ7fNDCV5LL/NrC9ztNNgg/jSgi+bA58tgPV?=
+ =?us-ascii?Q?/w=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9223d023-0af3-4256-9dc6-08da748df786
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 13:50:32.0382
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vo6BOfGFfUyrumRFUAsS6NNu9sCsrBVdM8/Pg/5mEVVq8eU/6W3y+FT/AQjbzl6v9hR7DpBhuqOikzF88eCZcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9126
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 09:54:55AM +0100, Will Deacon wrote:
-> On Mon, Aug 01, 2022 at 12:20:35PM -0700, Paul E. McKenney wrote:
-> > On Mon, Aug 01, 2022 at 04:41:09PM +0100, Will Deacon wrote:
-> > > Apologies for the slow response here; believe it or not, I was attending
-> > > a workshop about memory ordering.
-> > 
-> > Nice!!!  Anything that I can/should know from that gathering?  ;-)
-> 
-> Oh come off it, you know this stuff already ;)
+The Lynx PCS integrated with ENETC port 0 does not support in-band
+autoneg for the 2500base-x SERDES protocol, and prints errors from its
+phylink methods. Furthermore, the AQR112 card used for these boards does
+not expect in-band autoneg either. So delete the extraneous property.
 
-Thank you for the kind words, but the most devastating learning disability
-of all is thinking that you already know everything about the topic
-in question.  ;-)
+Fixes: e426d63e752b ("arm64: dts: ls1028a-qds: add overlays for various serdes protocols")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-> > > On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
-> > > > On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
-> > > > > Even alpha is specified to be locally ordered wrt *one* memory
-> > > > > location, including for reads (See table 5-1: "Processor issue order",
-> > > > > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
-> > > > > new value, a subsequent read is not allowed to see an older one - even
-> > > > > without a memory barrier.
-> > > > > 
-> > > > > Will, Paul? Maybe that's only for overlapping loads/stores, not for
-> > > > > loads/loads. Because maybe alpha for once isn't the weakest possible
-> > > > > ordering.
-> > > > 
-> > > > The "bad boy" in this case is Itanium, which can do some VLIW reordering
-> > > > of accesses.  Or could, I am not sure that newer Itanium hardware
-> > > > does this.  But this is why Itanium compilers made volatile loads use
-> > > > the ld,acq instruction.
-> > > > 
-> > > > Which means that aligned same-sized marked accesses to a single location
-> > > > really do execute consistently with some global ordering, even on Itanium.
-> > > 
-> > > Although this is true, there's a really subtle issue which crops up if you
-> > > try to compose this read-after-read ordering with dependencies in the case
-> > > where the two reads read the same value (which is encapsulated by the
-> > > unusual RSW litmus test that I've tried to convert to C below):
-> > 
-> > RSW from the infamous test6.pdf, correct?
-> 
-> That's the badger. I've no doubt that you're aware of it already, but I
-> thought it was a useful exercise to transcribe it to C and have it on the
-> mailing list for folks to look at.
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+index 40d34c8384a5..b949cac03742 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+@@ -25,7 +25,6 @@ slot1_sgmii: ethernet-phy@2 {
+ &enetc_port0 {
+ 	phy-handle = <&slot1_sgmii>;
+ 	phy-mode = "2500base-x";
+-	managed = "in-band-status";
+ 	status = "okay";
+ };
+ 
+-- 
+2.34.1
 
-I have seen it, but this was nevertheless a useful reminder.
-
-> > > /* Global definitions; assume everything zero-initialised */
-> > > struct foo {
-> > > 	int *x;
-> > > };
-> > > 
-> > > int x;
-> > > struct foo foo;
-> > > struct foo *ptr;
-> > > 
-> > > 
-> > > /* CPU 0 */
-> > > WRITE_ONCE(x, 1);
-> > 
-> > Your x is RSW's z?
-> 
-> Yes.
-> 
-> > > WRITE_ONCE(foo.x, &x);
-> > 
-> > And your foo.x is RSW's x?  If so, the above WRITE_ONCE() could happen at
-> > compile time, correct?  Or in the initialization clause of a litmus test?
-> 
-> Yes, although I think it's a tiny bit more like real code to have it done
-> here, although it means that the "surprising" outcome relies on this being
-> reordered before the store to x.
-> 
-> > > /*
-> > >  * Release ordering to ensure that somebody following a non-NULL ptr will
-> > >  * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
-> > >  */
-> > > smp_store_release(&ptr, &foo);
-> > 
-> > Your ptr is RSW's y, correct?
-> 
-> Yes.
-> 
-> > > /* CPU 1 */
-> > > int *xp1, *xp2, val;
-> > > struct foo *foop;
-> > > 
-> > > /* Load the global pointer and check that it's not NULL. */
-> > > foop = READ_ONCE(ptr);
-> > > if (!foop)
-> > > 	return;
-> > 
-> > A litmus tests can do this via the filter clause.
-> 
-> Indeed, but I was trying to make this look like C code for non-litmus
-> speakers!
-> 
-> > > /*
-> > >  * Load 'foo.x' via the pointer we just loaded. This is ordered after the
-> > >  * previous READ_ONCE() because of the address dependency.
-> > >  */
-> > > xp1 = READ_ONCE(foop->x);
-> > > 
-> > > /*
-> > >  * Load 'foo.x' directly via the global 'foo'.
-> > >  * _This is loading the same address as the previous READ_ONCE() and
-> > >  *  therefore cannot return a stale (NULL) value!_
-> > >  */
-> > > xp2 = READ_ONCE(foo.x);
-> > 
-> > OK, same location, but RSW calls only for po, not addr from the initial
-> > read to this read, got it.  (My first attempt left out this nuance,
-> > in case you were wondering.)
-> 
-> Right, there is only po from the initial read to this read. If there was an
-> address dependency, then we'd have a chain of address dependencies from the
-> first read to the last read on this CPU and the result (of x == 0) would be
-> forbidden.
-> 
-> > > /*
-> > >  * Load 'x' via the pointer we just loaded.
-> > >  * _We may see zero here!_
-> > >  */
-> > > val = READ_ONCE(*xp2);
-> > 
-> > And herd7/LKMM agree with this, at least assuming I got the litmus
-> > test right.  (I used RSW's variables as a cross-check.)
-> 
-> That's promising, but see below...
-> 
-> > C rsw
-> > 
-> > {
-> > 	a=0;
-> > 	x=z;
-> > 	y=a;
-> > 	z=0;
-> > }
-> > 
-> > P0(int *x, int **y, int *z)
-> > {
-> > 	WRITE_ONCE(*z, 1);
-> > 	WRITE_ONCE(*y, x);
-> > }
-> 
-> Ah wait, you need a barrier between these two writes, don't you? I used
-> an smp_store_release() but smp[w]_mb() should do too.
-
-You are quite right, thank you!  Here is the fixed version and output,
-which LKMM still says is allowed.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-C rsw
-
-{
-	a=0;
-	x=z;
-	y=a;
-	z=0;
-}
-
-P0(int *x, int **y, int *z)
-{
-	WRITE_ONCE(*z, 1);
-	smp_store_release(y, x);
-}
-
-P1(int *x, int **y, int *z)
-{
-	r1 = READ_ONCE(*y);
-	r2 = READ_ONCE(*r1);
-	r3 = READ_ONCE(*x);
-	r4 = READ_ONCE(*r3);
-}
-
-filter(1:r1=x)
-exists(1:r2=z /\ 1:r3=z /\ 1:r4=0)
-
-------------------------------------------------------------------------
-
-$ herd7 -conf linux-kernel.cfg /tmp/rsw.litmus
-Test rsw Allowed
-States 2
-1:r2=z; 1:r3=z; 1:r4=0;
-1:r2=z; 1:r3=z; 1:r4=1;
-Ok
-Witnesses
-Positive: 1 Negative: 1
-Condition exists (1:r2=z /\ 1:r3=z /\ 1:r4=0)
-Observation rsw Sometimes 1 1
-Time rsw 0.01
-Hash=588486c0f4d521fa3ce559a19ed118d5

@@ -2,353 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62C5587A5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E10587A63
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiHBKJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S236517AbiHBKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbiHBKJR (ORCPT
+        with ESMTP id S233387AbiHBKMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:09:17 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E84C2DA8C;
-        Tue,  2 Aug 2022 03:09:15 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 12:09:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1659434953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7NYuUcWnJkrPfTbvdD6RiompurpoY0WN1swUqz0070=;
-        b=cxYHHuwzEUFgW5zeedn/Jjz3FJd01+uuOwcEU1smPxBqubkaHA3aDZGGmteOtZFikWE6CB
-        SGUF0xd0ufSrPEq6bWYvaVL7BZcwMR4A1IzW1WaGuvEKbHoVfjW5rKXyeFp0NGiRDEWzfK
-        hvz8K2HNCqO5ly7TRMG8XchW3iiEbYQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, seanjc@google.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, joro@8bytes.org, mizhang@google.com,
-        pbonzini@redhat.com, Colton Lewis <coltonlewis@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Subject: Re: [V2 06/11] KVM: selftests: Consolidate common code for
- popuplating
-Message-ID: <20220802100911.5kyfhxdavqtpddma@kamzik>
-References: <20220801201109.825284-1-pgonda@google.com>
- <20220801201109.825284-7-pgonda@google.com>
+        Tue, 2 Aug 2022 06:12:07 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CACE4B0F9;
+        Tue,  2 Aug 2022 03:12:06 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LxrJK1LVNz67gb0;
+        Tue,  2 Aug 2022 18:07:13 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 12:12:04 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 2 Aug 2022 12:12:04 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Hao Luo <haoluo@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: RE: [PATCH bpf-next v6 1/8] btf: Add a new kfunc flag which allows to
+ mark a function to be sleepable
+Thread-Topic: [PATCH bpf-next v6 1/8] btf: Add a new kfunc flag which allows
+ to mark a function to be sleepable
+Thread-Index: AQHYpc/QHd6pQm3GSkK+4jcMX6ARwK2bZJZw
+Date:   Tue, 2 Aug 2022 10:12:04 +0000
+Message-ID: <8924d019684340ecb2f6c9e3e99a5287@huawei.com>
+References: <20220801175407.2647869-1-haoluo@google.com>
+ <20220801175407.2647869-2-haoluo@google.com>
+In-Reply-To: <20220801175407.2647869-2-haoluo@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.210.42]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801201109.825284-7-pgonda@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 01:11:04PM -0700, Peter Gonda wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Make ucall() a common helper that populates struct ucall, and only calls
-> into arch code to make the actually call out to userspace.
-> 
-> Rename all arch-specific helpers to make it clear they're arch-specific,
-> and to avoid collisions with common helpers (one more on its way...)
-> 
-> No functional change intended.
-
-But there is...
-
-> 
-> Cc: Colton Lewis <coltonlewis@google.com>
-> Cc: Andrew Jones <drjones@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |  1 +
->  .../selftests/kvm/include/ucall_common.h      | 23 ++++++++++++++++---
->  .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++------------
->  tools/testing/selftests/kvm/lib/riscv/ucall.c | 23 ++++---------------
->  tools/testing/selftests/kvm/lib/s390x/ucall.c | 23 ++++---------------
->  .../testing/selftests/kvm/lib/ucall_common.c  | 20 ++++++++++++++++
->  .../testing/selftests/kvm/lib/x86_64/ucall.c  | 23 ++++---------------
->  7 files changed, 60 insertions(+), 73 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 690b499c3471..39fc5e8e5594 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -46,6 +46,7 @@ LIBKVM += lib/perf_test_util.c
->  LIBKVM += lib/rbtree.c
->  LIBKVM += lib/sparsebit.c
->  LIBKVM += lib/test_util.c
-> +LIBKVM += lib/ucall_common.c
->  
->  LIBKVM_x86_64 += lib/x86_64/apic.c
->  LIBKVM_x86_64 += lib/x86_64/handlers.S
-> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-> index ee79d180e07e..5a85f5318bbe 100644
-> --- a/tools/testing/selftests/kvm/include/ucall_common.h
-> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
-> @@ -24,10 +24,27 @@ struct ucall {
->  	uint64_t args[UCALL_MAX_ARGS];
->  };
->  
-> -void ucall_init(struct kvm_vm *vm, void *arg);
-> -void ucall_uninit(struct kvm_vm *vm);
-> +void ucall_arch_init(struct kvm_vm *vm, void *arg);
-> +void ucall_arch_uninit(struct kvm_vm *vm);
-> +void ucall_arch_do_ucall(vm_vaddr_t uc);
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
-> +
->  void ucall(uint64_t cmd, int nargs, ...);
-> -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
-> +
-> +static inline void ucall_init(struct kvm_vm *vm, void *arg)
-> +{
-> +	ucall_arch_init(vm, arg);
-> +}
-> +
-> +static inline void ucall_uninit(struct kvm_vm *vm)
-> +{
-> +	ucall_arch_uninit(vm);
-> +}
-> +
-> +static inline uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +{
-> +	return ucall_arch_get_ucall(vcpu, uc);
-> +}
->  
->  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
->  				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> index ed237b744690..1c81a6a5c1f2 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> @@ -21,7 +21,7 @@ static bool ucall_mmio_init(struct kvm_vm *vm, vm_paddr_t gpa)
->  	return true;
->  }
->  
-> -void ucall_init(struct kvm_vm *vm, void *arg)
-> +void ucall_arch_init(struct kvm_vm *vm, void *arg)
->  {
->  	vm_paddr_t gpa, start, end, step, offset;
->  	unsigned int bits;
-> @@ -64,30 +64,18 @@ void ucall_init(struct kvm_vm *vm, void *arg)
->  	TEST_FAIL("Can't find a ucall mmio address");
->  }
->  
-> -void ucall_uninit(struct kvm_vm *vm)
-> +void ucall_arch_uninit(struct kvm_vm *vm)
->  {
->  	ucall_exit_mmio_addr = 0;
->  	sync_global_to_guest(vm, ucall_exit_mmio_addr);
->  }
->  
-> -void ucall(uint64_t cmd, int nargs, ...)
-> +void ucall_arch_do_ucall(vm_vaddr_t uc)
->  {
-> -	struct ucall uc = {};
-> -	va_list va;
-> -	int i;
-> -
-> -	WRITE_ONCE(uc.cmd, cmd);
-> -	nargs = min(nargs, UCALL_MAX_ARGS);
-> -
-> -	va_start(va, nargs);
-> -	for (i = 0; i < nargs; ++i)
-> -		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
-> -	va_end(va);
-> -
-
-There are WRITE_ONCE's being used here...
-
->  	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
->  }
->  
-> -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  {
->  	struct kvm_run *run = vcpu->run;
->  	struct ucall ucall = {};
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> index 087b9740bc8f..b1598f418c1f 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
-> @@ -10,11 +10,11 @@
->  #include "kvm_util.h"
->  #include "processor.h"
->  
-> -void ucall_init(struct kvm_vm *vm, void *arg)
-> +void ucall_arch_init(struct kvm_vm *vm, void *arg)
->  {
->  }
->  
-> -void ucall_uninit(struct kvm_vm *vm)
-> +void ucall_arch_uninit(struct kvm_vm *vm)
->  {
->  }
->  
-> @@ -44,27 +44,14 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
->  	return ret;
->  }
->  
-> -void ucall(uint64_t cmd, int nargs, ...)
-> +void ucall_arch_do_ucall(vm_vaddr_t uc)
->  {
-> -	struct ucall uc = {
-> -		.cmd = cmd,
-> -	};
-> -	va_list va;
-> -	int i;
-> -
-> -	nargs = min(nargs, UCALL_MAX_ARGS);
-> -
-> -	va_start(va, nargs);
-> -	for (i = 0; i < nargs; ++i)
-> -		uc.args[i] = va_arg(va, uint64_t);
-> -	va_end(va);
-> -
->  	sbi_ecall(KVM_RISCV_SELFTESTS_SBI_EXT,
->  		  KVM_RISCV_SELFTESTS_SBI_UCALL,
-> -		  (vm_vaddr_t)&uc, 0, 0, 0, 0, 0);
-> +		  uc, 0, 0, 0, 0, 0);
->  }
->  
-> -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  {
->  	struct kvm_run *run = vcpu->run;
->  	struct ucall ucall = {};
-> diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> index 73dc4e21190f..114cb4af295f 100644
-> --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
-> @@ -6,34 +6,21 @@
->   */
->  #include "kvm_util.h"
->  
-> -void ucall_init(struct kvm_vm *vm, void *arg)
-> +void ucall_arch_init(struct kvm_vm *vm, void *arg)
->  {
->  }
->  
-> -void ucall_uninit(struct kvm_vm *vm)
-> +void ucall_arch_uninit(struct kvm_vm *vm)
->  {
->  }
->  
-> -void ucall(uint64_t cmd, int nargs, ...)
-> +void ucall_arch_do_ucall(vm_vaddr_t uc)
->  {
-> -	struct ucall uc = {
-> -		.cmd = cmd,
-> -	};
-> -	va_list va;
-> -	int i;
-> -
-> -	nargs = min(nargs, UCALL_MAX_ARGS);
-> -
-> -	va_start(va, nargs);
-> -	for (i = 0; i < nargs; ++i)
-> -		uc.args[i] = va_arg(va, uint64_t);
-> -	va_end(va);
-> -
->  	/* Exit via DIAGNOSE 0x501 (normally used for breakpoints) */
-> -	asm volatile ("diag 0,%0,0x501" : : "a"(&uc) : "memory");
-> +	asm volatile ("diag 0,%0,0x501" : : "a"(uc) : "memory");
->  }
->  
-> -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  {
->  	struct kvm_run *run = vcpu->run;
->  	struct ucall ucall = {};
-> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> new file mode 100644
-> index 000000000000..749ffdf23855
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> @@ -0,0 +1,20 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include "kvm_util.h"
-> +
-> +void ucall(uint64_t cmd, int nargs, ...)
-> +{
-> +	struct ucall uc = {
-> +		.cmd = cmd,
-> +	};
-> +	va_list va;
-> +	int i;
-> +
-> +	nargs = min(nargs, UCALL_MAX_ARGS);
-> +
-> +	va_start(va, nargs);
-> +	for (i = 0; i < nargs; ++i)
-> +		uc.args[i] = va_arg(va, uint64_t);
-> +	va_end(va);
-
-...but not here. At least AArch64 needs them, see commit 9e2f6498efbb
-("selftests: KVM: Handle compiler optimizations in ucall")
-
-> +
-> +	ucall_arch_do_ucall((vm_vaddr_t)&uc);
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> index e5f0f9e0d3ee..9f532dba1003 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> @@ -8,34 +8,21 @@
->  
->  #define UCALL_PIO_PORT ((uint16_t)0x1000)
->  
-> -void ucall_init(struct kvm_vm *vm, void *arg)
-> +void ucall_arch_init(struct kvm_vm *vm, void *arg)
->  {
->  }
->  
-> -void ucall_uninit(struct kvm_vm *vm)
-> +void ucall_arch_uninit(struct kvm_vm *vm)
->  {
->  }
->  
-> -void ucall(uint64_t cmd, int nargs, ...)
-> +void ucall_arch_do_ucall(vm_vaddr_t uc)
->  {
-> -	struct ucall uc = {
-> -		.cmd = cmd,
-> -	};
-> -	va_list va;
-> -	int i;
-> -
-> -	nargs = min(nargs, UCALL_MAX_ARGS);
-> -
-> -	va_start(va, nargs);
-> -	for (i = 0; i < nargs; ++i)
-> -		uc.args[i] = va_arg(va, uint64_t);
-> -	va_end(va);
-> -
->  	asm volatile("in %[port], %%al"
-> -		: : [port] "d" (UCALL_PIO_PORT), "D" (&uc) : "rax", "memory");
-> +		: : [port] "d" (UCALL_PIO_PORT), "D" (uc) : "rax", "memory");
->  }
->  
-> -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  {
->  	struct kvm_run *run = vcpu->run;
->  	struct ucall ucall = {};
-> -- 
-> 2.37.1.455.g008518b4e5-goog
->
-
-Thanks,
-drew
+PiBGcm9tOiBIYW8gTHVvIFttYWlsdG86aGFvbHVvQGdvb2dsZS5jb21dDQo+IFNlbnQ6IE1vbmRh
+eSwgQXVndXN0IDEsIDIwMjIgNzo1NCBQTQ0KPiBGcm9tOiBCZW5qYW1pbiBUaXNzb2lyZXMgPGJl
+bmphbWluLnRpc3NvaXJlc0ByZWRoYXQuY29tPg0KPiANCj4gRnJvbTogQmVuamFtaW4gVGlzc29p
+cmVzIDxiZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbT4NCj4gDQo+IFRoaXMgYWxsb3dzIHRv
+IGRlY2xhcmUgYSBrZnVuYyBhcyBzbGVlcGFibGUgYW5kIHByZXZlbnRzIGl0cyB1c2UgaW4NCj4g
+YSBub24gc2xlZXBhYmxlIHByb2dyYW0uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCZW5qYW1pbiBU
+aXNzb2lyZXMgPGJlbmphbWluLnRpc3NvaXJlc0ByZWRoYXQuY29tPg0KPiBDby1kZXZlbG9wZWQt
+Ynk6IFlvc3J5IEFobWVkIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+DQo+IFNpZ25lZC1vZmYtYnk6
+IFlvc3J5IEFobWVkIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IEhh
+byBMdW8gPGhhb2x1b0Bnb29nbGUuY29tPg0KDQpUaGFua3MsIGhlbHBmdWwgYWxzbyBmb3IgbWUu
+DQoNClJldmlld2VkLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+
+DQoNClJvYmVydG8NCg0KPiAtLS0NCj4gIERvY3VtZW50YXRpb24vYnBmL2tmdW5jcy5yc3QgfCA2
+ICsrKysrKw0KPiAgaW5jbHVkZS9saW51eC9idGYuaCAgICAgICAgICB8IDEgKw0KPiAga2VybmVs
+L2JwZi9idGYuYyAgICAgICAgICAgICB8IDkgKysrKysrKysrDQo+ICAzIGZpbGVzIGNoYW5nZWQs
+IDE2IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2JwZi9r
+ZnVuY3MucnN0IGIvRG9jdW1lbnRhdGlvbi9icGYva2Z1bmNzLnJzdA0KPiBpbmRleCBjMGI3ZGFl
+NmRiZjUuLmM4YjIxZGUxYzc3MiAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9icGYva2Z1
+bmNzLnJzdA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2JwZi9rZnVuY3MucnN0DQo+IEBAIC0xNDYs
+NiArMTQ2LDEyIEBAIHRoYXQgb3BlcmF0ZSAoY2hhbmdlIHNvbWUgcHJvcGVydHksIHBlcmZvcm0g
+c29tZQ0KPiBvcGVyYXRpb24pIG9uIGFuIG9iamVjdCB0aGF0DQo+ICB3YXMgb2J0YWluZWQgdXNp
+bmcgYW4gYWNxdWlyZSBrZnVuYy4gU3VjaCBrZnVuY3MgbmVlZCBhbiB1bmNoYW5nZWQgcG9pbnRl
+ciB0bw0KPiAgZW5zdXJlIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIG9wZXJhdGlvbiBiZWluZyBwZXJm
+b3JtZWQgb24gdGhlIGV4cGVjdGVkIG9iamVjdC4NCj4gDQo+ICsyLjQuNiBLRl9TTEVFUEFCTEUg
+ZmxhZw0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gKw0KPiArVGhlIEtGX1NMRUVQQUJM
+RSBmbGFnIGlzIHVzZWQgZm9yIGtmdW5jcyB0aGF0IG1heSBzbGVlcC4gU3VjaCBrZnVuY3MgY2Fu
+IG9ubHkNCj4gK2JlIGNhbGxlZCBieSBzbGVlcGFibGUgQlBGIHByb2dyYW1zIChCUEZfRl9TTEVF
+UEFCTEUpLg0KPiArDQo+ICAyLjUgUmVnaXN0ZXJpbmcgdGhlIGtmdW5jcw0KPiAgLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0NCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2J0Zi5o
+IGIvaW5jbHVkZS9saW51eC9idGYuaA0KPiBpbmRleCBjZGIzNzZkNTMyMzguLjk3NmNiZGQyOTgx
+ZiAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9idGYuaA0KPiArKysgYi9pbmNsdWRlL2xp
+bnV4L2J0Zi5oDQo+IEBAIC00OSw2ICs0OSw3IEBADQo+ICAgKiBmb3IgdGhpcyBjYXNlLg0KPiAg
+ICovDQo+ICAjZGVmaW5lIEtGX1RSVVNURURfQVJHUyAoMSA8PCA0KSAvKiBrZnVuYyBvbmx5IHRh
+a2VzIHRydXN0ZWQgcG9pbnRlcg0KPiBhcmd1bWVudHMgKi8NCj4gKyNkZWZpbmUgS0ZfU0xFRVBB
+QkxFICAgKDEgPDwgNSkgLyoga2Z1bmMgbWF5IHNsZWVwICovDQo+IA0KPiAgc3RydWN0IGJ0ZjsN
+Cj4gIHN0cnVjdCBidGZfbWVtYmVyOw0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi9idGYuYyBi
+L2tlcm5lbC9icGYvYnRmLmMNCj4gaW5kZXggN2U2NDQ0NzY1OWYzLi5kM2U0Yzg2YjhmY2QgMTAw
+NjQ0DQo+IC0tLSBhL2tlcm5lbC9icGYvYnRmLmMNCj4gKysrIGIva2VybmVsL2JwZi9idGYuYw0K
+PiBAQCAtNjE3NSw2ICs2MTc1LDcgQEAgc3RhdGljIGludCBidGZfY2hlY2tfZnVuY19hcmdfbWF0
+Y2goc3RydWN0DQo+IGJwZl92ZXJpZmllcl9lbnYgKmVudiwNCj4gIHsNCj4gIAllbnVtIGJwZl9w
+cm9nX3R5cGUgcHJvZ190eXBlID0gcmVzb2x2ZV9wcm9nX3R5cGUoZW52LT5wcm9nKTsNCj4gIAli
+b29sIHJlbCA9IGZhbHNlLCBrcHRyX2dldCA9IGZhbHNlLCB0cnVzdGVkX2FyZyA9IGZhbHNlOw0K
+PiArCWJvb2wgc2xlZXBhYmxlID0gZmFsc2U7DQo+ICAJc3RydWN0IGJwZl92ZXJpZmllcl9sb2cg
+KmxvZyA9ICZlbnYtPmxvZzsNCj4gIAl1MzIgaSwgbmFyZ3MsIHJlZl9pZCwgcmVmX29ial9pZCA9
+IDA7DQo+ICAJYm9vbCBpc19rZnVuYyA9IGJ0Zl9pc19rZXJuZWwoYnRmKTsNCj4gQEAgLTYyMTIs
+NiArNjIxMyw3IEBAIHN0YXRpYyBpbnQgYnRmX2NoZWNrX2Z1bmNfYXJnX21hdGNoKHN0cnVjdA0K
+PiBicGZfdmVyaWZpZXJfZW52ICplbnYsDQo+ICAJCXJlbCA9IGtmdW5jX2ZsYWdzICYgS0ZfUkVM
+RUFTRTsNCj4gIAkJa3B0cl9nZXQgPSBrZnVuY19mbGFncyAmIEtGX0tQVFJfR0VUOw0KPiAgCQl0
+cnVzdGVkX2FyZyA9IGtmdW5jX2ZsYWdzICYgS0ZfVFJVU1RFRF9BUkdTOw0KPiArCQlzbGVlcGFi
+bGUgPSBrZnVuY19mbGFncyAmIEtGX1NMRUVQQUJMRTsNCj4gIAl9DQo+IA0KPiAgCS8qIGNoZWNr
+IHRoYXQgQlRGIGZ1bmN0aW9uIGFyZ3VtZW50cyBtYXRjaCBhY3R1YWwgdHlwZXMgdGhhdCB0aGUN
+Cj4gQEAgLTY0MTksNiArNjQyMSwxMyBAQCBzdGF0aWMgaW50IGJ0Zl9jaGVja19mdW5jX2FyZ19t
+YXRjaChzdHJ1Y3QNCj4gYnBmX3ZlcmlmaWVyX2VudiAqZW52LA0KPiAgCQkJZnVuY19uYW1lKTsN
+Cj4gIAkJcmV0dXJuIC1FSU5WQUw7DQo+ICAJfQ0KPiArDQo+ICsJaWYgKHNsZWVwYWJsZSAmJiAh
+ZW52LT5wcm9nLT5hdXgtPnNsZWVwYWJsZSkgew0KPiArCQlicGZfbG9nKGxvZywgImtlcm5lbCBm
+dW5jdGlvbiAlcyBpcyBzbGVlcGFibGUgYnV0IHRoZSBwcm9ncmFtIGlzDQo+IG5vdFxuIiwNCj4g
+KwkJCWZ1bmNfbmFtZSk7DQo+ICsJCXJldHVybiAtRUlOVkFMOw0KPiArCX0NCj4gKw0KPiAgCS8q
+IHJldHVybnMgYXJndW1lbnQgcmVnaXN0ZXIgbnVtYmVyID4gMCBpbiBjYXNlIG9mIHJlZmVyZW5j
+ZSByZWxlYXNlDQo+IGtmdW5jICovDQo+ICAJcmV0dXJuIHJlbCA/IHJlZl9yZWdubyA6IDA7DQo+
+ICB9DQo+IC0tDQo+IDIuMzcuMS40NTUuZzAwODUxOGI0ZTUtZ29vZw0KDQo=

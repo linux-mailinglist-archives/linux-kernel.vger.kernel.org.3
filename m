@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF1A588133
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49500588136
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiHBRk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S233114AbiHBRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiHBRkV (ORCPT
+        with ESMTP id S231132AbiHBRmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:40:21 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA610EA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:40:17 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31f5960500bso122626457b3.14
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:40:17 -0700 (PDT)
+        Tue, 2 Aug 2022 13:42:22 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A166DF4E;
+        Tue,  2 Aug 2022 10:42:22 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bv3so4857047wrb.5;
+        Tue, 02 Aug 2022 10:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ONVk+IwfQtxkQMEE1txHxraIYz5uS1JfsA6nTBwgy+I=;
-        b=VPi1EX9sV3DI3/6YfkpEke2lO5PZ2alhRTtje8l5A7fsDOKzH3zs6lpGJSy3VD1Kwc
-         gSTmLomYI5iNuo+5Dqa+wxPnj84hVgh40XecRcNFbjGl/DcJomF4EL5SW2MQzR0HRS3o
-         0GRMM0y9FmEbHuaDTRci/3TrTZRz5Qkwp9ZLY0htMy51YggPCh+k6riQG7qBynu6Ljt7
-         txyB+cVI8TajmI/Z4yiE37p1A9Wz+9JSgHW4g3VQLlfsiVZGY4znC33U/QUu/zKe1xeK
-         dX9bi2BWvBTIC+gFLiM97+BKol+uHfNy3wfz3NdjPaTTpLfjFQs7vf9UrHszGXJQ4/5N
-         zgpw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uMymkjvhOIcHe+sIXSnW+UwLBk8H2QUc7FOOoXpXHb8=;
+        b=CVwJje0b8xNV+ysA9tcGpwaEVno/l6Tq8zWv67ZEG1DfK5dfpo+4C9fTA1CphUJ2da
+         cNLz9c7GZrNl7TD0YRKB38XxC2jEGi3/KcrgPT+GHBMxkSliruQlyR1+ujfcWIL1AZXS
+         gnkbDZ4IZic20zBg+IUusKcqSMCZy9Dim1VBgIit9s0V/Kxvh5ycx9jCIGrNFYYORssw
+         os69pEp6+8JC4741xhtr9jON7usmqtfz8sWsKMROlIMfpDZPbfni4a/jsLnpuM6eFSKg
+         eJ8Ch7l/OmbORXKiDPjrLPzkh5DjIBmSBzvNVn6OfoVW7m79/2MLnYC5Hb45FCYGPO+I
+         KhUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ONVk+IwfQtxkQMEE1txHxraIYz5uS1JfsA6nTBwgy+I=;
-        b=If1wRt0ywiCrXmUHC9X3/NXZsMYovK6oV82SQbCYxchfb6sDqZs2D8XuwzHcQUFWFG
-         /qMvGZyk1LUCteBauPbf6xT5olRcKqO7Sntnhlj/U5JdjIusxFUnuILGU1Uh2B/pwLwx
-         /wqkXJ9GJa2xz7BUm5b5ezN7+pf93fVQ/A8wqNRQyT4KnhdkYwYfkM3roXomzOZE1RmC
-         xy8enpZV0/beGh/0C1BfS9KainrRWqpnhbpCtgja186cAq/JOYXP7aXB5h4gX4tGVfmf
-         Yj4NRm+tNTI7uXa6dojz1ASGsy/m+BK079/tBheuEuPGqadVOllOx788pRHZzCjrw0+y
-         lXkw==
-X-Gm-Message-State: ACgBeo0Y7W/gH4kx6PJ616dnausVgnxXn++LSI5Ojd0Jky+3FskCRj0r
-        nT2bxhUcXWE0XFz7poSwKJ1REJXglA==
-X-Google-Smtp-Source: AA6agR6G2fc61/vdfjDY2CqjeZK0f37dBSOoZhf6/RxQc1A4UreeeeNwIkSFEV8AcCr2cuFO5qqUDWYlZw==
-X-Received: from timvp.bld.corp.google.com ([2620:15c:183:200:61dc:f28d:ccc1:638a])
- (user=timvp job=sendgmr) by 2002:a05:6902:1404:b0:64e:1ec0:cec with SMTP id
- z4-20020a056902140400b0064e1ec00cecmr15406103ybu.588.1659462017098; Tue, 02
- Aug 2022 10:40:17 -0700 (PDT)
-Date:   Tue,  2 Aug 2022 11:40:08 -0600
-Message-Id: <20220802113957.v3.1.I2c8c550183162e7594309b66d19af696b8d84552@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH v3] platform/chrome: cros_ec: Send host event for prepare/complete
-From:   Tim Van Patten <timvp@google.com>
-To:     rrangel@chromium.org, robbarnes@google.com
-Cc:     Tim Van Patten <timvp@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uMymkjvhOIcHe+sIXSnW+UwLBk8H2QUc7FOOoXpXHb8=;
+        b=XeQsAbPhXvUFrVIwF17KqCWXupt3ZD4/lDD1MSfbK54iW6gp6YNYYGYmcy6f0zYETr
+         GLiEJXPP3t4TbYzMekJZHORn5/VDaRj4SxhuXPoO3z6Oi35k5fOMp1G+iivZ50NahVqy
+         3BUDfadl2SWy93vLlXzgTurSu0aXuKjdro8r17FSUA6HPFOY7+vlglqv2OUTZy1yAGX0
+         OqFipSzU+XTl19tw+B8rFEBTIbabg/SOuRjSVTPWDIllL4wK98/UFwWWYEJFoVtiJiiM
+         hdYocgm17jQxx+8bQ7Atho5AIJgurjd3jU7Y/0iMxmfFIOUg2EystWQXcqeJMyJjHBqz
+         lKog==
+X-Gm-Message-State: ACgBeo0UpHy33J7jWaqh/LM5OM/K9ion7nw59lu7N3dv6n7xCEbavXOV
+        EAoEo4mYbLHDSDO/2aKCw98=
+X-Google-Smtp-Source: AA6agR4GttsrbDq2JcA/FdVMaSkFZw2cy0s/eZMfGRftJ3DZCpwitW95thj2EbUhKal9LHyP829itw==
+X-Received: by 2002:adf:f6cb:0:b0:220:7859:7bf with SMTP id y11-20020adff6cb000000b00220785907bfmr789777wrp.683.1659462140622;
+        Tue, 02 Aug 2022 10:42:20 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id s14-20020a5d424e000000b0021d7fa77710sm15725446wrr.92.2022.08.02.10.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:42:20 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 18:42:09 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
+Message-ID: <Yulh8fzUJWY89i4J@debian>
+References: <20220801114138.041018499@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-.prepare() and cros_ec_lpc_complete() during .complete(). This allows the
-EC to log entry/exit of AP's suspend/resume more accurately.
+Hi Greg,
 
-Signed-off-by: Tim Van Patten <timvp@google.com>
----
+On Mon, Aug 01, 2022 at 01:46:14PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.16 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
+> Anything received after that time might be too late.
 
-Changes in v3:
-- Update cros_ec_lpc_suspend() to cros_ec_lpc_prepare()
-- Update cros_ec_lpc_resume() to cros_ec_lpc_complete()
+Build test (gcc version 12.1.1 20220724):
+mips: 59 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Changes in v2:
-- Include cros_ec_resume() return value in dev_info() output.
-- Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
- drivers/platform/chrome/cros_ec_lpc.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+[1]. https://openqa.qa.codethink.co.uk/tests/1607
+[2]. https://openqa.qa.codethink.co.uk/tests/1608
+[3]. https://openqa.qa.codethink.co.uk/tests/1611
 
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 7677ab3c0ead9..4158bdeee197b 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -530,23 +530,31 @@ static const struct dmi_system_id cros_ec_lpc_dmi_table[] __initconst = {
- MODULE_DEVICE_TABLE(dmi, cros_ec_lpc_dmi_table);
- 
- #ifdef CONFIG_PM_SLEEP
--static int cros_ec_lpc_suspend(struct device *dev)
-+static int cros_ec_lpc_prepare(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
- 
-+	dev_info(dev, "Prepare EC suspend\n");
-+
- 	return cros_ec_suspend(ec_dev);
- }
- 
--static int cros_ec_lpc_resume(struct device *dev)
-+static void cros_ec_lpc_complete(struct device *dev)
- {
- 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = cros_ec_resume(ec_dev);
- 
--	return cros_ec_resume(ec_dev);
-+	dev_info(dev, "EC resume completed: ret = %d\n", ret);
- }
- #endif
- 
- static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
-+#ifdef CONFIG_PM_SLEEP
-+	.prepare = cros_ec_lpc_prepare,
-+	.complete = cros_ec_lpc_complete
-+#endif
- };
- 
- static struct platform_driver cros_ec_lpc_driver = {
--- 
-2.37.1.455.g008518b4e5-goog
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
+--
+Regards
+Sudip

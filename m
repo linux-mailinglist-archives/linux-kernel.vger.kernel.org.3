@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8AE588389
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FBF588396
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbiHBV2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S233941AbiHBV3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235294AbiHBV1i (ORCPT
+        with ESMTP id S234168AbiHBV3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:27:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7346EE1D
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:27:32 -0700 (PDT)
+        Tue, 2 Aug 2022 17:29:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABC91D0F3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:29:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7157B61541
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBDEC433D6
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:27:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4927CB820AA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2AEC433D7
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:29:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659475651;
-        bh=f8sXEmjzCVWO9SdsToGcbb/52oVj4biGgRxKUZX9cL0=;
+        s=k20201202; t=1659475773;
+        bh=SGZd11R+IMi10UvAspXhHJm/sz8ulVf0IdRmfkUbaoM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Tw80OWTVEkjpfhGKgLg91gtAzcr6sCrkizVmxfD0Wx1gGBiuz/lnleEzvXaqDbzAn
-         7ajyz91BF/G9Q7wvrdG7rN3O0GaVCNCpZhbrNjHNkjTtqvOECaIbr+RRf+pBMT56lR
-         Vkp9mrmU3xm9zd5clNZ1FYDm7P2bYWTgpQ50fzNd6v+UVXZh+lMLRtBXdqZtI6ioMQ
-         aV8GbUhtu5wCkBA1mqLh+KQ3F77stMNn/I3E6sWj8OcStGPTbAAq6sEQAi/h8yTJAa
-         WGY0QtGf0x1kZE2iIxLpdrqGaGfJj+Vw1dQx2scC6k1OtVx5Zc0Oy3Axzm5IucJ41s
-         R/O3QVyy0fGag==
-Received: by mail-oo1-f46.google.com with SMTP id j1-20020a4ab1c1000000b0043576bcb9b1so2718401ooo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:27:31 -0700 (PDT)
-X-Gm-Message-State: AJIora8TVBAZ+QG6hN9+STO/jlzj7L005hYPtDZ63MkrQVnXoFVjq/bp
-        hmN3Wjdl+OVvNNh2jpGXOiQbwNVNtRPuyv3dAsKnAg==
-X-Google-Smtp-Source: AA6agR7JinRXkeCaJ5iefkcmIgve6ME8Mm5zo+J7U3kFFPHDt8uq88NL4Vzh4y50CW3ZVwUTqLvZCLIQnwxxgoeJPB4=
-X-Received: by 2002:a81:14c7:0:b0:328:25f0:9c89 with SMTP id
- 190-20020a8114c7000000b0032825f09c89mr2444233ywu.476.1659475640618; Tue, 02
- Aug 2022 14:27:20 -0700 (PDT)
+        b=EAknVLAxXRbcMekqZH/Z1acSSJw61MzAAgSXD+Au2gxiiopiJDAtCQiEPvFKVJ9pu
+         6+vgMi6sslgax8h2Cx9pXfQrKHYz6CyMldcl5txcjSw0Amyzcy68RgolRMXv2jR8U2
+         2I+pMBtm8eg79KPSvfpBA3kjq5FsZ2X53MzB0BFC4QaKl5V/Kc9dn3fELmv4ZiuuAX
+         S/hvbpKTWls8oPW+TUMXWEoRg3vO+0pUYlQ53L2RUH5R5ZTF3dczOW1oZZ7h3TrCsT
+         uqYHt+S6lAQzql6h11nJMPwOtTGsm4qhsWopFZjXgszWxHuZ8qY/e3d8Jazm0v3dpu
+         sLDw3brQ4vPnA==
+Received: by mail-ot1-f54.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so10989920otf.12
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:29:33 -0700 (PDT)
+X-Gm-Message-State: AJIora+m9wInceYn8twEtavyPgg/WXROfn57SGbpBV93zHB+i7EFcYpv
+        +40ozKPOm7T+1T/99D5q8muSZxHuvl+LjKSME6BUFA==
+X-Google-Smtp-Source: AA6agR4gDjxO8eQIdJP2ak/bQJj6aSqPJNBmfbIMRPjX7q3qBHZva2gJEgK5hCAMdBGldKbha+0RtVlrHChFByEI3nI=
+X-Received: by 2002:a05:6902:1541:b0:675:4f34:7315 with SMTP id
+ r1-20020a056902154100b006754f347315mr18285149ybu.65.1659475762836; Tue, 02
+ Aug 2022 14:29:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
- <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
-In-Reply-To: <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
+References: <20220801180146.1157914-1-fred@cloudflare.com> <20220801180146.1157914-3-fred@cloudflare.com>
+In-Reply-To: <20220801180146.1157914-3-fred@cloudflare.com>
 From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 2 Aug 2022 23:27:10 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ5EH5t+-jC=FkLxJHQwrkVVPBdR3jAnEFPm-KVmLxBQjQ@mail.gmail.com>
-Message-ID: <CACYkzJ5EH5t+-jC=FkLxJHQwrkVVPBdR3jAnEFPm-KVmLxBQjQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Frederick Lawler <fred@cloudflare.com>,
-        Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+Date:   Tue, 2 Aug 2022 23:29:12 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7Oxb8dhM6SotKfS30i2_=ONbd=LF2qB6ZCpYqRFtDx+A@mail.gmail.com>
+Message-ID: <CACYkzJ7Oxb8dhM6SotKfS30i2_=ONbd=LF2qB6ZCpYqRFtDx+A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
         stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, ebiederm@xmission.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -76,78 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 6:35 PM Paul Moore <paul@paul-moore.com> wrote:
+On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
 >
-> On Mon, Aug 1, 2022 at 11:25 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > On 8/1/2022 6:13 AM, Frederick Lawler wrote:
-> > > On 7/22/22 7:20 AM, Paul Moore wrote:
-> > >> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> > >>
-> > >>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
-> > >>>> While creating a LSM BPF MAC policy to block user namespace
-> > >>>> creation, we
-> > >>>> used the LSM cred_prepare hook because that is the closest hook to
-> > >>>> prevent
-> > >>>> a call to create_user_ns().
-> > >>>>
-> > >>>> The calls look something like this:
-> > >>>>
-> > >>>> cred = prepare_creds()
-> > >>>> security_prepare_creds()
-> > >>>> call_int_hook(cred_prepare, ...
-> > >>>> if (cred)
-> > >>>> create_user_ns(cred)
-> > >>>>
-> > >>>> We noticed that error codes were not propagated from this hook and
-> > >>>> introduced a patch [1] to propagate those errors.
-> > >>>>
-> > >>>> The discussion notes that security_prepare_creds()
-> > >>>> is not appropriate for MAC policies, and instead the hook is
-> > >>>> meant for LSM authors to prepare credentials for mutation. [2]
-> > >>>>
-> > >>>> Ultimately, we concluded that a better course of action is to
-> > >>>> introduce
-> > >>>> a new security hook for LSM authors. [3]
-> > >>>>
-> > >>>> This patch set first introduces a new security_create_user_ns()
-> > >>>> function
-> > >>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
-> > >>> Patch 1 and 4 still need review from the lsm/security side.
-> > >>
-> > >>
-> > >> This patchset is in my review queue and assuming everything checks
-> > >> out, I expect to merge it after the upcoming merge window closes.
-> > >>
-> > >> I would also need an ACK from the BPF LSM folks, but they're CC'd on
-> > >> this patchset.
-> > >
-> > > Based on last weeks comments, should I go ahead and put up v4 for
-> > > 5.20-rc1 when that drops, or do I need to wait for more feedback?
-> >
-> > As the primary consumer of this hook is BPF I would really expect their
-> > reviewed-by before accepting this.
+> Users may want to audit calls to security_create_user_ns() and access
+> user space memory. Also create_user_ns() runs without
+> pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
+> for mandatory access control policies.
 >
-> We love all our in-tree LSMs equally.  As long as there is at least
-> one LSM which provides an implementation and has ACK'd the hook, and
-> no other LSMs have NACK'd the hook, then I have no problem merging it.
-> I doubt it will be necessary in this case, but if we need to tweak the
-> hook in the future we can definitely do that; we've done this in the
-> past when it has made sense.
->
-> As a reminder, the LSM hooks are *not* part of the "don't break
-> userspace" promise.  I know it gets a little muddy with the way the
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-That's correct. Also, with BPF LSM, we encourage users to
-build the application / bpf program logic to be resilient to changes
-in the LSM hooks.
-
-I am happy to share how we've done it, if folks are interested.
-
-- KP
-
-> BPF LSM works, but just as we don't want to allow one LSM to impact
-> the runtime controls on another, we don't want to allow one LSM to
-> freeze the hooks for everyone.
->
-> --
-> paul-moore.com
+Acked-by: KP Singh <kpsingh@kernel.org>

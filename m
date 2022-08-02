@@ -2,163 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3810B5876F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E3B5876FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiHBGHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 02:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S234798AbiHBGJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 02:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiHBGHp (ORCPT
+        with ESMTP id S232447AbiHBGJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 02:07:45 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2055.outbound.protection.outlook.com [40.107.95.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027FED100
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:07:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KahNW4EtunVbK+WqRlO3+ZzOja1S56mjeeoYP9N7yrVIk7uamJGxPdnx791ehz8jyVEeCdP5PIWUFQfl/kMgTHPY5XBPe1H9GwbQFrktskj7Xkizc5yL/awk8WGPyMBMTCSyhnvxmZuyc8i8+YXCvTxzAb2m4GGT+JcIyX/Hw3OMwD97+aPK3dUTqNck6NoAlbtETXj/m0d8TUCg9rMVHDZm2FbzlW5VB3tJ75/QYYN26HnJxQBwvjVl2qchHe3TeBeGVwuXeubRliyfiQBNAdxYZGew5tLFn0qb3aTPfDBv0afgKcU9IEvgn7HYwftUGA3ohvtX3N3lSSmxsQjUog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TMiiLEAjEJisFBYRi8V9GbOCfd1T55CWOGC/f2PAKqQ=;
- b=OVllSOrLSuG6trwIs27llGBf78e+kLC6h+3DwTZHQONtAo4ZDC+Dm6HNCDx9gutSYdPEovMDyUcUcqrBPVrnhAXBwomWL83Nkm2hlHxv+bFeWnlW7mqf+m4jhZB1R+dsZCmnUP3zZHBpl0y6IjZEXrlCmICMARwBvvGeNsJsB0QMxYsa69S5s8ReXaRubkpszfrrFfNsxuMXJ+aenfNPV2lU96HMvuI85pwpVbjUZuCpdYEvctbb1l8qGoFEJKrufXONWwzYjYNqnTRBdo6gS2ywyGS0EnW5kfMBzhfJiFeaOM5/tZ5FQuSdg2Po9nB9XqfvNwj8tqD5CTeUYpy8tQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TMiiLEAjEJisFBYRi8V9GbOCfd1T55CWOGC/f2PAKqQ=;
- b=VccGMTKuRxiXbkJ/67fqMeyJ5BhMDyWZgKfmyifCbeQ3i3Ed1+TkD+K+/BYyR0Ttb2+l1iaTSXMqh8evh4bAfLH+S6ztmAk/G/bsoP/FpRQW6lYy3P0/iIdYM7rJGssMX6IDDYdPDYDjJajlv3sOMd8mvKpXxPGyOJRjvLQlcmQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by IA1PR12MB6353.namprd12.prod.outlook.com (2603:10b6:208:3e3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 06:07:38 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9%3]) with mapi id 15.20.5482.011; Tue, 2 Aug 2022
- 06:07:37 +0000
-Message-ID: <d8b6c09d-78f0-eb0d-460d-28e8b5be826f@amd.com>
-Date:   Tue, 2 Aug 2022 11:36:07 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com, ravi.bangoria@amd.com
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <3492774b-a462-d8e6-34bf-9f5ea10729d4@amd.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <3492774b-a462-d8e6-34bf-9f5ea10729d4@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0038.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::6) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Tue, 2 Aug 2022 02:09:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B75BD100;
+        Mon,  1 Aug 2022 23:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46A12B8188E;
+        Tue,  2 Aug 2022 06:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FA0C43140;
+        Tue,  2 Aug 2022 06:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659420557;
+        bh=EtnTwiGnu4HXQ9Ajm3QFxagD2pw2qahfshy7dOh36ls=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XuJv1FjJJhESBQNK/rbwjWz1hSf46Jyy/N98IPoFZuLePEz+Qbofv2pnjUlbj1RxB
+         jx3hcRpJWZUn6bwLgrBlwIfKYehV4s8uDDj66OFFO1EGVvByw1R8dZDRnnaGB/LEAN
+         n6WXmQZh7aj9GJ2hyc1i8TsUeajXrDV3QhGtk6u0kTE9Bm8rRxYXxXMnfkQg4VNB/p
+         hnfzSj8TI9vK+lqkqRsWjS64BHqmbCrQ9K5SZi08DRqcy9tYNkQMUu4jyqP8ktVVNS
+         3SXvDZK2vOpG7NQuVZmz04slz8m7Z8mYDs2SkR7kFuyNi7wdQYBsVqf1qfsreFLMh5
+         xhytxNTBPsnbQ==
+Received: by mail-vs1-f48.google.com with SMTP id j2so7035076vsp.1;
+        Mon, 01 Aug 2022 23:09:17 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3iMh4u41bf1aDJcuqst/bnzgr1RF7fZokR2fMKqe8HPuHFLqlI
+        cwaSkFaJuoeMgcklYe2E9fFQ6opAv06aH8IRkQM=
+X-Google-Smtp-Source: AA6agR6j61B+NJ3XBdxdJflIlHm8f5slQ+DzX3WG0PxUB1DsIcuiKtnbh3IMcK1OYrz/i6ueMTYs7kZf0FDxw8QgX74=
+X-Received: by 2002:a67:d487:0:b0:385:1a6b:6f33 with SMTP id
+ g7-20020a67d487000000b003851a6b6f33mr3002902vsj.59.1659420556640; Mon, 01 Aug
+ 2022 23:09:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b3c838e8-7aef-4b52-2d28-08da744d4cab
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6353:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X0bYSjlfRNw7pD2IwKEobMG2XiB39YGCCfZwQGG4qEQyaEWEWmzJMxxXB1RXrKPyzE+tsu6sLFdLeKl7pN83GuTflnBH67ZcoDzDdDb0DszuCyDgmd+jdohtqBhH7qyWbhDYx/asB9/IZ34VP7/OcxYYwGoxv7MRqA7nWifWmWxgFkF3qQfzKzjh5oC59AQJbOrIvpUQW6KdGSqBP+AYlr0aAb2+uvIgBq6DrDQTWvReq9BlRsN6lNG/KCcsqM+1xLpyDbCJTONCasqb4DAkvlMxYVetFCFfJsfQ4zDEQJDAcyNKKIU0n8iR4zTNKd5Ca8lqasLz5tPIDpFH8HZUbsyV4OWdQmy6SbzTZUVK8UyOHxnFNAYWNY2aneZFSsZp8sP7CeM82a9z/JAriys/+8Grm/uVNWf8+RE2JIN281Z1aVkpxklR6kFsTYpu1/m9C4dyVCEl8tz4JxRapjIIEMNaywozVhyCsvJhvxE8jfxdV7QJrDBhtEJHgZBWr5cTGS/miVzHwYXNkbH9HUKHbUhuRlzmYLw6JPlk7ANFoOCDefve+SGUR6KNGWl/6pLIgoDbdKw94lzM2pr9t+VC/Ee5YiCkN9nvAvOG4GiI0DT6ZkByRx9MqAwKyppno9ufK6O5WoydwcLunabkd4J9ZFWbkoTNWzn2aitOous9RhLiPFDgu6wQOpuGUObxN6w9zF4Jnm7GumJlPW8WpYA7R4iyc34nMgj3VxjfpHHKve/MtakgmjXlSXqOe+MaHUY0Nv0SQAvPE98u9Y5mFXBwdiFqjFetI3Qu8amknhvwnBtx5daKoQsRTBZAkKWbmHlRc+yR1h6LtjaJwRQge+mm5g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(31696002)(86362001)(26005)(6512007)(6486002)(5660300002)(66476007)(66556008)(66946007)(44832011)(2616005)(4326008)(7416002)(41300700001)(6666004)(8676002)(38100700002)(8936002)(53546011)(478600001)(6506007)(36756003)(6916009)(2906002)(31686004)(83380400001)(316002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NCs0bGlrNFdqSFNOaWhhWVZRVUpYYmNXUzBrbUdMbkFkNDk4bElvME9TZTNS?=
- =?utf-8?B?dXI0RVV3RWVTVkxvc2VSaW1WM1M3VzJwSWpZbHRyOWIwUUtja2hVRHdPNmlw?=
- =?utf-8?B?TUN3ME1Yb09JbkVGNjkzVFVpcFYraThQUlNUT1FNVkM5NTdpeHEzSlVkMmJ1?=
- =?utf-8?B?L085MkpOU1QzQzBtMEplNFlBMHhrL3NEbG92bGd5SUJnaFY3Wk5oV1p2eEFR?=
- =?utf-8?B?WnJzSjZCZHF2RXo1NkdZbDY0WG4yRHB0YktSbmxad3k0bEhSY0owZmhYVHgx?=
- =?utf-8?B?RFp6T291TEtmYmFZQUFIa3gxYjJFSDBWMCt4SUlxNnN2dHMyWXE2TzJBR1U1?=
- =?utf-8?B?Z2EwZWd1SkJzeTBZOXREZkVKdW1ubXhybGlCNXMxTWsrdW92TDBIcWJycy90?=
- =?utf-8?B?RzlYZG1EOC94U29EU0dwd20zNXI0UURXUGNDOVZjVFRNYk5EWGROWHdMRzhj?=
- =?utf-8?B?aTlWTXBGYkNuQWdqb21KdFhCdTBzdFdmMnQxR1JXek9wb0JOckt1ZmZIbGNK?=
- =?utf-8?B?NFJNU1RNemFSMzhkQUFYeHVCelJxcWR4aEEvWmZWdklhSDQyV2Erbk9aMDdo?=
- =?utf-8?B?ditHMisrcG9Fa25IRHVLRUV6amJzWVdzQ25uSXBOei9WS0oxa0I0K3V0ekFp?=
- =?utf-8?B?WW5IY25xV3ZBYnFQVTBaNXloWWYyWnlEekpZQTFUL2RrUzY0d0hHU3BkdklO?=
- =?utf-8?B?K1ZpbTcwdFQwMXNxYWZyR2xEVTBJeGlOZ3ZOWC9pWVNNTHJwL3JoMU5xbytM?=
- =?utf-8?B?eWlaU21FbWtKNDdGeStDZVBvK0hIVmZtMzdsQzZVUlVIK0JXcE9kTFJSdzlE?=
- =?utf-8?B?eDIzK2xySENQTnAxTHp6MmUwa0FTQ0I3Rmlod2VrWjR1N3NScFVvWElXTkN5?=
- =?utf-8?B?ZFpueFlkQ0ZqNWpPcE5JQlFGNkUyT3ZQWVA5TWppd2krNksveUVIVnlsbHlN?=
- =?utf-8?B?ejJGdExlNDNpbnYzZG52cWdNanBiM2dKcC9DTDZ2YlNBMkJVK1hYR3l3bnhG?=
- =?utf-8?B?QVJYUWJTVGlZSkVxVEordjBYTFRBaS9lWkdmMmhOamxxSTBWNDJIUVFpOHgy?=
- =?utf-8?B?bVIwd0RjVnRJYkZmY2U3ZWZ4TXZBZCtGbUswczhoRnptdW1KUUxEOTdKUWQx?=
- =?utf-8?B?K3lhQWJDTmZJTmhjZjEweFBrMThuMXRWVlI5MXlBU2dZamVUQ25mVC9TOFNk?=
- =?utf-8?B?VkUwK0pQRm1MUU9kL0RJK25rei82cWVRbkdsSnNNb0JaSVoySWNmUUk0M2FT?=
- =?utf-8?B?enhwcWRrM1BwUzRabFFySEFGZ282Nkh2U3czbkxJVFRtdy9RdnhZdjFOMXls?=
- =?utf-8?B?Q29IeXV3cUR4UDU0SUZERERtR1JrSWdScHg0UXZITWVaMFY4dDF0blA4RDJR?=
- =?utf-8?B?bWhVY2NhSmlXQ0laaW9Nd3MrTkp3bUVUTysza1hvL1AyNjljbWdtakhHdmQ4?=
- =?utf-8?B?WUdndCsxdWd4VmR5WE51WmJBc2dZckphdCt0bHlFVXhzV2JJdjVrSkhjc0Rk?=
- =?utf-8?B?SFFDbGlxRldPZk5xS3dJMTRpM2s3S3I3OVZOamxXYkx3K0R5ZnpJcHQwSi9l?=
- =?utf-8?B?NUJPeWh4dmRUQzVmQWd6M1BqKzJlUFdIbVlmUHl4LzdaMGVoNndneGZ2RlM3?=
- =?utf-8?B?ZENXMHlFSHp0NklkTXlVa0NUb0wydEFMKzRiRWVZNGsxOTVyTGFUM2hReXli?=
- =?utf-8?B?bnZ1UDZxUC92azg5Y0ZmOG81MWZRckdqSmtUQXhsaEtNWHpPa2N3WnYyMjdJ?=
- =?utf-8?B?ekRXdk9SK0p6THhYaTBzNU80RXpHeW5kVTNzaHRnc0htN2x6WGFSVXVPZFZs?=
- =?utf-8?B?UUpPTk5TL2ZNeG11NCtiUGtuRW10ZjZmVGJZbG05S2xxbitSUEVOTGRIMkow?=
- =?utf-8?B?SDhiaUc2UGtDSlhiMVB3dGZjY1RpdHROcUNGcnY3aTgxYmJiM3NwcWF1enAw?=
- =?utf-8?B?KzIzcDBlbFVnd0FiUmhvNDUzclVKY1NQeFdtdnRvbVM5alo2RlMyd21sQjBF?=
- =?utf-8?B?ODFuRDlyUUcwRVVGbDRvc0JGWi9RS2VpamVpZU1VY1VjcUpZOENQYmQ0WVN5?=
- =?utf-8?B?bFBiWWtFUjM1TWMzTDQ3U2dkZW5zcVRLZE14TDdFK3N4VExBUmE0WTBPeXpW?=
- =?utf-8?Q?3+drXTH5neFqkpzL7dfGNzVGq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3c838e8-7aef-4b52-2d28-08da744d4cab
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 06:07:37.7842
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qr2ZPrWlHsrFph7XTmVVpdpX+Ieq9RNscsm+GvMuuuswmTu2jkT648VOv2HVrYDNSMGFFh7CD4p4ULxl5PQ7iw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6353
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220802053818.18051-1-zhangqing@loongson.cn> <20220802053818.18051-4-zhangqing@loongson.cn>
+In-Reply-To: <20220802053818.18051-4-zhangqing@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 2 Aug 2022 14:09:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7NLgM4zWkhsmMtx8uL1AwC28=YxFvQPo1LbppHHHHRtQ@mail.gmail.com>
+Message-ID: <CAAhV-H7NLgM4zWkhsmMtx8uL1AwC28=YxFvQPo1LbppHHHHRtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] LoongArch: Add stacktrace support
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-Jun-22 9:48 AM, Ravi Bangoria wrote:
-> 
-> On 13-Jun-22 8:05 PM, Peter Zijlstra wrote:
->>
->>
->> Right, so sorry for being incredibly tardy on this. Find below the
->> patch fwd ported to something recent.
->>
->> I'll reply to this with fixes and comments.
-> 
-> Thanks! I've resumed on this but my mind has lost all the context so
-> it might take a while for me to reply to your comments. Please bear
-> with me if I'm bit slow.
+Hi, Qing,
 
-Sorry, it took a while for me to get started on it. Anyways, thanks for
-providing fixes. I applied those and ran some tests on AMD Milan machine:
+On Tue, Aug 2, 2022 at 1:38 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>
+> Use common arch_stack_walk infrastructure to avoid duplicated code and
+> avoid taking care of the stack storage and filtering.
+> Add sra (means __schedule return address) and scfa (means __schedule call
+I think you want to say sched_ra and sched_cfa here. :)
 
-- Built in perf tests ran fine without any issues
-- perf_event_tests reported one BUG_ON() and one WARN_ON(). I'll work on
-  fixing those.
-- Ran perf fuzzer for almost a day. It reported one softlockup but system
-  recovered from it and later it reported one hardlockup but unfortunately
-  my config had HARDLOCKUP_PANIC set and thus couldn't confirm whether that
-  hardlockup was recoverable or not. Anyway, system was running pretty much
-  fine until then.
-- No lockdep warnings were observed in any of the tests.
-
-I'll work on verifying functionality changes.
-
-Thanks,
-Ravi
+Huacai
+> frame address) to thread_info and store it in switch_to().
+>
+> Now we can print the process stack by cat /proc/*/stack and can better
+> support ftrace.
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                 |  5 ++++
+>  arch/loongarch/include/asm/processor.h |  9 +++++++
+>  arch/loongarch/include/asm/switch_to.h | 14 ++++++----
+>  arch/loongarch/kernel/Makefile         |  1 +
+>  arch/loongarch/kernel/asm-offsets.c    |  2 ++
+>  arch/loongarch/kernel/process.c        |  3 +++
+>  arch/loongarch/kernel/stacktrace.c     | 37 ++++++++++++++++++++++++++
+>  arch/loongarch/kernel/switch.S         |  2 ++
+>  8 files changed, 68 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/loongarch/kernel/stacktrace.c
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 62b5b07fa4e1..85d0fa3147cd 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -38,6 +38,7 @@ config LOONGARCH
+>         select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
+>         select ARCH_MIGHT_HAVE_PC_PARPORT
+>         select ARCH_MIGHT_HAVE_PC_SERIO
+> +       select ARCH_STACKWALK
+>         select ARCH_SPARSEMEM_ENABLE
+>         select ARCH_SUPPORTS_ACPI
+>         select ARCH_SUPPORTS_ATOMIC_RMW
+> @@ -140,6 +141,10 @@ config LOCKDEP_SUPPORT
+>         bool
+>         default y
+>
+> +config STACKTRACE_SUPPORT
+> +       bool
+> +       default y
+> +
+>  # MACH_LOONGSON32 and MACH_LOONGSON64 are delibrately carried over from the
+>  # MIPS Loongson code, to preserve Loongson-specific code paths in drivers that
+>  # are shared between architectures, and specifically expecting the symbols.
+> diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
+> index 57ec45aa078e..1c4b4308378d 100644
+> --- a/arch/loongarch/include/asm/processor.h
+> +++ b/arch/loongarch/include/asm/processor.h
+> @@ -101,6 +101,10 @@ struct thread_struct {
+>         unsigned long reg23, reg24, reg25, reg26; /* s0-s3 */
+>         unsigned long reg27, reg28, reg29, reg30, reg31; /* s4-s8 */
+>
+> +       /* __schedule() return address / call frame address */
+> +       unsigned long sched_ra;
+> +       unsigned long sched_cfa;
+> +
+>         /* CSR registers */
+>         unsigned long csr_prmd;
+>         unsigned long csr_crmd;
+> @@ -129,6 +133,9 @@ struct thread_struct {
+>         struct loongarch_fpu fpu FPU_ALIGN;
+>  };
+>
+> +#define thread_saved_ra(tsk)   (tsk->thread.sched_ra)
+> +#define thread_saved_fp(tsk)   (tsk->thread.sched_cfa)
+> +
+>  #define INIT_THREAD  {                                         \
+>         /*                                                      \
+>          * Main processor registers                             \
+> @@ -145,6 +152,8 @@ struct thread_struct {
+>         .reg29                  = 0,                            \
+>         .reg30                  = 0,                            \
+>         .reg31                  = 0,                            \
+> +       .sched_ra               = 0,                            \
+> +       .sched_cfa              = 0,                            \
+>         .csr_crmd               = 0,                            \
+>         .csr_prmd               = 0,                            \
+>         .csr_euen               = 0,                            \
+> diff --git a/arch/loongarch/include/asm/switch_to.h b/arch/loongarch/include/asm/switch_to.h
+> index 2a8d04375574..43a5ab162d38 100644
+> --- a/arch/loongarch/include/asm/switch_to.h
+> +++ b/arch/loongarch/include/asm/switch_to.h
+> @@ -15,12 +15,15 @@ struct task_struct;
+>   * @prev:      The task previously executed.
+>   * @next:      The task to begin executing.
+>   * @next_ti:   task_thread_info(next).
+> + * @sched_ra:  __schedule return address.
+> + * @sched_cfa: __schedule call frame address.
+>   *
+>   * This function is used whilst scheduling to save the context of prev & load
+>   * the context of next. Returns prev.
+>   */
+>  extern asmlinkage struct task_struct *__switch_to(struct task_struct *prev,
+> -                       struct task_struct *next, struct thread_info *next_ti);
+> +                       struct task_struct *next, struct thread_info *next_ti,
+> +                       void *sched_ra, void *sched_cfa);
+>
+>  /*
+>   * For newly created kernel threads switch_to() will return to
+> @@ -28,10 +31,11 @@ extern asmlinkage struct task_struct *__switch_to(struct task_struct *prev,
+>   * That is, everything following __switch_to() will be skipped for new threads.
+>   * So everything that matters to new threads should be placed before __switch_to().
+>   */
+> -#define switch_to(prev, next, last)                                    \
+> -do {                                                                   \
+> -       lose_fpu_inatomic(1, prev);                                     \
+> -       (last) = __switch_to(prev, next, task_thread_info(next));       \
+> +#define switch_to(prev, next, last)                                            \
+> +do {                                                                           \
+> +       lose_fpu_inatomic(1, prev);                                             \
+> +       (last) = __switch_to(prev, next, task_thread_info(next),                \
+> +                __builtin_return_address(0), __builtin_frame_address(0));      \
+>  } while (0)
+>
+>  #endif /* _ASM_SWITCH_TO_H */
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index 918600e7b30f..7449513eb08d 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_EFI)             += efi.o
+>  obj-$(CONFIG_CPU_HAS_FPU)      += fpu.o
+>
+>  obj-$(CONFIG_MODULES)          += module.o module-sections.o
+> +obj-$(CONFIG_STACKTRACE)        += stacktrace.o
+>
+>  obj-$(CONFIG_PROC_FS)          += proc.o
+>
+> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+> index 20cd9e16a95a..eb350f3ffae5 100644
+> --- a/arch/loongarch/kernel/asm-offsets.c
+> +++ b/arch/loongarch/kernel/asm-offsets.c
+> @@ -103,6 +103,8 @@ void output_thread_defines(void)
+>         OFFSET(THREAD_REG29, task_struct, thread.reg29);
+>         OFFSET(THREAD_REG30, task_struct, thread.reg30);
+>         OFFSET(THREAD_REG31, task_struct, thread.reg31);
+> +       OFFSET(THREAD_SCHED_RA, task_struct, thread.sched_ra);
+> +       OFFSET(THREAD_SCHED_CFA, task_struct, thread.sched_cfa);
+>         OFFSET(THREAD_CSRCRMD, task_struct,
+>                thread.csr_crmd);
+>         OFFSET(THREAD_CSRPRMD, task_struct,
+> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+> index 709b7a1664f8..34c3f2148714 100644
+> --- a/arch/loongarch/kernel/process.c
+> +++ b/arch/loongarch/kernel/process.c
+> @@ -135,6 +135,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>         childregs = (struct pt_regs *) childksp - 1;
+>         /*  Put the stack after the struct pt_regs.  */
+>         childksp = (unsigned long) childregs;
+> +       p->thread.sched_cfa = 0;
+>         p->thread.csr_euen = 0;
+>         p->thread.csr_crmd = csr_read32(LOONGARCH_CSR_CRMD);
+>         p->thread.csr_prmd = csr_read32(LOONGARCH_CSR_PRMD);
+> @@ -145,6 +146,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>                 p->thread.reg23 = (unsigned long)args->fn;
+>                 p->thread.reg24 = (unsigned long)args->fn_arg;
+>                 p->thread.reg01 = (unsigned long)ret_from_kernel_thread;
+> +               p->thread.sched_ra = (unsigned long)ret_from_kernel_thread;
+>                 memset(childregs, 0, sizeof(struct pt_regs));
+>                 childregs->csr_euen = p->thread.csr_euen;
+>                 childregs->csr_crmd = p->thread.csr_crmd;
+> @@ -161,6 +163,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>
+>         p->thread.reg03 = (unsigned long) childregs;
+>         p->thread.reg01 = (unsigned long) ret_from_fork;
+> +       p->thread.sched_ra = (unsigned long) ret_from_fork;
+>
+>         /*
+>          * New tasks lose permission to use the fpu. This accelerates context
+> diff --git a/arch/loongarch/kernel/stacktrace.c b/arch/loongarch/kernel/stacktrace.c
+> new file mode 100644
+> index 000000000000..f4f4b8ad3917
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/stacktrace.c
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Stack trace management functions
+> + *
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/sched.h>
+> +#include <linux/stacktrace.h>
+> +
+> +#include <asm/stacktrace.h>
+> +#include <asm/unwind.h>
+> +
+> +void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
+> +                    struct task_struct *task, struct pt_regs *regs)
+> +{
+> +       struct pt_regs dummyregs;
+> +       struct unwind_state state;
+> +       unsigned long addr;
+> +
+> +       regs = &dummyregs;
+> +
+> +       if (task == current) {
+> +               regs->csr_era = (unsigned long)__builtin_return_address(0);
+> +               regs->regs[3] = (unsigned long)__builtin_frame_address(0);
+> +       } else {
+> +               regs->csr_era = thread_saved_ra(task);
+> +               regs->regs[3] = thread_saved_fp(task);
+> +       }
+> +
+> +       regs->regs[1] = 0;
+> +       for (unwind_start(&state, task, regs);
+> +             !unwind_done(&state); unwind_next_frame(&state)) {
+> +               addr = unwind_get_return_address(&state);
+> +               if (!addr || !consume_entry(cookie, addr))
+> +                       break;
+> +       }
+> +}
+> diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
+> index 37e84ac8ffc2..43ebbc3990f7 100644
+> --- a/arch/loongarch/kernel/switch.S
+> +++ b/arch/loongarch/kernel/switch.S
+> @@ -21,6 +21,8 @@ SYM_FUNC_START(__switch_to)
+>
+>         cpu_save_nonscratch a0
+>         stptr.d ra, a0, THREAD_REG01
+> +       stptr.d a3, a0, THREAD_SCHED_RA
+> +       stptr.d a4, a0, THREAD_SCHED_CFA
+>         move    tp, a2
+>         cpu_restore_nonscratch a1
+>
+> --
+> 2.20.1
+>

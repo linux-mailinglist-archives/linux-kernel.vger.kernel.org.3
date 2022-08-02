@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30216587595
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC03458759E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiHBCkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S235740AbiHBCrt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 1 Aug 2022 22:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiHBCkl (ORCPT
+        with ESMTP id S231213AbiHBCrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:40:41 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6012B6152
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 19:40:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz17so23603444ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 19:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=xPuuf8+PAYoavldmY5b0ibEHAIh5Ld0JS+AL2+6BUHg=;
-        b=A8wfm0/Lj6UP6J2JryDD1irUewuyEwBm3U9jUrGLoMk6ihhA52fQ1xstY+87Rg/3Pg
-         81rDvRy8AvrKkvVCpTVR1CZb4VdhUO7vUCMrbzCc+paxTDLjZXArzlgyvj6kIlAHZn0Y
-         /VUOR1t1JvAwXes35KTGoJpaLzQM4dV31mrq0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=xPuuf8+PAYoavldmY5b0ibEHAIh5Ld0JS+AL2+6BUHg=;
-        b=2PD0BhY/+yWkgNHtaewMH9A88Tce19Ke9W+cJqMiv00Eacw3cPL0ikXvikHXoIW+HL
-         JT5FFNOmk8BdaLqiF1DW++cMpJix9uZay/BXIhZyyk+HQVvJlzol4dyPzIf/MEMM4Owh
-         KqhelN6BSYliVS6WXO4dGKPxlX3VXkarerOJ59760acMLznSG0iJ9/fpO3+rnOyrJUhr
-         4Q0ZKcXRupRqeen62EqDWK0i40o5j7+8/h7wWklH/Q9cYhEQh6J1iquDAEO9Pq/gi6G1
-         L9V/zQG7q47oj/jsX1Qe1SmjmH1mMkaolMVt7jBd/aq4Nedo/Rid94beLX3mi8LzXhRV
-         rwDQ==
-X-Gm-Message-State: AJIora9baUo87pxkhHi6OUs97kA4gAMQ1wA9EioUtueRkPsMx9o/Qag8
-        Odi3klDOYH2QLX/D1ZJt91mVyGYoueJXTtLl1prULw==
-X-Google-Smtp-Source: AGRyM1ssOTfG0ulGVLlHvsfyQwduJLPLytNCncGY7BXeiV9DslnFDGR/nwnfEhce0TWJka/kMUnxWwF6omDezNqnpLA=
-X-Received: by 2002:a17:907:2ccb:b0:72b:52bb:fd51 with SMTP id
- hg11-20020a1709072ccb00b0072b52bbfd51mr14600021ejc.118.1659408038916; Mon, 01
- Aug 2022 19:40:38 -0700 (PDT)
-MIME-Version: 1.0
-From:   Micah Morton <mortonm@chromium.org>
-Date:   Mon, 1 Aug 2022 19:42:26 -0700
-Message-ID: <CAJ-EccPH46FGKQj8gYEg5HGpmmRiqzrZouTZauwpvX-+2j4GNA@mail.gmail.com>
-Subject: [GIT PULL] SafeSetID changes for v6.0
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 22:47:42 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF691AF28;
+        Mon,  1 Aug 2022 19:47:34 -0700 (PDT)
+Received: from proxy01.sjtu.edu.cn (unknown [202.112.26.54])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id D39291008B391;
+        Tue,  2 Aug 2022 10:47:32 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by proxy01.sjtu.edu.cn (Postfix) with ESMTP id AC7D6203D801B;
+        Tue,  2 Aug 2022 10:47:32 +0800 (CST)
+X-Virus-Scanned: amavisd-new at proxy01.sjtu.edu.cn
+Received: from proxy01.sjtu.edu.cn ([127.0.0.1])
+        by localhost (proxy01.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id z8dqFZ4H9EgJ; Tue,  2 Aug 2022 10:47:32 +0800 (CST)
+Received: from smtpclient.apple (unknown [58.45.124.125])
+        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
+        by proxy01.sjtu.edu.cn (Postfix) with ESMTPSA id D593B203D8011;
+        Tue,  2 Aug 2022 10:47:05 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [RFC 3/5] vhost_test: batch used buffer
+Date:   Tue, 2 Aug 2022 10:47:01 +0800
+In-Reply-To: <CAJaqyWfgUqdP6mkOUdouvQSst=qc7MOTaigC-EiTg9-gojHqzg@mail.gmail.com>
+Cc:     jasowang <jasowang@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+To:     eperezma <eperezma@redhat.com>
+Message-Id: <5E347090-9EB2-4961-B435-D6783CB46CAF@sjtu.edu.cn>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
 
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+----- Original Message -----
+From: "eperezma" <eperezma@redhat.com>
+To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
+Cc: "jasowang" <jasowang@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael Tsirkin" <mst@redhat.com>, "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>, "virtualization" <virtualization@lists.linux-foundation.org>
+Sent: Friday, July 22, 2022 3:12:47 PM
+Subject: Re: [RFC 3/5] vhost_test: batch used buffer
+
+On Thu, Jul 21, 2022 at 10:44 AM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+> 
+> Only add to used ring when a batch a buffer have all been used.  And if
+> in order feature negotiated, add randomness to the used buffer's order,
+> test the ability of vhost to reorder batched buffer.
+> 
+> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+> ---
+> drivers/vhost/test.c | 15 ++++++++++++++-
+> 1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
+> index bc8e7fb1e..1c9c40c11 100644
+> --- a/drivers/vhost/test.c
+> +++ b/drivers/vhost/test.c
+> @@ -43,6 +43,9 @@ struct vhost_test {
+> static void handle_vq(struct vhost_test *n)
+> {
+>        struct vhost_virtqueue *vq = &n->vqs[VHOST_TEST_VQ];
+> +       struct vring_used_elem *heads = kmalloc(sizeof(*heads)
+> +                       * vq->num, GFP_KERNEL);
+> +       int batch_idx = 0;
+>        unsigned out, in;
+>        int head;
+>        size_t len, total_len = 0;
+> @@ -84,11 +87,21 @@ static void handle_vq(struct vhost_test *n)
+>                        vq_err(vq, "Unexpected 0 len for TX\n");
+>                        break;
+>                }
+> -               vhost_add_used_and_signal(&n->dev, vq, head, 0);
+> +               heads[batch_idx].id = cpu_to_vhost32(vq, head);
+> +               heads[batch_idx++].len = cpu_to_vhost32(vq, len);
+>                total_len += len;
+>                if (unlikely(vhost_exceeds_weight(vq, 0, total_len)))
+>                        break;
+>        }
+> +       if (batch_idx) {
+> +               if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && batch_idx >= 2) {
+
+Maybe to add a module parameter to test this? Instead of trusting in
+feature negotiation, "unorder_used=1" or something like that.
+
+vhost.c:vhost_add_used_and_signal_n should support receiving buffers
+in order or out of order whether F_IN_ORDER is negotiated or not.
+
+Thanks!
 
 
-are available in the Git repository at:
 
-
-  https://github.com/micah-morton/linux.git tags/safesetid-6.0
-
-
-for you to fetch changes up to 64b634830c919979de4b18163e15d30df66e64a8:
-
-
-  LSM: SafeSetID: add setgroups() testing to selftest (2022-07-15
-18:24:42 +0000)
-
-
-----------------------------------------------------------------
-
-This pull request contains one commit that touches common kernel code,
-
-one that adds functionality internal to the SafeSetID LSM code, and a
-
-few other commits that only modify the SafeSetID LSM selftest.
-
-
-The commit that touches common kernel code simply adds an LSM hook in
-
-the setgroups() syscall that mirrors what is done for the existing LSM
-
-hooks in the setuid() and setgid() syscalls. This commit combined with
-
-the SafeSetID-specific one allow the LSM to filter setgroups() calls
-
-according to configured rule sets in the same way that is already done
-
-for setuid() and setgid().
-
-
-The changes are based on v5.19-rc6 and have been in -next.
-
-
-----------------------------------------------------------------
-
-Micah Morton (6):
-
-      LSM: SafeSetID: fix userns bug in selftest
-
-      LSM: SafeSetID: selftest cleanup and prepare for GIDs
-
-      LSM: SafeSetID: add GID testing to selftest
-
-      security: Add LSM hook to setgroups() syscall
-
-      LSM: SafeSetID: Add setgroups() security policy handling
-
-      LSM: SafeSetID: add setgroups() testing to selftest
-
-
- include/linux/lsm_hook_defs.h                      |   1 +
-
- include/linux/lsm_hooks.h                          |   7 +
-
- include/linux/security.h                           |   7 +
-
- kernel/groups.c                                    |  13 +
-
- security/safesetid/lsm.c                           |  39 ++-
-
- security/security.c                                |   5 +
-
- tools/testing/selftests/safesetid/Makefile         |   2 +-
-
- tools/testing/selftests/safesetid/safesetid-test.c | 295 ++++++++++++++++++---
-
- 8 files changed, 315 insertions(+), 54 deletions(-)
+> +                       vhost_add_used_and_signal_n(&n->dev, vq, &heads[batch_idx / 2],
+> +                                                   batch_idx - batch_idx / 2);
+> +                       vhost_add_used_and_signal_n(&n->dev, vq, heads, batch_idx / 2);
+> +               } else {
+> +                       vhost_add_used_and_signal_n(&n->dev, vq, heads, batch_idx);
+> +               }
+> +       }
+> 
+>        mutex_unlock(&vq->mutex);
+> }
+> --
+> 2.17.1

@@ -2,109 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FE1588429
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB59E588431
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236119AbiHBWWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S236413AbiHBWZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbiHBWWH (ORCPT
+        with ESMTP id S232519AbiHBWZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:22:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBB654AFE;
-        Tue,  2 Aug 2022 15:22:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E937B81F45;
-        Tue,  2 Aug 2022 22:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66109C433D7;
-        Tue,  2 Aug 2022 22:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659478923;
-        bh=9VDhQQyT2A6k2G8P0OvmJ8l24hraDbeYrrioekoRq9M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ksE43vgw5yPAp97pisFLn1VMujzKXlkfPpm8PiuTHHAnw/i4DUvp8pWYAhRlEz7R9
-         6hWB+5zUcSucx8Otxq8+kHSpfuum2mKEpGAKzm1wzgwHIOxA8kqLJWWnjv3AcNhIj7
-         70ASWFQZBqQfdTr3WLiBR36eWYIuOI9+l8M8QqG3YFaEHnx2W6ortl++uj5/lFr+xd
-         jndtMFUmzHcvbPOnUmMmDz89w2jv2yvGo7zt9xVk4Ma8l99834n1LSXQ4oTcTH/GAP
-         fNRddzTFv4Mdg/SSOu2LZFP/ui+5L/+k6aOUXukWBhxLpQxLgy9DwSRGOTjRI8AH/c
-         3VgkVx+OsoBZQ==
-Received: by mail-pg1-f179.google.com with SMTP id i71so7992310pge.9;
-        Tue, 02 Aug 2022 15:22:03 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1H3hy1YUfvUlEjj4brFy6Omg4PHnID8evPsO8P6K9gHC/M1QZ6
-        1OPdlCATpaM+cqeF0wgpaxD+xZ+NmFixnrdjBw==
-X-Google-Smtp-Source: AA6agR5CzuOzOwpHSN5b+WH1fxHUfAlYek1LHV5RvuPClFgI4f4JvRb9+DG82z3885fVG/s3a/RFDqymvboLdabT8FM=
-X-Received: by 2002:aa7:982f:0:b0:52d:9787:c5c5 with SMTP id
- q15-20020aa7982f000000b0052d9787c5c5mr9518249pfl.24.1659478922946; Tue, 02
- Aug 2022 15:22:02 -0700 (PDT)
+        Tue, 2 Aug 2022 18:25:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4429054AE0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:25:06 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a7so15381727ejp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K9zCr1Ua5Z5qld+qZnE6ufAcMkPILK5j4hP/Kmv7z4Q=;
+        b=fPeWFzpguMC2ok/r6m5/wFGNI4Vpwps2mjYbnuB72rg3CWEdNIanju6umfeRlVyIHj
+         o53Z8VliqtA8T9G6X+DjIsaIXr+QtA/ZRgLs48fqtcySgf5BE5cV9FHYo73gX/N4PoL9
+         DfmeZ/+cOAqleFYDQpG1Zwtenkbnum5NfzeyxEs+O0ZhUabRpVKkDB2BKkds3RPlVfEA
+         ghZTxrgXhh6G9umrx1PBlSs3LrDlqtr51QEPXvoxhUSDUowltkXISgfkjZPLoNa06901
+         Ns1yQxD6dwkcvCRnH8zWzMEcSuY5Ayf1gLS8ucp2y5i+eX6AeId2Ry8VVkfkoADGKEe3
+         N0+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K9zCr1Ua5Z5qld+qZnE6ufAcMkPILK5j4hP/Kmv7z4Q=;
+        b=dwYtSEH6kEwmxP1Q+wnMqk0LXUCWi+Q+iiZJO84fZy4tGwddDXSYKBob2EvMEWrWZs
+         qzFNlDnBWDiRIWpat5eQNmWH8jjLCh2MJOS6x6meGW7XXF++XSke+1tNTrPdlkbFcHwy
+         jZtloh1u1netZ4qy90SJygM6f64nWSHIpkCdH4qptLvQ6ENLFxeDK1vr5Hd0rf3J+qVy
+         FtBJaTyuhnaMY/SwXUh510Gn4YoiXxdTwe+Jx0jC7TNm93Q2w5tkJquXhmKEO7q4Cd3U
+         /OW1pxJ3xf5H0+99ef9B/yiViPvhUDe1Uv/58foYaCQ38DbWqOXIvNVzbRSiID+1pvgg
+         V09w==
+X-Gm-Message-State: ACgBeo01o8T7zqPl1MyPM0EFwX2Nvfg0OsiUDsFIbwUyBi0zbofXElo7
+        +/RW89h1Enu/hssihP8ovFY+IMjQE+GCKDWar9MvVQ==
+X-Google-Smtp-Source: AA6agR7m/4yk72Yrra1mZ03lh/mGJ8i/zB89ellNcKdmgT0x1mIJ//kyaqU7IU0LpmUKUNhe5IiDLngr8Zk5BMlPqEE=
+X-Received: by 2002:a17:907:7b89:b0:730:8649:983c with SMTP id
+ ne9-20020a1709077b8900b007308649983cmr8717759ejc.542.1659479104597; Tue, 02
+ Aug 2022 15:25:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728175137.1172841-1-robh@kernel.org> <a673e846-e3d7-63e3-70cd-4adef3f761cc@arm.com>
-In-Reply-To: <a673e846-e3d7-63e3-70cd-4adef3f761cc@arm.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 2 Aug 2022 16:21:49 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
-Message-ID: <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: PCI: host-generic-pci: Allow IOMMU and MSI properties
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220802212621.420840-1-mairacanal@riseup.net> <20220802212621.420840-2-mairacanal@riseup.net>
+In-Reply-To: <20220802212621.420840-2-mairacanal@riseup.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 2 Aug 2022 15:24:53 -0700
+Message-ID: <CAGS_qxq_meFFwLQV+_aEL+kr-q6x0WNeq7OS99bq_MyES5T98w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
+        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 3:26 AM Robin Murphy <robin.murphy@arm.com> wrote:
+On Tue, Aug 2, 2022 at 2:26 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
 >
-> On 2022-07-28 18:51, Rob Herring wrote:
-> > Allow 'iommu-map', 'iommu-map-mask', and 'msi-parent' properties for
-> > generic host. This fixes unevaluated property warnings on Arm Juno, AMD
-> > Seattle, and FSL LS1028a.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   Documentation/devicetree/bindings/pci/host-generic-pci.yaml | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
-> > index 6bcaa8f2c3cf..d25423aa7167 100644
-> > --- a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
-> > @@ -106,6 +106,9 @@ properties:
-> >       maxItems: 3
-> >
-> >     dma-coherent: true
-> > +  iommu-map: true
-> > +  iommu-map-mask: true
-> > +  msi-parent: true
+> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_E=
+Q
+> or KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp
+> function, such as:
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 >
-> Hmm, in general this set looks suspiciously incomplete without msi-map
-> and msi-map-mask too. Am I right in thinking that the ideal thing to do
-> here would be to convert pci-msi.txt and pci-iommu.txt to schema and
-> $ref them?
+> Although this usage produces correct results for the test cases, when
+> the expectation fails, the error message is not very helpful,
+> indicating only the return of the memcmp function.
+>
+> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a specified size.
+> In case of expectation failure, those macros print the hex dump of the
+> memory blocks, making it easier to debug test failures for memory blocks.
+>
+> That said, the expectation
+>
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>
+> would translate to the expectation
+>
+>     KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
+>
+> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
 
-I already added msi-map/msi-map-mask to pci-bus.yaml[1] as well as
-schemas for iommu-map/iommu-map-mask[2] and msi-parent[3]. Since
-msi-map is already in the referenced schema, it is allowed here.
-msi-parent is separate because it is used elsewhere. iommu-map is
-separate largely to make copying pci-iommu.txt as-is easier.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Thanks, this is nice to have and I think the clarity issues have been resol=
+ved.
 
-And yes, pci-iommu.txt can now be removed. pci-msi.txt is more
-complicated as all of it hasn't been moved into schemas.
+Some various optional nits about whitespace below.
+I'd see if anyone has any complaints about the output format before
+wasting any time on those nits.
 
-Rob
+Looking at example output now, I see
+    Expected array2 =3D=3D array1, but
+        array2 =3D=3D
+<1f> 00 00 00 ff 00 00 00
+        array1 =3D=3D
+<0f> 00 00 00 ff 00 00 00
+    not ok 4 - example_all_expect_macros_test
 
-[1] https://github.com/devicetree-org/dt-schema/commit/109bde712466281e8c96a4fadb0f68e7a90a6eca
-[2] https://github.com/devicetree-org/dt-schema/commit/3d44bf2b46a9ac638550ca3916d7d7f70823bb58
-[3] https://github.com/devicetree-org/dt-schema/commit/59f2e3103b6e776afe4f42e45897f7eabae06fa4
+Looks good to me.
+
+> ---
+> v1 -> v2:
+> - Change "determinated" to "specified" (Daniel Latypov).
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
+make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Mark the different bytes on the failure message with a <> (Daniel Latyp=
+ov).
+> ---
+>  include/kunit/assert.h | 35 +++++++++++++++++++
+>  include/kunit/test.h   | 76 ++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/assert.c     | 54 ++++++++++++++++++++++++++++++
+>  3 files changed, 165 insertions(+)
+>
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 4b52e12c2ae8..a54f5253b997 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -256,4 +256,39 @@ void kunit_binary_str_assert_format(const struct kun=
+it_assert *assert,
+>                                     const struct va_format *message,
+>                                     struct string_stream *stream);
+>
+> +
+> +#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) =
+\
+> +       {                                                                =
+ \
+> +               .assert =3D { .format =3D kunit_mem_assert_format },   \
+> +               .text =3D text_,                                         =
+   \
+> +               .left_value =3D left_val,                                =
+   \
+> +               .right_value =3D right_val, .size =3D size_,             =
+     \
+> +       }
+
+very nit: the trailing \s aren't quite lined up.
+In this particular case, I'm planning on deleting this block in the
+future, so it doesn't matter too much.
+
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 8ffcd7de9607..1925d648eec8 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -684,6 +684,36 @@ do {                                                =
+                              \
+>                         ##__VA_ARGS__);                                  =
+      \
+>  } while (0)
+>
+> +#define KUNIT_MEM_ASSERTION(test,                                     \
+
+very nit: the trailing \s are also a bit out of line here.
+We can fix this particular line by just adding another \t after "test,"
+
+In general, lining these up is just a matter of adding a \t after the
+text and then maybe add or delete some of the " "s before the \s.
+E.g. with vim's `:set list`, after lining up the \s, I get
+
+#define KUNIT_MEM_ASSERTION(test,^I^I^I^I^I       \$
+^I^I^I^I   assert_type,^I^I^I^I       \$
+^I^I^I^I   left,^I^I^I^I       \$
+^I^I^I^I   op,^I^I^I^I^I       \$
+^I^I^I^I   right,^I^I^I^I       \$
+^I^I^I^I   size,^I^I                       \$
+^I^I^I^I   fmt,^I^I^I^I^I       \$
+^I^I^I^I   ...)^I^I^I^I^I       \$
+do {^I^I^I^I^I^I^I^I^I       \$
+^Iconst void *__left =3D (left);^I^I^I^I^I       \$
+...
+
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index d00d6d181ee8..abd434bc7ec6 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -204,3 +204,57 @@ void kunit_binary_str_assert_format(const struct kun=
+it_assert *assert,
+>         kunit_assert_print_msg(message, stream);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+> +
+> +/* Adds a hexdump of a buffer to a string_stream comparing it with
+> + * a second buffer. The different bytes are marked with <>.
+> + */
+> +static void kunit_assert_hexdump(struct string_stream *stream,
+> +               const void *buf, const void *compared_buf, const size_t l=
+en)
+> +{
+> +       size_t i;
+> +       const u8 *buf1 =3D buf;
+> +       const u8 *buf2 =3D compared_buf;
+> +
+> +       for (i =3D 0; i < len; ++i) {
+> +               if (i % 16)
+> +                       string_stream_add(stream, " ");
+> +               else if (i)
+> +                       string_stream_add(stream, "\n ");
+> +
+> +               if (buf1[i] !=3D buf2[i])
+> +                       string_stream_add(stream, "<%02x>", buf1[i]);
+> +               else
+> +                       string_stream_add(stream, "%02x", buf1[i]);
+> +       }
+> +}
+> +
+> +void kunit_mem_assert_format(const struct kunit_assert *assert,
+> +                                   const struct va_format *message,
+> +                                   struct string_stream *stream)
+
+very nit: the func above doesn't line up the params, but I don't think
+it matters too much.
+It uses \t\t whereas this one is \t\t\t + some spaces.
+
+I think it'd be fine if they were consistent with each other, or if
+you're willing to mess around with spaces, we could get the parameters
+to line up.
+(e.g. see how kunit_binary_ptr_assert_format and others do their line break=
+s)

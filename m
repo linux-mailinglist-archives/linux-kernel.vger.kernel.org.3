@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03457588170
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A0D588190
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbiHBR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S236184AbiHBSAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiHBR6i (ORCPT
+        with ESMTP id S235477AbiHBSAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:58:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFE24D801
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:58:37 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id d14so11175260lfl.13
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XlyYTnn1kbQZ516FIn+rClIxx0d3BNXJVA7WhFGAQX8=;
-        b=T7Njkv8tzTVHHIvYpT9tG294YaM9GVyg71TOexkCuOgsNTAvaFhaA0Vmm2k2noHMhH
-         O+VWuJaWwm+LjFlWFWVHlwXo4TvjS0+XOfSCCPvqEYqiwcmdQiIBGsFXaqGJ78XoOZZS
-         xWnqhlZ2P61EJ/apxpKqjo2B1Cgy9MBn+/baAzg0ClzSACClmuwVjX2tHTTXL5brtvTZ
-         mAUveI1bX+afXCappQ+YkXMvYHQkhOVMcFqk5AL2a+w/13fm/Hi9CoEpn1DHuy8w67Tq
-         +ldB4hHTSstKkviAnDrL6uZNiXL0isptAOL/FtYjrgq4EwkJgRetWcdPSsfIpIKyW13M
-         HEew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XlyYTnn1kbQZ516FIn+rClIxx0d3BNXJVA7WhFGAQX8=;
-        b=5tVkmhvqgBCtH4fjwPZldjPK8sQszEqSXimt0Mfno50kDDWpHU5ZnX17HvWR5SYQgl
-         jM63edY3Y5Ho1B6cebLJ+NTgujo0JanuUynZIuIzakG/x3lj9dKigqPRcKaB6WVvigf8
-         nYogWXQNFnSrwpk13u90U2LoMnKGkSwJNyBoOZheStKiXI+zxFFO6DMiuItdWDQzbp0i
-         f+RNL/Ai91GBthO7zG9c0JoLDfzM9yWKU5NK5AeriwlyGrq3oMig8t9iHd0VzcSt0NJe
-         Jl31KgT835OODwazjXz+nV251i0JWsBGCO/0fHZ+v3bT03naVEKa7vGqCcSUj1qDoZhk
-         2hMQ==
-X-Gm-Message-State: ACgBeo28jRSDmHMGO12nWH7PrBPTikc4e8j6+JVR31+p8L9t15xsR4Bz
-        zX3W1FKPHfAGQNI/eNEmnT+mrqgzcvvNOXa/666mzQ==
-X-Google-Smtp-Source: AA6agR40G8SCTsMN05WoDpwiLryayqYoZ9acr7piTwCNBrfuVq6ECmM1bRacKcBj0jEU+55VZMSSU8Vxd9uKo7iDo/o=
-X-Received: by 2002:a19:ca50:0:b0:48a:f4ce:4559 with SMTP id
- h16-20020a19ca50000000b0048af4ce4559mr4677864lfj.432.1659463115376; Tue, 02
- Aug 2022 10:58:35 -0700 (PDT)
+        Tue, 2 Aug 2022 14:00:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176BC51A20;
+        Tue,  2 Aug 2022 10:59:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55D99B82011;
+        Tue,  2 Aug 2022 17:59:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B6BC433B5;
+        Tue,  2 Aug 2022 17:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659463183;
+        bh=xpWA7Jpv8r6INPM8eC9dRH0bjB0EBSQdgOjBy0N4/rw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V15liBSsJpZKesOb/8eDlMArbGuucPgpmrtWaDszI2rKEzxMbDCo0O95EcymiP/Gp
+         hgvNMmLbm1E/ShJPRVRXIXi9EaBllYBTW3GEAjm718erwAGJskfqJORShJdSvPuNbQ
+         iwAUvD2pCUmKfk3TcIc0HVHOG2CT8xYrYzkhhrOlRbyepLiKpGC5bezksL0I3N+KzC
+         Jv4qtfYKy9y1e9icY9Kkg9JLXewDMZ4CEcfa1K++dF9fJD6y37IAJgFl4+f0I149YC
+         edPUIBhg/MRDSCtYNChFU0UpEPNcFAl7jQ87XMhYIPr1NXSx95oRx15uf1S6GtFrhp
+         5GKo0/IDk4IgQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH] MIPS: tlbex: Explicitly compare _PAGE_NO_EXEC against 0
+Date:   Tue,  2 Aug 2022 10:59:36 -0700
+Message-Id: <20220802175936.2278362-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <YulSY1pDms0ZyNs9@debian>
+References: <YulSY1pDms0ZyNs9@debian>
 MIME-Version: 1.0
-References: <20220730173636.1303357-1-masahiroy@kernel.org> <20220730173636.1303357-2-masahiroy@kernel.org>
-In-Reply-To: <20220730173636.1303357-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 2 Aug 2022 10:58:24 -0700
-Message-ID: <CAKwvOdk3-UdsxDwjgF=_=irsGLeDj6LF45oeV+6a5d9CeY-Fkg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] modpost: use more reliable way to get fromsec in section_rel(a)()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 10:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The section name of Rel and Rela starts with ".rel" and ".rela"
-> respectively (but, I do not know whether this is specification or
-> convention).
->
-> For example, ".rela.text" holds relocation entries applied to the
-> ".text" section.
->
-> So, the code chops the ".rel" or ".rela" prefix to get the name of
-> the section to which the relocation applies.
->
-> However, I do not like to skip 4 or 5 bytes blindly because it is
-> potential memory overrun.
->
-> The ELF specification provides a more reliable way to do this.
->
->  - The sh_info field holds extra information, whose interpretation
->    depends on the section type
->
->  - If the section type is SHT_REL or SHT_RELA, the sh_info field holds
->    the section header index of the section to which the relocation
->    applies.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+When CONFIG_XPA is enabled, Clang warns:
 
-Yes, this seems much safer; thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+  arch/mips/mm/tlbex.c:629:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+                              ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  arch/mips/mm/tlbex.c:2568:24: error: converting the result of '<<' to a boolean; did you mean '(1 << _PAGE_NO_EXEC_SHIFT) != 0'? [-Werror,-Wint-in-bool-context]
+          if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
+                                ^
+  arch/mips/include/asm/pgtable-bits.h:174:28: note: expanded from macro '_PAGE_NO_EXEC'
+  # define _PAGE_NO_EXEC          (1 << _PAGE_NO_EXEC_SHIFT)
+                                     ^
+  2 errors generated.
 
-> ---
->
->  scripts/mod/modpost.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 148b38699889..c6a055c0291e 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1723,8 +1723,7 @@ static void section_rela(const char *modname, struct elf_info *elf,
->         Elf_Rela *start = (void *)elf->hdr + sechdr->sh_offset;
->         Elf_Rela *stop  = (void *)start + sechdr->sh_size;
->
-> -       fromsec = sech_name(elf, sechdr);
-> -       fromsec += strlen(".rela");
-> +       fromsec = sec_name(elf, sechdr->sh_info);
->         /* if from section (name) is know good then skip it */
->         if (match(fromsec, section_white_list))
->                 return;
-> @@ -1776,8 +1775,7 @@ static void section_rel(const char *modname, struct elf_info *elf,
->         Elf_Rel *start = (void *)elf->hdr + sechdr->sh_offset;
->         Elf_Rel *stop  = (void *)start + sechdr->sh_size;
->
-> -       fromsec = sech_name(elf, sechdr);
-> -       fromsec += strlen(".rel");
-> +       fromsec = sec_name(elf, sechdr->sh_info);
->         /* if from section (name) is know good then skip it */
->         if (match(fromsec, section_white_list))
->                 return;
-> --
-> 2.34.1
->
+_PAGE_NO_EXEC can be '0' or '1 << _PAGE_NO_EXEC_SHIFT' depending on the
+build and runtime configuration, which is what the negation operators
+are trying to convey. To silence the warning, explicitly compare against
+0 so the result of the '<<' operator is not implicitly converted to a
+boolean.
 
+According to its documentation, GCC enables -Wint-in-bool-context with
+-Wall but this warning is not visible when building the same
+configuration with GCC. It appears GCC only warns when compiling C++,
+not C, although the documentation makes no note of this:
+https://godbolt.org/z/x39q3brxf
 
+Reported-by: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/mips/mm/tlbex.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 8dbbd99fc7e8..be4d4670d649 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -626,7 +626,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+ 		return;
+ 	}
+ 
+-	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
++	if (cpu_has_rixi && _PAGE_NO_EXEC != 0) {
+ 		if (fill_includes_sw_bits) {
+ 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+ 		} else {
+@@ -2565,7 +2565,7 @@ static void check_pabits(void)
+ 	unsigned long entry;
+ 	unsigned pabits, fillbits;
+ 
+-	if (!cpu_has_rixi || !_PAGE_NO_EXEC) {
++	if (!cpu_has_rixi || _PAGE_NO_EXEC == 0) {
+ 		/*
+ 		 * We'll only be making use of the fact that we can rotate bits
+ 		 * into the fill if the CPU supports RIXI, so don't bother
+
+base-commit: 7d0d3fa7339ed5a06d6608b7cde9f079eba62bb1
 -- 
-Thanks,
-~Nick Desaulniers
+2.37.1
+

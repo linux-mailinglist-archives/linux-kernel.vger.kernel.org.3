@@ -2,400 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106C85876F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3810B5876F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234532AbiHBGFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 02:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S234484AbiHBGHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 02:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiHBGFQ (ORCPT
+        with ESMTP id S232576AbiHBGHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 02:05:16 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3538125D6;
-        Mon,  1 Aug 2022 23:05:13 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oIl1c-00745v-IF; Tue, 02 Aug 2022 16:05:06 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 02 Aug 2022 14:05:04 +0800
-Date:   Tue, 2 Aug 2022 14:05:04 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [GIT PULL] Crypto Update for 5.20
-Message-ID: <Yui+kNeY+Qg4fKVl@gondor.apana.org.au>
-References: <20210708030913.GA32097@gondor.apana.org.au>
- <20210817013601.GA14148@gondor.apana.org.au>
- <20210929023843.GA28594@gondor.apana.org.au>
- <20211029041408.GA3192@gondor.apana.org.au>
- <20211112104815.GA14105@gondor.apana.org.au>
- <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au>
- <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+        Tue, 2 Aug 2022 02:07:45 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2055.outbound.protection.outlook.com [40.107.95.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027FED100
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:07:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KahNW4EtunVbK+WqRlO3+ZzOja1S56mjeeoYP9N7yrVIk7uamJGxPdnx791ehz8jyVEeCdP5PIWUFQfl/kMgTHPY5XBPe1H9GwbQFrktskj7Xkizc5yL/awk8WGPyMBMTCSyhnvxmZuyc8i8+YXCvTxzAb2m4GGT+JcIyX/Hw3OMwD97+aPK3dUTqNck6NoAlbtETXj/m0d8TUCg9rMVHDZm2FbzlW5VB3tJ75/QYYN26HnJxQBwvjVl2qchHe3TeBeGVwuXeubRliyfiQBNAdxYZGew5tLFn0qb3aTPfDBv0afgKcU9IEvgn7HYwftUGA3ohvtX3N3lSSmxsQjUog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TMiiLEAjEJisFBYRi8V9GbOCfd1T55CWOGC/f2PAKqQ=;
+ b=OVllSOrLSuG6trwIs27llGBf78e+kLC6h+3DwTZHQONtAo4ZDC+Dm6HNCDx9gutSYdPEovMDyUcUcqrBPVrnhAXBwomWL83Nkm2hlHxv+bFeWnlW7mqf+m4jhZB1R+dsZCmnUP3zZHBpl0y6IjZEXrlCmICMARwBvvGeNsJsB0QMxYsa69S5s8ReXaRubkpszfrrFfNsxuMXJ+aenfNPV2lU96HMvuI85pwpVbjUZuCpdYEvctbb1l8qGoFEJKrufXONWwzYjYNqnTRBdo6gS2ywyGS0EnW5kfMBzhfJiFeaOM5/tZ5FQuSdg2Po9nB9XqfvNwj8tqD5CTeUYpy8tQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TMiiLEAjEJisFBYRi8V9GbOCfd1T55CWOGC/f2PAKqQ=;
+ b=VccGMTKuRxiXbkJ/67fqMeyJ5BhMDyWZgKfmyifCbeQ3i3Ed1+TkD+K+/BYyR0Ttb2+l1iaTSXMqh8evh4bAfLH+S6ztmAk/G/bsoP/FpRQW6lYy3P0/iIdYM7rJGssMX6IDDYdPDYDjJajlv3sOMd8mvKpXxPGyOJRjvLQlcmQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by IA1PR12MB6353.namprd12.prod.outlook.com (2603:10b6:208:3e3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
+ 2022 06:07:38 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::1c48:55fc:da99:87c9]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::1c48:55fc:da99:87c9%3]) with mapi id 15.20.5482.011; Tue, 2 Aug 2022
+ 06:07:37 +0000
+Message-ID: <d8b6c09d-78f0-eb0d-460d-28e8b5be826f@amd.com>
+Date:   Tue, 2 Aug 2022 11:36:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC v2] perf: Rewrite core context handling
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, alexey.budankov@linux.intel.com,
+        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
+        santosh.shukla@amd.com, ravi.bangoria@amd.com
+References: <20220113134743.1292-1-ravi.bangoria@amd.com>
+ <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+ <3492774b-a462-d8e6-34bf-9f5ea10729d4@amd.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <3492774b-a462-d8e6-34bf-9f5ea10729d4@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0038.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::6) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b3c838e8-7aef-4b52-2d28-08da744d4cab
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6353:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0bYSjlfRNw7pD2IwKEobMG2XiB39YGCCfZwQGG4qEQyaEWEWmzJMxxXB1RXrKPyzE+tsu6sLFdLeKl7pN83GuTflnBH67ZcoDzDdDb0DszuCyDgmd+jdohtqBhH7qyWbhDYx/asB9/IZ34VP7/OcxYYwGoxv7MRqA7nWifWmWxgFkF3qQfzKzjh5oC59AQJbOrIvpUQW6KdGSqBP+AYlr0aAb2+uvIgBq6DrDQTWvReq9BlRsN6lNG/KCcsqM+1xLpyDbCJTONCasqb4DAkvlMxYVetFCFfJsfQ4zDEQJDAcyNKKIU0n8iR4zTNKd5Ca8lqasLz5tPIDpFH8HZUbsyV4OWdQmy6SbzTZUVK8UyOHxnFNAYWNY2aneZFSsZp8sP7CeM82a9z/JAriys/+8Grm/uVNWf8+RE2JIN281Z1aVkpxklR6kFsTYpu1/m9C4dyVCEl8tz4JxRapjIIEMNaywozVhyCsvJhvxE8jfxdV7QJrDBhtEJHgZBWr5cTGS/miVzHwYXNkbH9HUKHbUhuRlzmYLw6JPlk7ANFoOCDefve+SGUR6KNGWl/6pLIgoDbdKw94lzM2pr9t+VC/Ee5YiCkN9nvAvOG4GiI0DT6ZkByRx9MqAwKyppno9ufK6O5WoydwcLunabkd4J9ZFWbkoTNWzn2aitOous9RhLiPFDgu6wQOpuGUObxN6w9zF4Jnm7GumJlPW8WpYA7R4iyc34nMgj3VxjfpHHKve/MtakgmjXlSXqOe+MaHUY0Nv0SQAvPE98u9Y5mFXBwdiFqjFetI3Qu8amknhvwnBtx5daKoQsRTBZAkKWbmHlRc+yR1h6LtjaJwRQge+mm5g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(31696002)(86362001)(26005)(6512007)(6486002)(5660300002)(66476007)(66556008)(66946007)(44832011)(2616005)(4326008)(7416002)(41300700001)(6666004)(8676002)(38100700002)(8936002)(53546011)(478600001)(6506007)(36756003)(6916009)(2906002)(31686004)(83380400001)(316002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NCs0bGlrNFdqSFNOaWhhWVZRVUpYYmNXUzBrbUdMbkFkNDk4bElvME9TZTNS?=
+ =?utf-8?B?dXI0RVV3RWVTVkxvc2VSaW1WM1M3VzJwSWpZbHRyOWIwUUtja2hVRHdPNmlw?=
+ =?utf-8?B?TUN3ME1Yb09JbkVGNjkzVFVpcFYraThQUlNUT1FNVkM5NTdpeHEzSlVkMmJ1?=
+ =?utf-8?B?L085MkpOU1QzQzBtMEplNFlBMHhrL3NEbG92bGd5SUJnaFY3Wk5oV1p2eEFR?=
+ =?utf-8?B?WnJzSjZCZHF2RXo1NkdZbDY0WG4yRHB0YktSbmxad3k0bEhSY0owZmhYVHgx?=
+ =?utf-8?B?RFp6T291TEtmYmFZQUFIa3gxYjJFSDBWMCt4SUlxNnN2dHMyWXE2TzJBR1U1?=
+ =?utf-8?B?Z2EwZWd1SkJzeTBZOXREZkVKdW1ubXhybGlCNXMxTWsrdW92TDBIcWJycy90?=
+ =?utf-8?B?RzlYZG1EOC94U29EU0dwd20zNXI0UURXUGNDOVZjVFRNYk5EWGROWHdMRzhj?=
+ =?utf-8?B?aTlWTXBGYkNuQWdqb21KdFhCdTBzdFdmMnQxR1JXek9wb0JOckt1ZmZIbGNK?=
+ =?utf-8?B?NFJNU1RNemFSMzhkQUFYeHVCelJxcWR4aEEvWmZWdklhSDQyV2Erbk9aMDdo?=
+ =?utf-8?B?ditHMisrcG9Fa25IRHVLRUV6amJzWVdzQ25uSXBOei9WS0oxa0I0K3V0ekFp?=
+ =?utf-8?B?WW5IY25xV3ZBYnFQVTBaNXloWWYyWnlEekpZQTFUL2RrUzY0d0hHU3BkdklO?=
+ =?utf-8?B?K1ZpbTcwdFQwMXNxYWZyR2xEVTBJeGlOZ3ZOWC9pWVNNTHJwL3JoMU5xbytM?=
+ =?utf-8?B?eWlaU21FbWtKNDdGeStDZVBvK0hIVmZtMzdsQzZVUlVIK0JXcE9kTFJSdzlE?=
+ =?utf-8?B?eDIzK2xySENQTnAxTHp6MmUwa0FTQ0I3Rmlod2VrWjR1N3NScFVvWElXTkN5?=
+ =?utf-8?B?ZFpueFlkQ0ZqNWpPcE5JQlFGNkUyT3ZQWVA5TWppd2krNksveUVIVnlsbHlN?=
+ =?utf-8?B?ejJGdExlNDNpbnYzZG52cWdNanBiM2dKcC9DTDZ2YlNBMkJVK1hYR3l3bnhG?=
+ =?utf-8?B?QVJYUWJTVGlZSkVxVEordjBYTFRBaS9lWkdmMmhOamxxSTBWNDJIUVFpOHgy?=
+ =?utf-8?B?bVIwd0RjVnRJYkZmY2U3ZWZ4TXZBZCtGbUswczhoRnptdW1KUUxEOTdKUWQx?=
+ =?utf-8?B?K3lhQWJDTmZJTmhjZjEweFBrMThuMXRWVlI5MXlBU2dZamVUQ25mVC9TOFNk?=
+ =?utf-8?B?VkUwK0pQRm1MUU9kL0RJK25rei82cWVRbkdsSnNNb0JaSVoySWNmUUk0M2FT?=
+ =?utf-8?B?enhwcWRrM1BwUzRabFFySEFGZ282Nkh2U3czbkxJVFRtdy9RdnhZdjFOMXls?=
+ =?utf-8?B?Q29IeXV3cUR4UDU0SUZERERtR1JrSWdScHg0UXZITWVaMFY4dDF0blA4RDJR?=
+ =?utf-8?B?bWhVY2NhSmlXQ0laaW9Nd3MrTkp3bUVUTysza1hvL1AyNjljbWdtakhHdmQ4?=
+ =?utf-8?B?WUdndCsxdWd4VmR5WE51WmJBc2dZckphdCt0bHlFVXhzV2JJdjVrSkhjc0Rk?=
+ =?utf-8?B?SFFDbGlxRldPZk5xS3dJMTRpM2s3S3I3OVZOamxXYkx3K0R5ZnpJcHQwSi9l?=
+ =?utf-8?B?NUJPeWh4dmRUQzVmQWd6M1BqKzJlUFdIbVlmUHl4LzdaMGVoNndneGZ2RlM3?=
+ =?utf-8?B?ZENXMHlFSHp0NklkTXlVa0NUb0wydEFMKzRiRWVZNGsxOTVyTGFUM2hReXli?=
+ =?utf-8?B?bnZ1UDZxUC92azg5Y0ZmOG81MWZRckdqSmtUQXhsaEtNWHpPa2N3WnYyMjdJ?=
+ =?utf-8?B?ekRXdk9SK0p6THhYaTBzNU80RXpHeW5kVTNzaHRnc0htN2x6WGFSVXVPZFZs?=
+ =?utf-8?B?UUpPTk5TL2ZNeG11NCtiUGtuRW10ZjZmVGJZbG05S2xxbitSUEVOTGRIMkow?=
+ =?utf-8?B?SDhiaUc2UGtDSlhiMVB3dGZjY1RpdHROcUNGcnY3aTgxYmJiM3NwcWF1enAw?=
+ =?utf-8?B?KzIzcDBlbFVnd0FiUmhvNDUzclVKY1NQeFdtdnRvbVM5alo2RlMyd21sQjBF?=
+ =?utf-8?B?ODFuRDlyUUcwRVVGbDRvc0JGWi9RS2VpamVpZU1VY1VjcUpZOENQYmQ0WVN5?=
+ =?utf-8?B?bFBiWWtFUjM1TWMzTDQ3U2dkZW5zcVRLZE14TDdFK3N4VExBUmE0WTBPeXpW?=
+ =?utf-8?Q?3+drXTH5neFqkpzL7dfGNzVGq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3c838e8-7aef-4b52-2d28-08da744d4cab
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 06:07:37.7842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qr2ZPrWlHsrFph7XTmVVpdpX+Ieq9RNscsm+GvMuuuswmTu2jkT648VOv2HVrYDNSMGFFh7CD4p4ULxl5PQ7iw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6353
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus:
+On 27-Jun-22 9:48 AM, Ravi Bangoria wrote:
+> 
+> On 13-Jun-22 8:05 PM, Peter Zijlstra wrote:
+>>
+>>
+>> Right, so sorry for being incredibly tardy on this. Find below the
+>> patch fwd ported to something recent.
+>>
+>> I'll reply to this with fixes and comments.
+> 
+> Thanks! I've resumed on this but my mind has lost all the context so
+> it might take a while for me to reply to your comments. Please bear
+> with me if I'm bit slow.
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+Sorry, it took a while for me to get started on it. Anyways, thanks for
+providing fixes. I applied those and ran some tests on AMD Milan machine:
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+- Built in perf tests ran fine without any issues
+- perf_event_tests reported one BUG_ON() and one WARN_ON(). I'll work on
+  fixing those.
+- Ran perf fuzzer for almost a day. It reported one softlockup but system
+  recovered from it and later it reported one hardlockup but unfortunately
+  my config had HARDLOCKUP_PANIC set and thus couldn't confirm whether that
+  hardlockup was recoverable or not. Anyway, system was running pretty much
+  fine until then.
+- No lockdep warnings were observed in any of the tests.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git tags/v5.20-p1
-
-for you to fetch changes up to af5d35b83f642399c719ea9a8599a13b8a0c4167:
-
-  crypto: tcrypt - Remove the static variable initialisations to NULL (2022-07-29 18:29:18 +0800)
-
-----------------------------------------------------------------
-This update includes the following changes:
-
-API:
-
-- Make proc files report fips module name and version.
-
-Algorithms:
-
-- Move generic SHA1 code into lib/crypto.
-- Implement Chinese Remainder Theorem for RSA.
-- Remove blake2s.
-- Add XCTR with x86/arm64 acceleration.
-- Add POLYVAL with x86/arm64 acceleration.
-- Add HCTR2.
-- Add ARIA.
-
-Drivers:
-
-- Add support for new CCP/PSP device ID in ccp.
-
-----------------------------------------------------------------
-Alexey Khoroshilov (1):
-      crypto: sun8i-ss - fix infinite loop in sun8i_ss_setup_ivs()
-
-Andre Przywara (1):
-      crypto: qat - replace get_current_node() with numa_node_id()
-
-Andrew Davis (2):
-      crypto: sa2ul - Set the supported_algos bits individually
-      crypto: sa2ul - Check engine status before enabling
-
-Bagas Sanjaya (2):
-      Documentation: qat: Use code block for qat sysfs example
-      Documentation: qat: rewrite description
-
-Christophe JAILLET (2):
-      crypto: ccree - Remove a useless dma_supported() call
-      crypto: hisilicon/zip - Use the bitmap API to allocate bitmaps
-
-Claudiu Beznea (2):
-      crypto: atmel-sha - initialize sha_dd while declaring
-      crypto: atmel-tdes - initialize tdes_dd while declaring
-
-Colin Ian King (1):
-      crypto: x86/blowfish - remove redundant assignment to variable nytes
-
-Dan Carpenter (2):
-      crypto: sun8i-ss - fix error codes in allocate_flows()
-      crypto: sun8i-ss - Fix error codes for dma_mapping_error()
-
-Eric Biggers (3):
-      crypto: lib - move lib/sha1.c into lib/crypto/
-      crypto: lib - make the sha1 library optional
-      crypto: lib - add module license to libsha1
-
-GUO Zihua (1):
-      crypto: arm64/poly1305 - fix a read out-of-bound
-
-Giovanni Cabiddu (4):
-      crypto: qat - expose device state through sysfs for 4xxx
-      crypto: qat - change behaviour of adf_cfg_add_key_value_param()
-      crypto: qat - relocate and rename adf_sriov_prepare_restart()
-      crypto: qat - expose device config through sysfs for 4xxx
-
-Herbert Xu (1):
-      crypto: vmx - Fix warning on p8_ghash_alg
-
-Ignat Korchagin (3):
-      crypto: rsa - implement Chinese Remainder Theorem for faster private key operations
-      crypto: testmgr - populate RSA CRT parameters in RSA test vectors
-      crypto: testmgr - some more fixes to RSA test vectors
-
-Jakub Kicinski (1):
-      crypto: caam/qi2 - switch to netif_napi_add_tx_weight()
-
-Jason A. Donenfeld (3):
-      crypto: memneq - move into lib/
-      crypto: blake2s - remove shash module
-      crypto: lib/blake2s - reduce stack frame usage in self test
-
-Jason Wang (3):
-      crypto: twofish - Fix comment typo
-      hwrng: via - Fix comment typo
-      crypto: tcrypt - Remove the static variable initialisations to NULL
-
-Jiang Jian (6):
-      crypto: nx - drop unexpected word "the"
-      crypto: ux500/hash - drop unexpected word "the"
-      crypto: cavium - fix typos in comments
-      crypto: caam - drop unexpected word 'a' in comments
-      crypto: caam - drop unexpected word 'for' in comments
-      crypto: vmx - drop unexpected word 'for' in comments
-
-Jianglei Nie (1):
-      crypto: hisilicon/sec - fix inconsistent argument
-
-Jilin Yuan (1):
-      crypto: arm64/aes-neon - Fix typo in comment
-
-John Allen (1):
-      crypto: ccp - Use kzalloc for sev ioctl interfaces to prevent kernel memory leak
-
-Julia Lawall (2):
-      crypto: hisilicon/sec - fix typos in comment
-      crypto: ccp - fix typo in comment
-
-Kai Ye (2):
-      crypto: hisilicon/sec - only HW V2 needs to change the BD err detection
-      crypto: hisilicon/sec - fix auth key size error
-
-Liang He (2):
-      crypto: amcc - Hold the reference returned by of_find_compatible_node
-      crypto: nx - Hold the reference returned by of_find_compatible_node
-
-Mario Limonciello (1):
-      crypto: ccp - Add support for new CCP/PSP device ID
-
-Nathan Huckleberry (9):
-      crypto: xctr - Add XCTR support
-      crypto: polyval - Add POLYVAL support
-      crypto: hctr2 - Add HCTR2 support
-      crypto: x86/aesni-xctr - Add accelerated implementation of XCTR
-      crypto: arm64/aes-xctr - Add accelerated implementation of XCTR
-      crypto: arm64/aes-xctr - Improve readability of XCTR and CTR modes
-      crypto: x86/polyval - Add PCLMULQDQ accelerated implementation of POLYVAL
-      crypto: arm64/polyval - Add PMULL accelerated implementation of POLYVAL
-      fscrypt: Add HCTR2 support for filename encryption
-
-Ofer Heifetz (1):
-      crypto: inside-secure - fix packed bit-field result descriptor
-
-Pali Rohár (1):
-      crypto: inside-secure - Add missing MODULE_DEVICE_TABLE for of
-
-Peng Wu (1):
-      crypto: sun8i-ss - fix a NULL vs IS_ERR() check in sun8i_ss_hashkey
-
-Qian Cai (1):
-      crypto: arm64/gcm - Select AEAD for GHASH_ARM64_CE
-
-Randy Dunlap (1):
-      crypto: rmd160 - fix Kconfig "its" grammar
-
-Shijith Thotton (2):
-      crypto: octeontx2 - add firmware version in devlink info
-      crypto: octeontx2 - fix potential null pointer access
-
-Taehee Yoo (2):
-      crypto: aria - Implement ARIA symmetric cipher algorithm
-      crypto: testmgr - add ARIA testmgr tests
-
-Tom Lendacky (1):
-      crypto: ccp - During shutdown, check SEV data pointer before using
-
-Uwe Kleine-König (9):
-      crypto: atmel-ecc - Remove duplicated error reporting in .remove()
-      crypto: atmel-aes - Drop if with an always false condition
-      crypto: atmel-sha - Drop if with an always false condition
-      crypto: atmel-tdes - Drop if with an always false condition
-      crypto: omap-aes - Drop if with an always false condition
-      crypto: omap-des - Drop if with an always false condition
-      crypto: omap-sham - Drop if with an always false condition
-      crypto: s5p-sss - Drop if with an always false condition
-      crypto: keembay-ocs-ecc - Drop if with an always false condition
-
-Vladis Dronov (1):
-      crypto: fips - make proc files report fips module name and version
-
-Weili Qian (4):
-      crypto: hisilicon/trng - fix local variable type
-      crypto: hisilicon/qm - add functions for releasing resources
-      crypto: hisilicon/qm - move alloc qm->wq to qm.c
-      crypto: hisilicon/qm - modify event irq processing
-
-Yoan Picchi (1):
-      crypto: qat - Removes the x86 dependency on the QAT drivers
-
-Yuan Can (1):
-      crypto: ccree - Add missing clk_disable_unprepare() in cc_pm_resume()
-
-Zhengchao Shao (3):
-      crypto: hisilicon/sec - don't sleep when in softirq
-      crypto: hisilicon - Kunpeng916 crypto driver don't sleep when in softirq
-      crypto: hisilicon/hpre - don't use GFP_KERNEL to alloc mem during softirq
-
-Zhou Wang (1):
-      MAINTAINERS: update HiSilicon ZIP and QM maintainers
-
-lei he (1):
-      crypto: testmgr - fix version number of RSA tests
-
-shaom Deng (1):
-      cyrpto: powerpc/aes - delete the rebundant word "block" in comments
-
- Documentation/ABI/testing/sysfs-driver-qat         |   49 +
- Documentation/filesystems/fscrypt.rst              |   22 +-
- MAINTAINERS                                        |   15 +-
- arch/arm/crypto/Kconfig                            |    2 +-
- arch/arm/crypto/Makefile                           |    4 +-
- arch/arm/crypto/blake2s-shash.c                    |   75 -
- arch/arm64/crypto/Kconfig                          |   10 +-
- arch/arm64/crypto/Makefile                         |    3 +
- arch/arm64/crypto/aes-glue.c                       |   80 +-
- arch/arm64/crypto/aes-modes.S                      |  349 +-
- arch/arm64/crypto/aes-neon.S                       |    2 +-
- arch/arm64/crypto/poly1305-glue.c                  |    2 +-
- arch/arm64/crypto/polyval-ce-core.S                |  361 ++
- arch/arm64/crypto/polyval-ce-glue.c                |  191 +
- arch/powerpc/crypto/aes-spe-glue.c                 |    2 +-
- arch/x86/crypto/Makefile                           |    7 +-
- arch/x86/crypto/aes_ctrby8_avx-x86_64.S            |  232 +-
- arch/x86/crypto/aesni-intel_glue.c                 |  114 +-
- arch/x86/crypto/blake2s-glue.c                     |    3 +-
- arch/x86/crypto/blake2s-shash.c                    |   77 -
- arch/x86/crypto/blowfish_glue.c                    |    4 +-
- arch/x86/crypto/polyval-clmulni_asm.S              |  321 ++
- arch/x86/crypto/polyval-clmulni_glue.c             |  203 +
- crypto/Kconfig                                     |   99 +-
- crypto/Makefile                                    |    7 +-
- crypto/aria.c                                      |  288 ++
- crypto/blake2s_generic.c                           |   75 -
- crypto/fips.c                                      |   35 +-
- crypto/hctr2.c                                     |  581 +++
- crypto/polyval-generic.c                           |  245 +
- crypto/rsa.c                                       |   78 +-
- crypto/tcrypt.c                                    |   62 +-
- crypto/testmgr.c                                   |   75 +-
- crypto/testmgr.h                                   | 4830 ++++++++++++++++++--
- crypto/twofish_common.c                            |    2 +-
- crypto/xctr.c                                      |  191 +
- drivers/char/hw_random/via-rng.c                   |    2 +-
- .../crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c    |    1 +
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c  |   16 +-
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c  |   10 +-
- drivers/crypto/amcc/crypto4xx_core.c               |   40 +-
- drivers/crypto/atmel-aes.c                         |    3 +-
- drivers/crypto/atmel-ecc.c                         |   12 +-
- drivers/crypto/atmel-sha.c                         |    5 +-
- drivers/crypto/atmel-tdes.c                        |    5 +-
- drivers/crypto/caam/caamalg_qi2.c                  |    7 +-
- drivers/crypto/caam/caamhash_desc.c                |    2 +-
- drivers/crypto/caam/qi.c                           |    6 +-
- drivers/crypto/cavium/cpt/cpt_hw_types.h           |    2 +-
- drivers/crypto/ccp/ccp-dev.h                       |    2 +-
- drivers/crypto/ccp/sev-dev.c                       |   12 +-
- drivers/crypto/ccp/sp-pci.c                        |    7 +
- drivers/crypto/ccree/cc_driver.c                   |   13 +-
- drivers/crypto/ccree/cc_pm.c                       |    2 +
- drivers/crypto/hisilicon/hpre/hpre_crypto.c        |    2 +-
- drivers/crypto/hisilicon/qm.c                      |  203 +-
- drivers/crypto/hisilicon/sec/sec_algs.c            |   14 +-
- drivers/crypto/hisilicon/sec/sec_drv.c             |    2 +-
- drivers/crypto/hisilicon/sec/sec_drv.h             |    2 +-
- drivers/crypto/hisilicon/sec2/sec.h                |    6 +-
- drivers/crypto/hisilicon/sec2/sec_crypto.c         |   26 +-
- drivers/crypto/hisilicon/sec2/sec_crypto.h         |    1 +
- drivers/crypto/hisilicon/sec2/sec_main.c           |   39 +-
- drivers/crypto/hisilicon/trng/trng.c               |    2 +-
- drivers/crypto/hisilicon/zip/zip_crypto.c          |   10 +-
- drivers/crypto/hisilicon/zip/zip_main.c            |   17 +-
- drivers/crypto/inside-secure/safexcel.c            |    2 +
- drivers/crypto/inside-secure/safexcel.h            |   18 +-
- drivers/crypto/keembay/keembay-ocs-ecc.c           |    2 -
- .../crypto/marvell/octeontx2/otx2_cpt_devlink.c    |   40 +-
- .../crypto/marvell/octeontx2/otx2_cptpf_ucode.c    |   17 +-
- .../crypto/marvell/octeontx2/otx2_cptpf_ucode.h    |    3 +
- drivers/crypto/nx/nx-common-powernv.c              |    2 +-
- drivers/crypto/nx/nx-common-pseries.c              |    5 +-
- drivers/crypto/omap-aes.c                          |    4 -
- drivers/crypto/omap-des.c                          |    4 -
- drivers/crypto/omap-sham.c                         |    3 +-
- drivers/crypto/qat/Kconfig                         |   14 +-
- drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c     |    1 +
- drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h     |    1 +
- drivers/crypto/qat/qat_4xxx/adf_drv.c              |    6 +-
- drivers/crypto/qat/qat_common/Makefile             |    1 +
- drivers/crypto/qat/qat_common/adf_accel_devices.h  |    1 +
- drivers/crypto/qat/qat_common/adf_cfg.c            |   41 +-
- drivers/crypto/qat/qat_common/adf_common_drv.h     |    8 +-
- drivers/crypto/qat/qat_common/adf_init.c           |   26 +
- drivers/crypto/qat/qat_common/adf_sriov.c          |   28 +-
- drivers/crypto/qat/qat_common/adf_sysfs.c          |  191 +
- drivers/crypto/qat/qat_common/qat_algs.c           |    4 +-
- drivers/crypto/qat/qat_common/qat_asym_algs.c      |    4 +-
- drivers/crypto/s5p-sss.c                           |    3 -
- drivers/crypto/sa2ul.c                             |   25 +-
- drivers/crypto/sa2ul.h                             |    1 +
- drivers/crypto/ux500/hash/hash_core.c              |    2 +-
- drivers/crypto/vmx/ghash.c                         |    1 +
- drivers/crypto/vmx/ghashp8-ppc.pl                  |    2 +-
- fs/crypto/fscrypt_private.h                        |    2 +-
- fs/crypto/keysetup.c                               |    7 +
- fs/crypto/policy.c                                 |   14 +-
- include/crypto/aria.h                              |  461 ++
- include/crypto/internal/blake2s.h                  |  108 -
- include/crypto/polyval.h                           |   22 +
- include/linux/hisi_acc_qm.h                        |    8 +-
- include/uapi/linux/fscrypt.h                       |    3 +-
- init/Kconfig                                       |    1 +
- lib/Kconfig                                        |    3 +
- lib/Makefile                                       |    3 +-
- lib/crypto/Kconfig                                 |    4 +
- lib/crypto/Makefile                                |    3 +
- lib/crypto/blake2s-selftest.c                      |   41 +
- lib/crypto/blake2s.c                               |   37 +-
- lib/{ => crypto}/sha1.c                            |    3 +
- {crypto => lib}/memneq.c                           |    0
- lib/mpi/mpi-add.c                                  |    2 +-
- lib/mpi/mpi-mul.c                                  |    1 +
- net/ipv6/Kconfig                                   |    1 +
- 116 files changed, 9147 insertions(+), 1204 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-qat
- delete mode 100644 arch/arm/crypto/blake2s-shash.c
- create mode 100644 arch/arm64/crypto/polyval-ce-core.S
- create mode 100644 arch/arm64/crypto/polyval-ce-glue.c
- delete mode 100644 arch/x86/crypto/blake2s-shash.c
- create mode 100644 arch/x86/crypto/polyval-clmulni_asm.S
- create mode 100644 arch/x86/crypto/polyval-clmulni_glue.c
- create mode 100644 crypto/aria.c
- delete mode 100644 crypto/blake2s_generic.c
- create mode 100644 crypto/hctr2.c
- create mode 100644 crypto/polyval-generic.c
- create mode 100644 crypto/xctr.c
- create mode 100644 drivers/crypto/qat/qat_common/adf_sysfs.c
- create mode 100644 include/crypto/aria.h
- create mode 100644 include/crypto/polyval.h
- rename lib/{ => crypto}/sha1.c (98%)
- rename {crypto => lib}/memneq.c (100%)
+I'll work on verifying functionality changes.
 
 Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Ravi

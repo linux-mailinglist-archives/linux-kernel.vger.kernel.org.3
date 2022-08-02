@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA835874D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0DA5874DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiHBAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S235433AbiHBAhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 20:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiHBAfw (ORCPT
+        with ESMTP id S229551AbiHBAhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:35:52 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E035101DE
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:35:51 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea30a098bso10666259fac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:35:51 -0700 (PDT)
+        Mon, 1 Aug 2022 20:37:14 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5F1357D2
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:37:12 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s206so11047072pgs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=IpG/dju9KLyWY+v7cb47gm6DxXSiSa+Zd/huh62dlOs=;
-        b=LYUwomZu3H5zY5ikiCvxt25xm78Qmq2B/2LEt8FQIPgviW4e08HXwlHEWf+2CSfoOX
-         zeqijkDLuj0EzqvZy7wzT+zuqVIsY3jqAeNeuTWqzBr50iVjeP0oTs6ENEbSwB0JkKLi
-         sg+BeG2RBoFi3COtNjpgvQ1dNDZExn7Uv5Z8w8qbuu3gjGHAbOtLppMNntguqi/cUad4
-         b2cct/jkcdrMnTVAQogvjjIgoTwAsuGLRjzwcEsDc8QKlMmPNT8/D6x7WqaC3ZJ6Rkt5
-         qFym956VApjbyNuTD49nxJispTGaTloKqF08346HhFUi8JU8W/f87aLundwWV8WzxoMv
-         9x8A==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xkSPJ1fGWKwnB6nfWJJpSabwLL8PeTkD8DzYOav9XOM=;
+        b=jstM1DFtArIJE4r3dJgJmVB+/wkidSo+wxJa4lXqU5JQeQ1S0J5fiNv9yCe+DI25hp
+         HzobHfGoDNXR/ZFg2DSuVTr0rCXMWOx3obERUgT4Ahv/JBGt5RJoPzK4NSMVhOb5+ks4
+         5tbSJ1j2DZN3JPAk3Uc5qT1GeI4GaFKf6LpyY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=IpG/dju9KLyWY+v7cb47gm6DxXSiSa+Zd/huh62dlOs=;
-        b=RtMkIV3hGE/mIrW5THosePn6gqkIjDcKkuKpERSugFq49sypDXJscXFdonfnVQ3pSh
-         n147PYT3U0pfHrNBawux7o8Ayq0kwGbjf40BI4C7LHo8SfqWIAciIrMMnARR6xmDrYff
-         rlbx0aw5eek+AQEeLdOPqw0TZNAOJfOPkQkNHw+7FXpRH/deolEX1cMHLriy18AaPn6G
-         f9FTLdUNP0KfbNHH+Jhqcxa6AutRsUEMUPQFG2lIKB86oMzywpS+mxETHUCMS2QYPLvU
-         Q7tBdjqWceM5O9ixKGTBX0XaY8g7lOCkmipLx18b6yDALC26hII/b5sHNtQT8EbqwuIF
-         toSw==
-X-Gm-Message-State: AJIora9NltdFDDNHZIHJbd/6nOkkpnryQE5Owt2IUhvCaBGj4Xlk91Vy
-        JvOGPSH+v9+OB6E4cFC13uVpAXEMU6qVS/l0
-X-Google-Smtp-Source: AGRyM1sYB0YTcs7CVvjVqFWF6n7FTYKIQn0sHsJDRfdIluSotVoZ8OdFjxKB993DPiqy9qHEkOBjjg==
-X-Received: by 2002:a05:6870:2499:b0:101:7531:c7ec with SMTP id s25-20020a056870249900b001017531c7ecmr9075592oaq.42.1659400550909;
-        Mon, 01 Aug 2022 17:35:50 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.211])
-        by smtp.gmail.com with ESMTPSA id w9-20020a0568080d4900b003352223a14asm2788023oik.15.2022.08.01.17.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Aug 2022 17:35:50 -0700 (PDT)
-Message-ID: <2b6bf767-d3f8-4e9b-358b-0826c701e00b@linaro.org>
-Date:   Mon, 1 Aug 2022 19:35:48 -0500
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xkSPJ1fGWKwnB6nfWJJpSabwLL8PeTkD8DzYOav9XOM=;
+        b=DM0tpvmUAt8O0bGONSz6TElZo7UtYMZ8hgBRkV7HJFCuJ09af1PwPcm3PDbDUa3Jua
+         lL4LBfiG/6J2fBVikc3CJQXcthkaljFHIOU2+sG876DXNp3KD9nHJi3VocozoPyoysDl
+         3EluiiMsyuvTaxZtrZ9AkyLgooA3LUGC1hp8DEP8l2j7vtDZ4jSriK3dyS1TAa/XGu1F
+         yY0yk4XMTnbvfO5gP4SAkMXoEvvBY4Ez8nT/eYG00SEF9eBPPERdkzo85Xd94ygCROdR
+         paY2fcBDho3MegbAN4Jl7oLLws5tNS7k4FGnTmPR9fbzYUiCA5ohJNyw1xVqEbRlsAmz
+         MaAQ==
+X-Gm-Message-State: ACgBeo0MLUMkCc0R6SDUzXYBL2bjkJRnJ0MVDKS2J8Q1oK0RQFhm6g0t
+        puSMpvHmfsbf6VM8buRicdsoFg==
+X-Google-Smtp-Source: AA6agR6qACbTp/hM1PKV8p19nlC1Su2CQrDQDk7YaxKNHs5REHWX0QuwjnCCLkjuK3nX1wiOcQkhlQ==
+X-Received: by 2002:a62:cec9:0:b0:52d:414b:c70f with SMTP id y192-20020a62cec9000000b0052d414bc70fmr9893287pfg.20.1659400632174;
+        Mon, 01 Aug 2022 17:37:12 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016ef1e058e5sm2558806pln.295.2022.08.01.17.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 17:37:11 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v5] ufs: core: print UFSHCD capabilities in controller's sysfs node
+Date:   Tue,  2 Aug 2022 10:37:02 +1000
+Message-Id: <20220802103643.v5.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 5.4 00/34] 5.4.209-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220801114128.025615151@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,114 +74,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Allows userspace to check if Clock Scaling and Write Booster are
+supported.
 
-On 01/08/22 06:46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.209 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.209-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+---
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Changes in v5:
+* Correct wording for clock scaling.
+* Correct wording for the commit message.
 
-## Build
-* kernel: 5.4.209-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: b48a8f43dce6a15f83f416453361b45905c1b88b
-* git describe: v5.4.207-123-gb48a8f43dce6
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.207-123-gb48a8f43dce6
+Changes in v4:
+* Dropped crypto node per Eric Biggers mentioning it can be queried from
+  disk's queue node
 
-## No test regressions (compared to v5.4.208)
+Changes in v3:
+* Expose each capability individually.
+* Update documentation to represent new scheme.
 
-## No metric regressions (compared to v5.4.208)
+Changes in v2:
+* Add documentation entry for the new sysfs node.
 
-## No test fixes (compared to v5.4.208)
+ Documentation/ABI/testing/sysfs-driver-ufs | 26 ++++++++++++++++++
+ drivers/ufs/core/ufs-sysfs.c               | 31 ++++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
 
-## No metric fixes (compared to v5.4.208)
-
-## Test result summary
-total: 107690, pass: 94251, fail: 487, skip: 11696, xfail: 1256
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 307 total, 307 passed, 0 failed
-* arm64: 61 total, 57 passed, 4 failed
-* i386: 28 total, 26 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 54 total, 52 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 6b248abb1bd71..1750a9b84ce0f 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1591,6 +1591,32 @@ Description:	This entry shows the status of HPB.
+ 
+ 		The file is read only.
+ 
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
++What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of clock scaling.
++
++		== ============================
++		0  Clock scaling is not supported.
++		1  Clock scaling is supported.
++		== ============================
++
++		The file is read only.
++
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/write_booster
++What:		/sys/bus/platform/devices/*.ufs/capabilities/write_booster
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of Write Booster.
++
++		== ============================
++		0  Write Booster can not be enabled.
++		1  Write Booster can be enabled.
++		== ============================
++
++		The file is read only.
++
+ What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/activation_thld
+ Date:		February 2021
+ Contact:	Avri Altman <avri.altman@wdc.com>
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 0a088b47d5570..5c53349337dd8 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -279,6 +279,36 @@ static const struct attribute_group ufs_sysfs_default_group = {
+ 	.attrs = ufs_sysfs_ufshcd_attrs,
+ };
+ 
++static ssize_t clock_scaling_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_clkscaling_supported(hba));
++}
++
++static ssize_t write_booster_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_wb_allowed(hba));
++}
++
++static DEVICE_ATTR_RO(clock_scaling);
++static DEVICE_ATTR_RO(write_booster);
++
++static struct attribute *ufs_sysfs_capabilities_attrs[] = {
++	&dev_attr_clock_scaling.attr,
++	&dev_attr_write_booster.attr,
++	NULL
++};
++
++static const struct attribute_group ufs_sysfs_capabilities_group = {
++	.name = "capabilities",
++	.attrs = ufs_sysfs_capabilities_attrs,
++};
++
+ static ssize_t monitor_enable_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+@@ -1134,6 +1164,7 @@ static const struct attribute_group ufs_sysfs_attributes_group = {
+ 
+ static const struct attribute_group *ufs_sysfs_groups[] = {
+ 	&ufs_sysfs_default_group,
++	&ufs_sysfs_capabilities_group,
+ 	&ufs_sysfs_monitor_group,
+ 	&ufs_sysfs_device_descriptor_group,
+ 	&ufs_sysfs_interconnect_descriptor_group,
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+2.31.0
+

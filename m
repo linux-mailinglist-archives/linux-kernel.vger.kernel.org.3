@@ -2,47 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70985884C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A465884CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiHBXgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 19:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S232997AbiHBXjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 19:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiHBXgO (ORCPT
+        with ESMTP id S229568AbiHBXi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 19:36:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F5D12085;
-        Tue,  2 Aug 2022 16:36:12 -0700 (PDT)
+        Tue, 2 Aug 2022 19:38:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9A3DBC6;
+        Tue,  2 Aug 2022 16:38:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E8F5B82082;
-        Tue,  2 Aug 2022 23:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9FDC433D6;
-        Tue,  2 Aug 2022 23:36:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED5BA60DDD;
+        Tue,  2 Aug 2022 23:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3DEC433D6;
+        Tue,  2 Aug 2022 23:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659483369;
-        bh=v5BpfTeeUnEg5aiY3JXzeQ9+oVLGf+XXAtusafcmUKA=;
+        s=k20201202; t=1659483537;
+        bh=kE1gCYFgEihzpK3jhHTawC8I47E1q9R6kltPrsYq80w=;
         h=From:To:Cc:Subject:Date:From;
-        b=GX4S/1RupGvypi9o/4VEONNJk88b0p04HGabcMEcfKRKtQJmeeL+ykEK5fulPVy9X
-         LbDT3ayL+TirezyrK0cMuJLOp0U9SanhjUy+9EIr4Gsm9bwZrApLl//QJzzXJejtNx
-         Mx+B3ey6NIYLzE1sl99YPrUYWB3ocg5jDZ61xLXzxQkbkHmf4zJOahSnMUsD6uE0EZ
-         ixt8GnMEqhTuJ9aEB/TIfPmqxDJUhM0h+69r1moi1xgWA/hj7iq+lFP9jHrhsgdE7i
-         mRPY0279OXn99EbYZvqk9W3DfIsezjYByT8FoaAWR+Rf5FBcvanqixiJkHCemNjluo
-         HDRSWyuLPnjHA==
+        b=j1/6I2sWf3sQdLxAFvIV6/Vxf37JTNlTXC1DTgkjJ6okwN15VUKctFDeDUPvMWC9w
+         vKvbpPncM4pr2oI4xnOOJx+iIyrUBlHXlWnjB+TVnFKL/8VEJ0fNQi5+/x+kJiX8w2
+         LzzWI72v/MURZ87qamD81fmnQl4HHwy45RVfkllkYNNHUJZfs+wQXeQNUOjNg07dTZ
+         KS6s/oPUKxdN7ED5fzmW8ESIvUgnqUgEn0L/2Vfo11jEQkP9/6zYuG5gCIf6ioxknY
+         eKLT0U+ygQ1/8PtYGEt8LzaXjUn/9eUr+XCIvT4r9k3eBtiFJCZC3/Wx4ijvkcRT7c
+         4MJ45p3pM14dQ==
 From:   broonie@kernel.org
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        David Gow <davidgow@google.com>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-s390@vger.kernel.org
-Subject: linux-next: manual merge of the random tree with the s390-fixes tree
-Date:   Wed,  3 Aug 2022 00:35:59 +0100
-Message-Id: <20220802233559.2606732-1-broonie@kernel.org>
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Tiago Lam <tiagolam@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Date:   Wed,  3 Aug 2022 00:38:44 +0100
+Message-Id: <20220802233844.2613013-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,19 +73,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the random tree got a conflict in:
+Today's linux-next merge of the rust tree got a conflict in:
 
-  arch/s390/include/asm/archrandom.h
+  Makefile
 
 between commit:
 
-  918e75f77af7d ("s390/archrandom: prevent CPACF trng invocations in interrupt context")
+  a6036a41bffba ("kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3")
 
-from the s390-fixes tree and commit:
+from the kbuild tree and commit:
 
-  d349ab99eec7a ("random: handle archrandom with multiple longs")
+  fe24902ba8765 ("Kbuild: add Rust support")
 
-from the random tree.
+from the rust tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,63 +94,37 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc arch/s390/include/asm/archrandom.h
-index 4120c428dc378,cf5e000df0a14..0000000000000
---- a/arch/s390/include/asm/archrandom.h
-+++ b/arch/s390/include/asm/archrandom.h
-@@@ -11,47 -11,26 +11,28 @@@
-  #ifndef _ASM_S390_ARCHRANDOM_H
-  #define _ASM_S390_ARCHRANDOM_H
+diff --cc Makefile
+index 60a7e3e8b4787,cd1d545f316bc..0000000000000
+--- a/Makefile
++++ b/Makefile
+@@@ -758,10 -819,20 +822,17 @@@ KBUILD_CFLAGS	+= $(call cc-disable-warn
   
-- #ifdef CONFIG_ARCH_RANDOM
-- 
-  #include <linux/static_key.h>
- +#include <linux/preempt.h>
-  #include <linux/atomic.h>
-  #include <asm/cpacf.h>
+  ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+  KBUILD_CFLAGS += -O2
++ KBUILD_RUSTFLAGS += -Copt-level=2
+ -else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+ -KBUILD_CFLAGS += -O3
+ -KBUILD_RUSTFLAGS += -Copt-level=3
+  else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+  KBUILD_CFLAGS += -Os
++ KBUILD_RUSTFLAGS += -Copt-level=s
+  endif
   
-  DECLARE_STATIC_KEY_FALSE(s390_arch_random_available);
-  extern atomic64_t s390_arch_random_counter;
++ # Always set `debug-assertions` and `overflow-checks` because their default
++ # depends on `opt-level` and `debug-assertions`, respectively.
++ KBUILD_RUSTFLAGS += -Cdebug-assertions=$(if $(CONFIG_RUST_DEBUG_ASSERTIONS),y,n)
++ KBUILD_RUSTFLAGS += -Coverflow-checks=$(if $(CONFIG_RUST_OVERFLOW_CHECKS),y,n)
++ 
+  # Tell gcc to never replace conditional load with a non-conditional one
+  ifdef CONFIG_CC_IS_GCC
+  # gcc-10 renamed --param=allow-store-data-races=0 to
+@@@ -1098,7 -1178,7 +1178,8 @@@ export MODULES_NSDEPS := $(extmod_prefi
+  ifeq ($(KBUILD_EXTMOD),)
+  core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+  core-$(CONFIG_BLOCK)	+= block/
+ +core-$(CONFIG_IO_URING)	+= io_uring/
++ core-$(CONFIG_RUST)	+= rust/
   
-- static inline bool __must_check arch_get_random_long(unsigned long *v)
-- {
-- 	return false;
-- }
-- 
-- static inline bool __must_check arch_get_random_int(unsigned int *v)
-- {
-- 	return false;
-- }
-- 
-- static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
-+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
-  {
-- 	if (static_branch_likely(&s390_arch_random_available) &&
-- 	    in_task()) {
-- 		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-- 		atomic64_add(sizeof(*v), &s390_arch_random_counter);
-- 		return true;
-- 	}
-- 	return false;
-+ 	return 0;
-  }
-  
-- static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
-+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
-  {
- -	if (static_branch_likely(&s390_arch_random_available)) {
- +	if (static_branch_likely(&s390_arch_random_available) &&
- +	    in_task()) {
-- 		cpacf_trng(NULL, 0, (u8 *)v, sizeof(*v));
-- 		atomic64_add(sizeof(*v), &s390_arch_random_counter);
-- 		return true;
-+ 		cpacf_trng(NULL, 0, (u8 *)v, max_longs * sizeof(*v));
-+ 		atomic64_add(max_longs * sizeof(*v), &s390_arch_random_counter);
-+ 		return max_longs;
-  	}
-- 	return false;
-+ 	return 0;
-  }
-  
-- #endif /* CONFIG_ARCH_RANDOM */
-  #endif /* _ASM_S390_ARCHRANDOM_H */
+  vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
+  		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \

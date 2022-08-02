@@ -2,199 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17943588344
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6D5588349
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbiHBU7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S232611AbiHBVEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiHBU7v (ORCPT
+        with ESMTP id S229482AbiHBVEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:59:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED47F3336E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659473989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FlYyxUq4TBUO2ujDZlR7hAoRGaLEjsFsfXjHZjjIh3c=;
-        b=GMruv6UyrD0d+o8CXYqpExNtj8zfiIXWj0qKF+svde+jw3MdsJ2SvKjBiOHaIiYPSGRS63
-        Xn4R9ZB+LuRHpTa94x53hDU80TZVsPaAHZAGuRyCjkZSXqyfgZTl2+uNOYCm4Gx8NKCNtp
-        whlbJ7TIlgbZ3JDrj4WVnp3dTfeu0Po=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-340-AA8LMfvzOaa1ce9v3u8eSg-1; Tue, 02 Aug 2022 16:59:45 -0400
-X-MC-Unique: AA8LMfvzOaa1ce9v3u8eSg-1
-Received: by mail-wm1-f72.google.com with SMTP id v64-20020a1cac43000000b003a4bea31b4dso5110261wme.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:59:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=FlYyxUq4TBUO2ujDZlR7hAoRGaLEjsFsfXjHZjjIh3c=;
-        b=7095FO7TW0w+jPS08FK/xqOFyJW+8f6dQZTIgEiAK5/TNNH+0h8GSJ/YFu4gNMst1U
-         WEO64nH4BZKxA5iuNsS8HQqJM+v62Xj2j5BtTmOcXVs6Nu55QeTWzyhFKE0QccyWcyso
-         rupyerCmzHi2dx/XIYIrapF4TwWQipVdEdD1lQwUFUcoeAjHed3qOvanN1A9bcZEfZ8u
-         sdlHgldLT5DwEffYO6boHFiyDJGENQmJ3dRFaI84Vobi9zgU6/C7eyDY81921RHERDg3
-         MVflh8iw8sYHgW/VwWyCb/E/0H5bRf46XB05XG1kGhKkFMfJznPqkJayRGbx/BecdoQH
-         +vlA==
-X-Gm-Message-State: ACgBeo0h9C+aUm/iAuANN/sAGfRsKNYbbeweBPcJbC9DiKJTn75DcKB5
-        HTjVj98RFxanbRc6j+sJ6yewyFCAIj4sX47OUGsPBNvrxngODD/TeY1KWbsv291FVtOMWGypECF
-        x5Tfx7ZoirFzNbC76b6QFZbWx
-X-Received: by 2002:a05:6000:18a2:b0:21d:bc7c:1c83 with SMTP id b2-20020a05600018a200b0021dbc7c1c83mr13941208wri.420.1659473983942;
-        Tue, 02 Aug 2022 13:59:43 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6NvLMSUgfym6qig+NNK7JeAaiHpc6m+XOmwm4mwjmY8k0qE+y0bjE9xFGipim2nNc0Tbk69g==
-X-Received: by 2002:a05:6000:18a2:b0:21d:bc7c:1c83 with SMTP id b2-20020a05600018a200b0021dbc7c1c83mr13941195wri.420.1659473983636;
-        Tue, 02 Aug 2022 13:59:43 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3800:8435:659e:f80:9b3d? (p200300cbc70738008435659e0f809b3d.dip0.t-ipconnect.de. [2003:cb:c707:3800:8435:659e:f80:9b3d])
-        by smtp.gmail.com with ESMTPSA id k41-20020a05600c1ca900b003a2e5f536b3sm26163056wms.24.2022.08.02.13.59.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 13:59:43 -0700 (PDT)
-Message-ID: <4f876ff0-c6d2-2ebb-5917-dc1ff98fa8b0@redhat.com>
-Date:   Tue, 2 Aug 2022 22:59:42 +0200
+        Tue, 2 Aug 2022 17:04:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD76045077;
+        Tue,  2 Aug 2022 14:04:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58136614B8;
+        Tue,  2 Aug 2022 21:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C619C433C1;
+        Tue,  2 Aug 2022 21:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659474272;
+        bh=wJtT9GHNrpPgl7ieiEvee76VOHI23x/7v0i9zeXxLtI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IdTyLCPwcuuIT9VextDI7wfdar3USX+1v0+sjcqzEG5J4zax5uTx+eslkEUGmiWxX
+         RbUOTvSfncEBORL0AOmm0yn6csLfji3/pbxrgnv65acVW5+pk0o/frkUiJpt72zzcP
+         7YcXPWYdoABiPSkOAtKVh+gkyGRPYpVAOnm5c1QVX/eSW7rRbx8A8bGJAHaJ9mBtHT
+         PSmEYjQWhYZpNn6GmZFnS8BuOxnfiz3Mltly7XwANPmVLMwUPQGf/0mTEI1CmyLb8q
+         m4jzFDEj7YohW9zaJcjw6ovX3gWxI0aNOT+SDkcMVkbtmK9j9qXlY19XnY2gd4Y4Gq
+         RmPq+cSCidBTw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 548FC40736; Tue,  2 Aug 2022 18:04:29 -0300 (-03)
+Date:   Tue, 2 Aug 2022 18:04:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Subject: Re: [PATCH v2 1/3] perf lock: Introduce struct lock_contention
+Message-ID: <YumRXcxc5XIUwlBO@kernel.org>
+References: <20220802191004.347740-1-namhyung@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huang Ying <ying.huang@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220729014041.21292-1-peterx@redhat.com>
- <f23b71e5-a5f5-bb39-dbec-3e85af344185@redhat.com>
- <YuhVJmSsgs4Q1bYJ@xz-m1.local>
- <49434bea-3862-1052-2993-8ccad985708b@redhat.com>
- <YumFs0jpCc/Mwjzf@xz-m1.local>
- <24ffea6e-ca66-2b94-c682-48a42a655fd1@redhat.com>
- <YumKlqjv8PaafpER@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC 0/4] mm: Remember young bit for migration entries
-In-Reply-To: <YumKlqjv8PaafpER@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802191004.347740-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.08.22 22:35, Peter Xu wrote:
-> On Tue, Aug 02, 2022 at 10:23:49PM +0200, David Hildenbrand wrote:
->>> I don't think we only care about x86_64?  Should other archs have the same
->>> issue as long as there's the hardware young bit?
->>>
->>> Even without it, it'll affect page reclaim logic too, and that's also not
->>> x86 only.
->>
->> Okay, reading the cover letter and looking at the code my understanding
->> was that x86-64 is the real focus.
->>
->>>>
->>>>>
->>>>> Besides I actually have a question on the anon exclusive bit in the swap
->>>>> pte: since we have that anyway, why we need a specific migration type for
->>>>> anon exclusive pages?  Can it be simply read migration entries with anon
->>>>> exclusive bit set?
->>>>
->>>> Not before all arch support pte_swp_mkexclusive/pte_swp_exclusive/.
->>>>
->>>> As pte_swp_mkexclusive/pte_swp_exclusive/ only applies to actual swap
->>>> PTEs, you could even reuse that bit for migration entries and get at
->>>> alteast the most relevant 64bit architectures supported easily.
->>>
->>> Yes, but I think having two mechanisms for the single problem can confuse
->>> people.
->>>
->>
->> It would be one bit with two different meanings depending on the swp type.
->>
->>> IIUC the swap bit is already defined in major archs anyway, and since anon
->>> exclusive bit is best-effort (or am I wrong?..), I won't worry too much on
->>
->> It kind-of is best effort, but the goal is to have all archs support it.
->>
->> ... just like the young bit here?
+Em Tue, Aug 02, 2022 at 12:10:02PM -0700, Namhyung Kim escreveu:
+> The lock_contention struct is to carry related fields together and to
+> minimize the change when we add new config options.
+
+
+Thanks, applied. Forgot the cover letter? :-)
+
+- Arnaldo
+
+ 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/builtin-lock.c             | 23 ++++++++++++++---------
+>  tools/perf/util/bpf_lock_contention.c |  9 ++++++---
+>  tools/perf/util/lock-contention.h     | 17 +++++++++++------
+>  3 files changed, 31 insertions(+), 18 deletions(-)
 > 
-> Exactly, so I'm also wondering whether we can move the swp pte anon
-> exclusive bit into swp entry.  It just sounds weird to have them defined in
-> two ways.
-
-I'd argue it's just the swp vs. nonswp difference that are in fact two
-different concepts (device+offset vs. type+pte). And some dirty details
-how swp entries are actually used.
-
-With swp entries you have to be very careful, for example, take a look
-at radix_to_swp_entry() and swp_to_radix_entry(). That made me refrain
-from touching anything inside actual swp entries and instead store it in
-the pte.
-
-> 
->>
->>> archs outside x86/arm/ppc/s390 on having anon exclusive bit lost during
->>> migrations, because afaict the whole swap type of ANON_EXCLUSIVE_READ is
->>> only servicing that very minority.. which seems to be a pity to waste the
->>
->> I have a big item on my todo list to support all, but I have different
->> priorities right now.
->>
->> If there is no free bit, simply steal one from the offset ... which is
->> the same thing your approach would do, just in a different way, no?
->>
->>> swp type on all archs even if the archs defined swp pte bits just for anon
->>> exclusive.
->>
->> Why do we care? We walk about one type not one bit.
-> 
-> The swap type address space is still limited, I'd say we should save when
-> possible.  I believe people caring about swapping care about the limit of
-> swap devices too.  If the offset can keep it, I think it's better than the
-
-Ehm, last time I did the math I came to the conclusion that nobody
-cares. Let me redo the math:
-
-MAX_SWAPFILES = 1<<5 - 1 - 1 - 4 - 3 - 1 = 22
-
-Which is the worst case right now with all kinds of oddity compiled in
-(sorry CONFIG_DEVICE_PRIVATE).
-
-So far nobody complaint.
-
-> swap type.  De-dup either the type or the swap pte bit would be nicer, imho.
-> 
-
-If you manage bits in the pte manually, you might be able to get a
-better packing density, if bits are scattered around. Just take a look
-at the x86_64 location of _PAGE_SWP_EXCLUSIVE.
-
-What I'm rooting for is something like
-
-#define pte_nonswp_mkyoung pte_swp_mkexclusive
-
-Eventually with some VM_BUG_ONs to make sure people call it on the right
-swp ptes.
-
-If we ever want to get rid of SWP_MIGRATION_READ_EXCLUSIVE (so people
-can have 23 swap devices), and eventually have separate bits for both.
-For now it's not necessary.
+> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> index 7897a33fec1b..eef778b7d33d 100644
+> --- a/tools/perf/builtin-lock.c
+> +++ b/tools/perf/builtin-lock.c
+> @@ -1594,7 +1594,10 @@ static int __cmd_contention(int argc, const char **argv)
+>  		.mode  = PERF_DATA_MODE_READ,
+>  		.force = force,
+>  	};
+> -	struct evlist *evlist = NULL;
+> +	struct lock_contention con = {
+> +		.target = &target,
+> +		.result = &lockhash_table[0],
+> +	};
+>  
+>  	session = perf_session__new(use_bpf ? NULL : &data, &eops);
+>  	if (IS_ERR(session)) {
+> @@ -1620,24 +1623,26 @@ static int __cmd_contention(int argc, const char **argv)
+>  		signal(SIGCHLD, sighandler);
+>  		signal(SIGTERM, sighandler);
+>  
+> -		evlist = evlist__new();
+> -		if (evlist == NULL) {
+> +		con.machine = &session->machines.host;
+> +
+> +		con.evlist = evlist__new();
+> +		if (con.evlist == NULL) {
+>  			err = -ENOMEM;
+>  			goto out_delete;
+>  		}
+>  
+> -		err = evlist__create_maps(evlist, &target);
+> +		err = evlist__create_maps(con.evlist, &target);
+>  		if (err < 0)
+>  			goto out_delete;
+>  
+>  		if (argc) {
+> -			err = evlist__prepare_workload(evlist, &target,
+> +			err = evlist__prepare_workload(con.evlist, &target,
+>  						       argv, false, NULL);
+>  			if (err < 0)
+>  				goto out_delete;
+>  		}
+>  
+> -		if (lock_contention_prepare(evlist, &target) < 0) {
+> +		if (lock_contention_prepare(&con) < 0) {
+>  			pr_err("lock contention BPF setup failed\n");
+>  			goto out_delete;
+>  		}
+> @@ -1672,13 +1677,13 @@ static int __cmd_contention(int argc, const char **argv)
+>  	if (use_bpf) {
+>  		lock_contention_start();
+>  		if (argc)
+> -			evlist__start_workload(evlist);
+> +			evlist__start_workload(con.evlist);
+>  
+>  		/* wait for signal */
+>  		pause();
+>  
+>  		lock_contention_stop();
+> -		lock_contention_read(&session->machines.host, &lockhash_table[0]);
+> +		lock_contention_read(&con);
+>  	} else {
+>  		err = perf_session__process_events(session);
+>  		if (err)
+> @@ -1691,7 +1696,7 @@ static int __cmd_contention(int argc, const char **argv)
+>  	print_contention_result();
+>  
+>  out_delete:
+> -	evlist__delete(evlist);
+> +	evlist__delete(con.evlist);
+>  	lock_contention_finish();
+>  	perf_session__delete(session);
+>  	return err;
+> diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+> index 16b7451b4b09..f5e2b4f19a72 100644
+> --- a/tools/perf/util/bpf_lock_contention.c
+> +++ b/tools/perf/util/bpf_lock_contention.c
+> @@ -27,10 +27,12 @@ struct lock_contention_data {
+>  	u32 flags;
+>  };
+>  
+> -int lock_contention_prepare(struct evlist *evlist, struct target *target)
+> +int lock_contention_prepare(struct lock_contention *con)
+>  {
+>  	int i, fd;
+>  	int ncpus = 1, ntasks = 1;
+> +	struct evlist *evlist = con->evlist;
+> +	struct target *target = con->target;
+>  
+>  	skel = lock_contention_bpf__open();
+>  	if (!skel) {
+> @@ -102,12 +104,13 @@ int lock_contention_stop(void)
+>  	return 0;
+>  }
+>  
+> -int lock_contention_read(struct machine *machine, struct hlist_head *head)
+> +int lock_contention_read(struct lock_contention *con)
+>  {
+>  	int fd, stack;
+>  	u32 prev_key, key;
+>  	struct lock_contention_data data;
+>  	struct lock_stat *st;
+> +	struct machine *machine = con->machine;
+>  	u64 stack_trace[CONTENTION_STACK_DEPTH];
+>  
+>  	fd = bpf_map__fd(skel->maps.lock_stat);
+> @@ -163,7 +166,7 @@ int lock_contention_read(struct machine *machine, struct hlist_head *head)
+>  			return -1;
+>  		}
+>  
+> -		hlist_add_head(&st->hash_entry, head);
+> +		hlist_add_head(&st->hash_entry, con->result);
+>  		prev_key = key;
+>  	}
+>  
+> diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+> index 092c84441f9f..a0df5308cca4 100644
+> --- a/tools/perf/util/lock-contention.h
+> +++ b/tools/perf/util/lock-contention.h
+> @@ -107,18 +107,24 @@ struct evlist;
+>  struct machine;
+>  struct target;
+>  
+> +struct lock_contention {
+> +	struct evlist *evlist;
+> +	struct target *target;
+> +	struct machine *machine;
+> +	struct hlist_head *result;
+> +};
+> +
+>  #ifdef HAVE_BPF_SKEL
+>  
+> -int lock_contention_prepare(struct evlist *evlist, struct target *target);
+> +int lock_contention_prepare(struct lock_contention *con);
+>  int lock_contention_start(void);
+>  int lock_contention_stop(void);
+> -int lock_contention_read(struct machine *machine, struct hlist_head *head);
+> +int lock_contention_read(struct lock_contention *con);
+>  int lock_contention_finish(void);
+>  
+>  #else  /* !HAVE_BPF_SKEL */
+>  
+> -static inline int lock_contention_prepare(struct evlist *evlist __maybe_unused,
+> -					  struct target *target __maybe_unused)
+> +static inline int lock_contention_prepare(struct lock_contention *con __maybe_unused)
+>  {
+>  	return 0;
+>  }
+> @@ -127,8 +133,7 @@ static inline int lock_contention_start(void) { return 0; }
+>  static inline int lock_contention_stop(void) { return 0; }
+>  static inline int lock_contention_finish(void) { return 0; }
+>  
+> -static inline int lock_contention_read(struct machine *machine __maybe_unused,
+> -				       struct hlist_head *head __maybe_unused)
+> +static inline int lock_contention_read(struct lock_contention *con __maybe_unused)
+>  {
+>  	return 0;
+>  }
+> -- 
+> 2.37.1.455.g008518b4e5-goog
 
 -- 
-Thanks,
 
-David / dhildenb
-
+- Arnaldo

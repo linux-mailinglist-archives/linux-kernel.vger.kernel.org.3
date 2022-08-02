@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154F45880DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAC25880E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiHBRQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S233676AbiHBRRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiHBRQT (ORCPT
+        with ESMTP id S230280AbiHBRRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:16:19 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326971B797
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:16:18 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id o1so11085445qkg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=e6NijbvqJl8I0P3m6XHrZ81f2mOc7XtHT6+K/U+OWxY=;
-        b=DsXX8JrT5LsPXdsw++Wlq0MCRC1wxpg01IFPY/k1QbzXqA/zirsGJH9qqfYIXPQL4G
-         10+koW0tw14F0n15lu2K/eA7v7I0F2k2wGhSCYlIw0eX1EuE9zPn7XJS7e3TvicvP8Gf
-         ThcV7QAalbemYLI74l6jesYmSS0Rl/fH5O8F0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=e6NijbvqJl8I0P3m6XHrZ81f2mOc7XtHT6+K/U+OWxY=;
-        b=wldmwKb3UsY2vL3kq1CcRdFxh0jipxLVu0mc1PsSTHzCpzCP+lqg7c6Kb9EG61ZO2/
-         B34WMupvsXsSduTNYBsWtQnWHREt/KSdoAO2WcSfC4GArCs1j9+P09Y347AnpnPvnfFb
-         lXeoEDzaoODZQU1AQ+N6BjcnZrPp/rhFK03r0J/cwDFOtJDqjuD6rC/kd2PyK+6SrPdB
-         vedXQ+1M4eP/nO3aa1tjK2RkSu9LDGBknY88pUqBRAHzVvGbML+qIpUloVicD+dKeFl2
-         VFq4g5q3LrSrAGyslKck6mleniRiImvZ+a/8JtJ74zW5hfo+GHMLP9imXU+s5IGlrhT0
-         M+Ow==
-X-Gm-Message-State: AJIora/+NuKxHrLZwVTEtrHhoyjdqc4TbUedvZswcutBzIXcvaMJhrye
-        JnzUrZaCPpvluxm03FyosbJttQ==
-X-Google-Smtp-Source: AGRyM1u2DDPa/mdWTCYghTu8DIlK0fMUycCBiC23JG7/2DlXnPD82mYXL5SI0mdchretdUvgeoAn1w==
-X-Received: by 2002:a05:620a:1926:b0:6b8:3f1f:fcd9 with SMTP id bj38-20020a05620a192600b006b83f1ffcd9mr15658943qkb.443.1659460577286;
-        Tue, 02 Aug 2022 10:16:17 -0700 (PDT)
-Received: from nitro.local (host-142-67-156-76.public.eastlink.ca. [142.67.156.76])
-        by smtp.gmail.com with ESMTPSA id t22-20020ac87396000000b0031ec44aa37bsm9035499qtp.93.2022.08.02.10.16.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 10:16:16 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 13:16:14 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] maintainer-pgp-guide: update ECC support
- information
-Message-ID: <20220802171614.qrcs7aowhqtd7egj@nitro.local>
-References: <20220727-docs-pgp-guide-v1-0-c48fb06cb9af@linuxfoundation.org>
- <20220727-docs-pgp-guide-v1-3-c48fb06cb9af@linuxfoundation.org>
- <YuOkPtg+Wa7KldPm@debian.me>
+        Tue, 2 Aug 2022 13:17:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254D1D0E1;
+        Tue,  2 Aug 2022 10:17:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69CEE611CB;
+        Tue,  2 Aug 2022 17:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE03C433C1;
+        Tue,  2 Aug 2022 17:17:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659460655;
+        bh=ezo/DMFL/JZvUXZGmbP9Yp6XteEVnCTIPlNYh1llQVE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a/0QMhAwa99UhhzkA/GaZ6skt+cIxlFs8m4phu2lVbgEKs8dAuQajL3z/PhmuCPaM
+         FDVa81594txuJ6Xr9STpLGFG7y+g07ES9nX30wKOpuL+gQ7zgDrUjDvJHTpe1A4m2m
+         RDbcrd/tssUPIkaaWNEG4vIhBbaUyU6WWUeJwnQcg+SiDGhhWTaM1GLet9g376AV7n
+         4Ek//phbCj5VOJKH/lMwneV582MPbDyHRh3KM/4EWS5Yt7fv03eq2eb4UMhxmcCJ4U
+         +re1YFXDh1Ux02PHKxrlABplvVUqmFrmPRUWOJbRf+VA/RMft1hLs35Nl3qPvsy013
+         W/CYZ7tl1w0Nw==
+Received: by mail-ua1-f43.google.com with SMTP id c19so6049621uat.6;
+        Tue, 02 Aug 2022 10:17:35 -0700 (PDT)
+X-Gm-Message-State: ACgBeo19klTm7nkg3xVLYWntjoXIVqqGPELxu+K8cEGZFwzwGFViHj2a
+        58pkbCOPEbRRsjmvua1xw1TnJbKGySIefMhZmw==
+X-Google-Smtp-Source: AA6agR7y4buQNvya5WmrFhrh5GEnJcFBluchloSidybizQJCjyZ9Adx3yyIrlsqlhrS3nobQjHpb5sanNqcqWcHzULM=
+X-Received: by 2002:ab0:2b06:0:b0:384:c4af:107c with SMTP id
+ e6-20020ab02b06000000b00384c4af107cmr8357117uar.77.1659460654762; Tue, 02 Aug
+ 2022 10:17:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YuOkPtg+Wa7KldPm@debian.me>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220802151404.1797-1-johan+linaro@kernel.org> <20220802151404.1797-6-johan+linaro@kernel.org>
+In-Reply-To: <20220802151404.1797-6-johan+linaro@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 2 Aug 2022 11:17:22 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL5ZCzfd06rxOdQodFjk4G3QpDCsxA5heM71x0q5d-hCw@mail.gmail.com>
+Message-ID: <CAL_JsqL5ZCzfd06rxOdQodFjk4G3QpDCsxA5heM71x0q5d-hCw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] Revert "dt-bindings: usb: dwc3: Add wakeup-source
+ property support"
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +77,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 04:11:26PM +0700, Bagas Sanjaya wrote:
-> > -    If for some reason you prefer to stay with RSA subkeys, just replace
-> > -    "ed25519" with "rsa2048" in the above command. Additionally, if you
-> > -    plan to use a hardware device that does not support ED25519 ECC
-> > -    keys, like Nitrokey Pro or a Yubikey, then you should use
-> > -    "nistp256" instead or "ed25519."
-> > +    Note, that if you plan to use a hardware device that does not
-> > +    support ED25519 ECC keys, you should choose "nistp256" instead or
-> > +    "ed25519."
-> >  
-> 
-> nistp256 isn't just ECC key algo other than ed25519. In fact, it is a
-> part of NIST curve family (the others are nistp384 and nistp521).
-> 
-> Maybe we can just say "If unsure, or if your hardware device does not
-> support ED25519, use one of NIST curves (nistp256, nistp384, or nistp521)
-> instead".
+On Tue, Aug 2, 2022 at 9:14 AM Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> This reverts commit 098c4d43b91a269e89f60331a26a3f3b914677ed.
+>
+> A devicetree binding should describe hardware capabilities and not be
+> used to configure power-management policies (even if things are a bit
+> blurry when it comes to "wakeup-source").
 
-Hm... ED25519 is the default for GnuPG 2.3+, so I'm not sure it makes sense to
-go into this level of detail here. Folks who are likely to need to use NIST
-curves will probably already know this information without needing to list it
-in this guide. As far as I can recall, TPMs and older Nitrokey Pros are some
-of the few remaining devices that can't do ed25519, so the number of people
-who would need to use NIST curves will likely be super small.
+Whether a device's interrupt can cause a wakeup is a h/w feature.
+That's not policy. If Linux also uses this to decide whether or not to
+enable wakeup, then that's its policy.
 
--K
+> It should also not be used to
+> work around Linux driver implementation issues such as how to coordinate
+> the glue and core dwc3 drivers.
+>
+> For the Qualcomm dwc3 controllers, it is the glue device that manages
+> the wakeup interrupts, which may or may not be able to wake the system
+> up from system suspend.
+
+While the reasoning to add this may have been for QCom, having this
+property for other users makes sense. On some platforms, 'snps,dwc3'
+is the only node (i.e. there's no wrapper node). So I don't think this
+should be reverted.
+
+Rob

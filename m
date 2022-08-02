@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E105587911
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABC7587916
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiHBId5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S236199AbiHBIet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiHBIdz (ORCPT
+        with ESMTP id S236136AbiHBIeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:33:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7171EC
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:33:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id d14so9048067lfl.13
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:33:54 -0700 (PDT)
+        Tue, 2 Aug 2022 04:34:46 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3C226AEE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:34:44 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id z20so7740091ljq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1ozmbsN2tgjXvPMdLMQFGo2ZV9fcaQMnF+02jQaScWo=;
-        b=xiDFHToAk53VqqiejooYK/XgNB5mKuNz8WRx/QqME+8fOqnbf+fM8Vxd7FAAatCyJx
-         hvU1TGDiOfHaUWhFP2YZApPg5ShXnWIAsahH5o+ul7zbNBW7rWJVihGhwjvE6teAvwdK
-         wLsAJiemDPc68V7aQLFnMwgFh6kH3OyAVRyhk7UG5hqJ3fqzttbWyFfDezbMEdIxHz2X
-         Hqo45gVcyArFQi+RpBv2sk8UlVcnIeNqwwgRqJDTw17K1rhw2xyHkrolTK0jzqqtk/Zc
-         Cqz4bsnwSgM2QmwYMTVCaYGsJhGX1Gbiaz9dgELpIduIQq3AoBVrcYurKvBIRnTKBz+9
-         v/eQ==
+        bh=aHp4Yh2rcRrr2xl2PTuwsd7kksQen9PU5SLjODiDla4=;
+        b=nYLwIhzChbnzC54T8x4mN/2jmwBAQbgIkFf2s2p3HQ5k79Fhzn3/vhRVIuKwJNVL/w
+         uLtahYAkyaZEFsn3gbWNDLE1ptfTNwfd9YtKzRQrIDluadm5b4EqIOlVUhYT0OkapAzS
+         fStBrPwgSIZ3K+5rsQnt+aZm09Ye0+Zy3vGiIn/7Y3ljaR8BjgEd/xcz6boDnnV8EddK
+         /tkUX0T/oswa46JHzOE2e52CBegMgiHlV3SStncnpqWE7TCIh0k8hZk/rKdVgygHSyvP
+         +Rc0EaAYxYL0fblqCkc4GOqgIJLFJxoOgHXvx+qpx49orbgbZZ1QS2C/5+4ceGseoEpz
+         DLkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=1ozmbsN2tgjXvPMdLMQFGo2ZV9fcaQMnF+02jQaScWo=;
-        b=CQpDOnNr64XvQjmizSQIFmdDqCZwSjdxM7m4OuGeEnwFSzg1zwrRXFspNPFi3Lu9tA
-         v5JiqDo43uF4VsK7I2agNWl1CwI3Pjvs8kLtP7yatCsO0QIN9u7jFszyO9A7JMIlw4eL
-         Nv4G8AVXVBwS10SCslbTeRnYhocRSakD8oW+m8fbdP8B4OzDEU3ZLtblRJzpgx99Ohhx
-         stEX7aMJe+wNmx+LWe5bgtxBYXKtXbj3vAoXrgtP7lUFIgMhuppWgAu4OJsvpFZ7I1tX
-         AfRfww6pc+j8JCz180uwed4rkZbzXbBy5w67vCA3Qqjjpv4lkwrhCfWQaCBY6c8K1X8N
-         I0uQ==
-X-Gm-Message-State: AJIora/9rgN1vOLFEKXIUSQLWxCOxs+hsTTRyQd5V+87mB7MKEuzSJy2
-        toyweBU969ukPvpKS+Np1kJ1tg==
-X-Google-Smtp-Source: AGRyM1sQl5cqH63HPgknS6/o1ykpwybk//qudzbfgglFjDL8qQJpX626a+cQNqh9Xlkj2+M40g0KWQ==
-X-Received: by 2002:a19:dc4d:0:b0:489:63cb:20c7 with SMTP id f13-20020a19dc4d000000b0048963cb20c7mr6494786lfj.101.1659429232964;
-        Tue, 02 Aug 2022 01:33:52 -0700 (PDT)
+        bh=aHp4Yh2rcRrr2xl2PTuwsd7kksQen9PU5SLjODiDla4=;
+        b=BMF+frodjlf7OEFSRFMVbwM1MsRrCIU2i93IFNVFqQVmnNEV1Pq0HLBwurMXohr5xu
+         MKlr/wLhywWgglx0z3ShepLkAXKqCddP+7EM1FX0+8USKebtojRUje8jDAfSYOjRaf/f
+         hVPrxNZGBtYLCm8d3bTL2ix3gcYKsW9zXvT0Mb2hS6kjBDUJgAREJZox+O6qMaFXfvVf
+         QVoWXr3T5bnpCwz7q/IB29H9IT3cugpsXgsZCpjIu3Pe/LozdMJPORSPFAbbWCLrx4k/
+         s4bGk7JoRCwbXQ/QuC7X3Ws/Z4S9TF5ug57QVujc8bEVXc4ImHheerbWxMrZJua+10oo
+         675g==
+X-Gm-Message-State: AJIora8z3YYsYA3DCt/Y3keyzRnrR8skk8duUjC/QkBpvb3QOSyNSSn/
+        9TXSMwA2yQ64e8n2qlNj0OF3Lw==
+X-Google-Smtp-Source: AGRyM1v2RoMwCWgJQRpQTWDaOWPiz/1teviwJ5VZF+VOTBURgWT6kzm/Hthgd6B8Pa5Aq4g73j431A==
+X-Received: by 2002:a05:651c:1544:b0:25d:a561:2d7e with SMTP id y4-20020a05651c154400b0025da5612d7emr6381308ljp.8.1659429281794;
+        Tue, 02 Aug 2022 01:34:41 -0700 (PDT)
 Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id t17-20020a2e4611000000b0025e1ec74e25sm869652lja.43.2022.08.02.01.33.51
+        by smtp.gmail.com with ESMTPSA id m20-20020a2eb6d4000000b0025e4cf9d0c1sm738547ljo.115.2022.08.02.01.34.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:33:52 -0700 (PDT)
-Message-ID: <64e3702b-f09b-5a2e-b6a5-4c8752fbad77@linaro.org>
-Date:   Tue, 2 Aug 2022 10:33:50 +0200
+        Tue, 02 Aug 2022 01:34:41 -0700 (PDT)
+Message-ID: <9a470289-c0ad-aaa9-17b5-b1c7242d3549@linaro.org>
+Date:   Tue, 2 Aug 2022 10:34:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 9/9] ARM: dts: uniphier: Remove compatible
- "snps,dw-pcie-ep" from Pro5 pcie-ep node
+Subject: Re: [PATCH v2 1/3] ARM: dts: qcom: msm8960: change the device node of
+ sleep_clk
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Shinjo Park <peremen@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1656894026-15707-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1656894026-15707-10-git-send-email-hayashi.kunihiko@socionext.com>
- <CAK8P3a0D4CYqZipY30scDA=KkWR_Az_5i-8avkg6EeDs1nM62w@mail.gmail.com>
+References: <f0a4790d-7739-3bc5-b877-2dacbdb5158b@somainline.org>
+ <20220730081232.14181-1-peremen@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAK8P3a0D4CYqZipY30scDA=KkWR_Az_5i-8avkg6EeDs1nM62w@mail.gmail.com>
+In-Reply-To: <20220730081232.14181-1-peremen@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/07/2022 13:58, Arnd Bergmann wrote:
-> On Mon, Jul 4, 2022 at 2:20 AM Kunihiko Hayashi
-> <hayashi.kunihiko@socionext.com> wrote:
->>
->> UniPhier PCIe endpoint controller doesn't use "snps,dw-pcie-ep" compatible,
->> so this is no longer needed. Remove the compatible string from the pcie-ep
->> node to fix the following warning.
->>
->>   uniphier-pro5-epcore.dtb: pcie@66000000: compatible: ['socionext,uniphier-pro5-pcie-ep', 'snps,dw-pcie-ep'] is too long
->>       From schema: Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
->>
+On 30/07/2022 10:12, Shinjo Park wrote:
+> Change the device node of sleep_clk to sleep-clk, and add a label. This
+> follows the similar convention as qcom-apq8064.dtsi.
 > 
-> This sounds like a problem with the binding rather than the dt file. Is this not
-> a designware pci endpoint? Should it be documented in that binding instead?
+> Signed-off-by: Shinjo Park <peremen@gmail.com>
+> Reviewed-by: David Heidelberg <david@ixit.cz>
+> ---
+> 
+> v2:
+>  - Rewrite commit message
+>  - Rename device node to not contain underscore
 
-Depends. We had one or two similar cases, where we dropped the snps/dw
-generic compatible, because device was actually quite different and
-could not match against snps/dw compatible. IOW, if device bound/matched
-via generic compatible it would be entirely non-operational. Logically I
-think it is okay to drop the generic compatible. Different question is
-any ABI break.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof

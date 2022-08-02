@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0A458840A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A095883F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237266AbiHBWMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S236858AbiHBWMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbiHBWMA (ORCPT
+        with ESMTP id S236168AbiHBWMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:12:00 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CAF41997;
-        Tue,  2 Aug 2022 15:11:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id s11so7886969edd.13;
-        Tue, 02 Aug 2022 15:11:51 -0700 (PDT)
+        Tue, 2 Aug 2022 18:12:01 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6013445989;
+        Tue,  2 Aug 2022 15:11:53 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w3so3642968edc.2;
+        Tue, 02 Aug 2022 15:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=5jqYykzK2VAPDQ9Ktx3qm63n0ndEZqi3cDc1gNnjf1w=;
-        b=I+01BXSMI6H4SdMabksVFqk0engvlwSKNEorbCiUBqDNuFlud4qJtqnO5/Wu0v6iSg
-         pgULNisMijgzf9Q3oxVTNf5wLPnomn6LtPH+eB+3Xr2CThkhmaLF7xyh8yGpD+2vNlgx
-         hdr9AMWN/Ttcw3nEY1af1vq3+WHxZRec1V7wBPBdLKM5qwjCiQqyE9TwIULZ8NCafSyB
-         P7qGLUvp1I0fLITz2zhiYJhEETmI5BsTKQ6sq23WS8Tdzz4jz8KmJW9BJbHgztyC6ywT
-         D3L4DMJGuwKIbAl9dlNX0jgT8wrMYdGOyQsORsEbBUWReKYwY2ylm6FEinwxEZmSEPNj
-         88cA==
+        bh=M2ycc73FpdaMn3bEjgV7beLocW5w17jbIEDHPtlJrZs=;
+        b=M8zvmJQivjeEj/S94zy7riR/WTDDdqyglPBSf334Er8kx99SzBvJUXOm8RGXtlnICR
+         gHHwYm2gE6O1VNHC8cTvwYzgoqlupOpw0uKtGp2v/gZla2CBpaw5wBTvQIVHLPksG5kU
+         BoY3xSbrPIkXU7v6f6YqMH+3XQ53NmxC3oc2Uxeqd2J6IQ6aitmHwusL6CpFL4vAiVO0
+         ObBZLorlJW6i1pGD8lMnD/oEaHflHpuqe7KYRancN0eCsy6/bBqvq1TPz/mz4Vy+a5yg
+         Xhz4HYDu3d0QjJlrNOBexA71c2GvdPY06mItJhP58iKRC9T5pmLRkKqK01XDfLNQZL/a
+         vXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=5jqYykzK2VAPDQ9Ktx3qm63n0ndEZqi3cDc1gNnjf1w=;
-        b=I28OisU3hBWS0OVBGtxy1gr53gxvb+4K8k4ftgepvQMBoQVbu2WA6Qq/59kENrzAo0
-         6ILXcVRmBLGbwwbgHciO0YcwE18+VBe/iLMvqcxOw6jW0trnNwh49mJPjmPrL6DtnYhm
-         gPaqu7YxEB/ZsaZfi5/dk7918d4vXxLnl0e34wjMh6EOgbdXjbgFYTVJ6BDJfSU9uEMJ
-         TWE+eTgA4jQyPA7CORYnVQh50Vpks6C+dh2k76D3Ibqj6xIw4yyEhUKU7K2tMInbgBGc
-         3BuB7+LEQkBBgzD4GgBPlN4Ztw2y3XKMesc/Y6uAbYdVVaVXYTDldzl9AeJR6703VvZY
-         wOqw==
-X-Gm-Message-State: ACgBeo3KNneRM9Z6EDNqFTnWz7sgI+WANrS47H9fMdF3lv1jXfZDNal4
-        AL8kbAEf15J6CESebFzAaak=
-X-Google-Smtp-Source: AA6agR6UcE9wH9pR9PIFKVTk4ikLBFfOWe/oRTHcarffmIOh9S7eARyGCf0/9+TZghdMbLZdMk2Nbw==
-X-Received: by 2002:a05:6402:4241:b0:43d:a7c9:8b21 with SMTP id g1-20020a056402424100b0043da7c98b21mr11389161edb.374.1659478310141;
-        Tue, 02 Aug 2022 15:11:50 -0700 (PDT)
+        bh=M2ycc73FpdaMn3bEjgV7beLocW5w17jbIEDHPtlJrZs=;
+        b=HZjQ/k3XpACpIIbmQdle7DYsCj0B1m2S44DQLZXsVjq6jgpmPbSqYYF+0f5KWb4js1
+         6T8wg3GtOgcUCb4JlIspCfX9/KUpKPDdy/2CCy1OWc8NcQGKhNX1q5qjytu/QaKUNI3R
+         tbXZa1OyZsULR/MHd3/lbvAAmNaEXd06OOnefgdq0IkAuzEAfTOyotuLubqAeSVdB2H+
+         7GeJRHpErhHRNDaAI3T4vxXUUQ6gwnJnm4feTzXoqpMcZlTRvUQb2OhjnpTiXnnywZnZ
+         TBKOGPgwS8NCzfLASXmXoGarhyqjWN/VVHka3HiwRyK0BoSVPxg4Z2K+SFX7G3TMy3Zz
+         ghyQ==
+X-Gm-Message-State: ACgBeo1Z74UuqEGhGsevgGbtTFie0qxMCJY+6yIHaF8cWW421exjhKFD
+        zdKlEilQcXAd5wIu+IrXOFk=
+X-Google-Smtp-Source: AA6agR7duz5n+FDcrBqE7ICNTGABywTUOijPyNWihLEnFityEV0wWLtvwi1zpcWcxusGGWerQk5RzA==
+X-Received: by 2002:a05:6402:524a:b0:43d:aa71:33d8 with SMTP id t10-20020a056402524a00b0043daa7133d8mr11369421edd.33.1659478312509;
+        Tue, 02 Aug 2022 15:11:52 -0700 (PDT)
 Received: from localhost ([77.78.38.236])
-        by smtp.gmail.com with ESMTPSA id t23-20020aa7d4d7000000b0043bbc9503ddsm8833805edr.76.2022.08.02.15.11.48
+        by smtp.gmail.com with ESMTPSA id la20-20020a170907781400b0072b7d76211dsm6620962ejc.107.2022.08.02.15.11.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 15:11:49 -0700 (PDT)
+        Tue, 02 Aug 2022 15:11:51 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,12 +59,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v4 09/13] regulator: qcom_spmi: Add PM6125 PMIC support
-Date:   Wed,  3 Aug 2022 01:11:08 +0300
-Message-Id: <20220802221112.2280686-10-iskren.chernev@gmail.com>
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH v4 10/13] regulator: qcom_smd: Sort pmics alphabetically (part 1)
+Date:   Wed,  3 Aug 2022 01:11:09 +0300
+Message-Id: <20220802221112.2280686-11-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220802221112.2280686-1-iskren.chernev@gmail.com>
 References: <20220802221112.2280686-1-iskren.chernev@gmail.com>
@@ -80,86 +78,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for PM6125 PMIC which is found on SM4250/6115 SoCs.
+The sorting is split in multiple commits for easier reviewing.
 
-S1, S2, S3, S4, S8 are FTS+FTSMPS_510, rev 2
-- range is 0.3-1.372V by 4mV increments
-S5, S6, s7 are BUCK+HFSMPS_510, rev 4
-- range is 0.32-2.04V by 8mV increment
-L1, L3, L7 are LDO+N600_510, rev 2
-L2, L4, L8, L17, L18 are LDO+N300_510, rev 2
-L6 is LDO+N1200_510, rev 2
-- range is 0.32-1.304V by 8mV increment
-L5 is LDO+MV_P50_510, rev 2
-L15, L19, L20 are LDO+MV_P150_510, rev 2
-L21, L22, L23, L24 are LDO+MV_P600_510, rev 2
-- range is 1.504-3.544V by 8mV increment
-L9, L11, L14 are LDO+LV_P600_510, rev 2
-L10, L16 are LDO+LV_P150_510, rev 2
-L12, L13 are LDO+LV_P300_510, rev 2
-- range 1.504-2V by 8mV increment
-
-Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/regulator/qcom_spmi-regulator.c | 36 +++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/regulator/qcom_smd-regulator.c | 178 ++++++++++++-------------
+ 1 file changed, 89 insertions(+), 89 deletions(-)
 
-diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
-index aed818c7a4d4..3e312729741e 100644
---- a/drivers/regulator/qcom_spmi-regulator.c
-+++ b/drivers/regulator/qcom_spmi-regulator.c
-@@ -2021,6 +2021,41 @@ static int spmi_regulator_of_parse(struct device_node *node,
- 	return 0;
- }
- 
-+static const struct spmi_regulator_data pm6125_regulators[] = {
-+	{ "s1", 0x1400, "vdd_s1" },
-+	{ "s2", 0x1700, "vdd_s2" },
-+	{ "s3", 0x1a00, "vdd_s3" },
-+	{ "s4", 0x1d00, "vdd_s4" },
-+	{ "s5", 0x2000, "vdd_s5" },
-+	{ "s6", 0x2300, "vdd_s6" },
-+	{ "s7", 0x2600, "vdd_s7" },
-+	{ "s8", 0x2900, "vdd_s8" },
-+	{ "l1", 0x4000, "vdd_l1_l7_l17_l18" },
-+	{ "l2", 0x4100, "vdd_l2_l3_l4" },
-+	{ "l3", 0x4200, "vdd_l2_l3_l4" },
-+	{ "l4", 0x4300, "vdd_l2_l3_l4" },
-+	{ "l5", 0x4400, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l6", 0x4500, "vdd_l6_l8" },
-+	{ "l7", 0x4600, "vdd_l1_l7_l17_l18" },
-+	{ "l8", 0x4700, "vdd_l6_l8" },
-+	{ "l9", 0x4800, "vdd_l9_l11" },
-+	{ "l10", 0x4900, "vdd_l10_l13_l14" },
-+	{ "l11", 0x4a00, "vdd_l9_l11" },
-+	{ "l12", 0x4b00, "vdd_l12_l16" },
-+	{ "l13", 0x4c00, "vdd_l10_l13_l14" },
-+	{ "l14", 0x4d00, "vdd_l10_l13_l14" },
-+	{ "l15", 0x4e00, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l16", 0x4f00, "vdd_l12_l16" },
-+	{ "l17", 0x5000, "vdd_l1_l7_l17_l18" },
-+	{ "l18", 0x5100, "vdd_l1_l7_l17_l18" },
-+	{ "l19", 0x5200, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l20", 0x5300, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l21", 0x5400, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l22", 0x5500, "vdd_l5_l15_l19_l20_l21_l22" },
-+	{ "l23", 0x5600, "vdd_l23_l24" },
-+	{ "l24", 0x5700, "vdd_l23_l24" },
-+};
-+
- static const struct spmi_regulator_data pm660_regulators[] = {
- 	{ "s1", 0x1400, "vdd_s1", },
- 	{ "s2", 0x1700, "vdd_s2", },
-@@ -2315,6 +2350,7 @@ static const struct spmi_regulator_data pms405_regulators[] = {
+diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+index 59024c639141..c807768d1927 100644
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -772,6 +772,44 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+ 	{}
  };
  
- static const struct of_device_id qcom_spmi_regulator_match[] = {
-+	{ .compatible = "qcom,pm6125-regulators", .data = &pm6125_regulators },
- 	{ .compatible = "qcom,pm660-regulators", .data = &pm660_regulators },
- 	{ .compatible = "qcom,pm660l-regulators", .data = &pm660l_regulators },
- 	{ .compatible = "qcom,pm8004-regulators", .data = &pm8004_regulators },
++static const struct rpm_regulator_data rpm_pm8226_regulators[] = {
++	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pm8226_hfsmps, "vdd_s1" },
++	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8226_ftsmps, "vdd_s2" },
++	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pm8226_hfsmps, "vdd_s3" },
++	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pm8226_hfsmps, "vdd_s4" },
++	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pm8226_hfsmps, "vdd_s5" },
++	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
++	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
++	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pm8226_nldo, "vdd_l3_l24_l26" },
++	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
++	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
++	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
++	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
++	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
++	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
++	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pm8226_pldo, "vdd_l10_l11_l13" },
++	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8226_pldo, "vdd_l10_l11_l13" },
++	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8226_pldo, "vdd_l12_l14" },
++	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8226_pldo, "vdd_l10_l11_l13" },
++	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8226_pldo, "vdd_l12_l14" },
++	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
++	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
++	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
++	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
++	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "l20", QCOM_SMD_RPM_LDOA, 20, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "l21", QCOM_SMD_RPM_LDOA, 21, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "l24", QCOM_SMD_RPM_LDOA, 24, &pm8226_nldo, "vdd_l3_l24_l26" },
++	{ "l25", QCOM_SMD_RPM_LDOA, 25, &pm8226_pldo, "vdd_l25" },
++	{ "l26", QCOM_SMD_RPM_LDOA, 26, &pm8226_nldo, "vdd_l3_l24_l26" },
++	{ "l27", QCOM_SMD_RPM_LDOA, 27, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
++	{ "l28", QCOM_SMD_RPM_LDOA, 28, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
++	{ "lvs1", QCOM_SMD_RPM_VSA, 1, &pm8226_switch, "vdd_lvs1" },
++	{}
++};
++
+ static const struct rpm_regulator_data rpm_pm8841_regulators[] = {
+ 	{ "s1", QCOM_SMD_RPM_SMPB, 1, &pm8x41_hfsmps, "vdd_s1" },
+ 	{ "s2", QCOM_SMD_RPM_SMPB, 2, &pm8841_ftsmps, "vdd_s2" },
+@@ -833,44 +871,6 @@ static const struct rpm_regulator_data rpm_pm8916_regulators[] = {
+ 	{}
+ };
+ 
+-static const struct rpm_regulator_data rpm_pm8226_regulators[] = {
+-	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pm8226_hfsmps, "vdd_s1" },
+-	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8226_ftsmps, "vdd_s2" },
+-	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pm8226_hfsmps, "vdd_s3" },
+-	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pm8226_hfsmps, "vdd_s4" },
+-	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pm8226_hfsmps, "vdd_s5" },
+-	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
+-	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
+-	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pm8226_nldo, "vdd_l3_l24_l26" },
+-	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
+-	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8226_nldo, "vdd_l1_l2_l4_l5" },
+-	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
+-	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
+-	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
+-	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
+-	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pm8226_pldo, "vdd_l10_l11_l13" },
+-	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8226_pldo, "vdd_l10_l11_l13" },
+-	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8226_pldo, "vdd_l12_l14" },
+-	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8226_pldo, "vdd_l10_l11_l13" },
+-	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8226_pldo, "vdd_l12_l14" },
+-	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
+-	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
+-	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
+-	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pm8226_pldo, "vdd_l15_l16_l17_l18" },
+-	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "l20", QCOM_SMD_RPM_LDOA, 20, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "l21", QCOM_SMD_RPM_LDOA, 21, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "l24", QCOM_SMD_RPM_LDOA, 24, &pm8226_nldo, "vdd_l3_l24_l26" },
+-	{ "l25", QCOM_SMD_RPM_LDOA, 25, &pm8226_pldo, "vdd_l25" },
+-	{ "l26", QCOM_SMD_RPM_LDOA, 26, &pm8226_nldo, "vdd_l3_l24_l26" },
+-	{ "l27", QCOM_SMD_RPM_LDOA, 27, &pm8226_pldo, "vdd_l6_l7_l8_l9_l27" },
+-	{ "l28", QCOM_SMD_RPM_LDOA, 28, &pm8226_pldo, "vdd_l19_l20_l21_l22_l23_l28" },
+-	{ "lvs1", QCOM_SMD_RPM_VSA, 1, &pm8226_switch, "vdd_lvs1" },
+-	{}
+-};
+-
+ static const struct rpm_regulator_data rpm_pm8941_regulators[] = {
+ 	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pm8x41_hfsmps, "vdd_s1" },
+ 	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8x41_hfsmps, "vdd_s2" },
+@@ -912,57 +912,6 @@ static const struct rpm_regulator_data rpm_pm8941_regulators[] = {
+ 	{}
+ };
+ 
+-static const struct rpm_regulator_data rpm_pma8084_regulators[] = {
+-	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pma8084_ftsmps, "vdd_s1" },
+-	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pma8084_ftsmps, "vdd_s2" },
+-	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pma8084_hfsmps, "vdd_s3" },
+-	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pma8084_hfsmps, "vdd_s4" },
+-	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pma8084_hfsmps, "vdd_s5" },
+-	{ "s6", QCOM_SMD_RPM_SMPA, 6, &pma8084_ftsmps, "vdd_s6" },
+-	{ "s7", QCOM_SMD_RPM_SMPA, 7, &pma8084_ftsmps, "vdd_s7" },
+-	{ "s8", QCOM_SMD_RPM_SMPA, 8, &pma8084_ftsmps, "vdd_s8" },
+-	{ "s9", QCOM_SMD_RPM_SMPA, 9, &pma8084_ftsmps, "vdd_s9" },
+-	{ "s10", QCOM_SMD_RPM_SMPA, 10, &pma8084_ftsmps, "vdd_s10" },
+-	{ "s11", QCOM_SMD_RPM_SMPA, 11, &pma8084_ftsmps, "vdd_s11" },
+-	{ "s12", QCOM_SMD_RPM_SMPA, 12, &pma8084_ftsmps, "vdd_s12" },
+-
+-	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pma8084_nldo, "vdd_l1_l11" },
+-	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
+-	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
+-	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
+-	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pma8084_pldo, "vdd_l5_l7" },
+-	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
+-	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pma8084_pldo, "vdd_l5_l7" },
+-	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pma8084_pldo, "vdd_l8" },
+-	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pma8084_nldo, "vdd_l1_l11" },
+-	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
+-	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
+-	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
+-	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pma8084_pldo, "vdd_l16_l25" },
+-	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pma8084_pldo, "vdd_l17" },
+-	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pma8084_pldo, "vdd_l18" },
+-	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pma8084_pldo, "vdd_l19" },
+-	{ "l20", QCOM_SMD_RPM_LDOA, 20, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l21", QCOM_SMD_RPM_LDOA, 21, &pma8084_pldo, "vdd_l21" },
+-	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pma8084_pldo, "vdd_l22" },
+-	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l24", QCOM_SMD_RPM_LDOA, 24, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
+-	{ "l25", QCOM_SMD_RPM_LDOA, 25, &pma8084_pldo, "vdd_l16_l25" },
+-	{ "l26", QCOM_SMD_RPM_LDOA, 26, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
+-	{ "l27", QCOM_SMD_RPM_LDOA, 27, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
+-
+-	{ "lvs1", QCOM_SMD_RPM_VSA, 1, &pma8084_switch },
+-	{ "lvs2", QCOM_SMD_RPM_VSA, 2, &pma8084_switch },
+-	{ "lvs3", QCOM_SMD_RPM_VSA, 3, &pma8084_switch },
+-	{ "lvs4", QCOM_SMD_RPM_VSA, 4, &pma8084_switch },
+-	{ "5vs1", QCOM_SMD_RPM_VSA, 5, &pma8084_switch },
+-
+-	{}
+-};
+-
+ static const struct rpm_regulator_data rpm_pm8950_regulators[] = {
+ 	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pm8950_hfsmps, "vdd_s1" },
+ 	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8950_hfsmps, "vdd_s2" },
+@@ -1082,6 +1031,57 @@ static const struct rpm_regulator_data rpm_pm8994_regulators[] = {
+ 	{}
+ };
+ 
++static const struct rpm_regulator_data rpm_pma8084_regulators[] = {
++	{ "s1", QCOM_SMD_RPM_SMPA, 1, &pma8084_ftsmps, "vdd_s1" },
++	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pma8084_ftsmps, "vdd_s2" },
++	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pma8084_hfsmps, "vdd_s3" },
++	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pma8084_hfsmps, "vdd_s4" },
++	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pma8084_hfsmps, "vdd_s5" },
++	{ "s6", QCOM_SMD_RPM_SMPA, 6, &pma8084_ftsmps, "vdd_s6" },
++	{ "s7", QCOM_SMD_RPM_SMPA, 7, &pma8084_ftsmps, "vdd_s7" },
++	{ "s8", QCOM_SMD_RPM_SMPA, 8, &pma8084_ftsmps, "vdd_s8" },
++	{ "s9", QCOM_SMD_RPM_SMPA, 9, &pma8084_ftsmps, "vdd_s9" },
++	{ "s10", QCOM_SMD_RPM_SMPA, 10, &pma8084_ftsmps, "vdd_s10" },
++	{ "s11", QCOM_SMD_RPM_SMPA, 11, &pma8084_ftsmps, "vdd_s11" },
++	{ "s12", QCOM_SMD_RPM_SMPA, 12, &pma8084_ftsmps, "vdd_s12" },
++
++	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pma8084_nldo, "vdd_l1_l11" },
++	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
++	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
++	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
++	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pma8084_pldo, "vdd_l5_l7" },
++	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
++	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pma8084_pldo, "vdd_l5_l7" },
++	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pma8084_pldo, "vdd_l8" },
++	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pma8084_nldo, "vdd_l1_l11" },
++	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
++	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
++	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
++	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pma8084_pldo, "vdd_l16_l25" },
++	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pma8084_pldo, "vdd_l17" },
++	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pma8084_pldo, "vdd_l18" },
++	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pma8084_pldo, "vdd_l19" },
++	{ "l20", QCOM_SMD_RPM_LDOA, 20, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l21", QCOM_SMD_RPM_LDOA, 21, &pma8084_pldo, "vdd_l21" },
++	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pma8084_pldo, "vdd_l22" },
++	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l24", QCOM_SMD_RPM_LDOA, 24, &pma8084_pldo, "vdd_l9_l10_l13_l20_l23_l24" },
++	{ "l25", QCOM_SMD_RPM_LDOA, 25, &pma8084_pldo, "vdd_l16_l25" },
++	{ "l26", QCOM_SMD_RPM_LDOA, 26, &pma8084_pldo, "vdd_l6_l12_l14_l15_l26" },
++	{ "l27", QCOM_SMD_RPM_LDOA, 27, &pma8084_nldo, "vdd_l2_l3_l4_l27" },
++
++	{ "lvs1", QCOM_SMD_RPM_VSA, 1, &pma8084_switch },
++	{ "lvs2", QCOM_SMD_RPM_VSA, 2, &pma8084_switch },
++	{ "lvs3", QCOM_SMD_RPM_VSA, 3, &pma8084_switch },
++	{ "lvs4", QCOM_SMD_RPM_VSA, 4, &pma8084_switch },
++	{ "5vs1", QCOM_SMD_RPM_VSA, 5, &pma8084_switch },
++
++	{}
++};
++
+ static const struct rpm_regulator_data rpm_pmi8994_regulators[] = {
+ 	{ "s1", QCOM_SMD_RPM_SMPB, 1, &pmi8994_ftsmps, "vdd_s1" },
+ 	{ "s2", QCOM_SMD_RPM_SMPB, 2, &pmi8994_hfsmps, "vdd_s2" },
 -- 
 2.37.1
 

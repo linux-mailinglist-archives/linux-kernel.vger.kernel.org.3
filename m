@@ -2,168 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A93A58848C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF87588490
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbiHBWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S233066AbiHBWuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiHBWth (ORCPT
+        with ESMTP id S229637AbiHBWuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:49:37 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0552E12767;
-        Tue,  2 Aug 2022 15:49:36 -0700 (PDT)
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272MibsG015986;
-        Tue, 2 Aug 2022 22:49:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=aBcwqy5rVuadZreo5FWlVUOrcn121dA1tLTMwt/VlW0=;
- b=nn+FYBnnAvwjEEecRWIgeXnudvUWZeCAevyeDk+g30cDwkVlu34201wEn/rdjW1t0hga
- yR3ndrns/2bRbVBmPRgZetpTl9cNUs1ChWTYy+mpU2iYwKX6LXJtL2jt0hfkS7P2230R
- 5WonxW7nsL77vJ9olqQXwm/XwGxxTTBpf8iivwmKJAUZPEBq5K2kT1yskJBaR0VINvyG
- njlXLaKQN/2F0iVsr31WQ5UsTpsuTEwHtX/y0+VRkfqn2ihZWHHZWM8jmtdRcZUf7+kz
- l6pQy+3uxz8ma0oDQ6b8WNktj6xuOsLG4G8/XdjEc21TMUVz9h3xnzpY53zjqQ3Lc2KK cQ== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3hqcyyr0s2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 22:49:27 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 06BB6804CB5;
-        Tue,  2 Aug 2022 22:49:26 +0000 (UTC)
-Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 2 Aug 2022 10:49:18 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Tue, 2 Aug 2022 10:49:18 -1200
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 2 Aug 2022 10:49:18 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q+QEbOqEuPWuvcDzGJtDuCSJ6zegXqw9weg9bEvS5XpBP2aMKwlEgdBq8blsBEQEASNirD4Cn7E1Jv+Zp1K/0SuNI7obtIsRX9nUU0UIMDV+sm2RIBMDjAbw7eKbcR72vGtexIK6btqUpYSZmdFZo3P370UbI/vB1jHOp1GQeVB1QsheaiQKPsVz0ZAf0rgbEnP6NPcLTKstIFskjcwcOLrhoGRCVgcPvJYq1yAt0/mmv6u1wYQoRlOFSph/NIH2zL7iXIl/KvxNMqa9VQ5+1nKZI+fW5MtzMhAHwoWnjdbvKEeJlHP76kB8WjIdmokjUPDPYwRTeL9OMXOkhEP54w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aBcwqy5rVuadZreo5FWlVUOrcn121dA1tLTMwt/VlW0=;
- b=XLthTer3k7UNC+re8aeAP5f45nmCoQbpc7wn/6vTo180kw/K4z1ZD8d+4+QkfvRo5KTm604xc2Y2OMgswv9g6U9ZhO/oWqB5uwJTDrGscwWKtwSBmIq1tEU+q0viEL0rdh7heDezPaUKGqpTr677uwS6H6y0G1hDViWUhhmZB5NxTLn5RRS3JF/qMx8w1yRoh5wONWVe3N03/Bk4FJj6Ib1mvwacMgtCU6ZLQZljXLr10kPmpg6K7dAVxiZjXn7PpWfBDzd8Azskh4b/4bK+UYCF+Oei2ft2lFjrehLNtOjxeCrmTpK7AwS0jBsHQOU2dpPD/B9iPS2WDpDbudJfgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
- by MN0PR84MB3072.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:3c8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
- 2022 22:49:17 +0000
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::1cc2:4b7b:f4c5:fbb4]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::1cc2:4b7b:f4c5:fbb4%4]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 22:49:17 +0000
-From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
-To:     "'<Vishal Badole>'" <badolevishal1116@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "inux-clk@vger.kernel.org" <inux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "chinmoyghosh2001@gmail.com" <chinmoyghosh2001@gmail.com>,
-        "mintupatel89@gmail.com" <mintupatel89@gmail.com>,
-        "vimal.kumar32@gmail.com" <vimal.kumar32@gmail.com>
-Subject: =?utf-8?B?UkU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFjdGl2?=
- =?utf-8?Q?e_consumers_of_clocks?=
-Thread-Topic: =?utf-8?B?W1BBVENIXSBDb21tb24gY2xvY2s6IOKAi+KAi1RvIGxpc3QgYWN0aXZlIGNv?=
- =?utf-8?Q?nsumers_of_clocks?=
-Thread-Index: AQHYhlnsnUQ3P7E53E2XSWzjiEGgZ61iCBkZgDptc7A=
-Date:   Tue, 2 Aug 2022 22:49:17 +0000
-Message-ID: <MW5PR84MB1842824E0F57D0EC46381B09AB9D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
- <20220610194013.DD39DC34114@smtp.kernel.org> <20220622170219.GA6978@Mahakal>
- <20220624010550.582BBC341C7@smtp.kernel.org> <20220626182517.GA26001@Mahakal>
-In-Reply-To: <20220626182517.GA26001@Mahakal>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3638ea31-5579-4513-b5a1-08da74d93ada
-x-ms-traffictypediagnostic: MN0PR84MB3072:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cDUYV0SV+bq/asY2nbAhXR80tSJMcxmTe6detlxBaWyGcMtJhwe3vYXlpL0E1XebtVm0sbIYTAm9WIo+0aI0sbkECb7l0VC/jNif/BwH9j7/DdP9NbGI2lcstL65/Qbii3h2ePs7NYUqAVSsirRN8JIShqXH41MQUEyiNbomCT8N9Wi00jlXtsduhqLjxBKxqnp5Nj1dZuITT0DZybOdjRev1dqCxDKuTTS3H/fe+57gtAkwTzCd3MDqvr0Z2+CBxFhomuXzq3nLT/vOBedweAKrWwqo9915Z8AyOMiAg/2JGlr6HcuYCzXdi7OzmoZKgtjbtUjigSyiaVviaB/RNM9+Y9qCff7bVlevEUsQrh3q8/ICOv1xBwo7vsaIW8yCJh91M2Yi+FAENdA4mpNhY7ys1R+7r0kiy6Tfkjp8DrMSHAxt9YsLql+qiIp96PM6HSvheUgailQ9Wd3huYkQjLgCoAt5zWKH9EEqu+nBfxQZu7g8+K+GEE5V5uLBsdJMWSco3gcXTkfB85cjfOuvDosFHM00XR7+/FaBscCrVs/AWtAXnWDlaq4dlrnKDxtUAKY9+7q902HMZEbmuSFbX/C6XZJ7auE/Y55MWJrVuaPGs3kIeHClgi74LASPWF1DIOQlsdlnWIH/N1UuotWsCDy6ppGMuGVUS7A4nu5173vBIfC7/mf0s2oYEAvBpTXp/4OY6sqDwJH/jJnYBbEx4GooOSL0LtvO9Xcjd9zxldMWt63EtZnztYc7MSYYf2Ts3GVnj1fyWbRwf0/XsOnDyLZicDAuRN2dm5GniN5QJew=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(136003)(366004)(39860400002)(6506007)(53546011)(7696005)(41300700001)(26005)(9686003)(316002)(55016003)(478600001)(54906003)(86362001)(71200400001)(82960400001)(122000001)(38070700005)(38100700002)(186003)(83380400001)(4744005)(2906002)(8936002)(66446008)(66556008)(76116006)(66476007)(64756008)(33656002)(66946007)(52536014)(5660300002)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?azVtY2VDODByMmlGeWlnM2dIdmh6Nmk4UnFBL2hhK2l4VjZkdHF0U2daMFZh?=
- =?utf-8?B?SXpWVE9WWUFhQ3E5UXFHMjkzWkFrWVE0VVdnQ0hFSjVFdEFoRE55UG5zR1E1?=
- =?utf-8?B?TjRZeDRXMHRjR0pTQm1VOHNyZWpqTi81OGdUTGQrWnhtaUQ3Mzl2SGlsYU1v?=
- =?utf-8?B?am5qN1QyRFRQaEVVMUJMcUlRbmlBSnQ2RzVuRjRDR2JOaGtRVE1DdnVLaHdv?=
- =?utf-8?B?amM1S3U2RHR3YUdtbDlEeUVSNDlWb3JOS2g5TTlLaTRtWTNYY2dhOC9uRVkw?=
- =?utf-8?B?R3h0bmt3aDRXdlNrZkZhQzJXbmpJaEVTeS9rMkcwa1ErZUxMSFI4c3ZBcElE?=
- =?utf-8?B?dStuVjVSRUhIS1ZmalcrckVmY2FIWjgvRnUxZm1lakZWR01HekU5RmpMNVBp?=
- =?utf-8?B?WlZINWQ4WGVuM0VGYUpzMUFrZVNCdWVsVm1NcFp5TXBiUkk5SFg3VlMxSUFq?=
- =?utf-8?B?T2RZTTBJd2JTOTVrdlB5VlpCN3lwMUZTTmVNN1BxaGZlVEhJdzFsNmE0OTFY?=
- =?utf-8?B?VCtQaFNVb1QwRFd3Y1pDTkpmTHZ0R0RmWkpmMlV4QUl2S3RsbnlPS2oyaGZk?=
- =?utf-8?B?eFJ1LzhQbHl3MkJObVl3KzZ6M1RpTTJHWjJXd2FDaFJLOVJDL3orM2orWitQ?=
- =?utf-8?B?L3dRVG1nNHJCdGY4U1FZa1JZeTVPaXNyUTlRRUlnREJvYVJvbmwwQ1VqRnlj?=
- =?utf-8?B?ZnZNK0ZES01YYTJXNm1DRG1aMldiSE9XR245VWM0Tldaa3A4NkNyS2txenlZ?=
- =?utf-8?B?R0RVek9obWVYei9YYXlndEFDcFJRelVYZVk4bVJNMUkrMkFHSUljNERFUkZh?=
- =?utf-8?B?K0dxZEhDOXJNNTZsL3U4YXBLUC8vREdXOVJvWTB3MEdUWlpiOVduNTJWZzYr?=
- =?utf-8?B?a2dQMzhxUnowaTBEVkkxekVQS2dxVmNSUlZVaTFQbGtrS3VwdlozMTBrOTdQ?=
- =?utf-8?B?Unh4UXJGUFRMZ3p0a0ZwRFF4Z01kK0RnNkh4aFEzUmMvWnUwdHhYVkpWSG9o?=
- =?utf-8?B?Wk1IRVJJbHRyM3RBcGlLN2Fjck41dEFzRDgxRFVia1JNM01YTFhiYm4xdVl5?=
- =?utf-8?B?NHBHSTBzSHhsRWo5ZGtjcG1ZcllidjVLOUszbjBjUlluQ1VQa2NUZ3ZKZ093?=
- =?utf-8?B?TlAxamZMZnl1YXYvY3EyKzVidm1Cdi93VGZwWWFSRGJONitML2t0N3V6SUtF?=
- =?utf-8?B?Y0plQUlEeFA3TzFZdEtDclR3TG5wR01GWnh2Z1ZsbjE3eFZXbEkzbkQ0Y200?=
- =?utf-8?B?cmR6NHRrai9VcGwzYlYrVUxhSXNJRnhMU0R0cTZYc2EwUndqeTdwZHBxQlY2?=
- =?utf-8?B?bk9wTFJJQzE5UnNoV2lWU2VMbFN1c1Y5bE82OWY0bVBNRnZhQ2paVHdnYmxB?=
- =?utf-8?B?dFBXeS90K2wzYVh4cmY1cWFYdDdqZTFUd3U2NElCOEgzQmkrNENod1A3aVVF?=
- =?utf-8?B?MG16YVFyaGJXTFlhSk1ZUjVyck8yWkRoV1pNVnc5OHBySGhmRnVVQ2JiaGRT?=
- =?utf-8?B?MlZYMU1ka0F6d2Y2V0dVUlo5TUwxMVorYlNNditOVVhUMGZySmpjYjk3RGRM?=
- =?utf-8?B?L2Y1dFBsRE5XYWVYdFNWWnJURENOUkt0UG9BbmNpNVNPMWNvV1R4Tzk1MUVi?=
- =?utf-8?B?RjBYZkZUN2VWSCtOWTZOVkNobHlpSDdpUDlKY0hHWklpWHk0WEx4a0tPQUM3?=
- =?utf-8?B?dDh1YnVtRDNIeDBuS1JWV2JERVd5U1Y4azZKZ3BaNjE4WXI3TzdnYndPeDJz?=
- =?utf-8?B?emZVQWllQUtFYU1BcVZhc3ZRVXpWaUFNd1lQWGhsTjEyTFA1YlE1aUpqSEhw?=
- =?utf-8?B?RlhNMU0zZk5wZmxzZENaQnh6SGtUby8xdmcxSktFQTBGQkx1aTk2ZmhxYVNE?=
- =?utf-8?B?WUdCcTgrbWR0eEFVVy90OWVtMy9LanZMZFp6YmI4Q0g0d2V3UFJTdEx0VllC?=
- =?utf-8?B?KzB0UlVpMmcwWDJrVEJ4L3VpTjdpWm95ZVU3NDlNLzV0TERvRlluU0tJRzAx?=
- =?utf-8?B?RThGVUkzVktPUnRBR1NkdGZDN2V1aTJybkFiM3dpQ2JjNE42allXdlNaY0RF?=
- =?utf-8?B?NjVuTWwzd2d0MkRFdzhiV1MvTXZla0tqUTJKWktjZlU0UkY3TlMzWFpoYjlM?=
- =?utf-8?Q?lzzE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 2 Aug 2022 18:50:09 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0D20BE2;
+        Tue,  2 Aug 2022 15:50:07 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id i14so9679299ejg.6;
+        Tue, 02 Aug 2022 15:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rfkpQPKLu8SRWjwd0TtH906xz9zr70rSua/GjZiwncg=;
+        b=Wd9p1qEtwQHVZWLVEbEMe3AQ+JCAwPYfU8jdUH2cHOQEwIoc1XBAzHbodO0B1fCYD0
+         UpBuoEJyV1B0swkybzR4KdVJh5tDDZVM3DsIIzGVNZegMkRuMLIbpXUxJqJqox4nPtAz
+         rRWzbMeRgQHivrhL138vGSActPpKv3yaatrB4cc28uHLqdkf74oLyfAXJ+c4BAOjM7W+
+         N7dCjmcV95QE8WQI3Fkci/w9EhIRvn7/02u3gGmdJxm5MjadOgEeFRbwNK1aOM38bsqL
+         zosSX19Qs0DqQGyX/LfQC0BeULRaR2n062yl92ATmp/+Jx/196u5ABsd3GGX60Je93tM
+         eABg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rfkpQPKLu8SRWjwd0TtH906xz9zr70rSua/GjZiwncg=;
+        b=ItLxDkMDOEUqUB1TqARA3M9dLMNp5JLfG+RbHBOVpxPiN3T+0lggx/KG5IFAhwhH9Y
+         lVYDTiqUI9y/QXP70lQngl2Ui7gblJFjx7VQluleDkrEf1vQ1C0+GgrCrnbfDt2KubGs
+         tnjtjTbnPfMnLVNLmXNW7OUd4A+cFJCFzVFfjhcJTxWs9GW4Y/VsO2U5AvZoOZbTLDCN
+         qMRK7/Fs68Eq67qSjQ6Sk81B5an1fWlIXCLgrb2efD6bdoa7KHQh3Boprbfu340KCTwh
+         +7TicffX395p+2HFH0uQ/tMrQxFMyvkxtsCOiXEIyPBEXXK+jrR4e9Ny3KoUn38Zk6qY
+         SuYQ==
+X-Gm-Message-State: AJIora+D8lkvIk2p9zCJcH96D6tz9I1rUuu8o2awsXAJA9F826cBHnqM
+        +EpM3pJh8uGxmB1YtgN5G82XmrGPhSg/zFWbju0=
+X-Google-Smtp-Source: AGRyM1tVilscQlMqtuCjMqxEiWukkme1VpEV5t4XIMIpZ1DFVec4hXV3fVO69UAWvoV0Jq0YQhqQQLe/Odo9MSKricE=
+X-Received: by 2002:a17:907:6e1d:b0:72f:20ad:e1b6 with SMTP id
+ sd29-20020a1709076e1d00b0072f20ade1b6mr18321344ejc.545.1659480605949; Tue, 02
+ Aug 2022 15:50:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3638ea31-5579-4513-b5a1-08da74d93ada
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 22:49:17.0171
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JZZQc2Pvt5IOsYU37EYeIia7rOgqkvPES5IKxVRy1CiAAF+Pj6fyeKCMQxYauE+t
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR84MB3072
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: lo4tTA-65mt5taWWMlMGQZQpzk11olHE
-X-Proofpoint-GUID: lo4tTA-65mt5taWWMlMGQZQpzk11olHE
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1011 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2208020107
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-5-yosryahmed@google.com> <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
+ <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com>
+In-Reply-To: <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 2 Aug 2022 15:49:54 -0700
+Message-ID: <CAEf4BzYDqaTQr-S8TuLkysQ+FhT+6qMS0z=Sp_7+-wk84_4h6Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Kui-Feng Lee <kuifeng@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -171,24 +88,248 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogPFZpc2hhbCBCYWRvbGU+
-IDxiYWRvbGV2aXNoYWwxMTE2QGdtYWlsLmNvbT4NCj4gU2VudDogU3VuZGF5LCBKdW5lIDI2LCAy
-MDIyIDE6MjUgUE0NCj4gVG86IFN0ZXBoZW4gQm95ZCA8c2JveWRAa2VybmVsLm9yZz47IG10dXJx
-dWV0dGVAYmF5bGlicmUuY29tOyBpbnV4LQ0KPiBjbGtAdmdlci5rZXJuZWwub3JnOyBsaW51eC1r
-ZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiBjaGlubW95Z2hvc2gyMDAxQGdtYWlsLmNvbTsg
-bWludHVwYXRlbDg5QGdtYWlsLmNvbTsNCj4gdmltYWwua3VtYXIzMkBnbWFpbC5jb20NCj4gU3Vi
-amVjdDogUmU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFjdGl2ZSBjb25z
-dW1lcnMgb2YgY2xvY2tzDQo+IA0KLi4uDQo+IFdlIHdpbGwgcmVtb3ZlIGFib3ZlIHByaW50cyBp
-biB0aGUgcmV2aXNlZCBwYXRjaC4gV2UgYXJlIGZhY2luZw0KPiBpbmRlbnRhdGlvbiBpc3N1ZSB3
-aGxlIHByaW50aW5nIGNvbnN1bWVyIGluIHN1bW1hcnkNCj4gYXMgZ2l2ZW4gYmVsb3cNCj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZW5hYmxlICBwcmVwYXJlICBwcm90ZWN0ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIGR1dHkgIGhhcmR3YXJlICAgICAgICAgICAgcGVyLXVz
-ZXINCj4gICBjbG9jayAgICAgICAgICAgICAgICAgICAgICAgICAgY291bnQgICAgY291bnQgICAg
-Y291bnQgICAgICAgIHJhdGVjY3VyYWN5IHBoYXNlICBjeWNsZSAgICBlbmFibGUgIGNvbnN1bWVy
-ICAgY291bnQNCj4gICBjbGtfbWNhc3AwX2ZpeGVkICAgICAgICAgICAgICAgICAgIDAgICAgICAg
-IDAgICAgICAgIDAgICAgICAgICAgIDI0NTc2MDAwICAgICAwICA1MDAwMCAgICAgICAgIFkgICAN
-Cj4gICBkZXZpY2VsZXNzICAgICAgICAwDQoNCg0KQ29uc2lkZXIgbWFraW5nIHRoZSBrZXJuZWwg
-b3V0cHV0IHNpbXBsZSwgZ3JlcHBhYmxlLCBhbmQgcGFyc2VhYmxlIChlLmcuLA0KY29tbWEtc2Vw
-YXJhdGVkIGZpZWxkcywgb25lIGVudHJ5IHBlciBsaW5lLCBubyBtdWx0aS1saW5lIGNvbHVtbiBo
-ZWFkZXJzKQ0KYW5kIGxldCBhIHVzZXJzcGFjZSB0b29sIGRvIHRoZSBmYW5jeSBmb3JtYXR0aW5n
-Lg0KDQoNCg0KDQo=
+On Tue, Aug 2, 2022 at 3:27 PM Hao Luo <haoluo@google.com> wrote:
+>
+> Hi Andrii,
+>
+> On Mon, Aug 1, 2022 at 8:43 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Fri, Jul 22, 2022 at 10:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > >
+> > > From: Hao Luo <haoluo@google.com>
+> > >
+> > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+> > >
+> > >  - walking a cgroup's descendants in pre-order.
+> > >  - walking a cgroup's descendants in post-order.
+> > >  - walking a cgroup's ancestors.
+> > >
+> > > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > > created from attaching. This cgroup is passed as a file descriptor and
+> > > serves as the starting point of the walk. If no cgroup is specified,
+> > > the starting point will be the root cgroup.
+> > >
+> > > For walking descendants, one can specify the order: either pre-order or
+> > > post-order. For walking ancestors, the walk starts at the specified
+> > > cgroup and ends at the root.
+> > >
+> > > One can also terminate the walk early by returning 1 from the iter
+> > > program.
+> > >
+> > > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > > program is called with cgroup_mutex held.
+> > >
+> > > Currently only one session is supported, which means, depending on the
+> > > volume of data bpf program intends to send to user space, the number
+> > > of cgroups that can be walked is limited. For example, given the current
+> > > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > > cgroup, the total number of cgroups that can be walked is 512. This is
+> > > a limitation of cgroup_iter. If the output data is larger than the
+> > > buffer size, the second read() will signal EOPNOTSUPP. In order to work
+> > > around, the user may have to update their program to reduce the volume
+> > > of data sent to output. For example, skip some uninteresting cgroups.
+> > > In future, we may extend bpf_iter flags to allow customizing buffer
+> > > size.
+> > >
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > Acked-by: Yonghong Song <yhs@fb.com>
+> > > ---
+> > >  include/linux/bpf.h                           |   8 +
+> > >  include/uapi/linux/bpf.h                      |  30 +++
+> > >  kernel/bpf/Makefile                           |   3 +
+> > >  kernel/bpf/cgroup_iter.c                      | 252 ++++++++++++++++++
+> > >  tools/include/uapi/linux/bpf.h                |  30 +++
+> > >  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+> > >  6 files changed, 325 insertions(+), 2 deletions(-)
+> > >  create mode 100644 kernel/bpf/cgroup_iter.c
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > index a97751d845c9..9061618fe929 100644
+> > > --- a/include/linux/bpf.h
+> > > +++ b/include/linux/bpf.h
+> > > @@ -47,6 +47,7 @@ struct kobject;
+> > >  struct mem_cgroup;
+> > >  struct module;
+> > >  struct bpf_func_state;
+> > > +struct cgroup;
+> > >
+> > >  extern struct idr btf_idr;
+> > >  extern spinlock_t btf_idr_lock;
+> > > @@ -1717,7 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+> > >         int __init bpf_iter_ ## target(args) { return 0; }
+> > >
+> > >  struct bpf_iter_aux_info {
+> > > +       /* for map_elem iter */
+> > >         struct bpf_map *map;
+> > > +
+> > > +       /* for cgroup iter */
+> > > +       struct {
+> > > +               struct cgroup *start; /* starting cgroup */
+> > > +               int order;
+> > > +       } cgroup;
+> > >  };
+> > >
+> > >  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > index ffcbf79a556b..fe50c2489350 100644
+> > > --- a/include/uapi/linux/bpf.h
+> > > +++ b/include/uapi/linux/bpf.h
+> > > @@ -87,10 +87,30 @@ struct bpf_cgroup_storage_key {
+> > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> > >  };
+> > >
+> > > +enum bpf_iter_cgroup_traversal_order {
+> > > +       BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
+> > > +       BPF_ITER_CGROUP_POST,           /* post-order traversal */
+> > > +       BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
+> >
+> > I've just put up my arguments why it's a good idea to also support a
+> > "trivial" mode of only traversing specified cgroup and no descendants
+> > or parents. Please see [0].
+>
+> cc Kui-Feng in this thread.
+>
+> Yeah, I think it's a good idea. It's useful when we only want to show
+> a single object, which can be common. Going further, I think we may
+> want to restructure bpf_iter to optimize for this case.
+>
+> > I think the same applies here, especially
+> > considering that it seems like a good idea to support
+> > task/task_vma/task_files iteration within a cgroup.
+>
+> I have reservations on these use cases. I don't see immediate use of
+> iterating vma or files within a cgroup. Tasks within a cgroup? Maybe.
+> :)
+>
+
+iter/task was what I had in mind in the first place. But I can also
+imagine tools utilizing iter/task_files for each process within a
+cgroup, so given iter/{task, task_file, task_vma} share the same UAPI
+and internals, I don't see why we'd restrict this to only iter/task.
+
+> > So depending on
+> > how successful I am in arguing for supporting task iterator with
+> > target cgroup, I think we should reuse *exactly* this
+> > bpf_iter_cgroup_traversal_order and how we specify cgroup (FD or ID,
+> > see some more below) *as is* in task iterators as well. In the latter
+> > case, having an ability to say "iterate task for only given cgroup" is
+> > very useful, and for such mode all the PRE/POST/PARENT_UP is just an
+> > unnecessary nuisance.
+> >
+> > So please consider also adding and supporting BPF_ITER_CGROUP_SELF (or
+> > whatever naming makes most sense).
+> >
+>
+> PRE/POST/UP can be reused for iter of tree-structured containers, like
+> rbtree [1]. SELF can be reused for any iters like iter/task,
+> iter/cgroup, etc. Promoting all of them out of cgroup-specific struct
+> seems valuable.
+
+you mean just define them as generic tree traversal orders? Sure, I
+guess makes sense. No strong feelings.
+
+>
+> [1] https://lwn.net/Articles/902405/
+>
+> >
+> > Some more naming nits. I find BPF_ITER_CGROUP_PRE and
+> > BPF_ITER_CGROUP_POST a bit confusing. Even internally in kernel we
+> > have css_next_descendant_pre/css_next_descendant_post, so why not
+> > reflect the fact that we are going to iterate descendants:
+> > BPF_ITER_CGROUP_DESCENDANTS_{PRE,POST}. And now that we use
+> > "descendants" terminology, PARENT_UP should be ANCESTORS. ANCESTORS_UP
+> > probably is fine, but seems a bit redundant (unless we consider a
+> > somewhat weird ANCESTORS_DOWN, where we find the furthest parent and
+> > then descend through preceding parents until we reach specified
+> > cgroup; seems a bit exotic).
+> >
+>
+> BPF_ITER_CGROUP_DESCENDANTS_PRE is too verbose. If there is a
+> possibility of merging rbtree and supporting walk order of rbtree
+> iter, maybe the name here could be general, like
+> BPF_ITER_DESCENDANTS_PRE, which seems better.
+
+it's not like you'll be typing this hundreds of type, so verboseness
+doesn't seem to be too problematic, but sure, BPF_ITER_DESCENDANTS_PRE
+is fine with me
+
+>
+> >   [0] https://lore.kernel.org/bpf/f92e20e9961963e20766e290ee6668edd4bacf06.camel@fb.com/T/#m5ce50632aa550dd87a99241efb168cbcde1ee98f
+> >
+> > > +};
+> > > +
+> > >  union bpf_iter_link_info {
+> > >         struct {
+> > >                 __u32   map_fd;
+> > >         } map;
+> > > +
+> > > +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
+> > > +        * ancestors of a given cgroup.
+> > > +        */
+> > > +       struct {
+> > > +               /* Cgroup file descriptor. This is root of the subtree if walking
+> > > +                * descendants; it's the starting cgroup if walking the ancestors.
+> > > +                * If it is left 0, the traversal starts from the default cgroup v2
+> > > +                * root. For walking v1 hierarchy, one should always explicitly
+> > > +                * specify the cgroup_fd.
+> > > +                */
+> > > +               __u32   cgroup_fd;
+> >
+> > Now, similar to what I argued in regard of pidfd vs pid, I think the
+> > same applied to cgroup_fd vs cgroup_id. Why can't we support both?
+> > cgroup_fd has some benefits, but cgroup_id is nice due to simplicity
+> > and not having to open/close/keep extra FDs (which can add up if we
+> > want to periodically query something about a large set of cgroups).
+> > Please see my arguments from [0] above.
+> >
+> > Thoughts?
+> >
+>
+> We can support both, it's a good idea IMO. But what exactly is the
+> interface going to look like? Can you be more specific about that?
+> Below is something I tried based on your description.
+>
+> @@ -91,6 +91,18 @@ union bpf_iter_link_info {
+>         struct {
+>                 __u32   map_fd;
+>         } map;
+> +       struct {
+> +               /* PRE/POST/UP/SELF */
+> +               __u32 order;
+> +               struct {
+> +                       __u32 cgroup_fd;
+> +                       __u64 cgroup_id;
+> +               } cgroup;
+> +               struct {
+> +                       __u32 pid_fd;
+> +                       __u64 pid;
+> +               } task;
+> +       };
+>  };
+>
+
+So I wouldn't combine task and cgroup definition together, let's keep
+them independent.
+
+then for cgroup we can do something like:
+
+struct {
+    __u32 order;
+    __u32 cgroup_fd; /* cgroup_fd ^ cgroup_id, exactly one can be non-zero */
+    __u32 cgroup_id;
+} cgroup
+
+Similar idea with task, but it's a bit more complicated because there
+we have target that can be pid, pidfd, or cgroup (cgroup_fd and
+cgroup_id). I haven't put much thought into the best representation,
+though.
+
+> > > +               __u32   traversal_order;
+> > > +       } cgroup;
+> > >  };
+> > >
+> > >  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> >
+> > [...]

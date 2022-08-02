@@ -2,138 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D986F587A8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A21B587A8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235986AbiHBKRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S236140AbiHBKSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbiHBKRw (ORCPT
+        with ESMTP id S233350AbiHBKSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:17:52 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2052.outbound.protection.outlook.com [40.107.20.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF36237F5;
-        Tue,  2 Aug 2022 03:17:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DyOVJdBRSsvFYyrrWbsyNQf/3gibixUrrjNxYNme/doUZFfHyJSflGAIJ+IgXgJVj5OQsKjfIT0OPLrCjRjJta7qTVLjFfxVXWHbm7av5/mczSJKT63+D4IsnjoVjFeuipLF2nfJHqJ1+dXkVr4GtrgeLm32VUZh665VP/4VIEG3JGQXNFG8+3x0Kwi/zlSTnAtBDUdgMdLBEIC7/6C639TRGi+SmHk3lDSfIZxTa8AYFAvRXcFSbEokG1LxLjkVZw8eoCHz3DKsKpvMT69CGqUDccwK+RGRlPcnJU0yh68nrcbiHMuMYpDtwgUYtqe4XEfu72jmoBkDUkbaSm68YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CXLCMiMuDgzVCGxCpdq5X7/6Rjrh+M3MH67j0V+/Hv0=;
- b=HalcjVvb5QNWRZks8V/Jm9PeOEYSCbXQy2WHUYijg/boRI0LbSn8Lg3St9FOFGmWpzfeTs3e6JxE7rvDu6acV0BhaTxbtrBysnSnamVlu6HL40wRg2B1+SANm9qyaX3BwnCNYLxTMuE7h2CbFaXSi844RMNedUolD3HhlafyeUzl4lGwLExslp0FlJTXLUJsIrAOwQfGdszxJQwTQuxqsnn/Rl6Hjbqox81X7sgCF4Jf6AQDAaojwOyF1gjFuzmRB0mqlR7Hrfsrgp2jfjRWJc9/aqqiyG+YaAf0CyhBFVESss13zOWpcVAR1NfhnkbRJi3dTOvITpX4095+3EOzSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CXLCMiMuDgzVCGxCpdq5X7/6Rjrh+M3MH67j0V+/Hv0=;
- b=Ji+xPLnTO33k2H2PTqmwEYGTgusjdwGVoGFH9HqUUBH9HlT2CzLbB4IbeEIrN0yIvsnQs0PnZovgvParePGL1K2UG7EvXBPLVxJJBOA3HyQgu6Wq2OaLJ42UT4TN4Y1np00Cift3iEzMC3+WaiKNcNd7yWjvYzlW6EfkjbSb4FI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by AM5PR0402MB2722.eurprd04.prod.outlook.com (2603:10a6:203:9a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
- 2022 10:17:49 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::d547:3040:284e:580c]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::d547:3040:284e:580c%7]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 10:17:48 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, jindong.yue@nxp.com
-Subject: [PATCH] tty: serial: fsl_lpuart: adjust SERIAL_FSL_LPUART_CONSOLE config dependency
-Date:   Tue,  2 Aug 2022 18:16:13 +0800
-Message-Id: <20220802101613.30879-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0085.apcprd02.prod.outlook.com
- (2603:1096:4:90::25) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+        Tue, 2 Aug 2022 06:18:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECBB4C616;
+        Tue,  2 Aug 2022 03:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659435497; x=1690971497;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l50721CoO65cvD9qwtVMJ23IicYwmfGIz60g+6zQApo=;
+  b=IJPrU68SSESUsKoNSWh5lAv+vJ2ECanQkrSgu0RCrVVX+naWfl6Vbxh3
+   8SOG5jEjKZ40tyfxqDflP31HYGj/gJHbPtpTL6YxBFOtfGL8gkUI+opZK
+   1bUFoe7I8HRObD7+m8WIQCL3bXjARAqn64tuWaAhRKJhmR6v9UhMS5nbl
+   LXqIg4qOGgtFaJ8GNi1lwKK6Decm0YfO01tcghtIyGqzwNlg8JfiQxGm8
+   nGHLpgUts/OE9p8IqFr/WiTtn4PoVOhMqQVlI11o1U8aqDdO0ZZH0QA6O
+   UjWVcuE5MIs2B6H/Sj3m8brxiUL75wLo8gaaZO3np1flPFbQyF1UTq2tb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269142495"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="269142495"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 03:18:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="744616976"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Aug 2022 03:18:13 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIoyb-000FwL-0t;
+        Tue, 02 Aug 2022 10:18:13 +0000
+Date:   Tue, 2 Aug 2022 18:17:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniil Lunev <dlunev@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Stanley Chu <chu.stanley@gmail.com>
+Cc:     kbuild-all@lists.01.org, Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v3] ufs: core: ufshcd: use local_clock() for debugging
+ timestamps
+Message-ID: <202208021848.n995UITS-lkp@intel.com>
+References: <20220802103230.v3.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0210a02e-1ef0-4c61-8fb0-08da74703fe3
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2722:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Mb1G8c1aYyBnwq4En5ZY+Dw7+WesvlNVMyH7Q8QDFtVktX/0U9HRgv12DEfh9cVu1eA2NO9tb+EpADS++BMqtIIHurblEDpMcNLnpu1RVuI6X52BtOFHhHQ9V+o3YF7p2qCnWWcxWk3iIZY8sUrdndLRUgRrsVceVI7aNd2h76YtcPcnarO5lmAzG7KoKFFxsFneSq4HUyC/DWUAUiOvvMSVvnP8dolONfFdu6Ha6WORxqMMU8DENtVuHdAgp6Te4bu2VT21JDb85lCka0oacsUeXXWwEUuVAwLBy2lNaZrsZJ/YxokWRAI381SAZzTqqgWxAm0cr8lFLUntscMaoJ1jy5IF6hz3xxNAnPUCHg3qc8Ysh1Zi07swg6PYifTxuhdOVZlaY5JelI3VWJkch/wFz7LxMJKwSQ+EErvygR16I9U32RzkkEP4Gzlw2xVvl0e6rUYU4ew54K1IfyXvGlZIS7wmxWcdOPvJP4PV/FjwBkoikn2ZR7t8s0nCMX5+DSSV1dEW4IxYRdWxntv1YyXnKhTwud5rl/oR4N/AImxm2J8rk2adJVS6uB49McI/l69oz/tl4WW8KzK52GoqCPiLBXGRNtux0pWAqGZkPo2fwn6bcVXNoJqTJKy2boB1/IwaGJJOA5n7Tshk87EvGG3j4i0Fn/I6CZtU3eQvi5KoAjHjmjt7NgNrdH16rEGCVgizgHUOplX4BnirqAhXHqvTdcqh6x+qwXkHHnjl/ekEtTsUYooB1Br+LcaURB0KY9ZvU6QvWi4/Z/mf4kIIf+sTlinrUFXE7AbIlLKkVciLiNBK/KZYZfpw+ZkiIUxs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(186003)(1076003)(2616005)(6506007)(52116002)(86362001)(41300700001)(2906002)(6666004)(6512007)(26005)(38350700002)(38100700002)(83380400001)(5660300002)(316002)(478600001)(6486002)(8676002)(44832011)(66946007)(66556008)(66476007)(4326008)(36756003)(4744005)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0COfCTe+az2JzQMpIvoeNKQqUL3C+iNT1P+DfeL+9p/6KU7V05hcHRX3qALV?=
- =?us-ascii?Q?L3ONvM5mPLfiLXI7TejrKTFE666XIFIPtoAg/w4LZHVv+wKVaTk/JjJZwCZW?=
- =?us-ascii?Q?DrqeDtDPHTlr6bQ5DYTuvIUX0sUjH8ESOP9VWDsAH01RwE8uTkRzeHrOO4iz?=
- =?us-ascii?Q?aBtdryUPYwmhtxAHluEMKrxMWtWUFwPC8s6YxK9CvzsQY6uxF5EzV+Ed7mzq?=
- =?us-ascii?Q?HUGjAxoB8PLZxmkiJeoxby16FcIeOemkFA1lxxOOo/2mop9+QTRpKO1TIynm?=
- =?us-ascii?Q?Wf87K+6L3C0J4pCy60SP3Nya4Ea0jsNbEskCVmvTwzUzLlf8T6HgNzhtJi9u?=
- =?us-ascii?Q?ifrFHjKJv+OcWUn3kxZQA4/beBvaXE3rL5zYwg6gDl6Khqfj1RUc9v1Q0Q+o?=
- =?us-ascii?Q?+f1WODNy+hOh08+p+2z+tY4HBfSkZjlKxsnC3sYoUcO+kU7PNV94XRYHylrV?=
- =?us-ascii?Q?VR9BQt4zf1+6AcIye2PXcEPhcBbCBWwtr4pKhaLPnvgPMvmnAqjMSmpbDy2Y?=
- =?us-ascii?Q?yseJdHipmx9wAxLY5pf3hwCHMcSYFZX7yYVmVuvPka1JhtfZK93mQgeMGZwa?=
- =?us-ascii?Q?AAwJnTpxgI3XejNU/ZnlQLT3m8Q1JYI8o88u1DGr+X97k4rcPpRM9obOHtmV?=
- =?us-ascii?Q?z5qzbCQLl0qSZ558zbBQuyFhxq+JzgK8+AqFz2IJnTCaxo8hjIGTpgry/iOl?=
- =?us-ascii?Q?JHPaKiINPp4edxdaE8oXM5c6auNbnzNrfVuw/9YWWydlWJjVd6i/VsZgLYLK?=
- =?us-ascii?Q?Ndo66EavV/4udrh8SCG8Vn4JtVQmfLdQlMllL0nLX/hfoy6lx2x4Y02/aXs2?=
- =?us-ascii?Q?fX+zYqJovAuEMNNDMUE+v2m05nH/NyyeNAUceiPyIrxhVu43R32AxpBVA+x6?=
- =?us-ascii?Q?6H054TCtqfOE5tRN3WfCS1dVLWhZA0/AOgDXIfcrXk4X/XnQf/ZKE00wxrcx?=
- =?us-ascii?Q?vy6XSOYqm+gj71pWmdQYDwxof1EaJayJjitTcDPATJfMYWBfoa7+qNBfFa4x?=
- =?us-ascii?Q?uQXAlJIhBSDmoy7l8qJx80jSSh68jYPl1hpHRVndXAyJkR4N6gxuT6A7G/6G?=
- =?us-ascii?Q?NVLi8XOZrx9agy3dftL+9eXiXI0YJI31ed1wnD36qkRoGjAavINqyl3yuHOJ?=
- =?us-ascii?Q?fLX9yuQaL4eWhtlrkaxJFvZKcmB2bP8PdeyxgwcZNG0lSUv4QD2AplbQmlCS?=
- =?us-ascii?Q?JnUMqoLk4FkBSdcTg/fE1oSVmt9QE6HBCPpbqcCorhHefHoO2TKwjWr7sow+?=
- =?us-ascii?Q?sufF5Qgw2o+k3vUJ4tInfpxLL2qSVrknTx67io41oI8hqt8e1q1iQjaHzZIo?=
- =?us-ascii?Q?BOJ9Vu97hBc0N4jrc11G2jBYno/pLX6W4zcW/8dMGsZWXp11ixAkn8noNzMB?=
- =?us-ascii?Q?t2xqz2Dq0k196AsAeN1HSzibCmA8G6dl34gZRH8woXOgOZGgxzJw//Ayvon4?=
- =?us-ascii?Q?7rc5yz2AFovlnN123tjxn1Oayvmc8xm6FBQLU+64X6IeW1xNEBr0zAKUFS1s?=
- =?us-ascii?Q?OzLiOp5DXo1LdSAa2hqU2fHLWc/FDYBBY0L4aOuCL/AIJ/F9NZhMDk2dFwu3?=
- =?us-ascii?Q?lzT2FBQEF5Hrtqw5SosWzjOvG1K+XvMUlQcMzTHq?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0210a02e-1ef0-4c61-8fb0-08da74703fe3
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 10:17:48.7614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6yMTsiU6B9WUdrCpdO1O8s7iPkwvvZBYGTABfzOnGaTsV4mk993Ob+r3rJ5xkdQSuTpZQhUQOGNQdliSIBFYMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2722
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802103230.v3.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jindong Yue <jindong.yue@nxp.com>
+Hi Daniil,
 
-Remove the limitation of SERIAL_FSL_LPUART=y,
-as we may need enable this console while SERIAL_FSL_LPUART=m.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Jindong Yue <jindong.yue@nxp.com>
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
- drivers/tty/serial/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v5.19 next-20220728]
+[cannot apply to bvanassche/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 877173907c53..a18dd525e42b 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1325,7 +1325,7 @@ config SERIAL_FSL_LPUART
- 
- config SERIAL_FSL_LPUART_CONSOLE
- 	bool "Console on Freescale lpuart serial port"
--	depends on SERIAL_FSL_LPUART=y
-+	depends on SERIAL_FSL_LPUART
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220802-083420
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: i386-randconfig-a013-20220801 (https://download.01.org/0day-ci/archive/20220802/202208021848.n995UITS-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c72f82f12e7c9f361f0d13d4ab583f9834384464
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniil-Lunev/ufs-core-ufshcd-use-local_clock-for-debugging-timestamps/20220802-083420
+        git checkout c72f82f12e7c9f361f0d13d4ab583f9834384464
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/ufs/core/ufshcd.o: in function `ufshcd_print_evt':
+>> drivers/ufs/core/ufshcd.c:460: undefined reference to `__udivdi3'
+   ld: drivers/ufs/core/ufshcd.o: in function `ufshcd_print_host_state':
+   drivers/ufs/core/ufshcd.c:568: undefined reference to `__udivdi3'
+>> ld: drivers/ufs/core/ufshcd.c:572: undefined reference to `__udivdi3'
+   ld: drivers/ufs/core/ufshcd.o: in function `ufshcd_print_trs':
+   drivers/ufs/core/ufshcd.c:505: undefined reference to `__udivdi3'
+   ld: drivers/ufs/core/ufshcd.c:507: undefined reference to `__udivdi3'
+
+
+vim +460 drivers/ufs/core/ufshcd.c
+
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  442  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  443  static void ufshcd_print_evt(struct ufs_hba *hba, u32 id,
+35d11ec239e099 drivers/ufs/core/ufshcd.c Krzysztof Kozlowski 2022-06-23  444  			     const char *err_name)
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  445  {
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  446  	int i;
+27752647f88a1b drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-01-28  447  	bool found = false;
+35d11ec239e099 drivers/ufs/core/ufshcd.c Krzysztof Kozlowski 2022-06-23  448  	const struct ufs_event_hist *e;
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  449  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  450  	if (id >= UFS_EVT_CNT)
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  451  		return;
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  452  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  453  	e = &hba->ufs_stats.event[id];
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  454  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  455  	for (i = 0; i < UFS_EVENT_HIST_LENGTH; i++) {
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  456  		int p = (i + e->pos) % UFS_EVENT_HIST_LENGTH;
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  457  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  458  		if (e->tstamp[p] == 0)
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  459  			continue;
+c5397f13fc744b drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-07-10 @460  		dev_err(hba->dev, "%s[%d] = 0x%x at %lld us\n", err_name, p,
+c72f82f12e7c9f drivers/ufs/core/ufshcd.c Daniil Lunev        2022-08-02  461  			e->val[p], e->tstamp[p] / 1000);
+27752647f88a1b drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-01-28  462  		found = true;
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  463  	}
+27752647f88a1b drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-01-28  464  
+27752647f88a1b drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-01-28  465  	if (!found)
+fd1fb4d5562a87 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-01-04  466  		dev_err(hba->dev, "No record of %s\n", err_name);
+bafd09f8d8ec0a drivers/scsi/ufs/ufshcd.c DooHyun Hwang       2021-02-03  467  	else
+bafd09f8d8ec0a drivers/scsi/ufs/ufshcd.c DooHyun Hwang       2021-02-03  468  		dev_err(hba->dev, "%s: total cnt=%llu\n", err_name, e->cnt);
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  469  }
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  470  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  471  static void ufshcd_print_evt_hist(struct ufs_hba *hba)
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  472  {
+ba80917d9932da drivers/scsi/ufs/ufshcd.c Tomas Winkler       2018-06-14  473  	ufshcd_dump_regs(hba, 0, UFSHCI_REG_SPACE_SIZE, "host_regs: ");
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  474  
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  475  	ufshcd_print_evt(hba, UFS_EVT_PA_ERR, "pa_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  476  	ufshcd_print_evt(hba, UFS_EVT_DL_ERR, "dl_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  477  	ufshcd_print_evt(hba, UFS_EVT_NL_ERR, "nl_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  478  	ufshcd_print_evt(hba, UFS_EVT_TL_ERR, "tl_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  479  	ufshcd_print_evt(hba, UFS_EVT_DME_ERR, "dme_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  480  	ufshcd_print_evt(hba, UFS_EVT_AUTO_HIBERN8_ERR,
+d3c615bf586f27 drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-07-10  481  			 "auto_hibern8_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  482  	ufshcd_print_evt(hba, UFS_EVT_FATAL_ERR, "fatal_err");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  483  	ufshcd_print_evt(hba, UFS_EVT_LINK_STARTUP_FAIL,
+8808b4e9dcdc90 drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-07-10  484  			 "link_startup_fail");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  485  	ufshcd_print_evt(hba, UFS_EVT_RESUME_ERR, "resume_fail");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  486  	ufshcd_print_evt(hba, UFS_EVT_SUSPEND_ERR,
+8808b4e9dcdc90 drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-07-10  487  			 "suspend_fail");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  488  	ufshcd_print_evt(hba, UFS_EVT_DEV_RESET, "dev_reset");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  489  	ufshcd_print_evt(hba, UFS_EVT_HOST_RESET, "host_reset");
+e965e5e00b23c4 drivers/scsi/ufs/ufshcd.c Stanley Chu         2020-12-05  490  	ufshcd_print_evt(hba, UFS_EVT_ABORT, "task_abort");
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  491  
+7c486d91f3d191 drivers/scsi/ufs/ufshcd.c Stanley Chu         2019-12-24  492  	ufshcd_vops_dbg_register_dump(hba);
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  493  }
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  494  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  495  static
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  496  void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  497  {
+35d11ec239e099 drivers/ufs/core/ufshcd.c Krzysztof Kozlowski 2022-06-23  498  	const struct ufshcd_lrb *lrbp;
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  499  	int prdt_length;
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  500  	int tag;
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  501  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  502  	for_each_set_bit(tag, &bitmap, hba->nutrs) {
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  503  		lrbp = &hba->lrb[tag];
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  504  
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  505  		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
+c72f82f12e7c9f drivers/ufs/core/ufshcd.c Daniil Lunev        2022-08-02  506  				tag, lrbp->issue_time_stamp_local_clock / 1000);
+090171885f505e drivers/scsi/ufs/ufshcd.c Zang Leigang        2017-09-27  507  		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
+c72f82f12e7c9f drivers/ufs/core/ufshcd.c Daniil Lunev        2022-08-02  508  				tag, lrbp->compl_time_stamp_local_clock / 1000);
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  509  		dev_err(hba->dev,
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  510  			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  511  			tag, (u64)lrbp->utrd_dma_addr);
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  512  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  513  		ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  514  				sizeof(struct utp_transfer_req_desc));
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  515  		dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  516  			(u64)lrbp->ucd_req_dma_addr);
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  517  		ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  518  				sizeof(struct utp_upiu_req));
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  519  		dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  520  			(u64)lrbp->ucd_rsp_dma_addr);
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  521  		ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  522  				sizeof(struct utp_upiu_rsp));
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  523  
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  524  		prdt_length = le16_to_cpu(
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  525  			lrbp->utr_descriptor_ptr->prd_table_length);
+cc770ce34aeeff drivers/scsi/ufs/ufshcd.c Eric Biggers        2020-08-25  526  		if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
+cc770ce34aeeff drivers/scsi/ufs/ufshcd.c Eric Biggers        2020-08-25  527  			prdt_length /= sizeof(struct ufshcd_sg_entry);
+cc770ce34aeeff drivers/scsi/ufs/ufshcd.c Eric Biggers        2020-08-25  528  
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  529  		dev_err(hba->dev,
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  530  			"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  531  			tag, prdt_length,
+ff8e20c6624921 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  532  			(u64)lrbp->ucd_prdt_dma_addr);
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  533  
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  534  		if (pr_prdt)
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  535  			ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
+7fabb77b3aa016 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  536  				sizeof(struct ufshcd_sg_entry) * prdt_length);
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  537  	}
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  538  }
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  539  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  540  static void ufshcd_print_tmrs(struct ufs_hba *hba, unsigned long bitmap)
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  541  {
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  542  	int tag;
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  543  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  544  	for_each_set_bit(tag, &bitmap, hba->nutmrs) {
+391e388f853dad drivers/scsi/ufs/ufshcd.c Christoph Hellwig   2018-10-07  545  		struct utp_task_req_desc *tmrdp = &hba->utmrdl_base_addr[tag];
+391e388f853dad drivers/scsi/ufs/ufshcd.c Christoph Hellwig   2018-10-07  546  
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  547  		dev_err(hba->dev, "TM[%d] - Task Management Header\n", tag);
+391e388f853dad drivers/scsi/ufs/ufshcd.c Christoph Hellwig   2018-10-07  548  		ufshcd_hex_dump("", tmrdp, sizeof(*tmrdp));
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  549  	}
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  550  }
+66cc820f9cbf12 drivers/scsi/ufs/ufshcd.c Dolev Raviv         2016-12-22  551  
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  552  static void ufshcd_print_host_state(struct ufs_hba *hba)
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  553  {
+35d11ec239e099 drivers/ufs/core/ufshcd.c Krzysztof Kozlowski 2022-06-23  554  	const struct scsi_device *sdev_ufs = hba->ufs_device_wlun;
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  555  
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  556  	dev_err(hba->dev, "UFS Host state=%d\n", hba->ufshcd_state);
+7252a3603015f1 drivers/scsi/ufs/ufshcd.c Bart Van Assche     2019-12-09  557  	dev_err(hba->dev, "outstanding reqs=0x%lx tasks=0x%lx\n",
+7252a3603015f1 drivers/scsi/ufs/ufshcd.c Bart Van Assche     2019-12-09  558  		hba->outstanding_reqs, hba->outstanding_tasks);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  559  	dev_err(hba->dev, "saved_err=0x%x, saved_uic_err=0x%x\n",
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  560  		hba->saved_err, hba->saved_uic_err);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  561  	dev_err(hba->dev, "Device power mode=%d, UIC link state=%d\n",
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  562  		hba->curr_dev_pwr_mode, hba->uic_link_state);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  563  	dev_err(hba->dev, "PM in progress=%d, sys. suspended=%d\n",
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  564  		hba->pm_op_in_progress, hba->is_sys_suspended);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  565  	dev_err(hba->dev, "Auto BKOPS=%d, Host self-block=%d\n",
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  566  		hba->auto_bkops_enabled, hba->host->host_self_blocked);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  567  	dev_err(hba->dev, "Clk gate=%d\n", hba->clk_gating.state);
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  568  	dev_err(hba->dev,
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  569  		"last_hibern8_exit_tstamp at %lld us, hibern8_exit_cnt=%d\n",
+c72f82f12e7c9f drivers/ufs/core/ufshcd.c Daniil Lunev        2022-08-02  570  		hba->ufs_stats.last_hibern8_exit_tstamp / 1000,
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  571  		hba->ufs_stats.hibern8_exit_cnt);
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09 @572  	dev_err(hba->dev, "last intr at %lld us, last intr status=0x%x\n",
+c72f82f12e7c9f drivers/ufs/core/ufshcd.c Daniil Lunev        2022-08-02  573  		hba->ufs_stats.last_intr_ts / 1000,
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  574  		hba->ufs_stats.last_intr_status);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  575  	dev_err(hba->dev, "error handling flags=0x%x, req. abort count=%d\n",
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  576  		hba->eh_flags, hba->req_abort_count);
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  577  	dev_err(hba->dev, "hba->ufs_version=0x%x, Host capabilities=0x%x, caps=0x%x\n",
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  578  		hba->ufs_version, hba->capabilities, hba->caps);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  579  	dev_err(hba->dev, "quirks=0x%x, dev. quirks=0x%x\n", hba->quirks,
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  580  		hba->dev_quirks);
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  581  	if (sdev_ufs)
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  582  		dev_err(hba->dev, "UFS dev info: %.8s %.16s rev %.4s\n",
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  583  			sdev_ufs->vendor, sdev_ufs->model, sdev_ufs->rev);
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  584  
+3f8af6044713fa drivers/scsi/ufs/ufshcd.c Can Guo             2020-08-09  585  	ufshcd_print_clk_freqs(hba);
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  586  }
+6ba65588381d59 drivers/scsi/ufs/ufshcd.c Gilad Broner        2017-02-03  587  
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

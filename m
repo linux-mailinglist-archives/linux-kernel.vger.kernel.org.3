@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29C55882E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86945882E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiHBUEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S232829AbiHBUEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiHBUEL (ORCPT
+        with ESMTP id S232040AbiHBUEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:04:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7411750076;
-        Tue,  2 Aug 2022 13:04:10 -0700 (PDT)
-Date:   Tue, 02 Aug 2022 20:04:06 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659470648;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TArMLEdIDIvN1Mr2pZzfeNF4vfqBhPO02hE5okfCN+E=;
-        b=QoBy534OqzE+u0hnSpY0jbgIdZ1B0Was0gOMFOraQSwyEFpxDddG0ZVNvn6nR5OzsPSv8Y
-        tb8LSrBqAI0dc6wc5vx/PJ/2Gt78ZLduA7s+qtrXe3qCYKb0UBwvtbaBjyP1mJJfwlUZZn
-        fo+WMfo9O/UWgN9SI/FcvTZPRLZq/seX4KNY6Z7VfpJ9QERsP5yKYr4/5CgEsbjckFmjve
-        YfUt53eqZs4d25Sw7ZXl21UHD/nhihDDWjILXZsFlWeAfK0D04GPtjRaXxYWhUCrZIX5Xr
-        ygIHSNDM1N06p2dEazLKR1QZuhd52F1drkG1eQsVm334oRxVfTcztKSSmRe0kA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659470648;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TArMLEdIDIvN1Mr2pZzfeNF4vfqBhPO02hE5okfCN+E=;
-        b=9N2h6O5n+U0IYx3ExOBkmpt5YpJNuE0eoc8uNzLTR40SUwBdv4SydtQWPZZ5kdi07Jzgkc
-        CB/D9wwWFzCKxiDA==
-From:   "tip-bot2 for Slark Xiao" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] selftests: futex: Fix 'the the' typo in comment
-Cc:     Slark Xiao <slark_xiao@163.com>, Ingo Molnar <mingo@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220725015903.5449-1-slark_xiao@163.com>
-References: <20220725015903.5449-1-slark_xiao@163.com>
+        Tue, 2 Aug 2022 16:04:36 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1509B52FE1;
+        Tue,  2 Aug 2022 13:04:35 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id v3so18235192wrp.0;
+        Tue, 02 Aug 2022 13:04:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3GVUs+QSi7eRzqzPaiptheuyohg5wVNG8R4iP24zVoI=;
+        b=0sDQyBYCb1tTHQm/FGM8LQdIqnClQjjesHduzzDk4CftIJFNpKOOXPPKalPVJ6tNKX
+         smiZemcdP76OFAGpqv7P2ATtw6roOjaVFxszqWq85fCCYwE+tBCo5QHLW3z2H3XpDW5G
+         9PGu6kZvYaQBVMMy2zH6x17MEWPr8HeruisjtLi0B1vvHryj725m4/MFUfS78pww5UWG
+         9DXwhchg5mki4290LDNQfqCIBKA5WOFG9xCQVJmKXkttKbySh9/1jGH71Evp6xbx3H5H
+         toiIKtsNtHA5sfHix8oqZ89KbEpjtEx6lxViJyLzwzavbx8aq8f+GqqaCWKzprSeM+rL
+         /Y1Q==
+X-Gm-Message-State: ACgBeo2R3vAzes3N3deRXVaRj5+lGJBSYg+9NbzmR4JF4WUEzcrva+cR
+        uvAHhWkbfoMOFBgezPA/aUw=
+X-Google-Smtp-Source: AA6agR4LjVRosNcFgQ0KXv+SeDQ6ihaov87I87aolTGGyOFkq7dqTr/AfqxhAqXsXp38sd1qbi+ITQ==
+X-Received: by 2002:adf:fb03:0:b0:21d:70cb:d6b5 with SMTP id c3-20020adffb03000000b0021d70cbd6b5mr13459341wrr.548.1659470673490;
+        Tue, 02 Aug 2022 13:04:33 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id w10-20020adfd4ca000000b002205cbc1c74sm10281991wrk.101.2022.08.02.13.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 13:04:33 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 20:04:30 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
+Cc:     ojeda@kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v8 28/31] samples: add Rust examples
+Message-ID: <20220802200430.qiyy2utts4lai3ac@liuwe-devbox-debian-v2>
+References: <20220802015052.10452-29-ojeda@kernel.org>
+ <YukvvPOOu8uZl7+n@yadro.com>
 MIME-Version: 1.0
-Message-ID: <165947064693.15455.11100574232413276883.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YukvvPOOu8uZl7+n@yadro.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On Tue, Aug 02, 2022 at 05:07:56PM +0300, Konstantin Shelekhin wrote:
+> > +module! {
+> > +    type: RustSemaphore,
+> > +    name: b"rust_semaphore",
+> > +    author: b"Rust for Linux Contributors",
+> > +    description: b"Rust semaphore sample",
+> > +    license: b"GPL",
+> > +}
+> 
+> A minor neat, but ain't it possible to use &str here in order to drop
+> this ugly binary string prefix?
 
-Commit-ID:     d171011e6adad135eaced630dce26cac9a174037
-Gitweb:        https://git.kernel.org/tip/d171011e6adad135eaced630dce26cac9a174037
-Author:        Slark Xiao <slark_xiao@163.com>
-AuthorDate:    Mon, 25 Jul 2022 09:59:03 +08:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 02 Aug 2022 21:57:03 +02:00
+Their types are different. One is for u8. The other is for UTF-8.
 
-selftests: futex: Fix 'the the' typo in comment
-
-Replace 'the the' with 'the' in the comment.
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220725015903.5449-1-slark_xiao@163.com
----
- tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-index f8c43ce..c6b8f32 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
- 		/*
- 		 * If res is non-zero, we either requeued the waiter or hit an
- 		 * error, break out and handle it. If it is zero, then the
--		 * signal may have hit before the the waiter was blocked on f1.
-+		 * signal may have hit before the waiter was blocked on f1.
- 		 * Try again.
- 		 */
- 		if (res > 0) {
+Thanks,
+Wei.

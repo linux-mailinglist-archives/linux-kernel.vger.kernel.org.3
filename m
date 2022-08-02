@@ -2,137 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA9758777C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73E6587780
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbiHBHGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S235540AbiHBHHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiHBHGi (ORCPT
+        with ESMTP id S235681AbiHBHGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:06:38 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEAD4A833;
-        Tue,  2 Aug 2022 00:06:31 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id m13so12728840wrq.6;
-        Tue, 02 Aug 2022 00:06:31 -0700 (PDT)
+        Tue, 2 Aug 2022 03:06:42 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DFB491F4
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:06:35 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s14so14673406ljh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OmMOmLSJX+RzCR7biJYmLUZVQCiFdcK4fy7tSbKi77k=;
-        b=LMHSu5Dd188FY3TEyEo63Pk3NPgQycUxvJ2cSw6MReQ5goUojzRe3EED21z6SboUW6
-         jWA3BtvhfAD8EA/iJCOlUB4ri3mw2O1fHI9aGfCFEvXKh7NkeTSKM3dIHdQHRN05XhNP
-         L5D2DDm3BKghO9EN4yPtv4NI9Dfv/VlhF1eqxu8F+PDZekGxEZvPKofkRmhEP7zBbO2S
-         hbvUJPsXX0b7kntTE24FWhw0SAsapdTLJ5/A1Wy0vreQgF6ecLislCfzmZZrJYfVQiif
-         ajXklZTEzJ1jsiORpg1C2zXEgNIoQtDWDcbCxI8+jLY1y9wMUsGwodHdK3RBEKvuosOZ
-         C2Jg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=YyBYmLXFn5IFerrIXB88rk828Nzxi3yZBlN5vWZi/gM=;
+        b=cqShYtc7B4W7+q0vK7VkTMRnsYgBNGzLw6e2P8pZuRkHXrMnlMerLmoE/2weJs4sSA
+         ocXKFpxuWtWtb1fhSYbnxLu9yBchBRsggPdcY+GsiMqQxQzl00PcrID3nMwsn5j9ljUn
+         Q2q45sZ0s6MZWe2aMQmOCqU3abPyz7zyeyliIBvgJZlj/OJ2VmjEBuPNg2NKYSZqJV2f
+         Ba5lIM6m2qZ7Q8GEkOJJ7xmwxGbFeEGtWqzPlCAIjZVbwXph3xyaIznRTbSr/mrwh18N
+         idKySTQiWRH+Y6UU3DZwyzzDiy5UABGQzp8uHK8B+9SG0ZaLpx4iZXISVU0aDf2GPW/L
+         sVsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OmMOmLSJX+RzCR7biJYmLUZVQCiFdcK4fy7tSbKi77k=;
-        b=71DjVHxacahox/1jd+N8cyGGjGKQK+N6VwKyIeetW/Bocva0PkzZ+aQjkXVRhjME/Z
-         guwi8FG07rdqs6+oOplpsWnro/0AyPctbua7rbyGtq4QD6k3lGweRSIqj8dllTKbY8Ik
-         Q6cHPueBKMDfth7gyHNcPtZwrMw6tRDhUAIoj/uSTtDqugFi7dq2Sp+J86gkSWYTZZzq
-         o9KJp9QP/aXusn/fEmXPMDGcB7JhA2FJRarAbhac4N5vuUTAwRN1PCMAqF54/9AE9Sxw
-         TrsZLZXaL2bUcVEiL5rlgcy34gW4D6B+m3kZK+ditBpSZW/6huAUJ0mmdmzYU+SlIOU7
-         KLrg==
-X-Gm-Message-State: ACgBeo3OoP744D8d0a/+XXhtDDSiU3aQ6WOmke9cF32TVp/SRF89u2qz
-        UnvKrbllipGmxF/PJR7lkmo=
-X-Google-Smtp-Source: AA6agR6G5EpnVnBvkcxlzW7mPnOz/ceSYW0olJa8SWIzXPSF8tAS5hYqSbxfG0s+lDDyrSHZKgRJKw==
-X-Received: by 2002:adf:e88c:0:b0:220:7084:4c91 with SMTP id d12-20020adfe88c000000b0022070844c91mr1151320wrm.212.1659423989583;
-        Tue, 02 Aug 2022 00:06:29 -0700 (PDT)
-Received: from opensuse.localnet (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
-        by smtp.gmail.com with ESMTPSA id p6-20020a1c5446000000b003a2f96935c0sm26094455wmi.9.2022.08.02.00.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 00:06:27 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ira Weiny <ira.weiny@intel.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
-Date:   Tue, 02 Aug 2022 09:06:26 +0200
-Message-ID: <2589292.k3LOHGUjKi@opensuse>
-In-Reply-To: <YoJl+lh0QELbv/TL@casper.infradead.org>
-References: <20220516101925.15272-1-fmdefrancesco@gmail.com> <YoJl+lh0QELbv/TL@casper.infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=YyBYmLXFn5IFerrIXB88rk828Nzxi3yZBlN5vWZi/gM=;
+        b=1fq48MLZfnTseHIiNGn0xjU5HUWZnvJosAlVv38Gcqrij0X1NOBAM/k/WPQqZkm1O1
+         EV1GoNvzK3mAiReMbQ4TSkTYGqCdf3WDQVk0UiEojO5r30Bk2Tuzo3bngqeCbqzCO0KQ
+         x0rlHOIRRTrej0hYxJFrF4fpbvAU0O7PCcfz2uRQ8ADSHEE1i0wYECQWWKScqk5IYYCq
+         NCwVLJ2hqA9PRQFDFFUZYTseCx6A9TzORCjIJZFPEz+rTHsC6zb9ueCLYvIbsX32royD
+         rRMzZzUwqqybeTLkrM00tQPMTCTI6aT3f4/QWiu4onisj+PJcBV4QegCCoQLheV+meEU
+         Nz4Q==
+X-Gm-Message-State: AJIora8iCZQZjwia0y67DthscFTV6M063MvNm2imwAKSWP2aF9UBQW/f
+        8odRfNoaIz80rREZv6+d/1isCA==
+X-Google-Smtp-Source: AGRyM1vyFzsFMTCPRJxtHWx7y5a7FMF92v+tAByHTMxUB/MOjUpdCznNzN7CY7oLLyxTnSAivEK0hg==
+X-Received: by 2002:a2e:bd0a:0:b0:25d:d2a3:7366 with SMTP id n10-20020a2ebd0a000000b0025dd2a37366mr6103917ljq.35.1659423993628;
+        Tue, 02 Aug 2022 00:06:33 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id e1-20020a05651236c100b0048afa5daaf3sm629717lfs.123.2022.08.02.00.06.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 00:06:33 -0700 (PDT)
+Message-ID: <43d19449-cf06-2302-b536-4ade5f79c5fd@linaro.org>
+Date:   Tue, 2 Aug 2022 10:06:32 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/5] clk: qcom: Allow custom reset ops
+Content-Language: en-GB
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220730144713.2.I4b69f984a97535179acd9637426a1331f84f6646@changeid>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220730144713.2.I4b69f984a97535179acd9637426a1331f84f6646@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=C3=AC 16 maggio 2022 16:55:54 CEST Matthew Wilcox wrote:
-> On Mon, May 16, 2022 at 12:19:25PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap() is being deprecated in favor of kmap_local_page().=20
-With
-> > kmap_local_page(), the mapping is per thread, CPU local and not=20
-globally
-> > visible.
-> >=20
-> > The usage of kmap_local_page() in fs/ufs is pre-thread, therefore=20
-replace
-> > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
-> >=20
-> > kunmap_local() requires the mapping address, so return that address=20
-from
-> > ufs_get_page() to be used in ufs_put_page().
-> >=20
-> > These changes are essentially ported from fs/ext2 and are largely based=
-=20
-on
-> > commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
-> >=20
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
->=20
-> Have you done more than compile-tested this?  I'd like to know that it's
-> been tested on a machine with HIGHMEM enabled (in a VM, presumably).
-> UFS doesn't get a lot of testing, and it'd be annoying to put out a
-> patch that breaks the kmap_local() rules.
->=20
-As said in another message of this thread, these changes have only been=20
-compile-tested. I can't see anything which may break the rules about using=
-=20
-local mappings properly.
+On 30/07/2022 12:17, Akhil P Oommen wrote:
+> Add support to allow soc specific clk drivers to specify a custom reset
+> operation. A consumer-driver of the reset framework can call
+> "reset_control_reset()" api to trigger this.
+> 
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+> 
+>   drivers/clk/qcom/reset.c | 6 ++++++
+>   drivers/clk/qcom/reset.h | 2 ++
+>   2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/reset.c b/drivers/clk/qcom/reset.c
+> index 819d194..4782bf1 100644
+> --- a/drivers/clk/qcom/reset.c
+> +++ b/drivers/clk/qcom/reset.c
+> @@ -13,6 +13,12 @@
+>   
+>   static int qcom_reset(struct reset_controller_dev *rcdev, unsigned long id)
+>   {
+> +	struct qcom_reset_controller *rst = to_qcom_reset_controller(rcdev);
+> +	const struct qcom_reset_map *map = &rst->reset_map[id];
+> +
+> +	if (map->op)
+> +		return map->op(map);
 
-I'm working on converting all kmap() call sites I can do across the whole=20
-kernel to kmap_local_page(). Practically all of those conversions have=20
-already been reviewed / acked, and many of them have already been taken by=
-=20
-their respective maintainers. Others are still too recent.
+This looks like a hack. For example, assert() and deassert() would still 
+follow the usual pattern of updating the bits. Please at least make them 
+return -EOPNOTSUP if map->op is defined.
 
-Most of those patches have been properly tested on a QEMU/KVM x86_32 VM,=20
-4GB to 6GB RAM, booting kernels with HIGHMEM64GB enabled.
-
-Instead, despite this submission is very old, I haven't yet been able to=20
-figure out how to test these changes. I really don't know how I can create=
-=20
-and test a UFS filesystem.
-
-Can you please help somewhat with hints about how to test this patch or=20
-with testing it yourself? I'm thinking of this option because I suppose=20
-that you may have access to a Solaris system (if I recall correctly, UFS is=
-=20
-the default filesystem of that OS. Isn't it?).
-
-I'm sorry to bother you with this issue, however I'd appreciate any help=20
-you may provide. I'd hate to see all patches applied but one :-)=20
-
-Thanks,
-
-=46abio
+A slightly better solution would be to make qcom_reset implementation 
+optional (and depending on desc->num_resets being greater than 0). Then 
+you can register your own reset controller implementation from the gpucc 
+driver.
 
 
+> +
+>   	rcdev->ops->assert(rcdev, id);
+>   	udelay(1);
+>   	rcdev->ops->deassert(rcdev, id);
+> diff --git a/drivers/clk/qcom/reset.h b/drivers/clk/qcom/reset.h
+> index 2a08b5e..295deeb 100644
+> --- a/drivers/clk/qcom/reset.h
+> +++ b/drivers/clk/qcom/reset.h
+> @@ -11,6 +11,8 @@
+>   struct qcom_reset_map {
+>   	unsigned int reg;
+>   	u8 bit;
+> +	int (*op)(const struct qcom_reset_map *map);
+> +	void *priv;
+>   };
+>   
+>   struct regmap;
 
+
+-- 
+With best wishes
+Dmitry

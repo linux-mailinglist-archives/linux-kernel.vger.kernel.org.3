@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586DD587770
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC08587778
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbiHBHGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S235233AbiHBHGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiHBHGE (ORCPT
+        with ESMTP id S234754AbiHBHGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:06:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636D9B1E1;
-        Tue,  2 Aug 2022 00:06:01 -0700 (PDT)
+        Tue, 2 Aug 2022 03:06:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F72AB1E1;
+        Tue,  2 Aug 2022 00:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659423962; x=1690959962;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4uKslXInd/LYsZkf3rMu4R9j6IPobKre4A/4EBr2oP4=;
-  b=WNkiDPnLjTkIyJX5nfX/S7QOHWZYF2bq2NuhVlqBUT1tp/UQG8XU4T8W
-   gDuMmiA9cFJrBO3nImB7M0SmZJ2qNssDhZ7WLkEoEjbnvySBKmTuHzfbL
-   oJkjsTCa9ww0L1tqJuLo7N/fi7sjJjMujPFVyYhNLBFGedXoC3g1scA2U
-   XOetq25LCVYFVAIDgYcdo2HMpygkNscew/RiJLMQJXGCRV5WMlnS0DtmB
-   WEzS5zCXpwHd44LyxYJjGON3hhaAd9TTguxF1nOZ/WVRkvN+s1HrhxEkU
-   VwU+WpakpYDDUDMNJzb2WrzJEPbhrt/cqyeXQgdECFNctqm/BpvNclhsm
+  t=1659423967; x=1690959967;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jGI+QIBNsfuGN9appaI6ht1TfA1Oozu2Tl7H91y3oME=;
+  b=Bi8J+LSwxTxjoldIPyOJZg4OeRYeL4Kt1AtI312O94NStgTnfEdoi2Oi
+   GyoLEPCctFsk+lLt309Eh9p2EMyQz5aJQfTUP9WPT02ti79FvjXvv0v7o
+   JhCWuryg+gZhpHKyvHnVj4GzqCotE5FFCzY4So//jpXb+0LzfYFMMAssi
+   JRYrSgBghN6ySQXvP1hJ0vyFXTQ0Pc/anfs5y2IBFe71I+T32WIeKAreQ
+   DD0pjb2PZlsPWIestTTdGRiSixQWlbK9aj2xBVkU1LbVoMhnMmMWC7WnN
+   wDLruOAB22lYh1XYT+RBZAdjXjiYElVp2t3bXMpzihhXmWqoLRpz5nrGR
    g==;
 X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="174531286"
+   d="scan'208";a="107147668"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2022 00:06:02 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2022 00:06:06 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 2 Aug 2022 00:06:00 -0700
+ 15.1.2375.17; Tue, 2 Aug 2022 00:06:03 -0700
 Received: from microchip-OptiPlex-5040.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.28 via Frontend Transport; Tue, 2 Aug 2022 00:05:57 -0700
+ 15.1.2375.28 via Frontend Transport; Tue, 2 Aug 2022 00:06:00 -0700
 From:   Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor.dooley@microchip.com>
 CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
-Subject: [PATCH v2 0/3] Add support for Microchip QSPI controller
-Date:   Tue, 2 Aug 2022 12:35:15 +0530
-Message-ID: <20220802070518.855951-1-nagasuresh.relli@microchip.com>
+Subject: [PATCH v2 1/3] spi: dt-binding: add Microchip CoreQSPI compatible
+Date:   Tue, 2 Aug 2022 12:35:16 +0530
+Message-ID: <20220802070518.855951-2-nagasuresh.relli@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220802070518.855951-1-nagasuresh.relli@microchip.com>
+References: <20220802070518.855951-1-nagasuresh.relli@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,35 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the Microchip's FPGA QSPI and Polarfire SoC QSPI
-controller support.
+Add compatible string for Microchip CoreQSPI controller.
 
-Tested spi-nand (W25N01GV) and spi-nor (MT25QL256A) on Microchip's
-ICICLE kit. tested using both FPGA QSPI and Polarfie SoC QSPI.
+Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+---
+ .../devicetree/bindings/spi/microchip,mpfs-spi.yaml  | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-changes in v2
-------------
-1. Replaced spi_alloc_master() with devm_spi_alloc_master()
-2. Used dev_err_probe() when devm_spi_alloc_master() fails.
-3. Added shared IRQ flag in the interrupt registration.
-4. Updated the dt_bindings so that there is a differentiation
-   between FPGA QSPI IP core and hard QSPI IP core.
-5. Updated the MAINTAINERS file.
-
-Naga Sureshkumar Relli (3):
-  spi: dt-binding: add Microchip CoreQSPI compatible
-  spi: microchip-core-qspi: Add support for microchip fpga qspi
-    controllers
-  MAINTAINERS: add qspi to Polarfire SoC entry
-
- .../bindings/spi/microchip,mpfs-spi.yaml      |  12 +-
- MAINTAINERS                                   |   1 +
- drivers/spi/Kconfig                           |   9 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-microchip-core-qspi.c         | 609 ++++++++++++++++++
- 5 files changed, 629 insertions(+), 3 deletions(-)
- create mode 100644 drivers/spi/spi-microchip-core-qspi.c
-
+diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+index 7326c0a28d16..8d252eb8c460 100644
+--- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+@@ -14,9 +14,15 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - microchip,mpfs-spi
+-      - microchip,mpfs-qspi
++    oneOf:
++      - description: Microchip's Polarfire SoC QSPI controller.
++        items:
++          - const: microchip,mpfs-qspi
++          - const: microchip,coreqspi-rtl-v2
++      - description: Microchip's fabric based QSPI IP core
++        const: microchip,coreqspi-rtl-v2
++      - description: Microchip's Polarfire SoC SPI controller.
++        const: microchip,mpfs-spi
+ 
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 

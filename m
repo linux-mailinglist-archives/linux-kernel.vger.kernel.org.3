@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FFF587E82
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC656587E89
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbiHBPCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 11:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
+        id S236960AbiHBPEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiHBPCC (ORCPT
+        with ESMTP id S233060AbiHBPEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 11:02:02 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A62B1E3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:02:01 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so10331761otf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 08:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=uKqb6PaUkYrBfbM6a6MGXXS4D4m12oIAPT3k08dh9BE=;
-        b=gXkIQzzfDTQXvsoALPrZvmxmyhBrvsTnC6vfXHPIWyycmy2E3UYVKtGGRIhanYf6II
-         ckgNlh+mqhO9LRWE64p4t/YUUzwO4jGbEHV3233fDb06SktBOVbGM0wsfeC3cvx3yA5n
-         k+xChpWg6vmjEq/7cXROWy7S84ZzYvkCRjtYPOkAkgN3vhckj06FVwd/Pp4EI82YZsj4
-         iwjrvUJD1aEfVIxax9Leh0WegZQpE7Prie0dx1jyXF0I6G8zCs9lhr+djQ/VY/yduH2h
-         0ktfHsjz0/2wF1s0UHhRZfFC5OA9eiEhMY2gpMvZMiE+mJZ6pNC+Frah1ncE94yunhzs
-         BiOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=uKqb6PaUkYrBfbM6a6MGXXS4D4m12oIAPT3k08dh9BE=;
-        b=6u056WCkeTZwnTcLWpOTwL4BO+0cHQtzRjiBYJDFnyO4NqqS4N2Dauu6TvtcbPktwQ
-         6R1POYlwNF6TAgKKn9PTDy2KoyeFocYTIRkCgv57JNxVXrL8qdKHPj931Y/Wd6p08aup
-         t9QLPWTtYxng/F5yWtTRovX8wGOEZNtXZmzrhx+Df5am8vKrT/hjX+n4Ov+c/xTrRGP6
-         sdigQHjEHDtC7Yb0+OEgKCnkWwg937jndkKkaiayUxl7mArFwAWcjVJXJnVUJGZfp7ys
-         uEDFUBdzdZcDnHwXqGWmVdS1FII/T6A6riEDFspCc2pE6/+O62zRETUb948p5Y6nKUhZ
-         bz7Q==
-X-Gm-Message-State: AJIora9pFxW21nt+blzvAo/2OEUeiCwwrpxvzTfWQRb/Q/TFATDjnCpy
-        iJykjjKG70YOB1BbRDjMcRW4UXnyFMw=
-X-Google-Smtp-Source: AGRyM1vrDpr5OKiG/q0avH8adnyXZc6OQGk+2OqxINidcJaLQRvnIJ0Ax6N8TMjuGWbtYgisTJLE4w==
-X-Received: by 2002:a9d:784f:0:b0:61c:7817:3d8f with SMTP id c15-20020a9d784f000000b0061c78173d8fmr7707974otm.271.1659452519983;
-        Tue, 02 Aug 2022 08:01:59 -0700 (PDT)
-Received: from [192.168.1.108] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056870149600b0010e63d0afbbsm2473054oab.55.2022.08.02.08.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 08:01:59 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <c82114b6-1003-bfb5-0550-98dcbf1a3761@lwfinger.net>
-Date:   Tue, 2 Aug 2022 10:01:58 -0500
+        Tue, 2 Aug 2022 11:04:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D21237F4;
+        Tue,  2 Aug 2022 08:04:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E144B81F2C;
+        Tue,  2 Aug 2022 15:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404B0C433C1;
+        Tue,  2 Aug 2022 15:04:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659452688;
+        bh=iyTtJVEbln6OfBEVVllx/EGPV3y1Caz+SHF557VpTv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dp9q/XY4lvbNEjHTYjCxcYnlj7wSKJXBcKCh/vyk9m8CdB4UfxGV7lKtoh3vCd+SU
+         cuMWfGtJ/QpArlVzqLXdj4vfTGmWSAZcHXNv7hza3qeTBHc8taBkWgGR4O+25qaHeI
+         ntImp3rsukD6DwJLbLwaei0hao14DUQqtSMrX+V7ixxaX4rIJnnsyRe4WBkM/dR+jb
+         puvKh1Qvh/MKZyWAfg8hmvuoe9av+F3O7tpMdq9cpdcsTX03ixs9h4XH0LbrkdJ/9F
+         vdkdhSIZNEb/4SID5wBGYTH2fiIR4kMu0vRmC3C6twtE0y7QOVUuPIBeHjh0rXQCxi
+         FynKhgCkmnogw==
+Date:   Tue, 2 Aug 2022 16:04:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the thermal tree
+Message-ID: <Yuk9C07obs+uPQJ6@sirena.org.uk>
+References: <20220801223509.3613888-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: The r8188eu kernel module does not depend on the
- rtlwifi/rtl8188eufw.bin firmware file
-Content-Language: en-US
-To:     Grzegorz Szymaszek <gszymaszek@short.pl>, Greg KH <greg@kroah.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <YukkBu3TNODO3or9@nx64de-df6d00> <YukvnVWuhUeOgRyZ@kroah.com>
- <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WFXrVHyTCSFT868G"
+Content-Disposition: inline
+In-Reply-To: <20220801223509.3613888-1-broonie@kernel.org>
+X-Cookie: Stay on the trail.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 09:17, Grzegorz Szymaszek wrote:
-> On Tue, Aug 02, 2022 at 04:07:25PM +0200, Greg KH wrote:
->> Looks like someone needs to add a line to the driver that looks like:
->> 	MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
->> […] Can you make a patch that does this?
-> 
-> Sure, I will prepare and send one later (hopefully today), assuming no
-> one objects in the meantime. Thanks for quick response.
 
-There will be no objections. All 8188eu-based devices need that firmware. 
-Omitting the MODULE_FIRMWARE macro was simply an oversight.
+--WFXrVHyTCSFT868G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Larry
+On Mon, Aug 01, 2022 at 11:35:09PM +0100, broonie@kernel.org wrote:
 
+> After merging the thermal tree, today's linux-next build (x86
+> allmodconfig) failed like this:
+
+...
+
+> I'll figure out how to handle this tomorrow since I don't expect to
+> release today, I'm just droping the tree for now.
+
+The error persists, I have used the thermal tree from 20220828 instead.
+
+--WFXrVHyTCSFT868G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpPQoACgkQJNaLcl1U
+h9A1Twf/dizOI1Kgx43C5jAQoQzqH07HH6V5lnCkKLeiCJmN+0dGXvB2OmUiEQ0g
+rHjZTnLOc7cCLkIAXKyoiNCL9fKMGfxzcYlQfBxuKInMRgO7ko6WiDw1qFde5AtO
+Vryq/p8Sxn6JI1GypnU5wbwYN5zcaRxRPphmmph6oiL3XzDB+4VjVhcnj2V25TFR
+G6qbXb15xUO8EosODrmHCfqrGJY4MqjPv1tW6zXKFcLTNge1XPwEC7p8b1PBoC4s
+1umf5Di3RixE9WhNw9ydXJBXbYMltMr/HnUAYhQQa9ug/iHj8XcNg7D3o0A+eouM
+/HPTsb2oNXlz6n2ch3GjCPWrh4kz0g==
+=umee
+-----END PGP SIGNATURE-----
+
+--WFXrVHyTCSFT868G--

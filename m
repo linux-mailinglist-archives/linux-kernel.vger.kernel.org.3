@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B78587689
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B4F58768C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbiHBFFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S235483AbiHBFJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiHBFFA (ORCPT
+        with ESMTP id S231599AbiHBFJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:05:00 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E8E65BF;
-        Mon,  1 Aug 2022 22:04:59 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id s11so4762950edd.13;
-        Mon, 01 Aug 2022 22:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y82hfpg6T6DnHBl0eGr+nPNpL/5TjcB5vAqOZt23ee4=;
-        b=cTCUmjrx0Eu58mdFSzfFDVH3IjrBV1VlqQcaOIquZeMs82x+1IxhEVa9V7ehFhIz8K
-         4SfimlfHVSG9PSrEzbXp2v4BiOF+cCXAVHkfj5K3W0EG2J4DC3zT5Qqr+4P4v5Y6r0OI
-         38cZdyfQDb3n7xT1pFMJnO22whKoVGwsjoWV+8JcRFtB4QK67aRL86yH5CYwxIDI2+eT
-         uTRPKQ0+VziAdhYpFB85+zfi5SwZxYYcMqjq/R/miMD0L1PyZFFKyC7nTdqWEAQ78TY0
-         DUb2875Yyi50e3l/RSt5mFhz9ch3dMLV/8rUdkP6DkSMHAvU37tbZ0qUiugqmb+74+nt
-         M3aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y82hfpg6T6DnHBl0eGr+nPNpL/5TjcB5vAqOZt23ee4=;
-        b=Kl5zkxso/hBv4YvJhAXJ3lwUpg1G4t2mHbW/vjWtNrwl0ZLFYeYjfMqoE8GKihKu7F
-         pwlW/CsqsS/bFKYBrdID27BQPLSlJfBZqpUizWiO2QgJcu9igOCa6DU78/aEmromQvxv
-         lNOs6aNt4IwL8v0RdfSMS3E6pp8TLcDze+TAu3Lk8p0BE4XwIxgA54lWmdt5Z3IZDEy8
-         qlSnSJe0W3bZE+BOaHLfubalv9Ckyle08im2p5aJMmJl9uA+Lq40b3wNdyVZsOs+puhC
-         xoXLRL5ydokWcQlfvsT/LJHdh1DyS/SaBGOzh7v38q8HK0xF98CPQFx4JGKCoJH5+u2I
-         N+8A==
-X-Gm-Message-State: AJIora9KOPI5Or4D0tCzWc+guCUqKxKXK6/ohwZRIK93rLk22TrTLZ9v
-        ZWJwHQdAKiJTqueb4rK7+6gRt8HHUDCe/dUhcqg=
-X-Google-Smtp-Source: AGRyM1vEdWhU3Y1tZm3JHUujUTcNSEx040urz+bsEtVG7v5vNfBj3rpIAAS6UDPDvetxnRNI6x/Lc0NgdGcsFuBtBsM=
-X-Received: by 2002:a05:6402:4024:b0:43d:2067:f068 with SMTP id
- d36-20020a056402402400b0043d2067f068mr18000013eda.258.1659416698232; Mon, 01
- Aug 2022 22:04:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANX2M5ZSuHONz-TPVdGcW3q_n6Z2DKLM6M8RfG+mORA9CCQRsQ@mail.gmail.com>
- <CAKXUXMxVCCRB2uaAN68LZv6Fwe7zAkUmwCmsqB6pE=z_=cztMg@mail.gmail.com>
- <CANX2M5b9PBp9i5v_akXshQqBFRT4dTHg+PR2pWpHPa5RBOEUTg@mail.gmail.com> <20220731095307.GA12211@1wt.eu>
-In-Reply-To: <20220731095307.GA12211@1wt.eu>
-From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
-Date:   Mon, 1 Aug 2022 22:04:46 -0700
-Message-ID: <CANX2M5YxE31gSU804jm6U4T6uTeCTjgk1gfHM+ockpjHnXfDrw@mail.gmail.com>
-Subject: Re: INFO: task hung in __floppy_read_block_0
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Denis Efremov <efremov@linux.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        fleischermarius@googlemail.com, its.priyanka.bose@gmail.com
+        Tue, 2 Aug 2022 01:09:20 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F42E1054B;
+        Mon,  1 Aug 2022 22:09:15 -0700 (PDT)
+X-UUID: d90cb81c6ffa4484bf87f5f097666c6c-20220802
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:c987c419-5aa8-4d9a-92c3-3f78d742cd0b,OB:10,L
+        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:45
+X-CID-INFO: VERSION:1.1.8,REQID:c987c419-5aa8-4d9a-92c3-3f78d742cd0b,OB:10,LOB
+        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-META: VersionHash:0f94e32,CLOUDID:6cfa08d0-a6cf-4fb6-be1b-c60094821ca2,C
+        OID:4b69b0cc6ffe,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d90cb81c6ffa4484bf87f5f097666c6c-20220802
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 831541770; Tue, 02 Aug 2022 13:09:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 2 Aug 2022 13:09:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 2 Aug 2022 13:09:08 +0800
+Message-ID: <202347b5f781ba1a9abe7297c9906793ad547d0d.camel@mediatek.com>
+Subject: Re: [PATCH v15 05/11] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 2 Aug 2022 13:09:08 +0800
+In-Reply-To: <20220727045035.32225-6-rex-bc.chen@mediatek.com>
+References: <20220727045035.32225-1-rex-bc.chen@mediatek.com>
+         <20220727045035.32225-6-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +74,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 2:53 AM Willy Tarreau <w@1wt.eu> wrote:
->
-> Thus I'm a bit confused about what to look for. It's very likely that
-> there are still bugs left in this driver, but trying to identify them
-> and to validate a fix will be difficult if they cannot be reproduced.
-> Maybe they only happen under emulation due to timing issues.
->
-> As such, any hint about the exact setup and how long to wait to get
-> the error would be much appreciated.
+Hi, Bo-Chen:
 
-We can confirm that we were able to trigger the issue on the latest
-5.19 (commit: 3d7cb6b04c3f3115719235cc6866b10326de34cd) with the
-C-repro within a VM. We use this:
-https://syzkaller.appspot.com/text?tag=KernelConfig&x=cd73026ceaed1402
- config to build the kernel. The issue triggers after around 143
-seconds. For all the five times we tried, we were able to reproduce
-the issue deterministically every time. Please let us know if you need
-any other information.
+On Wed, 2022-07-27 at 12:50 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
--- 
-Thanks and Regards,
+[snip]
 
-Dipanjan
+> +
+> +static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +
+> +	if (mtk_dp->train_info.hpd_inerrupt) {
+
+When the thread is running, mtk_dp->train_info.hpd_inerrupt would be
+true. So this checking is redundant.
+
+> +		dev_dbg(mtk_dp->dev, "MTK_DP_HPD_INTERRUPT\n");
+> +		mtk_dp->train_info.hpd_inerrupt = false;
+> +		mtk_dp_hpd_sink_event(mtk_dp);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t mtk_dp_hpd_event(int hpd, void *dev)
+> +{
+> +	struct mtk_dp *mtk_dp = dev;
+> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> +	u32 irq_status;
+> +
+> +	irq_status = mtk_dp_read(mtk_dp, MTK_DP_TOP_IRQ_STATUS);
+> +
+> +	if (!irq_status)
+> +		return IRQ_HANDLED;
+> +
+> +	if (irq_status & RGS_IRQ_STATUS_TRANSMITTER) {
+
+Combine this if-checking with previous if-checking, it would be:
+
+if (!(irq_status & RGS_IRQ_STATUS_TRANSMITTER))
+	return IRQ_HANDLED;
+
+> +		irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
+> +			     mtk_dp_hwirq_get_clear(mtk_dp);
+> +
+> +		if (!irq_status)
+> +			return IRQ_HANDLED;
+> +
+> +		if (irq_status & MTK_DP_HPD_INTERRUPT)
+
+Does this interrupt MTK_DP_HPD_INTERRUPT have any relation with
+MTK_DP_HPD_CONNECT and MTK_DP_HPD_CONNECT? From the naming, I guess
+that when MTK_DP_HPD_CONNECT happen, MTK_DP_HPD_INTERRUPT would also
+happen. Either for MTK_DP_HPD_DISCONNECT. When would
+MTK_DP_HPD_INTERRUPT happen but MTK_DP_HPD_CONNECT or
+MTK_DP_HPD_DISCONNECT does not happen.
+
+Regards,
+CK
+
+> +			train_info->hpd_inerrupt = true;
+> +
+> +		if (!(irq_status & MTK_DP_HPD_CONNECT ||
+> +		      irq_status & MTK_DP_HPD_DISCONNECT))
+> +			return IRQ_WAKE_THREAD;
+> +
+> +		if (!!(mtk_dp_read(mtk_dp, MTK_DP_TRANS_P0_3414) &
+> +		       HPD_DB_DP_TRANS_P0_MASK))
+> +			train_info->cable_plugged_in = true;
+> +		else
+> +			train_info->cable_plugged_in = false;
+> +
+> +		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> +				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> +				   DP_PWR_STATE_MASK);
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+

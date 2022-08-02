@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DCB587B05
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE40C587B08
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236591AbiHBKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S236536AbiHBKwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbiHBKrr (ORCPT
+        with ESMTP id S233342AbiHBKwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:47:47 -0400
-Received: from sonic304-23.consmr.mail.ne1.yahoo.com (sonic304-23.consmr.mail.ne1.yahoo.com [66.163.191.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C4C50
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1659437264; bh=kXK2mzy82pZvXoY/dP/bBeMCh45pejQngWYJQN43WIw=; h=Date:From:Subject:To:References:From:Subject:Reply-To; b=JN1z/7c/xkhkhf/bc1SGYoY0S3e22s5GplNcdVIMNcyGhcTSmMxFl8e5/wEu4HfMF/HMH0gnZ6DvjOEl+yhZr+20WNXQrKwUvHg5Va002gQNMapdVymk5ViVg1veBP+in3QZB1FL+EgzgQZHiDWNaJPXojIQC0E4RzJZdsIylyI=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1659437264; bh=r49qXjeXe9L/x9ADo0zrIDnDhjPsU5jNtB3jIDwOAEs=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=FWBtjOpMPIZZ4MF8f2/95G4QLim4VgOE2hBq2xdBJxt6SXch1Ar5Hb+B3dXE4d7kIGVnRA+B3KD5LnZXLcB3Ln4d/mXHGawQ9MiAAK9XbvM44HerDt4YpOmbFoCJ8dH0waZuOZSR2DNr/3boSAiA/WOexIIfQIGk+ro+TTUV2WPIz65XdMyXHWSheY7Q4BHrOdjI8KCIx7PB0xBXi+5yjGicfIpiEogzzW9trftPc2Utxll/u/ArLhOQyUB0dx+REsU1e1xsoMrmsiWCcECLFd69uhEbbods9e7UKpCZb2H7vRip5F/yNXkRW1+q5HppV+BdWn0SkPVkEUzh1fdRwQ==
-X-YMail-OSG: irFpXeQVM1lDw0ij2v1CiicOHl87jdLQ6.0tCKs_Z07PKrEre8KsWomnhiDm._i
- 5RxL2f84Al3QnIUomnU54r6ofCZSmQc0bZUL5ObvkdjqgtOpIuHnrDS1za3bmKGRP.ydo5y5vu54
- bVV52U_joMU_ZSU2dIBCcdwTWekzfOiALZPW2ebA_9eBX9HadLfPsX0di1.6xBIwGWrSuwjymRao
- bFFQ1LOvgrWINaTa532Z3F2yVW82Zkl1d87z02PDzhg2vJyOMgtl5a.p0gUziFaoqKiTyIbWuPDE
- n5w2VBagj8EaJ7VfCsP19jRuSzMh4TkBZcBYyPE1eyguBsb2C8QC2ocWezz9A01IjOIRXtbn2bYi
- pbVLJeaJRry7fV2_6zPZvSseq2me4wGHpxjJtiwSWpiiMvLkzRXk0AG8jBXBZm0WB9t_WI8fxjhT
- XZFxS_WHNJ7RyiWgDp1v7WfQFTstZtURQ5mqvODGiuv3NJrZmur.HxCINOUINPNeA367_oS.TSiZ
- dy7qqPX2E5liaK.vSjHGuTH8SYTwy_0nl9pOWHc55MOZEetVLaiFxY7J3D.j606ASDfJEbSDcpSF
- UR4ZsQWU4wfzxnEp8zAGiV0O0Ppjj2pSNJC6Yj4g9P58Wq2Bksk5YnhdN65AMll3YzomeZ1M1WjR
- mo29AKnky9MwUHQBuoqtH15A7IK0BIwTYejBkY1odQgVcoTfc2i13HiJ15kHjxAaTLNzNfsfSnFb
- _IpzeZ6kLTLgGdsciKLM_Al3hJADWAzU9rFFtjFLsVTNuL39qvyVP9LG62QVb2uMSuNqyffnlHBw
- t4sGVn3VzY2l4haD00GjaXJx51LKGAfft9yd3pmLLr2xHn1oWpbTOHM5jI3.LMT0GIQMMpMP49Bw
- 6wRDk5o0V60w9hk_MhQ8pVkQhK4Q1knk1kvKOuQvM2Q.mhLqwhg8CCiUnAW1EsqNpDivSBAiuHRg
- G8u1RjFoEx_x9Hc484ilNMZoKuYKuroQ5EQpsbt1sekwwrRD1FabM3bIYPLfEmSrjk7vZX7VPKa9
- CbW07RsGUdI9cu1pG.P3kHSAr_v0h4E.ZvsnT5bwMXHxYGjc9J01tOYcgUVE1max2Cvrr6I3LY9W
- iDxJojPTC.TqfzZUT0nW0VJizKrk6Q2gbwwHLcmUoi.valtwVZwVnMGhUGpjXkSL0JRJd1gBjv3V
- LqvlbHO1d6Iz9dUe0XAWU4asDEednU2OsOHOHxZNSRLY3R0g3QeNpABFVuLJbcZR.faHkmflK9LZ
- y.JKRJWg3BW6vLV6srzyPPeqnwaWjwJu4KtqzDISNY2iSeubfKXESW8_8V2Ydj1eamlCOGIsgCsb
- 4prII3Irk_..kIwQU_xWu71_hoF97589nhDwv_Uenbr_3Ql5Us7wbGiEUujwP7YMIHVGdqmBzbqX
- D1jL_f2i4xx6mGgmabvv2IuBoW3_d0etZi3bAgMQNuDytfqnp709qmho0EbMrLIu3L4c.AWLucpL
- a0GPVbm1.nvOEnRpMD4GEiYNBVPaHwXTXfG2R41NdmpGUtaG6DmxTgfyIJWqhRwcm1V_pUgkmoo7
- JR4Sau175GOOoEyLrWjtq3_kBT0_NhydaGECX8FMw_OvD6STjKn7z7aT34WR.W9tV4wiXeMs_nPt
- XcKJ4MrqSl1Ovd.VuzJwxSleOyTNQ1cU0gM47ZnPFT_19uwOk0iAXcMBAA11ZgmSePF0cIE5IVAQ
- MqLF0io8a5qXnGLeDBiXuhJgjJpcUXbxt6Z1EJWPqqtWE72XKtbt9eHOiUAlMFsJJscfvr.aW_zB
- C09twpCb8mdqiujx2A6.DUhVXOrcL_Fl6kBTLv3bi2iqEjSHoLDQ232tVGGkb5Zx.gPjvGhWnYql
- i7N2cHvlKyVtSZOwJJUJFgXyGCLGN7dSpXVAAq5Qiwtxzyjot_y.gUx702SZXOlcnhdgg27j.3le
- BGUJBdzkqzywHu7AU9_W.pPO7OXmwTlbl6XuPrigR6nqnpgEHiYHCsB.Il5XEhRNaDp4IWzbN8Ie
- NAVK.Ygtc8QMgs4A9HvF7PmgZzRQxdf3G2PxLlL4Yy3Tzy.CbAVp._PeJF8bAnSXxM4oJ4xUYaub
- qiTXy3uKaG0RYdZ0lPFeyOez1lXiOae.F4T5IqrjAlWHwuFALqQgOAazZgKLLd4EOAKYnet9NN3K
- KU1E.Z4Ugpc_RsuxfbDBiibHJMtcFN21qO5uUTd1OoqcgzyNPlbyaN0j1ZmTOkqfol79LAwEAY5Y
- aJG4-
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Tue, 2 Aug 2022 10:47:44 +0000
-Received: by hermes--production-ne1-74ddcb6b46-6wz25 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 24dc143382a414b51c3e7d5d6f033ecb;
-          Tue, 02 Aug 2022 10:47:40 +0000 (UTC)
-Date:   Tue, 02 Aug 2022 06:47:39 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: Threading crash > kernel 5.10
-To:     linux-kernel@vger.kernel.org
-Message-Id: <1659437259.2636.0@smtp.mail.att.net>
-X-Mailer: pantheon-mail/1.0.8
+        Tue, 2 Aug 2022 06:52:04 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA2F17AAA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:52:03 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id y13so11247417ejp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 03:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XdVAnfQ0dVySFOaw/b8Pu8nKKQlmM6z22D0DLysEdi4=;
+        b=mUJE4WwMaZAAOw98u9yYL3T1cfk1bqLWxU7Z4ZIhVTPU5vwJcAwYOdiILjPlQ9Vgrh
+         71OTJZHu+gxFgc5ws1qx59laygSiWwUq9yB1aKWrT9OcucBIkcGQcT1f7GExuQCu0Yl3
+         R1CVTk/KCJDCfhpTnWAmNmekPybUy4uv8U6QzD2hZR7w/rkUcPUkSlaz+mdIADu/4N2w
+         gPDqkuTpFxcyE88koNDbj7ewQcdG73Nl5lJNii37i9sf1pVS2hrurHiGFJShZ9ZSWjP5
+         BlFnXkcblSRpb7LlWjIc1HVn0y6XNeNn9X5JESKkc9lgya+2zWpmcQOZYuTXeV36tv+F
+         cNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XdVAnfQ0dVySFOaw/b8Pu8nKKQlmM6z22D0DLysEdi4=;
+        b=A3+GeWfWtK7K+R6JqSR7VbTuCWh7w8gA1SY5qXMNckPqgKi6WkMv2Nx1b89R/14dc2
+         ODqkOFXiLi/NW9qcGqygkwBHPVNKpkKW3KJU1kiXCntmLBA5KxRuCGGeBlsKNbGuBiiU
+         n69KjB7iZa+IzMW2JmuAa0VIz36r9SQ+dF3Ol30MhWjRHt+JymY4P5WP4VHTMO5OSRYm
+         SUGwF1k2AeIPIeq8Nujv5NoJdI77CVMqNwBXKSC6z82bhWaDC33M7iwrpf4WqBBe4rZJ
+         WUrKaKtguZrczoHrK8kx2k1BGz3lGjINjjY26a6pXPx6pEaC6QzokSX/xtDl8FgdyNrA
+         gHng==
+X-Gm-Message-State: AJIora+YzXQP0FmolaCrNbbO+HTwxnpAM3BHxCh6DjZHz37M2bTMxQqv
+        dI4r19IkMTUrgQuizx42KWSCDIEiHF0=
+X-Google-Smtp-Source: AGRyM1vxcfWMK3q99cUVk0qLEqBAvD/2M3n1orppz+p3IWxotabALxtZBdc6dz7MOGC99xM+T/sR/g==
+X-Received: by 2002:a17:907:724c:b0:72e:e6fe:5ea4 with SMTP id ds12-20020a170907724c00b0072ee6fe5ea4mr16234439ejc.421.1659437522133;
+        Tue, 02 Aug 2022 03:52:02 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id f2-20020a17090631c200b00730860b6c43sm2193089ejf.173.2022.08.02.03.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 03:52:01 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 2 Aug 2022 12:51:59 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [RESEND] x86/bus_lock: Don't assume the init value of
+ DEBUGCTLMSR.BUS_LOCK_DETECT to be zero
+Message-ID: <YukBz6t1n3aMbznT@gmail.com>
+References: <20220802033206.21333-1-chenyi.qiang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-References: <1659437259.2636.0.ref@smtp.mail.att.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802033206.21333-1-chenyi.qiang@intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
- When using 8 threads vs. 4 threads, test crashes application.
-AMD Ryzen 5 2400G, elementary OS 5.1.7, Ubuntu 18.04.6 LTS, System 
-Stability Tester
-Version 1.5.1 generic.
- Testing Pi digits >= 64M with threads @ 8 will crash application, can 
-not say for certain system crashes, as that occurred on different 
-conditions not used on problem.
-Using threads @ 4 will complete task, no crash. Also during track, used 
-64M, 4,8
-exclusively. Kernels 5.18, 5.15 will crash, kernels 5.10, 5.4 will not. 
-Kernels
-were installed by Ubuntu Mainline Kernel Installer.
- Hopefully I can be of more help, I have not built a kernel from 
-scratch in many of years, LFS, so for me patches to solve on my end 
-could be issue?
- Steve
 
+* Chenyi Qiang <chenyi.qiang@intel.com> wrote:
+
+> It's possible that BIOS/firmware has set DEBUGCTLMSR_BUS_LOCK_DETECT, or
+> this kernel has been kexec'd from a kernel that enabled bus lock
+> detection.
+> 
+> Disable bus lock detection explicitly if not wanted.
+
+Makes sense.
+
+Just curious: in what circumstances does the BIOS/firmware set 
+DEBUGCTLMSR_BUS_LOCK_DETECT? Does it use it, or does it enable it for some 
+spurious reason, without really using the feature? (Assuming you are aware 
+of instances where this happened - or was this simply a hypothetical?)
+
+Thanks,
+
+	Ingo

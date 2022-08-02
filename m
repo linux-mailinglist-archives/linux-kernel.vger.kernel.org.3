@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A07587537
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCCB587536
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbiHBBwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S235585AbiHBBwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiHBBvz (ORCPT
+        with ESMTP id S235532AbiHBBwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:51:55 -0400
+        Mon, 1 Aug 2022 21:52:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10962A26E;
-        Mon,  1 Aug 2022 18:51:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8562E48C87;
+        Mon,  1 Aug 2022 18:51:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 495C361059;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0BC761085;
+        Tue,  2 Aug 2022 01:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88CB5C433D7;
         Tue,  2 Aug 2022 01:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD473C433D6;
-        Tue,  2 Aug 2022 01:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659405108;
-        bh=TqMR/tIQcRK94+z9eetCsW+BK+LLUVa7DCQEAcBAA+Q=;
+        s=k20201202; t=1659405112;
+        bh=8ZkynlYQyKINIYvVDmoUlY90LXh1vGqtb0aKnxbwfBE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q/5caY9M57mfl9FH2ASQi2naf9zkjJG7sLtTBScWduo2cd0WOjnRWfTB9xwFE2Fbz
-         racaBApzgnbeD0FAdSafeDX4quUKlLiHJW7eGHpyx28ax1pYWpm2S+zBPvA7I9SJ9u
-         70SwKZ2ALIeDbu5ebZjbFTI1nRuvHA8EGyAC6wJBzPHfj9vsVectuJD12BOXE/Q55w
-         M2Bn4KwGmSHS1TeHVZof1SNs5HUJO2PAvsqybTlzpwuyvIqwPortf8yCfHKeP7/0IO
-         WZNgtKIaJTzH4/SGy1EYoMQ8f6ycG6Ywyeb65yx8dKQ7YkogtM3TE7/UjlOBbGkgA9
-         FrNHwOySYVYTg==
+        b=fXhGRqtRpu72zj7VrpWfhzD9J69bYFX8mKtCcJIrWshqhvJBz05htr29mbu21o0F9
+         Sk5LziU6keVk3oMR9EwwnQ/BDUUEdZak91bFJ4CtXVXTvXnAV4RYrfFA9tnVUNLA3V
+         qGssLgcJXye/ofJmtTNHGSR9sNbsTmicGH824wMAFA1i1cananQcUySDMo529lgWpx
+         DEVrmoVOedvgRFC3CwS08LFU6vh6fRZO7Raqx4U4O8cMkknPwV/WWTgdUhfS0kr6tn
+         WwegRxJszQUp28GIHOxhl7l/Aab1WqfMhv45TfMA36Lbe3XV0ewfMLTmyZ1EB8SdUJ
+         8jEBtznZBOlSQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH v8 05/31] kallsyms: increase maximum kernel symbol length to 512
-Date:   Tue,  2 Aug 2022 03:49:52 +0200
-Message-Id: <20220802015052.10452-6-ojeda@kernel.org>
+        Alex Gaynor <alex.gaynor@gmail.com>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [PATCH v8 06/31] workqueue: introduce `__INIT_WORK_WITH_KEY`
+Date:   Tue,  2 Aug 2022 03:49:53 +0200
+Message-Id: <20220802015052.10452-7-ojeda@kernel.org>
 In-Reply-To: <20220802015052.10452-1-ojeda@kernel.org>
 References: <20220802015052.10452-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -71,144 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rust symbols can become quite long due to namespacing introduced
-by modules, types, traits, generics, etc. For instance,
-the following code:
+From: Wedson Almeida Filho <wedsonaf@google.com>
 
-    pub mod my_module {
-        pub struct MyType;
-        pub struct MyGenericType<T>(T);
+A Rust helper (introduced in a later patch) needs to call
+`__INIT_WORK` with a passed key, rather than define one in place.
 
-        pub trait MyTrait {
-            fn my_method() -> u32;
-        }
+In order to do that, this moves the initialization code from
+the `__INIT_WORK` macro into a new `__INIT_WORK_WITH_KEY` macro
+which takes the key as an extra parameter.
 
-        impl MyTrait for MyGenericType<MyType> {
-            fn my_method() -> u32 {
-                42
-            }
-        }
-    }
-
-generates a symbol of length 96 when using the upcoming v0 mangling scheme:
-
-    _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
-
-At the moment, Rust symbols may reach up to 300 in length.
-Setting 512 as the maximum seems like a reasonable choice to
-keep some headroom.
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Co-developed-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- include/linux/kallsyms.h            | 2 +-
- kernel/livepatch/core.c             | 4 ++--
- scripts/kallsyms.c                  | 4 ++--
- tools/include/linux/kallsyms.h      | 2 +-
- tools/lib/perf/include/perf/event.h | 2 +-
- tools/lib/symbol/kallsyms.h         | 2 +-
- 6 files changed, 8 insertions(+), 8 deletions(-)
+ include/linux/workqueue.h | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ad39636e0c3f..649faac31ddb 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -15,7 +15,7 @@
- 
- #include <asm/sections.h>
- 
--#define KSYM_NAME_LEN 128
-+#define KSYM_NAME_LEN 512
- #define KSYM_SYMBOL_LEN (sizeof("%s+%#lx/%#lx [%s %s]") + \
- 			(KSYM_NAME_LEN - 1) + \
- 			2*(BITS_PER_LONG*3/10) + (MODULE_NAME_LEN - 1) + \
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index bc475e62279d..ec06ce59d728 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -213,7 +213,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
- 	 * we use the smallest/strictest upper bound possible (56, based on
- 	 * the current definition of MODULE_NAME_LEN) to prevent overflows.
- 	 */
--	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 128);
-+	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 512);
- 
- 	relas = (Elf_Rela *) relasec->sh_addr;
- 	/* For each rela in this klp relocation section */
-@@ -227,7 +227,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
- 
- 		/* Format: .klp.sym.sym_objname.sym_name,sympos */
- 		cnt = sscanf(strtab + sym->st_name,
--			     ".klp.sym.%55[^.].%127[^,],%lu",
-+			     ".klp.sym.%55[^.].%511[^,],%lu",
- 			     sym_objname, sym_name, &sympos);
- 		if (cnt != 3) {
- 			pr_err("symbol %s has an incorrectly formatted name\n",
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 9da3b7767e9d..3b64dda7e4cc 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -30,10 +30,10 @@
- #define _stringify_1(x)	#x
- #define _stringify(x)	_stringify_1(x)
- 
--#define KSYM_NAME_LEN		128
-+#define KSYM_NAME_LEN		512
- 
- /* A substantially bigger size than the current maximum. */
--#define KSYM_NAME_LEN_BUFFER	512
-+#define KSYM_NAME_LEN_BUFFER	2048
- _Static_assert(
- 	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
- 	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
-diff --git a/tools/include/linux/kallsyms.h b/tools/include/linux/kallsyms.h
-index efb6c3f5f2a9..5a37ccbec54f 100644
---- a/tools/include/linux/kallsyms.h
-+++ b/tools/include/linux/kallsyms.h
-@@ -6,7 +6,7 @@
- #include <stdio.h>
- #include <unistd.h>
- 
--#define KSYM_NAME_LEN 128
-+#define KSYM_NAME_LEN 512
- 
- struct module;
- 
-diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-index e7758707cadd..116a80c31675 100644
---- a/tools/lib/perf/include/perf/event.h
-+++ b/tools/lib/perf/include/perf/event.h
-@@ -95,7 +95,7 @@ struct perf_record_throttle {
- };
- 
- #ifndef KSYM_NAME_LEN
--#define KSYM_NAME_LEN 256
-+#define KSYM_NAME_LEN 512
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 62e75dd40d9a..06c24805e666 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -221,24 +221,31 @@ static inline unsigned int work_static(struct work_struct *work) { return 0; }
+  * to generate better code.
+  */
+ #ifdef CONFIG_LOCKDEP
++#define __INIT_WORK_WITH_KEY(_work, _func, _onstack, _key)		\
++	do {								\
++		__init_work((_work), _onstack);				\
++		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
++		lockdep_init_map(&(_work)->lockdep_map, "(work_completion)"#_work, _key, 0); \
++		INIT_LIST_HEAD(&(_work)->entry);			\
++		(_work)->func = (_func);				\
++	} while (0)
++
+ #define __INIT_WORK(_work, _func, _onstack)				\
+ 	do {								\
+ 		static struct lock_class_key __key;			\
+-									\
+-		__init_work((_work), _onstack);				\
+-		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+-		lockdep_init_map(&(_work)->lockdep_map, "(work_completion)"#_work, &__key, 0); \
+-		INIT_LIST_HEAD(&(_work)->entry);			\
+-		(_work)->func = (_func);				\
++		__INIT_WORK_WITH_KEY(_work, _func, _onstack, &__key);	\
+ 	} while (0)
+ #else
+-#define __INIT_WORK(_work, _func, _onstack)				\
++#define __INIT_WORK_WITH_KEY(_work, _func, _onstack, _key)		\
+ 	do {								\
+ 		__init_work((_work), _onstack);				\
+ 		(_work)->data = (atomic_long_t) WORK_DATA_INIT();	\
+ 		INIT_LIST_HEAD(&(_work)->entry);			\
+ 		(_work)->func = (_func);				\
+ 	} while (0)
++
++#define __INIT_WORK(_work, _func, _onstack)				\
++	__INIT_WORK_WITH_KEY(_work, _func, _onstack, NULL)
  #endif
  
- struct perf_record_ksymbol {
-diff --git a/tools/lib/symbol/kallsyms.h b/tools/lib/symbol/kallsyms.h
-index 72ab9870454b..542f9b059c3b 100644
---- a/tools/lib/symbol/kallsyms.h
-+++ b/tools/lib/symbol/kallsyms.h
-@@ -7,7 +7,7 @@
- #include <linux/types.h>
- 
- #ifndef KSYM_NAME_LEN
--#define KSYM_NAME_LEN 256
-+#define KSYM_NAME_LEN 512
- #endif
- 
- static inline u8 kallsyms2elf_binding(char type)
+ #define INIT_WORK(_work, _func)						\
 -- 
 2.37.1
 

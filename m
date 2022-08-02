@@ -2,140 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB23B587C8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD0E587C8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiHBMjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S236218AbiHBMkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbiHBMjm (ORCPT
+        with ESMTP id S236172AbiHBMj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:39:42 -0400
-Received: from wp126.webpack.hosteurope.de (wp126.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8485::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6B20BC2
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:39:40 -0700 (PDT)
-Received: from p5098d998.dip0.t-ipconnect.de ([80.152.217.152] helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1oIrBR-0003Qp-Dc; Tue, 02 Aug 2022 14:39:37 +0200
-X-Virus-Scanned: by amavisd-new 2.12.2 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.16.1/SUSE Linux 0.8) with ESMTPSA id 272CdYrP002926
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 2 Aug 2022 14:39:35 +0200
-Message-ID: <88f2de00-32e3-ed74-082f-c0972a81f0f8@fivetechno.de>
-Date:   Tue, 2 Aug 2022 14:39:34 +0200
+        Tue, 2 Aug 2022 08:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862C42251C;
+        Tue,  2 Aug 2022 05:39:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A4D5612CB;
+        Tue,  2 Aug 2022 12:39:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA5BDC433D6;
+        Tue,  2 Aug 2022 12:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659443997;
+        bh=PCR0ioV6fNZP3YUrBL59/cNasicX5SaYXfiF0EyEclg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NQqr3uk+c9m8SmN+EpeKHs99sSRP5o4d6itRIx1sQ9JIx0GuQN0Zh7stPoohY+zo0
+         3PF69OpEy4klTKYs0DWgkN8uzyVg15Z9jCPwtINZX9ljfqMcBTxrDFYGNrdKAScBmu
+         b9Yjfa66tjoqT6Ride43cu6yx0fVXlu9PZ6h8G5RKm8rF0jQKJ9cBKG6cKWXaIL7IW
+         crcs5ni4zlwinZuKU/9i42bKlDq/67Ii6Era/B43XFJaMgwTdr50bjUPoljnk0YpaA
+         J+OGdQHe36jFoy30fIx8dy3et4mHaQxnD+88QDJTxg27K2vokVRduOlR5UONFbgpx7
+         1tk4aP1uvMa3Q==
+Date:   Tue, 2 Aug 2022 15:39:54 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 18/49] crypto: ccp: Provide APIs to query
+ extended attestation report
+Message-ID: <YukbGl5aZMK1PWRF@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <afae5980fd4adf52932a9d639a0b0bfe83255c0a.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [BUG BISECT] phy: rockchip-inno-usb2: Sync initial otg state
-Content-Language: de-DE
-To:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220622003140.30365-1-pgwipeout@gmail.com>
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Organization: five technologies GmbH
-In-Reply-To: <20220622003140.30365-1-pgwipeout@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1659443980;411e59fa;
-X-HE-SMSGID: 1oIrBR-0003Qp-Dc
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afae5980fd4adf52932a9d639a0b0bfe83255c0a.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+I'd rephrase "Provide in-kernel API..." (e.g. not uapi).
 
-with linux-next-20220728 rk3399-roc-pc does not boot.
-Bisecting pointed to this commit.
-By reverting this commit the board boots again.
-
-[    2.398700] Unable to handle kernel NULL pointer dereference at virtual address 
-0000000000000008
-[    2.399517] Mem abort info:
-[    2.399772]   ESR = 0x0000000096000004
-[    2.400114]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    2.400594]   SET = 0, FnV = 0
-[    2.400873]   EA = 0, S1PTW = 0
-[    2.401161]   FSC = 0x04: level 0 translation fault
-[    2.401602] Data abort info:
-[    2.401864]   ISV = 0, ISS = 0x00000004
-[    2.402212]   CM = 0, WnR = 0
-[    2.402484] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000001376000
-[    2.403071] [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
-[    2.403687] Internal error: Oops: 96000004 [#1] SMP
-[    2.404130] Modules linked in: ip_tables x_tables ipv6 xhci_plat_hcd xhci_hcd 
-dwc3 rockchipdrm drm_cma_helper analogix_dp dw_hdmi realtek drm_display_helper 
-dwc3_of_simple dw_mipi_dsi ehci_platform ohci_platform ohci_hcd ehci_hcd 
-drm_kms_helper dwmac_rk syscopyarea sysfillrect stmmac_platform sysimgblt 
-fb_sys_fops usbcore stmmac pcs_xpcs drm phylink drm_panel_orientation_quirks
-[    2.407155] CPU: 4 PID: 71 Comm: kworker/4:6 Not tainted 
-5.19.0-rc8-next-20220728 #437
-[    2.407868] Hardware name: Firefly ROC-RK3399-PC Mezzanine Board (DT)
-[    2.408448] Workqueue: events rockchip_usb2phy_otg_sm_work
-[    2.408958] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    2.411634] pc : rockchip_usb2phy_otg_sm_work+0x50/0x330
-[    2.414332] lr : process_one_work+0x1d8/0x380
-[    2.416948] sp : ffff800009373d60
-[    2.419406] x29: ffff800009373d60 x28: 0000000000000000 x27: 0000000000000000
-[    2.422199] x26: ffff0000f779fcb8 x25: ffff0000f77a3a05 x24: 000000000000000c
-[    2.424978] x23: 0000000000000000 x22: ffff0000010c8258 x21: ffff80000888ec10
-[    2.427768] x20: ffff0000010c82f0 x19: 000000000000000c x18: 0000000000000001
-[    2.430604] x17: 000000040044ffff x16: 00400034b5503510 x15: 0000000000000000
-[    2.433390] x14: ffff000000708000 x13: ffff8000eec96000 x12: 0000000034d4d91d
-[    2.436185] x11: 0000000000000000 x10: 0000000000000a10 x9 : ffff000001aa7a74
-[    2.438958] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffff000001aa7a74
-[    2.441668] x5 : 000073746e657665 x4 : 000000000000002f x3 : ffff00000356c808
-[    2.444407] x2 : ffff800009373da4 x1 : 000000000000e2ac x0 : ffff80000888eb34
-[    2.447190] Call trace:
-[    2.449557]  rockchip_usb2phy_otg_sm_work+0x50/0x330
-[    2.452169]  process_one_work+0x1d8/0x380
-[    2.454684]  worker_thread+0x170/0x4e0
-[    2.457056]  kthread+0xd8/0xdc
-[    2.459354]  ret_from_fork+0x10/0x20
-[    2.461728] Code: 91037015 295be001 f9403c77 b940e413 (f94006e0)
-[    2.464338] ---[ end trace 0000000000000000 ]---
-
-Am 22.06.22 um 02:31 schrieb Peter Geis:
-> The initial otg state for the phy defaults to device mode. The actual
-> state isn't detected until an ID IRQ fires. Fix this by syncing the ID
-> state during initialization.
+On Mon, Jun 20, 2022 at 11:06:06PM +0000, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 > 
-> Fixes: 51a9b2c03dd3 ("phy: rockchip-inno-usb2: Handle ID IRQ")
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> Version 2 of the GHCB specification defines VMGEXIT that is used to get
+> the extended attestation report. The extended attestation report includes
+> the certificate blobs provided through the SNP_SET_EXT_CONFIG.
+> 
+> The snp_guest_ext_guest_request() will be used by the hypervisor to get
+> the extended attestation report. See the GHCB specification for more
+> details.
+
+What is "the hypersivor"? Could it be replaced with e.g. KVM for
+clarity?
+
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 > ---
->   drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+>  drivers/crypto/ccp/sev-dev.c | 43 ++++++++++++++++++++++++++++++++++++
+>  include/linux/psp-sev.h      | 24 ++++++++++++++++++++
+>  2 files changed, 67 insertions(+)
 > 
-> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> index 6711659f727c..6e44069617df 100644
-> --- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> +++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-> @@ -1162,6 +1162,12 @@ static int rockchip_usb2phy_otg_port_init(struct rockchip_usb2phy *rphy,
->   					EXTCON_USB_HOST, &rport->event_nb);
->   		if (ret)
->   			dev_err(rphy->dev, "register USB HOST notifier failed\n");
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 97b479d5aa86..f6306b820b86 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/fs.h>
+>  
+>  #include <asm/smp.h>
+> +#include <asm/sev.h>
+>  
+>  #include "psp-dev.h"
+>  #include "sev-dev.h"
+> @@ -1857,6 +1858,48 @@ int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error)
+>  }
+>  EXPORT_SYMBOL_GPL(snp_guest_dbg_decrypt);
+>  
+> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> +				unsigned long vaddr, unsigned long *npages, unsigned long *fw_err)
+> +{
+> +	unsigned long expected_npages;
+> +	struct sev_device *sev;
+> +	int rc;
 > +
-> +		if (!of_property_read_bool(rphy->dev->of_node, "extcon")) {
-> +			/* do initial sync of usb state */
-> +			ret = property_enabled(rphy->grf, &rport->port_cfg->utmi_id);
-> +			extcon_set_state_sync(rphy->edev, EXTCON_USB_HOST, !ret);
-> +		}
->   	}
->   
->   out:
+> +	if (!psp_master || !psp_master->sev_data)
+> +		return -ENODEV;
+> +
+> +	sev = psp_master->sev_data;
+> +
+> +	if (!sev->snp_inited)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Check if there is enough space to copy the certificate chain. Otherwise
+> +	 * return ERROR code defined in the GHCB specification.
+> +	 */
+> +	expected_npages = sev->snp_certs_len >> PAGE_SHIFT;
+> +	if (*npages < expected_npages) {
+> +		*npages = expected_npages;
+> +		*fw_err = SNP_GUEST_REQ_INVALID_LEN;
+> +		return -EINVAL;
+> +	}
+> +
+> +	rc = sev_do_cmd(SEV_CMD_SNP_GUEST_REQUEST, data, (int *)&fw_err);
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Copy the certificate blob */
+> +	if (sev->snp_certs_data) {
+> +		*npages = expected_npages;
+> +		memcpy((void *)vaddr, sev->snp_certs_data, *npages << PAGE_SHIFT);
+> +	} else {
+> +		*npages = 0;
+> +	}
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(snp_guest_ext_guest_request);
 
-Gruß,
--- 
-Markus Reichl
+Undocumented export.
+
+> +
+>  static void sev_exit(struct kref *ref)
+>  {
+>  	misc_deregister(&misc_dev->misc);
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index a3bb792bb842..cd37ccd1fa1f 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -945,6 +945,23 @@ void *psp_copy_user_blob(u64 uaddr, u32 len);
+>  void *snp_alloc_firmware_page(gfp_t mask);
+>  void snp_free_firmware_page(void *addr);
+>  
+> +/**
+> + * snp_guest_ext_guest_request - perform the SNP extended guest request command
+> + *  defined in the GHCB specification.
+> + *
+> + * @data: the input guest request structure
+> + * @vaddr: address where the certificate blob need to be copied.
+> + * @npages: number of pages for the certificate blob.
+> + *    If the specified page count is less than the certificate blob size, then the
+> + *    required page count is returned with error code defined in the GHCB spec.
+> + *    If the specified page count is more than the certificate blob size, then
+> + *    page count is updated to reflect the amount of valid data copied in the
+> + *    vaddr.
+> + */
+
+This kdoc is misplaced: it should be in sev-dev.c, right before the
+implementation. Also it does not say anything about return value, and
+still the return type is "int".
+
+> +int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> +				unsigned long vaddr, unsigned long *npages,
+> +				unsigned long *error);
+> +
+>  #else	/* !CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  static inline int
+> @@ -992,6 +1009,13 @@ static inline void *snp_alloc_firmware_page(gfp_t mask)
+>  
+>  static inline void snp_free_firmware_page(void *addr) { }
+>  
+> +static inline int snp_guest_ext_guest_request(struct sev_data_snp_guest_request *data,
+> +					      unsigned long vaddr, unsigned long *n,
+> +					      unsigned long *error)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+>  #endif	/* CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  #endif	/* __PSP_SEV_H__ */
+> -- 
+> 2.25.1
+> 
+
+BR, Jarkko

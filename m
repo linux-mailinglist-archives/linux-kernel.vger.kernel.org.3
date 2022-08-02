@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB59B587A56
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C37E587A52
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiHBKI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S236494AbiHBKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236490AbiHBKIZ (ORCPT
+        with ESMTP id S236387AbiHBKIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:08:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A88530F55;
-        Tue,  2 Aug 2022 03:08:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A9B3B819EF;
-        Tue,  2 Aug 2022 10:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7382C433C1;
-        Tue,  2 Aug 2022 10:08:14 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V7 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Tue,  2 Aug 2022 18:05:13 +0800
-Message-Id: <20220802100513.1303717-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220802100513.1303717-1-chenhuacai@loongson.cn>
-References: <20220802100513.1303717-1-chenhuacai@loongson.cn>
+        Tue, 2 Aug 2022 06:08:01 -0400
+Received: from spam.unicloud.com (smgmail.unigroup.com.cn [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79972DA8C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:07:58 -0700 (PDT)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 272A7VV3097087;
+        Tue, 2 Aug 2022 18:07:31 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Tue, 2
+ Aug 2022 18:07:30 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
+        <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        luofei <luofei@unicloud.com>
+Subject: [PATCH] mm, hwpoison, hugetlb: Free hwpoison huge page to list tail and dissolve hwpoison huge page first
+Date:   Tue, 2 Aug 2022 06:07:11 -0400
+Message-ID: <20220802100711.2425644-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb09.Unicloud.com (10.10.0.24) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 272A7VV3097087
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+If free hwpoison huge page to the end of hugepage_freelists, the
+loop can exit directly when the hwpoison huge page is traversed,
+which can effectively reduce the repeated traversal of the hwpoison
+huge page. Meanwhile, when free the free huge pages to lower level
+allocators, if hwpoison ones are released first, this can improve
+the effecvive utilization rate of huge page.
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
-
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
-
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
-
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: luofei <luofei@unicloud.com>
 ---
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+ mm/hugetlb.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index cff781d92c81..de78c86a205c 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 28516881a1b2..ca72220eedd9 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1116,7 +1116,10 @@ static void enqueue_huge_page(struct hstate *h, struct page *page)
+ 	lockdep_assert_held(&hugetlb_lock);
+ 	VM_BUG_ON_PAGE(page_count(page), page);
+ 
+-	list_move(&page->lru, &h->hugepage_freelists[nid]);
++	if (unlikely(PageHWPoison(page)))
++		list_move_tail(&page->lru, &h->hugepage_freelists[nid]);
++	else
++		list_move(&page->lru, &h->hugepage_freelists[nid]);
+ 	h->free_huge_pages++;
+ 	h->free_huge_pages_node[nid]++;
+ 	SetHPageFreed(page);
+@@ -1133,7 +1136,7 @@ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
+ 			continue;
+ 
+ 		if (PageHWPoison(page))
+-			continue;
++			break;
+ 
+ 		list_move(&page->lru, &h->hugepage_activelist);
+ 		set_page_refcounted(page);
+@@ -2045,7 +2048,7 @@ static struct page *remove_pool_huge_page(struct hstate *h,
+ 		 */
+ 		if ((!acct_surplus || h->surplus_huge_pages_node[node]) &&
+ 		    !list_empty(&h->hugepage_freelists[node])) {
+-			page = list_entry(h->hugepage_freelists[node].next,
++			page = list_entry(h->hugepage_freelists[node].prev,
+ 					  struct page, lru);
+ 			remove_hugetlb_page(h, page, acct_surplus);
+ 			break;
+@@ -3210,7 +3213,7 @@ static void try_to_free_low(struct hstate *h, unsigned long count,
+ 	for_each_node_mask(i, *nodes_allowed) {
+ 		struct page *page, *next;
+ 		struct list_head *freel = &h->hugepage_freelists[i];
+-		list_for_each_entry_safe(page, next, freel, lru) {
++		list_for_each_entry_safe_reverse(page, next, freel, lru) {
+ 			if (count >= h->nr_huge_pages)
+ 				goto out;
+ 			if (PageHighMem(page))
+@@ -3494,7 +3497,7 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
+ 	for_each_node_mask_to_free(h, nr_nodes, node, nodes_allowed) {
+ 		list_for_each_entry(page, &h->hugepage_freelists[node], lru) {
+ 			if (PageHWPoison(page))
+-				continue;
++				break;
+ 
+ 			return demote_free_huge_page(h, page);
+ 		}
 -- 
-2.31.1
+2.27.0
 

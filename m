@@ -2,227 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033775883BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422BC5883C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiHBVrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S231523AbiHBVsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiHBVrc (ORCPT
+        with ESMTP id S234530AbiHBVs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:47:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E4425C79
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:47:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CA2C61561
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB684C433B5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:47:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659476850;
-        bh=bw7ZR3OubmcRjpwNuSpXxWiUDJEe/z23F1fjfbai/Z8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OvLbgmDndBHNQP0tVJ1hHSrKjt6cZe80PHrVWs2uSh7XQzCne8KBq+oFkcH1vRxFc
-         wrtGnfTBbf2h6c+7Utrt7AvWqZI4SugTZqG/SlJCGL80bOypt7s+rrqwSFTATxMVOi
-         JjNHd9sLBPDLXuEr4l4hPRDyvb8JsofxJ5qSsugTXCRgBR+doo+CTi0MuRGxCVZWR5
-         iboQvmbAuP2Lvd5m1FX613Vo5MW2RJJStHNsoiCORC1x/O42b1IwV/mQcsgLak6ny/
-         dimWU3akttRARF4SyzN35Cc9TRLOhl454gBj1moYKFoFEIuOwqox6N2JMh3AMMXI5x
-         rjvQGZiUH3XFw==
-Received: by mail-yb1-f181.google.com with SMTP id n8so25666896yba.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:47:30 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1vbwHHhC/TzXPc9z2UlPQwe7xZmoJs3DfxjGrXkbV2ARaSNN6S
-        zEmdrPnhCRS5zMeTyM2MXyq9PAVhKaA/7TA6UdG8ng==
-X-Google-Smtp-Source: AA6agR4fnI8EaqJu29BFVOEueN1dznAYAG7hl+whc2++wbcE3Ahd5U9wkn2b/VFuz0XOU8vk11ZqrjSnAeTTXExhUt8=
-X-Received: by 2002:a81:9148:0:b0:328:2c96:eaed with SMTP id
- i69-20020a819148000000b003282c96eaedmr1782937ywg.314.1659476838933; Tue, 02
- Aug 2022 14:47:18 -0700 (PDT)
+        Tue, 2 Aug 2022 17:48:27 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FB02610E;
+        Tue,  2 Aug 2022 14:48:25 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 272LmDij112802;
+        Tue, 2 Aug 2022 16:48:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1659476893;
+        bh=0085f2YE6P7wZvScCEtOgRlXyb7a4tEOVEdnbAXBFS8=;
+        h=From:To:CC:Subject:Date;
+        b=e7cRbefBu/WONF98CcgLnAnXJ1iGxuuyTsTK0ZCoXK6VYsekRMY88cTOkg3Vycgb3
+         tzZoRL8/LNvBxbqKniztMfm9lquNkrJ1+c0gBuKXbNsGVIH7Mf8zLBiPprFRJSwCL/
+         lf7fiubQYgmaA437MsSU0uNkfqVlE53VrvPuafSs=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 272LmC4I014820
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 2 Aug 2022 16:48:12 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 2
+ Aug 2022 16:48:12 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 2 Aug 2022 16:48:11 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 272LmBwx085355;
+        Tue, 2 Aug 2022 16:48:11 -0500
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] dt-bindings: sound: tlv320aic3x: Convert to dtschema
+Date:   Tue, 2 Aug 2022 16:48:11 -0500
+Message-ID: <20220802214811.29033-1-j-luthra@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <20220801180146.1157914-2-fred@cloudflare.com>
-In-Reply-To: <20220801180146.1157914-2-fred@cloudflare.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 2 Aug 2022 23:47:08 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-Message-ID: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
->
-> Preventing user namespace (privileged or otherwise) creation comes in a
-> few of forms in order of granularity:
->
->         1. /proc/sys/user/max_user_namespaces sysctl
->         2. OS specific patch(es)
->         3. CONFIG_USER_NS
->
-> To block a task based on its attributes, the LSM hook cred_prepare is a
-> good candidate for use because it provides more granular control, and
-> it is called before create_user_ns():
->
->         cred = prepare_creds()
->                 security_prepare_creds()
->                         call_int_hook(cred_prepare, ...
->         if (cred)
->                 create_user_ns(cred)
->
-> Since security_prepare_creds() is meant for LSMs to copy and prepare
-> credentials, access control is an unintended use of the hook. Therefore
-> introduce a new function security_create_user_ns() with an accompanying
-> userns_create LSM hook.
->
-> This hook takes the prepared creds for LSM authors to write policy
-> against. On success, the new namespace is applied to credentials,
-> otherwise an error is returned.
->
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
 
-Reviewed-by: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Jai Luthra <j-luthra@ti.com>
+---
+ .../devicetree/bindings/sound/tlv320aic3x.txt |  97 ------------
+ .../bindings/sound/tlv320aic3x.yaml           | 145 ++++++++++++++++++
+ 2 files changed, 145 insertions(+), 97 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
 
-This looks useful, and I would also like folks to consider the
-observability aspects of BPF LSM as
-brought up here:
+diff --git a/Documentation/devicetree/bindings/sound/tlv320aic3x.txt b/Documentation/devicetree/bindings/sound/tlv320aic3x.txt
+deleted file mode 100644
+index 20931a63fd64..000000000000
+--- a/Documentation/devicetree/bindings/sound/tlv320aic3x.txt
++++ /dev/null
+@@ -1,97 +0,0 @@
+-Texas Instruments - tlv320aic3x Codec module
+-
+-The tlv320aic3x serial control bus communicates through both I2C and SPI bus protocols
+-
+-Required properties:
+-
+-- compatible - "string" - One of:
+-    "ti,tlv320aic3x" - Generic TLV320AIC3x device
+-    "ti,tlv320aic33" - TLV320AIC33
+-    "ti,tlv320aic3007" - TLV320AIC3007
+-    "ti,tlv320aic3106" - TLV320AIC3106
+-    "ti,tlv320aic3104" - TLV320AIC3104
+-
+-
+-- reg - <int> -  I2C slave address
+-
+-
+-Optional properties:
+-
+-- reset-gpios - GPIO specification for the active low RESET input.
+-- ai3x-gpio-func - <array of 2 int> - AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
+-				    - Not supported on tlv320aic3104
+-- ai3x-micbias-vg - MicBias Voltage required.
+-	1 - MICBIAS output is powered to 2.0V,
+-	2 - MICBIAS output is powered to 2.5V,
+-	3 - MICBIAS output is connected to AVDD,
+-	If this node is not mentioned or if the value is incorrect, then MicBias
+-	is powered down.
+-- ai3x-ocmv - Output Common-Mode Voltage selection:
+-	0 - 1.35V,
+-	1 - 1.5V,
+-	2 - 1.65V,
+-	3 - 1.8V
+-- AVDD-supply, IOVDD-supply, DRVDD-supply, DVDD-supply : power supplies for the
+-  device as covered in Documentation/devicetree/bindings/regulator/regulator.txt
+-
+-Deprecated properties:
+-
+-- gpio-reset - gpio pin number used for codec reset
+-
+-CODEC output pins:
+-  * LLOUT
+-  * RLOUT
+-  * MONO_LOUT
+-  * HPLOUT
+-  * HPROUT
+-  * HPLCOM
+-  * HPRCOM
+-
+-CODEC input pins for TLV320AIC3104:
+-  * MIC2L
+-  * MIC2R
+-  * LINE1L
+-  * LINE1R
+-
+-CODEC input pins for other compatible codecs:
+-  * MIC3L
+-  * MIC3R
+-  * LINE1L
+-  * LINE2L
+-  * LINE1R
+-  * LINE2R
+-
+-The pins can be used in referring sound node's audio-routing property.
+-
+-I2C example:
+-
+-#include <dt-bindings/gpio/gpio.h>
+-
+-tlv320aic3x: tlv320aic3x@1b {
+-	compatible = "ti,tlv320aic3x";
+-	reg = <0x1b>;
+-
+-	reset-gpios = <&gpio1 17 GPIO_ACTIVE_LOW>;
+-
+-	AVDD-supply = <&regulator>;
+-	IOVDD-supply = <&regulator>;
+-	DRVDD-supply = <&regulator>;
+-	DVDD-supply = <&regulator>;
+-};
+-
+-SPI example:
+-
+-spi0: spi@f0000000 {
+-	tlv320aic3x: codec@0 {
+-		compatible = "ti,tlv320aic3x";
+-		reg = <0>; /* CS number */
+-		#sound-dai-cells = <0>;
+-		spi-max-frequency = <1000000>;
+-
+-		AVDD-supply = <&regulator>;
+-		IOVDD-supply = <&regulator>;
+-		DRVDD-supply = <&regulator>;
+-		DVDD-supply = <&regulator>;
+-		ai3x-ocmv = <0>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
+new file mode 100644
+index 000000000000..6efb1d459543
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
+@@ -0,0 +1,145 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/tlv320aic3x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments TLV320AIC3x Codec Device Tree Bindings
++
++maintainers:
++  - Jai Luthra <j-luthra@ti.com>
++
++properties:
++  compatible:
++    enum:
++      - ti,tlv320aic3x
++      - ti,tlv320aic33
++      - ti,tlv320aic3007
++      - ti,tlv320aic3106
++      - ti,tlv320aic3104
++
++  reg:
++    maxItems: 1
++    description: i2c slave address
++
++  reset-gpios:
++    maxItems: 1
++    description:
++      GPIO specification for the active low RESET input.
++
++  ai3x-gpio-func:
++    description: AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minItems: 3
++    maxItems: 3
++
++  ai3x-micbias-vg:
++    description: MicBias required voltage. If node is omitted then MicBias is powered down.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    oneOf:
++      - const: 1
++        description: MICBIAS output is powered to 2.0V.
++      - const: 2
++        description: MICBIAS output is powered to 2.5V.
++      - const: 3
++        description: MICBIAS output is connected to AVDD.
++
++  ai3x-ocmv:
++    description: Output Common-Mode Voltage selection.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    oneOf:
++      - const: 0
++        description: 1.35V
++      - const: 1
++        description: 1.5V
++      - const: 2
++        description: 1.65V
++      - const: 3
++        description: 1.8V
++
++  AVDD-supply:
++    description: Analog DAC voltage.
++
++  IOVDD-supply:
++    description: I/O voltage.
++
++  DRVDD-supply:
++    description: ADC analog and output driver voltage.
++
++  DVDD-supply:
++    description: Digital core voltage.
++
++  '#sound-dai-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++#The pins can be used in referring sound node's audio-routing property.
++
++#CODEC output pins:
++  # LLOUT
++  # RLOUT
++  # MONO_LOUT
++  # HPLOUT
++  # HPROUT
++  # HPLCOM
++  # HPRCOM
++
++#CODEC input pins for TLV320AIC3104:
++  # MIC2L
++  # MIC2R
++  # LINE1L
++  # LINE1R
++
++#CODEC input pins for other compatible codecs:
++  # MIC3L
++  # MIC3R
++  # LINE1L
++  # LINE2L
++  # LINE1R
++  # LINE2R
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      tlv320aic3x_i2c: tlv320aic3x@1b {
++        compatible = "ti,tlv320aic3x";
++        reg = <0x1b>;
++
++        reset-gpios = <&gpio1 17 GPIO_ACTIVE_LOW>;
++
++        AVDD-supply = <&regulator>;
++        IOVDD-supply = <&regulator>;
++        DRVDD-supply = <&regulator>;
++        DVDD-supply = <&regulator>;
++      };
++    };
++
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      tlv320aic3x_spi: codec@0 {
++        compatible = "ti,tlv320aic3x";
++        reg = <0>; /* CS number */
++        #sound-dai-cells = <0>;
++
++        AVDD-supply = <&regulator>;
++        IOVDD-supply = <&regulator>;
++        DRVDD-supply = <&regulator>;
++        DVDD-supply = <&regulator>;
++        ai3x-ocmv = <0>;
++      };
++    };
++
++...
+-- 
+2.17.1
 
-https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
-
-Frederick, what about adding the observability aspects to the commit
-description as well.
-
-- KP
-
->
-> ---
-> Changes since v3:
-> - No changes
-> Changes since v2:
-> - Rename create_user_ns hook to userns_create
-> Changes since v1:
-> - Changed commit wording
-> - Moved execution to be after id mapping check
-> - Changed signature to only accept a const struct cred *
-> ---
->  include/linux/lsm_hook_defs.h | 1 +
->  include/linux/lsm_hooks.h     | 4 ++++
->  include/linux/security.h      | 6 ++++++
->  kernel/user_namespace.c       | 5 +++++
->  security/security.c           | 5 +++++
->  5 files changed, 21 insertions(+)
->
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index eafa1d2489fd..7ff93cb8ca8d 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
->          unsigned long arg3, unsigned long arg4, unsigned long arg5)
->  LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
->          struct inode *inode)
-> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
->  LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
->  LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
->          u32 *secid)
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 91c8146649f5..54fe534d0e01 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -799,6 +799,10 @@
->   *     security attributes, e.g. for /proc/pid inodes.
->   *     @p contains the task_struct for the task.
->   *     @inode contains the inode structure for the inode.
-> + * @userns_create:
-> + *     Check permission prior to creating a new user namespace.
-> + *     @cred points to prepared creds.
-> + *     Return 0 if successful, otherwise < 0 error code.
->   *
->   * Security hooks for Netlink messaging.
->   *
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 7fc4e9f49f54..a195bf33246a 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
->  int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
->                         unsigned long arg4, unsigned long arg5);
->  void security_task_to_inode(struct task_struct *p, struct inode *inode);
-> +int security_create_user_ns(const struct cred *cred);
->  int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
->  void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
->  int security_msg_msg_alloc(struct msg_msg *msg);
-> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
->  static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
->  { }
->
-> +static inline int security_create_user_ns(const struct cred *cred)
-> +{
-> +       return 0;
-> +}
-> +
->  static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
->                                           short flag)
->  {
-> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-> index 5481ba44a8d6..3f464bbda0e9 100644
-> --- a/kernel/user_namespace.c
-> +++ b/kernel/user_namespace.c
-> @@ -9,6 +9,7 @@
->  #include <linux/highuid.h>
->  #include <linux/cred.h>
->  #include <linux/securebits.h>
-> +#include <linux/security.h>
->  #include <linux/keyctl.h>
->  #include <linux/key-type.h>
->  #include <keys/user-type.h>
-> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
->             !kgid_has_mapping(parent_ns, group))
->                 goto fail_dec;
->
-> +       ret = security_create_user_ns(new);
-> +       if (ret < 0)
-> +               goto fail_dec;
-> +
->         ret = -ENOMEM;
->         ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
->         if (!ns)
-> diff --git a/security/security.c b/security/security.c
-> index 188b8f782220..ec9b4696e86c 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
->         call_void_hook(task_to_inode, p, inode);
->  }
->
-> +int security_create_user_ns(const struct cred *cred)
-> +{
-> +       return call_int_hook(userns_create, 0, cred);
-> +}
-> +
->  int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
->  {
->         return call_int_hook(ipc_permission, 0, ipcp, flag);
-> --
-> 2.30.2
->

@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C005879F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113A0587A05
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236292AbiHBJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S236265AbiHBJnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbiHBJjd (ORCPT
+        with ESMTP id S232724AbiHBJnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:39:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7194130F55;
-        Tue,  2 Aug 2022 02:39:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w3so1223082edc.2;
-        Tue, 02 Aug 2022 02:39:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cFQwqqqznTGEXjJGP0GCqKukfQLdTRB/jDpu9UVZUWs=;
-        b=JRAJRY44ZuzRpshknUC7cIWE8hqPhZLVESaoKq6M+kYFcJ28mAN5ySLU8hUfVs++E7
-         MEdCyR4eKoXAsg3uNwnKRWw97LrAWAfPxc74r5w/1AfUY6enrn31vlujsfyM+OLolT6e
-         0silr0d2hlVQupQz/Jz2biFW4kKEA4BUsIMQskN96mstkLEnrV8bvdvFmBRJzMvBDwWF
-         DlXxsZzPPSIhtsb2qEIwBAPdC54rjUIeVVzZTHX0P+pndNeDqDB3oJLGDvMQvi2RIFKm
-         zLUUViMY+Q0TVoVjmLlScYOWXV+rC8N+AEzuiljhgaLxR0QeT4ldO68CXJCkKery4HJ0
-         uwVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=cFQwqqqznTGEXjJGP0GCqKukfQLdTRB/jDpu9UVZUWs=;
-        b=dwN9v/cQNbFYWgyfb3mvkgrtfY8CShm6tGYgErKzFF/dcqrfXXxz0jImInKmI+r3+T
-         kUpnVc87HPdo0oKfsGtIWz/nXyqn4ZtNxVTvOi0Pnidv5jSTqLPVu/9y9jNvorWBABNQ
-         xDeBqA8yEG0AQES5r2u3Cwpi9uTWEjOuEUmjPnHdE0oaWfv6fA//h55K8fDfbncno4UK
-         wof4QmR6ZWYvFIWMd9pDDjEb5vJYViBT0AUgQKWw2mtZTaQkex3G0iuBimFZ0bh0FFBp
-         ylRFI2IOM5CaDjk8/k98rinqtPxK2/iNOX3UWzi5NsMF+q17oa0f8wvTajeVaWq1UbOr
-         n6sg==
-X-Gm-Message-State: ACgBeo1YAYFhpqSin2zO/W5LOWJdot+3SEv14O9tg5oFtm/7ZhcYpYQw
-        1tbE84jjfSuhwuWe8QMp6qI=
-X-Google-Smtp-Source: AA6agR4p5uaDWMAjWS724wffcK/PfHf6PF/eO8Rv9jiiBPYTbI5uudmhUbMNrPUqbDeI/D05fl89OA==
-X-Received: by 2002:a05:6402:40c9:b0:43d:cc0d:e9de with SMTP id z9-20020a05640240c900b0043dcc0de9demr6087800edb.319.1659433170946;
-        Tue, 02 Aug 2022 02:39:30 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b0071cef8bafc3sm6028201ejg.1.2022.08.02.02.39.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 02:39:30 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 2 Aug 2022 11:39:28 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Babu Moger <babu.moger@amd.com>, fenghua.yu@intel.com,
-        reinette.chatre@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, eranian@google.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] x86/resctrl: Support for AMD QoS new features
- and bug fix
-Message-ID: <Yujw0FOMj3tS0f3k@gmail.com>
-References: <165938717220.724959.10931629283087443782.stgit@bmoger-ubuntu>
- <13d16a59-0b13-8484-380c-21deb864f0f2@gmail.com>
+        Tue, 2 Aug 2022 05:43:20 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D55275F6;
+        Tue,  2 Aug 2022 02:43:16 -0700 (PDT)
+X-UUID: 38b491e449154999b289d24e73ef0475-20220802
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:c6cedf9c-523e-402d-9b21-769a8532de95,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.8,REQID:c6cedf9c-523e-402d-9b21-769a8532de95,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:0f94e32,CLOUDID:70020b25-a982-4824-82d2-9da3b6056c2a,C
+        OID:c8111b11b69c,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 38b491e449154999b289d24e73ef0475-20220802
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1292828691; Tue, 02 Aug 2022 17:43:11 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 2 Aug 2022 17:43:11 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 2 Aug 2022 17:43:10 +0800
+Message-ID: <1688f1aad1f7239e5b0eb3d45a854ca6b0e61e1a.camel@mediatek.com>
+Subject: Re: [PATCH v3] dt-bindings: PCI: mediatek-gen3: Add support for
+ MT8188 and MT8195
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Ryder Lee <ryder.lee@mediatek.com>, <Rex-BC.Chen@mediatek.com>,
+        <TingHan.Shen@mediatek.com>, <Liju-clr.Chen@mediatek.com>,
+        <Jian.Yang@mediatek.com>
+Date:   Tue, 2 Aug 2022 17:43:10 +0800
+In-Reply-To: <cd9518e3-9cb4-5165-af03-00e5300ab927@linaro.org>
+References: <20220801113709.12101-1-jianjun.wang@mediatek.com>
+         <cd9518e3-9cb4-5165-af03-00e5300ab927@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13d16a59-0b13-8484-380c-21deb864f0f2@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-* Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+Thanks for your comment.
 
-> On 8/2/22 03:55, Babu Moger wrote:
-> > v2:
-> >   a. Rebased the patches to latest stable tree (v5.18.15). Resolved some conflicts.
-> >   b. Added the patch to fix CBM issue on AMD. This was originally discussed
-> >      https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.com/
+On Tue, 2022-08-02 at 10:59 +0200, Krzysztof Kozlowski wrote:
+> On 01/08/2022 13:37, Jianjun Wang wrote:
+> > MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as
+> > MT8192.
 > > 
+> > Also add new clock name "peri_mem" since the MT8188 and MT8195 use
+> > clock
+> > "peri_mem" instead of "top_133m".
+> > 
+> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> > ---
+> > Changes in v3:
+> > Use enum property to add the new clock name.
+> > 
+> > Changes in v2:
+> > Merge two patches into one.
+> > ---
+> >  .../bindings/pci/mediatek-pcie-gen3.yaml           | 14
+> > ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-
+> > gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-
+> > gen3.yaml
+> > index 0499b94627ae..a0ca9c7f5dfa 100644
+> > --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> > @@ -48,7 +48,14 @@ allOf:
+> >  
+> >  properties:
+> >    compatible:
+> > -    const: mediatek,mt8192-pcie
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8188-pcie
+> > +              - mediatek,mt8195-pcie
+> > +          - const: mediatek,mt8192-pcie
+> > +      - items:
 > 
-> Shouldn't this series be rebased on tip tree? I think it's odd to base 
-> new feature series on stable tree, since patches on the latter are mostly 
-> bugfixes backported from mainline.
+> You have one item, so this is just const. Or enum if  you expect it
+> to
+> grow soon.
 
-Normally that's true, but AFAICS the patchset applies cleanly to latest 
--tip as well, so 'stable == tip' in this regard.
+It makes sense, I'll remove this "items" and just keep the const item
+in the next version.
 
-Series looks good to me (without having tested it):
+Thanks.
+> 
+> > +          - const: mediatek,mt8192-pcie
+> >  
+> >    reg:
+> >      maxItems: 1
+> > @@ -84,7 +91,9 @@ properties:
+> >        - const: tl_96m
+> >        - const: tl_32k
+> >        - const: peri_26m
+> > -      - const: top_133m
+> > +      - enum:
+> > +          - top_133m        # for MT8192
+> > +          - peri_mem        # for MT8188/MT8195
+> 
+> This requires allOf:if:then restricting it further per variant.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
 
-  Reviewed-by: Ingo Molnar <mingo@kernel.org>
-
-Thanks,
-
-	Ingo

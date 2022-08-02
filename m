@@ -2,189 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8697587A0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C8E587A12
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiHBJtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
+        id S232747AbiHBJtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiHBJtL (ORCPT
+        with ESMTP id S235988AbiHBJtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:49:11 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF5DF67
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 02:49:10 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id s204so15957877oif.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 02:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rd/MnnpubSXpiz2m3mizA1wFblV70cbg5nXLpi9fPUU=;
-        b=LrhdbfLNPTzm+rQRir/KlWFTOP5w7dp2DeTugPU44Q7w9F+j2YfnKpe5cfHrw8ralE
-         bKy5BBnIk/1WWdF3dgQ/lWnyvcFT5+dRorBjdP3noyEpgfJqKe3is9ZiFbMNycb6g6v4
-         0MRYwfSDsPLWug/dc57YhUVLFQrhQPoRYD1AivLL9QUs4VTOvsIGmHWbj9nPBlkXwueu
-         xbaByWeHnH7xrusROFoxFuJRrdZmKdaGTgZXL5zmSyG2yv642dN+zwJTVYzJLHRddndm
-         CxXNmEiUPl7zFls9hvBpssresB7hZSjkLKunn8joVhzt1eroMR4WxIf8rps0sGG1CyLi
-         54sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rd/MnnpubSXpiz2m3mizA1wFblV70cbg5nXLpi9fPUU=;
-        b=yl2NCi0PjNoZlVeYEXpes0ar5iiW9lijWPyrCQbRLzUUIK6L3M1qp+Lnk/ICAGVJnP
-         QicV8e9NiWVxHd7s3DS6LygN2WTb9gl6fe3ititkbJASPQfbLugbF1nK2lwEEaApwiQj
-         IBr286t368nGy37bIXF3fILhplv9j8/hdQEkWAxxV3LwDqh6A8YESjDGn//I2Qh8urCp
-         28UVB2Q8ws7oXlpsyGtr27LeYxGesyYmvNqSe+fHdJbM9pTzQfPLM77owPXVQfgiLIkn
-         X/ndBpkq3WcI5nVsmNeg7JLfmB5dvitc3C9U9kZSyFE+vumig8ZoWKtJvtwnn09KMtox
-         x5Rw==
-X-Gm-Message-State: AJIora8ZCjqk5GhD5w1KMWlyTW42zlOZbQltW1ZHcA4Uv2EdIos8cdSh
-        mgEq6a1EVfT9No9KP2+2YvfZITpULJWUC3IA6GWuiQ==
-X-Google-Smtp-Source: AGRyM1vYxPJcIwe5cHDHLSAcsh31y1ZP8mbEtq/TG7pxpHeW2mhAu3KJQQ6G4OsCSeCIaJ4nIBs3Y1UcxGw0e5uU3tU=
-X-Received: by 2002:a05:6808:1446:b0:33a:c7e0:e88d with SMTP id
- x6-20020a056808144600b0033ac7e0e88dmr7690868oiv.123.1659433749236; Tue, 02
- Aug 2022 02:49:09 -0700 (PDT)
+        Tue, 2 Aug 2022 05:49:21 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E74D177;
+        Tue,  2 Aug 2022 02:49:18 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 11:49:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1659433756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g5pQA3Fay6yZOVdRePFC9/TrGLheTiDU+GTyjdl1GFQ=;
+        b=VbGGAbbhqmnRdydxbDv5IuK1ENDvX2nw54j3wT4xX7gOuK80I99j3QqPoXuQIIQ8puI3CM
+        1xNqVHbsImMN8CtSdWsgPQZ8hCgU7xlsCFflk0Y50JVGF8OdQXDcyWm006uoJAkLyLWXm8
+        64pkpjA4Y2XvrnB1DuAAGYkNDjHcTYo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, seanjc@google.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, joro@8bytes.org, mizhang@google.com,
+        pbonzini@redhat.com
+Subject: Re: [V2 09/11] KVM: selftests: Make ucall work with encrypted guests
+Message-ID: <20220802094915.lkmoz52gztzjjun4@kamzik>
+References: <20220801201109.825284-1-pgonda@google.com>
+ <20220801201109.825284-10-pgonda@google.com>
 MIME-Version: 1.0
-References: <20220801210946.3069083-1-zokeefe@google.com> <YujpzGKImMQsn8SM@dhcp22.suse.cz>
-In-Reply-To: <YujpzGKImMQsn8SM@dhcp22.suse.cz>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Tue, 2 Aug 2022 02:48:33 -0700
-Message-ID: <CAAa6QmS=VbsdvHgvFQCceV+pYHwSSj1pjhX3_voz12T4rJ-EBQ@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable] mm/madvise: remove CAP_SYS_ADMIN requirement
- for process_madvise(MADV_COLLAPSE)
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        SeongJae Park <sj@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Zi Yan <ziy@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Kennelly <ckennelly@google.com>,
-        Chris Zankel <chris@zankel.net>, Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Patrick Xia <patrickx@google.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801201109.825284-10-pgonda@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 2:09 AM Michal Hocko <mhocko@suse.com> wrote:
+On Mon, Aug 01, 2022 at 01:11:07PM -0700, Peter Gonda wrote:
+> Add support for encrypted, SEV, guests in the ucall framework. If
+> encryption is enabled set up a pool of ucall structs in the guests'
+> shared memory region. This was suggested in the thread on "[RFC PATCH
+> 00/10] KVM: selftests: Add support for test-selectable ucall
+> implementations". Using a listed as suggested there doesn't work well
+> because the list is setup using HVAs not GVAs so use a bitmap + array
+> solution instead to get the same pool result.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |   3 +
+>  .../selftests/kvm/include/ucall_common.h      |  14 +--
+>  .../testing/selftests/kvm/lib/ucall_common.c  | 112 +++++++++++++++++-
+>  3 files changed, 115 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 8ce9e5be70a3..ad4abc6be1ab 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -102,6 +102,9 @@ struct kvm_vm {
+>  	int stats_fd;
+>  	struct kvm_stats_header stats_header;
+>  	struct kvm_stats_desc *stats_desc;
+> +
+> +	bool use_ucall_list;
+
+use_ucall_pool
+
+> +	struct list_head ucall_list;
+>  };
+>  
+>  
+> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+> index c1bc8e33ef3f..a96220ac6024 100644
+> --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> @@ -22,6 +22,10 @@ enum {
+>  struct ucall {
+>  	uint64_t cmd;
+>  	uint64_t args[UCALL_MAX_ARGS];
+> +
+> +	/* For encrypted guests. */
+
+Please, no 'encrypted' words in ucall files. ucalls shouldn't care about
+guest types. Indeed, the summary of this patch could even drop the word
+'encrypted'. This patch is adding support for ucall pools, which is
+motivated by the need to support encrypted guests (the motivation should
+go in the commit message, but otherwise the patch should be ucall specific
+and guest type agnostic)
+
+> +	uint64_t idx;
+
+We don't need 'idx' because 'hva' will always be at the
+idx * sizeof(struct ucall) offset of ucall_hdr->ucalls, which means
+we can always calculate it,
+
+ static inline size_t uc_pool_idx(struct ucall *uc)
+ {
+ 	return uc->hva - ucall_hdr->ucalls;
+ }
+
+> +	struct ucall *hva;
+>  };
+>  
+>  void ucall_arch_init(struct kvm_vm *vm, void *arg);
+> @@ -32,15 +36,9 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+>  void ucall(uint64_t cmd, int nargs, ...);
+>  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+>  
+> -static inline void ucall_init(struct kvm_vm *vm, void *arg)
+> -{
+> -	ucall_arch_init(vm, arg);
+> -}
+> +void ucall_init(struct kvm_vm *vm, void *arg);
+>  
+> -static inline void ucall_uninit(struct kvm_vm *vm)
+> -{
+> -	ucall_arch_uninit(vm);
+> -}
+> +void ucall_uninit(struct kvm_vm *vm);
+>  
+>  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
+>  				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> index a060252bab40..feb0173179ec 100644
+> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> @@ -1,22 +1,122 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  #include "kvm_util.h"
+> +#include "linux/types.h"
+> +#include "linux/bitmap.h"
+> +#include "linux/atomic.h"
+> +
+> +struct ucall_header {
+> +	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
+> +	struct ucall ucalls[KVM_MAX_VCPUS];
+> +};
+> +
+> +static bool use_ucall_list;
+
+use_ucall_pool
+
+> +static struct ucall_header *ucall_hdr;
+
+ucall_pool
+
+> +
+> +void ucall_init(struct kvm_vm *vm, void *arg)
+> +{
+> +	struct ucall *uc;
+> +	struct ucall_header *hdr;
+> +	vm_vaddr_t vaddr;
+> +	int i;
+> +
+> +	use_ucall_list = vm->use_ucall_list;
+> +	sync_global_to_guest(vm, use_ucall_list);
+> +	if (!use_ucall_list)
+> +		goto out;
+> +
+> +	TEST_ASSERT(!ucall_hdr,
+> +		    "Only a single encrypted guest at a time for ucalls.");
+
+single VM at a time
+
+And I'd leave that on a single line. checkpatch allows up to 100 chars and
+I'm included to use all 110 chars of it.
+
+> +	vaddr = vm_vaddr_alloc_shared(vm, sizeof(*hdr), vm->page_size);
+> +	hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
+> +	memset(hdr, 0, sizeof(*hdr));
+> +
+> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> +		uc = &hdr->ucalls[i];
+> +		uc->hva = uc;
+> +		uc->idx = i;
+> +	}
+> +
+> +	ucall_hdr = (struct ucall_header *)vaddr;
+> +	sync_global_to_guest(vm, ucall_hdr);
+> +
+> +out:
+> +	ucall_arch_init(vm, arg);
+> +}
+> +
+> +void ucall_uninit(struct kvm_vm *vm)
+> +{
+> +	use_ucall_list = false;
+> +	ucall_hdr = NULL;
+
+It's unlikely we'd ever change the ucall setup on a running VM,
+but we should sync these changes to the guest for good measure.
+
+> +
+> +	ucall_arch_uninit(vm);
+> +}
+> +
+> +static struct ucall *ucall_alloc(void)
+> +{
+> +	struct ucall *uc = NULL;
+> +	int i;
+> +
+> +	if (!use_ucall_list)
+> +		goto out;
+> +
+> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> +		if (atomic_test_and_set_bit(i, ucall_hdr->in_use))
+> +			continue;
+> +
+> +		uc = &ucall_hdr->ucalls[i];
+> +	}
+
+This is not what I suggested in the last revision and it's still wrong.
+Here, you're still looping through all of the pool and returning the last
+one.
+
+What I suggested was
+
+ 	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+ 		if (!atomic_test_and_set_bit(i, ucall_hdr->in_use)) {
+ 			uc = &ucall_hdr->ucalls[i];
+ 			break;
+ 		}
+ 	}
+
+Notice how we leave the loop early when we find a free uc.
+
+We should also zero the contents of the uc buffer before returning.
+
+> +
+> +out:
+> +	return uc;
+> +}
+> +
+> +static void ucall_free(struct ucall *uc)
+> +{
+> +	if (!use_ucall_list)
+> +		return;
+> +
+> +	clear_bit(uc->idx, ucall_hdr->in_use);
+
+This seems to be the one and only use of idx which is another argument for
+dropping the variable and just calculating it instead.
+
+> +}
+> +
+> +static vm_vaddr_t get_ucall_addr(struct ucall *uc)
+> +{
+> +	if (use_ucall_list)
+> +		return (vm_vaddr_t)uc->hva;
+
+A comment explaining that this hva has already been synchronized
+with the guest would be good. Or maybe a different name for the
+pointer than hva, one which conveys that it's a pointer that works
+as both an hva and gva would be better.
+
+
+> +
+> +	return (vm_vaddr_t)uc;
+> +}
+>  
+>  void ucall(uint64_t cmd, int nargs, ...)
+>  {
+> -	struct ucall uc = {
+> -		.cmd = cmd,
+> -	};
+
+This zeros all members except cmd.
+
+> +	struct ucall *uc;
+> +	struct ucall tmp;
+
+And this makes tmp full of stack garbage, so in the non uc-pool case we
+no longer have an equivalent uc. Please initialize tmp the same way uc
+was initialized.
+
+>  	va_list va;
+>  	int i;
+>  
+> +	uc = ucall_alloc();
+> +	if (!uc)
+> +		uc = &tmp;
+> +
+> +	uc->cmd = cmd;
+> +
+>  	nargs = min(nargs, UCALL_MAX_ARGS);
+>  
+>  	va_start(va, nargs);
+>  	for (i = 0; i < nargs; ++i)
+> -		uc.args[i] = va_arg(va, uint64_t);
+> +		uc->args[i] = va_arg(va, uint64_t);
+>  	va_end(va);
+>  
+> -	ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> +	ucall_arch_do_ucall(get_ucall_addr(uc));
+
+We don't need get_ucall_addr(). Just do the if-else right here
+
+   if (use_ucall_list)
+       ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
+   else
+      ucall_arch_do_ucall((vm_vaddr_t)uc);
+
+> +
+> +	ucall_free(uc);
+> +}
+> +
+> +static void *get_ucall_hva(struct kvm_vm *vm, uint64_t uc)
+> +{
+> +	if (vm->use_ucall_list)
+> +		return (void *)uc;
+> +
+> +	return addr_gva2hva(vm, uc);
+>  }
+>  
+>  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> @@ -27,7 +127,7 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+>  	if (!uc)
+>  		uc = &ucall;
+>  
+> -	addr = addr_gva2hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
+> +	addr = get_ucall_hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
+
+Wait, I thought we wanted ucall_arch_get_ucall() to return hvas?
+It would make more sense if it did, since it's called from the
+host.
+
+>  	if (addr) {
+>  		memcpy(uc, addr, sizeof(*uc));
+>  		vcpu_run_complete_io(vcpu);
+> -- 
+> 2.37.1.455.g008518b4e5-goog
 >
-> Hasn't this been discussed during the MADV_COLLAPSE submission? What has
-> changed? Does this need more time to settle with the consensus?
->
-> On Mon 01-08-22 14:09:46, Zach O'Keefe wrote:
-> > process_madvise(MADV_COLLAPSE) currently requires CAP_SYS_ADMIN when not
-> > acting on the caller's own mm.  This is maximally restrictive, and
-> > perpetuates existing issues with CAP_SYS_ADMIN.  Remove this requirement.
-> >
-> > When acting on an external process' memory, the biggest concerns for
-> > process_madvise(MADV_COLLAPSE) are (1) being able to influence process
-> > performance by moving memory, possibly between nodes, that is mapped
-> > into the address space of external process(es), (2) defeat of
-> > address-space-layout randomization, and (3), being able to increase
-> > process RSS and memcg usage, possibly causing memcg OOM.
-> >
-> > process_madvise(2) already enforces CAP_SYS_NICE and PTRACE_MODE_READ (in
-> > PTRACE_MODE_FSCREDS mode).  A process with these credentials can already
-> > accomplish (1) and (2) via move_pages(MPOL_MF_MOVE_ALL), and (3) via
-> > process_madvise(MADV_WILLNEED).
-> >
-> > process_madvise(MADV_COLLAPSE) may also circumvent sysfs THP settings.
-> > When acting on one's own memory (which is equivalent to
-> > madvise(MADV_COLLAPSE)), this is deemed acceptable, since aside from the
-> > possibility of hoarding available hugepages (which is currently already
-> > possible) no harm to the system can be done.  When acting on an external
-> > process' memory, circumventing sysfs THP settings should provide no
-> > additional threat compared to the ones listed.  As such, imposing
-> > additional capabilities (such as CAP_SETUID, as a way to ensure the
-> > caller could have just altered the sysfs THP settings themselves)
-> > provides no extra protection.
-> >
-> > Fixes: 7ec952341312 ("mm/madvise: add MADV_COLLAPSE to process_madvise()")
-> > Signed-off-by: Zach O'Keefe <zokeefe@google.com>
-> > ---
-> >  mm/madvise.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index f9e11b6c9916..af97100a0727 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -1170,16 +1170,14 @@ madvise_behavior_valid(int behavior)
-> >       }
-> >  }
-> >
-> > -static bool
-> > -process_madvise_behavior_valid(int behavior, struct task_struct *task)
-> > +static bool process_madvise_behavior_valid(int behavior)
-> >  {
-> >       switch (behavior) {
-> >       case MADV_COLD:
-> >       case MADV_PAGEOUT:
-> >       case MADV_WILLNEED:
-> > -             return true;
-> >       case MADV_COLLAPSE:
-> > -             return task == current || capable(CAP_SYS_ADMIN);
-> > +             return true;
-> >       default:
-> >               return false;
-> >       }
-> > @@ -1457,7 +1455,7 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
-> >               goto free_iov;
-> >       }
-> >
-> > -     if (!process_madvise_behavior_valid(behavior, task)) {
-> > +     if (!process_madvise_behavior_valid(behavior)) {
-> >               ret = -EINVAL;
-> >               goto release_task;
-> >       }
-> > --
-> > 2.37.1.455.g008518b4e5-goog
->
-> --
-> Michal Hocko
-> SUSE Labs
 
-Hey Michal,
-
-Thanks for taking the time to take a look at this.
-
-"mm/madvise: add MADV_COLLAPSE to process_madvise()" in the v7 series
-ended with me mentioning a couple options, but ultimately I didn't
-present a solution, and no consensus was reached[1]. After taking a
-closer look, this is my proposal for what I believe to be the best
-path forward. It should be squashed into the original patch. What do you think?
-
-Thanks again,
-Zach
-
-[1] https://lore.kernel.org/linux-mm/Ys4aTRqWIbjNs1mI@google.com/
+Thanks,
+drew

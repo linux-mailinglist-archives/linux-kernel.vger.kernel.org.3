@@ -2,120 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14F35881F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB695881FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiHBSlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S229622AbiHBSnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbiHBSl0 (ORCPT
+        with ESMTP id S229470AbiHBSnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:41:26 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D9D13F97;
-        Tue,  2 Aug 2022 11:41:25 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id w16so7458270ilh.0;
-        Tue, 02 Aug 2022 11:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jzeyAGDUN/5A+HWtk+TkUOMLjgyiHaE5JWRfu9ZYqzc=;
-        b=i8kv/sB2pUO8kWbomr6irJGT80XTy+ZIKQIM0es3wsFaScbFJEfht0LwuJSI76ZDBI
-         otcs31AWbY5bIQQMtsSaTm1NMglVigUzPLlvOX+1CJvyJ6cjF8XlcUQyzkbszMPyyACF
-         yqJ3hWWlInEXFtMdEfa0eEcV/s+jrsGbqQuRs2+KwUv3Y4Pwl7VAx+5dnLqRg7xgR041
-         er6oD9vUYQM3h43RX8drjXslySbk6rJXLCktQ8dqY7KKcWRObNO2pPauKarVbRL2sgrx
-         PGI1spIjdERjT7+aAC4SN8dByFxNb8bhSJPFW5pjuVB1+w72lDnB7ISSxfpP+viuxb5P
-         8AXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jzeyAGDUN/5A+HWtk+TkUOMLjgyiHaE5JWRfu9ZYqzc=;
-        b=06HCQGJD1rWbLaZXMIeowdueJgxv92GiiDYowI/Zn+HOZPQqzAMpR4xSc/o6wOFb7R
-         XgtveP9JcygoOpDlXFHjN5zLoMp8Y7UNSIKEPoWLGotq/rnlEseZDskHwcNxXk9znU2F
-         rOpJJnMZNbWTqEXDTORcZoLbdmmgObNZVM/phtamBsvS6981cPOh+hSVp5D9AVOog9Bi
-         nMdCKHRjMH71Bw+YSnOPLVev7K5hIWn1NRZLDSlqHZEV6j3L57n9xOVUtNrNBjRZ1Qhj
-         Xk0UiohJ3vUrg169qSAZmd9RLv6aSB1cCi4EA54C7lNXFhzMzY/wRtkQ4/SL3M97YgNA
-         nTgg==
-X-Gm-Message-State: AJIora99SNyhoUhLbEjRfPcDIUZZFAVVUpMQx9q6jN6YD9DIEk92mWl5
-        mVJPkjBkMVsXMBWl+zSIxW+igkTFjCuIOlQbN+E=
-X-Google-Smtp-Source: AGRyM1tXNM1HsM8dHkl1eQ4yCXGzTuCCrhzZadT08BpYNirft2Y/dlPEMbRSek/G58DWQ7LJ/W7rCQFykuLRGEdHmd4=
-X-Received: by 2002:a05:6e02:152c:b0:2dc:9b02:b590 with SMTP id
- i12-20020a056e02152c00b002dc9b02b590mr8645294ilu.320.1659465685089; Tue, 02
- Aug 2022 11:41:25 -0700 (PDT)
+        Tue, 2 Aug 2022 14:43:47 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1992613F97;
+        Tue,  2 Aug 2022 11:43:42 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4Ly3mF5RKFzDqJt;
+        Tue,  2 Aug 2022 18:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1659465822; bh=UbIIdBEmCjXhtev1nV/F9xDLpTHPjYwNl7kFZr7GgJ0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gOBxP/ijRpYAtMio6iB8PFC/AbctDlA1arteJx4ZbAROp712SZbx20/NXgMS4EY7h
+         Cdzx0NKH0sDK/GJii8ZjaXvzGToeu5PL5obI1WC8NDDDSJHB5OGuQxulCHWCJjBxeV
+         UhqrFes59GPZfpkYkXV1uaqG2IWRU2AAjLqPbWss=
+X-Riseup-User-ID: 106D2563DDDD0F2AF87EAB6C43C3657D9B56FB6F7A490E4DA7ED6059369E1132
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4Ly3m73rX4z5vMX;
+        Tue,  2 Aug 2022 18:43:35 +0000 (UTC)
+Message-ID: <2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net>
+Date:   Tue, 2 Aug 2022 15:43:32 -0300
 MIME-Version: 1.0
-References: <bb1df380b64dd708f480261548fb303046352878.1659296372.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <bb1df380b64dd708f480261548fb303046352878.1659296372.git.christophe.jaillet@wanadoo.fr>
-From:   Ping Cheng <pinglinux@gmail.com>
-Date:   Tue, 2 Aug 2022 11:41:14 -0700
-Message-ID: <CAF8JNhJBwaxUqWXLEejirRRoFo7mM2y99cPTByCpgba0cDjOFg@mail.gmail.com>
-Subject: Re: [PATCH] HID: wacom: Simplify comments
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Ping Cheng <ping.cheng@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/3] Introduce KUNIT_EXPECT_ARREQ and KUNIT_EXPECT_ARRNEQ
+ macros
+Content-Language: en-US
+To:     Daniel Latypov <dlatypov@google.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
+        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+References: <20220802161206.228707-1-mairacanal@riseup.net>
+ <CAGS_qxoAc934AwB7SZ34PpoVxvF3Eua-g+aO77kjJf6d1m0+Qw@mail.gmail.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <CAGS_qxoAc934AwB7SZ34PpoVxvF3Eua-g+aO77kjJf6d1m0+Qw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On 8/2/22 13:59, 'Daniel Latypov' via KUnit Development wrote:
+> On Tue, Aug 2, 2022 at 9:12 AM Maíra Canal <mairacanal@riseup.net> wrote:
+>>
+>> Currently, in order to compare arrays in KUnit, the KUNIT_EXPECT_EQ or
+>> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
+>> such as:
+>>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>>
+>> Although this usage produces correct results for the test cases, if the
+>> expectation fails the error message is not very helpful, indicating only the
+>> return of the memcmp function.
+>>
+>> Therefore, create a new set of macros KUNIT_EXPECT_ARREQ and
+>> KUNIT_EXPECT_ARRNEQ that compare memory blocks until a determined size. In
+>> case of expectation failure, those macros print the hex dump of the memory
+>> blocks, making it easier to debug test failures for arrays.
+> 
+> I totally agree with this.
+> 
+> The only reason I hadn't sent an RFC out for this so far is
+> * we didn't have enough use cases quite yet (now resolved)
+> * I wasn't sure how we'd want to format the failure message.
+> 
+> For the latter, right now this series produces
+> dst ==
+> 00000000: 33 0a 60 12 00 a8 00 00 00 00 8e 6b 33 0a 60 12
+> 00000010: 00 00 00 00 00 a8 8e 6b 33 0a 00 00 00 00
+> result->expected ==
+> 00000000: 31 0a 60 12 00 a8 00 00 00 00 81 6b 33 0a 60 12
+> 00000010: 00 00 00 00 01 a8 8e 6b 33 0a 00 00 00 00
+> 
+> I was thinking something like what KASAN produces would be nice, e.g.
+> from https://www.kernel.org/doc/html/v5.19/dev-tools/kasan.html#error-reports
+> (I'll paste the bit here, but my email client doesn't support
+> monospaced fonts, so it won't look nice on my end)
+> 
+> Memory state around the buggy address:
+>  ffff8801f44ec200: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
+>  ffff8801f44ec280: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>> ffff8801f44ec300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03
+>                                                                 ^
+> I just wasn't quite sure how to do it for a diff, since this only
+> really works well when showing one bad byte.
+> If we blindly followed that approach, we get
+> 
+> dst ==
+>> 00000000: 33 0a 60 12 00 a8 00 00 00 00 8e 6b 33 0a 60 12
+>                                           ^
+>> 00000010: 00 00 00 00 00 a8 8e 6b 33 0a 00 00 00 00
+>                         ^
+> result->expected ==
+>> 00000000: 31 0a 60 12 00 a8 00 00 00 00 81 6b 33 0a 60 12
+>                                           ^
+>> 00000010: 00 00 00 00 01 a8 8e 6b 33 0a 00 00 00 00
+>                         ^
+> 
+> But perhaps we could instead highlight the bad bytes with something like
+> dst ==
+> 00000000: 33 0a 60 12 00 a8 00 00 00 00 <8e> 6b 33 0a 60 12
+> 00000010: 00 00 00 00 <00> a8 8e 6b 33 0a 00 00 00 00
+> result->expected ==
+> 00000000: 31 0a 60 12 00 a8 00 00 00 00 <81> 6b 33 0a 60 12
+> 00000010: 00 00 00 00 <01> a8 8e 6b 33 0a 00 00 00 00
 
-Thank you for cleaning up the driver code.
+My problem with this approach is that the bytes get slightly misaligned
+when adding the <>. Maybe if we aligned as:
 
-On Sun, Jul 31, 2022 at 12:51 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Remove a left-over from commit 2874c5fd2842 ("treewide: Replace GPLv2
-> boilerplate/reference with SPDX - rule 152").
-> An empty comment block can be removed.
+dst:
+00000000: <33> 0a 60 12  00  a8 00 00 00 00 <8e> 6b 33 0a 60 12
+00000010:  00  00 00 00 <00> a8 8e 6b 33 0a  00  00 00 00
+result->expected:
+00000000: <31> 0a 60 12  00  a8 00 00 00 00 <81> 6b 33 0a 60 12
+00000010:  00  00 00 00 <01> a8 8e 6b 33 0a  00  00 00 00
 
-While you are here, can you update your patch to include the removal
-of the empty comment blocks and paths in the other three files:
-wacom.h, wacom_wac.h, and wacom_wac.c?
+Although I don't know exactly how we can produce this output. I was
+using hex_dump_to_buffer to produce the hexdump, so maybe I need to
+change the strategy to generate the hexdump.
 
-Thanks,
-Ping
+I guess the KASAN approach could be easier to implement. But I guess it
+can turn out to be a little polluted if many bytes differ. For example:
 
-> While at it remove, also remove what is supposed to be the path/filename of
-> the file.
-> This is really low value... and wrong since commit 471d17148c8b
-> ("Input: wacom - move the USB (now hid) Wacom driver in drivers/hid")
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/hid/wacom_sys.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-> index 194a2e327591..21612fdae9c3 100644
-> --- a/drivers/hid/wacom_sys.c
-> +++ b/drivers/hid/wacom_sys.c
-> @@ -1,13 +1,8 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
-> - * drivers/input/tablet/wacom_sys.c
-> - *
->   *  USB Wacom tablet support - system specific code
->   */
->
-> -/*
-> - */
-> -
->  #include "wacom_wac.h"
->  #include "wacom.h"
->  #include <linux/input/mt.h>
-> --
-> 2.34.1
->
+dst:
+00000000: 33 31 31 31 31 31 31 31 31 31 8e 31 33 0a 60 12
+           ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+00000010: 00 00 00 00 00 a8 8e 6b 33 0a 00 00 00 00
+                       ^
+result->expected:
+00000000: 31 0a 60 12 00 a8 00 00 00 00 81 6b 33 0a 60 12
+           ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^  ^
+00000010: 00 00 00 00 01 a8 8e 6b 33 0a 00 00 00 00
+                       ^
+
+I don't know exactly with option I lean.
+
+
+Thank you for your inputs, Daniel!
+
+- Maíra Canal
+
+> 
+> Thoughts, suggestions?
+> 

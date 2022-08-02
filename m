@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDD9587B42
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17450587B46
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbiHBLDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S236751AbiHBLDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbiHBLDL (ORCPT
+        with ESMTP id S236728AbiHBLDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:03:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43B45006B;
-        Tue,  2 Aug 2022 04:03:10 -0700 (PDT)
-Date:   Tue, 02 Aug 2022 11:03:06 -0000
+        Tue, 2 Aug 2022 07:03:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E044F656;
+        Tue,  2 Aug 2022 04:03:18 -0700 (PDT)
+Date:   Tue, 02 Aug 2022 11:03:15 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659438188;
+        s=2020; t=1659438196;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=quj/DIYnqZXApkrdHkfR5Acc22JBv5Wfc2X2gChjjg4=;
-        b=bIa86NKUD9QHxI3b3vHNYYHQd2DL+0lfw2tluWCPaoGn9K9BqXflJT4TAofF69VQI491SC
-        XciKyYResPAHBT2dNqrk7GI6qJbXixhpRgETjCq8cjBsLq0J3Y0dztQl5zNG16uBnP8TAq
-        nh+ULaW7AbrYFgb/nETgt9vtqoFUuy0O9CUnhohuey+KqoYZSAGTk6tSgB6avhQ5QhDjVh
-        Sk5etpmNhsH5wLiM55Nzvq5tHiBB5C9UMFORyKsXAfpSMnDIS4Nlj9dnMi874ukOsyGZsK
-        lKZlMsPaQej8KRnAW44dJzw4eSxsZPvl2dQMDBZb3qph9OCqNYX0lbeYo8BI4Q==
+        bh=vXNVaiJ88X6B9vRwZaMF5TykDK+rWRqoy9ICuls3qBo=;
+        b=aULBAbB1vXGpHrNY36ZwgNYXJAqTJBVqQjxAsiFuvu716JerHD6DgOlm4cNfUF+3SRHuVs
+        SDcWZYKyV3kxPdIK9xrAT9ds0JfrOA6SP02KXBBxGc0SuIdm9L9ObDJJ8SwmU/26M6vnKJ
+        NbgvhJpQfh5IZRnCZxcOJaO4NfP6BVyHNZpvLZXJMis/ybgHUN0LRT20TXRQP4k/WjYPbi
+        EV3IxudluJtebHD4bgEbVgmPzlAqv+LfO810FkICiWKdTMkT1q1Ir0+Vd0HS/NKl7k019H
+        lqVrsPxPQgIn+207DN6UQvoOt1PMBSAjcAes4kDeCOKQ1Iiis5dwu2i8Tt3eUA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659438188;
+        s=2020e; t=1659438196;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=quj/DIYnqZXApkrdHkfR5Acc22JBv5Wfc2X2gChjjg4=;
-        b=8WfWDHfBERUUKIpq/jyzLcKxWTlUfoewKUQzaYxheBI0ZOs5ErkU+fvEAKln8OTlshzU1j
-        Pfq0ujLg8z6uG7Dw==
-From:   "tip-bot2 for Masami Hiramatsu (Google)" <tip-bot2@linutronix.de>
+        bh=vXNVaiJ88X6B9vRwZaMF5TykDK+rWRqoy9ICuls3qBo=;
+        b=msNAzvOUUHYeAdsyj+uVojfRIg+tYP3uaeXB4arIHLRLT9tlOCFa9s4RyAwSzi3CpWqfk/
+        RLCI/ZkvrPOQ44Bg==
+From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] x86/kprobes: Update kcb status flag after singlestepping
-Cc:     deso@posteo.net, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220727210136.jjgc3lpqeq42yr3m@muellerd-fedora-PC2BDTX9>
-References: <20220727210136.jjgc3lpqeq42yr3m@muellerd-fedora-PC2BDTX9>
+Subject: [tip: sched/core] sched/deadline: Use sched_dl_entity's dl_density in
+ dl_task_fits_capacity()
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220729111305.1275158-4-dietmar.eggemann@arm.com>
+References: <20220729111305.1275158-4-dietmar.eggemann@arm.com>
 MIME-Version: 1.0
-Message-ID: <165943818693.15455.252081735537091891.tip-bot2@tip-bot2>
+Message-ID: <165943819521.15455.1190018314589445418.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,70 +65,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     dec8784c9088b131a1523f582c2194cfc8107dc0
-Gitweb:        https://git.kernel.org/tip/dec8784c9088b131a1523f582c2194cfc81=
-07dc0
-Author:        Masami Hiramatsu (Google) <mhiramat@kernel.org>
-AuthorDate:    Tue, 02 Aug 2022 15:04:16 +09:00
+Commit-ID:     b3f53daacc74c0ca0922e14a8cb793cb2db4c6d1
+Gitweb:        https://git.kernel.org/tip/b3f53daacc74c0ca0922e14a8cb793cb2db4c6d1
+Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
+AuthorDate:    Fri, 29 Jul 2022 13:13:05 +02:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 02 Aug 2022 12:35:04 +02:00
+CommitterDate: Tue, 02 Aug 2022 12:32:46 +02:00
 
-x86/kprobes: Update kcb status flag after singlestepping
+sched/deadline: Use sched_dl_entity's dl_density in dl_task_fits_capacity()
 
-Fix kprobes to update kcb (kprobes control block) status flag to
-KPROBE_HIT_SSDONE even if the kp->post_handler is not set.
+Save a multiplication in dl_task_fits_capacity() by using already
+maintained per-sched_dl_entity (i.e. per-task) `dl_runtime/dl_deadline`
+(dl_density).
 
-This bug may cause a kernel panic if another INT3 user runs right
-after kprobes because kprobe_int3_handler() misunderstands the
-INT3 is kprobe's single stepping INT3.
+  cap_scale(dl_deadline, cap) >= dl_runtime
 
-Fixes: 6256e668b7af ("x86/kprobes: Use int3 instead of debug trap for single-=
-step")
-Reported-by: Daniel M=C3=BCller <deso@posteo.net>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+  dl_deadline * cap >> SCHED_CAPACITY_SHIFT >= dl_runtime
+
+  cap >= dl_runtime << SCHED_CAPACITY_SHIFT / dl_deadline
+
+  cap >= (dl_runtime << BW_SHIFT / dl_deadline) >>
+				BW_SHIFT - SCHED_CAPACITY_SHIFT
+
+  cap >= dl_density >> BW_SHIFT - SCHED_CAPACITY_SHIFT
+
+__sched_setscheduler()->__checkparam_dl() ensures that the 2 corner
+cases (if conditions) `runtime == RUNTIME_INF (-1)` and `period == 0`
+of to_ratio(deadline, runtime) are not met when setting dl_density in
+__sched_setscheduler()-> __setscheduler_params()->__setparam_dl().
+
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: Daniel M=C3=BCller <deso@posteo.net>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/all/20220727210136.jjgc3lpqeq42yr3m@muellerd-fe=
-dora-PC2BDTX9
-Link: https://lore.kernel.org/r/165942025658.342061.12452378391879093249.stgi=
-t@devnote2
+Link: https://lore.kernel.org/r/20220729111305.1275158-4-dietmar.eggemann@arm.com
 ---
- arch/x86/kernel/kprobes/core.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ kernel/sched/sched.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 7c4ab88..74167dc 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -814,16 +814,20 @@ set_current_kprobe(struct kprobe *p, struct pt_regs *re=
-gs,
- static void kprobe_post_process(struct kprobe *cur, struct pt_regs *regs,
- 			       struct kprobe_ctlblk *kcb)
- {
--	if ((kcb->kprobe_status !=3D KPROBE_REENTER) && cur->post_handler) {
--		kcb->kprobe_status =3D KPROBE_HIT_SSDONE;
--		cur->post_handler(cur, regs, 0);
--	}
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 86fc360..3ccd35c 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -320,21 +320,6 @@ struct dl_bw {
+ 	u64			total_bw;
+ };
+ 
+-/*
+- * Verify the fitness of task @p to run on @cpu taking into account the
+- * CPU original capacity and the runtime/deadline ratio of the task.
+- *
+- * The function will return true if the CPU original capacity of the
+- * @cpu scaled by SCHED_CAPACITY_SCALE >= runtime/deadline ratio of the
+- * task and false otherwise.
+- */
+-static inline bool dl_task_fits_capacity(struct task_struct *p, int cpu)
+-{
+-	unsigned long cap = arch_scale_cpu_capacity(cpu);
 -
- 	/* Restore back the original saved kprobes variables and continue. */
--	if (kcb->kprobe_status =3D=3D KPROBE_REENTER)
-+	if (kcb->kprobe_status =3D=3D KPROBE_REENTER) {
-+		/* This will restore both kcb and current_kprobe */
- 		restore_previous_kprobe(kcb);
--	else
-+	} else {
-+		/*
-+		 * Always update the kcb status because
-+		 * reset_curent_kprobe() doesn't update kcb.
-+		 */
-+		kcb->kprobe_status =3D KPROBE_HIT_SSDONE;
-+		if (cur->post_handler)
-+			cur->post_handler(cur, regs, 0);
- 		reset_current_kprobe();
-+	}
- }
- NOKPROBE_SYMBOL(kprobe_post_process);
-=20
+-	return cap_scale(p->dl.dl_deadline, cap) >= p->dl.dl_runtime;
+-}
+-
+ extern void init_dl_bw(struct dl_bw *dl_b);
+ extern int  sched_dl_global_validate(void);
+ extern void sched_dl_do_global(void);
+@@ -2899,6 +2884,21 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 				 enum cpu_util_type type,
+ 				 struct task_struct *p);
+ 
++/*
++ * Verify the fitness of task @p to run on @cpu taking into account the
++ * CPU original capacity and the runtime/deadline ratio of the task.
++ *
++ * The function will return true if the original capacity of @cpu is
++ * greater than or equal to task's deadline density right shifted by
++ * (BW_SHIFT - SCHED_CAPACITY_SHIFT) and false otherwise.
++ */
++static inline bool dl_task_fits_capacity(struct task_struct *p, int cpu)
++{
++	unsigned long cap = arch_scale_cpu_capacity(cpu);
++
++	return cap >= p->dl.dl_density >> (BW_SHIFT - SCHED_CAPACITY_SHIFT);
++}
++
+ static inline unsigned long cpu_bw_dl(struct rq *rq)
+ {
+ 	return (rq->dl.running_bw * SCHED_CAPACITY_SCALE) >> BW_SHIFT;

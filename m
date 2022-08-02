@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA18F587DFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB07587DFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237222AbiHBONQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S234863AbiHBONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237252AbiHBONG (ORCPT
+        with ESMTP id S237157AbiHBONd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:13:06 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB0E28720;
-        Tue,  2 Aug 2022 07:13:05 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c17so3641106lfb.3;
-        Tue, 02 Aug 2022 07:13:05 -0700 (PDT)
+        Tue, 2 Aug 2022 10:13:33 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2781B7A1;
+        Tue,  2 Aug 2022 07:13:32 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id e15so12097515lfs.0;
+        Tue, 02 Aug 2022 07:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=xYQllLGwQDfot9WaYK/IQR36FqQ2jGUDVaRhMK36BzI=;
-        b=k+E6+lqWxja7FEj1o9hHkU4jGoxS875065nmyE3nsg6QvKJaCrs8+Rb0EVOd0r7Fw3
-         uy7KANXio+czDbvb8hZ6hWO27qxwESmhOBJmnxqhgT4Dd7WSqHt5Ny9E1CyaZRzBMr2T
-         xBR0Hmxidnga1ctyjE7FYKd2i8qrMfxmeplMb23XZu4MWSOV5X42U3mKDTXrgzwR9Fsp
-         GvhWiwEm1oDe0+4I57O4s2NZkL5D8JDU+uFQ6Ca+PKJDV/GrzrNVeYrZSJpg9RDHh13b
-         zlzPY+f/FtNTSmhEtSM8w7CdGO7+3GGnpDvY/9ahNnt1NDlpGEF55efOAwNLvJCtHqwT
-         cHFw==
+        bh=gq5EF+uHu6U2Mh2NO3P+IK3XirUR3qoeh2OQtRdPzSE=;
+        b=Posz/xft7fE+5ODbToH8feXAc2vPzH4JAfErx4gip96rWFBD2vQgD0diCZS9MxC9dK
+         nEX+UEpbPhrPn6rtebFwSre/DaMptZwarVun5mXyGT3XjkqTCwqpU54zRf7395f9seAl
+         3qpxr0aemw4SAJnptCqzI+CUJmO2cmLs+YiH2YnO4YVh/v6oH4iTcmc1lSRKiiN0hU+/
+         Djfy6yWMqcqPkEBQY2SylkuDOKsXE3jdfmDoXkW/0cL2SFNMnaX3hf7s2tcaFZq2Z8+P
+         kjJNnmfRF9Cx8a98re5swBSrOBs38DIRGOzwLCUJZ9Qd9C9twGPNLvsItGRTT+LWCCVm
+         xZ3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=xYQllLGwQDfot9WaYK/IQR36FqQ2jGUDVaRhMK36BzI=;
-        b=lDYlpSMMy+6bcd1WTyA060r9EWqpAOR0RNzvSeN2G+opf8uh7GPKoC3+TaoK1CmqPU
-         6AZLQyXg3Tpa2AMRtGpSkAVVZK3V1SNn3f8dB8Nzryeff/l1JiogVz4UkavogZeeoiyP
-         dj4NiSKgPP7nOCasxDjE77zsje/Dzb2M2cVD01kgK0m/WJ0cRsJrFE8jOuPjB7QgSdoW
-         b3+ZLisKx3xb7OMHRutjydbrwXLMVDuZCZq3ARDm4154X/nQdztx1EAYWhZdRT6OCnjJ
-         ldCVmLngZGsqe9GkLpC6IW9F1JTRUaLnkOr5Y9GH62HY7+c1Eiel69fn8u0S1Ae4FY62
-         38lg==
-X-Gm-Message-State: ACgBeo2ncxndv5xMrgPgLKeJmWr89J6FxwtM1nGB7sq6BxdPU8Gyctih
-        PmjLJCMr7Mhhc69L6AOvNG0aXEJ6c/uvraAYwA==
-X-Google-Smtp-Source: AA6agR4xvmSr+T+c/s7ABoUE+edquaAUHnTDl5bREQFKmzOrbx0IDYwBN3+IHpO/DHmdSGp87EzDmxIyiaYOS2vVqAU=
-X-Received: by 2002:ac2:483b:0:b0:48a:e7f2:c7ff with SMTP id
- 27-20020ac2483b000000b0048ae7f2c7ffmr6746275lft.591.1659449582464; Tue, 02
- Aug 2022 07:13:02 -0700 (PDT)
+        bh=gq5EF+uHu6U2Mh2NO3P+IK3XirUR3qoeh2OQtRdPzSE=;
+        b=vSGMqTrN5httHXARyOAzdTZUIV+Z4zX5BXacQc7wKMdnPtxWfZ4hdSAK9wSr/0KPg3
+         x1Fe/L/lDJdZV7cdQtVqbxpbiizYAxP57ltgupEXO+3w61IWY1kz6/SmHqgd2ZiBB0ve
+         6PLgYxOXWPPmF4UAXEvWcEgPHs/b1zf+vXFmcIq1SMoJMsGqK5G4cnnyc8253P/NYJAU
+         XgmznD9FGlVmaBrd0b9GSjew0nmpPbG8Nse6ehd3UCzGyByg6JP6Qzc9jDPTinrPb1bX
+         0D9r5rsyrlVpc4eQJzl42iuebpY6OXwW6AKunXN4QGN2KxCjstb4vftYE/9DLibGHsKK
+         FrhQ==
+X-Gm-Message-State: ACgBeo0FDMN5ipha7rfUU6OrEiXkBpf9usEwuOneam5fdPGH1/xraDwl
+        QJIUapwW3J2PgQOUg/E8WPK/cmt8e5eYmzEFrkzEGR//oPiF
+X-Google-Smtp-Source: AA6agR6hwnxP5Z9bhzfcvqMV3gDZ5SCPC++b1OWUATEkGKBdN/dQZMHEWChjLXMb45tdDo/vVsY319c6vtdeCXd+2pg=
+X-Received: by 2002:a05:6512:3096:b0:48b:4f7:9019 with SMTP id
+ z22-20020a056512309600b0048b04f79019mr2133407lfd.208.1659449610460; Tue, 02
+ Aug 2022 07:13:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
- <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2> <20220802080831epcms2p2c2b9f94e2f450a6a772a193d9720b650@epcms2p2>
-In-Reply-To: <20220802080831epcms2p2c2b9f94e2f450a6a772a193d9720b650@epcms2p2>
+References: <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p6>
+ <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2> <20220802081039epcms2p68dbe18151e04103d10bf28751f9ace4e@epcms2p6>
+In-Reply-To: <20220802081039epcms2p68dbe18151e04103d10bf28751f9ace4e@epcms2p6>
 From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 2 Aug 2022 22:12:49 +0800
-Message-ID: <CAGaU9a_qK43ruFKHKybZmZwOz-QR44ci5qZWiuejH4oeMN2VLQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] scsi: ufs: wb: Add ufshcd_is_wb_buf_flush_allowed()
+Date:   Tue, 2 Aug 2022 22:13:18 +0800
+Message-ID: <CAGaU9a9jwjd8NW8M7Cju440nqpHDfuY0m7FWM8dx++m8R=ZYgA@mail.gmail.com>
+Subject: Re: [PATCH v6 6/6] scsi: ufs: wb: Move the comment to the right position
 To:     j-young.choi@samsung.com
 Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
         "avri.altman@wdc.com" <avri.altman@wdc.com>,
@@ -74,5 +74,13 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
+
+On Tue, Aug 2, 2022 at 4:27 PM Jinyoung CHOI <j-young.choi@samsung.com> wrote:
+>
+> The location of the comment is wrong. so fix it.
+>
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 
 Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>

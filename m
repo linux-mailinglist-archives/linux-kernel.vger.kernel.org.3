@@ -2,125 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325E25881BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DBE5881AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiHBSLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S234244AbiHBSI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237846AbiHBSLJ (ORCPT
+        with ESMTP id S230188AbiHBSIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:11:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD0517E1C;
-        Tue,  2 Aug 2022 11:11:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A8F3F381C5;
-        Tue,  2 Aug 2022 18:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659463864;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pz4nohXMnV6DoQDiLTQldnM+q/whU1JUDeaFPyIhZ1g=;
-        b=qbwOAxE67O43QdxlU3BgVNMFcqw+bIAks9zkzBZrdIt+p9QtP3Fv7xMPLaENAdVp7Aedx9
-        XzoRSqRbgRcLUXbFDFMud/GksDdqcgMn+9twIIJ4cRQFVh+siuSiTKL0Shqw/NSsGMSWNj
-        Sj0WJF2iodrQNqR8K7qbSku3yKszI1E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659463864;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pz4nohXMnV6DoQDiLTQldnM+q/whU1JUDeaFPyIhZ1g=;
-        b=B3fB4DC8HPOsEVk5KmGSn/lYbNT4tRMJqrUYo2XAEFOxE+jYElYC0WLOUq4qB59SfGVsCj
-        5wjm/c5z7w+cjuBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C8841345B;
-        Tue,  2 Aug 2022 18:11:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LWGzGbho6WJzTgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 02 Aug 2022 18:11:04 +0000
-Date:   Tue, 2 Aug 2022 20:06:02 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     alexlzhu@fb.com
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: fix alginment of VMA for memory mapped files on
- THP
-Message-ID: <20220802180602.GX13489@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, alexlzhu@fb.com, kernel-team@fb.com,
-        linux-mm@kvack.org, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220801184740.2134364-1-alexlzhu@fb.com>
+        Tue, 2 Aug 2022 14:08:22 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4941260C;
+        Tue,  2 Aug 2022 11:08:21 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-10ea30a098bso13213127fac.8;
+        Tue, 02 Aug 2022 11:08:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=enCiIDwJr66RukPVLw8qRHRdobd4dCtAaNNZuJ7m8ZU=;
+        b=oO91pIjv7SpHP73+NaxiH1cRoLU4oIXjchXZ7BQitug+KmcAae4p7o4c9k14YevGt6
+         NSDAj8W4wr6YXANCw9BKYDjbNa2brhlvm/VG6OKkRCb0rEVi05MOExFJ2RY2/euzXSp9
+         I8hyCBsTymXESbVbAzRgzM6ohN6OUygKWMolp26CcqkSfdGo7CPj0QOubzz5HV4aNyoD
+         u+4thr10nm3hykMsA6M7FGjo3PbcDDsGK01BYLDTtHsRyhncay4ti2hDdXsO+goPRZg9
+         LC7rOfnjsDckCFfedI/qEBBxWrci2DQ71hwJsrUaU64lbASfpnMyrLTGUeCd1tvxW51Z
+         9SCA==
+X-Gm-Message-State: ACgBeo3pz/k63ydnn4Kp1klhR0//kwlI81uNe25zzQeyJo3EGUx6Bha2
+        Gq/mpifNIoXEXCvzNJX6n8GGZVgmX6OW34Ng/hs=
+X-Google-Smtp-Source: AA6agR6IVTBQN1m2k+NH1e7KNrcm6vESCMT9T8oZe9foCAegooR21K5G6hCt0rsg3WHhyZkyTY+YbqYtoirQN/tZXb8=
+X-Received: by 2002:a05:6870:5b84:b0:10c:d1fa:2f52 with SMTP id
+ em4-20020a0568705b8400b0010cd1fa2f52mr323327oab.92.1659463700366; Tue, 02 Aug
+ 2022 11:08:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801184740.2134364-1-alexlzhu@fb.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220802073511.299459-1-namhyung@kernel.org> <20220802073511.299459-3-namhyung@kernel.org>
+ <YulipRqJZ7oYVWD/@kernel.org>
+In-Reply-To: <YulipRqJZ7oYVWD/@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 2 Aug 2022 11:08:09 -0700
+Message-ID: <CAM9d7chu8UFNGBk-1rEBY9+_Q+8dj_4CQ4VJ1BZzs+Dq3T=Shg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] perf lock: Print lost entries at the end
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 11:47:40AM -0700, alexlzhu@fb.com wrote:
-> From: alexlzhu <alexlzhu@fb.com>
-> 
-> With CONFIG_READ_ONLY_THP_FOR_FS, the Linux kernel supports using THPs for
-> read-only mmapped files, such as shared libraries. However, the
-> kernel makes no attempt to actually align those mappings on 2MB boundaries,
-> which makes it impossible to use those THPs most of the time. This issue
-> applies to general file mapping THP as well as existing setups using
-> CONFIG_READ_ONLY_THP_FOR_FS. This is easily fixed by using
-> thp_get_unmapped_area for the unmapped_area function in btrfs, which is
-> what ext2, ext4, fuse, and xfs all use.
+On Tue, Aug 2, 2022 at 10:45 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Tue, Aug 02, 2022 at 12:35:11AM -0700, Namhyung Kim escreveu:
+> > Like the normal perf lock report output, it'd print bad stats at the end
+> > if exists or -v option is passed.  Currently it uses BROKEN_CONTENDED
+>  stat for the lost count (due to full stack maps).
+>
+> "Print the number of lost entries in verbose mode"?
 
-Commit dbe6ec815641 ("ext2/4, xfs: call thp_get_unmapped_area() for pmd
-mappings") adds the callback for DAX, that btrfs does not support so it
-was left out.
+Do you want me to change the commit description?
 
-> The problem can be seen in
-> /proc/PID/smaps where THPeligible is set to 0 on mappings to eligible
-> shared object files as shown below.
-> 
-> Before this patch:
-> 
-> 7fc6a7e18000-7fc6a80cc000 r-xp 00000000 00:1e 199856
-> /usr/lib64/libcrypto.so.1.1.1k
-> Size:               2768 kB
-> THPeligible:    0
-> VmFlags: rd ex mr mw me
-> 
-> With this patch the library is mapped at a 2MB aligned address:
-> 
-> fbdfe200000-7fbdfe4b4000 r-xp 00000000 00:1e 199856
-> /usr/lib64/libcrypto.so.1.1.1k
-> Size:               2768 kB
-> THPeligible:    1
-> VmFlags: rd ex mr mw me
-> 
-> This fixes the alignment of VMAs for any mmap of a file that has the
-> rd and ex permissions and size >= 2MB. The VMA alignment and
-> THPeligible field for anonymous memory is handled separately and
-> is thus not effected by this change.
-> 
-> Signed-off-by: alexlzhu <alexlzhu@fb.com>
+Note that it can print the numbers not in verbose mode.
+It used to print unconditionally but I changed it to do
+that only if there's a bad number.  The -v option can
+help to keep the original behavior of printing it always.
 
-Please use full name for signed-off.
+Thanks,
+Namhyung
 
-Also the subject should start with "btrfs:", this is not a memory
-management patch. Thanks.
+
+>
+> >   $ sudo perf lock con -a -b -m 128 sleep 5
+> >   ...
+> >   === output for debug===
+> >
+> >   bad: 43, total: 14903
+> >   bad rate: 0.29 %
+> >   histogram of events caused bad sequence
+> >       acquire: 0
+> >      acquired: 0
+> >     contended: 43
+> >       release: 0
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  tools/perf/builtin-lock.c                      | 8 +++++++-
+> >  tools/perf/util/bpf_lock_contention.c          | 6 ++++--
+> >  tools/perf/util/bpf_skel/lock_contention.bpf.c | 9 +++++++--
+> >  tools/perf/util/lock-contention.h              | 1 +
+> >  4 files changed, 19 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> > index e32fdcd497e0..8065f0268e55 100644
+> > --- a/tools/perf/builtin-lock.c
+> > +++ b/tools/perf/builtin-lock.c
+> > @@ -1471,8 +1471,11 @@ static void print_contention_result(void)
+> >               pr_info("  %10s   %s\n\n", "type", "caller");
+> >
+> >       bad = total = 0;
+> > +     if (use_bpf)
+> > +             bad = bad_hist[BROKEN_CONTENDED];
+> > +
+> >       while ((st = pop_from_result())) {
+> > -             total++;
+> > +             total += use_bpf ? st->nr_contended : 1;
+> >               if (st->broken)
+> >                       bad++;
+> >
+> > @@ -1686,6 +1689,9 @@ static int __cmd_contention(int argc, const char **argv)
+> >
+> >               lock_contention_stop();
+> >               lock_contention_read(&con);
+> > +
+> > +             /* abuse bad hist stats for lost entries */
+> > +             bad_hist[BROKEN_CONTENDED] = con.lost;
+> >       } else {
+> >               err = perf_session__process_events(session);
+> >               if (err)
+> > diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+> > index 26128e5bb659..65f51cc25236 100644
+> > --- a/tools/perf/util/bpf_lock_contention.c
+> > +++ b/tools/perf/util/bpf_lock_contention.c
+> > @@ -16,7 +16,7 @@ static struct lock_contention_bpf *skel;
+> >
+> >  /* should be same as bpf_skel/lock_contention.bpf.c */
+> >  struct lock_contention_key {
+> > -     u32 stack_id;
+> > +     s32 stack_id;
+> >  };
+> >
+> >  struct lock_contention_data {
+> > @@ -110,7 +110,7 @@ int lock_contention_stop(void)
+> >  int lock_contention_read(struct lock_contention *con)
+> >  {
+> >       int fd, stack;
+> > -     u32 prev_key, key;
+> > +     s32 prev_key, key;
+> >       struct lock_contention_data data;
+> >       struct lock_stat *st;
+> >       struct machine *machine = con->machine;
+> > @@ -119,6 +119,8 @@ int lock_contention_read(struct lock_contention *con)
+> >       fd = bpf_map__fd(skel->maps.lock_stat);
+> >       stack = bpf_map__fd(skel->maps.stacks);
+> >
+> > +     con->lost = skel->bss->lost;
+> > +
+> >       prev_key = 0;
+> >       while (!bpf_map_get_next_key(fd, &prev_key, &key)) {
+> >               struct map *kmap;
+> > diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > index 67d46533e518..9e8b94eb6320 100644
+> > --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > @@ -12,7 +12,7 @@
+> >  #define MAX_ENTRIES  10240
+> >
+> >  struct contention_key {
+> > -     __u32 stack_id;
+> > +     __s32 stack_id;
+> >  };
+> >
+> >  struct contention_data {
+> > @@ -27,7 +27,7 @@ struct tstamp_data {
+> >       __u64 timestamp;
+> >       __u64 lock;
+> >       __u32 flags;
+> > -     __u32 stack_id;
+> > +     __s32 stack_id;
+> >  };
+> >
+> >  /* callstack storage  */
+> > @@ -73,6 +73,9 @@ int enabled;
+> >  int has_cpu;
+> >  int has_task;
+> >
+> > +/* error stat */
+> > +unsigned long lost;
+> > +
+> >  static inline int can_record(void)
+> >  {
+> >       if (has_cpu) {
+> > @@ -116,6 +119,8 @@ int contention_begin(u64 *ctx)
+> >       pelem->flags = (__u32)ctx[1];
+> >       pelem->stack_id = bpf_get_stackid(ctx, &stacks, BPF_F_FAST_STACK_CMP);
+> >
+> > +     if (pelem->stack_id < 0)
+> > +             lost++;
+> >       return 0;
+> >  }
+> >
+> > diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+> > index b09fd6eb978a..d9fc5f076567 100644
+> > --- a/tools/perf/util/lock-contention.h
+> > +++ b/tools/perf/util/lock-contention.h
+> > @@ -113,6 +113,7 @@ struct lock_contention {
+> >       struct machine *machine;
+> >       struct hlist_head *result;
+> >       unsigned long map_len;
+> > +     unsigned long lost;
+> >  };
+> >
+> >  #ifdef HAVE_BPF_SKEL
+> > --
+> > 2.37.1.455.g008518b4e5-goog
+>
+> --
+>
+> - Arnaldo

@@ -2,119 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C595878AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884E25878AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbiHBIFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S236405AbiHBIFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiHBIFZ (ORCPT
+        with ESMTP id S236360AbiHBIFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:05:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A595F5B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:05:22 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id x39so11255735lfu.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=56zrn37C4l7p2DAkni03ePVpqDUmjAfKCMc+oB4Stlk=;
-        b=zU6yAKCdfwACj1LN8M8wvnZF8gHg+PW6MbaJtxOXfjPZTwJFcbsX5rh/4PcyIWFme1
-         7U3JuH6zupd8cH8x4qCM0FHKfjfSOT6oqCxTeBe5iYp/cla6mcBJ6lT6OVcXC5NFs4PH
-         nwLe/i8HdU1F3EaiUhFefSu+O0CnNTDpzr9XET2CF+sSPkT3cfq5eqeTUiyD73P3gTPW
-         td+OZMByUgxO/Xn5SDPI2aJR6TKFVzFjrnRRARwQWY3bzO0BzIq0XTKJifXR2B9sQBt0
-         HH5llronv3dhWHsrTL7p/qsgSkDXD95M2lxNP+KXHPOy6YZsi6aXySPVvltlGIXeUj9w
-         J3lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=56zrn37C4l7p2DAkni03ePVpqDUmjAfKCMc+oB4Stlk=;
-        b=h7BPC9zKfJyT+V/CDTvA9WmFw+bx0bbFiyGuPCebNkqTGdBve5IshNY6wLVIC655Jg
-         f7c0PugF4AS+yoss3W5V4vnkH5w7X2Kqaon0e/5xMAUQSEb565YGp2Fi/P8wOGKZs7tJ
-         G4dsHpzLEhF+f13F+fWuPMP8t/dTWP64qlN0bCMLArwnjYpKHuez//CGLInNjMmM8zVj
-         mlpEXTVR2/Ouay3qmTfnsskoIs26kyHFbMetKEe/a4/B/XqSCJOnM/A+AJPU79+o6QOI
-         yEidU8Y6CQfvO2/VEHjdBT2Q9VmmW4uA6ZWKhv0ksX5dfTDpzd4irH5Chs1HRYbbB6O4
-         vurQ==
-X-Gm-Message-State: AJIora8PQSnlE5OOGSGb2MuiqNdjxTiuRDoatUFG6Z5VPc4BuGR9Ws2V
-        l1fiMhRhGweSt8Am+alt7W6OYw==
-X-Google-Smtp-Source: AA6agR62HyYSvC+LgEWXptx8UvHMaf3t1Teq0GYaR98724D7kJpvXdUM92sSva+zoy1yTiI605wHtw==
-X-Received: by 2002:ac2:4e0d:0:b0:48a:bc83:7fb8 with SMTP id e13-20020ac24e0d000000b0048abc837fb8mr6560745lfr.623.1659427520594;
-        Tue, 02 Aug 2022 01:05:20 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id c14-20020a2e9d8e000000b0025e5b5474a4sm190805ljj.85.2022.08.02.01.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:05:20 -0700 (PDT)
-Message-ID: <9ef21f8e-163e-fc31-636d-c0d6d004f27f@linaro.org>
-Date:   Tue, 2 Aug 2022 10:05:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/4] arm64: dts: meson: Add DDR PMU node
-Content-Language: en-US
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>
-References: <20220801060049.1655177-1-jiucheng.xu@amlogic.com>
- <20220801060049.1655177-3-jiucheng.xu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220801060049.1655177-3-jiucheng.xu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 2 Aug 2022 04:05:37 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD3D19285
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:05:32 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220802080531epoutp01c3d40b23eb35ea2959ceb0068f614d28~HeIw3Egqs2456524565epoutp01h
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:05:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220802080531epoutp01c3d40b23eb35ea2959ceb0068f614d28~HeIw3Egqs2456524565epoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659427531;
+        bh=SVmoLXbtKUB1vIM53WZ3qocmh/3HbPud77tuqhLKnLY=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=M/ZjmKuey0Nagm7wYbYbzBUiZGu5xn1x7C+JI040TqhFpAdxB/g2Ya6X3yOmgUFam
+         gOOU45GMpOhFpn7wr5V/ERVuV9zM6mvU0zyyPLYdm6aV3ZQ5LEHYlB7xJ7X9uNyCy2
+         sViMSZugmTP34RQ73dxVV+4iAwlVQBtxOio5Theo=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220802080530epcas2p1a9b3fd9447d870098239e5c7f2e4364c~HeIwgqFGD0375803758epcas2p1R;
+        Tue,  2 Aug 2022 08:05:30 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Lxnbt2RQhz4x9Q9; Tue,  2 Aug
+        2022 08:05:30 +0000 (GMT)
+X-AuditID: b6c32a47-5e1ff700000025aa-6c-62e8daca4b19
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        92.33.09642.ACAD8E26; Tue,  2 Aug 2022 17:05:30 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v6 2/6] scsi: ufs: wb: Change functions name and modify
+ parameter name
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220802080530epcms2p8a9bb540dc6f21957148088b7a9b8b6f4@epcms2p8>
+Date:   Tue, 02 Aug 2022 17:05:30 +0900
+X-CMS-MailID: 20220802080530epcms2p8a9bb540dc6f21957148088b7a9b8b6f4
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmhe6pWy+SDM71ClqcfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/JYunWm4wO3B6Xr3h7
+        LN7zksljwqIDjB4tJ/ezeHxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAGZVtk5GamJJapJCa
+        l5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0rJJCWWJOKVAoILG4WEnf
+        zqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO2Py8WesBa9kKi6f
+        y29gnC/RxcjBISFgInFvcUYXIyeHkMAORokzJ11AwrwCghJ/dwiDhIUFIiTWr+9mgihRkji3
+        ZhYjSImwgIHErV5zkDCbgJ7EzyUz2LoYuThEBNpYJI51bmUGSUgI8ErMaH/KAmFLS2xfvpUR
+        xOYU8JOYeOMDVI2GxI9lvVC2qMTN1W/ZYez3x+YzQtgiEq33zkLVCEo8+LkbKi4pcejQVzaI
+        T/IlNhwIhAjXSLxdfgCqRF/iWsdGsBN4BXwlfvw8B/YKi4CqxJWnO1ghWl0klrXWgISZBeQl
+        tr+dwwwSZhbQlFi/Sx+iQlniyC0WmJ8aNv5mR2czC/BJdBz+CxffMe8JE0SrmsSiJiOIsIzE
+        18Pz2ScwKs1CBPIsJGtnIaxdwMi8ilEstaA4Nz212KjAGB6pyfm5mxjB6VXLfQfjjLcf9A4x
+        MnEwHmKU4GBWEuG94/I8SYg3JbGyKrUoP76oNCe1+BCjKdC/E5mlRJPzgQk+ryTe0MTSwMTM
+        zNDcyNTAXEmc1ytlQ6KQQHpiSWp2ampBahFMHxMHp1QDE1/OstYpmb5PdOX9rkSl5Mrqfexe
+        uTpsldLk1+VZHJnhl6U+LT25KCinOOXdz0pmvuoD5+RvnmuyMGi7YHhoyyvlo/9/Wpxjyg//
+        /dCw7W56PeOC/ZophUreXv2ODzwPVS9jOvi7Na2XJ3ux8OvbX79GiLIezTCTnjSHf2JY1mkV
+        zxbLaOOLHOe+Fix6Yb7LuTpT0Orj9M9/lt+zixa91PtHzdHm46KHF/VD1iuc1no7++tXxYfH
+        dqkuOfzi/fbHTB5fhG8WpLlvK6nW/Fnp6DRv0o76JQeXvzh6zvxOZkxGmqHStoUuk2N+Piov
+        TQhknPFRWrzlMr+SyjIXD/UpOvaNa5q9dH6XVSXdvPDjhRJLcUaioRZzUXEiADD6BPY4BAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce
+References: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
+        <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p8>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/08/2022 08:00, Jiucheng Xu wrote:
-> Add DDR PMU device node for G12 series SoC
-> 
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> ---
-> Changes v2 -> v3:
->   - No change
-> 
-> Changes v1 -> v2:
->   - Remove model, dmc_nr, chann_nr properties
->   - Add g12a-ddr-pmu, g12b-ddr-pmu, sm1-ddr-pmu compatibles as
->     identifier
-> ---
->  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 7 +++++++
->  arch/arm64/boot/dts/amlogic/meson-g12a.dtsi       | 4 ++++
->  arch/arm64/boot/dts/amlogic/meson-g12b.dtsi       | 4 ++++
->  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi        | 4 ++++
->  4 files changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> index 45947c1031c4..7e556fe575be 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> @@ -2146,6 +2146,13 @@ hdmi_tx_out: endpoint {
->  			};
->  		};
->  
-> +		ddr_pmu: ddr_pmu@ff638000 {
-> +			compatible = "amlogic,g12-ddr-pmu";
+The parameter name of ufshcd_wb_toggle_flush_during_h8() has been changed
+in the same as other toggle functions.
 
-No. Test your DTS against bindings first.
+Function names were ambiguous. So changed to suit the meaning.
 
-Best regards,
-Krzysztof
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/ufs/core/ufshcd.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index b7e7c0c4eb75..df00441f89a1 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -265,8 +265,9 @@ static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
+ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+ 					 struct ufs_vreg *vreg);
+ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
++						 bool enable);
++static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
+ static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
+ static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
+ 
+@@ -286,16 +287,16 @@ static inline void ufshcd_disable_irq(struct ufs_hba *hba)
+ 	}
+ }
+ 
+-static inline void ufshcd_wb_config(struct ufs_hba *hba)
++static void ufshcd_configure_wb(struct ufs_hba *hba)
+ {
+ 	if (!ufshcd_is_wb_allowed(hba))
+ 		return;
+ 
+ 	ufshcd_wb_toggle(hba, true);
+ 
+-	ufshcd_wb_toggle_flush_during_h8(hba, true);
++	ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
+ 	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+-		ufshcd_wb_toggle_flush(hba, true);
++		ufshcd_wb_toggle_buf_flush(hba, true);
+ }
+ 
+ static void ufshcd_scsi_unblock_requests(struct ufs_hba *hba)
+@@ -5748,22 +5749,23 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ 	return ret;
+ }
+ 
+-static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set)
++static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
++						 bool enable)
+ {
+ 	int ret;
+ 
+-	ret = __ufshcd_wb_toggle(hba, set,
++	ret = __ufshcd_wb_toggle(hba, enable,
+ 			QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
+ 	if (ret) {
+ 		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
+-			__func__, set ? "enable" : "disable", ret);
++			__func__, enable ? "enable" : "disable", ret);
+ 		return;
+ 	}
+ 	dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
+-			__func__, set ? "enabled" : "disabled");
++			__func__, enable ? "enabled" : "disabled");
+ }
+ 
+-static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable)
++static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
+ {
+ 	int ret;
+ 
+@@ -5813,9 +5815,9 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+ static void ufshcd_wb_force_disable(struct ufs_hba *hba)
+ {
+ 	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
+-		ufshcd_wb_toggle_flush(hba, false);
++		ufshcd_wb_toggle_buf_flush(hba, false);
+ 
+-	ufshcd_wb_toggle_flush_during_h8(hba, false);
++	ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
+ 	ufshcd_wb_toggle(hba, false);
+ 	hba->caps &= ~UFSHCD_CAP_WB_EN;
+ 
+@@ -8212,7 +8214,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
+ 	 */
+ 	ufshcd_set_active_icc_lvl(hba);
+ 
+-	ufshcd_wb_config(hba);
++	/* Enable UFS Write Booster if supported */
++	ufshcd_configure_wb(hba);
++
+ 	if (hba->ee_usr_mask)
+ 		ufshcd_write_ee_control(hba);
+ 	/* Enable Auto-Hibernate if configured */
+-- 
+2.25.1

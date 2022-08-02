@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7603588070
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3961588076
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237555AbiHBQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S234335AbiHBQsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiHBQn6 (ORCPT
+        with ESMTP id S237699AbiHBQsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:43:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63F4163BD
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659458636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L8pobBAm4i46mJY839PgrpcD3mazYkh5vnTY9bSvya4=;
-        b=fL9+VuRJwCUdPdmYpErh9KEK7wEY6qDrx80CGveNNViijLuAF0IJmM6Z+axpKoEs5uPUFL
-        Tnw0AlIYDUqUwPyqv4R++eW4Y2BkSZ5FCfpLJ7y8d1CsaQnkV01ngpud9gblF7pLnySEJH
-        TNrhtvVBswTFGOLROoDyz974I6lLffI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-596-63J8WGLhOHm2G5M72aNNcg-1; Tue, 02 Aug 2022 12:43:55 -0400
-X-MC-Unique: 63J8WGLhOHm2G5M72aNNcg-1
-Received: by mail-wm1-f70.google.com with SMTP id c66-20020a1c3545000000b003a37b7e0764so9522679wma.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:43:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L8pobBAm4i46mJY839PgrpcD3mazYkh5vnTY9bSvya4=;
-        b=W7r2Bk+9oaHa4CKCxWvbGABR2lJCnDa0S0ZtXdeH9Q8uwBVdNq6O9gcmRrKdYn/YGY
-         FRb2SHCM/ky5ZLp5+p4hdCQYPpJrHGilOt7UB2oUpwouQNmzwlLvhJBXJlvLfKACiZjp
-         y+RQN1Sm36++Dv9R5SiA9X4BO3yWcSHfB4Z9EiUFXVNv6Rx6G4khgefnJJy6CsPAkfoo
-         j2ygSQmbmnJ6PPLtNwkZCdLHm/bIDecK2JPdqiIf3NetkucQ9cT+kG/q9mcVAzETLl2y
-         s0RFhvD2EEHixotR1nDpn+6m+DVjthFskK5xVOO91Q1K/kObmGZW9H69bNgaMtzLyGv3
-         KMCg==
-X-Gm-Message-State: ACgBeo3cF7OgRrYrblHICsUoNdD9M+fh2UE9pccgWjnFyIbMiov2iZJF
-        94OrMWr7iwN4iGFdC3bZ+wrzG2YZgVf4PvY+Ezn3XH+liVBycLEI0X7Xe/ncEWW4qx9xqtbMqJa
-        s7zFzvCgbSUjKGvu5/A8E7ekU
-X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr224957wmq.58.1659458633900;
-        Tue, 02 Aug 2022 09:43:53 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7ZAgXxc2CxG+KctR6fJdn0CsvShCyo8SoYUO7Uats0gOEPvqZKh1yx0XVMPje9AYIrimug6g==
-X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr224944wmq.58.1659458633666;
-        Tue, 02 Aug 2022 09:43:53 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id g16-20020a5d5410000000b00220633d96f2sm8460995wrv.72.2022.08.02.09.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 09:43:53 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 18:43:50 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nicolas.dichtel@6wind.com,
-        eyal.birger@gmail.com, linux-kernel@vger.kernel.org,
-        jesse@nicira.com, pshelar@nicira.com, tgraf@suug.ch
-Subject: Re: [PATCH v3 net] geneve: fix TOS inheriting for ipv4
-Message-ID: <20220802164350.GA11906@pc-4.home>
-References: <20220802122025.1364123-1-matthias.may@westermo.com>
+        Tue, 2 Aug 2022 12:48:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087EDFD0B;
+        Tue,  2 Aug 2022 09:48:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C19E0B819F1;
+        Tue,  2 Aug 2022 16:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3713CC433D7;
+        Tue,  2 Aug 2022 16:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659458918;
+        bh=M2FZ/DCeu0OKMAWrwlbjHZ6f1ykBiTc/SoCb3EvrMj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XWwWP2Soi9m2xCDGG/nEfNtRFSKO7aSCqw68ILMYREZYiyY2lIZD8FhevgfmIZPzN
+         4FffiHYCfdTJ6loS68B/2NPZE+Ed4bXVk8pkfx2HY18LO/LWVa2xlYRjOwEju3MNID
+         1sdGY3MCtd/3QCgMowPE+quMuk73gyUXFTm5p0Ow=
+Date:   Tue, 2 Aug 2022 18:48:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-input@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: elan_i2c - convert to use dev_groups
+Message-ID: <YulVY/QRFe/ey3tZ@kroah.com>
+References: <20220729135816.2306989-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802122025.1364123-1-matthias.may@westermo.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220729135816.2306989-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 02:20:25PM +0200, Matthias May wrote:
-> The current code retrieves the TOS field after the lookup
-> on the ipv4 routing table. The routing process currently
-> only allows routing based on the original 3 TOS bits, and
-> not on the full 6 DSCP bits.
-> As a result the retrieved TOS is cut to the 3 bits.
-> However for inheriting purposes the full 6 bits should be used.
+On Fri, Jul 29, 2022 at 03:58:16PM +0200, Greg Kroah-Hartman wrote:
+> The driver core supports the ability to handle the creation and removal
+> of device-specific sysfs files in a race-free manner.  Take advantage of
+> that by converting this driver to use this by moving the sysfs
+> attributes into a group and assigning the dev_groups pointer to it.
 > 
-> Extract the full 6 bits before the route lookup and use
-> that instead of the cut off 3 TOS bits.
-> 
-> This patch is the functional equivalent for IPv4 to the patch
-> "geneve: do not use RT_TOS for IPv6 flowlabel"
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "jingle.wu" <jingle.wu@emc.com.tw>
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/input/mouse/elan_i2c_core.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 
-This last sentence assumes this patch and your IPv6 series are going to
-be merged roughly at the same time and with the same title. There's
-no such guarantee though. So I think we can just drop the reference to
-the IPv6 patch. But wait a day or two before sending a new version:
-others might have different opinion, maintainers might want to apply
-the patch as is or adjust the message manually, someone may have other
-points to comment on...
-
-Anyway, the rest of the commit message and the code look good to me.
-Thanks for fixing this!
-
-Acked-by: Guillaume Nault <gnault@redhat.com>
-
+v2 is now here:
+	https://lore.kernel.org/r/20220802162854.3015369-1-gregkh@linuxfoundation.org

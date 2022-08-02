@@ -2,147 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58731587930
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CF4587933
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiHBIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S236064AbiHBIlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiHBIlo (ORCPT
+        with ESMTP id S231859AbiHBIls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:41:44 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DC815FF2
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:41:41 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220802084139epoutp043fee1aa2a59664be90eb8fee82606fe7~HeoUKd76_3186931869epoutp04N
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:41:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220802084139epoutp043fee1aa2a59664be90eb8fee82606fe7~HeoUKd76_3186931869epoutp04N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659429699;
-        bh=U2+1C8PyVM3+hskOZoTZthnT4tSJpiYEGUCuift9Ad8=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=C15jSF7Gc41WrPiviSYPX/D1Kjkhh9ggB9Je/XVVVJ/kFdco/mcstAxByDoCTXDU0
-         UwWDxLriwBmUsqA1hUSckDetw7QqeHsX5OjGtqTAKLIUQCbY+eKQ+0NIlWAJM63TNS
-         53Rek4BgZK9DknmrQt+KY46thnLbybBAEDZ6YOYk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220802084139epcas1p474dbcd625e171018e9aeb919ab261110~HeoTyX_4O0481804818epcas1p4r;
-        Tue,  2 Aug 2022 08:41:39 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.242]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4LxpPZ5fGWz4x9Q5; Tue,  2 Aug
-        2022 08:41:38 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D1.13.09633.243E8E26; Tue,  2 Aug 2022 17:41:38 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220802084138epcas1p22d18382ac9a3ae0990c53e0273645755~HeoTLGGOb1164911649epcas1p2F;
-        Tue,  2 Aug 2022 08:41:38 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220802084138epsmtrp265f2cbe72f1307887fde4c4aff2ee696~HeoTKWPnn2317523175epsmtrp2V;
-        Tue,  2 Aug 2022 08:41:38 +0000 (GMT)
-X-AuditID: b6c32a36-075ff700000025a1-6c-62e8e3425619
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4A.B7.08802.243E8E26; Tue,  2 Aug 2022 17:41:38 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.253.101.104]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220802084138epsmtip1b99909611d302fe81cbc5b8d7f3a5b29~HeoS9bvb62656426564epsmtip1q;
-        Tue,  2 Aug 2022 08:41:38 +0000 (GMT)
-From:   JeongHyeon Lee <jhs2.lee@samsung.com>
-To:     minchan@kernel.org
-Cc:     ngupta@vflare.org, senozhatsky@chromium.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        JeongHyeon Lee <jhs2.lee@samsung.com>
-Subject: [PATCH] zram: fix typos in comments
-Date:   Tue,  2 Aug 2022 17:41:34 +0900
-Message-Id: <20220802084134.27202-1-jhs2.lee@samsung.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 2 Aug 2022 04:41:48 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210A31ADB1
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:41:47 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id a9so8143257lfm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zzB0a7bJOMuRv01PGiHsY1rvic1GuiUFISUsomCCCOo=;
+        b=FGiOqoB701ZWcSGMUaQswKviPECFcCRkpb1CO5b7T7slyTtpMvgZLLV6NZv4POrW3A
+         8KxoyNm4hvlQ39tHXnv1WTlPGfm4VwNAbmheiMYG5htaEo9wiHviHhhbehHK9+BM69dZ
+         NyZ3qlzJbke68yc7fuGUCf8nJYbMAcXy/exARn+DYXlbv/5Ldrl5wN1FhsetYXS/rNlo
+         MsVvjSNyIdpmYIMdW+LURg68QqTKLFfEEha5nzX/+71DcMi352uN2HPEY2i/zJj5Vrob
+         Sc7aki4z/6Cvxbx2OQ4zEY8V4gYluEfFcHvtaYS+MRvfu6PGwN79mL3GtQHxzWt/Rqec
+         xT0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zzB0a7bJOMuRv01PGiHsY1rvic1GuiUFISUsomCCCOo=;
+        b=DFG/3Ke3scp9c3t388T3c2SYMbKVoC++KBk8+Jb76rQgxMwPTDeeaYpa2vJkKiZXCa
+         GsadbB4HuVWv6D1+XZf89jn0q2UiZ2lkLcXGXgI2N1zy3X9/lkZVypyzn4ZTFkYi/Oza
+         0Fpw6+t/XEE6xS5abwHkYzUlsszFp/cG+xHTZO4GiMAmf6L5tJJwgEVOO9kQFP2I3ySx
+         fV9XAohX73LF0B74otDZah5M/k5YkDIf5uTBtMyvpG1AXerk7QRNF7307BBZSovrn3Yh
+         oVl2ZaQukH7xp/Xpg0Rv6kGsZ4Hq/4f1j0VXNesuk1Q9GDhzMh6yCuwevG9Duee/E0lb
+         e8MQ==
+X-Gm-Message-State: AJIora8bchHzuOxf8kHhqB+Xp0fbWdp+i0jIfs9RebsWLEZOKcZJw0UF
+        yzCzAzL4gGQo2/2h17C1DH4j/w==
+X-Google-Smtp-Source: AGRyM1vJSAY2q/uqhkA1XSIumtj2KvUDJDe8nq4mEflYQj1coZO+qe9bEl83kK9K5j3RD9tqV2NHeg==
+X-Received: by 2002:a19:6d0d:0:b0:48a:8b3c:e28 with SMTP id i13-20020a196d0d000000b0048a8b3c0e28mr6420470lfc.265.1659429705435;
+        Tue, 02 Aug 2022 01:41:45 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id e12-20020a19674c000000b00489e2156285sm2021463lfj.104.2022.08.02.01.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 01:41:44 -0700 (PDT)
+Message-ID: <cc60401b-ecb8-4907-af3e-bb437ae1421b@linaro.org>
+Date:   Tue, 2 Aug 2022 10:41:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/4] dt-bindings: net: dsa: mediatek,mt7530: make trivial
+ changes
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220730142627.29028-1-arinc.unal@arinc9.com>
+ <20220730142627.29028-2-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220730142627.29028-2-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgk+LIzCtJLcpLzFFi42LZdljTQNfp8Yskg8uduhar7/azWVy6f4fV
-        Yu8tbYvLu+awWSz7+p7dYkPLLHaL3RsXsTmwe8xuuMjicflsqcemVZ1sHn1bVjF67Py0mdXj
-        8ya5ALaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wc
-        oEuUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQVmBXrFibnFpXnpenmpJVaGBgZG
-        pkCFCdkZd/svshYs5ay4Mu0CYwPjbfYuRk4OCQETiY8tR9i6GLk4hAR2MErcWD+ZCcL5xCjR
-        0TaNGaRKSOAzkLONE6aja9ETVoiiXYwS/6/NYIFwvjBKnNq0gAmkik1AW+J2yyawHSICYhKP
-        v/wAs5kFljFK/JgaD2ILC+hInFp6ASzOIqAqsfDzAjCbV8BS4umnU4wQ2+Ql9h88ywwRF5Q4
-        OfMJC8QceYnmrbOZQRZLCFxil9i8YQEzRIOLxK7J16FsYYlXx7dAPSol8fndXjYIO1vi+oZD
-        LBB2icT3dY1A9RxAtr3E+0sWICazgKbE+l36EBWKEjt/z2WEWMsn8e5rDytENS8wgIQgSpQk
-        Vvy7BjVQQmLD4W6oRR4SDybNABsuJBAr0diVMIFRfhaSX2Yh+WUWwt4FjMyrGMVSC4pz01OL
-        DQuM4FGanJ+7iRGcFLXMdjBOevtB7xAjEwfjIUYJDmYlEd47Ls+ThHhTEiurUovy44tKc1KL
-        DzGaAkN3IrOUaHI+MC3nlcQbmlgamJgZmVgYWxqbKYnzrpp2OlFIID2xJDU7NbUgtQimj4mD
-        U6qBqZU53ySPl+XOgwVl80r2Tnjw4//OOcaNEi/frJ7kKzf384HIOgvefcluczq99yu+/nZq
-        KX9/t+PGzKwZSxddOL/+ffbf1zZx75q2nipUUDBn3soiYRsRbrKkbObXOb+W6OduWjvvwNO4
-        3XJFZnP/Je9gENdb9cY7QPi8z9uvezUyupTc3GR6pbjm/Jxw/dCiPX27np39rFH0+51SYHrq
-        2u9ZYvtVJLsdnl64la5cV3/6aun1LTvWM3EK2O+YwH9dbMJjbjsLO+GZ+17OjKlSK34VEmC4
-        RZOT/afko0us/mw5hYy5P2+ZN57+6m1X+yVzT2bdl0Nplxy5rDnuhfLKmP9QSXgaLGfgfz58
-        u5rrFSWW4oxEQy3mouJEAFIanMMTBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrILMWRmVeSWpSXmKPExsWy7bCSnK7T4xdJBh1nxCxW3+1ns7h0/w6r
-        xd5b2haXd81hs1j29T27xYaWWewWuzcuYnNg95jdcJHF4/LZUo9NqzrZPPq2rGL02PlpM6vH
-        501yAWxRXDYpqTmZZalF+nYJXBl3+y+yFizlrLgy7QJjA+Nt9i5GTg4JAROJrkVPWEFsIYEd
-        jBL/9ohAxCUkNmxaC1TDAWQLSxw+XNzFyAVU8olRYsEKiF42AW2J2y2bwGwRATGJx19+sIMU
-        MQusYZSYMvcwG0hCWEBH4tTSC2BFLAKqEgs/LwCzeQUsJZ5+OsUIsUxeYv/Bs8wQcUGJkzOf
-        sIDYzEDx5q2zmScw8s1CkpqFJLWAkWkVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZw
-        qGpp7WDcs+qD3iFGJg7GQ4wSHMxKIrx3XJ4nCfGmJFZWpRblxxeV5qQWH2KU5mBREue90HUy
-        XkggPbEkNTs1tSC1CCbLxMEp1cCkd0ukOD0p5mqS/eplb8qYtpQsOqm5imfHZL1NgSkHD0qd
-        nVdi6vIgw+4q/wmfOndVj0Vs+1LSTH4J6yZ5Kf3K+Jv2b/3DsjCuTUcEt7w10r79ctXc5gsT
-        O70vqwcIhTtUfXQRE/gkpldT66l5+wX7+RVRp+YLytSmiG83K3RwKrrJKLx77RLTuDCxE8rx
-        3nqudT7ufxcJfrii8XhWOLOJ9LvCH1fEMw53PD/88KjJMZW3SSyyTkc2Rb/Q0Xn3cwHjjvVF
-        Jxdd2r3nVl4vQ0HIFqVNU/9wZ1aU5ciEO897fyn0bZGav4PGaZ4L2R1uHK8Of69tTFCzVVNT
-        /nLQ63B7x93WYFHNXw09dYe/WSqxFGckGmoxFxUnAgDzk7AnxAIAAA==
-X-CMS-MailID: 20220802084138epcas1p22d18382ac9a3ae0990c53e0273645755
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220802084138epcas1p22d18382ac9a3ae0990c53e0273645755
-References: <CGME20220802084138epcas1p22d18382ac9a3ae0990c53e0273645755@epcas1p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- The double `range` is duplicated in comment, remove one.
-- change `syfs` to `sysfs`
+On 30/07/2022 16:26, Arınç ÜNAL wrote:
+> Make trivial changes on the binding.
+> 
+> - Update title to include MT7531 switch.
+> - Add me as a maintainer. List maintainers in alphabetical order by first
+> name.
+> - Add description to compatible strings.
+> - Fix MCM description. mediatek,mcm is not used on MT7623NI.
+> - Add description for reset-gpios.
+> - Remove quotes from $ref: "dsa.yaml#".
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 27 ++++++++++++++-----
+>  1 file changed, 20 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index 17ab6c69ecc7..541984a7d2d4 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -4,12 +4,13 @@
+>  $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Mediatek MT7530 Ethernet switch
+> +title: Mediatek MT7530 and MT7531 Ethernet Switches
+>  
+>  maintainers:
+> -  - Sean Wang <sean.wang@mediatek.com>
+> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+>    - Landen Chao <Landen.Chao@mediatek.com>
+>    - DENG Qingfang <dqfext@gmail.com>
+> +  - Sean Wang <sean.wang@mediatek.com>
+>  
+>  description: |
+>    Port 5 of mt7530 and mt7621 switch is muxed between:
+> @@ -66,6 +67,14 @@ properties:
+>        - mediatek,mt7531
+>        - mediatek,mt7621
+>  
+> +    description: |
+> +      mediatek,mt7530:
+> +        For standalone MT7530 and multi-chip module MT7530 in MT7623AI SoC.
+> +      mediatek,mt7531:
+> +        For standalone MT7531.
+> +      mediatek,mt7621:
+> +        For multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs.
 
-Signed-off-by: JeongHyeon Lee <jhs2.lee@samsung.com>
----
- drivers/block/zram/zram_drv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If compatible: is changed to oneOf, you can use description for each
+item. Look at board compatibles (arm/fsl.yaml)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index b8549c61ff2c..dc91d7587bbb 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -172,7 +172,7 @@ static inline bool valid_io_request(struct zram *zram,
- 
- 	end = start + (size >> SECTOR_SHIFT);
- 	bound = zram->disksize >> SECTOR_SHIFT;
--	/* out of range range */
-+	/* out of range */
- 	if (unlikely(start >= bound || end > bound || start > end))
- 		return false;
- 
-@@ -1917,7 +1917,7 @@ static int zram_add(void)
- 	zram->disk->private_data = zram;
- 	snprintf(zram->disk->disk_name, 16, "zram%d", device_id);
- 
--	/* Actual capacity set using syfs (/sys/block/zram<id>/disksize */
-+	/* Actual capacity set using sysfs (/sys/block/zram<id>/disksize */
- 	set_capacity(zram->disk, 0);
- 	/* zram devices sort of resembles non-rotational disks */
- 	blk_queue_flag_set(QUEUE_FLAG_NONROT, zram->disk->queue);
--- 
-2.34.1
+> +
+>    reg:
+>      maxItems: 1
+>  
+> @@ -79,7 +88,7 @@ properties:
+>    gpio-controller:
+>      type: boolean
+>      description:
+> -      if defined, MT7530's LED controller will run on GPIO mode.
+> +      If defined, MT7530's LED controller will run on GPIO mode.
+>  
+>    "#interrupt-cells":
+>      const: 1
+> @@ -98,11 +107,15 @@ properties:
+>    mediatek,mcm:
+>      type: boolean
+>      description:
+> -      if defined, indicates that either MT7530 is the part on multi-chip
+> -      module belong to MT7623A has or the remotely standalone chip as the
+> -      function MT7623N reference board provided for.
+> +      Used for MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs which the MT7530
+> +      switch is a part of the multi-chip module.
 
+Does this mean it is valid only on these variants? If yes, this should
+have a "mediatek,mcm:false" in allOf:if:then as separate patch (with
+this change in description).
+
+>  
+>    reset-gpios:
+> +    description:
+> +      GPIO to reset the switch. Use this if mediatek,mcm is not used.
+
+The same. Example:
+https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml#L155
+
+> +      This property is optional because some boards share the reset line with
+> +      other components which makes it impossible to probe the switch if the
+> +      reset line is used.
+>      maxItems: 1
+>  
+>    reset-names:
+> @@ -148,7 +161,7 @@ required:
+>    - reg
+>  
+>  allOf:
+> -  - $ref: "dsa.yaml#"
+> +  - $ref: dsa.yaml#
+>    - if:
+>        required:
+>          - mediatek,mcm
+
+
+Best regards,
+Krzysztof

@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AB9587DE2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12165587DE4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbiHBOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S236936AbiHBOHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiHBOGi (ORCPT
+        with ESMTP id S232425AbiHBOHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:06:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE3A64E9;
-        Tue,  2 Aug 2022 07:06:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1659449195; x=1690985195;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+bD6Zoxnh572tnDwsX2wJkJ1zD0vSVAl0vbD6JMWMAw=;
-  b=yVTSdaYnnAJM2uLQI6PmQmG2M1eNB2/aU55TAUvAnPYXc1uLvBShevoJ
-   kFit7NRE/eMc5+9vnqdmD3YZIWS/cN4WZdobQP2IkrUWLP9qdPBjggpA+
-   2xeQlXj/MMGKOmoWTuO/OdoXuQZMO97T87CeJ8ea9A7k2xrFqtuK3Wn4u
-   xWfMgBdB7YV0cMmNGWVpa88FbrruCGzZf041967MgJkbL9jZdqV1E5mR8
-   txTDu+5zTd7GPweTL5lQ0eMW6Ew5UuUZlJUlnQgo4oUrEZrakpd5wOg93
-   Mrd7Nlx5tLuem/PBZGu0GyUluEq5NDW/+A+Q94DmoyDrvNLv7CXSGHpQa
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
-   d="scan'208";a="174586374"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2022 07:06:35 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 2 Aug 2022 07:06:33 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 2 Aug 2022 07:06:31 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <vkoul@kernel.org>
-CC:     <ludovic.desroches@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] dmaengine: at_xdmac: Replace two if statements with only one with two conditions
-Date:   Tue, 2 Aug 2022 17:06:30 +0300
-Message-ID: <20220802140630.243550-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 2 Aug 2022 10:07:33 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC94225C62
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:07:30 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6234B5C017F;
+        Tue,  2 Aug 2022 10:07:28 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 02 Aug 2022 10:07:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1659449248; x=
+        1659535648; bh=Gyb5nJMvA2GRmM1/gEp/D59ZBZHso6846VeYTzgqqNs=; b=i
+        ORaKtLZmPcj3DuTYTXE2fI52PeNvJH2xiFGFAzfIyFVakaIbqve7gjHswbfl4XFu
+        KPxj+aF7t1dMuPM802jgzy/5K1wGMmMdEkLACRWgA3j4WB9ooyLlDVIL2xbYCnAA
+        Nj/JyZ5161YPdiiDuH6/hXMJ1wLFFXJCZBnyac6seqOGY9Okz+QpLjL0gjDk0SqN
+        dLcArPYFdi9gbJ1UcVbZv3078X7yS73PbCDDiW1hSzkKkG+JuGzQPCINIYkuEh0J
+        c8+teSsnzaFByaYVCuwILTzrPIdVSVru0Wt6g5XMPY5WhfYio71FYEOVzHt+1Lvw
+        Gp+3KZ/fLIq5DvT9Uvn6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:feedback-id:feedback-id:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1659449248; x=1659535648; bh=G
+        yb5nJMvA2GRmM1/gEp/D59ZBZHso6846VeYTzgqqNs=; b=OTlvxejnAGFgrqWqd
+        FIlsxh7vzbkIVqGhsBxMo1BFKYp0pTvPT3UAoEN5ILYD3QCuDSgWHBVklDrDhEyJ
+        1GQciK58KHQKQxJqR88ee8yRpLzBNyoDoCEfo5f2N597DVewSqxiVALtQGzmpp9i
+        KWyLMdct5oFH0ABGSlAYTnf8zHOjXN4fLur6hIiRVcHqjjNoNQfAdD5pr6JvSYcI
+        NkARcHRRSWOvZxpvXTcPydBM4a9o7lp4IdOjs6sNbB6MpmzQtB2tqigFfkdvH1mL
+        oIr2iOILhk1seJ9wCfYQ7AyzMVQWYQYEeWXHQFrVc6+dclFmz08hJD7bLiZvAZsN
+        ZxusA==
+X-ME-Sender: <xms:ny_pYiDTOFzHTcXLbdNKS5Q0TckPKrQiHG9vdgcRaJW3KdTH9RDPTg>
+    <xme:ny_pYsjAVvsH0o2vlgFfCoOSi8kdRsboqUL7wtD5ZFtjk2PkJrxvKIYhOch6m0EWX
+    bGyv1ZGJtdoDQ>
+X-ME-Received: <xmr:ny_pYlkd5BRP-AL6pPExwXNJyqRyZQcSssVGrWgdic3KMs_ldmIg7FISNJbI1XNwDLYOVe7-kpOypzi5DylYy3ihbYVVAoL2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvhedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthekrodttddtjeenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeefvd
+    etkeeuieelieeluefhtdeuieelfffhtddvhfeikefhkeehueefveduffejnecuffhomhgr
+    ihhnpeduhedrihhnpdhkvghrnhgvlhdrohhrghdplhgruhhntghhphgrugdrnhgvthenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvghes
+    khhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:oC_pYgzhbVi4j6Dw1zXSMzOuaUgki-2SVark329SONXNqQcyBCmKZg>
+    <xmx:oC_pYnReTXqZeWNmyiYb1jeXH0NWrkSBsaL6yuwP-fwdvilpu2-Nwg>
+    <xmx:oC_pYrYLpMFhBM2kFvuHZ1XLjRX3NJEmh_dyZSFx1Hflij_YfN8_MA>
+    <xmx:oC_pYiEOKfqOYWpbMVWbTtBqzzqyAgHBL9FXBo7dpvQJOnXDzn5uqw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 2 Aug 2022 10:07:27 -0400 (EDT)
+Date:   Tue, 2 Aug 2022 16:07:25 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Grzegorz Szymaszek <gszymaszek@short.pl>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: The r8188eu kernel module does not depend on the
+ rtlwifi/rtl8188eufw.bin firmware file
+Message-ID: <YukvnVWuhUeOgRyZ@kroah.com>
+References: <YukkBu3TNODO3or9@nx64de-df6d00>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YukkBu3TNODO3or9@nx64de-df6d00>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a cosmetic change and replace two if statements with a single if
-statement with two conditions. In case the optional txstate parameter is
-NULL, we return the dma_cookie_status, which is fine, no functional change
-required.
+On Tue, Aug 02, 2022 at 03:17:58PM +0200, Grzegorz Szymaszek wrote:
+> Dear r8188eu Maintainers,
+> 
+> The old rtl8188eu kernel module, removed in v5.15[1][2], indicated that
+> it requires the rtlwifi/rtl8188eufw.bin firmware file[3]. The new
+> r8188eu driver no longer does so.
+> 
+> I don’t know if it should be considered a regression or just a different
+> behaviour of the two drivers. I’ve noticed it[4] when I tried to use an
+> RTL8188EU‐based card in the initramfs of two different Ubuntu kernels:
+> v5.4 and v5.15. In v5.4, the firmware would be automatically included
+> when the (old) driver was included, whereas in v5.15 I would have to add
+> it manually so that the card actually worked. (One can verify the active
+> driver’s requirements using “modinfo -F firmware r8188eu”.)
+> 
+> If there are cards the new driver supports that do not need that
+> firmware file, it makes sense to not automatically include it. In
+> general, I don’t know the kernel policy on such dependencies.
+> 
+> [1]: commit 55dfa29b43d23bab37d98f087615ff46d38241df
+> [2]: https://lore.kernel.org/all/20210731133809.196681-1-phil@philpotter.co.uk/
+> [3]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8188eu/os_dep/os_intfs.c?id=06889446a78fb9655332954a2288ecbacc7f0ff8#n22
+> [4]: https://answers.launchpad.net/ubuntu/+source/linux-meta-hwe-5.15/+question/702611
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/dma/at_xdmac.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Looks like someone needs to add a line to the driver that looks like:
+	MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
+so that the tools will automatically pick it up properly going forward.
 
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index def564d1e8fa..0aa3ae8d61e4 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1463,10 +1463,7 @@ at_xdmac_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
- 	bool			initd;
- 
- 	ret = dma_cookie_status(chan, cookie, txstate);
--	if (ret == DMA_COMPLETE)
--		return ret;
--
--	if (!txstate)
-+	if (ret == DMA_COMPLETE || !txstate)
- 		return ret;
- 
- 	spin_lock_irqsave(&atchan->lock, flags);
--- 
-2.25.1
+Can you make a patch that does this?
 
+thanks,
+
+greg k-h

@@ -2,162 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C10B587B0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C29587B11
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiHBKwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S236215AbiHBKxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236637AbiHBKwm (ORCPT
+        with ESMTP id S233829AbiHBKxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:52:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 924173AE7B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659437558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ONdY1uU26I/pqX90cMLtiDatv96YYKFzgzSpZbjXCSI=;
-        b=WUDB+CR95Kc3NaSUdJgI6YseJZ3X/Djm5rdI5aBNUyO2xFUKWTADQP2HpoCpD6K/EMndkg
-        Sp/J+FbUBWUygy1WuGv6NmPpvNQFpe9rWGWVr9AjX7zLtVXPNooAj5pLhr3gjJVxoD/ywv
-        pTsBx5cHtJRGwAHIriSOBQ+JNLCDFiQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-KZ5HsrqrO9ionF4bZQbYSw-1; Tue, 02 Aug 2022 06:52:35 -0400
-X-MC-Unique: KZ5HsrqrO9ionF4bZQbYSw-1
-Received: by mail-ed1-f69.google.com with SMTP id h6-20020a05640250c600b0043d9964d2ceso3670099edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 03:52:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ONdY1uU26I/pqX90cMLtiDatv96YYKFzgzSpZbjXCSI=;
-        b=amPDhQXdEK5kmW0XlM/4lM9Dt8w1uqCTrAKTlAFTKxrTjo5MSYhihD/zSZpVjHfjdR
-         vo9BnSCY4oibepexJjzMjzzkPmT8idPwXb8vmEdr78NAxgqpoArs8unE6KTDyurC/2n9
-         b1nRfb1iOuqHBJXNkdwzPoc82/pIUspiCWYR9h4YGhyeE3E7Z0CM57hY2N0gJ0H1PrLQ
-         zUVYY3ddlCv0lgd+4rAw3zfRxIglwsjNUWIc7HD1zpeimEbrDc4z8TmjLMwjesgY/QpN
-         yVTky3JhOjEFxqBvLjPDNJj6gSk0M6bsXAxshmYUaROV4Q32peEhBKiOao007rtyK2oF
-         Bsig==
-X-Gm-Message-State: ACgBeo0Jc5jYALz9hh+p1vGcP6aAq695Hbr7GBzs6qtlUPqcayFoJkyY
-        /TJdq2lPwVDJK4JBkcR6u+0nqOaNobFe0Y06hJ5SeNqP2S3iEwm2Gr5Bkrs5fAEe4V09Yjrv/il
-        ytx/MkmCrVezCCPelCrgj/dvX
-X-Received: by 2002:a05:6402:268d:b0:43d:b9d0:9efc with SMTP id w13-20020a056402268d00b0043db9d09efcmr7481737edd.92.1659437554281;
-        Tue, 02 Aug 2022 03:52:34 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6+oSfvV8yhZ6+wVMrVI1YAlOUICCAm7C/Wgk8tQ9rvCBPLUlUMMZEZjaO88o6wWcF5WBPqzg==
-X-Received: by 2002:a05:6402:268d:b0:43d:b9d0:9efc with SMTP id w13-20020a056402268d00b0043db9d09efcmr7481721edd.92.1659437554076;
-        Tue, 02 Aug 2022 03:52:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id cq27-20020a056402221b00b0043d482188b4sm5337166edb.29.2022.08.02.03.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 03:52:33 -0700 (PDT)
-Message-ID: <ca747bd7-fe05-6b42-df0b-a6bc3bf0aa2b@redhat.com>
-Date:   Tue, 2 Aug 2022 12:52:32 +0200
+        Tue, 2 Aug 2022 06:53:40 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2729167C8
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:53:37 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B200B25B;
+        Tue,  2 Aug 2022 12:53:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1659437614;
+        bh=w8AZJHqp+A9fn1ePAye0WrrjbAMpqA/lRUqJ3qO4C9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PLf6T6q508gLjgspDip9CkpueQ+XlYkfgVC55ovdoqaOOc0ELjJLiQW0KsI/HqpNS
+         g418Fy6Ajgis4ryKa+ZwH6zWBON4NLY8NWan+1YDmvxwE3XH/yGHeXbOp+pFJzlI35
+         eXIujlVMPgsaM9UOPIUexcLunmxP98DgcbskvrdA=
+Date:   Tue, 2 Aug 2022 13:53:29 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
+        mripard@kernel.org, sam@ravnborg.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drm-misc-next v7 1/5] drm/fb: remove unused includes of
+ drm_fb_cma_helper.h
+Message-ID: <YukCKUvNGuLx3JT7@pendragon.ideasonboard.com>
+References: <20220802000405.949236-1-dakr@redhat.com>
+ <20220802000405.949236-2-dakr@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] platform/x86: dell-privacy: convert to use dev_groups
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        platform-driver-x86@vger.kernel.org
-Cc:     Perry Yuan <Perry.Yuan@dell.com>,
-        Mark Gross <markgross@kernel.org>, Dell.Client.Kernel@dell.com,
-        linux-kernel@vger.kernel.org
-References: <20220729115302.2258296-1-gregkh@linuxfoundation.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220729115302.2258296-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220802000405.949236-2-dakr@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Danilo,
 
-On 7/29/22 13:53, Greg Kroah-Hartman wrote:
-> The driver core supports the ability to handle the creation and removal
-> of device-specific sysfs files in a race-free manner.  Take advantage of
-> that by converting this driver to use this by moving the sysfs
-> attributes into a group and assigning the dev_groups pointer to it.
+Thank you for the patch.
+
+On Tue, Aug 02, 2022 at 02:04:01AM +0200, Danilo Krummrich wrote:
+> Quite a lot of drivers include the drm_fb_cma_helper.h header file
+> without actually making use of it's provided API, hence remove those
+> includes.
 > 
-> Cc: Perry Yuan <Perry.Yuan@dell.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Dell.Client.Kernel@dell.com
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Patches which are added to review-hans now are intended for
-the next rc1. This branch will get rebased to the next rc1 when
-it is out and after the rebasing the contents of review-hans
-will be pushed to the platform-drivers-x86/for-next branch.
-
-Regards,
-
-Hans
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 > ---
->  drivers/platform/x86/dell/dell-wmi-privacy.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
+>  drivers/gpu/drm/arm/hdlcd_drv.c                 | 1 -
+>  drivers/gpu/drm/arm/malidp_drv.c                | 1 -
+>  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c         | 1 -
+>  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c       | 1 -
+>  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c       | 1 -
+>  drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c | 1 -
+>  drivers/gpu/drm/imx/imx-drm-core.c              | 1 -
+>  drivers/gpu/drm/imx/ipuv3-crtc.c                | 1 -
+>  drivers/gpu/drm/logicvc/logicvc_mode.c          | 1 -
+>  drivers/gpu/drm/pl111/pl111_drv.c               | 1 -
+>  drivers/gpu/drm/rcar-du/rcar_du_crtc.c          | 1 -
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.c           | 1 -
+>  drivers/gpu/drm/rcar-du/rcar_du_kms.c           | 1 -
+>  drivers/gpu/drm/shmobile/shmob_drm_kms.c        | 1 -
+>  drivers/gpu/drm/solomon/ssd130x.c               | 1 -
+>  drivers/gpu/drm/sti/sti_drv.c                   | 1 -
+>  drivers/gpu/drm/sti/sti_plane.c                 | 1 -
+>  drivers/gpu/drm/stm/drv.c                       | 1 -
+>  drivers/gpu/drm/sun4i/sun4i_drv.c               | 1 -
+>  drivers/gpu/drm/sun4i/sun8i_mixer.c             | 1 -
+>  drivers/gpu/drm/tidss/tidss_crtc.c              | 1 -
+>  drivers/gpu/drm/tidss/tidss_kms.c               | 1 -
+>  drivers/gpu/drm/tidss/tidss_plane.c             | 1 -
+>  drivers/gpu/drm/tve200/tve200_drv.c             | 1 -
+>  drivers/gpu/drm/v3d/v3d_drv.c                   | 1 -
+>  drivers/gpu/drm/vc4/vc4_drv.c                   | 1 -
+>  26 files changed, 26 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-privacy.c b/drivers/platform/x86/dell/dell-wmi-privacy.c
-> index 074b7e68c227..c82b3d6867c5 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-privacy.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-privacy.c
-> @@ -174,15 +174,12 @@ static ssize_t dell_privacy_current_state_show(struct device *dev,
->  static DEVICE_ATTR_RO(dell_privacy_supported_type);
->  static DEVICE_ATTR_RO(dell_privacy_current_state);
+> diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+> index 350ca4e4eaa6..b32168e3f9ae 100644
+> --- a/drivers/gpu/drm/arm/hdlcd_drv.c
+> +++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+> @@ -26,7 +26,6 @@
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_debugfs.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+> index d5aef21426cf..fa6c1a4254dc 100644
+> --- a/drivers/gpu/drm/arm/malidp_drv.c
+> +++ b/drivers/gpu/drm/arm/malidp_drv.c
+> @@ -19,7 +19,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_gem_cma_helper.h>
+> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> index 7780b72de9e8..54aa8af45829 100644
+> --- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> @@ -16,7 +16,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc_helper.h>
+>  #include <drm/drm_device.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> index 7a503bf08d0f..4baa4977e473 100644
+> --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> @@ -20,7 +20,6 @@
 >  
-> -static struct attribute *privacy_attributes[] = {
-> +static struct attribute *privacy_attrs[] = {
->  	&dev_attr_dell_privacy_supported_type.attr,
->  	&dev_attr_dell_privacy_current_state.attr,
->  	NULL,
->  };
-> -
-> -static const struct attribute_group privacy_attribute_group = {
-> -	.attrs = privacy_attributes
-> -};
-> +ATTRIBUTE_GROUPS(privacy);
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_modeset_helper.h>
+> diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
+> index d763f53f480c..5b47000738e4 100644
+> --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
+> +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c
+> @@ -6,7 +6,6 @@
+>   */
 >  
->  /*
->   * Describes the Device State class exposed by BIOS which can be consumed by
-> @@ -342,10 +339,6 @@ static int dell_privacy_wmi_probe(struct wmi_device *wdev, const void *context)
->  	if (ret)
->  		return ret;
+>  #include <drm/drm_atomic_helper.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+>  #include <drm/drm_probe_helper.h>
 >  
-> -	ret = devm_device_add_group(&wdev->dev, &privacy_attribute_group);
-> -	if (ret)
-> -		return ret;
-> -
->  	if (priv->features_present & BIT(DELL_PRIVACY_TYPE_AUDIO)) {
->  		ret = dell_privacy_leds_setup(&priv->wdev->dev);
->  		if (ret)
-> @@ -374,6 +367,7 @@ static const struct wmi_device_id dell_wmi_privacy_wmi_id_table[] = {
->  static struct wmi_driver dell_privacy_wmi_driver = {
->  	.driver = {
->  		.name = "dell-privacy",
-> +		.dev_groups = privacy_groups,
->  	},
->  	.probe = dell_privacy_wmi_probe,
->  	.remove = dell_privacy_wmi_remove,
+> diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> index 2af51df6dca7..e8b0fe970969 100644
+> --- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> +++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+> @@ -19,7 +19,6 @@
+>  
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/imx/imx-drm-core.c b/drivers/gpu/drm/imx/imx-drm-core.c
+> index 50fd7aac5198..e43345bd1346 100644
+> --- a/drivers/gpu/drm/imx/imx-drm-core.c
+> +++ b/drivers/gpu/drm/imx/imx-drm-core.c
+> @@ -16,7 +16,6 @@
+>  #include <drm/drm_atomic.h>
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
+> index f7863d6dea80..d9f832f952c2 100644
+> --- a/drivers/gpu/drm/imx/ipuv3-crtc.c
+> +++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
+> @@ -18,7 +18,6 @@
+>  
+>  #include <drm/drm_atomic.h>
+>  #include <drm/drm_atomic_helper.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_managed.h>
+>  #include <drm/drm_probe_helper.h>
+> diff --git a/drivers/gpu/drm/logicvc/logicvc_mode.c b/drivers/gpu/drm/logicvc/logicvc_mode.c
+> index 11940704f644..c59da7039dc1 100644
+> --- a/drivers/gpu/drm/logicvc/logicvc_mode.c
+> +++ b/drivers/gpu/drm/logicvc/logicvc_mode.c
+> @@ -10,7 +10,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/pl111/pl111_drv.c b/drivers/gpu/drm/pl111/pl111_drv.c
+> index 19a4324bd356..5b5f3573b619 100644
+> --- a/drivers/gpu/drm/pl111/pl111_drv.c
+> +++ b/drivers/gpu/drm/pl111/pl111_drv.c
+> @@ -48,7 +48,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_gem_cma_helper.h>
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> index 169ca0c8912f..ed887ebd2f6b 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> @@ -17,7 +17,6 @@
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_device.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_vblank.h>
+>  
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> index 70d85610d720..110ec9538b44 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> @@ -20,7 +20,6 @@
+>  
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_managed.h>
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
+> index 761451ee5263..7fed5b0c65ce 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
+> @@ -11,7 +11,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_device.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_framebuffer.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/shmobile/shmob_drm_kms.c b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
+> index 68d21be784aa..edb003537530 100644
+> --- a/drivers/gpu/drm/shmobile/shmob_drm_kms.c
+> +++ b/drivers/gpu/drm/shmobile/shmob_drm_kms.c
+> @@ -9,7 +9,6 @@
+>  
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_crtc_helper.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
+> index 77f80b0d3a5e..973ae2dfb2f8 100644
+> --- a/drivers/gpu/drm/solomon/ssd130x.c
+> +++ b/drivers/gpu/drm/solomon/ssd130x.c
+> @@ -21,7 +21,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_damage_helper.h>
+>  #include <drm/drm_edid.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_format_helper.h>
+>  #include <drm/drm_framebuffer.h>
+> diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
+> index d858209cf8de..c0fbdb8cf6eb 100644
+> --- a/drivers/gpu/drm/sti/sti_drv.c
+> +++ b/drivers/gpu/drm/sti/sti_drv.c
+> @@ -14,7 +14,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_debugfs.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/sti/sti_plane.c b/drivers/gpu/drm/sti/sti_plane.c
+> index c74b524663ab..0a55180be22b 100644
+> --- a/drivers/gpu/drm/sti/sti_plane.c
+> +++ b/drivers/gpu/drm/sti/sti_plane.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/types.h>
+>  
+>  #include <drm/drm_blend.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_framebuffer.h>
+>  #include <drm/drm_gem_cma_helper.h>
+> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+> index c63945dc2260..bb269dad30f9 100644
+> --- a/drivers/gpu/drm/stm/drv.c
+> +++ b/drivers/gpu/drm/stm/drv.c
+> @@ -18,7 +18,6 @@
+>  #include <drm/drm_atomic.h>
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> index 6eb1aabdb161..382074ef1394 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> @@ -17,7 +17,6 @@
+>  #include <drm/drm_aperture.h>
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_module.h>
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> index 4e9bd9cb6b36..b3d1c0940406 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> @@ -16,7 +16,6 @@
+>  
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_framebuffer.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_probe_helper.h>
+> diff --git a/drivers/gpu/drm/tidss/tidss_crtc.c b/drivers/gpu/drm/tidss/tidss_crtc.c
+> index ad4ce9d06622..92d2c25bb0ff 100644
+> --- a/drivers/gpu/drm/tidss/tidss_crtc.c
+> +++ b/drivers/gpu/drm/tidss/tidss_crtc.c
+> @@ -8,7 +8,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_crtc_helper.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_vblank.h>
+>  
+> diff --git a/drivers/gpu/drm/tidss/tidss_kms.c b/drivers/gpu/drm/tidss/tidss_kms.c
+> index 666e527a0acf..b61db8f279e9 100644
+> --- a/drivers/gpu/drm/tidss/tidss_kms.c
+> +++ b/drivers/gpu/drm/tidss/tidss_kms.c
+> @@ -10,7 +10,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_crtc_helper.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+>  #include <drm/drm_of.h>
+> diff --git a/drivers/gpu/drm/tidss/tidss_plane.c b/drivers/gpu/drm/tidss/tidss_plane.c
+> index 68a85a94ffcb..42d50ec5526d 100644
+> --- a/drivers/gpu/drm/tidss/tidss_plane.c
+> +++ b/drivers/gpu/drm/tidss/tidss_plane.c
+> @@ -11,7 +11,6 @@
+>  #include <drm/drm_crtc_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_framebuffer.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_gem_atomic_helper.h>
+>  
+>  #include "tidss_crtc.h"
+> diff --git a/drivers/gpu/drm/tve200/tve200_drv.c b/drivers/gpu/drm/tve200/tve200_drv.c
+> index 6d9d2921abf4..86ebfe626cd0 100644
+> --- a/drivers/gpu/drm/tve200/tve200_drv.c
+> +++ b/drivers/gpu/drm/tve200/tve200_drv.c
+> @@ -39,7 +39,6 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_bridge.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_gem_cma_helper.h>
+>  #include <drm/drm_gem_framebuffer_helper.h>
+> diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+> index 8c7f910daa28..e8c975b81585 100644
+> --- a/drivers/gpu/drm/v3d/v3d_drv.c
+> +++ b/drivers/gpu/drm/v3d/v3d_drv.c
+> @@ -22,7 +22,6 @@
+>  #include <linux/reset.h>
+>  
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_managed.h>
+>  #include <uapi/drm/v3d_drm.h>
+> diff --git a/drivers/gpu/drm/vc4/vc4_drv.c b/drivers/gpu/drm/vc4/vc4_drv.c
+> index 89975bdd607e..d33baf2667dd 100644
+> --- a/drivers/gpu/drm/vc4/vc4_drv.c
+> +++ b/drivers/gpu/drm/vc4/vc4_drv.c
+> @@ -33,7 +33,6 @@
+>  #include <drm/drm_aperture.h>
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_drv.h>
+> -#include <drm/drm_fb_cma_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_vblank.h>
+>  
 
+-- 
+Regards,
+
+Laurent Pinchart

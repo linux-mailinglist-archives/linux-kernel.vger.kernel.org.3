@@ -2,241 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC95587C96
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F4F587C9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiHBMnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S236282AbiHBMrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiHBMna (ORCPT
+        with ESMTP id S233808AbiHBMrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:43:30 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A819E37FB9;
-        Tue,  2 Aug 2022 05:43:29 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so15183687pjf.5;
-        Tue, 02 Aug 2022 05:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
-        b=i2Q8AEq1KNHeon8oovOfgQZVLe3KS3nqoU7VPppGG0qPugDAUwSenRTDP59HL+JmAc
-         POppR8p9f8SEZP/itNPUPvW1gb/7AyizvM7ycr9ukE6NXZRw3rMQJhd4097jNG8+gqFt
-         VKbG6SlXdmjPVoTA8fTjPk33Bu7/gFAkhZuQ/bKzeiit7n1l5ctyO73Mwex4wjbZ5zOv
-         d/McmwavwIO049aXxV7GBfF+3n0mzGNuKLulvO3JnoMoAeo359wjQhVlJMIv+ca3BdxM
-         hf2/Jk8oqWOzrWRyHunRbSC48OQx3yCFOw0dJROA92vx4u4W8JQMBay5swmGhXRu3geT
-         kaNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=U9m3FQ39/4mYFptI4g6gXxTyAr9soFCJ8+yoeDOFuYE=;
-        b=tK3sr2/gkovMAtaCj7BX55DZbakriam2nBbdCqbDlrMeN5hUYscooAEPO+XOhMa4Jd
-         fSY5+EZhSIpBh5IAXJGsU1o85NNJ30qEDFKg9zFVTMXsCu/pgnjtqpWGW3M+vp6I8zpf
-         xn0Z8se+pVTM9RO4/QpAJguGGXQu1smNHjyg3T4PFxdm5ZqJ4cRAUyufHxgfm2db3UGZ
-         s8if+S+WsD6b8+L60O+wR2jQKE9OW4ccOL8WfcysHYUJOFjvbwvLddQbCl+QFY2Vu3CV
-         TarXB5+fnR06Cw0Ob+RuD0YCzTNB6kNt8aVf77sXwe48siSxg0XoWjTQK+81ssqO9EHz
-         c22Q==
-X-Gm-Message-State: ACgBeo3/kZNt2sl0xwCdLVt31PzI7mHhK3dh4xyztxsPqV5XD2+aIroX
-        YiBr4mOSePK0qh7Cg1MVAtk3c8sX6SMQGq32jQM=
-X-Google-Smtp-Source: AA6agR43XCpLPTV1z8GO6mF5EYSfHI1FBFdyJ9uqiH9/FXtU0W+zqQqUBcZB+xxQvTIjrrBh2aUEIqE7in1fYQiNu9Q=
-X-Received: by 2002:a17:902:d4c2:b0:16d:c317:ee9d with SMTP id
- o2-20020a170902d4c200b0016dc317ee9dmr19985383plg.25.1659444209092; Tue, 02
- Aug 2022 05:43:29 -0700 (PDT)
+        Tue, 2 Aug 2022 08:47:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B1E963BE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659444441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wbbGtoG/Vl+wjUfmVqEW8AmNwItFx5zbhZBvkq/eXg8=;
+        b=jOlcADEDb1moVHpYwf12WqgRTx91Ig5Qxhwynoa3uffaSSkLCJVnQqgBQxNIF1aYtKdMcP
+        eSbjrL0wc4zYsMKvhQomxgjaa6dS6uW6U0fw5CHryorWLUhl0D6pJEN7llk8SZHh/BEy8Y
+        Onb3hwmhQMOgxK7bs3lniJGu4pTL/EA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-dOMSq3THNai4QTNWY5116w-1; Tue, 02 Aug 2022 08:47:20 -0400
+X-MC-Unique: dOMSq3THNai4QTNWY5116w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48B82858F00;
+        Tue,  2 Aug 2022 12:47:19 +0000 (UTC)
+Received: from localhost (ovpn-13-104.pek2.redhat.com [10.72.13.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 307DF90A04;
+        Tue,  2 Aug 2022 12:47:16 +0000 (UTC)
+Date:   Tue, 2 Aug 2022 20:46:57 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Will Deacon <will@kernel.org>,
+        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Dave Young <dyoung@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>, ardb@kernel.org
+Subject: Re: [PATCH v3 1/2] arm64: kdump: Provide default size when
+ crashkernel=Y,low is not specified
+Message-ID: <YukcwUyEvOLjV00C@MiWiFi-R3L-srv>
+References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+ <20220711090319.1604-2-thunder.leizhen@huawei.com>
+ <20220802083703.GA26962@willie-the-truck>
+ <bc2830f7-7c3c-30ea-0178-ad86922f8f5c@huawei.com>
 MIME-Version: 1.0
-References: <20220525115554.430971-1-alistair@alistair23.me>
- <20220525115554.430971-5-alistair@alistair23.me> <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
-In-Reply-To: <ea5e1659-5842-6685-52eb-f77ac4247a2d@sholland.org>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Tue, 2 Aug 2022 22:43:02 +1000
-Message-ID: <CAKmqyKPLanGCWkofWh7rEiAhpTFF865BGQNg1q-8avpObJ+J3A@mail.gmail.com>
-Subject: Re: [PATCH v21 4/4] ARM: dts: imx7d-remarkable2: Enable lcdif
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Amit Kucheria <amitk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-hwmon@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc2830f7-7c3c-30ea-0178-ad86922f8f5c@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 4:20 AM Samuel Holland <samuel@sholland.org> wrote:
->
-> Hi Alistair,
->
-> On 5/25/22 6:55 AM, Alistair Francis wrote:
-> > Connect the dispaly on the reMarkable2.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> > ---
-> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 74 +++++++++++++++++++++++++
-> >  1 file changed, 74 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > index 99ac0d242936..03a4029e1e57 100644
-> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> > @@ -68,6 +68,16 @@ reg_digitizer: regulator-digitizer {
-> >               startup-delay-us = <100000>; /* 100 ms */
-> >       };
-> >
-> > +     reg_sdoe: regulator-sdoe {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "SDOE";
-> > +             pinctrl-names = "default", "sleep";
-> > +             pinctrl-0 = <&pinctrl_sdoe_reg>;
-> > +             pinctrl-1 = <&pinctrl_sdoe_reg>;
-> > +             gpio = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-> > +             enable-active-high;
-> > +     };
-> > +
-> >       wifi_pwrseq: wifi_pwrseq {
-> >               compatible = "mmc-pwrseq-simple";
-> >               pinctrl-names = "default";
-> > @@ -76,6 +86,16 @@ wifi_pwrseq: wifi_pwrseq {
-> >               clocks = <&clks IMX7D_CLKO2_ROOT_DIV>;
-> >               clock-names = "ext_clock";
-> >       };
-> > +
-> > +     panel {
-> > +             compatible = "eink,vb3300-kca";
-> > +
-> > +             port {
-> > +                     panel_in: endpoint {
-> > +                             remote-endpoint = <&display_out>;
-> > +                     };
-> > +             };
-> > +     };
->
-> From the discussion at [1], this is not safe to merge. It exposes an
-> electrophoretic display to fbcon/userspace as if it was an LCD, which it very
-> much is not. Trying to write RGB pixel data to the panel could damage it.
+On 08/02/22 at 06:12pm, Leizhen (ThunderTown) wrote:
+......snip...  
+> >> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> >> index 339ee84e5a61a0b..5390f361208ccf7 100644
+> >> --- a/arch/arm64/mm/init.c
+> >> +++ b/arch/arm64/mm/init.c
+> >> @@ -96,6 +96,14 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+> >>  #define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
+> >>  #define CRASH_ADDR_HIGH_MAX		(PHYS_MASK + 1)
+> >>  
+> >> +/*
+> >> + * This is an empirical value in x86_64 and taken here directly. Please
+> >> + * refer to the code comment in reserve_crashkernel_low() of x86_64 for more
+> >> + * details.
+> > 
+> > Honestly, I read that comment and I'm none the wiser. What does "due to
+> > mapping restrictions" mean? The remainder of the comment appears to be
+> 
+> Because the comments you read is addressed to CRASH_ADDR_LOW_MAX, not
+> for DEFAULT_CRASH_KERNEL_LOW_SIZE. Please see the following patch:
+> 
+> 94fb9334182284 x86/crash: Allocate enough low memory when crashkernel=high
+> 
+> > specific to x86 and refers to jump ranges with 5-level page-tables.
+> > 
+> >> +#define DEFAULT_CRASH_KERNEL_LOW_SIZE	\
+> >> +	max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20)
+> > 
+> > So why does this value make sense for arm64? We have considerable platform
+> > fragmentation^Wdiversity compared to x86 and picking a one-size-fits-all
+> > default is more likely to cause weird problems when it doesn't work imo. I'd
+> > actually prefer that the default is something that fails obviously (e.g. 0)
+> > and we force an appropriate size to be specified.
 
-Hey Samuel,
+The default value mainly serves the crashkernel=xM case, not just for
+crashkernel=,high specified while no crahskernel=,low. The simplest
+usage of crashkernel reservation is user only need set crashkernel=xM in
+cmdline, we will try to get available memory from low memory region
+firstly, if failed, go above 4G to find again. If we finally get memory
+from above 4G, then the default low memory is needed. E.g if
+crashkernel=512M is set, and no sufficient memory under 4G. With it,
+user don't need to know about crashkernel=,high or ,low, and even memory
+has type of high, low, or dma stuff.
 
-From what I can tell it's difficult to damage the display, but I see your point.
+> > 
+> > On the other hand, if you can convince me that having a global constant is
+> > the right way forward, then please move this out of the arch code.
+> 
+> Yes, the default value may not be the same as that of x86. For example,
+> 128 MB may be sufficient.
+> 
+> So we need to discuss first, do we need a default value? Personally, I
+> don't think it hurts.
 
->
-> So at the very least before hooking this up, the LCD controller has to know that
-> the EPD needs special handling and that it cannot accept RGB.
+Yes, we can discuss. Welcome anyone to help provide information how we
+should take care to make a small but enough value. In fact, on x86_64,
+we didn't set the value at one time. It was set as 72M at the beginning,
+later Joerg found it's not enough, we finally decided to make it as
+256M. People who mind the wasting of 256M can use crashkernel=,high and
+crashkernel=,low pair to specify the value exactly.
 
-Looking at [1] it seems like no decision was made about how to handle
-a case like this where the EPC driving is all done in software. We
-currently drive it from userspace via proprietary software. It seems
-unlikely we will be able to support this in the kernel, so it would be
-nice to somehow expose it to userspace.
+commit c729de8fcea3 ("x86, kdump: Set crashkernel_low automatically")
+commit 94fb93341822 ("x86/crash: Allocate enough low memory when crashkernel=high")
 
->
-> That doesn't necessarily mean there is a problem with the content of this patch
-> -- the special handling may all be taken care of based on the compatible string
+Thanks
+Baoquan
 
-Ah ok. So it sounds like adding a check to the LCD controller based on
-compatible string to reject RGB values would be a good start here.
-That would at least block bogus values from making it to the screen
-
-Alistair
-
-> -- but I think it's a really bad idea to merge this with how "eink,vb3300-kca"
-> is currently represented in panel-simple.
->
-> Regards,
-> Samuel
->
-> [1]: https://lore.kernel.org/lkml/Yo5kz%2F9cSd6ewC5f@phenom.ffwll.local/
->
-> >  };
-> >
-> >  &clks {
-> > @@ -132,6 +152,20 @@ reg_epdpmic: vcom {
-> >       };
-> >  };
-> >
-> > +&lcdif {
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&pinctrl_lcdif>;
-> > +     lcd-supply = <&reg_epdpmic>;
-> > +     lcd2-supply = <&reg_sdoe>;
-> > +     status = "okay";
-> > +
-> > +     port {
-> > +             display_out: endpoint {
-> > +                     remote-endpoint = <&panel_in>;
-> > +             };
-> > +     };
-> > +};
-> > +
-> >  &snvs_pwrkey {
-> >       status = "okay";
-> >  };
-> > @@ -246,6 +280,46 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
-> >               >;
-> >       };
-> >
-> > +     pinctrl_lcdif: lcdifgrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
-> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
-> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
-> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
-> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
-> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
-> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
-> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
-> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
-> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
-> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
-> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
-> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
-> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
-> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
-> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
-> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
-> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
-> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
-> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
-> > +
-> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
-> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
-> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
-> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
-> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
-> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
-> > +             >;
-> > +     };
-> > +
-> > +     pinctrl_sdoe_reg: sdoereggrp {
-> > +             fsl,pins = <
-> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
-> > +             >;
-> > +     };
-> > +
-> >       pinctrl_uart1: uart1grp {
-> >               fsl,pins = <
-> >                       MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX    0x79
-> >
->

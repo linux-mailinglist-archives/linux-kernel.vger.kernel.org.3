@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B67588280
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93405588286
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiHBT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S232373AbiHBT3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiHBT2M (ORCPT
+        with ESMTP id S229554AbiHBT3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:28:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C365932ECA;
-        Tue,  2 Aug 2022 12:28:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 2 Aug 2022 15:29:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C9952DD4;
+        Tue,  2 Aug 2022 12:29:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 722FD1FD18;
-        Tue,  2 Aug 2022 19:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659468489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bg9h887C8gVWobrXRdOT9+x2p3w/uvq6a0lh9g6ugdw=;
-        b=sPQYvAQERl6eWHdAPuPNsyhfaVCEmkC9r8nSCcKD4psu/To3u5G33OiKMg8Ee+at+kjS46
-        lY21UGgRR9gRSNkgmOd1CZ9ZVjw8h/UYU/VgJYTubmxycxMqNdzEp5hcoWkCXJEg3OXQXL
-        b2fRFFAs4LcTotsP2QVkgkgV65An0P8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659468489;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bg9h887C8gVWobrXRdOT9+x2p3w/uvq6a0lh9g6ugdw=;
-        b=gHBnpQbwmKAesnR9qkEQagwr1eS9+zywFq4ADlHcZMXXXuLNNmJJAeNUfpu2sHUUhVE1Y5
-        fffmCIMNujceztBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E1C1913A8E;
-        Tue,  2 Aug 2022 19:28:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ok4kKMh66WI/aQAAMHmgww
-        (envelope-from <ematsumiya@suse.de>); Tue, 02 Aug 2022 19:28:08 +0000
-Date:   Tue, 2 Aug 2022 16:28:06 -0300
-From:   Enzo Matsumiya <ematsumiya@suse.de>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-cifs@vger.kernel.org, smfrench@gmail.com, pc@cjr.nz,
-        ronniesahlberg@gmail.com, nspmangalore@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tom@talpey.com, samba-technical@lists.samba.org,
-        pshilovsky@samba.org, jlayton@kernel.org, rpenny@samba.org
-Subject: Re: [RFC PATCH v2 0/5] Rename "cifs" module to "smbfs"
-Message-ID: <20220802192806.6ryronlqvus2ua26@cyberdelia>
-References: <20220802190048.19881-1-ematsumiya@suse.de>
- <Yul5hBFmwoOQ0cxG@casper.infradead.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA9766149D;
+        Tue,  2 Aug 2022 19:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE584C433D6;
+        Tue,  2 Aug 2022 19:29:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659468591;
+        bh=sDAM1SkrSW3oBwm2JR0NuYN1X7SGSbkmaVuAjkVRnLY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FMRKUMQUJr2ZmEXgrIarTKzASc1dJpL8ZyXHffsbBbpxJQ40EiUel1hWPcWuQTd/t
+         F6L4FYY61TexsKxgJrR+P6L7Z+lbmyesVMb24rHeGYZOkBtYuF4XnN0b8qdij6qWWh
+         Ti+qjzrnfTpINxlINhk0mpgAQLD5speoVw19qjo3VX/y7AMzg9iMO3Vl8lIXVWpnwu
+         Ll+fUYt23wgAdg7eKP42pBOE25DP5FJhizfb06otZgtkQEk9KkeJ77MJkWf1LvQksf
+         PE/d9fBBdxV2vg+bsA9BqM7jBG6LvQl5rNfQUKKOkh9jPUWzkXHiIIRdiOAyuX6ODA
+         2rjP0SmjMbU/g==
+Date:   Tue, 2 Aug 2022 12:29:49 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     andrei.tachici@stud.acs.upb.ro
+Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        vegard.nossum@oracle.com, joel@jms.id.au, l.stelmach@samsung.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org
+Subject: Re: [net-next v3 0/3] net: ethernet: adi: Add ADIN1110 support
+Message-ID: <20220802122949.7080822f@kernel.org>
+In-Reply-To: <20220802155947.83060-1-andrei.tachici@stud.acs.upb.ro>
+References: <20220802155947.83060-1-andrei.tachici@stud.acs.upb.ro>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Yul5hBFmwoOQ0cxG@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02, Matthew Wilcox wrote:
->On Tue, Aug 02, 2022 at 04:00:43PM -0300, Enzo Matsumiya wrote:
->> Hi,
->>
->> As part of the ongoing effort to remove the "cifs" nomenclature from the
->> Linux SMB client, I'm proposing the rename of the module to "smbfs".
->>
->> As it's widely known, CIFS is associated to SMB1.0, which, in turn, is
->> associated with the security issues it presented in the past. Using
->> "SMBFS" makes clear what's the protocol in use for outsiders, but also
->> unties it from any particular protocol version. It also fits in the
->> already existing "fs/smbfs_common" and "fs/ksmbd" naming scheme.
->>
->> This short patch series only changes directory names and includes/ifdefs in
->> headers and source code, and updates docs to reflect the rename. Other
->> than that, no source code/functionality is modified (WIP though).
->
->Why did you not reply to Jeff Layton's concern before posting a v2?
+On Tue,  2 Aug 2022 18:59:44 +0300 andrei.tachici@stud.acs.upb.ro wrote:
+> Subject: [net-next v3 0/3] net: ethernet: adi: Add ADIN1110 support
 
-Hm, I was pretty sure I did. Sorry about that, I got confused on how my
-mail client organized the replies to the initial thread.
+# Form letter - net-next is closed
 
-Replying to Jeff right now.
+The merge window for Linux 6.0 has started and therefore 
+net-next is closed for new drivers, features, code refactoring 
+and optimizations. We are currently accepting bug fixes only.
+
+Please repost when net-next reopens after 6.0-rc1 is cut.
+
+RFC patches sent for review only are obviously welcome at any time.

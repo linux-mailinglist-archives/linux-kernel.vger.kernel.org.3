@@ -2,179 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27037587D7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437F8587D7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiHBNwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S236777AbiHBNwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbiHBNwP (ORCPT
+        with ESMTP id S236643AbiHBNwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:52:15 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69B225E8E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:52:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id y13so12074143ejp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 06:52:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=tygEmQo2fM88im/5bVVcHB1T0VfpleA6ie9m/bYh6CA=;
-        b=BwabfrmKwaXUPfLOc0/xFNk7TwdvzAmRAZLjnCecg3eGFOpbuCPTb99uRYNiJDeN/i
-         pWY80JnwJ/rhXVCW1KReEMwjUNtqWIEN9Skv0RcjmNAkhQUv1pH3tg9Z4WL54qq1eB6H
-         gbCFQL74Ea3UBH0CKyJMbJJmJs/r54zc8GTD8nC4hzrZ5ADvoNAdBXlGrJzoDpI9UhVQ
-         C3Iov+WX1d+RKaI/roFmqXWXvNjkgfthmIcIcIKHqToPg6YiUJJdNJv+n2NUHXGuuI1M
-         ts4Ij8QC7vwjyBRPO74AZyAzmqZKZLRacvL2b1oT0hhfEzSF/Ug825EEQJYcwFa8emQl
-         2Uhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=tygEmQo2fM88im/5bVVcHB1T0VfpleA6ie9m/bYh6CA=;
-        b=TTA/uB3IT5XBzItBgR9JEYCie6+8VnI2DWiwCdyUJQ/9bS3HGdCPGfkQstFttD3m+v
-         v+ymGE6C2pCVSAMr8cwnvtqKU72UC9aaHMYNyEyoanZYgXBlSsaBASjSwT9jUwset6+F
-         OzhM+nji6C+rXaiGt+GAzlIOwlxhfFqkjq+eHOvpAPzciKeztzcU2lGWBDCJLlD15jAX
-         g/JtnCy4ZlHp/QwpKp/q09JdTR9w/2edc07rsXaA+G/Z2MKONfQTVaDiLbWuuBXbUm85
-         yQa3Uh6nlih4QaYC3fHmnIMGTxYXrB0AXLevWNf1Y7EZswLUjbQTkyPq0eSogs7bSPa3
-         xbNQ==
-X-Gm-Message-State: AJIora9p6I6EYMM4aVUTTvBx8ths+4J3X+GLEaDLtIEBihJvBxMXk3/k
-        TGOJZ9zq9OHFYuJRJIdS8+A1Ip72Obnt65D9Qck=
-X-Google-Smtp-Source: AGRyM1shdJmsktY8zrcXEWcL4rBfP+9PL5Kqswpu3FBaUufmuBcYlYGatVQ8fWVuu6PBCAyYLpwcd/aMQkLJe1qA6Bs=
-X-Received: by 2002:a17:907:6e12:b0:72e:6774:cb80 with SMTP id
- sd18-20020a1709076e1200b0072e6774cb80mr15871363ejc.504.1659448328964; Tue, 02
- Aug 2022 06:52:08 -0700 (PDT)
+        Tue, 2 Aug 2022 09:52:20 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D8D26AEE;
+        Tue,  2 Aug 2022 06:52:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mw2t5mDotnuLBkZsW7+S+D/Sh07k3jCvz9UING5DYe+STIN5ZjqGAj2WERGVVwPyZI5pl63v6sFMOAG7vKl6GhRP4g/1k1pzZs1mA2KIOA8j5WZubfQOBvV7zCrR815ennAGh5IJPoJLr6maNyIPtDi8ez3S6JDd4U7vLXbZr+1i97M91Z6l2sSI5WP9BqgDsoa6/Uf1NVA/wkrPYlQHfCOy4dTzAqH1Wbq5OWd4mEDdfhvAfGk7ha2Rhqxdd0J3Ww4mpzaNuEHh5BqDi+rcjLYNPogiKrVaNI0bXxbowCCVgs44zjT5Ich9i3OcNDE7s/rUkSR7pd/uvVoMpTEuBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iVJJq4JoYCe6O5hd7BtYZjX34jqMLTKeJ0egwP3tVPo=;
+ b=UPaS9tcalXsBOf3qSEzh7BKJDv4ezVS1wGjig5nXUUuyrMiGDtHsYUWfLOWSpL44AlNNWSc4pd7Okuw1VGWKhLFSlDqwqhD7L9VBg++JQ6bEhr1l0Klia+pWkNe1eD5E55ipDfvcgLzgB843Z+r1UVWuB3kP/rtYAeCT3xFTUr802LzphkS4Ynn/EoLNtvvlje+EtoLJUgkJgZWgUGlwtmrjUyniMQUzel6oZTyazzMmadiw1yZ1Qte7e089cEFJPvbbUNJLD40ZHObVYPCDoGumEgGJZWKAj52TL+5Ve65gkPW1FYBb0EtutdaK/T0GxFNdv+nKoDoJ6F5ZjDD/fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVJJq4JoYCe6O5hd7BtYZjX34jqMLTKeJ0egwP3tVPo=;
+ b=OkxsvXh3DKcTUJckIeJE+SiKyVXc5cj/5ixyCbVonzwMotgj6RRjl5FkjtQGDYbelZWed4cCv0qycK/ivYp5wnbVWSjBXrVozbE5qK1hLbRZ9IKAoSmvagegIKJrxEJeRkuYKOQFUky3CsCmHCSo9aDS+SDX0OVg5Ck9S2/QXM5qSr4SlKMpZx9mF3Xz3Oa28LCNkW0UtzZNWIY0E9SNXSrJgUymI0gCIrtNrb78EHGlWjCQUvc6RKV7wkjWHpe3FS5zuVyy6CZbDtF9SXgj+4kZo2lUfSvyv9mxfpp5ay0ua3Uh48Omsy76E3eGANMP+OB0HvcA0JISvAGVVJqayA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BN8PR12MB3220.namprd12.prod.outlook.com (2603:10b6:408:9e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.14; Tue, 2 Aug
+ 2022 13:52:08 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 13:52:08 +0000
+Date:   Tue, 2 Aug 2022 10:52:07 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Mark Zhang <markzhang@nvidia.com>
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, leon@kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] RDMA/cm: fix cond_no_effect.cocci warnings
+Message-ID: <YuksB4Lv9/7Ix5x8@nvidia.com>
+References: <20220610094530.28950-1-jiapeng.chong@linux.alibaba.com>
+ <e187af34-d0a8-55ed-cc21-d88845ec1eb5@nvidia.com>
+ <20220624201733.GA284068@nvidia.com>
+ <fdc5931f-5794-1770-0a5d-7470965cf390@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdc5931f-5794-1770-0a5d-7470965cf390@nvidia.com>
+X-ClientProxiedBy: MN2PR07CA0012.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::22) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
- <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
-In-Reply-To: <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 2 Aug 2022 08:51:57 -0500
-Message-ID: <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 76645cc0-d8b8-4753-ace1-08da748e312d
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3220:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zQz7HbB5zThb5M2OwCb+xQU4DRAz2fNshxehoMmreMRY2oQAGo7AAGAk8Se32z2OrWUOcVB35qaJhOWU08ivPIoO5FugK2xvKNWOlJIh5ObTE5Yd/RPsSQD2igiXKKbNE/D9gvr/c++KO11N4uxRYoZHMH4jZMU0Ezxrua2MS93goHZK1ob5dQqBdoKpZVXpbuD/qLlHqBAcp9l0tgToiYn4YmNBFNhM4H56sufUw5PHLlgvVEeqM9kZSfp4YhpNfGFr0o0FADcv3+KPLRKBUdVg8KxpozVOP6sq7AuI3AzBmXofTdljmhMK1YMTXmybXkByOpaz55VIbtNGLnz1Vsbw+tZxl0hn9glFj9SjigkBo1wT1GLRcgnZFEyhEsBu5a5njCIKltU75Y0Bi46HJH+MsC1y6jD3NmdkqTzLf9WQg/akFh5+gJ1xVden3s9UMki0EUBUy8ZgrHLBQIwJ9XE+1M3q/BD8M0JeyQnohVX1gx2DNNCmhZRFAvJSyCz1IeBm/KusGkb8GvYcoUqFfmkYerAh3MRGpq/dxtlp+canbDdWXvkNksThlRrztHdGgOZ/UHHTQEO7rc92kfeDKwZXzV5hHbL65zatAFhLIRiRhJsJku8wY/xG6VUei3oYkKCttU2Yr3qFyTdpIXd6CPfI9Gtn3uE95xKy/hyxjr21UqC6eZnRT4kQsF+bGUCd00gzzCPTThJa0mIsAgpJ6yMk+zd15hT5hEFN1exfYJc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(396003)(39860400002)(376002)(6506007)(6512007)(26005)(5660300002)(38100700002)(316002)(186003)(36756003)(6486002)(478600001)(86362001)(66946007)(2616005)(4326008)(8676002)(66556008)(66476007)(41300700001)(8936002)(6862004)(2906002)(6636002)(54906003)(37006003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?x+2drj21nbDnz+gWHWQI12EhgnfBZ17x8EfLdkO2yrVJ1DqfSogHzfdVVRNF?=
+ =?us-ascii?Q?gSfXIfIJXNcDT/zNvL1zxL8/2Ney+Oc/tD+/Mr5c+8rmubkEJtZ8HFVuqwpp?=
+ =?us-ascii?Q?yQZXsGwJiOZj2t454ED7MuG0ue15Airde/I3twUR/yOK2Xe9X8HHoABeKlXc?=
+ =?us-ascii?Q?nW2f95qfj73Oer3g51gQFpJ7tRA/7QSx01E1LZqSjw2M9pbGBBIDgnh4rZQ0?=
+ =?us-ascii?Q?BcTogEAUSiOg5XMAxsSlUNY/oYnzwJ1LSL3EHtPNpDDbdbh0kh/bNIFAVyI0?=
+ =?us-ascii?Q?WKFR6HCtQcfjRjJA+w+g5ndB1HqtzT//KOEViwFJxxk4CaYu4+EOnDWwMP63?=
+ =?us-ascii?Q?w4i7YtSBQMxIePXyAYVZJk4vPYHKnA1PvKAo4aBCquhcmbSR0MRVeKEJXfQ9?=
+ =?us-ascii?Q?IT0m5DHemul9hHrGtLRJ0a2TK2RNxd4ChmeJ2bzSydxYLhJChTcGesrZawel?=
+ =?us-ascii?Q?N3e8no0B/745Ikqb6p2JmoFnGdy/dCzniEanhfpSMu3Lpig/91wuq1kjbidD?=
+ =?us-ascii?Q?CfRTu5MPuRUAQwbN5HoKrKSCRabaqZM9BjxXP4erhjuIy40tEJVCl3+nEEVI?=
+ =?us-ascii?Q?TbY/TqNJcWX1maDJHVoTbEgyZS1ZMJh3/0pXCC9Wr9FSj1PzF/r+I2wz7uLZ?=
+ =?us-ascii?Q?Tbcf1v/L64ipUzPby+zohgFhDoDO28Jevx6+CcFWqgCuGuEtymKhr/jU1+GC?=
+ =?us-ascii?Q?aNPuQptMMrC8XE/KPmGt8AEDT2QWVN7fFwIxltw7fjan9QcKJOdUAOymXBg6?=
+ =?us-ascii?Q?+XP+9sog8V4eXdChAmJCPcUOo8ItL8fFu7k86nucHNY1sANnAHHRah77XxOq?=
+ =?us-ascii?Q?ygwLhA/uxVezXWMp8V8+s8BkSY6YO5tJi1Y8yesyvka7zBvu/0rSNT/F7UYe?=
+ =?us-ascii?Q?xcWH/gDNxt14/ePlXzD4ADlWuvLFBhA4UDcUAF1ufXJQ80fUVv4JB6kU/Fwc?=
+ =?us-ascii?Q?JCiBJ6BFacnqNLfDs9GeIq6Rdc4RJa6y09LGb+QGN8tmqKqe21d+XF2OkBIg?=
+ =?us-ascii?Q?YozTRSj1t2Y3ykDEbYGI3VHhNvxoKU08aC05bQdD/frJ7r/scEF6l32kzxV0?=
+ =?us-ascii?Q?QE0vmMTWikDeYJM2Y0Ygc8j/lwZk6RNwBn3LDrPp1gPNYpF9nxAPOYsfgM6r?=
+ =?us-ascii?Q?TVvZo5dlwAo4psQVqbedcvZFTVlcADMAneOUJYxBDZmGsv25Bhnx5+rqFjyi?=
+ =?us-ascii?Q?SiQwvVDpGd9nlXxWbPj6CIFrVoe2+XhYAOG85LFL1/gLDuQQtdfjx44Ad82q?=
+ =?us-ascii?Q?2cwhgwKlnJFIgLKr5V9V6hjLAF9u9AB9m9jC6J/hHgROr/+aqNE+tYj24HDf?=
+ =?us-ascii?Q?8WQWp2kCwhyQZGJI6qtw61g1jYBbBqzVwEV8AB89xnUWIWkMbKtkJbwFkTh0?=
+ =?us-ascii?Q?LbCAleIl9vJ49/LZ5HHGJRrfhNC/4OjhsXjQzXzg0S38RBHZ9ZTKIOOm1yeg?=
+ =?us-ascii?Q?TzXEpzkSLgqwbvFNMIrPjR4hKv9hemKuPebDgt4VT+icnhMBOv5OTz/IxM2X?=
+ =?us-ascii?Q?8j0ih9R5gE8zro9XDtZnXDvLSIjAgHZESRqHt+HWR9qozJv0ENCVJ3I0M107?=
+ =?us-ascii?Q?n51evOo4/e645WDIjSJ94RaJcLqdzXASsqYZur1K?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76645cc0-d8b8-4753-ace1-08da748e312d
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 13:52:08.6851
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YLoN3uhj/lWYrcVodjX9ln+87JqHzqZLyu3F9uKVGiwqSLwrkN/0vF4TjIv5xG25
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3220
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 7:13 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Tue, Aug 2, 2022 at 3:08 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
-> >
-> > Hi Adam, Fabio,
-> >
-> > On 22-08-01, Adam Ford wrote:
-> > > On Mon, Aug 1, 2022 at 8:53 PM Fabio Estevam <festevam@gmail.com> wrote:
-> > > >
-> > > > On Mon, Aug 1, 2022 at 10:39 PM Adam Ford <aford173@gmail.com> wrote:
-> > > >
-> > > > > I managed to get my HDMI output working. I had the lanes set to 2
-> > > > > instead of 4.  Once I switched to 4-lanes, the monitor came up in
-> > > > > 1080p.  I haven't yet been able to get other modes to work.
-> > > >
-> > > > Ok, good. On another thread, you mentioned that you were also trying
-> > > > to get LVDS to work via SN65DSI83.
-> > > >
-> > > > Does LVDS work for you on this branch?
-> > >
-> > > I haven't tried with Marek's latest suggestion.  In the other thread
-> > > he mentioned a burst mode and setting the DSI speeds to higher
-> > > frequencies, but the patch he had didn't look like it would apply
-> > > cleanly, so I will need to dig into that a bit further.
-> >
-> > Can you provide me a link to this thread?
->
-> Sure,
->
-> https://www.spinics.net/lists/dri-devel/msg358301.html
->
-> >
-> > > Since my company doesn't really ship the LVDS displays with the kits,
-> > > the HDMI is the default video, so I've been focusing on it.
-> > >
-> > > To answer Marco's question, I was able to revert "MLK-21958-13:
-> > > drm/bridge: adv7511: Limit supported clocks" and still get a display
-> > > at 1080p, but all the other resolutions I tried appear to come up
-> > > blank.
-> >
-> > Cool so now you have the same state as we are.
->
-> I have a couple patches applied to mine which mimic some of the stuff
-> that NXP did.  Since I have access to a programmer manual, i was able
-> to confirm some of the 7535 specific stuff and the low-refresh rate
-> changes in their kernel appear appropriate and I also created a second
-> table of default settings for the 7535 and if the type is set
-> properly, i'll use the newer table instead of the older one. If anyone
-> wants any of these patches, I can certainly share them, but I am not
-> certain they make any difference.
->
-> There are a few other items in the programmer manual that I want to
-> attempt to implement once I have a chance to further review the
-> document.
->
-> >
-> > I think that the most important one is the blanking calc. Can you try to
-> > revert "drm/bridge: adv7511: Repair bus_flags and bus_format" and check
-> > if you can get a output still? Also something to try would be to disable
-> > the internal timing generator by specifying
-> > 'adi,disable-timing-generator'. Also if you have an oscilloscope for
+On Tue, Aug 02, 2022 at 10:15:24AM +0800, Mark Zhang wrote:
+> 
+> > Yes, this is a standard pattern for walking tree with priority, we
+> > should not obfuscate it.
+> > 
+> > The final else means 'equal' and the first if should ideally be placed
+> > there
+> > 
+> > However this function is complicated by the use of the service_mask
+> > for equality checking, and it doesn't even work right if the
+> > service_mask is not -1.
+> > 
+> > If someone wants to clean this then please go through and eliminate
+> > service_mask completely. From what I can see its value is always -1.
+> > Three patches:
+> >   - Remove the service_mask parameter from ib_cm_listen(), all callers
+> >     use 0
+> >   - Remove the service_mask parameter from cm_init_listen(), all
+> >     callers use 0. Inspect and remove cm_id_priv->id.service_mask,
+> >     it is the constant value  ~cpu_to_be64(0) which is a NOP when &'d
+> >   - Move the test at the top of cm_find_listen() into the final else
+> > 
+> 
+> I'll do it. For the 3rd one, do you mean a patch like (similar change in
+> cm_insert_listen):
 
-I did some reading about the internal timing generator.  It appears
-that it's required when video formats use fractional bytes, and it's
-preconfigured to run at 720p by default, but registers 28h through 37h
-configure it for other video modes.
+Yes
 
-Are you thinking the imx8mm DSI generator would do it better?
-
-> > such frequencies you can check the hdmi clk-lane. I noticed that this is
-> > sometimes wrong.
->
-> I am doing this from my home office as a side project, so I don't have
-> a scope, but I can try to revert the other patch and try to disable
-> the internal timing generator when I get home tonight.  I'll report my
-> findings.
->
-> >
-> > Regards,
-> >   Marco
-> >
-> > > I didn't try every one.  With that revert, more options come
-> > > available, but 1440x900 and 800x600 were options I tried
-> > > unsuccessfullyl.
-> >
-> > >
-> > > adam
-> > >
+Jason

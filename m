@@ -2,149 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A522588439
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F6F58843C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiHBW1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S234734AbiHBW2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbiHBW1t (ORCPT
+        with ESMTP id S232949AbiHBW2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:27:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1D84D4F0;
-        Tue,  2 Aug 2022 15:27:47 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1659479264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+8YQaqr4jvBS77GSdetrDQfbpLw2aOVtTCrGN8SWq0=;
-        b=f4Fsr/J/7fmIJ2tvX1It3tya28H7xrMMJIXEhiveaI8B56d8Y7ynh+50whCMatb9FWA23I
-        DP9ICXxCnxu1bqeqH0KeaObLIY3cJSda2SFuFH4heJVgDqRVbFnwmzZIB3ss+cSOwvo0Q3
-        e1dgusOuX7PpaSZhIRWU7HBvLsNpSnb/6Qh4IPMrBUEYhUzPg9Z3qKsEirKdKKpCjObmGf
-        T0V2Zuh6On3YOvGT5mXnbOmwEbTRBKdfChjVKtzvfny9zSZy6H+y5DxCN5UWasFGV1XhEW
-        afNKWS7pehSl2eNQJCzmBFxB/CnPByq2euTBPqiXgWAlQ/KUsB82/Bj3rx7xFQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1659479264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+8YQaqr4jvBS77GSdetrDQfbpLw2aOVtTCrGN8SWq0=;
-        b=J5odj7yQnMHKp1krceheGfiT050s2V9VWquVety53pBTRT3cFLrw3HOBTdbvUxNHxE124Q
-        P8Dvry2qh+yQwpCg==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, Nadia Heninger <nadiah@cs.ucsd.edu>,
-        Thomas Ristenpart <ristenpart@cornell.edu>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH RFC v1] random: implement getrandom() in vDSO
-In-Reply-To: <CAHmME9pNN6Pc_1NaMDv+hqv_ULXiVUYFXM=Xigu_StvGS_-53A@mail.gmail.com>
-References: <20220729145525.1729066-1-Jason@zx2c4.com>
- <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
- <YuXCpyULk6jFgGV5@zx2c4.com> <87zggnsqwj.ffs@tglx>
- <Yuhe6IIFXqNMZs5b@zx2c4.com> <87bkt2sqq4.ffs@tglx>
- <YuktqQS7Rb0IbJNh@zx2c4.com> <878ro6smmm.ffs@tglx>
- <CAHmME9pNN6Pc_1NaMDv+hqv_ULXiVUYFXM=Xigu_StvGS_-53A@mail.gmail.com>
-Date:   Wed, 03 Aug 2022 00:27:43 +0200
-Message-ID: <87zggmqo0w.ffs@tglx>
+        Tue, 2 Aug 2022 18:28:06 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCF654CBC
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:27:55 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id ct13so8058831qvb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 15:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9SA1GeBCwPiGvsrnnwBDw1nYIHiUSNtHqCw5JUNeRyk=;
+        b=tN7USoFfowYqaOA3Zg7kBgDk9uh8FMrZP5UPHQpQgQA49sW+iNiHFS0Ua7puhPUvQV
+         y23XyuYrkE8cRYDz/Za/oub0X6hP/u2391ShPfSH6nuX3nku04d1N71G7JBwsqgFMBCL
+         svXUhAvY2hQc8Ot26TnHY2JyRLD7XFvGuqJeGRvQUqiEV3WxSZh4lwAFNPaW1v4k8i0s
+         9S8eVIpf0+8pemcv6MCpwmd7tlpfmxitnptjmQJDw8HPZMXMt3IPtJpk4KfIeDScYyBn
+         pcM3gNEYo0bAOeb3/VY4KxpyGtKfutMGciY6RE5pFf22fS/4Ng9+Ypqtwqw6Om+9t8at
+         ta0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9SA1GeBCwPiGvsrnnwBDw1nYIHiUSNtHqCw5JUNeRyk=;
+        b=4rHlHgOYT8rR9bZl7TSx+udnyYBkUZYhRlxGy6RTiNXWSOfG8usGttWLawW/jGpqYk
+         RCxVcsWkU8sYJcPqwP7jeJu5MjOfAgReJAbucVGlKKxZwztLOfHvK05VwN9lfgwkKS5E
+         YeJPaoTr149aQGcMAG7d6lcdtZkDH8Jn9p7G5H1ts1A2ffjtHgEHNLomMriScFlnuVhU
+         9EJFpr9Q41b4aK8AgKRQ3aoqsLUeG5VI/ZQjBBtN7naO4/HOMB9NbpxNvjnDSark363M
+         d8MzNcEW9rEOxSlFTbgWB2mAw5vSOaOfToFXNlXEY27yYOaZgBZTyUSQcvoXll4nijk/
+         sydA==
+X-Gm-Message-State: ACgBeo3dcsOWziqr5wTTWpP0V0gYg9SkxysR8VN+TG2U8exniA1XgIGj
+        xGe29XPUgKKEIKPzvd5NlDUUZ1Q4eIuJ8ZIObxxNJg==
+X-Google-Smtp-Source: AA6agR5+Y3zN3DuMsHNU5t2COkNkCwWZBkoftegn99gL+qMDMiI/AiRmHr5ptn4jQrA3+/lO3hRhX33eBXJdbM5Cocw=
+X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id q1-20020a0c9101000000b00473009bd92amr19932398qvq.17.1659479274234;
+ Tue, 02 Aug 2022 15:27:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722174829.3422466-1-yosryahmed@google.com>
+ <20220722174829.3422466-5-yosryahmed@google.com> <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 2 Aug 2022 15:27:43 -0700
+Message-ID: <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org,
+        Kui-Feng Lee <kuifeng@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason!
+Hi Andrii,
 
-On Tue, Aug 02 2022 at 17:26, Jason A. Donenfeld wrote:
-> On Tue, Aug 2, 2022 at 5:14 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> Seriously no.
+On Mon, Aug 1, 2022 at 8:43 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Why so serious all at once? :-)
-
-Because you triggered the 'now it gets serious' button with your "it's
-the same" sentiment.
-
->> All existing VDSO functions have exactly the same function
->> signature and semantics as their syscall counterparts. So they are drop
->> in equivalent.
->>
->> But:
->>
->>   ssize_t getrandom(void *, void *, size_t, unsigned int);
->>
->> is very much different than
->>
->>   ssize_t getrandom(void *, size_t, unsigned int);
->>
->> Different signature and different semantics.
+> On Fri, Jul 22, 2022 at 10:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > From: Hao Luo <haoluo@google.com>
+> >
+> > Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+> >
+> >  - walking a cgroup's descendants in pre-order.
+> >  - walking a cgroup's descendants in post-order.
+> >  - walking a cgroup's ancestors.
+> >
+> > When attaching cgroup_iter, one can set a cgroup to the iter_link
+> > created from attaching. This cgroup is passed as a file descriptor and
+> > serves as the starting point of the walk. If no cgroup is specified,
+> > the starting point will be the root cgroup.
+> >
+> > For walking descendants, one can specify the order: either pre-order or
+> > post-order. For walking ancestors, the walk starts at the specified
+> > cgroup and ends at the root.
+> >
+> > One can also terminate the walk early by returning 1 from the iter
+> > program.
+> >
+> > Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> > program is called with cgroup_mutex held.
+> >
+> > Currently only one session is supported, which means, depending on the
+> > volume of data bpf program intends to send to user space, the number
+> > of cgroups that can be walked is limited. For example, given the current
+> > buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> > cgroup, the total number of cgroups that can be walked is 512. This is
+> > a limitation of cgroup_iter. If the output data is larger than the
+> > buffer size, the second read() will signal EOPNOTSUPP. In order to work
+> > around, the user may have to update their program to reduce the volume
+> > of data sent to output. For example, skip some uninteresting cgroups.
+> > In future, we may extend bpf_iter flags to allow customizing buffer
+> > size.
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > ---
+> >  include/linux/bpf.h                           |   8 +
+> >  include/uapi/linux/bpf.h                      |  30 +++
+> >  kernel/bpf/Makefile                           |   3 +
+> >  kernel/bpf/cgroup_iter.c                      | 252 ++++++++++++++++++
+> >  tools/include/uapi/linux/bpf.h                |  30 +++
+> >  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+> >  6 files changed, 325 insertions(+), 2 deletions(-)
+> >  create mode 100644 kernel/bpf/cgroup_iter.c
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index a97751d845c9..9061618fe929 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -47,6 +47,7 @@ struct kobject;
+> >  struct mem_cgroup;
+> >  struct module;
+> >  struct bpf_func_state;
+> > +struct cgroup;
+> >
+> >  extern struct idr btf_idr;
+> >  extern spinlock_t btf_idr_lock;
+> > @@ -1717,7 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+> >         int __init bpf_iter_ ## target(args) { return 0; }
+> >
+> >  struct bpf_iter_aux_info {
+> > +       /* for map_elem iter */
+> >         struct bpf_map *map;
+> > +
+> > +       /* for cgroup iter */
+> > +       struct {
+> > +               struct cgroup *start; /* starting cgroup */
+> > +               int order;
+> > +       } cgroup;
+> >  };
+> >
+> >  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index ffcbf79a556b..fe50c2489350 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -87,10 +87,30 @@ struct bpf_cgroup_storage_key {
+> >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> >  };
+> >
+> > +enum bpf_iter_cgroup_traversal_order {
+> > +       BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
+> > +       BPF_ITER_CGROUP_POST,           /* post-order traversal */
+> > +       BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
 >
-> Different signature, but basically the same semantics.
+> I've just put up my arguments why it's a good idea to also support a
+> "trivial" mode of only traversing specified cgroup and no descendants
+> or parents. Please see [0].
 
-Not at all. The concept of 'basically same semantics' is a delusion. It
-does not exist. Either it's the same or it's not.
+cc Kui-Feng in this thread.
 
-I really want to see your reaction on a claim that some RNG
-implementation is basically the same as the existing one. I'm sure you
-buy that without complaints.
+Yeah, I think it's a good idea. It's useful when we only want to show
+a single object, which can be common. Going further, I think we may
+want to restructure bpf_iter to optimize for this case.
 
->> So you have to go through the whole process of a new ABI whether you
->> like it or not.
+> I think the same applies here, especially
+> considering that it seems like a good idea to support
+> task/task_vma/task_files iteration within a cgroup.
+
+I have reservations on these use cases. I don't see immediate use of
+iterating vma or files within a cgroup. Tasks within a cgroup? Maybe.
+:)
+
+> So depending on
+> how successful I am in arguing for supporting task iterator with
+> target cgroup, I think we should reuse *exactly* this
+> bpf_iter_cgroup_traversal_order and how we specify cgroup (FD or ID,
+> see some more below) *as is* in task iterators as well. In the latter
+> case, having an ability to say "iterate task for only given cgroup" is
+> very useful, and for such mode all the PRE/POST/PARENT_UP is just an
+> unnecessary nuisance.
 >
-> Ahh, in that sense. Yea, I'd rather not have to do that too, with the
-> additional opaque handle passed as the first argument. It'd be nice if
-> there were some private place where I could store the necessary state,
-> but I'm not really sure where that might be at the moment. If you have
-> any ideas, please let me know.
+> So please consider also adding and supporting BPF_ITER_CGROUP_SELF (or
+> whatever naming makes most sense).
+>
 
-That's exactly the problem. VDSO is a stateless syscall wrapper which
-has to be self contained for obvious reasons.
+PRE/POST/UP can be reused for iter of tree-structured containers, like
+rbtree [1]. SELF can be reused for any iters like iter/task,
+iter/cgroup, etc. Promoting all of them out of cgroup-specific struct
+seems valuable.
 
-My previous statement:
+[1] https://lwn.net/Articles/902405/
 
-    Everything else is library material, really.
+>
+> Some more naming nits. I find BPF_ITER_CGROUP_PRE and
+> BPF_ITER_CGROUP_POST a bit confusing. Even internally in kernel we
+> have css_next_descendant_pre/css_next_descendant_post, so why not
+> reflect the fact that we are going to iterate descendants:
+> BPF_ITER_CGROUP_DESCENDANTS_{PRE,POST}. And now that we use
+> "descendants" terminology, PARENT_UP should be ANCESTORS. ANCESTORS_UP
+> probably is fine, but seems a bit redundant (unless we consider a
+> somewhat weird ANCESTORS_DOWN, where we find the furthest parent and
+> then descend through preceding parents until we reach specified
+> cgroup; seems a bit exotic).
+>
 
-is based on that fact and not on the unwillingness to add magic muck to
-the VDSO.
+BPF_ITER_CGROUP_DESCENDANTS_PRE is too verbose. If there is a
+possibility of merging rbtree and supporting walk order of rbtree
+iter, maybe the name here could be general, like
+BPF_ITER_DESCENDANTS_PRE, which seems better.
 
-The unwillingness part is just the question:
+>   [0] https://lore.kernel.org/bpf/f92e20e9961963e20766e290ee6668edd4bacf06.camel@fb.com/T/#m5ce50632aa550dd87a99241efb168cbcde1ee98f
+>
+> > +};
+> > +
+> >  union bpf_iter_link_info {
+> >         struct {
+> >                 __u32   map_fd;
+> >         } map;
+> > +
+> > +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
+> > +        * ancestors of a given cgroup.
+> > +        */
+> > +       struct {
+> > +               /* Cgroup file descriptor. This is root of the subtree if walking
+> > +                * descendants; it's the starting cgroup if walking the ancestors.
+> > +                * If it is left 0, the traversal starts from the default cgroup v2
+> > +                * root. For walking v1 hierarchy, one should always explicitly
+> > +                * specify the cgroup_fd.
+> > +                */
+> > +               __u32   cgroup_fd;
+>
+> Now, similar to what I argued in regard of pidfd vs pid, I think the
+> same applied to cgroup_fd vs cgroup_id. Why can't we support both?
+> cgroup_fd has some benefits, but cgroup_id is nice due to simplicity
+> and not having to open/close/keep extra FDs (which can add up if we
+> want to periodically query something about a large set of cgroups).
+> Please see my arguments from [0] above.
+>
+> Thoughts?
+>
 
-    Is there a sensible usecase?
+We can support both, it's a good idea IMO. But what exactly is the
+interface going to look like? Can you be more specific about that?
+Below is something I tried based on your description.
 
-Assumed that there is a sensible usecase, there is a way out and that's
-exactly the library part. You can make that VDSO interface versioned and
-provide a library in tools/random/ which goes in lockstep with the VDSO
-changes.
+@@ -91,6 +91,18 @@ union bpf_iter_link_info {
+        struct {
+                __u32   map_fd;
+        } map;
++       struct {
++               /* PRE/POST/UP/SELF */
++               __u32 order;
++               struct {
++                       __u32 cgroup_fd;
++                       __u64 cgroup_id;
++               } cgroup;
++               struct {
++                       __u32 pid_fd;
++                       __u64 pid;
++               } task;
++       };
+ };
 
-If the RNG tinkerers abuse that, then so be it. You can't do anything
-about it whatever you try. They can abuse your magic vdso functionality
-too.
-
-That's very much the same as we have with e.g. perf. The old perf binary
-still works, but it does not have access to the latest and greatest
-features.
-
-You can do very much the same in a kernel supplied helper library which
-either can cope with the version change or falls back to
-sys_getrandom().
-
-Vs. the storage problem. That yells TLS, but that makes your process
-wide sharing moot, which might not be the worst of all things IMO.
-
-Thanks,
-
-        tglx
-
-
+> > +               __u32   traversal_order;
+> > +       } cgroup;
+> >  };
+> >
+> >  /* BPF syscall commands, see bpf(2) man-page for more details. */
+>
+> [...]

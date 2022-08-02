@@ -2,221 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32D25881C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366B35881C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiHBSN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S229499AbiHBSNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiHBSNY (ORCPT
+        with ESMTP id S233981AbiHBSNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:13:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3551817E1C;
-        Tue,  2 Aug 2022 11:13:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9C42B81EF4;
-        Tue,  2 Aug 2022 18:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F43C433D6;
-        Tue,  2 Aug 2022 18:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659464000;
-        bh=nQJbrO57DyZP6Khfo1y4+FRa0/uoV/1hWZd8ykEAbQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KkZKasLRcXY0UBRLQpQCt2HQeH+bQJ1EurBm17qTjnGcjMFX7FlDsFYfMlc//PNrs
-         rFG7UFwDqSKio7gMApA2khxLmHdsWrmSFmlu/5J5VQo2p+fG51lXBQcABrf/owkFq0
-         hnQ+djSIN+1DE05gj0AQAbawTkbxQJTcOUnoQysbS91lTcj/8M6sf/UKwuVpVES1jb
-         N7iQn+MIzbkQyn59h47K0cGQLhExl2cifL9HAklbI6QScYHfNwzRldQq9iXSamtxvB
-         8btn6IUoD0XLlzco8f2s9dLVHg32tpNXRFgTuCCx6tcNHzqZTB2zWIp/y1CZGzHhqY
-         WIOFYjDeMbbcQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1B8CE40736; Tue,  2 Aug 2022 15:13:18 -0300 (-03)
-Date:   Tue, 2 Aug 2022 15:13:18 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        =?utf-8?B?6LCt5qKT54WK?= <tanzixuan.me@gmail.com>,
-        Zixuan Tan <tanzixuangg@gmail.com>, terrelln@fb.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
- libcrypto feature test
-Message-ID: <YulpPqXSOG0Q4J1o@kernel.org>
-References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
- <YrhxE4s0hLvbbibp@krava>
- <CABwm_eT_LE6VbLMgT31yqW=tc_obLP=6E0jnMqVn1sMdWrVVNw@mail.gmail.com>
- <Yrqcpr7ICzpsoGrc@krava>
- <YufUAiLqKiuwdvcP@krava>
- <YuloQYU72pe4p3eK@kernel.org>
+        Tue, 2 Aug 2022 14:13:40 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CC44A83A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:13:37 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id x39so13526609lfu.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RfAmeIhpMtEjE+n6tE+gFwawGbWrsqhmqXKSU+whqmc=;
+        b=Sgh8aeC7x64vARyPgwe8pZ3HUDFse2tcOJvVUz8LPNYSEnSsIM/Is7UoaACkUvNPvG
+         QGxPIiJNwQztYPTpWPhWpYkCc7MHsE242mjlSddOOhZj2BKJdCHM1tkOwn0tumvmq5U3
+         UnHw/dMWaNxDSjU09BXg6STjRv9DpnHlIoFCCHWPDToo/9rBDOOKOYCxYpYGik5XYwG8
+         R3lYXPsGxyct22bR6qgSmaXk818F1o0gne/oVg5ihBEPV3T8CnMZwFbxxlD1C7G5avOd
+         Hm44bMeeXtFnYhw3ZgIq46NYqPXulCAxrXp4HqNpuM5vYp8gteiaNI+G8W6BdmI7HePo
+         cVPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RfAmeIhpMtEjE+n6tE+gFwawGbWrsqhmqXKSU+whqmc=;
+        b=aoHeNMA29xMCRDaDwCPXFhXpOneQyQkukFWQWJbqouFHDZyR48wbI+SP4oQ2ndzZrV
+         bptIXHaJSAbnAvvnmgG+mQ3SySNLmshKfCi3Xa1iy4i1XXemUHOXy9+5GCTpVpAd3eBp
+         C4rKhPQC6kU5PRXw4+/XEXxKREbTKB7WFLHDM4ZNp1fAdxmWCs7zixUTZrJSYJZVn71s
+         ltWXqOT72VWQjAU+82zYzQbEHd5EFWT3X/sm1xIIVahYnrplTfXTTMqpcfBEyp0TMkTv
+         NMWAit42NZi/6E17CTxWbT8qD1xKHFBzFDQiJ0hFQwnjeRcBlRwZAbWkZM+naiCX57BK
+         7J2A==
+X-Gm-Message-State: ACgBeo1fx5HdPHuurM4mJGLA1ML8xnJtvv53np/uKG8VG9jOm0UP9DSy
+        BRFoC2N3IIlTeKiY4nVve9tNqJ4j8DT+XulkBuvZac1tRCE=
+X-Google-Smtp-Source: AA6agR5IZ3f2t5nb+xFmpy44jVFACoSxNadQbNDWn3Ir2XwLUgWDvka1g8gFJ9sJ4TgfG8IsHsST2MaWS+CO6SDDPoA=
+X-Received: by 2002:a05:6512:158b:b0:48b:38:cff8 with SMTP id
+ bp11-20020a056512158b00b0048b0038cff8mr2926407lfb.100.1659464016072; Tue, 02
+ Aug 2022 11:13:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YuloQYU72pe4p3eK@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801093902.1506297-1-masahiroy@kernel.org>
+In-Reply-To: <20220801093902.1506297-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 2 Aug 2022 11:13:24 -0700
+Message-ID: <CAKwvOd=cBXzA9SfYtK-h_dAqLyg=5iZ6YjztTfNschKUMBTK9Q@mail.gmail.com>
+Subject: Re: [PATCH 1/4] modpost: shorten warning messages in report_sec_mismatch()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 02, 2022 at 03:09:05PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Aug 01, 2022 at 03:24:18PM +0200, Jiri Olsa escreveu:
-> > On Tue, Jun 28, 2022 at 08:16:06AM +0200, Jiri Olsa wrote:
-> > > On Mon, Jun 27, 2022 at 11:08:34AM +0800, 谭梓煊 wrote:
-> > > > On Sun, Jun 26, 2022 at 10:45 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > > >
-> > > > > On Sat, Jun 25, 2022 at 11:34:38PM +0800, Zixuan Tan wrote:
-> > > > > > With OpenSSL v3 installed, the libcrypto feature check fails as it use the
-> > > > > > deprecated MD5_* API (and is compiled with -Werror). The error message is
-> > > > > > as follows.
-> > > > > >
-> > > > > > $ make tools/perf
-> > > > > > ```
-> > > > > > Makefile.config:778: No libcrypto.h found, disables jitted code injection,
-> > > > > > please install openssl-devel or libssl-dev
-> > > > > >
-> > > > > > Auto-detecting system features:
-> > > > > > ...                         dwarf: [ on  ]
-> > > > > > ...            dwarf_getlocations: [ on  ]
-> > > > > > ...                         glibc: [ on  ]
-> > > > > > ...                        libbfd: [ on  ]
-> > > > > > ...                libbfd-buildid: [ on  ]
-> > > > > > ...                        libcap: [ on  ]
-> > > > > > ...                        libelf: [ on  ]
-> > > > > > ...                       libnuma: [ on  ]
-> > > > > > ...        numa_num_possible_cpus: [ on  ]
-> > > > > > ...                       libperl: [ on  ]
-> > > > > > ...                     libpython: [ on  ]
-> > > > > > ...                     libcrypto: [ OFF ]
-> > > > > > ...                     libunwind: [ on  ]
-> > > > > > ...            libdw-dwarf-unwind: [ on  ]
-> > > > > > ...                          zlib: [ on  ]
-> > > > > > ...                          lzma: [ on  ]
-> > > > > > ...                     get_cpuid: [ on  ]
-> > > > > > ...                           bpf: [ on  ]
-> > > > > > ...                        libaio: [ on  ]
-> > > > > > ...                       libzstd: [ on  ]
-> > > > > > ...        disassembler-four-args: [ on  ]
-> > > > > > ```
-> > > > > >
-> > > > > > This is very confusing because the suggested library (on my Ubuntu 20.04
-> > > > > > it is libssl-dev) is already installed. As the test only checks for the
-> > > > > > presence of libcrypto, this commit suppresses the deprecation warning to
-> > > > > > allow the test to pass.
-> > > > > >
-> > > > > > Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
-> > > > > > ---
-> > > > > >  tools/build/feature/test-libcrypto.c | 6 ++++++
-> > > > > >  1 file changed, 6 insertions(+)
-> > > > > >
-> > > > > > diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
-> > > > > > index a98174e0569c..31afff093d0b 100644
-> > > > > > --- a/tools/build/feature/test-libcrypto.c
-> > > > > > +++ b/tools/build/feature/test-libcrypto.c
-> > > > > > @@ -2,6 +2,12 @@
-> > > > > >  #include <openssl/sha.h>
-> > > > > >  #include <openssl/md5.h>
-> > > > > >
-> > > > > > +/*
-> > > > > > + * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
-> > > > > > + * feature test to fail silently. This is a workaround.
-> > > > > > + */
-> > > > >
-> > > > > then we use these deprecated MD5 calls in util/genelf.c if libcrypto is detected,
-> > > > > so I wonder how come the rest of the compilation passed for you.. do you have
-> > > > > CONFIG_JITDUMP disabled?
-> > > > >
-> > > > No, CONFIG_JITDUMP is not disabled. I am using the default configuration.
-> > > > 
-> > > > Yes, you are right. The rest of the compilation should fail, but it doesn't.
-> > > > I checked the verbose build commands. This seems to be the result of another
-> > > > inconsistency.
-> > > > 
-> > > > If libcrypto is detected, the macro "HAVE_LIBCRYPTO_SUPPORT" will be
-> > > > defined, but in perf/util/genelf.c, "HAVE_LIBCRYPTO" without the "_SUPPORT"
-> > > > prefix is checked. This causes urandom always be used to create build id
-> > > > rather than MD5 and SHA1, no matter what the detection result is.
-> > > > 
-> > > > In perf/Makefile.config, from line 776
-> > > > ```
-> > > > ifndef NO_LIBCRYPTO
-> > > >   ifneq ($(feature-libcrypto), 1)
-> > > >     msg := $(warning No libcrypto.h found, disables jitted code injection,
-> > > >             please install openssl-devel or libssl-dev);
-> > > >     NO_LIBCRYPTO := 1
-> > > >   else                                  <-- if libcrypto feature detected
-> > > >     CFLAGS += -DHAVE_LIBCRYPTO_SUPPORT  <-- define this
-> > > >     EXTLIBS += -lcrypto
-> > > >     $(call detected,CONFIG_CRYPTO)
-> > > >   endif
-> > > > endif
-> > > > ```
-> > > > 
-> > > > In perf/util/genelf.c, from line 33
-> > > > ```
-> > > > #ifdef HAVE_LIBCRYPTO                <-- but check this, it's always false
-> > > 
-> > > nice :)
-> > > 
-> > > > 
-> > > > #define BUILD_ID_MD5
-> > > > #undef BUILD_ID_SHA /* does not seem to work well when linked with Java */
-> > > > #undef BUILD_ID_URANDOM /* different uuid for each run */
-> > > > 
-> > > > #ifdef BUILD_ID_SHA
-> > > > #include <openssl/sha.h>
-> > > > #endif
-> > > > 
-> > > > #ifdef BUILD_ID_MD5
-> > > > #include <openssl/md5.h>
-> > > > #endif
-> > > > #endif                               <-- this block will be skipped
-> > > > ```
-> > > > 
-> > > > Maybe we should fix this, to really make use of libcrypto if it is available?
-> > > 
-> > > yea, I think that was the original idea, let's keep the variable with
-> > > SUPPORT suffix and use the -Wdeprecated-declarations for genelf.c
-> > > 
-> > > full fix would be to detect the new API and use it when it's available but..
-> > > given that the check was false at least since 2016, perhaps we could remove
-> > > that code? ;-) Stephane?
-> > 
-> > ping
-> 
-> So, we should start with 谭梓煊 patch, then fix that ifdef and go on
-> from there?
+On Mon, Aug 1, 2022 at 2:41 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Each section mismatch results in long warning messages. Too much.
 
-I.e. with this:
+:(
+
+Yes; they are too verbose.  That said, I have found the
+recommendations about annotations for function attributes handy in the
+past and would be sad to see them go.  They remind me of "note"
+diagnostics from the compiler that add additional context to
+"warning"/"error" diagnostics on what the recommended next steps are
+for fixing them.
+
+Is there a "happy middle ground" here?
+
+>
+> Make each warning fit in one line, and remove a lot of messy code.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 179 +++---------------------------------------
+>  1 file changed, 9 insertions(+), 170 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index a8ee27496da7..9e8ae2636ec1 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1238,42 +1238,6 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
+>         return near;
+>  }
+>
+> -/*
+> - * Convert a section name to the function/data attribute
+> - * .init.text => __init
+> - * .memexitconst => __memconst
+> - * etc.
+> - *
+> - * The memory of returned value has been allocated on a heap. The user of this
+> - * method should free it after usage.
+> -*/
+> -static char *sec2annotation(const char *s)
+> -{
+> -       if (match(s, init_exit_sections)) {
+> -               char *p = NOFAIL(malloc(20));
+> -               char *r = p;
+> -
+> -               *p++ = '_';
+> -               *p++ = '_';
+> -               if (*s == '.')
+> -                       s++;
+> -               while (*s && *s != '.')
+> -                       *p++ = *s++;
+> -               *p = '\0';
+> -               if (*s == '.')
+> -                       s++;
+> -               if (strstr(s, "rodata") != NULL)
+> -                       strcat(p, "const ");
+> -               else if (strstr(s, "data") != NULL)
+> -                       strcat(p, "data ");
+> -               else
+> -                       strcat(p, " ");
+> -               return r;
+> -       } else {
+> -               return NOFAIL(strdup(""));
+> -       }
+> -}
+> -
+>  static int is_function(Elf_Sym *sym)
+>  {
+>         if (sym)
+> @@ -1282,19 +1246,6 @@ static int is_function(Elf_Sym *sym)
+>                 return -1;
+>  }
+>
+> -static void print_section_list(const char * const list[20])
+> -{
+> -       const char *const *s = list;
+> -
+> -       while (*s) {
+> -               fprintf(stderr, "%s", *s);
+> -               s++;
+> -               if (*s)
+> -                       fprintf(stderr, ", ");
+> -       }
+> -       fprintf(stderr, "\n");
+> -}
+> -
+>  static inline void get_pretty_name(int is_func, const char** name, const char** name_p)
+>  {
+>         switch (is_func) {
+> @@ -1312,141 +1263,31 @@ static inline void get_pretty_name(int is_func, const char** name, const char**
+>  static void report_sec_mismatch(const char *modname,
+>                                 const struct sectioncheck *mismatch,
+>                                 const char *fromsec,
+> -                               unsigned long long fromaddr,
+>                                 const char *fromsym,
+> -                               int from_is_func,
+> -                               const char *tosec, const char *tosym,
+> -                               int to_is_func)
+> +                               const char *tosec, const char *tosym)
+>  {
+> -       const char *from, *from_p;
+> -       const char *to, *to_p;
+> -       char *prl_from;
+> -       char *prl_to;
+> -
+>         sec_mismatch_count++;
+>
+> -       get_pretty_name(from_is_func, &from, &from_p);
+> -       get_pretty_name(to_is_func, &to, &to_p);
+> -
+> -       warn("%s(%s+0x%llx): Section mismatch in reference from the %s %s%s "
+> -            "to the %s %s:%s%s\n",
+> -            modname, fromsec, fromaddr, from, fromsym, from_p, to, tosec,
+> -            tosym, to_p);
+> -
+>         switch (mismatch->mismatch) {
+>         case TEXT_TO_ANY_INIT:
+> -               prl_from = sec2annotation(fromsec);
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The function %s%s() references\n"
+> -               "the %s %s%s%s.\n"
+> -               "This is often because %s lacks a %s\n"
+> -               "annotation or the annotation of %s is wrong.\n",
+> -               prl_from, fromsym,
+> -               to, prl_to, tosym, to_p,
+> -               fromsym, prl_to, tosym);
+> -               free(prl_from);
+> -               free(prl_to);
+> -               break;
+> -       case DATA_TO_ANY_INIT: {
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The variable %s references\n"
+> -               "the %s %s%s%s\n"
+> -               "If the reference is valid then annotate the\n"
+> -               "variable with __init* or __refdata (see linux/init.h) "
+> -               "or name the variable:\n",
+> -               fromsym, to, prl_to, tosym, to_p);
+> -               print_section_list(mismatch->symbol_white_list);
+> -               free(prl_to);
+> -               break;
+> -       }
+> +       case DATA_TO_ANY_INIT:
+>         case TEXT_TO_ANY_EXIT:
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The function %s() references a %s in an exit section.\n"
+> -               "Often the %s %s%s has valid usage outside the exit section\n"
+> -               "and the fix is to remove the %sannotation of %s.\n",
+> -               fromsym, to, to, tosym, to_p, prl_to, tosym);
+> -               free(prl_to);
+> -               break;
+> -       case DATA_TO_ANY_EXIT: {
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The variable %s references\n"
+> -               "the %s %s%s%s\n"
+> -               "If the reference is valid then annotate the\n"
+> -               "variable with __exit* (see linux/init.h) or "
+> -               "name the variable:\n",
+> -               fromsym, to, prl_to, tosym, to_p);
+> -               print_section_list(mismatch->symbol_white_list);
+> -               free(prl_to);
+> -               break;
+> -       }
+> +       case DATA_TO_ANY_EXIT:
+>         case XXXINIT_TO_SOME_INIT:
+>         case XXXEXIT_TO_SOME_EXIT:
+> -               prl_from = sec2annotation(fromsec);
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The %s %s%s%s references\n"
+> -               "a %s %s%s%s.\n"
+> -               "If %s is only used by %s then\n"
+> -               "annotate %s with a matching annotation.\n",
+> -               from, prl_from, fromsym, from_p,
+> -               to, prl_to, tosym, to_p,
+> -               tosym, fromsym, tosym);
+> -               free(prl_from);
+> -               free(prl_to);
+> -               break;
+>         case ANY_INIT_TO_ANY_EXIT:
+> -               prl_from = sec2annotation(fromsec);
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The %s %s%s%s references\n"
+> -               "a %s %s%s%s.\n"
+> -               "This is often seen when error handling "
+> -               "in the init function\n"
+> -               "uses functionality in the exit path.\n"
+> -               "The fix is often to remove the %sannotation of\n"
+> -               "%s%s so it may be used outside an exit section.\n",
+> -               from, prl_from, fromsym, from_p,
+> -               to, prl_to, tosym, to_p,
+> -               prl_to, tosym, to_p);
+> -               free(prl_from);
+> -               free(prl_to);
+> -               break;
+>         case ANY_EXIT_TO_ANY_INIT:
+> -               prl_from = sec2annotation(fromsec);
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The %s %s%s%s references\n"
+> -               "a %s %s%s%s.\n"
+> -               "This is often seen when error handling "
+> -               "in the exit function\n"
+> -               "uses functionality in the init path.\n"
+> -               "The fix is often to remove the %sannotation of\n"
+> -               "%s%s so it may be used outside an init section.\n",
+> -               from, prl_from, fromsym, from_p,
+> -               to, prl_to, tosym, to_p,
+> -               prl_to, tosym, to_p);
+> -               free(prl_from);
+> -               free(prl_to);
+> +               warn("%s: section mismatch in reference: %s (section: %s) -> %s (section: %s)\n",
+> +                    modname, fromsym, fromsec, tosym, tosec);
+>                 break;
+>         case EXPORT_TO_INIT_EXIT:
+> -               prl_to = sec2annotation(tosec);
+> -               fprintf(stderr,
+> -               "The symbol %s is exported and annotated %s\n"
+> -               "Fix this by removing the %sannotation of %s "
+> -               "or drop the export.\n",
+> -               tosym, prl_to, prl_to, tosym);
+> -               free(prl_to);
+> +               warn("%s: EXPORT_SYMBOL used for init/exit symbol: %s (section: %s)\n",
+> +                    modname, tosym, tosec);
+>                 break;
+>         case EXTABLE_TO_NON_TEXT:
+> -               fatal("There's a special handler for this mismatch type, "
+> -                     "we should never get here.");
+> +               fatal("There's a special handler for this mismatch type, we should never get here.\n");
+>                 break;
+>         }
+> -       fprintf(stderr, "\n");
+>  }
+>
+>  static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+> @@ -1470,9 +1311,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+>         if (secref_whitelist(mismatch,
+>                              fromsec, fromsym, tosec, tosym)) {
+>                 report_sec_mismatch(modname, mismatch,
+> -                                   fromsec, r->r_offset, fromsym,
+> -                                   is_function(from), tosec, tosym,
+> -                                   is_function(to));
+> +                                   fromsec, fromsym, tosec, tosym);
+>         }
+>  }
+>
+> --
+> 2.34.1
+>
 
 
-diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
-index aed49806a09bab8f..953338b9e887e26f 100644
---- a/tools/perf/util/genelf.c
-+++ b/tools/perf/util/genelf.c
-@@ -30,7 +30,11 @@
- 
- #define BUILD_ID_URANDOM /* different uuid for each run */
- 
--#ifdef HAVE_LIBCRYPTO
-+// FIXME, remove this and fix the deprecation warnings before its removed and
-+// We'll break for good here...
-+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+
-+#ifdef HAVE_LIBCRYPTO_SUPPORT
- 
- #define BUILD_ID_MD5
- #undef BUILD_ID_SHA	/* does not seem to work well when linked with Java */
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E3B5882F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134EB5882F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbiHBUJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S233620AbiHBUJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbiHBUJE (ORCPT
+        with ESMTP id S232116AbiHBUJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:09:04 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1D852455
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:09:03 -0700 (PDT)
-Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oIyCL-0001Cv-Gd;
-        Tue, 02 Aug 2022 16:09:01 -0400
-Date:   Tue, 2 Aug 2022 16:09:00 -0400
-From:   Rik van Riel <riel@surriel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@vger.kernel.org, kernel-team@fb.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Dave Jones <dsj@fb.com>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH] x86,mm: print likely CPU at segfault time
-Message-ID: <20220802160900.7a68909b@imladris.surriel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Tue, 2 Aug 2022 16:09:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF64853D27
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659470990; x=1691006990;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U59KtBgaCpfNIdztFpCknLJxnYxEbEefieDqDELq+as=;
+  b=epwQHJcJuxL6b4EaRiOTRjxzkqueYJTVluGkN4hd9UBm3cWZozy82PR8
+   Y2eXUT80h2QbfkkVUJwEs8pIeGGK7N7vMGAhRZTj0FYTnz7NOPkK6SdBa
+   Yyi/bjGvAvoETggxB4GasAgDOaL5PUjku+VjTWT8XylcNPlddXr3VAGq9
+   7IS31lh5Ihq8AV3CvVfArLr20NVLbGT05847y0viD2ErCQoMmLB/vdQqD
+   eMP21MQOj3SO6hvIHxWU4XAfbaQPzFwo+oYBzC/KuOuFtgk6Ls7TTlXFi
+   yS5vUNzMy3jlKh4jcPQUWSC/gRYPrDcG+Bbf3uFaAO/EGcyDjENbOkdWb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="272555807"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="272555807"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 13:09:50 -0700
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="670586220"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.212.185.95])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 13:09:49 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mcgrof@kernel.org, rafael@kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>,
+        kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH v1 1/1] firmware_loader: Fix use-after-free during unregister
+Date:   Tue,  2 Aug 2022 13:09:42 -0700
+Message-Id: <20220802200942.98149-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a large enough fleet of computers, it is common to have a few bad CPUs.
-Those can often be identified by seeing that some commonly run kernel code,
-which runs fine everywhere else, keeps crashing on the same CPU core on one
-particular bad system.
+In the following code within firmware_upload_unregister(), the call
+to device_unregister() results in the dev_release function freeing the
+fw_upload_priv structure before it is dereferenced for the call to
+module_put():
 
-However, the failure modes in CPUs that have gone bad over the years are
-often oddly specific, and the only bad behavior seen might be segfaults
-in programs like bash, python, or various system daemons that run fine
-everywhere else.
+  device_unregister(&fw_sysfs->dev);
+  module_put(fw_upload_priv->module);
 
-Add a printk to show_signal_msg() to print the CPU, core, and socket
-at segfault time. This is not perfect, since the task might get rescheduled
-on another CPU between when the fault hit, and when the message is printed,
-but in practice this has been good enough to help us identify several bad
-CPU cores.
+This is fixed by copying fw_upload_priv->module to a local variable
+before calling device_unregister() and then using the local variable
+for the call to module_put().
 
-segfault[1349]: segfault at 0 ip 000000000040113a sp 00007ffc6d32e360 error 4 in segfault[401000+1000] on CPU 0 (core 0, socket 0)
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
-CC: Dave Jones <dsj@fb.com>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Fixes: 97730bbb242c (firmware_loader: Add firmware-upload support)
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
 ---
- arch/x86/mm/fault.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/base/firmware_loader/sysfs_upload.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index fad8faa29d04..47faf7c0041e 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -782,6 +782,12 @@ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
+diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
+index 87044d52322a..63e15bddd80c 100644
+--- a/drivers/base/firmware_loader/sysfs_upload.c
++++ b/drivers/base/firmware_loader/sysfs_upload.c
+@@ -377,6 +377,7 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
+ {
+ 	struct fw_sysfs *fw_sysfs = fw_upload->priv;
+ 	struct fw_upload_priv *fw_upload_priv = fw_sysfs->fw_upload_priv;
++	struct module *module = fw_upload_priv->module;
  
- 	print_vma_addr(KERN_CONT " in ", regs->ip);
+ 	mutex_lock(&fw_upload_priv->lock);
+ 	if (fw_upload_priv->progress == FW_UPLOAD_PROG_IDLE) {
+@@ -392,6 +393,6 @@ void firmware_upload_unregister(struct fw_upload *fw_upload)
  
-+	printk(KERN_CONT " on CPU %d (core %d, socket %d)",
-+	       raw_smp_processor_id(),
-+	       topology_core_id(raw_smp_processor_id()),
-+	       topology_physical_package_id(raw_smp_processor_id()));
-+
-+
- 	printk(KERN_CONT "\n");
- 
- 	show_opcodes(regs, loglvl);
+ unregister:
+ 	device_unregister(&fw_sysfs->dev);
+-	module_put(fw_upload_priv->module);
++	module_put(module);
+ }
+ EXPORT_SYMBOL_GPL(firmware_upload_unregister);
 -- 
-2.37.1
-
+2.25.1
 

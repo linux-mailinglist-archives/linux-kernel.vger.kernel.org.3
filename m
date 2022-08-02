@@ -2,83 +2,897 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FBF588396
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF01B588390
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiHBV3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S233304AbiHBV30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234168AbiHBV3h (ORCPT
+        with ESMTP id S232213AbiHBV3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:29:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABC91D0F3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:29:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4927CB820AA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:29:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2AEC433D7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:29:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659475773;
-        bh=SGZd11R+IMi10UvAspXhHJm/sz8ulVf0IdRmfkUbaoM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EAknVLAxXRbcMekqZH/Z1acSSJw61MzAAgSXD+Au2gxiiopiJDAtCQiEPvFKVJ9pu
-         6+vgMi6sslgax8h2Cx9pXfQrKHYz6CyMldcl5txcjSw0Amyzcy68RgolRMXv2jR8U2
-         2I+pMBtm8eg79KPSvfpBA3kjq5FsZ2X53MzB0BFC4QaKl5V/Kc9dn3fELmv4ZiuuAX
-         S/hvbpKTWls8oPW+TUMXWEoRg3vO+0pUYlQ53L2RUH5R5ZTF3dczOW1oZZ7h3TrCsT
-         uqYHt+S6lAQzql6h11nJMPwOtTGsm4qhsWopFZjXgszWxHuZ8qY/e3d8Jazm0v3dpu
-         sLDw3brQ4vPnA==
-Received: by mail-ot1-f54.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so10989920otf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:29:33 -0700 (PDT)
-X-Gm-Message-State: AJIora+m9wInceYn8twEtavyPgg/WXROfn57SGbpBV93zHB+i7EFcYpv
-        +40ozKPOm7T+1T/99D5q8muSZxHuvl+LjKSME6BUFA==
-X-Google-Smtp-Source: AA6agR4gDjxO8eQIdJP2ak/bQJj6aSqPJNBmfbIMRPjX7q3qBHZva2gJEgK5hCAMdBGldKbha+0RtVlrHChFByEI3nI=
-X-Received: by 2002:a05:6902:1541:b0:675:4f34:7315 with SMTP id
- r1-20020a056902154100b006754f347315mr18285149ybu.65.1659475762836; Tue, 02
- Aug 2022 14:29:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <20220801180146.1157914-3-fred@cloudflare.com>
-In-Reply-To: <20220801180146.1157914-3-fred@cloudflare.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 2 Aug 2022 23:29:12 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7Oxb8dhM6SotKfS30i2_=ONbd=LF2qB6ZCpYqRFtDx+A@mail.gmail.com>
-Message-ID: <CACYkzJ7Oxb8dhM6SotKfS30i2_=ONbd=LF2qB6ZCpYqRFtDx+A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+        Tue, 2 Aug 2022 17:29:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A794E6243
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659475760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PFOfmxtVu7EZMOowjLBWPWu+qgxqHqWTX6y+slZ99hs=;
+        b=NPsWfn16TldrvTGUzBlnN0oL/+3oBkT4siyEN7r2Dkpdgsr1oCBK1KHdmU7FMh/yoVc0Ip
+        INbyUtT4LOoaotG/2kfBXBSwGA/+LZD7dsDAza9PNBtaYW+nyXYS3+7+DNVkVUzRGji1J5
+        zYevduyPmVG9juAq81F6euihiA89rIw=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-627-xdAMEm4YNh2GQf7tdoKF0g-1; Tue, 02 Aug 2022 17:29:19 -0400
+X-MC-Unique: xdAMEm4YNh2GQf7tdoKF0g-1
+Received: by mail-qk1-f197.google.com with SMTP id f20-20020a05620a409400b006b5fc740485so12388533qko.12
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:29:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=PFOfmxtVu7EZMOowjLBWPWu+qgxqHqWTX6y+slZ99hs=;
+        b=CBbeCckoi+Z/vv/yvAzl/y9qrgaljyslvEmMQBNDwKG42DQEdDi93T5x5rwwZ2qCP+
+         6QnnJ98trWGfF0OqGRSGf8dulF0FoWBpHFoaok4LDLnqAjUArocntdSY6/ayFJiC/Cr6
+         KEKgMUUg9AoqQWiVKW2dfL8WtXACTlxxrmLnAYbJZQ3obpwyKtJGPlpGsQP79yUD8bLu
+         L+w5vYGmCSuiqEJgHrCsisBzboCfsU2+h00I93c0DSeF8dUmyPBHf7sDrpDb5HECWJ+d
+         jo9MD4d/Pr+zIY0UT9Lrroj10Lfnm8zQb3BJ3c8nnLDB3NxUFMyxQ/Sw13e8KD4uYe8/
+         P1cA==
+X-Gm-Message-State: AJIora9QizcIa4uw8IRlzoTq6Xc/uWhO199w/XWEeP7a/27vuEzGv6u/
+        PGfgy28Bah0FntBFtO5L4gJ+2ZgqMiwK+d5AKf2GdDV2rN19dmt8F0YYkvFFb1lAX+UXrogfeHE
+        MIyfav56ekexx+tZC00XSFdV+
+X-Received: by 2002:ac8:5949:0:b0:31e:f363:989 with SMTP id 9-20020ac85949000000b0031ef3630989mr20253528qtz.483.1659475758096;
+        Tue, 02 Aug 2022 14:29:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uM6ENWF40N2cTsO8PnfzSE/yAqj+3SmfvzwYKtIvLD+0dP6KYNAIDIhegvVFrNuTn9EFo6Wg==
+X-Received: by 2002:ac8:5949:0:b0:31e:f363:989 with SMTP id 9-20020ac85949000000b0031ef3630989mr20253501qtz.483.1659475757766;
+        Tue, 02 Aug 2022 14:29:17 -0700 (PDT)
+Received: from [192.168.8.138] (pool-100-0-245-4.bstnma.fios.verizon.net. [100.0.245.4])
+        by smtp.gmail.com with ESMTPSA id bm7-20020a05620a198700b006b629f86244sm11354510qkb.50.2022.08.02.14.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 14:29:17 -0700 (PDT)
+Message-ID: <612b5b77b9c4cc9e32f62cfd83b3bad15d43ee06.camel@redhat.com>
+Subject: Re: [RESEND RFC 04/18] drm/display/dp_mst: Call them time slots,
+ not VCPI slots
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Cc:     Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sean Paul <sean@poorly.run>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Li, Roman" <Roman.Li@amd.com>, "Shih, Jude" <Jude.Shih@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        "Wu, Hersen" <hersenxs.wu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Lakha, Bhawanpreet" <Bhawanpreet.Lakha@amd.com>,
+        =?ISO-8859-1?Q?Jos=E9?= Roberto de Souza 
+        <jose.souza@intel.com>, He Ying <heying24@huawei.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Fernando Ramos <greenfoo@u92.eu>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:INTEL DRM DRIVERS" <intel-gfx@lists.freedesktop.org>
+Date:   Tue, 02 Aug 2022 17:29:14 -0400
+In-Reply-To: <CO6PR12MB54899A4F412F3BE9A105CD6FFCAD9@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20220607192933.1333228-1-lyude@redhat.com>
+         <20220607192933.1333228-5-lyude@redhat.com>
+         <CO6PR12MB54899A4F412F3BE9A105CD6FFCAD9@CO6PR12MB5489.namprd12.prod.outlook.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
->
-> Users may want to audit calls to security_create_user_ns() and access
-> user space memory. Also create_user_ns() runs without
-> pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
-> for mandatory access control policies.
->
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+On Wed, 2022-06-15 at 04:28 +0000, Lin, Wayne wrote:
+> [Public]
+> 
+> Thank you Lyude for addressing this!
+> 
+> VCPI is also a confusing naming to me at first glance since it stands for 
+> Virtual Channel Payload Identification which is just an ID number ( we can 
+>  look up these payload IDs In DPCD 0x2C1 ~0x2FF).
+> 
+> I also look up left VCPI terms in rest of the code. Seems like we still can
+> modify 
+> some parts here? Like:
+> 
+> /**
+>  * struct drm_dp_vcpi - Virtual Channel Payload Identifier
+>  * @vcpi: Virtual channel ID.
+>  * @pbn: Payload Bandwidth Number for this channel
+>  * @aligned_pbn: PBN aligned with slot size
+>  * @num_slots: number of slots for this PBN
+>  */
+> struct drm_dp_vcpi {
+>         int vcpi;
+>         int pbn;
+>         int aligned_pbn;
+>         int num_slots;
+> };
+> 
+> Would like to change the structure name to  "struct drm_dp_mst_vcp {}" to
+> represent
+> the virtual channel payload. Not specific to the ID.
+> Would like to know your thoughts : )
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+JFYI - I didn't rename this structure because we actually remove it entirely
+in later patches
+
+> 
+> > -----Original Message-----
+> > From: Lyude Paul <lyude@redhat.com>
+> > Sent: Wednesday, June 8, 2022 3:29 AM
+> > To: dri-devel@lists.freedesktop.org; nouveau@lists.freedesktop.org; amd-
+> > gfx@lists.freedesktop.org
+> > Cc: Lin, Wayne <Wayne.Lin@amd.com>; Ville Syrjälä
+> > <ville.syrjala@linux.intel.com>; Zuo, Jerry <Jerry.Zuo@amd.com>; Jani
+> > Nikula
+> > <jani.nikula@intel.com>; Imre Deak <imre.deak@intel.com>; Daniel Vetter
+> > <daniel.vetter@ffwll.ch>; Sean Paul <sean@poorly.run>; Wentland, Harry
+> > <Harry.Wentland@amd.com>; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>;
+> > Siqueira, Rodrigo <Rodrigo.Siqueira@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
+> > Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Jani Nikula
+> > <jani.nikula@linux.intel.com>; Joonas Lahtinen
+> > <joonas.lahtinen@linux.intel.com>; Rodrigo Vivi <rodrigo.vivi@intel.com>;
+> > Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>; Ben Skeggs
+> > <bskeggs@redhat.com>; Karol Herbst <kherbst@redhat.com>; Kazlauskas,
+> > Nicholas <Nicholas.Kazlauskas@amd.com>; Li, Roman
+> > <Roman.Li@amd.com>; Shih, Jude <Jude.Shih@amd.com>; Simon Ser
+> > <contact@emersion.fr>; Wu, Hersen <hersenxs.wu@amd.com>; Thomas
+> > Zimmermann <tzimmermann@suse.de>; Lakha, Bhawanpreet
+> > <Bhawanpreet.Lakha@amd.com>; José Roberto de Souza
+> > <jose.souza@intel.com>; He Ying <heying24@huawei.com>; Matt Roper
+> > <matthew.d.roper@intel.com>; Sean Paul <seanpaul@chromium.org>; Hans
+> > Verkuil <hverkuil-cisco@xs4all.nl>; Fernando Ramos <greenfoo@u92.eu>;
+> > Javier Martinez Canillas <javierm@redhat.com>; open list <linux-
+> > kernel@vger.kernel.org>; open list:INTEL DRM DRIVERS <intel-
+> > gfx@lists.freedesktop.org>
+> > Subject: [RESEND RFC 04/18] drm/display/dp_mst: Call them time slots, not
+> > VCPI slots
+> > 
+> > VCPI is only sort of the correct term here, originally the majority of
+> > this code
+> > simply referred to timeslots vaguely as "slots" - and since I started
+> > working
+> > on it and adding atomic functionality, the name "VCPI slots" has been used
+> > to
+> > represent time slots.
+> > 
+> > Now that we actually have consistent access to the DisplayPort spec thanks
+> > to
+> > VESA, I now know this isn't actually the proper term - as the
+> > specification
+> > refers to these as time slots.
+> > 
+> > Since we're trying to make this code as easy to figure out as possible,
+> > let's
+> > take this opportunity to correct this nomenclature and call them by their
+> > proper name - timeslots. Likewise, we rename various functions
+> > appropriately, along with replacing references in the kernel documentation
+> > and various debugging messages.
+> > 
+> > It's important to note that this patch series leaves the legacy MST code
+> > untouched for the most part, which is fine since we'll be removing it soon
+> > anyhow. There should be no functional changes in this series.
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > Cc: Wayne Lin <Wayne.Lin@amd.com>
+> > Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> > Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+> > Cc: Jani Nikula <jani.nikula@intel.com>
+> > Cc: Imre Deak <imre.deak@intel.com>
+> > Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > Cc: Sean Paul <sean@poorly.run>
+> > ---
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   2 +-
+> >  .../display/amdgpu_dm/amdgpu_dm_mst_types.c   |  28 ++---
+> >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 106 +++++++++---------
+> >  drivers/gpu/drm/i915/display/intel_dp_mst.c   |   5 +-
+> >  drivers/gpu/drm/nouveau/dispnv50/disp.c       |   4 +-
+> >  include/drm/display/drm_dp_mst_helper.h       |   6 +-
+> >  6 files changed, 75 insertions(+), 76 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index ad4571190a90..f84a4ad736d8 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -7393,7 +7393,7 @@ static int dm_encoder_helper_atomic_check(struct
+> > drm_encoder *encoder,
+> >                 clock = adjusted_mode->clock;
+> >                 dm_new_connector_state->pbn =
+> > drm_dp_calc_pbn_mode(clock, bpp, false);
+> >         }
+> > -       dm_new_connector_state->vcpi_slots =
+> > drm_dp_atomic_find_vcpi_slots(state,
+> > +       dm_new_connector_state->vcpi_slots =
+> > +drm_dp_atomic_find_time_slots(state,
+> > 
+> > mst_mgr,
+> > 
+> > mst_port,
+> > 
+> > dm_new_connector_state->pbn, diff --git
+> > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > index 9221b6690a4a..e40ff51e7be0 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > @@ -378,7 +378,7 @@ static int dm_dp_mst_atomic_check(struct
+> > drm_connector *connector,
+> >                         return 0;
+> >                 }
+> > 
+> > -       return drm_dp_atomic_release_vcpi_slots(state,
+> > +       return drm_dp_atomic_release_time_slots(state,
+> >                                                 mst_mgr,
+> >                                                 mst_port);
+> >  }
+> > @@ -689,7 +689,7 @@ static void increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> > 
+> >                 if (initial_slack[next_index] > fair_pbn_alloc) {
+> >                         vars[next_index].pbn += fair_pbn_alloc;
+> > -                       if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                       if (drm_dp_atomic_find_time_slots(state,
+> > 
+> > params[next_index].port->mgr,
+> > 
+> > params[next_index].port,
+> > 
+> > vars[next_index].pbn,
+> > @@ -699,7 +699,7 @@ static void increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> >                                 vars[next_index].bpp_x16 =
+> > bpp_x16_from_pbn(params[next_index], vars[next_index].pbn);
+> >                         } else {
+> >                                 vars[next_index].pbn -= fair_pbn_alloc;
+> > -                               if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                               if (drm_dp_atomic_find_time_slots(state,
+> > 
+> > params[next_index].port->mgr,
+> > 
+> > params[next_index].port,
+> > 
+> > vars[next_index].pbn,
+> > @@ -708,7 +708,7 @@ static void increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> >                         }
+> >                 } else {
+> >                         vars[next_index].pbn += initial_slack[next_index];
+> > -                       if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                       if (drm_dp_atomic_find_time_slots(state,
+> > 
+> > params[next_index].port->mgr,
+> > 
+> > params[next_index].port,
+> > 
+> > vars[next_index].pbn,
+> > @@ -718,7 +718,7 @@ static void increase_dsc_bpp(struct
+> > drm_atomic_state *state,
+> >                                 vars[next_index].bpp_x16 =
+> > params[next_index].bw_range.max_target_bpp_x16;
+> >                         } else {
+> >                                 vars[next_index].pbn -=
+> > initial_slack[next_index];
+> > -                               if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                               if (drm_dp_atomic_find_time_slots(state,
+> > 
+> > params[next_index].port->mgr,
+> > 
+> > params[next_index].port,
+> > 
+> > vars[next_index].pbn,
+> > @@ -775,7 +775,7 @@ static void try_disable_dsc(struct drm_atomic_state
+> > *state,
+> >                         break;
+> > 
+> >                 vars[next_index].pbn =
+> > kbps_to_peak_pbn(params[next_index].bw_range.stream_kbps);
+> > -               if (drm_dp_atomic_find_vcpi_slots(state,
+> > +               if (drm_dp_atomic_find_time_slots(state,
+> >                                                   params[next_index].port-
+> > > mgr,
+> >                                                   params[next_index].port,
+> >                                                   vars[next_index].pbn,
+> > @@ -787,7 +787,7 @@ static void try_disable_dsc(struct drm_atomic_state
+> > *state,
+> >                         vars[next_index].bpp_x16 = 0;
+> >                 } else {
+> >                         vars[next_index].pbn =
+> > kbps_to_peak_pbn(params[next_index].bw_range.max_kbps);
+> > -                       if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                       if (drm_dp_atomic_find_time_slots(state,
+> > 
+> > params[next_index].port->mgr,
+> > 
+> > params[next_index].port,
+> > 
+> > vars[next_index].pbn,
+> > @@ -873,11 +873,11 @@ static bool
+> > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
+> >                 vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
+> >                 vars[i + k].dsc_enabled = false;
+> >                 vars[i + k].bpp_x16 = 0;
+> > -               if (drm_dp_atomic_find_vcpi_slots(state,
+> > -                                                params[i].port->mgr,
+> > -                                                params[i].port,
+> > -                                                vars[i + k].pbn,
+> > -
+> > dm_mst_get_pbn_divider(dc_link)) < 0)
+> > +               if (drm_dp_atomic_find_time_slots(state,
+> > +                                                 params[i].port->mgr,
+> > +                                                 params[i].port,
+> > +                                                 vars[i + k].pbn,
+> > +
+> > dm_mst_get_pbn_divider(dc_link)) < 0)
+> >                         return false;
+> >         }
+> >         if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) { @@
+> > -891,7 +891,7 @@ static bool compute_mst_dsc_configs_for_link(struct
+> > drm_atomic_state *state,
+> >                         vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.min_kbps);
+> >                         vars[i + k].dsc_enabled = true;
+> >                         vars[i + k].bpp_x16 =
+> > params[i].bw_range.min_target_bpp_x16;
+> > -                       if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                       if (drm_dp_atomic_find_time_slots(state,
+> >                                                           params[i].port-
+> > >mgr,
+> >                                                           params[i].port,
+> >                                                           vars[i + k].pbn,
+> > @@ -901,7 +901,7 @@ static bool compute_mst_dsc_configs_for_link(struct
+> > drm_atomic_state *state,
+> >                         vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
+> >                         vars[i + k].dsc_enabled = false;
+> >                         vars[i + k].bpp_x16 = 0;
+> > -                       if (drm_dp_atomic_find_vcpi_slots(state,
+> > +                       if (drm_dp_atomic_find_time_slots(state,
+> >                                                           params[i].port-
+> > >mgr,
+> >                                                           params[i].port,
+> >                                                           vars[i + k].pbn,
+> > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > index 38eecb89e22d..702ff5d9ecc7 100644
+> > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > @@ -4304,11 +4304,11 @@ struct edid *drm_dp_mst_get_edid(struct
+> > drm_connector *connector, struct drm_dp_
+> > EXPORT_SYMBOL(drm_dp_mst_get_edid);
+> > 
+> >  /**
+> > - * drm_dp_find_vcpi_slots() - Find VCPI slots for this PBN value
+> > + * drm_dp_find_vcpi_slots() - Find time slots for this PBN value
+> >   * @mgr: manager to use
+> >   * @pbn: payload bandwidth to convert into slots.
+> >   *
+> > - * Calculate the number of VCPI slots that will be required for the given
+> > PBN
+> > + * Calculate the number of time slots that will be required for the
+> > + given PBN
+> >   * value. This function is deprecated, and should not be used in atomic
+> >   * drivers.
+> >   *
+> > @@ -4345,17 +4345,17 @@ static int drm_dp_init_vcpi(struct
+> > drm_dp_mst_topology_mgr *mgr,  }
+> > 
+> >  /**
+> > - * drm_dp_atomic_find_vcpi_slots() - Find and add VCPI slots to the state
+> > + * drm_dp_atomic_find_time_slots() - Find and add time slots to the
+> > + state
+> >   * @state: global atomic state
+> >   * @mgr: MST topology manager for the port
+> > - * @port: port to find vcpi slots for
+> > + * @port: port to find time slots for
+> >   * @pbn: bandwidth required for the mode in PBN
+> >   * @pbn_div: divider for DSC mode that takes FEC into account
+> >   *
+> > - * Allocates VCPI slots to @port, replacing any previous VCPI allocations
+> > it
+> > + * Allocates time slots to @port, replacing any previous timeslot
+> > + allocations it
+> >   * may have had. Any atomic drivers which support MST must call this
+> > function
+> >   * in their &drm_encoder_helper_funcs.atomic_check() callback to change
+> > the
+> > - * current VCPI allocation for the new state, but only when
+> > + * current timeslot allocation for the new state, but only when
+> >   * &drm_crtc_state.mode_changed or &drm_crtc_state.connectors_changed
+> > is set
+> >   * to ensure compatibility with userspace applications that still use the
+> >   * legacy modesetting UAPI.
+> > @@ -4365,17 +4365,17 @@ static int drm_dp_init_vcpi(struct
+> > drm_dp_mst_topology_mgr *mgr,
+> >   *
+> >   * Additionally, it is OK to call this function multiple times on the
+> > same
+> >   * @port as needed. It is not OK however, to call this function and
+> > - * drm_dp_atomic_release_vcpi_slots() in the same atomic check phase.
+> > + * drm_dp_atomic_release_time_slots() in the same atomic check phase.
+> >   *
+> >   * See also:
+> > - * drm_dp_atomic_release_vcpi_slots()
+> > + * drm_dp_atomic_release_time_slots()
+> >   * drm_dp_mst_atomic_check()
+> >   *
+> >   * Returns:
+> >   * Total slots in the atomic state assigned for this port, or a negative
+> > error
+> >   * code if the port no longer exists
+> >   */
+> > -int drm_dp_atomic_find_vcpi_slots(struct drm_atomic_state *state,
+> > +int drm_dp_atomic_find_time_slots(struct drm_atomic_state *state,
+> >                                   struct drm_dp_mst_topology_mgr *mgr,
+> >                                   struct drm_dp_mst_port *port, int pbn,
+> >                                   int pbn_div)
+> > @@ -4392,17 +4392,17 @@ int drm_dp_atomic_find_vcpi_slots(struct
+> > drm_atomic_state *state,
+> >         list_for_each_entry(pos, &topology_state->payloads, next) {
+> >                 if (pos->port == port) {
+> >                         payload = pos;
+> > -                       prev_slots = payload->vcpi;
+> > +                       prev_slots = payload->time_slots;
+> >                         prev_bw = payload->pbn;
+> > 
+> >                         /*
+> >                          * This should never happen, unless the driver
+> > tries
+> > -                        * releasing and allocating the same VCPI
+> > allocation,
+> > +                        * releasing and allocating the same timeslot
+> > allocation,
+> >                          * which is an error
+> >                          */
+> >                         if (WARN_ON(!prev_slots)) {
+> >                                 drm_err(mgr->dev,
+> > -                                       "cannot allocate and release VCPI
+> > on
+> > [MST PORT:%p] in the same state\n",
+> > +                                       "cannot allocate and release time
+> > slots on [MST PORT:%p] in the
+> > +same state\n",
+> >                                         port);
+> >                                 return -EINVAL;
+> >                         }
+> > @@ -4420,7 +4420,7 @@ int drm_dp_atomic_find_vcpi_slots(struct
+> > drm_atomic_state *state,
+> > 
+> >         req_slots = DIV_ROUND_UP(pbn, pbn_div);
+> > 
+> > -       drm_dbg_atomic(mgr->dev, "[CONNECTOR:%d:%s] [MST PORT:%p]
+> > VCPI %d -> %d\n",
+> > +       drm_dbg_atomic(mgr->dev, "[CONNECTOR:%d:%s] [MST PORT:%p]
+> > TU %d ->
+> > +%d\n",
+> >                        port->connector->base.id, port->connector->name,
+> >                        port, prev_slots, req_slots);
+> >         drm_dbg_atomic(mgr->dev, "[CONNECTOR:%d:%s] [MST PORT:%p]
+> > PBN %d -> %d\n", @@ -4437,20 +4437,20 @@ int
+> > drm_dp_atomic_find_vcpi_slots(struct drm_atomic_state *state,
+> >                 payload->port = port;
+> >                 list_add(&payload->next, &topology_state->payloads);
+> >         }
+> > -       payload->vcpi = req_slots;
+> > +       payload->time_slots = req_slots;
+> >         payload->pbn = pbn;
+> > 
+> >         return req_slots;
+> >  }
+> > -EXPORT_SYMBOL(drm_dp_atomic_find_vcpi_slots);
+> > +EXPORT_SYMBOL(drm_dp_atomic_find_time_slots);
+> > 
+> >  /**
+> > - * drm_dp_atomic_release_vcpi_slots() - Release allocated vcpi slots
+> > + * drm_dp_atomic_release_time_slots() - Release allocated time slots
+> >   * @state: global atomic state
+> >   * @mgr: MST topology manager for the port
+> > - * @port: The port to release the VCPI slots from
+> > + * @port: The port to release the time slots from
+> >   *
+> > - * Releases any VCPI slots that have been allocated to a port in the
+> > atomic
+> > + * Releases any time slots that have been allocated to a port in the
+> > + atomic
+> >   * state. Any atomic drivers which support MST must call this function in
+> >   * their &drm_connector_helper_funcs.atomic_check() callback when the
+> >   * connector will no longer have VCPI allocated (e.g. because its CRTC
+> > was
+> > @@ -4459,18 +4459,18 @@
+> > EXPORT_SYMBOL(drm_dp_atomic_find_vcpi_slots);
+> >   * It is OK to call this even if @port has been removed from the system.
+> >   * Additionally, it is OK to call this function multiple times on the
+> > same
+> >   * @port as needed. It is not OK however, to call this function and
+> > - * drm_dp_atomic_find_vcpi_slots() on the same @port in a single atomic
+> > check
+> > + * drm_dp_atomic_find_time_slots() on the same @port in a single atomic
+> > + check
+> >   * phase.
+> >   *
+> >   * See also:
+> > - * drm_dp_atomic_find_vcpi_slots()
+> > + * drm_dp_atomic_find_time_slots()
+> >   * drm_dp_mst_atomic_check()
+> >   *
+> >   * Returns:
+> >   * 0 if all slots for this port were added back to
+> >   * &drm_dp_mst_topology_state.avail_slots or negative error code
+> >   */
+> > -int drm_dp_atomic_release_vcpi_slots(struct drm_atomic_state *state,
+> > +int drm_dp_atomic_release_time_slots(struct drm_atomic_state *state,
+> >                                      struct drm_dp_mst_topology_mgr *mgr,
+> >                                      struct drm_dp_mst_port *port)
+> >  {
+> > @@ -4494,16 +4494,16 @@ int drm_dp_atomic_release_vcpi_slots(struct
+> > drm_atomic_state *state,
+> >                 return -EINVAL;
+> >         }
+> > 
+> > -       drm_dbg_atomic(mgr->dev, "[MST PORT:%p] VCPI %d -> 0\n", port,
+> > pos->vcpi);
+> > -       if (pos->vcpi) {
+> > +       drm_dbg_atomic(mgr->dev, "[MST PORT:%p] TU %d -> 0\n", port,
+> > pos->time_slots);
+> > +       if (pos->time_slots) {
+> >                 drm_dp_mst_put_port_malloc(port);
+> > -               pos->vcpi = 0;
+> > +               pos->time_slots = 0;
+> >                 pos->pbn = 0;
+> >         }
+> > 
+> >         return 0;
+> >  }
+> > -EXPORT_SYMBOL(drm_dp_atomic_release_vcpi_slots);
+> > +EXPORT_SYMBOL(drm_dp_atomic_release_time_slots);
+> > 
+> >  /**
+> >   * drm_dp_mst_update_slots() - updates the slot info depending on the DP
+> > ecoding format @@ -4557,7 +4557,7 @@ bool
+> > drm_dp_mst_allocate_vcpi(struct drm_dp_mst_topology_mgr *mgr,
+> > 
+> >         ret = drm_dp_init_vcpi(mgr, &port->vcpi, pbn, slots);
+> >         if (ret) {
+> > -               drm_dbg_kms(mgr->dev, "failed to init vcpi slots=%d
+> > ret=%d\n",
+> > +               drm_dbg_kms(mgr->dev, "failed to init time slots=%d
+> > ret=%d\n",
+> >                             DIV_ROUND_UP(pbn, mgr->pbn_div), ret);
+> >                 drm_dp_mst_topology_put_port(port);
+> >                 goto out;
+> > @@ -5083,8 +5083,8 @@ drm_dp_mst_duplicate_state(struct
+> > drm_private_obj *obj)
+> >         INIT_LIST_HEAD(&state->payloads);
+> > 
+> >         list_for_each_entry(pos, &old_state->payloads, next) {
+> > -               /* Prune leftover freed VCPI allocations */
+> > -               if (!pos->vcpi)
+> > +               /* Prune leftover freed timeslot allocations */
+> > +               if (!pos->time_slots)
+> >                         continue;
+> > 
+> >                 payload = kmemdup(pos, sizeof(*payload), GFP_KERNEL);
+> > @@ -5116,7 +5116,7 @@ static void drm_dp_mst_destroy_state(struct
+> > drm_private_obj *obj,
+> > 
+> >         list_for_each_entry_safe(pos, tmp, &mst_state->payloads, next) {
+> >                 /* We only keep references to ports with non-zero VCPIs */
+> > -               if (pos->vcpi)
+> > +               if (pos->time_slots)
+> >                         drm_dp_mst_put_port_malloc(pos->port);
+> >                 kfree(pos);
+> >         }
+> > @@ -5242,28 +5242,28 @@
+> > drm_dp_mst_atomic_check_port_bw_limit(struct drm_dp_mst_port *port,  }
+> > 
+> >  static inline int
+> > -drm_dp_mst_atomic_check_vcpi_alloc_limit(struct
+> > drm_dp_mst_topology_mgr *mgr,
+> > -                                        struct drm_dp_mst_topology_state
+> > *mst_state)
+> > +drm_dp_mst_atomic_check_payload_alloc_limits(struct
+> > drm_dp_mst_topology_mgr *mgr,
+> > +                                            struct
+> > drm_dp_mst_topology_state *mst_state)
+> >  {
+> >         struct drm_dp_mst_atomic_payload *payload;
+> >         int avail_slots = mst_state->total_avail_slots, payload_count = 0;
+> > 
+> >         list_for_each_entry(payload, &mst_state->payloads, next) {
+> >                 /* Releasing payloads is always OK-even if the port is
+> > gone */
+> > -               if (!payload->vcpi) {
+> > -                       drm_dbg_atomic(mgr->dev, "[MST PORT:%p]
+> > releases all VCPI slots\n",
+> > +               if (!payload->time_slots) {
+> > +                       drm_dbg_atomic(mgr->dev, "[MST PORT:%p]
+> > releases all time slots\n",
+> >                                        payload->port);
+> >                         continue;
+> >                 }
+> > 
+> > -               drm_dbg_atomic(mgr->dev, "[MST PORT:%p] requires %d
+> > vcpi slots\n",
+> > -                              payload->port, payload->vcpi);
+> > +               drm_dbg_atomic(mgr->dev, "[MST PORT:%p] requires %d
+> > time slots\n",
+> > +                              payload->port, payload->time_slots);
+> > 
+> > -               avail_slots -= payload->vcpi;
+> > +               avail_slots -= payload->time_slots;
+> >                 if (avail_slots < 0) {
+> >                         drm_dbg_atomic(mgr->dev,
+> > -                                      "[MST PORT:%p] not enough VCPI
+> > slots in
+> > mst state %p (avail=%d)\n",
+> > -                                      payload->port, mst_state,
+> > avail_slots +
+> > payload->vcpi);
+> > +                                      "[MST PORT:%p] not enough time
+> > slots in
+> > mst state %p (avail=%d)\n",
+> > +                                      payload->port, mst_state,
+> > avail_slots +
+> > +payload->time_slots);
+> >                         return -ENOSPC;
+> >                 }
+> > 
+> > @@ -5274,7 +5274,7 @@ drm_dp_mst_atomic_check_vcpi_alloc_limit(struct
+> > drm_dp_mst_topology_mgr *mgr,
+> >                         return -EINVAL;
+> >                 }
+> >         }
+> > -       drm_dbg_atomic(mgr->dev, "[MST MGR:%p] mst state %p VCPI
+> > avail=%d used=%d\n",
+> > +       drm_dbg_atomic(mgr->dev, "[MST MGR:%p] mst state %p TU
+> > avail=%d
+> > +used=%d\n",
+> >                        mgr, mst_state, avail_slots, mst_state-
+> > >total_avail_slots -
+> > avail_slots);
+> > 
+> >         return 0;
+> > @@ -5363,7 +5363,7 @@ int drm_dp_mst_atomic_enable_dsc(struct
+> > drm_atomic_state *state,
+> >         struct drm_dp_mst_topology_state *mst_state;
+> >         struct drm_dp_mst_atomic_payload *pos;
+> >         bool found = false;
+> > -       int vcpi = 0;
+> > +       int time_slots = 0;
+> > 
+> >         mst_state = drm_atomic_get_mst_topology_state(state, port->mgr);
+> > 
+> > @@ -5379,30 +5379,30 @@ int drm_dp_mst_atomic_enable_dsc(struct
+> > drm_atomic_state *state,
+> > 
+> >         if (!found) {
+> >                 drm_dbg_atomic(state->dev,
+> > -                              "[MST PORT:%p] Couldn't find VCPI
+> > allocation in
+> > mst state %p\n",
+> > +                              "[MST PORT:%p] Couldn't find payload in mst
+> > state %p\n",
+> >                                port, mst_state);
+> >                 return -EINVAL;
+> >         }
+> > 
+> >         if (pos->dsc_enabled == enable) {
+> >                 drm_dbg_atomic(state->dev,
+> > -                              "[MST PORT:%p] DSC flag is already set to
+> > %d,
+> > returning %d VCPI slots\n",
+> > -                              port, enable, pos->vcpi);
+> > -               vcpi = pos->vcpi;
+> > +                              "[MST PORT:%p] DSC flag is already set to
+> > %d,
+> > returning %d time slots\n",
+> > +                              port, enable, pos->time_slots);
+> > +               time_slots = pos->time_slots;
+> >         }
+> > 
+> >         if (enable) {
+> > -               vcpi = drm_dp_atomic_find_vcpi_slots(state, port->mgr,
+> > port,
+> > pbn, pbn_div);
+> > +               time_slots = drm_dp_atomic_find_time_slots(state, port-
+> > > mgr, port,
+> > +pbn, pbn_div);
+> >                 drm_dbg_atomic(state->dev,
+> > -                              "[MST PORT:%p] Enabling DSC flag,
+> > reallocating
+> > %d VCPI slots on the port\n",
+> > -                              port, vcpi);
+> > -               if (vcpi < 0)
+> > +                              "[MST PORT:%p] Enabling DSC flag,
+> > reallocating
+> > %d time slots on the port\n",
+> > +                              port, time_slots);
+> > +               if (time_slots < 0)
+> >                         return -EINVAL;
+> >         }
+> > 
+> >         pos->dsc_enabled = enable;
+> > 
+> > -       return vcpi;
+> > +       return time_slots;
+> >  }
+> >  EXPORT_SYMBOL(drm_dp_mst_atomic_enable_dsc);
+> >  /**
+> > @@ -5412,15 +5412,15 @@
+> > EXPORT_SYMBOL(drm_dp_mst_atomic_enable_dsc);
+> >   *
+> >   * Checks the given topology state for an atomic update to ensure that
+> > it's
+> >   * valid. This includes checking whether there's enough bandwidth to
+> > support
+> > - * the new VCPI allocations in the atomic update.
+> > + * the new timeslot allocations in the atomic update.
+> >   *
+> >   * Any atomic drivers supporting DP MST must make sure to call this after
+> >   * checking the rest of their state in their
+> >   * &drm_mode_config_funcs.atomic_check() callback.
+> >   *
+> >   * See also:
+> > - * drm_dp_atomic_find_vcpi_slots()
+> > - * drm_dp_atomic_release_vcpi_slots()
+> > + * drm_dp_atomic_find_time_slots()
+> > + * drm_dp_atomic_release_time_slots()
+> >   *
+> >   * Returns:
+> >   *
+> > @@ -5436,7 +5436,7 @@ int drm_dp_mst_atomic_check(struct
+> > drm_atomic_state *state)
+> >                 if (!mgr->mst_state)
+> >                         continue;
+> > 
+> > -               ret = drm_dp_mst_atomic_check_vcpi_alloc_limit(mgr,
+> > mst_state);
+> > +               ret = drm_dp_mst_atomic_check_payload_alloc_limits(mgr,
+> > mst_state);
+> >                 if (ret)
+> >                         break;
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/intel_dp_mst.c
+> > b/drivers/gpu/drm/i915/display/intel_dp_mst.c
+> > index 061b277e5ce7..0c922667398a 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_dp_mst.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_dp_mst.c
+> > @@ -70,7 +70,7 @@ static int intel_dp_mst_compute_link_config(struct
+> > intel_encoder *encoder,
+> >                                                        crtc_state-
+> > >pipe_bpp,
+> >                                                        false);
+> > 
+> > -               slots = drm_dp_atomic_find_vcpi_slots(state, &intel_dp-
+> > > mst_mgr,
+> > +               slots = drm_dp_atomic_find_time_slots(state, &intel_dp-
+> > > mst_mgr,
+> >                                                       connector->port,
+> >                                                       crtc_state->pbn,
+> > 
+> > drm_dp_get_vc_payload_bw(&intel_dp->mst_mgr,
+> > @@ -344,8 +344,7 @@ intel_dp_mst_atomic_check(struct drm_connector
+> > *connector,
+> >         }
+> > 
+> >         mgr = &enc_to_mst(to_intel_encoder(old_conn_state-
+> > > best_encoder))->primary->dp.mst_mgr;
+> > -       ret = drm_dp_atomic_release_vcpi_slots(&state->base, mgr,
+> > -                                              intel_connector->port);
+> > +       ret = drm_dp_atomic_release_time_slots(&state->base, mgr,
+> > +intel_connector->port);
+> > 
+> >         return ret;
+> >  }
+> > diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> > b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> > index 4347f0b61797..631dba5a2418 100644
+> > --- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> > +++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
+> > @@ -1070,7 +1070,7 @@ nv50_msto_atomic_check(struct drm_encoder
+> > *encoder,
+> >                                                     false);
+> >         }
+> > 
+> > -       slots = drm_dp_atomic_find_vcpi_slots(state, &mstm->mgr, mstc-
+> > > port,
+> > +       slots = drm_dp_atomic_find_time_slots(state, &mstm->mgr, mstc-
+> > > port,
+> >                                               asyh->dp.pbn, 0);
+> >         if (slots < 0)
+> >                 return slots;
+> > @@ -1282,7 +1282,7 @@ nv50_mstc_atomic_check(struct drm_connector
+> > *connector,
+> >                         return 0;
+> >         }
+> > 
+> > -       return drm_dp_atomic_release_vcpi_slots(state, mgr, mstc->port);
+> > +       return drm_dp_atomic_release_time_slots(state, mgr, mstc->port);
+> >  }
+> > 
+> >  static int
+> > diff --git a/include/drm/display/drm_dp_mst_helper.h
+> > b/include/drm/display/drm_dp_mst_helper.h
+> > index 5671173f9f37..8ab4f14f2344 100644
+> > --- a/include/drm/display/drm_dp_mst_helper.h
+> > +++ b/include/drm/display/drm_dp_mst_helper.h
+> > @@ -544,7 +544,7 @@ struct drm_dp_payload {
+> > 
+> >  struct drm_dp_mst_atomic_payload {
+> >         struct drm_dp_mst_port *port;
+> > -       int vcpi;
+> > +       int time_slots;
+> >         int pbn;
+> >         bool dsc_enabled;
+> >         struct list_head next;
+> > @@ -846,7 +846,7 @@ void drm_dp_mst_connector_early_unregister(struct
+> > drm_connector *connector,  struct drm_dp_mst_topology_state
+> > *drm_atomic_get_mst_topology_state(struct drm_atomic_state *state,
+> >                                                                     struct
+> > drm_dp_mst_topology_mgr *mgr);  int __must_check -
+> > drm_dp_atomic_find_vcpi_slots(struct drm_atomic_state *state,
+> > +drm_dp_atomic_find_time_slots(struct drm_atomic_state *state,
+> >                               struct drm_dp_mst_topology_mgr *mgr,
+> >                               struct drm_dp_mst_port *port, int pbn,
+> >                               int pbn_div);
+> > @@ -858,7 +858,7 @@ int __must_check
+> >  drm_dp_mst_add_affected_dsc_crtcs(struct drm_atomic_state *state,
+> >                                   struct drm_dp_mst_topology_mgr *mgr);
+> > int __must_check -drm_dp_atomic_release_vcpi_slots(struct
+> > drm_atomic_state *state,
+> > +drm_dp_atomic_release_time_slots(struct drm_atomic_state *state,
+> >                                  struct drm_dp_mst_topology_mgr *mgr,
+> >                                  struct drm_dp_mst_port *port);
+> >  int drm_dp_send_power_updown_phy(struct drm_dp_mst_topology_mgr
+> > *mgr,
+> > --
+> > 2.35.3
+> --
+> Regards,
+> Wayne Lin
+
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+

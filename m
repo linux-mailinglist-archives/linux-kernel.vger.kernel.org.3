@@ -2,108 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D78587742
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CD058774B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbiHBGuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 02:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S233079AbiHBGxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 02:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbiHBGuO (ORCPT
+        with ESMTP id S231932AbiHBGxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 02:50:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AA12735;
-        Mon,  1 Aug 2022 23:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659423013; x=1690959013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Em4r8waKeUhhrtXpfrHO7VA66HUnkdX4I+KJBKy59zY=;
-  b=i9m2hzue420/jzXqaKcUqPJ/s+kZH3bwfmekhGRIv6N8j20sJGYxf4wU
-   1BbpCPgCdoyf19YUMSsFaYZiZmfvv+7TFDio7pUuBHMpJAOsm70klRZTH
-   ghRS3YTdQcFqtH+ZcaaCcEJErb34r4Zvn0bHsqsCTsiUi/vxEY16p1Ucq
-   uZ3Ku4T17Oqj5mvZGHTpJw6dcoDIxtcAj8wZbGf4+c9SCaklW4lOi9YJR
-   UR2Dn/WhxcLqnmENkGHTSfsDBHO/fKAfd5JJfKljvDQuwUK0dG6jK+AZz
-   1z74Z9a9cuSxLu5rVP2yBBwK7L8+1i04wwBFOMbb2pIuz7Lvahk6r+I3V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="351045286"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="351045286"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 23:50:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="744561851"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Aug 2022 23:50:08 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIljD-000Fn7-39;
-        Tue, 02 Aug 2022 06:50:07 +0000
-Date:   Tue, 2 Aug 2022 14:49:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gautam Menghani <gautammenghani201@gmail.com>,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/net: Refactor xfrm_fill_key() to use array of
- structs
-Message-ID: <202208021442.LI0ioKrz-lkp@intel.com>
-References: <20220731170316.71542-1-gautammenghani201@gmail.com>
+        Tue, 2 Aug 2022 02:53:36 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43816491C8
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:53:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so702296pjz.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 23:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=uVFoLxQ6dMayohS3JHhDfe5iy+WrdfwvAxJQ06r4ODg=;
+        b=xgH/Pm2Vq7i1xxAqCs0FiuBWEln7VQz8Mthw8a5mgC/b96Dpl/iGsVG5qf/IlnjGCx
+         3E8gpHm7laW2IZ2DSrKNi008izQaxPCz6pFvauX5MR5Hh5rgtgIUVQHhgooSpUjRLOIt
+         NN0H9OwLhzBkSgFArjxFA5YKPVzTBVJXIep6q4+xmrm0HgXJgWuE6xFgqpfwhE5qBNzX
+         rZrSbru+D8Ho2GNPHfscScz2RwhgIa0gbF5C+M3J/PT7tgpRdNhfK+9NYgvT/nGVXgxS
+         5z4ajg+2CDUDDrnQ/3U43uY+hN2UtNFdn0DkqF7YFj+VLGyfbYIcYnKC4Ice89pa1GE7
+         nWZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=uVFoLxQ6dMayohS3JHhDfe5iy+WrdfwvAxJQ06r4ODg=;
+        b=Jx+HkRp/lZltYEmdXJO4wofsKDeyx6CTzYDI2EyVoUZkK45CIKraQC6qUBGlk/IUN+
+         4WjWpejTyaqZ+smCLKtXjcSNJcHdU7y8n+NEJ/qN80dNeG4uZ4oNJbXR9+aBWQhxwXDd
+         gyqcrTKOdgJCF7956ZS48NecWJStjbo3fjkRnhSOpjQTPVFDmxdd5LHsr5RZnX8Jwkzh
+         25ecmfT72rQWD6Pqxh1yPAv4+ASYF+ThVMCPjtfYm1GfgtSPiDmeSbz7RL17+3VBSFoJ
+         fpb7+qO7ftg4jwH+yXC6cwMMmAj+VmaFL4yKskbwNfrLW+qTS/hvWVikXqbXiD5TUVGo
+         Oriw==
+X-Gm-Message-State: ACgBeo269ymVP8KDim8Tgno2uBCQ9Do+qVZNrKwTkWgLhN7+HOqspvXo
+        NleC/KnITVuffmHvVVoh0oGFow==
+X-Google-Smtp-Source: AA6agR49NL9qaHjMgzqU4n2JYSNt1BQhiTLN5q0K/x8eg2GJigMZYgcN0OEqv/0rRIO0OMkhEyZuMg==
+X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr19889308plh.124.1659423214750;
+        Mon, 01 Aug 2022 23:53:34 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id 18-20020a621912000000b0052ac5e304d0sm10198168pfz.179.2022.08.01.23.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 23:53:34 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     will@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        mark.rutland@arm.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH v2] arm64: run softirqs on the per-CPU IRQ stack
+Date:   Tue,  2 Aug 2022 14:53:25 +0800
+Message-Id: <20220802065325.39740-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731170316.71542-1-gautammenghani201@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gautam,
+Currently arm64 supports per-CPU IRQ stack, but softirqs
+are still handled in the task context.
 
-Thank you for the patch! Perhaps something to improve:
+Since any call to local_bh_enable() at any level in the task's
+call stack may trigger a softirq processing run, which could
+potentially cause a task stack overflow if the combined stack
+footprints exceed the stack's size, let's run these softirqs
+on the IRQ stack as well.
 
-[auto build test WARNING on klassert-ipsec-next/master]
-[also build test WARNING on klassert-ipsec/master net-next/master net/master linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Will Deacon <will@kernel.org>
+---
+v1: https://lore.kernel.org/lkml/20220708094950.41944-1-zhengqi.arch@bytedance.com/
+RFC: https://lore.kernel.org/lkml/20220707110511.52129-1-zhengqi.arch@bytedance.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gautam-Menghani/selftests-net-Refactor-xfrm_fill_key-to-use-array-of-structs/20220801-010446
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec-next.git master
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/deea0844458f9991c45aff2949b7180a95105752
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gautam-Menghani/selftests-net-Refactor-xfrm_fill_key-to-use-array-of-structs/20220801-010446
-        git checkout deea0844458f9991c45aff2949b7180a95105752
-        make O=/tmp/kselftest headers
-        make O=/tmp/kselftest -C tools/testing/selftests
+Changelog in v1 -> v2:
+ - temporarily discard [PATCH v1 2/2] to allow this patch to be merged first
+ - rebase onto the v5.19
+ - collect Reviewed-by and Acked-by
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Changelog in RFC -> v1:
+ - fix conflicts with commit f2c5092190f2 ("arch/*: Disable softirq stacks on PREEMPT_RT.")
 
-All warnings (new ones prefixed by >>):
+ arch/arm64/Kconfig      |  1 +
+ arch/arm64/kernel/irq.c | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
 
->> ipsec.c:83:1: warning: useless storage class specifier in empty declaration
-      83 | };
-         | ^
-   ipsec.c: In function 'xfrm_fill_key':
->> ipsec.c:812:13: warning: unused variable 'i' [-Wunused-variable]
-     812 |         int i = 0;
-         |             ^
-
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1652a9800ebe..90f1ab403724 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -226,6 +226,7 @@ config ARM64
+ 	select THREAD_INFO_IN_TASK
+ 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+ 	select TRACE_IRQFLAGS_SUPPORT
++	select HAVE_SOFTIRQ_ON_OWN_STACK
+ 	help
+ 	  ARM 64-bit (AArch64) Linux support.
+ 
+diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+index bda49430c9ea..c36ad20a52f3 100644
+--- a/arch/arm64/kernel/irq.c
++++ b/arch/arm64/kernel/irq.c
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
+ #include <asm/daifflags.h>
+ #include <asm/vmap_stack.h>
++#include <asm/exception.h>
+ 
+ /* Only access this in an NMI enter/exit */
+ DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+@@ -71,6 +72,18 @@ static void init_irq_stacks(void)
+ }
+ #endif
+ 
++#ifndef CONFIG_PREEMPT_RT
++static void ____do_softirq(struct pt_regs *regs)
++{
++	__do_softirq();
++}
++
++void do_softirq_own_stack(void)
++{
++	call_on_irq_stack(NULL, ____do_softirq);
++}
++#endif
++
+ static void default_handle_irq(struct pt_regs *regs)
+ {
+ 	panic("IRQ taken without a root IRQ handler\n");
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

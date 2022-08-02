@@ -2,112 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1525881A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325E25881BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237303AbiHBSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S230038AbiHBSLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiHBSFW (ORCPT
+        with ESMTP id S237846AbiHBSLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:05:22 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE910113A;
-        Tue,  2 Aug 2022 11:05:20 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so18037019fac.13;
-        Tue, 02 Aug 2022 11:05:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UHeuO4m1+0J5UAlSgd6a8rj3eBaXa+1Xip7NqoHiSmg=;
-        b=NGrthaA8IXRcLwThaq0CE0GNaIEMB/4kzBAKzYrdS9YZBG89CeF7+5COgWR8oyg9de
-         wrOFJBXEWjPLxNGdPr5WAdNIVrzkwEvxaDRmkVy9rooxfiXx+z0sAQWuzZqdMs1PXeCM
-         0QEO/hcrtcObr+qIwPM8Pe0riQBQntLamG0aIDBGEnKED9JoPDIc4ES3u7Ok1d8NYz7J
-         Fcdi/t/+kdLsMenrM9xxq5iODYfdL4Pm1vDSfhg0pO6QdmJpuVqAELxPmgjOfZt3z3Zd
-         fvOO2NsVy2g33O4t6cI6oNPVZ9u+iWScxI3+lmizht8SwgWcFmeIdbcpb+iVral6HTU2
-         I6kQ==
-X-Gm-Message-State: ACgBeo23cnuwqozp9lHnqQ8dH6RbDcc+0OeYo06CeRHqwC9KT2v4suWR
-        82hxGr+ABpsokxru6S1ThJKWvAROy46IlQ9UuAeozWGd
-X-Google-Smtp-Source: AA6agR4jnsOeta38tYWDtd4Yqm1aG3kaThX1Nbcmx08uVJCpjEDUj5U8hpXpb0zZWYrLeCa+xwTKJPdrp1x5jy7WsQ0=
-X-Received: by 2002:a05:6870:a182:b0:10b:efbe:e65d with SMTP id
- a2-20020a056870a18200b0010befbee65dmr310078oaf.5.1659463520100; Tue, 02 Aug
- 2022 11:05:20 -0700 (PDT)
+        Tue, 2 Aug 2022 14:11:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD0517E1C;
+        Tue,  2 Aug 2022 11:11:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A8F3F381C5;
+        Tue,  2 Aug 2022 18:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659463864;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pz4nohXMnV6DoQDiLTQldnM+q/whU1JUDeaFPyIhZ1g=;
+        b=qbwOAxE67O43QdxlU3BgVNMFcqw+bIAks9zkzBZrdIt+p9QtP3Fv7xMPLaENAdVp7Aedx9
+        XzoRSqRbgRcLUXbFDFMud/GksDdqcgMn+9twIIJ4cRQFVh+siuSiTKL0Shqw/NSsGMSWNj
+        Sj0WJF2iodrQNqR8K7qbSku3yKszI1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659463864;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pz4nohXMnV6DoQDiLTQldnM+q/whU1JUDeaFPyIhZ1g=;
+        b=B3fB4DC8HPOsEVk5KmGSn/lYbNT4tRMJqrUYo2XAEFOxE+jYElYC0WLOUq4qB59SfGVsCj
+        5wjm/c5z7w+cjuBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C8841345B;
+        Tue,  2 Aug 2022 18:11:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LWGzGbho6WJzTgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 02 Aug 2022 18:11:04 +0000
+Date:   Tue, 2 Aug 2022 20:06:02 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     alexlzhu@fb.com
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: fix alginment of VMA for memory mapped files on
+ THP
+Message-ID: <20220802180602.GX13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, alexlzhu@fb.com, kernel-team@fb.com,
+        linux-mm@kvack.org, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220801184740.2134364-1-alexlzhu@fb.com>
 MIME-Version: 1.0
-References: <20220802073511.299459-1-namhyung@kernel.org> <20220802073511.299459-2-namhyung@kernel.org>
- <YuliN2UDbls5uW3u@kernel.org>
-In-Reply-To: <YuliN2UDbls5uW3u@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 2 Aug 2022 11:05:09 -0700
-Message-ID: <CAM9d7chZT-mociK=+iF_6SO=1JuD2xaL1HpE4eeo=myngq9vTw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] perf lock: Add -m/--map-length option
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Song Liu <songliubraving@fb.com>,
-        Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801184740.2134364-1-alexlzhu@fb.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 10:43 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Tue, Aug 02, 2022 at 12:35:10AM -0700, Namhyung Kim escreveu:
-> > The -m/--map-length option is to control number of max entries in the
-> > perf lock contention BPF maps.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/Documentation/perf-lock.txt |  4 ++++
-> >  tools/perf/builtin-lock.c              | 23 ++++++++++++++++++++++-
-> >  tools/perf/util/bpf_lock_contention.c  |  3 +++
-> >  tools/perf/util/lock-contention.h      |  1 +
-> >  4 files changed, 30 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-> > index 7949d2e6891b..2101644785e0 100644
-> > --- a/tools/perf/Documentation/perf-lock.txt
-> > +++ b/tools/perf/Documentation/perf-lock.txt
-> > @@ -145,6 +145,10 @@ CONTENTION OPTIONS
-> >  --tid=::
-> >          Record events on existing thread ID (comma separated list).
-> >
-> > +-m::
-> > +--map-length::
-> > +     Maximum number of BPF map entries (default: 10240).
->
-> --map-nr-entries?
->
-> I think we use this jargon "nr-entries" for arrays, lists, etc, better
-> try to stick to it.
+On Mon, Aug 01, 2022 at 11:47:40AM -0700, alexlzhu@fb.com wrote:
+> From: alexlzhu <alexlzhu@fb.com>
+> 
+> With CONFIG_READ_ONLY_THP_FOR_FS, the Linux kernel supports using THPs for
+> read-only mmapped files, such as shared libraries. However, the
+> kernel makes no attempt to actually align those mappings on 2MB boundaries,
+> which makes it impossible to use those THPs most of the time. This issue
+> applies to general file mapping THP as well as existing setups using
+> CONFIG_READ_ONLY_THP_FOR_FS. This is easily fixed by using
+> thp_get_unmapped_area for the unmapped_area function in btrfs, which is
+> what ext2, ext4, fuse, and xfs all use.
 
-Makes sense, will change.
+Commit dbe6ec815641 ("ext2/4, xfs: call thp_get_unmapped_area() for pmd
+mappings") adds the callback for DAX, that btrfs does not support so it
+was left out.
 
->
-> Also what do you think about not using single letter options for things
-> that are not that used?
->
-> The map size has a default, one that seems generous, so changing it
-> should be something uncommon, and then, if it becomes common that more
-> entries are needed by default, we can change the default in the tool.
+> The problem can be seen in
+> /proc/PID/smaps where THPeligible is set to 0 on mappings to eligible
+> shared object files as shown below.
+> 
+> Before this patch:
+> 
+> 7fc6a7e18000-7fc6a80cc000 r-xp 00000000 00:1e 199856
+> /usr/lib64/libcrypto.so.1.1.1k
+> Size:               2768 kB
+> THPeligible:    0
+> VmFlags: rd ex mr mw me
+> 
+> With this patch the library is mapped at a 2MB aligned address:
+> 
+> fbdfe200000-7fbdfe4b4000 r-xp 00000000 00:1e 199856
+> /usr/lib64/libcrypto.so.1.1.1k
+> Size:               2768 kB
+> THPeligible:    1
+> VmFlags: rd ex mr mw me
+> 
+> This fixes the alignment of VMAs for any mmap of a file that has the
+> rd and ex permissions and size >= 2MB. The VMA alignment and
+> THPeligible field for anonymous memory is handled separately and
+> is thus not effected by this change.
+> 
+> Signed-off-by: alexlzhu <alexlzhu@fb.com>
 
-Fair enough, I'll remove the single letter option.
+Please use full name for signed-off.
 
-Thanks,
-Namhyung
+Also the subject should start with "btrfs:", this is not a memory
+management patch. Thanks.

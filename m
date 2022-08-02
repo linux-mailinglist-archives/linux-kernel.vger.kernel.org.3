@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16555587682
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 06:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C959E587686
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiHBE6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 00:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S235574AbiHBE77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 00:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiHBE6I (ORCPT
+        with ESMTP id S231599AbiHBE7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 00:58:08 -0400
+        Tue, 2 Aug 2022 00:59:55 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8CA20F70;
-        Mon,  1 Aug 2022 21:58:05 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D00145C0181;
-        Tue,  2 Aug 2022 00:58:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 02 Aug 2022 00:58:02 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B372B255;
+        Mon,  1 Aug 2022 21:59:54 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 008175C0183;
+        Tue,  2 Aug 2022 00:59:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 02 Aug 2022 00:59:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1659416282; x=1659502682; bh=UB5gR/FmsQ0i1wLcmF1rXIiEP
-        SZnZsAQiAxjp8uWbrw=; b=EZnvDLi6MF5gvqKTs79nNvKicjgeX4kCFH0rFkQEY
-        pl35H+ygXKRWkjBHRsKDmGGAZlgCuWUUDgA42jonIWMYfeHthlv7xuUyPXZmRC6v
-        S+3kwe08szgylbMJVIebcehUkoypECTdD5uS/4eX8kGbPwLigifKXlIT7gmWp6Tc
-        1zjdl/Hvl3McWZqf+ITD+Pe4aPVp+Ewk2wdWhB4ucq5PDSE/e1dta3tN5mnedPWF
-        2jURpId2XGUblHbEx9Sq+nHLPf4k78FIH5o0SRbFHHhsV1EOfEVas2kbdJdItsV9
-        8TJ4aptISu9IBA/mUlMvpF8Jxk5Pmwu2hO016Vc7CRXYg==
+         s=fm2; t=1659416393; x=1659502793; bh=LVBbdeLHvCtClZ0OaBxyCsnLS
+        Z5C9ApI2ez3gIz7M24=; b=ArkxyYpBljpK09bw1yAh37zF7u94QtErREAaw9mfA
+        hjImPE2DCrqHJUhvQkhc61HdZyx//r6OAaKvyobuwy7Tn2JknH+pObwyDdnDZPNn
+        mEKlGta607SohY+x4QnMcGkm57kzeJYOgiuXlEOp3KqBxAuMidyHK0okwpjqx6eG
+        GWrY0+SaDYNJvTW7vIniw0wwx6XAA53oY1oNKORXxZ2cpSD8y9DLPdSf+jYHaoR8
+        c8hNDE6yt/n0fB6yWcy4/47dGi0MkrciP/J3jWJXtWdLUPzGnQnzAOAvmhOPOGD5
+        Y2nZzvjjYBRf8hhmbRWaL3rjpja7nBuLUtQFxJJMzwsPw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:message-id
         :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1659416282; x=1659502682; bh=UB5gR/FmsQ0i1wLcmF1rXIiEPSZnZsAQiAx
-        jp8uWbrw=; b=bBu0GA/eJzsDr7iNt0xINkSEcYo7J4s0bHf4dYfLa4jjXiJSohS
-        xWHzcclTjmp4JMLGowyUWbmCo8bkssgKJMVBAdO85rMSnrgkz0AYRtM+Ixm6grjB
-        SuBWbzPcQc4BlGtlmzGia/kEdzFgJMV9gSrtCiBRF6pZqFQcRXF3gunlrBLm87ry
-        eVbT6QgIHdiLfTBV9KO0c0VEQ60nMP5ffXcEszV6VSyzYU+Ev1yTBIjUhNZltN8D
-        n8ralE1BWd+w4d+3KTIkfpOxQLtl4AHcGwUBoak0TqfBteKEstvXdn0RZzGBsIu2
-        jbK6BdAY/eaqDqGo1YE1OiJ3MkbWUd6CrmQ==
-X-ME-Sender: <xms:2q7oYgB7gwux_aOcHCfXMDmBgb75jzSXePzJ_bdXqqvj66NbocFEqA>
-    <xme:2q7oYih7c7PvqG4F1tEDDjHCcgMscOHU4A55m5kvqteIV33AFir9cYuRKWbBUh1TC
-    9aRBt3xaCdD4UpFKks>
-X-ME-Received: <xmr:2q7oYjm4EVmNKxCxlx_jpfhS0_Qvd5ze3vIZny30Uk_srmshMFrd9txWBw7G>
+        1659416393; x=1659502793; bh=LVBbdeLHvCtClZ0OaBxyCsnLSZ5C9ApI2ez
+        3gIz7M24=; b=ZUSiklysGNAbxysqol2QYI2BnjjEIIe7FqF1cP+hx4z/Kac4mxb
+        ZZ8iRU4IwWVZ1j1QCBV1WhUuQCkRvXEMVqLGWnci17fqrSeIvUedWirtKPz4THRG
+        Kxzbk/N6Oq2liy994PAwJv8SkksEEWj8fNyRVGuLRMej2KgB+MRhvYfJ2n21crVB
+        Cj17wD1es0sFX5JGp12tWcduNF2FY5kmvKeYPptbh5bfCLC3GzN9hrJw/LTKbJ6+
+        HTeBNHmpZPLWEn8khY22DNRnn5E2smowjzIt024w1kPDh9MzzD4XW1ned6h1l+N/
+        UKobQqpRoj8g6jokeWWDqEu2wfPmnUNp6cA==
+X-ME-Sender: <xms:Sa_oYlHMXVRzt-cSAhF29uTDuzbop4iOnfu255hiOkaEPyTkPO6oPA>
+    <xme:Sa_oYqXgIhJ1sKVkEJeVPdT04dh-77pdDyGmh_ZFmfz76FVz255tQ0yQTEdAJSEjv
+    2FxM-9QdJTAhG1Rk0M>
+X-ME-Received: <xmr:Sa_oYnI8KjR25H-7h0DSXUOQoAiqCuWPs2Hkyde5ek4oVsP089RyP5mbrPfz>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgledtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
@@ -53,21 +53,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgledtucetufdoteggod
     nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
     dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
     rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:2q7oYmwSfl_INEY7upOhXdNcA7GhROBRl7JD5wcLylCnrSrjKBqGxA>
-    <xmx:2q7oYlSkDs3TNlMDRSTxRMzae8YQcob3ADLN00PXzrmzuRGNI4SaTw>
-    <xmx:2q7oYhYMNk0FWMV4gtahePJpObK4rx2_MJzxYu3lpunjMREef0mrwQ>
-    <xmx:2q7oYneeT9Q-jG4BHPZCK5zwiEtEDAKCuR3qK0deQlcGgeQfUbkwKg>
+X-ME-Proxy: <xmx:Sa_oYrGURQIwg5Xpo3KnjjFeAXHNs1uCNfSbyD2EuIdGDom-7JmrJA>
+    <xmx:Sa_oYrUZp0jKFqVyq5H01JgSpXZbA5p98Gswgcn75WgvSlDZcFuJXA>
+    <xmx:Sa_oYmMsATqcnkuXOOAHmS27RoF7RNtTVm3h8mwURmuPs1GAWcioCA>
+    <xmx:Sa_oYmSbrwF4pZU4iaN064ltwFK71sJuypNcFHA4xhtpgKf_7pZSEA>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 Aug 2022 00:57:58 -0400 (EDT)
+ 2 Aug 2022 00:59:50 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     corentin.chary@gmail.com, markgross@kernel.org,
         linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         "Luke D. Jones" <luke@ljones.dev>
 Subject: [PATCH] asus-wmi: Add support for TUF laptop keyboard RGB
-Date:   Tue,  2 Aug 2022 16:57:35 +1200
-Message-Id: <20220802045735.1565260-1-luke@ljones.dev>
+Date:   Tue,  2 Aug 2022 16:59:42 +1200
+Message-Id: <20220802045942.1565559-1-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -84,7 +84,7 @@ Adds support for TUF laptop RGB control. This creates two sysfs
 paths to add control of basic keyboard LEDs, and power states.
 
 /sys/devices/platform/asus-nb-wmi/tuf_krgb_mode has the following
-as input options via U8 "n, n, n, n, n":
+as input options via U8 "n n n n n n":
 - Save or set, if set, then settings revert on cold boot
 - Mode, 0-8 for regular modes (if supported), 10-12 for "warning" styles
 - Red, 0-255

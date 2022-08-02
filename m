@@ -2,88 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D76587E76
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A9B587E7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237356AbiHBO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        id S237316AbiHBO5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiHBO4z (ORCPT
+        with ESMTP id S233060AbiHBO5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:56:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0141CB16
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:56:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 86371CE1FE3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF90C433C1;
-        Tue,  2 Aug 2022 14:56:47 +0000 (UTC)
-Date:   Tue, 2 Aug 2022 10:56:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Tom Zanussi <zanussi@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] tracing: Add .percent suffix option to histogram
- values
-Message-ID: <20220802105646.50819088@gandalf.local.home>
-In-Reply-To: <202208021438.2r5RXlo9-lkp@intel.com>
-References: <165932284978.2881436.13536997915615710506.stgit@devnote2>
-        <202208021438.2r5RXlo9-lkp@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 2 Aug 2022 10:57:53 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC211EC70
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:57:52 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id t2so13694736ply.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=dBnuiKdu4WthPT4ZuUplx30eOhTTtqqaF6B2cSk/UyQ=;
+        b=psEKrtShroDo+VkE5iTSlooVNyXfYmgSlA6KYgx76ni4xZuMbRh3wEg2PSd6WyqFcn
+         1mVehE9UlGobBwL13y1cxMstd5t0XYI7SYRCPGZvH57qZ7rNeV7EbjwnIrWIsNGZoqh+
+         Mqg9bYMC+pKjrwvjmpeWl51csWufsISG0LN+aozQwWbb3EkDNwu96V52ZaSQHZu7/D9h
+         SbbW0ptH5HEpfaUCS8cEFPm5X59cfrec0WXIwSr0R0YW6GZ6Ynuns3/yIDP9H2lTjJY8
+         EDqNu1eWqMtmmSwjJrfZdYFiZMN2+QXw+m1YEiN1t/yqJ/5FlGDeCAD5qj0TIgwd69WW
+         VfRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=dBnuiKdu4WthPT4ZuUplx30eOhTTtqqaF6B2cSk/UyQ=;
+        b=fhXbmwnOVq2wJTw27XxALUS882yK4Uv1yQRBML8FeGuBgF+4D4KaAGAc1baP9hAVMu
+         P17JG5jASKQBJhcR0ENGlaRLLQBBStw7UxPbvVjV3XTqZ2IcaKx20ywE2H9L74KfFOyP
+         ALeOTK6Iyj9SE7frjwD3oi0qy6fDqOZ+WBGNGw6vtTFpDQkAeCZQibuXUeQNj6RF8FSl
+         /AcO0/dRJoLeVIIpQlLWlPS1S9ORNYEGLbouE14iLyaGwJSBfujyh1R5WJDxgn6rAOPP
+         Uys/ma/QhEoOzvz35GzEtpCHL3Q31N+Snel63f/tHkIZQYCR3B+aOWo9Rkvkm5kFPsjj
+         xzYA==
+X-Gm-Message-State: ACgBeo0lx81uVz03TeMHGB+H8BV/ni1CJklGfWdstqpwX3uwZqMivKL3
+        we3ZNtmiLIfYSVUsYQ8jZs4V4A==
+X-Google-Smtp-Source: AA6agR5RwrqfkmiyTfqXe9VG/f0YcO2GxWF4rOah1awuIVlUkHZyQF1ejfarhiK2g3EmaVhcQlgfqw==
+X-Received: by 2002:a17:90b:164d:b0:1f0:31c1:9e88 with SMTP id il13-20020a17090b164d00b001f031c19e88mr25335859pjb.206.1659452271776;
+        Tue, 02 Aug 2022 07:57:51 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0016bdf2220desm5428299plc.263.2022.08.02.07.57.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 07:57:50 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 14:57:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 3/3] KVM: VMX: Adjust number of LBR records for
+ PERF_CAPABILITIES at refresh
+Message-ID: <Yuk7avLSXXmaufgm@google.com>
+References: <20220727233424.2968356-1-seanjc@google.com>
+ <20220727233424.2968356-4-seanjc@google.com>
+ <dcc187d2-f55b-a5cd-0664-a6fc78b7966f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcc187d2-f55b-a5cd-0664-a6fc78b7966f@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2 Aug 2022 14:49:36 +0800
-kernel test robot <lkp@intel.com> wrote:
-
-> All errors (new ones prefixed by >>):
+On Tue, Aug 02, 2022, Like Xu wrote:
+> On 28/7/2022 7:34 am, Sean Christopherson wrote:
+> > -bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+> > -{
+> > -	struct x86_pmu_lbr *lbr = vcpu_to_lbr_records(vcpu);
+> > -
+> > -	return lbr->nr && (vcpu_get_perf_capabilities(vcpu) & PMU_CAP_LBR_FMT);
+> > -}
+> > -
+> >   static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+> >   {
+> >   	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
+> > @@ -590,7 +583,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+> >   	bitmap_set(pmu->all_valid_pmc_idx,
+> >   		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+> > -	if (cpuid_model_is_consistent(vcpu))
+> > +	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
+> > +	if (cpuid_model_is_consistent(vcpu) &&
+> > +	    (perf_capabilities & PMU_CAP_LBR_FMT))
+> >   		x86_perf_get_lbr(&lbr_desc->records);
 > 
-> >> ld.lld: error: undefined symbol: __udivdi3  
+> As one of evil source to add CPUID walk in the critical path:
+> 
+> The x86_perf_get_lbr() is one of the perf interfaces, KVM cannot always trust
+> that the number of returned lbr_desc->records.nr is always > 0,  and if not,
+> we have to tweak perf_capabilities inside KVM which violates user input again.
+> 
+> Do you have more inputs to address this issue ?
 
-This is due to this:
+First, drop the unnecessary stub and return value from x86_perf_get_lbr().  KVM
+selects PERF_EVENTS, so the stub and thus error path can't be hit.  I'll add
+patches to the series to do this.
 
-> @@ -5190,18 +5202,34 @@ static void hist_trigger_print_key(struct seq_file *m,
->  	seq_puts(m, "}");
->  }
->  
-> +/* Get the 100 times of the percentage of @val in @total */
-> +static inline unsigned int __get_percentage(u64 val, u64 total)
-> +{
-> +	if (val < (U64_MAX / 10000))
-> +		return (unsigned int)(val * 10000 / total);
-> +	else
-> +		return val / (total / 10000);
-> +}
-> +
+Second, check the number of perf LBRs in vmx_get_perf_capabilities() and advertise
+PMU_CAP_LBR_FMT iff perf fully supports LBRs.
 
-You can't use '/' on u64 values. You have to use div64*(). Otherwise 32 bit
-architectures may use floating point operations or glibc helpers.
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 2 Aug 2022 07:45:33 -0700
+Subject: [PATCH] KVM: VMX: Advertise PMU LBRs if and only if perf supports
+ LBRs
 
-See the other divisions in trace_events_hist.c that do so too.
+Advertise LBR support to userspace via MSR_IA32_PERF_CAPABILITIES if and
+only if perf fully supports LBRs.  Perf may disable LBRs (by zeroing the
+number of LBRs) even on platforms the allegedly support LBRs, e.g. if
+probing any LBR MSRs during setup fails.
 
--- Steve
+Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/capabilities.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+index c5e5dfef69c7..d2fdaf888d33 100644
+--- a/arch/x86/kvm/vmx/capabilities.h
++++ b/arch/x86/kvm/vmx/capabilities.h
+@@ -404,6 +404,7 @@ static inline bool vmx_pebs_supported(void)
+ static inline u64 vmx_get_perf_capabilities(void)
+ {
+ 	u64 perf_cap = PMU_CAP_FW_WRITES;
++	struct x86_pmu_lbr lbr;
+ 	u64 host_perf_cap = 0;
 
->    >>> referenced by trace_events_hist.c:5211 (kernel/trace/trace_events_hist.c:5211)
->    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
->    >>> referenced by trace_events_hist.c:0 (kernel/trace/trace_events_hist.c:0)
->    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
->    >>> referenced by trace_events_hist.c:5211 (kernel/trace/trace_events_hist.c:5211)
->    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
->    >>> referenced 1 more times  
+ 	if (!enable_pmu)
+@@ -412,7 +413,9 @@ static inline u64 vmx_get_perf_capabilities(void)
+ 	if (boot_cpu_has(X86_FEATURE_PDCM))
+ 		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+
+-	perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
++	x86_perf_get_lbr(&lbr);
++	if (lbr.nr)
++		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
+
+ 	if (vmx_pebs_supported()) {
+ 		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
+
+base-commit: 1f011a0755c2135b035cdee3b54e3adc426ec95c
+--
 

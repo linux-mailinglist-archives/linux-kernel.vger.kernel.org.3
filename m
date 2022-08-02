@@ -2,385 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDC45876BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403C75876C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235812AbiHBFci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S235733AbiHBFf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235725AbiHBFca (ORCPT
+        with ESMTP id S232964AbiHBFf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:32:30 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C59419B4;
-        Mon,  1 Aug 2022 22:32:29 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id D0FEC320029B;
-        Tue,  2 Aug 2022 01:32:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 02 Aug 2022 01:32:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1659418347; x=1659504747; bh=R/
-        +5h2/DAfq0YCIGUVxS5EwHlMEbm7OFJH1J6Sy47ck=; b=sspf3FLqhx1v+GhxFE
-        twX3YF012CRJpjcX9YjZXud3u7bRq8x+B2WKBIJsrHCcB7dwtDmxLjuWFKrcGfff
-        GNdJpt2y8RXLvbXGosDqxua1pggG543qaj/WE48u/fwenDpEKaVjeLJKtQY1zNAk
-        EhHA/SRd0mXHmCVxpjPZtclvLW7eKBdzdPknj+fikGQTZ7mNAm6J6bODU5EKTv6M
-        iXkEfEI4OsiwHF2WmFVdK7e6ytfQRnJEq+O4dv6v54ZGlOsbrljRKcEqayb57lUN
-        fjL7hbh+XLQ/YsEXmXKcMFjpLHqEmzlX9UORnI4mm89YfgG15ZwJiEH84RWLJ2nk
-        6sbw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659418347; x=1659504747; bh=R/+5h2/DAfq0Y
-        CIGUVxS5EwHlMEbm7OFJH1J6Sy47ck=; b=2MUbs1AmBJuyWTbT277VEKlR+Sfkl
-        8vHD+tbQowt3KYTUz87uWbtHQB5bSbnT9U/G/yY+61dLwDGuGlnZiMJeNASBlv/u
-        sJWJCFStJRi2EUDsSY2HmQ4VBOFBDPaW1/jrfBIYwnx9YSWnXcv/eMOVReUBRH+G
-        lrcv3wtq0vWYbnc3FhR/QBLIFcA9JD6nUklCq+EJYUH0xxLQJnVmhK2ivJmQSxUZ
-        zsvROlA2JvcIL+xLW9mr4r6q6FP/y2PrmWa/b12HezAt7dWWhAkAzROwXYb4MgZa
-        xJKmW4Oda1Iac6onGp/ATYmaCa3tfOdrDWHrqXNJQCNC4xR8qQOiY8Tmw==
-X-ME-Sender: <xms:67boYtS1so2OUNmSvPCbglbHmCakw4_ND-QQlzQ8yLFSRP4UsJQPoQ>
-    <xme:67boYmz_2aPxtV6Nxz3eAL8Jpeq1fd5F5l7J605UpX1E3pokVVEOruj4sgeIdMR-q
-    1eDAOnc_pjwCekAsw>
-X-ME-Received: <xmr:67boYi0hPbYVI-pyH6BXyh1CoWAslfQtXm_iD-NCYvaltpy6QldIU__olnj32hWNpkwZoiFSJVGL0rQRsdyIXcnXzSNqC7a1ZTHavyXbxjl3BnXdv84gZ7cmTP2DXG03uXjaDQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:67boYlD6NGRgm4KBCYLXDTNEhkSC-yOnw9ke1UzVKLw-d1U96t_L0w>
-    <xmx:67boYmg4dqHjpeQuMwXEp07zKMXeoiQdNnrdrcQIlBXWwUJOjsH_xA>
-    <xmx:67boYpoQyqbd4e8p4oCOEkNqOX91bkypo2o-sNmocjGELa5TYiTjvg>
-    <xmx:67boYra0-wryNw1yVe0QM7vQBHIy1LUs4yhS-4YYa07Mg2QzE1y-6A>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 Aug 2022 01:32:26 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 4/4] regulator: sun20i: Add support for Allwinner D1 LDOs
-Date:   Tue,  2 Aug 2022 00:32:13 -0500
-Message-Id: <20220802053213.3645-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220802053213.3645-1-samuel@sholland.org>
-References: <20220802053213.3645-1-samuel@sholland.org>
+        Tue, 2 Aug 2022 01:35:26 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E69B26553;
+        Mon,  1 Aug 2022 22:35:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eGaaI2akrwQWK53uFa13aUaoiupK+usn325TMfaGory0zzTmW5iPhlpwtWAbgqTcbNwmQj24JuB7pxn55higlYjMDokRT89bk4RdOQhVyvQpq17R3wtyup7/CBEnkkx9hNlI6OJhqZ6L901agLVigvW8SoTjyFOMVu5XcZWMcuNMFadlz+eAf3A4Jzvlt5k3jxVKwuqVT95gwVQQRpIYRsRGZXOw2UvZzDVCBdhIz5cag197ip7hwNzp/Qm1x1JTn1HCUq7E5L5bUFVUzQWArbRqv03wdtk5O7g/XgPhSILaJC53/6WbdgYQiFuusyVrvtNJ9dd7Ci7MEcIX8RogLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6qr/t5Nh4CSbxlIj4GTABGYi01Q4E4KGUJUXqE9AkrI=;
+ b=FdW10OLkWPDaix3E5sKaXk0aoqQoyywm0WmDsKziPeYVpjo6O8GakUI8eJl/dNGlhr4LgYfq4kD3UatvGuhf07DUX8cHd5IzHJsoyJQ31aWCjgz6u1EOxzXtdPHOAV4jyDFalmAaZxBrYZSMOh4NX4uCEl6rGGslnd0oHP1bC6XVkg/59ULIdz88GZK1mxORCI00ZFDiiOnLr169AmCKmbzJEJVzYo7lzxwlckmEC5cwZxDZzcgBM3BcbLviLis9iTtvHQXP5tAFGyObF9IoRu/OxKr1QBPPZve1uj8LODbyKRu66F8I0zDIOYFoBacrkhinmuNWzREFi4W86swmGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6qr/t5Nh4CSbxlIj4GTABGYi01Q4E4KGUJUXqE9AkrI=;
+ b=yHB91SN7fgz6FBV0VC0AjzwstoOEpkMAeisKNwwyqTSDBf1miPO86Pk5+tSUSgvw/vnnqvCP9jTZ+zyzMx6n/IZ6yJIN+FFXLZ+ROZ6BAIfzmZLcuF23k8/2b2d8tVS1GgXN6HLY+kAQyoRmpLR+jDnu3W2n+B4FDbAcJ+KEYtw=
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
+ by SN6PR05MB4751.namprd05.prod.outlook.com (2603:10b6:805:93::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.10; Tue, 2 Aug
+ 2022 05:35:22 +0000
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::959e:de9c:2ea:213a]) by BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::959e:de9c:2ea:213a%5]) with mapi id 15.20.5438.010; Tue, 2 Aug 2022
+ 05:35:22 +0000
+From:   Vishnu Dasa <vdasa@vmware.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Bryan Tan <bryantan@vmware.com>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v2 0/9] vsock: updates for SO_RCVLOWAT handling
+Thread-Topic: [RFC PATCH v2 0/9] vsock: updates for SO_RCVLOWAT handling
+Thread-Index: AQHYobWftGqT6D2PPUyTyofbXSwoca2bH+UA
+Date:   Tue, 2 Aug 2022 05:35:22 +0000
+Message-ID: <D7315A7C-D288-4BDC-A8BF-B8631D8664BA@vmware.com>
+References: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+ <20220727123710.pwzy6ag3gavotxda@sgarzare-redhat>
+In-Reply-To: <20220727123710.pwzy6ag3gavotxda@sgarzare-redhat>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 419a3d18-6a0c-4689-a555-08da7448cb7d
+x-ms-traffictypediagnostic: SN6PR05MB4751:EE_
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: =?us-ascii?Q?wAuhAEdDs/Ykx5NtbTYFk4AC5gO6FSzyyEm0Q9GeFx7+GNGNGm8Qv5FHm43X?=
+ =?us-ascii?Q?Rh6/k1/cMKpybboOUyPrgAYdW2IxBXgMv7tfFtIiSj1rHr/nwEnSo8/HKOjx?=
+ =?us-ascii?Q?DIls2qyQbbGOII9AeRuHjEKpwpBI5G+1R/EIPunu4K35Kb/rVu+F5JShBMwJ?=
+ =?us-ascii?Q?ODT9fbfXu1ttSAoCpe6paZX1iAXueOM9U2+MNGHubc8vpVSzMwTkEi/cf5xE?=
+ =?us-ascii?Q?ANbNHlOr6f2oTumngfoRhSvHhlzlPgAic2QViZO9t19fZZ/oeFiBsHG2Bdf7?=
+ =?us-ascii?Q?xHsR04e9p1pZZflHU3ot+VXskK1Cpqo8x4EFmoNyqIc0YdXH8PMhozCMlJph?=
+ =?us-ascii?Q?AC6kYCAlE3NNqCuTVRCxWgqBYxa2jbRpgEDlU4SHuwbBikKQW3H5hgB2cJcT?=
+ =?us-ascii?Q?fb3/ogsb1bUeC95+he9k45m85Y0w4yNd9lxnnBt4G8R19NB80Qsrl5qY+ymV?=
+ =?us-ascii?Q?PXzl2qLem5NZRGxhln0ZG4NAhNK4V1bEExforlxRh0AA9kWG3lcTT+Hh3r6b?=
+ =?us-ascii?Q?EDwJCuSR/xq2lluOUiFeL1DewGauI5sRS2E1hV/rx0x0E2uTENN265Qsj7tt?=
+ =?us-ascii?Q?aG3HYiOSTcaFH0VXFYd3JDpb9uchFYk2OPbQ1MRLMOSWR9r33K2OISIaiIER?=
+ =?us-ascii?Q?9vQ7ThaergcG8i8X5YZ4C8pF4UzLaUD20pGCBu+Bf0Swuh6BNqJ+0MImwlL7?=
+ =?us-ascii?Q?5Vrsp2RrFJgKUZiL42lvvxmCe5EXvknWeugPR7h3pKNmMZM9lJMIKtHxnWjH?=
+ =?us-ascii?Q?wfsc4vs1I6uj0c/LW971fw5kSSqnSgu56D9Es4x1O5DJUG1ZtL9rrID02owN?=
+ =?us-ascii?Q?PcJx2CpwRLvbxyLvfo/9CUy1S2oOCQNYO5vP5mU4+NgM6/DvAbO6H68kXb1h?=
+ =?us-ascii?Q?tN3BujVsFaAWQ3uaS0EISGhmTMy3aXRhxMEE508AvwqWXU7Lnj5rTa/Ph/Vv?=
+ =?us-ascii?Q?WIEw0FJQv8/gjc6gvk+KnA=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(366004)(396003)(346002)(6512007)(53546011)(6506007)(86362001)(41300700001)(54906003)(6916009)(45080400002)(316002)(6486002)(966005)(71200400001)(478600001)(38070700005)(122000001)(38100700002)(2616005)(186003)(83380400001)(2906002)(66946007)(66556008)(8676002)(76116006)(4326008)(64756008)(66476007)(66446008)(8936002)(33656002)(5660300002)(7416002)(36756003)(15650500001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oltrh0RmrEP8x7yTWQi8/GJhlOSgiLAyyBSpQC5MncH66+GqJ3FPacbIHb4T?=
+ =?us-ascii?Q?mb9YSWAnOQArLma7+whY6I3LwuEAR1F5i2cVqPMQQsCkqsXU1/XLYpgk7mhG?=
+ =?us-ascii?Q?T6EobU9QroliX7kVFPX+61bawcsJfP9EvTCetNXEXvYj3TvBVU46sJAQLnFm?=
+ =?us-ascii?Q?zmjNk8qHXlMbyGHQhDPCSPDKjUvk7IorcrffaS9I0PVtGD0wgZNFsteD8mHh?=
+ =?us-ascii?Q?G5Qs7WjfXXttiDIzPQUhhHSeAkdvOepg8FQjAG8HZosy48jOUXoNPQGByEU6?=
+ =?us-ascii?Q?GSk09PSS25p8/bSs44HIw73dBqxzY2eBJ/gnGJwOaz0u8VLZnOnn8xEiHk/K?=
+ =?us-ascii?Q?HTzdUDcj9vlghrBNaorQMlJU3mDWY+EH9CzMs10vYLleoegCwf237/hQLzUl?=
+ =?us-ascii?Q?gw/XCN44UhSTwEgqJQVuun9c4dfBqAzWpCFMFy1HLIrDX4dJ2dUZgHrMr+mt?=
+ =?us-ascii?Q?bUfJ8ND6th8LP8L66sIV0ubz3kUS2nf1bivR8RTkP3UphLaOqBYHvP0Jyj//?=
+ =?us-ascii?Q?QnXmAEa/6QFBPKgb8vQhlyCRHo7mxxBZnhfgyIEp0cGFZzcmP9ijJmiuecYC?=
+ =?us-ascii?Q?dz9tOIB83m4K3ucIvaNVasdJHUZTggqlRcPDrr2nxqcEF7SxawbCPXLoGC2N?=
+ =?us-ascii?Q?UOq816hwIrU8jAeU14kZkPaVfoDWUD2+lAa+Ar/2oENEX2BtlKXk1fQR8xcX?=
+ =?us-ascii?Q?JHiHoVVvCTEiIW8rrbzQ9+tNyx0BxUjznEVErZvL6WV6CX+QdEeR2ZP3VgmA?=
+ =?us-ascii?Q?Z2S5VfhZC1eC4KJfWcTJXO311bziaa/u4ScsUhwRRGLdmStQxcVwNp3tWhvi?=
+ =?us-ascii?Q?BJ96NZO9iEDD3N1pNgRHUGEHcYaHzsDx9QTy7JF+XHpA2du0avklMwr8BRnh?=
+ =?us-ascii?Q?Ld/K4hRTFkzyBF/0sQCzgoZLHCjQaDV9uQF5rVhHy7R7xpEHUdOATX7ngR4d?=
+ =?us-ascii?Q?gemPSBAyBSuu02XSHvqfNjG6Lu5VZ90VlwFO23UbJhB+XzBT5fnRgfAZc+H5?=
+ =?us-ascii?Q?/+JZD+BNx5EXeB0JlO+S29D3NeR/utAdRpzXcPZUUCXCoVTma1eY3Z2Jbljv?=
+ =?us-ascii?Q?B4KvuvoAMW0nwj4EzA1zjudHx7PphmlYaq049ysxPCtN5oJ0aO6RCvSKTAlZ?=
+ =?us-ascii?Q?68ebP0rToMfKhpi6X5kdb8GEB6s7YVly/iA0F7/OiFxFn4H9tKsD7GRvaVAP?=
+ =?us-ascii?Q?drqfAG+E5oWHrYJpTX4ocka6zyEf/0rbsn/hACl7ccL41ABKxyTv1FHRg1Aj?=
+ =?us-ascii?Q?YDVcX9NX1ydnoKFE+emXPEpv/EMWUi79E1qTi8DO6BSk235aQRwHZWQvdF/b?=
+ =?us-ascii?Q?++iJYcEl6zOpackEqFa3C0xKhewhLV80CsTVwFAVLdI6a/HNqhIpB8Gm/mMi?=
+ =?us-ascii?Q?XUzpotNbQtx/v5p8Rtp5noUwGeZuOZe14W8BkGCTD3EDjf4nrNZKAPwQ/5c0?=
+ =?us-ascii?Q?k4rUd3FPCSu1kK4CBSub5VFTRbySfi0mRY9NZ9VGEAgDD/ARpqYw6W0Iunvk?=
+ =?us-ascii?Q?+eapmIwKtlUEsTXrBZCzo18ldHz3ncMuJLqcJV6zpjqNPlUEh68LDMOxEDWD?=
+ =?us-ascii?Q?ZgfxD7py3Wx3VNO9bU3dl2lMPSGVgjknZwlthedEbWtrxSm4Z+N077OHt+dz?=
+ =?us-ascii?Q?G4XOxY0+cCpml936gJ9oHL9GBjYTD0jl7gWJeHFls4fd?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <54ECB86CAAA4F941BE14BA597B924194@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB3960.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 419a3d18-6a0c-4689-a555-08da7448cb7d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 05:35:22.6666
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0QZAxhVZYd4Ao7IZr8HlRyS5EWqjaSq0dPsReIyDaGaGLJ/pAGUAAl+9kRyxTl/FkHo0SVLS7yJ5aRwKtk2gPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB4751
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 contains two pairs of LDOs. Since they have similar bindings, and
-they always exist together, put them in a single driver.
 
-The analog LDOs are relatively boring, with a single linear range. Their
-one quirk is that a bandgap reference must be calibrated for them to
-produce the correct voltage.
+> On Jul 27, 2022, at 5:37 AM, Stefano Garzarella <sgarzare@redhat.com> wro=
+te:
+>=20
+> Hi Arseniy,
+>=20
+> On Mon, Jul 25, 2022 at 07:54:05AM +0000, Arseniy Krasnov wrote:
+>> Hello,
+>>=20
+>> This patchset includes some updates for SO_RCVLOWAT:
+>>=20
+>> 1) af_vsock:
+>>  During my experiments with zerocopy receive, i found, that in some
+>>  cases, poll() implementation violates POSIX: when socket has non-
+>>  default SO_RCVLOWAT(e.g. not 1), poll() will always set POLLIN and
+>>  POLLRDNORM bits in 'revents' even number of bytes available to read
+>>  on socket is smaller than SO_RCVLOWAT value. In this case,user sees
+>>  POLLIN flag and then tries to read data(for example using  'read()'
+>>  call), but read call will be blocked, because  SO_RCVLOWAT logic is
+>>  supported in dequeue loop in af_vsock.c. But the same time,  POSIX
+>>  requires that:
+>>=20
+>>  "POLLIN     Data other than high-priority data may be read without
+>>              blocking.
+>>   POLLRDNORM Normal data may be read without blocking."
+>>=20
+>>  See https://nam04.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
+Fwww.open-std.org%2Fjtc1%2Fsc22%2Fopen%2Fn4217.pdf&amp;data=3D05%7C01%7Cvda=
+sa%40vmware.com%7C5ad2c6759fd8439e938708da6fccbee4%7Cb39138ca3cee4b4aa4d6cd=
+83d9dd62f0%7C0%7C1%7C637945222450930014%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4=
+wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp=
+;sdata=3D60hG3DiYufOCv1DuufSdujiLEKDNou1Ztyah3GPbOLI%3D&amp;reserved=3D0, p=
+age 293.
+>>=20
+>>  So, we have, that poll() syscall returns POLLIN, but read call will
+>>  be blocked.
+>>=20
+>>  Also in man page socket(7) i found that:
+>>=20
+>>  "Since Linux 2.6.28, select(2), poll(2), and epoll(7) indicate a
+>>  socket as readable only if at least SO_RCVLOWAT bytes are available."
+>>=20
+>>  I checked TCP callback for poll()(net/ipv4/tcp.c, tcp_poll()), it
+>>  uses SO_RCVLOWAT value to set POLLIN bit, also i've tested TCP with
+>>  this case for TCP socket, it works as POSIX required.
+>>=20
+>>  I've added some fixes to af_vsock.c and virtio_transport_common.c,
+>>  test is also implemented.
+>>=20
+>> 2) virtio/vsock:
+>>  It adds some optimization to wake ups, when new data arrived. Now,
+>>  SO_RCVLOWAT is considered before wake up sleepers who wait new data.
+>>  There is no sense, to kick waiter, when number of available bytes
+>>  in socket's queue < SO_RCVLOWAT, because if we wake up reader in
+>>  this case, it will wait for SO_RCVLOWAT data anyway during dequeue,
+>>  or in poll() case, POLLIN/POLLRDNORM bits won't be set, so such
+>>  exit from poll() will be "spurious". This logic is also used in TCP
+>>  sockets.
+>=20
+> Nice, it looks good!
+>=20
+>>=20
+>> 3) vmci/vsock:
+>>  Same as 2), but i'm not sure about this changes. Will be very good,
+>>  to get comments from someone who knows this code.
+>=20
+> I CCed VMCI maintainers to the patch and also to this cover, maybe
+> better to keep them in the loop for next versions.
+>=20
+> (Jorgen's and Rajesh's emails bounced back, so I'm CCing here only
+> Bryan, Vishnu, and pv-drivers@vmware.com)
 
-The system LDOs have the complication that their voltage step is not an
-integer, so a custom .list_voltage is needed to get the rounding right.
+Hi Stefano,
+Jorgen and Rajesh are no longer with VMware.  There's a patch in
+flight to remove Rajesh from the MAINTAINERS file (Jorgen is already
+removed).
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-
-Changes in v2:
- - Use decimal numbers for .n_voltages instead of field widths
- - Get the regmap from the parent device instead of a property/phandle
-
- drivers/regulator/Kconfig            |   8 +
- drivers/regulator/Makefile           |   1 +
- drivers/regulator/sun20i-regulator.c | 232 +++++++++++++++++++++++++++
- 3 files changed, 241 insertions(+)
- create mode 100644 drivers/regulator/sun20i-regulator.c
-
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index cbe0f96ca342..20a22f900bb2 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1234,6 +1234,14 @@ config REGULATOR_STW481X_VMMC
- 	  This driver supports the internal VMMC regulator in the STw481x
- 	  PMIC chips.
- 
-+config REGULATOR_SUN20I
-+	tristate "Allwinner D1 internal LDOs"
-+	depends on ARCH_SUNXI || COMPILE_TEST
-+	depends on MFD_SYSCON && NVMEM
-+	default ARCH_SUNXI
-+	help
-+	  This driver supports the internal LDOs in the Allwinner D1 SoC.
-+
- config REGULATOR_SY7636A
- 	tristate "Silergy SY7636A voltage regulator"
- 	help
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 8d3ee8b6d41d..cb3ac9290fc3 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -145,6 +145,7 @@ obj-$(CONFIG_REGULATOR_STM32_VREFBUF) += stm32-vrefbuf.o
- obj-$(CONFIG_REGULATOR_STM32_PWR) += stm32-pwr.o
- obj-$(CONFIG_REGULATOR_STPMIC1) += stpmic1_regulator.o
- obj-$(CONFIG_REGULATOR_STW481X_VMMC) += stw481x-vmmc.o
-+obj-$(CONFIG_REGULATOR_SUN20I) += sun20i-regulator.o
- obj-$(CONFIG_REGULATOR_SY7636A) += sy7636a-regulator.o
- obj-$(CONFIG_REGULATOR_SY8106A) += sy8106a-regulator.o
- obj-$(CONFIG_REGULATOR_SY8824X) += sy8824x.o
-diff --git a/drivers/regulator/sun20i-regulator.c b/drivers/regulator/sun20i-regulator.c
-new file mode 100644
-index 000000000000..789a68829630
---- /dev/null
-+++ b/drivers/regulator/sun20i-regulator.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright (c) 2021-2022 Samuel Holland <samuel@sholland.org>
-+//
-+
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+
-+#define SUN20I_POWER_REG		0x348
-+
-+#define SUN20I_SYS_LDO_CTRL_REG		0x150
-+
-+struct sun20i_regulator_data {
-+	int				(*init)(struct device *dev,
-+						struct regmap *regmap);
-+	const struct regulator_desc	*descs;
-+	unsigned int			ndescs;
-+};
-+
-+static int sun20i_d1_analog_ldos_init(struct device *dev, struct regmap *regmap)
-+{
-+	u8 bg_trim;
-+	int ret;
-+
-+	ret = nvmem_cell_read_u8(dev, "bg_trim", &bg_trim);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get bg_trim value\n");
-+
-+	/* The default value corresponds to 900 mV. */
-+	if (!bg_trim)
-+		bg_trim = 0x19;
-+
-+	return regmap_update_bits(regmap, SUN20I_POWER_REG,
-+				  GENMASK(7, 0), bg_trim);
-+}
-+
-+static const struct regulator_ops sun20i_d1_analog_ldo_ops = {
-+	.list_voltage		= regulator_list_voltage_linear,
-+	.map_voltage		= regulator_map_voltage_linear,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.is_enabled		= regulator_is_enabled_regmap,
-+};
-+
-+static const struct regulator_desc sun20i_d1_analog_ldo_descs[] = {
-+	{
-+		.name		= "aldo",
-+		.supply_name	= "vdd33",
-+		.of_match	= "aldo",
-+		.ops		= &sun20i_d1_analog_ldo_ops,
-+		.type		= REGULATOR_VOLTAGE,
-+		.owner		= THIS_MODULE,
-+		.n_voltages	= 8,
-+		.min_uV		= 1650000,
-+		.uV_step	= 50000,
-+		.vsel_reg	= SUN20I_POWER_REG,
-+		.vsel_mask	= GENMASK(14, 12),
-+		.enable_reg	= SUN20I_POWER_REG,
-+		.enable_mask	= BIT(31),
-+	},
-+	{
-+		.name		= "hpldo",
-+		.supply_name	= "hpldoin",
-+		.of_match	= "hpldo",
-+		.ops		= &sun20i_d1_analog_ldo_ops,
-+		.type		= REGULATOR_VOLTAGE,
-+		.owner		= THIS_MODULE,
-+		.n_voltages	= 8,
-+		.min_uV		= 1650000,
-+		.uV_step	= 50000,
-+		.vsel_reg	= SUN20I_POWER_REG,
-+		.vsel_mask	= GENMASK(10, 8),
-+		.enable_reg	= SUN20I_POWER_REG,
-+		.enable_mask	= BIT(30),
-+	},
-+};
-+
-+static const struct sun20i_regulator_data sun20i_d1_analog_ldos = {
-+	.init	= sun20i_d1_analog_ldos_init,
-+	.descs	= sun20i_d1_analog_ldo_descs,
-+	.ndescs	= ARRAY_SIZE(sun20i_d1_analog_ldo_descs),
-+};
-+
-+/* regulator_list_voltage_linear() modified for the non-integral uV_step. */
-+static int sun20i_d1_system_ldo_list_voltage(struct regulator_dev *rdev,
-+					     unsigned int selector)
-+{
-+	const struct regulator_desc *desc = rdev->desc;
-+	unsigned int uV;
-+
-+	if (selector >= desc->n_voltages)
-+		return -EINVAL;
-+
-+	uV = desc->min_uV + (desc->uV_step * selector);
-+
-+	/* Produce correctly-rounded absolute voltages. */
-+	return uV + ((selector + 1 + (desc->min_uV % 4)) / 3);
-+}
-+
-+static const struct regulator_ops sun20i_d1_system_ldo_ops = {
-+	.list_voltage		= sun20i_d1_system_ldo_list_voltage,
-+	.map_voltage		= regulator_map_voltage_ascend,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+};
-+
-+static const struct regulator_desc sun20i_d1_system_ldo_descs[] = {
-+	{
-+		.name		= "ldoa",
-+		.supply_name	= "ldo-in",
-+		.of_match	= "ldoa",
-+		.ops		= &sun20i_d1_system_ldo_ops,
-+		.type		= REGULATOR_VOLTAGE,
-+		.owner		= THIS_MODULE,
-+		.n_voltages	= 32,
-+		.min_uV		= 1600000,
-+		.uV_step	= 13333, /* repeating */
-+		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
-+		.vsel_mask	= GENMASK(7, 0),
-+	},
-+	{
-+		.name		= "ldob",
-+		.supply_name	= "ldo-in",
-+		.of_match	= "ldob",
-+		.ops		= &sun20i_d1_system_ldo_ops,
-+		.type		= REGULATOR_VOLTAGE,
-+		.owner		= THIS_MODULE,
-+		.n_voltages	= 64,
-+		.min_uV		= 1166666,
-+		.uV_step	= 13333, /* repeating */
-+		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
-+		.vsel_mask	= GENMASK(15, 8),
-+	},
-+};
-+
-+static const struct sun20i_regulator_data sun20i_d1_system_ldos = {
-+	.descs	= sun20i_d1_system_ldo_descs,
-+	.ndescs	= ARRAY_SIZE(sun20i_d1_system_ldo_descs),
-+};
-+
-+static const struct of_device_id sun20i_regulator_of_match[] = {
-+	{
-+		.compatible = "allwinner,sun20i-d1-analog-ldos",
-+		.data = &sun20i_d1_analog_ldos,
-+	},
-+	{
-+		.compatible = "allwinner,sun20i-d1-system-ldos",
-+		.data = &sun20i_d1_system_ldos,
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, sun20i_regulator_of_match);
-+
-+static struct regmap *sun20i_regulator_get_regmap(struct device *dev)
-+{
-+	struct regmap *regmap;
-+
-+	/*
-+	 * First try the syscon interface. The system control device is not
-+	 * compatible with "syscon", so fall back to getting the regmap from
-+	 * its platform device. This is ugly, but required for devicetree
-+	 * backward compatibility.
-+	 */
-+	regmap = syscon_node_to_regmap(dev->parent->of_node);
-+	if (!IS_ERR(regmap))
-+		return regmap;
-+
-+	regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!regmap)
-+		return ERR_PTR(-EPROBE_DEFER);
-+
-+	return regmap;
-+}
-+
-+static int sun20i_regulator_probe(struct platform_device *pdev)
-+{
-+	const struct sun20i_regulator_data *data;
-+	struct device *dev = &pdev->dev;
-+	struct regulator_config config;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	data = of_device_get_match_data(dev);
-+	if (!data)
-+		return -EINVAL;
-+
-+	regmap = sun20i_regulator_get_regmap(dev);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to get regmap\n");
-+
-+	if (data->init) {
-+		ret = data->init(dev, regmap);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	config = (struct regulator_config) {
-+		.dev	= dev,
-+		.regmap	= regmap,
-+	};
-+
-+	for (unsigned int i = 0; i < data->ndescs; ++i) {
-+		const struct regulator_desc *desc = &data->descs[i];
-+		struct regulator_dev *rdev;
-+
-+		rdev = devm_regulator_register(dev, desc, &config);
-+		if (IS_ERR(rdev))
-+			return PTR_ERR(rdev);
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver sun20i_regulator_driver = {
-+	.probe	= sun20i_regulator_probe,
-+	.driver	= {
-+		.name		= "sun20i-regulator",
-+		.of_match_table	= sun20i_regulator_of_match,
-+	},
-+};
-+module_platform_driver(sun20i_regulator_driver);
-+
-+MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
-+MODULE_DESCRIPTION("Allwinner D1 internal LDO driver");
-+MODULE_LICENSE("GPL");
--- 
-2.35.1
-
+Thanks,
+Vishnu=

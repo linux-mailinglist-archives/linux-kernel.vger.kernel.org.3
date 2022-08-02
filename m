@@ -2,227 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E11587D68
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7422587D6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236320AbiHBNsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S236183AbiHBNt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbiHBNsd (ORCPT
+        with ESMTP id S233153AbiHBNtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:48:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B920E1DA79
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659448110;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OrwE3Ag22dL3OQ2ksEp1YwraLinA6Mssgv+fkDSYVVA=;
-        b=e1U0xpB1dZv8LxjSHyZzuw3oBphow7sG6otpOWgyF31GqwnLbpQ1T3UzI//FIb9VRMCI01
-        1MhIfrXVZLxfTfy6BxvgBe31F4MuOjiFjfEaAAfyb6f0Cnxy6nrBa8JztGQVzcdQVgQAfD
-        LiNhqVhbpnL8lsFQ9P5KpzOVVV0wCzk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-XO8-lj8WNx6rNrxQqP0Rqw-1; Tue, 02 Aug 2022 09:48:29 -0400
-X-MC-Unique: XO8-lj8WNx6rNrxQqP0Rqw-1
-Received: by mail-wr1-f71.google.com with SMTP id x5-20020adfbb45000000b0021ee56506dfso3578311wrg.11
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 06:48:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=OrwE3Ag22dL3OQ2ksEp1YwraLinA6Mssgv+fkDSYVVA=;
-        b=6zqoba24UZiaAvwfJRcVAIJ7lPeUkBEqR1cenFPrBm+h+c41B4PhYix9tS/4eVaM8p
-         xEDkPJc95vQ6+uXZ4pNXGzyQzuZ8ZacTtY6iUFKVLfGzF30SonD5xtpi05dmG+/mb835
-         wQpypuLknerqbyGC3pxSyTVDO0CDSAshkmJs9IJanWJpqU+p0T8TIVr36fEhs7XDJWje
-         m7+7JAAEkLmir7ofmoAXceA/Gs/ssDTMUXeGT45HazFo8ebRjXLU2mBmPHmcj3bKmEqK
-         p01eDFXUZOOkEWAa4tKnA5vjD1RKtZWDsGkMvgbCdPtoT/SZcS3ZljvaTowoCYLUSXhc
-         EU4g==
-X-Gm-Message-State: AJIora8zcOZQaungdlCtZgZoyM0J1a/Ri1qgx81UpZy0taU/uFHu0kpm
-        Thcneo3JgYBnsZfB0HN3r2aMJqtkQ689+Ht2wdV9Q4igT7uTre5YPTFhY6OLa8JZtBqtnJkKP3b
-        ZMr+AY78j85Db5XKqVv5eqrdk
-X-Received: by 2002:a1c:f710:0:b0:394:1960:e8a1 with SMTP id v16-20020a1cf710000000b003941960e8a1mr14360940wmh.154.1659448108425;
-        Tue, 02 Aug 2022 06:48:28 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v9Dgd3H45ZrMwAMcmmB5W4HzBAT4j3DZORAVdakwAplU9KXQO2uIkeIGZbm3F6/tcCZdIByg==
-X-Received: by 2002:a1c:f710:0:b0:394:1960:e8a1 with SMTP id v16-20020a1cf710000000b003941960e8a1mr14360915wmh.154.1659448108091;
-        Tue, 02 Aug 2022 06:48:28 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3800:8435:659e:f80:9b3d? (p200300cbc70738008435659e0f809b3d.dip0.t-ipconnect.de. [2003:cb:c707:3800:8435:659e:f80:9b3d])
-        by smtp.gmail.com with ESMTPSA id h3-20020a5d4fc3000000b0021eba590ad1sm17427218wrw.90.2022.08.02.06.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 06:48:27 -0700 (PDT)
-Message-ID: <f0f12c84-a62e-5f8b-46ab-a651fe8f8589@redhat.com>
-Date:   Tue, 2 Aug 2022 15:48:26 +0200
+        Tue, 2 Aug 2022 09:49:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB1A201AF;
+        Tue,  2 Aug 2022 06:49:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9D78B81F08;
+        Tue,  2 Aug 2022 13:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73025C433C1;
+        Tue,  2 Aug 2022 13:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659448161;
+        bh=zKsEQnkbeJlDAzFKonEQsrFp1x/ZO2YOyjiCSMfQkjo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ilaepzytmmWWLFKYUHbLUFUbNZuTbDWsu01I2uYKONRS7nTvYB0opjTHczNPDmyeH
+         9wAFYNPi2z8aDQ7mXXqbpvMoJEM5M7P1w4cQDTDRepgFtuXt8ZgiAxp7aw5Z4RWPrr
+         4f3+2TkZ0nmFJmO/l27VaivAlCWqNGUoUgHTqxUQ4DFtlcoVGeBHDfie9fmbCuF9MB
+         o+fWN0aih30CqpOGmiRvgT6LN5kBCxz1yUpgiiWE+D7iqVFEE8SWaKHZDq2gCL84Zt
+         GeChVLmAlQBZnugxIwXjqq6AWPeJvZt83EhLAyfGEK0A5DT9X4nmWwoFpkTBH0VXJk
+         tjcU9Zc1eAkVg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1060F5C02F9; Tue,  2 Aug 2022 06:49:21 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 06:49:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+Message-ID: <20220802134921.GE2860372@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+ <20220801154108.GA26280@willie-the-truck>
+ <20220801192035.GA2860372@paulmck-ThinkPad-P17-Gen-1>
+ <20220802085455.GC26962@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     kernel@openvz.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, stevensd@chromium.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Nadav Amit <namit@vmware.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-References: <55016ed9-7b3c-c4eb-f5f4-02cfce2191e4@redhat.com>
- <20220726140831.72816-1-alexander.atanasov@virtuozzo.com>
- <2d0703da-ae89-7002-f500-300a4b5d206b@redhat.com>
- <3a5e60e8-a0d2-a1f1-28e9-e0b45069029a@virtuozzo.com>
- <71e73194-1683-b65f-7b84-c0c719010aef@redhat.com>
- <2dfad5c8-59d2-69a1-cc4c-d530c12ceea9@virtuozzo.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC] how the ballooned memory should be accounted by the drivers
- inside the guests? (was:[PATCH v6 1/2] Create debugfs file with virtio
- balloon usage information)
-In-Reply-To: <2dfad5c8-59d2-69a1-cc4c-d530c12ceea9@virtuozzo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802085455.GC26962@willie-the-truck>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>
->> In case of Hyper-V I remember a customer BUG report that requested that
->> exact behavior, however, I'm not able to locate the BZ quickly.
->> [1] https://lists.linuxfoundation.org/pipermail/virtualization/2021-November/057767.html
->> (note that I can't easily find the original mail in the archives)
+On Tue, Aug 02, 2022 at 09:54:55AM +0100, Will Deacon wrote:
+> On Mon, Aug 01, 2022 at 12:20:35PM -0700, Paul E. McKenney wrote:
+> > On Mon, Aug 01, 2022 at 04:41:09PM +0100, Will Deacon wrote:
+> > > Apologies for the slow response here; believe it or not, I was attending
+> > > a workshop about memory ordering.
+> > 
+> > Nice!!!  Anything that I can/should know from that gathering?  ;-)
 > 
-> VMWare does not, Xen do, HV do (but it didn't) - Virtio does both.
+> Oh come off it, you know this stuff already ;)
+
+Thank you for the kind words, but the most devastating learning disability
+of all is thinking that you already know everything about the topic
+in question.  ;-)
+
+> > > On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
+> > > > On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
+> > > > > Even alpha is specified to be locally ordered wrt *one* memory
+> > > > > location, including for reads (See table 5-1: "Processor issue order",
+> > > > > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
+> > > > > new value, a subsequent read is not allowed to see an older one - even
+> > > > > without a memory barrier.
+> > > > > 
+> > > > > Will, Paul? Maybe that's only for overlapping loads/stores, not for
+> > > > > loads/loads. Because maybe alpha for once isn't the weakest possible
+> > > > > ordering.
+> > > > 
+> > > > The "bad boy" in this case is Itanium, which can do some VLIW reordering
+> > > > of accesses.  Or could, I am not sure that newer Itanium hardware
+> > > > does this.  But this is why Itanium compilers made volatile loads use
+> > > > the ld,acq instruction.
+> > > > 
+> > > > Which means that aligned same-sized marked accesses to a single location
+> > > > really do execute consistently with some global ordering, even on Itanium.
+> > > 
+> > > Although this is true, there's a really subtle issue which crops up if you
+> > > try to compose this read-after-read ordering with dependencies in the case
+> > > where the two reads read the same value (which is encapsulated by the
+> > > unusual RSW litmus test that I've tried to convert to C below):
+> > 
+> > RSW from the infamous test6.pdf, correct?
 > 
-> For me the confusion comes from mixing ballooning and hot plug.
+> That's the badger. I've no doubt that you're aware of it already, but I
+> thought it was a useful exercise to transcribe it to C and have it on the
+> mailing list for folks to look at.
 
-For example, QEMU (and even libvirt) doesn't even have built in support
-for any kind of automatic balloon resizing on guest memory pressure (and
-I'm happy that we don't implement any such heuristics). As a user/admin,
-all you can do is manually adjust the logical VM size by requesting to
-inflate/deflate the balloon. For virtio-balloon, we cannot derive what
-the hypervisor/admin might or might not do -- and whether the admin
-intends to use memory ballooning for memory hotunplug or for optimizing
-memory overcommit.
+I have seen it, but this was nevertheless a useful reminder.
 
-As another example, HV dynamic memory actually combines memory hotplug
-with memory ballooning: use memory hotplug to add more memory on demand
-and use memory ballooning to logically unplug memory again.
-
-The VMWare balloon is a bit special, because it actually usually
-implements deflate-on-oom semantics in the hypervisor. IIRC, the
-hypervisor will actually adjust the balloon size based on guest memory
-stats, and there isn't really an interface to manually set the balloon
-size for an admin. But I might be wrong regarding the latter.
-
+> > > /* Global definitions; assume everything zero-initialised */
+> > > struct foo {
+> > > 	int *x;
+> > > };
+> > > 
+> > > int x;
+> > > struct foo foo;
+> > > struct foo *ptr;
+> > > 
+> > > 
+> > > /* CPU 0 */
+> > > WRITE_ONCE(x, 1);
+> > 
+> > Your x is RSW's z?
 > 
-> Ballooning is like a heap inside the guest from which the host can 
-> allocate/deallocate pages, if there is a mechanism for the guest to ask 
-> the host for more/to free/ pages or the host have a heuristic to monitor 
-> the guest and inflate/deflate the guest it is a matter of implementation.
-
-Please don't assume that the use case for memory ballooning is only
-optimizing memory overcommit in the hypervisor under memory pressure.
-
+> Yes.
 > 
-> Hot plug is adding  to MemTotal and it is not a random event either in 
-> real or virtual environment -  so you can act upon it. MemTotal  goes 
-> down on hot unplug and if pages get marked as faulty RAM.
-
-"not a random event either" -- sure, with ppc dlpar, xen balloon, hv
-balloon or virtio-mem ... which all are able to hotplug memory fairly
-randomly based on hypervisor decisions.
-
-In physical environments, it's not really a random event, I agree.
-
+> > > WRITE_ONCE(foo.x, &x);
+> > 
+> > And your foo.x is RSW's x?  If so, the above WRITE_ONCE() could happen at
+> > compile time, correct?  Or in the initialization clause of a litmus test?
 > 
-> Historically MemTotal is a stable value ( i agree with most of David 
-> Stevens points) and user space is expecting it to be stable , 
-> initialized at startup and it does not expect it to change.
-
-Just like some apps are not prepared for memory hot(un)plug. Some apps
-just don't work in environments with variable physical memory sizes:
-examples include databases, where memory ballooning might essentially be
-completely useless (there is a paper about application-aware memory
-ballooning for that exact use case).
-
+> Yes, although I think it's a tiny bit more like real code to have it done
+> here, although it means that the "surprising" outcome relies on this being
+> reordered before the store to x.
 > 
-> Used is what changes and that is what user space expects to change.
+> > > /*
+> > >  * Release ordering to ensure that somebody following a non-NULL ptr will
+> > >  * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
+> > >  */
+> > > smp_store_release(&ptr, &foo);
+> > 
+> > Your ptr is RSW's y, correct?
 > 
-> Delfate on oom might have been a mistake but it is there and if anything 
-> depends on changing MemTotal  it will be broken by that option.  How 
-> that can be fixed?
-
-I didn't quite get your concern here. Deflate-on-oom in virtio-balloon
-won't adjust MemTotal, so under which condition would be something broken?
-
+> Yes.
 > 
-> I agree that the host can not reclaim what is marked as used  but should 
-> it be able to ? May be it will be good to teach oom killer that there 
-> can be such ram that can not be reclaimed.
+> > > /* CPU 1 */
+> > > int *xp1, *xp2, val;
+> > > struct foo *foop;
+> > > 
+> > > /* Load the global pointer and check that it's not NULL. */
+> > > foop = READ_ONCE(ptr);
+> > > if (!foop)
+> > > 	return;
+> > 
+> > A litmus tests can do this via the filter clause.
 > 
->> Note: I suggested under [1] to expose inflated pages via /proc/meminfo
->> directly. We could do that consistently over all balloon drivers ...
->> doesn't sound too crazy.
+> Indeed, but I was trying to make this look like C code for non-litmus
+> speakers!
 > 
-> Initally i wanted to do exactly this BUT:
-> - some drivers prefer to expose some more internal information in the file.
-
-They always can have an extended debugfs interface in addition.
-
-> - a lot of user space is using meminfo so better keep it as is to avoid breaking something, ballooning is not very frequently used.
-
-We can always extend. Just recently, we exposed Zswap data:
-
-commit f6498b776d280b30a4614d8261840961e993c2c8
-Author: Johannes Weiner <hannes@cmpxchg.org>
-Date:   Thu May 19 14:08:53 2022 -0700
-
-    mm: zswap: add basic meminfo and vmstat coverage
-
-
-Exposing information about inflated pages in a generic way doesn't sound
-completely wrong to me, but there might be people that object.
-
+> > > /*
+> > >  * Load 'foo.x' via the pointer we just loaded. This is ordered after the
+> > >  * previous READ_ONCE() because of the address dependency.
+> > >  */
+> > > xp1 = READ_ONCE(foop->x);
+> > > 
+> > > /*
+> > >  * Load 'foo.x' directly via the global 'foo'.
+> > >  * _This is loading the same address as the previous READ_ONCE() and
+> > >  *  therefore cannot return a stale (NULL) value!_
+> > >  */
+> > > xp2 = READ_ONCE(foo.x);
+> > 
+> > OK, same location, but RSW calls only for po, not addr from the initial
+> > read to this read, got it.  (My first attempt left out this nuance,
+> > in case you were wondering.)
 > 
+> Right, there is only po from the initial read to this read. If there was an
+> address dependency, then we'd have a chain of address dependencies from the
+> first read to the last read on this CPU and the result (of x == 0) would be
+> forbidden.
 > 
-> Please, share your view on how the ballooned memory should be accounted by the drivers inside the guests so we can work towards consistent behaviour:
+> > > /*
+> > >  * Load 'x' via the pointer we just loaded.
+> > >  * _We may see zero here!_
+> > >  */
+> > > val = READ_ONCE(*xp2);
+> > 
+> > And herd7/LKMM agree with this, at least assuming I got the litmus
+> > test right.  (I used RSW's variables as a cross-check.)
 > 
-> Should the inflated memory be accounted as Used or MemTotal be adjusted?
-
-I hope I was able to make it clear that it completely depends on how
-memory ballooning is actually intended to be used. It's not uncommon to
-use it as form of fake memory hotunplug, where that memory is actually
-gone for good and won't simply come back when under memory pressure.
-
+> That's promising, but see below...
 > 
-> Should the inflated memory be added to /proc/meminfo ?
+> > C rsw
+> > 
+> > {
+> > 	a=0;
+> > 	x=z;
+> > 	y=a;
+> > 	z=0;
+> > }
+> > 
+> > P0(int *x, int **y, int *z)
+> > {
+> > 	WRITE_ONCE(*z, 1);
+> > 	WRITE_ONCE(*y, x);
+> > }
+> 
+> Ah wait, you need a barrier between these two writes, don't you? I used
+> an smp_store_release() but smp[w]_mb() should do too.
 
-My gut feeling is yes. The interesting question remains, how to
-distinguish the two use cases (inflated memory subtracted from MemTotal
-or subtracted from MemFree).
+You are quite right, thank you!  Here is the fixed version and output,
+which LKMM still says is allowed.
 
-I'm not sure if we even want to unify balloon handling reagrding
-adjusting managed pages. IMHO, there are good reasons to do it either way.
+							Thanx, Paul
 
--- 
-Thanks,
+------------------------------------------------------------------------
 
-David / dhildenb
+C rsw
 
+{
+	a=0;
+	x=z;
+	y=a;
+	z=0;
+}
+
+P0(int *x, int **y, int *z)
+{
+	WRITE_ONCE(*z, 1);
+	smp_store_release(y, x);
+}
+
+P1(int *x, int **y, int *z)
+{
+	r1 = READ_ONCE(*y);
+	r2 = READ_ONCE(*r1);
+	r3 = READ_ONCE(*x);
+	r4 = READ_ONCE(*r3);
+}
+
+filter(1:r1=x)
+exists(1:r2=z /\ 1:r3=z /\ 1:r4=0)
+
+------------------------------------------------------------------------
+
+$ herd7 -conf linux-kernel.cfg /tmp/rsw.litmus
+Test rsw Allowed
+States 2
+1:r2=z; 1:r3=z; 1:r4=0;
+1:r2=z; 1:r3=z; 1:r4=1;
+Ok
+Witnesses
+Positive: 1 Negative: 1
+Condition exists (1:r2=z /\ 1:r3=z /\ 1:r4=0)
+Observation rsw Sometimes 1 1
+Time rsw 0.01
+Hash=588486c0f4d521fa3ce559a19ed118d5

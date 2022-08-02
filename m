@@ -2,139 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243385881E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A4D5881E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiHBSc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S233653AbiHBSeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiHBScZ (ORCPT
+        with ESMTP id S237524AbiHBSeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:32:25 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D91813F19;
-        Tue,  2 Aug 2022 11:32:24 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id o2so11277372iof.8;
-        Tue, 02 Aug 2022 11:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=jhq8ckgM3wThDcZldY9YmghfnMoP9xPtuQZ8KnzumAo=;
-        b=VdRx0EOsVrd6Ybzj1Gs9qS7AxPtnD2QK2IFIf9RolrI/Ygx7n3CCPKpPU3zj+wbTT1
-         ETLSmXQFke1UC+3v1WU2TyO3kRU0MD0Rdp0SGOvF3myFXUQ6wFHZKpIyw8xahimWkVON
-         jk2wd4Nn434JzCuBcEdlIZySLE0BhWD9fadVz0ZqJ1obVJiJDZr5hMhXw24O2VEI8klm
-         FZk8AO2kd42gWSy82KfZcBwGzBDMF+jqTz9kWkkYy4ue1OxZt0UsLBe6WJKHt6BVeLU2
-         F6WSNBYCEa/kocJxgUbP0v5Frv/SqfhloM8ge/5o3X4nWAl+uGoYAKvubrM7r92YIIw5
-         lt4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=jhq8ckgM3wThDcZldY9YmghfnMoP9xPtuQZ8KnzumAo=;
-        b=CZajW4LJwenfbh5Np/pf9emzw6nlayYaDbCqgMeq/RPT3mz3j/bl3Ta5htO5+GpAss
-         4BSxEoQE9r4BXsI1SXuNzQm6Dwjcyls+jrsZo/JQRs+63lyd5nSda4J/s7n1BAn5DzCE
-         u2jN0Wz+mDwbXo5HSL7CCKT0AS2XGsJfgBiPNFbhPxY/i1Y8DlH2s3FAC5xuNwF+pefp
-         RmuWPrUwbHt1cjCWGfBWm1XHgctw/6GXEPqQ5W5DymZNvezHyqr62SPRLKjq5LYwl/Yn
-         WU8zMO+JfLGj3UcCUPGHgk1AxhkeGCUkkzy5ZSjCQoYbku1bvyhMHDr+1M0stChTV0/d
-         5oOQ==
-X-Gm-Message-State: ACgBeo1tBaJy1R2zgkgg5urt0D8mFYaf/YrKC8N3toafg81xmzdRo1CJ
-        UA/V3sBGTTAoAQPCLCWjcn7JpBfH4+beEs8WVxY=
-X-Google-Smtp-Source: AA6agR4zB01AwMUmm2uoczyPEG/voRCuVs5QOx8SXiSosbJh2mT+l0ai6vNdX9v3/FVkFqgzoqRCCul6am0CDk+QETo=
-X-Received: by 2002:a05:6638:25d0:b0:342:72f5:a080 with SMTP id
- u16-20020a05663825d000b0034272f5a080mr4809472jat.51.1659465144024; Tue, 02
- Aug 2022 11:32:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com> <34ae275e-8d4c-3735-c08c-4769caf2909c@linaro.org>
-In-Reply-To: <34ae275e-8d4c-3735-c08c-4769caf2909c@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 2 Aug 2022 11:32:50 -0700
-Message-ID: <CAF6AEGv_cgPtaFpxSPCzWXeBcJvqE2fGucriRvMAJMbQ7ULndQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] clk/qcom: Support gdsc collapse polling using 'reset' inteface
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 14:34:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4B13F19;
+        Tue,  2 Aug 2022 11:34:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AF13612E9;
+        Tue,  2 Aug 2022 18:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D89F2C433D6;
+        Tue,  2 Aug 2022 18:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659465248;
+        bh=GBtM0DehaPq1tJtLXq1OKEu7O8SXdKoqI0E26yme45U=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Rw2fHt75wEDfYXAD+SeZDm0ZPiE3jfj0C1YQKUBMViCp41vayXDoGJYlJCkref90/
+         0844ixLz4DtNqohQrBh6PE+PZceyjkCSjqgqC2TNiXIuDkbVIylfuLXkneXaSjvSaC
+         zzJ5Wp3ivaH7ZOStfWsBR7GDsVY72qC/nw4mr3/3qmByCRbiRrxOyDXcY/TFqFOBBw
+         6Ic6++PKlOQaWOYj87ydbpjtZikSKuuvP5yHT4ffe2PZ4iAYZjws9a6JHFAtvojcbb
+         ZzRqc6e+BdhbM6lmhDemjcqn41YBzfUutJtEd/R4GssREvSHe3p8mUYGYqBaOvJUlq
+         N5Yub0OwoSfbg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8019C43140;
+        Tue,  2 Aug 2022 18:34:08 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v5.20
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220730022529.497941-1-linux@roeck-us.net>
+References: <20220730022529.497941-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220730022529.497941-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.20
+X-PR-Tracked-Commit-Id: cdbe34da01e32024e56fff5c6854a263a012d7ff
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 64ae88ff48cb5b3cc7b7aea97241a3e940085bf7
+Message-Id: <165946524881.2519.15892404700380969906.pr-tracker-bot@kernel.org>
+Date:   Tue, 02 Aug 2022 18:34:08 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 12:02 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 30/07/2022 12:17, Akhil P Oommen wrote:
-> >
-> > Some clients like adreno gpu driver would like to ensure that its gdsc
-> > is collapsed at hardware during a gpu reset sequence. This is because it
-> > has a votable gdsc which could be ON due to a vote from another subsystem
-> > like tz, hyp etc or due to an internal hardware signal.
->
-> If this is votable, do we have any guarantee that the gdsc will collapse
-> at all? How can we proceed if it did not collapse?
+The pull request you sent on Fri, 29 Jul 2022 19:25:29 -0700:
 
-Other potential votes should be transient.  But I guess we eventually
-need to timeout and give up.  At which point we are no worse off than
-before.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.20
 
-But hmm, we aren't using RBBM_SW_RESET_CMD for sw reset like we have
-on previous generations?  That does seem a bit odd.  Looks like kgsl
-does use it.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/64ae88ff48cb5b3cc7b7aea97241a3e940085bf7
 
-BR,
--R
+Thank you!
 
-> > To allow
-> > this, gpucc driver can expose an interface to the client driver using
-> > reset framework. Using this the client driver can trigger a polling within
-> > the gdsc driver.
->
-> Trigger the polling made me think initially that we will actually
-> trigger something in the HW. Instead the client uses reset framework to
-> poll for the gdsc to be reset.
->
-> >
-> > This series is rebased on top of linus's master branch.
-> >
-> > Related discussion: https://patchwork.freedesktop.org/patch/493144/
-> >
-> >
-> > Akhil P Oommen (5):
-> >    dt-bindings: clk: qcom: Support gpu cx gdsc reset
-> >    clk: qcom: Allow custom reset ops
-> >    clk: qcom: gpucc-sc7280: Add cx collapse reset support
-> >    clk: qcom: gdsc: Add a reset op to poll gdsc collapse
-> >    arm64: dts: qcom: sc7280: Add Reset support for gpu
-> >
-> >   arch/arm64/boot/dts/qcom/sc7280.dtsi          |  3 +++
-> >   drivers/clk/qcom/gdsc.c                       | 23 +++++++++++++++++++----
-> >   drivers/clk/qcom/gdsc.h                       |  7 +++++++
-> >   drivers/clk/qcom/gpucc-sc7280.c               |  6 ++++++
-> >   drivers/clk/qcom/reset.c                      |  6 ++++++
-> >   drivers/clk/qcom/reset.h                      |  2 ++
-> >   include/dt-bindings/clock/qcom,gpucc-sc7280.h |  3 +++
-> >   7 files changed, 46 insertions(+), 4 deletions(-)
-> >
->
->
-> --
-> With best wishes
-> Dmitry
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

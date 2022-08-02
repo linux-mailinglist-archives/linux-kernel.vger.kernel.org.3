@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFB258815D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679DC588166
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbiHBRzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S234760AbiHBR6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiHBRzx (ORCPT
+        with ESMTP id S229675AbiHBR6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:55:53 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791C61EADC
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:55:52 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s9so10455843ljs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:55:52 -0700 (PDT)
+        Tue, 2 Aug 2022 13:58:19 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3538F222B0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:58:18 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id m13so14869607wrq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xMFTPfu+5zncYEkukQRG8ZpUKBpBT3nlb86KyCAQyPA=;
-        b=aQoMJrSssxzauOdbFrB9wScBW+nXxpw4uqe3xSTFfXbWSUB1ZNa8czyknKQsXH3Gpb
-         xvHwm+NbqgRm688vJvTJ/7TV3Kq58FX3szhuh9gSJL5KWIdhYyxILQfTAKhJkR4Tw0sU
-         JDqvhMSSX5F7JfSovXlE+rWOpUIh0XX7jURrhu7/4Afdz0e4EcVwfBPgK/PgicV7stZG
-         vMrTnPaDxE68+gmVB1uj7YVPOYL3gqA9J68ILuPaj6J9DKiR3Dc1VQv11QZEawXNmosA
-         LR5w/h3HkK9B/DSSms2J0eHdRMcCiEKnfDzAIsIvMuiBLUoIJ1b5ewH54CfDoxq12RJ2
-         qgMQ==
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D5VB2FOmZFu7Zd41ltdFac1q4e5aLoaLQgroB4OX9/s=;
+        b=aamoHvNa6141WrHA4zpN7rbydohy1lauVLA0F4AswnJ6fgLWB2VPeU5WlX7+7en22D
+         VpNOl5B7V/AYoUbgHVnx1jiDfjPg4lK7SdoXvUKo6FT/rYhP9g9qM/Qw2bQB9Bn2PyuR
+         JjxhBUpDiomTg1xNyyL3WrCak0hUXuCIwTS0sCZpZlygha/idyNKAYA0BDKkBOOR8mxA
+         EczL8nhi5U2gTrW+XW1GS/S+QyS05o2cNw0Q8+PslQfalu6SzOYxXn4tFf5ql/eBmjFo
+         zcEE87sC6W2K+01GTE8NqeMXZ6VIALDc4dmZVLwgvUG76wYSelhiqGO0iYME2P4ZfSf5
+         Sf3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xMFTPfu+5zncYEkukQRG8ZpUKBpBT3nlb86KyCAQyPA=;
-        b=rJAejgjtJEluUkxg2EC+7irhx9nEaI8Sj4gvfJX28r/jr4K3safdtZxPTNaq6G4Uvi
-         8E2IqeIsm3aCy+N2G01LsOw2vqOTuJFJ8VGXg/vutRlDX7qgwVnSXd24yZ3rRhCdWQLC
-         Q58TkuPAy2MQpcDShFWr+VqV5XFdFhZEZ3ALaNRTAQ38tZFWHYQT631pxx/7CSEWSgTR
-         rAC36sLzsDR8jEJ6ar3Xf0zU8IVRnm1H++yJk21nM2qUf+zcusy2+v0vhGSpZkR00HYj
-         rMOkXQywCrgslo17m7Wxv2eeqoXZQ29JJMcmPY8dEbpNKnwHlT0IZHWBt3ULC73NpddZ
-         56aQ==
-X-Gm-Message-State: AJIora+yquQnuIwlfcAv5KznhODapA6F1eHDAP+xH7LOgWXX72qHKcZU
-        YRBT46n103dVyWO7yu1yHq4eok6B44ynMWQARMzvB8xlOMCgKg==
-X-Google-Smtp-Source: AGRyM1uIgIyl0P0rXiqFCrTv4ElBVeqbBnQIQw86ggWODHXkXUkRvKdj6ZX4Z6Vje7Uew5gyM+S7n+PJ/Q6WqTACgV0=
-X-Received: by 2002:a2e:920e:0:b0:25d:ed6f:e66b with SMTP id
- k14-20020a2e920e000000b0025ded6fe66bmr6558873ljg.103.1659462950708; Tue, 02
- Aug 2022 10:55:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D5VB2FOmZFu7Zd41ltdFac1q4e5aLoaLQgroB4OX9/s=;
+        b=uD64EGCrtoembQm9m6FH9wM2U+5tnzTgloCojBapDqZV8a78L+dgSiiqIxoZJmE2PF
+         BZOgaiUuj6dyd18RUYiVj7MFIVlwiRsDrflKvJodOhcZBWk9jyM3ctSukCIvc4egDHyu
+         ntH8c/NZnV4u2ylMp2llaUaVBSCXtYCwzFy+rvqpo9V2mf4Ya7lspG7De7ITSxilFNoj
+         TzxyWdViRcE1t1PV/Fg5KQB7fNjQAI0OPUwcsO+TDCAV0FqnFua11FehEzf3NmCN/FAq
+         ahjRY8mQ4Gq1I+xbsEkQa1fkSJJtwHjr1UJHE9OPCro2VbSaeYjJadvdFEvm09P/6g4b
+         lQbQ==
+X-Gm-Message-State: ACgBeo0G2RzBEgsMZmgCZKy2TO1uk08rIw+G0FRTfH7aezwDAr8c+eiv
+        zYaj71fpGKnaJkcPoNqRFhSfmA==
+X-Google-Smtp-Source: AA6agR6rAMlfiAvC3j2BDeH7AB7wHWhuUx276d06qGtylAw+ckAidJAvLeFkbbt7zeFLNcua1pXstQ==
+X-Received: by 2002:adf:e6d0:0:b0:21f:156d:1a8c with SMTP id y16-20020adfe6d0000000b0021f156d1a8cmr12685521wrm.177.1659463096802;
+        Tue, 02 Aug 2022 10:58:16 -0700 (PDT)
+Received: from debian.office.codethink.co.uk ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id 9-20020a05600c020900b003a3187a2d4csm23318222wmi.22.2022.08.02.10.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:58:16 -0700 (PDT)
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Subject: [PATCH 00/11] Add support for enhanced SPI for Designware SPI controllers
+Date:   Tue,  2 Aug 2022 18:57:44 +0100
+Message-Id: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220730173636.1303357-1-masahiroy@kernel.org>
-In-Reply-To: <20220730173636.1303357-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 2 Aug 2022 10:55:39 -0700
-Message-ID: <CAKwvOd=gZc6TKaV1yh4pfbtj26xoQasVw=i+Vq+jOu2dgzFsFA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] modpost: add array range check to sec_name()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 10:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The section index is always positive, so the argunent, secindex, should
-> be unsigned.
->
-> Also, inserted the array range check.
->
-> If sym->st_shndx is a special section index (between SHN_LORESERVE and
-> SHN_HIRESERVE), there is no corresponding section header.
->
-> For example, if a symbol specifies an absolute value, sym->st_shndx is
-> SHN_ABS (=0xfff1).
->
-> The current users do not cause the out-of-range access of
-> info->sechddrs[], but it is better to avoid such a pitfall.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Some Synopsys SSI controllers support enhanced SPI which includes
+Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+feature in enhanced SPI modes which can be used to prevent FIFO underflow
+and overflow conditions while transmitting or receiving the data respectively.
+This is only tested on controller version 1.03a.
 
-I don't mind adding this check; though if it's anomalous I think we
-could also just print to stderr and abort.
+Ben Dooks (1):
+  spi: dw-apb-ssi: add generic 1.03a version
 
-I would prefer Elf_Sym over unsigned int though.  WDYT?
+Sudip Mukherjee (10):
+  spi: dw: define capability for enhanced spi
+  spi: dw: add check for support of dual/quad/octal
+  spi: dw: define spi_frf for dual/quad/octal modes
+  spi: dw: use TMOD_RO to read in enhanced spi modes
+  spi: dw: define SPI_CTRLR0 register and its fields
+  spi: dw: update SPI_CTRLR0 register
+  spi: dw: update NDF while writing in enhanced spi mode
+  spi: dw: update buffer for enhanced spi mode
+  spi: dw: prepare the transfer routine for enhanced mode
+  spi: dw: initialize dwc-ssi-1.03a controller
 
-> ---
->
->  scripts/mod/modpost.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 08411fff3e17..148b38699889 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -336,8 +336,16 @@ static const char *sech_name(const struct elf_info *info, Elf_Shdr *sechdr)
->                                       sechdr->sh_name);
->  }
->
-> -static const char *sec_name(const struct elf_info *info, int secindex)
-> +static const char *sec_name(const struct elf_info *info, unsigned int secindex)
->  {
-> +       /*
-> +        * If sym->st_shndx is a special section index, there is no
-> +        * corresponding section header.
-> +        * Return "" if the index is out of range of info->sechdrs[] array.
-> +        */
-> +       if (secindex >= info->num_sections)
-> +               return "";
-> +
->         return sech_name(info, &info->sechdrs[secindex]);
->  }
->
-> --
-> 2.34.1
->
-
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+ drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
+ drivers/spi/spi-dw-mmio.c                     |  10 +
+ drivers/spi/spi-dw.h                          |  19 ++
+ 4 files changed, 291 insertions(+), 27 deletions(-)
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.30.2
+

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF1D5876B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A915876B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiHBFcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S235689AbiHBFcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiHBFcV (ORCPT
+        with ESMTP id S235692AbiHBFcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:32:21 -0400
+        Tue, 2 Aug 2022 01:32:24 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81933D5B2;
-        Mon,  1 Aug 2022 22:32:20 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 61127320084E;
-        Tue,  2 Aug 2022 01:32:19 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD1419B5;
+        Mon,  1 Aug 2022 22:32:23 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 3DDE6320014C;
+        Tue,  2 Aug 2022 01:32:22 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 02 Aug 2022 01:32:20 -0400
+  by compute4.internal (MEProxy); Tue, 02 Aug 2022 01:32:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1659418338; x=1659504738; bh=rb
-        jmZkkk6X840fiGkFSA29gDLZhKU9eVHRzenL4cBYo=; b=I8GLtdlMaokbsOUJpD
-        G3yvCu0flCzmXUVObfm49uDZmlvfZFBAQPk5EYZKCinJy+nQ1ddqsegtOhJVlEHJ
-        Q97ugQeI2Tf92BPrDEaBWveGf96r5NQqC5CUwSXtjD2uan6+nDMvKFNx7CuWlWcG
-        Nm48j9JxcoNJj1RwgyK7cdErKEdeGOsgt1b9oQFE2PfN1iTFw51w/z48OTLdcZfc
-        CRyZ56oy9i0hAhilBZq4741HLVtJMCab2kc+UWT9uY5ikz3vCW9JaRdNX3PdIJbo
-        WNDCy0vWLGFsEjm/miEYNGdk/huOSSLTaB5/Tfqx55GYBXKbk7Ez13HqJmcK6eEX
-        y0PQ==
+        :subject:subject:to:to; s=fm1; t=1659418341; x=1659504741; bh=Wt
+        MXBT+59nWEb2J1x8DNZxQ7gooH85ypsgA1qbaYSaE=; b=tXm963gc+4S4p0cn16
+        9zp3SYOM3N3+Qzw95uABkmcQoWsuaTjCWZqTE2HEMwKeVMQErigomgJYyS8dCbhs
+        Ele0GjF2wgEVbObGKKqGRGobv4yWC0y7s6fTlNAjmf8IXC6doDSTAv6tBh08AgSq
+        ZhGZBIhoYUoyNE6qyirIETObOHzTY2pvZhBy/LFaabca/xFUr5uGzmvewy74pFSU
+        4/sVH5YZ8DxIwAMohzSgFbXqRpKFCWvCbgl+dB5n3pY4iQxGb9YbJnoOQVrV52tb
+        odzomMQvGzqHgFeHX0A5oAd5hhhaOxwNQ3CvEiNbJf79o64gI+ZnnaKbm/8kuBZE
+        8v/w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1659418338; x=1659504738; bh=rbjmZkkk6X840
-        fiGkFSA29gDLZhKU9eVHRzenL4cBYo=; b=jb488zcMgHsnIHyypHZPExSR9CbpZ
-        qRWR/P20NT2oJIJJlYqguu+XvjjgRiZQrqcP6lqX0u7SvDnbKEb6BLcLOW5Kp1It
-        izTda/WLyDyI52ylz1Rfr+/sPbbUThYWOi7EVbbbNkRA11/TiaT4P6/AFLbQM6bF
-        CfguOLFOxY7Ju1olWK25S4A0C8H96tIzVmG9NJwDEB1lXOYm9oKkIrbGh8CEejHv
-        4Zs1Cu4rpx+VmA0jeXx54prIQ4HkKG8pBsvr7IMH1RkbpxZ0NxrUwJ9GZJHNh2zl
-        E8XObz0Z5mctRhYVtOjtGBlEOgp9Lb68dfRa2Pvfe3Mezq9bRNza8/HJg==
-X-ME-Sender: <xms:4rboYjkhHY2PN6XErUzxl-_yVOpHc9xr-FqBC1D-X-04ttF0xNGzLQ>
-    <xme:4rboYm13wpfDGs94lP7OhZehSK9dJCOYSxkyiWXB65QfRWREVfo8QIxGB9g5on6JQ
-    7sZQKrQxo36iR0AaQ>
-X-ME-Received: <xmr:4rboYpof9er03Ojanx8n6N3C7KHj_qyNzR0pt7QL4fmpGczDVeLZImLGGUabJABrpqv9dhLp7Jh2PI-uIHepxifBtCiq-PqXBp5Ruvlp8eg2VO7gMmFVIN8oRk1MA469aO1HKA>
+        :x-sasl-enc; s=fm3; t=1659418341; x=1659504741; bh=WtMXBT+59nWEb
+        2J1x8DNZxQ7gooH85ypsgA1qbaYSaE=; b=g1FdcSV+dV9CHdQ7BpcQgj1BJOBsP
+        sLoIk6DdAAzfKeME0wDPttDcrRvOtmMMaRhIgTrvNymATa4TMAeh8HQucV2ORL/5
+        cMLjVFadIk7tAdBAe98HdRU4MTnQcw2EnAcNr1YRYAIrkJZz5p7u2NmHS/9jhN1P
+        B6pzf6JjSHA5Y4lDFFhFmw3n1P7HLH2Y65FzKZU3oabguszC7XnmpO1FeuHvqn8Y
+        yu3nkoOgfNoyFxGL6SAnkdO6UOrKcACpRNDCaEKJYmlvdwrOnsH41b9TSZF4KqI2
+        n4LIyryqenXxmHejo5cfCtljSHQR7Gnm6tWn/mmR2/jjIs4aMuaC3YFAg==
+X-ME-Sender: <xms:5bboYihYGiW8g_qME4tTfXW1MKQEe1xPXmL24SW9dFzAZX0buSSikQ>
+    <xme:5bboYjCVQbQ-k3em8bHTnDKHlaLxOO3yZYkfs05wBkGG--qolwzwQQZhuPw63-vxA
+    SZfCUzaO51XdbA42Q>
+X-ME-Received: <xmr:5bboYqH9lcu_IsLRh3dW9yTeIAFjgu_tyIS9qolZmCrZAd-8O3rTaUJh4xYfgU5qp8nfqQIuwnCQk9HGNGkgHC6w5zU6S-SNqIDgOYoJhpiWMzuxUzNmrLdDidYvdo6SBvdfQw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgleejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvgedgleejucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:4rboYrk8njdjMFzHSkaSUaDH1roDZ6zBttuTnQhsQ0j8NlwJwo15GQ>
-    <xmx:4rboYh3VvX0amDjax8AWSZOiWWM7p9CUTe2Cqt-biJMRbg9cIDwt6g>
-    <xmx:4rboYqtn7jTSIQWIn41lXxj0p94-cQbyh1rugOrF2loUbdpXL6pAkw>
-    <xmx:4rboYqvoZ2pay0l1xOqhkZYrUtEc4tgqErhXeawUqJ-ff09gM0Bjog>
+X-ME-Proxy: <xmx:5bboYrQPCyQKn6uTzoACb5X3sqZ0S6FCDET243ydfssrD8ruqHn5CQ>
+    <xmx:5bboYvwrBRfsAOUdCZlvOGfP6KK_ehZOWltCEH8zvs6v6RRXh3ucbQ>
+    <xmx:5bboYp6-7gedzvpyd-YcztVUcymB6jkPRovaKSxHq3FVmnZcOcAxqg>
+    <xmx:5bboYkq1PuGdl9ymO0Uz6HU6eWVdvJx51D_2dj2ExSC1u6aoMBVydg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 2 Aug 2022 01:32:18 -0400 (EDT)
+ 2 Aug 2022 01:32:20 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -72,9 +72,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 1/4] dt-bindings: sram: sunxi-sram: Add optional regulators child
-Date:   Tue,  2 Aug 2022 00:32:10 -0500
-Message-Id: <20220802053213.3645-2-samuel@sholland.org>
+Subject: [PATCH v2 2/4] soc: sunxi: sram: Only iterate over SRAM children
+Date:   Tue,  2 Aug 2022 00:32:11 -0500
+Message-Id: <20220802053213.3645-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220802053213.3645-1-samuel@sholland.org>
 References: <20220802053213.3645-1-samuel@sholland.org>
@@ -89,9 +89,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some sunxi SoCs have in-package regulators controlled by a register in
-the system control MMIO block. Allow a child node for these regulators
-in addition to SRAM child nodes.
+Now that a "regulators" child is accepted by the controller binding, the
+debugfs show routine must be explicitly limited to "sram" children.
+Otherwise, it will crash because the "regulators" node has no address.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
@@ -99,23 +99,23 @@ Signed-off-by: Samuel Holland <samuel@sholland.org>
 Changes in v2:
  - New patch for v2
 
- .../bindings/sram/allwinner,sun4i-a10-system-control.yaml      | 3 +++
+ drivers/soc/sunxi/sunxi_sram.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-index 1c426c211e36..cc57836b2906 100644
---- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-+++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-@@ -56,6 +56,9 @@ properties:
+diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
+index a8f3876963a0..b3016b9698fb 100644
+--- a/drivers/soc/sunxi/sunxi_sram.c
++++ b/drivers/soc/sunxi/sunxi_sram.c
+@@ -120,6 +120,9 @@ static int sunxi_sram_show(struct seq_file *s, void *data)
+ 	seq_puts(s, "--------------------\n\n");
  
-   ranges: true
- 
-+  regulators:
-+    type: object
+ 	for_each_child_of_node(sram_dev->of_node, sram_node) {
++		if (!of_node_name_eq(sram_node, "sram"))
++			continue;
 +
- patternProperties:
-   "^sram@[a-z0-9]+":
-     type: object
+ 		sram_addr_p = of_get_address(sram_node, 0, NULL, NULL);
+ 
+ 		seq_printf(s, "sram@%08x\n",
 -- 
 2.35.1
 

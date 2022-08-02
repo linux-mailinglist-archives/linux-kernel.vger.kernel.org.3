@@ -2,200 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677075884D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067BF5884D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234980AbiHBXnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 19:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S234994AbiHBXoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 19:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbiHBXnm (ORCPT
+        with ESMTP id S229614AbiHBXoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 19:43:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1838752E42;
-        Tue,  2 Aug 2022 16:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659483821; x=1691019821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/LJASFRzIeInreQ73D8eRDuT2RqFrVAf9oHkIaKOgWU=;
-  b=fYoUpboNAHBAa3exOEQnD8fYr6cdlvtVHjb09Ia466v2ChD3jHQIbBm9
-   CakKgMJYSTeNOhX6c0zVEXctejJ/A3Q9Au41ehsjbJAi2MdrBc8jw7hoh
-   35jUodYmAZ1wZ/3y8/OIH0T85d2Z1O3RI5+NFgk9V4y9ulPqQ/I2Jritp
-   qL42v3cuhPEGlr6pF0GlwBWQadlxcDXtk42rGw0/jyhqur5CmovumOirF
-   8V/klUAVELpIg/53e2R9za95crkPjjgWHE+VSjgQ21kwvCySLNrdqxRXp
-   EHQ8IIG3cKgToiK8rwdOT05Qi0uZHM539ciDU48SR96LCR1pnc/vHGUzY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="375843685"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="375843685"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 16:43:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="930169030"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 16:43:38 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJ1Y2-000GZP-0X;
-        Tue, 02 Aug 2022 23:43:38 +0000
-Date:   Wed, 3 Aug 2022 07:43:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gene Chen <gene_chen@richtek.com>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Pavel Machek <pavel@ucw.cz>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v1 1/1] leds: mt6360: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208030728.Yo6CynF9-lkp@intel.com>
-References: <20220802212532.7091-1-andriy.shevchenko@linux.intel.com>
+        Tue, 2 Aug 2022 19:44:15 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1065465D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 16:44:14 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id a18-20020a05600c349200b003a30de68697so1232564wmq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 16:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LdDwNECNKOvsqe41unvtSWJtqFXY0vco7mkCCiO+5zA=;
+        b=Me9ngPLMG9NwxgPxLEPrV78K+02GbdHmULeqAhvxcSynw/dYDkSGOX3g9GQBQROOIE
+         tS6jz+TsARqv0yzYh7E+lyp+bCaCcETeryRArofAmv9Jq7bZEqc/XTub+oy7Yb6Z4BU3
+         nQWklkOQcN6w4BrD0E0EFdYKkks+1NbTbvhjbOoQykXaOYari+Jf5NZViMaAAImRrysr
+         +9eqIGN6NIr0qzummthstNjdy707nTFwmh1kd/9qTnM5dTywPMBP4aM060T3Q+I0tF2x
+         Xyj8WVwBuPeqNVxtYOuWmKtC+jJHL+EEmEDPh0GSH7sF9y120lTasGs6ngAJsTKCR0v6
+         Vgdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LdDwNECNKOvsqe41unvtSWJtqFXY0vco7mkCCiO+5zA=;
+        b=PRzmzQdgH+qq4um9xK+m6GsLQ6Z5e5oewFrUl9CNMuFq7gGWg12CVw/iOz7gs8kocN
+         hw44kbdwb9xCknl3f+4fG9XZeWQNRIeu1VV7uc9fojOs8Ad7rPTVfR7ri9RvF4y9Xyce
+         spwdLpQ7H7uLZv0U9/LDHXkdeSIhy7MEzG0sg+hXxVghTbf6rBvC8t61cYLlptyR/t54
+         7Cd+BkFAIpiykqcoS2aMCWpJdizGMFaYiPna6PAOajjzA7Cd8dh8BzoWT1q1CaDo7xgf
+         Ud9KX383Bire8+qQecbx94PlQ0OpO9TufSYozY9aakpT8NONdoK3WJ0wV0bbPomJeoPI
+         eWjQ==
+X-Gm-Message-State: ACgBeo0sT0J2PL5uyZWapVBcV9Y3BV9g97Vw5agFF9kejexhdjS3Y21X
+        +/kgUsRU+5T0JAuLe/jOu6xy7mrxhS1LSA==
+X-Google-Smtp-Source: AA6agR7eO6ES2+kK8YX/k7Qd1X7tV4TDZC1/ibzpACd/4CXVQcuP+uC90AqOhIC4/DXi/0XiuqHmUQ==
+X-Received: by 2002:a05:600c:384c:b0:3a3:744d:8dd2 with SMTP id s12-20020a05600c384c00b003a3744d8dd2mr994110wmr.117.1659483853048;
+        Tue, 02 Aug 2022 16:44:13 -0700 (PDT)
+Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c359300b003a32297598csm220092wmq.43.2022.08.02.16.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 16:44:12 -0700 (PDT)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, paskripkin@gmail.com,
+        straube.linux@gmail.com, martin@kaiser.cx, abdun.nihaal@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: convert rtw_p2p_enable to correct error code semantics
+Date:   Wed,  3 Aug 2022 00:44:08 +0100
+Message-Id: <20220802234408.930-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802212532.7091-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Convert the rtw_p2p_enable function to use correct error code semantics
+rather than _SUCCESS/_FAIL, and also make sure we allow these to be
+passed through properly in the one caller where we actually check the
+code, rtw_wext_p2p_enable.
 
-I love your patch! Yet something to improve:
+This change moves these functions to a clearer 'return 0;' style at the
+end of the function, and in the case of errors now returns ret instead
+of jumping to the end of the function, so that these can still be passed
+through but without using a goto to jump to a single return statement at
+the end which is less clear.
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This change moves the driver slowly closer to using standard error code
+semantics everywhere.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-mt6360-Get-rid-of-custom-led_init_default_state_get/20220803-052854
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arc-randconfig-r043-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030728.Yo6CynF9-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/260d7c20cbd2b5da92dfa5ffa7c73499661c838f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-mt6360-Get-rid-of-custom-led_init_default_state_get/20220803-052854
-        git checkout 260d7c20cbd2b5da92dfa5ffa7c73499661c838f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/leds/flash/
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+---
+ drivers/staging/r8188eu/core/rtw_p2p.c       | 19 ++++++++-----------
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 12 +++++-------
+ 2 files changed, 13 insertions(+), 18 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/leds/flash/leds-mt6360.c: In function 'mt6360_led_probe':
->> drivers/leds/flash/leds-mt6360.c:832:38: error: implicit declaration of function 'led_init_default_state_get'; did you mean 'led_get_default_pattern'? [-Werror=implicit-function-declaration]
-     832 |                 led->default_state = led_init_default_state_get(child);
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                      led_get_default_pattern
-   cc1: some warnings being treated as errors
-
-
-vim +832 drivers/leds/flash/leds-mt6360.c
-
-   770	
-   771	static int mt6360_led_probe(struct platform_device *pdev)
-   772	{
-   773		struct mt6360_priv *priv;
-   774		struct fwnode_handle *child;
-   775		size_t count;
-   776		int i = 0, ret;
-   777	
-   778		count = device_get_child_node_count(&pdev->dev);
-   779		if (!count || count > MT6360_MAX_LEDS) {
-   780			dev_err(&pdev->dev,
-   781				"No child node or node count over max led number %zu\n",
-   782				count);
-   783			return -EINVAL;
-   784		}
-   785	
-   786		priv = devm_kzalloc(&pdev->dev,
-   787				    struct_size(priv, leds, count), GFP_KERNEL);
-   788		if (!priv)
-   789			return -ENOMEM;
-   790	
-   791		priv->leds_count = count;
-   792		priv->dev = &pdev->dev;
-   793		mutex_init(&priv->lock);
-   794	
-   795		priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   796		if (!priv->regmap) {
-   797			dev_err(&pdev->dev, "Failed to get parent regmap\n");
-   798			return -ENODEV;
-   799		}
-   800	
-   801		device_for_each_child_node(&pdev->dev, child) {
-   802			struct mt6360_led *led = priv->leds + i;
-   803			struct led_init_data init_data = { .fwnode = child, };
-   804			u32 reg, led_color;
-   805	
-   806			ret = fwnode_property_read_u32(child, "color", &led_color);
-   807			if (ret)
-   808				goto out_flash_release;
-   809	
-   810			if (led_color == LED_COLOR_ID_RGB ||
-   811			    led_color == LED_COLOR_ID_MULTI)
-   812				reg = MT6360_VIRTUAL_MULTICOLOR;
-   813			else {
-   814				ret = fwnode_property_read_u32(child, "reg", &reg);
-   815				if (ret)
-   816					goto out_flash_release;
-   817	
-   818				if (reg >= MT6360_MAX_LEDS) {
-   819					ret = -EINVAL;
-   820					goto out_flash_release;
-   821				}
-   822			}
-   823	
-   824			if (priv->leds_active & BIT(reg)) {
-   825				ret = -EINVAL;
-   826				goto out_flash_release;
-   827			}
-   828			priv->leds_active |= BIT(reg);
-   829	
-   830			led->led_no = reg;
-   831			led->priv = priv;
- > 832			led->default_state = led_init_default_state_get(child);
-   833	
-   834			if (reg == MT6360_VIRTUAL_MULTICOLOR ||
-   835			    reg <= MT6360_LED_ISNKML)
-   836				ret = mt6360_init_isnk_properties(led, &init_data);
-   837			else
-   838				ret = mt6360_init_flash_properties(led, &init_data);
-   839	
-   840			if (ret)
-   841				goto out_flash_release;
-   842	
-   843			ret = mt6360_led_register(&pdev->dev, led, &init_data);
-   844			if (ret)
-   845				goto out_flash_release;
-   846	
-   847			i++;
-   848		}
-   849	
-   850		platform_set_drvdata(pdev, priv);
-   851		return 0;
-   852	
-   853	out_flash_release:
-   854		mt6360_v4l2_flash_release(priv);
-   855		return ret;
-   856	}
-   857	
-
+diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
+index bd654d4ff8b4..dc159e58f428 100644
+--- a/drivers/staging/r8188eu/core/rtw_p2p.c
++++ b/drivers/staging/r8188eu/core/rtw_p2p.c
+@@ -1883,15 +1883,14 @@ void init_wifidirect_info(struct adapter *padapter, enum P2P_ROLE role)
+ 
+ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
+ {
+-	int ret = _SUCCESS;
++	int ret;
+ 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
+ 
+ 	if (role == P2P_ROLE_DEVICE || role == P2P_ROLE_CLIENT || role == P2P_ROLE_GO) {
+ 		/* leave IPS/Autosuspend */
+-		if (rtw_pwr_wakeup(padapter)) {
+-			ret = _FAIL;
+-			goto exit;
+-		}
++		ret = rtw_pwr_wakeup(padapter);
++		if (ret)
++			return ret;
+ 
+ 		/*	Added by Albert 2011/03/22 */
+ 		/*	In the P2P mode, the driver should not support the b mode. */
+@@ -1902,10 +1901,9 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
+ 		init_wifidirect_info(padapter, role);
+ 
+ 	} else if (role == P2P_ROLE_DISABLE) {
+-		if (rtw_pwr_wakeup(padapter)) {
+-			ret = _FAIL;
+-			goto exit;
+-		}
++		ret = rtw_pwr_wakeup(padapter);
++		if (ret)
++			return ret;
+ 
+ 		/* Disable P2P function */
+ 		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
+@@ -1923,6 +1921,5 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
+ 		update_tx_basic_rate(padapter, padapter->registrypriv.wireless_mode);
+ 	}
+ 
+-exit:
+-	return ret;
++	return 0;
+ }
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index 7f91dac2e41b..e9802d42aa1b 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -2079,7 +2079,7 @@ static int rtw_wext_p2p_enable(struct net_device *dev,
+ 			       struct iw_request_info *info,
+ 			       union iwreq_data *wrqu, char *extra)
+ {
+-	int ret = 0;
++	int ret;
+ 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
+ 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+@@ -2094,10 +2094,9 @@ static int rtw_wext_p2p_enable(struct net_device *dev,
+ 	else if (*extra == '3')
+ 		init_role = P2P_ROLE_GO;
+ 
+-	if (_FAIL == rtw_p2p_enable(padapter, init_role)) {
+-		ret = -EFAULT;
+-		goto exit;
+-	}
++	ret = rtw_p2p_enable(padapter, init_role);
++	if (ret)
++		return ret;
+ 
+ 	/* set channel/bandwidth */
+ 	if (init_role != P2P_ROLE_DISABLE) {
+@@ -2121,8 +2120,7 @@ static int rtw_wext_p2p_enable(struct net_device *dev,
+ 		set_channel_bwmode(padapter, channel, ch_offset, bwmode);
+ 	}
+ 
+-exit:
+-	return ret;
++	return 0;
+ }
+ 
+ static void rtw_p2p_set_go_nego_ssid(struct net_device *dev,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

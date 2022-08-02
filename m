@@ -2,117 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A59587D56
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13471587D59
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiHBNqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S236051AbiHBNqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiHBNqF (ORCPT
+        with ESMTP id S235977AbiHBNqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:46:05 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499D513D29;
-        Tue,  2 Aug 2022 06:46:02 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id r70so10643019iod.10;
-        Tue, 02 Aug 2022 06:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ColewwI6l3g5ZDtLvTS82d/pMaZ2whxLZFnC491Bn6M=;
-        b=Ix9fPoJ51D0qSPNpA+0N27SSr+MNMIyYRhiTE7KDWG2BBH2bO6g80DXYnJnms6YJjG
-         agUuOKCD9wiLdQ++JXvVGshqkEc8jxhyZXYsdpoauxQCswodvgdOoEDts4s54Ghpbktb
-         vUGPGAO5uX2H8URrsKOvTlDlM9wx7V0BdREsaLOQlEg9gcsSoCWN2ZqxBjxNBxXC98n7
-         rmdqT/SparDIm/Ml8dTc/TzNdWkvacAdxkfHXMUkpv8D//AosWIR2t3EGy/AaSJxJ8IF
-         oB9E+nbhcEuuHe8zonZZK1ucnrxX31t2oWw/hOQxYs7RO/jvYm6dpNY/E1kQfJvrcc6P
-         XNEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ColewwI6l3g5ZDtLvTS82d/pMaZ2whxLZFnC491Bn6M=;
-        b=c0kq/+9po6+Yy2yVLra72q1Lp2HxAS6BGMQY2OdT/XGJ1xbLP/064vjYm2y3yf/Sgv
-         e5Ce24swQ3SZ3DWRc04A/rIgObdmwK6NSb+ZY5cLnC03q4SYny4rchKQ8TY194KQwV/a
-         WvDyOtuLSh7ayJGWWEXfwer8QvxbW6vcn24E3kpo8KwqLDsp684jw5uJ7LkB1trpmIN/
-         G2dtGb2750opWnKB9lzfe+402+BlvysdCu3SKGApMBq1Gcj3KV4qFTlAMTYwcygifCN8
-         jWWvlnXFdhdRzmLQp0SmnV8sM94RayB8txGHcm73k6+U2PK4tSpPxU+DSI933zzN6WJ7
-         iHOA==
-X-Gm-Message-State: AJIora8tT7xr5AFTksVeG7FQsD6W1uyEsQjV934y03TObx3G5dv891kG
-        6qjS5P/w+Ozl5lNt4dGB1Gc8TC6Z5vACR6Tr5MIhIKfF
-X-Google-Smtp-Source: AGRyM1uCQS8jcQ0eTYdpzXJtMC+GsUZV7viJg2lh4yuiqsyHiT1OZ2XaNk9WVUmOTbXEr/cMDTnXeLewlffITgyBAM4=
-X-Received: by 2002:a05:6638:dd1:b0:341:5666:dd0a with SMTP id
- m17-20020a0566380dd100b003415666dd0amr8504893jaj.199.1659447961680; Tue, 02
- Aug 2022 06:46:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <YukYByl76DKqa+iD@casper.infradead.org>
-In-Reply-To: <YukYByl76DKqa+iD@casper.infradead.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 2 Aug 2022 15:45:50 +0200
-Message-ID: <CANiq72k7JKqq5-8Nqf3Q2r2t_sAffC8g86A+v8yBc=W-1--_Tg@mail.gmail.com>
-Subject: Re: [PATCH v8 00/31] Rust support
-To:     Matthew Wilcox <willy@infradead.org>
+        Tue, 2 Aug 2022 09:46:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397DD1CB04;
+        Tue,  2 Aug 2022 06:46:29 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659447987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3cV1DF1tJGwCUTznBFQ+3bYEP9ySHgzm2aLZBU2Umsg=;
+        b=RRSwfXucPgdcH2vq4hM4k1lXlPMG16dj8gKpeH3k6Ut0ZvZzJq10s3qosgawQ1UQjUNubn
+        2MGxfKHlHP4sccaQ2b7OSsZROuhZ62XEK262sCzzAmKLHVPpBky433zXCP5fsW7yOLOvxX
+        4riLpiXuN0Us5ntZlNe1Q9MgPsHDomHz3wCF/W2MkqmqERHPb472b6WZrtDGDgFUFZAADy
+        EAnWi4/6w6UvUr/SG5O2eim/p7XXEJGzuov82DXtYiRNnnuhKOKxN0lBTbrLfUGzkxZihR
+        m2x+39XqYBOhE6j8RcxEyDRaOmFHStoWDCt+dUL4IXNQxQCDDB3o5N4vTyPkig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659447987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3cV1DF1tJGwCUTznBFQ+3bYEP9ySHgzm2aLZBU2Umsg=;
+        b=MPl5kGwHqVs9wmVaeXLASu+CN1mJKbtBMkMKD94SoAeoUm+tiRBZ/jst6pYdWGfh4nPRng
+        nnKh35x/27tVGICA==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        x86@kernel.org, Nadia Heninger <nadiah@cs.ucsd.edu>,
+        Thomas Ristenpart <ristenpart@cornell.edu>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH RFC v1] random: implement getrandom() in vDSO
+In-Reply-To: <Yuhe6IIFXqNMZs5b@zx2c4.com>
+References: <20220729145525.1729066-1-Jason@zx2c4.com>
+ <CAHk-=wiLwz=9h9LD1-_yb1+T+u59a2EjTmMvCiGj4A-ZsPN1wA@mail.gmail.com>
+ <YuXCpyULk6jFgGV5@zx2c4.com> <87zggnsqwj.ffs@tglx>
+ <Yuhe6IIFXqNMZs5b@zx2c4.com>
+Date:   Tue, 02 Aug 2022 15:46:27 +0200
+Message-ID: <87bkt2sqq4.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+Jason!
 
-On Tue, Aug 2, 2022 at 2:26 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Tue, Aug 02 2022 at 01:16, Jason A. Donenfeld wrote:
+> On Mon, Aug 01, 2022 at 09:30:20PM +0200, Thomas Gleixner wrote:
+>> > So, anyway, if I do muster a v2 of this (perhaps just to see the idea
+>> > through), the API might split in two to something like:
+>> >
+>> >   void *getrandom_allocate_states([inout] size_t *number_of_states, [out] size_t *length_per_state);
+>> >   ssize_t getrandom(void *state, void *buffer, size_t len, unsigned long flags);
+>> 
+>> I'm not seeing any reason to have those functions at all.
+>> 
+>> The only thing which would be VDSO worthy here is the access to
+>> random_state->ready and random_state->generation as that's the
+>> information which is otherwise not available to userspace.
 >
-> None of this (afaict) has been discussed on linux-fsdevel.  And I may
-> have missed somethiing, but I don't see the fs module in this series
-> of patches.  Could linux-fsdevel be cc'd on the development of Rust
-> support for filesystems in the future?
+> I think you might have missed the part of the patch message where I
+> discuss this. I'm happy to talk about that more, but it might help the
+> discussion to refer to the parts already addressed. Reproduced here:
 
-In order to provide example drivers and kernel modules, we need to
-have some safe abstractions for them, thus we are adding some as we
-need them.
+I did not miss this. I carefully read it.
 
-More importantly, the abstractions also serve as a showcase of how
-they may be written in the future if Rust support is merged.
+> To reiterate, I don't want to commit to a particular data API, or even
+> to an ideal interplay between kernel random and user random. I'd like to
+> retain the latitude to change the semantics there considerably, so that
+> Linux isn't locked into one RNG design forever. I think that kind of
+> lock in would be a mistake. For example, just the generation counter
+> alone won't do it (as I mentioned later on in the message; the RFC patch
+> is somewhat incomplete). Rather, the interface I'm fine committing to
+> would be the higher level getrandom(), with maybe an added state
+> parameter, which doesn't expose any guts about what it's actually doing.
+>
+> Comex (CC'd) described in a forum comment the idea (and perhaps vDSO in
+> general?) as a little more akin to system libraries on Windows or macOS,
+> which represent the OS barrier, rather than the raw system call. Such
+> libraries then can operate on private data as necessary. So in that
+> sense, this patch here isn't very Linuxy (which Comex described as a
+> potentially positive thing, but I assume you disagree).
+>
+> Anyway, I guess it in large part isn't so dissimilar to decisions you
+> made around other vDSO functions, where to draw the barrier, etc. Why
+> not just have an accessor for each vvar struct member and leave it to
+> userspaces to implement? Well, that'd probably be a terrible idea for
+> various reasons, and I feel the same way about exposing too many
+> getrandom() guts.
 
-This does not mean these abstractions are a final design or that we
-plan to develop them independently of subsystem maintainers. In fact,
-we would prefer the opposite: in the future, when the support is
-merged and more people start having more experience with Rust, we hope
-that the respective kernel maintainers start developing and
-maintaining the abstractions themselves.
+I surely understand your goal, but the real question is where we draw
+the line and what kind of functionality should go into such a library
+and what's the required justification for it.
 
-But we have to start somewhere, and at least provide enough examples
-to serve as guidance and to show that it is actually possible to write
-abstractions that restrict the amount of unsafe code.
+The concept of system libraries on Windows NT was to provide different
+APIs for application programmers: Win32, OS/2, Posix. That allowed to
+change the actual syscalls without breaking existing applications. IOW,
+it's just a glue layer which translates between application API and
+syscall API.
 
-And, of course, if you are already interested in developing them, that
-would be actually great and we would love your input and/or that you
-join us.
+Right now the Linux VDSO functions are 1:1 replacements for system calls
+and not adding a magic pile of functionality which is otherwise not
+available.
 
-As for the `fs` module, I see in lore 2 patches didn't make it
-through, but I didn't get a bounce (I do get bounces for the
-rust-for-linux ML, but I was told that was fine as long as LKML got
-them). Sorry about that... I will ask what to do.
+What you are proposing is to have an implementation which is not
+available via a regular syscall. Which means you are creating a VDSO
+only syscall which still has the same problem as any other syscall in
+terms of API design and functionality which needs to be supported
+forever.
 
-Meanwhile, you can see the patches in this branch:
+Thanks,
 
-    https://github.com/Rust-for-Linux/linux.git rust-next
+        tglx
 
-Cheers,
-Miguel
+
+
+
+
+
+
+

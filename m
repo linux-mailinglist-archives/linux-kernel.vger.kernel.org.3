@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D66587C48
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E22C587C57
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236870AbiHBMUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S237066AbiHBMXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236894AbiHBMUU (ORCPT
+        with ESMTP id S237060AbiHBMXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:20:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC18BE5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:20:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659442819; x=1690978819;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2xp3qtulm79Mx89SQH8hG0Y/Weam2Tt2Mqcm9mRtNGI=;
-  b=dT2hrtplCywYsj5Va4os46C8lmY0qutAy1aUWybfLi7UCHDAVsNQt4Am
-   g7dT0qiHghhsXP/fcS9mXWvJSH9f6iVptKInHUMuoN7lYd+ZqGbVN/z1a
-   WIx3kLreXHHtep8s+eaiF297/uw6Vn4njOk4WbUf3bDhfvb9zsV4+HA9u
-   tJ42FZamWOqTsKFb6p5bGSFnuqGh4aeQ9FNe8voGDO7qJq4LQpHUOMVrv
-   ElAbmGfs3FFLmmVzzMJsbhen7tkYrCxQ3qwix4VKRQHjdCVZdPxMGcR6S
-   oBUuEJlFHuKOb3Ga1bPUCtH2/hJAXTCvY4/J0gJtLwAdUvtFLWsh1SqQ/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="315236308"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="315236308"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 05:20:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="929949112"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 05:20:17 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIqsj-000G1j-0x;
-        Tue, 02 Aug 2022 12:20:17 +0000
-Date:   Tue, 2 Aug 2022 20:20:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: drivers/irqchip/irq-loongarch-cpu.c:35: undefined reference to
- `liointc_handle'
-Message-ID: <202208022031.9hRlPwUl-lkp@intel.com>
+        Tue, 2 Aug 2022 08:23:02 -0400
+Received: from mx08-0057a101.pphosted.com (mx08-0057a101.pphosted.com [185.183.31.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020685073C;
+        Tue,  2 Aug 2022 05:22:59 -0700 (PDT)
+Received: from pps.filterd (m0214196.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272AeB8x001989;
+        Tue, 2 Aug 2022 14:20:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=12052020; bh=3sjdGficD/AKSRbBF8kWwqIQiYuXVjB6Pg42n4U43Gc=;
+ b=tIHhJxIMwhsB1E3FZQtU9YaAmRd+1qKssOYCvv7StilLul03cawZswESA+NRmZJtawyh
+ 4YxJG+wnalkxjTXb3T3Nw3JR65wDDIpz184zZ0YafQb+UnSIZ9a4aPVqO2YdqZ8nneSg
+ TW8EnSPG1IaeJRGHYxprXZ+3qwqTTbV4hSio5XabcIQCQiSD62m/rSY0D1lvIgo7noZ2
+ ieoSGY9vbw58XUPTHpp3nLZ88b3H8MxTj2lNujiwRUkRYQ0Mh7/FPm4O16MsSeuyAcmr
+ ssRqj4aUZOCCv2oGgAtUXXekdiM0lcE7x0EpPCNztbgFXpn4VA7UDjAnb1+va4Kfv6gF kw== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hmrn42vps-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 02 Aug 2022 14:20:41 +0200
+Received: from Orpheus.westermo.com (172.29.101.13) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Tue, 2 Aug 2022 14:20:39 +0200
+From:   Matthias May <matthias.may@westermo.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <nicolas.dichtel@6wind.com>,
+        <eyal.birger@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <jesse@nicira.com>, <pshelar@nicira.com>, <tgraf@suug.ch>,
+        Matthias May <matthias.may@westermo.com>
+Subject: [PATCH v3 net] geneve: fix TOS inheriting for ipv4
+Date:   Tue, 2 Aug 2022 14:20:25 +0200
+Message-ID: <20220802122025.1364123-1-matthias.may@westermo.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.29.101.13]
+X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25)
+X-Proofpoint-GUID: BL6xwU_P0y675RcCKEw2jdbyIL2nK4qC
+X-Proofpoint-ORIG-GUID: BL6xwU_P0y675RcCKEw2jdbyIL2nK4qC
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9de1f9c8ca5100a02a2e271bdbde36202e251b4b
-commit: e8bba72b396cef7c919c73710f3c5884521adb4e irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC for LoongArch
-date:   13 days ago
-config: loongarch-randconfig-s053-20220801 (https://download.01.org/0day-ci/archive/20220802/202208022031.9hRlPwUl-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8bba72b396cef7c919c73710f3c5884521adb4e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8bba72b396cef7c919c73710f3c5884521adb4e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash
+The current code retrieves the TOS field after the lookup
+on the ipv4 routing table. The routing process currently
+only allows routing based on the original 3 TOS bits, and
+not on the full 6 DSCP bits.
+As a result the retrieved TOS is cut to the 3 bits.
+However for inheriting purposes the full 6 bits should be used.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Extract the full 6 bits before the route lookup and use
+that instead of the cut off 3 TOS bits.
 
-All errors (new ones prefixed by >>):
+This patch is the functional equivalent for IPv4 to the patch
+"geneve: do not use RT_TOS for IPv6 flowlabel"
 
-   loongarch64-linux-ld: drivers/irqchip/irq-loongarch-cpu.o: in function `lpic_get_gsi_domain_id':
->> drivers/irqchip/irq-loongarch-cpu.c:35: undefined reference to `liointc_handle'
->> loongarch64-linux-ld: drivers/irqchip/irq-loongarch-cpu.c:35: undefined reference to `liointc_handle'
->> loongarch64-linux-ld: drivers/irqchip/irq-loongarch-cpu.c:35: undefined reference to `liointc_handle'
-   loongarch64-linux-ld: drivers/irqchip/irq-loongarch-cpu.o: in function `liointc_parse_madt':
-   drivers/irqchip/irq-loongarch-cpu.c:101: undefined reference to `liointc_acpi_init'
+Fixes: e305ac6cf5a1 ("geneve: Add support to collect tunnel metadata.")
+Signed-off-by: Matthias May <matthias.may@westermo.com>
+---
+v1 -> v2:
+ - Fix typo in "Fixes" tag
+v2 -> v3:
+ - Add missing CCs
+---
+ drivers/net/geneve.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-
-vim +35 drivers/irqchip/irq-loongarch-cpu.c
-
-    27	
-    28	static struct fwnode_handle *lpic_get_gsi_domain_id(u32 gsi)
-    29	{
-    30		int id;
-    31		struct fwnode_handle *domain_handle = NULL;
-    32	
-    33		switch (gsi) {
-    34		case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
-  > 35			if (liointc_handle)
-    36				domain_handle = liointc_handle;
-    37			break;
-    38	
-    39		case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
-    40			if (pch_lpc_handle)
-    41				domain_handle = pch_lpc_handle;
-    42			break;
-    43	
-    44		case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
-    45			id = find_pch_pic(gsi);
-    46			if (id >= 0 && pch_pic_handle[id])
-    47				domain_handle = pch_pic_handle[id];
-    48			break;
-    49		}
-    50	
-    51		return domain_handle;
-    52	}
-    53	
-
+diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+index 2495a5719e1c..4c380c06f178 100644
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -797,7 +797,8 @@ static struct rtable *geneve_get_v4_rt(struct sk_buff *skb,
+ 				       struct geneve_sock *gs4,
+ 				       struct flowi4 *fl4,
+ 				       const struct ip_tunnel_info *info,
+-				       __be16 dport, __be16 sport)
++				       __be16 dport, __be16 sport,
++				       __u8 *full_tos)
+ {
+ 	bool use_cache = ip_tunnel_dst_cache_usable(skb, info);
+ 	struct geneve_dev *geneve = netdev_priv(dev);
+@@ -822,6 +823,7 @@ static struct rtable *geneve_get_v4_rt(struct sk_buff *skb,
+ 		use_cache = false;
+ 	}
+ 	fl4->flowi4_tos = RT_TOS(tos);
++	*full_tos = tos;
+ 
+ 	dst_cache = (struct dst_cache *)&info->dst_cache;
+ 	if (use_cache) {
+@@ -910,6 +912,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 	const struct ip_tunnel_key *key = &info->key;
+ 	struct rtable *rt;
+ 	struct flowi4 fl4;
++	__u8 full_tos;
+ 	__u8 tos, ttl;
+ 	__be16 df = 0;
+ 	__be16 sport;
+@@ -920,7 +923,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 	sport = udp_flow_src_port(geneve->net, skb, 1, USHRT_MAX, true);
+ 	rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
+-			      geneve->cfg.info.key.tp_dst, sport);
++			      geneve->cfg.info.key.tp_dst, sport, &full_tos);
+ 	if (IS_ERR(rt))
+ 		return PTR_ERR(rt);
+ 
+@@ -964,7 +967,7 @@ static int geneve_xmit_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 		df = key->tun_flags & TUNNEL_DONT_FRAGMENT ? htons(IP_DF) : 0;
+ 	} else {
+-		tos = ip_tunnel_ecn_encap(fl4.flowi4_tos, ip_hdr(skb), skb);
++		tos = ip_tunnel_ecn_encap(full_tos, ip_hdr(skb), skb);
+ 		if (geneve->cfg.ttl_inherit)
+ 			ttl = ip_tunnel_get_ttl(ip_hdr(skb), skb);
+ 		else
+@@ -1137,6 +1140,7 @@ static int geneve_fill_metadata_dst(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	struct ip_tunnel_info *info = skb_tunnel_info(skb);
+ 	struct geneve_dev *geneve = netdev_priv(dev);
++	__u8 full_tos;
+ 	__be16 sport;
+ 
+ 	if (ip_tunnel_info_af(info) == AF_INET) {
+@@ -1148,7 +1152,8 @@ static int geneve_fill_metadata_dst(struct net_device *dev, struct sk_buff *skb)
+ 					  1, USHRT_MAX, true);
+ 
+ 		rt = geneve_get_v4_rt(skb, dev, gs4, &fl4, info,
+-				      geneve->cfg.info.key.tp_dst, sport);
++				      geneve->cfg.info.key.tp_dst, sport,
++				      &full_tos);
+ 		if (IS_ERR(rt))
+ 			return PTR_ERR(rt);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

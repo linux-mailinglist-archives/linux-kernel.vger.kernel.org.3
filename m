@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3FE5880B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB765880C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiHBRDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S231712AbiHBRIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiHBRDE (ORCPT
+        with ESMTP id S230126AbiHBRIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:03:04 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DF1255BA;
-        Tue,  2 Aug 2022 10:03:04 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id l24so11073043ion.13;
-        Tue, 02 Aug 2022 10:03:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=2FklMCvsf+IFL6IdQs89s38JLwJsvCdwCA9uElrwbhs=;
-        b=b1VaronuxnKO/TQ9sTHzoNKDc6/PCEYqFlMvqbHIVAn09H/TxvV9KemyHSFoQbFjM3
-         Cua1EXE/pmqySy66SOFTzPKBpGJyikmP/EzgUxLomn5stWFFZ08j0sWIqPcRLK4NhgcF
-         OfryW3UxFeEnq+ydS3MrYncXirQvL/ORM+VmpX37MK+YAx+gtReRnEKPmlBZgSE42qc+
-         Ldxzy7iazBWbHLbBM4Sj+5wNMM35XnKgcX0OsViRg5LZorybcJ1XVC4FPnK8Ee70v3sb
-         ppnwlRdU7QTqkFA1FfPpQj9Lcm0orkrwhPHQbi8ziBu+DWRDddrudSLQf/99rt+B4o5r
-         pGPA==
-X-Gm-Message-State: AJIora8DhLkjUWTsXtYvnutPtynWhZlkSdbtylzkMfIpjC54O3+1Sx6w
-        +7v5ARox0hHEPwKRdLUZYA==
-X-Google-Smtp-Source: AGRyM1tbaN1sLhdrNh2TVrQLtic1f6Uc7wVbQREu84ol+jGbAI7KqCctkaE8hw2JA3Air2u+MzttgA==
-X-Received: by 2002:a05:6638:d54:b0:33f:8e41:a3b3 with SMTP id d20-20020a0566380d5400b0033f8e41a3b3mr8841580jak.251.1659459783371;
-        Tue, 02 Aug 2022 10:03:03 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z7-20020a926507000000b002de08fef8c5sm5721525ilb.43.2022.08.02.10.03.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 10:03:02 -0700 (PDT)
-Received: (nullmailer pid 297736 invoked by uid 1000);
-        Tue, 02 Aug 2022 17:03:01 -0000
-Date:   Tue, 2 Aug 2022 11:03:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiko Schocher <hs@denx.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mtd: microchip,mchp48l640: use
- spi-peripheral-props.yaml
-Message-ID: <20220802170301.GA297672-robh@kernel.org>
-References: <20220727164148.385476-1-krzysztof.kozlowski@linaro.org>
+        Tue, 2 Aug 2022 13:08:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20C233E30;
+        Tue,  2 Aug 2022 10:08:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 43D442031A;
+        Tue,  2 Aug 2022 17:08:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1659460087;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m/1xUYeHrM1BqHKP5e5fDaxuz2T/jk7uQtkyo8BlmRE=;
+        b=dD0Z5E1iOkqy6EcvXiP46+3wqJN8iNHtLCpe0VSR18JR2E4DVBFFrqDsErnCjdyoznzjFd
+        jjutw4CLHNt3scGvSzZHl85yui3V/EImvd9zD3npRMNDxtX8nOp7E1ipYmiTDKwcwLilPr
+        Cn1RGRHDfYxltcSCH+W7sNJz9DdOH38=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1659460087;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m/1xUYeHrM1BqHKP5e5fDaxuz2T/jk7uQtkyo8BlmRE=;
+        b=jl7m6JOpghmEoUCKKRNSL5Uk1d24c9TmjxBL7qbVolxJE8choElvjFUKDs6DIYFj1VsvOk
+        EelVxo2fkjt6zKBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F198413A8E;
+        Tue,  2 Aug 2022 17:08:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9X0dOvZZ6WKMOAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 02 Aug 2022 17:08:06 +0000
+Date:   Tue, 2 Aug 2022 19:03:05 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Zixuan Fu <r33s3n6@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: Re: [PATCH] fs: btrfs: fix a possible use-after-free bug caused by
+ incorrect error handling in prepare_to_relocate()
+Message-ID: <20220802170305.GR13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Zixuan Fu <r33s3n6@gmail.com>,
+        clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
+References: <20220721074829.2905233-1-r33s3n6@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220727164148.385476-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220721074829.2905233-1-r33s3n6@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022 18:41:48 +0200, Krzysztof Kozlowski wrote:
-> Instead of listing directly properties typical for SPI peripherals,
-> reference the spi-peripheral-props.yaml schema.  This allows using all
-> properties typical for SPI-connected devices, even these which device
-> bindings author did not tried yet.
-> 
-> Remove the spi-* properties which now come via spi-peripheral-props.yaml
-> schema, except for the cases when device schema adds some constraints
-> like maximum frequency.
-> 
-> While changing additionalProperties->unevaluatedProperties, put it in
-> typical place, just before example DTS.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Technically, this depends on [1] merged to SPI tree, if we want to
-> preserve existing behavior of not allowing SPI CPHA and CPOL in each of
-> schemas in this patch.
-> 
-> If this patch comes independently via different tree, the SPI CPHA and
-> CPOL will be allowed for brief period of time, before [1] is merged.
-> This will not have negative impact, just DT schema checks will be
-> loosened for that period.
-> 
-> [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
-> ---
->  .../devicetree/bindings/mtd/microchip,mchp48l640.yaml      | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
+On Thu, Jul 21, 2022 at 03:48:29PM +0800, Zixuan Fu wrote:
+> In btrfs_relocate_block_group(), the structure variable rc is allocated.
+> Then btrfs_relocate_block_group() calls relocate_block_group() -> 
+> prepare_to_relocate() -> set_reloc_control(), and assigns rc to the
+> variable fs_info->reloc_ctl. When prepare_to_relocate() returns, it
+> calls btrfs_commit_transaction() -> btrfs_start_dirty_block_groups()
+> -> btrfs_alloc_path() -> kmem_cache_zalloc(), which may fail. When the
+> failure occurs, btrfs_relocate_block_group() detects the error and frees
+> rc and doesn't set fs_info->reloc_ctl to NULL. After that, in 
+> btrfs_init_reloc_root(), rc is retrieved from fs_info->reloc_ctl and
+> then used, which may cause a use-after-free bug.
 
-Applied, thanks!
+I've reformatted the paragraph, the call chains are otherwise
+incomprehensible.
+
+> This possible bug can be triggered by calling btrfs_ioctl_balance()
+> before calling btrfs_ioctl_defrag().
+> 
+> To fix this possible bug, in prepare_to_relocate(), an if statement
+> is added to check whether btrfs_commit_transaction() fails. If the
+> failure occurs, unset_reloc_control() is called to set
+> fs_info->reloc_ctl to NULL.
+> 
+> The error log in our fault-injection testing is shown as follows:
+> 
+> [   58.751070] BUG: KASAN: use-after-free in btrfs_init_reloc_root+0x7ca/0x920 [btrfs]
+> ...
+> [   58.753577] Call Trace:
+> ...
+> [   58.755800]  kasan_report+0x45/0x60
+> [   58.756066]  btrfs_init_reloc_root+0x7ca/0x920 [btrfs]
+> [   58.757304]  record_root_in_trans+0x792/0xa10 [btrfs]
+> [   58.757748]  btrfs_record_root_in_trans+0x463/0x4f0 [btrfs]
+> [   58.758231]  start_transaction+0x896/0x2950 [btrfs]
+> [   58.758661]  btrfs_defrag_root+0x250/0xc00 [btrfs]
+> [   58.759083]  btrfs_ioctl_defrag+0x467/0xa00 [btrfs]
+> [   58.759513]  btrfs_ioctl+0x3c95/0x114e0 [btrfs]
+> ...
+> [   58.768510] Allocated by task 23683:
+> [   58.768777]  ____kasan_kmalloc+0xb5/0xf0
+> [   58.769069]  __kmalloc+0x227/0x3d0
+> [   58.769325]  alloc_reloc_control+0x10a/0x3d0 [btrfs]
+> [   58.769755]  btrfs_relocate_block_group+0x7aa/0x1e20 [btrfs]
+> [   58.770228]  btrfs_relocate_chunk+0xf1/0x760 [btrfs]
+> [   58.770655]  __btrfs_balance+0x1326/0x1f10 [btrfs]
+> [   58.771071]  btrfs_balance+0x3150/0x3d30 [btrfs]
+> [   58.771472]  btrfs_ioctl_balance+0xd84/0x1410 [btrfs]
+> [   58.771902]  btrfs_ioctl+0x4caa/0x114e0 [btrfs]
+> ...
+> [   58.773337] Freed by task 23683:
+> ...
+> [   58.774815]  kfree+0xda/0x2b0
+> [   58.775038]  free_reloc_control+0x1d6/0x220 [btrfs]
+> [   58.775465]  btrfs_relocate_block_group+0x115c/0x1e20 [btrfs]
+> [   58.775944]  btrfs_relocate_chunk+0xf1/0x760 [btrfs]
+> [   58.776369]  __btrfs_balance+0x1326/0x1f10 [btrfs]
+> [   58.776784]  btrfs_balance+0x3150/0x3d30 [btrfs]
+> [   58.777185]  btrfs_ioctl_balance+0xd84/0x1410 [btrfs]
+> [   58.777621]  btrfs_ioctl+0x4caa/0x114e0 [btrfs]
+> ...
+> 
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+
+Added to misc-next, thanks.

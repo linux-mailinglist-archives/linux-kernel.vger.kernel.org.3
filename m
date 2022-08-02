@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49500588136
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE54F58813B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiHBRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S234110AbiHBRnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHBRmW (ORCPT
+        with ESMTP id S233661AbiHBRm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:42:22 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A166DF4E;
-        Tue,  2 Aug 2022 10:42:22 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bv3so4857047wrb.5;
-        Tue, 02 Aug 2022 10:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uMymkjvhOIcHe+sIXSnW+UwLBk8H2QUc7FOOoXpXHb8=;
-        b=CVwJje0b8xNV+ysA9tcGpwaEVno/l6Tq8zWv67ZEG1DfK5dfpo+4C9fTA1CphUJ2da
-         cNLz9c7GZrNl7TD0YRKB38XxC2jEGi3/KcrgPT+GHBMxkSliruQlyR1+ujfcWIL1AZXS
-         gnkbDZ4IZic20zBg+IUusKcqSMCZy9Dim1VBgIit9s0V/Kxvh5ycx9jCIGrNFYYORssw
-         os69pEp6+8JC4741xhtr9jON7usmqtfz8sWsKMROlIMfpDZPbfni4a/jsLnpuM6eFSKg
-         eJ8Ch7l/OmbORXKiDPjrLPzkh5DjIBmSBzvNVn6OfoVW7m79/2MLnYC5Hb45FCYGPO+I
-         KhUw==
+        Tue, 2 Aug 2022 13:42:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E05C4D17B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:42:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659462174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9SK7bFw/0R7/hTM55OR2c83JALu5NeuiKS9q8ZWkjFk=;
+        b=W+39XnN8KdD5LpmWa9r2t4tdEwyYsq9SNOxF7/wyhTRuck22bzd1vgSEoDO2JzYgaFVzbx
+        z6ZMGuHalIhTf9C4eTS2GtVsJ0AqfPm6OaYuMQG8+H38Fn9k2Eq9kxa5dt6+c1Z7LO4/ER
+        Ta4IqfKhNYSKl9srDsG5fTAe3e8hLOc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-d1N3iltMN1iGaekgqWq16A-1; Tue, 02 Aug 2022 13:42:53 -0400
+X-MC-Unique: d1N3iltMN1iGaekgqWq16A-1
+Received: by mail-wr1-f72.google.com with SMTP id w17-20020adfbad1000000b0021f0acd5398so3583055wrg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:42:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uMymkjvhOIcHe+sIXSnW+UwLBk8H2QUc7FOOoXpXHb8=;
-        b=XeQsAbPhXvUFrVIwF17KqCWXupt3ZD4/lDD1MSfbK54iW6gp6YNYYGYmcy6f0zYETr
-         GLiEJXPP3t4TbYzMekJZHORn5/VDaRj4SxhuXPoO3z6Oi35k5fOMp1G+iivZ50NahVqy
-         3BUDfadl2SWy93vLlXzgTurSu0aXuKjdro8r17FSUA6HPFOY7+vlglqv2OUTZy1yAGX0
-         OqFipSzU+XTl19tw+B8rFEBTIbabg/SOuRjSVTPWDIllL4wK98/UFwWWYEJFoVtiJiiM
-         hdYocgm17jQxx+8bQ7Atho5AIJgurjd3jU7Y/0iMxmfFIOUg2EystWQXcqeJMyJjHBqz
-         lKog==
-X-Gm-Message-State: ACgBeo0UpHy33J7jWaqh/LM5OM/K9ion7nw59lu7N3dv6n7xCEbavXOV
-        EAoEo4mYbLHDSDO/2aKCw98=
-X-Google-Smtp-Source: AA6agR4GttsrbDq2JcA/FdVMaSkFZw2cy0s/eZMfGRftJ3DZCpwitW95thj2EbUhKal9LHyP829itw==
-X-Received: by 2002:adf:f6cb:0:b0:220:7859:7bf with SMTP id y11-20020adff6cb000000b00220785907bfmr789777wrp.683.1659462140622;
-        Tue, 02 Aug 2022 10:42:20 -0700 (PDT)
-Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
-        by smtp.gmail.com with ESMTPSA id s14-20020a5d424e000000b0021d7fa77710sm15725446wrr.92.2022.08.02.10.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 10:42:20 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 18:42:09 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
-Message-ID: <Yulh8fzUJWY89i4J@debian>
-References: <20220801114138.041018499@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=9SK7bFw/0R7/hTM55OR2c83JALu5NeuiKS9q8ZWkjFk=;
+        b=pntrjVYj1U8jXRYn7to59h6RHt6jojRfqxAs1EbfKjtp+ldmP+8QBh7j+IPHmiK9cz
+         i+MAcoY9+aUEeyJesmT2Vf5ccZn4DNSRF5daWDBxV4k1u+aDCssasSUiW6k1tKjTVC2m
+         25Ngi4yUzWOQE/77XlsvFyTCxWXQ1NHsEjyMZbB7T/ndNBn7kvwjsPHB/G+DvRcxpalh
+         dSSugCULs8O62SYme0cLr0di2K86vRUM+drO6n8vcPm6BWWK9DtVFpO2GgEPIBs+cl32
+         5XgaIFIF/IUutNbEnpZtu5z3397w4Ku+jGoFt7sqMsjrTaonoCDvP+0b5b1TTNEysn0c
+         GfAg==
+X-Gm-Message-State: ACgBeo1cZ3wGIFWrLE84GFFq9FG7W/Q2F4jehcH10Il2XxS1t5CGWwcR
+        eRrNIh/fd00OPZUeRU6ht4IxII3ORNhzAw9aq/XaV2su7Hz3SQuZNWtKkJ8OCpI8fkZ4LKv3bEz
+        VozT8IuOGNGRlKNrAX2qF4d13
+X-Received: by 2002:a1c:f718:0:b0:3a3:2416:634d with SMTP id v24-20020a1cf718000000b003a32416634dmr352843wmh.83.1659462172005;
+        Tue, 02 Aug 2022 10:42:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7+GmtZBuIt1gi72koKOE5H8qmVdhDI9l+aloFYOwLKRdQlZ9zYY5O7hosx3FfQSnhMnFMn+A==
+X-Received: by 2002:a1c:f718:0:b0:3a3:2416:634d with SMTP id v24-20020a1cf718000000b003a32416634dmr352835wmh.83.1659462171743;
+        Tue, 02 Aug 2022 10:42:51 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id a1-20020adfe5c1000000b0021e491fd250sm9673171wrn.89.2022.08.02.10.42.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 10:42:51 -0700 (PDT)
+Message-ID: <4ccbafb5-9157-ec73-c751-ec71164f8688@redhat.com>
+Date:   Tue, 2 Aug 2022 19:42:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>
+Cc:     Vipin Sharma <vipinsh@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220801151928.270380-1-vipinsh@google.com>
+ <YuhPT2drgqL+osLl@google.com> <YuhoJUoPBOu5eMz8@google.com>
+ <YulRZ+uXFOE1y2dj@google.com> <YuldSf4T2j4rIrIo@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Make page tables for eager page splitting
+ NUMA aware
+In-Reply-To: <YuldSf4T2j4rIrIo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +85,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On 8/2/22 19:22, Sean Christopherson wrote:
+> Userspace can already force the ideal setup for eager page splitting by configuring
+> vNUMA-aware memslots and using a task with appropriate policy to toggle dirty
+> logging.  And userspace really should be encouraged to do that, because otherwise
+> walking the page tables in software to do the split is going to be constantly
+> accessing remote memory.
 
-On Mon, Aug 01, 2022 at 01:46:14PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.16 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
-> Anything received after that time might be too late.
+Yes, it's possible to locate the page tables on the node that holds the 
+memory they're mapping by enable dirty logging from different tasks for 
+different memslots, but that seems a bit weird.
 
-Build test (gcc version 12.1.1 20220724):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Walking the page tables in software is going to do several remote memory 
+accesses, but it will do that in a thread that probably is devoted to 
+background tasks anyway.  The relative impact of remote memory accesses 
+in the thread that enables dirty logging vs. in the vCPU thread should 
+also be visible in the overall performance of dirty_log_perf_test.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+So I agree with Vipin's patch and would even extend it to all page table 
+allocations, however dirty_log_perf_test should be run with fixed CPU 
+mappings to measure accurately the impact of the remote memory accesses.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1607
-[2]. https://openqa.qa.codethink.co.uk/tests/1608
-[3]. https://openqa.qa.codethink.co.uk/tests/1611
+Paolo
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

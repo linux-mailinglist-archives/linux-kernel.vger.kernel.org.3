@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804C258847D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149B1588484
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiHBWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S232024AbiHBWon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237342AbiHBWiu (ORCPT
+        with ESMTP id S229556AbiHBWol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:38:50 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AACC57242;
-        Tue,  2 Aug 2022 15:38:34 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id b12so7024760ils.9;
-        Tue, 02 Aug 2022 15:38:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=4M0eNIcFrYgM5K/B0q/9btVK0E4O23iIxQ1FHEylB2U=;
-        b=TG8lkkOyxPw0P1EV4FBtI/TxCLA8iJdOBkDguv+NJKMEPw5sVJHR5JX00VJOEbvn4v
-         ny3J3iCOjQeUtjDExcjaH8yoc18Jxnpgv0qsImtbB63JEczz4thsGa97uV69NCLROiED
-         f8hbV0iRXTkPaX1OkHxwxSvMV9JHVd/dFeyYioikso3RhWVcGRSIEY+zHauH8F1Cu5pV
-         b/W02YTOCpBDHo2oFnILQqEKUfHaNih1+ytv7Wb0FFA6VJf9I2E9uAn6ClZwmuoCijB/
-         v02zf/hXUNongpn3FY406MMnZGvVeX42bitNApHWdBVZMZ8l+Nww85fY87VGb2YbYQ6F
-         CbvQ==
-X-Gm-Message-State: AJIora9lOzEzMfKia5Q1GKpxWb7eoi0mUvIwG/j1OyUc0xC7tinu4Qdo
-        3Po9XDsK+WDXRwMMPnm4Vw==
-X-Google-Smtp-Source: AGRyM1t4Mw6kVtI+EzyL63IE/rpUMY/PA8D8Z57S4TVy7ZVABHlfY8+rPMcwlSBHTLSqzeTeseVjDQ==
-X-Received: by 2002:a92:cbd1:0:b0:2dd:ab8f:ed15 with SMTP id s17-20020a92cbd1000000b002ddab8fed15mr9012529ilq.251.1659479909841;
-        Tue, 02 Aug 2022 15:38:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id h14-20020a02b60e000000b0033ebbb649fasm6918776jam.101.2022.08.02.15.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 15:38:29 -0700 (PDT)
-Received: (nullmailer pid 758795 invoked by uid 1000);
-        Tue, 02 Aug 2022 22:38:27 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
-        linux@roeck-us.net, devicetree@vger.kernel.org, jdelvare@suse.com,
-        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20220802194656.240564-2-eajames@linux.ibm.com>
-References: <20220802194656.240564-1-eajames@linux.ibm.com> <20220802194656.240564-2-eajames@linux.ibm.com>
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
-Date:   Tue, 02 Aug 2022 16:38:27 -0600
-Message-Id: <1659479907.535740.758793.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 18:44:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F8F54ACE;
+        Tue,  2 Aug 2022 15:44:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3045BB8213F;
+        Tue,  2 Aug 2022 22:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D466BC433D7;
+        Tue,  2 Aug 2022 22:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659480277;
+        bh=V9bk76GSzx33fU+JZ+1Bdf90KJc+ck5Yqw/pwb8oRxg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Gadaajw8M9DDiWhT/k6J+yzz4p8PpUvtrllO7Mi2ekfYWHFi89NQ3meznMyUXIdCs
+         h/K46ThUWYOYukOyHkoHz62W+/mIO949x6zwztX1cVRIwyjOXkuepfrgKne3QGN/10
+         tm4+vvGM73gCvKfnUXQ4lO9CF/ghduBYOtYIidD1V7JIlZYCaxcLdPNB/DjQLDIV1G
+         0HvOIVAjivVuqIyUXcj4/0uFQAa9gUvRSNreJfwPis8qgQeLBMYtDLGTpyDaIccNSw
+         Y4nAQ08fOUoR9zUO40PLExqokEjlCgQojAMc90VGcUtq7r4VaRVJc/5oPPehyQwXYT
+         0mvLHxllP70Lw==
+Received: by mail-pj1-f46.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so203754pjk.1;
+        Tue, 02 Aug 2022 15:44:37 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3R0kq8Pzw/bPShw6QVZH2sfTgULy6T8brAW9IGLeZzoJDUPg+5
+        tycwmju1Vnfp8uwj2aoAZmzehZsWdKK+/Rq6yg==
+X-Google-Smtp-Source: AA6agR4yGn4dNgN1F5VZu/eS4OHwaG9ojj3g7zAcnkZGjF9yIXh6RCdJOQOCU4N9lVwJ2tW4qCHsr0tWdDEMjgyVL4Q=
+X-Received: by 2002:a17:903:328e:b0:16e:fa5f:37ae with SMTP id
+ jh14-20020a170903328e00b0016efa5f37aemr8392334plb.148.1659480277466; Tue, 02
+ Aug 2022 15:44:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220524080337.1322240-1-joy.zou@nxp.com> <AM6PR04MB592501ABD3A369F913137E1FE19D9@AM6PR04MB5925.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB592501ABD3A369F913137E1FE19D9@AM6PR04MB5925.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 2 Aug 2022 16:44:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJWvLrC91=MvVUiCyC3txEbK7tvja1SpZ7wsUktPMNoeA@mail.gmail.com>
+Message-ID: <CAL_JsqJWvLrC91=MvVUiCyC3txEbK7tvja1SpZ7wsUktPMNoeA@mail.gmail.com>
+Subject: Re: FW: [PATCH V2 1/2] bindings: fsl-imx-sdma: Document 'HDMI Audio' transfer
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     "vkoul@kernel.org" <vkoul@kernel.org>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 02 Aug 2022 14:46:54 -0500, Eddie James wrote:
-> These bindings describe the POWER processor On Chip Controller accessed
-> from a service processor or baseboard management controller (BMC).
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
-> 
+On Mon, Aug 1, 2022 at 9:58 PM Joy Zou <joy.zou@nxp.com> wrote:
+>
+> Gentle ping...
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+For what? Krzysztof commented less than 2 hours after you sent v2. And
+dtbs_check shows a ton of warnings as reported. I suspect you need to
+update the schema to fix some of those unless you think they are all
+.dts file fixes.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/hwmon/ibm,occ-hmwon.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Rob

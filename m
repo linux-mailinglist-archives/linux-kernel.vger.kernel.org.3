@@ -2,156 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FB658781B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6534B58781E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiHBHpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S236072AbiHBHpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiHBHpT (ORCPT
+        with ESMTP id S236080AbiHBHp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:45:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64273DE4
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659426315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n2QKGORUPt90s3M7laRV8rZjur0eTOpV52LUAMCgLrw=;
-        b=iAElqphaXnmwvl5k/N0oZ1rktEMrxHy680Tb1NQaQkntAauLcdM0L1RCT1ri+Bygppe8o1
-        eKsHlvV0LlI+PUc0A9YkHBvQ1ybYs30hkQ4bUXnSzTFO9s2aU0eAOJQ43WqL8l0scw0NLQ
-        y8I02Cx7bQ6CGmhbQQ9kPpEDL2/V+AE=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-210-Mg2aHvwJP9-debxbZljakA-1; Tue, 02 Aug 2022 03:45:13 -0400
-X-MC-Unique: Mg2aHvwJP9-debxbZljakA-1
-Received: by mail-lf1-f70.google.com with SMTP id o4-20020ac25e24000000b0048af174d5bdso1887319lfg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:45:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=n2QKGORUPt90s3M7laRV8rZjur0eTOpV52LUAMCgLrw=;
-        b=QzRzRjk9zRwSRu03QhCtKnhXUN+oezzpKWjZrxo8Gonn9Bn3ItiGFlUJTrLBag4RsB
-         bWp3oaxhABIKpuq/GvcETErdSH3jJGcKU226uZwNoNTXQB0VUh1qzoneaxWS9+0od1i+
-         N9q89BdiwJ6gzSQ+XD+cOY61EWdTDld6qTF4j++80GcOjj2VXphChqHsA9/uxXalN1c6
-         6NPLN+pTsRxWGJg0EeEdyi4ZUdu1BlV7PPdcsOBMIR4xYvV8GGRVkdxkSkrC2vtX/0kt
-         2t5xi1W/uDBFeNGmJ+ktmj4piD53CtFTbkO0yRFkBIPP8s1Qd41mMX/6q9Vyzja2Gdzm
-         btXA==
-X-Gm-Message-State: AJIora/kCGm05e86KySZs+0Iwk1xUdwaBkCPV30vc3vF4h5mb7O8ymgJ
-        bLhKUUOfoFdXmj/unpBiwVLUlH/2UBKnoB+diWYP1EyFUuP6mTw+STVW1BLOddt7ndU1+wMYft7
-        s8C5QX1hSE0+j3y7I2ngXT+8zIs/+RDP4b76hD1/A
-X-Received: by 2002:a2e:82c6:0:b0:25d:eef5:8096 with SMTP id n6-20020a2e82c6000000b0025deef58096mr6288541ljh.201.1659426312321;
-        Tue, 02 Aug 2022 00:45:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tIVif5PVmN7a8VhTns7vhbkHiwcEFEE4L31UG6gd+2t07IqYSwiB0aIDCfwMP5XF9mr/mf+ZUHXWrTlopG4R8=
-X-Received: by 2002:a2e:82c6:0:b0:25d:eef5:8096 with SMTP id
- n6-20020a2e82c6000000b0025deef58096mr6288536ljh.201.1659426312110; Tue, 02
- Aug 2022 00:45:12 -0700 (PDT)
+        Tue, 2 Aug 2022 03:45:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C422B3E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:45:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oImag-0008IG-9t; Tue, 02 Aug 2022 09:45:22 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oImaf-001Gz2-GV; Tue, 02 Aug 2022 09:45:21 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oImae-0095B7-Ow; Tue, 02 Aug 2022 09:45:20 +0200
+Date:   Tue, 2 Aug 2022 09:45:20 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        robh+dt@kernel.org, thierry.reding@gmail.com,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v7 1/4] dt-bindings: pwm: fix microchip corePWM's
+ pwm-cells
+Message-ID: <20220802074520.ayyjl5sf332eta3o@pengutronix.de>
+References: <20220721172109.941900-1-mail@conchuod.ie>
+ <20220721172109.941900-2-mail@conchuod.ie>
 MIME-Version: 1.0
-References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn>
- <20220721084341.24183-4-qtxuning1999@sjtu.edu.cn> <CAJaqyWfgUqdP6mkOUdouvQSst=qc7MOTaigC-EiTg9-gojHqzg@mail.gmail.com>
- <1D1ABF88-B503-4BE0-AC83-3326EAA62510@sjtu.edu.cn>
-In-Reply-To: <1D1ABF88-B503-4BE0-AC83-3326EAA62510@sjtu.edu.cn>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Tue, 2 Aug 2022 09:45:00 +0200
-Message-ID: <CAGxU2F4-aBTP=CwzTKutiSqHQL++zfMmK_dCoR+t=BJA9AvhFQ@mail.gmail.com>
-Subject: Re: [RFC 3/5] vhost_test: batch used buffer
-To:     Zhi Guo <qtxuning1999@sjtu.edu.cn>
-Cc:     Eugenio Perez Martin <eperezma@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qqmpwa5unzevycoi"
+Content-Disposition: inline
+In-Reply-To: <20220721172109.941900-2-mail@conchuod.ie>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 4:45 AM Zhi Guo <qtxuning1999@sjtu.edu.cn> wrote:
->
->
->
-> 2022=E5=B9=B47=E6=9C=8822=E6=97=A5 =E4=B8=8B=E5=8D=883:12=EF=BC=8CEugenio=
- Perez Martin <eperezma@redhat.com> =E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Jul 21, 2022 at 10:44 AM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote=
-:
->
->
-> Only add to used ring when a batch a buffer have all been used.  And if
-> in order feature negotiated, add randomness to the used buffer's order,
-> test the ability of vhost to reorder batched buffer.
->
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
-> drivers/vhost/test.c | 15 ++++++++++++++-
-> 1 file changed, 14 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
-> index bc8e7fb1e..1c9c40c11 100644
-> --- a/drivers/vhost/test.c
-> +++ b/drivers/vhost/test.c
-> @@ -43,6 +43,9 @@ struct vhost_test {
-> static void handle_vq(struct vhost_test *n)
-> {
->        struct vhost_virtqueue *vq =3D &n->vqs[VHOST_TEST_VQ];
-> +       struct vring_used_elem *heads =3D kmalloc(sizeof(*heads)
-> +                       * vq->num, GFP_KERNEL);
-> +       int batch_idx =3D 0;
->        unsigned out, in;
->        int head;
->        size_t len, total_len =3D 0;
-> @@ -84,11 +87,21 @@ static void handle_vq(struct vhost_test *n)
->                        vq_err(vq, "Unexpected 0 len for TX\n");
->                        break;
->                }
-> -               vhost_add_used_and_signal(&n->dev, vq, head, 0);
-> +               heads[batch_idx].id =3D cpu_to_vhost32(vq, head);
-> +               heads[batch_idx++].len =3D cpu_to_vhost32(vq, len);
->                total_len +=3D len;
->                if (unlikely(vhost_exceeds_weight(vq, 0, total_len)))
->                        break;
->        }
-> +       if (batch_idx) {
-> +               if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && batch_idx=
- >=3D 2) {
->
->
-> Maybe to add a module parameter to test this? Instead of trusting in
-> feature negotiation, "unorder_used=3D1" or something like that.
->
-> vhost.c:vhost_add_used_and_signal_n should support receiving buffers
-> in order or out of order whether F_IN_ORDER is negotiated or not.
->
-> Thanks!
->
-> That=E2=80=99s a good idea, The reorder feature in vhost is a "workaround=
-=E2=80=9D solution for the device that can't consume buffer in order,
-> If that device support in order feature, The reorder in vhost will not be=
- used.
-> So we can add a parameter in vhost_test can config in order or not in ord=
-er usage for used descriptors.
-> A global parameter in vhost_test.c is enough?
 
-Maybe a module parameter is easier to use (or a sysfs file), and to
-test we don't need to recompile the module every time.
+--qqmpwa5unzevycoi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In view of having a CI, it's definitely easier to set the module
-parameter than to recompile it.
+On Thu, Jul 21, 2022 at 06:21:07PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> corePWM is capable of inverted operation but the binding requires
+> \#pwm-cells of 2. Expand the binding to support setting the polarity.
+>=20
+> Fixes: df77f7735786 ("dt-bindings: pwm: add microchip corepwm binding")
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
-Stefano
+I'm surprised by myself I didn't notice this when acking df77f7735786,
+*shrug*.
 
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qqmpwa5unzevycoi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLo1g4ACgkQwfwUeK3K
+7AnP5Af/XZhd73YIdx2wsJViugHNrfh9xObg6ePSOGVeE9RzkIizBUQuUxVZt+Gq
+7imbuubQrntsS0HZqxkwl24eGRPrSbAJrN+jHY323LTl72X3MbLIRBMLHLN2eZ1P
+pbu6kCeR425V36EMSaJOAsAMEHHKuia73rwxuUL2G674Y0brEcZ914XLqgqgC1V9
++zhH0KFx9rgzEPWPIozeZgVK9AYjhYVgIZC7wj8GEqME1ppslZQt2czTU16cB3PZ
+IsDIseICnSi3YB8poYd/9Od6RkyDW0Lq7r+6HwpxmgIvAzLOjWYWtZad09q1aAKu
++HmVReWtq83sFOepD+uHUmgmpmZcjQ==
+=Bu3F
+-----END PGP SIGNATURE-----
+
+--qqmpwa5unzevycoi--

@@ -2,167 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D5D5878CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBE05878D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbiHBIOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        id S233563AbiHBIQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiHBIOc (ORCPT
+        with ESMTP id S235469AbiHBIQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:14:32 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB0E540BDE;
-        Tue,  2 Aug 2022 01:14:31 -0700 (PDT)
-Received: from [192.168.1.87] (unknown [122.171.18.126])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0FF1120FEB3D;
-        Tue,  2 Aug 2022 01:14:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0FF1120FEB3D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659428071;
-        bh=e9jMP+l1EBs7edkrR5yZ/P6HawFIJg7Wsf/tP8c1hH0=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=sXcg7ueT90KrfILlIRM1HvHe29gKYoqSsyMQQeLTWwjG/2yXmE0aR2uVg0MLLbabt
-         bFLzzVExKfHih7h+hz22WEJriYgk9tSIr380HorDd/SRNsmSyQsKfrYRToXiqRvEob
-         v/XBrdiMYQPyzKMTC6bhLKTBeUWwNFvx6GIrQrRE=
-Message-ID: <33983fa2-c9a8-1ac1-2f75-8360a077cfc2@linux.microsoft.com>
-Date:   Tue, 2 Aug 2022 13:44:23 +0530
+        Tue, 2 Aug 2022 04:16:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E30E19285
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:16:21 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gk3so12435939ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=t+pQa5dRvfaXNuusnmsa3SIVfyR2GaEPDHqht+u9DDE=;
+        b=BlgVUzLcNk6nPCzP4HZtzqs1YrqAnjzgG6xgPn5nG6L7Ma+k+2NRBZ0m7DGn35OYjf
+         Kf7m8KpeFBB7FuNfLm1xMkNgkY8mV4MsFczpHcETDV3eDmrr6xPCJvvQGKGa/R17VxML
+         f13El9Xpo3RxTOH6oh/k0uJm7KW60GNCN59ESlcRi52hatYAI1CdbUhCqogDZW+mxMh3
+         /N1bgiCxXA9JDDZBlh0S6LU/j7xouNXmQkfGjmUNiw3Yjez1a0JajrVWPAQ455avnmlM
+         pi7X50kzwXrYWx+d9kZRhhkv76gUcJ+NLgIXJAZiGeUqnqxs5AQdO6oGmhM+SwfS1PmS
+         AU9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=t+pQa5dRvfaXNuusnmsa3SIVfyR2GaEPDHqht+u9DDE=;
+        b=7+ySAvSD/iNKN9H4iFglGCzzyRucmnMTa9IVOqFwIK9OvF9YjRTXAqMqOtXCc6lVxy
+         3qD+lzcWo8KvPt2qQeW7jlYUYboDzRZPNo52PBB1uaEp5TBd/+ANKpUKZOY4B15zG+4o
+         ngJt1vDjCFBwXWxnAttFOJZg5Ve4FfccUrQFsKHVdUgPP6gIuVTB9X0u5zrq5fBq7lLE
+         WzmztCyzgahEN3hIfm8BnQvrv0l4uXo5+Ifx4rdh9bVelCSGBA+g5mb5XOT5B9LyLs3P
+         E9Nuu1+zDfivuHNj+IZKBJ4tqotMVNWHGJDvYqYd4J6UWlw5bN6r8n0mhF18an0hWip+
+         dtkw==
+X-Gm-Message-State: AJIora9fozIE8zp64gsIoJT4dEtJ5h+J2SEsgHiLRdmfxZ0uNwgNoNWE
+        oLzg4sV1ZwRvuaaqmwPlnbdNB44gugoUQt2wNLw=
+X-Google-Smtp-Source: AGRyM1viZMGF966+RJGbbHArBOM3BIYnlrSbbERjHDRObZ3SUnNc6sQaiL1gsgjq755QoEpM/eWbZ0B/36S7CPx+8O0=
+X-Received: by 2002:a17:907:75e3:b0:72b:198a:b598 with SMTP id
+ jz3-20020a17090775e300b0072b198ab598mr15623092ejc.401.1659428179782; Tue, 02
+ Aug 2022 01:16:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Drivers: hv: vmbus: Optimize vmbus_on_event
-Content-Language: en-US
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
-From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
-In-Reply-To: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrsabibatuhafiza1@gmail.com
+Received: by 2002:a17:906:2dd3:b0:730:8417:5f39 with HTTP; Tue, 2 Aug 2022
+ 01:16:16 -0700 (PDT)
+From:   Mimi Hassan <mimihassan971@gmail.com>
+Date:   Tue, 2 Aug 2022 09:16:16 +0100
+X-Google-Sender-Auth: NHvzQnh-oKMl5O4r-BtJGn5lSQE
+Message-ID: <CABzhNW0GCc+t5Bt8N6QwqJAJwZkuvSu0sTzdPE7BxU_xW4WR8A@mail.gmail.com>
+Subject: I WILL TELL YOU HOW TO GO ABOUT IT.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-07-2022 15:07, Saurabh Sengar wrote:
-> In the vmbus_on_event loop, 2 jiffies timer will not serve the purpose if
-> callback_fn takes longer. For effective use move this check inside of
-> callback functions where needed. Out of all the VMbus drivers using
-> vmbus_on_event, only storvsc has a high packet volume, thus add this limit
-> only in storvsc callback for now.
-> There is no apparent benefit of loop itself because this tasklet will be
-> scheduled anyway again if there are packets left in ring buffer. This
-> patch removes this unnecessary loop as well.
-> 
-
-In my understanding the loop was for optimizing the host to guest signaling for batched channels.
-And the loop ensures that we process all the posted messages from the host before returning from the respective callbacks.
-
-Am I missing something here.
-
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  drivers/hv/connection.c    | 33 ++++++++++++++-------------------
->  drivers/scsi/storvsc_drv.c |  9 +++++++++
->  2 files changed, 23 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index eca7afd..9dc27e5 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -431,34 +431,29 @@ struct vmbus_channel *relid2channel(u32 relid)
->  void vmbus_on_event(unsigned long data)
->  {
->  	struct vmbus_channel *channel = (void *) data;
-> -	unsigned long time_limit = jiffies + 2;
-> +	void (*callback_fn)(void *context);
->  
->  	trace_vmbus_on_event(channel);
->  
->  	hv_debug_delay_test(channel, INTERRUPT_DELAY);
-> -	do {
-> -		void (*callback_fn)(void *);
->  
-> -		/* A channel once created is persistent even when
-> -		 * there is no driver handling the device. An
-> -		 * unloading driver sets the onchannel_callback to NULL.
-> -		 */
-> -		callback_fn = READ_ONCE(channel->onchannel_callback);
-> -		if (unlikely(callback_fn == NULL))
-> -			return;
-> -
-> -		(*callback_fn)(channel->channel_callback_context);
-> +	/* A channel once created is persistent even when
-> +	 * there is no driver handling the device. An
-> +	 * unloading driver sets the onchannel_callback to NULL.
-> +	 */
-> +	callback_fn = READ_ONCE(channel->onchannel_callback);
-> +	if (unlikely(!callback_fn))
-> +		return;
->  
-> -		if (channel->callback_mode != HV_CALL_BATCHED)
-> -			return;
-> +	(*callback_fn)(channel->channel_callback_context);
->  
-> -		if (likely(hv_end_read(&channel->inbound) == 0))
-> -			return;
-> +	if (channel->callback_mode != HV_CALL_BATCHED)
-> +		return;
->  
-> -		hv_begin_read(&channel->inbound);
-> -	} while (likely(time_before(jiffies, time_limit)));
-> +	if (likely(hv_end_read(&channel->inbound) == 0))
-> +		return;
->  
-> -	/* The time limit (2 jiffies) has been reached */
-> +	hv_begin_read(&channel->inbound);
->  	tasklet_schedule(&channel->callback_event);
->  }
->  
-> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> index fe000da..c457e6b 100644
-> --- a/drivers/scsi/storvsc_drv.c
-> +++ b/drivers/scsi/storvsc_drv.c
-> @@ -60,6 +60,9 @@
->  #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
->  #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
->  
-> +/* channel callback timeout in ms */
-> +#define CALLBACK_TIMEOUT               2
-> +
->  /*  Packet structure describing virtual storage requests. */
->  enum vstor_packet_operation {
->  	VSTOR_OPERATION_COMPLETE_IO		= 1,
-> @@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
->  	struct hv_device *device;
->  	struct storvsc_device *stor_device;
->  	struct Scsi_Host *shost;
-> +	unsigned long time_limit = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
->  
->  	if (channel->primary_channel != NULL)
->  		device = channel->primary_channel->device_obj;
-> @@ -1224,6 +1228,11 @@ static void storvsc_on_channel_callback(void *context)
->  		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
->  			sizeof(enum vstor_packet_operation);
->  
-> +		if (unlikely(time_after(jiffies, time_limit))) {
-> +			hv_pkt_iter_close(channel);
-> +			return;
-> +		}
-> +
->  		if (pktlen < minlen) {
->  			dev_err(&device->device,
->  				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
-
-Regards,
-
-~Praveen.
+i am Mrs Mimi Hassan Abdul Muhammad and i was diagnosed with cancer
+about 2 years
+ago,before i go for a surgery  i  have to do this by helping the
+Less-privileged,so If you are interested to use the sum of
+US17.3Million)to help them kindly get back to me for more information.
+Warm Regards,
+Mrs Mimi Hassan Abdul Muhammad

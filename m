@@ -2,201 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5C85878BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F395878C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbiHBIJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S236399AbiHBIKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235653AbiHBIJb (ORCPT
+        with ESMTP id S235653AbiHBIKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:09:31 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98314192B5
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:09:29 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220802080928epoutp01990457f5ed9678bf4d37421576b85b2b~HeMNXZxmL2687226872epoutp01o
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:09:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220802080928epoutp01990457f5ed9678bf4d37421576b85b2b~HeMNXZxmL2687226872epoutp01o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659427768;
-        bh=3jLix4T4XgSy7myOUsJb8gZNbmWtNDyABXmcfSgtTyM=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=Sa/6jJcnkcSvqnxRFQaZ8EChCJBVIVs6VZOv7kptHjbv8drbX0TWe/eeTXU61Wa3W
-         lyzoEHRpfDfRXQ1g723Xvnk5UsIm2XNlEdBsXwQF1tSjN5B3XuwbB5XREFEx7Oc2Oh
-         IqtS26WcxTUM6AZvQ83ondOQolmROwV/Zr13BgH8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220802080927epcas2p12304cfdf89a96bbe75b6859fda206d29~HeMM8a6I_0083000830epcas2p1b;
-        Tue,  2 Aug 2022 08:09:27 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LxnhR2Fymz4x9Q2; Tue,  2 Aug
-        2022 08:09:27 +0000 (GMT)
-X-AuditID: b6c32a46-0b9ff700000025b2-62-62e8dbb7ef20
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B4.D7.09650.7BBD8E26; Tue,  2 Aug 2022 17:09:27 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v6 5/6] scsi: ufs: wb: Modify messages
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
-Date:   Tue, 02 Aug 2022 17:09:27 +0900
-X-CMS-MailID: 20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmqe722y+SDB63CFqcfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/JYunWm4wO3B6Xr3h7
-        LN7zksljwqIDjB4tJ/ezeHxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAGZVtk5GamJJapJCa
-        l5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0rJJCWWJOKVAoILG4WEnf
-        zqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO2PTvJOsBWtlK46/
-        esLYwPhRvIuRk0NCwETi2ObtjF2MXBxCAjsYJa4dW8rUxcjBwSsgKPF3hzBIjbCAmcTO41PY
-        QGwhASWJc2tmMYKUCAsYSNzqNQcJswnoSfxcMoMNZIyIQBuLxLHOrcwQ83klZrQ/ZYGwpSW2
-        L9/KCGJzCvhJTLzxAapGQ+LHsl4oW1Ti5uq37DD2+2PzGSFsEYnWe2ehagQlHvzcDRWXlDh0
-        6CsbyD0SAvkSGw4EQoRrJN4uPwBVoi9xrWMj2Am8Ar4SJ2Y2soOUswioSixYIwdR4iLRfrKF
-        FcRmFpCX2P52DjNICbOApsT6XfoQw5UljtxigfmpYeNvdnQ2swCfRMfhv3DxHfOeMEG0qkks
-        ajKCCMtIfD08n30Co9IsRCDPQrJ2FsLaBYzMqxjFUguKc9NTi40KjODxmpyfu4kRnGS13HYw
-        Tnn7Qe8QIxMH4yFGCQ5mJRHeOy7Pk4R4UxIrq1KL8uOLSnNSiw8xmgL9O5FZSjQ5H5jm80ri
-        DU0sDUzMzAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MG38O+FLp7uImajknkeH
-        t7kuP/vpQbWBRZ157h/bFmnZJZc1a1Wj+cOTmhYWKCe7mR/+ON/x+yENieRfO48cEWrI+da9
-        yOrTIiX3+E/7q6pcuKb3HTB4mKTy/hKH/6+TC7kcu6Qcu2d+D6+9kKhXnd24zobHpJfz1Mqa
-        m7uKtwfGZFVxGOxdq6Hgs5pzncWbya8maL/+sfNGR3CCnGWv+e5I4R3vP384M/nLbEGbgnI2
-        Zv+n934dvXSjsWqJ01nfb8fquy/XbD7/yHTRCZuz0xNO7mN9nssqvHKi0vS0uXM0/6jONV3z
-        gZsteZOkYfznMzkzD8ldu1l058z9Pon3239PlvzA7sHoKXT42uaMllwlluKMREMt5qLiRADr
-        C0cbOwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce
-References: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
-        <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p1>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 04:10:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E2526D5;
+        Tue,  2 Aug 2022 01:10:13 -0700 (PDT)
+Received: from mail-ed1-f51.google.com ([209.85.208.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M5gAG-1oLVk13t9e-007C6I; Tue, 02 Aug 2022 10:10:11 +0200
+Received: by mail-ed1-f51.google.com with SMTP id w3so963814edc.2;
+        Tue, 02 Aug 2022 01:10:11 -0700 (PDT)
+X-Gm-Message-State: AJIora+2O9gaY5hbZ4oqjC8Wr8sYFyeQYvMGdO4Xq8Pbo9h1WReQsomp
+        sJN+UWWh7lyV87B9Uq7sYmuO8D0d5mZ2Sf4P13k=
+X-Google-Smtp-Source: AGRyM1v/HqHwbEDYWX+iBQTrBNjWYHzrWjUAqsUsM3oDd39cerR78g3FWoIIPreKizV2F5AVl2aftYbbgEROHwhpPbo=
+X-Received: by 2002:a05:6402:3693:b0:43d:1a40:21fd with SMTP id
+ ej19-20020a056402369300b0043d1a4021fdmr18891990edb.206.1659427811579; Tue, 02
+ Aug 2022 01:10:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220802020819.1226454-1-sunliming@kylinos.cn>
+In-Reply-To: <20220802020819.1226454-1-sunliming@kylinos.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 2 Aug 2022 10:09:55 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0B7eAuTZx-ynoKHo2O49kPxwD5bXoS3G5utRriuH3Dcw@mail.gmail.com>
+Message-ID: <CAK8P3a0B7eAuTZx-ynoKHo2O49kPxwD5bXoS3G5utRriuH3Dcw@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: sa1100: make variable sa1100dog_driver static
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ufX2SafejYawHSK04SlcPYS2TjNFODc8KLsqVGlZiglCrGNASBx
+ 3zdNsDpereppXx9l0yNr5sAdrKeprzrhHUNv7pm71fySGHnR0c1ZAadQlkxcMFRohnerap9
+ doRNydqZi951ON1NQtXVT6QNn0Eh8/JxodXy1AmvcBccvSLO6e2ofsXJhLqTmdC5unqv9hY
+ /Nm3bwLtvQC1MR2Envkbw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QwvWEWBpm+g=:VRsJuzbhfDYZ8Xx8Tmmrmh
+ WVq0prnpdh7yRtZp4KMC4CPhzNLXDvgqU7KUe3h5H3SaQCoG+pBRAa3nLcL0N/Ll+erIqbker
+ wnKspT+hLzwBu5BTutUOUY/TDVT2YgXWG4XOi9o4GwTB8V4K+6/1mNkasBY9wQ3E/yAV4lcMN
+ F5wmwie7UOt36eaXQEJIqQJMUAErAUlNZe17XMUkyaH82SToz1CYa+bPfhQHDnHsmpC2siuwl
+ dBGI6kE9CfL8SxkexHA18kj8ReMmGDgOP1tFx4Qldbo1jttnEzEx7q3OjXKfr0LfaPpaQeuea
+ lMlBV7AaheAnF+cKk+cDl1N0dIxdxgokrUKRvY+67YBBo9v5NSqLgF0ci8i9pUuMYai3F1yKv
+ O4hjoCr/iEZbaDOnPejFhsZBVjt8OFgZ20E+hgDQcVYbldDVJ6aOi8/iZ9SJewPamdw/9iWPQ
+ hPT20IXVaA/WMieO1sK30werqJ5fzwvJh33dIVLnxtOfOFff1tTU6eHlOOffXVextxAmeJr4G
+ YdEIX52UU+99vmzRcWiVU32ZOZ1LIafWW/Q0b21NxNtmQbOYkGfRZkK6nNSsWpu5X7vxsZSta
+ lQxZ8TV7Wwe6Mg/qNhERB/ZNLwDmSLtNhPvg188EOgnRo3T5RgxEv/qd0KV5F1L1ubngqnedq
+ Nx8XlBjZb3FraQ44/D5nNtchGVZAvrfM13IQ8UJnne7Al/OKX9FVhhH7lLgXsXyVed3nWy8fx
+ H8shiRC5hWEAMykk6Z1vr75LtWQJL1Tsac4xWQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Messages are modified to fit the format of others.
+On Tue, Aug 2, 2022 at 4:08 AM sunliming <sunliming@kylinos.cn> wrote:
+>
+> This symbol is not used outside of sa1100_wdt.c, so marks it static.
+>
+> Fixes the following warning:
+>
+> >> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver'
+> was not declared. Should it be static?
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
 
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- drivers/ufs/core/ufs-sysfs.c |  2 +-
- drivers/ufs/core/ufshcd.c    | 23 +++++++++++------------
- 2 files changed, 12 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 2c0b7f45de4b..117272cf7d61 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
- 		 * on/off will be done while clock scaling up/down.
- 		 */
--		dev_warn(dev, "To control WB through wb_on is not allowed!\n");
-+		dev_warn(dev, "It is not allowed to configure WB!\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 5099d161f115..dcd7f03db2a2 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5737,13 +5737,13 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
- 	if (ret) {
--		dev_err(hba->dev, "%s Write Booster %s failed %d\n",
--			__func__, enable ? "enable" : "disable", ret);
-+		dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
-+			__func__, enable ? "enabling" : "disabling", ret);
- 		return ret;
- 	}
- 
- 	hba->dev_info.wb_enabled = enable;
--	dev_info(hba->dev, "%s Write Booster %s\n",
-+	dev_info(hba->dev, "%s: Write Booster %s\n",
- 			__func__, enable ? "enabled" : "disabled");
- 
- 	return ret;
-@@ -5757,11 +5757,11 @@ static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 	ret = __ufshcd_wb_toggle(hba, enable,
- 			QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8);
- 	if (ret) {
--		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed: %d\n",
--			__func__, enable ? "enable" : "disable", ret);
-+		dev_err(hba->dev, "%s: WB-Buf Flush during H8 %s failed %d\n",
-+			__func__, enable ? "enabling" : "disabling", ret);
- 		return;
- 	}
--	dev_dbg(hba->dev, "%s WB-Buf Flush during H8 %s\n",
-+	dev_info(hba->dev, "%s: WB-Buf Flush during H8 %s\n",
- 			__func__, enable ? "enabled" : "disabled");
- }
- 
-@@ -5775,14 +5775,13 @@ int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
- 	if (ret) {
--		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
--			enable ? "enable" : "disable", ret);
-+		dev_err(hba->dev, "%s: WB-Buf Flush %s failed %d\n",
-+			__func__, enable ? "enabling" : "disabling", ret);
- 		return ret;
- 	}
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
--
--	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
-+	dev_info(hba->dev, "%s: WB-Buf Flush %s\n",
- 			__func__, enable ? "enabled" : "disabled");
- 
- 	return ret;
-@@ -5800,7 +5799,7 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
- 					      QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE,
- 					      index, 0, &cur_buf);
- 	if (ret) {
--		dev_err(hba->dev, "%s dCurWriteBoosterBufferSize read failed %d\n",
-+		dev_err(hba->dev, "%s: dCurWriteBoosterBufferSize read failed %d\n",
- 			__func__, ret);
- 		return false;
- 	}
-@@ -5885,7 +5884,7 @@ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
- 				      QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE,
- 				      index, 0, &avail_buf);
- 	if (ret) {
--		dev_warn(hba->dev, "%s dAvailableWriteBoosterBufferSize read failed %d\n",
-+		dev_warn(hba->dev, "%s: dAvailableWriteBoosterBufferSize read failed %d\n",
- 			 __func__, ret);
- 		return false;
- 	}
--- 
-2.25.1
+Acked-by: Arnd Bergmann <arnd@arndb.de>

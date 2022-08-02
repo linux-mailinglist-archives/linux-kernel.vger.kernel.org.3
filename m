@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD3B588460
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC58E58847B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiHBWiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S237271AbiHBWjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiHBWhw (ORCPT
+        with ESMTP id S237207AbiHBWiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:37:52 -0400
-Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7D217AA1
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 15:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=2671; q=dns/txt; s=iport;
-  t=1659479871; x=1660689471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pKOnt7OBLC0Sl5DxaQljA8KzE5uazBS88utyntub/94=;
-  b=T/0olTYMBocamuzarv239CBUCc348lWE6wE5vSXDGzHs6JU7CkaBRvWS
-   gBPbP3gTk94gvsqpbjnyzhU7kcpRbrzh6/v41vcLWRg0xK/OnUiZ8yhOq
-   b/l3g1sXZqLIs4eGiFmU3Cjugm90xYmTLJo4u6JbMi1fsmhGcvfPC7Rkc
-   8=;
-X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
-   d="scan'208";a="782774020"
-Received: from rcdn-core-2.cisco.com ([173.37.93.153])
-  by rcdn-iport-5.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 02 Aug 2022 22:37:50 +0000
-Received: from zorba (sjc-vpn6-436.cisco.com [10.21.121.180])
-        by rcdn-core-2.cisco.com (8.15.2/8.15.2) with ESMTPS id 272Mblld013996
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 2 Aug 2022 22:37:49 GMT
-Date:   Tue, 2 Aug 2022 15:37:47 -0700
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        George Cherian <george.cherian@marvell.com>,
-        sgoutham@marvell.com, "BOBBY Liu (bobbliu)" <bobbliu@cisco.com>,
-        xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] genirq: allow selection of number of sparse irqs
-Message-ID: <20220802223747.GX821407@zorba>
-References: <20220728030420.2279713-1-danielwa@cisco.com>
- <980a561ed87c5530aab2e2b067074862@kernel.org>
- <20220729182156.GS821407@zorba>
- <87wnbuc45y.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wnbuc45y.wl-maz@kernel.org>
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.21.121.180, sjc-vpn6-436.cisco.com
-X-Outbound-Node: rcdn-core-2.cisco.com
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 2 Aug 2022 18:38:52 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B3254CBF;
+        Tue,  2 Aug 2022 15:38:36 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id z132so11795351iof.0;
+        Tue, 02 Aug 2022 15:38:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=xc7pVcgM8oggfYYoDi+YgFJKASpGtHTVPBIB9MLasi0=;
+        b=U68JPjhcBKABY2EvsarONwVp5tohHQCtr7S63ThToKpvKEov9ALIHsiM+hl/1/X51v
+         ZZ8SkqvresjW37+CbExxB/IiJ1OJdmem9wQgLH3siNzkk5gL7SnFNdXbrNqbr/WjAbJp
+         aBjKeCOet+qZ6l1F1o8bjOBsCVHITkvvWx3U6R9TlG2J8eHQPcX2sLBkBGn7pt5qrDmf
+         XQ2Pzj7czWDUYtlia7mbWCxx+Hf6xQ21npZXIYBQ/US2UTo8c/ynR86GAwnlIQzcJZxo
+         chROhYDn5JzRgRFjitmcK7FKSnuDUQ67ikb5Fv3QHGXFOJlcaGkJyZCG4VzzdoGo7rpO
+         VxBQ==
+X-Gm-Message-State: AJIora+opKqbpGMhWwm9yl+DQ15SC8nwvzUV8CkfVwkGq8RCvoWnRU68
+        FGBAlwt3HygFoaJu9AdFbQ==
+X-Google-Smtp-Source: AGRyM1uvjDnbb8GnFfjBfYlQ83bdSSQK2oBX9P0LrOPi4jW/MSL2a2C/PDhZtFJlJhS9j6J7oaGaYQ==
+X-Received: by 2002:a02:9046:0:b0:341:af23:4bb5 with SMTP id y6-20020a029046000000b00341af234bb5mr8385992jaf.44.1659479911950;
+        Tue, 02 Aug 2022 15:38:31 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id d191-20020a0262c8000000b00341927a1e0dsm7109249jac.72.2022.08.02.15.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 15:38:31 -0700 (PDT)
+Received: (nullmailer pid 758799 invoked by uid 1000);
+        Tue, 02 Aug 2022 22:38:27 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Jai Luthra <j-luthra@ti.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20220802214811.29033-1-j-luthra@ti.com>
+References: <20220802214811.29033-1-j-luthra@ti.com>
+Subject: Re: [PATCH] dt-bindings: sound: tlv320aic3x: Convert to dtschema
+Date:   Tue, 02 Aug 2022 16:38:27 -0600
+Message-Id: <1659479907.575212.758797.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 10:59:05AM +0100, Marc Zyngier wrote:
-> > 
-> > Marvell submitted a similar change, but non-selectable, about a
-> > month ago.
+On Tue, 02 Aug 2022 16:48:11 -0500, Jai Luthra wrote:
+> Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
 > 
-> Which wasn't really acceptable either.
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> ---
+>  .../devicetree/bindings/sound/tlv320aic3x.txt |  97 ------------
+>  .../bindings/sound/tlv320aic3x.yaml           | 145 ++++++++++++++++++
+>  2 files changed, 145 insertions(+), 97 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.txt
+>  create mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
 > 
-> > 
-> > The limitation prevents Cisco and Marvell hardware from
-> > functioning. I don't think we're well versed enough on the generic
-> > irq system to implement what your suggesting, even if we did Thomas
-> > would not likely accept it.
-> 
-> I don't think you can speak for Thomas here. In my experience of
-> working with him, he's in general much more inclined to look at a
-> scalable, long term solution than at a point hack. Specially given
-> that we already use xarrays for MSIs.
- 
-Your welcome make the attempt yourself, if you believe in it.
 
-> > Your suggestion is more of a long term solution vs. our short term
-> > solution.
-> 
-> Exactly. Experience shows that short term hacks are almost always a
-> bad idea and result in something that isn't maintainable.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thomas introduced the "hack" in c1ee626 in 2011.
+yamllint warnings/errors:
 
-It's more of a question of if someone has the time an and/or inclination to make the changes
-your requesting.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: properties:ai3x-gpio-func:maxItems: False schema does not allow 3
+	hint: Scalar properties should not have array keywords
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: properties:ai3x-gpio-func:minItems: False schema does not allow 3
+	hint: Scalar properties should not have array keywords
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: ignoring, error in schema: properties: ai3x-gpio-func: maxItems
+Documentation/devicetree/bindings/sound/tlv320aic3x.example.dtb:0:0: /example-0/i2c/tlv320aic3x@1b: failed to match any schema with compatible: ['ti,tlv320aic3x']
+Documentation/devicetree/bindings/sound/tlv320aic3x.example.dtb:0:0: /example-1/spi/codec@0: failed to match any schema with compatible: ['ti,tlv320aic3x']
 
-Marvell and Cisco only require to increase the size and keep the status quo, and
-nothing is wrong with that.
+doc reference errors (make refcheckdocs):
 
-> > I'm not wedded to any solution, we just need to relieve
-> > the limitation so our hardware starts working. I would imagine other
-> > companies have this issue, but I don't know which ones currently.
-> 
-> This architecture has been in the wild for the best part of 10 years,
-> in Linux for 8 years, and nobody so far screamed because of this
-> perceived limitation. It would help if you described exactly what
-> breaks in your system, because just saying "give me more" is not
-> exactly helping (there are other limitations in the GICv3 ITS driver
-> that may bite you anyway).
+See https://patchwork.ozlabs.org/patch/
 
-We need more irq lines because we have a lot of devices.. I suppose it's
-possible there's some defect in the kernel which eats up or wastes irq lines,
-but I don't think so. We have devices which use a lot of irq lines.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-> > I would rather to use an upstream solution verses holding the
-> > patches privately.  I would suggest if this limitation would not be
-> > overcome for 3-4 releases the short term solution should be
-> > acceptable over that time frame to be replaced by something else
-> > after that.
-> 
-> If you want to have an impact on the features being merged in the
-> upstream kernel, a good start would be to take feedback on board.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-We did that.. I updated the patch from Marvell's original to allow it to be
-selectable, this was requested by someone on this list.
+pip3 install dtschema --upgrade
 
+Please check and re-submit.
 
-Daniel

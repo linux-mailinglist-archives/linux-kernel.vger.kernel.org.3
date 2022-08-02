@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B15358819D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087C55881A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237494AbiHBSDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S237059AbiHBSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237414AbiHBSDV (ORCPT
+        with ESMTP id S236916AbiHBSE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:03:21 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB4CE62
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:03:20 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id c185so17369259oia.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:03:20 -0700 (PDT)
+        Tue, 2 Aug 2022 14:04:26 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7B118E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:04:25 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t22so23095661lfg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=GNoHkmqZpKx9Pktw11GIbNQ2bhjivWnkaFbnDxeXjko=;
-        b=Udpqm0u/iKCRrsXn0zwaQsyNbevqIDy0JDzIIAcMh0IK1K/IwgtExogFGRWKiWTGtI
-         uFfjjNke+0eMux5masDyDxE8wI85IacWFitHG7istD/kZT4u5nGWrNT2MsvqaPsjeDeE
-         oDj1nrKjgBWFF5lT0nE8EDsaoMJeW5ouqZ1zlDb2KbDmKyj0sUtFb2nZ2T4GFw2aIrya
-         apox241/J0FPpHvJKf4/USJnw37uXh1wPG3DnsrVXW3FuIUREHbbI6THvb/sQwxE1o+9
-         A5/zD3/7GUypSEJVUVocU/5eWQgDnt5c4gtSzgAIBNCIL0r5kPKkpyVqAtnU+wFqiJf6
-         R0XQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/DT1Fy6516QHYclkQUbxl4Uh7gxM9Qp3F1M1t05YgLg=;
+        b=rF0SUPED2ACYPQZq1h5mNpta4oJoviVm17CUjbyoD1axNgFVSREzmdgRmOVX2kBu3D
+         kPuOSYwU0htUfwM9LrbI7oqV1Pw2FfDzf7AqqsiavpxLq5pRtxzFPaZpRS5vPxZksFT1
+         Mmh3NH6283K5IYzbMfmuy/cKN1bh4YwpRPGIMK4A7mFlTxPrr1B6JpXcA8T07WLRtyHx
+         4Q3rJfosX07DgZOametHSsDOQNZrBkA2WtO6qZnYJ3K35FnIbwj/OJ5AJG/nRWEopU5e
+         f+VRpHtZqOXdx0KWRRs9d4Eo83HJpI0O0Er4Y6VkNcxh3DeL3dwjXM3zPx79avTMI362
+         SBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=GNoHkmqZpKx9Pktw11GIbNQ2bhjivWnkaFbnDxeXjko=;
-        b=1Iaiauz8uisChbSv7DCpFsn4u4WiEpWwiAbJObFOev06s9dkR1HFBDlRhzV5iYhvTr
-         BXvObZK6i9AikAqipEyxUwg5+8L3H3xEVen0UbCeCQuPCY5xqDIYvSUXLDR+umYM6Gsf
-         tDJ1SFg6/LCDo1wGO/jZ0xmUb+sbuDrIlY8/ECnoiVUJHhwocZooHetHuslfSHyuABvm
-         k7eg2rpZk1sXRPE0u6baK3bq4uFDJQNlUXvrGECOhaCt95fvU9SE51pSXVhb9eCY1UzW
-         0qcgburDlH5Dx+R3OOblKGKRlOgrS3Uod+DKt9zDZWPkobm6nn6RQcOPLzt0Jr6knzjz
-         OQ1A==
-X-Gm-Message-State: ACgBeo3GeXa2m6WfDSQbPZCnwYeZid924jmjdKQJp3rR2A1YC1YNeO89
-        WICQW5RdYft+RXMMKZhGK0U=
-X-Google-Smtp-Source: AA6agR6tKINKcuOaNVqYuLToWlaaeWaMIPBLG88vYHrun7FOyb6H5HO1ZUxOuFlhlSi5vMZ/8Pw79A==
-X-Received: by 2002:a05:6808:bca:b0:33b:2275:27b8 with SMTP id o10-20020a0568080bca00b0033b227527b8mr290247oik.180.1659463399472;
-        Tue, 02 Aug 2022 11:03:19 -0700 (PDT)
-Received: from [192.168.1.108] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id d13-20020a9d5e0d000000b006359cd3e3b0sm836323oti.77.2022.08.02.11.03.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 11:03:18 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <a94b833a-2f3c-a5ba-f2e4-7c7ef0d1e862@lwfinger.net>
-Date:   Tue, 2 Aug 2022 13:03:17 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/DT1Fy6516QHYclkQUbxl4Uh7gxM9Qp3F1M1t05YgLg=;
+        b=ugA+isNwrLB0l3YjH4VqR2ICEACRaWAE5U2c/ouE7Ba7+WB/184loCnBSESTL3mgUR
+         LsaZAj7PeNqgrkhP1TdTt3QT9WUx5LcoqRepm6sDB8mXhjCdeyjqcgadeuaowTJ9cJk2
+         80prljhNxfxEy1YNV5+5tt50V82AGTzpXDK/4OenKkwtlalI9bLchB49PQqk6vASLBf7
+         KxZmwwZgXumXOHyviaLUiq/uGzK/XzFfXSQpFO5ySPWPe2ZujAQ9hux7j3ElKPkCtKnl
+         Uh4l/AXnFwDNpcGXjKmKqI2eWfqB9RN/GqRIko9HkyPkNN+90XsxjIb+vHULGPK9YxAW
+         U69w==
+X-Gm-Message-State: AJIora+s7ElildK6S7Pox7aOxFbADLZzO9wMjh7GZ/IqkjtHvNn3gqqa
+        VnNTmgMa4Yix2wSylhjTjW/ebD6tUgdd91tI/95mnw==
+X-Google-Smtp-Source: AGRyM1vu0sUfmiHEHs+AbWugSM1Hy1w9DSdDY4CfuIAb+XNsl36yCC0sqbLUTpYAdo5k4VuT7bIk0WhXsX/2W8EaSvY=
+X-Received: by 2002:a05:6512:1307:b0:47f:baa4:52c5 with SMTP id
+ x7-20020a056512130700b0047fbaa452c5mr7342378lfu.103.1659463463620; Tue, 02
+ Aug 2022 11:04:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: add firmware dependency
-Content-Language: en-US
-To:     Grzegorz Szymaszek <gszymaszek@short.pl>, Greg KH <greg@kroah.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <YukkBu3TNODO3or9@nx64de-df6d00> <YukvnVWuhUeOgRyZ@kroah.com>
- <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
- <c82114b6-1003-bfb5-0550-98dcbf1a3761@lwfinger.net>
- <YulcdKfhA8dPQ78s@nx64de-df6d00>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <YulcdKfhA8dPQ78s@nx64de-df6d00>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220730173636.1303357-1-masahiroy@kernel.org> <20220730173636.1303357-3-masahiroy@kernel.org>
+In-Reply-To: <20220730173636.1303357-3-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 2 Aug 2022 11:04:12 -0700
+Message-ID: <CAKwvOdkq1or=UOWJLU2DaS=MFGO9OmH7HG6=FDKS6h_saoKLAw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Revert "Kbuild, lto, workaround: Don't warn for
+ initcall_reference in modpost"
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 12:18, Grzegorz Szymaszek wrote:
-> The old rtl8188eu module, removed in commit 55dfa29b43d2 ("staging:
-> rtl8188eu: remove rtl8188eu driver from staging dir") (Linux kernel
-> v5.15-rc1), required (through a MODULE_FIRMWARE call()) the
-> rtlwifi/rtl8188eufw.bin firmware file, which the new r8188eu driver no
-> longer requires.
-> 
-> I have tested a few RTL8188EUS-based Wi-Fi cards and, while supported by
-> both drivers, they do not work when using the new one and the firmware
-> wasn't manually loaded. According to Larry Finger, the module
-> maintainer, all such cards need the firmware and the driver should
-> depend on it (see the linked mails).
-> 
-> Add a proper MODULE_FIRMWARE() call, like it was done in the old driver.
-> 
-> Thanks to Greg Kroah-Hartman and Larry Finger for quick responses to my
-> questions.
-> 
-> Link: https://answers.launchpad.net/ubuntu/+source/linux-meta-hwe-5.15/+question/702611
-> Link: https://lore.kernel.org/lkml/YukkBu3TNODO3or9@nx64de-df6d00/
-> Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
+On Sat, Jul 30, 2022 at 10:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> This reverts commit 77ab21adae509c5540956729e2d03bc1a59bc82a.
+>
+> That commit was 8 years old, and it said "This is a workaround".
+> If this is needed for GCC LTO, it should be added in a proper way.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Please don't forget to cc the author & reviewers for a patch when
+submitting a revert.
+
++ Jiri in case a patch needs to be carried in any downstream trees for
+re-application.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+
 > ---
->   drivers/staging/r8188eu/os_dep/os_intfs.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-> index 891c85b088ca..5bd3022e4b40 100644
-> --- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-> +++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-> @@ -18,6 +18,7 @@ MODULE_LICENSE("GPL");
->   MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
->   MODULE_AUTHOR("Realtek Semiconductor Corp.");
->   MODULE_VERSION(DRIVERVERSION);
-> +MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
->   
->   #define CONFIG_BR_EXT_BRNAME "br0"
->   #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
+>
+>  scripts/mod/modpost.c | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index c6a055c0291e..a8ee27496da7 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1462,9 +1462,6 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+>         from = find_elf_symbol2(elf, r->r_offset, fromsec);
+>         fromsym = sym_name(elf, from);
+>
+> -       if (strstarts(fromsym, "reference___initcall"))
+> -               return;
+> -
+>         tosec = sec_name(elf, get_secindex(elf, sym));
+>         to = find_elf_symbol(elf, r->r_addend, sym);
+>         tosym = sym_name(elf, to);
+> --
+> 2.34.1
+>
 
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
 
+-- 
 Thanks,
-
-Larry
-
+~Nick Desaulniers

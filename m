@@ -2,141 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E608E5880BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4555880C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiHBRHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S230177AbiHBRHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiHBRHB (ORCPT
+        with ESMTP id S229526AbiHBRH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:07:01 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948633340E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:06:59 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t1so22841869lft.8
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ZXWj8bAr14o0Agc06qVEnrp82B9KIUIFNSkdgF3Gohc=;
-        b=cBO7meugLJqyR+4TK+L2GvQ1jwGL7IEu5mBgrr0z7hLEJmgMGEus+W0LqYvkdEaxU7
-         gWEFucqgGrc6ngDSOxBhjuO8b1xGU12K1m+wdKSbUky1Y6ACeFyS+G+q4VSo34iVs0p/
-         ZLf8euyc/cxp8VDona9sw7igkjVYASpFKYzhJlkcdeuXBMq0tVNrdLnPOqfXB2LnJxz2
-         lXYzIZXbEqjE5EJEQ4ESz767wYzWFLAWiqRR/E8OQ45TwsYNtH0+Jget0BeZPcB339Mn
-         IKwOVtQ7Vk443URjhpJgugm6ZdwpYs8Slz59bjQF3mJ3RYMECgSo/DFnzEHVj7jPszFM
-         y/OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ZXWj8bAr14o0Agc06qVEnrp82B9KIUIFNSkdgF3Gohc=;
-        b=HTDl246Ol1cLYj/YgCMvEyf/GwVHBXrMM9Qz2nbMDup+lEeNhabFxZJaB2ATwWCzue
-         ejV5jsFIRtMSV1GJsgXnkSwquUPzorBYffl4MmZj2KWHHPUWynab/vUIf7IF0+g79CI9
-         arerdhqx6+KqlqLwWOvMOtp8kyL/fIgQD6TbOqFzODW2o6N6JP49QEJ5UXB9KvfYmbb3
-         1LK8gJvlM+jqN4KuAkBG9HMiiDaOOBOsGfH+1twq4HEi//1uH/B+cV/hVZPCoKR7FzbW
-         8sm12C66EZtoKqZp6W3ikoefD25S6nqzjh6YLmFKL23kXYfXhnTHDT2D6pFvbP4A3Ihs
-         E5fA==
-X-Gm-Message-State: AJIora+YslT69hK7Jn+n9STrcKlDBUNzvQ3uYwJ1Z81z3QwJkJRUz3v5
-        OM65s/rDfxfzuFIXjVMPvwItUxuU7upWmjSsvb45xKZgz+sFAg==
-X-Google-Smtp-Source: AGRyM1sPNLZq14qYNmP60AzGtHJUw6471TvUJfcxP5adnc8e8cgleoWQVR5+TC6UWESg14FbmxpVeNGf67+b9zKlVuM=
-X-Received: by 2002:a05:6512:10ce:b0:489:cc6b:fad with SMTP id
- k14-20020a05651210ce00b00489cc6b0fadmr8328207lfg.299.1659460017708; Tue, 02
- Aug 2022 10:06:57 -0700 (PDT)
+        Tue, 2 Aug 2022 13:07:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53733405
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659460048; x=1690996048;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zV6cKLFN2FvGEebMveN7G1Wd2cB6N+bA0EAS1zMTi4g=;
+  b=HetDYc7skPQ0ZnAS4ZoDOGiUvswU3Rif46TDeYr2unB1KkXZwYE9iv8B
+   4BwVrmDI4BB/ChnUhs5WBeZxiYkckjrVWQbZWUkj/8i6xsci7J/v7a2tP
+   LARIoQrLc9eGXjnpKRwlFVGFeBobat488aYEVMblcDf+NxALr9Hjj4b5Y
+   H7CA0pJECHs8nQDXUBI8AVzZuEZ1VXfCQlrWD1rFU1cXIE5IWg6xDhUck
+   Je2spRvDAuXIKbFxiStNf0/tp/Wq2MQuySQxM9rdmnrGfJS7wtZljBH4m
+   jA0EcRR5mR6BxBtxNdnzmiVuav/EgB4LrOQQ/18CQ60F91FGY9neLOwY7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289479740"
+X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
+   d="scan'208";a="289479740"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 10:07:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
+   d="scan'208";a="930048123"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 10:07:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIvMc-000GFJ-0j;
+        Tue, 02 Aug 2022 17:07:26 +0000
+Date:   Wed, 3 Aug 2022 01:07:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [steev:lenovo-x13s-5.19.0 73/150]
+ drivers/clk/qcom/clk-regmap-phy-mux.c:30:15: error: implicit declaration of
+ function 'FIELD_GET'
+Message-ID: <202208030144.XL7rBrWY-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com>
- <CAFTs51UAyc4Z5WUFdMXCTYR6zji6NwLeBxYsp9GQZvFdEtUm1w@mail.gmail.com> <500891137.95782.1659452479846.JavaMail.zimbra@efficios.com>
-In-Reply-To: <500891137.95782.1659452479846.JavaMail.zimbra@efficios.com>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Tue, 2 Aug 2022 10:06:45 -0700
-Message-ID: <CAPNVh5dviLMLS5APS8M+n9cHups2zvoJvcguqnO0aPO8bi4DDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/23] RSEQ node id and virtual cpu id extensions
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Oskolkov <posk@posk.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@aculab.com>,
-        carlos <carlos@redhat.com>, Chris Kennelly <ckennelly@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 8:01 AM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
+tree:   https://github.com/steev/linux lenovo-x13s-5.19.0
+head:   3f70e98ff07f044b171ef59e1bb91545e1f65818
+commit: a55a3f8acea99d052a3ce9e93ca8404fb8f4957b [73/150] clk: qcom: regmap: add PHY clock source implementation
+config: riscv-randconfig-r042-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030144.XL7rBrWY-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/a55a3f8acea99d052a3ce9e93ca8404fb8f4957b
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev lenovo-x13s-5.19.0
+        git checkout a55a3f8acea99d052a3ce9e93ca8404fb8f4957b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/
 
-[...]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >
-> > We have experimented with several approaches here. The one that we are
-> > currently using is the "flat" model: we allocate vcpu IDs ignoring numa nodes.
-> >
-> > We did try per-numa-node vcpus, but it did not show any material improvement
-> > over the "flat" model, perhaps because on our most "wide" servers the CPU
-> > topology is multi-level. Chris Kennelly may provide more details here.
->
-> I would really like to know more about Google's per-numa-node vcpus implementation.
-> I suspect you guys may have taken a different turn somewhere in the design which
-> led to these results. But having not seen that implementation, I can only guess.
->
-> I notice the following Google-specific prototype extension in tcmalloc:
->
->   // This is a prototype extension to the rseq() syscall.  Since a process may
->   // run on only a few cores at a time, we can use a dense set of "v(irtual)
->   // cpus."  This can reduce cache requirements, as we only need N caches for
->   // the cores we actually run on simultaneously, rather than a cache for every
->   // physical core.
->   union {
->     struct {
->       short numa_node_id;
->       short vcpu_id;
->     };
->     int vcpu_flat;
->   };
->
-> Can you tell me more about the way the numa_node_id and vcpu_id are allocated
-> internally, and how they are expected to be used by userspace ?
+All errors (new ones prefixed by >>):
 
-Based on a "VCPU policy" flag passed by the userspace during rseq registration
-request, our kernel would:
-- do nothing re: vcpus, i.e. behave like it currently does upstream;
-- allocate VCPUs in a "flat" manner, ignoring NUMA;
-- populate numa_node_id with the value from the function with the same name in
-  https://elixir.bootlin.com/linux/latest/source/include/linux/topology.h
-  and allocate vcpu_id within the numa node in a tight manner.
+   drivers/clk/qcom/clk-regmap-phy-mux.c: In function 'phy_mux_is_enabled':
+>> drivers/clk/qcom/clk-regmap-phy-mux.c:30:15: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+      30 |         val = FIELD_GET(PHY_MUX_MASK, val);
+         |               ^~~~~~~~~
+   drivers/clk/qcom/clk-regmap-phy-mux.c: In function 'phy_mux_enable':
+>> drivers/clk/qcom/clk-regmap-phy-mux.c:44:35: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+      44 |                                   FIELD_PREP(PHY_MUX_MASK, PHY_MUX_PHY_SRC));
+         |                                   ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Basically, if there are M threads running on node 0 and N threads
-running on node 1 at time T, there will be [0,M-1] vcpu IDs associated with
-node 0 and [0,N-1] vcpu IDs associated with node 1 at this moment
-in time. If a thread migrates across nodes, the balance would change
-accordingly.
 
-I'm not sure how exactly tcmalloc tried to use VCPUs under this policy, and
-what were the benefits expected. The simplest way would be to keep
-a freelist per node_id/vcpu_id pair (basically, per vcpu_flat in the union),
-but this would tend to increase the number of freelists due to thread
-migrations,
-so benefits should be related to memory locality, and so somewhat difficult to
-measure precisely.
+vim +/FIELD_GET +30 drivers/clk/qcom/clk-regmap-phy-mux.c
 
-Chris Kennelly may offer more details here.
+    22	
+    23	static int phy_mux_is_enabled(struct clk_hw *hw)
+    24	{
+    25		struct clk_regmap *clkr = to_clk_regmap(hw);
+    26		struct clk_regmap_phy_mux *phy_mux = to_clk_regmap_phy_mux(clkr);
+    27		unsigned int val;
+    28	
+    29		regmap_read(clkr->regmap, phy_mux->reg, &val);
+  > 30		val = FIELD_GET(PHY_MUX_MASK, val);
+    31	
+    32		WARN_ON(val != PHY_MUX_PHY_SRC && val != PHY_MUX_REF_SRC);
+    33	
+    34		return val == PHY_MUX_PHY_SRC;
+    35	}
+    36	
+    37	static int phy_mux_enable(struct clk_hw *hw)
+    38	{
+    39		struct clk_regmap *clkr = to_clk_regmap(hw);
+    40		struct clk_regmap_phy_mux *phy_mux = to_clk_regmap_phy_mux(clkr);
+    41	
+    42		return regmap_update_bits(clkr->regmap, phy_mux->reg,
+    43					  PHY_MUX_MASK,
+  > 44					  FIELD_PREP(PHY_MUX_MASK, PHY_MUX_PHY_SRC));
+    45	}
+    46	
 
-Thanks,
-Peter
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

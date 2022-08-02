@@ -2,182 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F71058762C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 06:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCC258762E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 06:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiHBEJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 00:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S232708AbiHBEMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 00:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiHBEJj (ORCPT
+        with ESMTP id S229455AbiHBEMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 00:09:39 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8611A1B7B0;
-        Mon,  1 Aug 2022 21:09:38 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i14so5096991ejg.6;
-        Mon, 01 Aug 2022 21:09:38 -0700 (PDT)
+        Tue, 2 Aug 2022 00:12:19 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B6718B06
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 21:12:18 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id i62so20169708yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 21:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=UocwHfpqhdsaKRBjXUO3oWoo5VgvByxIYhhk++TJzww=;
-        b=jx4n8eOOxofhaSZH8qAE8+C6TnYGtkoSskRxtdK6cpEuJs3B2/r/mtS+LfGdb607Z+
-         Pt706y5owNULu/vT+bzuxlMpb2iAnCL2E0Y5Wi5ngS2662xLzjr/k72ssPZBwg7ee0M/
-         zepD+iNbd8FUgpsRoAHdZUDWBWHTxN/pdEOFPX5Uha6kIcv96xO8u3cQvd4100gd9i1E
-         O8ysJtP8T++KWGFyqQ68Xvs7n5ypjil/P8MXrTBcSLTJBBoeAg7ayjvnfyNgCh3r8xV8
-         3LnE2hkBGhoIu41apN04xmyBhTNU+cphPbdgr5N+UbDCDF2MJhvMjx495VwSEh1m0AKL
-         FxUA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mB9h8G9LJF8fW8nHybI8e5Iuu0xEFlrhVdl6RtAPL58=;
+        b=D8xqF6gqVwgRmjc6T7IFge/nqYPeDWoinA/3nld8iU+Rg3OvO70iE2v1rzUIrG8MZj
+         qGhIBy760M2U1mdG2ZYlat0wTNl05qOXhSP6ELrth4M0ansXNj/qv8lRqp1J5FwCrZVv
+         TJiUTFnl3jsOxN0b9vuw3V48OlVC0QBVetP5k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UocwHfpqhdsaKRBjXUO3oWoo5VgvByxIYhhk++TJzww=;
-        b=dmgK/cuh/Jx8iy0LSFNBUkx61D/OU3Z8GHxNI+V4k+ffZzsZZtE8JRFMINFb9fzvu6
-         n17oVL/EIcduB1HYUWwQtZa320Z2OBr/CLqEhWJp1gjTVGjdD0m3Ml9Wpm06JuW1zrbx
-         KJuTpSeyMakvEgIl4boHLJXcoD8FMUuXJsi4yDK/TVBYW2AUNQSkmJueEPzX714FgAto
-         2vzw4pyAoSyln6vvJIGAAeuI2NhE1W6wR8adguNrKVtVYWAsES/K3WYCMXsIO+S+Ev3c
-         FUQy/Ix6VrmHyzmsVyYSFtJijtl5iEpAp9F7R1ttppnlkarD0qrlBfhhKqrmrIDRwyVY
-         tP5g==
-X-Gm-Message-State: AJIora+MHXkvGH5o5N9qKlP8KcfzTjmQCkx/J4VF8NKZ6O/tM0a0RpSA
-        e/TKeOTX7kbG1Jq/cfUi/NMOEtW1KdxZOF/4rb88BzAG8ZQ=
-X-Google-Smtp-Source: AGRyM1ty5sQTlF8ub0NnxUzp5syP51LYgsz8b9F8DDUIfoi9492DqzuJLw/BVfKhXCQt6hC71NiFlKdCphZTEUPiAWI=
-X-Received: by 2002:a17:907:2ccc:b0:72b:6907:fce6 with SMTP id
- hg12-20020a1709072ccc00b0072b6907fce6mr15019557ejc.115.1659413377003; Mon, 01
- Aug 2022 21:09:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mB9h8G9LJF8fW8nHybI8e5Iuu0xEFlrhVdl6RtAPL58=;
+        b=K41eiW2T+KKYWhA0CfZLdMM5wISXkCQa5Gm3QIf8hluUC4nQGANhxP4XXJQ8uagnPw
+         mJ/cHUqSnvCd8261zmstHIbrimxDQpcCTTOk/2e5YkmnxgN6wbr56sjYGzciKBZY1JPX
+         8OIFHwfh/48g6XhZgwRNWcjPP0by20LH77W+aSUPhGl/P5ZWMMdCP3o4amEamXlAx56L
+         DdSzzrtoIYHC/od2C6VBBx3MihkjvozLULVgBw9h+jgg9oE0c3cGssEXQgUJe2Hif1Jd
+         zMEyhxUoOX61h6P2SetV1LhAgr0JBpNi31UMh3hKBVnC5AxkhmK4WPSdaNZeEKLADxK/
+         Knzg==
+X-Gm-Message-State: ACgBeo2LobUJiBxw3O4QSf3ct8OqN9RI5C351H0vt9S0UmQbYVMSAdvz
+        Gl5R1HJtkaeOBRpTQtCxqMeVIhwqc9BuwRgczlj35w==
+X-Google-Smtp-Source: AA6agR4jGk7db6YnblMvl6gotI+dOcEvoOeEMq6XPSBgfWTyVIX+RKhIFBiQKVY7fmHKWFKz/7SAl7l1eDzedE16O98=
+X-Received: by 2002:a25:7cc2:0:b0:677:5a84:9f79 with SMTP id
+ x185-20020a257cc2000000b006775a849f79mr4233940ybc.518.1659413538291; Mon, 01
+ Aug 2022 21:12:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-6-haoluo@google.com>
- <CAEf4Bzbdz7=Cg-87G2tak1Mr=1wJkqr6g2d=dkHqu0YH+j2unA@mail.gmail.com> <CA+khW7jiW=oAHS-N1ADLbqB74jTwAaLqUFFvYgb4xTz9WFwtZg@mail.gmail.com>
-In-Reply-To: <CA+khW7jiW=oAHS-N1ADLbqB74jTwAaLqUFFvYgb4xTz9WFwtZg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 1 Aug 2022 21:09:25 -0700
-Message-ID: <CAEf4BzZcwN3N-8iHrHWFmunoWAVP4-snUs7kxpLLnQJpOtR+rw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 5/8] selftests/bpf: Test cgroup_iter.
-To:     Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
+References: <20220802103643.v5.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+ <c4acb34f-7bba-336f-ddfc-a9c098f2c95f@acm.org> <CAONX=-cAW5UX__xu5y7NdtHkZq-YWmh_k=iFa5witdxw3xXkYA@mail.gmail.com>
+ <d06d9625-8ef9-f385-a9c9-75c306a959ed@acm.org>
+In-Reply-To: <d06d9625-8ef9-f385-a9c9-75c306a959ed@acm.org>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Tue, 2 Aug 2022 14:12:07 +1000
+Message-ID: <CAONX=-fpMBSgMzdY9AnV3iJftv2+0UTiruMiR+Dt_dfwKEd6gA@mail.gmail.com>
+Subject: Re: [PATCH v5] ufs: core: print UFSHCD capabilities in controller's
+ sysfs node
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 3:55 PM Hao Luo <haoluo@google.com> wrote:
->
-> On Mon, Aug 1, 2022 at 2:51 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Aug 1, 2022 at 10:54 AM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
-> > > of the following structure:
-> > >
-> > >     ROOT (working cgroup)
-> > >      |
-> > >    PARENT
-> > >   /      \
-> > > CHILD1  CHILD2
-> > >
-> > > and tests the following scenarios:
-> > >
-> > >  - invalid cgroup fd.
-> > >  - pre-order walk over descendants from PARENT.
-> > >  - post-order walk over descendants from PARENT.
-> > >  - walk of ancestors from PARENT.
-> > >  - early termination.
-> > >
-> > > Acked-by: Yonghong Song <yhs@fb.com>
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > ---
-> > >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 193 ++++++++++++++++++
-> > >  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
-> > >  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++++
-> > >  3 files changed, 239 insertions(+)
-> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
-> > >
-
-[...]
-
-> > > +#define format_expected_output3(cg_id1, cg_id2, cg_id3) \
-> > > +       snprintf(expected_output, sizeof(expected_output), \
-> > > +                PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE, \
-> > > +                (cg_id1), (cg_id2), (cg_id3))
-> > > +
-> >
-> > you use format_expected_output{1,2} just once and
-> > format_expected_output3 twice. Is it worth defining macros for that?
-> >
->
-> If not, we'd see this snprintf and format all over the place. It looks
-> worse than the current one I think, prefer leave as-is.
-
-All over the place == 4 places where it matters.
-
-We are not trying to write the most beautiful code through macro
-obfuscation. The point is to write tests that are easy to follow,
-debug, understand, and potentially modify. Adding extra layers of
-macros goes against this. Instead of clearly seeing in each individual
-subtest that we expect "%llu\n%llu\n", I need to search what
-"format_expected_output3" is actually doing, then I'm wondering where
-expected_output is coming from (I scan macro input args, see nothing,
-then I conclude it must be coming from the environment; I jump to one
-of the format_expected_output3 invocation sites, see no local variable
-named "expected_output", then I look around and see global variable;
-aha, finally!) Sure it's a rather trivial thing, but this adds up.
-
-*Unnecessary* macros are bad and a hindrance. Please avoid them, if
-possible. Saving 20 characters is not a sufficient justification in my
-view.
-
->
-> > > +const char *cg_path[] = {
-> > > +       "/", "/parent", "/parent/child1", "/parent/child2"
-> > > +};
-> > > +
-
-[...]
-
-> > > +       link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
-> > > +       if (!ASSERT_ERR_PTR(link, "attach_iter"))
-> > > +               bpf_link__destroy(link);
-> >
-> > nit: you can call bpf_link__destroy() even if link is NULL or IS_ERR
-> >
->
-> Ack. Still need to ASSERT on 'link' though, so the saving is probably
-> just an indentation. Anyway, will change.
-
-Yeah, of course you need to assert. But it's nice to have
-unconditional assertion.
-
->
-> > > +}
-> > > +
-> >
-> > [...]
-> >
-
-[...]
+> Calling this the effective capabilities of the controller-device pair
+> sounds good to me. But please do not refer to hba->caps. I'd like to
+> rework hba->caps such that it only includes controller capabilities and
+> no information related to the WriteBooster. Additionally, several UFS
+> device capabilities that may be exported in the future are not
+> represented in hba->caps.
+So can you clarify where specifically do you want me to mention that?
+Should I name the directory "effective_capabilities" or the commit
+message?
+Thanks,
+--Daniil

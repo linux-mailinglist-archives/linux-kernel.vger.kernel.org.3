@@ -2,126 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04801588244
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A2058824A
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbiHBTII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S231707AbiHBTKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiHBTIG (ORCPT
+        with ESMTP id S230293AbiHBTKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:08:06 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2286DF81
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:08:05 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id w72so13242054oiw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 12:08:05 -0700 (PDT)
+        Tue, 2 Aug 2022 15:10:07 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D548120F4A;
+        Tue,  2 Aug 2022 12:10:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so14618398pjn.3;
+        Tue, 02 Aug 2022 12:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PwHROmjdSzYzm0sxl+mb0D7nS/Dpj+aOGIkG9xrIgpc=;
-        b=f7Zl01K4rflUNsIJYdTnIL/qMwNba+cHm1OwmbHUKs0Uc1E/UxPLCnG4kO+M/tZ1XG
-         cdM0lVuixLt7Vy6sC3Oy4JmK4FAVsibGAf1yztWBj9ZWY22Cnydya4BN0EVOXkqfiikM
-         CxOH+8O72Gl6rAldJA0XveG2ofNI/WENHCl8n6nGBdbVCKr/VU7tdBwJd8iNi1uxVn39
-         nYYYg5zlkfSzwL13wcXUocP8Mp/h1KjKtpwevOTvf7MIDB1/HH87w8Bge/WleyDf9ed5
-         2PCB+0Q47nMjtXQ5sf42cQmfcXzp8fd71u1/EnByY9cjijv9nNTke7pett7wqIVrO705
-         D5Bg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
+        b=NYtgEeoaghrU8qVNeAfEHo+hiWygoLHGe//I9QBLPEGWow2BDRS8mlPg039Qwlm+6O
+         rj/B+ErN+huUUT7qffmxSE5KswZ3t8EQhNEn74BB52bxZz0YeQDF/S9fuxp5OATuE/ZY
+         rSZ90x3fx02nuHv8MUAA/dc90g1twsKvnCXcDj64bD2rsOYhKlxPdjjxoJCc/Ov4/AZX
+         TyKgYKrXKmu3Z44yfagde8dmG8L7Mqemq0t9/qwyf7CGt30IclT7g9b6uaztpOfZbROU
+         p2C+2CLNTKwvlPzvGzaIeHeB69cldZ0PdSJZ27BB5fFf2+IN5YmFQFeNY43FnWmaHXpU
+         FvnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PwHROmjdSzYzm0sxl+mb0D7nS/Dpj+aOGIkG9xrIgpc=;
-        b=SiCGgCGx60M0igwtQ0kCC7PBPbLH8GR4WnFqO99V8sTMwDEHzbP79ZQR+TtOXO0jsw
-         R2Aea5YnKlj2Fpr+/d84XvY+v5RI48ZHE8UhlThpJFDJuhx2djIm1K8/n9MPZQRfcEYV
-         L3HtIEpKyawxI4wiax9YB+nYugPP9k9UTlT7WCbZFzeOAd90EmafQPohdA6IKsB8orJB
-         14igIqLveVHKXs8pvGqI64Cp/sQ7OC/JQZZG0RxUmkG6XGNsouWW0rKy3q4IFN1FW/AF
-         T4IxPeiqVNG4uuCkM0PWMaDT51OKcGHDfWra8Y9Lfw2uy8ChfdTSmen/hP5IlX+KFHcJ
-         f/Og==
-X-Gm-Message-State: ACgBeo38o7pBdHB9139j8/rHCTodGrhUzLiQcCEWvXGjHdQxEAZXRUiy
-        NcB26O5iza8ox/uSCEgxoEe/r2CcR5DQF081ceAL4PZxCF0=
-X-Google-Smtp-Source: AA6agR4m9xh2SjOXMzsI9h5tcnGbSBSvt7PbxRYPdDwV2nv8TvNJN2JhpGZUgY9peWFKAIZmgJeLe4CCMg88OH0KxJk=
-X-Received: by 2002:a05:6808:11cc:b0:32e:7fc5:3a49 with SMTP id
- p12-20020a05680811cc00b0032e7fc53a49mr359789oiv.166.1659467284951; Tue, 02
- Aug 2022 12:08:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=1Fhi/pC4xw3OPTvEKSAzkqvvM4dFeLSgYHZxK40S0/Q=;
+        b=jWlfGyBQazDBoYkgAB6ePnGTqJYbteaVoWxdX3MrDqvSkHU98g4dJLNGOGORvMC+aK
+         CFTVR0/t2/MfEZarCxvQzKCrWOsm2t5rSK2BsAlnPE/S4GI5QHHC6k8NQNHTD0mmxz9u
+         FycNLdlHkADCtpc8mmZeYe+r02sj7TFPp5SaFdKVFq63KyulAUpWD2eO6QN+9ve5DhLj
+         pBzxHlLmEQ5jg/Cxru0VVoUjugnRhr6UMHXgnRlcT8QuXR+zZg917S+Atk/cWOgJMwJZ
+         L5KkiUCa0YWTjL8E3AoeyOYAJgp09KRVWLyKQjsFmSJkdAFCX+qcNe1gCZ/zPmWQIRBS
+         Vyvg==
+X-Gm-Message-State: ACgBeo3W74ttcWunFFtilLQOe6p6Kx3O8/ijR9g0obn/L1Qt2+rlDXwQ
+        JSnpGzKYBnGHGhD7A/x46NE=
+X-Google-Smtp-Source: AA6agR6c5d/eGDZnvXii4j134GP/53rWW/DvN9lfXS8jWY5N9Vn0RcwB4+wjZULSragax6pLfvCHmQ==
+X-Received: by 2002:a17:90b:17ca:b0:1f2:df3d:593c with SMTP id me10-20020a17090b17ca00b001f2df3d593cmr921029pjb.205.1659467406115;
+        Tue, 02 Aug 2022 12:10:06 -0700 (PDT)
+Received: from balhae.roam.corp.google.com (rrcs-173-196-215-70.west.biz.rr.com. [173.196.215.70])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170902714900b0016a091eb88esm46784plm.126.2022.08.02.12.10.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 12:10:05 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Subject: [PATCH v2 1/3] perf lock: Introduce struct lock_contention
+Date:   Tue,  2 Aug 2022 12:10:02 -0700
+Message-Id: <20220802191004.347740-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 MIME-Version: 1.0
-References: <CGME20220731114605epcas1p1afff6b948f542e2062b60d49a8023f6f@epcas1p1.samsung.com>
- <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com> <20220803022549.cc12d4b82fb05974214f8b23@samsung.com>
-In-Reply-To: <20220803022549.cc12d4b82fb05974214f8b23@samsung.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Tue, 2 Aug 2022 22:07:38 +0300
-Message-ID: <CAFCwf12nGdzWUW8TZ46_wopmDGRWPLgh8hanHuPuiu6uRrqzqQ@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Jiho Chu <jiho.chu@samsung.com>
-Cc:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 8:25 PM Jiho Chu <jiho.chu@samsung.com> wrote:
->
-> On Sun, 31 Jul 2022 14:45:34 +0300
-> Oded Gabbay <oded.gabbay@gmail.com> wrote:
->
-> > Hi,
-> > Greg and I talked a couple of months ago about preparing a new accel
-> > subsystem for compute/acceleration devices that are not GPUs and I
-> > think your drivers that you are now trying to upstream fit it as well.
-> >
-> > Would you be open/interested in migrating your drivers to this new subsystem ?
-> >
-> > Because there were no outstanding candidates, I have done so far only
-> > a basic and partial implementation of the infrastructure for this
-> > subsystem, but if you are willing to join I believe I can finish it
-> > rather quickly.
-> >
-> > At start, the new subsystem will provide only a common device
-> > character (e.g. /dev/acX) so everyone will do open/close/ioctl on the
-> > same device character. Also sysfs/debugfs entries will be under that
-> > device and maybe an IOCTL to retrieve information.
-> >
-> > In the future I plan to move some of habanalabs driver's code into the
-> > subsystem itself, for common tasks such as memory management, dma
-> > memory allocation, etc.
-> >
-> > Of course, you will be able to add your own IOCTLs as you see fit.
-> > There will be a range of IOCTLs which are device-specific (similar to
-> > drm).
-> >
-> > wdyt ?
-> >
-> > Thanks,
-> > Oded
-> >
->
-> Hi, Oded.
-> Thanks for sharing your idea. And I'm really positive on the subsystem for ai acceleration devices.
->
-> Samsung NPU driver is trying to upstream now, so I wonder new subsystem can cover all of the operations.
-> I'll appreciate if you share the code when you ready, so I can figure out our driver can be migrated.
-I'm working on it.
-I'm also preparing a small demo driver so you will be able to better
-understand how to integrate a driver with this subsystem.
-I believe I will be able to post the link during the weekend.
+The lock_contention struct is to carry related fields together and to
+minimize the change when we add new config options.
 
-Oded
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-lock.c             | 23 ++++++++++++++---------
+ tools/perf/util/bpf_lock_contention.c |  9 ++++++---
+ tools/perf/util/lock-contention.h     | 17 +++++++++++------
+ 3 files changed, 31 insertions(+), 18 deletions(-)
 
->
-> Sincerely,
-> Jiho Chu
->
->
->
->
->
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index 7897a33fec1b..eef778b7d33d 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -1594,7 +1594,10 @@ static int __cmd_contention(int argc, const char **argv)
+ 		.mode  = PERF_DATA_MODE_READ,
+ 		.force = force,
+ 	};
+-	struct evlist *evlist = NULL;
++	struct lock_contention con = {
++		.target = &target,
++		.result = &lockhash_table[0],
++	};
+ 
+ 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
+ 	if (IS_ERR(session)) {
+@@ -1620,24 +1623,26 @@ static int __cmd_contention(int argc, const char **argv)
+ 		signal(SIGCHLD, sighandler);
+ 		signal(SIGTERM, sighandler);
+ 
+-		evlist = evlist__new();
+-		if (evlist == NULL) {
++		con.machine = &session->machines.host;
++
++		con.evlist = evlist__new();
++		if (con.evlist == NULL) {
+ 			err = -ENOMEM;
+ 			goto out_delete;
+ 		}
+ 
+-		err = evlist__create_maps(evlist, &target);
++		err = evlist__create_maps(con.evlist, &target);
+ 		if (err < 0)
+ 			goto out_delete;
+ 
+ 		if (argc) {
+-			err = evlist__prepare_workload(evlist, &target,
++			err = evlist__prepare_workload(con.evlist, &target,
+ 						       argv, false, NULL);
+ 			if (err < 0)
+ 				goto out_delete;
+ 		}
+ 
+-		if (lock_contention_prepare(evlist, &target) < 0) {
++		if (lock_contention_prepare(&con) < 0) {
+ 			pr_err("lock contention BPF setup failed\n");
+ 			goto out_delete;
+ 		}
+@@ -1672,13 +1677,13 @@ static int __cmd_contention(int argc, const char **argv)
+ 	if (use_bpf) {
+ 		lock_contention_start();
+ 		if (argc)
+-			evlist__start_workload(evlist);
++			evlist__start_workload(con.evlist);
+ 
+ 		/* wait for signal */
+ 		pause();
+ 
+ 		lock_contention_stop();
+-		lock_contention_read(&session->machines.host, &lockhash_table[0]);
++		lock_contention_read(&con);
+ 	} else {
+ 		err = perf_session__process_events(session);
+ 		if (err)
+@@ -1691,7 +1696,7 @@ static int __cmd_contention(int argc, const char **argv)
+ 	print_contention_result();
+ 
+ out_delete:
+-	evlist__delete(evlist);
++	evlist__delete(con.evlist);
+ 	lock_contention_finish();
+ 	perf_session__delete(session);
+ 	return err;
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index 16b7451b4b09..f5e2b4f19a72 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -27,10 +27,12 @@ struct lock_contention_data {
+ 	u32 flags;
+ };
+ 
+-int lock_contention_prepare(struct evlist *evlist, struct target *target)
++int lock_contention_prepare(struct lock_contention *con)
+ {
+ 	int i, fd;
+ 	int ncpus = 1, ntasks = 1;
++	struct evlist *evlist = con->evlist;
++	struct target *target = con->target;
+ 
+ 	skel = lock_contention_bpf__open();
+ 	if (!skel) {
+@@ -102,12 +104,13 @@ int lock_contention_stop(void)
+ 	return 0;
+ }
+ 
+-int lock_contention_read(struct machine *machine, struct hlist_head *head)
++int lock_contention_read(struct lock_contention *con)
+ {
+ 	int fd, stack;
+ 	u32 prev_key, key;
+ 	struct lock_contention_data data;
+ 	struct lock_stat *st;
++	struct machine *machine = con->machine;
+ 	u64 stack_trace[CONTENTION_STACK_DEPTH];
+ 
+ 	fd = bpf_map__fd(skel->maps.lock_stat);
+@@ -163,7 +166,7 @@ int lock_contention_read(struct machine *machine, struct hlist_head *head)
+ 			return -1;
+ 		}
+ 
+-		hlist_add_head(&st->hash_entry, head);
++		hlist_add_head(&st->hash_entry, con->result);
+ 		prev_key = key;
+ 	}
+ 
+diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
+index 092c84441f9f..a0df5308cca4 100644
+--- a/tools/perf/util/lock-contention.h
++++ b/tools/perf/util/lock-contention.h
+@@ -107,18 +107,24 @@ struct evlist;
+ struct machine;
+ struct target;
+ 
++struct lock_contention {
++	struct evlist *evlist;
++	struct target *target;
++	struct machine *machine;
++	struct hlist_head *result;
++};
++
+ #ifdef HAVE_BPF_SKEL
+ 
+-int lock_contention_prepare(struct evlist *evlist, struct target *target);
++int lock_contention_prepare(struct lock_contention *con);
+ int lock_contention_start(void);
+ int lock_contention_stop(void);
+-int lock_contention_read(struct machine *machine, struct hlist_head *head);
++int lock_contention_read(struct lock_contention *con);
+ int lock_contention_finish(void);
+ 
+ #else  /* !HAVE_BPF_SKEL */
+ 
+-static inline int lock_contention_prepare(struct evlist *evlist __maybe_unused,
+-					  struct target *target __maybe_unused)
++static inline int lock_contention_prepare(struct lock_contention *con __maybe_unused)
+ {
+ 	return 0;
+ }
+@@ -127,8 +133,7 @@ static inline int lock_contention_start(void) { return 0; }
+ static inline int lock_contention_stop(void) { return 0; }
+ static inline int lock_contention_finish(void) { return 0; }
+ 
+-static inline int lock_contention_read(struct machine *machine __maybe_unused,
+-				       struct hlist_head *head __maybe_unused)
++static inline int lock_contention_read(struct lock_contention *con __maybe_unused)
+ {
+ 	return 0;
+ }
+-- 
+2.37.1.455.g008518b4e5-goog
+

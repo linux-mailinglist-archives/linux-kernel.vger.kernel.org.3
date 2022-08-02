@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BD0587971
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D8D587975
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbiHBI6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S233640AbiHBI64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiHBI6M (ORCPT
+        with ESMTP id S231571AbiHBI6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:58:12 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B77EE81
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:58:11 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id h12so14913169ljg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:58:10 -0700 (PDT)
+        Tue, 2 Aug 2022 04:58:54 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477524D83F;
+        Tue,  2 Aug 2022 01:58:52 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id z19so12884153plb.1;
+        Tue, 02 Aug 2022 01:58:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=npQP1PTeFOBz/aH/qk/2cJgnMA7yHhXLpALhGeue+vw=;
-        b=wrhadkP9rdiZt1XXIHzWWCrjD0rl5hQMS+ZHqpbiG8Bt2LLowIhnWcU7ppEYLP+n5h
-         feQRYMFdysj8IjhdN8uy//PHWuS2s0gAwNG2Tl4bJRy/VJ9+pKLcCEgofn1G/zzwOdbc
-         Bklq4hdGFHGafaOmpt8fbbRFgY2Swqfn0djw4xHaNIQUxdGw7fQt/cg6ATRE6IJ64N3u
-         SJgUmnLAuwZUEPt3YYr+G8Cs5Yl1YdtfUahwTnkJ/1KXe+/za3ugN2PeP7+3or95tLx+
-         zqcqdUUdODthmLA5lyqRvz90oSbF2qfLtF5jWkgC45Uoo1xD+XGM0+Lw/wJ93t2KtsXd
-         AgzQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=nWqh6KG5a1Ft7mZyLnhDTkUYadJU0/RKzxkHOlg+eQk=;
+        b=dqtssUq3NP8S6rOLiBW510fa535GnJ1INIodTRrzqZ8N5ar+LkDdXfLF5juIgDLCra
+         DwLb0QLd4EMhapQbXv6qPwaDTt3iElMs33rthDr5DWVbjtTA2Z9zpQNfPDyrzZFN+rrs
+         Hpw02es/Zivahi/5Lwfb/CBjncGhK8sykPeY70edIEXWkDAyc2KEVAa5akzBA8ImDoCe
+         eDEAzAcGhhebYYdj1EG+CVuFihRxzeCaCaDnEARWjUeS8pwcYdY5/bak0kewnwY7TYyW
+         U7clUrt+dEt2VDWStq7AX7F1CmC5lVZhErU8Z55MwAxUKdroclCSU8pJZYRIoXC3x3l0
+         khgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=npQP1PTeFOBz/aH/qk/2cJgnMA7yHhXLpALhGeue+vw=;
-        b=SHhKm7QWHQcCCgkU3ePrXO3nW1zLPMoXXMG+bTIjmkKZzqWRAglB51MBCuKjVgwRbt
-         dYSnAU1R3fJTzW6XJ60K80tq8yuCSea+7FTRBeWDcHX2mrzse2pbIw0ZAPnjzJsiptwO
-         lnhQmftz4QDYqMWSFYYezRh05yOpIe9AiydSjpjXHFLRsrDbjxL0lNUfakMGcrrX/Sy6
-         lULWfBTjGej54OXIBxFdm6d2K5Guamz42TdUn9y6Tt5Pi+UPyeWTuUy+O2wKtHjU3hTO
-         zkroS6lMr0hb3JDqss7PUI1v224fHVideZ2B3G5jZa9TZbtAywH6nVuSREdYXwEaegiT
-         TvEw==
-X-Gm-Message-State: AJIora9L75L+6zOg/mSRd0VbIZIzLUIlhTFuFLr5EHJmD0h5jnl6WhS8
-        Nr9/TFGODlikxczmsehmLrzeibScc3VkIOhs
-X-Google-Smtp-Source: AGRyM1s6TASgKeoeefB3kojxmqJkb8Ddf94gvx/txy9BStGigDLYfFEvUo1PUBytil1oYOafbF8+hQ==
-X-Received: by 2002:a05:651c:179f:b0:25d:ba24:2e16 with SMTP id bn31-20020a05651c179f00b0025dba242e16mr5887088ljb.422.1659430689430;
-        Tue, 02 Aug 2022 01:58:09 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id bf43-20020a05651225ab00b0047fae90bfb4sm2033495lfb.56.2022.08.02.01.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:58:08 -0700 (PDT)
-Message-ID: <b265c106-373f-3850-2933-9418c2b515f0@linaro.org>
-Date:   Tue, 2 Aug 2022 10:58:06 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=nWqh6KG5a1Ft7mZyLnhDTkUYadJU0/RKzxkHOlg+eQk=;
+        b=kJY00mSeFMDF1vgg/CBgwyvRJNfIEm/GrO11zHyN2NVNTl3l18kylIOcTGVbHl9l2E
+         WJhyZzWFYUUzAlX6YEqmzP5xSCdPhxj6hT0Gn0LMqtDKZKbeJecxgUq5bsMSg11IKYOv
+         GnNAcNRQCej/35BvIy0k7k8SNIOvBCJwW1i+YrYb6XzdHjfW76iHNzk+pGLX65FIQWCy
+         bDpbb79Qxgyg1FSicI0+5XaNEk9Vw/GhuPa+szXPlwjrl8HDlqWsUTGyk3DAKxp//bxz
+         DGi5V9Vb/i0xCq9QP4stRCjUjgZQZvyyCvyYmGbGh+ZVazHW6HDJwrK7VKeQphzkxlat
+         GkYw==
+X-Gm-Message-State: ACgBeo2IRRE+PG1zlEbWlVOMQ14DTSLPOaMyecwg3XGaE3LyfUALUFuF
+        4F07Pu+4Xf+D8OhPbLJ9sw0=
+X-Google-Smtp-Source: AA6agR6P8z2E8EFi66AxmUjTPwBg/ty9OUo6EdUPvZB6uqRlwYESXq8ZiAlIRhTsegZxVs3eXQwJ+A==
+X-Received: by 2002:a17:90a:e2cc:b0:1f3:1151:e0ff with SMTP id fr12-20020a17090ae2cc00b001f31151e0ffmr23828121pjb.50.1659430731586;
+        Tue, 02 Aug 2022 01:58:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l9-20020a170903244900b0016dc307aef4sm11277071pls.36.2022.08.02.01.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 01:58:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 2 Aug 2022 01:58:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Gene Chen <gene.chen.richtek@gmail.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        gene_chen@richtek.com, cy_huang@richtek.com
+Subject: Re: [PATCH v3 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
+Message-ID: <20220802085848.GA3096405@roeck-us.net>
+References: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
+ <20220801101447.86207-5-gene.chen.richtek@gmail.com>
+ <YujeA2pHG2WnZjaF@kuha.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 06/20] dt-bindings: power: mediatek: Add bindings for
- MediaTek SCPSYS
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220729063208.16799-1-tinghan.shen@mediatek.com>
- <20220729063208.16799-7-tinghan.shen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220729063208.16799-7-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YujeA2pHG2WnZjaF@kuha.fi.intel.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/07/2022 08:31, Tinghan Shen wrote:
-> The System Control Processor System (SCPSYS) has several power
-> management related tasks in the system. Add the bindings for it.
+On Tue, Aug 02, 2022 at 11:19:15AM +0300, Heikki Krogerus wrote:
+> Hi Gene,
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> On Mon, Aug 01, 2022 at 06:14:44PM +0800, Gene Chen wrote:
+> > From: Gene Chen <gene_chen@richtek.com>
+> > 
+> > Add initial phy setting about phy dicard retry,
+> > rx filter deglitech time and BMC-encoded wait time
+> 
+> I'm sorry, but what does "deglitech" mean? Is it just a typo?
+> 
 
-Thank you for your patch. There is something to discuss/improve.
+deglitch ?
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/power/mt8195-power.h>
-> +
-> +    syscon@10006000 {
-> +      compatible = "mediatek,mt8195-scpsys", "syscon", "simple-mfd";
-> +      reg = <0x10006000 0x100>;
-> +
-> +      spm: power-controller {
-> +        compatible = "mediatek,mt8195-power-controller";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        #power-domain-cells = <1>;
-> +
-> +        /* sample of power domain nodes */
-> +        power-domain@MT8195_POWER_DOMAIN_PCIE_PHY {
-> +                reg = <MT8195_POWER_DOMAIN_PCIE_PHY>;
-
-Wrong indentation.
-
-Best regards,
-Krzysztof
+> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > ---
+> >  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
+> >  1 file changed, 14 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > index df7bfe299987..33d8ea95b7c1 100644
+> > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > @@ -20,6 +20,9 @@
+> >  #define RT1711H_VID		0x29CF
+> >  #define RT1711H_PID		0x1711
+> >  
+> > +#define RT1711H_PHYCTRL1	0x80
+> > +#define RT1711H_PHYCTRL2	0x81
+> > +
+> >  #define RT1711H_RTCTRL8		0x9B
+> >  
+> >  /* Autoidle timeout = (tout * 2 + 1) * 6.4ms */
+> > @@ -107,8 +110,18 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+> >  		return ret;
+> >  
+> >  	/* dcSRC.DRP : 33% */
+> > -	return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> > +	ret = rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	/* Enable phy discard retry, retry count 7, rx filter deglitech 100 us */
+> > +	ret = rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
+> > +	if (ret < 0)
+> > +		return ret;
+> >  
+> > +	/* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us */
+> > +	/* wait time : (val * .4167) us */
+> > +	return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
+> >  }
+> >  
+> >  static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata,
+> > -- 
+> > 2.25.1
+> 
+> thanks,
+> 
+> -- 
+> heikki

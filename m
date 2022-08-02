@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A1F5874AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC495874B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234719AbiHBAEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S235302AbiHBAFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 20:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235172AbiHBAEY (ORCPT
+        with ESMTP id S235433AbiHBAFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:04:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC4DE47B9C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659398661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U6SzF5bzrdmxIOn5tTpulDRO8riGmWkL+mC1UkjRs+s=;
-        b=Yt8B7K+fyeV/BhczjHZyTPri3ixicpIHFSYJCDbHEmXiVo4OJSPhOE1ix0P+8RVKlnVBSX
-        3HnejyMbge2WD4DieEVi+LNE6aiNSungcI25NL7BoCDLw4pmu026c1tg8NH2n5KSqGjK4U
-        xk7X1nERWAJ30X3wW4uR+0OxygU0qrk=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-9L4Vq8-0MFGdO92WQauNyQ-1; Mon, 01 Aug 2022 20:04:20 -0400
-X-MC-Unique: 9L4Vq8-0MFGdO92WQauNyQ-1
-Received: by mail-ed1-f69.google.com with SMTP id y16-20020a056402359000b0043db5186943so2161199edc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:04:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=U6SzF5bzrdmxIOn5tTpulDRO8riGmWkL+mC1UkjRs+s=;
-        b=3tz7lc6hX3NeLyS/lz2EfX5CINdNFmsakY3Z/ZGUgtHRLRs5eYh9fWiaTxEnMKtswC
-         Go/iJkF8u5Bmy7mVyoJ0H62GwbiIvu/UH/3j+sbc6eFeisSC7cAkCXJL3Fu7jUYlDplL
-         +QnZxHVowV0G2GXCj+YtGrgKVg4/y8yj5vmOjy+IF1dsV0RtP7auZHAmGO3Dnl1v9Qig
-         hEb4BBcTM9DKPKuiEXivujrHf67fIbaHjd1PqLwmedvexR19swGo7W+1FuRwLkUhc91t
-         A6Q4EovlV0zCw2sXWO+dMwttbi/Bu/9KynDsxbHfRMh+WSEwfXwHqxVv6xiahyDUlOh0
-         DzvA==
-X-Gm-Message-State: ACgBeo0nDEjyctaeBkNI0/gjL//QZjfwElicGMZZoOFX8ZhZL5CYjySQ
-        UOr49Mn4et6TO0npHlHLEXQJwPrzM1Td4l68Nd+P6aXJLG8pOKG1DHF9dIEWkXfTHPdQjUnDHT4
-        DpyGhY5A/53FgHF8c+k6BZgl7
-X-Received: by 2002:a17:907:3e20:b0:730:7528:d7d7 with SMTP id hp32-20020a1709073e2000b007307528d7d7mr6521268ejc.136.1659398659622;
-        Mon, 01 Aug 2022 17:04:19 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6thFS7LA8ACR06UD7XqVrl7c5feAQorB6NJrtwmpPXzDw1vuirxz8o3tTHC8XQS8w9dnrsLg==
-X-Received: by 2002:a17:907:3e20:b0:730:7528:d7d7 with SMTP id hp32-20020a1709073e2000b007307528d7d7mr6521253ejc.136.1659398659502;
-        Mon, 01 Aug 2022 17:04:19 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056402036400b0043cbdb16fbbsm7461686edw.24.2022.08.01.17.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 17:04:17 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
-        airlied@linux.ie, tzimmermann@suse.de, mripard@kernel.org,
-        sam@ravnborg.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v7 5/5] drm/todo: remove task to rename CMA helpers
-Date:   Tue,  2 Aug 2022 02:04:05 +0200
-Message-Id: <20220802000405.949236-6-dakr@redhat.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220802000405.949236-1-dakr@redhat.com>
-References: <20220802000405.949236-1-dakr@redhat.com>
+        Mon, 1 Aug 2022 20:05:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE96632A;
+        Mon,  1 Aug 2022 17:05:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659398744; x=1690934744;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=rWuQPCu40e7gDnk51I9xaScsexta3PguED9KE//tWpI=;
+  b=fDJLHrptnYkvZNmDOlek/jf19QzA4LIV+r/mYZUhAuHqYiUnlfJIRf3b
+   ZY93agzveLCkHA4goNk7KHdv2QAahCzlC+IREhvuZ1XXkYUGtDbbENytz
+   XY8I31WmFT4XRZSpTirnuCsfoQ9rrDTsNaYh32sxzXHgqczueU+LWkQWl
+   /AcgyC8t5lgTpKpjm4hZIaU4aKNEISwA6OtXQJRVx18CevC1bzzDRJE9/
+   VdoJQF1jp0LL0+McNSYBSr7Apg0Y+F9I0sZk3iUjruFpx1DDNKHbC9us3
+   IUIVrgiacXoRTuiiyReCH9QLhwi6Bvg42F/kr3jQEFZ+GBA0Lrun3qCCk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269660282"
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="269660282"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 17:05:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="635091573"
+Received: from vgutierr-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.22.230])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 17:05:42 -0700
+Message-ID: <4fd3cea874b69f1c8bbcaf19538c7fdcb9c22aab.camel@intel.com>
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Fully re-evaluate MMIO caching when
+ SPTE masks change
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Date:   Tue, 02 Aug 2022 12:05:39 +1200
+In-Reply-To: <YuhfuQbHy4P9EZcw@google.com>
+References: <20220728221759.3492539-1-seanjc@google.com>
+         <20220728221759.3492539-3-seanjc@google.com>
+         <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
+         <YuP3zGmpiALuXfW+@google.com>
+         <f313c41ed50e187ae5de87b32325c6cd4cc17c79.camel@intel.com>
+         <YufgCR9CpeoVWKF7@google.com>
+         <244f619a4e7a1c7079830d12379872a111da418d.camel@intel.com>
+         <YuhfuQbHy4P9EZcw@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,41 +68,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both, GEM and FB, CMA helpers were renamed to "GEM DMA" and "FB DMA",
-hence the task can be removed.
+On Mon, 2022-08-01 at 23:20 +0000, Sean Christopherson wrote:
+> On Tue, Aug 02, 2022, Kai Huang wrote:
+> > On Mon, 2022-08-01 at 14:15 +0000, Sean Christopherson wrote:
+> > > Another thing to note is that only the value needs to be per-VM, the =
+mask can be
+> > > KVM-wide, i.e. "mask =3D SUPPRESS_VE | RWX" will work for TDX and non=
+-TDX VMs when
+> > > EPT is enabled.
+> >=20
+> > Yeah, but is more like VMX and TDX both *happen* to have the same mask?=
+=20
+> > Theoretically,  VMX only need RWX to trigger EPT misconfiguration but d=
+oesn't
+> > need SUPPRESS_VE.
+>=20
+> Right, SUPPRESS_VE isn't strictly necessary, but KVM already deliberately=
+ avoids
+> bit 63 because it has meaning, e.g. SUPPRESS_VE for EPT and NX for PAE an=
+d 64-bit
+> paging. =20
+>=20
+> > I don't see making mask/value both per-vm is a big issue?
+>=20
+> Yes and no.
+>=20
+> No, in the sense that it's not a big issue in terms of code. =20
+>=20
+> Yes, because of the connotations of having a per-VM mask.  While having S=
+UPPRESS_VE
+> in the mask for non-TDX EPT isn't strictly necessary, it's also not stric=
+tly necessary
+> to _not_ have it in the mask. =C2=A0
+>=20
 
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- Documentation/gpu/todo.rst | 13 -------------
- 1 file changed, 13 deletions(-)
+I think the 'mask' itself is ambiguous, i.e. it doesn't say in what circums=
+tance
+we should include one bit to the mask.  My understanding is any bit in the
+'mask' should at least be related to the 'value' that can enable MMIO cachi=
+ng.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index de226ccc2c54..7634c27ac562 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -331,19 +331,6 @@ converted, except for struct drm_driver.gem_prime_mmap.
- 
- Level: Intermediate
- 
--Rename CMA helpers to DMA helpers
-----------------------------------
--
--CMA (standing for contiguous memory allocator) is really a bit an accident of
--what these were used for first, a much better name would be DMA helpers. In the
--text these should even be called coherent DMA memory helpers (so maybe CDM, but
--no one knows what that means) since underneath they just use dma_alloc_coherent.
--
--Contact: Laurent Pinchart, Daniel Vetter
--
--Level: Intermediate (mostly because it is a huge tasks without good partial
--milestones, not technically itself that challenging)
--
- connector register/unregister fixes
- -----------------------------------
- 
--- 
-2.37.1
+So if SUPPRESS_VE bit is not related to non-TDX EPT (as we want EPT
+misconfiguration, but not EPT violation), I don't see why we need to includ=
+e it
+to the  'mask'.
+
+> In other words, having a per-VM mask incorrectly
+> implies that TDX _must_ have a different mask.
+
+I interpret as TDX _can_, but not _must_.=20
+
+>=20
+> It's also one more piece of information that developers have to track dow=
+n and
+> account for, i.e. one more thing we can screw up.
+>=20
+> The other aspect of MMIO SPTEs are that the mask bits must not overlap th=
+e generation
+> bits or shadow-present bit, and changing any of those bits requires caref=
+ul
+> consideration, i.e. defining the set of _allowed_ mask bits on a per-VM b=
+asis would
+> incur significant complexity without providing meaningful benefit. =C2=A0
+>=20
+
+Agreed on this.
+
+But we are not checking any of those in kvm_mmu_set_mmio_spte_mask(), right=
+? :)
+
+Also Isaku's patch extends kvm_mmu_set_mmio_spte_mask() to take 'kvm' or 'v=
+cpu'
+as parameter so it's easy to check there -- not 100% sure about other place=
+s,
+though.
+
+> As a result,
+> it's highly unlikely that we'll ever want to opportunsitically "reclaim" =
+bit 63
+> for MMIO SPTEs, so there's practically zero cost if it's included in the =
+mask for
+> non-TDX EPT.
+
+Sorry I don't understand this.  If we will never "reclaim" bit 63 for MMIO =
+SPTEs
+(for non-TDX EPT), then why bother including it to the mask?
+
+--=20
+Thanks,
+-Kai
+
 

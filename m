@@ -2,53 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F48587E49
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93E8587E4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbiHBOmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S236876AbiHBOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiHBOmU (ORCPT
+        with ESMTP id S233153AbiHBOoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:42:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65463A467;
-        Tue,  2 Aug 2022 07:42:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22D35B8199C;
-        Tue,  2 Aug 2022 14:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B24C9C43140;
-        Tue,  2 Aug 2022 14:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659451336;
-        bh=6B1CWeT95NQ2giPvjw5QAffoy9TyqeOJL6uU6Ph4Ejw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=EC6PsSm6Y9tNBgdZXif/HIuGdiuW9ALjxm0q0U3Nzck7rCdyEbmZlTJv5QZWjg9Tn
-         etK1A/vhTnMOWBNGe/D+WONr88h3GnBzagHsMDNZXFpXunDILQFC+i2DVWmmJWFCCC
-         sQ4Qby3t6W/VMt3/NDeejgCa6DuDCofeLCKhXqTs0vhd1aMxGXVlbWJ6kYoBB3jU2z
-         vLaDdXLCs5lSfUU55oLvbNOPokwtcTIrH1Ni1Mcsm5NOhOvpOmG24/N68cs40eenZt
-         1+H3Fn0yvLktMimoA+LiCw9FubJItKHc/XE0iaEHObb/ZVS9o3zryI+NQa9Z7MhxBx
-         CzSI3MInL8l0g==
-Message-ID: <c05f4fc668fa97e737758ab03030d7170c0edbd9.camel@kernel.org>
-Subject: Re: [RFC PATCH 0/3] Rename "cifs" module to "smbfs"
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Enzo Matsumiya <ematsumiya@suse.de>, linux-cifs@vger.kernel.org
-Cc:     smfrench@gmail.com, pc@cjr.nz, ronniesahlberg@gmail.com,
-        nspmangalore@gmail.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, tom@talpey.com,
-        samba-technical@lists.samba.org, pshilovsky@samba.org
-Date:   Tue, 02 Aug 2022 10:42:14 -0400
-In-Reply-To: <20220801190933.27197-1-ematsumiya@suse.de>
-References: <20220801190933.27197-1-ematsumiya@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Tue, 2 Aug 2022 10:44:08 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B334EA474;
+        Tue,  2 Aug 2022 07:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659451447; x=1690987447;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=0HsczQYtJm1i3slGdvS7RQjwctCL5Y7nU/w+74oz0VQ=;
+  b=NtJqa5+c4hyQxkCkFvns1YHHb270xsUJvX0ROjaKRzAVScegUpSvQldK
+   jb/nRZHfs1DoSRQMO+4TejkEgS6X8SCEQ837sOHU9+dubrR67Jms55P7K
+   10AI3sbL083OCrc7aldQgwRR14WG47efXkSKIurHieVaRKm1dtLmEp0/S
+   s=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 02 Aug 2022 07:44:07 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 07:44:06 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 2 Aug 2022 07:44:06 -0700
+Received: from [10.253.74.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 2 Aug 2022
+ 07:43:58 -0700
+Message-ID: <20260db2-8c7e-e2b6-2385-74f433e4b55e@quicinc.com>
+Date:   Tue, 2 Aug 2022 22:43:39 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v12 0/9] Coresight: Add support for TPDM and TPDA
+Content-Language: en-US
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220710021032.27455-1-quic_jinlmao@quicinc.com>
+ <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
+In-Reply-To: <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,227 +83,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-01 at 16:09 -0300, Enzo Matsumiya wrote:
-> Hi,
->=20
-> As part of the ongoing effort to remove the "cifs" nomenclature from the
-> Linux SMB client, I'm proposing the rename of the module to "smbfs".
->=20
-> As it's widely known, CIFS is associated to SMB1.0, which, in turn, is
-> associated with the security issues it presented in the past. Using
-> "SMBFS" makes clear what's the protocol in use for outsiders, but also
-> unties it from any particular protocol version. It also fits in the
-> already existing "fs/smbfs_common" and "fs/ksmbd" naming scheme.
->=20
-> This short patch series only changes directory names and includes/ifdefs =
-in
-> headers and source code, and updates docs to reflect the rename. Other
-> than that, no source code/functionality is modified (WIP though).
->=20
-> Patch 1/3: effectively changes the module name to "smbfs" and create a
-> 	   "cifs" module alias to maintain compatibility (a warning
-> 	   should be added to indicate the complete removal/isolation of
-> 	   CIFS/SMB1.0 code).
-> Patch 2/3: rename the source-code directory to align with the new module
-> 	   name
-> Patch 3/3: update documentation references to "fs/cifs" or "cifs.ko" or
-> 	   "cifs module" to use the new name
->=20
-> Enzo Matsumiya (3):
->   cifs: change module name to "smbfs.ko"
->   smbfs: rename directory "fs/cifs" -> "fs/smbfs"
->   smbfs: update doc references
->=20
->  Documentation/admin-guide/index.rst           |   2 +-
->  .../admin-guide/{cifs =3D> smbfs}/authors.rst   |   0
->  .../admin-guide/{cifs =3D> smbfs}/changes.rst   |   4 +-
->  .../admin-guide/{cifs =3D> smbfs}/index.rst     |   0
->  .../{cifs =3D> smbfs}/introduction.rst          |   0
->  .../admin-guide/{cifs =3D> smbfs}/todo.rst      |  12 +-
->  .../admin-guide/{cifs =3D> smbfs}/usage.rst     | 168 +++++++++---------
->  .../{cifs =3D> smbfs}/winucase_convert.pl       |   0
->  Documentation/filesystems/index.rst           |   2 +-
->  .../filesystems/{cifs =3D> smbfs}/cifsroot.rst  |  14 +-
->  .../filesystems/{cifs =3D> smbfs}/index.rst     |   0
->  .../filesystems/{cifs =3D> smbfs}/ksmbd.rst     |   2 +-
->  Documentation/networking/dns_resolver.rst     |   2 +-
->  .../translations/zh_CN/admin-guide/index.rst  |   2 +-
->  .../translations/zh_TW/admin-guide/index.rst  |   2 +-
->  fs/Kconfig                                    |   6 +-
->  fs/Makefile                                   |   2 +-
->  fs/cifs/Makefile                              |  34 ----
->  fs/{cifs =3D> smbfs}/Kconfig                    | 108 +++++------
->  fs/smbfs/Makefile                             |  34 ++++
->  fs/{cifs =3D> smbfs}/asn1.c                     |   0
->  fs/{cifs =3D> smbfs}/cifs_debug.c               |  72 ++++----
->  fs/{cifs =3D> smbfs}/cifs_debug.h               |   4 +-
->  fs/{cifs =3D> smbfs}/cifs_dfs_ref.c             |   2 +-
->  fs/{cifs =3D> smbfs}/cifs_fs_sb.h               |   0
->  fs/{cifs =3D> smbfs}/cifs_ioctl.h               |   0
->  fs/{cifs =3D> smbfs}/cifs_spnego.c              |   4 +-
->  fs/{cifs =3D> smbfs}/cifs_spnego.h              |   0
->  .../cifs_spnego_negtokeninit.asn1             |   0
->  fs/{cifs =3D> smbfs}/cifs_swn.c                 |   0
->  fs/{cifs =3D> smbfs}/cifs_swn.h                 |   4 +-
->  fs/{cifs =3D> smbfs}/cifs_unicode.c             |   0
->  fs/{cifs =3D> smbfs}/cifs_unicode.h             |   0
->  fs/{cifs =3D> smbfs}/cifs_uniupr.h              |   0
->  fs/{cifs =3D> smbfs}/cifsacl.c                  |   6 +-
->  fs/{cifs =3D> smbfs}/cifsacl.h                  |   0
->  fs/{cifs =3D> smbfs}/cifsencrypt.c              |   0
->  fs/{cifs =3D> smbfs}/cifsglob.h                 |  26 +--
->  fs/{cifs =3D> smbfs}/cifspdu.h                  |   6 +-
->  fs/{cifs =3D> smbfs}/cifsproto.h                |  10 +-
->  fs/{cifs =3D> smbfs}/cifsroot.c                 |   0
->  fs/{cifs =3D> smbfs}/cifssmb.c                  |  14 +-
->  fs/{cifs =3D> smbfs}/connect.c                  |  36 ++--
->  fs/{cifs/cifsfs.c =3D> smbfs/core.c}            |  49 ++---
->  fs/{cifs =3D> smbfs}/dfs_cache.c                |   2 +-
->  fs/{cifs =3D> smbfs}/dfs_cache.h                |   0
->  fs/{cifs =3D> smbfs}/dir.c                      |   2 +-
->  fs/{cifs =3D> smbfs}/dns_resolve.c              |   0
->  fs/{cifs =3D> smbfs}/dns_resolve.h              |   0
->  fs/{cifs =3D> smbfs}/export.c                   |   8 +-
->  fs/{cifs =3D> smbfs}/file.c                     |  16 +-
->  fs/{cifs =3D> smbfs}/fs_context.c               |  20 +--
->  fs/{cifs =3D> smbfs}/fs_context.h               |   0
->  fs/{cifs =3D> smbfs}/fscache.c                  |   0
->  fs/{cifs =3D> smbfs}/fscache.h                  |   6 +-
->  fs/{cifs =3D> smbfs}/inode.c                    |  10 +-
->  fs/{cifs =3D> smbfs}/ioctl.c                    |   6 +-
->  fs/{cifs =3D> smbfs}/link.c                     |   2 +-
->  fs/{cifs =3D> smbfs}/misc.c                     |  14 +-
->  fs/{cifs =3D> smbfs}/netlink.c                  |   0
->  fs/{cifs =3D> smbfs}/netlink.h                  |   0
->  fs/{cifs =3D> smbfs}/netmisc.c                  |   2 +-
->  fs/{cifs =3D> smbfs}/nterr.c                    |   0
->  fs/{cifs =3D> smbfs}/nterr.h                    |   0
->  fs/{cifs =3D> smbfs}/ntlmssp.h                  |   2 +-
->  fs/{cifs =3D> smbfs}/readdir.c                  |   4 +-
->  fs/{cifs =3D> smbfs}/rfc1002pdu.h               |   0
->  fs/{cifs =3D> smbfs}/sess.c                     |  10 +-
->  fs/{cifs =3D> smbfs}/smb1ops.c                  |   4 +-
->  fs/{cifs =3D> smbfs}/smb2file.c                 |   2 +-
->  fs/{cifs =3D> smbfs}/smb2glob.h                 |   0
->  fs/{cifs =3D> smbfs}/smb2inode.c                |   2 +-
->  fs/{cifs =3D> smbfs}/smb2maperror.c             |   0
->  fs/{cifs =3D> smbfs}/smb2misc.c                 |   0
->  fs/{cifs =3D> smbfs}/smb2ops.c                  |  32 ++--
->  fs/{cifs =3D> smbfs}/smb2pdu.c                  |  22 +--
->  fs/{cifs =3D> smbfs}/smb2pdu.h                  |   0
->  fs/{cifs =3D> smbfs}/smb2proto.h                |   0
->  fs/{cifs =3D> smbfs}/smb2status.h               |   0
->  fs/{cifs =3D> smbfs}/smb2transport.c            |   2 +-
->  fs/{cifs =3D> smbfs}/smbdirect.c                |   0
->  fs/{cifs =3D> smbfs}/smbdirect.h                |   2 +-
->  fs/{cifs =3D> smbfs}/smbencrypt.c               |   0
->  fs/{cifs =3D> smbfs}/smberr.h                   |   0
->  fs/{cifs/cifsfs.h =3D> smbfs/smbfs.h}           |  12 +-
->  fs/{cifs =3D> smbfs}/trace.c                    |   0
->  fs/{cifs =3D> smbfs}/trace.h                    |   0
->  fs/{cifs =3D> smbfs}/transport.c                |   4 +-
->  fs/{cifs =3D> smbfs}/unc.c                      |   0
->  fs/{cifs =3D> smbfs}/winucase.c                 |   0
->  fs/{cifs =3D> smbfs}/xattr.c                    |  18 +-
->  91 files changed, 414 insertions(+), 417 deletions(-)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/authors.rst (100%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/changes.rst (73%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/index.rst (100%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/introduction.rst (100=
-%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/todo.rst (95%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/usage.rst (87%)
->  rename Documentation/admin-guide/{cifs =3D> smbfs}/winucase_convert.pl (=
-100%)
->  rename Documentation/filesystems/{cifs =3D> smbfs}/cifsroot.rst (85%)
->  rename Documentation/filesystems/{cifs =3D> smbfs}/index.rst (100%)
->  rename Documentation/filesystems/{cifs =3D> smbfs}/ksmbd.rst (99%)
->  delete mode 100644 fs/cifs/Makefile
->  rename fs/{cifs =3D> smbfs}/Kconfig (72%)
->  create mode 100644 fs/smbfs/Makefile
->  rename fs/{cifs =3D> smbfs}/asn1.c (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_debug.c (96%)
->  rename fs/{cifs =3D> smbfs}/cifs_debug.h (98%)
->  rename fs/{cifs =3D> smbfs}/cifs_dfs_ref.c (99%)
->  rename fs/{cifs =3D> smbfs}/cifs_fs_sb.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_ioctl.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_spnego.c (98%)
->  rename fs/{cifs =3D> smbfs}/cifs_spnego.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_spnego_negtokeninit.asn1 (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_swn.c (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_swn.h (95%)
->  rename fs/{cifs =3D> smbfs}/cifs_unicode.c (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_unicode.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifs_uniupr.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifsacl.c (99%)
->  rename fs/{cifs =3D> smbfs}/cifsacl.h (100%)
->  rename fs/{cifs =3D> smbfs}/cifsencrypt.c (100%)
->  rename fs/{cifs =3D> smbfs}/cifsglob.h (99%)
->  rename fs/{cifs =3D> smbfs}/cifspdu.h (99%)
->  rename fs/{cifs =3D> smbfs}/cifsproto.h (99%)
->  rename fs/{cifs =3D> smbfs}/cifsroot.c (100%)
->  rename fs/{cifs =3D> smbfs}/cifssmb.c (99%)
->  rename fs/{cifs =3D> smbfs}/connect.c (99%)
->  rename fs/{cifs/cifsfs.c =3D> smbfs/core.c} (98%)
->  rename fs/{cifs =3D> smbfs}/dfs_cache.c (99%)
->  rename fs/{cifs =3D> smbfs}/dfs_cache.h (100%)
->  rename fs/{cifs =3D> smbfs}/dir.c (99%)
->  rename fs/{cifs =3D> smbfs}/dns_resolve.c (100%)
->  rename fs/{cifs =3D> smbfs}/dns_resolve.h (100%)
->  rename fs/{cifs =3D> smbfs}/export.c (91%)
->  rename fs/{cifs =3D> smbfs}/file.c (99%)
->  rename fs/{cifs =3D> smbfs}/fs_context.c (99%)
->  rename fs/{cifs =3D> smbfs}/fs_context.h (100%)
->  rename fs/{cifs =3D> smbfs}/fscache.c (100%)
->  rename fs/{cifs =3D> smbfs}/fscache.h (98%)
->  rename fs/{cifs =3D> smbfs}/inode.c (99%)
->  rename fs/{cifs =3D> smbfs}/ioctl.c (99%)
->  rename fs/{cifs =3D> smbfs}/link.c (99%)
->  rename fs/{cifs =3D> smbfs}/misc.c (99%)
->  rename fs/{cifs =3D> smbfs}/netlink.c (100%)
->  rename fs/{cifs =3D> smbfs}/netlink.h (100%)
->  rename fs/{cifs =3D> smbfs}/netmisc.c (99%)
->  rename fs/{cifs =3D> smbfs}/nterr.c (100%)
->  rename fs/{cifs =3D> smbfs}/nterr.h (100%)
->  rename fs/{cifs =3D> smbfs}/ntlmssp.h (98%)
->  rename fs/{cifs =3D> smbfs}/readdir.c (99%)
->  rename fs/{cifs =3D> smbfs}/rfc1002pdu.h (100%)
->  rename fs/{cifs =3D> smbfs}/sess.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb1ops.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb2file.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb2glob.h (100%)
->  rename fs/{cifs =3D> smbfs}/smb2inode.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb2maperror.c (100%)
->  rename fs/{cifs =3D> smbfs}/smb2misc.c (100%)
->  rename fs/{cifs =3D> smbfs}/smb2ops.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb2pdu.c (99%)
->  rename fs/{cifs =3D> smbfs}/smb2pdu.h (100%)
->  rename fs/{cifs =3D> smbfs}/smb2proto.h (100%)
->  rename fs/{cifs =3D> smbfs}/smb2status.h (100%)
->  rename fs/{cifs =3D> smbfs}/smb2transport.c (99%)
->  rename fs/{cifs =3D> smbfs}/smbdirect.c (100%)
->  rename fs/{cifs =3D> smbfs}/smbdirect.h (99%)
->  rename fs/{cifs =3D> smbfs}/smbencrypt.c (100%)
->  rename fs/{cifs =3D> smbfs}/smberr.h (100%)
->  rename fs/{cifs/cifsfs.h =3D> smbfs/smbfs.h} (97%)
->  rename fs/{cifs =3D> smbfs}/trace.c (100%)
->  rename fs/{cifs =3D> smbfs}/trace.h (100%)
->  rename fs/{cifs =3D> smbfs}/transport.c (99%)
->  rename fs/{cifs =3D> smbfs}/unc.c (100%)
->  rename fs/{cifs =3D> smbfs}/winucase.c (100%)
->  rename fs/{cifs =3D> smbfs}/xattr.c (98%)
->=20
+Hi Reviewers,
 
+Please help to review V12 series of TPDM/TPDA patches.
 
-Why do this? My inclination is to say NAK here.
+Thanks
 
-This seems like a lot of change for not a lot of benefit. Renaming the
-directory like this pretty much guarantees that backporting patches
-after this change to kernels that existed before it will be very
-difficult.
+Jinlong Mao
 
-Also, bear in mind that there used to be an smbfs in the kernel that
-predated cifs.ko. That was removed ~2010 though, which is long enough
-ago that it shouldn't produce conflicts in currently shipping releases.=A0
---=20
-Jeff Layton <jlayton@kernel.org>
+On 7/21/2022 11:30 PM, Jinlong Mao wrote:
+> Hi all,
+>
+> Please help to review V12 patches.
+>
+> Thanks
+>
+> Jinlong Mao
+>
+> On 7/10/2022 10:10 AM, Mao Jinlong wrote:
+>> This series adds support for the trace performance monitoring and
+>> diagnostics hardware (TPDM and TPDA). It is composed of two major
+>> elements.
+>> a) Changes for original coresight framework to support for TPDM and 
+>> TPDA.
+>> b) Add driver code for TPDM and TPDA.
+>>
+>> Introduction of changes for original coresight framework
+>> Support TPDM as new coresight source.
+>> Since only STM and ETM are supported as coresight source originally.
+>> TPDM is a newly added coresight source. We need to change
+>> the original way of saving coresight path to support more types source
+>> for coresight driver.
+>> The following patch is to add support more coresight sources.
+>>      coresight: core: Use IDR for non-cpu bound sources' paths.
+>>
+>> Introduction of TPDM and TPDA
+>> TPDM - The trace performance monitoring and diagnostics monitor or 
+>> TPDM in
+>> short serves as data collection component for various dataset types
+>> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+>> architecture) spec. The primary use case of the TPDM is to collect data
+>> from different data sources and send it to a TPDA for packetization,
+>> timestamping and funneling.
+>>       Coresight: Add coresight TPDM source driver
+>>       dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+>>       coresight-tpdm: Add DSB dataset support
+>>       coresight-tpdm: Add integration test support
+>>       docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
+>>
+>> TPDA - The trace performance monitoring and diagnostics aggregator or
+>> TPDA in short serves as an arbitration and packetization engine for the
+>> performance monitoring and diagnostics network as specified in the QPMDA
+>> (Qualcomm performance monitoring and diagnostics architecture)
+>> specification. The primary use case of the TPDA is to provide
+>> packetization, funneling and timestamping of Monitor data as specified
+>> in the QPMDA specification.
+>> The following patch is to add driver for TPDA.
+>>       Coresight: Add TPDA link driver
+>>       dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+>>
+>> The last patch of this series is a device tree modification, which add
+>> the TPDM and TPDA configuration to device tree for validating.
+>>      ARM: dts: msm: Add coresight components for SM8250
+>>      ARM: dts: msm: Add tpdm mm/prng for sm8250
+>>
+>> Once this series patches are applied properly, the tpdm and tpda nodes
+>> should be observed at the coresight path /sys/bus/coresight/devices
+>> e.g.
+>> /sys/bus/coresight/devices # ls -l | grep tpd
+>> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+>> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+>>
+>> We can use the commands are similar to the below to validate TPDMs.
+>> Enable coresight sink first.
+>>
+>> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+>> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+>> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+>> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+>> The test data will be collected in the coresight sink which is enabled.
+>> If rwp register of the sink is keeping updating when do
+>> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+>> generated from TPDM to sink.
+>>
+>> There must be a tpda between tpdm and the sink. When there are some
+>> other trace event hw components in the same HW block with tpdm, tpdm
+>> and these hw components will connect to the coresight funnel. When
+>> there is only tpdm trace hw in the HW block, tpdm will connect to
+>> tpda directly.
+>>         +---------------+                +-------------+
+>>      |  tpdm@6c08000 |                |tpdm@684C000 |
+>>      +-------|-------+                +------|------+
+>>              |                               |
+>>      +-------|-------+                       |
+>>      | funnel@6c0b000|                       |
+>>      +-------|-------+                       |
+>>              |                               |
+>>      +-------|-------+                       |
+>>      |funnel@6c2d000 |                       |
+>>      +-------|-------+                       |
+>>              |                               |
+>>              |    +---------------+          |
+>>              +----- tpda@6004000  -----------+
+>>                   +-------|-------+
+>>                           |
+>>                   +-------|-------+
+>>                   |funnel@6005000 |
+>>                   +---------------+
+>>
+>> This patch series depends on patch series:
+>> "[v2,00/13] coresight: Add new API to allocate trace source ID values"
+>> https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220704081149.16797-1-mike.leach@linaro.org/ 
+>>
+>>
+>> Changes from V11:
+>> 1. Clear bits for atid before setting them and relese atid when tpda
+>> remove. -- Suzuki K Poulose <suzuki.poulose@arm.com>
+>>
+>> Mao Jinlong (9):
+>>    coresight: core: Use IDR for non-cpu bound sources' paths.
+>>    Coresight: Add coresight TPDM source driver
+>>    dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+>>    coresight-tpdm: Add DSB dataset support
+>>    coresight-tpdm: Add integration test support
+>>    Coresight: Add TPDA link driver
+>>    dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+>>    arm64: dts: qcom: sm8250: Add coresight components
+>>    arm64: dts: qcom: sm8250: Add tpdm mm/prng
+>>
+>>   .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+>>   .../bindings/arm/qcom,coresight-tpda.yaml     | 111 +++
+>>   .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++
+>>   MAINTAINERS                                   |   2 +
+>>   arch/arm64/boot/dts/qcom/sm8250.dtsi          | 671 ++++++++++++++++++
+>>   drivers/hwtracing/coresight/Kconfig           |  23 +
+>>   drivers/hwtracing/coresight/Makefile          |   2 +
+>>   drivers/hwtracing/coresight/coresight-core.c  |  42 +-
+>>   drivers/hwtracing/coresight/coresight-tpda.c  | 208 ++++++
+>>   drivers/hwtracing/coresight/coresight-tpda.h  |  35 +
+>>   drivers/hwtracing/coresight/coresight-tpdm.c  | 259 +++++++
+>>   drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
+>>   include/linux/coresight.h                     |   1 +
+>>   13 files changed, 1510 insertions(+), 12 deletions(-)
+>>   create mode 100644 
+>> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+>>

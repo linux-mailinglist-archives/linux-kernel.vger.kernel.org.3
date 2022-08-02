@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587F25882F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD3B5882F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 22:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbiHBUKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 16:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S234379AbiHBUKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 16:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiHBUKe (ORCPT
+        with ESMTP id S234183AbiHBUKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 16:10:34 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0BFD39
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659471033; x=1691007033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aNqlGem3NFF0GkVpiptfTkjgnKFDgSyWE10bhVq+Y7o=;
-  b=JxWthWvPl2P6kurtGQAZ/yLGd7ykxbgLr+sJhg6l+sgDezfmYOmKuKFP
-   MbyeJDS45eEQffTnAZZPUCSZC4HY+/DguW9NHkAhmBHa2PWY8FOYLYZOI
-   XzlihBMVMflNKVp9tOS63I6+Wv5vUFTcOiP9svBg+sjeLtryed0Tkqye1
-   NlextHCEvJvIGaq2ePUVZmQTmDUqbMvQM72mkh6v0qYE2i468wna7H0xx
-   MQ/Q4OVLPVucGsU+irogJoA37XSWew99/m85pPlIinG1oLdKHB9g1fAf1
-   JGcUyuYMVA3m8szjY60/4hFpTRbVBWazLzWjWUSZ2NmpKxjgezDcq4VcJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289521963"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="289521963"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 13:10:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="553049848"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 13:10:32 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIyDn-000GOB-1P;
-        Tue, 02 Aug 2022 20:10:31 +0000
-Date:   Wed, 3 Aug 2022 04:09:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/mips/kernel/jump_label.c:93:6: warning: no previous prototype
- for 'jump_label_apply_nops'
-Message-ID: <202208030454.88LesR4N-lkp@intel.com>
+        Tue, 2 Aug 2022 16:10:41 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA5AFD39
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 13:10:40 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h12so16788378ljg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 13:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CixUSBcZNq9i0WpR8GtdvttXmNXU/G94pZeb65hTEM0=;
+        b=WyNxtYqk3qeNX2OkEahMvbK034jsOfS/qAlqgpXcbok6ytj9bMkyg7zn1hiX32tp+/
+         OEVHYAeSEdlMmm7Sc6SbDiw7Mx9W1vaadsB4Xkk/WBkl2toPvBPIHlr7yGzeFohoua9s
+         dLAK1biH6/qLzRReNqLfwDG/bZnlOSo70OtmxpvLAoHfCyrlv6ycBip2qW/PYgBsxN1o
+         jbkkIjkImEBZ8wQkzDMZdPt67/kUDDu7twHPSTzIhgHP+v+a8/ujqcNZZ++psR7/4hPh
+         occvRR2zXeSz/WK65qdff/r4nsCevELyHFnBXmFme4DtRavFn/LwK+ImehnrnaZxbfs9
+         hDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CixUSBcZNq9i0WpR8GtdvttXmNXU/G94pZeb65hTEM0=;
+        b=4K++eI5YdVLDi1Ddot/MVzo600XYgyNPeldeWcLHrHzI7+Ar5hxOYDsay36PtCN0pG
+         lTkNFLa/US1V42JtCxPXntfelZy64hgFrY3bkTYE21yV9tBCd6rzdNXGJMmwPd0eToJo
+         +0vCbQ1TBVZEyra6o6RMWUJgtblSxN6OrnAkCJFm0TkORrcgS+ssVuobZWJvapxZVYVG
+         pmQXzFPwNg1sI3cEP8kexiqa0eO+/aD0Tagd8SUiJs/O0ozZKgVmZVRkxwyIyu2aw/Ol
+         Rgxl1Qp1CDHimrgMJAInNcL+G/Z+7/SLRPiK0K+pU3JlZ5UJwCtsvkgVyDMHdf25pKqF
+         WWJg==
+X-Gm-Message-State: AJIora9bAu4wlATE+nBr3pk33HG71gpmCruquWzEE7wXnjbNTuWtsH5P
+        POSE69ka7efn7s9bqdzG0GY=
+X-Google-Smtp-Source: AGRyM1t1sO0Omp3yxQjOR809RdRPIRBJhuRvsggT+FA6u4dXikm/vOHoeh7Yy9QJQO8lUgJaMi1KfQ==
+X-Received: by 2002:a05:651c:11c5:b0:25e:22c9:19e1 with SMTP id z5-20020a05651c11c500b0025e22c919e1mr6791233ljo.428.1659471038665;
+        Tue, 02 Aug 2022 13:10:38 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.227.117])
+        by smtp.gmail.com with ESMTPSA id o18-20020ac24352000000b0048af397c827sm1161237lfl.218.2022.08.02.13.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 13:10:28 -0700 (PDT)
+Message-ID: <2e838551-e6a3-df5d-a889-baf60c7f99fd@gmail.com>
+Date:   Tue, 2 Aug 2022 23:10:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] staging: r8188eu: convert rtw_set_802_11_add_wep
+ error code semantics
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, dan.carpenter@oracle.com,
+        martin@kaiser.cx, straube.linux@gmail.com, fmdefrancesco@gmail.com,
+        abdun.nihaal@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220728231150.972-1-phil@philpotter.co.uk>
+ <20220728231150.972-3-phil@philpotter.co.uk>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220728231150.972-3-phil@philpotter.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+Hi Phillip,
 
-FYI, the error/warning still remains.
+Phillip Potter <phil@philpotter.co.uk> says:
+> -	if (!rtw_set_802_11_add_wep(padapter, &wep)) {
+> +	if (rtw_set_802_11_add_wep(padapter, &wep)) {
+>   		if (rf_on == pwrpriv->rf_pwrstate)
+>   			ret = -EOPNOTSUPP;
+>   		goto exit;
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c1dbe9a1c86da098a29dcdca1a67b65e2de7ec3a
-commit: fdfd42892f311e2b3695852036e5be23661dc590 jump_label: mips: move module NOP patching into arch code
-date:   6 weeks ago
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220803/202208030454.88LesR4N-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdfd42892f311e2b3695852036e5be23661dc590
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fdfd42892f311e2b3695852036e5be23661dc590
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/mips/kernel/jump_label.c:93:6: warning: no previous prototype for 'jump_label_apply_nops' [-Wmissing-prototypes]
-      93 | void jump_label_apply_nops(struct module *mod)
-         |      ^~~~~~~~~~~~~~~~~~~~~
+is it intentional to ignore an error in case of rf_on != 
+pwrpriv->rf_pwrstate?
 
 
-vim +/jump_label_apply_nops +93 arch/mips/kernel/jump_label.c
 
-    91	
-    92	#ifdef CONFIG_MODULES
-  > 93	void jump_label_apply_nops(struct module *mod)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With regards,
+Pavel Skripkin

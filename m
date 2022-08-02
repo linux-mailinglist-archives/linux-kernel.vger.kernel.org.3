@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B06587F1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30AB587F25
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiHBPkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 11:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S232500AbiHBPke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiHBPkJ (ORCPT
+        with ESMTP id S231539AbiHBPkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 11:40:09 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15341276F
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:40:05 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id f20so15292234lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 08:40:05 -0700 (PDT)
+        Tue, 2 Aug 2022 11:40:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F362422BFD
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 08:40:08 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bq11so17413048lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 08:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6U0K0h4XfCxZ6J88e7aNUQxYgHcQqggkH+1chvRPQrA=;
-        b=NELq2s9YVjKFC0Zg3wUCSM5EfibpG68Oh5KtmFcV2J3SB8SekFdPhgcXQdX14jYTK4
-         sW4Ta1Xo9RuEMyAYsN81qJObrjWKGpjPtOpqBxx65+9gHtohFSllO0j1IkIvscOQ86gV
-         1fROcfZW5QDI4U+Ozux/OHjBgSUxmi1R6YMSsoGoXQjdCvzMJPyMT2xcYT+5g4GF6scN
-         EWFMPONp97dEssVj0N5Ct2aCUc1uJwEHbIqcdWp6IxYpg0fH6Dk228BHMjMrNqWiydDo
-         42XKZH5sL9KamcEAg8s1sU/TRRfgfaQFGIVM80ywNLfJINP1CX5m98601MCcnPhpllbm
-         hlew==
+        bh=54qGZ5ZtcQLmbPgrY9r61txc+HSHHzp+1aVpwosOhFg=;
+        b=KbkrfsFx1CLARK2mO6QEEYEilbFtrSH16CB1lUAEp6DPy3veI1uxqdWYWeso30e2Vk
+         vFzPpoZFZFdY+4jXENjHpikimOalS7QAsEtYXmJg6vduKi5F5Z5K9v3NHfGA0bg0H3ZB
+         gMTRlXQboZHgI8XRWRwKDx0Dj1bwjRss00diD9ZsrzwXUps5Kbq/wu8cKBg1nzAK558z
+         NvtzMNTS7W+I9u5eGKCD2F7O4Ck7SoyeByf0KvZi7at74JrB0MOnulKq0TUQf/LQDso7
+         xfLx/1whPIHwSD5BbgPM4e9/xe52yVOvARwyH15C3ppOBE3Tvk729JApianqBYy0ayaq
+         3IFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6U0K0h4XfCxZ6J88e7aNUQxYgHcQqggkH+1chvRPQrA=;
-        b=8FO1W2pg9tmq52z18kXz0brHv2zOCfaw0qm/eH005QMyTWiAEXM//gHHKap8YQL/UP
-         QRyTTPyCYoUA7Fht886jiyV1VNCq+kb2ZtTeBH6mBH1sbWnzJ47Q4gPNZluvY/deg3uk
-         Y9G0vRVzHwC9oeWRRWGsnjdMEkyaTLkYXkawosNIrtLgjEVA4jpQP8HhAO4Jm6bpNHAx
-         FlbrAF8xGfKnrXuK6s6EkMNl+6lWnegEbncmBZEuCDtPYyaEz5CkYPOptU3g6g2UTi3X
-         MG1Os1TAK1zbVCSL5Uz9HIBdmg79e9K6w+aTlZoRbvsYkE5O7bjQPbQBvVmHXbOWKW+j
-         hzpg==
-X-Gm-Message-State: AJIora9sXEnWF7EWXeUj8EkF2k7wdh11YpVzvRUYuj+Hj5s8CCozcie4
-        d/HQ1L5N0OyM7g4wfLmX7q/8gw==
-X-Google-Smtp-Source: AA6agR5t1E3bEfgdy3JYeJ7AgQkrUCDx1qVi1ExbWCxlf3PshWe2xgu+y3rowdsDBbkZWlrhDGRGWQ==
-X-Received: by 2002:a05:6512:33c4:b0:489:da1c:76cc with SMTP id d4-20020a05651233c400b00489da1c76ccmr8303662lfg.237.1659454805247;
-        Tue, 02 Aug 2022 08:40:05 -0700 (PDT)
+        bh=54qGZ5ZtcQLmbPgrY9r61txc+HSHHzp+1aVpwosOhFg=;
+        b=z9VqQYixl0Ea5f0/0ud7DsEcAvGydVinJwvrw2pp32FxoRo3Dc1XB1rEImB41uHdsn
+         ZsJq44nf76veeaQjSf8srE2jFLgxHnUUmBQrJIhXUQQHH0t3TE18+oH5yZ7rAuQFiuGv
+         7TReaiEffWpgQnJSvPCSm4zp4S/UAUjskaw6bQBDxEUocRUCHT8QtOJyeKaG/GjL7+kf
+         +klBtOUlbmCzBiItC6FVO1ErQl5zi6EAtYyolPA5u5u1OepWH0hubr1XUEodLPOGLW2j
+         Rwa3Et+YTzG1Zd8vgoMNA1ggJiXChttXH5+E3OvGaaM9CB/lLhjJXKW8CZmqjsedsgEW
+         3ZXQ==
+X-Gm-Message-State: AJIora/N9euG+bhJGCwEvBuSF8Kzww24zdXhEfJS3gEysAwMWjsS52KK
+        tjV/4PsDf7oaReAYZnIDqg6vMA==
+X-Google-Smtp-Source: AGRyM1sUEAZ8IGSI0gRQ0uUJbPt0qOg4rWpgcB8wkEnVLcLiyAeS0M9vgT7ebXPt9ip/HEVoYEqk+Q==
+X-Received: by 2002:a05:6512:3b82:b0:48a:a3f4:abae with SMTP id g2-20020a0565123b8200b0048aa3f4abaemr8120077lfv.155.1659454807145;
+        Tue, 02 Aug 2022 08:40:07 -0700 (PDT)
 Received: from krzk-bin.. ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id c2-20020a056512074200b0048b06f34566sm407669lfs.76.2022.08.02.08.40.03
+        by smtp.gmail.com with ESMTPSA id c2-20020a056512074200b0048b06f34566sm407669lfs.76.2022.08.02.08.40.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 08:40:04 -0700 (PDT)
+        Tue, 02 Aug 2022 08:40:06 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     corbet@lwn.net,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/5] arm64: dts: qcom: use GPIO flags for tlmm
-Date:   Tue,  2 Aug 2022 17:39:45 +0200
-Message-Id: <20220802153947.44457-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/5] ARM: dts: qcom: use GPIO flags for tlmm
+Date:   Tue,  2 Aug 2022 17:39:46 +0200
+Message-Id: <20220802153947.44457-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
 References: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
@@ -83,182 +83,118 @@ gpio.h header if this is first usage of that flag.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts               | 2 +-
- arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/msm8994.dtsi                      | 3 ++-
- arch/arm64/boot/dts/qcom/msm8996.dtsi                      | 3 ++-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts                 | 4 ++--
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts       | 2 +-
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts         | 4 ++--
- arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts       | 2 +-
- arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts           | 2 +-
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts                    | 2 +-
- 10 files changed, 14 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/qcom-apq8074-dragonboard.dts           | 3 ++-
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi            | 3 ++-
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi            | 4 ++--
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts          | 5 +++--
+ arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts | 2 +-
+ 5 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts b/arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts
-index 567b33106556..92f264891d84 100644
---- a/arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts
-+++ b/arch/arm64/boot/dts/qcom/apq8096-ifc6640.dts
-@@ -368,7 +368,7 @@ &sdhc2 {
- 
- 	bus-width = <4>;
- 
--	cd-gpios = <&tlmm 38 0x1>;
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
- 
- 	vmmc-supply = <&vreg_l21a_2p95>;
- 	vqmmc-supply = <&vreg_l13a_2p95>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-index f430d797196f..ff60b7004d26 100644
---- a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
-@@ -471,7 +471,7 @@ &sdhc1 {
- &sdhc2 {
+diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+index 3051a861ff0c..91716298ec5e 100644
+--- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
++++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <dt-bindings/gpio/gpio.h>
+ #include "qcom-msm8974.dtsi"
+ #include "qcom-pm8841.dtsi"
+ #include "qcom-pm8941.dtsi"
+@@ -261,7 +262,7 @@ &sdhc_1 {
+ &sdhc_2 {
  	status = "okay";
  
--	cd-gpios = <&tlmm 100 0>;
-+	cd-gpios = <&tlmm 100 GPIO_ACTIVE_HIGH>;
- 	vmmc-supply = <&pm8994_l21>;
- 	vqmmc-supply = <&pm8994_l13>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 8bc6c070e306..86ef0091caff 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -6,6 +6,7 @@
- #include <dt-bindings/clock/qcom,gcc-msm8994.h>
- #include <dt-bindings/clock/qcom,mmcc-msm8994.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
+-	cd-gpios = <&tlmm 62 0x1>;
++	cd-gpios = <&tlmm 62 GPIO_ACTIVE_LOW>;
+ 	vmmc-supply = <&pm8941_l21>;
+ 	vqmmc-supply = <&pm8941_l13>;
+ 
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+index 03bb9e1768c4..0505270cf508 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+@@ -14,6 +14,7 @@
+  *
+  */
+ 
 +#include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
+ #include "qcom-ipq4019.dtsi"
  
  / {
-@@ -502,7 +503,7 @@ sdhc2: mmc@f98a4900 {
- 			pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
- 			pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+@@ -72,7 +73,7 @@ spi@78b5000 {
+ 			pinctrl-0 = <&spi_0_pins>;
+ 			pinctrl-names = "default";
+ 			status = "okay";
+-			cs-gpios = <&tlmm 54 0>;
++			cs-gpios = <&tlmm 54 GPIO_ACTIVE_HIGH>;
  
--			cd-gpios = <&tlmm 100 0>;
-+			cd-gpios = <&tlmm 100 GPIO_ACTIVE_HIGH>;
- 			bus-width = <4>;
- 			status = "disabled";
+ 			mx25l25635e@0 {
+ 				#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+index 44a9597d8bfd..c2f5222e72de 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
+@@ -87,7 +87,7 @@ spi@78b5000 { /* BLSP1 QUP1 */
+ 			pinctrl-0 = <&spi_0_pins>;
+ 			pinctrl-names = "default";
+ 			status = "okay";
+-			cs-gpios = <&tlmm 12 0>;
++			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+ 
+ 			flash@0 {
+ 				#address-cells = <1>;
+@@ -100,7 +100,7 @@ flash@0 {
+ 
+ 		pci@40000000 {
+ 			status = "okay";
+-			perst-gpio = <&tlmm 38 0x1>;
++			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
  		};
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 742eac4ce9b3..0815b31c9e10 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
- #include <dt-bindings/interconnect/qcom,msm8996.h>
+ 
+ 		qpic-nand@79b0000 {
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+index c7a6e77da272..7fc33149060c 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ 
 +#include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
- #include <dt-bindings/soc/qcom,apr.h>
- #include <dt-bindings/thermal/thermal.h>
-@@ -3337,7 +3338,7 @@ wcd9335: codec@1{
- 					interrupt-names = "intr1", "intr2";
- 					interrupt-controller;
- 					#interrupt-cells = <1>;
--					reset-gpios = <&tlmm 64 0>;
-+					reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
+ #include "qcom-ipq4019-ap.dk07.1.dtsi"
  
- 					slim-ifc-dev = <&tasha_ifd>;
+ / {
+@@ -10,7 +11,7 @@ / {
+ 	soc {
+ 		pci@40000000 {
+ 			status = "okay";
+-			perst-gpio = <&tlmm 38 0x1>;
++			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
+ 		};
  
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index f313f6964810..dff49e3dfe56 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -1081,7 +1081,7 @@ &wcd9340{
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
- 	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
--	reset-gpios = <&tlmm 64 0>;
-+	reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
- 	vdd-buck-supply = <&vreg_s4a_1p8>;
- 	vdd-buck-sido-supply = <&vreg_s4a_1p8>;
- 	vdd-tx-supply = <&vreg_s4a_1p8>;
-@@ -1251,7 +1251,7 @@ camera@60 {
- 		reg = <0x60>;
+ 		spi@78b6000 {
+@@ -50,7 +51,7 @@ spi@78b5000 {
+ 			pinctrl-0 = <&spi_0_pins>;
+ 			pinctrl-names = "default";
+ 			status = "okay";
+-			cs-gpios = <&tlmm 12 0>;
++			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
  
- 		// CAM3_RST_N
--		enable-gpios = <&tlmm 21 0>;
-+		enable-gpios = <&tlmm 21 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&cam3_default>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-index 82c27f90d300..0f470cf1ed1c 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-@@ -546,7 +546,7 @@ &wcd9340{
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
- 	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
--	reset-gpios = <&tlmm 64 0>;
-+	reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
- 	vdd-buck-supply = <&vreg_s4a_1p8>;
- 	vdd-buck-sido-supply = <&vreg_s4a_1p8>;
- 	vdd-tx-supply = <&vreg_s4a_1p8>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-index 7747081b9887..6a2b98c23628 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-@@ -126,7 +126,7 @@ vreg_tp_vddio: vreg-tp-vddio {
- 		regulator-min-microvolt = <1800000>;
- 		regulator-max-microvolt = <1800000>;
- 
--		gpio = <&tlmm 23 0>;
-+		gpio = <&tlmm 23 GPIO_ACTIVE_HIGH>;
- 		regulator-always-on;
- 		regulator-boot-on;
- 		enable-active-high;
-@@ -712,7 +712,7 @@ &wcd9340 {
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
- 	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
--	reset-gpios = <&tlmm 64 0>;
-+	reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
- 	vdd-buck-sido-supply = <&vreg_s4a_1p8>;
- 	vdd-buck-supply = <&vreg_s4a_1p8>;
- 	vdd-tx-supply = <&vreg_s4a_1p8>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-index a7af1bed4312..be59a8ba9c1f 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-@@ -772,7 +772,7 @@ &wcd9340{
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
- 	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
--	reset-gpios = <&tlmm 64 0>;
-+	reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
- 	vdd-buck-supply = <&vreg_s4a_1p8>;
- 	vdd-buck-sido-supply = <&vreg_s4a_1p8>;
- 	vdd-tx-supply = <&vreg_s4a_1p8>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-index b0315eeb1320..f954fe5cb61a 100644
---- a/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts
-@@ -704,7 +704,7 @@ &wcd9340{
- 	pinctrl-names = "default";
- 	clock-names = "extclk";
- 	clocks = <&rpmhcc RPMH_LN_BB_CLK2>;
--	reset-gpios = <&tlmm 64 0>;
-+	reset-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
- 	vdd-buck-supply = <&vreg_s4a_1p8>;
- 	vdd-buck-sido-supply = <&vreg_s4a_1p8>;
- 	vdd-tx-supply = <&vreg_s4a_1p8>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-index 7ab3627cc347..a102aa5efa32 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-@@ -635,7 +635,7 @@ &soc {
- 	wcd938x: codec {
- 		compatible = "qcom,wcd9380-codec";
- 		#sound-dai-cells = <1>;
--		reset-gpios = <&tlmm 32 0>;
-+		reset-gpios = <&tlmm 32 GPIO_ACTIVE_HIGH>;
- 		vdd-buck-supply = <&vreg_s4a_1p8>;
- 		vdd-rxtx-supply = <&vreg_s4a_1p8>;
- 		vdd-io-supply = <&vreg_s4a_1p8>;
+ 			flash@0 {
+ 				#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+index ec5d340562b6..6daceaa87802 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+@@ -175,7 +175,7 @@ i2c-gate {
+ 			ak8963@f {
+ 				compatible = "asahi-kasei,ak8963";
+ 				reg = <0x0f>;
+-				gpios = <&tlmm 67 0>;
++				gpios = <&tlmm 67 GPIO_ACTIVE_HIGH>;
+ 				vid-supply = <&pm8941_lvs1>;
+ 				vdd-supply = <&pm8941_l17>;
+ 			};
 -- 
 2.34.1
 

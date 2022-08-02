@@ -2,864 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F37587E41
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC762587E43
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbiHBOjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S237036AbiHBOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237036AbiHBOjg (ORCPT
+        with ESMTP id S234025AbiHBOkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:39:36 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130044.outbound.protection.outlook.com [40.107.13.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368FE18370;
-        Tue,  2 Aug 2022 07:39:33 -0700 (PDT)
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=G/ijuTGkDZuQoHhsAzqRD0bxnIFfchCwQrUsD2ILL35IMSZPtFIOb9pW2HXfO7fd+DKAiYlVW88oxa4axzFE9onURYEdW4NyFTRrZm9b17STZm7y9zbNUGqk8RN5zyHkUJPiImkAMbn37Bqlx7HooyBwaxFfRBp645hOgLhBK2HwsvlZ+ww1gYq6wv/Lj2LaNE7AQK4STqNmS3xEnLab6pb3TvPSdGB1dz3zn2DqZq+le2MJtmaZvYos6r/XS4GHtwigUyZy7x6csrE+bUPfA/ECJLZAO+HbODj9TP6B4SIvB8sEFxCN9UevRil+P+NSBdNZYxREQW41cUvSVZGCnA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f3GvsCfZ8zm3mjXxo0SNerz/pnc375+tlcV5xXoMgnw=;
- b=e0SGJtjksQJi/W5pFkmi9LWqAnNOVkFLr3GT9Wy3ek5WNAhkHl5u75GydRWTQ4qslYOfTOOEH+gBsNzYNq6qyLNhlweHVGeknXxcQDzmZ3dEYMQOH26FHfMy4FUgq1iDTIufRX+Orlh/qprn6tsbtyG93Ta3kNtSRo/5z6SWzojph28TMjBGSH9k2oTrhlOD3/FbCA8psKD/KbP/IZMlaworb40aQtDgAfopxnM6tQ70qvLAEZ5ANIhfndSwPXMIH+i5uIX4R6sQBAnUhwBS5mEoxyVH4rS+YGGZQ7WaZGT18hRVsxanALBbyS/Ki6rVQ5k05QVo/Z6X/bQEUexrGA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
- oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f3GvsCfZ8zm3mjXxo0SNerz/pnc375+tlcV5xXoMgnw=;
- b=w5huj5Dnt0JFHCp8piBGnV4BD+MN/nRL+q/NFnQRnlMR3OtYG9kHE7UnO5eJ8r6l4zkUzkb12vZfFX1txmqWj01NQh420sjkVe97p/E6hJBsQHtWurbaDhgqodYyn2trPyFvo9kuipn97NmbbOlIGct4Ar2PN4Pg+9UOjZZsCdw=
-Received: from FR3P281CA0068.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:4b::15)
- by AM7PR08MB5381.eurprd08.prod.outlook.com (2603:10a6:20b:105::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 14:39:29 +0000
-Received: from VE1EUR03FT042.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:d10:4b:cafe::4c) by FR3P281CA0068.outlook.office365.com
- (2603:10a6:d10:4b::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.11 via Frontend
- Transport; Tue, 2 Aug 2022 14:39:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VE1EUR03FT042.mail.protection.outlook.com (10.152.19.62) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5482.12 via Frontend Transport; Tue, 2 Aug 2022 14:39:28 +0000
-Received: ("Tessian outbound cc6a8ab50b6b:v123"); Tue, 02 Aug 2022 14:39:28 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: bc206f62ed8809a5
-X-CR-MTA-TID: 64aa7808
-Received: from 8a85b536ad0b.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 9AE54AAD-71B7-4CB5-A7B7-64220D50C2CF.1;
-        Tue, 02 Aug 2022 14:39:21 +0000
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 8a85b536ad0b.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 02 Aug 2022 14:39:21 +0000
+        Tue, 2 Aug 2022 10:40:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A84637B;
+        Tue,  2 Aug 2022 07:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1659451224; x=1690987224;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=acrZiGBdYXIAiesqDZSWyyG6E7oMwbTmgaVuNzqzxio=;
+  b=haz3N+jUickZbbhgLbPjqk9AIDKVE1WmOx3ZhfHyH+xJ0qyWKEUt62tw
+   eLTKEFX4drF/rebeP9MtE3KJSbFK/+mUOnHzM/dRgIRk5Nn9CO3EG7rUc
+   tc2OkAP6VSt/P5pJNJM5dOwrjYVkgat/Juc9uELzHdKxB8nIXRi5p/3Yx
+   Ivvsk+1tBRazs46QG0ZUwNRPbrZcwvAxjzACRNQUVizk6/lqNO1+ilmHf
+   ZvvQl6qHNSKmGAUFJdZjMPud5MRj/9exHVEgfPtBVnojjmlazCJx8fQa9
+   UsCIVdkI950ewcx3OpUms4t2c0xB1yeprLwAdcAyrTusbmLrRnBVEMLfR
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
+   d="scan'208";a="167468136"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Aug 2022 07:40:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 2 Aug 2022 07:40:21 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Tue, 2 Aug 2022 07:40:20 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G1A8I7RFR+ErUICpL662ZwBeLAD62sVDMhEnqhoUquuSkhlPZHEx7maMEyY1DBQCu57oNCUh/GLsMVl5P3ifzv3kWkBKXCO8SKZ/2SwepnQICliJBlznt2UcFt6Vur8VlguoUhQUW7nGOJgNv6Jjnz9IKzrTwECm20bD5JDRryt3zeaKFmMKt9Af7caEJIXVogHY8UYjYgLY9EVqcjd9QhDekPEsozZnyQwt6CJf2Jc7tlOJg/ZAxHx7nqQ5fkUe9+0hopYpVwqzvMYrW5gDu9lIbo9QSX0uhVSQmCUqZoJlbTPo4Anu/QtS2EWknh/hezDLGEzJT5K23/uettW50Q==
+ b=Abg6/rBmEmU3hBoIVVb9z8+TrJOznucD5GPkwWy9C/NgJvwl2nGlekTNXTxBkrAfeN/rkEBJOWXlnTbvJjRWiAkf7QVeTcGbtMmNHD51wjb2gngXy/ssJKDQLk0H+Epuvxwy4SWDMdkLPT+SDebZBCICzbghmz5d4rXxLFqm2q7qWGqZlnqwResMwNPEtlbYKsHe/8WOWRZA9XPZZ9CL8PNZv1rwhoktHHiegzaHWHGOMSyRHQWJiHKf4F6HzkGGZQrBmgsak/VjBU2imX5aG1WJ1DjK0wl7kozoCggWjW7/SW9TOze0+txxoOBo6c66ugSp8Gfqu3L1sB6VupZtqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f3GvsCfZ8zm3mjXxo0SNerz/pnc375+tlcV5xXoMgnw=;
- b=NsDDtDV1rR6c+u9xNbt2MwWZyvr3hbbfoBKdrtKqK2f9NOfzw+3yNALLaP+GvV20edXBiDCDaMfvdDil5GXN69X51X0KHVwToFRFLiHdHPU9eL5tFnbYs+46FtcZ3HPfhah5OIQSs3sSchoxMNMYGaiwNtDv4BW4U+mLPOSDsEYHr2ZbZdm9w5xPCABocmOJpqxqYbqY7p0Va7YfmzjtGufNiTqlNpgXu9coM+IXnoSlRXAoWcODncXelrPxLnnYixQNxEEelhnazY3MZDrmcUaw7ApX7gsSz/38U/syeTf1ARb0LHJMVU6oNudr4m9HR4Ft9KgK9eZJfWWFXHfZxg==
+ bh=acrZiGBdYXIAiesqDZSWyyG6E7oMwbTmgaVuNzqzxio=;
+ b=eQh2rSJYvRjU6RPni5Ta5ByjRKIISy2xK0H4salASqaAGvmrnxOtSpBcrhIjEr6YdAG7q12iKOxisxM2JjkSF/q7Tp3I7DperuW8J8APaKngyKmBnbS6a/3uk26Cvaa5uAbNUN5MuyPAXXDK3L7dCpim51Z8SDy3zAgjTlNygORxWrr53nzTQQfMB/gmVxQ8gM3vS2ZChW9XegDHO54otJ4z5LbTv2vUhNRJshLVf1ceOic193f75p4m8kBfyEkSmHejJFddi0GkD3ZEuCSQtOeJv2yADjSFG5PCO8+a3P+zMhndkldridGSOaz8qynn621EjFaZKKq0eAjPIRotjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f3GvsCfZ8zm3mjXxo0SNerz/pnc375+tlcV5xXoMgnw=;
- b=w5huj5Dnt0JFHCp8piBGnV4BD+MN/nRL+q/NFnQRnlMR3OtYG9kHE7UnO5eJ8r6l4zkUzkb12vZfFX1txmqWj01NQh420sjkVe97p/E6hJBsQHtWurbaDhgqodYyn2trPyFvo9kuipn97NmbbOlIGct4Ar2PN4Pg+9UOjZZsCdw=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from AM9PR08MB6803.eurprd08.prod.outlook.com (2603:10a6:20b:301::12)
- by AM6PR08MB5013.eurprd08.prod.outlook.com (2603:10a6:20b:ef::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.13; Tue, 2 Aug
- 2022 14:39:17 +0000
-Received: from AM9PR08MB6803.eurprd08.prod.outlook.com
- ([fe80::4cad:8ea2:a247:6bce]) by AM9PR08MB6803.eurprd08.prod.outlook.com
- ([fe80::4cad:8ea2:a247:6bce%8]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 14:39:17 +0000
-Date:   Tue, 2 Aug 2022 15:39:08 +0100
-From:   Brian Starkey <brian.starkey@arm.com>
-To:     Olivier Masse <olivier.masse@nxp.com>
-Cc:     sumit.semwal@linaro.org, benjamin.gaignard@collabora.com,
-        christian.koenig@amd.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, clement.faure@nxp.com, nd@arm.com
-Subject: Re: [PATCH 3/5] dma-buf: heaps: add Linaro secure dmabuf heap support
-Message-ID: <20220802143908.24vemxeon537cad2@000377403353>
-References: <20220802095843.14614-1-olivier.masse@nxp.com>
- <20220802095843.14614-4-olivier.masse@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802095843.14614-4-olivier.masse@nxp.com>
-X-ClientProxiedBy: LO4P123CA0560.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:33b::18) To AM9PR08MB6803.eurprd08.prod.outlook.com
- (2603:10a6:20b:301::12)
+ bh=acrZiGBdYXIAiesqDZSWyyG6E7oMwbTmgaVuNzqzxio=;
+ b=SRTCDtLMEBNB2jWZQlNvKkbvEiZ3Q2A/hpRni8eoqwUNZIi2mtIMPJbIE72nB739sSsyd5ooxpE1Q+N13L8OZfrlnHcjqFxQzLI8xCBnTJ3V/R7d3DjafIqBzDdozWoHKAYwVk3l34xDn1FOoAkW6iCtz8386lxPT5q9z6fYqp8=
+Received: from DM5PR11MB0076.namprd11.prod.outlook.com (2603:10b6:4:6b::28) by
+ MWHPR11MB1488.namprd11.prod.outlook.com (2603:10b6:301:c::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.14; Tue, 2 Aug 2022 14:40:09 +0000
+Received: from DM5PR11MB0076.namprd11.prod.outlook.com
+ ([fe80::945f:fc90:5ca3:d69a]) by DM5PR11MB0076.namprd11.prod.outlook.com
+ ([fe80::945f:fc90:5ca3:d69a%6]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 14:40:09 +0000
+From:   <Arun.Ramadoss@microchip.com>
+To:     <olteanv@gmail.com>
+CC:     <andrew@lunn.ch>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <vivien.didelot@gmail.com>,
+        <linux@armlinux.org.uk>, <f.fainelli@gmail.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <Woojung.Huh@microchip.com>,
+        <davem@davemloft.net>
+Subject: Re: [Patch RFC net-next 4/4] net: dsa: microchip: use private pvid
+ for bridge_vlan_unwaware
+Thread-Topic: [Patch RFC net-next 4/4] net: dsa: microchip: use private pvid
+ for bridge_vlan_unwaware
+Thread-Index: AQHYo16i5OwaIBSN6UuhTptF+k0JEK2bd1lSgAA9bwA=
+Date:   Tue, 2 Aug 2022 14:40:09 +0000
+Message-ID: <365b35f48b4a6c2003b67a4ee0c287b8172fa262.camel@microchip.com>
+References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
+         <20220729151733.6032-1-arun.ramadoss@microchip.com>
+         <20220729151733.6032-5-arun.ramadoss@microchip.com>
+         <20220729151733.6032-5-arun.ramadoss@microchip.com>
+         <20220802105935.gjjc3ft6zf35xrhr@skbuf>
+In-Reply-To: <20220802105935.gjjc3ft6zf35xrhr@skbuf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f91ab262-03e5-4578-b15e-08da7494e623
+x-ms-traffictypediagnostic: MWHPR11MB1488:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ML3fiYltpfYHBKI0dX14GCAl+Y85D+sYeoh8DTACg9kxgdAEElVh8KTUJ0/UKpmFI++iU7xBqejAYNy2egZ+XA+i2MIdxeU8lkXb/SY/aP0Hi3nP6SF3Hyh13tZp9c9KZ0EjJiPQXkxh6eI2Dd8ns82OVx8Zde5gGBopDKb0qSWc/lEXW215fHHCVfZsRCyDYobDcgMwSGK4/3NHl6n+vfILguRs9VZ0xKjHHeIbfZyaGnaqWXT1LZ2D4CTTgBaek0Dn/S3l5QU5HIP45w5rKRjYjh9Zdx18eRd/8zTDe1EB+Wjt3f2syNAXxMlLCXl3s7Vv+m0Lbo6XH3drXZcxYsFSV5a+rUeCx3YTAXg0LwUaa1p24ObA7Aku9n9JiCBs5Qt8uK3ZPPlItfW6H6x+EbaLzM0eBLFr3eTV3lSKC9lmamK6P9ZT1kfBo+Gt76CNgNWy+veg+IMwKas8QEWD+YHmHODQ3rlBlvxgfx4sOfoS8qJX5qEAkZ+kMud+q5H/DVh6aep+Q8krXtMWZUDpQPXmKpqvUuwEkC0je8E/KSZ2gPSKqLg/mRl7sc7hl8ZG8XZyPBb4O19lVz2dLnAMV5yGGXJA/uZDbia3j35EB4wr/Yuk+Q9Ko8FEXFXzb+MSzg3cawhsgLaumT9eEGRoxDoOqv7nSiQJ/hufdWEFoQNxceEaroDwE05EuGj+E9lFiKC2B/C3MOk7fjm+TTEl2Fpg51AyX6M+EiWX2tws72a7fEeYKjY+cqumQe0RnqsE31dCxNrdHbD91r/gY0B1YdGFv9lW+eQ5ajNXdgC3F36cpLp23T0xRElWuvptVuPp5ybj6qxIloI55+7kE19KniFO4raGyubsHwP0tQb745g=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0076.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(39860400002)(396003)(376002)(366004)(346002)(7416002)(5660300002)(2906002)(41300700001)(2616005)(186003)(38100700002)(6506007)(122000001)(38070700005)(6512007)(316002)(6916009)(54906003)(71200400001)(86362001)(478600001)(966005)(6486002)(83380400001)(36756003)(8936002)(64756008)(4326008)(66946007)(91956017)(66556008)(8676002)(66476007)(66446008)(76116006)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UGdlTisyOWpWN0hxdDFIamNXV25DZGNEalE0cXM0eHJoWlMyRmZtMWdBU2I1?=
+ =?utf-8?B?N2pBaGRlQ1dsZnNaWkVTbGlnZTlQbEtyRk1STXVzSFJRZDZYSTFLQTE1a3Zs?=
+ =?utf-8?B?YVNyVzA0N2NRNVJWdG52VE9Kbi95L3hIRkdnUXgwc25VRERHc2tHSUNDb1ky?=
+ =?utf-8?B?TUVKU1NKSFd5OWplT3dmdEtpbFNyVFhnUUora2RzVlMxOHQ3WVZlNHY3SWJi?=
+ =?utf-8?B?T3l5Wk5rNjM3VHJERGVQajVBRTdERUZOVCtHVVpZdzZUWjVUalNxT3NQdmFO?=
+ =?utf-8?B?RHY5TmJZRjYyTFFQeGhRcnpKZXlzNk5mZ3NrZFdtVG5TWUVWYjBGeHFRVlM2?=
+ =?utf-8?B?eDFQWTNwb1lOeXBLTnJlc3NUZ2MxMkpzQW5ZUzdoRi9SQitFcXk1TDNwT2pD?=
+ =?utf-8?B?TzZaRS9HOWtFbWVNbjIwRCtLSGNUb1pIOVNnTm5SOU5UODdxakhnYmxxL05O?=
+ =?utf-8?B?VldNU2RDditjUnYzUWNmSktOY2QyczFxNkNDaFZRQnYySWliQXp3MTVUdTlH?=
+ =?utf-8?B?MjF5UlBmNXhhTERjaVBJeGtLYlpyTXpuTWpEOU9BOHBRaU9Ia1RFQlNzaHZI?=
+ =?utf-8?B?YUg0MHI0bTNMQ0dSclBGWUlMTWE0Z29xeEFlZEdvQWdEcnloOHZvWWtGaUhW?=
+ =?utf-8?B?ejRDQ01pYkdLSXE2TUJZY1RSazJLOVNNMXpRUThkNWR2YjNFWWR2V05zdDE1?=
+ =?utf-8?B?dzhQc05lOEVGb08vNlJEWXgxOG8ydzI1am1YaXljTFU0QzUrMGJrMUxoV1pK?=
+ =?utf-8?B?enBiSDZ4RUZyL2RobDZVQ1U2MGdVQ3hVUUVqVlVaWWlsVk41V0E1cXhKaUw0?=
+ =?utf-8?B?S0ovb1pBa2g0b2ZkQmZrd2srYkVNUkdiakYxQllZR1BaMCtYYzQrWXBNb00x?=
+ =?utf-8?B?MmRuajhNRHd1UnR4cDkzSTE4bmMwTEhPZ2pPSFB6ckZLYkxCVXlVN3ZJQ2Vk?=
+ =?utf-8?B?NDNoQThvQXNsMnU3TkFWeEVqZlRXY2F0SzZuVldTVitGUEh2aTFJck4zV3dT?=
+ =?utf-8?B?RXM4clA5MWVnRVBwZC96RnQvSmE5TC85ZVFBZGVSSXdvcUZpam1oOVc5Y0Qx?=
+ =?utf-8?B?cjZ4SGNja2xpdTcwVkNhUzVEbkFUVnU4c245NWVqUityWmUyUXlMVVVieXA5?=
+ =?utf-8?B?OTJWTUhTdUJNTnpHSkNYOFk3RncwY0g5Vkg2dmdCZTBnUkcxMHFMeVN1UDlu?=
+ =?utf-8?B?b05wY1JHVjJ2TzI3eXJVd0pkaW9KM0tUQlFPNjRQTHFBRVVOa1NZZGVzQXRC?=
+ =?utf-8?B?N0dQemh2YlI2Tlg0K0tENGROVklpMEk5cjRGUzg5SzVhYzZVNUZ2K2lMYWl6?=
+ =?utf-8?B?V3R1WmpLd2VVVVFDbmwvRGNCVU5mY3B4dTQwM0hpZlVUOWF5QzJZOE1DVHVl?=
+ =?utf-8?B?ZlNYWlRmKzBjYjRxNWY0dHNxMTJ1TjZyNlRrSUlYeHdBMFdUQlBObVorTnF5?=
+ =?utf-8?B?NmNWUUUycU54STdnZzV6dStmWHpYRVBocWZVejVRZGlFbWRhM0FoaWVicU94?=
+ =?utf-8?B?cmhYMGNpNDdjK0c0VnR0L2hWK09nTksrR0V4cnExQnlocUhtUWd3VjMwVWxR?=
+ =?utf-8?B?bnZuN3hzVEIyWDhoMDc4a1l3RVBHMVhERUtVMnVaVXlPSUhCNE5qVHNsWGdZ?=
+ =?utf-8?B?alZjU2Nqc3Q3eEsySXhxdURTaWYyREd3emx2SzhKUWwxTE9wWmRLeXAzM1h0?=
+ =?utf-8?B?WlZSMVlzbG52RFUrY2VlSG1yaVRTdldnS3QxMXdQRTI3empmRmIxMjhuK0JT?=
+ =?utf-8?B?bURETlg0UUtQY0ZaeUI5T2w5NE5OZ2Z3OWh5SkxNMHRXb25yekdCVERicFlu?=
+ =?utf-8?B?NWEzVEJCbjBhRWNHZWtQVVk1U25TLzl4U3RxcW5tNmtwUGxmVnRYK2FIbm9w?=
+ =?utf-8?B?Mm1DRkZRb0Ezdk1VY3Z2OHZRWmZTdVlUeXBXN09PcnBYbEV2L1hUcnozbWlm?=
+ =?utf-8?B?bFVNcmpTbXNjbU5HRWx1cGxOYkdNZk5YYTNNa2lGZnhWWTAwT045dGtJcWFY?=
+ =?utf-8?B?VWtUd3pIYVRLdjdCRFdwb0xEdXREQm9nZzd3SjNqRUVrRmhFOWFIbjRvWGd2?=
+ =?utf-8?B?VkNkaHR2QzljMUV6emhiU2VDQ0JObStvSWovV0ZaeUV4TzNTclJVdVJwQjBC?=
+ =?utf-8?B?a1dpUXNJS1crTzEyYTBNUGI4bWdUZUswZmF4V2w0dllhY1lxSUpTeU1RZ1Jn?=
+ =?utf-8?B?SGt6bXArM3RHWloycDYvaU9PWXlpVFF5UlU2MEwwUkVkOW0xaWdzL0YwQzZO?=
+ =?utf-8?Q?y2JdMSzhbsfsH6F69Y43tMhHUaE4hATo42eErHkPEY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <292FFA8AB3585F48A0F60501AEF9103A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Office365-Filtering-Correlation-Id: e32b375d-7f76-4841-2762-08da7494ce04
-X-MS-TrafficTypeDiagnostic: AM6PR08MB5013:EE_|VE1EUR03FT042:EE_|AM7PR08MB5381:EE_
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: uj+eZuQbafjsm6suRuYZsG2n6X8cr9w4uelk/2vhZ/8WUA1Q3Ucb+ZiFqvo3CGsBGL0xTVJIVADB6rp+HN/lqUVBrnyRu9iyNt0mabnx5wJ67evelXBS+iCSgIV4sb/4LecnCDjG0gV2RMqJeDjYTA3bOWOq9ebsgYE6b7evOiwcj7YhSSZIZikEFw9l4EmIIQBGdttcZIsq6wOUHmklogHFaCDr172IjLh351tWjDvAh0TT2GMX/ZMY04dgwGAsbZl2q01+bgS1VyLkClUzmCULS88hpZrv6fZUggHMRA8naCEbuHw5L0Uo/yaQQdHdIPBXmwhxkxr1Y4kvJpSG3j2tfrqFRx62FY19cMjbiAB+Sn6fZ6HGrkPkCdFpdLxx6Unf/VNo3UM7/pZln2e08tscqgIL0FoE+ozAUTLqAzGW/X/wYOXDzpVqicdPNRxaHRnYKFjd2bqkrEZXus48iPcI+Ih85J8/6nDrbMAROiSojK3iIk6okzFxaBb9IzdFmNQXq9/d1Qeb5vSJ7EUFHysokJ6+wt+Jv51neVLhqvCcTQ8qZjl5Mp/8m8BWPuTB8rmNrKnkd8Mvb1HWRduIL7uKgMuDqcHbR9L7IdiqjLxZ9/om4GD3Nwa5zCe5Y2ihszwbW0ol6D9YOeaClbqmV0Mn/eY/4sVEWZRYhERVuEqh7Vf7p5Ba9nRq5+Ygllt1
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6803.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(376002)(136003)(346002)(366004)(396003)(39860400002)(6666004)(30864003)(478600001)(41300700001)(5660300002)(2906002)(6916009)(33716001)(316002)(6486002)(966005)(8936002)(44832011)(6506007)(38100700002)(66556008)(66476007)(86362001)(66946007)(1076003)(186003)(8676002)(26005)(6512007)(4326008)(9686003)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB5013
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT042.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 3c79e63f-0606-4358-0e8a-08da7494c70a
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fvqMI5xsf1souf/NNv+KILF+Dm9DsCoJ3C8GX+cjZPt4eM0030xYVYTUBjTqwtWXAV+pvhjsRNRuRrZSHVN2ZBKAf/F53ACrdJs96vMnM0jL/9LLUuL5/glmoOfC7Kero6vsB7adNzKDo4oaO+fxeRa0D6vn3BWhipEts7f2MM4eOTywvuQMUbr/VZLulPv7u06pyIcXf4i5u12SzdNKduDPzLNSUissx+l3kVJvlRPjcn3mM1WdEaG5dNzQCS91O9prJVYLT73wcgm2TgKq6O4KgSbGeYlSFq0PVASwRLYkthEgmxWjE7q0uc4MYqdrhluTY5T4Ps7FPgfh202qUttXuKsLMFQVOldBNqWn5qhaJ8z5I5CuhV0U9OjoDHF6F6Aa4xjylYDInPW6bPKWm8sQCYIh800IO/gMJewvw922mqn+OaItUcpcXraeZx4z8G0eviPQROPmuKq/PJPxhsjkaihv313uPBz+Hvcclbn9s/MSz9i/Gn314tfIB3Cl8Y0feZT04dIM+FO+nAUl9ESrRFz5xy7x8NhjHY+dRBvg8IIurmm+eLv6/7YVv0hNJGwc9nNaszafhZOwo050o3xcE/QjIxFu8jxNaNaUTMLCVugf5zvUAkj6M8V/A7yiSYmT0V1evPLOYrU4e8EiRy4fO+bnEogutgt70h5nZYsQfTerrDTHwqjHL3zRWewJhFOIxoIUHckvreY5Z3w/UbWGYpNlSeChuBTKnt2vRv437rUrsQZjdaeHoVij5VeA
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(7916004)(4636009)(396003)(376002)(346002)(39860400002)(136003)(46966006)(40470700004)(36840700001)(41300700001)(6506007)(6666004)(9686003)(6512007)(26005)(33716001)(316002)(40480700001)(478600001)(86362001)(82310400005)(6486002)(966005)(81166007)(356005)(40460700003)(82740400003)(47076005)(1076003)(83380400001)(336012)(4326008)(186003)(36860700001)(30864003)(450100002)(70206006)(70586007)(2906002)(44832011)(8676002)(8936002)(5660300002)(6862004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 14:39:28.4988
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0076.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f91ab262-03e5-4578-b15e-08da7494e623
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 14:40:09.0958
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e32b375d-7f76-4841-2762-08da7494ce04
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT042.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5381
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lXclqlQeX0PNGSyQrGL/bvM5XsJjYOxHu3ID8q3oU7gGUPnaH56sEI2ilmUCvfrjxYBeZqvNvA6vZ86KuU9/d3sKgZbHdmWY3s4uVmMHr58=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1488
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier,
-
-Some comments below as I mentioned off-list.
-
-One additional point: some devices need to know if a buffer is
-protected, so that they can configure registers appropriately to make
-use of that protected buffer. There was previously a discussion about
-adding a flag to a dma_buf to indicate that it is allocated from
-protected memory[1].
-
-[1] https://lists.freedesktop.org/archives/dri-devel/2019-September/238059.html
-
-On Tue, Aug 02, 2022 at 11:58:41AM +0200, Olivier Masse wrote:
-> add Linaro secure heap bindings: linaro,secure-heap
-> use genalloc to allocate/free buffer from buffer pool.
-> buffer pool info is from dts.
-> use sg_table instore the allocated memory info, the length of sg_table is 1.
-> implement secure_heap_buf_ops to implement buffer share in difference device:
-> 1. Userspace passes this fd to all drivers it wants this buffer
-> to share with: First the filedescriptor is converted to a &dma_buf using
-> dma_buf_get(). Then the buffer is attached to the device using dma_buf_attach().
-> 2. Once the buffer is attached to all devices userspace can initiate DMA
-> access to the shared buffer. In the kernel this is done by calling dma_buf_map_attachment()
-> 3. get sg_table with dma_buf_map_attachment in difference device.
-> 
-> Signed-off-by: Olivier Masse <olivier.masse@nxp.com>
-> ---
->  drivers/dma-buf/heaps/Kconfig       |  21 +-
->  drivers/dma-buf/heaps/Makefile      |   1 +
->  drivers/dma-buf/heaps/secure_heap.c | 588 ++++++++++++++++++++++++++++
->  3 files changed, 606 insertions(+), 4 deletions(-)
->  create mode 100644 drivers/dma-buf/heaps/secure_heap.c
-> 
-> diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-buf/heaps/Kconfig
-> index 6a33193a7b3e..b2406932192e 100644
-> --- a/drivers/dma-buf/heaps/Kconfig
-> +++ b/drivers/dma-buf/heaps/Kconfig
-> @@ -1,8 +1,12 @@
-> -config DMABUF_HEAPS_DEFERRED_FREE
-> -	tristate
-> +menuconfig DMABUF_HEAPS_DEFERRED_FREE
-> +	bool "DMA-BUF heaps deferred-free library"
-> +	help
-> +	  Choose this option to enable the DMA-BUF heaps deferred-free library.
->  
-> -config DMABUF_HEAPS_PAGE_POOL
-> -	tristate
-> +menuconfig DMABUF_HEAPS_PAGE_POOL
-> +	bool "DMA-BUF heaps page-pool library"
-> +	help
-> +	  Choose this option to enable the DMA-BUF heaps page-pool library.
->  
->  config DMABUF_HEAPS_SYSTEM
->  	bool "DMA-BUF System Heap"
-> @@ -26,3 +30,12 @@ config DMABUF_HEAPS_DSP
->            Choose this option to enable the dsp dmabuf heap. The dsp heap
->            is allocated by gen allocater. it's allocated according the dts.
->            If in doubt, say Y.
-> +
-> +config DMABUF_HEAPS_SECURE
-> +	tristate "DMA-BUF Secure Heap"
-> +	depends on DMABUF_HEAPS && DMABUF_HEAPS_DEFERRED_FREE
-> +	help
-> +	  Choose this option to enable the secure dmabuf heap. The secure heap
-> +	  pools are defined according to the DT. Heaps are allocated
-> +	  in the pools using gen allocater.
-> +	  If in doubt, say Y.
-> diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-buf/heaps/Makefile
-> index e70722ea615e..08f6aa5919d1 100644
-> --- a/drivers/dma-buf/heaps/Makefile
-> +++ b/drivers/dma-buf/heaps/Makefile
-> @@ -4,3 +4,4 @@ obj-$(CONFIG_DMABUF_HEAPS_PAGE_POOL)	+= page_pool.o
->  obj-$(CONFIG_DMABUF_HEAPS_SYSTEM)	+= system_heap.o
->  obj-$(CONFIG_DMABUF_HEAPS_CMA)		+= cma_heap.o
->  obj-$(CONFIG_DMABUF_HEAPS_DSP)          += dsp_heap.o
-> +obj-$(CONFIG_DMABUF_HEAPS_SECURE)	+= secure_heap.o
-> diff --git a/drivers/dma-buf/heaps/secure_heap.c b/drivers/dma-buf/heaps/secure_heap.c
-> new file mode 100644
-> index 000000000000..31aac5d050b4
-> --- /dev/null
-> +++ b/drivers/dma-buf/heaps/secure_heap.c
-> @@ -0,0 +1,588 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * DMABUF secure heap exporter
-> + *
-> + * Copyright 2021 NXP.
-> + */
-> +
-> +#include <linux/dma-buf.h>
-> +#include <linux/dma-heap.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/err.h>
-> +#include <linux/genalloc.h>
-> +#include <linux/highmem.h>
-> +#include <linux/mm.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/scatterlist.h>
-> +#include <linux/slab.h>
-> +#include <linux/vmalloc.h>
-> +
-> +#include "deferred-free-helper.h"
-> +#include "page_pool.h"
-> +
-> +#define MAX_SECURE_HEAP 2
-> +#define MAX_HEAP_NAME_LEN 32
-> +
-> +struct secure_heap_buffer {
-> +	struct dma_heap *heap;
-> +	struct list_head attachments;
-> +	struct mutex lock;
-> +	unsigned long len;
-> +	struct sg_table sg_table;
-> +	int vmap_cnt;
-> +	struct deferred_freelist_item deferred_free;
-> +	void *vaddr;
-> +	bool uncached;
-> +};
-> +
-> +struct dma_heap_attachment {
-> +	struct device *dev;
-> +	struct sg_table *table;
-> +	struct list_head list;
-> +	bool no_map;
-> +	bool mapped;
-> +	bool uncached;
-> +};
-
-I think dma_heap_attachment should have a more specific name,
-otherwise it looks like some generic part of the dma_heap framework.
-
-> +
-> +struct secure_heap_info {
-> +	struct gen_pool *pool;
-> +
-> +	bool no_map;
-> +};
-> +
-> +struct rmem_secure {
-> +	phys_addr_t base;
-> +	phys_addr_t size;
-> +
-> +	char name[MAX_HEAP_NAME_LEN];
-> +
-> +	bool no_map;
-> +};
-> +
-> +static struct rmem_secure secure_data[MAX_SECURE_HEAP] = {0};
-> +static unsigned int secure_data_count;
-> +
-> +static struct sg_table *dup_sg_table(struct sg_table *table)
-> +{
-> +	struct sg_table *new_table;
-> +	int ret, i;
-> +	struct scatterlist *sg, *new_sg;
-> +
-> +	new_table = kzalloc(sizeof(*new_table), GFP_KERNEL);
-> +	if (!new_table)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ret = sg_alloc_table(new_table, table->orig_nents, GFP_KERNEL);
-> +	if (ret) {
-> +		kfree(new_table);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	new_sg = new_table->sgl;
-> +	for_each_sgtable_sg(table, sg, i) {
-> +		sg_set_page(new_sg, sg_page(sg), sg->length, sg->offset);
-> +		new_sg->dma_address = sg->dma_address;
-> +#ifdef CONFIG_NEED_SG_DMA_LENGTH
-> +		new_sg->dma_length = sg->dma_length;
-> +#endif
-> +		new_sg = sg_next(new_sg);
-> +	}
-> +
-> +	return new_table;
-> +}
-> +
-> +static int secure_heap_attach(struct dma_buf *dmabuf,
-> +			      struct dma_buf_attachment *attachment)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	struct secure_heap_info *info = dma_heap_get_drvdata(buffer->heap);
-> +	struct dma_heap_attachment *a;
-> +	struct sg_table *table;
-> +
-> +	a = kzalloc(sizeof(*a), GFP_KERNEL);
-> +	if (!a)
-> +		return -ENOMEM;
-> +
-> +	table = dup_sg_table(&buffer->sg_table);
-> +	if (IS_ERR(table)) {
-> +		kfree(a);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	a->table = table;
-> +	a->dev = attachment->dev;
-> +	INIT_LIST_HEAD(&a->list);
-> +	a->no_map = info->no_map;
-> +	a->mapped = false;
-> +	a->uncached = buffer->uncached;
-> +	attachment->priv = a;
-> +
-> +	mutex_lock(&buffer->lock);
-> +	list_add(&a->list, &buffer->attachments);
-> +	mutex_unlock(&buffer->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static void secure_heap_detach(struct dma_buf *dmabuf,
-> +			       struct dma_buf_attachment *attachment)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	struct dma_heap_attachment *a = attachment->priv;
-> +
-> +	mutex_lock(&buffer->lock);
-> +	list_del(&a->list);
-> +	mutex_unlock(&buffer->lock);
-> +
-> +	sg_free_table(a->table);
-> +	kfree(a->table);
-> +	kfree(a);
-> +}
-> +
-> +static struct sg_table *secure_heap_map_dma_buf(struct dma_buf_attachment *attachment,
-> +						enum dma_data_direction direction)
-> +{
-> +	struct dma_heap_attachment *a = attachment->priv;
-> +	struct sg_table *table = a->table;
-> +	int attr = 0;
-> +	int ret;
-> +
-> +	if (!a->no_map) {
-
-This looks strange - you're expecting this driver to be used on
-regions with no-map set, but if no-map _is_ set, you don't allow the
-dma_buf to get mapped to any devices. Doesn't that mean that these
-buffers can never actually be used?
-
-> +		if (a->uncached)
-> +			attr = DMA_ATTR_SKIP_CPU_SYNC;
-> +
-
-If the CPU can never touch these buffers, is cached vs uncached
-meaningful?
-
-If the TEE touches the buffers from the CPU then perhaps the TEE would
-need to do cache maintenance, but I'd expect that to be managed in the
-TEE.
-
-> +		ret = dma_map_sgtable(attachment->dev, table, direction, attr);
-> +		if (ret)
-> +			return ERR_PTR(ret);
-> +
-> +		a->mapped = true;
-> +	}
-> +
-> +	return table;
-> +}
-> +
-> +static void secure_heap_unmap_dma_buf(struct dma_buf_attachment *attachment,
-> +				      struct sg_table *table,
-> +				      enum dma_data_direction direction)
-> +{
-> +	struct dma_heap_attachment *a = attachment->priv;
-> +	int attr = 0;
-> +
-> +	if (!a->no_map)	{
-> +		if (a->uncached)
-> +			attr = DMA_ATTR_SKIP_CPU_SYNC;
-> +
-> +		a->mapped = false;
-> +		dma_unmap_sgtable(attachment->dev, table, direction, attr);
-> +	}
-> +}
-> +
-> +static int secure_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
-> +						enum dma_data_direction direction)
-
-If the firewall is preventing CPU accesses, then shouldn't
-begin_cpu_access and end_cpu_access either fail or be a no-op?
-
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	struct dma_heap_attachment *a;
-> +
-> +	mutex_lock(&buffer->lock);
-> +
-> +	if (buffer->vmap_cnt)
-> +		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
-> +
-> +	if (!buffer->uncached) {
-> +		list_for_each_entry(a, &buffer->attachments, list) {
-> +			if (!a->mapped)
-> +				continue;
-> +			dma_sync_sgtable_for_cpu(a->dev, a->table, direction);
-> +		}
-> +	}
-> +	mutex_unlock(&buffer->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int secure_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
-> +					      enum dma_data_direction direction)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	struct dma_heap_attachment *a;
-> +
-> +	mutex_lock(&buffer->lock);
-> +
-> +	if (buffer->vmap_cnt)
-> +		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
-> +
-> +	if (!buffer->uncached) {
-> +		list_for_each_entry(a, &buffer->attachments, list) {
-> +			if (!a->mapped)
-> +				continue;
-> +			dma_sync_sgtable_for_device(a->dev, a->table, direction);
-> +		}
-> +	}
-> +	mutex_unlock(&buffer->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int secure_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	struct sg_table *table = &buffer->sg_table;
-> +	unsigned long addr = vma->vm_start;
-> +	struct sg_page_iter piter;
-> +	int ret;
-> +
-> +	if (buffer->uncached)
-> +		vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-> +
-> +	for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
-> +		struct page *page = sg_page_iter_page(&piter);
-> +
-> +		ret = remap_pfn_range(vma, addr, page_to_pfn(page), PAGE_SIZE,
-> +				      vma->vm_page_prot);
-
-If the CPU can't touch these buffers, what would they be mapped to
-userspace for?
-
-> +		if (ret)
-> +			return ret;
-> +		addr += PAGE_SIZE;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static void *secure_heap_do_vmap(struct secure_heap_buffer *buffer)
-> +{
-> +	struct sg_table *table = &buffer->sg_table;
-> +	int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
-> +	struct page **pages = vmalloc(sizeof(struct page *) * npages);
-> +	struct page **tmp = pages;
-> +	struct sg_page_iter piter;
-> +	pgprot_t pgprot = PAGE_KERNEL;
-> +	void *vaddr;
-> +
-> +	if (!pages)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	if (buffer->uncached)
-> +		pgprot = pgprot_writecombine(PAGE_KERNEL);
-> +
-> +	for_each_sgtable_page(table, &piter, 0) {
-> +		WARN_ON(tmp - pages >= npages);
-> +		*tmp++ = sg_page_iter_page(&piter);
-> +	}
-> +
-> +	vaddr = vmap(pages, npages, VM_MAP, pgprot);
-> +	vfree(pages);
-
-Similar to above, if the CPU can't touch these buffers, what would be
-the point of mapping them to the kernel?
-
-> +
-> +	if (!vaddr)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	return vaddr;
-> +}
-> +
-> +static int secure_heap_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	void *vaddr;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&buffer->lock);
-> +	if (buffer->vmap_cnt) {
-> +		buffer->vmap_cnt++;
-> +		goto out;
-> +	}
-> +
-> +	vaddr = secure_heap_do_vmap(buffer);
-> +	if (IS_ERR(vaddr)) {
-> +		ret = PTR_ERR(vaddr);
-> +		goto out;
-> +	}
-> +
-> +	buffer->vaddr = vaddr;
-> +	buffer->vmap_cnt++;
-> +	dma_buf_map_set_vaddr(map, buffer->vaddr);
-> +out:
-> +	mutex_unlock(&buffer->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static void secure_heap_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +
-> +	mutex_lock(&buffer->lock);
-> +	if (!--buffer->vmap_cnt) {
-> +		vunmap(buffer->vaddr);
-> +		buffer->vaddr = NULL;
-> +	}
-> +	mutex_unlock(&buffer->lock);
-> +	dma_buf_map_clear(map);
-> +}
-> +
-> +static void secure_heap_zero_buffer(struct secure_heap_buffer *buffer)
-> +{
-> +	struct sg_table *sgt = &buffer->sg_table;
-> +	struct sg_page_iter piter;
-> +	struct page *p;
-> +	void *vaddr;
-> +
-> +	for_each_sgtable_page(sgt, &piter, 0) {
-> +		p = sg_page_iter_page(&piter);
-> +		vaddr = kmap_atomic(p);
-> +		memset(vaddr, 0, PAGE_SIZE);
-
-How can you do memset on the buffer if the firewall is preventing CPU
-accesses?
-
-> +		kunmap_atomic(vaddr);
-> +	}
-> +}
-> +
-> +static void secure_heap_buf_free(struct deferred_freelist_item *item,
-> +				 enum df_reason reason)
-> +{
-> +	struct secure_heap_buffer *buffer;
-> +	struct secure_heap_info *info;
-> +	struct sg_table *table;
-> +	struct scatterlist *sg;
-> +	int i;
-> +
-> +	buffer = container_of(item, struct secure_heap_buffer, deferred_free);
-> +	info = dma_heap_get_drvdata(buffer->heap);
-> +
-> +	if (!info->no_map) {
-> +		// Zero the buffer pages before adding back to the pool
-> +		if (reason == DF_NORMAL)
-> +			secure_heap_zero_buffer(buffer);
-> +	}
-> +
-> +	table = &buffer->sg_table;
-> +	for_each_sg(table->sgl, sg, table->nents, i)
-> +		gen_pool_free(info->pool, sg_dma_address(sg), sg_dma_len(sg));
-> +
-> +	sg_free_table(table);
-> +	kfree(buffer);
-> +}
-> +
-> +static void secure_heap_dma_buf_release(struct dma_buf *dmabuf)
-> +{
-> +	struct secure_heap_buffer *buffer = dmabuf->priv;
-> +	int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
-> +
-> +	deferred_free(&buffer->deferred_free, secure_heap_buf_free, npages);
-> +}
-> +
-> +static const struct dma_buf_ops secure_heap_buf_ops = {
-> +	.attach = secure_heap_attach,
-> +	.detach = secure_heap_detach,
-> +	.map_dma_buf = secure_heap_map_dma_buf,
-> +	.unmap_dma_buf = secure_heap_unmap_dma_buf,
-> +	.begin_cpu_access = secure_heap_dma_buf_begin_cpu_access,
-> +	.end_cpu_access = secure_heap_dma_buf_end_cpu_access,
-> +	.mmap = secure_heap_mmap,
-> +	.vmap = secure_heap_vmap,
-> +	.vunmap = secure_heap_vunmap,
-> +	.release = secure_heap_dma_buf_release,
-> +};
-> +
-> +static struct dma_buf *secure_heap_do_allocate(struct dma_heap *heap,
-> +					       unsigned long len,
-> +					       unsigned long fd_flags,
-> +					       unsigned long heap_flags,
-> +					       bool uncached)
-> +{
-> +	struct secure_heap_buffer *buffer;
-> +	struct secure_heap_info *info = dma_heap_get_drvdata(heap);
-> +	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
-> +	unsigned long size = roundup(len, PAGE_SIZE);
-> +	struct dma_buf *dmabuf;
-> +	struct sg_table *table;
-> +	int ret = -ENOMEM;
-> +	unsigned long phy_addr;
-> +
-> +	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-> +	if (!buffer)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	INIT_LIST_HEAD(&buffer->attachments);
-> +	mutex_init(&buffer->lock);
-> +	buffer->heap = heap;
-> +	buffer->len = size;
-> +	buffer->uncached = uncached;
-> +
-> +	phy_addr = gen_pool_alloc(info->pool, size);
-> +	if (!phy_addr)
-> +		goto free_buffer;
-> +
-> +	table = &buffer->sg_table;
-> +	if (sg_alloc_table(table, 1, GFP_KERNEL))
-> +		goto free_pool;
-> +
-> +	sg_set_page(table->sgl,	phys_to_page(phy_addr),	size, 0);
-> +	sg_dma_address(table->sgl) = phy_addr;
-> +	sg_dma_len(table->sgl) = size;
-> +
-> +	/* create the dmabuf */
-> +	exp_info.exp_name = dma_heap_get_name(heap);
-> +	exp_info.ops = &secure_heap_buf_ops;
-> +	exp_info.size = buffer->len;
-> +	exp_info.flags = fd_flags;
-> +	exp_info.priv = buffer;
-> +	dmabuf = dma_buf_export(&exp_info);
-> +	if (IS_ERR(dmabuf)) {
-> +		ret = PTR_ERR(dmabuf);
-> +		goto free_pages;
-> +	}
-> +
-> +	return dmabuf;
-> +
-> +free_pages:
-> +	sg_free_table(table);
-> +
-> +free_pool:
-> +	gen_pool_free(info->pool, phy_addr, size);
-> +
-> +free_buffer:
-> +	mutex_destroy(&buffer->lock);
-> +	kfree(buffer);
-> +
-> +	return ERR_PTR(ret);
-> +}
-> +
-> +static struct dma_buf *secure_heap_allocate(struct dma_heap *heap,
-> +					    unsigned long len,
-> +					    unsigned long fd_flags,
-> +					    unsigned long heap_flags)
-> +{
-> +	// use uncache buffer here by default
-> +	return secure_heap_do_allocate(heap, len, fd_flags, heap_flags, true);
-> +	// use cache buffer
-> +	// return secure_heap_do_allocate(heap, len, fd_flags, heap_flags, false);
-> +}
-> +
-> +static const struct dma_heap_ops secure_heap_ops = {
-> +	.allocate = secure_heap_allocate,
-> +};
-> +
-> +static int secure_heap_add(struct rmem_secure *rmem)
-> +{
-> +	struct dma_heap *secure_heap;
-> +	struct dma_heap_export_info exp_info;
-> +	struct secure_heap_info *info = NULL;
-> +	struct gen_pool *pool = NULL;
-> +	int ret = -EINVAL;
-> +
-> +	if (rmem->base == 0 || rmem->size == 0) {
-> +		pr_err("secure_data base or size is not correct\n");
-> +		goto error;
-> +	}
-> +
-> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +	if (!info) {
-> +		pr_err("dmabuf info allocation failed\n");
-> +		ret = -ENOMEM;
-> +		goto error;
-> +	}
-> +
-> +	pool = gen_pool_create(PAGE_SHIFT, -1);
-> +	if (!pool) {
-> +		pr_err("can't create gen pool\n");
-> +		ret = -ENOMEM;
-> +		goto error;
-> +	}
-> +
-> +	if (gen_pool_add(pool, rmem->base, rmem->size, -1) < 0) {
-> +		pr_err("failed to add memory into pool\n");
-> +		ret = -ENOMEM;
-> +		goto error;
-> +	}
-> +
-> +	info->pool = pool;
-> +	info->no_map = rmem->no_map;
-
-This kind of heap probably can't work if the region doesn't have
-no-map, so I think it would make sense to enforce that no_map is set
-(or ignore regions without no-map in DT).
-
-Cheers,
--Brian
-
-> +
-> +	exp_info.name = rmem->name;
-> +	exp_info.ops = &secure_heap_ops;
-> +	exp_info.priv = info;
-> +
-> +	secure_heap = dma_heap_add(&exp_info);
-> +	if (IS_ERR(secure_heap)) {
-> +		pr_err("dmabuf secure heap allocation failed\n");
-> +		ret = PTR_ERR(secure_heap);
-> +		goto error;
-> +	}
-> +
-> +	return 0;
-> +
-> +error:
-> +	kfree(info);
-> +	if (pool)
-> +		gen_pool_destroy(pool);
-> +
-> +	return ret;
-> +}
-> +
-> +static int secure_heap_create(void)
-> +{
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	for (i = 0; i < secure_data_count; i++) {
-> +		ret = secure_heap_add(&secure_data[i]);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int rmem_secure_heap_device_init(struct reserved_mem *rmem,
-> +					 struct device *dev)
-> +{
-> +	dev_set_drvdata(dev, rmem);
-> +	return 0;
-> +}
-> +
-> +static void rmem_secure_heap_device_release(struct reserved_mem *rmem,
-> +					 struct device *dev)
-> +{
-> +	dev_set_drvdata(dev, NULL);
-> +}
-> +
-> +static const struct reserved_mem_ops rmem_dma_ops = {
-> +	.device_init    = rmem_secure_heap_device_init,
-> +	.device_release = rmem_secure_heap_device_release,
-> +};
-> +
-> +static int __init rmem_secure_heap_setup(struct reserved_mem *rmem)
-> +{
-> +	if (secure_data_count < MAX_SECURE_HEAP) {
-> +		int name_len = 0;
-> +		char *s = rmem->name;
-> +
-> +		secure_data[secure_data_count].base = rmem->base;
-> +		secure_data[secure_data_count].size = rmem->size;
-> +		secure_data[secure_data_count].no_map =
-> +			(of_get_flat_dt_prop(rmem->fdt_node, "no-map", NULL) != NULL);
-> +
-> +		while (name_len < MAX_HEAP_NAME_LEN) {
-> +			if ((*s == '@') || (*s == '\0'))
-> +				break;
-> +			name_len++;
-> +			s++;
-> +		}
-> +		if (name_len == MAX_HEAP_NAME_LEN)
-> +			name_len--;
-> +
-> +		strncpy(secure_data[secure_data_count].name, rmem->name, name_len);
-> +
-> +		rmem->ops = &rmem_dma_ops;
-> +		pr_info("Reserved memory: DMA buf secure pool %s at %pa, size %ld MiB\n",
-> +			secure_data[secure_data_count].name,
-> +			&rmem->base, (unsigned long)rmem->size / SZ_1M);
-> +
-> +		secure_data_count++;
-> +		return 0;
-> +	}
-> +	WARN_ONCE(1, "Cannot handle more than %u secure heaps\n", MAX_SECURE_HEAP);
-> +	return -EINVAL;
-> +}
-> +
-> +RESERVEDMEM_OF_DECLARE(secure_heap, "linaro,secure-heap", rmem_secure_heap_setup);
-> +
-> +module_init(secure_heap_create);
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.25.0
-> 
+T24gVHVlLCAyMDIyLTA4LTAyIGF0IDEzOjU5ICswMzAwLCBWbGFkaW1pciBPbHRlYW4gd3JvdGU6
+DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50
+cyB1bmxlc3MgeW91DQo+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gT24gRnJpLCBK
+dWwgMjksIDIwMjIgYXQgMDg6NDc6MzNQTSArMDUzMCwgQXJ1biBSYW1hZG9zcyB3cm90ZToNCj4g
+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9rc3pfY29tbW9uLmMNCj4g
+PiBiL2RyaXZlcnMvbmV0L2RzYS9taWNyb2NoaXAva3N6X2NvbW1vbi5jDQo+ID4gaW5kZXggNTE2
+ZmI5ZDM1Yzg3Li44YTU1ODNiMWYyZjQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvZHNh
+L21pY3JvY2hpcC9rc3pfY29tbW9uLmMNCj4gPiArKysgYi9kcml2ZXJzL25ldC9kc2EvbWljcm9j
+aGlwL2tzel9jb21tb24uYw0KPiA+IEBAIC0xNjEsNiArMTYxLDcgQEAgc3RhdGljIGNvbnN0IHN0
+cnVjdCBrc3pfZGV2X29wcyBrc3o4X2Rldl9vcHMgPQ0KPiA+IHsNCj4gPiAgICAgICAudmxhbl9m
+aWx0ZXJpbmcgPSBrc3o4X3BvcnRfdmxhbl9maWx0ZXJpbmcsDQo+ID4gICAgICAgLnZsYW5fYWRk
+ID0ga3N6OF9wb3J0X3ZsYW5fYWRkLA0KPiA+ICAgICAgIC52bGFuX2RlbCA9IGtzejhfcG9ydF92
+bGFuX2RlbCwNCj4gPiArICAgICAuZHJvcF91bnRhZ2dlZCA9IGtzejhfcG9ydF9lbmFibGVfcHZp
+ZCwNCj4gDQo+IFlvdSdsbCBoYXZlIHRvIGV4cGxhaW4gdGhpcyBvbmUuIFdoYXQgaW1wYWN0IGRv
+ZXMgUFZJRCBpbnNlcnRpb24gb24NCj4gS1NaOA0KPiBoYXZlIHVwb24gZHJvcHBpbmcvbm90IGRy
+b3BwaW5nIHVudGFnZ2VkIHBhY2tldHM/IFRoaXMgcGF0Y2ggaXMNCj4gc2F5aW5nDQo+IHRoYXQg
+d2hlbiB1bnRhZ2dlZCBwYWNrZXRzIHNob3VsZCBiZSBkcm9wcGVkLCBQVklEIGluc2VydGlvbiBz
+aG91bGQNCj4gYmUNCj4gZW5hYmxlZCwgYW5kIHdoZW4gdW50YWdnZWQgcGFja2V0cyBzaG91bGQg
+YmUgYWNjZXB0ZWQsIFBWSUQgaW5zZXJ0aW9uDQo+IHNob3VsZCBiZSBkaXNhYmxlZC4gSG93IGNv
+bWU/DQoNCkl0cyBteSBtaXN0YWtlLiBJIHJlZmVycmVkIEtTWjg3eHggZGF0YXNoZWV0IGJ1dCBJ
+IGNvdWxkbid0IGZpbmQgdGhlDQpyZWdpc3RlciBmb3IgdGhlIGRyb3BwaW5nIHRoZSB1bnRhZ2dl
+ZCBwYWNrZXQuIElmIHRoYXQgaXMgdGhlIGNhc2UsDQpzaGFsbCBJIHJlbW92ZSB0aGUgZHJvcHBp
+bmcgb2YgdW50YWdnZWQgcGFja2V0IGZlYXR1cmUgZnJvbSB0aGUga3N6OA0Kc3dpdGNoZXM/DQoN
+Cj4gDQo+ID4gICAgICAgLm1pcnJvcl9hZGQgPSBrc3o4X3BvcnRfbWlycm9yX2FkZCwNCj4gPiAg
+ICAgICAubWlycm9yX2RlbCA9IGtzejhfcG9ydF9taXJyb3JfZGVsLA0KPiA+ICAgICAgIC5nZXRf
+Y2FwcyA9IGtzejhfZ2V0X2NhcHMsDQo+ID4gQEAgLTE4Nyw2ICsxODgsNyBAQCBzdGF0aWMgY29u
+c3Qgc3RydWN0IGtzel9kZXZfb3BzIGtzejk0NzdfZGV2X29wcw0KPiA+ID0gew0KPiA+ICAgICAg
+IC52bGFuX2ZpbHRlcmluZyA9IGtzejk0NzdfcG9ydF92bGFuX2ZpbHRlcmluZywNCj4gPiAgICAg
+ICAudmxhbl9hZGQgPSBrc3o5NDc3X3BvcnRfdmxhbl9hZGQsDQo+ID4gICAgICAgLnZsYW5fZGVs
+ID0ga3N6OTQ3N19wb3J0X3ZsYW5fZGVsLA0KPiA+ICsgICAgIC5kcm9wX3VudGFnZ2VkID0ga3N6
+OTQ3N19wb3J0X2Ryb3BfdW50YWdnZWQsDQo+ID4gICAgICAgLm1pcnJvcl9hZGQgPSBrc3o5NDc3
+X3BvcnRfbWlycm9yX2FkZCwNCj4gPiAgICAgICAubWlycm9yX2RlbCA9IGtzejk0NzdfcG9ydF9t
+aXJyb3JfZGVsLA0KPiA+ICAgICAgIC5nZXRfY2FwcyA9IGtzejk0NzdfZ2V0X2NhcHMsDQo+ID4g
+QEAgLTIyMCw2ICsyMjIsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGtzel9kZXZfb3BzIGxhbjkz
+N3hfZGV2X29wcw0KPiA+ID0gew0KPiA+ICAgICAgIC52bGFuX2ZpbHRlcmluZyA9IGtzejk0Nzdf
+cG9ydF92bGFuX2ZpbHRlcmluZywNCj4gPiAgICAgICAudmxhbl9hZGQgPSBrc3o5NDc3X3BvcnRf
+dmxhbl9hZGQsDQo+ID4gICAgICAgLnZsYW5fZGVsID0ga3N6OTQ3N19wb3J0X3ZsYW5fZGVsLA0K
+PiA+ICsgICAgIC5kcm9wX3VudGFnZ2VkID0ga3N6OTQ3N19wb3J0X2Ryb3BfdW50YWdnZWQsDQo+
+ID4gICAgICAgLm1pcnJvcl9hZGQgPSBrc3o5NDc3X3BvcnRfbWlycm9yX2FkZCwNCj4gPiAgICAg
+ICAubWlycm9yX2RlbCA9IGtzejk0NzdfcG9ydF9taXJyb3JfZGVsLA0KPiA+ICAgICAgIC5nZXRf
+Y2FwcyA9IGxhbjkzN3hfcGh5bGlua19nZXRfY2FwcywNCj4gPiBAQCAtMTI1NCw2ICsxMjU3LDkg
+QEAgc3RhdGljIGludCBrc3pfZW5hYmxlX3BvcnQoc3RydWN0IGRzYV9zd2l0Y2gNCj4gPiAqZHMs
+IGludCBwb3J0LA0KPiA+ICB7DQo+ID4gICAgICAgc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGRz
+LT5wcml2Ow0KPiA+IA0KPiA+ICsgICAgIGRldi0+ZGV2X29wcy0+dmxhbl9hZGQoZGV2LCBwb3J0
+LCBLU1pfREVGQVVMVF9WTEFOLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgQlJJ
+REdFX1ZMQU5fSU5GT19VTlRBR0dFRCk7DQo+ID4gKw0KPiANCj4gSG93IG1hbnkgdGltZXMgY2Fu
+IHRoaXMgYmUgZXhlY3V0ZWQgYmVmb3JlIHRoZSBWTEFOIGFkZCBvcGVyYXRpb24NCj4gZmFpbHMN
+Cj4gZHVlIHRvIHRoZSBWTEFOIGFscmVhZHkgYmVpbmcgcHJlc2VudCBvbiB0aGUgcG9ydD8gSSBu
+b3RpY2UgeW91J3JlDQo+IGlnbm9yaW5nIHRoZSByZXR1cm4gY29kZS4gV291bGRuJ3QgaXQgYmUg
+YmV0dGVyIHRvIGRvIHRoaXMgYXQNCj4gcG9ydF9zZXR1cCgpIHRpbWUgaW5zdGVhZD8NCj4gDQo+
+IChzaWRlIG5vdGUsIHRoZSBQVklEIGZvciBzdGFuZGFsb25lIG1vZGUgY2FuIGJlIGFkZGVkIGF0
+IHBvcnRfc2V0dXANCj4gdGltZS4gVGhlIFBWSUQgdG8gdXNlIGZvciBicmlkZ2VzIGluIFZMQU4t
+dW5hd2FyZSBtb2RlIGNhbiBiZQ0KPiBhbGxvY2F0ZWQNCj4gYXQgcG9ydF9icmlkZ2Vfam9pbiB0
+aW1lKQ0KDQpPay4gSSB3aWxsIGFkZCBpbiBwb3J0X2JyaWRnZV9qb2luIGZ1bmN0aW9uIGZvciBi
+cmlkZ2Ugdmxhbl9hd2FyZQ0KcG9ydHMuDQoNCj4gDQo+ID4gICAgICAgaWYgKCFkc2FfaXNfdXNl
+cl9wb3J0KGRzLCBwb3J0KSkNCj4gPiAgICAgICAgICAgICAgIHJldHVybiAwOw0KPiA+IA0KPiA+
+ICtzdGF0aWMgaW50IGtzel9jb21taXRfcHZpZChzdHJ1Y3QgZHNhX3N3aXRjaCAqZHMsIGludCBw
+b3J0KQ0KPiA+ICt7DQo+ID4gKyAgICAgc3RydWN0IGRzYV9wb3J0ICpkcCA9IGRzYV90b19wb3J0
+KGRzLCBwb3J0KTsNCj4gPiArICAgICBzdHJ1Y3QgbmV0X2RldmljZSAqYnIgPSBkc2FfcG9ydF9i
+cmlkZ2VfZGV2X2dldChkcCk7DQo+ID4gKyAgICAgc3RydWN0IGtzel9kZXZpY2UgKmRldiA9IGRz
+LT5wcml2Ow0KPiA+ICsgICAgIHUxNiBwdmlkID0gS1NaX0RFRkFVTFRfVkxBTjsNCj4gPiArICAg
+ICBib29sIGRyb3BfdW50YWdnZWQgPSBmYWxzZTsNCj4gPiArICAgICBzdHJ1Y3Qga3N6X3BvcnQg
+KnA7DQo+ID4gKw0KPiA+ICsgICAgIHAgPSAmZGV2LT5wb3J0c1twb3J0XTsNCj4gPiArDQo+ID4g
+KyAgICAgaWYgKGJyICYmIGJyX3ZsYW5fZW5hYmxlZChicikpIHsNCj4gPiArICAgICAgICAgICAg
+IHB2aWQgPSBwLT5icmlkZ2VfcHZpZC52aWQ7DQo+ID4gKyAgICAgICAgICAgICBkcm9wX3VudGFn
+Z2VkID0gIXAtPmJyaWRnZV9wdmlkLnZhbGlkOw0KPiA+ICsgICAgIH0NCj4gDQo+IFRoaXMgaXMg
+YmV0dGVyIGluIHRoZSBzZW5zZSB0aGF0IGl0IHJlc29sdmVzIHRoZSBuZWVkIGZvciB0aGUNCj4g
+Y29uZmlndXJlX3ZsYW5fd2hpbGVfbm90X2ZpbHRlcmluZyBoYWNrLiBCdXQgc3RhbmRhbG9uZSBh
+bmQgVkxBTi0NCj4gdW5hd2FyZQ0KPiBicmlkZ2UgcG9ydHMgc3RpbGwgc2hhcmUgdGhlIHNhbWUg
+UFZJRC4gRXZlbiBtb3JlIHNvLCBzdGFuZGFsb25lDQo+IHBvcnRzDQo+IGhhdmUgYWRkcmVzcyBs
+ZWFybmluZyBlbmFibGVkLCB3aGljaCB3aWxsIHBvaXNvbiB0aGUgYWRkcmVzcyBkYXRhYmFzZQ0K
+PiBvZg0KPiBWTEFOLXVuYXdhcmUgYnJpZGdlIHBvcnRzIChhbmQgb2Ygb3RoZXIgc3RhbmRhbG9u
+ZSBwb3J0cyk6DQo+IA0KaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0L25ldGRl
+dmJwZi9wYXRjaC8yMDIyMDgwMjAwMjYzNi4zOTYzMDI1LTEtdmxhZGltaXIub2x0ZWFuQG54cC5j
+b20vDQo+IA0KPiBBcmUgeW91IGdvaW5nIHRvIGRvIGZ1cnRoZXIgd29yayBpbiB0aGlzIGFyZWE/
+DQoNCkZvciBub3csIEkgdGhvdWdodCBJIGNhbiBmaXggdGhlIGlzc3VlIGZvciBicmlkZ2Ugdmxh
+biB1bmF3YXJlIHBvcnQuIEkNCmhhdmUgZmV3IG90aGVyIHBhdGNoIHNlcmllcyB0byBiZSBzdWJt
+aXR0ZWQgbGlrZSBnUFRQLCB0YyBjb21tYW5kcy4gSWYNCnN0YW5kYWxvbmUgcG9ydCBmaXggYWxz
+byBuZWVkZWQgZm9yIHlvdXIgcGF0Y2ggc2VyaWVzIEkgY2FuIHdvcmsgb24gaXQNCm90aGVyd2lz
+ZSBJIGNhbiB0YWtlIHVwIGxhdGVyIHN0YWdlLg0KDQoNCj4gDQo+ID4gKw0KPiA+ICsgICAgIGtz
+el9zZXRfcHZpZChkZXYsIHBvcnQsIHB2aWQpOw0KPiA+ICsNCj4gPiArICAgICBpZiAoZGV2LT5k
+ZXZfb3BzLT5kcm9wX3VudGFnZ2VkKQ0KPiA+ICsgICAgICAgICAgICAgZGV2LT5kZXZfb3BzLT5k
+cm9wX3VudGFnZ2VkKGRldiwgcG9ydCwNCj4gPiBkcm9wX3VudGFnZ2VkKTsNCj4gPiArDQo+ID4g
+KyAgICAgcmV0dXJuIDA7DQo+ID4gK30NCg==

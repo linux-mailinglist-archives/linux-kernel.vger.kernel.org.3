@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F104587561
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B5F587562
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbiHBCBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S235276AbiHBCBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235646AbiHBCAy (ORCPT
+        with ESMTP id S235904AbiHBCBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:00:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110AA9FC6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 19:00:53 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxdS20W7PzlVws;
-        Tue,  2 Aug 2022 09:58:10 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 10:00:50 +0800
-To:     Linux-MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Subject: [bug report] mm, hwpoison: memory_failure races with
- alloc_fresh_huge_page/free_huge_page
-Message-ID: <3c542543-0965-ef60-4627-1a4116077a5b@huawei.com>
-Date:   Tue, 2 Aug 2022 10:00:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 1 Aug 2022 22:01:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85F3F5AE;
+        Mon,  1 Aug 2022 19:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659405675; x=1690941675;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QFlgAKqTB8gdWypxOP5EQfQFZ19EkRrqD1V34Ml/mk0=;
+  b=GnzOnI0/32UPZfU7T1W71NKY12KPvzAKT3YhNujOg9XeftIr/K2b0LuV
+   zdqvwewrwI+H9V1AX3irNLM9OqVhQAxU0Rm0rJ7XLKSUwBvAKuGqmBYkm
+   PtKYnwsgK7CN/PH0xdLqqRkyfz4d4+C47I7lDI/zvFgaIKLSsgZWZQiy1
+   iLNwSuUYF7qOWM/xIuSRC81IVs7oOwZyB16/xpHA4VTyMpUrcaYuDraBS
+   X+pZZkkOnPwlMEyEoWqgZPXcDk5IYgjpymVSkANvqvHNk5Z7CBC2uuJOy
+   HXVXlHEQ/LsAoXvdTsyb1trn1e1rAoWmu59kfiFeYnb5XC2+9UowS6HM9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290072321"
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="290072321"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 19:01:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="661419442"
+Received: from xinyuwa2-mobl1.ccr.corp.intel.com (HELO [10.255.28.181]) ([10.255.28.181])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 19:01:12 -0700
+Message-ID: <7bd30975-fdcc-7d87-af4a-448b92bb6e02@linux.intel.com>
+Date:   Tue, 2 Aug 2022 10:01:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH v5 1/22] x86/virt/tdx: Detect TDX during kernel boot
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
+From:   "Wu, Binbin" <binbin.wu@linux.intel.com>
+In-Reply-To: <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all:
-    When I investigate the mm/memory-failure.c code again, I found there's a possible race window
-between memory_failure and alloc_fresh_huge_page/free_huge_page. Thank about the below scene:
 
-CPU 1							CPU 2
-alloc_fresh_huge_page -- page refcnt > 0		memory_failure
-  prep_new_huge_page					  get_huge_page_for_hwpoison
-							    !PageHeadHuge -- so 2(not a hugepage) is returned
-    hugetlb_vmemmap_optimize -- subpages is read-only
-    set_compound_page_dtor -- PageHuge is true now, but too late!!!
-							  TestSetPageHWPoison(p)
-							    -- We might write to read-only subpages here!!!
+On 2022/6/22 19:15, Kai Huang wrote:
+> +	/*
+> +	 * TDX guarantees at least two TDX KeyIDs are configured by
+> +	 * BIOS, otherwise SEAMRR is disabled.  Invalid TDX private
+> +	 * range means kernel bug (TDX is broken).
+> +	 */
+> +	if (WARN_ON(!tdx_keyid_start || tdx_keyid_num < 2)) {
+Do you think it's better to define a meaningful macro instead of the 
+number here and below?
+> +		tdx_keyid_start = tdx_keyid_num = 0;
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
 
-Another similar scene:
-
-CPU 1							CPU 2
-free_huge_page -- page refcnt == 0 and not PageHuge	memory_failure
-							  get_huge_page_for_hwpoison
-							    !PageHeadHuge -- so 2(not a hugepage) is returned
-							  TestSetPageHWPoison(p)
-							    -- We might write to read-only subpages here!!!
-  hugetlb_vmemmap_restore -- subpages can be written to now, but too late!!!
-
-I think the above scenes are possible. But I can't found a stable solution to fix it. Any suggestions?
-Or is it not worth to fix it as it's too rare? Or am I miss something?
-
-Any response would be appreciated!
-
-Thanks!
+> +
+> +/**
+> + * platform_tdx_enabled() - Return whether BIOS has enabled TDX
+> + *
+> + * Return whether BIOS has enabled TDX regardless whether the TDX module
+> + * has been loaded or not.
+> + */
+> +bool platform_tdx_enabled(void)
+> +{
+> +	return tdx_keyid_num >= 2;
+> +}
+>
+>

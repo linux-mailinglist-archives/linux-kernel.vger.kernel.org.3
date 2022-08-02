@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B70587A96
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13722587AA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiHBKWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S236336AbiHBKZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiHBKWk (ORCPT
+        with ESMTP id S233152AbiHBKZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:22:40 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811A14D4EC;
-        Tue,  2 Aug 2022 03:22:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KIfUDBgDf+4TmnyRq+MLCNIGj77fO1CDcu4iY4ej0xlwOk5VAf37xcd9R40pVCzm/WGO4C95MLpBfv/LCe/Z8ZuiQk7yWxWKgviXCZW5UfBoaFTAIfY9BYDOsWyDFInD0VsHgETH9d2WZoGQ7DsUNwig7bBhQI2fwm63UNHOeTUGHaKfqXrdsxKjeQ/SDHELs640+AvF6RwVjRfWXlfJh8CKh25Yj32QHQWxi4J4hBhQUXCZRZPI5mZSmGsyaR1HXfWhXi8QXykgpHEtv1ImJwDLrLLe4QFk8YhJg47y0JeceGwpMTkLL2b21sL+oQJPWkTIEdxFAyFXMxVbE4aLeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hxFmZJ30Q5dN1XVbkd07mmY5cV0iFlpxYaMZMEQqXXY=;
- b=eGM4Gi6RMsJdQDMdQHbYDhEUD4VBZw4zpcbHlhgTjcdCSl7VsdGVnAUn4IzGyrNvSJmeMYnz1St7jPEpRP/JR7sogZTo8RAWB+jZUFnmd4NSH87hWGNalrD403uqfeB9XbJlqIXk3g6IhOfY0ulvh62qhO51i3axnYuZEgkMfySKJrBQCwJyyfAf8gBH3CBt/GcwkiZCR4G3XMKJMIS1w4cUSq17FFlIhEBD0Y5/1+RSWF6zaDKE9/Cux7AgEqheihlex88v4ExFpPw+vVR1iVDrZBhp1C47FbySGjmtEeH16H1Kg4S+UYqR7i2SlqSdKxYtGfh2i7Da/woZM2kmyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hxFmZJ30Q5dN1XVbkd07mmY5cV0iFlpxYaMZMEQqXXY=;
- b=u7+Cvq7G3cfqQXIG6vqyBSo45HNPthX6lyPHPJwSceuDj9FoX/az160mLQruTTdllCGsBLwZYYNXFh5FSUbLeBNbCS91Hw1rxVAb1FuEVSqdAx6jI1B0fDDQKrgrbMLlsdcFsOuO1aE9I0Qc/QsR0gzL7kaWRIqJIijIqwvp8A4=
-Received: from MW4PR03CA0354.namprd03.prod.outlook.com (2603:10b6:303:dc::29)
- by DM6PR12MB4338.namprd12.prod.outlook.com (2603:10b6:5:2a2::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 10:22:37 +0000
-Received: from CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::fa) by MW4PR03CA0354.outlook.office365.com
- (2603:10b6:303:dc::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
- Transport; Tue, 2 Aug 2022 10:22:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT005.mail.protection.outlook.com (10.13.174.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5482.11 via Frontend Transport; Tue, 2 Aug 2022 10:22:37 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 2 Aug
- 2022 05:22:36 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 2 Aug
- 2022 03:22:35 -0700
-Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 2 Aug 2022 05:22:33 -0500
-From:   Harini Katakam <harini.katakam@amd.com>
-To:     <vkoul@kernel.org>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <harinikatakamlinux@gmail.com>, <michal.simek@amd.com>,
-        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
-Subject: [PATCH] dmaengine: pl330: Remove unused flags
-Date:   Tue, 2 Aug 2022 15:52:32 +0530
-Message-ID: <20220802102232.17653-1-harini.katakam@amd.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 2 Aug 2022 06:25:11 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B9D214
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:25:09 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t22so21310666lfg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 03:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=32riGaBNwk3VyE6hdv+6XAqjeRv6luXruUcdG+hakbQ=;
+        b=b6nSHDRd+QIf+kmD8yFl2XXoQ+t/lW5t1U8cXmezYH1hL/VW/w8RxVa2zqq6GS3qgB
+         a8T2zSPYz6ZduPNDPwRnuSE2537utEOyey8hWXAR5KvFfcw2K6TgKp5EiGglOz08N3tf
+         yAHvpM8CQUq3bmUs1NZoc1DfKNm2oJ63pPFRZ8eAVn4KpjUZkRXveWtfP1098DwbDIFE
+         /LY2tvIAKo1uUjC2X6cH5vrWqLT5WCLtvI3CUTlKtWq8O8MpywrR4xcFsRT17XXEl9hs
+         +9z+nbA5NeLqNNRUMwSZgiO+sqYDz7idzMqc2RA3rNyX9Edkw+e4BCVWbw/eNX0pGEHm
+         tweA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=32riGaBNwk3VyE6hdv+6XAqjeRv6luXruUcdG+hakbQ=;
+        b=AE9U8LmaU+IFZ3U1gifWKWhoqzatYJJRLi4H5qwuIsPscBrzNxF9kcduOBXhw8c0+a
+         nhXhzndbiYBTNA8R/TuywrUPOL0c82Zf6/T+bGESXU117xRpQU4yStz2dDsdRjyHJmqu
+         BZReu7tbsIHVRBKyZRR7ixspVGJwu6R6zybgaLU0CtZJjxtQdhBXAOKtwIp/cpx3N3Pn
+         1yxZ4YrnyCjVgAvEkVCTLbRdmSO6PTdurze5jB4ZShpbXRxL2r8X80B1loMbYZVoMvbf
+         hpSdiRdBxHwe/kgtTC7il+lR8p6D6htGFQNb21SsZImLLkJNPbnlCFKPGqQteVgy3BB3
+         HbdQ==
+X-Gm-Message-State: AJIora9B2GsuxULd+uD+nz7WCO2XlPFGZexj7XPH1osHzpl/qEQxTRYC
+        wigMxVWYTPFA96K0zR7TqG6sZw==
+X-Google-Smtp-Source: AGRyM1u+TP2rU6tMjJYBCvpxi30NLlMB5vS9w9pZe4/rLLuZSbqipQFppJ/UeMA3ywR6StzKur38dQ==
+X-Received: by 2002:a05:6512:3981:b0:48a:6fb9:74b7 with SMTP id j1-20020a056512398100b0048a6fb974b7mr6811569lfu.98.1659435907780;
+        Tue, 02 Aug 2022 03:25:07 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05651c02c800b0025e66a771efsm7596ljo.136.2022.08.02.03.25.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 03:25:07 -0700 (PDT)
+Message-ID: <3406e537-cc97-42c5-2342-cee18e8054fc@linaro.org>
+Date:   Tue, 2 Aug 2022 12:25:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 75f3dd29-bf5d-4552-802f-08da7470ec2b
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4338:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jn+EimVEgp+GS6FlQUvQqK/Tab7sWdM4ID8yHIMa/00UlkfuGtIjL4I3Mrbj+M9EljZZtaVy38SWLF3xicOsOGP1sQ6e+ln8MaC9JEpI3FTnKz7c/KJOB91gZl3neXbk37Nt11sS5CG/ptm0SsGozJlwEVK/qTpzXCIOdEln4TlSIIEwboglPx4yhmai24Q5UqR464sbFmIozDfiZr8rFA+uuyOPwtpYKyPzF8m6xS2qqw9JZ1dUz/g5qN0D1WUBfGLtd3Qgc3UYSuU4iEyeVLj/t+ThOSjpfBM9pO3pKXISM/pETV40ZSpzm/GVWY/zobo1VtlR8UzM2ofr/HtVJnrGNSAoc15+LhrRevfOXI2Pb+BNadFs2Uow3jE0duOuBVTskkOZR2qZk3lG2b2/mM6DyPfAcFZ1D1Mb/cC3BUP4+k8I/M4v5WNiGqiNLA0pnLcHg5+mQTu/1ClgHgWFvG0xzCYT3BhQqvVn3IiJkp2Gtp3cRf+axs1ux8eU2vDva7VAxxp/84M3XZ8Oc+SNYO5hNqD93KuW/Gj77L+vtojjmLlSs4QTb0+p96f7T7nYXUQboybs3yZAwPbG/8tYP5VeK63TlUMJFnviSQLIMbYHFZro2Zf/NpEozkcRQc1c0z4yw/L3dy4Ihzjk9VS1YCP/O8il43H/py5FnER9V+9gZMRmfVfUzI6DSclnoVjY5ttuSuaUeiJ9Vsj+M6Jfsc870s2B8Z00EvGmucERF0NI7+dMSotSAJUeZKG+2O9+lXtTvsXR6jM4TxGtP6HyZEYRyiTig+QGakwM+VkdKJ5L0gfP6aL1LuCeHEHPXH1N9+KBIDooreGcCPAIC1Z++A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(346002)(376002)(36840700001)(40470700004)(46966006)(8676002)(83380400001)(4744005)(4326008)(2616005)(1076003)(36860700001)(186003)(36756003)(8936002)(70586007)(70206006)(5660300002)(44832011)(2906002)(316002)(478600001)(82310400005)(40480700001)(6916009)(54906003)(41300700001)(86362001)(26005)(40460700003)(336012)(426003)(47076005)(81166007)(82740400003)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 10:22:37.2060
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75f3dd29-bf5d-4552-802f-08da7470ec2b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4338
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/3] spi: dt-binding: add Microchip CoreQSPI compatible
+Content-Language: en-US
+To:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor.dooley@microchip.com
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220802070518.855951-1-nagasuresh.relli@microchip.com>
+ <20220802070518.855951-2-nagasuresh.relli@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220802070518.855951-2-nagasuresh.relli@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-txd.flags is unused and need not be updated.
+On 02/08/2022 09:05, Naga Sureshkumar Relli wrote:
+> Add compatible string for Microchip CoreQSPI controller.
+> 
+> Signed-off-by: Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>
+> ---
+>  .../devicetree/bindings/spi/microchip,mpfs-spi.yaml  | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> index 7326c0a28d16..8d252eb8c460 100644
+> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> @@ -14,9 +14,15 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - microchip,mpfs-spi
+> -      - microchip,mpfs-qspi
+> +    oneOf:
+> +      - description: Microchip's Polarfire SoC QSPI controller.
+> +        items:
+> +          - const: microchip,mpfs-qspi
+> +          - const: microchip,coreqspi-rtl-v2
 
-Signed-off-by: Harini Katakam <harini.katakam@amd.com>
----
- drivers/dma/pl330.c | 4 ----
- 1 file changed, 4 deletions(-)
+This is a bit confusing and it is no described in commit msg. You change
+ compatibles for existing binding. This must be a separate commit with
+its own explanation/reasoning.
 
-diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
-index 09915a5cba3e..0d9257fbdfb0 100644
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -2752,7 +2752,6 @@ static struct dma_async_tx_descriptor *pl330_prep_dma_cyclic(
- 		return NULL;
- 
- 	pch->cyclic = true;
--	desc->txd.flags = flags;
- 
- 	return &desc->txd;
- }
-@@ -2804,8 +2803,6 @@ pl330_prep_dma_memcpy(struct dma_chan *chan, dma_addr_t dst,
- 
- 	desc->bytes_requested = len;
- 
--	desc->txd.flags = flags;
--
- 	return &desc->txd;
- }
- 
-@@ -2889,7 +2886,6 @@ pl330_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
- 	}
- 
- 	/* Return the last desc in the chain */
--	desc->txd.flags = flg;
- 	return &desc->txd;
- }
- 
--- 
-2.17.1
 
+Best regards,
+Krzysztof

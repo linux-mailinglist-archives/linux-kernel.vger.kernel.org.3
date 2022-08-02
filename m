@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50943587E26
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2314C587E2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237282AbiHBO3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S236904AbiHBOc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237284AbiHBO3k (ORCPT
+        with ESMTP id S234788AbiHBOcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:29:40 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EA31A39E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:29:38 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id q14so10772124iod.3
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:29:38 -0700 (PDT)
+        Tue, 2 Aug 2022 10:32:23 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9562A7;
+        Tue,  2 Aug 2022 07:32:22 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o3so13619167ple.5;
+        Tue, 02 Aug 2022 07:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=X7Hm0u9qMwzlB0EPKeiGIRJ5T3Cdcf+L/7KSSDvl0hk=;
-        b=V3CbIjz0IqwMu9qJT7/0gVE97AFRo6nwNmwyuXcOiFRsIF4gTG63bgySn0IZedd73R
-         rWI8/uffPLy8/IaRwVPUOWUgplTP+nC595Hq63FfIRQW7rQsPFe73x9/K1as9/QtP4fI
-         l8Zqwp+lo0Dhm+cV6MyiAJTpu9vS7StOH/8PU=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=a2I3feE0Mlfc3dQYVR+6wp2Xd8855Ae93uhZIIi/yHM=;
+        b=aesQNlVxD1yT/+g/rcziiqLmKf9Hlm4zQQ8bBvOm0oMfANjlGDpxKqZmpWKm2YnQDm
+         LFZ/MXvbb3s71YM75UkKN4Jt4s/ZWOV3PKtzYjpYxhWxYjfsefJutvUBRtmXRkDT/+fh
+         gvKoiOn1EBsouTWHyg6Ju3+b6aBVDJ1KmwG+DpepedgZHxZgRbFkbSTgUmbcGvP0mIp0
+         y/+m+2Hx6jAYOjwCJ0cO5ZlX1EwegRTdAkUDJY2269qXI/owaAW0twShGzApePCaVe7h
+         D/jqVN4qGJ8AoNxqd1bLBacScqDR+hSIys2eexLd8l1X5EptRGbTSsyq3NtxmxZmQdO6
+         O7+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X7Hm0u9qMwzlB0EPKeiGIRJ5T3Cdcf+L/7KSSDvl0hk=;
-        b=yHdI5RdUQRaaYCOYxKjltXM6s9hsbCsRo1OrbBIZxxgM+bNRH2TtXYMHioC6RVvhA7
-         kdR7x+DoyfRj58UG6oH1DDti7ymPC/P9R3txXb0VULIC1HIv+oAkCNa1zsmnGfMB0MX0
-         8qiR4gl+MtN48t0rSoZpTYCBPEv42uMMx9z8oUadeobysGdvi9ehktB5N0YOUd/lhJbZ
-         Yyu7fo7EL4wwDYoixXwBmO45++GQ0BnkKk6AdSRYze8/0iv42XbNg2LOxiVGaOo37Jx7
-         11u6t7GJ8LjAxkULQqeddlOTXvyblWhe0zWWj/VCAVjUl7GA1V88G/8/Q0LHpzvbfIbg
-         z0rQ==
-X-Gm-Message-State: AJIora+6A+KqBqbncyA+/FXmOr9rI8d9ZRmmjvgNxgzG5pdKPeggBNS/
-        7fPvTNBlhn0l2uW9usXJ0EukFuXGTcPfEQ==
-X-Google-Smtp-Source: AGRyM1sv2sJthqbr+9zq0hE9qcHjoYD1XTNQ+/fOt/wczi41khz9f7bL+JmEmLJtn1TwRrTbqqma9w==
-X-Received: by 2002:a05:6638:37aa:b0:33f:8980:5b50 with SMTP id w42-20020a05663837aa00b0033f89805b50mr8482091jal.103.1659450577255;
-        Tue, 02 Aug 2022 07:29:37 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z11-20020a027a4b000000b00339bae1dab9sm6483462jad.40.2022.08.02.07.29.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 07:29:36 -0700 (PDT)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
- <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <84560b65-12ed-da24-3698-45484f80802a@linuxfoundation.org>
-Date:   Tue, 2 Aug 2022 08:29:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=a2I3feE0Mlfc3dQYVR+6wp2Xd8855Ae93uhZIIi/yHM=;
+        b=DplfZWu2I5g6QWxGV4yrpLSf6P8/jGGrl+3HNy6wZykJluMazYLUJ3aOf9oedhiNEK
+         AGxgaLVuomVIgElgdXCYh57lXq9FT/uQ2d2I56FrylPRj254p76RVsO/OqiZzdw+ZMiA
+         Ieh0bNGVrhvNYgeKcP2vlNnVzC4R7N0ytpXRcCMyLEGvo/Y5FIXChho7lGqMVcfCzZww
+         iSXGyiowLomm1EGy8s/sFagsDJKMYOozbzzWYUEVVwOhRgmXbwg9w8otqA83Z4VpTCFR
+         DUP694AgxbUYejerBpHnbMrqqB3n5lovW15QWWqA7sCckZyXxUx9mzHb2X13C0hT7Lvn
+         ZJ7Q==
+X-Gm-Message-State: ACgBeo2zdOAEClkntUsJI45ljvZcicBNDueYSEaOIxb6SwI9iNZdaoWm
+        Gt6COsA9Ue7GlZsl+IcSvk4=
+X-Google-Smtp-Source: AA6agR5f0C9L4dHw1ZGT1V6HsSKE+oSWd0oY5hDNIEcYNyrNHoM+heSlQ+rbuArRCrxHcS4G+noBOA==
+X-Received: by 2002:a17:902:ab96:b0:16a:6db6:2715 with SMTP id f22-20020a170902ab9600b0016a6db62715mr22067267plr.141.1659450741586;
+        Tue, 02 Aug 2022 07:32:21 -0700 (PDT)
+Received: from localhost ([223.104.103.89])
+        by smtp.gmail.com with ESMTPSA id q16-20020a17090311d000b0016be6a554b5sm12172323plh.233.2022.08.02.07.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 07:32:21 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     jakub@cloudflare.com
+Cc:     18801353760@163.com, andrii@kernel.org, ast@kernel.org,
+        borisp@nvidia.com, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, guvenc@linux.ibm.com,
+        guwen@linux.alibaba.com, john.fastabend@gmail.com, kafai@fb.com,
+        kgraul@linux.ibm.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, paskripkin@gmail.com,
+        skhan@linuxfoundation.org, songliubraving@fb.com,
+        syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, ubraun@linux.ibm.com,
+        wenjia@linux.ibm.com, yhs@fb.com, yin31149@gmail.com
+Subject: Re: [PATCH v2] net/smc: fix refcount bug in sk_psock_get (2)
+Date:   Tue,  2 Aug 2022 22:32:14 +0800
+Message-Id: <20220802143214.5885-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87wnbsjpdb.fsf@cloudflare.com>
+References: <87wnbsjpdb.fsf@cloudflare.com>
 MIME-Version: 1.0
-In-Reply-To: <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,57 +80,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 3:51 AM, Mickaël Salaün wrote:
-> Hi,
-> 
-> This change breaks the Landlock test build when performed on the tools/testing/selftests/landlock directory because the (non-system/up-to-date) kernel headers aren't found. Looking at the use of top_srcdir and HDR_PATH, it seems that multiple subsystems are using this feature. I consider this change a regression.
-> 
+Thanks for your suggestion!
 
-I did a build test from the top level before sending the pull request
-and didn't catch this breakage as a result. This breaks when build is
-run from the test directory.
+On Mon, 1 Aug 2022 at 17:16, Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> This way we would also avoid some confusion. With the change below, the
+> SK_USER_DATA_NOTPSOCK is not *always* set when sk_user_data holds a
+> non-psock pointer. Only when SMC sets it.
+>
+> If we go with the current approach, the rest of sites, execpt for psock,
+> that assign to sk_user_data should be updated to set
+> SK_USER_DATA_NOTPSOCK as well, IMO.
+Yes, as you point out, in this patch, this flag's name should be
+*SK_USER_DATA_NEEDCHECK_NOTPSOCK*, which is more clearly.
 
-We have had several problems related to khdr_dir and target and decided
-to move away from it with this change.
+To be more specific, we don't need to set this flag for
+every sk_user_data who holds non-psock pointer. Only set the flag for
+the site that has been reported involved with the type-mismatch bug
+like this bug.
+> > During SMC fallback process in connect syscall, kernel will
+> > replaces TCP with SMC. In order to forward wakeup
+> > smc socket waitqueue after fallback, kernel will sets
+> > clcsk->sk_user_data to origin smc socket in
+> > smc_fback_replace_callbacks().
+> > 
+> > Later, in shutdown syscall, kernel will calls
+> > sk_psock_get(), which treats the clcsk->sk_user_data
+> > as sk_psock type, triggering the refcnt warning.
 
-> It also removes the check on up-to-date kernel headers (thanks to the Makefile's target timestamp).
-> 
-> I wasn't CCed for this change impacting Landlock [1]. Please keep in mind to add at least maintainers and related mailing-lists for changes on related subsystems.
-> 
-
-That is the usual practice and if I notice missing maintainers, I add
-them. We missed this one.
-
-> The following patch almost revert commit a917dd94b832 ("selftests/landlock: drop deprecated headers dependency") and partially fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
-> 
-
-Guillaume,
-
-Will you be able to look at this and send a patch on top? I will
-send another pull request before merge window closes?
-
-> --- a/tools/testing/selftests/landlock/Makefile
-> +++ b/tools/testing/selftests/landlock/Makefile
-> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->   TEST_GEN_PROGS_EXTENDED := true
-> 
->   OVERRIDE_TARGETS := 1
-> +top_srcdir = ../../../..
->   include ../lib.mk
-> 
-> +khdr_dir = $(top_srcdir)/usr/include
+For other sites, this patch is actually transparent to them, because
+the *SK_USER_DATA_NEEDCHECK_NOTPSOCK* flag is always unset. So this
+patch won't affect them, which won't introduce any extra
+potential bugs.
+> +/**
+> + * rcu_dereference_sk_user_data_psock - return psock if sk_user_data points
+> + * to the psock
+> + * @sk: socket
+> + */
+> +static inline
+> +struct sk_psock *rcu_dereference_sk_user_data_psock(const struct sock *sk)
+> +{
+> +	uintptr_t __tmp = (uintptr_t)rcu_dereference(__sk_user_data((sk)));
 > +
->   $(OUTPUT)/true: true.c
->       $(LINK.c) $< $(LDLIBS) -o $@ -static
-> 
-> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
-> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
-> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
-> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-> 
-> 
-> This doesn't fix the header timestamp check though.
-> 
+> +	if (__tmp & SK_USER_DATA_NOTPSOCK)
+> +		return NULL;
+> +	return (struct sk_psock *)(__tmp & SK_USER_DATA_PTRMASK);
+> +}
 
-thanks,
--- Shuah
+>
+> Hi,
+> Since using psock is not the common case, I'm wondering if it makes more
+> sense to have an inverse flag - SK_USER_DATA_PSOCK. Flag would be set by
+> the psock code on assignment to sk_user_data.
+However, your suggestion seems more elegant. For my patch, as you point
+out, when anyone reports a new type-mismatch bug, the relative assign to
+sk_user_data should be updated to set *SK_USER_DATA_NEEDCHECK_NOTPSOCK*
+flag.
+
+For your suggestion, you seems avoid above situation. What's more, as I
+use git grep to search, there seems no direct access to sk_user_data,
+all via a small amount macros and wrapper functions. So we can keep
+transparent by only update those macros and wrapper functions, which
+also won't introduce any extra potential bugs.
+
+I will patch as you suggest in v3 patch.

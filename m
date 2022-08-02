@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A9B587E7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62899587E7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbiHBO5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S236972AbiHBO7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiHBO5x (ORCPT
+        with ESMTP id S233060AbiHBO7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:57:53 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC211EC70
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:57:52 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id t2so13694736ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=dBnuiKdu4WthPT4ZuUplx30eOhTTtqqaF6B2cSk/UyQ=;
-        b=psEKrtShroDo+VkE5iTSlooVNyXfYmgSlA6KYgx76ni4xZuMbRh3wEg2PSd6WyqFcn
-         1mVehE9UlGobBwL13y1cxMstd5t0XYI7SYRCPGZvH57qZ7rNeV7EbjwnIrWIsNGZoqh+
-         Mqg9bYMC+pKjrwvjmpeWl51csWufsISG0LN+aozQwWbb3EkDNwu96V52ZaSQHZu7/D9h
-         SbbW0ptH5HEpfaUCS8cEFPm5X59cfrec0WXIwSr0R0YW6GZ6Ynuns3/yIDP9H2lTjJY8
-         EDqNu1eWqMtmmSwjJrfZdYFiZMN2+QXw+m1YEiN1t/yqJ/5FlGDeCAD5qj0TIgwd69WW
-         VfRA==
+        Tue, 2 Aug 2022 10:59:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 777061EEC9
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659452375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TiEVWlyldriK6u+7IZclS64oyMv2tQAk41MyojiltD4=;
+        b=hy8pn/cbvBX0kEdiSVCh/smgAkI+pvRli0UxJq9YHGTSGsrGZtCVavRkmvt6KUpD/n/WEK
+        Z+UYNzzFV3UbPwtPcp9bly/1YFYALwMp2godAn/WKVQ4qSRetuCqVy88lSGTM3YQ0q2CWL
+        LT4d3SR1GOha0ir3ZjE3XycsRI8Hen0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-35-sUT9OL9lNUKPkV9Wvxzazw-1; Tue, 02 Aug 2022 10:59:34 -0400
+X-MC-Unique: sUT9OL9lNUKPkV9Wvxzazw-1
+Received: by mail-wm1-f70.google.com with SMTP id ay19-20020a05600c1e1300b003a315c2c1c0so9600294wmb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:59:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=dBnuiKdu4WthPT4ZuUplx30eOhTTtqqaF6B2cSk/UyQ=;
-        b=fhXbmwnOVq2wJTw27XxALUS882yK4Uv1yQRBML8FeGuBgF+4D4KaAGAc1baP9hAVMu
-         P17JG5jASKQBJhcR0ENGlaRLLQBBStw7UxPbvVjV3XTqZ2IcaKx20ywE2H9L74KfFOyP
-         ALeOTK6Iyj9SE7frjwD3oi0qy6fDqOZ+WBGNGw6vtTFpDQkAeCZQibuXUeQNj6RF8FSl
-         /AcO0/dRJoLeVIIpQlLWlPS1S9ORNYEGLbouE14iLyaGwJSBfujyh1R5WJDxgn6rAOPP
-         Uys/ma/QhEoOzvz35GzEtpCHL3Q31N+Snel63f/tHkIZQYCR3B+aOWo9Rkvkm5kFPsjj
-         xzYA==
-X-Gm-Message-State: ACgBeo0lx81uVz03TeMHGB+H8BV/ni1CJklGfWdstqpwX3uwZqMivKL3
-        we3ZNtmiLIfYSVUsYQ8jZs4V4A==
-X-Google-Smtp-Source: AA6agR5RwrqfkmiyTfqXe9VG/f0YcO2GxWF4rOah1awuIVlUkHZyQF1ejfarhiK2g3EmaVhcQlgfqw==
-X-Received: by 2002:a17:90b:164d:b0:1f0:31c1:9e88 with SMTP id il13-20020a17090b164d00b001f031c19e88mr25335859pjb.206.1659452271776;
-        Tue, 02 Aug 2022 07:57:51 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0016bdf2220desm5428299plc.263.2022.08.02.07.57.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 07:57:50 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 14:57:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 3/3] KVM: VMX: Adjust number of LBR records for
- PERF_CAPABILITIES at refresh
-Message-ID: <Yuk7avLSXXmaufgm@google.com>
-References: <20220727233424.2968356-1-seanjc@google.com>
- <20220727233424.2968356-4-seanjc@google.com>
- <dcc187d2-f55b-a5cd-0664-a6fc78b7966f@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=TiEVWlyldriK6u+7IZclS64oyMv2tQAk41MyojiltD4=;
+        b=nMaplOICQobUwHchehfXrFU90Ya5RyjeFudrtbDINncrLRCtgrynvmsPNLg5PZwPqY
+         /yS/XvXjiz/m6X1b+701XUi/LpT5LfkelLFJGTmefMmg8Khmh2Ih92FnjGE4BZ4L3kpo
+         yZXNsLZBmv5qSyhK2mvlvBh7EAAYI3lUDGmNvwyTRIl8uDEYEcm+HUrCZ9bHBUW3UBCO
+         xvrJ2YJRUTM7Ip5N5/S8HAD8NYKOagD1qEcvthZOiA+fRWFs1EUZu/xE+8wtgYwg9OQq
+         13MHYMoSuRxi+y3bncqBar9urZMksyrQjAz1o9e3NGSgYB2U/Kl+TDif3CepYvVz5Zub
+         BNLQ==
+X-Gm-Message-State: AJIora/kvkHJtMJvkynhnqzUWm6SlGom+boh1UkCb+JfNYYFy4AiGvEb
+        kvR6MIlMsv8IT+KfXxCAS/Vh9mWhOaf4doQjRNw5U56Iq00jYQYIPUvwHWrZ+OPGbGsvw5RSDVC
+        QjRcq7hsyGiEg3zfnBZmJsWBr
+X-Received: by 2002:a05:600c:a41:b0:39c:1512:98bd with SMTP id c1-20020a05600c0a4100b0039c151298bdmr14793140wmq.88.1659452373044;
+        Tue, 02 Aug 2022 07:59:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uVcy9Uhg/u4K309FT0W3bmnAaw4bdK83/8GL9sXHMylj8ESdtJLqkyEA7z9bDjEmji9qyLrA==
+X-Received: by 2002:a05:600c:a41:b0:39c:1512:98bd with SMTP id c1-20020a05600c0a4100b0039c151298bdmr14793119wmq.88.1659452372798;
+        Tue, 02 Aug 2022 07:59:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:3800:8435:659e:f80:9b3d? (p200300cbc70738008435659e0f809b3d.dip0.t-ipconnect.de. [2003:cb:c707:3800:8435:659e:f80:9b3d])
+        by smtp.gmail.com with ESMTPSA id u11-20020a056000038b00b0021e4829d359sm16597094wrf.39.2022.08.02.07.59.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 07:59:32 -0700 (PDT)
+Message-ID: <01362246-05e6-f57f-9f64-c8d2524e685d@redhat.com>
+Date:   Tue, 2 Aug 2022 16:59:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dcc187d2-f55b-a5cd-0664-a6fc78b7966f@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm: Split huge PUD on wp_huge_pud fallback
+Content-Language: en-US
+To:     "Gowans, James" <jgowans@amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?U2Now7ZuaGVyciwgSmFuIEgu?= <jschoenh@amazon.de>,
+        "thomas.hellstrom@linux.intel.com" <thomas.hellstrom@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+References: <6f48d622eb8bce1ae5dd75327b0b73894a2ec407.camel@amazon.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <6f48d622eb8bce1ae5dd75327b0b73894a2ec407.camel@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,83 +86,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Like Xu wrote:
-> On 28/7/2022 7:34 am, Sean Christopherson wrote:
-> > -bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
-> > -{
-> > -	struct x86_pmu_lbr *lbr = vcpu_to_lbr_records(vcpu);
-> > -
-> > -	return lbr->nr && (vcpu_get_perf_capabilities(vcpu) & PMU_CAP_LBR_FMT);
-> > -}
-> > -
-> >   static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
-> >   {
-> >   	struct x86_pmu_lbr *records = vcpu_to_lbr_records(vcpu);
-> > @@ -590,7 +583,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
-> >   	bitmap_set(pmu->all_valid_pmc_idx,
-> >   		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
-> > -	if (cpuid_model_is_consistent(vcpu))
-> > +	perf_capabilities = vcpu_get_perf_capabilities(vcpu);
-> > +	if (cpuid_model_is_consistent(vcpu) &&
-> > +	    (perf_capabilities & PMU_CAP_LBR_FMT))
-> >   		x86_perf_get_lbr(&lbr_desc->records);
+On 23.06.22 07:24, Gowans, James wrote:
+> Currently the implementation will split the PUD when a fallback is taken
+> inside the create_huge_pud function. This isn't where it should be done:
+> the splitting should be done in wp_huge_pud, just like it's done for
+> PMDs. Reason being that if a callback is taken during create, there is
+> no PUD yet so nothing to split, whereas if a fallback is taken when
+> encountering a write protection fault there is something to split.
 > 
-> As one of evil source to add CPUID walk in the critical path:
+> It looks like this was the original intention with the commit where the
+> splitting was introduced, but somehow it got moved to the wrong place
+> between v1 and v2 of the patch series. Rebase mistake perhaps.
 > 
-> The x86_perf_get_lbr() is one of the perf interfaces, KVM cannot always trust
-> that the number of returned lbr_desc->records.nr is always > 0,  and if not,
-> we have to tweak perf_capabilities inside KVM which violates user input again.
-> 
-> Do you have more inputs to address this issue ?
+> Fixes: 327e9fd48972 ("mm: Split huge pages on write-notify or COW")
 
-First, drop the unnecessary stub and return value from x86_perf_get_lbr().  KVM
-selects PERF_EVENTS, so the stub and thus error path can't be hit.  I'll add
-patches to the series to do this.
+Right, the functions should just look like create_huge_pmd()/wp_huge_pmd().
 
-Second, check the number of perf LBRs in vmx_get_perf_capabilities() and advertise
-PMU_CAP_LBR_FMT iff perf fully supports LBRs.
+I do wonder if there was a reason to do it differently, though ... I
+can't spot any in current code.
 
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 2 Aug 2022 07:45:33 -0700
-Subject: [PATCH] KVM: VMX: Advertise PMU LBRs if and only if perf supports
- LBRs
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Advertise LBR support to userspace via MSR_IA32_PERF_CAPABILITIES if and
-only if perf fully supports LBRs.  Perf may disable LBRs (by zeroing the
-number of LBRs) even on platforms the allegedly support LBRs, e.g. if
-probing any LBR MSRs during setup fails.
+-- 
+Thanks,
 
-Fixes: be635e34c284 ("KVM: vmx/pmu: Expose LBR_FMT in the MSR_IA32_PERF_CAPABILITIES")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/capabilities.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index c5e5dfef69c7..d2fdaf888d33 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -404,6 +404,7 @@ static inline bool vmx_pebs_supported(void)
- static inline u64 vmx_get_perf_capabilities(void)
- {
- 	u64 perf_cap = PMU_CAP_FW_WRITES;
-+	struct x86_pmu_lbr lbr;
- 	u64 host_perf_cap = 0;
-
- 	if (!enable_pmu)
-@@ -412,7 +413,9 @@ static inline u64 vmx_get_perf_capabilities(void)
- 	if (boot_cpu_has(X86_FEATURE_PDCM))
- 		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
-
--	perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-+	x86_perf_get_lbr(&lbr);
-+	if (lbr.nr)
-+		perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-
- 	if (vmx_pebs_supported()) {
- 		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
-
-base-commit: 1f011a0755c2135b035cdee3b54e3adc426ec95c
---
+David / dhildenb
 

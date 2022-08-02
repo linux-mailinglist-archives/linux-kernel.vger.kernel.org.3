@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D91587E73
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D76587E76
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiHBO4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S237356AbiHBO45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiHBOz6 (ORCPT
+        with ESMTP id S234222AbiHBO4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:55:58 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D221CB16
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:55:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r4so10235270edi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+wxkILs1XPjXI14YovBxlfOcpoRiTNhnTeuF0IZkMKQ=;
-        b=GtcOwKkqWEMy+ACwmz0p7Mm7g2mk+CWyAjSo+9SGKo3Yf+TBbl1rlnpLK60YAqNwTf
-         PWs+fDCTRe2oTDrl+hvysgUGQ5sdhNa5oJvq77kGdt3CdWYnt2lWHKUE/AWx6bCrNLij
-         /a/w9ubEGuvfYobxZSgR2ErPpwXQ8csZ/anXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+wxkILs1XPjXI14YovBxlfOcpoRiTNhnTeuF0IZkMKQ=;
-        b=apGveHWhhfFbjLiwDgtsR6mrbFhsE15iu7wp12f5I+beb5GduUjkB96Pn1XoF/KTgB
-         906LsNvlGC3MAmruxMzU+tUtcgczyM3vu/KvyQgKqkC0mdK52dr2DEThWkR0rzPAWW0Q
-         duRCqYzwvdqyB9KN68NivwCSKm914bSA42NDNP98zgVIRhFIXtDCSPOHAAElYAJfsN61
-         0jE+OkolpIr/ErLkbxGXIUBSOSLSPTzHAbaACPaOXDeWSQQ5ah9NDa4d3mR8i/6ahAHD
-         WnJj7bCviM0DPQvDiu3/iCNErA/B4ehJgAt5CJyKzLkDzkSeN1u1kukFW9Mlx7Q7dBI7
-         mCcA==
-X-Gm-Message-State: AJIora+FsTfOIdNdCnhTxrfjipXg4lkLTjhXAvQ0GWy9luCBZk8go/+5
-        m+J4sCGASXDGOldWRlR8tAzLYn5eM0APly5X
-X-Google-Smtp-Source: AGRyM1vlX9YM7EMudVZAhM2Q2jJpm5mfq6EZm1Odz3ulmXZBg4JZo+U2oVQGZGTaQQNzyFktMc9REw==
-X-Received: by 2002:a05:6402:40d5:b0:43b:eaa7:f195 with SMTP id z21-20020a05640240d500b0043beaa7f195mr20783774edb.405.1659452156072;
-        Tue, 02 Aug 2022 07:55:56 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056402328400b0043d18a875d1sm7131557eda.79.2022.08.02.07.55.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 07:55:55 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id q30so13803513wra.11
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:55:55 -0700 (PDT)
-X-Received: by 2002:a5d:59a4:0:b0:21e:8704:ea35 with SMTP id
- p4-20020a5d59a4000000b0021e8704ea35mr12648547wrr.442.1659452154701; Tue, 02
- Aug 2022 07:55:54 -0700 (PDT)
+        Tue, 2 Aug 2022 10:56:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0141CB16
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:56:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 86371CE1FE3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:56:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF90C433C1;
+        Tue,  2 Aug 2022 14:56:47 +0000 (UTC)
+Date:   Tue, 2 Aug 2022 10:56:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tom Zanussi <zanussi@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: Add .percent suffix option to histogram
+ values
+Message-ID: <20220802105646.50819088@gandalf.local.home>
+In-Reply-To: <202208021438.2r5RXlo9-lkp@intel.com>
+References: <165932284978.2881436.13536997915615710506.stgit@devnote2>
+        <202208021438.2r5RXlo9-lkp@intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220729102205.GA24050@willie-the-truck> <CAHk-=wj=CQsmGPzDUZjey3DoMFsiCqn-O6kmCv6ZCW0AoO=kOg@mail.gmail.com>
- <20220802090000.GD26962@willie-the-truck>
-In-Reply-To: <20220802090000.GD26962@willie-the-truck>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 2 Aug 2022 07:55:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgcDUd-vGTTBN8UQJN7OyiDWvJy6udg3O0BFodkut1EkQ@mail.gmail.com>
-Message-ID: <CAHk-=wgcDUd-vGTTBN8UQJN7OyiDWvJy6udg3O0BFodkut1EkQ@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64 updates for 5.20
-To:     Will Deacon <will@kernel.org>
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        maz@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 2:00 AM Will Deacon <will@kernel.org> wrote:
->
-> Seriously though, if you could share any details about exactly how you're
-> running this (e.g. in a VM or native, .config, any extra patches on top)
-> then we could probably mimic it in CI to avoid any last minute surprises
-> with the pull requests.
+On Tue, 2 Aug 2022 14:49:36 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-So my setup is basically an 2022 M2 Apple Macbook Air, with a Fedora
-spin of Asahi.
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: __udivdi3  
 
-I run it natively, but because not all of the Asahi kernel patches are
-in, currently I end up with two trees (exactly like my main desktop,
-actually): one that is my plain kernel that I run allmodconfig builds
-on, and a separate tree for "local boot testing".
+This is due to this:
 
-That "local boot testing" tree is basically the same tree except I
-merge in the Asahi kernel to get the drivers (that aren't upstream yet
-(it's 150+ patches for iommu, HID, GPIO, wireless, power, and dts
-files).
+> @@ -5190,18 +5202,34 @@ static void hist_trigger_print_key(struct seq_file *m,
+>  	seq_puts(m, "}");
+>  }
+>  
+> +/* Get the 100 times of the percentage of @val in @total */
+> +static inline unsigned int __get_percentage(u64 val, u64 total)
+> +{
+> +	if (val < (U64_MAX / 10000))
+> +		return (unsigned int)(val * 10000 / total);
+> +	else
+> +		return val / (total / 10000);
+> +}
+> +
 
-The asahi side doesn't contain any actual architecture changes
-(outside of the dts files).
+You can't use '/' on u64 values. You have to use div64*(). Otherwise 32 bit
+architectures may use floating point operations or glibc helpers.
 
-             Linus
+See the other divisions in trace_events_hist.c that do so too.
+
+-- Steve
+
+
+>    >>> referenced by trace_events_hist.c:5211 (kernel/trace/trace_events_hist.c:5211)
+>    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
+>    >>> referenced by trace_events_hist.c:0 (kernel/trace/trace_events_hist.c:0)
+>    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
+>    >>> referenced by trace_events_hist.c:5211 (kernel/trace/trace_events_hist.c:5211)
+>    >>>               trace/trace_events_hist.o:(hist_show) in archive kernel/built-in.a
+>    >>> referenced 1 more times  
+

@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3444C587A80
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E7D587A66
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 12:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiHBKQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 06:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S236543AbiHBKNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 06:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236570AbiHBKPf (ORCPT
+        with ESMTP id S236534AbiHBKNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 06:15:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A160622524;
-        Tue,  2 Aug 2022 03:15:33 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LxrQQ5CdZzjXfc;
-        Tue,  2 Aug 2022 18:12:30 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 18:15:32 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 18:15:29 +0800
-From:   Jie Hai <haijie1@huawei.com>
-To:     <vkoul@kernel.org>, <wangzhou1@hisilicon.com>
-CC:     <haijie1@huawei.com>, <liudongdong3@huawei.com>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] MAINTAINERS: Add myself as maintainer for hisi_dma
-Date:   Tue, 2 Aug 2022 18:12:26 +0800
-Message-ID: <20220802101226.9005-8-haijie1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220802101226.9005-1-haijie1@huawei.com>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220802101226.9005-1-haijie1@huawei.com>
+        Tue, 2 Aug 2022 06:13:02 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89974B49D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 03:13:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VLBJdL._1659435154;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VLBJdL._1659435154)
+          by smtp.aliyun-inc.com;
+          Tue, 02 Aug 2022 18:12:58 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     bhelgaas@google.com, horms@verge.net.au, pablo@netfilter.org,
+        davem@davemloft.net, nathan@kernel.org
+Cc:     helgaas@kernel.org, apw@canonical.com, joe@perches.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Kconfig: eliminate abnormal characters displayed under menuconfig
+Date:   Tue,  2 Aug 2022 18:12:33 +0800
+Message-Id: <1659435153-119538-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as a maintainer for hisi_dma.
+From: Liu Song <liusong@linux.alibaba.com>
 
-Signed-off-by: Jie Hai <haijie1@huawei.com>
-Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
+Use "find ./linux/* | grep Kconfig | xargs file | grep UTF", can find
+files with utf-8 encoded characters, these files will display garbled
+characters in menuconfig, except for characters with special meanings
+that cannot be modified, modify the characters with obvious errors to
+eliminate the wrong display under meunconfig.
+
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ arch/Kconfig               | 2 +-
+ drivers/pci/Kconfig        | 2 +-
+ net/netfilter/ipvs/Kconfig | 8 ++++----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..b1aeffd74a37 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8971,6 +8971,7 @@ F:	net/dsa/tag_hellcreek.c
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 5ea3e38..2462337 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -745,7 +745,7 @@ config CFI_CLANG
+ 	depends on CLANG_VERSION >= 140000
+ 	select KALLSYMS
+ 	help
+-	  This option enables Clang’s forward-edge Control Flow Integrity
++	  This option enables Clang's forward-edge Control Flow Integrity
+ 	  (CFI) checking, where the compiler injects a runtime check to each
+ 	  indirect function call to ensure the target is a valid function with
+ 	  the correct static type. This restricts possible call targets and
+diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+index 133c732..8102b78 100644
+--- a/drivers/pci/Kconfig
++++ b/drivers/pci/Kconfig
+@@ -166,7 +166,7 @@ config PCI_P2PDMA
+ 	depends on ZONE_DEVICE
+ 	select GENERIC_ALLOCATOR
+ 	help
+-	  Enableѕ drivers to do PCI peer-to-peer transactions to and from
++	  Enables drivers to do PCI peer-to-peer transactions to and from
+ 	  BARs that are exposed in other devices that are the part of
+ 	  the hierarchy where peer-to-peer DMA is guaranteed by the PCI
+ 	  specification to work (ie. anything below a single PCI bridge).
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index 271da84..06b9066 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -308,10 +308,10 @@ config IP_VS_MH_TAB_INDEX
+ 	  stored in a hash table. This table is assigned by a preference
+ 	  list of the positions to each destination until all slots in
+ 	  the table are filled. The index determines the prime for size of
+-	  the table as 251, 509, 1021, 2039, 4093, 8191, 16381, 32749,
+-	  65521 or 131071. When using weights to allow destinations to
+-	  receive more connections, the table is assigned an amount
+-	  proportional to the weights specified. The table needs to be large
++	  the table as 251, 509, 1021, 2039, 4093, 8191, 16381, 32749,
++	  65521 or 131071. When using weights to allow destinations to
++	  receive more connections, the table is assigned an amount
++	  proportional to the weights specified. The table needs to be large
+ 	  enough to effectively fit all the destinations multiplied by their
+ 	  respective weights.
  
- HISILICON DMA DRIVER
- M:	Zhou Wang <wangzhou1@hisilicon.com>
-+M:	Jie Hai <haijie1@hisilicon.com>
- L:	dmaengine@vger.kernel.org
- S:	Maintained
- F:	drivers/dma/hisi_dma.c
 -- 
-2.33.0
+1.8.3.1
 

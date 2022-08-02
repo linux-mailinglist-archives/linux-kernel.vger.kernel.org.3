@@ -2,393 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E1D587C1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C25587C21
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236923AbiHBMN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S236990AbiHBMOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236867AbiHBMNe (ORCPT
+        with ESMTP id S236867AbiHBMOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:13:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE5D351A1D
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659442392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+FUteSntw1oP6JwSKMxIObD0Apu/7Jmh2+5550WYKTc=;
-        b=DdT4b8bWte3H7zvWv2ErEPDkk0trCohScH5WCAHoQg2VeZfHLaMO5s0O4uyMra6jMFzlxG
-        ph0oEwtzPYBkUpigSbbAp9slJccVt6Y+RuEHdu+0ra5kLn5JeheZgul4tHlzTwi+dtSEfm
-        AEsK5pe4fz0p5Je0+XAAulvZek041MY=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-_TJ67M8fNxy8BG9BX4hfnw-1; Tue, 02 Aug 2022 08:13:11 -0400
-X-MC-Unique: _TJ67M8fNxy8BG9BX4hfnw-1
-Received: by mail-ej1-f72.google.com with SMTP id s4-20020a170906500400b006feaccb3a0eso4134909ejj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 05:13:11 -0700 (PDT)
+        Tue, 2 Aug 2022 08:14:25 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA3452FC9
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:13:47 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bq11so16547468lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 05:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wULxbsFCsO2mWrH1kUgZI39H39Fg7/Dp3JHxKstJL5w=;
+        b=EapWLVMYRopIPrmUKWyWH2kAktnoZuyQiFxSnUGnAm2RX/uVkzChEsKWao/PShY7/1
+         1vbrASNFKANYzAcRwdV7gqzkin//gHK2GmpDYsMVObW4YABwrCSpaINBp6kUdjP1afEZ
+         iI4P4akwdwJlZGu+K/t7+ysdcqDZn6iVwfrJTyDz53NLvY71711JxNxBa/h/3uxiRWL/
+         rM+AnmCR3pHa+FdKQzZPWysUqZEV5FGncWvveW49o1RXmVE0Aqybe422Xx2uVmJe7hBb
+         P2u4vSDYYfySTnJmYwYuinfDjcwDq5YTwIq/1LiuXyfBYg8XVBHUat36CWjmaAFJfm1P
+         ZnZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+FUteSntw1oP6JwSKMxIObD0Apu/7Jmh2+5550WYKTc=;
-        b=4TygyFmJh3lKp1q1dlPiLy/m4jy5JJBqHL9X7XWN9p3KmZ2K5qLgWl2lqASgaeVcu3
-         fLi1opKtrfTRQqX4+Bp3ClNzJ2d/kQqy38eSRIyHmyUn05C9sYlw73lGvdIKxZvu/dp5
-         9ke06O9Dr/NxBE8XeVs7PXN4w+9COFwZ9QvC9lc+bBTAZv+OJ9ojcsZ/GEBxwc4b4MMR
-         +9TJchYe9+eAZKpm9cpLT6f0kpIG66U36s2ja6R4YxSJlx5OmLrhtrDUuQ3PUeyfY2Gc
-         6DGwMv0FRYMLRiCZPJzc3BBmvTbWq1n0+0jIt6kojh8A2wCszp04aOpP6V93D1Gn72z3
-         WfZw==
-X-Gm-Message-State: ACgBeo0R7p5Po/b7eDshU4iezXFoqKGDOD8yEJh2oZu8kADdPkDlQ783
-        bKh9/lnV34avu9XqK1FeH1OnO12tuneO5VEy+rpq2HAT+CKRU7UVkCgVt/0pbcAAoNpeSasX03q
-        3Iljqw/bq2FQZnQOs42wLfJgn
-X-Received: by 2002:a17:906:478d:b0:730:a5ed:1bf3 with SMTP id cw13-20020a170906478d00b00730a5ed1bf3mr799881ejc.255.1659442390107;
-        Tue, 02 Aug 2022 05:13:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5A+EisIdwng8Zphivlj67dFYScZFcmhXZI1rXuTmwY6YP/W/Pzh4kxUSzMvKIpamERQjs8/Q==
-X-Received: by 2002:a17:906:478d:b0:730:a5ed:1bf3 with SMTP id cw13-20020a170906478d00b00730a5ed1bf3mr799857ejc.255.1659442389806;
-        Tue, 02 Aug 2022 05:13:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id p6-20020a17090653c600b007307c557e31sm2521686ejo.106.2022.08.02.05.13.07
+        bh=wULxbsFCsO2mWrH1kUgZI39H39Fg7/Dp3JHxKstJL5w=;
+        b=mz+Wr0D1nSSNnhsWqA/fYRszSMyDlGM0PuuPVj4oJOZN1TrQjElQPhPUYdkylOOsJU
+         c9sxJsofKMz5fSbccXymjBjUGH4Nyt2j5EgnZvr+PKS5zQaecUwPWNOWa5GYJTpTtqFs
+         Vo2NeVGupOOL8biiiO9+vvP2uEj6SgaOxqV2AZRLho22oDijUfcIM3OYjzkolyEr1c1X
+         Cj2EAasIwMww7ndh/D+b6MOJN5hgThMVXHJfy88RzXR3d0tBzP5Ovutc0WqK+UsAkdyl
+         M/en8mGX550fSLF6hbIyhRgYz/FK2+i2q8xHzKBlh6vWO768CbH0prgo/inYgzlM0GUx
+         V/iw==
+X-Gm-Message-State: ACgBeo2AV1pkh4mR6aBxZXz7PN11MmpVk7W46/+VV5zF7UGq8Up2mmAj
+        ftWqVzncU+NoL+rcCwfI7V6Pgw==
+X-Google-Smtp-Source: AA6agR4+VPCL3CF9Zzr8gFl9yGLK6jXfEOZBDb20OqWPvS8Z8zJbaesexcOruBvxvOr7AubCzNyF3g==
+X-Received: by 2002:a05:6512:3989:b0:48a:e4de:cc36 with SMTP id j9-20020a056512398900b0048ae4decc36mr6227240lfu.207.1659442425220;
+        Tue, 02 Aug 2022 05:13:45 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id f15-20020a05651232cf00b0048b17b0db44sm46652lfg.61.2022.08.02.05.13.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 05:13:09 -0700 (PDT)
-Message-ID: <4cb33604-28c6-ac51-0162-2e5a027f02a0@redhat.com>
-Date:   Tue, 2 Aug 2022 14:13:06 +0200
+        Tue, 02 Aug 2022 05:13:44 -0700 (PDT)
+Message-ID: <64c9ffc1-6f4b-7ddb-01ab-1ddf9ba628db@linaro.org>
+Date:   Tue, 2 Aug 2022 14:13:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] asus-wmi: Add support for TUF laptop keyboard RGB
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 4/4] dt-binding: perf: Add Amlogic DDR PMU
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     corentin.chary@gmail.com, markgross@kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-References: <20220802045942.1565559-1-luke@ljones.dev>
- <e6c0ca61-97d3-328b-f50e-7cdac50eb083@redhat.com>
-In-Reply-To: <e6c0ca61-97d3-328b-f50e-7cdac50eb083@redhat.com>
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>
+References: <20220801060049.1655177-1-jiucheng.xu@amlogic.com>
+ <20220801060049.1655177-4-jiucheng.xu@amlogic.com>
+ <0893fab6-a7e1-bfa7-2497-239e044cc7ed@linaro.org>
+ <bafb824a-d450-b4d3-20a9-026dccaca2cd@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bafb824a-d450-b4d3-20a9-026dccaca2cd@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/2/22 13:09, Hans de Goede wrote:
-> Hi Luke,
+On 02/08/2022 11:25, Jiucheng Xu wrote:
 > 
-> On 8/2/22 06:59, Luke D. Jones wrote:
->> Adds support for TUF laptop RGB control. This creates two sysfs
->> paths to add control of basic keyboard LEDs, and power states.
+> On 2022/8/2 16:04, Krzysztof Kozlowski wrote:
+>> [ EXTERNAL EMAIL ]
 >>
->> /sys/devices/platform/asus-nb-wmi/tuf_krgb_mode has the following
->> as input options via U8 "n n n n n n":
->> - Save or set, if set, then settings revert on cold boot
->> - Mode, 0-8 for regular modes (if supported), 10-12 for "warning" styles
->> - Red, 0-255
->> - Green, 0-255
->> - Blue, 0-255
->> - Speed, 0 = Slow, 1 = Medium, 2 = Fast
+>> On 01/08/2022 08:00, Jiucheng Xu wrote:
+>>> Add binding documentation for the Amlogic G12 series DDR
+>>> performance monitor unit.
+>>>
+>>> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+>>> ---
+>>> Changes v2 -> v3:
+>>>    - Remove oneOf
+>>>    - Add descriptions
+>>>    - Fix compiling warning
+>>>
+>>> Changes v1 -> v2:
+>>>    - Rename file, from aml_ddr_pmu.yaml to amlogic,g12_ddr_pmu.yaml
+>>>    - Delete "model", "dmc_nr", "chann_nr" new properties
+>>>    - Fix compiling error
+>>> ---
+>>>   .../bindings/perf/amlogic,g12_ddr_pmu.yaml    | 51 +++++++++++++++++++
+>>>   MAINTAINERS                                   |  1 +
+>>>   2 files changed, 52 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+>>> new file mode 100644
+>>> index 000000000000..961656d4db6e
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/perf/amlogic,g12_ddr_pmu.yaml
+>>> @@ -0,0 +1,51 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/perf/amlogic,g12-ddr-pmu.yaml#
+>> You still did not test the bindings...
 >>
->> /sys/devices/platform/asus-nb-wmi/tuf_krgb_state has the following
->> as input options via boolean "b b b b b":
->> - Save or set, if set, then settings revert on cold boot
->> - Boot, if true, the keyboard displays animation on boot
->> - Awake, if true, the keyboard LED's are on while device is awake
->> - Sleep, if true, the keyboard shows animation while device is suspended
->> - Keybaord, appears to have no effect
-> 
-> Typo in Keybaord here.
-> 
-> Thank you for your patch. I really appreciate your continued
-> efforts to make Asus laptops work well with Linux.
-> 
-> For keyboard backlight support Linux has standardized on
-> using the /sys/class/leds API. So I'm afraid that this patch
-> will need to be rewritten to use the standard LED API
-> and then specifically the somewhat new multicolor LED API
-> at least for setting the RGB values (within the current mode)
-> 
-> Any extra functionality can then be added as extra sysfs
-> attributes under the /sys/class/leds/asus::kbd_backlight
-> device, see e.g. the use of kbd_led_groups in:
-> drivers/platform/x86/dell/dell-laptop.c
-> 
-> Note the kbd_backlight part of the name is important this
-> will allow upower to recognize this as a keyboard backlight
-> and will then enable desktop-environments which use
-> upower for kbd backlight control to at least control
-> the overall brightness of the kbd-backlight.
-> 
-> I realize that this means that you need to redo a whole
-> bunch of work here; and I presume also in your
-> asusctl userspace utility, sorry about that. But it
-> really is important that standard userspace APIs are
-> used for things like this where ever possible.
-> 
-> Regards,
-> 
-> Hans
-
-p.s.
-
-For more info on the multi-color LED API see:
-
-https://www.kernel.org/doc/html/latest/leds/leds-class-multicolor.html
-https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.9-Multi-Color-LEDs
-
-
-
-> 
-> 
-> 
-> 
+>> You received such comment (with instructions how to do it) and still
+>> decided to send untested bindings.
 >>
->> Signed-off-by: Luke D. Jones <luke@ljones.dev>
->> ---
->>  drivers/platform/x86/asus-wmi.c            | 168 +++++++++++++++++++++
->>  include/linux/platform_data/x86/asus-wmi.h |   6 +
->>  2 files changed, 174 insertions(+)
+>> That's not how submission procces should look like.
 >>
->> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
->> index 62ce198a3463..09277bd98249 100644
->> --- a/drivers/platform/x86/asus-wmi.c
->> +++ b/drivers/platform/x86/asus-wmi.c
->> @@ -234,6 +234,9 @@ struct asus_wmi {
->>  	bool dgpu_disable_available;
->>  	bool dgpu_disable;
->>  
->> +	bool tuf_kb_rgb_mode_available;
->> +	bool tuf_kb_rgb_state_available;
->> +
->>  	bool throttle_thermal_policy_available;
->>  	u8 throttle_thermal_policy_mode;
->>  
->> @@ -734,6 +737,153 @@ static ssize_t egpu_enable_store(struct device *dev,
->>  
->>  static DEVICE_ATTR_RW(egpu_enable);
->>  
->> +/* TUF Laptop Keyboard RGB Modes **********************************************/
->> +static int tuf_kb_rgb_mode_check_present(struct asus_wmi *asus)
->> +{
->> +	u32 result;
->> +	int err;
->> +
->> +	asus->tuf_kb_rgb_mode_available = false;
->> +
->> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_TUF_RGB_MODE, &result);
->> +	if (err) {
->> +		if (err == -ENODEV)
->> +			return 0;
->> +		return err;
->> +	}
->> +
->> +	if (result & ASUS_WMI_DSTS_PRESENCE_BIT)
->> +		asus->tuf_kb_rgb_mode_available = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static ssize_t tuf_kb_rgb_mode_store(struct device *dev,
->> +				 struct device_attribute *attr,
->> +				 const char *buf, size_t count)
->> +{
->> +	int err;
->> +	u32 ret;
->> +	u8 res, tmp, arg_num;
->> +	char *data, *part, *end;
->> +	u8 cmd, mode, r, g,  b,  speed;
->> +
->> +	data = end = kstrdup(buf, GFP_KERNEL);
->> +	cmd = mode = r = g = b = speed = arg_num = 0;
->> +
->> +	while ((part = strsep(&end, " ")) != NULL) {
->> +		if (part == NULL)
->> +			return -1;
->> +
->> +		res = kstrtou8(part, 10, &tmp);
->> +		if (res)
->> +			return -1;
->> +
->> +		if (arg_num == 0)
->> +			// apply : set
->> +			cmd = tmp == 1 ? 0xb5 : 0xb4;
->> +		else if (arg_num == 1)
->> +			// From 0-8 are valid modes with 10-12 being "warning"
->> +			// style modes. All models have "pulse" mode 10.
->> +			mode = (tmp <= 12 && tmp != 9) ? tmp : 10;
->> +		else if (arg_num == 2)
->> +			r = tmp;
->> +		else if (arg_num == 3)
->> +			g = tmp;
->> +		else if (arg_num == 4)
->> +			b = tmp;
->> +		else if (arg_num == 5) {
->> +			if (tmp == 0)
->> +				speed = 0xe1;
->> +			else if (tmp == 1)
->> +				speed = 0xeb;
->> +			else if (tmp == 2)
->> +				speed = 0xf5;
->> +		}
->> +
->> +		arg_num += 1;
->> +	}
->> +
->> +	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, ASUS_WMI_DEVID_TUF_RGB_MODE,
->> +			cmd | (mode << 8) | (r << 16) | (g << 24), (b) | (speed << 8), &ret);
->> +	if (err)
->> +		return err;
->> +
->> +	kfree(data);
->> +	return count;
->> +}
->> +
->> +static DEVICE_ATTR_WO(tuf_kb_rgb_mode);
->> +
->> +/* TUF Laptop Keyboard RGB States *********************************************/
->> +static int tuf_kb_rgb_state_check_present(struct asus_wmi *asus)
->> +{
->> +	u32 result;
->> +	int err;
->> +
->> +	asus->tuf_kb_rgb_state_available = false;
->> +
->> +	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_TUF_RGB_STATE, &result);
->> +	if (err) {
->> +		if (err == -ENODEV)
->> +			return 0;
->> +		return err;
->> +	}
->> +
->> +	if (result & ASUS_WMI_DSTS_PRESENCE_BIT)
->> +		asus->tuf_kb_rgb_state_available = true;
->> +
->> +	return 0;
->> +}
->> +
->> +static ssize_t tuf_kb_rgb_state_store(struct device *dev,
->> +				   struct device_attribute *attr,
->> +				   const char *buf, size_t count)
->> +{
->> +	int err;
->> +	u32 ret;
->> +	bool tmp;
->> +	char *data, *part, *end;
->> +	u8 save, flags, res, arg_num;
->> +
->> +	save = flags = arg_num = 0;
->> +	data = end = kstrdup(buf, GFP_KERNEL);
->> +
->> +	while ((part = strsep(&end, " ")) != NULL) {
->> +		if (part == NULL)
->> +			return -1;
->> +
->> +		res = kstrtobool(part, &tmp);
->> +		if (res)
->> +			return -1;
->> +
->> +		if (tmp) {
->> +			if (arg_num == 0) // save  :  set
->> +				save = tmp == 0 ? 0x0100 : 0x0000;
->> +			else if (arg_num == 1)
->> +				flags |= 0x02; // boot
->> +			else if (arg_num == 2)
->> +				flags |= 0x08; // awake
->> +			else if (arg_num == 3)
->> +				flags |= 0x20; // sleep
->> +			else if (arg_num == 4)
->> +				flags |= 0x80; // keyboard
->> +		}
->> +
->> +		arg_num += 1;
->> +	}
->> +
->> +	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS,
->> +			ASUS_WMI_DEVID_TUF_RGB_STATE, 0xBD | save | (flags << 16), 0, &ret);
->> +	if (err)
->> +		return err;
->> +
->> +	kfree(data);
->> +	return count;
->> +}
->> +
->> +static DEVICE_ATTR_WO(tuf_kb_rgb_state);
->> +
->>  /* Battery ********************************************************************/
->>  
->>  /* The battery maximum charging percentage */
->> @@ -3258,6 +3408,8 @@ static struct attribute *platform_attributes[] = {
->>  	&dev_attr_touchpad.attr,
->>  	&dev_attr_egpu_enable.attr,
->>  	&dev_attr_dgpu_disable.attr,
->> +	&dev_attr_tuf_kb_rgb_mode.attr,
->> +	&dev_attr_tuf_kb_rgb_state.attr,
->>  	&dev_attr_lid_resume.attr,
->>  	&dev_attr_als_enable.attr,
->>  	&dev_attr_fan_boost_mode.attr,
->> @@ -3286,6 +3438,12 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
->>  		devid = ASUS_WMI_DEVID_ALS_ENABLE;
->>  	else if (attr == &dev_attr_egpu_enable.attr)
->>  		ok = asus->egpu_enable_available;
->> +	else if (attr == &dev_attr_tuf_kb_rgb_mode.attr)
->> +		ok = asus->tuf_kb_rgb_mode_available;
->> +	else if (attr == &dev_attr_tuf_kb_rgb_state.attr)
->> +		ok = asus->tuf_kb_rgb_state_available;
->> +	else if (attr == &dev_attr_dgpu_disable.attr)
->> +		ok = asus->dgpu_disable_available;
->>  	else if (attr == &dev_attr_dgpu_disable.attr)
->>  		ok = asus->dgpu_disable_available;
->>  	else if (attr == &dev_attr_fan_boost_mode.attr)
->> @@ -3557,6 +3715,14 @@ static int asus_wmi_add(struct platform_device *pdev)
->>  	if (err)
->>  		goto fail_dgpu_disable;
->>  
->> +	err = tuf_kb_rgb_mode_check_present(asus);
->> +	if (err)
->> +		goto fail_tuf_kb_rgb_mode;
->> +
->> +	err = tuf_kb_rgb_state_check_present(asus);
->> +	if (err)
->> +		goto fail_tuf_kb_rgb_state;
->> +
->>  	err = fan_boost_mode_check_present(asus);
->>  	if (err)
->>  		goto fail_fan_boost_mode;
->> @@ -3671,6 +3837,8 @@ static int asus_wmi_add(struct platform_device *pdev)
->>  fail_fan_boost_mode:
->>  fail_egpu_enable:
->>  fail_dgpu_disable:
->> +fail_tuf_kb_rgb_mode:
->> +fail_tuf_kb_rgb_state:
->>  fail_platform:
->>  fail_panel_od:
->>  	kfree(asus);
->> diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
->> index a571b47ff362..af4191fb0508 100644
->> --- a/include/linux/platform_data/x86/asus-wmi.h
->> +++ b/include/linux/platform_data/x86/asus-wmi.h
->> @@ -98,6 +98,12 @@
->>  /* dgpu on/off */
->>  #define ASUS_WMI_DEVID_DGPU		0x00090020
->>  
->> +/* TUF laptop RGB modes/colours */
->> +#define ASUS_WMI_DEVID_TUF_RGB_MODE	0x00100056
->> +
->> +/* TUF laptop RGB power/state */
->> +#define ASUS_WMI_DEVID_TUF_RGB_STATE	0x00100057
->> +
->>  /* DSTS masks */
->>  #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
->>  #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
+>> NAK, till you send something which you actually test.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi Krzysztof,
+> 
+> 
+> Thanks for your time. I think I got a wrong understanding.
+> 
+> As the binding doc says, I run the following command to check:
+> 
+> # make dt_binding_check DT_SCHEMA_FILES=amlogic,g12_ddr_pmu.yaml ARCH=arm64
 
+Ah, cool, thanks.
+
+> 
+> I saw the warning/errors in v2 patch, and thanks to your comments let 
+> them gone.
+> 
+> But I didn't see any warning/errors keywords printing in v3 except the 
+> message as below:
+> 
+> "$id: relative path/filename doesn't match actual path or filename".
+> 
+> 
+> I admit I didn't understand this prompt. I found the doc in example says 
+> that:
+> 
+> # $id is a unique identifier based on the filename. There may or may not 
+> be a
+> # file present at the URL.
+> 
+> So I thought that was not warning/errors prompt.
+
+Unfortunately, it is and warning message. The final part of this ID is
+directory and filename - these must match real file path.
+
+
+> 
+> Today, I find the root cause of the warning/errors prompt.
+> 
+> I think I have fixed it and the building log is so quiet.
+> 
+> 
+> This is my first upstream patch, TBH I even didn't know what is binding 
+> before.
+> 
+> In order to upstream my driver, I try to learn how to write binding scheme.
+> 
+> It looks like I still did terribly.
+> 
+> I think my stupid misunderstanding get you angry. I'm sorry for wasting 
+> your time and comments.
+
+Apologies for being harsh. We all make mistakes and hopefully learn from
+them.
+
+> 
+> I will re-submit v4 to fix it.
+> 
+
+Awesome, thank you!
+
+Best regards,
+Krzysztof

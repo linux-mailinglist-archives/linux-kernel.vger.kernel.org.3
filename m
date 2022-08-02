@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD27587627
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 06:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F71058762C
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 06:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiHBEIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 00:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S233189AbiHBEJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 00:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiHBEIl (ORCPT
+        with ESMTP id S229455AbiHBEJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 00:08:41 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0714B1B7B0
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 21:08:40 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id m2so5550667pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 21:08:40 -0700 (PDT)
+        Tue, 2 Aug 2022 00:09:39 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8611A1B7B0;
+        Mon,  1 Aug 2022 21:09:38 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id i14so5096991ejg.6;
+        Mon, 01 Aug 2022 21:09:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=qt2lrz7hBi6/NHKhZYMSJYVUWY56n9uxWwwqraR3638=;
-        b=rpCpGLlLp7TBtQ479cZ7kwRr9lCjE+DaLznlPfNFZu01VkPz1WwcASUTwlw1Bweluo
-         jXkYKLsDxBsWEDMBp73X7qDXF1L60OJeyvIuShjF/k1o1KeTPFOxyxlNd3PquLOKnJkH
-         +5ymXZtQ9nLxD0+xsUB3xAHJXC/8116SdFPoQOeOcpBZjPGsokL66mz3v+M9IJ07peAL
-         CQRZfNAU5xFYMCWJldyjxal32EFt0rOJWA8XHb/NY6E0OToq1QINeBh9zcJpZD1DWQHw
-         LdIe1ckvpddfm5pqA18mn0Ti5O9Ri29pmza/EvlfqtfdRHicttKir5eRMXZpz55MXpdJ
-         ybjA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UocwHfpqhdsaKRBjXUO3oWoo5VgvByxIYhhk++TJzww=;
+        b=jx4n8eOOxofhaSZH8qAE8+C6TnYGtkoSskRxtdK6cpEuJs3B2/r/mtS+LfGdb607Z+
+         Pt706y5owNULu/vT+bzuxlMpb2iAnCL2E0Y5Wi5ngS2662xLzjr/k72ssPZBwg7ee0M/
+         zepD+iNbd8FUgpsRoAHdZUDWBWHTxN/pdEOFPX5Uha6kIcv96xO8u3cQvd4100gd9i1E
+         O8ysJtP8T++KWGFyqQ68Xvs7n5ypjil/P8MXrTBcSLTJBBoeAg7ayjvnfyNgCh3r8xV8
+         3LnE2hkBGhoIu41apN04xmyBhTNU+cphPbdgr5N+UbDCDF2MJhvMjx495VwSEh1m0AKL
+         FxUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=qt2lrz7hBi6/NHKhZYMSJYVUWY56n9uxWwwqraR3638=;
-        b=jbC09Q9LrFh8y5yPsrzxP5uKQqmKKX1/cTIIlLme1xLknJ+zRdtq4tqTegDGZDfe5X
-         dFWwpInPPszaOkUKIagcoQsadcBN5I+taVQo0JNuPHD2e1qdTww0Oh3OsJLLNbRlILa5
-         mTBTwm3DIz9wJU32UbaAjNb5oZfxpnieVcwVr/xhfHZuG4YHYQ/SNcHT0D84L4EHk+Gn
-         lhBeExgPc+2w2AphT6xyXfaa/6yMQQpl1KOHtfs8N4PdDU+DAsZAIsY9HraQBxRvqWmq
-         p3NQBChiMpaQoWuuzcw94uxvC7r/r8c6Te2SIT6dRLdGt0aAxdc9CQIxufm+kdVrkZuK
-         PnTQ==
-X-Gm-Message-State: ACgBeo1Xz8UmM9YX+QV5BQX951pDqsWm2Are7Wu4GNl8TLGuspemyrGn
-        SyPtRa+W6KDlZdkDZ6VtXwyuYg==
-X-Google-Smtp-Source: AA6agR5cH95rwmZABqpRvDzA2yYBgzz7vgM9rP0eLpQPg/wXljKfQHFd3F9EZLzviOll+6w4XaXFIw==
-X-Received: by 2002:a17:902:e5c3:b0:16e:d968:634e with SMTP id u3-20020a170902e5c300b0016ed968634emr11974551plf.80.1659413319426;
-        Mon, 01 Aug 2022 21:08:39 -0700 (PDT)
-Received: from C02F63J9MD6R.bytedance.net ([61.120.150.78])
-        by smtp.gmail.com with ESMTPSA id m18-20020a63f612000000b003fba1a97c49sm8238014pgh.61.2022.08.01.21.08.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Aug 2022 21:08:39 -0700 (PDT)
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-To:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Cc:     chenzhuo.1@bytedance.com, lukas@wunner.de, jan.kiszka@siemens.com,
-        stuart.w.hayes@gmail.com, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] PCI/ERR: Use pcie_aer_is_native() to judge whether OS owns AER
-Date:   Tue,  2 Aug 2022 12:08:30 +0800
-Message-Id: <20220802040830.28514-1-chenzhuo.1@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UocwHfpqhdsaKRBjXUO3oWoo5VgvByxIYhhk++TJzww=;
+        b=dmgK/cuh/Jx8iy0LSFNBUkx61D/OU3Z8GHxNI+V4k+ffZzsZZtE8JRFMINFb9fzvu6
+         n17oVL/EIcduB1HYUWwQtZa320Z2OBr/CLqEhWJp1gjTVGjdD0m3Ml9Wpm06JuW1zrbx
+         KJuTpSeyMakvEgIl4boHLJXcoD8FMUuXJsi4yDK/TVBYW2AUNQSkmJueEPzX714FgAto
+         2vzw4pyAoSyln6vvJIGAAeuI2NhE1W6wR8adguNrKVtVYWAsES/K3WYCMXsIO+S+Ev3c
+         FUQy/Ix6VrmHyzmsVyYSFtJijtl5iEpAp9F7R1ttppnlkarD0qrlBfhhKqrmrIDRwyVY
+         tP5g==
+X-Gm-Message-State: AJIora+MHXkvGH5o5N9qKlP8KcfzTjmQCkx/J4VF8NKZ6O/tM0a0RpSA
+        e/TKeOTX7kbG1Jq/cfUi/NMOEtW1KdxZOF/4rb88BzAG8ZQ=
+X-Google-Smtp-Source: AGRyM1ty5sQTlF8ub0NnxUzp5syP51LYgsz8b9F8DDUIfoi9492DqzuJLw/BVfKhXCQt6hC71NiFlKdCphZTEUPiAWI=
+X-Received: by 2002:a17:907:2ccc:b0:72b:6907:fce6 with SMTP id
+ hg12-20020a1709072ccc00b0072b6907fce6mr15019557ejc.115.1659413377003; Mon, 01
+ Aug 2022 21:09:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220801175407.2647869-1-haoluo@google.com> <20220801175407.2647869-6-haoluo@google.com>
+ <CAEf4Bzbdz7=Cg-87G2tak1Mr=1wJkqr6g2d=dkHqu0YH+j2unA@mail.gmail.com> <CA+khW7jiW=oAHS-N1ADLbqB74jTwAaLqUFFvYgb4xTz9WFwtZg@mail.gmail.com>
+In-Reply-To: <CA+khW7jiW=oAHS-N1ADLbqB74jTwAaLqUFFvYgb4xTz9WFwtZg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 1 Aug 2022 21:09:25 -0700
+Message-ID: <CAEf4BzZcwN3N-8iHrHWFmunoWAVP4-snUs7kxpLLnQJpOtR+rw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 5/8] selftests/bpf: Test cgroup_iter.
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,95 +84,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use pcie_aer_is_native() in place of "host->native_aer ||
-pcie_ports_native" to judge whether OS has native control of AER
-in aer_root_reset() and pcie_do_recovery().
+On Mon, Aug 1, 2022 at 3:55 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Mon, Aug 1, 2022 at 2:51 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Mon, Aug 1, 2022 at 10:54 AM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
+> > > of the following structure:
+> > >
+> > >     ROOT (working cgroup)
+> > >      |
+> > >    PARENT
+> > >   /      \
+> > > CHILD1  CHILD2
+> > >
+> > > and tests the following scenarios:
+> > >
+> > >  - invalid cgroup fd.
+> > >  - pre-order walk over descendants from PARENT.
+> > >  - post-order walk over descendants from PARENT.
+> > >  - walk of ancestors from PARENT.
+> > >  - early termination.
+> > >
+> > > Acked-by: Yonghong Song <yhs@fb.com>
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 193 ++++++++++++++++++
+> > >  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+> > >  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++++
+> > >  3 files changed, 239 insertions(+)
+> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+> > >  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+> > >
 
-Replace "dev->aer_cap && (pcie_ports_native || host->native_aer)" in
-get_port_device_capability() with pcie_aer_is_native(), which has no
-functional changes.
+[...]
 
-Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
----
-Changelog:
-v4:
-- Use pcie_aer_is_native() instead in aer_root_reset().
-v3:
-- Simplify why we use pcie_aer_is_native().
-- Revert modification of pci_aer_clear_nonfatal_status() and comments.
-v2:
-- Add details and note in commit log.
----
- drivers/pci/pcie/aer.c          | 5 ++---
- drivers/pci/pcie/err.c          | 3 +--
- drivers/pci/pcie/portdrv_core.c | 3 +--
- 3 files changed, 4 insertions(+), 7 deletions(-)
+> > > +#define format_expected_output3(cg_id1, cg_id2, cg_id3) \
+> > > +       snprintf(expected_output, sizeof(expected_output), \
+> > > +                PROLOGUE "%8llu\n%8llu\n%8llu\n" EPILOGUE, \
+> > > +                (cg_id1), (cg_id2), (cg_id3))
+> > > +
+> >
+> > you use format_expected_output{1,2} just once and
+> > format_expected_output3 twice. Is it worth defining macros for that?
+> >
+>
+> If not, we'd see this snprintf and format all over the place. It looks
+> worse than the current one I think, prefer leave as-is.
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 7952e5efd6cf..796810c49008 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -1383,7 +1383,6 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
- 	int type = pci_pcie_type(dev);
- 	struct pci_dev *root;
- 	int aer;
--	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
- 	u32 reg32;
- 	int rc;
- 
-@@ -1404,7 +1403,7 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
- 	 */
- 	aer = root ? root->aer_cap : 0;
- 
--	if ((host->native_aer || pcie_ports_native) && aer) {
-+	if (pcie_aer_is_native(dev) && aer) {
- 		/* Disable Root's interrupt in response to error messages */
- 		pci_read_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, &reg32);
- 		reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
-@@ -1423,7 +1422,7 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
- 			pci_is_root_bus(dev->bus) ? "Root" : "Downstream", rc);
- 	}
- 
--	if ((host->native_aer || pcie_ports_native) && aer) {
-+	if (pcie_aer_is_native(dev) && aer) {
- 		/* Clear Root Error Status */
- 		pci_read_config_dword(root, aer + PCI_ERR_ROOT_STATUS, &reg32);
- 		pci_write_config_dword(root, aer + PCI_ERR_ROOT_STATUS, reg32);
-diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-index 0c5a143025af..121a53338e44 100644
---- a/drivers/pci/pcie/err.c
-+++ b/drivers/pci/pcie/err.c
-@@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
- 	int type = pci_pcie_type(dev);
- 	struct pci_dev *bridge;
- 	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
--	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
- 
- 	/*
- 	 * If the error was detected by a Root Port, Downstream Port, RCEC,
-@@ -243,7 +242,7 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
- 	 * it is responsible for clearing this status.  In that case, the
- 	 * signaling device may not even be visible to the OS.
- 	 */
--	if (host->native_aer || pcie_ports_native) {
-+	if (pcie_aer_is_native(dev)) {
- 		pcie_clear_device_status(dev);
- 		pci_aer_clear_nonfatal_status(dev);
- 	}
-diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-index 604feeb84ee4..98c18f4a01b2 100644
---- a/drivers/pci/pcie/portdrv_core.c
-+++ b/drivers/pci/pcie/portdrv_core.c
-@@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
- 	}
- 
- #ifdef CONFIG_PCIEAER
--	if (dev->aer_cap && pci_aer_available() &&
--	    (pcie_ports_native || host->native_aer)) {
-+	if (pcie_aer_is_native(dev) && pci_aer_available()) {
- 		services |= PCIE_PORT_SERVICE_AER;
- 
- 		/*
--- 
-2.30.1 (Apple Git-130)
+All over the place == 4 places where it matters.
 
+We are not trying to write the most beautiful code through macro
+obfuscation. The point is to write tests that are easy to follow,
+debug, understand, and potentially modify. Adding extra layers of
+macros goes against this. Instead of clearly seeing in each individual
+subtest that we expect "%llu\n%llu\n", I need to search what
+"format_expected_output3" is actually doing, then I'm wondering where
+expected_output is coming from (I scan macro input args, see nothing,
+then I conclude it must be coming from the environment; I jump to one
+of the format_expected_output3 invocation sites, see no local variable
+named "expected_output", then I look around and see global variable;
+aha, finally!) Sure it's a rather trivial thing, but this adds up.
+
+*Unnecessary* macros are bad and a hindrance. Please avoid them, if
+possible. Saving 20 characters is not a sufficient justification in my
+view.
+
+>
+> > > +const char *cg_path[] = {
+> > > +       "/", "/parent", "/parent/child1", "/parent/child2"
+> > > +};
+> > > +
+
+[...]
+
+> > > +       link = bpf_program__attach_iter(skel->progs.cgroup_id_printer, &opts);
+> > > +       if (!ASSERT_ERR_PTR(link, "attach_iter"))
+> > > +               bpf_link__destroy(link);
+> >
+> > nit: you can call bpf_link__destroy() even if link is NULL or IS_ERR
+> >
+>
+> Ack. Still need to ASSERT on 'link' though, so the saving is probably
+> just an indentation. Anyway, will change.
+
+Yeah, of course you need to assert. But it's nice to have
+unconditional assertion.
+
+>
+> > > +}
+> > > +
+> >
+> > [...]
+> >
+
+[...]

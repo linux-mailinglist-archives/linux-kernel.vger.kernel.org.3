@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49071587C1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5F6587C00
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbiHBMNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S236531AbiHBMKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236865AbiHBMNO (ORCPT
+        with ESMTP id S236476AbiHBMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:13:14 -0400
-Received: from mx07-0057a101.pphosted.com (mx07-0057a101.pphosted.com [205.220.184.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35004F648;
-        Tue,  2 Aug 2022 05:13:01 -0700 (PDT)
-Received: from pps.filterd (m0214197.ppops.net [127.0.0.1])
-        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272Bru40021377;
-        Tue, 2 Aug 2022 14:10:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=12052020;
- bh=7Dt46XnYgf28PDkRim97Pp78Rq0luk57iTdbu5nsFDk=;
- b=5A5ZHa/0fQMLtboujnDa9BvigvhJm8zM/sKzAeRSrKNB/Vh8BF9o+gJvfxedi/5ona09
- BE6fPGar3b68cHForqu4ZK0KK9U5MJXrFgTbMXF9Ndr9kCmjdAU5XRVq1k+VzD38TK37
- wVtRkrcBN2c1OkEo9ZB/R8wZ1xJK1Rc+E3Dy5GVlcwrqfCCAO2HUkpKKJPtVhbMF/UiZ
- VLon0gn0MUaJloc9NgvcJi17bz/Tb5BY40K/A+QgvlsJo1ckpOUFl4qxtIhajLpjonCH
- J/d1746EKf7Eav9sh+YJ4Oayr9U8pd54NjmPZ05An5wZKjV8mFPio+M0qwZL+08WntQB Jw== 
-Received: from mail.beijerelectronics.com ([195.67.87.131])
-        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hms0c2wby-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 02 Aug 2022 14:10:04 +0200
-Received: from Orpheus.westermo.com (172.29.101.13) by
- EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2375.17; Tue, 2 Aug 2022 14:10:01 +0200
-From:   Matthias May <matthias.may@westermo.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <roopa@nvidia.com>,
-        <eng.alaamohamedsoliman.am@gmail.com>, <bigeasy@linutronix.de>,
-        <saeedm@nvidia.com>, <leon@kernel.org>, <roid@nvidia.com>,
-        <maord@nvidia.com>, <lariel@nvidia.com>, <vladbu@nvidia.com>,
-        <cmi@nvidia.com>, <gnault@redhat.com>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <nicolas.dichtel@6wind.com>, <eyal.birger@gmail.com>,
-        <jesse@nicira.com>, <linville@tuxdriver.com>,
-        <daniel@iogearbox.net>, <hadarh@mellanox.com>,
-        <ogerlitz@mellanox.com>, <willemb@google.com>,
-        <martin.varghese@nokia.com>,
-        Matthias May <matthias.may@westermo.com>
-Subject: [PATCH v2 net 4/4] ipv6: do not use RT_TOS for IPv6 flowlabel
-Date:   Tue, 2 Aug 2022 14:09:35 +0200
-Message-ID: <20220802120935.1363001-5-matthias.may@westermo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220802120935.1363001-1-matthias.may@westermo.com>
-References: <20220802120935.1363001-1-matthias.may@westermo.com>
+        Tue, 2 Aug 2022 08:10:42 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6C326108;
+        Tue,  2 Aug 2022 05:10:41 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id iw1so13254649plb.6;
+        Tue, 02 Aug 2022 05:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=cmB25PFL10++aK91jk9vUd2FanNg0aRKpDcRtxq0uPI=;
+        b=CXH+jr1j1fttnvwdJf4loNtAFS0U6qK7Bi7aCni5NbdI7wJaoiouB5lw1U0K5/krOD
+         lXmKA6WRsVEHWO9iN3fKEpADOORNMRWzFSKXSVtnIxHE9eGf3v840N827Waj4KrHKgwf
+         DnEoNsuhQiiCG1w28nSnmMA1YOy0IPkFyLrtMBP74sKUL6sm5p80jBQ+OnNLtQfyTFt5
+         ocoRiGO27hc0cLhwNCL6bEyzk4LwfahXEuTHHzHVZshi28tereJutpJYKEaWDOpEQLxs
+         bAFYRXEgOapwJ3OBX4MzD94w05I76X2qPHou8FpgsJl2UNKGUQBNgYrZ9noB02hQMw7i
+         Q+fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=cmB25PFL10++aK91jk9vUd2FanNg0aRKpDcRtxq0uPI=;
+        b=ryWTk+KD4lartxTnPCdwQK59oZZCx6Kf9Fir3Z69R0ja+X4aC62FIb5qfrQdJKYEfA
+         iYoeAeViFjqKVJIuOmxcUQxbWKoliB6XgzfN26B7+d2FlK01HMiJ0ulSoRJPCD2hXZRm
+         NLBd6RHL17Cz4Xu2IqNTF/7ONNH5+h4EwQRlmP3AKqONFbS3uM0GYHnzBEIpk9HOue3b
+         4pEd3OAON0Z6OxsEZti3kGq4aHSgfsiByYEd7jC5z/yozzwneWbzvOLow8rhm+85VzQB
+         rC/MIKTVSDncXj73jCXC0m70kPJmDOP4RCKaDoxVdD5VqX6lmvFgzBHafCYXWGHeYtpT
+         gYvg==
+X-Gm-Message-State: ACgBeo1rMqm0a4d9JEQs9MbqzaJRLgultVHDWKoZW1b1E9ai+L53DRWa
+        lrcFctX6Y1NMsauspmxq3dU=
+X-Google-Smtp-Source: AA6agR6Hw1+Xna3gyOLt+ETO6ZLjDbMmPWbyEClThJRRY2w5XbSNNv4B3bav544l+pxpFl6TyWWbWg==
+X-Received: by 2002:a17:902:7448:b0:16e:e3f8:7683 with SMTP id e8-20020a170902744800b0016ee3f87683mr10943112plt.74.1659442240813;
+        Tue, 02 Aug 2022 05:10:40 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090341c400b0016d93be285asm11882630ple.173.2022.08.02.05.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 05:10:40 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7860E103A10; Tue,  2 Aug 2022 19:10:36 +0700 (WIB)
+Date:   Tue, 2 Aug 2022 19:10:35 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/88] 5.18.16-rc1 review
+Message-ID: <YukUOzNwe83HWwwU@debian.me>
+References: <20220801114138.041018499@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.29.101.13]
-X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
- EX01GLOBAL.beijerelectronics.com (10.101.10.25)
-X-Proofpoint-GUID: ZoawDdE9j41KGZHES-cdGopeQksgu0vj
-X-Proofpoint-ORIG-GUID: ZoawDdE9j41KGZHES-cdGopeQksgu0vj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220801114138.041018499@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Guillaume Nault RT_TOS should never be used for IPv6.
+On Mon, Aug 01, 2022 at 01:46:14PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.16 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-Fixes: 571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
-Signed-off-by: Matthias May <matthias.may@westermo.com>
----
-v1 -> v2:
- - Fix spacing of "Fixes" tag.
- - Add missing CCs
----
- net/ipv6/ip6_output.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 77e3f5970ce4..ec62f472aa1c 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1311,8 +1311,7 @@ struct dst_entry *ip6_dst_lookup_tunnel(struct sk_buff *skb,
- 	fl6.daddr = info->key.u.ipv6.dst;
- 	fl6.saddr = info->key.u.ipv6.src;
- 	prio = info->key.tos;
--	fl6.flowlabel = ip6_make_flowinfo(RT_TOS(prio),
--					  info->key.label);
-+	fl6.flowlabel = ip6_make_flowinfo(prio, info->key.label);
- 
- 	dst = ipv6_stub->ipv6_dst_lookup_flow(net, sock->sk, &fl6,
- 					      NULL);
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
 -- 
-2.35.1
-
+An old man doll... just what I always wanted! - Clara

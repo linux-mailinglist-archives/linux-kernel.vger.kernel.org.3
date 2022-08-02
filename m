@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF16587978
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DEB58797B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbiHBI7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S236204AbiHBI7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236070AbiHBI7O (ORCPT
+        with ESMTP id S233867AbiHBI7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:59:14 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53924E85E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:59:12 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id bx38so5059686ljb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rDww99bxZ2K/yqjmoq3VMhTRa5h4h8Y1EfcjnZHfk94=;
-        b=P/jl4sFtz1DbCpP1Q7lGN97y4/R9mecC9JwtO80y4ggDk15tvzJrsxnyKC62COQETW
-         v8MLmUHK20P81S4TLUGEoqR/POhXAReg4qYYUl1rRfJ4DLT5N5/uE/4tUL0AIxY6LV/n
-         e+xAgt6br1ENb/zETwDDrS0luENfM9kMwNDSxcSiAuL3AKjJoGPROydxlVkm1wgn/lsD
-         NSyCBNThJ3/wU9+q61xEPyIp+Z26OHa3FvMLkb2lDXr/+oyu6R25Zb2aZmEJ99BivGzf
-         q7rQr5pc5OTE7R/ttOiG8yKwta95k5djwaOWQW3xNmzFypfZZ5SF9MdulDizkoWYGmZy
-         2m0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rDww99bxZ2K/yqjmoq3VMhTRa5h4h8Y1EfcjnZHfk94=;
-        b=qfk1qY8LZmb1ebFoDpbH1sQRNZrUBIQfW0YD47Fs4z9hNb7c3MOJlsHiqsHy5PkX/b
-         FuYM1QWUOD68c33KCsmiV/NE5zoXozh18Te4gPgNmJov9tvUAiZGhUAq2VXunAPtDTNY
-         YJQ0/KpwdoXpQ2omcM39CG9hTeNOElENJrbqV3+h6bczus8qOFdDW0IHdIUG8q4ZVTZm
-         ap7bAtvJyx48IZ+mFlwosCh7OJUI/qGgYeuz5FENwZnrcX7kve2YAhnRQuPsz1ic9H2v
-         L659T5MSOelKhoHgk5KX/f8JfmN7PYw0BX6/dvozbJg3eCru+huGDUScd7fqpJAyFA9B
-         aj7w==
-X-Gm-Message-State: AJIora+fQ79SGcLvoSSLMvv3MdtNB4udR7UB13xt/QiQpRX56+VvfQ+8
-        DiXBG965A1vXxAExsxyRUWW9kSHph67uAaHE
-X-Google-Smtp-Source: AGRyM1uOWqNPMAzWytOXQR2J61sWqAunSBTaLh3kg+0TBkWkquMqqEGhG2ByS32YRfZ/WqjuKxpL8w==
-X-Received: by 2002:a2e:96c1:0:b0:258:e8ec:3889 with SMTP id d1-20020a2e96c1000000b00258e8ec3889mr6323278ljj.6.1659430751040;
-        Tue, 02 Aug 2022 01:59:11 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id u8-20020a056512128800b0048ae316caf0sm1524349lfs.18.2022.08.02.01.59.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:59:10 -0700 (PDT)
-Message-ID: <cd9518e3-9cb4-5165-af03-00e5300ab927@linaro.org>
-Date:   Tue, 2 Aug 2022 10:59:08 +0200
+        Tue, 2 Aug 2022 04:59:37 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B2E81;
+        Tue,  2 Aug 2022 01:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659430776; x=1690966776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rhx2mjzECQhwFJuSSVWaFi/hh3YiP+uH0x/KGzMUvpo=;
+  b=RLLqlDlQ3fdJe4ESHaHv8tlbSHK9WEajXcBCmOOSDLOzi5xYvQ14xVXy
+   SiqZ9oKN2IZQMKUkvgigBf4vrmaXgYCvXgas7NnB9oQ1skPerZeoK7Z+i
+   78rWiG4VFhRInd7HwNzF/Et9bCibRT8IwqSUyQqLVPgMfPChcI7NQwG/x
+   YaZaoNg9ivaZw4S7thn8PFEwKdXhWbVBstPd2GBr4p/6yDAdHyHSVXfs7
+   wdnJGktx+anyxVIRIhYYIAFtFw/ZwFiaJCWc2GGWNOwY/LxGMT2DVxeQa
+   BxF3niZ2xtn26/jimNtD+1cHnO4Pl4A3B5NW9BGYUQX0nUGIoanDqU0rJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="286920956"
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="286920956"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 01:59:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
+   d="scan'208";a="744596705"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Aug 2022 01:59:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 02 Aug 2022 11:59:32 +0300
+Date:   Tue, 2 Aug 2022 11:59:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rajmohan.mani@intel.com
+Subject: Re: [PATCH] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor
+ Lake IOM device
+Message-ID: <YujndMdpS+4L0AiL@kuha.fi.intel.com>
+References: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3] dt-bindings: PCI: mediatek-gen3: Add support for
- MT8188 and MT8195
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ryder Lee <ryder.lee@mediatek.com>, Rex-BC.Chen@mediatek.com,
-        TingHan.Shen@mediatek.com, Liju-clr.Chen@mediatek.com,
-        Jian.Yang@mediatek.com
-References: <20220801113709.12101-1-jianjun.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220801113709.12101-1-jianjun.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/08/2022 13:37, Jianjun Wang wrote:
-> MT8188 and MT8195 are ARM platform SoCs with the same PCIe IP as MT8192.
+Hi Utkarsh,
+
+On Thu, Jul 28, 2022 at 05:30:33PM -0700, Utkarsh Patel wrote:
+> Intel Meteor Lake IOM uses 64bit IOM BASE address than previous Intel
+> Generations which use 32bit.
 > 
-> Also add new clock name "peri_mem" since the MT8188 and MT8195 use clock
-> "peri_mem" instead of "top_133m".
+> Added code to support 64bit IOM BASE address change with necessary ACPI
+> resource extraction support.
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
-> Changes in v3:
-> Use enum property to add the new clock name.
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> Changes in v2:
-> Merge two patches into one.
-> ---
->  .../bindings/pci/mediatek-pcie-gen3.yaml           | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 0499b94627ae..a0ca9c7f5dfa 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -48,7 +48,14 @@ allOf:
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index 47b733f78fb0..a8e273fe204a 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -571,9 +571,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
 >  
->  properties:
->    compatible:
-> -    const: mediatek,mt8192-pcie
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-pcie
-> +              - mediatek,mt8195-pcie
-> +          - const: mediatek,mt8192-pcie
-> +      - items:
-
-You have one item, so this is just const. Or enum if  you expect it to
-grow soon.
-
-> +          - const: mediatek,mt8192-pcie
+>  static int is_memory(struct acpi_resource *res, void *data)
+>  {
+> -	struct resource r;
+> +	struct resource_win win = {};
+> +	struct resource *r = &win.res;
 >  
->    reg:
->      maxItems: 1
-> @@ -84,7 +91,9 @@ properties:
->        - const: tl_96m
->        - const: tl_32k
->        - const: peri_26m
-> -      - const: top_133m
-> +      - enum:
-> +          - top_133m        # for MT8192
-> +          - peri_mem        # for MT8188/MT8195
+> -	return !acpi_dev_resource_memory(res, &r);
+> +	return !(acpi_dev_resource_memory(res, r) ||
+> +		 acpi_dev_resource_address_space(res, &win));
+>  }
 
-This requires allOf:if:then restricting it further per variant.
+I realised that now that is_memory() function is basically just a copy
+of the is_memory() function that's in drivers/acpi/resources.c, so I
+think we need to handle this a bit differently. There are a few places
+in kernel that have that same check.
+
+One way would be to just export the is_memory() function that's in
+drivers/acpi/resources.c, but since we have already a wrapper function
+acpi_dev_get_dma_resources() for DMA resouces, I think we could have a
+similar wrapper for common memory resources.
+
+I'll prepare a patch(s) where I'll propose a new wrapper function
+acpi_dev_get_memory_resources() that will take care of the is_memory()
+check, and then convert the users (including this driver). After that,
+this patch only needs to add the ID.
 
 
+thanks,
 
-Best regards,
-Krzysztof
+
+>  /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
+> @@ -583,6 +585,9 @@ static const struct acpi_device_id iom_acpi_ids[] = {
+>  
+>  	/* AlderLake */
+>  	{ "INTC1079", 0x160, },
+> +
+> +	/* Meteor Lake */
+> +	{ "INTC107A", 0x160, },
+>  	{}
+>  };
+>  
+> -- 
+> 2.25.1
+
+-- 
+heikki

@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F76E5875E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8A55875E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiHBDUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 23:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S233932AbiHBDUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 23:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiHBDUT (ORCPT
+        with ESMTP id S232373AbiHBDUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 1 Aug 2022 23:20:19 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA105266D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:20:16 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id y127so21835582yby.8
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 20:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E0RRsjoUyem/Uu6X8omWbmsj/Rtm7+eGWCw7Bg5wOuk=;
-        b=fJfp67jot0JG7C9ufb0tEJZH2wfzDUaQhd+8KHwzRqYFr3b+slwkXVhS7A5677iBte
-         yoyvZ7FNGiJJS1hHre8mX7otvQ8fhp7BOv7LoBNMve+fbsDvPeTPtJnCJc+rSF3kQnyV
-         94Gmr5ANWthxdPgsvStd5CIg0UZegP8tQqfIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E0RRsjoUyem/Uu6X8omWbmsj/Rtm7+eGWCw7Bg5wOuk=;
-        b=SSj9dSAFg4iRLvTFl8IkPmgB3zCg93YV+rLpzQFsZ/+JT+LXar8M2RhE9FRnwGuair
-         B0BnsyibPSYYpy5tcITAUC8KV++wXvFV7qbb1oodT2kLhTT7ZqdPHc4VAeehJntLdNxf
-         BiAkdlHebySmni74/nsmjc+uqPzUHtLzh7JQKUay91YPDyFawb5R/azID2JiEoH412dS
-         7LYX1h9VFsG+FnW0uH5Ul/vbtPgukfhLrHq037UYZQMq5YZVOdfsavE+OJ7hcuggm8Tl
-         FPrELiFXs43+RR+E8RFhAekUgYVA30iP+v/efiiqltWHHZN3nPaFAUv6m2tKxwR6RVTn
-         0PYQ==
-X-Gm-Message-State: ACgBeo1Lxtnc9aswVpvI7xomg3gTtElKmFPhVtKw5tZafGlhBXI5TysU
-        Haq9pLTz2gQpf/omdnBt5/v+s3uakpqEvcrqhqLIaw==
-X-Google-Smtp-Source: AA6agR45GVkAIWzB395IwGRNxzpFkXaVilMwK8OytxnFjfxML6ca852d/ZTtoG6iW2/mTgBoX1AwOX+HoHm4VVBsVuM=
-X-Received: by 2002:a25:7cc2:0:b0:677:5a84:9f79 with SMTP id
- x185-20020a257cc2000000b006775a849f79mr4142817ybc.518.1659410415884; Mon, 01
- Aug 2022 20:20:15 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F85262B;
+        Mon,  1 Aug 2022 20:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C33DB81993;
+        Tue,  2 Aug 2022 03:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B97DDC433D7;
+        Tue,  2 Aug 2022 03:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659410413;
+        bh=vrJp6GcO+jYYAeP3AVrkWQ42YZmgEXnXE8fn6z/p80E=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=q9cxOISR/B37jnc7pY1xBUUhvozMXSOFNY9+CkCep6oURH/Y0G6mHfQb7LBXCLqza
+         83OeFe0d/I+mVCfqFZvU8Zes0mx16KIomPNGEYyl5thBkDkKcPrU4sCEP0ANLYrRyJ
+         MZLpfYZ5PzYooYpa+NaHjh1QAX3aRF0i2Kp+SSD7wymwc7WreSOJt9cjHnb5DHSueO
+         cD650Iwea856ky/oLN34HzmqmqAaLVbYLhbpIwGU+9NJAKeiRGgHs7DqOSBAIs7FNV
+         PlSbxzPAAExvDC58j3pUijl8mKt31mKBQoD8CPMlpUSB2/SbkkW8cXU1A+SDRPjT0K
+         qCx3koqFZVPqw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 994F5C43140;
+        Tue,  2 Aug 2022 03:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220802103643.v5.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
- <c4acb34f-7bba-336f-ddfc-a9c098f2c95f@acm.org>
-In-Reply-To: <c4acb34f-7bba-336f-ddfc-a9c098f2c95f@acm.org>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Tue, 2 Aug 2022 13:20:04 +1000
-Message-ID: <CAONX=-cAW5UX__xu5y7NdtHkZq-YWmh_k=iFa5witdxw3xXkYA@mail.gmail.com>
-Subject: Re: [PATCH v5] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net PATCH v2] octeontx2-pf: Reduce minimum mtu size to 60
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165941041362.29891.15985898898628153206.git-patchwork-notify@kernel.org>
+Date:   Tue, 02 Aug 2022 03:20:13 +0000
+References: <20220729092457.3850-1-naveenm@marvell.com>
+In-Reply-To: <20220729092457.3850-1-naveenm@marvell.com>
+To:     Naveen Mamindlapalli <naveenm@marvell.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com, sbhatta@marvell.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Is the "capabilities" directory a directory with capabilities of the
-> host, with capabilities of the UFS device or perhaps with capabilities
-> of both?
-I would say effective capabilities of the controller-device pair, from the
-semantic that hba->caps field presents. Do you want me to mention it
-anywhere?
-Thanks,
-Daniil
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 29 Jul 2022 14:54:57 +0530 you wrote:
+> From: Subbaraya Sundeep <sbhatta@marvell.com>
+> 
+> PTP messages like SYNC, FOLLOW_UP, DELAY_REQ are of size 58 bytes.
+> Using a minimum packet length as 64 makes NIX to pad 6 bytes of
+> zeroes while transmission. This is causing latest ptp4l application to
+> emit errors since length in PTP header and received packet are not same.
+> Padding upto 3 bytes is fine but more than that makes ptp4l to assume
+> the pad bytes as a TLV. Hence reduce the size to 60 from 64.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] octeontx2-pf: Reduce minimum mtu size to 60
+    https://git.kernel.org/netdev/net/c/53e99496abc1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

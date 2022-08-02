@@ -2,161 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335335883CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658C55883CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbiHBVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        id S233108AbiHBVuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbiHBVs6 (ORCPT
+        with ESMTP id S229502AbiHBVuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:48:58 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2043.outbound.protection.outlook.com [40.92.23.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4266852453;
-        Tue,  2 Aug 2022 14:48:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SMnTXuqpEhIKb/NgRctewzmkxMqWVqp/Jv/GQTk8BYBzvR1qSpGtMS6Lwp8PvTqp3lglx68EAt1KVeuUbYTcibmqfe5fVqpfzeQ11rv+RWUoH47ZUcOGbIdullj+GUN03L4M9GFEW9B9PqGBpvz2mf6AXl3API86YJuYryRWwYl95SkZ8BdZipx1ziW9TO5QSQuQmbTXEcAAwHvqZhJQs0mSYUjZp4vXgn5TINU1uNEnzfKpcXTk7zyVestKvYOJgBw1AFWKGkANEa1J7KlCOKytuL71m/YZo8BxgtEeMsoln03TBMc9jDKw7Wyimbde5eDlJfy+kGfq3iWUblZrwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ecHLiGX9LIOMGnLzK1OLXnFdK9Os7h/F4goajBAvJao=;
- b=oRVwledqp4FUjqroI8f+40FP5sL0puHXO0JMtUy2Pk9hTN2e8yKowjWEVewFJ+P7qdz2vD+b0eNsKTQkvF1b1hifTeSESIinOM56+C7e9o2I8VtHhC3XllH2Zw5x09LqsaS8Fr3x4wbj67ajhiaZe71LEa79XvFTK6qC2QOaLs3vAvs3T2A+kSCM+mIIbcRW7XV8Iklb6exMxzrsWBiaEkDRQrGw0y3jb5Yasq+ESg/irB6LWPiLbg1FWFXPj3KtREoBaMvdOxBl9XTApVbpOK1ScaXDu4EcSsEadUYWZzWW5mJ8BCLKydFdw0GOpz/9v5FiHeg5r0z/MAiwsN1N1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ecHLiGX9LIOMGnLzK1OLXnFdK9Os7h/F4goajBAvJao=;
- b=IRGZ7wCYjD6TyUSG5B9BNHnbEkH2BLFzVgjZQHRjbN3AvtMdEcppEND2Lo1ws8vE9scH/Yun7cP97+wa6qVlvkKdn2aNEMHuxLfFs0sI739Yn84NY7wqDdovXYVCEZWe9UyWwBwAqs7TeVYSHJKjM1ktvqTllyd64JhUIW1mP9KpHA1fh0fhjP0JY7jkuhINWBokvUlQwkc6SzNKfgdRbCOQvTScoVvqCocBHsnuqIpvw8KimdAOloiW8MUG7+T0EAWc9JfDDcOD7g30IW6G+2N3zOHeW/uxDG7sYH7IeRSPV4H0unC2chMyy6RzQQ0W9XYUb36xE9WI7EypWHrq2g==
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
- by BYAPR02MB5960.namprd02.prod.outlook.com (2603:10b6:a03:126::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
- 2022 21:48:52 +0000
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::e080:d670:29c7:9180]) by BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::e080:d670:29c7:9180%8]) with mapi id 15.20.5504.014; Tue, 2 Aug 2022
- 21:48:52 +0000
-Message-ID: <BY5PR02MB7009690D397E52593431E12CEA9D9@BY5PR02MB7009.namprd02.prod.outlook.com>
-Date:   Wed, 3 Aug 2022 03:18:43 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH v2 0/3] Add support for Xiaomi Poco F1 EBBG variant
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <BY5PR02MB70099020AC1D181D15909F64EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
- <BY5PR02MB700972E09CC9D8ED6EFBA59AEA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
- <CAA8EJpqBVaPt6dc+=u1YZwxEo9i4Y6+QFK5ko0Gd3091pKYXjw@mail.gmail.com>
-From:   Joel Selvaraj <joel.selvaraj@outlook.com>
-In-Reply-To: <CAA8EJpqBVaPt6dc+=u1YZwxEo9i4Y6+QFK5ko0Gd3091pKYXjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TMN:  [LkgtmTZFtixG8NNrdJ79qV3i9C9buPhkgCACLcPei/V/mOtZ9OAIVovb2AXkKxRP]
-X-ClientProxiedBy: BMXPR01CA0081.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::21) To BY5PR02MB7009.namprd02.prod.outlook.com
- (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <55619ad3-d6fc-a7cd-753f-04dfcc2e8e8f@outlook.com>
+        Tue, 2 Aug 2022 17:50:19 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6DD62DD
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:50:17 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d16so6552776pll.11
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hb89G9krB6RKM/pZci++W1IGnnGTFxYNnFvZ3OknFGs=;
+        b=k3Teggg8APeevPHASdBY5f2itpnShq02Mcu65hszc5EF41S5RxU0QA17I03FH++ZC0
+         ZVzSGXFobmTSYpYudykju17v7k5Dq16V7a7k83w2wQ5oULJ5ulf9O65WpsZhXI4KKgHT
+         9prRIi8oFh0LOOznCs8ZrVp44q4xWegLpjLIc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hb89G9krB6RKM/pZci++W1IGnnGTFxYNnFvZ3OknFGs=;
+        b=bm4k37F7O7hSCI2KcExIYuGWKFRIBiIf4P3uH37dkjyd+QBglPeE2ix4gXyZkpEFxw
+         MIblQgIk9s05YOXJMxt+91pT/11QxpKG92DKb5DTnZLx8JB06aMmbs87TKij7v9niICE
+         mD+Yrul5PxDVgMjoNboEY7euGJ70fUw00oTVxpZLoO+twhhBdndIZz+GH7yaZcxjjigs
+         1eu4AaNYTFxUqA7yYPV3eMi0NqMEDQ4TnKmYdzUwPuJPDBFAov5Eui/KSyb7vWoMW/R6
+         VqFWzjCl9LFLG9AU/6wLkPHoCzcZPSSMWHnt3VVjuaOp6OM2OFgWK8rovRBL4sGHRWiY
+         YQSg==
+X-Gm-Message-State: ACgBeo3ivxqrR5AuI/0MzZ75NJ99DQWVPj8PSMzjyTntErvRBne7isA8
+        k3GMGyu1NuFDnPX1/ovscdNJ/Q==
+X-Google-Smtp-Source: AA6agR7xtjqmZwo1XewbkN9y3rqgaqhkChFH1KXDhxYO+a3agQiGv9Sf2bftbRpMuWB8yVpO8ykD6Q==
+X-Received: by 2002:a17:90b:2241:b0:1f5:2c5e:1080 with SMTP id hk1-20020a17090b224100b001f52c5e1080mr1560747pjb.85.1659477016773;
+        Tue, 02 Aug 2022 14:50:16 -0700 (PDT)
+Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
+        by smtp.gmail.com with ESMTPSA id a25-20020a634d19000000b00419b66846fcsm9458089pgb.91.2022.08.02.14.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 14:50:16 -0700 (PDT)
+From:   Daniil Lunev <dlunev@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniil Lunev <dlunev@chromium.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v6] ufs: core: print UFSHCD capabilities in controller's sysfs node
+Date:   Wed,  3 Aug 2022 07:50:07 +1000
+Message-Id: <20220803074955.v6.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1b998159-f5e4-48ad-b0b8-08da74d0ca50
-X-MS-TrafficTypeDiagnostic: BYAPR02MB5960:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gOebMrC55vdRO667VFxELrzN7VQNAHYmofE0rds1r+U0mH0kgbHsOJUxUzkrZrij3DuzQ9WxVzSrGxX3i/KYuNQg+qfMdAPv6aMJSlgAIEyZs3sllslbAwS2GKiuhVv6bFo+SQ8OvDok+7Ro85vyOUqVm/gAhHQD+R3RTP5HblMaqgRqGVef6ASdYc0qpvgPKoi2UMMm68lcq/6agfgsorShGt/sF0KWbZ1nDQq/7h9Im8vJ1iJdcTTgr4aW6eClq7Lc6nav5JBUTHOrZWiU1mT8chY9ykbEN0tCrKTwXgE9QLp5dsbQG8BZY806lVXYZVx6Uc2ECREVRTV2HauWTB2RKDwJp9zRQjCoNVAEBTjc5e5dmHRe3443xiRlicC7trNluf4GN2vkcpLeo10ZW8KgyQZrA26j+EkaNDdjNrNXwlXwTPQYtw7Fkh1w8LbYfwj+jvimd19SxOHIot21gu43IPfumj7eQEpNs3IIxrL8ERZsEkCgGvAKwVMsXXnVS8zdWqTrP16pEGa0mN2R14ZOo0U0MVVnbY3n1SDxoCaHF/Pl7OcH4LLp5sl7mFUlrdN0oaKvTMU5YGqacEwQZv+BCXiwH83TI87NJa+HkaqxAybTl75GLZoxY4yv4j7sJ7rxVPZddq/dOCLFbRdigoilqx2TaLSFqSLqJI6Y0kQXuH8SuRpneRXf6/9bsp3d
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3pRVFZ5NTBwWUgva0cwS2NqcEtTNFN0ck5JalJJOTUrM0FtdWpJcEpiNS9O?=
- =?utf-8?B?US9vVlliaHg0U0VMMnp2MGNQSHh3RmpGdC9ZQ3FwbnF4RlREd0lzRWxWcUM1?=
- =?utf-8?B?bWYyRnpLcFdBUk9waksrVjlSa3FtSEVmSHVwSm5ZRkplNVBsVXY1dEoxV29U?=
- =?utf-8?B?RzAwU2hkUHZrbWgvL1EzamJablJ2OFRPeFFoVmI1QURIaGhMenBCd2JRY2xQ?=
- =?utf-8?B?clA2ZlVoZkJmTk5kZG9xejlDVnJ3akppYlRZQ0U0YjF6a213dGZvc09tbGJW?=
- =?utf-8?B?RHN5V21aemtGYVFGUHBaRXpSUXNKWDBmL01lQUVpQ1RzbkNDVFZJc1BIL2JH?=
- =?utf-8?B?L0d6bFNxL0U5Z29MOTZLeHdrRS9XNGtZT3JJRW5ZbEhJdVNaVDNmMjd5RldO?=
- =?utf-8?B?bG1mTnBKQ1B1bFVoQ0dlZnN3T0drKzFjdjl4Ty9oWVc2VDVwYlhFd1E0K2F4?=
- =?utf-8?B?MDNGWFBmdmMyT2ZLclJCeWpEb3lkZFZXc05paC9aWWdGVjF5Z0pWZmhYbWpR?=
- =?utf-8?B?MTNUQXplOFpsenJENGYrTFM5SW9yVndJM1JaeXB6Tml4QUhvZkNNMittL2tF?=
- =?utf-8?B?NGQ5K1phVGpTQzVhYVNVL0hkNldaME5ReXhIRExjRTZuc2E4UjBsRzdEeUhQ?=
- =?utf-8?B?bzVUT1RIRzA2dzhYUEFUOGxMNFhaNTZyUnp6eHlUTStsVzFUalJ4TEJTMDRh?=
- =?utf-8?B?ZjZjUHNKVjgxTzJBVTJuRWpRRmpyTjNIWFQ5Z1pBbWEvdEZmbmNsRkp4K1k5?=
- =?utf-8?B?U1EwZHRXOEpWanYyOEhOb1BZNmUyVDBSY2lvZzZ3QlFZZk5jMXlOUVU2ZWFp?=
- =?utf-8?B?ODBTNGJHVWxKYnY5cENYNk9YWDl1eGs0aElVMjhoc0JkdlBlMWl3UlpuOEE1?=
- =?utf-8?B?c3laWVdJajNQM0VSZWZBeExUUW43NFBxZC9UT0F4ekMyRnphbW42Y2ZDeGdC?=
- =?utf-8?B?RWpJVDBESnAxTEhkY3gyeWtUR1l3SjN6M0Nyek5SeVIvRnBlRG5iV3RDWHF1?=
- =?utf-8?B?OU5YTythbEdnZWdpK29WNVFwSVdaYVgrRjhDWnA1SThwc202ZUYxSmRBeXJa?=
- =?utf-8?B?KzRXemFEZ0I0MFA2T2IvTTQxN1FUaGp2TnFUaHM5RXZKQnlPUTZrbk4zSi9X?=
- =?utf-8?B?RTY5S0lVYVpKd0hUWmp4SllvRjMwc0dsNFhSa2RZVS93ODlZZHdpTFh4aHc5?=
- =?utf-8?B?RFJsZzVtd3IwQS84TW9nZTY2RGNIUnF6ZWF2a1pTNVBUbGJoWkFRQUsrU0Nm?=
- =?utf-8?B?NXlkVFhPaGZaOVlWS2NxTVNCRG10OXZaeHNmTnpNN09XMXc1QTdnT0toSlFZ?=
- =?utf-8?B?bGhOQzVoczRIZkZBcVJDS3p4eTFPTFY4TktpdnFzUEpwS0NPN2FVcENHY0gy?=
- =?utf-8?B?NE5jQ0FmMjJWR0plZWF4aEpYa2dnU2M3OGJ4RHVuTGQ2cUFoOHdRR01UT2ta?=
- =?utf-8?B?Zm1oUWMyamthTDhnNklGZVpKK25yRVR3MXpTZzh1elZJUml3OGRpVDEyRytl?=
- =?utf-8?B?N3o1Z2l2TGNKeWJRTFRzbmdBNjNPeWIvWkRiNWNCYlQ3by9SdHBiRUhFK1lL?=
- =?utf-8?B?UGxRdEdqa1VpVXU3dnZwUk9KMkVNRllUaW1jSC96MUMvRkNmaGc5UDhtRktV?=
- =?utf-8?B?dkJsVUhuRU96ODJoWUFSR3B4U1ZJZCtSSStDM05ocGdlc3JTSnBSNnZzZFVp?=
- =?utf-8?B?d1VUZW9uc1VxNGV3Ui9WZG5MUzBoTjJGVytZSGg5cUswazdyK3hXTHAxTlNr?=
- =?utf-8?B?NGtxU3ArZmpMZnJvM3Z6SkVvYklhZ2ZHOUVDd1VjdFhIZEJCM2V6aDdHaDM3?=
- =?utf-8?B?azFtSXk0Q2dmNDJwZ0pNQT09?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b998159-f5e4-48ad-b0b8-08da74d0ca50
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 21:48:52.7181
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5960
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry Baryshkov
+Allows userspace to check if Clock Scaling and Write Booster are
+supported.
 
-On 01/08/22 20:30, Dmitry Baryshkov wrote:
-> Hi,
-> 
-> On Mon, 1 Aug 2022 at 14:44, Joel Selvaraj <joel.selvaraj@outlook.com> wrote:
->>
->> To be honest, I have no idea why my patch series doesn't get linked
->> properly. I think there is some issue in my OS. I use git format-patch
->> and git send-mail to send patches. It used to work fine. But it doesn't
->> want to work anymore :/ Is there a mailing list for sending test mails?
->> or how do I debug this? Kindly let me know if anyone has any
->> suggestions.
-> 
-> Judging from the following headers, it's not your OS, it is M$
-> rewriting the headers.
-> 
-> Message-ID: <BY5PR02MB70099020AC1D181D15909F64EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
-> X-Microsoft-Original-Message-ID:
-> <20220801112512.209047-1-joel.selvaraj@outlook.com>
-> 
-> According to some mentions on the Internet, M$ relies on headers
-> rewriting and will not change this behaviour.
-> 
-> I'd suggest switching to another SMTP submission host. I think it
-> should be e.g. possible to tell GMail to send mails with @outlook.com
-> addresses. However this might confuse some of the mail clients into
-> believing it is spam since the email will SOFTFAIL the SPF check.
-> 
-> Switching to another mail provider might be an option too.
+Signed-off-by: Daniil Lunev <dlunev@chromium.org>
 
-Thanks for the suggestion. Plan to switch the mail provider for the next
-patch. Hope it goes well.
+---
 
-Best Regards,
-Joel Selvaraj
+Changes in v6:
+* Add comment to clarify meaning of the "capbilities" sysfs group.
+
+Changes in v5:
+* Correct wording for clock scaling.
+* Correct wording for the commit message.
+
+Changes in v4:
+* Dropped crypto node per Eric Biggers mentioning it can be queried from
+  disk's queue node
+
+Changes in v3:
+* Expose each capability individually.
+* Update documentation to represent new scheme.
+
+Changes in v2:
+* Add documentation entry for the new sysfs node.
+
+ Documentation/ABI/testing/sysfs-driver-ufs | 26 +++++++++++++++
+ drivers/ufs/core/ufs-sysfs.c               | 37 ++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 6b248abb1bd71..1750a9b84ce0f 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1591,6 +1591,32 @@ Description:	This entry shows the status of HPB.
+ 
+ 		The file is read only.
+ 
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/clock_scaling
++What:		/sys/bus/platform/devices/*.ufs/capabilities/clock_scaling
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of clock scaling.
++
++		== ============================
++		0  Clock scaling is not supported.
++		1  Clock scaling is supported.
++		== ============================
++
++		The file is read only.
++
++What:		/sys/bus/platform/drivers/ufshcd/*/capabilities/write_booster
++What:		/sys/bus/platform/devices/*.ufs/capabilities/write_booster
++Date:		July 2022
++Contact:	Daniil Lunev <dlunev@chromium.org>
++Description:	Indicates status of Write Booster.
++
++		== ============================
++		0  Write Booster can not be enabled.
++		1  Write Booster can be enabled.
++		== ============================
++
++		The file is read only.
++
+ What:		/sys/class/scsi_device/*/device/hpb_param_sysfs/activation_thld
+ Date:		February 2021
+ Contact:	Avri Altman <avri.altman@wdc.com>
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 0a088b47d5570..4149cdf19de92 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -279,6 +279,42 @@ static const struct attribute_group ufs_sysfs_default_group = {
+ 	.attrs = ufs_sysfs_ufshcd_attrs,
+ };
+ 
++static ssize_t clock_scaling_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_clkscaling_supported(hba));
++}
++
++static ssize_t write_booster_show(struct device *dev, struct device_attribute *attr,
++				  char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", ufshcd_is_wb_allowed(hba));
++}
++
++static DEVICE_ATTR_RO(clock_scaling);
++static DEVICE_ATTR_RO(write_booster);
++
++/*
++ * The "capabilities" sysfs group represents the effective capabilities of the
++ * host-device pair, i.e. the capabilities which are enabled in the driver for
++ * the specific host controller, supported by the host controller and are
++ * supported and/or have compatible configuration on the device side.
++ */
++static struct attribute *ufs_sysfs_capabilities_attrs[] = {
++	&dev_attr_clock_scaling.attr,
++	&dev_attr_write_booster.attr,
++	NULL
++};
++
++static const struct attribute_group ufs_sysfs_capabilities_group = {
++	.name = "capabilities",
++	.attrs = ufs_sysfs_capabilities_attrs,
++};
++
+ static ssize_t monitor_enable_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+@@ -1134,6 +1170,7 @@ static const struct attribute_group ufs_sysfs_attributes_group = {
+ 
+ static const struct attribute_group *ufs_sysfs_groups[] = {
+ 	&ufs_sysfs_default_group,
++	&ufs_sysfs_capabilities_group,
+ 	&ufs_sysfs_monitor_group,
+ 	&ufs_sysfs_device_descriptor_group,
+ 	&ufs_sysfs_interconnect_descriptor_group,
+-- 
+2.31.0
 

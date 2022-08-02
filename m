@@ -2,84 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C44A5882BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131B95882C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiHBToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S232047AbiHBTqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiHBToR (ORCPT
+        with ESMTP id S231317AbiHBTq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:44:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6497E45F5E
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:44:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AAAF6146B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8634BC433C1;
-        Tue,  2 Aug 2022 19:44:14 +0000 (UTC)
-Date:   Tue, 2 Aug 2022 15:44:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH] tracing: Use alignof__(struct {type b;}) instead of
- offsetof()
-Message-ID: <20220802154412.513c50e3@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 2 Aug 2022 15:46:26 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8374193E3
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:46:25 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 23so13229797pgc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 12:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=X/WDXK9dhhCu2+RqKxktdTeX2bUeOW08JdNOmeWMcTs=;
+        b=NL5o6kvqAp6CZUASniRtCaOagRjx+QG1iSgvPprEwPYurql8OMpuEZmOFx6m2qf6nA
+         g6AMoPP/k+45Ju4Ums6yL1rIn86JnpdNTZzRB3wR92+ODN4ZDUSq9PRH/ku8m/4pc0VM
+         +xxMU2EBVJ+rQ8pvBGQl+hkeiZYhooAeUMAkmmUSyzr3+oCqb+/ahr3m6x3R4vz4sDfo
+         h4MWBl0XsW/uI+K2gflxhy4RJYOgnbdggtvqZpT6LvHVojnLXKm3AxY1gK65VUdw07kJ
+         ewfvJ0dZJGUZybx+ifbQcyonBPrJBF+W8xZt7uYPwDz5wgP2lbjwTpeXbzIlbcZoY9TQ
+         0lwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=X/WDXK9dhhCu2+RqKxktdTeX2bUeOW08JdNOmeWMcTs=;
+        b=qsktZcoitf1ZraDo9F3hTbvudXt0qHebhddutyNPqNQ0fYN4OZLM9dmdMKFIJeyQKh
+         yHdt20VGy+A87rb2rCgXcslY8VvRn73prRyU1QEFNEKjqEuOsCXxXYoUB7oG+Shi94Ni
+         vitLCT5Nas0iai9FEcaqurTsRa4jyMgSGDDaKCqQnBvHstOcA54ZWan/PYxd4wbzDYNR
+         eWP25SFrfwak7mAEBFcUhOHAGPD+KB8xsnZ5xK0hn/IzXQc9KwBgnrXoXkQ2L/JD0dFN
+         Ln7Hjw4MEVRwrj/ACP2UX79B944YtoCa1wXXmRsE6i+0Ozk0qzZWQAd5AB33o8FRmfB9
+         cZTQ==
+X-Gm-Message-State: AJIora/HPkCZ+iNC2cfp9iUnqAzh3D1rg3LHQfeax/3rCfWGRH0X4GvA
+        rhSjGftfg3UetMOfrgpKaDvwXA==
+X-Google-Smtp-Source: AGRyM1tcTnFkPMk+iDatakVZ7haudXkfR3vj1qEX62HpKsQWAyAaZKldn3yOWM0WYYOAHPmmfcQnZA==
+X-Received: by 2002:a05:6a00:1a0e:b0:52a:cef3:b4a1 with SMTP id g14-20020a056a001a0e00b0052acef3b4a1mr22192466pfv.23.1659469585316;
+        Tue, 02 Aug 2022 12:46:25 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b12-20020a17090a6acc00b001f4fb21c11asm5439377pjm.21.2022.08.02.12.46.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 12:46:24 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 19:46:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Kai Huang <kai.huang@intel.com>, Sagi Shahar <sagis@google.com>
+Subject: Re: [PATCH v7 022/102] KVM: TDX: create/destroy VM structure
+Message-ID: <Yul/DapNdokpeN36@google.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <aa3b9b81f257d4d177ab25cb78a222d6297de97f.1656366338.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa3b9b81f257d4d177ab25cb78a222d6297de97f.1656366338.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, Jun 27, 2022, isaku.yamahata@intel.com wrote:
+> +int tdx_vm_init(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	cpumask_var_t packages;
+> +	int ret, i;
+> +	u64 err;
+> +
+> +	/* vCPUs can't be created until after KVM_TDX_INIT_VM. */
+> +	kvm->max_vcpus = 0;
+> +
+> +	kvm_tdx->hkid = tdx_keyid_alloc();
+> +	if (kvm_tdx->hkid < 0)
+> +		return -EBUSY;
 
-Simplify:
+We (Google) have been working through potential flows for intrahost (copyless)
+migration, and one of the things that came up is that allocating the HKID during
+KVM_CREATE_VM will be problematic as HKID are a relatively scarce resource.  E.g.
+if all key IDs are in use, then creating a destination TDX VM will be impossible
+even though intrahost migration can create succeed since the "new" would reuse
+the source's HKID.
 
-  #define ALIGN_STRUCTFIELD(type) ((int)(offsetof(struct {char a; type b;}, b)))
+Allocating the various pages is also annoying, e.g. they'd have to be freed, but
+not as directly problematic.
 
-with
+SEV (all flavors) has a similar problem with ASIDs.  The solution for SEV was to
+not allocate an ASID during KVM_CREATE_VM and instead "activate" SEV during
+KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM.
 
-  #define  ALIGN_STRUCTFIELD(type) __alignof__(struct {type b;})
+I think we should prepare for a similar future for TDX and move the HKID allocation
+and all dependent resource allocation to KVM_TDX_INIT_VM.  AFAICT (and remember),
+this should be a fairly simple code movement, but I'd prefer it be done before
+merging TDX so that if it's not so simple, e.g. requires another sub-ioctl, then
+we don't have to try and tweak KVM's ABI to enable intrahost migration.
 
-Which works just the same.
-
-Link: https://lore.kernel.org/all/a7d202457150472588df0bd3b7334b3f@AcuMS.aculab.com/
-
-Suggested-by: David Laight <David.Laight@ACULAB.COM>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/trace/stages/stage4_event_fields.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/trace/stages/stage4_event_fields.h b/include/trace/stages/stage4_event_fields.h
-index 80d34f396555..a8fb25f39a99 100644
---- a/include/trace/stages/stage4_event_fields.h
-+++ b/include/trace/stages/stage4_event_fields.h
-@@ -2,7 +2,7 @@
- 
- /* Stage 4 definitions for creating trace events */
- 
--#define ALIGN_STRUCTFIELD(type) ((int)(offsetof(struct {char a; type b;}, b)))
-+#define ALIGN_STRUCTFIELD(type) ((int)(__alignof__(struct {type b;})))
- 
- #undef __field_ext
- #define __field_ext(_type, _item, _filter_type) {			\
--- 
-2.35.1
-
+> +
+> +	ret = tdx_alloc_td_page(&kvm_tdx->tdr);
+> +	if (ret)
+> +		goto free_hkid;
+> +
+> +	kvm_tdx->tdcs = kcalloc(tdx_caps.tdcs_nr_pages, sizeof(*kvm_tdx->tdcs),
+> +				GFP_KERNEL_ACCOUNT);
+> +	if (!kvm_tdx->tdcs)
+> +		goto free_tdr;
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		ret = tdx_alloc_td_page(&kvm_tdx->tdcs[i]);
+> +		if (ret)
+> +			goto free_tdcs;
+> +	}

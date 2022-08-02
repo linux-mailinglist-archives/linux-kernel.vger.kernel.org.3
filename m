@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3832558788A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447CF587891
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236258AbiHBH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S236312AbiHBIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235931AbiHBH7z (ORCPT
+        with ESMTP id S236294AbiHBIAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:59:55 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FEB31DD9;
-        Tue,  2 Aug 2022 00:59:54 -0700 (PDT)
-X-UUID: 71bef0e673364a029d76015472538e65-20220802
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:77eacfd1-624b-45f7-b11c-b7b2243d2da2,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:100
-X-CID-INFO: VERSION:1.1.8,REQID:77eacfd1-624b-45f7-b11c-b7b2243d2da2,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:100
-X-CID-META: VersionHash:0f94e32,CLOUDID:c5280ed0-a6cf-4fb6-be1b-c60094821ca2,C
-        OID:5cf007a313eb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 71bef0e673364a029d76015472538e65-20220802
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 629295692; Tue, 02 Aug 2022 15:59:50 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 2 Aug 2022 15:59:49 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 2 Aug 2022 15:59:49 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Ikjoon Jang" <ikjn@chromium.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] usb: xhci-mtk: fix bandwidth release issue
-Date:   Tue, 2 Aug 2022 15:59:46 +0800
-Message-ID: <20220802075946.18168-2-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220802075946.18168-1-chunfeng.yun@mediatek.com>
-References: <20220802075946.18168-1-chunfeng.yun@mediatek.com>
+        Tue, 2 Aug 2022 04:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C37FE4;
+        Tue,  2 Aug 2022 01:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C341561468;
+        Tue,  2 Aug 2022 08:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27BC2C433B5;
+        Tue,  2 Aug 2022 08:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659427214;
+        bh=vi8rmU/UnEIHRCSFSG7YgXVQCZZeFIzq638X8Qjzbjs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=fCHTyiNJS5ME2SnuU5l7CdB5X/5h1EHhjMt6qljvynDMszyw5cE47NCkHAgfLa3lp
+         enIZyKLjjYqfWrk1SWeQo1u9JgFQAbJBb2zC3ZLy7cj1rMpH5v4MCDEca7R2I4DiaG
+         lwb5ke2SU2zD2GNt3jNSnu770nTzPBmKBoVD85WfBQuR3QhqMLEVQcXr8539Aftq7o
+         PYj3mf38vW46KyPB/+eF0Q0yJeIXFt0GDrM+8TTUOWLvdC6oWR2OOWVeGZQHT3T6nX
+         Pml6kvCyhMA4fqcFmU+jA8OcXzfxfvMpopcEoojHc11yny+snC7WSdkrj+ivJee2sJ
+         LjK+ntEfYHahg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DD13C43143;
+        Tue,  2 Aug 2022 08:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RESEND PATCH] selftests: net: fix IOAM test skip return code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165942721405.6972.11037268506015977032.git-patchwork-notify@kernel.org>
+Date:   Tue, 02 Aug 2022 08:00:14 +0000
+References: <20220801124615.256416-1-kleber.souza@canonical.com>
+In-Reply-To: <20220801124615.256416-1-kleber.souza@canonical.com>
+To:     Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, justin.iurman@uliege.be, kuba@kernel.org,
+        davem@davemloft.net, shuah@kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This happens when @udev->reset_resume is set to true, when usb resume,
-the flow as below:
-  - hub_resume
-    - usb_disable_interface
-      - usb_disable_endpoint
-        - usb_hcd_disable_endpoint
-          - xhci_endpoint_disable  // it set @ep->hcpriv to NULL
+Hello:
 
-Then when reset usb device, it will drop allocated endpoints,
-the flow as below:
-  - usb_reset_and_verify_device
-    - usb_hcd_alloc_bandwidth
-      - xhci_mtk_drop_ep
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-but @ep->hcpriv is already set to NULL, the bandwidth will be not
-released anymore.
+On Mon,  1 Aug 2022 14:46:15 +0200 you wrote:
+> The ioam6.sh test script exits with an error code (1) when tests are
+> skipped due to lack of support from userspace/kernel or not enough
+> permissions. It should return the kselftests SKIP code instead.
+> 
+> Reviewed-by: Justin Iurman <justin.iurman@uliege.be>
+> Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+> 
+> [...]
 
-Due to the added endponts are stored in hash table, we can drop the check
-of @ep->hcpriv.
+Here is the summary with links:
+  - [RESEND] selftests: net: fix IOAM test skip return code
+    https://git.kernel.org/netdev/net-next/c/1995943c3f2a
 
-Fixes: 4ce186665e7c ("usb: xhci-mtk: Do not use xhci's virt_dev in drop_endpoint")
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk-sch.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index a17bc584ee99..b54626732d18 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -764,8 +764,7 @@ int xhci_mtk_drop_ep(struct usb_hcd *hcd, struct usb_device *udev,
- 	if (ret)
- 		return ret;
- 
--	if (ep->hcpriv)
--		drop_ep_quirk(hcd, udev, ep);
-+	drop_ep_quirk(hcd, udev, ep);
- 
- 	return 0;
- }
+You are awesome, thank you!
 -- 
-2.18.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878235881D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E3C5881D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiHBSZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S234481AbiHBS1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiHBSZH (ORCPT
+        with ESMTP id S229748AbiHBS1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:25:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA50014017;
-        Tue,  2 Aug 2022 11:25:06 -0700 (PDT)
-Received: from BRIANROB-L1.corp.microsoft.com (unknown [167.220.2.188])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 751EA20FF4ED;
-        Tue,  2 Aug 2022 11:25:06 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 751EA20FF4ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1659464706;
-        bh=jCknuAZXcS7EQG+s0KtGkSDPS0LlyQP0yJ1frqbdv5s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i+fYMFLaNvJPNfflfVXOv8D1JbPvYuB4MXj9KKAemXPXyZxcM5olO83G0u+PBxg6o
-         VXnsxBnVufDNFmvOrG/S87NmsaO4csmmSIcrlNaML46g9R29ARojZHmbgGRDl5MSrc
-         IsmwenUDwAXkuhvGdbNPrZAXt/D9N1Yup3AurHyw=
-From:   Brian Robbins <brianrob@linux.microsoft.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brianrob@linux.microsoft.com
-Subject: [PATCH] perf inject jit: Ignore memfd mmap events if jitdump present
-Date:   Tue,  2 Aug 2022 11:25:02 -0700
-Message-Id: <20220802182502.85562-1-brianrob@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 2 Aug 2022 14:27:03 -0400
+Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386031C92C
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=D0PK1bfHTKooI9fAsxRXzq/f4llPUyccP9Do73wixGg=;
+        b=JjH3vgnR44o8QQvycQP8bg0nIQDBwVESq0fHHohNrX15lNj5/BQqKbOMN+0KdA6OuaUNyhbZo9T9f
+         2Dy0mRksdsZFO/gMQEnGfoA9nt2Zn7VKShm3cfEMc/azV3+T5K14Cm/94DosEMt8PsR1Q2R2DtK/s/
+         IDGbw/IA9KL30WnGMQoYPjySxY2tfITaHcMn6dN0zs/gC/qb2xTQ6GBhurLlAPOcx1LezOneMsy9K+
+         8tFP6soEmK+28/CAhHY7h/l89xvGqt67w40lImo+GQWVjvS4kkHMSANI+MO7WY23gk37anaxP1irNF
+         U82hL4a0vaMjhLB4bbAFwgp1a2r8qXA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=D0PK1bfHTKooI9fAsxRXzq/f4llPUyccP9Do73wixGg=;
+        b=Tvcx8T7g7fVGMIcB1ZmB/CKSAklYWRtVeA06FvfQDl/nCKMORIKE9YI72lyfRykC6dNiy/n3faECF
+         e8jU/7lBA==
+X-HalOne-Cookie: a2f6cb94a3c37daf9f3f2f5680c1594af0cb938c
+X-HalOne-ID: b1e9030c-1290-11ed-be81-d0431ea8bb03
+Received: from mailproxy4.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id b1e9030c-1290-11ed-be81-d0431ea8bb03;
+        Tue, 02 Aug 2022 18:26:58 +0000 (UTC)
+Date:   Tue, 2 Aug 2022 20:26:57 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
+        airlied@linux.ie, tzimmermann@suse.de, mripard@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drm-misc-next v7 0/5] drm: rename CMA helpers to DMA
+ helpers
+Message-ID: <YulscTGLXzsbar4v@ravnborg.org>
+References: <20220802000405.949236-1-dakr@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802000405.949236-1-dakr@redhat.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some processes store jitted code in memfd mappings to avoid having rwx
-mappings.  These processes map the code with a writeable mapping and a
-read-execute mapping.  They write the code using the writeable mapping
-and then unmap the writeable mapping.  All subsequent execution is
-through the read-execute mapping.
+Hi Danilo,
 
-perf inject --jit ignores //anon* mappings for each process where a
-jitdump is present because it expects to inject mmap events for each
-jitted code range, and said jitted code ranges will overlap with the
-//anon* mappings.
+On Tue, Aug 02, 2022 at 02:04:00AM +0200, Danilo Krummrich wrote:
+> This patch series renames all CMA helpers to DMA helpers - considering the
+> hierarchy of APIs (mm/cma -> dma -> gem/fb dma helpers) calling them DMA
+> helpers seems to be more applicable.
+> 
+> Additionally, commit e57924d4ae80 ("drm/doc: Task to rename CMA helpers")
+> requests to rename the CMA helpers and implies that people seem to be confused
+> about the naming.
+> 
+> The patches are compile-time tested building a x86_64 kernel with
+> `make allyesconfig && make drivers/gpu/drm`.
 
-Ignore /memfd: mappings so that jitted code contained in /memfd:
-mappings is treated the same way as jitted code contained in //anon*
-mappings.
+For good measure I build tested each patch on my setup - which covers a
+few more archs (cross compiled).
+There was a few checkpatch warnings when applying, which I happily ignored.
+Most/all are existing flaws where you do other edits in the relevant
+line.
 
-Signed-off-by: Brian Robbins <brianrob@linux.microsoft.com>
----
- tools/perf/util/jitdump.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I consider the series ready to be applied to drm-misc, but have not done
+so myself.
+I have pinged Daniel Vetter on irc - as he was the one suggesting the
+task from the very beginning.
 
-diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
-index a23255773c60..335a3c61940b 100644
---- a/tools/perf/util/jitdump.c
-+++ b/tools/perf/util/jitdump.c
-@@ -845,8 +845,12 @@ jit_process(struct perf_session *session,
- 	if (jit_detect(filename, pid, nsi)) {
- 		nsinfo__put(nsi);
- 
--		// Strip //anon* mmaps if we processed a jitdump for this pid
--		if (jit_has_pid(machine, pid) && (strncmp(filename, "//anon", 6) == 0))
-+		/*
-+		 * Strip //anon* and /memfd:* mmaps if we processed a jitdump for this pid
-+		 */
-+		if (jit_has_pid(machine, pid) &&
-+			((strncmp(filename, "//anon", 6) == 0) ||
-+			 (strncmp(filename, "/memfd:", 7) == 0))
- 			return 1;
- 
- 		return 0;
--- 
-2.25.1
-
+	Sam

@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C405877C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8D85877C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiHBHYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S235835AbiHBH1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiHBHYi (ORCPT
+        with ESMTP id S231804AbiHBH06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:24:38 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A666446D88
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:24:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id b10so12876648pjq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:24:37 -0700 (PDT)
+        Tue, 2 Aug 2022 03:26:58 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70088101FF
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:26:57 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u1so10467694lfq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7CWlA2+lkbubnWGtr6j474HLCnz+upKajwJ7DVrFrZk=;
-        b=w70M3FKql12kzWfxf2FSt2qzi3lp2sqrJ0YXLWoBPuvSsqxoqyFJJtfFUK5FZH6Y+I
-         6Bz/+uPE1rNq26bhrYjrDdcbIHQFCNL45iTc176kV+0mbTzSKkl70XOBgVYpdunKAWDp
-         MrI1cJfPQogKsWvliKQK7FikVh8QY3q8VeSKxmNay3/niMVT4du2za4MKmgY3sYm+I4a
-         w9d7xoht5NYCuCAsfPlZn71gZBawq1P1465L9V+cF9uEQtLOcueHYv4Zb9wlNlQkr39R
-         j5RVaxHEuHiKNUMI3La7sHhUjlhEEwCbWIzzoUdRy7NqhQJL26/5CcVnfgUmjfA+tdJw
-         exXQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=d4HkZdDOv7XNMC5h/HfkGuuWra/wdCBUbN3rR8kUcYw=;
+        b=IVrIhKV6TQ2LB8/agWnpQ42D82tl2sCEUmqpSES2WT3nhnptLgRnpkPPtUsiLmXRfM
+         gT+gL3l8RtiOZd9IwL/KWUMsd67aEritX51QDojFFghkW7gzh//2J5KrMZ8Iu1qhHqe4
+         4a1pcioPuluo5PnBnsOPTnAlVi09nbdP6eNqkkSITGgzdAqYzhhXdqrWpVBcyMOCKvlP
+         5s6LgVu5mhBKl3tD/pikVQJ6HZY9jR/Msqt9E1mb+aoHG5UnIBinhhGjXi9zaKOwmbFm
+         twYYtXscQfoMAUZBxUnedqv/CaIouL2hhOTt7LNPKJxRcQsqiqpUE6mLiL8lSKwxZKjr
+         TJcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7CWlA2+lkbubnWGtr6j474HLCnz+upKajwJ7DVrFrZk=;
-        b=W6e/NiSsKvQ9DlwNWi/UjlP+7fX7oKWJNljKMj6WL23zr8kJldvjzKaG/RwLhtIUqh
-         N0TNQPAjDEk5aN9Du/22ResiS+KwzlUwYwAvyPqEz0jlHoeBC9w3A9ZRGPN4ev48HLrh
-         59zcdTwbifbr6/JeOwEAaAP6LVpusmB8fF/bleEyFfeaCQgHD/dHM70IWflnA9Sf51H6
-         UWytczsYepEHdzdLKAHT0fDwwJQodxvYErSmqEhl62xXyThe/GxQIyqNaD8+o7TfcT0+
-         0HJxk7rZw7AELgnQJKRM1H/96fqv90rvrJE4bI1h8HMFxrZkiTWnJ8+w50gcj2sbHT7p
-         afEA==
-X-Gm-Message-State: ACgBeo3s6XyFmKGxdaLhQSDgXLSSVdijP8AfEabyDtSjoUSTGtJDnsBZ
-        nu7EmpBmwLOVdSU/M2S5fFXi
-X-Google-Smtp-Source: AA6agR7THQxw9Q8u1KXWQ9qP4iHD84X8p9rtlqxZOoUwtwTkmtLt0rSXXK3oJWcqvVaW/ye32hFWvg==
-X-Received: by 2002:a17:902:e54c:b0:16d:4c2d:d52b with SMTP id n12-20020a170902e54c00b0016d4c2dd52bmr20365410plf.90.1659425077054;
-        Tue, 02 Aug 2022 00:24:37 -0700 (PDT)
-Received: from thinkpad ([117.193.215.193])
-        by smtp.gmail.com with ESMTPSA id c189-20020a624ec6000000b0052b6ed5ca40sm3805709pfb.192.2022.08.02.00.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 00:24:36 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 12:54:26 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krishna Thota <kthota@nvidia.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        sagar.tv@gmail.com, Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Subject: Re: [PATCH V1] PCI: designware-ep: Fix DBI access before core init
-Message-ID: <20220802072426.GA2494@thinkpad>
-References: <051a3baf-b4dd-7764-2e61-03584cefb4d3@nvidia.com>
- <20220729224404.GA478920@bhelgaas>
- <20220730145025.GA4005@thinkpad>
- <CAL_Jsq+tnLMcKGxzTJODQjCUTXU1yoMS2yF3WxEEfMmfgRt5uQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=d4HkZdDOv7XNMC5h/HfkGuuWra/wdCBUbN3rR8kUcYw=;
+        b=ySzMKzFlhDJ2nFOSWgOkBAfGex92Ir9oZYRsI0YmTy0A5urjy/XGmvJn9DwyFxlhF3
+         ozUsE28wG5qX8Xt7glG9VZNpiTke803dIB4Y4Wwfac+Y3ePVEUrZ+xhh5z9O/Xg0iLzm
+         TiY8Ss2D0JoObYJxVg+oGRtRWnXlKZcyyXIOkWTLu43zM54s/HKv6nNqgM40uIjdMvWw
+         vDmGIT2oHRnRE0jG9weQlFsseEHj6Il0bbUI1TcPteNN8T2vbicjFz4jA0CXOdW0bFTd
+         opCwJ3Xwa5S07lMyNVHrFzkvom3Dy4JA6+0xdLi/bThE8UYEQgcuhlDQ5EgsAvqM4kfw
+         y2mQ==
+X-Gm-Message-State: ACgBeo2nLnH/lUzeD0U6fIva2DeP5gmbhSer1KFbF/5n4mma3xnZlMPy
+        rQvwVFRaiTcQXeUxJ8X+/AwCMYHFCdxJ3F1T
+X-Google-Smtp-Source: AA6agR4qI7vkwPxXKnLuW4SI41fSrQ+0NIFPJ6qbvRABceYlNlsRqTf7UV8Y8TYIvB6PTniHjU07Pw==
+X-Received: by 2002:a05:6512:3990:b0:48a:e4ca:7ec0 with SMTP id j16-20020a056512399000b0048ae4ca7ec0mr5902895lfu.146.1659425215752;
+        Tue, 02 Aug 2022 00:26:55 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id bf17-20020a056512259100b0048ad4ca88afsm1616699lfb.102.2022.08.02.00.26.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 00:26:55 -0700 (PDT)
+Message-ID: <ba6bc0e8-8b64-aa7f-241e-1e88dd9cfaa5@linaro.org>
+Date:   Tue, 2 Aug 2022 09:26:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+tnLMcKGxzTJODQjCUTXU1yoMS2yF3WxEEfMmfgRt5uQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3] ASoC: dt-bindings: fsl,sai: Convert format to
+ json-schema
+Content-Language: en-US
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shengjiu.wang@gmail.com
+References: <1659060632-4880-1-git-send-email-shengjiu.wang@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1659060632-4880-1-git-send-email-shengjiu.wang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,51 +76,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 02:27:14PM -0600, Rob Herring wrote:
-> On Sat, Jul 30, 2022 at 8:50 AM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Fri, Jul 29, 2022 at 05:44:04PM -0500, Bjorn Helgaas wrote:
-> > > [+cc Xiaowei (author of 6bfc9c3a2c70), Hou (author of 8bcca2658558)]
-> > >
-> > > On Thu, Jul 28, 2022 at 05:56:28PM +0530, Vidya Sagar wrote:
-> > > > On 7/28/2022 3:44 AM, Bjorn Helgaas wrote:
-> > > > > On Wed, Jun 22, 2022 at 09:31:33AM +0530, Vidya Sagar wrote:
-> > > > > > Platforms that cannot support their core initialization without the
-> > > > > > reference clock from the host, implement the feature 'core_init_notifier'
-> > > > > > to indicate the DesignWare sub-system about when their core is getting
-> > > > > > initialized. Any accesses to the core (Ex:- DBI) would result in system
-> > > > > > hang in such systems (Ex:- tegra194). This patch moves any access to the
-> > > > > > core to dw_pcie_ep_init_complete() API which is effectively called only
-> > > > > > after the core initialization.
+On 29/07/2022 04:10, Shengjiu Wang wrote:
+> Convert the NXP SAI binding to DT schema format using json-schema.
 > 
-> > >   6) What's going on with the CORE_INIT and LINK_UP notifiers?
-> > >      dw_pcie_ep_init_notify() is only called by qcom and tegra.
-> > >      dw_pcie_ep_linkup() is only called by dra7xx, qcom, and tegra.
-> > >      As far as I can tell, nobody at all registers to handle those
-> > >      events except a test.  I think it's pointless to have that code
-> > >      if nobody uses it.
-> > >
-> >
-> > I have submitted an actual driver that makes use of these notifiers:
-> > https://lore.kernel.org/lkml/20220502060611.58987-9-manivannan.sadhasivam@linaro.org/
+> The Synchronous Audio Interface (SAI) provides an interface that
+> supports full-duplex serial interfaces with frame synchronization
+> formats such as I2S, AC97, TDM, and codec/DSP interfaces.
 > 
-> Notifiers aren't the best interface in the kernel. I think they are
-> best used if there's no real linkage between the sender and receiver.
-> For an EPC and EPF that's a fixed interface, so define a proper
-> interface.
+> Beside conversion, 'fsl,shared-interrupt' and '#sound-dai-cells'
+> are added for they are already used by some dts.
 > 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+> changes in v3
+> - address comments from Krzysztof
+> 
+> changes in v2
+> - fix exclusive property issue
+> - fix order issue of compatible, clock-names, dma-names
+> 
+>  .../devicetree/bindings/sound/fsl,sai.yaml    | 221 ++++++++++++++++++
+>  .../devicetree/bindings/sound/fsl-sai.txt     |  95 --------
+>  2 files changed, 221 insertions(+), 95 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/fsl,sai.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/fsl-sai.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/fsl,sai.yaml b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
+> new file mode 100644
+> index 000000000000..86ee46755b0c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
+> @@ -0,0 +1,221 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/fsl,sai.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale Synchronous Audio Interface (SAI).
+> +
+> +maintainers:
+> +  - Shengjiu Wang <shengjiu.wang@nxp.com>
+> +
+> +description: |
+> +  The SAI is based on I2S module that used communicating with audio codecs,
+> +  which provides a synchronous audio interface that supports fullduplex
+> +  serial interfaces with frame synchronization such as I2S, AC97, TDM, and
+> +  codec/DSP interfaces.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - fsl,vf610-sai
+> +          - fsl,imx6sx-sai
+> +          - fsl,imx6ul-sai
+> +          - fsl,imx7ulp-sai
+> +          - fsl,imx8mq-sai
+> +          - fsl,imx8qm-sai
+> +          - fsl,imx8ulp-sai
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mm-sai
+> +              - fsl,imx8mn-sai
+> +              - fsl,imx8mp-sai
+> +          - const: fsl,imx8mq-sai
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: receive and transmit interrupt
+> +
+> +  dmas:
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    items:
+> +      - description: The ipg clock for register access
+> +      - description: master clock source 0 (obsoleted)
+> +      - description: master clock source 1
+> +      - description: master clock source 2
+> +      - description: master clock source 3
+> +      - description: PLL clock source for 8kHz series
+> +      - description: PLL clock source for 11kHz series
+> +    minItems: 4
+> +
+> +  clock-names:
+> +    oneOf:
+> +      - items:
+> +          - const: bus
+> +          - const: mclk0
+> +          - const: mclk1
+> +          - const: mclk2
+> +          - const: mclk3
+> +          - const: pll8k
+> +          - const: pll11k
+> +        minItems: 4
+> +      - items:
+> +          - const: bus
+> +          - const: mclk1
+> +          - const: mclk2
+> +          - const: mclk3
+> +          - const: pll8k
+> +          - const: pll11k
+> +        minItems: 4
+> +
+> +  lsb-first:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      Configures whether the LSB or the MSB is transmitted
+> +      first for the fifo data. If this property is absent,
+> +      the MSB is transmitted first as default, or the LSB
+> +      is transmitted first.
+> +    type: boolean
 
-Fair point! The use of notifiers also suffer from an issue where the notifier
-chain in EPC is atomic but the EPF calls some of the functions like
-pci_epc_write_header() could potentially sleep.
+The type: boolean goes instead of $ref, not additionally to it. Just
+like below...
 
-I'll try to come up with an interface.
+> +
+> +  big-endian:
+> +    description: |
+> +      required if all the SAI registers are big-endian rather than little-endian.
+> +    type: boolean
 
-Thanks,
-Mani
+... be consistent.
 
-> Rob
+> +
+> +  fsl,sai-synchronous-rx:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      SAI will work in the synchronous mode (sync Tx with Rx) which means
+> +      both the transmitter and the receiver will send and receive data by
+> +      following receiver's bit clocks and frame sync clocks.
+> +    type: boolean
+> +
 
--- 
-மணிவண்ணன் சதாசிவம்
+Best regards,
+Krzysztof

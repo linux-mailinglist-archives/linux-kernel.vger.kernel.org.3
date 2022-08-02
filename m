@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE51587E0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12D5587E0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237257AbiHBORK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S237260AbiHBORg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiHBORH (ORCPT
+        with ESMTP id S237083AbiHBORc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:17:07 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67001D0E9;
-        Tue,  2 Aug 2022 07:17:05 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id c185so10723396iof.7;
-        Tue, 02 Aug 2022 07:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dzbPWwhcEKIUb5XmuwsXZk0WHu1HAmpGHak33W/hz4Y=;
-        b=SY+mGld3c8Zk5Jxf7IddnvW31p46/D08XTmBEhxsrkVs4fSRF9TXUtbmjH5o29Gxrt
-         bM66MbluvwjQq1o0MRDc/b6vnsKl1e+6ofpDuhtDNVKZb08z8wTfrEPdcJSCiW6ofXiB
-         qEuAm4F+ALOKrC2llY5tCHy3VoSjYivoxA06GuVSAfECweP/3IaLqi3p3FY6ucuhokla
-         K4mOlgf3XQjAXVMtSZachXXq7XaOA4DS7qtJwOaRv8mXGyQ+Z+gZE4oZIhwUV0zcSiun
-         FkleluOQc7MJ6OTzXCqMZT9Pusj5PuHsJNZDnH4IvH4LGi5U09DMZvSX2vIPTdKNG3zj
-         mTdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dzbPWwhcEKIUb5XmuwsXZk0WHu1HAmpGHak33W/hz4Y=;
-        b=4QHRhzQlUIMfz5uWEjgBSqrAksiIxpP3EGJq00/PdqKM8flBjQNXrDXLDLrH84enxr
-         d4I60Ahml3f0xw/wBDBpCpl3qKTsnuUVokq/d7CfUOEILszbtx0agfBvj5zCv/AXdaba
-         Pl9khhd+FdMI7Dm8Gx3Vms+ehgLwINcZh2Ai11ktMfWqx5PZ8DvkiWAB4Qj1D67a1hv+
-         c6FCjXXH0OEs1opGbIqfzCC0oqEA4NIVgh9JXRm9Jy8/UlmzK2hMrRIeNLz0+WYsJQp+
-         7kLQlFp5wZWLWyEycLKM+Hm5FZSMvmY41S4F6hgPWkMyITjl+KEBDGcakIPKTMn6P4Ra
-         Evlg==
-X-Gm-Message-State: AJIora/qreJcgYlD2Wp1FAjJp2p5E1qSZWEJrL4DmxTXa87AvMnQ4I9k
-        ss96/2IqXzVloH+seNKAFAPiTWNRVcMfFmD70kI=
-X-Google-Smtp-Source: AGRyM1uIEC0PcctxDbe0s059lTbpgzq5joEE1C4fgSlA6DPH4iRSwaj5/x2NpdBckrK5+ERUo19alicmxyTxfHdCTU8=
-X-Received: by 2002:a05:6638:25cb:b0:341:6546:1534 with SMTP id
- u11-20020a05663825cb00b0034165461534mr8193243jat.308.1659449825119; Tue, 02
- Aug 2022 07:17:05 -0700 (PDT)
+        Tue, 2 Aug 2022 10:17:32 -0400
+Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799952982B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:17:31 -0700 (PDT)
+Received: from [192.168.192.146] (port=54948 helo=nx64de-df6d00)
+        by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <gszymaszek@short.pl>)
+        id 1oIsi2-0001xv-0t; Tue, 02 Aug 2022 16:17:22 +0200
+Date:   Tue, 2 Aug 2022 16:17:20 +0200
+From:   Grzegorz Szymaszek <gszymaszek@short.pl>
+To:     Greg KH <greg@kroah.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Grzegorz Szymaszek <gszymaszek@short.pl>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: The r8188eu kernel module does not depend on the
+ rtlwifi/rtl8188eufw.bin firmware file
+Message-ID: <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
+Mail-Followup-To: Grzegorz Szymaszek <gszymaszek@short.pl>,
+        Greg KH <greg@kroah.com>, Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <YukkBu3TNODO3or9@nx64de-df6d00>
+ <YukvnVWuhUeOgRyZ@kroah.com>
 MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <YukYByl76DKqa+iD@casper.infradead.org>
- <CANiq72k7JKqq5-8Nqf3Q2r2t_sAffC8g86A+v8yBc=W-1--_Tg@mail.gmail.com> <YukrFS9NIMSP/I/Q@infradead.org>
-In-Reply-To: <YukrFS9NIMSP/I/Q@infradead.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 2 Aug 2022 16:16:53 +0200
-Message-ID: <CANiq72=rRxQf+CLhDBpR7YFYkjSFKQoik082q5_bgh_AMCb3rQ@mail.gmail.com>
-Subject: Re: [PATCH v8 00/31] Rust support
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Z/WwFWMLoRCa0UiB"
+Content-Disposition: inline
+In-Reply-To: <YukvnVWuhUeOgRyZ@kroah.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 3:48 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> handwaiving and pointing to git trees is not how Linux development
-> works.  Please make sure all the patches go to the relevant lists
-> and maintainers first, and actually do have ACKs.
 
-Which hand-waving? In fact, we were requested to do it like this.
+--Z/WwFWMLoRCa0UiB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As for the Cc's, if any ML wants to be Cc'd for an abstraction we
-create, even if no C code is modified on their side, I am more than
-happy to Cc them. I can even do that by default, but not everyone may
-want to hear about the Rust side just yet, so I have not been doing it
-so far.
+On Tue, Aug 02, 2022 at 04:07:25PM +0200, Greg KH wrote:
+> Looks like someone needs to add a line to the driver that looks like:
+> 	MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
+> [=E2=80=A6] Can you make a patch that does this?
 
-Cheers,
-Miguel
+Sure, I will prepare and send one later (hopefully today), assuming no
+one objects in the meantime. Thanks for quick response.
+
+--Z/WwFWMLoRCa0UiB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEZT55kPBhnB69hD4ZeE9lGUIcpz4FAmLpMfAACgkQeE9lGUIc
+pz6oCQ/+OLg2hG7bKYoCH3KXW06YqD2gwtD00PtwOiWWeQ+wFxR68sNtdosW1d4u
+Vt2Absqtt9gOx9eaWhqSk3IQRtr6pPIl8EcmQCV9rfb+UXlpYUCSmZvWV/J7dlmo
+MAoFtVnhutapSCPrcH023tm3WBrW3o/f9ktr3zKIFfB5+1WiXEoR/ik+PgwNDScy
+Y1pcT6wyhD+ngyKmjYB0RvrJGWR4dhQ2NdsNzwgNlPMVNclU8i/b8ko5/+ZyJ0tV
+jtD24d44FtpxI3W2w9nSBuDLvB0O0fSzlxWjj6aLY2DY3Zmhsn4e+YgKgi+nrbwW
+sTNYNExF3xAXrzMiEtTU1DiHMmdnRliJlGYUBZB7+yMbSWDS4D5Is8XDDrqFx/qR
+PoghB/8/qpPqVxGU8SmPTtLxO+C4YDpIsKK/SploAtZ6d69/Q2T2zHZ5R+PnGlaR
+k9miDHyNOtd5JP+Ohb9sRvNu1mLadAMAocin3UZrHCfpj32M0XFhH8eQGNqLTEVJ
+mXjNxCdvu3Z4turMGqkPaBGWNm9m/6GLvQKrotBNZ2X2/a5uwfwwodlJJemBybRn
+KAqPv8s0SyToP9eS+kzF28Lyr/jJolY6RqwqX7P76CAehVr0qfPNXRKVkv7RJl9A
+PA3H2qcFdMsi/wrdVRUkTUGlVjZxdmB+XSNx9/RGndQlWx6NC58=
+=DWUF
+-----END PGP SIGNATURE-----
+
+--Z/WwFWMLoRCa0UiB--

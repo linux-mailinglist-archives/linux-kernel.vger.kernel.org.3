@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4195881F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14F35881F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbiHBShD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S232087AbiHBSlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiHBShA (ORCPT
+        with ESMTP id S232182AbiHBSl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:37:00 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC227169
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:36:55 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a9so10383214lfm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:36:54 -0700 (PDT)
+        Tue, 2 Aug 2022 14:41:26 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D9D13F97;
+        Tue,  2 Aug 2022 11:41:25 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id w16so7458270ilh.0;
+        Tue, 02 Aug 2022 11:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0V0vFut6oA8ltHdEyyj9G6rE8xemZdZlYLyGMvFW5i4=;
-        b=JbMbzCWRmy2/Iq8VzGanXbbRzWl9cc1EE2JwK+mM841qApg8exzR+ojIFePkA7dQsb
-         gRvYUobGX7Snt7L3xK5hiI7zmrzrfLFRObO9mFClHnUkwfU6RNbXI69ns2zApTAL5gwY
-         kR7qULTZV5hfS9jHk1j94fGdCQkp4OBZzlsDCSvL9fb11iscSOr5AmCiXIvg1FPe5NWO
-         koW2x7Wj40zQPUC0l7K2Xgx4uTqPUvDr2YMa8LZhVKI2B+MeIHFWqwE8TEimAQrNInYn
-         is/ADBfYIy6DYJUaZIuUiI0ETOFvlzjoNx0rvql7JSvU6PkaoZznCv80G6c9ccum3uVl
-         vtog==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jzeyAGDUN/5A+HWtk+TkUOMLjgyiHaE5JWRfu9ZYqzc=;
+        b=i8kv/sB2pUO8kWbomr6irJGT80XTy+ZIKQIM0es3wsFaScbFJEfht0LwuJSI76ZDBI
+         otcs31AWbY5bIQQMtsSaTm1NMglVigUzPLlvOX+1CJvyJ6cjF8XlcUQyzkbszMPyyACF
+         yqJ3hWWlInEXFtMdEfa0eEcV/s+jrsGbqQuRs2+KwUv3Y4Pwl7VAx+5dnLqRg7xgR041
+         er6oD9vUYQM3h43RX8drjXslySbk6rJXLCktQ8dqY7KKcWRObNO2pPauKarVbRL2sgrx
+         PGI1spIjdERjT7+aAC4SN8dByFxNb8bhSJPFW5pjuVB1+w72lDnB7ISSxfpP+viuxb5P
+         8AXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0V0vFut6oA8ltHdEyyj9G6rE8xemZdZlYLyGMvFW5i4=;
-        b=d/6AMQPyV1psjI4Df5uUgFacsD4G4yCgIdulF+wlkx4UKWzTNYVTwYI6s5NVZLuEBO
-         VN+Whea3DiDkdUDY+vO4rVRQAxHzYz+3SIqO0uDxCwHrZsDL2WhfAGCrHTEhZ0vCXhfo
-         eXRzlqUx7gUa7GunS3326FeZ1Ax4Yi4+mmE+9gxDL3TlaWIHOwv8/I+aFevMWqyQxx+w
-         VNjQ2Q7etwMugB2/7PfN8JRGrqA6kTVBrv603IC9ztwS1+bKiQGvgrlocw9kyeLDs71K
-         cRoas7S9xhgp0xSFyv3UjJPWnNtvuOUGRtQ5/h4Lh0LLn5iTsYggCUu1NY8bU1BURGFK
-         XwGg==
-X-Gm-Message-State: ACgBeo1G1gYLYhfo57X5WwHAbMeO+MYYRf4tnHVJtOow89Zasvmv3duN
-        QfiFXFsNyGgzH6r1nomxA/w6U+vSBLiSYotTwCdcAQ==
-X-Google-Smtp-Source: AA6agR70SjsuYYJddFRJXTUrFz/CWwlMCj2fILiDwxN6veWaZoGRKD8kCvsT07vO/4pAW16kbrglao8qW/EMdbXFqzc=
-X-Received: by 2002:a05:6512:210a:b0:48a:eaaf:b889 with SMTP id
- q10-20020a056512210a00b0048aeaafb889mr6144760lfr.89.1659465413351; Tue, 02
- Aug 2022 11:36:53 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jzeyAGDUN/5A+HWtk+TkUOMLjgyiHaE5JWRfu9ZYqzc=;
+        b=06HCQGJD1rWbLaZXMIeowdueJgxv92GiiDYowI/Zn+HOZPQqzAMpR4xSc/o6wOFb7R
+         XgtveP9JcygoOpDlXFHjN5zLoMp8Y7UNSIKEPoWLGotq/rnlEseZDskHwcNxXk9znU2F
+         rOpJJnMZNbWTqEXDTORcZoLbdmmgObNZVM/phtamBsvS6981cPOh+hSVp5D9AVOog9Bi
+         nMdCKHRjMH71Bw+YSnOPLVev7K5hIWn1NRZLDSlqHZEV6j3L57n9xOVUtNrNBjRZ1Qhj
+         Xk0UiohJ3vUrg169qSAZmd9RLv6aSB1cCi4EA54C7lNXFhzMzY/wRtkQ4/SL3M97YgNA
+         nTgg==
+X-Gm-Message-State: AJIora99SNyhoUhLbEjRfPcDIUZZFAVVUpMQx9q6jN6YD9DIEk92mWl5
+        mVJPkjBkMVsXMBWl+zSIxW+igkTFjCuIOlQbN+E=
+X-Google-Smtp-Source: AGRyM1tXNM1HsM8dHkl1eQ4yCXGzTuCCrhzZadT08BpYNirft2Y/dlPEMbRSek/G58DWQ7LJ/W7rCQFykuLRGEdHmd4=
+X-Received: by 2002:a05:6e02:152c:b0:2dc:9b02:b590 with SMTP id
+ i12-20020a056e02152c00b002dc9b02b590mr8645294ilu.320.1659465685089; Tue, 02
+ Aug 2022 11:41:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
- <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
- <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
- <CAE=gft5OYAgosqmwNkk=Cwoooeg93Njmnzfz=gwCaLB0Ts+=sw@mail.gmail.com> <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-In-Reply-To: <CAE=gft6sPkhNcz7+fJuDzQo2f8fM_0Wv_OWC9W2LyvXd6M6zeQ@mail.gmail.com>
-From:   Matthew Garrett <mgarrett@aurora.tech>
-Date:   Tue, 2 Aug 2022 11:36:43 -0700
-Message-ID: <CAHSSk05JEcZfS2tc22F+m76T3vZt-mZ7zUQaGRgSanKaFc5xBg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     Evan Green <evgreen@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+References: <bb1df380b64dd708f480261548fb303046352878.1659296372.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <bb1df380b64dd708f480261548fb303046352878.1659296372.git.christophe.jaillet@wanadoo.fr>
+From:   Ping Cheng <pinglinux@gmail.com>
+Date:   Tue, 2 Aug 2022 11:41:14 -0700
+Message-ID: <CAF8JNhJBwaxUqWXLEejirRRoFo7mM2y99cPTByCpgba0cDjOFg@mail.gmail.com>
+Subject: Re: [PATCH] HID: wacom: Simplify comments
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Ping Cheng <ping.cheng@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-input@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 3:33 PM Evan Green <evgreen@chromium.org> wrote:
+Hi Christophe,
 
-> One more bump here, as we'd really love to get encrypted hibernation
-> to a form upstream would accept if at all possible. We were
-> considering landing this in our Chrome OS tree for now, then coming
-> back in a couple months with a "we've been baking this ourselves and
-> it's going so great, oooh yeah". I'm not sure if upstream would find
-> that compelling or not. But in any case, some guidance towards making
-> this more upstream friendly would be well appreciated.
+Thank you for cleaning up the driver code.
+
+On Sun, Jul 31, 2022 at 12:51 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> One thing I realized in attempting to pick this myself is that the
-> trusted key blob format has moved to ASN.1. So I should really move
-> the creation ticket to the new ASN.1 format (if I can figure out the
-> right OID for that piece), which would allow me to drop a lot of the
-> ugly stuff in tpm2_unpack_blob(). Maybe if I get no other comments
-> I'll work on that and resend.
+> Remove a left-over from commit 2874c5fd2842 ("treewide: Replace GPLv2
+> boilerplate/reference with SPDX - rule 152").
+> An empty comment block can be removed.
 
-I've been revamping my TPM-backed verified hibernation implementation
-based on this work, so I'd definitely be enthusiastic about it being
-mergeable.
+While you are here, can you update your patch to include the removal
+of the empty comment blocks and paths in the other three files:
+wacom.h, wacom_wac.h, and wacom_wac.c?
+
+Thanks,
+Ping
+
+> While at it remove, also remove what is supposed to be the path/filename of
+> the file.
+> This is really low value... and wrong since commit 471d17148c8b
+> ("Input: wacom - move the USB (now hid) Wacom driver in drivers/hid")
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/hid/wacom_sys.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+> index 194a2e327591..21612fdae9c3 100644
+> --- a/drivers/hid/wacom_sys.c
+> +++ b/drivers/hid/wacom_sys.c
+> @@ -1,13 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+> - * drivers/input/tablet/wacom_sys.c
+> - *
+>   *  USB Wacom tablet support - system specific code
+>   */
+>
+> -/*
+> - */
+> -
+>  #include "wacom_wac.h"
+>  #include "wacom.h"
+>  #include <linux/input/mt.h>
+> --
+> 2.34.1
+>

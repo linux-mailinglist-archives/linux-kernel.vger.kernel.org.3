@@ -2,156 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110605875B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27E35875C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiHBDC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 23:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S234019AbiHBDDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 23:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiHBDCX (ORCPT
+        with ESMTP id S231180AbiHBDDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 23:02:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA92A1900A
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659409342; x=1690945342;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ojKsdgAlU+AwiBO7QqMHjQ3Y4cvOyJYrRfNpPAstPZ4=;
-  b=KO3tN6VeDosT+nBFlrbypQg1gUBpgUrc6bpRAcwOctepchUvczDaCXdM
-   CSEN2QnGV2b5Pfk2YrzxSAUcewEb2/csNWJST/o1rtHz+A6GN1dYg0VOz
-   yZNQNGHArUTpUmqTRLdxyyBNVD77vkLG7ulc+kGhrpfEVn0qj7VXHaQvw
-   6Wj+uI7ytw7r0pmT7UcEbNUFbA0WiDwxLrSKomNGNFjFVDudx/sWE2n5U
-   TyXCsgeDDGS9CW+Y6f2Z9eFW382Zxkckacx1pzEhjHv0LAdME53Gz2DB+
-   OKdHHz/wJXlaa3tmyZSgLqzDF3SmtmO1vtzUyegyYV9vyeuY6I2NRSgl3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="315143520"
-X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="315143520"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 20:02:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="630525076"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Aug 2022 20:02:01 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIiAS-000FcJ-0w;
-        Tue, 02 Aug 2022 03:02:00 +0000
-Date:   Tue, 02 Aug 2022 11:01:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- c17a6ff9321355487d7d5ccaa7d406a0ea06b6c4
-Message-ID: <62e8938c.m8JVSS8Vkq2P10yT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 1 Aug 2022 23:03:47 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D71219281
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 20:03:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VL9W-L4_1659409422;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VL9W-L4_1659409422)
+          by smtp.aliyun-inc.com;
+          Tue, 02 Aug 2022 11:03:42 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     linux-kernel@vger.kernel.org, xiang@kernel.org
+Subject: [RFC PATCH 0/9] cachefiles: content map
+Date:   Tue,  2 Aug 2022 11:03:33 +0800
+Message-Id: <20220802030342.46302-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: c17a6ff9321355487d7d5ccaa7d406a0ea06b6c4  rseq: Kill process when unknown flags are encountered in ABI structures
+Kernel Patchset
+===============
+Git tree:
 
-elapsed time: 721m
+    https://github.com/lostjeffle/linux.git jingbo/dev-fscache-bitmap-v1
 
-configs tested: 74
-configs skipped: 2
+Gitweb:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+    https://github.com/lostjeffle/linux/commits/jingbo/dev-fscache-bitmap-v1
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                             allyesconfig
-i386                                defconfig
-arc                  randconfig-r043-20220801
-s390                 randconfig-r044-20220801
-riscv                randconfig-r042-20220801
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                 randconfig-a012-20220801
-i386                 randconfig-a013-20220801
-x86_64                              defconfig
-powerpc                          allmodconfig
-i386                 randconfig-a014-20220801
-i386                 randconfig-a011-20220801
-i386                 randconfig-a016-20220801
-mips                             allyesconfig
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a015-20220801
-ia64                             allmodconfig
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-alpha                            allyesconfig
-sh                               allmodconfig
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-arm                                 defconfig
-x86_64               randconfig-a011-20220801
-x86_64               randconfig-a012-20220801
-x86_64               randconfig-a013-20220801
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64               randconfig-a015-20220801
-x86_64               randconfig-a014-20220801
-x86_64               randconfig-a016-20220801
-arm                              allyesconfig
-arm64                            allyesconfig
-powerpc                      ep88xc_defconfig
-sh                           se7721_defconfig
-powerpc                     tqm8541_defconfig
-sh                           sh2007_defconfig
-powerpc                   motionpro_defconfig
-xtensa                  nommu_kc705_defconfig
-sparc64                          alldefconfig
-mips                           xway_defconfig
-m68k                          amiga_defconfig
-powerpc                     tqm8555_defconfig
-sh                          urquell_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-x86_64               randconfig-k001-20220801
-i386                 randconfig-c001-20220801
-loongarch                           defconfig
-loongarch                         allnoconfig
 
-clang tested configs:
-hexagon              randconfig-r045-20220801
-hexagon              randconfig-r041-20220801
-i386                 randconfig-a004-20220801
-i386                 randconfig-a006-20220801
-i386                 randconfig-a001-20220801
-i386                 randconfig-a002-20220801
-i386                 randconfig-a003-20220801
-x86_64               randconfig-a005-20220801
-x86_64               randconfig-a002-20220801
-i386                 randconfig-a005-20220801
-x86_64               randconfig-a001-20220801
-x86_64               randconfig-a003-20220801
-x86_64               randconfig-a004-20220801
-x86_64               randconfig-a006-20220801
-powerpc                     akebono_defconfig
-arm                   milbeaut_m10v_defconfig
+[Introduction]
+==============
+
+Besides the SEEK_[DATA|HOLE] llseek mechanism provided by the backing
+filesystem, this patch set is going to introduce a bitmap based
+mechanism, in which a self-maintained bitmap is used to track if the
+file range has been cached by the backing file.
+
+
+[Design]
+========
+
+[Content Map]
+The content map is allocated/expanded/shorten in unit of PAGE_SIZE,
+which is multiples times of the block size of the backing filesystem,
+so that the backing content map file can be easily punched hole if the
+content map gets truncated or invalidated. Each bit of the content map
+indicates the existence of 4KB data of the backing file, thus each
+(4K sized) chunk of content map covers 128MB data of the backing file.
+
+In the lookup phase, for the case when the backing file already exists,
+the content map is loaded from the backing content map file. When the
+backing file gets written, the content map gets updated on the
+completion of the write (i.e. cachefiles_write_complete()).
+
+When the backing file is truncated to a larger size, we need to expand
+the content map accordingly. However the expansion of the content map is
+done in a lazy expansion way. That is, the expansion of the content map
+is delayed to the point when the content map needs to be marked, inside
+cachefiles_write_complete(), i.e. iocb.ki_complete() callback. It shall
+be safe to allocate memory with GFP_KERNEL inside the iocb.ki_complete()
+callback, since the callback is scheduled by workqueue for DIRECT IO.
+
+While for the case where the backing file doesn't exist, i.e. a new
+tmpfile is created as the backing file, the content map will not be
+allocated at the lookup phase. Instead, it will be expanded at runtime
+in the same way described above.
+
+When the backing file is truncated to a smaller size, only the tailing
+part that exceeds the new size gets zeroed, while the content map itself
+is not truncated.
+
+Thus the content map size may be smaller or larger than the actual size
+of the backing file.
+
+
+[Backing Content Map File]
+The content map is permanentized to the backing content map file.
+Currently each sub-directory under one volume maintains one backing
+content map file, so that the cacehfilesd only needs to remove the whole
+sub-directory (including the content map file and backing files in the
+sub-directory) as usual when it's going to cull the whole sub-directory
+or volume.
+
+In this case, the content map file will be shared among all backing
+files under the same sub-directory. Thus the offset of the content map
+in the backing content map file needs to be stored in the xattr for each
+backing file. Besides, since the content map size may be smaller or
+larger than the actual size of the backing file as we described above,
+the content map size also needs to be stored in the xattr of the backing
+file.
+
+When expanding the content map, a new offset inside the backing content
+map file also needs to be allocated, with the old range starting from
+the old offset getting punched hole. Currently the new offset is always
+allocated in an appending style, i.e. the previous hole will not be
+reused.
+
+
+[Time Sequence]
+===============
+I haven't do much work on this yet though... Actually there are three
+actions when filling the cache:
+
+1. write data to the backing file
+2. write content map to the backing content map file
+3. flush the content of xattr to disk
+
+Currently action 1 is through DIRECT IO, while action 2 is buffered IO.
+To make sure the content map is flushed to disk _before_ xattr gets
+flushed to disk, the backing content map file is opened with O_DSYNC, so
+that the following write to the backing content map file will only
+return when the written data has been flushed to disk.
+
+
+[TEST]
+======
+It passes the test cases for on-demand mode[1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/tests/fscache?h=experimental-tests-fscache
+
+It also passes xfstests on NFS 4.0 with fscache enabled.
+
+The performance test is still under progress.
+
+
+Jingbo Xu (9):
+  cachefiles: improve FSCACHE_COOKIE_NO_DATA_TO_READ optimization
+  cachefiles: add content map file helpers
+  cachefiles: allocate per-subdir content map files
+  cachefiles: alloc/load/save content map
+  cachefiles: mark content map on write to the backing file
+  cachefiles: check content map on read/write
+  cachefiles: free content map on invalidate
+  cachefiles: resize content map on resize
+  cachefiles: cull content map file on cull
+
+ fs/cachefiles/Makefile      |   3 +-
+ fs/cachefiles/content-map.c | 333 ++++++++++++++++++++++++++++++++++++
+ fs/cachefiles/interface.c   |  10 +-
+ fs/cachefiles/internal.h    |  31 ++++
+ fs/cachefiles/io.c          |  59 +++++--
+ fs/cachefiles/namei.c       |  96 +++++++++++
+ fs/cachefiles/ondemand.c    |   5 +-
+ fs/cachefiles/volume.c      |  14 +-
+ fs/cachefiles/xattr.c       |  26 +++
+ fs/fscache/cookie.c         |   2 +-
+ 10 files changed, 558 insertions(+), 21 deletions(-)
+ create mode 100644 fs/cachefiles/content-map.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B97C58754A
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDA558754B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiHBByx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S235766AbiHBBzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235621AbiHBBxq (ORCPT
+        with ESMTP id S235742AbiHBBx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:53:46 -0400
+        Mon, 1 Aug 2022 21:53:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D1F4AD69;
-        Mon,  1 Aug 2022 18:53:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355724B0D5;
+        Mon,  1 Aug 2022 18:53:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C87846109A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7D4F6106F;
+        Tue,  2 Aug 2022 01:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D62C433D6;
         Tue,  2 Aug 2022 01:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43FFDC433D7;
-        Tue,  2 Aug 2022 01:53:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659405184;
-        bh=LJMbIbsmGPh8jLekYZBgD3WYeoa1VFA5q4dxEXu4mdw=;
+        s=k20201202; t=1659405188;
+        bh=FzcxabaZhSQ69xBMAwnH2bzRNcykHT1NhBRq2p1N3ek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HcS8040a61nvCwmaL7UGokVomlnVV+hlh68bcL+tKSkCoSD9lcUeRJWaPhe3wrzGX
-         7b0rNusBh0bb7gI8XFNTeDIwgYOlEArolEq64V8UFX/fFhg073cVIaAzvP51Mkwh1u
-         EeLQBK09+0b2v/yXvi2pYZkXTdG/Tt7aIBufu5rwkLi9VQBFHXwO4mRLrahaEBmupy
-         KpI1g4UlmQf3VPjBzo8Vh+V9opy3lUq6yB+1B9T1IYpFxXhviYNBXA5BgbsYNBBfUs
-         518mV30m3plO+omWT3iq7O16QyYKHZ9ufbs/00cTKN4qew1lGH+oX8M7Fqt0MVr52k
-         dzR02iwpd756w==
+        b=bT7r0rS66XSpWMdO0B6TKWtlShJeFO7LPSLKtMp9cChYXGq15fzk4esB6Q/60zf6A
+         LNmcYrcajSADLWhRtoF9thhYQftiwq/MJMhd9p+10zsVKqCZWm6MPmaucfJysRg6f+
+         NpB1Gs5+i+eQCx3ug0EpjXofXATz8o6ZHjidfyaLw4+4Q46BYNTlotfalbPPqODOnK
+         9TLhXKFKY0ep4ZmSktd1Qqto4m6Xg6Bk5oXh3LLRYtF0bSOW1TROJrYv6gwBTQJTR+
+         HOqMyq9IzQO8gk3+N/afKBOaboK13B2/m8x0qUWfW7KZKUE8nykJb4ImMl/DcVnAYi
+         12h4zpY0H9rCQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
+        Miguel Ojeda <ojeda@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH v8 19/31] vsprintf: add new `%pA` format specifier
-Date:   Tue,  2 Aug 2022 03:50:06 +0200
-Message-Id: <20220802015052.10452-20-ojeda@kernel.org>
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v8 20/31] scripts: checkpatch: diagnose uses of `%pA` in the C side as errors
+Date:   Tue,  2 Aug 2022 03:50:07 +0200
+Message-Id: <20220802015052.10452-21-ojeda@kernel.org>
 In-Reply-To: <20220802015052.10452-1-ojeda@kernel.org>
 References: <20220802015052.10452-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -63,90 +61,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gary Guo <gary@garyguo.net>
+The `%pA` format specifier is only intended to be used from Rust.
 
-This patch adds a format specifier `%pA` to `vsprintf` which formats
-a pointer as `core::fmt::Arguments`. Doing so allows us to directly
-format to the internal buffer of `printf`, so we do not have to use
-a temporary buffer on the stack to pre-assemble the message on
-the Rust side.
+`checkpatch.pl` already gives a warning for invalid specificers:
 
-This specifier is intended only to be used from Rust and not for C, so
-`checkpatch.pl` is intentionally unchanged to catch any misuse.
+    WARNING: Invalid vsprintf pointer extension '%pA'
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Petr Mladek <pmladek@suse.com>
+This makes it an error and introduces an explanatory message:
+
+    ERROR: Invalid vsprintf pointer extension '%pA' - '%pA' is only intended to be used from Rust code
+
+Suggested-by: Kees Cook <keescook@chromium.org>
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
 Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Co-developed-by: Joe Perches <joe@perches.com>
+Signed-off-by: Joe Perches <joe@perches.com>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- Documentation/core-api/printk-formats.rst | 10 ++++++++++
- lib/vsprintf.c                            | 13 +++++++++++++
- 2 files changed, 23 insertions(+)
+ scripts/checkpatch.pl | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-index 5e89497ba314..dbe1aacc79d0 100644
---- a/Documentation/core-api/printk-formats.rst
-+++ b/Documentation/core-api/printk-formats.rst
-@@ -625,6 +625,16 @@ Examples::
- 	%p4cc	Y10  little-endian (0x20303159)
- 	%p4cc	NV12 big-endian (0xb231564e)
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 503e8abbb2c1..23799e8013b3 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -6782,15 +6782,19 @@ sub process {
+ 				}
+ 				if ($bad_specifier ne "") {
+ 					my $stat_real = get_stat_real($linenr, $lc);
++					my $msg_level = \&WARN;
+ 					my $ext_type = "Invalid";
+ 					my $use = "";
+ 					if ($bad_specifier =~ /p[Ff]/) {
+ 						$use = " - use %pS instead";
+ 						$use =~ s/pS/ps/ if ($bad_specifier =~ /pf/);
++					} elsif ($bad_specifier =~ /pA/) {
++						$use =  " - '%pA' is only intended to be used from Rust code";
++						$msg_level = \&ERROR;
+ 					}
  
-+Rust
-+----
-+
-+::
-+
-+	%pA
-+
-+Only intended to be used from Rust code to format ``core::fmt::Arguments``.
-+Do *not* use it from C.
-+
- Thanks
- ======
- 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3c1853a9d1c0..c414a8d9f1ea 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -2246,6 +2246,9 @@ int __init no_hash_pointers_enable(char *str)
- }
- early_param("no_hash_pointers", no_hash_pointers_enable);
- 
-+/* Used for Rust formatting ('%pA'). */
-+char *rust_fmt_argument(char *buf, char *end, void *ptr);
-+
- /*
-  * Show a '%p' thing.  A kernel extension is that the '%p' is followed
-  * by an extra set of alphanumeric characters that are extended format
-@@ -2372,6 +2375,10 @@ early_param("no_hash_pointers", no_hash_pointers_enable);
-  *
-  * Note: The default behaviour (unadorned %p) is to hash the address,
-  * rendering it useful as a unique identifier.
-+ *
-+ * There is also a '%pA' format specifier, but it is only intended to be used
-+ * from Rust code to format core::fmt::Arguments. Do *not* use it from C.
-+ * See rust/kernel/print.rs for details.
-  */
- static noinline_for_stack
- char *pointer(const char *fmt, char *buf, char *end, void *ptr,
-@@ -2444,6 +2451,12 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
- 		return device_node_string(buf, end, ptr, spec, fmt + 1);
- 	case 'f':
- 		return fwnode_string(buf, end, ptr, spec, fmt + 1);
-+	case 'A':
-+		if (!IS_ENABLED(CONFIG_RUST)) {
-+			WARN_ONCE(1, "Please remove %%pA from non-Rust code\n");
-+			return error_string(buf, end, "(%pA?)", spec);
-+		}
-+		return rust_fmt_argument(buf, end, ptr);
- 	case 'x':
- 		return pointer_string(buf, end, ptr, spec);
- 	case 'e':
+-					WARN("VSPRINTF_POINTER_EXTENSION",
+-					     "$ext_type vsprintf pointer extension '$bad_specifier'$use\n" . "$here\n$stat_real\n");
++					&{$msg_level}("VSPRINTF_POINTER_EXTENSION",
++						      "$ext_type vsprintf pointer extension '$bad_specifier'$use\n" . "$here\n$stat_real\n");
+ 				}
+ 			}
+ 		}
 -- 
 2.37.1
 

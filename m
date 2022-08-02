@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4555880C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B6C5880C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiHBRHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        id S231463AbiHBRHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiHBRH3 (ORCPT
+        with ESMTP id S230333AbiHBRHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:07:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53733405
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659460048; x=1690996048;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zV6cKLFN2FvGEebMveN7G1Wd2cB6N+bA0EAS1zMTi4g=;
-  b=HetDYc7skPQ0ZnAS4ZoDOGiUvswU3Rif46TDeYr2unB1KkXZwYE9iv8B
-   4BwVrmDI4BB/ChnUhs5WBeZxiYkckjrVWQbZWUkj/8i6xsci7J/v7a2tP
-   LARIoQrLc9eGXjnpKRwlFVGFeBobat488aYEVMblcDf+NxALr9Hjj4b5Y
-   H7CA0pJECHs8nQDXUBI8AVzZuEZ1VXfCQlrWD1rFU1cXIE5IWg6xDhUck
-   Je2spRvDAuXIKbFxiStNf0/tp/Wq2MQuySQxM9rdmnrGfJS7wtZljBH4m
-   jA0EcRR5mR6BxBtxNdnzmiVuav/EgB4LrOQQ/18CQ60F91FGY9neLOwY7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289479740"
-X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
-   d="scan'208";a="289479740"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 10:07:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
-   d="scan'208";a="930048123"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 10:07:26 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIvMc-000GFJ-0j;
-        Tue, 02 Aug 2022 17:07:26 +0000
-Date:   Wed, 3 Aug 2022 01:07:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [steev:lenovo-x13s-5.19.0 73/150]
- drivers/clk/qcom/clk-regmap-phy-mux.c:30:15: error: implicit declaration of
- function 'FIELD_GET'
-Message-ID: <202208030144.XL7rBrWY-lkp@intel.com>
+        Tue, 2 Aug 2022 13:07:47 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B3139BB0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:07:45 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id w29so10783876qtv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=6iYgJx1j8ZAFmZN+rJNmYGmMPmy0JicrvsAPug+G8to=;
+        b=arrN66fcx5wmQ4e9+DB/J4OegStyVrVZaNZd2gDnH14ow8qoHFAJ98xCwc10dryqiH
+         PwgpausrHSvt2oeqVHG5AQO+qExeZX7KCPmQTHDRiYGC7mMgKu8ao8dRjPhwUnxN4reT
+         hWoNtSrOE5sioo7yx+TYW5Jc6NGNQP7adYRi8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=6iYgJx1j8ZAFmZN+rJNmYGmMPmy0JicrvsAPug+G8to=;
+        b=UzT2/eA+U28Xtw920SA82R/6b6zx1xz+2RPn93dbAg2hcCipF+XPIbEvXF8I5/MbWh
+         FOvCqIIJetruBOgXbYEZEYw1pS/QguSbqFdgvClZHtNj/QMf9t8ALKjR3f+fW9x52ZMq
+         wihve/Da7KTZv9L8i7q/6/ufXwRcpgFRgRxkxjq2r4MKd2Odd8j+K5AuhnRU6ofpY65p
+         7Z30NkoPjNuLHB8OzDWi13RlBUZTUHFzOGCE0EgluUjtwF23sx1qVySBKiNKQSk28e2G
+         HJ2LFcFDEr1jWnnymObhQKhgntj4rdgoa7pHY+q5XPgVkvwQOF5bpCA9MQJrDv+imj7t
+         qR6g==
+X-Gm-Message-State: AJIora8dOBaycRnZMqKeZW+NvWgDBvTpNBugXWvsnIrxMDIjA8Ra6w/R
+        Y4plLz/NufxNqc/UEvhNsVSWog==
+X-Google-Smtp-Source: AGRyM1tLzqSsLOMhbc4MMreTdenPj/0I/eaai6L2Pfb70hcXUOiPV21mlgoIzsV68cxAkC/TfTctBw==
+X-Received: by 2002:a05:622a:cf:b0:31f:28ac:a8d0 with SMTP id p15-20020a05622a00cf00b0031f28aca8d0mr20050650qtw.581.1659460065100;
+        Tue, 02 Aug 2022 10:07:45 -0700 (PDT)
+Received: from nitro.local (host-142-67-156-76.public.eastlink.ca. [142.67.156.76])
+        by smtp.gmail.com with ESMTPSA id r11-20020ae9d60b000000b006b5869c1525sm10927961qkk.21.2022.08.02.10.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:07:44 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:07:42 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Wu XiangCheng <wu.xiangcheng@linux.dev>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 1/5] maintainer-pgp-guide: use key terminology
+ consistent with upstream
+Message-ID: <20220802170742.uujvf7clztfpasqu@nitro.local>
+References: <20220727-docs-pgp-guide-v1-0-c48fb06cb9af@linuxfoundation.org>
+ <20220727-docs-pgp-guide-v1-1-c48fb06cb9af@linuxfoundation.org>
+ <YuUuQ9shkkY7gco4@bobwxc.mipc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuUuQ9shkkY7gco4@bobwxc.mipc>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux lenovo-x13s-5.19.0
-head:   3f70e98ff07f044b171ef59e1bb91545e1f65818
-commit: a55a3f8acea99d052a3ce9e93ca8404fb8f4957b [73/150] clk: qcom: regmap: add PHY clock source implementation
-config: riscv-randconfig-r042-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030144.XL7rBrWY-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/steev/linux/commit/a55a3f8acea99d052a3ce9e93ca8404fb8f4957b
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev lenovo-x13s-5.19.0
-        git checkout a55a3f8acea99d052a3ce9e93ca8404fb8f4957b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/
+On Sat, Jul 30, 2022 at 09:12:35PM +0800, Wu XiangCheng wrote:
+> They use "primary key" in their interface and document.
+> 
+> For example in their .po file:
+> 
+> msgid "Note: The public primary key and all its subkeys will be deleted.\n"
+> msgid "using subkey %s instead of primary key %s\n"
+> 
+> Also in gnupg/doc/gpg.texi:
+> 
+> By specifying the key to export using a key ID or a fingerprint
+> suffixed with an exclamation mark (!), a specific subkey or the
+> primary key can be exported.  This does not even require that the key
+> has the authentication capability flag set.
+> 
+> Using the new word?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hmm.. this documentation must be newer than I last looked at it. Still, I
+prefer to call it the "certify" key, because "primary key" is also ambiguous:
 
-All errors (new ones prefixed by >>):
+- "primary" key suggests that other keys are "secondary", which they are not
+- "primary key" clashes with "primary identity" in an important way -- you can
+  change your primary identity by adding a new one and assigning it a primary
+  status, but you cannot add a new certify key
 
-   drivers/clk/qcom/clk-regmap-phy-mux.c: In function 'phy_mux_is_enabled':
->> drivers/clk/qcom/clk-regmap-phy-mux.c:30:15: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-      30 |         val = FIELD_GET(PHY_MUX_MASK, val);
-         |               ^~~~~~~~~
-   drivers/clk/qcom/clk-regmap-phy-mux.c: In function 'phy_mux_enable':
->> drivers/clk/qcom/clk-regmap-phy-mux.c:44:35: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-      44 |                                   FIELD_PREP(PHY_MUX_MASK, PHY_MUX_PHY_SRC));
-         |                                   ^~~~~~~~~~
-   cc1: some warnings being treated as errors
+So, I'm sticking with the wording "certify key".
 
+> > +The **[C]** (certification) key is often called the "master" key, but
+> 
+> Maybe "The key carrying the **[C]**" is better, match the following
+> description. As your said, gpg always create a [SC] key by default.
 
-vim +/FIELD_GET +30 drivers/clk/qcom/clk-regmap-phy-mux.c
+Sure, I will consider this change.
 
-    22	
-    23	static int phy_mux_is_enabled(struct clk_hw *hw)
-    24	{
-    25		struct clk_regmap *clkr = to_clk_regmap(hw);
-    26		struct clk_regmap_phy_mux *phy_mux = to_clk_regmap_phy_mux(clkr);
-    27		unsigned int val;
-    28	
-    29		regmap_read(clkr->regmap, phy_mux->reg, &val);
-  > 30		val = FIELD_GET(PHY_MUX_MASK, val);
-    31	
-    32		WARN_ON(val != PHY_MUX_PHY_SRC && val != PHY_MUX_REF_SRC);
-    33	
-    34		return val == PHY_MUX_PHY_SRC;
-    35	}
-    36	
-    37	static int phy_mux_enable(struct clk_hw *hw)
-    38	{
-    39		struct clk_regmap *clkr = to_clk_regmap(hw);
-    40		struct clk_regmap_phy_mux *phy_mux = to_clk_regmap_phy_mux(clkr);
-    41	
-    42		return regmap_update_bits(clkr->regmap, phy_mux->reg,
-    43					  PHY_MUX_MASK,
-  > 44					  FIELD_PREP(PHY_MUX_MASK, PHY_MUX_PHY_SRC));
-    45	}
-    46	
+> > +1. All subkeys are fully independent from each other. If you lose a
+> > +   private subkey, it cannot be restored or recreated from any other
+> > +   private key on your chain.
+> > +2. With the exception of the Certify key, there can be multiple subkeys
+> > +   with identical capabilities (e.g. you can have 2 valid encryption
+> > +   subkeys, 3 valid signing subkeys, but only one valid certification
+> > +   subkey). All subkeys are fully independent -- a message encrypted to
+> > +   one **[E]** subkey cannot be decrypted with any other **[E]** subkey
+> > +   you may also have.
+> > +3. A single subkey may have multiple capabilities (e.g. your **[C]** key
+> > +   can also be your **[S]** key).
+> 
+> Reminding the limit of algorithms' capabilities by the way?
+> Like: As long as under the algorithm's capabilities.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I think that's unnecessary in this context. Yes, ed25519 keys cannot be used
+for encryption (that's for cv25519 keys), but I'm just illustrating that a
+single key can have multiple capabilities, so just leaving it at "may" is
+enough here, imo.
+
+Thank you for your suggestions.
+
+Regards,
+Konstantin

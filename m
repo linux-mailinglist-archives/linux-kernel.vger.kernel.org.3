@@ -2,122 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B66587588
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA5A587586
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235546AbiHBCYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S235494AbiHBCVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiHBCYH (ORCPT
+        with ESMTP id S231213AbiHBCVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:24:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65291ADB1
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 19:24:06 -0700 (PDT)
+        Mon, 1 Aug 2022 22:21:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EC175AD;
+        Mon,  1 Aug 2022 19:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659407046; x=1690943046;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=X0+Fo5Zyxytk3rUKtAqS0oOOSdZ/wsYHzGBuKKmFi5Y=;
-  b=B8KlaAsSna+49FWKEgmGl++Ao92FRjNoenCT0EllmY6gfeAqv2rGZ45g
-   +vkgXXeS4M5cBEFE0lHs2gP/yNoYOqaIcww66y/o2WMx6XJv9VIus5brG
-   brO5z3PZkya5Js5Yd+LBVkq24AfHwV+UfQLLhPiaNI0geVxnjwjB4GtV5
-   hXWt5RhWoLLFFGQIrCMbDlYy+2J9nBidU5kvF2erA7aSwuzTtabW/DpBG
-   oRewh9cp90HF3BUiZ8j7UTXqqU48mBUBZN1g2UOwYkqF9WZShL6IRIYyR
-   p5uWDsg4h6asSU3SteoHDBiw/fxq5OAbTYC2xTJorqLpjoB+/N5kfrnUY
+  t=1659406879; x=1690942879;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=OZx7CajtvMkiCnlwt7rHIb0ADoHGq/IX7yj7nDLJgyE=;
+  b=O6QuPqMFSMFQzoeZRhiHoa1C6K8s+atnXzl3Xs9PF3wt91PHd1A2zEKl
+   ArG4b/vIhuRVVw5/AqyLXRQprK5iJa6gVorpo3LNHZudhVgPmZ+fzWRLz
+   7K9tBilzt73vX3xHQVWVvr29Di9PzXZeWFcRuD/Tq6TbI7PsFv2yH0lIx
+   84wPTGUbY42YEutGbJQOTaY3k39gPZFTOXtPn7zewLjDO6udZiJeZLTRL
+   wop4buCOhvhrGHd9iR2ll+VzUj2qzm6++nbZ/n0/+gAcJAZOo1geVmw+5
+   z0K8gRF9sCGABHaCXmyFJaYuUeE3o76TeEB5Dr9qBXyN+b91VyO8xF65t
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269070383"
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="289314369"
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="269070383"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 19:24:06 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="289314369"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 19:21:19 -0700
 X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="661426081"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Aug 2022 19:24:02 -0700
-Message-ID: <806b1437-441b-253b-7f52-ee7a7a9053e9@linux.intel.com>
-Date:   Tue, 2 Aug 2022 10:19:08 +0800
+   d="scan'208";a="552747137"
+Received: from vgutierr-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.22.230])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 19:21:16 -0700
+Message-ID: <35d7254cafde24b722b167c6a3566592d903acd2.camel@intel.com>
+Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
+From:   Kai Huang <kai.huang@intel.com>
+To:     Haitao Huang <haitao.huang@linux.intel.com>, dave@sr71.net,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 02 Aug 2022 14:21:13 +1200
+In-Reply-To: <op.1p2k13ibwjvjmi@hhuan26-mobl1.mshome.net>
+References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+         <op.1p2k13ibwjvjmi@hhuan26-mobl1.mshome.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
- <686b137f-232a-2a78-beb0-e4373bd20959@linux.intel.com>
- <20220725144005.GE3747@nvidia.com>
- <6da27a6b-b580-4ba4-24c8-ebdfb2d9345d@linux.intel.com>
- <20220726135722.GC4438@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220726135722.GC4438@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+>=20
+> Tested-by: Haitao Huang <haitao.huang@intel.com>
+>=20
+> Thanks
+> Haitao
 
-On 7/26/22 9:57 PM, Jason Gunthorpe wrote:
->> +	/*
->> +	 * Block PASID attachment in all cases where the PCI fabric is
->> +	 * routing based on address. ACS disables it.
->> +	 */
->> +	if (dev_is_pci(dev) &&
->> +	    !pci_acs_path_enabled(to_pci_dev(dev), NULL, REQ_ACS_FLAGS))
->> +		return -ENODEV;
-> I would probably still put this in a function just to be clear, and
-> probably even a PCI layer funcion 'pci_is_pasid_supported' that
-> clearly indicates that the fabric path can route a PASID packet
-> without mis-routing it.
+Hi Haitao,
 
-I am fine with putting above in a function to make it clear. But I am
-hesitant to move this part of logic into the PCI layer.
+Could you also help to test in a VM?
 
- From the perspective of IOMMU, TLPs with PASID prefix form distinct
-address spaces, so it's reasonable to require ACS protection on the
-upstream path.
+You will also need below patch in order to use EDECCSSA in the guest:
 
-But PCI spec doesn't require this. The interfaces defined in drivers/pci
-/ats.c should work as well even the IOMMU is disabled.
+https://lore.kernel.org/lkml/20220727115442.464380-1-kai.huang@intel.com/
 
-> If the fabric routes PASID properly then groups are not an issue - all
-> agree on this?
+When you create the VM, please use -cpu host.
 
-Yes, agreed. The iommu groups are not an issue any more. But just like
-iommu_attach_device(), if multiple devices share a group, there must be
-some mechanism to make sure that device drivers are aware of this fact
-and only attach a shared domain to any PASID of those devices.'
-Otherwise, the iommu_attach/detach_dev_pasid() might be misused.
+--=20
+Thanks,
+-Kai
 
-Considering that all existing PASID use cases are singleton group case,
-probably we can start our support from the simple singleton group case?
 
-Best regards,
-baolu

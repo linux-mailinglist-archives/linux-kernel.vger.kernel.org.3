@@ -2,280 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1515877E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641665877F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbiHBHeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S235978AbiHBHha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiHBHeB (ORCPT
+        with ESMTP id S235917AbiHBHh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:34:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7287C6579;
-        Tue,  2 Aug 2022 00:33:59 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lxmps5xfgzWfNV;
-        Tue,  2 Aug 2022 15:29:57 +0800 (CST)
-Received: from kwepemm600006.china.huawei.com (7.193.23.105) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 15:33:51 +0800
-Received: from huawei.com (10.175.127.234) by kwepemm600006.china.huawei.com
- (7.193.23.105) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 2 Aug
- 2022 15:33:50 +0800
-From:   Wenyu Liu <liuwenyu7@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <rickyman7@gmail.com>, <namhyung@gmail.com>, <nicolas@fjasle.eu>,
-        <acme@redhat.com>, <alexey.v.bayduraev@linux.intel.com>,
-        <masahiroy@kernel.org>, <linux-perf-users@vger.kernel.org>
-CC:     <hewenliang4@huawei.com>, <yeyunfeng@huawei.com>,
-        <linfeilong@huawei.com>, <liuwenyu7@huawei.com>
-Subject: [PATCH] tools api fs: fix the concurrency problem for xxx__mountpoint()
-Date:   Tue, 2 Aug 2022 03:37:16 -0400
-Message-ID: <20220802073716.1875289-1-liuwenyu7@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 2 Aug 2022 03:37:26 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1156454
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:37:24 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id h12so14724701ljg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=URseQjXjOTyP7Y7Ids7IGoAxfF0B+LCgv9LDJOxn0e4=;
+        b=hgEifgEEc8RJp8ISWE1R7rNbqZOTjbYFLSR+ZCQ3pCzNKf6M/zLuIFQub34HwSf2Cx
+         pXKoJH0Xcib5nDBj2xTw283BeMqtxYDBvYDoIHZ5I6c/rQhNNETCJMkJnDSqRfkdnINH
+         WQsz52anuBiuLZsea5kdDORb9OCwYhdOeFETD/smvx1IIcxqGsEipeovwptZxh8xxgMi
+         HR1N11jZ7fKXqkJR1DpgnvlUxqvhw4LvcpeLid1CWKfDQbCw8sbPiQkog8VM8YuvXQo5
+         HQcRsz5ksXv2HRAld+feKYP4AKMwKPCz4CSwRRY0EOVd0zhAskdDwfJyNkWFza/SJ1WV
+         dNRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=URseQjXjOTyP7Y7Ids7IGoAxfF0B+LCgv9LDJOxn0e4=;
+        b=Xe9mXWKBVdZeJFgivsvC+oSGqbnwWpcX+gfxXybSFAR/0yCKu0a3+2I15BKYe91lOt
+         duvTS8QeXrrRn4BAZfeDjRfWcy/AlIzamvha3ZOO3Qz5qaz4zt0FlLvz0PxA3/TcV5yD
+         uTSP4mCxfaf5ZX6hcrTbpzZAiH0znW6Z9Y3CavShVNcwDFcCRUdVX1L3kSJ/I5dMF6C8
+         o88s7qSOnwUFH91p/C6lSfLM8Of1kXXHbcqXWvVQ6EC3FRxNCANv6bckMUjC8ULiHybH
+         +DIjNlhTFKEXxNHwj1oR0iIMYqI89utXdzTdMAv2PVaKT83wtR2LR/i85/F6YnAJ+8Kc
+         yVrw==
+X-Gm-Message-State: AJIora8VafEU4Alco+Vkmw20a4stKolBIdA1lsif/17fReDTV0x0eOYK
+        j24zI2wUtzd4LHvaRA/L8W13+Q==
+X-Google-Smtp-Source: AGRyM1uhBNEbBQJbIFzahQRwuRR5CYFcJwVMYLFPLaZ+RgbUYWmzvMn9AyXfnetpcWEXjIbws1+nSA==
+X-Received: by 2002:a2e:bc06:0:b0:25e:19b8:637b with SMTP id b6-20020a2ebc06000000b0025e19b8637bmr6779517ljf.356.1659425842847;
+        Tue, 02 Aug 2022 00:37:22 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id be20-20020a05651c171400b0025d4cbc20d8sm1845842ljb.22.2022.08.02.00.37.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 00:37:22 -0700 (PDT)
+Message-ID: <4ff10b73-d04b-cda8-6603-f6f342f5ce9a@linaro.org>
+Date:   Tue, 2 Aug 2022 09:37:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600006.china.huawei.com (7.193.23.105)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] media: dt-bindings: media: Document RZ/G2L CRU
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hugeltbfs__mountpoint() interface seems have a problem
-in perf top,sometimes it will get a wrong path in
-perf_event__synthesize_mmap_events().
+On 01/08/2022 23:47, Lad Prabhakar wrote:
+> Document the CRU block found on Renesas RZ/G2L SoC's.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> RFC v2 -> v1
+> * Dropped endpoint stuff from port1 as suggested by Rob
+> * Updated description for endpoint
+> 
+> RFC v1 -> RFC v2
+> * Dropped CSI
+> ---
+>  .../bindings/media/renesas,rzg2l-cru.yaml     | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> new file mode 100644
+> index 000000000000..d7389693dae9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022 Renesas Electronics Corp.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
+> +
+> +maintainers:
+> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> +
+> +description:
+> +  The CRU image processing module is a data conversion module equipped with pixel
+> +  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
+> +  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
 
-There is a very small probability when using perf top
-and I got entries like this:
-	3.26% 	perf-1.map		[.]0x0000ffffb2993d00
-	3.22%	perf-1.map		[.]0x0000ffffb28a2984
-	3.26%	perf-1.map		[.]0x0000ffffb2993d00
-	...	...			...
-I have already installed the perf-debuginfo package.
+No need for oneOf, unless you already have a patch adding second case to
+oneOf.
 
-I find out it's in perf_event__synthesize_mmap_events():
-when these following code execute:
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-cru     # RZ/V2L
+> +          - const: renesas,rzg2l-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 3
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: image_conv
+> +      - const: image_conv_err
+> +      - const: axi_mst_err
+> +
+> +  clocks:
+> +    items:
+> +      - description: CRU Main clock
+> +      - description: CPU Register access clock
+> +      - description: CRU image transfer clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: vclk
+> +      - const: pclk
+> +      - const: aclk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    items:
+> +      - description: CRU_PRESETN reset terminal
+> +      - description: CRU_ARESETN reset terminal
+> +
+> +  reset-names:
+> +    items:
+> +      - const: presetn
+> +      - const: aresetn
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing a parallel input source.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              hsync-active: true
+> +              vsync-active: true
+> +              bus-width: true
+> +              data-shift: true
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Input port node, describing the Image Processing module connected to the
+> +          CSI-2 receiver.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - power-domains
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Device node example with CSI-2
+> +  - |
+> +    #include <dt-bindings/clock/r9a07g044-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    cru: video@10830000 {
+> +            compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
 
-    const char *hugetlbfs_mnt = hugetlbfs__mountpoint();
-    int hugetlbfs_mnt_len = hugetlbfs_mnt ? strlen(hugetlbfs_mnt) : 0;
-    ...	...
-    if (hugetlbfs_mnt_len &&
-        !strncmp(event->mmap2.filename, hugetlbfs_mnt,
-                 hugetlbfs_mnt_len)) {
-    		strcpy(event->mmap2.filename, anonstr);
-            event->mmap2.flags |= MAP_HUGETLB;
-     }
+Also 4-space for DTS example, please.
 
-when came to the if condition:
-*event->mmap2.filename = "/usr/lib64/libgpg-error.so.0.29.0"
-*hugetlbfs_mnt = "/dev/hugepages"
-hugetlbfs_mnt_len = 1
 
-So it's the strlen(hugetlbfs_mnt) get a wrong result,
-make it only compared the first character and resulting
-the mistake.
-And that make the filename in map__new() came
-to "/tmp/perf-<pid>.map".
 
-It seems xxx_mountpoint() have a concurrency problem when
-it scan /proc/mounts and fill path into fs->path in
-fs__read_mounts().
-
-The hugeltbfs__mountpoint() is called for each process found
-in perf_event__synthesize_mmap_events().
-And the working threads is synthesize_threads_worker(),which
-is created by perf_event__synthesize_threads(),threads number
-equals to the cpus number.
-These threads share the fs__entries and fill path into
-fs->path concurrently in perf_event__synthesize_mmap_events()
-but without any synchronizing measures,cause the problem.
-
-This patch add a mutex in struct fs,and a interface
-fs_fill_path() for copying the path into fs->path.
-When the target fs name be found in fs__read_mounts(),
-using fs_fill_path() to copy the path into fs->path,
-the mutex is needed during the coping procedure.
-
-And add memory barrier to ensure the path is completely
-filled before the fs->found is set.
-
-Signed-off-by: Wenyu Liu <liuwenyu7@huawei.com>
----
- tools/lib/api/Makefile |  1 +
- tools/lib/api/fs/fs.c  | 50 ++++++++++++++++++++++++++++++++++--------
- 2 files changed, 42 insertions(+), 9 deletions(-)
-
-diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
-index e21e1b40b525..9f2332c07294 100644
---- a/tools/lib/api/Makefile
-+++ b/tools/lib/api/Makefile
-@@ -19,6 +19,7 @@ LIBFILE = $(OUTPUT)libapi.a
- 
- CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
- CFLAGS += -ggdb3 -Wall -Wextra -std=gnu99 -U_FORTIFY_SOURCE -fPIC
-+CFLAGS += -lpthread
- 
- ifeq ($(DEBUG),0)
- ifeq ($(CC_NO_CLANG), 0)
-diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
-index 82f53d81a7a7..5de7ba1fdbc9 100644
---- a/tools/lib/api/fs/fs.c
-+++ b/tools/lib/api/fs/fs.c
-@@ -12,6 +12,9 @@
- #include <fcntl.h>
- #include <unistd.h>
- #include <sys/mount.h>
-+#include <pthread.h>
-+#include <asm/barrier.h>
-+#include <linux/compiler.h>
- 
- #include "fs.h"
- #include "debug-internal.h"
-@@ -92,6 +95,7 @@ struct fs {
- 	bool			 found;
- 	bool			 checked;
- 	long			 magic;
-+	pthread_mutex_t		 lock;
- };
- 
- enum {
-@@ -113,43 +117,69 @@ static struct fs fs__entries[] = {
- 		.mounts	= sysfs__fs_known_mountpoints,
- 		.magic	= SYSFS_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- 	[FS__PROCFS] = {
- 		.name	= "proc",
- 		.mounts	= procfs__known_mountpoints,
- 		.magic	= PROC_SUPER_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- 	[FS__DEBUGFS] = {
- 		.name	= "debugfs",
- 		.mounts	= debugfs__known_mountpoints,
- 		.magic	= DEBUGFS_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- 	[FS__TRACEFS] = {
- 		.name	= "tracefs",
- 		.mounts	= tracefs__known_mountpoints,
- 		.magic	= TRACEFS_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- 	[FS__HUGETLBFS] = {
- 		.name	= "hugetlbfs",
- 		.mounts = hugetlbfs__known_mountpoints,
- 		.magic	= HUGETLBFS_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- 	[FS__BPF_FS] = {
- 		.name	= "bpf",
- 		.mounts = bpf_fs__known_mountpoints,
- 		.magic	= BPF_FS_MAGIC,
- 		.checked = false,
-+		.lock = PTHREAD_MUTEX_INITIALIZER,
- 	},
- };
- 
-+static void fs_fill_path(struct fs *fs, const char *path, size_t len)
-+{
-+	if (len >= sizeof(fs->path))
-+		len = sizeof(fs->path) - 1;
-+
-+	pthread_mutex_lock(&fs->lock);
-+	if (fs->found) {
-+		pthread_mutex_unlock(&fs->lock);
-+		return;
-+	}
-+	strncpy(fs->path, path, len);
-+	fs->path[len] = '\0';
-+	/* Make sure the path is filled before fs->found is set */
-+	smp_wmb();
-+	fs->found = true;
-+	pthread_mutex_unlock(&fs->lock);
-+}
-+
-+
- static bool fs__read_mounts(struct fs *fs)
- {
- 	bool found = false;
- 	char type[100];
-+	char path[PATH_MAX];
- 	FILE *fp;
- 
- 	fp = fopen("/proc/mounts", "r");
-@@ -158,15 +188,17 @@ static bool fs__read_mounts(struct fs *fs)
- 
- 	while (!found &&
- 	       fscanf(fp, "%*s %" STR(PATH_MAX) "s %99s %*s %*d %*d\n",
--		      fs->path, type) == 2) {
-+		      path, type) == 2) {
- 
--		if (strcmp(type, fs->name) == 0)
-+		if (strcmp(type, fs->name) == 0) {
-+			fs_fill_path(fs, path, sizeof(path) - 1);
- 			found = true;
-+		}
- 	}
- 
- 	fclose(fp);
- 	fs->checked = true;
--	return fs->found = found;
-+	return found;
- }
- 
- static int fs__valid_mount(const char *fs, long magic)
-@@ -188,8 +220,7 @@ static bool fs__check_mounts(struct fs *fs)
- 	ptr = fs->mounts;
- 	while (*ptr) {
- 		if (fs__valid_mount(*ptr, fs->magic) == 0) {
--			fs->found = true;
--			strcpy(fs->path, *ptr);
-+			fs_fill_path(fs, *ptr, strlen(*ptr));
- 			return true;
- 		}
- 		ptr++;
-@@ -227,10 +258,8 @@ static bool fs__env_override(struct fs *fs)
- 	if (!override_path)
- 		return false;
- 
--	fs->found = true;
-+	fs_fill_path(fs, override_path, sizeof(fs->path) - 1);
- 	fs->checked = true;
--	strncpy(fs->path, override_path, sizeof(fs->path) - 1);
--	fs->path[sizeof(fs->path) - 1] = '\0';
- 	return true;
- }
- 
-@@ -252,8 +281,11 @@ static const char *fs__mountpoint(int idx)
- {
- 	struct fs *fs = &fs__entries[idx];
- 
--	if (fs->found)
-+	if (READ_ONCE(fs->found)) {
-+		/* Make sure the path is filled completely */
-+		smp_rmb();
- 		return (const char *)fs->path;
-+	}
- 
- 	/* the mount point was already checked for the mount point
- 	 * but and did not exist, so return NULL to avoid scanning again.
--- 
-2.36.1
-
+Best regards,
+Krzysztof

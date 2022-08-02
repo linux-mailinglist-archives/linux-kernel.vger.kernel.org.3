@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FA95874D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA835874D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 02:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiHBAdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 20:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S235060AbiHBAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 20:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbiHBAc6 (ORCPT
+        with ESMTP id S230292AbiHBAfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:32:58 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A22A431
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:32:57 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id y15so11951725plp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:32:57 -0700 (PDT)
+        Mon, 1 Aug 2022 20:35:52 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E035101DE
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 17:35:51 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10ea30a098bso10666259fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 01 Aug 2022 17:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S7DNijVESn0SQkYeT3HX2odpK4m3UtmixO49ipbaF9k=;
-        b=Qll8kx87hY0OMXBocmMfOUol1nONH1o/U8+hQ7pZeI6lCr30l7wO5u+uUGh4ybg+CV
-         KL3Yu4mpYxLLD1suh9TFVlITZQzq56thh/+9qB0T1R2SxJNR+ngZqgB0mQvDlTdW8hiX
-         MVaaUIUT02G6xhywxjRi3Vfsdxw1xf2TviBxI=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=IpG/dju9KLyWY+v7cb47gm6DxXSiSa+Zd/huh62dlOs=;
+        b=LYUwomZu3H5zY5ikiCvxt25xm78Qmq2B/2LEt8FQIPgviW4e08HXwlHEWf+2CSfoOX
+         zeqijkDLuj0EzqvZy7wzT+zuqVIsY3jqAeNeuTWqzBr50iVjeP0oTs6ENEbSwB0JkKLi
+         sg+BeG2RBoFi3COtNjpgvQ1dNDZExn7Uv5Z8w8qbuu3gjGHAbOtLppMNntguqi/cUad4
+         b2cct/jkcdrMnTVAQogvjjIgoTwAsuGLRjzwcEsDc8QKlMmPNT8/D6x7WqaC3ZJ6Rkt5
+         qFym956VApjbyNuTD49nxJispTGaTloKqF08346HhFUi8JU8W/f87aLundwWV8WzxoMv
+         9x8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S7DNijVESn0SQkYeT3HX2odpK4m3UtmixO49ipbaF9k=;
-        b=tPqL4cak5cMjGD02gGXV6eRAdbdzwQgSO1a9Hj7OhnOqTE1FAB3Xh907yhDjXgpJvr
-         Nd2NIPcgcg/+jCKlY0BZxbJftw1sU33bl0aZFiXJMgN+bXXGOVvA+ZZrJUeHa6We5mPC
-         vFDv4RqOnIlozdtlsmUsNhua88vsjgBW2jLBn3PUGLMWib9ShQseR/sdaMYVcKkLxkBV
-         lp8wNDhF8k6583u7CaDY6jWZG3Cs8FbkGa3RclpcIqVE2c9geTrTiL2pCpps+v+iZkKk
-         bgYd7UxctQbX44gJVjtrPjuFT7gSzIb54gGgLSQRMGWNhS+9nh4OXFsN4jjd8CN4elWV
-         AUNA==
-X-Gm-Message-State: ACgBeo2LC1OiLiV8RwlOa0pqpjqOBJX0yI3bpDrH3RIRf/XtQQH5h9S4
-        WIQUHCLj9qYjUt/dO0G5E6F1ug==
-X-Google-Smtp-Source: AA6agR4fkdhC2YtjxJmOItlsU/Y879mHDKcNdGmF2Y6jUgRIZPU1jE212T3fJjGI8GiQnUrGHGIUqw==
-X-Received: by 2002:a17:90b:4a06:b0:1f4:d8c9:7073 with SMTP id kk6-20020a17090b4a0600b001f4d8c97073mr14527751pjb.246.1659400376674;
-        Mon, 01 Aug 2022 17:32:56 -0700 (PDT)
-Received: from dlunevwfh.roam.corp.google.com (n122-107-196-14.sbr2.nsw.optusnet.com.au. [122.107.196.14])
-        by smtp.gmail.com with ESMTPSA id ot10-20020a17090b3b4a00b001f326ead012sm8943667pjb.37.2022.08.01.17.32.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 17:32:56 -0700 (PDT)
-From:   Daniil Lunev <dlunev@chromium.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Stanley Chu <chu.stanley@gmail.com>
-Cc:     Daniil Lunev <dlunev@chromium.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [PATCH v3] ufs: core: ufshcd: use local_clock() for debugging timestamps
-Date:   Tue,  2 Aug 2022 10:32:47 +1000
-Message-Id: <20220802103230.v3.1.I699244ea7efbd326a34a6dfd9b5a31e78400cf68@changeid>
-X-Mailer: git-send-email 2.31.0
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=IpG/dju9KLyWY+v7cb47gm6DxXSiSa+Zd/huh62dlOs=;
+        b=RtMkIV3hGE/mIrW5THosePn6gqkIjDcKkuKpERSugFq49sypDXJscXFdonfnVQ3pSh
+         n147PYT3U0pfHrNBawux7o8Ayq0kwGbjf40BI4C7LHo8SfqWIAciIrMMnARR6xmDrYff
+         rlbx0aw5eek+AQEeLdOPqw0TZNAOJfOPkQkNHw+7FXpRH/deolEX1cMHLriy18AaPn6G
+         f9FTLdUNP0KfbNHH+Jhqcxa6AutRsUEMUPQFG2lIKB86oMzywpS+mxETHUCMS2QYPLvU
+         Q7tBdjqWceM5O9ixKGTBX0XaY8g7lOCkmipLx18b6yDALC26hII/b5sHNtQT8EbqwuIF
+         toSw==
+X-Gm-Message-State: AJIora9NltdFDDNHZIHJbd/6nOkkpnryQE5Owt2IUhvCaBGj4Xlk91Vy
+        JvOGPSH+v9+OB6E4cFC13uVpAXEMU6qVS/l0
+X-Google-Smtp-Source: AGRyM1sYB0YTcs7CVvjVqFWF6n7FTYKIQn0sHsJDRfdIluSotVoZ8OdFjxKB993DPiqy9qHEkOBjjg==
+X-Received: by 2002:a05:6870:2499:b0:101:7531:c7ec with SMTP id s25-20020a056870249900b001017531c7ecmr9075592oaq.42.1659400550909;
+        Mon, 01 Aug 2022 17:35:50 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.75.211])
+        by smtp.gmail.com with ESMTPSA id w9-20020a0568080d4900b003352223a14asm2788023oik.15.2022.08.01.17.35.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 17:35:50 -0700 (PDT)
+Message-ID: <2b6bf767-d3f8-4e9b-358b-0826c701e00b@linaro.org>
+Date:   Mon, 1 Aug 2022 19:35:48 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 5.4 00/34] 5.4.209-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220801114128.025615151@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220801114128.025615151@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,171 +78,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CLOCK_MONOTONIC is not advanced when the system is in suspend. This
-becomes problematic when debugging issues related to suspend-resume:
-the timestamps printed by ufshcd_print_trs can not be correlated with
-dmesg entries, which are timestamped with local_clock().
+Hello!
 
-This CL changes the used clock to local_clock() for the informational
-timestamp variables and adds mirroring *_local_clock instances for
-variables used in subsequent derevations (to not change the semantics of
-those derevations).
+On 01/08/22 06:46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.209 release.
+> There are 34 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 03 Aug 2022 11:41:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.209-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Daniil Lunev <dlunev@chromium.org>
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
----
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Changes in v3:
-- Add missing header
+## Build
+* kernel: 5.4.209-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: b48a8f43dce6a15f83f416453361b45905c1b88b
+* git describe: v5.4.207-123-gb48a8f43dce6
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.207-123-gb48a8f43dce6
 
-Changes in v2:
-- Use local clock to better align with dmesg
-- Correct commit message
+## No test regressions (compared to v5.4.208)
 
- drivers/ufs/core/ufshcd.c | 20 ++++++++++++--------
- include/ufs/ufshcd.h      | 14 +++++++++-----
- 2 files changed, 21 insertions(+), 13 deletions(-)
+## No metric regressions (compared to v5.4.208)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index ce86d1b790c05..e61dafb93986f 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -21,6 +21,7 @@
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/sched/clock.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_dbg.h>
- #include <scsi/scsi_driver.h>
-@@ -460,7 +461,7 @@ static void ufshcd_print_evt(struct ufs_hba *hba, u32 id,
- 		if (e->tstamp[p] == 0)
- 			continue;
- 		dev_err(hba->dev, "%s[%d] = 0x%x at %lld us\n", err_name, p,
--			e->val[p], ktime_to_us(e->tstamp[p]));
-+			e->val[p], e->tstamp[p] / 1000);
- 		found = true;
- 	}
- 
-@@ -505,9 +506,9 @@ void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
- 		lrbp = &hba->lrb[tag];
- 
- 		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
--				tag, ktime_to_us(lrbp->issue_time_stamp));
-+				tag, lrbp->issue_time_stamp_local_clock / 1000);
- 		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
--				tag, ktime_to_us(lrbp->compl_time_stamp));
-+				tag, lrbp->compl_time_stamp_local_clock / 1000);
- 		dev_err(hba->dev,
- 			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
- 			tag, (u64)lrbp->utrd_dma_addr);
-@@ -569,10 +570,10 @@ static void ufshcd_print_host_state(struct ufs_hba *hba)
- 	dev_err(hba->dev, "Clk gate=%d\n", hba->clk_gating.state);
- 	dev_err(hba->dev,
- 		"last_hibern8_exit_tstamp at %lld us, hibern8_exit_cnt=%d\n",
--		ktime_to_us(hba->ufs_stats.last_hibern8_exit_tstamp),
-+		hba->ufs_stats.last_hibern8_exit_tstamp / 1000,
- 		hba->ufs_stats.hibern8_exit_cnt);
- 	dev_err(hba->dev, "last intr at %lld us, last intr status=0x%x\n",
--		ktime_to_us(hba->ufs_stats.last_intr_ts),
-+		hba->ufs_stats.last_intr_ts / 1000,
- 		hba->ufs_stats.last_intr_status);
- 	dev_err(hba->dev, "error handling flags=0x%x, req. abort count=%d\n",
- 		hba->eh_flags, hba->req_abort_count);
-@@ -2142,7 +2143,9 @@ void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
- 	unsigned long flags;
- 
- 	lrbp->issue_time_stamp = ktime_get();
-+	lrbp->issue_time_stamp_local_clock = local_clock();
- 	lrbp->compl_time_stamp = ktime_set(0, 0);
-+	lrbp->compl_time_stamp_local_clock = 0;
- 	ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
- 	ufshcd_clk_scaling_start_busy(hba);
- 	if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
-@@ -4199,7 +4202,7 @@ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
- 	} else {
- 		ufshcd_vops_hibern8_notify(hba, UIC_CMD_DME_HIBER_EXIT,
- 								POST_CHANGE);
--		hba->ufs_stats.last_hibern8_exit_tstamp = ktime_get();
-+		hba->ufs_stats.last_hibern8_exit_tstamp = local_clock();
- 		hba->ufs_stats.hibern8_exit_cnt++;
- 	}
- 
-@@ -4696,7 +4699,7 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val)
- 
- 	e = &hba->ufs_stats.event[id];
- 	e->val[e->pos] = val;
--	e->tstamp[e->pos] = ktime_get();
-+	e->tstamp[e->pos] = local_clock();
- 	e->cnt += 1;
- 	e->pos = (e->pos + 1) % UFS_EVENT_HIST_LENGTH;
- 
-@@ -5329,6 +5332,7 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
- 	for_each_set_bit(index, &completed_reqs, hba->nutrs) {
- 		lrbp = &hba->lrb[index];
- 		lrbp->compl_time_stamp = ktime_get();
-+		lrbp->compl_time_stamp_local_clock = local_clock();
- 		cmd = lrbp->cmd;
- 		if (cmd) {
- 			if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
-@@ -6617,7 +6621,7 @@ static irqreturn_t ufshcd_intr(int irq, void *__hba)
- 
- 	intr_status = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
- 	hba->ufs_stats.last_intr_status = intr_status;
--	hba->ufs_stats.last_intr_ts = ktime_get();
-+	hba->ufs_stats.last_intr_ts = local_clock();
- 
- 	/*
- 	 * There could be max of hba->nutrs reqs in flight and in worst case
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index a92271421718e..2de73196bb779 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -160,8 +160,10 @@ struct ufs_pm_lvl_states {
-  * @task_tag: Task tag of the command
-  * @lun: LUN of the command
-  * @intr_cmd: Interrupt command (doesn't participate in interrupt aggregation)
-- * @issue_time_stamp: time stamp for debug purposes
-- * @compl_time_stamp: time stamp for statistics
-+ * @issue_time_stamp: time stamp for debug purposes (CLOCK_MONOTONIC)
-+ * @issue_time_stamp_local_clock: time stamp for debug purposes (local_clock)
-+ * @compl_time_stamp: time stamp for statistics (CLOCK_MONOTONIC)
-+ * @compl_time_stamp_local_clock: time stamp for debug purposes (local_clock)
-  * @crypto_key_slot: the key slot to use for inline crypto (-1 if none)
-  * @data_unit_num: the data unit number for the first block for inline crypto
-  * @req_abort_skip: skip request abort task flag
-@@ -185,7 +187,9 @@ struct ufshcd_lrb {
- 	u8 lun; /* UPIU LUN id field is only 8-bit wide */
- 	bool intr_cmd;
- 	ktime_t issue_time_stamp;
-+	u64 issue_time_stamp_local_clock;
- 	ktime_t compl_time_stamp;
-+	u64 compl_time_stamp_local_clock;
- #ifdef CONFIG_SCSI_UFS_CRYPTO
- 	int crypto_key_slot;
- 	u64 data_unit_num;
-@@ -430,7 +434,7 @@ struct ufs_clk_scaling {
- struct ufs_event_hist {
- 	int pos;
- 	u32 val[UFS_EVENT_HIST_LENGTH];
--	ktime_t tstamp[UFS_EVENT_HIST_LENGTH];
-+	u64 tstamp[UFS_EVENT_HIST_LENGTH];
- 	unsigned long long cnt;
- };
- 
-@@ -446,10 +450,10 @@ struct ufs_event_hist {
-  */
- struct ufs_stats {
- 	u32 last_intr_status;
--	ktime_t last_intr_ts;
-+	u64 last_intr_ts;
- 
- 	u32 hibern8_exit_cnt;
--	ktime_t last_hibern8_exit_tstamp;
-+	u64 last_hibern8_exit_tstamp;
- 	struct ufs_event_hist event[UFS_EVT_CNT];
- };
- 
+## No test fixes (compared to v5.4.208)
+
+## No metric fixes (compared to v5.4.208)
+
+## Test result summary
+total: 107690, pass: 94251, fail: 487, skip: 11696, xfail: 1256
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 307 total, 307 passed, 0 failed
+* arm64: 61 total, 57 passed, 4 failed
+* i386: 28 total, 26 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 54 total, 52 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
 -- 
-2.31.0
-
+Linaro LKFT
+https://lkft.linaro.org

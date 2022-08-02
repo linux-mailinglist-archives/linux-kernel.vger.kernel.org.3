@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4625881B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75CA5881B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237448AbiHBSJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S235042AbiHBSJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbiHBSJN (ORCPT
+        with ESMTP id S229462AbiHBSJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:09:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCD51260C;
-        Tue,  2 Aug 2022 11:09:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4FCDB81EE8;
-        Tue,  2 Aug 2022 18:09:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931E7C433D6;
-        Tue,  2 Aug 2022 18:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659463749;
-        bh=3m8XltI+Jl+jFjBten+Mlx06s0qeecBCmc9bi22rqio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XuAr0J0gEK56Qchy3h2DcX0QGjfWI3dg1sUMOFcAVySs95YRb7e5N+F4lLf0JMDYW
-         uTpRo0JLzZ9lcvMaJZ6FCMxZdMSdNsZVLYHB71VgtRDcHmw+lh9ROq2HVibosRZXTE
-         SGjc+YVTLQqe2DXmqpayhOJmKcEYdnx52Ddl4vCUgxmrycC5y0RxBuuCxmD71CmeIx
-         duO26RTyTbaAhNGDEjDd3gGFzTowItuNY8i1y/jY26YM2Y6FMPmonmFCVVZK+4USQK
-         u8urtU2yho4Xl2RBSjm5onC8SNqJdGqA1VZiEQChABfYvZcMe3puwsn05/sGTmIrIi
-         Ok0iPeMfwvD8g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DE2CF40736; Tue,  2 Aug 2022 15:09:05 -0300 (-03)
-Date:   Tue, 2 Aug 2022 15:09:05 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        =?utf-8?B?6LCt5qKT54WK?= <tanzixuan.me@gmail.com>,
-        Zixuan Tan <tanzixuangg@gmail.com>, terrelln@fb.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
- libcrypto feature test
-Message-ID: <YuloQYU72pe4p3eK@kernel.org>
-References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
- <YrhxE4s0hLvbbibp@krava>
- <CABwm_eT_LE6VbLMgT31yqW=tc_obLP=6E0jnMqVn1sMdWrVVNw@mail.gmail.com>
- <Yrqcpr7ICzpsoGrc@krava>
- <YufUAiLqKiuwdvcP@krava>
+        Tue, 2 Aug 2022 14:09:11 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1CB1260C;
+        Tue,  2 Aug 2022 11:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659463750; x=1690999750;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HnVKc3XQcKkacCwwPqn1Gcys57vujuhNWLXz1cK3oJE=;
+  b=vmmY0LAKxlMl8ThKNSS1/QniKTsKJik/8buGUX0bBhs2kmb4ajsxalsV
+   v85tYdsMK0YnCM7dcSfHmsnH3FeN/A2CcMPWp91Mx4aJKEYYumTxfti9j
+   KSlqtj8KYNC7Hnk06nhcwmWnQHLyP3K8vTMJsSzUKF7wKeNEDy9oYuGcT
+   o=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Aug 2022 11:09:10 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 11:09:09 -0700
+Received: from [10.110.16.211] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 2 Aug 2022
+ 11:09:08 -0700
+Message-ID: <710f2b46-f30a-3d69-4a2c-2c67cb62c80b@quicinc.com>
+Date:   Tue, 2 Aug 2022 11:09:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YufUAiLqKiuwdvcP@krava>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v12 0/9] Coresight: Add support for TPDM and TPDA
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220710021032.27455-1-quic_jinlmao@quicinc.com>
+ <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
+ <20260db2-8c7e-e2b6-2385-74f433e4b55e@quicinc.com>
+ <23ae507d-1a01-9a33-52fb-73ac9efca8aa@quicinc.com>
+ <7ff0a9c5-b009-7b45-ac85-8ce26619a00a@arm.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <7ff0a9c5-b009-7b45-ac85-8ce26619a00a@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,134 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Aug 01, 2022 at 03:24:18PM +0200, Jiri Olsa escreveu:
-> On Tue, Jun 28, 2022 at 08:16:06AM +0200, Jiri Olsa wrote:
-> > On Mon, Jun 27, 2022 at 11:08:34AM +0800, 谭梓煊 wrote:
-> > > On Sun, Jun 26, 2022 at 10:45 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > >
-> > > > On Sat, Jun 25, 2022 at 11:34:38PM +0800, Zixuan Tan wrote:
-> > > > > With OpenSSL v3 installed, the libcrypto feature check fails as it use the
-> > > > > deprecated MD5_* API (and is compiled with -Werror). The error message is
-> > > > > as follows.
-> > > > >
-> > > > > $ make tools/perf
-> > > > > ```
-> > > > > Makefile.config:778: No libcrypto.h found, disables jitted code injection,
-> > > > > please install openssl-devel or libssl-dev
-> > > > >
-> > > > > Auto-detecting system features:
-> > > > > ...                         dwarf: [ on  ]
-> > > > > ...            dwarf_getlocations: [ on  ]
-> > > > > ...                         glibc: [ on  ]
-> > > > > ...                        libbfd: [ on  ]
-> > > > > ...                libbfd-buildid: [ on  ]
-> > > > > ...                        libcap: [ on  ]
-> > > > > ...                        libelf: [ on  ]
-> > > > > ...                       libnuma: [ on  ]
-> > > > > ...        numa_num_possible_cpus: [ on  ]
-> > > > > ...                       libperl: [ on  ]
-> > > > > ...                     libpython: [ on  ]
-> > > > > ...                     libcrypto: [ OFF ]
-> > > > > ...                     libunwind: [ on  ]
-> > > > > ...            libdw-dwarf-unwind: [ on  ]
-> > > > > ...                          zlib: [ on  ]
-> > > > > ...                          lzma: [ on  ]
-> > > > > ...                     get_cpuid: [ on  ]
-> > > > > ...                           bpf: [ on  ]
-> > > > > ...                        libaio: [ on  ]
-> > > > > ...                       libzstd: [ on  ]
-> > > > > ...        disassembler-four-args: [ on  ]
-> > > > > ```
-> > > > >
-> > > > > This is very confusing because the suggested library (on my Ubuntu 20.04
-> > > > > it is libssl-dev) is already installed. As the test only checks for the
-> > > > > presence of libcrypto, this commit suppresses the deprecation warning to
-> > > > > allow the test to pass.
-> > > > >
-> > > > > Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
-> > > > > ---
-> > > > >  tools/build/feature/test-libcrypto.c | 6 ++++++
-> > > > >  1 file changed, 6 insertions(+)
-> > > > >
-> > > > > diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
-> > > > > index a98174e0569c..31afff093d0b 100644
-> > > > > --- a/tools/build/feature/test-libcrypto.c
-> > > > > +++ b/tools/build/feature/test-libcrypto.c
-> > > > > @@ -2,6 +2,12 @@
-> > > > >  #include <openssl/sha.h>
-> > > > >  #include <openssl/md5.h>
-> > > > >
-> > > > > +/*
-> > > > > + * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
-> > > > > + * feature test to fail silently. This is a workaround.
-> > > > > + */
-> > > >
-> > > > then we use these deprecated MD5 calls in util/genelf.c if libcrypto is detected,
-> > > > so I wonder how come the rest of the compilation passed for you.. do you have
-> > > > CONFIG_JITDUMP disabled?
-> > > >
-> > > > thanks,
-> > > > jirka
-> > > >
-> > > No, CONFIG_JITDUMP is not disabled. I am using the default configuration.
-> > > 
-> > > Yes, you are right. The rest of the compilation should fail, but it doesn't.
-> > > I checked the verbose build commands. This seems to be the result of another
-> > > inconsistency.
-> > > 
-> > > If libcrypto is detected, the macro "HAVE_LIBCRYPTO_SUPPORT" will be
-> > > defined, but in perf/util/genelf.c, "HAVE_LIBCRYPTO" without the "_SUPPORT"
-> > > prefix is checked. This causes urandom always be used to create build id
-> > > rather than MD5 and SHA1, no matter what the detection result is.
-> > > 
-> > > In perf/Makefile.config, from line 776
-> > > ```
-> > > ifndef NO_LIBCRYPTO
-> > >   ifneq ($(feature-libcrypto), 1)
-> > >     msg := $(warning No libcrypto.h found, disables jitted code injection,
-> > >             please install openssl-devel or libssl-dev);
-> > >     NO_LIBCRYPTO := 1
-> > >   else                                  <-- if libcrypto feature detected
-> > >     CFLAGS += -DHAVE_LIBCRYPTO_SUPPORT  <-- define this
-> > >     EXTLIBS += -lcrypto
-> > >     $(call detected,CONFIG_CRYPTO)
-> > >   endif
-> > > endif
-> > > ```
-> > > 
-> > > In perf/util/genelf.c, from line 33
-> > > ```
-> > > #ifdef HAVE_LIBCRYPTO                <-- but check this, it's always false
-> > 
-> > nice :)
-> > 
-> > > 
-> > > #define BUILD_ID_MD5
-> > > #undef BUILD_ID_SHA /* does not seem to work well when linked with Java */
-> > > #undef BUILD_ID_URANDOM /* different uuid for each run */
-> > > 
-> > > #ifdef BUILD_ID_SHA
-> > > #include <openssl/sha.h>
-> > > #endif
-> > > 
-> > > #ifdef BUILD_ID_MD5
-> > > #include <openssl/md5.h>
-> > > #endif
-> > > #endif                               <-- this block will be skipped
-> > > ```
-> > > 
-> > > Maybe we should fix this, to really make use of libcrypto if it is available?
-> > 
-> > yea, I think that was the original idea, let's keep the variable with
-> > SUPPORT suffix and use the -Wdeprecated-declarations for genelf.c
-> > 
-> > full fix would be to detect the new API and use it when it's available but..
-> > given that the check was false at least since 2016, perhaps we could remove
-> > that code? ;-) Stephane?
+Hi Suzuki,
+
+On 8/2/2022 10:43 AM, Suzuki K Poulose wrote:
+> Hi Trilok,
 > 
-> ping
+> On 02/08/2022 18:33, Trilok Soni wrote:
+>>
+>>
+>> On 8/2/2022 7:43 AM, Jinlong Mao wrote:
+>>> Hi Reviewers,
+>>>
+>>> Please help to review V12 series of TPDM/TPDA patches.
+>>>
+>>> Thanks
+>>>
+>>
+>> Suzuki and Mathieu, we are almost there it seems in getting the 
+>> acceptance of these patches, so I hope you find the time to review 
+>> these patches. I guess it is almost a year now for these patches and 
+>> had a good amount of reviews and revisions :)
+> 
+> This series has been reviewed for the previous versions (which is why
+> we have it in v12) and this one depends on a series worked on by Mike
+> Leach. We cannot push this without the dynamic Trace ID allocation
+> scheme, which is clearly mentioned in the cover letter for this
+> series.
+> 
+> As such this series is in a good shape, assuming all the comments
+> in the previous version has been addressed. So, we would rather
+> get Mike's work priority and pull that in, so that we can eventually
+> get this upstream.
+> 
+> 
 
-So, we should start with 谭梓煊 patch, then fix that ifdef and go on
-from there?
+I believe we have addressed all the comments in v12. Are you ok, if we 
+post additional features series (around ~2k to ~3k SLOC)? I just want to 
+make sure we are not creating flood of patches w/ features.
 
-- Arnaldo
+---Trilok Soni

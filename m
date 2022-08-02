@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DD55877D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87975877DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbiHBHbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
+        id S232447AbiHBHbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiHBHbO (ORCPT
+        with ESMTP id S235895AbiHBHbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 03:31:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F33363E1
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659425471; x=1690961471;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YfPZ9jGO8TGdyQe6z1+YCzrSqurJjWAFBq482Dhoc60=;
-  b=h9cCeAC+vJYB9BFSnfTdoYrw0E42rLtv4rwb34JQDu0QESXr0hbfbqj6
-   2elzzIDXqq2orNjzkQw0iuyUnRd+lIIV2LCJwNNcHLtFt+jOIPDhPAtL1
-   UfjBBCmILUe2cDf0sGUoyXWrX9EIpN+eP14mDfDFzpts1mLw+HclkthCN
-   PXYWoc8aVCubBwA11HWfO2hFinSSxGmJjrWsVAN9A6GdnsmChiky1/Db8
-   W/NyaIW9WlC+X6lllsOko1l0p3qQ+JTvxqoZVbu5dowGEWHzj7VqQbG8V
-   XKiqH5Gcd6EbbSUNbapNDstqbnp7DPBjfHtFNXXlbsBr6FlJUciL3VhLT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="290558237"
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="290558237"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 00:31:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,210,1654585200"; 
-   d="scan'208";a="929865343"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 00:31:09 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oImMu-000Fox-2x;
-        Tue, 02 Aug 2022 07:31:08 +0000
-Date:   Tue, 2 Aug 2022 15:30:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: drivers/irqchip/irq-loongarch-cpu.c:66: undefined reference to
- `liointc_acpi_init'
-Message-ID: <202208021528.FiUMZ8BX-lkp@intel.com>
+        Tue, 2 Aug 2022 03:31:46 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024415825
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 00:31:43 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y141so12791585pfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 00:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Oz4pyVolo+7EocETp6RPHwTxAVjyx7EAwXvBqZK2TEk=;
+        b=Yq1RxDelFYMxpGFBpY90jH//emjw/Amk7Exgr+6EjDUFo+wD2lQUatG2wfLn9nNzYr
+         cYJ+3fYLUaYpNmI8rYkkAsoyTRZAyFGP6Hfa+hHAdCpJ+WROXAH52v5kF7zdKkfcyQQD
+         pgQPfgFtzBVglBCx47edP6Gjax4ELIZzNu9sIqMIb77R8Nq6Xj723KV2TjxTPBmtoiwm
+         DtiBX0z4wKJDkSYscJJiOHE9v2fPrINfVNLu+axlRZ8l1riqldWWVMYq/X+wphDevaIL
+         VVAAGVwuL6I93daY5nYrduO5fb36qYpYcUvo/NtarjXXbdSt4NWfkw5NIe9ZqCG8BHul
+         sO2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Oz4pyVolo+7EocETp6RPHwTxAVjyx7EAwXvBqZK2TEk=;
+        b=erp1IM5JXW63MhgtExM4ZkbaKKF7DHXmrBkxB79t3kVYfZKV03WKApL++5GkS/gt+f
+         FKHJUd8ScCne0GMKUOFIbSDgT5d7sAM2ZwOGufcILlrKO/U4dxDulZNC2B1Wn5thhdKX
+         Is+RrwCuwSut3nEMrJgmlFqz9p9WBU1YpV3kEbzH7mu3w6E2WqyoeDAaH7IV9L91BKOo
+         A8qIutDduTWfr2nrvhQKZFPZpnzCrM43pcm1aH1kipvWvYHggNYWbX4t5gImVT99ShYg
+         ZVYFcVXmYu9l2iKm2o9R8sy8BGfhyQW5vL5Dy4nz/TuAI69NLHhXKo5Wv/fX9FcFTVm1
+         27Gw==
+X-Gm-Message-State: AJIora+0OiDbbtxom03g6dd5GEbh+//PTbvtGPlLjuQs4/wl2wet33+v
+        mogmkEp/Ix+1fJ8rTrrYDnDL
+X-Google-Smtp-Source: AGRyM1vbOHIYB4UFSLFge9JzQ5/mJ4EhdQ5f6vclz1JLLTBqFFbYcUjVSNAiGGyjYRh4bT2MuGZ32A==
+X-Received: by 2002:a63:d90b:0:b0:41a:ff05:4808 with SMTP id r11-20020a63d90b000000b0041aff054808mr16315270pgg.159.1659425501914;
+        Tue, 02 Aug 2022 00:31:41 -0700 (PDT)
+Received: from thinkpad ([117.193.215.193])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090341cb00b0016c09a0ef87sm3002132ple.255.2022.08.02.00.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 00:31:41 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:01:33 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 04/15] PCI: dwc: Add IP-core version detection
+ procedure
+Message-ID: <20220802073133.GB2494@thinkpad>
+References: <20220801131219.GD93763@thinkpad>
+ <20220801200606.GA622066@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220801200606.GA622066@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9de1f9c8ca5100a02a2e271bdbde36202e251b4b
-commit: b2d3e3354e2a0d0e912308618ea33d0337f405c3 irqchip: Add LoongArch CPU interrupt controller support
-date:   13 days ago
-config: loongarch-randconfig-s053-20220801 (https://download.01.org/0day-ci/archive/20220802/202208021528.FiUMZ8BX-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b2d3e3354e2a0d0e912308618ea33d0337f405c3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b2d3e3354e2a0d0e912308618ea33d0337f405c3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash
+On Mon, Aug 01, 2022 at 03:06:06PM -0500, Bjorn Helgaas wrote:
+> On Mon, Aug 01, 2022 at 06:42:19PM +0530, Manivannan Sadhasivam wrote:
+> > On Fri, Jun 24, 2022 at 05:39:36PM +0300, Serge Semin wrote:
+> > > Since DWC PCIe v4.70a the controller version and version type can be read
+> > > from the PORT_LOGIC.PCIE_VERSION_OFF and PORT_LOGIC.PCIE_VERSION_TYPE_OFF
+> > > registers respectively. Seeing the generic code has got version-dependent
+> > > parts let's use these registers to find out the controller version.  The
+> > > detection procedure is executed for both RC and EP modes right after the
+> > > platform-specific initialization. We can't do that earlier since the
+> > > glue-drivers can perform the DBI-related setups there including the bus
+> > > reference clocks activation, without which the CSRs just can't be read.
+> > > 
+> > > Note the CSRs content is zero on the older DWC PCIe controller. In that
+> > > case we have no choice but to rely on the platform setup.
+> > > 
+> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > 
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> > > @@ -711,6 +711,8 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  	ep->phys_base = res->start;
+> > >  	ep->addr_size = resource_size(res);
+> > >  
+> > > +	dw_pcie_version_detect(pci);
+> > > +
+> > 
+> > There is still an ongoing debate about moving all DBI accesses to
+> > init_complete. But this is fine atm.
+> 
+> Well, if I understand it correctly, e966f7390da9 ("PCI: dwc: Refactor
+> core initialization code for EP mode") claims that all DBI accesses
+> should be in dw_pcie_ep_init_complete(), so it's not so much a debate
+> as a discussion about how best to achieve that.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Glad to know that we are on the same page. Let's continue the discussion in
+that thread.
 
-All errors (new ones prefixed by >>):
+Thanks,
+Mani
 
-   loongarch64-linux-ld: drivers/irqchip/irq-loongarch-cpu.o: in function `liointc_parse_madt':
->> drivers/irqchip/irq-loongarch-cpu.c:66: undefined reference to `liointc_acpi_init'
-
-
-vim +66 drivers/irqchip/irq-loongarch-cpu.c
-
-    59	
-    60	static int __init
-    61	liointc_parse_madt(union acpi_subtable_headers *header,
-    62			       const unsigned long end)
-    63	{
-    64		struct acpi_madt_lio_pic *liointc_entry = (struct acpi_madt_lio_pic *)header;
-    65	
-  > 66		return liointc_acpi_init(irq_domain, liointc_entry);
-    67	}
-    68	
+> But you're right, we can fix that up later if necessary.
+> 
+> > >  	dw_pcie_iatu_detect(pci);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+மணிவண்ணன் சதாசிவம்

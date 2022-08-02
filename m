@@ -2,127 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9135878EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF405878F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236029AbiHBIVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S234340AbiHBI10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbiHBIVC (ORCPT
+        with ESMTP id S232747AbiHBI1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:21:02 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943AE26559
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:21:01 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 123so22563912ybv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc;
-        bh=8v205cQ/ieAUhL/Vo4tOV+N+9VBgqw+bgVFiUzCohIE=;
-        b=fyjSwVqQ7j/8JAmGMKlTYKqcY2ocCDo4nwZKotKi+q3IbfWw3pRbrrAJYujSQsaHD8
-         Xdan84tPf3yoMXEMXgWh81jQdZRAU5KShWT3dnHYp8qAbf8RZf5drrDYPA1E3TJ+jdzI
-         b2YpDedRTtXD1A0fhN68WHMg3yqw8vM7ALDB/xbuJ50Q8cYsBB2np8DIzElBeg06Uv+6
-         Cj+lIK8IHmwzvYenHnih81eNjfTpbRkzOtLj8zR8IqUvE7I2fQ52NFQzgKIBQmp5hMH3
-         Y4VHM5jPm31E6g9DXGwKaI0Mj8Afatf/yOBN8q7a4osvKQCB6fMA5cvUeBp01DTo+94E
-         Giiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8v205cQ/ieAUhL/Vo4tOV+N+9VBgqw+bgVFiUzCohIE=;
-        b=jO9+Ni8S6s84M2aeOzsH+Xts4xeKDMqjtsJVrSUCe2oqktB3TaQUfIZk5UGega9PPI
-         pgeMa684CsH2t4qqb8vo97se/YihDNJaDcKe21en6v4t7QWGZZoHx8Kpd/B3v07MDG+w
-         rpi/+v1r1UqSUEJJL3nErJldlis0DLectdhn3AKcbYqtaRTLX0eB/W3krjhTDom3YV21
-         JDR86PryhxCQOCwBYQBdlOak5NuGchpOFNXNxgRE+aWuddkzWEgoRLvIw3tx9J38JN1/
-         dJmqEk3qqaEDsI8WtH8iU7zlnRjneItkWW4JglSp0kAQq3v2N2iTCtEnXlc2NOgLTZCU
-         NmrQ==
-X-Gm-Message-State: ACgBeo3aESY7ASldBQ2Ol8UL67HnXyyMBuhIPyWQ5E/p1Cu5d2Stougs
-        V+EiqhgJ7CD4Hi8gtaQyNasY4hUFn1drRCWSDEY=
-X-Google-Smtp-Source: AA6agR6qFy+310eRX/r/RRc6NxP0bRnCAZO8QGIYvLuOJC00rgxrJjGj4n0fpkeGTLBKLbr7CqedUMypJ5OJrPv0CsE=
-X-Received: by 2002:a25:9849:0:b0:676:d67c:2522 with SMTP id
- k9-20020a259849000000b00676d67c2522mr10299768ybo.487.1659428460550; Tue, 02
- Aug 2022 01:21:00 -0700 (PDT)
+        Tue, 2 Aug 2022 04:27:24 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C2925C46;
+        Tue,  2 Aug 2022 01:27:22 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 28EF8188589F;
+        Tue,  2 Aug 2022 08:27:20 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D4ADE25032B8;
+        Tue,  2 Aug 2022 08:27:19 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C83B0A1E00B7; Tue,  2 Aug 2022 08:27:19 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Sender: drabrarzebadiyah@gmail.com
-Received: by 2002:a05:7010:42cd:b0:2e8:65bb:6021 with HTTP; Tue, 2 Aug 2022
- 01:20:59 -0700 (PDT)
-From:   Mrs Evelyn Richardson <evelynrichards10@gmail.com>
-Date:   Tue, 2 Aug 2022 01:20:59 -0700
-X-Google-Sender-Auth: EziLD2nfewVDvq-RfxYSQBe1pWk
-Message-ID: <CAB4WHGvznPcVhhyTxpp2DOxaPfuDco7bvkWQYabxBkznaSq5SA@mail.gmail.com>
-Subject: Dear Beneficiary
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_80,DEAR_BENEFICIARY,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8194]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [evelynrichards10[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  2.0 DEAR_BENEFICIARY BODY: Dear Beneficiary:
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 HK_SCAM No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: ******
+Date:   Tue, 02 Aug 2022 10:27:19 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 2/6] net: switchdev: add support for
+ offloading of fdb locked flag
+In-Reply-To: <20220708085403.sk7znfad3x2mnxeh@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-3-netdev@kapio-technology.com>
+ <20220708085403.sk7znfad3x2mnxeh@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <50bb7ce47f993fb9522476bac69c935e@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Dear Beneficiary.
+On 2022-07-08 10:54, Vladimir Oltean wrote:
+>>  };
+>> 
+>>  /* TODO: ideally DSA ports would have a single dp->link_dp member,
+>> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+>> index aa0171d5786d..9f83c835ee62 100644
+>> --- a/include/net/switchdev.h
+>> +++ b/include/net/switchdev.h
+>> @@ -245,6 +245,7 @@ struct switchdev_notifier_fdb_info {
+>>  	u16 vid;
+>>  	u8 added_by_user:1,
+>>  	   is_local:1,
+>> +	   is_locked:1,
+>>  	   offloaded:1;
+>>  };
+>> 
+>> diff --git a/net/bridge/br.c b/net/bridge/br.c
+>> index 96e91d69a9a8..fe0a4741fcda 100644
+>> --- a/net/bridge/br.c
+>> +++ b/net/bridge/br.c
+>> @@ -166,7 +166,8 @@ static int br_switchdev_event(struct 
+>> notifier_block *unused,
+>>  	case SWITCHDEV_FDB_ADD_TO_BRIDGE:
+>>  		fdb_info = ptr;
+>>  		err = br_fdb_external_learn_add(br, p, fdb_info->addr,
+>> -						fdb_info->vid, false);
+>> +						fdb_info->vid, false,
+>> +						fdb_info->is_locked);
+>>  		if (err) {
+>>  			err = notifier_from_errno(err);
+>>  			break;
+>> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+>> index ee9064a536ae..32ebb18050b9 100644
+>> --- a/net/bridge/br_fdb.c
+>> +++ b/net/bridge/br_fdb.c
+>> @@ -1136,7 +1136,7 @@ static int __br_fdb_add(struct ndmsg *ndm, 
+>> struct net_bridge *br,
+>>  					   "FDB entry towards bridge must be permanent");
+>>  			return -EINVAL;
+>>  		}
+>> -		err = br_fdb_external_learn_add(br, p, addr, vid, true);
+>> +		err = br_fdb_external_learn_add(br, p, addr, vid, true, false);
+>>  	} else {
+>>  		spin_lock_bh(&br->hash_lock);
+>>  		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
+>> @@ -1366,7 +1366,7 @@ void br_fdb_unsync_static(struct net_bridge *br, 
+>> struct net_bridge_port *p)
+>> 
+>>  int br_fdb_external_learn_add(struct net_bridge *br, struct 
+>> net_bridge_port *p,
+>>  			      const unsigned char *addr, u16 vid,
+>> -			      bool swdev_notify)
+>> +			      bool swdev_notify, bool locked)
+>>  {
+>>  	struct net_bridge_fdb_entry *fdb;
+>>  	bool modified = false;
+>> @@ -1386,6 +1386,9 @@ int br_fdb_external_learn_add(struct net_bridge 
+>> *br, struct net_bridge_port *p,
+>>  		if (!p)
+>>  			flags |= BIT(BR_FDB_LOCAL);
+>> 
+>> +		if (locked)
+>> +			flags |= BIT(BR_FDB_ENTRY_LOCKED);
+>> +
+>>  		fdb = fdb_create(br, p, addr, vid, flags);
+>>  		if (!fdb) {
+>>  			err = -ENOMEM;
+>> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+>> index 47a3598d25c8..9082451b4d40 100644
+>> --- a/net/bridge/br_private.h
+>> +++ b/net/bridge/br_private.h
+>> @@ -811,7 +811,7 @@ int br_fdb_sync_static(struct net_bridge *br, 
+>> struct net_bridge_port *p);
+>>  void br_fdb_unsync_static(struct net_bridge *br, struct 
+>> net_bridge_port *p);
+>>  int br_fdb_external_learn_add(struct net_bridge *br, struct 
+>> net_bridge_port *p,
+>>  			      const unsigned char *addr, u16 vid,
+>> -			      bool swdev_notify);
+>> +			      bool swdev_notify, bool locked);
+>>  int br_fdb_external_learn_del(struct net_bridge *br, struct 
+>> net_bridge_port *p,
+>>  			      const unsigned char *addr, u16 vid,
+>>  			      bool swdev_notify);
+>> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+>> index 8f3d76c751dd..85e566b856e1 100644
+>> --- a/net/bridge/br_switchdev.c
+>> +++ b/net/bridge/br_switchdev.c
+>> @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct 
+>> net_bridge *br,
+>>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+>> +	item->is_locked = test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+>>  	item->info.dev = (!p || item->is_local) ? br->dev : p->dev;
+>>  	item->info.ctx = ctx;
+>>  }
+>> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+>> index d9722e49864b..42f47a94b0f0 100644
+>> --- a/net/dsa/dsa_priv.h
+>> +++ b/net/dsa/dsa_priv.h
+>> @@ -65,6 +65,7 @@ struct dsa_notifier_fdb_info {
+>>  	const struct dsa_port *dp;
+>>  	const unsigned char *addr;
+>>  	u16 vid;
+>> +	bool is_locked;
+> 
+> drop
+> 
 
-This is to inform you that the United Nation Organization in
-conjunction with the World Bank has released the 2022 compensation
-Fund which you are one of the lucky 40 winners that the committee has
-resolved to compensate with the sum of ( =E2=82=AC2,000,000.00 Euro ) Two
-Million Euro after the 2022 general online compensation raffle draw
-held last WEEK during the UNCC conference this year with the
-Secretary-General of the United Nations Mr. Ant=C3=B3nio Guterres in Geneva
-Switzerland. This payment program is aimed at charities / fraud
-victims and their development to help individuals to establish their
-own private business/companies.
-
-However, your Compensation Fund of =E2=82=AC2,000,000.00 Euro has been
-credited into an  DISCOVER CARD which you are entitled to be
-withdrawing =E2=82=AC3000 Euro each day from the DISCOVER CARD in any
-DISCOVER CARD of your choice in your country or anywhere in the World.
-
-Therefore, contact Engineer Account Mrs Kristalina Georgieva, he is
-our representative and also United Nation`s Coordinator in United
-State of America that will organize with you in Dispatch or handling
-your DISCOVER CARD to your Destination. You are to make sure that you
-received the UN Approved DISCOVER CARD in your names which is in list
-founds in names of U.N world list to receive this UN Guest
-Compensation.
-
-We are at your service.
-Many Thanks,
-Mrs. Evelyn Richardson
-United Nations Liaison Office
-Directorate for International Payments
-United States of America  USA.
+If this is dropped, the whole scheme will not work as userspace will not 
+get notifications of new locked entries from the driver.

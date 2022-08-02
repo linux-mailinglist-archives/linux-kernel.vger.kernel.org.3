@@ -2,145 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965A658809D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFBC58809B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbiHBRAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S230381AbiHBRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiHBRAO (ORCPT
+        with ESMTP id S229933AbiHBRAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:00:14 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85FFC3D
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:00:12 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kb8so12473022ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:00:12 -0700 (PDT)
+        Tue, 2 Aug 2022 13:00:09 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC94F15714
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 10:00:08 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id y11so11148856qvn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 10:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2w9j9LaZJjOKyMxreP7PDQG5d151R4IhaLjK01Lb1iM=;
-        b=Iua2tMz9VCggF2zvbuaciSSrSdIzA6LZwUpp1N894iDucV1kOI7qdYGfmfKDClT2IE
-         f2UgcD9N78KSCyczFLpt4gpc3fEw+lpAMY2ctYeN+7a1QLskAiRER1ucVyHk/2/fhtfR
-         rfMjdQ5aPIgxJ00Y5WNVwhd47T8BjWPFOzshujn5+knc605IMjbOkmMz3XcoTbXOt/cg
-         mpu49YAP3pdjXirKKYgt6noUtvlxJ279lQfM//iGDWqPwxIvR2nXb9mq9Qawf7nKe+24
-         s2vcHKHPNhUvqLtEr7OsnpId++WidGeGPmCCinwuiyRHzy+PQXwHJxhQ4g7pW0zfDgD4
-         87gg==
+        d=linuxfoundation.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc;
+        bh=xQ0kvl9C3hCLQpFuT6ogOJg1ypf6GITTlwjPXuv+0b0=;
+        b=I2lVxFu0JMs77LdlkLS7pRzfNNzJjEY1Cn6T5H/Jab/W+7TquRmwlUkoo4Anj1xlb5
+         PQQpBzbGCv+KhgyQSGPX3soU9L4SQObLGnG8+wqNvUlG9tuV/kvFyZpNwClOUvgaly/N
+         bHyxk3tZZY5vWLeHO5xXmIDv+IP1KO8MtBksg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2w9j9LaZJjOKyMxreP7PDQG5d151R4IhaLjK01Lb1iM=;
-        b=Rb2cA28d2ds1NU635jJX6qQIqqs0A0fi7GQodNyIjV3heKU4ivEwfDOxCJ9lg47rBp
-         njMIs1C1F5SFgPMSXKVy0kqf3PyE/oN1M7aU5/tMmoc5zTcRka4kyKyaozXdL7xYAJOq
-         /9FPUA5WKDJxM0st4NSExnrw6Hyyg786JoIxuSBkf0gObtbqOAaR31uuL4sytawOEqcr
-         WA+fVIrPnnmIyvijd+iTc0zc0zcZwcHw7w9LKyekRZ0h3UFRwLjVlsmjtyzy8D9WZUh6
-         dRRrAftQKq2kCDPto6nLg2bBlzC8JGMM97ojO8qjJqxJu99QO8j+VzqmEfllJ8tgsDMy
-         2gmw==
-X-Gm-Message-State: ACgBeo35Udunnp+LyNvgZcclUNlMQ9wxqatASBkv0mZ22hNoWWv4jj7h
-        9W2P5LL0vdW+sMTkcy6z94ssm0nwRodt3YgBJNtxSQ==
-X-Google-Smtp-Source: AA6agR41HGJZg+YeeikZ2qs2nfRN9hqXpBRMZUvhsoEyZwKr3moN6pyQp+LCxIrEH9wFbiTETV/GLbEakJHhm6pT+LA=
-X-Received: by 2002:a17:907:6da8:b0:730:8ed5:2df8 with SMTP id
- sb40-20020a1709076da800b007308ed52df8mr7232187ejc.75.1659459611056; Tue, 02
- Aug 2022 10:00:11 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc;
+        bh=xQ0kvl9C3hCLQpFuT6ogOJg1ypf6GITTlwjPXuv+0b0=;
+        b=o2AId/z6MvUis+ezJ7G6gl0A+QcTNM9zXb2NTWOFjIPdbN3uIRPwDcEhBuPAhbv9CZ
+         eptlO3uiEI/RO0y2LDszsqzYWT47wv0dlFIs2OG0VAmcX3hDFAXBiHOEkxOLvueCROg6
+         Mg6KxTcT+701ZcDvdfBn9dzs0FhXZkA/h+N/b5XP7ih8IVo09EpZ8xTcj9gH/qg0+xUu
+         EjMYau83y+idA0Yb7O1iunh4vYWg4C7g8HPVtPwGc28+cgOAGwz3LGQ9oMa0X3eMfS7+
+         XDJja83AktdOYFekJukBqbmq+AIcXwoyDUasVhGV6P2V0Y5bvO1ymFWhpStZq5oxlxBw
+         9JaA==
+X-Gm-Message-State: ACgBeo0pXFesBEcXRIk8tBszTX2ZgcYdD+RnrzXCd6O/k078t3A8nu1W
+        x2vXKkTtG6g7C3r4pMf9YfV7jA==
+X-Google-Smtp-Source: AA6agR4VtP2gYy4PjhKLRngiYMERbRcMmBEW8EUJgR+UmvRBa63bq2GYROFZXyKXiceS95Bc+d/RaQ==
+X-Received: by 2002:a05:6214:2466:b0:474:7d56:8f2d with SMTP id im6-20020a056214246600b004747d568f2dmr18813587qvb.90.1659459608011;
+        Tue, 02 Aug 2022 10:00:08 -0700 (PDT)
+Received: from nitro.local (host-142-67-156-76.public.eastlink.ca. [142.67.156.76])
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a430500b006b5988b2ca8sm11478209qko.40.2022.08.02.10.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 10:00:07 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 13:00:05 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 0/5] Update the maintainer PGP guide
+Message-ID: <20220802170005.fpt3g5bk5i6ygqz2@nitro.local>
+References: <20220727-docs-pgp-guide-v1-0-c48fb06cb9af@linuxfoundation.org>
+ <YujpSWaISTWm8/8w@ada.ifak-system.com>
 MIME-Version: 1.0
-References: <20220802161206.228707-1-mairacanal@riseup.net>
-In-Reply-To: <20220802161206.228707-1-mairacanal@riseup.net>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 2 Aug 2022 09:59:59 -0700
-Message-ID: <CAGS_qxoAc934AwB7SZ34PpoVxvF3Eua-g+aO77kjJf6d1m0+Qw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Introduce KUNIT_EXPECT_ARREQ and KUNIT_EXPECT_ARRNEQ macros
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
-        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YujpSWaISTWm8/8w@ada.ifak-system.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 9:12 AM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
-te:
->
-> Currently, in order to compare arrays in KUnit, the KUNIT_EXPECT_EQ or
-> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp functio=
-n,
-> such as:
->   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
->
-> Although this usage produces correct results for the test cases, if the
-> expectation fails the error message is not very helpful, indicating only =
-the
-> return of the memcmp function.
->
-> Therefore, create a new set of macros KUNIT_EXPECT_ARREQ and
-> KUNIT_EXPECT_ARRNEQ that compare memory blocks until a determined size. I=
-n
-> case of expectation failure, those macros print the hex dump of the memor=
-y
-> blocks, making it easier to debug test failures for arrays.
+On Tue, Aug 02, 2022 at 11:07:21AM +0200, Alexander Dahl wrote:
+> Hallo Konstantin,
+> 
+> Am Thu, Jul 28, 2022 at 04:57:03PM -0400 schrieb Konstantin Ryabitsev:
+> > This series updates the guide to match terminology used in the upstream
+> > "protecting code integrity" guide [1] and brings the documentation in
+> > line with the latest developments in the GnuPG world:
+> 
+> I could not find [1]. Did you miss to add the footnote?
 
-I totally agree with this.
+I did. I'll send a follow-up v2. The footnote was supposed to be to the
+following URL:
 
-The only reason I hadn't sent an RFC out for this so far is
-* we didn't have enough use cases quite yet (now resolved)
-* I wasn't sure how we'd want to format the failure message.
+[1]: https://github.com/lfit/itpol/blob/master/protecting-code-integrity.md
 
-For the latter, right now this series produces
-dst =3D=3D
-00000000: 33 0a 60 12 00 a8 00 00 00 00 8e 6b 33 0a 60 12
-00000010: 00 00 00 00 00 a8 8e 6b 33 0a 00 00 00 00
-result->expected =3D=3D
-00000000: 31 0a 60 12 00 a8 00 00 00 00 81 6b 33 0a 60 12
-00000010: 00 00 00 00 01 a8 8e 6b 33 0a 00 00 00 00
-
-I was thinking something like what KASAN produces would be nice, e.g.
-from https://www.kernel.org/doc/html/v5.19/dev-tools/kasan.html#error-repor=
-ts
-(I'll paste the bit here, but my email client doesn't support
-monospaced fonts, so it won't look nice on my end)
-
-Memory state around the buggy address:
- ffff8801f44ec200: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
- ffff8801f44ec280: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff8801f44ec300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03
-                                                                ^
-I just wasn't quite sure how to do it for a diff, since this only
-really works well when showing one bad byte.
-If we blindly followed that approach, we get
-
-dst =3D=3D
->00000000: 33 0a 60 12 00 a8 00 00 00 00 8e 6b 33 0a 60 12
-                                          ^
->00000010: 00 00 00 00 00 a8 8e 6b 33 0a 00 00 00 00
-                        ^
-result->expected =3D=3D
->00000000: 31 0a 60 12 00 a8 00 00 00 00 81 6b 33 0a 60 12
-                                          ^
->00000010: 00 00 00 00 01 a8 8e 6b 33 0a 00 00 00 00
-                        ^
-
-But perhaps we could instead highlight the bad bytes with something like
-dst =3D=3D
-00000000: 33 0a 60 12 00 a8 00 00 00 00 <8e> 6b 33 0a 60 12
-00000010: 00 00 00 00 <00> a8 8e 6b 33 0a 00 00 00 00
-result->expected =3D=3D
-00000000: 31 0a 60 12 00 a8 00 00 00 00 <81> 6b 33 0a 60 12
-00000010: 00 00 00 00 <01> a8 8e 6b 33 0a 00 00 00 00
-
-Thoughts, suggestions?
+-K

@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0F4588052
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEC0588055
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 18:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiHBQd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 12:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S237865AbiHBQeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 12:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiHBQdY (ORCPT
+        with ESMTP id S237808AbiHBQeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:33:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD817E16;
-        Tue,  2 Aug 2022 09:33:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0D411CE2017;
-        Tue,  2 Aug 2022 16:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63BCC433D6;
-        Tue,  2 Aug 2022 16:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659458000;
-        bh=wvCuCNOjRSMOixoJFZ19V50Uqrz6WXVshhwx5kuDuAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rhx22xzDRr5SQtI8UcUj+PkAqia5W0S+aT0Muk+9TNLMSlppNcAsqxFQZoF9mtyCu
-         PUOe5GGmGgwl5clH5K+V9dBko2+MbHK9F6tyC/w6rVNSIsqR+cbRMG9HDecruvhX8z
-         gNNPKtvoU7S1hGzSY75g4QaDtio0M0am3W8UZzPqkemR266Y2fHc08GvD/JypyHSc1
-         6p0sA+X3cKgKCsbs3Rmifv0o/SC+4ZzKHnmtivKWBZKI66uFzh8cWUZb3HS5hNrcyS
-         4BKb0jUszU167LsvXnuZbFCrY9A3wZz+e8ssZ7IuzwxkIhQx2xdo4QViroRPa/OvVX
-         rwPQgq1ApTuGw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oIupr-0002Vn-Cf; Tue, 02 Aug 2022 18:33:36 +0200
-Date:   Tue, 2 Aug 2022 18:33:35 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: Provide stubs for
- dwc3_qcom_read_usb2_speed function
-Message-ID: <YulR31pEq9wjCBg8@hovoldconsulting.com>
-References: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
+        Tue, 2 Aug 2022 12:34:31 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD9C45F5E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 09:34:30 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id q7so16163272ljp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 09:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=SfZoTACqO1kuVkp4wgMQFVuT+8zwCFihmXjSQbfcjAY=;
+        b=rQR0qT0A80RapBIF9aQb9iwXYo5L1YHXXsvCRm+YhJdHHIkgCDYG8JteRQSm/+R0N7
+         3/U47110CTA7UYkSE4hSy7eIHs866iNxI2btd3mU/c2KXH+Kod/cOtkOQf7ccKBhc7yF
+         I5CFluHib48gwGjUldncFXjse7Vc0pO21BOIjMc8eA1B+hisvMa1OGnu8xiTbDRHyZzz
+         BAX/539j4aIqztucsN+g1cznwXXhRComYe98ICxav1gqa9wLjZZCdwW/w0Ga1SmW9zrR
+         z0OHLHpwakJDZR6Hf6JOkPDrOtRgdrKDriZ4iMidDk3sBi/AdrudxaR4/5iqR/HP26+O
+         T6Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=SfZoTACqO1kuVkp4wgMQFVuT+8zwCFihmXjSQbfcjAY=;
+        b=iW3UeosTMgaPNGHsdSKKPyKaJhG+230GnyjJrdRcneGJFsDDU8pEhMxFbNv7tj0VK2
+         Pvca+nVcwu+QtOPeZvUyGRQAzzAmX0O/x7c9R91P0m6JJEEqXK7wdDCL9pkXgotBj15A
+         mr9+8bP3JjuNyinrW/w51LgK1tw2PDk1wEG7aF7OSk5Yb44+s8O9wWvYvhW2bl+sOi3b
+         1Hcs1PGhQ62NcsLllQuZUFWwBIPIpD83+db8eVDEvLd58VzRnVUE9lEkk+cZn21GWACf
+         HDwViXEOOOZNTz5635E2O3hLcqYy4ehy892rjtwh2YibMq5jNlrT7CWea8vacLhAoKqD
+         QH+Q==
+X-Gm-Message-State: AJIora+Z1MZ0d4uVhf8PIfKU3eiMy1gGtgjxZV0dmyY6CZHT/6XXhbR9
+        4DxD/ZE++u0tOh1LwnAdDc6jKSNhmTP+zYsWpmT2Jg==
+X-Google-Smtp-Source: AGRyM1s61hTPpIC+hAWV0friZVteo9oDBtFC95C9ODAe2dB3HYSdSiDEVlf0xrklPtcOoQaCROU4+1FSH1DBd9qJlNg=
+X-Received: by 2002:a2e:a884:0:b0:25d:ea06:6a3f with SMTP id
+ m4-20020a2ea884000000b0025dea066a3fmr6462084ljq.335.1659458068698; Tue, 02
+ Aug 2022 09:34:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1659337215-20421-1-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <d1a1da631b44f425d929767fda74c90de2d87a8d.1651774250.git.isaku.yamahata@intel.com>
+ <YuhTPxZNhxFs+xjc@google.com> <YuhheIdg47zCDiNi@google.com> <29929897856941e0896954011d0ecc34@intel.com>
+In-Reply-To: <29929897856941e0896954011d0ecc34@intel.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 2 Aug 2022 09:34:02 -0700
+Message-ID: <CALzav=esHsBL7XL91HmqT89+VBeAhR3avSbdUWk-OScD=eoymQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 036/104] KVM: x86/mmu: Explicitly check for MMIO
+ spte in fast page fault
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "erdemaktas@google.com" <erdemaktas@google.com>,
+        Sagi Shahar <sagis@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:30:15PM +0530, Krishna Kurapati wrote:
-> Dwc3 Qcom driver makes use of usb_hub_find_child API in its efforts
-> to get speed of connected devices (HS/LS/FS) and enable interrupts
-> accordingly.
+On Mon, Aug 1, 2022 at 6:46 PM Huang, Kai <kai.huang@intel.com> wrote:
+>
+> > On Mon, Aug 01, 2022, David Matlack wrote:
+> > > On Thu, May 05, 2022 at 11:14:30AM -0700, isaku.yamahata@intel.com wrote:
+> > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> > > >
+> > > > Explicitly check for an MMIO spte in the fast page fault flow.  TDX
+> > > > will use a not-present entry for MMIO sptes, which can be mistaken
+> > > > for an access-tracked spte since both have SPTE_SPECIAL_MASK set.
+> > > >
+> > > > MMIO sptes are handled in handle_mmio_page_fault for non-TDX VMs, so
+> > > > this patch does not affect them.  TDX will handle MMIO emulation
+> > > > through a hypercall instead.
+> > > >
+> > > > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> > > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > > ---
+> > > >  arch/x86/kvm/mmu/mmu.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c index
+> > > > d1c37295bb6e..4a12d862bbb6 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -3184,7 +3184,7 @@ static int fast_page_fault(struct kvm_vcpu *vcpu,
+> > struct kvm_page_fault *fault)
+> > > >           else
+> > > >                   sptep = fast_pf_get_last_sptep(vcpu, fault->addr,
+> > &spte);
+> > > >
+> > > > -         if (!is_shadow_present_pte(spte))
+> > > > +         if (!is_shadow_present_pte(spte) || is_mmio_spte(spte))
+> > >
+> > > I wonder if this patch is really necessary. is_shadow_present_pte()
+> > > checks if SPTE_MMU_PRESENT_MASK is set (which is bit 11, not
+> > > shadow_present_mask). Do TDX VMs set bit 11 in MMIO SPTEs?
+> >
+> > This patch should be unnecessary, TDX's not-present SPTEs was one of my
+> > motivations
+> > for adding MMU_PRESENT.   Bit 11 most definitely must not be set for MMIO
+> > SPTEs.
+>
+> As we already discussed, Isaku will drop this patch.
 
-> usb_hub_find_child API is a part of usb core compiled
-> either into the kernel or as a module (CONFIG_USB= Y or M). In some
-> builds (make randconfig for i386) CONFIG_USB is not enabled and the
-> usb core is not compiled resulting in linking errors.
-
-Please replace the above with something more succinct. Whether USB core
-is built as a module or not is completely irrelevant. The problem is
-that the qcom dwc3 driver can be built and used without host support. 
-
-> Provide stubs for dwc3_qcom_read_usb2_speed function to use
-> usb_hub_find_child API only if CONFIG_USB is enabled. Else return
-> USB_SPEED_UNKNOWN.
-
-The fact that you need to do this is an indication that something is
-wrong with the current implementation. The glue driver shouldn't be
-touching the host driver internal state directly like this.
-
-As pointed out here:
-
-	https://lore.kernel.org/all/20220802151404.1797-4-johan+linaro@kernel.org/
-
-dwc3_qcom_read_usb2_speed() is indeed broken and currently triggers a
-NULL-pointer dereference when the controller is used in peripheral mode.
-
-But for now I guess something like this is needed even if we try to
-avoid stubs in implementation files.
-
-Johan
+Ah, I missed that discussion. Can you share a link so I can catch up?

@@ -2,231 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2B587CEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69B6587D7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiHBNSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
+        id S233816AbiHBNwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbiHBNSS (ORCPT
+        with ESMTP id S236489AbiHBNwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:18:18 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6876A12D19;
-        Tue,  2 Aug 2022 06:18:10 -0700 (PDT)
-Message-ID: <0a073674-cb3b-96f5-8af6-779f681a05d0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1659446288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=px8ybqGB8lVsEkoR1fXo4n81yqEsz0zAAzD8kDgD+zQ=;
-        b=EOOlHjuSyES/QjQ7KnBPtt9XSjJayho7izkNJitc9wYxDWVl343ZJlV9qAK4T+2ZfBMLDl
-        Owsn0cgAzaGPMI4Ff5TXFkaix03MekSxvSbHpJkWbVeewNP6BdvZM7QIWkrXqykuwhE62p
-        hXOWDF+bHu3yqADCns87C2qfg1cfyfM=
-Date:   Tue, 2 Aug 2022 21:17:57 +0800
+        Tue, 2 Aug 2022 09:52:10 -0400
+X-Greylist: delayed 2039 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Aug 2022 06:52:06 PDT
+Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D060D252AE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:52:06 -0700 (PDT)
+Received: from [192.168.192.146] (port=45372 helo=nx64de-df6d00)
+        by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <gszymaszek@short.pl>)
+        id 1oIrmZ-0001SJ-Dy; Tue, 02 Aug 2022 15:17:59 +0200
+Date:   Tue, 2 Aug 2022 15:17:58 +0200
+From:   Grzegorz Szymaszek <gszymaszek@short.pl>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>
+Cc:     Grzegorz Szymaszek <gszymaszek@short.pl>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: The r8188eu kernel module does not depend on the
+ rtlwifi/rtl8188eufw.bin firmware file
+Message-ID: <YukkBu3TNODO3or9@nx64de-df6d00>
+Mail-Followup-To: Grzegorz Szymaszek <gszymaszek@short.pl>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
 MIME-Version: 1.0
-Subject: Re: [PATCH] RDMA/RXE: Add send_common_ack() helper
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <1659335010-2-1-git-send-email-lizhijian@fujitsu.com>
- <CAD=hENfqCKs3jk7pUNJq0Urqx1ZCSU2KpDcipgz_ORJs_43C=g@mail.gmail.com>
- <b47219be-b6e0-9a18-5d84-5546c08d721e@fujitsu.com>
- <CAD=hENfZN43c4ZBmXwdru61=341bZgfYa8VJeKaBQYF5KKFA2A@mail.gmail.com>
- <02c52efa-61fd-5e27-9f98-46e0384d81e7@fujitsu.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <02c52efa-61fd-5e27-9f98-46e0384d81e7@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iqpQVhHimMfcUGvS"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/8/2 13:52, lizhijian@fujitsu.com 写道:
-> 
-> 
-> On 01/08/2022 15:47, Zhu Yanjun wrote:
->> On Mon, Aug 1, 2022 at 3:28 PM lizhijian@fujitsu.com
->> <lizhijian@fujitsu.com> wrote:
->>>
->>>
->>> On 01/08/2022 15:11, Zhu Yanjun wrote:
->>>> On Mon, Aug 1, 2022 at 2:16 PM Li Zhijian <lizhijian@fujitsu.com> wrote:
->>>>> Most code in send_ack() and send_atomic_ack() are duplicate, move them
->>>>> to a new helper send_common_ack().
->>>>>
->>>>> In newer IBA SPEC, some opcodes require acknowledge with a zero-length read
->>>>> response, with this new helper, we can easily implement it later.
->>>>>
->>>>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
->>>>> ---
->>>>>     drivers/infiniband/sw/rxe/rxe_resp.c | 43 ++++++++++++++----------------------
->>>>>     1 file changed, 17 insertions(+), 26 deletions(-)
->>>>>
->>>>> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
->>>>> index b36ec5c4d5e0..4c398fa220fa 100644
->>>>> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
->>>>> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
->>>>> @@ -1028,50 +1028,41 @@ static enum resp_states do_complete(struct rxe_qp *qp,
->>>>>                    return RESPST_CLEANUP;
->>>>>     }
->>>>>
->>>>> -static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
->>>>> +
->>>>> +static int send_common_ack(struct rxe_qp *qp, u8 syndrome, u32 psn,
->>>> The function is better with rxe_send_common_ack?
->>> I'm not clear the exact rule about the naming prefix. if it has, please let me know :)
->>>
->>> IMHO, if a function is either a public API(export function) or a callback to a upper layer,  it's a good idea to a fixed prefix.
->>> Instead, if they are just static, no prefix is not too bad.
->> When debug, a rxe_ prefix can help us filter the functions whatever
->> the function static or public.
->>
->>> BTW, current RXE are mixing the two rules, it should be another standalone patch to do the cleanup if needed.
->> Yes. Please make this standalone patch to complete this.
-> 
-> i tried to do a rough statistic.
-> 
-> all functions:
-> $ git grep -E '^[a-z].*\(' drivers/infiniband/sw/rxe | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | wc -l
-> 474
-> 
-> without rxe_ prefix:
-> git grep -E '^[a-z].*\(' drivers/infiniband/sw/rxe | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | grep -v -e ^rxe | wc -l
-> 199
-The followings are the no rxe_ prefix functions. About 22 functions.
 
-do_complete
-retransmit_timer
-next_opcode
-rnr_nak_timer
-find_resource
-send_data_in
-prepare_ack_packet
-send_ack
-check_keys
-check_type_state
-resize_finish
-do_mmap_info
-parent_show
-post_one_recv
-free_rd_atomic_resources
-free_rd_atomic_resource
-lookup_iova
-mr_check_range
-iova_to_vaddr
-advance_dma_data
-lookup_mr
-copy_data
+--iqpQVhHimMfcUGvS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Zhu Yanjun
+Dear r8188eu Maintainers,
 
-> 
-> Similarly, the mlx5 have the same situations.
-> $ git grep -h -E '^[a-z].*\(' drivers/infiniband/hw/mlx5 | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | wc -l
-> 1083
-> $ git grep -h -E '^[a-z].*\(' drivers/infiniband/hw/mlx5 | awk -F'(' '{print $1}' | awk '{print $NF}' | tr -d '\*' | grep -E ^[a-z]+ | grep -v -e ^mlx5 | wc -l
-> 476
-> 
-> TBH, i have no strong stomach to do such cleanup so far :)
-> 
-> Thanks
-> Zhijian
-> 
-> 
->>
->> Thanks and Regards,
->> Zhu Yanjun
->>
->>> Thanks
->>> Zhijian
->>>
->>>
->>>> So when debug, rxe_ prefix can help us.
->>>>
->>>>> +                                 int opcode, const char *msg)
->>>>>     {
->>>>> -       int err = 0;
->>>>> +       int err;
->>>>>            struct rxe_pkt_info ack_pkt;
->>>>>            struct sk_buff *skb;
->>>>>
->>>>> -       skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ACKNOWLEDGE,
->>>>> -                                0, psn, syndrome);
->>>>> -       if (!skb) {
->>>>> -               err = -ENOMEM;
->>>>> -               goto err1;
->>>>> -       }
->>>>> +       skb = prepare_ack_packet(qp, &ack_pkt, opcode, 0, psn, syndrome);
->>>>> +       if (!skb)
->>>>> +               return -ENOMEM;
->>>>>
->>>>>            err = rxe_xmit_packet(qp, &ack_pkt, skb);
->>>>>            if (err)
->>>>> -               pr_err_ratelimited("Failed sending ack\n");
->>>>> +               pr_err_ratelimited("Failed sending %s\n", msg);
->>>>>
->>>>> -err1:
->>>>>            return err;
->>>>>     }
->>>>>
->>>>> -static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
->>>>> +static int send_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
->>>> rxe_send_ack
->>>>
->>>>>     {
->>>>> -       int err = 0;
->>>>> -       struct rxe_pkt_info ack_pkt;
->>>>> -       struct sk_buff *skb;
->>>>> -
->>>>> -       skb = prepare_ack_packet(qp, &ack_pkt, IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE,
->>>>> -                                0, psn, syndrome);
->>>>> -       if (!skb) {
->>>>> -               err = -ENOMEM;
->>>>> -               goto out;
->>>>> -       }
->>>>> +       return send_common_ack(qp, syndrome, psn,
->>>>> +                       IB_OPCODE_RC_ACKNOWLEDGE, "ACK");
->>>>> +}
->>>>>
->>>>> -       err = rxe_xmit_packet(qp, &ack_pkt, skb);
->>>>> -       if (err)
->>>>> -               pr_err_ratelimited("Failed sending atomic ack\n");
->>>>> +static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)
->>>> rxe_send_atomic_ack
->>>>
->>>> Thanks and Regards,
->>>> Zhu Yanjun
->>>>> +{
->>>>> +       int ret = send_common_ack(qp, syndrome, psn,
->>>>> +                       IB_OPCODE_RC_ATOMIC_ACKNOWLEDGE, "ATOMIC ACK");
->>>>>
->>>>>            /* have to clear this since it is used to trigger
->>>>>             * long read replies
->>>>>             */
->>>>>            qp->resp.res = NULL;
->>>>> -out:
->>>>> -       return err;
->>>>> +       return ret;
->>>>>     }
->>>>>
->>>>>     static enum resp_states acknowledge(struct rxe_qp *qp,
->>>>> --
->>>>> 1.8.3.1
->>>>>
+The old rtl8188eu kernel module, removed in v5.15[1][2], indicated that
+it requires the rtlwifi/rtl8188eufw.bin firmware file[3]. The new
+r8188eu driver no longer does so.
 
+I don=E2=80=99t know if it should be considered a regression or just a diff=
+erent
+behaviour of the two drivers. I=E2=80=99ve noticed it[4] when I tried to us=
+e an
+RTL8188EU=E2=80=90based card in the initramfs of two different Ubuntu kerne=
+ls:
+v5.4 and v5.15. In v5.4, the firmware would be automatically included
+when the (old) driver was included, whereas in v5.15 I would have to add
+it manually so that the card actually worked. (One can verify the active
+driver=E2=80=99s requirements using =E2=80=9Cmodinfo -F firmware r8188eu=E2=
+=80=9D.)
+
+If there are cards the new driver supports that do not need that
+firmware file, it makes sense to not automatically include it. In
+general, I don=E2=80=99t know the kernel policy on such dependencies.
+
+[1]: commit 55dfa29b43d23bab37d98f087615ff46d38241df
+[2]: https://lore.kernel.org/all/20210731133809.196681-1-phil@philpotter.co=
+=2Euk/
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/drivers/staging/rtl8188eu/os_dep/os_intfs.c?id=3D06889446a78fb9655332954a=
+2288ecbacc7f0ff8#n22
+[4]: https://answers.launchpad.net/ubuntu/+source/linux-meta-hwe-5.15/+ques=
+tion/702611
+
+Best regards
+
+--=20
+Grzegorz Szymaszek
+
+--iqpQVhHimMfcUGvS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEZT55kPBhnB69hD4ZeE9lGUIcpz4FAmLpJAUACgkQeE9lGUIc
+pz6bAw/+Lgr16PtH7UpW6XYVGCUSGmtE9iquxHi+fAAPn61RpdkcbF7LJN1rqgQC
+MVt5hYDZrOEE6DcXXTKdb2BMNJfPJq7O66UGH71myyZx3xNbsKkW07BjikxDmZ69
+/My+HKCxXllVBMSZDlkdt4mHn1df+3E9jhY2Uu5Qu8TnQ1yY1zAfeXz+MTnI81lM
+RzpeNCs0LBUR6Hr4AqYsIKLqAhmx3hBCyhK5y4pZa/rTymwefM/CSvHiC+CGr89s
+6iucyx2wh4Cyv9ZLh4HSnGgkBhSS5AtzY7H+vE5318TqjJBUadvnhSGH8ponLQpO
+u+LC1BMaE5BabkJRPtQ49q+fvrPUs7tVB2hg3osrS/dEcwRs4h8mDvFkv2suC2rE
+rasrrZOL+RH8MfjeSNrS/B1cvPQiv8L8SWMvSErx9Z3Vlqr3oOVpgiVkogXg43Lo
+D6CRfQSzkQ+kfsQXFuJZ57cq5iAGTC/1VYU1NTmlSmlRg2RjBxL8EpY+3rDY2u+C
+qEp4j1Ly+Vc8Mr5i5tVHlpWjw8+59EJiZuuVz5kG1cslqgfVTwZ/fm2ZMW3uGJiT
+8AyPuZaCgzEpdO5bn2SfJNeCuKfEGJmfkuMgiILj+Oh7xjv+qkvrdpbjp7bVGXHl
+DeVeiSutlkqLXaSVUdZYJwaWEeafYDJqEcZnRXZ1H8WtnBkAbpY=
+=sx65
+-----END PGP SIGNATURE-----
+
+--iqpQVhHimMfcUGvS--

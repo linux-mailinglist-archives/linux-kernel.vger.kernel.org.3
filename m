@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A325884D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B905884D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiHBXma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 19:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S234700AbiHBXnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 19:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiHBXm2 (ORCPT
+        with ESMTP id S229568AbiHBXnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 19:42:28 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B2751A2F
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 16:42:26 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="83820010"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654527600"; 
-   d="scan'208";a="83820010"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 03 Aug 2022 08:42:24 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 3F3CBDAFD2
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:42:23 +0900 (JST)
-Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
-        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 6652327571
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:42:22 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om1.fujitsu.com (Postfix) with ESMTP id 2E26F4008A7C3;
-        Wed,  3 Aug 2022 08:42:22 +0900 (JST)
-From:   Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>
-To:     will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-        thunder.leizhen@huawei.com, jgg@ziepe.ca, tglx@linutronix.de,
-        chenxiang66@hisilicon.com, christophe.jaillet@wanadoo.fr,
-        john.garry@huawei.com, baolu.lu@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     ishii.shuuichir@fujitsu.com
-Subject: [PATCH] iommu/arm-smmu-v3: fixed check process for disable_bypass module parameter
-Date:   Wed,  3 Aug 2022 08:42:07 +0900
-Message-Id: <20220802234207.1994093-1-ishii.shuuichir@fujitsu.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 2 Aug 2022 19:43:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755AD51A37;
+        Tue,  2 Aug 2022 16:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659483779; x=1691019779;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=k1gNX86YincOcL9VRCK/r4AXXqCHM/b4AG11KWtCuDY=;
+  b=WmqGv8SlJxLkEFy0UeAb6izDAfkkTAz3TtTOJbf2fWWrDUAmebDM+Zo/
+   ceV2xWxcBH7HrtokDyL9CajbJARFFpJ1jU90We0ktTxPdDzyxq4aD7/Dj
+   wnSiRBctTUkvJEARZ8+zK5uBikQNEpBzKCKEveT8yYrpIOzKEpjTecn9w
+   SjUkC1psv8enKIYnJA09w3j5crsPy3hMRzaPinDeIP97hAQHnBw03Zjl9
+   nsdm+skB/RaEcBl1P52vIXbqWJeCPclHobnCdt4djkZ/36LlZTwh0QTvR
+   jv3bPVLPm/SCnZNQ16C2rd2w0DH53AcKsco5LjT1vKgYRprLxWCkVFObB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="351256633"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="351256633"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 16:42:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="630917735"
+Received: from gvenka2-desk.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.85.17])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 16:42:57 -0700
+Message-ID: <72b51c373e09fe8f0a6a65c40d75753348c64ce1.camel@intel.com>
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Fully re-evaluate MMIO caching when
+ SPTE masks change
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Date:   Wed, 03 Aug 2022 11:42:55 +1200
+In-Reply-To: <YumtzyBgNLWGh466@google.com>
+References: <20220728221759.3492539-3-seanjc@google.com>
+         <9104e22da628fef86a6e8a02d9d2e81814a9d598.camel@intel.com>
+         <YuP3zGmpiALuXfW+@google.com>
+         <f313c41ed50e187ae5de87b32325c6cd4cc17c79.camel@intel.com>
+         <YufgCR9CpeoVWKF7@google.com>
+         <244f619a4e7a1c7079830d12379872a111da418d.camel@intel.com>
+         <YuhfuQbHy4P9EZcw@google.com>
+         <4fd3cea874b69f1c8bbcaf19538c7fdcb9c22aab.camel@intel.com>
+         <YumT+6joTz2M1zZP@google.com>
+         <ebbccf92d7ab97bd79dac5529f109aa5b92542ab.camel@intel.com>
+         <YumtzyBgNLWGh466@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current process does not enable the bypass setting regardless of
-the value of the disable_bypass module parameter when ACPI is enabled,
-so the value of the disable_bypass module parameter has been corrected
-so that it is handled correctly.
+On Tue, 2022-08-02 at 23:05 +0000, Sean Christopherson wrote:
+> On Wed, Aug 03, 2022, Kai Huang wrote:
+> > On Tue, 2022-08-02 at 21:15 +0000, Sean Christopherson wrote:
+> > > On Tue, Aug 02, 2022, Kai Huang wrote:
+> > > > But we are not checking any of those in kvm_mmu_set_mmio_spte_mask(=
+), right? :)
+> > >=20
+> > > No, but we really should.
+> >=20
+> > I can come up a patch if you are not planning to do so?
+>=20
+> Hmm, I'll throw one together, it's simple enough (famous last words) and =
+it'll
+> need to be tested on AMD as well.
 
-Signed-off-by: Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sure.
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 88817a3376ef..256d7b2a83a7 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -3396,7 +3396,7 @@ static int arm_smmu_device_reset(struct arm_smmu_device *smmu, bool bypass)
- 		enables &= ~(CR0_EVTQEN | CR0_PRIQEN);
- 
- 	/* Enable the SMMU interface, or ensure bypass */
--	if (!bypass || disable_bypass) {
-+	if (!bypass && disable_bypass) {
- 		enables |= CR0_SMMUEN;
- 	} else {
- 		ret = arm_smmu_update_gbpa(smmu, 0, GBPA_ABORT);
--- 
-2.27.0
+--=20
+Thanks,
+-Kai
+
 

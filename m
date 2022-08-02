@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD0D5874F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD715874FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiHBBFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S234867AbiHBBME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiHBBFB (ORCPT
+        with ESMTP id S234746AbiHBBMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:05:01 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9714504B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659402299; x=1690938299;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eZ27QcnMat+V3xP3GPKnoUwOfJszKlQMtB66lmaY3n8=;
-  b=AQjayNG+eU2L8oJs8S7fAFfmhuhg7PJiJS2sj/iUpMdxi65quJSy4o5J
-   /10SK4y/+5CadCn0+ZeNn7pjEyyGBiOfbhSX8j+lR7vE00DREtDnZb55s
-   tZELKAC3ubzPfuWsS8SQ33H3iQiJmeDr1JECH4Q8Abx2rvhgfkUIW4NLy
-   SUTwo8JDlMfCbtXzyVUbG+LQ7U32quHIazcT4GxBmudEbW1lkyQK0B7mF
-   NdzDI8h2e64lsBJIWj7OdSV5Y+hFqteDmEAVhc7VyBOTwDIboCKT68y8s
-   XD1QK5+27FR9HyjUvH506fmytckqUk4c2swFa8yq6+5Ws8uwi7P9Yt8rL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="288046344"
-X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="288046344"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 18:04:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
-   d="scan'208";a="630491549"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Aug 2022 18:04:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oIgLB-000FXX-0U;
-        Tue, 02 Aug 2022 01:04:57 +0000
-Date:   Tue, 2 Aug 2022 09:04:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>
-Subject: arch/x86/kernel/fpu/xstate.c:1117:7: warning: Local variable 'mask'
- shadows outer variable [shadowVariable]
-Message-ID: <202208020949.LCC9Ch2H-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 1 Aug 2022 21:12:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C16B25EAC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:11:59 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2720xhxu005342;
+        Tue, 2 Aug 2022 01:11:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=+XCm5jSg8FjQE5YqGwyyuso1tjrDjKrNMsCGsTXDJYg=;
+ b=QdWS/6iBAAklD4za1JISNXcob7ukHqpue2gGjpKs8lnatHhIzD/nkUklvAeGTby2b5oV
+ mO9UY1QA1pl2XnZyohS5UQCyWCJgXxvtl1z+Y9+V9Lx+NureLsexK9/hEVVMtD3S8cJR
+ rpw2cbFQ0s3GK8yRlWGgk0RdzAp79/Y2IIt8tvQLyQzYGeB512HYQWRpxrbXP88VvP93
+ 5OljZm50+3iK9AOagj+Feubp8ML4oYAgv5D7u7h6Rb124MCzL8kmVqOBcZEC/N0cJFem
+ 138k20VkXGzEtZVFDuww/hcAQR/gJtDh9uCKg2uyTm4L+TvmdhTG29ir3qtwlFakAfJ3 3A== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hphfbh0wm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Aug 2022 01:11:46 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27216hJ5029661;
+        Tue, 2 Aug 2022 01:06:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3hmwqnqv6k-1;
+        Tue, 02 Aug 2022 01:06:43 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27216hXT029656;
+        Tue, 2 Aug 2022 01:06:43 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 27216gnm029653;
+        Tue, 02 Aug 2022 01:06:43 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id 9C66C21029A6; Tue,  2 Aug 2022 09:06:41 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     akpm@linux-foundation.org, vbabka@kernel.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v3] mm/page_owner.c: add llseek for page_owner
+Date:   Tue,  2 Aug 2022 09:06:40 +0800
+Message-Id: <20220802010640.26937-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OQB56bczKuKnXRj0Ch0ep3tLxqx5K73m
+X-Proofpoint-ORIG-GUID: OQB56bczKuKnXRj0Ch0ep3tLxqx5K73m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-01_12,2022-08-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=769 impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208020003
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,209 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9de1f9c8ca5100a02a2e271bdbde36202e251b4b
-commit: 522e92743b35351bda1b6a9136560f833a9c2490 x86/fpu: Deduplicate copy_uabi_from_user/kernel_to_xstate()
-date:   1 year, 1 month ago
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout 522e92743b35351bda1b6a9136560f833a9c2490
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+There is usage to dump a given cma region page_owner
+instead of all page's.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This change allows to specify a ppos as start_pfn
+by fseek.
 
-cppcheck warnings: (new ones prefixed by >>)
->> arch/x86/kernel/fpu/xstate.c:1117:7: warning: Local variable 'mask' shadows outer variable [shadowVariable]
-     u64 mask = ((u64)1 << i);
-         ^
-   arch/x86/kernel/fpu/xstate.c:1086:6: note: Shadowed declaration
-    u64 mask;
-        ^
-   arch/x86/kernel/fpu/xstate.c:1117:7: note: Shadow variable
-     u64 mask = ((u64)1 << i);
-         ^
+Any invalid ppos will be skipped, so it did not
+broken the origin dump feature.
 
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ mm/page_owner.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
->> drivers/thermal/intel/therm_throt.c:323:12: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->core_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:323:12: note: Address of variable taken here.
-      state = &pstate->core_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:323:12: note: Using pointer that is a temporary.
-      state = &pstate->core_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:323:13: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->core_throttle;
-               ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:323:13: note: Using pointer that is a temporary.
-      state = &pstate->core_throttle;
-               ^
-   drivers/thermal/intel/therm_throt.c:325:12: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->core_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:325:12: note: Address of variable taken here.
-      state = &pstate->core_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:325:12: note: Using pointer that is a temporary.
-      state = &pstate->core_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:325:13: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->core_power_limit;
-               ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:325:13: note: Using pointer that is a temporary.
-      state = &pstate->core_power_limit;
-               ^
-   drivers/thermal/intel/therm_throt.c:330:12: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->package_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:330:12: note: Address of variable taken here.
-      state = &pstate->package_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:330:12: note: Using pointer that is a temporary.
-      state = &pstate->package_throttle;
-              ^
-   drivers/thermal/intel/therm_throt.c:330:13: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->package_throttle;
-               ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:330:13: note: Using pointer that is a temporary.
-      state = &pstate->package_throttle;
-               ^
-   drivers/thermal/intel/therm_throt.c:332:12: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->package_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                   ^
-   drivers/thermal/intel/therm_throt.c:332:12: note: Address of variable taken here.
-      state = &pstate->package_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:318:41: note: Temporary created here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
-                                           ^
-   drivers/thermal/intel/therm_throt.c:332:12: note: Using pointer that is a temporary.
-      state = &pstate->package_power_limit;
-              ^
-   drivers/thermal/intel/therm_throt.c:332:13: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
-      state = &pstate->package_power_limit;
-               ^
-   drivers/thermal/intel/therm_throt.c:318:33: note: Address of variable taken here.
-    struct thermal_state *pstate = &per_cpu(thermal_state, this_cpu);
---
-
-vim +/mask +1117 arch/x86/kernel/fpu/xstate.c
-
-947f4947cf00ea Thomas Gleixner           2021-06-23  1079  
-522e92743b3535 Thomas Gleixner           2021-06-23  1080  
-522e92743b3535 Thomas Gleixner           2021-06-23  1081  static int copy_uabi_to_xstate(struct xregs_state *xsave, const void *kbuf,
-522e92743b3535 Thomas Gleixner           2021-06-23  1082  			       const void __user *ubuf)
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1083  {
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1084  	unsigned int offset, size;
-80d8ae86b36791 Eric Biggers              2017-09-24  1085  	struct xstate_header hdr;
-522e92743b3535 Thomas Gleixner           2021-06-23  1086  	u64 mask;
-522e92743b3535 Thomas Gleixner           2021-06-23  1087  	int i;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1088  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1089  	offset = offsetof(struct xregs_state, header);
-522e92743b3535 Thomas Gleixner           2021-06-23  1090  	if (copy_from_buffer(&hdr, offset, sizeof(hdr), kbuf, ubuf))
-522e92743b3535 Thomas Gleixner           2021-06-23  1091  		return -EFAULT;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1092  
-5274e6c172c472 Fenghua Yu                2020-05-12  1093  	if (validate_user_xstate_header(&hdr))
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1094  		return -EINVAL;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1095  
-522e92743b3535 Thomas Gleixner           2021-06-23  1096  	/* Validate MXCSR when any of the related features is in use */
-522e92743b3535 Thomas Gleixner           2021-06-23  1097  	mask = XFEATURE_MASK_FP | XFEATURE_MASK_SSE | XFEATURE_MASK_YMM;
-522e92743b3535 Thomas Gleixner           2021-06-23  1098  	if (hdr.xfeatures & mask) {
-522e92743b3535 Thomas Gleixner           2021-06-23  1099  		u32 mxcsr[2];
-522e92743b3535 Thomas Gleixner           2021-06-23  1100  
-522e92743b3535 Thomas Gleixner           2021-06-23  1101  		offset = offsetof(struct fxregs_state, mxcsr);
-522e92743b3535 Thomas Gleixner           2021-06-23  1102  		if (copy_from_buffer(mxcsr, offset, sizeof(mxcsr), kbuf, ubuf))
-522e92743b3535 Thomas Gleixner           2021-06-23  1103  			return -EFAULT;
-522e92743b3535 Thomas Gleixner           2021-06-23  1104  
-522e92743b3535 Thomas Gleixner           2021-06-23  1105  		/* Reserved bits in MXCSR must be zero. */
-522e92743b3535 Thomas Gleixner           2021-06-23  1106  		if (mxcsr[0] & ~mxcsr_feature_mask)
-947f4947cf00ea Thomas Gleixner           2021-06-23  1107  			return -EINVAL;
-947f4947cf00ea Thomas Gleixner           2021-06-23  1108  
-522e92743b3535 Thomas Gleixner           2021-06-23  1109  		/* SSE and YMM require MXCSR even when FP is not in use. */
-522e92743b3535 Thomas Gleixner           2021-06-23  1110  		if (!(hdr.xfeatures & XFEATURE_MASK_FP)) {
-522e92743b3535 Thomas Gleixner           2021-06-23  1111  			xsave->i387.mxcsr = mxcsr[0];
-522e92743b3535 Thomas Gleixner           2021-06-23  1112  			xsave->i387.mxcsr_mask = mxcsr[1];
-522e92743b3535 Thomas Gleixner           2021-06-23  1113  		}
-522e92743b3535 Thomas Gleixner           2021-06-23  1114  	}
-522e92743b3535 Thomas Gleixner           2021-06-23  1115  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1116  	for (i = 0; i < XFEATURE_MAX; i++) {
-79fecc2b7506f2 Ingo Molnar               2017-09-23 @1117  		u64 mask = ((u64)1 << i);
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1118  
-b89eda482d7849 Eric Biggers              2017-09-24  1119  		if (hdr.xfeatures & mask) {
-07baeb04f37c95 Sebastian Andrzej Siewior 2019-04-03  1120  			void *dst = __raw_xsave_addr(xsave, i);
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1121  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1122  			offset = xstate_offsets[i];
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1123  			size = xstate_sizes[i];
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1124  
-522e92743b3535 Thomas Gleixner           2021-06-23  1125  			if (copy_from_buffer(dst, offset, size, kbuf, ubuf))
-522e92743b3535 Thomas Gleixner           2021-06-23  1126  				return -EFAULT;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1127  		}
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1128  	}
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1129  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1130  	/*
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1131  	 * The state that came in from userspace was user-state only.
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1132  	 * Mask all the user states out of 'xfeatures':
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1133  	 */
-8ab22804efefea Fenghua Yu                2020-05-12  1134  	xsave->header.xfeatures &= XFEATURE_MASK_SUPERVISOR_ALL;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1135  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1136  	/*
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1137  	 * Add back in the features that came in from userspace:
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1138  	 */
-b89eda482d7849 Eric Biggers              2017-09-24  1139  	xsave->header.xfeatures |= hdr.xfeatures;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1140  
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1141  	return 0;
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1142  }
-79fecc2b7506f2 Ingo Molnar               2017-09-23  1143  
-
-:::::: The code at line 1117 was first introduced by commit
-:::::: 79fecc2b7506f29fb91becc65e8788e5ae7eba9f x86/fpu: Split copy_user_to_xstate() into copy_kernel_to_xstate() & copy_user_to_xstate()
-
-:::::: TO: Ingo Molnar <mingo@kernel.org>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index e4c6f3f1695b..231b1877af99 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -497,8 +497,8 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		return -EINVAL;
+ 
+ 	page = NULL;
+-	pfn = min_low_pfn + *ppos;
+ 
++	pfn = *ppos;
+ 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+ 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+ 		pfn++;
+@@ -561,7 +561,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 			continue;
+ 
+ 		/* Record the next PFN to read in the file offset */
+-		*ppos = (pfn - min_low_pfn) + 1;
++		*ppos = pfn + 1;
+ 
+ 		return print_page_owner(buf, count, pfn, page,
+ 				page_owner, handle);
+@@ -570,6 +570,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 	return 0;
+ }
+ 
++static loff_t llseek_page_owner(struct file *file, loff_t offset, int whence)
++{
++	loff_t retval = 0;
++	switch (whence) {
++		case SEEK_CUR:
++		case SEEK_SET:
++			file->f_pos = offset;
++			break;
++		default:
++			retval = -ENXIO;
++	}
++
++	return retval;
++}
++
+ static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
+ {
+ 	unsigned long pfn = zone->zone_start_pfn;
+@@ -660,6 +675,7 @@ static void init_early_allocated_pages(void)
+ 
+ static const struct file_operations proc_page_owner_operations = {
+ 	.read		= read_page_owner,
++	.llseek 	= llseek_page_owner,
+ };
+ 
+ static int __init pageowner_init(void)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

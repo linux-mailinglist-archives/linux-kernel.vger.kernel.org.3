@@ -2,237 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93E8587E4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE48587E50
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236876AbiHBOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        id S236643AbiHBOpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiHBOoI (ORCPT
+        with ESMTP id S237028AbiHBOps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:44:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B334EA474;
-        Tue,  2 Aug 2022 07:44:07 -0700 (PDT)
+        Tue, 2 Aug 2022 10:45:48 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC1B1EEC9
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:45:46 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id e15so12240927lfs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659451447; x=1690987447;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=0HsczQYtJm1i3slGdvS7RQjwctCL5Y7nU/w+74oz0VQ=;
-  b=NtJqa5+c4hyQxkCkFvns1YHHb270xsUJvX0ROjaKRzAVScegUpSvQldK
-   jb/nRZHfs1DoSRQMO+4TejkEgS6X8SCEQ837sOHU9+dubrR67Jms55P7K
-   10AI3sbL083OCrc7aldQgwRR14WG47efXkSKIurHieVaRKm1dtLmEp0/S
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 02 Aug 2022 07:44:07 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 07:44:06 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 2 Aug 2022 07:44:06 -0700
-Received: from [10.253.74.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 2 Aug 2022
- 07:43:58 -0700
-Message-ID: <20260db2-8c7e-e2b6-2385-74f433e4b55e@quicinc.com>
-Date:   Tue, 2 Aug 2022 22:43:39 +0800
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=27yyJkav5DwGufg9wksZxg7D5aoI0Py4PHOZi8o/OYQ=;
+        b=VpaP0g/dgKXcMOJg5Bd6Z1DzY2BOZrbupQuRtpOEUfBHWJL1JG58UeGx8WK70aD77N
+         a7KN11WgzSchknrohYsphJFl9cPGx6kfSWW1+3wfuFJcO4qOu6LAveQSsjYh2wwG8JDr
+         S4GNNU4P7wri7cTrH+1hUI5nwb+XLlF0sXZm9aoCFlg9GnpvZSekytPP3ecljJ0tcxvH
+         gpvj78bCm3LqBkqmGu3DSGMHX6PqTQSEyFdgO7bgZ8eVf0iU2dKp5w4pEqxdbPpWzC9C
+         hxpY/qUt4ck9ds1POdUC3no8v1XjpFabJ5ZtqBiw13nB5qj1n1j3NeO6lgjjdW3LRtzN
+         8T8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=27yyJkav5DwGufg9wksZxg7D5aoI0Py4PHOZi8o/OYQ=;
+        b=ATyOnz7lT/cuCysGrPZnujgCIW/AET9Vc9EVjg1DNqOwbulGiGxsRrOtC30IApZC/S
+         biT1ZTRB6+wm3zA2uwut1pxqfNN0jeHS+MKaHgDm72QJo/XFFvaZesOenSQgPdnYDdeJ
+         tq6LIIQkaKVGd5xaHjXWbXnkpAk3490n6s+2MZQ1K8U9/HuMIBt/AZD1r5EvuDKkAHHU
+         36gmETBTbHt/XyUX6UFqDFXEyGXzPs5yE5ZBDOczpCFe1ThlnHovHanM+AEm+WA9R/mE
+         OXsHxk+g14ATxHdkrv5q+Ga2YLseLVCDZwfeuS/O38vALJoei80dsyIX8gXXrtaQTgj1
+         W2aQ==
+X-Gm-Message-State: AJIora/2rQoxknxi51XvHAEtXlqXKpMe2XT63U0X/276BwrZVlgw38kK
+        gviDoLZiOCJOfeJD2S/vPNevdNfljhAyTxPn5eu3/Q==
+X-Google-Smtp-Source: AGRyM1uQwcA4fEJkqol/WVnINvG4ogq9Bkb7CfrNVbX9d+tTKUbrZYbYq1ZoK5B2DuAN478eJXsNtSInDr0zOk0TXb4=
+X-Received: by 2002:a05:6512:12d6:b0:48a:acd8:7183 with SMTP id
+ p22-20020a05651212d600b0048aacd87183mr7524996lfg.114.1659451544902; Tue, 02
+ Aug 2022 07:45:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v12 0/9] Coresight: Add support for TPDM and TPDA
-Content-Language: en-US
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20220710021032.27455-1-quic_jinlmao@quicinc.com>
- <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
-In-Reply-To: <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801201109.825284-1-pgonda@google.com> <20220801201109.825284-7-pgonda@google.com>
+ <20220802100911.5kyfhxdavqtpddma@kamzik>
+In-Reply-To: <20220802100911.5kyfhxdavqtpddma@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 2 Aug 2022 08:45:33 -0600
+Message-ID: <CAMkAt6pRQD+otp-WsmPtiwy8P6yRwZRay9zz-yv+O2gMCa_YXw@mail.gmail.com>
+Subject: Re: [V2 06/11] KVM: selftests: Consolidate common code for popuplating
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reviewers,
-
-Please help to review V12 series of TPDM/TPDA patches.
-
-Thanks
-
-Jinlong Mao
-
-On 7/21/2022 11:30 PM, Jinlong Mao wrote:
-> Hi all,
+On Tue, Aug 2, 2022 at 4:09 AM Andrew Jones <andrew.jones@linux.dev> wrote:
 >
-> Please help to review V12 patches.
+> On Mon, Aug 01, 2022 at 01:11:04PM -0700, Peter Gonda wrote:
+> > From: Sean Christopherson <seanjc@google.com>
+> >
+> > Make ucall() a common helper that populates struct ucall, and only calls
+> > into arch code to make the actually call out to userspace.
+> >
+> > Rename all arch-specific helpers to make it clear they're arch-specific,
+> > and to avoid collisions with common helpers (one more on its way...)
+> >
+> > No functional change intended.
 >
-> Thanks
+> But there is...
+
+Yea my mistake. Looking at 9e2f6498efbbc it appears this optimization
+could happen on all the other archs given the same reasoning in the
+description "perhaps due to no immediate readers".
+
+What do you think about dropping the "No functional change intended"
+from this patch and moving the WRITE_ONCE() for the ops in the common
+ucall() code?
+
 >
-> Jinlong Mao
+> >
+> > Cc: Colton Lewis <coltonlewis@google.com>
+> > Cc: Andrew Jones <drjones@redhat.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/Makefile          |  1 +
+> >  .../selftests/kvm/include/ucall_common.h      | 23 ++++++++++++++++---
+> >  .../testing/selftests/kvm/lib/aarch64/ucall.c | 20 ++++------------
+> >  tools/testing/selftests/kvm/lib/riscv/ucall.c | 23 ++++---------------
+> >  tools/testing/selftests/kvm/lib/s390x/ucall.c | 23 ++++---------------
+> >  .../testing/selftests/kvm/lib/ucall_common.c  | 20 ++++++++++++++++
+> >  .../testing/selftests/kvm/lib/x86_64/ucall.c  | 23 ++++---------------
+> >  7 files changed, 60 insertions(+), 73 deletions(-)
+> >  create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
+> >
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> > index 690b499c3471..39fc5e8e5594 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -46,6 +46,7 @@ LIBKVM += lib/perf_test_util.c
+> >  LIBKVM += lib/rbtree.c
+> >  LIBKVM += lib/sparsebit.c
+> >  LIBKVM += lib/test_util.c
+> > +LIBKVM += lib/ucall_common.c
+> >
+> >  LIBKVM_x86_64 += lib/x86_64/apic.c
+> >  LIBKVM_x86_64 += lib/x86_64/handlers.S
+> > diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+> > index ee79d180e07e..5a85f5318bbe 100644
+> > --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> > +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> > @@ -24,10 +24,27 @@ struct ucall {
+> >       uint64_t args[UCALL_MAX_ARGS];
+> >  };
+> >
+> > -void ucall_init(struct kvm_vm *vm, void *arg);
+> > -void ucall_uninit(struct kvm_vm *vm);
+> > +void ucall_arch_init(struct kvm_vm *vm, void *arg);
+> > +void ucall_arch_uninit(struct kvm_vm *vm);
+> > +void ucall_arch_do_ucall(vm_vaddr_t uc);
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> > +
+> >  void ucall(uint64_t cmd, int nargs, ...);
+> > -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> > +
+> > +static inline void ucall_init(struct kvm_vm *vm, void *arg)
+> > +{
+> > +     ucall_arch_init(vm, arg);
+> > +}
+> > +
+> > +static inline void ucall_uninit(struct kvm_vm *vm)
+> > +{
+> > +     ucall_arch_uninit(vm);
+> > +}
+> > +
+> > +static inline uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +{
+> > +     return ucall_arch_get_ucall(vcpu, uc);
+> > +}
+> >
+> >  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)       \
+> >                               ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > index ed237b744690..1c81a6a5c1f2 100644
+> > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > @@ -21,7 +21,7 @@ static bool ucall_mmio_init(struct kvm_vm *vm, vm_paddr_t gpa)
+> >       return true;
+> >  }
+> >
+> > -void ucall_init(struct kvm_vm *vm, void *arg)
+> > +void ucall_arch_init(struct kvm_vm *vm, void *arg)
+> >  {
+> >       vm_paddr_t gpa, start, end, step, offset;
+> >       unsigned int bits;
+> > @@ -64,30 +64,18 @@ void ucall_init(struct kvm_vm *vm, void *arg)
+> >       TEST_FAIL("Can't find a ucall mmio address");
+> >  }
+> >
+> > -void ucall_uninit(struct kvm_vm *vm)
+> > +void ucall_arch_uninit(struct kvm_vm *vm)
+> >  {
+> >       ucall_exit_mmio_addr = 0;
+> >       sync_global_to_guest(vm, ucall_exit_mmio_addr);
+> >  }
+> >
+> > -void ucall(uint64_t cmd, int nargs, ...)
+> > +void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >  {
+> > -     struct ucall uc = {};
+> > -     va_list va;
+> > -     int i;
+> > -
+> > -     WRITE_ONCE(uc.cmd, cmd);
+> > -     nargs = min(nargs, UCALL_MAX_ARGS);
+> > -
+> > -     va_start(va, nargs);
+> > -     for (i = 0; i < nargs; ++i)
+> > -             WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> > -     va_end(va);
+> > -
 >
-> On 7/10/2022 10:10 AM, Mao Jinlong wrote:
->> This series adds support for the trace performance monitoring and
->> diagnostics hardware (TPDM and TPDA). It is composed of two major
->> elements.
->> a) Changes for original coresight framework to support for TPDM and 
->> TPDA.
->> b) Add driver code for TPDM and TPDA.
->>
->> Introduction of changes for original coresight framework
->> Support TPDM as new coresight source.
->> Since only STM and ETM are supported as coresight source originally.
->> TPDM is a newly added coresight source. We need to change
->> the original way of saving coresight path to support more types source
->> for coresight driver.
->> The following patch is to add support more coresight sources.
->>      coresight: core: Use IDR for non-cpu bound sources' paths.
->>
->> Introduction of TPDM and TPDA
->> TPDM - The trace performance monitoring and diagnostics monitor or 
->> TPDM in
->> short serves as data collection component for various dataset types
->> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
->> architecture) spec. The primary use case of the TPDM is to collect data
->> from different data sources and send it to a TPDA for packetization,
->> timestamping and funneling.
->>       Coresight: Add coresight TPDM source driver
->>       dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->>       coresight-tpdm: Add DSB dataset support
->>       coresight-tpdm: Add integration test support
->>       docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->>
->> TPDA - The trace performance monitoring and diagnostics aggregator or
->> TPDA in short serves as an arbitration and packetization engine for the
->> performance monitoring and diagnostics network as specified in the QPMDA
->> (Qualcomm performance monitoring and diagnostics architecture)
->> specification. The primary use case of the TPDA is to provide
->> packetization, funneling and timestamping of Monitor data as specified
->> in the QPMDA specification.
->> The following patch is to add driver for TPDA.
->>       Coresight: Add TPDA link driver
->>       dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>
->> The last patch of this series is a device tree modification, which add
->> the TPDM and TPDA configuration to device tree for validating.
->>      ARM: dts: msm: Add coresight components for SM8250
->>      ARM: dts: msm: Add tpdm mm/prng for sm8250
->>
->> Once this series patches are applied properly, the tpdm and tpda nodes
->> should be observed at the coresight path /sys/bus/coresight/devices
->> e.g.
->> /sys/bus/coresight/devices # ls -l | grep tpd
->> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
->> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
->>
->> We can use the commands are similar to the below to validate TPDMs.
->> Enable coresight sink first.
->>
->> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
->> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
->> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
->> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
->> The test data will be collected in the coresight sink which is enabled.
->> If rwp register of the sink is keeping updating when do
->> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
->> generated from TPDM to sink.
->>
->> There must be a tpda between tpdm and the sink. When there are some
->> other trace event hw components in the same HW block with tpdm, tpdm
->> and these hw components will connect to the coresight funnel. When
->> there is only tpdm trace hw in the HW block, tpdm will connect to
->> tpda directly.
->>         +---------------+                +-------------+
->>      |  tpdm@6c08000 |                |tpdm@684C000 |
->>      +-------|-------+                +------|------+
->>              |                               |
->>      +-------|-------+                       |
->>      | funnel@6c0b000|                       |
->>      +-------|-------+                       |
->>              |                               |
->>      +-------|-------+                       |
->>      |funnel@6c2d000 |                       |
->>      +-------|-------+                       |
->>              |                               |
->>              |    +---------------+          |
->>              +----- tpda@6004000  -----------+
->>                   +-------|-------+
->>                           |
->>                   +-------|-------+
->>                   |funnel@6005000 |
->>                   +---------------+
->>
->> This patch series depends on patch series:
->> "[v2,00/13] coresight: Add new API to allocate trace source ID values"
->> https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220704081149.16797-1-mike.leach@linaro.org/ 
->>
->>
->> Changes from V11:
->> 1. Clear bits for atid before setting them and relese atid when tpda
->> remove. -- Suzuki K Poulose <suzuki.poulose@arm.com>
->>
->> Mao Jinlong (9):
->>    coresight: core: Use IDR for non-cpu bound sources' paths.
->>    Coresight: Add coresight TPDM source driver
->>    dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->>    coresight-tpdm: Add DSB dataset support
->>    coresight-tpdm: Add integration test support
->>    Coresight: Add TPDA link driver
->>    dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->>    arm64: dts: qcom: sm8250: Add coresight components
->>    arm64: dts: qcom: sm8250: Add tpdm mm/prng
->>
->>   .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
->>   .../bindings/arm/qcom,coresight-tpda.yaml     | 111 +++
->>   .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++
->>   MAINTAINERS                                   |   2 +
->>   arch/arm64/boot/dts/qcom/sm8250.dtsi          | 671 ++++++++++++++++++
->>   drivers/hwtracing/coresight/Kconfig           |  23 +
->>   drivers/hwtracing/coresight/Makefile          |   2 +
->>   drivers/hwtracing/coresight/coresight-core.c  |  42 +-
->>   drivers/hwtracing/coresight/coresight-tpda.c  | 208 ++++++
->>   drivers/hwtracing/coresight/coresight-tpda.h  |  35 +
->>   drivers/hwtracing/coresight/coresight-tpdm.c  | 259 +++++++
->>   drivers/hwtracing/coresight/coresight-tpdm.h  |  62 ++
->>   include/linux/coresight.h                     |   1 +
->>   13 files changed, 1510 insertions(+), 12 deletions(-)
->>   create mode 100644 
->> Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->>   create mode 100644 
->> Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
->>   create mode 100644 
->> Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
->>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
->>   create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
->>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->>
+> There are WRITE_ONCE's being used here...
+>
+> >       WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
+> >  }
+> >
+> > -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> >       struct ucall ucall = {};
+> > diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > index 087b9740bc8f..b1598f418c1f 100644
+> > --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > @@ -10,11 +10,11 @@
+> >  #include "kvm_util.h"
+> >  #include "processor.h"
+> >
+> > -void ucall_init(struct kvm_vm *vm, void *arg)
+> > +void ucall_arch_init(struct kvm_vm *vm, void *arg)
+> >  {
+> >  }
+> >
+> > -void ucall_uninit(struct kvm_vm *vm)
+> > +void ucall_arch_uninit(struct kvm_vm *vm)
+> >  {
+> >  }
+> >
+> > @@ -44,27 +44,14 @@ struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
+> >       return ret;
+> >  }
+> >
+> > -void ucall(uint64_t cmd, int nargs, ...)
+> > +void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >  {
+> > -     struct ucall uc = {
+> > -             .cmd = cmd,
+> > -     };
+> > -     va_list va;
+> > -     int i;
+> > -
+> > -     nargs = min(nargs, UCALL_MAX_ARGS);
+> > -
+> > -     va_start(va, nargs);
+> > -     for (i = 0; i < nargs; ++i)
+> > -             uc.args[i] = va_arg(va, uint64_t);
+> > -     va_end(va);
+> > -
+> >       sbi_ecall(KVM_RISCV_SELFTESTS_SBI_EXT,
+> >                 KVM_RISCV_SELFTESTS_SBI_UCALL,
+> > -               (vm_vaddr_t)&uc, 0, 0, 0, 0, 0);
+> > +               uc, 0, 0, 0, 0, 0);
+> >  }
+> >
+> > -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> >       struct ucall ucall = {};
+> > diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > index 73dc4e21190f..114cb4af295f 100644
+> > --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > @@ -6,34 +6,21 @@
+> >   */
+> >  #include "kvm_util.h"
+> >
+> > -void ucall_init(struct kvm_vm *vm, void *arg)
+> > +void ucall_arch_init(struct kvm_vm *vm, void *arg)
+> >  {
+> >  }
+> >
+> > -void ucall_uninit(struct kvm_vm *vm)
+> > +void ucall_arch_uninit(struct kvm_vm *vm)
+> >  {
+> >  }
+> >
+> > -void ucall(uint64_t cmd, int nargs, ...)
+> > +void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >  {
+> > -     struct ucall uc = {
+> > -             .cmd = cmd,
+> > -     };
+> > -     va_list va;
+> > -     int i;
+> > -
+> > -     nargs = min(nargs, UCALL_MAX_ARGS);
+> > -
+> > -     va_start(va, nargs);
+> > -     for (i = 0; i < nargs; ++i)
+> > -             uc.args[i] = va_arg(va, uint64_t);
+> > -     va_end(va);
+> > -
+> >       /* Exit via DIAGNOSE 0x501 (normally used for breakpoints) */
+> > -     asm volatile ("diag 0,%0,0x501" : : "a"(&uc) : "memory");
+> > +     asm volatile ("diag 0,%0,0x501" : : "a"(uc) : "memory");
+> >  }
+> >
+> > -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> >       struct ucall ucall = {};
+> > diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > new file mode 100644
+> > index 000000000000..749ffdf23855
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > @@ -0,0 +1,20 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +#include "kvm_util.h"
+> > +
+> > +void ucall(uint64_t cmd, int nargs, ...)
+> > +{
+> > +     struct ucall uc = {
+> > +             .cmd = cmd,
+> > +     };
+> > +     va_list va;
+> > +     int i;
+> > +
+> > +     nargs = min(nargs, UCALL_MAX_ARGS);
+> > +
+> > +     va_start(va, nargs);
+> > +     for (i = 0; i < nargs; ++i)
+> > +             uc.args[i] = va_arg(va, uint64_t);
+> > +     va_end(va);
+>
+> ...but not here. At least AArch64 needs them, see commit 9e2f6498efbb
+> ("selftests: KVM: Handle compiler optimizations in ucall")
+>
+> > +
+> > +     ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > index e5f0f9e0d3ee..9f532dba1003 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > @@ -8,34 +8,21 @@
+> >
+> >  #define UCALL_PIO_PORT ((uint16_t)0x1000)
+> >
+> > -void ucall_init(struct kvm_vm *vm, void *arg)
+> > +void ucall_arch_init(struct kvm_vm *vm, void *arg)
+> >  {
+> >  }
+> >
+> > -void ucall_uninit(struct kvm_vm *vm)
+> > +void ucall_arch_uninit(struct kvm_vm *vm)
+> >  {
+> >  }
+> >
+> > -void ucall(uint64_t cmd, int nargs, ...)
+> > +void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >  {
+> > -     struct ucall uc = {
+> > -             .cmd = cmd,
+> > -     };
+> > -     va_list va;
+> > -     int i;
+> > -
+> > -     nargs = min(nargs, UCALL_MAX_ARGS);
+> > -
+> > -     va_start(va, nargs);
+> > -     for (i = 0; i < nargs; ++i)
+> > -             uc.args[i] = va_arg(va, uint64_t);
+> > -     va_end(va);
+> > -
+> >       asm volatile("in %[port], %%al"
+> > -             : : [port] "d" (UCALL_PIO_PORT), "D" (&uc) : "rax", "memory");
+> > +             : : [port] "d" (UCALL_PIO_PORT), "D" (uc) : "rax", "memory");
+> >  }
+> >
+> > -uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> >       struct ucall ucall = {};
+> > --
+> > 2.37.1.455.g008518b4e5-goog
+> >
+>
+> Thanks,
+> drew

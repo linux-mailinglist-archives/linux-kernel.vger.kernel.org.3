@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A3E5881C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE3A5881CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiHBSPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S232498AbiHBSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiHBSPo (ORCPT
+        with ESMTP id S229748AbiHBSRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:15:44 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6FD31223
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 11:15:43 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id dc19so4654415ejb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 11:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6BbJfTjdzqSyIyJ/BwNHDar8lvGvNh9tJJcETlMgsi8=;
-        b=AAm3jF6Yv/WSrJVDzBAi32ZllaD6WcLJcAjOtSKJnri4173VklMNnvUGnSpWaK8DbH
-         b0cFJX9FlGlpz0WmeNBTElE1kknA3giOGd3CuRBPwIYTa9DbVr9/SsakzgOpBwQ/A/Co
-         /vqesB4IHMRKbZcq+VGsjIUB7i0oyDkJYQ8j6U+XiB6GiKf0O3Avb/HmbPDH/Mi9fmq1
-         /T8pMTA6xmFLBVSHCZPCpr6dXdsjiE6JTJhEVtDdiCVZ9gDl/Fo9Thp76i2nJg+zEeoQ
-         ALTdb322dXjVYojGkBb1TNx9zg+gwLP6yD+hnJEITarXNppZCv/iNe1rISks8mTSUWQh
-         BrXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6BbJfTjdzqSyIyJ/BwNHDar8lvGvNh9tJJcETlMgsi8=;
-        b=Vefluvw4IBwPjuERdG0KIMSjGu7aKA5fU+aLVymqBtdqayllnVvjsso5KfL4SoeJMw
-         VWzvgU6b2urmPDIWPcgzc7FtxrsaZlEOuC/vM49/V9IDX0Klc7WJSLh9I0Q6PGVydQ2Z
-         UaVmQ0heCHqplwml/5dQiP0/WplRW3A9d8EskYK/NJN97StRo3Nha0woA9NaquPxBn1q
-         5JmdTj6TxIhVRI4tTr/wENdDAIlZBsoFoGOKerE+3nt69aIOCtymRRDvtKxeFx6A/xPa
-         ZnulZ5ozyscuDuKLjIthj5eU+jN0mKUdyKKV3BrkasHoF2m8qn/M18wVT7HoO+9C02G7
-         VUNQ==
-X-Gm-Message-State: ACgBeo2w6VOmRQVBiRd/IPegfMETTrEG/qhH1HEocKkh3zZVopSBXY57
-        aC66oGov/Y4e1v1rVXbpYKuvSfMU4NlZIL9ErysaHQ==
-X-Google-Smtp-Source: AA6agR4WJiek/NyhjdRitZ/3tHtbSX+J19XLEFJDKQDWrFtTzwoDqLPeKK0bnUYbbWTa4hKd9a2ds+rDH2YAVxAWUeA=
-X-Received: by 2002:a17:907:2719:b0:730:a688:f1e4 with SMTP id
- w25-20020a170907271900b00730a688f1e4mr1756493ejk.425.1659464141758; Tue, 02
- Aug 2022 11:15:41 -0700 (PDT)
+        Tue, 2 Aug 2022 14:17:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B81332EE1;
+        Tue,  2 Aug 2022 11:17:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB92561333;
+        Tue,  2 Aug 2022 18:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6D5C433D6;
+        Tue,  2 Aug 2022 18:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659464228;
+        bh=MAPAKOMDnapoFWQI4pbiRIHdLfwu4SmgOSEVB+CmYFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uqCiNcvOxvcQF54d52JcBnBqklZPQOkv3iae9KzBU5KxMbhEAXyCWxwVT8+BjGV4E
+         F4VvDFJM2YMMc+tcVGfhijodaIQdQqHqOAkhtOhCdM1FBav7kBvvVwLbnpzKUFa0dw
+         +s/J42aE585ahlwTzU/GYJDkCI5S3iQO6fTAlp0khV+zpcZhYjoytvFIoWGU1EYc6R
+         sYHcnkE3QWfZHkZehoZEwH8DM+R45lDrfhhdPWxUMz9Raq57mootGS7D1GR4nxO3Uc
+         RVQqpeyAlXvk+YAhpPs7sZ9vRTEEQPwIgWSuSbMsn47dR6VpoUcoOAdTYe61YZndO/
+         Icl18/KHyZkrw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F186B40736; Tue,  2 Aug 2022 15:17:05 -0300 (-03)
+Date:   Tue, 2 Aug 2022 15:17:05 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Subject: Re: [PATCH 2/3] perf lock: Add -m/--map-length option
+Message-ID: <YulqIWpDMisldmHH@kernel.org>
+References: <20220802073511.299459-1-namhyung@kernel.org>
+ <20220802073511.299459-2-namhyung@kernel.org>
+ <YuliN2UDbls5uW3u@kernel.org>
+ <CAM9d7chZT-mociK=+iF_6SO=1JuD2xaL1HpE4eeo=myngq9vTw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220802161206.228707-1-mairacanal@riseup.net>
- <20220802161206.228707-3-mairacanal@riseup.net> <5c9038fd-a247-d0d3-841c-ba1e606bc309@riseup.net>
-In-Reply-To: <5c9038fd-a247-d0d3-841c-ba1e606bc309@riseup.net>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 2 Aug 2022 11:15:30 -0700
-Message-ID: <CAGS_qxodPndQZ_ypy-QP=ViNUvwZk1z1u8EAv9k5XzDEC4WSGQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: add KUnit array assertions to the example_all_expect_macros_test
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>
-Cc:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        melissa.srw@gmail.com, daniel@ffwll.ch, javierm@redhat.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        jose.exposito89@gmail.com, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, davidgow@google.com,
-        davem@davemloft.net, Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, airlied@linux.ie, kuba@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7chZT-mociK=+iF_6SO=1JuD2xaL1HpE4eeo=myngq9vTw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 9:19 AM Andr=C3=A9 Almeida <andrealmeid@riseup.net> =
-wrote:
-> =C3=80s 13:12 de 02/08/22, Ma=C3=ADra Canal escreveu:
-> > Increament the example_all_expect_macros_test with the
-> > KUNIT_EXPECT_ARREQ and KUNIT_EXPECT_ARRNEQ macros by creating a test
-> > with array assertions.
+Em Tue, Aug 02, 2022 at 11:05:09AM -0700, Namhyung Kim escreveu:
+> On Tue, Aug 2, 2022 at 10:43 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> > Em Tue, Aug 02, 2022 at 12:35:10AM -0700, Namhyung Kim escreveu:
+> > > +-m::
+> > > +--map-length::
+> > > +     Maximum number of BPF map entries (default: 10240).
 > >
-> > Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > ---
-> >  lib/kunit/kunit-example-test.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
+> > --map-nr-entries?
 > >
-> > diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-t=
-est.c
-> > index f8fe582c9e36..fc81a45d9cbc 100644
-> > --- a/lib/kunit/kunit-example-test.c
-> > +++ b/lib/kunit/kunit-example-test.c
-> > @@ -86,6 +86,9 @@ static void example_mark_skipped_test(struct kunit *t=
-est)
-> >   */
-> >  static void example_all_expect_macros_test(struct kunit *test)
-> >  {
-> > +     const u32 array[] =3D { 0x0F, 0xFF };
-> > +     const u32 expected[] =3D { 0x1F, 0xFF };
+> > I think we use this jargon "nr-entries" for arrays, lists, etc, better
+> > try to stick to it.
+ 
+> Makes sense, will change.
 
-Given the distance between the definition and their use, perhaps we
-can give them clearer names.
-E.g. array + diff_array, or array1 + array2, etc.
-
-I think something to indicate they're arrays and that they're different.
-The current name `expected` is a bit unclear.
-
-> > +
-> >       /* Boolean assertions */
-> >       KUNIT_EXPECT_TRUE(test, true);
-> >       KUNIT_EXPECT_FALSE(test, false);
-> > @@ -109,6 +112,10 @@ static void example_all_expect_macros_test(struct =
-kunit *test)
-> >       KUNIT_EXPECT_STREQ(test, "hi", "hi");
-> >       KUNIT_EXPECT_STRNEQ(test, "hi", "bye");
+Great.
+ 
+> > Also what do you think about not using single letter options for things
+> > that are not that used?
 > >
-> > +     /* Array assertions */
-> > +     KUNIT_EXPECT_ARREQ(test, expected, expected, 2);
-> > +     KUNIT_EXPECT_ARRNEQ(test, array, expected, 2);
->
-> ARRAY_SIZE() is usually better than constants is this case.
+> > The map size has a default, one that seems generous, so changing it
+> > should be something uncommon, and then, if it becomes common that more
+> > entries are needed by default, we can change the default in the tool.
+> 
+> Fair enough, I'll remove the single letter option.
 
-Note: that's actually incorrect!
+Thanks!
 
-Ah right, this was the other blocker I had in mind.
-I wasn't sure how we'd handle the size parameter.
-
-Users might think ARRAY_SIZE() is fine and copy-paste it.
-But the size parameter is in units of bytes, not array elements!
-If the element types are not 1 byte, it'll silently not compare the full ar=
-ray.
-
-We'd want people to use
-KUNIT_EXPECT_ARREQ(test, expected, expected, sizeof(expected));
-
-But this doesn't work for `u32 *array`, since it'll silently just
-compare 1 byte if people get them mixed up.
-
-I don't know how we make a maximally fool-proof version of this macro :\
+- Arnaldo

@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC786587503
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CC5587504
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiHBBUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S232389AbiHBBUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiHBBUE (ORCPT
+        with ESMTP id S230227AbiHBBUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:20:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E76801B79D
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:20:02 -0700 (PDT)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxHOS6e+hiV+EAAA--.4933S3;
-        Tue, 02 Aug 2022 09:19:55 +0800 (CST)
-Subject: Re: [PATCH 3/4] LoongArch: Add stacktrace support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jinyang He <hejinyang@loongson.cn>
-References: <20220801121726.9681-1-zhangqing@loongson.cn>
- <20220801121726.9681-4-zhangqing@loongson.cn>
- <CAAhV-H6Az_X1afvAO+JxnDaW-Ey_8wmozehd++qOZoGmimM+6g@mail.gmail.com>
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <3cc6aebc-87e7-f0d0-2a88-e7e742e1e5ee@loongson.cn>
-Date:   Tue, 2 Aug 2022 09:19:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 1 Aug 2022 21:20:03 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738B9AE47
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:20:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LxcZW2wSvzKJyG;
+        Tue,  2 Aug 2022 09:18:43 +0800 (CST)
+Received: from [10.174.176.103] (unknown [10.174.176.103])
+        by APP1 (Coremail) with SMTP id cCh0CgCX7PC+e+hiFqFeAA--.37387S2;
+        Tue, 02 Aug 2022 09:19:59 +0800 (CST)
+Message-ID: <2520574c-ea6c-7c0a-2288-9035b5e0cbab@huaweicloud.com>
+Date:   Tue, 2 Aug 2022 09:19:58 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6Az_X1afvAO+JxnDaW-Ey_8wmozehd++qOZoGmimM+6g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH -next] [RFC] scsi: ses: fix slab-out-of-bounds in
+ ses_enclosure_data_process
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+References: <20220713094548.3958915-1-yukuai1@huaweicloud.com>
+ <yq1edxz349n.fsf@ca-mkp.ca.oracle.com>
+From:   "zhangwensheng (E)" <zhangwensheng@huaweicloud.com>
+Reply-To: zhangwensheng@huaweicloud.com
+In-Reply-To: <yq1edxz349n.fsf@ca-mkp.ca.oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9BxHOS6e+hiV+EAAA--.4933S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxurWUZrWfuFy5Zr1kGr48JFb_yoW5WF1xpF
-        ykArsxGF4kCr1fCFyav345uFyrJwn7Gr12qF9rKa45CrnFvF1aqr1kGF1DuFWjqan8J3yI
-        9FyfWr9Iga1UXw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbLiSPUUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-CM-TRANSID: cCh0CgCX7PC+e+hiFqFeAA--.37387S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4rtryDAF4fAw1rXr1UJrb_yoW5JrW7pr
+        18Jr1UJryUJr1rJr1UJr1UJryUJF1UJ34UJr1UJFyUJr1UJr1jqr1UXr1jgr1UJr4rJr1U
+        Jr1UJw1UZr1UJrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
+X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
+ From my description, there is still loophole in the previous changes.
+can you make a test with the following changes?
 
-On 2022/8/1 下午11:30, Huacai Chen wrote:
-> Hi, Qing,
-> 
-> On Mon, Aug 1, 2022 at 8:17 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index 0a1734f34587..06b991e27c84 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -559,11 +559,11 @@ static void ses_enclosure_data_process(struct 
+enclosure_device *edev,
+                         struct enclosure_component *ecomp;
+
+                         if (desc_ptr) {
+-                               if (desc_ptr >= buf + page7_len) {
++                               len = (desc_ptr[2] << 8) + desc_ptr[3];
++                               desc_ptr += 4;
++                               if (desc_ptr + len > buf + page7_len) {
+                                         desc_ptr = NULL;
+                                 } else {
+-                                       len = (desc_ptr[2] << 8) + 
+desc_ptr[3];
+-                                       desc_ptr += 4;
+                                         /* Add trailing zero - pushes into
+                                          * reserved space */
+                                         desc_ptr[len] = '\0';
+
+thanks！
+
+Wensheng
+
+在 2022/8/2 8:01, Martin K. Petersen 写道:
+>> After analysis on vmcore, it was found that the line "desc_ptr[len] =
+>> '\0';" has slab-out-of-bounds problem in ses_enclosure_data_process.
+>> In ses_enclosure_data_process, "desc_ptr" point to "buf", so it have
+>> to be limited in the memory of "buf", however. although there is
+>> "desc_ptr >= buf + page7_len" judgment, it does not work because
+>> "desc_ptr + 4 + len" may bigger than "buf + page7_len", which will
+>> lead to slab-out-of-bounds problem.
 >>
->> Use common arch_stack_walk infrastructure to avoid duplicated code and
->> avoid taking care of the stack storage and filtering.
->> Add sra (means __schedule return address) and scfa (means __schedule call
->> frame address) to thread_info and store it in switch_to().
->>
->> Now we can print the process stack by cat /proc/*/stack and can better
->> support ftrace.
->>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->> ---
->>   arch/loongarch/Kconfig                 |  5 ++++
->>   arch/loongarch/include/asm/processor.h |  9 +++++++
->>   arch/loongarch/include/asm/switch_to.h | 14 ++++++----
->>   arch/loongarch/include/asm/uaccess.h   |  4 +--
->>   arch/loongarch/kernel/Makefile         |  1 +
->>   arch/loongarch/kernel/asm-offsets.c    |  2 ++
->>   arch/loongarch/kernel/process.c        |  3 +++
->>   arch/loongarch/kernel/stacktrace.c     | 37 ++++++++++++++++++++++++++
->>   arch/loongarch/kernel/switch.S         |  2 ++
->>   9 files changed, 70 insertions(+), 7 deletions(-)
->>   create mode 100644 arch/loongarch/kernel/stacktrace.c
->>
->> diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
->> index 2b44edc604a2..a8ae2af4025a 100644
->> --- a/arch/loongarch/include/asm/uaccess.h
->> +++ b/arch/loongarch/include/asm/uaccess.h
->> @@ -229,13 +229,13 @@ extern unsigned long __copy_user(void *to, const void *from, __kernel_size_t n);
->>   static inline unsigned long __must_check
->>   raw_copy_from_user(void *to, const void __user *from, unsigned long n)
->>   {
->> -       return __copy_user(to, from, n);
->> +       return __copy_user(to, (__force const void *)from, n);
->>   }
->>
->>   static inline unsigned long __must_check
->>   raw_copy_to_user(void __user *to, const void *from, unsigned long n)
->>   {
->> -       return __copy_user(to, from, n);
->> +       return __copy_user((__force void *)to, from, n);
-> Why this? Does it have something to do with stacktrace?
-> 
-> Huacai
-
-Hi, huacai
-
-This is kernel test robot report sparse warnings:
-I reproduced locally and found that other architectures calling 
-__copy_user also use __force conversion, Is this modification appropriate?
-
-kernel/trace/trace_events_user.c: note: in included file (through 
-include/linux/uaccess.h, include/linux/sched/task.h, 
-include/linux/sched/signal.h, ...):
-    arch/loongarch/include/asm/uaccess.h:232:32: sparse: sparse: 
-incorrect type in argument 2 (different address spaces) @@     expected 
-void const *from @@     got void const [noderef] __user *from @@
-    arch/loongarch/include/asm/uaccess.h:232:32: sparse:     expected 
-void const *from
-    arch/loongarch/include/asm/uaccess.h:232:32: sparse:     got void 
-const [noderef] __user *from
-
-Thanks,
--Qing
-
+>> Fix it by using judging desc_ptr cross the border or not after
+>> "desc_ptr += 4".
+> FWIW, I tested this change and I am still getting KASAN errors from ses.
+>
 

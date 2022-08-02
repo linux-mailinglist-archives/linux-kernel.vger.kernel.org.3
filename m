@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1B3587C26
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFDE587C2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbiHBMQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S236853AbiHBMSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiHBMQ3 (ORCPT
+        with ESMTP id S233811AbiHBMSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:16:29 -0400
+        Tue, 2 Aug 2022 08:18:15 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02914262C;
-        Tue,  2 Aug 2022 05:16:23 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1659442572tox89pbw
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577D140BFC;
+        Tue,  2 Aug 2022 05:18:10 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1659442679t8yn2sjl
 Received: from kali.lan ( [125.69.43.47])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 02 Aug 2022 20:16:10 +0800 (CST)
+        id ; Tue, 02 Aug 2022 20:17:58 +0800 (CST)
 X-QQ-SSF: 01000000002000F0U000B00A0000020
-X-QQ-FEAT: zT6n3Y95oi0+GF2rz41IpklRcaOGRreCB/vyXaTX2YbnxIVMbcZECTfR9yO/3
-        8npwl5Hj4lgtsMU4s/TMXiG0u2PUaRHZ8fHYtPbo2E/EelUGWi+5+4MV+jHV/ArGO1Dod8E
-        Sz6nKxkDksp+W0UJod80LdUSoUxw9VXV9pAkYKjQJaSmPuqVh3TQYyOQpAzdhX/+JvWsg8q
-        vQa+5hYtmzxp+ORs8hOwx43XouR9wfkvQfcdcjGyx3hE2JCmdbn1a1N00BbQn1x1Iwpgaih
-        QaiptHfzunkKEeqmhPO8AvJVWeurP/C+I28AzPye4kXEF8MeUMQK3ru3PCPNycWYoZ4nFGY
-        Kt0DjypTV/CNrBOMKf0VDbM6ZR/ALj51n8sSo1CzYptwRqo3d7+yAVh2/gFEg==
+X-QQ-FEAT: XBN7tc9DADI6Ojkp2zarVxqaO1A5I6gQqaQ5zzxYKVTmUGCuljx9aINUNxuez
+        8/K5ajgyHjB3KpPKPJ3BqU7nHGWfaNZtqzMh7LyQZzrLiBAT4KrdwrA07slrXT5zzetlk5x
+        uMGbAbhJtvuO3sZjB6ZTgUcnOWIlzVNCiWSCIKL3qmdxreNEIteF2DU8TvwUKBvZ+NHguu9
+        I7y7+rShwQZA6IrmrsbjjxG5LZxA1NPftibfl0qcDIpyVorwWHkPQ/BA8z5ui8Cd481ruYf
+        cTImVegfdPZJVi8T2OlH+yw6tVYYiw0GsetYw3bJfTza4PwxgsRzLKnkYeVVDwyqtBch9bP
+        zBeO0z4q1iOuyqn6nZ2lzVBwatPdkasE/dVhfwAiSMVhVoZqRz/2oW7QAsLUrSHg4WDXiHW
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     martin.petersen@oracle.com
-Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+To:     tony@atomide.com
+Cc:     lee@kernel.org, linux-omap@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] scsi: lpfc: Fix comment typo
-Date:   Wed,  3 Aug 2022 04:16:09 +0800
-Message-Id: <20220802201609.7788-1-wangborong@cdjrlc.com>
+Subject: [PATCH] mfd: twl-core: Fix comment typo
+Date:   Wed,  3 Aug 2022 04:17:57 +0800
+Message-Id: <20220802201757.8142-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +48,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `from' is duplicated in the comment, remove one.
+The double `to' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/scsi/lpfc/lpfc_debugfs.c | 2 +-
+ drivers/mfd/twl-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index 5037ea09a810..89c59d9fd040 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -2538,7 +2538,7 @@ lpfc_debugfs_lseek(struct file *file, loff_t off, int whence)
-  * @ppos: The position in the file to start reading from.
-  *
-  * Description:
-- * This routine reads data from from the buffer indicated in the private_data
-+ * This routine reads data from the buffer indicated in the private_data
-  * field of @file. It will start reading at @ppos and copy up to @nbytes of
-  * data to @buf.
-  *
+diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
+index 2cb9326f3e61..ca6eca53a79e 100644
+--- a/drivers/mfd/twl-core.c
++++ b/drivers/mfd/twl-core.c
+@@ -883,7 +883,7 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	 * SR_I2C_SCL_CTRL_PU(bit 4)=0 and SR_I2C_SDA_CTRL_PU(bit 6)=0.
+ 	 *
+ 	 * Also, always enable SmartReflex bit as that's needed for omaps to
+-	 * to do anything over I2C4 for voltage scaling even if SmartReflex
++	 * do anything over I2C4 for voltage scaling even if SmartReflex
+ 	 * is disabled. Without the SmartReflex bit omap sys_clkreq idle
+ 	 * signal will never trigger for retention idle.
+ 	 */
 -- 
 2.35.1
+
 

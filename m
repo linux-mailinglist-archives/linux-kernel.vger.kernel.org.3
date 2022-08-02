@@ -2,179 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363A1588383
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8AE588389
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234035AbiHBV1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S234763AbiHBV2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbiHBV0r (ORCPT
+        with ESMTP id S235294AbiHBV1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:26:47 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2010.outbound.protection.outlook.com [40.92.20.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61402638A;
-        Tue,  2 Aug 2022 14:26:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bUSHqyz2ShfMRo3Oej7+uYr1W1PWPowOiPcmWiO5n2MpDV0NhdqnlWt4agq7wLACP7iwA1+IhBZnetbf7DrCF5xw53sTDBuBB+kLQXRrVtxgo29OWlBR0GYnFgUzy6SNN7wxtOBkGu9MvOmPWd6JtzDQnjUY58shFQztg6QIs+spV0Ngr/bIGr1jAYvDTnW7qoZDyEFOSHO8W6xLh7GZeZePGv6y4T9o06dWOCy2WZLCPusNh0MLOSGQZ9XpIdGIQWYSOwfpHmG7FylO+Z6ZRx5xtS04SKOWoEy0CNkwF+sxr/zLeMSMKn8qtuRI6PB/Q6lTdgwl9cX9vZw0sTsnZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fWMVzIa3MsonwoTA4zmKlX8CudrOmMoCK7RcdG87xM4=;
- b=HdWBaWyVwlEDi8qSBlDQ7Qgbjy+XCs6kq8uvkRodjvocjM2Zab6SNXUv6me+8CEVT+TZMtw2n1mnZdT9pKmyi/5wHcYUHYweMVx+RZM95uiwNs8taFmkVa3vMkpEgIl5rJ+t+/8aTru7cwAdH8OVvYbCnmRQimfuWxmwE6DS4UMVON0jEIgs4ap2rFKBT6NLfVpw4wLzc2sbHaTI/LIkCkpuO74JFCamjTRjwIA0kXBjsGAl5gIf1KktC5ekeZ7c2UH88kDMUtpnrNxpMK64rIowRqE44epAWgvTSYVlm0sKzdrywh5moyCq6TYlOsSXNCHigOtBjpw/Ubicpb/bbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fWMVzIa3MsonwoTA4zmKlX8CudrOmMoCK7RcdG87xM4=;
- b=tBa7oY9wwYbll/5ikfSdpbsARzuUewl3u670PBXFPnYgU6Nb68Ow1gPn1017S1QOfx1ckIIw2FJsf2xWJxnP4bZUADzBMgWng8IiMJhn8WeRoswdtQJjxHuAe7ueF2OdE/ClsBPcymbcAOnv3TQyJ0mzc10uGb4JMD99dNbq9nhVPx15xzxHIxyjvZ+XD27OkYzbbDav7J6FLPISZUd5Ia5QyrT/aYxuZn3fPApBdByoAsK72FYlpfCISlCeRmBR+70nCXCs3IC5WEcqSiG00Pra8nEztKZvOMHMZBtFkmzAWw+ZWDtITHc6dO0yq9yusKWPnZqps39QnSKxMy177A==
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com (2603:10b6:a03:236::13)
- by MWHPR02MB2414.namprd02.prod.outlook.com (2603:10b6:300:5c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.15; Tue, 2 Aug
- 2022 21:26:36 +0000
-Received: from BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::e080:d670:29c7:9180]) by BY5PR02MB7009.namprd02.prod.outlook.com
- ([fe80::e080:d670:29c7:9180%8]) with mapi id 15.20.5504.014; Tue, 2 Aug 2022
- 21:26:36 +0000
-Message-ID: <BY5PR02MB700935025EB9A40B9E43CA48EA9D9@BY5PR02MB7009.namprd02.prod.outlook.com>
-Date:   Wed, 3 Aug 2022 02:56:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sdm845-xiaomi-beryllium-common:
- move common nodes to a common dtsi
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <BY5PR02MB70099020AC1D181D15909F64EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
- <BY5PR02MB70091276EDE0CE4FCB6CFBD5EA9A9@BY5PR02MB7009.namprd02.prod.outlook.com>
- <20220801185304.ozoydbmbgqe6fqdy@SoMainline.org>
- <822b24fb-add3-b49f-d64e-15b577929edf@linaro.org>
-Content-Language: en-US
-From:   Joel Selvaraj <joel.selvaraj@outlook.com>
-In-Reply-To: <822b24fb-add3-b49f-d64e-15b577929edf@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TMN:  [6QBWqs77HXsvBMLNOVfciWEYlmash8XqXl6eBPQwlnZkXwxab9Va1K1h5KkQDe1u]
-X-ClientProxiedBy: BM1PR01CA0161.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:68::31) To BY5PR02MB7009.namprd02.prod.outlook.com
- (2603:10b6:a03:236::13)
-X-Microsoft-Original-Message-ID: <b736fca7-3efa-faee-02fd-8203fa0f87f0@outlook.com>
+        Tue, 2 Aug 2022 17:27:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7346EE1D
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 14:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7157B61541
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBDEC433D6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659475651;
+        bh=f8sXEmjzCVWO9SdsToGcbb/52oVj4biGgRxKUZX9cL0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tw80OWTVEkjpfhGKgLg91gtAzcr6sCrkizVmxfD0Wx1gGBiuz/lnleEzvXaqDbzAn
+         7ajyz91BF/G9Q7wvrdG7rN3O0GaVCNCpZhbrNjHNkjTtqvOECaIbr+RRf+pBMT56lR
+         Vkp9mrmU3xm9zd5clNZ1FYDm7P2bYWTgpQ50fzNd6v+UVXZh+lMLRtBXdqZtI6ioMQ
+         aV8GbUhtu5wCkBA1mqLh+KQ3F77stMNn/I3E6sWj8OcStGPTbAAq6sEQAi/h8yTJAa
+         WGY0QtGf0x1kZE2iIxLpdrqGaGfJj+Vw1dQx2scC6k1OtVx5Zc0Oy3Axzm5IucJ41s
+         R/O3QVyy0fGag==
+Received: by mail-oo1-f46.google.com with SMTP id j1-20020a4ab1c1000000b0043576bcb9b1so2718401ooo.10
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 14:27:31 -0700 (PDT)
+X-Gm-Message-State: AJIora8TVBAZ+QG6hN9+STO/jlzj7L005hYPtDZ63MkrQVnXoFVjq/bp
+        hmN3Wjdl+OVvNNh2jpGXOiQbwNVNtRPuyv3dAsKnAg==
+X-Google-Smtp-Source: AA6agR7JinRXkeCaJ5iefkcmIgve6ME8Mm5zo+J7U3kFFPHDt8uq88NL4Vzh4y50CW3ZVwUTqLvZCLIQnwxxgoeJPB4=
+X-Received: by 2002:a81:14c7:0:b0:328:25f0:9c89 with SMTP id
+ 190-20020a8114c7000000b0032825f09c89mr2444233ywu.476.1659475640618; Tue, 02
+ Aug 2022 14:27:20 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a0e223b6-431e-44f9-03e2-08da74cdadc2
-X-MS-TrafficTypeDiagnostic: MWHPR02MB2414:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qMWkQUKqqB3K5V6Jugwzkn6vrbCcRdphpyQV2fKtnnN6OquU6hB2z4zSRA3Q23I/zNeRiFQpkIOpjiqr7+08x1eiiFSiBqBp1AEu5Y7MxYcOSwSuRrF2TdlIWNt6fvHTt89uYXkZxCIlG13hSehbtw6z9mNhlf0OrslsBGmTzSL4Y5yNGVDQGj/Yk5nPr+w3rDXdriUyqMdCCYDYotg2M5dbGZD/bHpyPLvE158Sz+nPQ0QXtCLEV5FObaIwfc7KOMg3JJtqhJzUIL2J2yTlDK7EE1qeG+hbKpGpCLnZo6RUV8Ni+lsygTfiWmtm/ZHmZfDJhsmboklXWsdlaLYwaL17DUjohHjbXX1Zwf0QQVoaRGrMyxA6YO2kJVeOWA5vYTIOyceCtAMcs+e9upSHnKEOCD13zAoy6vyWCNJ5BV0PNEIXIVbqTPAO78+QCrvhC/A4Lc0dx7InKtxVDTdgknK7Ulr29XLU/0xFQy3zynh/48nRIJg1KLhmu3mgolJCDnhKw3NWiE8y7a6djDixFX9jZPA5GZoklsTdqkVMgAXH93/x1rWfbEbSOw91V3zLHdGXK144NK7CyABJAQ8KKC1LFFmYTCtk7pmMgGGhe0AzNcw0s6AQuS3fYo/lAiSUtJCxBYH2T6MDzlGCTtOE12ykZn56ozziRfH9ifg5iD6Oa5Myi4Hb7NOyApGP8oJA
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUM2clRoSUFrOHVseFNQa0JHcjJLeHprdThOaWZyV1Z6LzI4eHJwTXFLemMw?=
- =?utf-8?B?Q2diK2xUemFhRFhOVUJPSWYyQ3VHbUI1RmxPVkp3Wi9TZzMyYi9rNS9JbUFq?=
- =?utf-8?B?cDV5eUdGM1pWS3RTNjN4Z2xYWllGSEFtZ1dmMmR0RldVTUtLVVVvek5WSkd5?=
- =?utf-8?B?VmhLK282czNpVmFHcnlscXlqSWprQUN2cUJQckIzV0VJa3J6S1VxQ3ozYnQ2?=
- =?utf-8?B?UjVkZElxWEVpR0lNSEtqTXhWSTByekJ6eFNDVVpRY01KVVNZVDhVUTFkNURp?=
- =?utf-8?B?YlBldXJZR3ZKeS90MWg0QnlSU1JQQmpnZmYyamVGQmxjb0hLRTBqbStnWEJS?=
- =?utf-8?B?VWdnTXlleFBUYWtkQ2cyL0dzQzFldTg4UEcvZnBBd3VrTEdFWURlRTgvdkZh?=
- =?utf-8?B?QnNlZGFzWEpDWFlObWlrSTY2UEw1Y2hsTDRMY1g5aGZJeEVJNnE5MXVBWVQ0?=
- =?utf-8?B?WWdFYXRhWDJWUVVpUXBZeGtYVjJNRmQ0enFjVmFJK1hvYmtnQ2tyQWFTUUd6?=
- =?utf-8?B?d2xTbjJxUUtJQlAza24wKzVBczBidXlEN3dYTFNyQWhrcy9idisySy9tNWM4?=
- =?utf-8?B?c0s1NkUwYklsdHlZVUY4dmpIWU5VUlZPQjhXMmJjNkxPTkp6YUIxWDRpWWR6?=
- =?utf-8?B?alFyMDdOb0EvL0h2bndlaUF5VnZYanB1NzM3VzhRSGFYTUxQbXdHcGV0WWEz?=
- =?utf-8?B?d25MRzh5WGp6aFZjejVxdlFOV1RsbzAydjRXM3IvQkhEZUx0bnBPbnlRY0hB?=
- =?utf-8?B?cDcvK2tDQ0xRbnRGNlNqbFBMY2QzM21DSHZIbmlCemQ1L1UzN3BsdHRkemVz?=
- =?utf-8?B?ZzJ2R0R0ZTBtbXVRZG9kdE51MjE5ekp3S3Y3ODJUcUV4dWtUNUowdjRXMktF?=
- =?utf-8?B?UC9YODc5RWRveEY1VC8zUS9TMTFUaVNlVllzbFBaRVlGYmh0RkxiYStKZVBu?=
- =?utf-8?B?YVl3amxkVkc2c2tpbkxNYXJPZXFLcUx2dEJIcDZWVVo3YjVKRXV3cVZnek55?=
- =?utf-8?B?T3Z2RXg0dUtwdFU4S25qcmRMWG1hQUp6WmUreUt1eHdnMkdjeGpEOVErRTln?=
- =?utf-8?B?Y3JVV2hmNEg3MENlQzhuZ2JQY2JpWGE1aHJ4R0lyTlBFbUx5eWJBZVpmckZX?=
- =?utf-8?B?THhBTzIrTVQwdXliZW4wQldCNU1YNHQ4ZmdaTnpJUUptL3czcm5BSW92NmhX?=
- =?utf-8?B?b1JvTC8rNTg3M1YzRUJsUlQ3eVVOOUthOXF5eTFNVkFIUmJiUGlEdGVLVVM3?=
- =?utf-8?B?QkcxVFJ6RjBIV1BaQlUxMi9EWUhPeHNsd0lGOG9ZUlBqT2E2WlpOenkyV29m?=
- =?utf-8?B?QjRYSXhCSHdkL1NUU0pCU2xNbGRvaXptWnhCN2ZXYXZmbWR0cExhSDlubGtl?=
- =?utf-8?B?SmV4a0NONFJiOWl5TmY4M3NFRG1lUUhXbDdhcm9rK1VEdUl3dlE4Mm1ZdjBB?=
- =?utf-8?B?QndzTi93cGxobVkrTEdxaVZYKzhpVzRwS0RKak1DdGRZSWg5V2x6Q1E1UE1K?=
- =?utf-8?B?c2JGNXNUTkxDQnFpa05iclpHNTg5eUdoRDRSWnBIb0FBZ3pMTElYcDJ0Q0E3?=
- =?utf-8?B?dVZxTzYxdVVHUGhXdVdTMFF5THlBbVo2ZkNmYnFKYllMSVZIN0tqajFSUGM3?=
- =?utf-8?B?SzlEakxVVzROTkdYYi9tZ3YxcXZiUmtUOEpxVnpHR0JIMTdTYmNPdnFFcm0x?=
- =?utf-8?B?RVdjOEY2bnJ1YWJzNW1KdXdZa2pHa25rNm94dTVYMTlSdXJMUS9MdTR6SUNW?=
- =?utf-8?B?S2FieXA0bGF3cml2MmlseVdTQWlrWU1NYll2T3hWeGJlUkVQRW1XajJ4aEhC?=
- =?utf-8?B?RGV1bTBtU2MybDhBSzIrdz09?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0e223b6-431e-44f9-03e2-08da74cdadc2
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB7009.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 21:26:36.3963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2414
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
+ <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
+In-Reply-To: <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 2 Aug 2022 23:27:10 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ5EH5t+-jC=FkLxJHQwrkVVPBdR3jAnEFPm-KVmLxBQjQ@mail.gmail.com>
+Message-ID: <CACYkzJ5EH5t+-jC=FkLxJHQwrkVVPBdR3jAnEFPm-KVmLxBQjQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Frederick Lawler <fred@cloudflare.com>,
+        Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
+        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, ebiederm@xmission.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof Kozlowski and Marijn Suijten
-
-On 02/08/22 13:16, Krzysztof Kozlowski wrote:
-> On 01/08/2022 20:53, Marijn Suijten wrote:
->> On 2022-08-01 16:55:11, Joel Selvaraj wrote:
->> Any summary what changed since v1?
-> 
-> +1 (although I already reviewed it)
-
-Will add them in v3.
-
->> I haven't re-read what was discussed in v1, but doing it this way causes
->> git to _not_ record this as a rename but instead state that everything
->> has been removed from sdm845-xiaomi-beryllium-tianma.dts, and a new file
->> sdm845-xiaomi-beryllium-common.dtsi was introduced with inconveniently
->> almost identical contents (see the unnecessary size of the patch that
->> follows).
-> 
-> The patch should be formatted a bit different. I agree that if combined
-> with first patch and proper settings (-M10% -C10%, optionally also
-> experiment with -B although here it looks not needed).
-> 
-> I reviewed the diff side-by-sie and there were differences (labels)
-> tricky to spot. If you generate the patch correctly, not much of review
-> is needed...
-
->> Instead, I'd keep the original patch with a rename from
->> sdm845-xiaomi-beryllium.dts to sdm845-xiaomi-beryllium-common.dtsi, and
->> _also_ update the existing:
->>
->> 	dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-beryllium.dtb
->>
->> in Makefile to match this rename so that it keeps compiling, even if
->> that means we treat a .dtsi as a .dts which may (likely) not be treated
->> correctly by existing build rules.
->>
->> If it doesn't - and this approach is probably frowned upon anyway - it
->> is perhaps easiest to generalize sdm845-xiaomi-beryllium.dtb (as
->> suggested above) _and_ introduce sdm845-xiaomi-beryllium-tianma.dtb
->> _and_ update Makefile in a _single_ patch, such that everyting keeps
->> compiling and stays consistent wrt how git treats renames.  Later
->> patches update the compatible and add the ebbg variant.
->>
->> - Marijn
+On Mon, Aug 1, 2022 at 6:35 PM Paul Moore <paul@paul-moore.com> wrote:
 >
-> Best regards,
-> Krzysztof
+> On Mon, Aug 1, 2022 at 11:25 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > On 8/1/2022 6:13 AM, Frederick Lawler wrote:
+> > > On 7/22/22 7:20 AM, Paul Moore wrote:
+> > >> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> > >>
+> > >>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+> > >>>> While creating a LSM BPF MAC policy to block user namespace
+> > >>>> creation, we
+> > >>>> used the LSM cred_prepare hook because that is the closest hook to
+> > >>>> prevent
+> > >>>> a call to create_user_ns().
+> > >>>>
+> > >>>> The calls look something like this:
+> > >>>>
+> > >>>> cred = prepare_creds()
+> > >>>> security_prepare_creds()
+> > >>>> call_int_hook(cred_prepare, ...
+> > >>>> if (cred)
+> > >>>> create_user_ns(cred)
+> > >>>>
+> > >>>> We noticed that error codes were not propagated from this hook and
+> > >>>> introduced a patch [1] to propagate those errors.
+> > >>>>
+> > >>>> The discussion notes that security_prepare_creds()
+> > >>>> is not appropriate for MAC policies, and instead the hook is
+> > >>>> meant for LSM authors to prepare credentials for mutation. [2]
+> > >>>>
+> > >>>> Ultimately, we concluded that a better course of action is to
+> > >>>> introduce
+> > >>>> a new security hook for LSM authors. [3]
+> > >>>>
+> > >>>> This patch set first introduces a new security_create_user_ns()
+> > >>>> function
+> > >>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> > >>> Patch 1 and 4 still need review from the lsm/security side.
+> > >>
+> > >>
+> > >> This patchset is in my review queue and assuming everything checks
+> > >> out, I expect to merge it after the upcoming merge window closes.
+> > >>
+> > >> I would also need an ACK from the BPF LSM folks, but they're CC'd on
+> > >> this patchset.
+> > >
+> > > Based on last weeks comments, should I go ahead and put up v4 for
+> > > 5.20-rc1 when that drops, or do I need to wait for more feedback?
+> >
+> > As the primary consumer of this hook is BPF I would really expect their
+> > reviewed-by before accepting this.
+>
+> We love all our in-tree LSMs equally.  As long as there is at least
+> one LSM which provides an implementation and has ACK'd the hook, and
+> no other LSMs have NACK'd the hook, then I have no problem merging it.
+> I doubt it will be necessary in this case, but if we need to tweak the
+> hook in the future we can definitely do that; we've done this in the
+> past when it has made sense.
+>
+> As a reminder, the LSM hooks are *not* part of the "don't break
+> userspace" promise.  I know it gets a little muddy with the way the
 
-I will work on v3 based on both of your comments.
+That's correct. Also, with BPF LSM, we encourage users to
+build the application / bpf program logic to be resilient to changes
+in the LSM hooks.
 
-Regards,
-Joel Selvaraj
+I am happy to share how we've done it, if folks are interested.
+
+- KP
+
+> BPF LSM works, but just as we don't want to allow one LSM to impact
+> the runtime controls on another, we don't want to allow one LSM to
+> freeze the hooks for everyone.
+>
+> --
+> paul-moore.com

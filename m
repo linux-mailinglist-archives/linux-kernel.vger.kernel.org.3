@@ -2,285 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF86587E21
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50943587E26
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237278AbiHBO3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S237282AbiHBO3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbiHBO3T (ORCPT
+        with ESMTP id S237284AbiHBO3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:29:19 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF051706A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659450557; x=1690986557;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=03qm8JOVn0V0LuRBj+aYQPlmiGoVKleHky+wewKkegU=;
-  b=hcSQM6eG2g6/nl63w7N8NLOQgaertKn0zk+mzlAsW7ivXYFnpTb+y2lP
-   Eat8SpeBT/KKo+3SFQ+Eq8YcMHbPtVmfYNNnDaqGEhiU7RmEf2M/trImQ
-   jL+LWDftqpTQq/+NeMGq0WquRBkyTND/etN2kLMqmUbjD8tItIRVQVsgi
-   CZHyL2KlDTbYsvm+/PxGU4fIM+VrTMtSYB04hHuMsLkBh+abnSZQuBDds
-   PXBLBGpUBNW+ii5uiQMn0g/7R/7gnGcRtNc+VP76H+UZGd1OrETvLcBH8
-   RnIpHQFsJtp8at4mqgrIjq4XhBI/yEIxCENdiTottXKXzjtNJPhz0ws0H
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="286980200"
-X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
-   d="scan'208";a="286980200"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 07:29:17 -0700
-X-IronPort-AV: E=Sophos;i="5.93,211,1654585200"; 
-   d="scan'208";a="661643849"
-Received: from llaviniu-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.60.134])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 07:29:14 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Matthieu CHARETTE <matthieu.charette@gmail.com>, lkp@intel.com
-Cc:     kbuild-all@lists.01.org, tzimmermann@suse.de, airlied@linux.ie,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        matthieu.charette@gmail.com, andrealmeid@igalia.com
-Subject: Re: [PATCH] drm: Fix EDID firmware load on resume
-In-Reply-To: <20220727074152.43059-1-matthieu.charette@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <202207172035.mtErdlaw-lkp@intel.com>
- <20220727074152.43059-1-matthieu.charette@gmail.com>
-Date:   Tue, 02 Aug 2022 17:29:12 +0300
-Message-ID: <87wnbqen2f.fsf@intel.com>
+        Tue, 2 Aug 2022 10:29:40 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EA31A39E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:29:38 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id q14so10772124iod.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X7Hm0u9qMwzlB0EPKeiGIRJ5T3Cdcf+L/7KSSDvl0hk=;
+        b=V3CbIjz0IqwMu9qJT7/0gVE97AFRo6nwNmwyuXcOiFRsIF4gTG63bgySn0IZedd73R
+         rWI8/uffPLy8/IaRwVPUOWUgplTP+nC595Hq63FfIRQW7rQsPFe73x9/K1as9/QtP4fI
+         l8Zqwp+lo0Dhm+cV6MyiAJTpu9vS7StOH/8PU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X7Hm0u9qMwzlB0EPKeiGIRJ5T3Cdcf+L/7KSSDvl0hk=;
+        b=yHdI5RdUQRaaYCOYxKjltXM6s9hsbCsRo1OrbBIZxxgM+bNRH2TtXYMHioC6RVvhA7
+         kdR7x+DoyfRj58UG6oH1DDti7ymPC/P9R3txXb0VULIC1HIv+oAkCNa1zsmnGfMB0MX0
+         8qiR4gl+MtN48t0rSoZpTYCBPEv42uMMx9z8oUadeobysGdvi9ehktB5N0YOUd/lhJbZ
+         Yyu7fo7EL4wwDYoixXwBmO45++GQ0BnkKk6AdSRYze8/0iv42XbNg2LOxiVGaOo37Jx7
+         11u6t7GJ8LjAxkULQqeddlOTXvyblWhe0zWWj/VCAVjUl7GA1V88G/8/Q0LHpzvbfIbg
+         z0rQ==
+X-Gm-Message-State: AJIora+6A+KqBqbncyA+/FXmOr9rI8d9ZRmmjvgNxgzG5pdKPeggBNS/
+        7fPvTNBlhn0l2uW9usXJ0EukFuXGTcPfEQ==
+X-Google-Smtp-Source: AGRyM1sv2sJthqbr+9zq0hE9qcHjoYD1XTNQ+/fOt/wczi41khz9f7bL+JmEmLJtn1TwRrTbqqma9w==
+X-Received: by 2002:a05:6638:37aa:b0:33f:8980:5b50 with SMTP id w42-20020a05663837aa00b0033f89805b50mr8482091jal.103.1659450577255;
+        Tue, 02 Aug 2022 07:29:37 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id z11-20020a027a4b000000b00339bae1dab9sm6483462jad.40.2022.08.02.07.29.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 07:29:36 -0700 (PDT)
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
+ <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <84560b65-12ed-da24-3698-45484f80802a@linuxfoundation.org>
+Date:   Tue, 2 Aug 2022 08:29:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Jul 2022, Matthieu CHARETTE <matthieu.charette@gmail.com> wrote:
-> Loading an EDID using drm.edid_firmware parameter makes resume to fail
-> after firmware cache is being cleaned. This is because edid_load() use a
-> temporary device to request the firmware. This cause the EDID firmware
-> not to be cached from suspend. And, requesting the EDID firmware return
-> an error during resume.
-> So the request_firmware() call should use a permanent device for each
-> connector. Also, we should cache the EDID even if no monitor is
-> connected, in case it's plugged while suspended.
+On 8/2/22 3:51 AM, Mickaël Salaün wrote:
+> Hi,
+> 
+> This change breaks the Landlock test build when performed on the tools/testing/selftests/landlock directory because the (non-system/up-to-date) kernel headers aren't found. Looking at the use of top_srcdir and HDR_PATH, it seems that multiple subsystems are using this feature. I consider this change a regression.
+> 
 
-AFAICT this breaks changing drm.edid_firmware runtime.
+I did a build test from the top level before sending the pull request
+and didn't catch this breakage as a result. This breaks when build is
+run from the test directory.
 
-BR,
-Jani.
+We have had several problems related to khdr_dir and target and decided
+to move away from it with this change.
 
->
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2061
-> Signed-off-by: Matthieu CHARETTE <matthieu.charette@gmail.com>
-> ---
->  drivers/gpu/drm/drm_connector.c |  9 ++++
->  drivers/gpu/drm/drm_edid_load.c | 81 ++++++++++++++++++++++++++++-----
->  include/drm/drm_connector.h     | 12 +++++
->  include/drm/drm_edid.h          |  3 ++
->  4 files changed, 94 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index 1c48d162c77e..e8819ebf1c4b 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -31,6 +31,7 @@
->  #include <drm/drm_privacy_screen_consumer.h>
->  #include <drm/drm_sysfs.h>
->  
-> +#include <linux/platform_device.h>
->  #include <linux/uaccess.h>
->  
->  #include "drm_crtc_internal.h"
-> @@ -289,6 +290,9 @@ int drm_connector_init(struct drm_device *dev,
->  
->  	drm_connector_get_cmdline_mode(connector);
->  
-> +	connector->edid_load_pdev = NULL;
-> +	drm_cache_edid_firmware(connector);
-> +
->  	/* We should add connectors at the end to avoid upsetting the connector
->  	 * index too much.
->  	 */
-> @@ -473,6 +477,11 @@ void drm_connector_cleanup(struct drm_connector *connector)
->  		connector->tile_group = NULL;
->  	}
->  
-> +	if (connector->edid_load_pdev) {
-> +		platform_device_unregister(connector->edid_load_pdev);
-> +		connector->edid_load_pdev = NULL;
-> +	}
-> +
->  	list_for_each_entry_safe(mode, t, &connector->probed_modes, head)
->  		drm_mode_remove(connector, mode);
->  
-> diff --git a/drivers/gpu/drm/drm_edid_load.c b/drivers/gpu/drm/drm_edid_load.c
-> index 37d8ba3ddb46..5a82be9917ec 100644
-> --- a/drivers/gpu/drm/drm_edid_load.c
-> +++ b/drivers/gpu/drm/drm_edid_load.c
-> @@ -167,6 +167,19 @@ static int edid_size(const u8 *edid, int data_size)
->  	return (edid[0x7e] + 1) * EDID_LENGTH;
->  }
->  
-> +static struct platform_device *edid_pdev(const char *connector_name)
-> +{
-> +	struct platform_device *pdev = platform_device_register_simple(connector_name, -1, NULL, 0);
-> +
-> +	if (IS_ERR(pdev)) {
-> +		DRM_ERROR("Failed to register EDID firmware platform device "
-> +			"for connector \"%s\"\n", connector_name);
-> +		return ERR_CAST(pdev);
-> +	}
-> +
-> +	return pdev;
-> +}
-> +
->  static void *edid_load(struct drm_connector *connector, const char *name,
->  			const char *connector_name)
->  {
-> @@ -182,18 +195,17 @@ static void *edid_load(struct drm_connector *connector, const char *name,
->  		fwdata = generic_edid[builtin];
->  		fwsize = sizeof(generic_edid[builtin]);
->  	} else {
-> -		struct platform_device *pdev;
-> +		struct platform_device *pdev = connector->edid_load_pdev;
->  		int err;
->  
-> -		pdev = platform_device_register_simple(connector_name, -1, NULL, 0);
-> -		if (IS_ERR(pdev)) {
-> -			DRM_ERROR("Failed to register EDID firmware platform device "
-> -				  "for connector \"%s\"\n", connector_name);
-> -			return ERR_CAST(pdev);
-> +		if (WARN_ON(!pdev)) {
-> +			pdev = edid_pdev(connector_name);
-> +			if (IS_ERR(pdev))
-> +				return ERR_CAST(pdev);
-> +			connector->edid_load_pdev = pdev;
->  		}
->  
->  		err = request_firmware(&fw, name, &pdev->dev);
-> -		platform_device_unregister(pdev);
->  		if (err) {
->  			DRM_ERROR("Requesting EDID firmware \"%s\" failed (err=%d)\n",
->  				  name, err);
-> @@ -263,11 +275,9 @@ static void *edid_load(struct drm_connector *connector, const char *name,
->  	return edid;
->  }
->  
-> -struct edid *drm_load_edid_firmware(struct drm_connector *connector)
-> +static char *edid_name(const char *connector_name)
->  {
-> -	const char *connector_name = connector->name;
->  	char *edidname, *last, *colon, *fwstr, *edidstr, *fallback = NULL;
-> -	struct edid *edid;
->  
->  	if (edid_firmware[0] == '\0')
->  		return ERR_PTR(-ENOENT);
-> @@ -310,8 +320,57 @@ struct edid *drm_load_edid_firmware(struct drm_connector *connector)
->  	if (*last == '\n')
->  		*last = '\0';
->  
-> -	edid = edid_load(connector, edidname, connector_name);
-> +	edidname = kstrdup(edidname, GFP_KERNEL);
-> +	if (!edidname) {
-> +		kfree(fwstr);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
->  	kfree(fwstr);
-> +	return edidname;
-> +}
-> +
-> +void drm_cache_edid_firmware(struct drm_connector *connector)
-> +{
-> +	const char *connector_name = connector->name;
-> +	const char *edidname = edid_name(connector_name);
-> +	struct platform_device *pdev;
-> +	int err;
-> +
-> +	if (IS_ERR(edidname))
-> +		return;
-> +
-> +	if (match_string(generic_edid_name, GENERIC_EDIDS, edidname) >= 0) {
-> +		kfree(edidname);
-> +		return;
-> +	}
-> +
-> +	pdev = edid_pdev(connector_name);
-> +	if (IS_ERR(pdev)) {
-> +		kfree(edidname);
-> +		return;
-> +	}
-> +	connector->edid_load_pdev = pdev;
-> +
-> +	err = firmware_request_cache(&pdev->dev, edidname);
-> +	if (err)
-> +		DRM_ERROR("Requesting EDID firmware cache \"%s\" failed (err=%d)\n",
-> +			edidname, err);
-> +
-> +	kfree(edidname);
-> +}
-> +
-> +struct edid *drm_load_edid_firmware(struct drm_connector *connector)
-> +{
-> +	const char *connector_name = connector->name;
-> +	const char *edidname = edid_name(connector_name);
-> +	struct edid *edid;
-> +
-> +	if (IS_ERR(edidname))
-> +		return ERR_CAST(edidname);
-> +
-> +	edid = edid_load(connector, edidname, connector_name);
-> +	kfree(edidname);
->  
->  	return edid;
->  }
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 3ac4bf87f257..47c84741517e 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -1573,6 +1573,18 @@ struct drm_connector {
->  	 */
->  	struct i2c_adapter *ddc;
->  
-> +	/**
-> +	 * @edid_load_pdev: Platform device for loading EDID via firmware.
-> +	 *
-> +	 * The platform device is registered in drm_connector_init() in case a
-> +	 * custom EDID firmware is used with `edid_firmware` parameter. Otherwise,
-> +	 * it is set to NULL.
-> +	 *
-> +	 * Platform device is unregistered in drm_connector_cleanup() if it
-> +	 * is not NULL.
-> +	 */
-> +	struct platform_device *edid_load_pdev;
-> +
->  	/**
->  	 * @null_edid_counter: track sinks that give us all zeros for the EDID.
->  	 * Needed to workaround some HW bugs where we get all 0s
-> diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-> index b2756753370b..e907c928a35d 100644
-> --- a/include/drm/drm_edid.h
-> +++ b/include/drm/drm_edid.h
-> @@ -378,10 +378,13 @@ int drm_av_sync_delay(struct drm_connector *connector,
->  		      const struct drm_display_mode *mode);
->  
->  #ifdef CONFIG_DRM_LOAD_EDID_FIRMWARE
-> +void drm_cache_edid_firmware(struct drm_connector *connector);
->  struct edid *drm_load_edid_firmware(struct drm_connector *connector);
->  int __drm_set_edid_firmware_path(const char *path);
->  int __drm_get_edid_firmware_path(char *buf, size_t bufsize);
->  #else
-> +inline void
-> +drm_cache_edid_firmware(struct drm_connector *connector);
->  static inline struct edid *
->  drm_load_edid_firmware(struct drm_connector *connector)
->  {
+> It also removes the check on up-to-date kernel headers (thanks to the Makefile's target timestamp).
+> 
+> I wasn't CCed for this change impacting Landlock [1]. Please keep in mind to add at least maintainers and related mailing-lists for changes on related subsystems.
+> 
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+That is the usual practice and if I notice missing maintainers, I add
+them. We missed this one.
+
+> The following patch almost revert commit a917dd94b832 ("selftests/landlock: drop deprecated headers dependency") and partially fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
+> 
+
+Guillaume,
+
+Will you be able to look at this and send a patch on top? I will
+send another pull request before merge window closes?
+
+> --- a/tools/testing/selftests/landlock/Makefile
+> +++ b/tools/testing/selftests/landlock/Makefile
+> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
+>   TEST_GEN_PROGS_EXTENDED := true
+> 
+>   OVERRIDE_TARGETS := 1
+> +top_srcdir = ../../../..
+>   include ../lib.mk
+> 
+> +khdr_dir = $(top_srcdir)/usr/include
+> +
+>   $(OUTPUT)/true: true.c
+>       $(LINK.c) $< $(LDLIBS) -o $@ -static
+> 
+> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+> 
+> 
+> This doesn't fix the header timestamp check though.
+> 
+
+thanks,
+-- Shuah

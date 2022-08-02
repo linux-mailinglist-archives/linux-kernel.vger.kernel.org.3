@@ -2,79 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C540587C69
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CB8587C70
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 14:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbiHBM07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 08:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S237045AbiHBM2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 08:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiHBM04 (ORCPT
+        with ESMTP id S236442AbiHBM2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 08:26:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B83D85;
-        Tue,  2 Aug 2022 05:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=i+Zl91q4t+AZoHrEuNohjOyc7HDaxjH2xIeIWp7puuQ=; b=wBqS2CGpTw57Y88TURyJ4aTzj8
-        8rA9zlyUQVdeZi0SP6WeltO8x64WM2LPUJbZVVC9vyEvcTQAvLSqpCU4SHM0zaQY9o9OrcdaBHZUh
-        chmVGrmleKNL5N3TDrjg+ibrLYbwS53UAzvK3KElODt+f7h/w5gi+6ldrpx7Tm/yeEUiofU0dBDeX
-        FbHeAzOiq9gf3BwXU38L2H1pGh5PUVyhGn6vnq+zYqs/YA3Pvf7oi7Z7cPZG0u/xpO9Hz/Tp1HGwz
-        oL5k2sD1WrQc2lLN3YLU266NK2sWUfhJXbwwljK9tqmKmI8tRrOhN3HJGG+3q4+Epob0XnjfJ2x5S
-        xfW/iZZw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oIqz1-008LTX-CP; Tue, 02 Aug 2022 12:26:47 +0000
-Date:   Tue, 2 Aug 2022 13:26:47 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v8 00/31] Rust support
-Message-ID: <YukYByl76DKqa+iD@casper.infradead.org>
-References: <20220802015052.10452-1-ojeda@kernel.org>
+        Tue, 2 Aug 2022 08:28:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204751408;
+        Tue,  2 Aug 2022 05:28:44 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxvNS5gwYzlVnH;
+        Tue,  2 Aug 2022 20:26:00 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 20:28:42 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 2 Aug
+ 2022 20:28:42 +0800
+Message-ID: <e3993e00-9346-9e0d-7490-76ffb713f343@huawei.com>
+Date:   Tue, 2 Aug 2022 20:28:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802015052.10452-1-ojeda@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH v3] kprobes: Forbid probing on trampoline and bpf prog
+Content-Language: en-US
+To:     Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <mhiramat@kernel.org>,
+        <peterz@infradead.org>, <mingo@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>
+References: <20220801033719.228248-1-chenzhongjin@huawei.com>
+ <Yug6bx7T4GzqUf2a@krava> <20220801165146.26fdeca2@gandalf.local.home>
+ <YujpFUB8KlkOgzyb@krava>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YujpFUB8KlkOgzyb@krava>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 03:49:47AM +0200, Miguel Ojeda wrote:
-> Some of the improvements to the abstractions and example drivers are:
-> 
->   - Filesystem support (`fs` module), including:
-> 
->       + `INode` type (which wraps `struct inode`).
->       + `DEntry` type (which wraps `struct dentry`).
->       + `Filename` type (which wraps `struct filename`).
->       + `Registration` type.
->       + `Type` and `Context` traits.
->       + `SuperBlock` type (which wraps `struct super_block` and takes
->         advantage of typestates for its initialization).
->       + File system parameters support (with a `Value` enum; `Spec*`
->         and `Constant*` types, `define_fs_params!` macro...).
->       + File system flags.
->       + `module_fs!` macro to simplify registering kernel modules that
->         only implement a single file system.
->       + A file system sample.
 
-None of this (afaict) has been discussed on linux-fsdevel.  And I may
-have missed somethiing, but I don't see the fs module in this series
-of patches.  Could linux-fsdevel be cc'd on the development of Rust
-support for filesystems in the future?
+On 2022/8/2 17:06, Jiri Olsa wrote:
+> On Mon, Aug 01, 2022 at 04:51:46PM -0400, Steven Rostedt wrote:
+>> On Mon, 1 Aug 2022 22:41:19 +0200
+>> Jiri Olsa <olsajiri@gmail.com> wrote:
+>>
+>>> LGTM cc-ing Steven because it affects ftrace as well
+>> Thanks for the Cc, but I don't quite see how it affects ftrace.
+>>
+>> Unless you are just saying how it can affect kprobe_events?
+> nope, I just saw the 'ftrace' in changelog ;-)
+>
+> anyway the patch makes check_kprobe_address_safe to fail
+> on ftrace trampoline address.. but not sure you could make
+> kprobe on ftrace trampoline before, probably not
+>
+> jirka
+
+In fact with CONFIG_KPROBE_EVENTS_ON_NOTRACE=y it can happen.
+
+But I think ftrace has no responsibility to promise the address safety 
+when this option open.
+
+
+Best,
+
+Chen
+
+>> -- Steve
+>>
+>>
+>>> jirka
+>>>
+>>>> v1 -> v2:
+>>>> Check core_kernel_text and is_module_text_address rather than
+>>>> only kprobe_insn.
+>>>> Also fix title and commit message for this. See old patch at [1].
+>>>> ---
+>>>>   kernel/kprobes.c | 3 ++-
+>>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+>>>> index f214f8c088ed..80697e5e03e4 100644
+>>>> --- a/kernel/kprobes.c
+>>>> +++ b/kernel/kprobes.c
+>>>> @@ -1560,7 +1560,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>>>>   	preempt_disable();
+>>>>   
+>>>>   	/* Ensure it is not in reserved area nor out of text */
+>>>> -	if (!kernel_text_address((unsigned long) p->addr) ||
+>>>> +	if (!(core_kernel_text((unsigned long) p->addr) ||
+>>>> +	    is_module_text_address((unsigned long) p->addr)) ||
+>>>>   	    within_kprobe_blacklist((unsigned long) p->addr) ||
+>>>>   	    jump_label_text_reserved(p->addr, p->addr) ||
+>>>>   	    static_call_text_reserved(p->addr, p->addr) ||
+>>>> -- 
+>>>> 2.17.1
+>>>>    
+

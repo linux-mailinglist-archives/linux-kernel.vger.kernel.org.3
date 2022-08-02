@@ -2,127 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0A05884E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37B85884E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 01:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbiHBXqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 19:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S235174AbiHBXrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 19:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234716AbiHBXqk (ORCPT
+        with ESMTP id S232721AbiHBXrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 19:46:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B58754673;
-        Tue,  2 Aug 2022 16:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659483999; x=1691019999;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6rXGmJONj6b+nIwOClpJuGcxiMNJkmRdeSvTUzrRYKw=;
-  b=ewQmNbUhWJEhDFRchni37SDkuFJYWwsO549xArF+m0avudCnxywe/ej6
-   wO1oivLgr+mEPgwMMF6r5LakoxYArgLJfDYQg1hR7JfbK5gADVw/27t1X
-   6o5LtJhoHsH2AZOewI0V2dVZxIoDjJFLif8ehE3AIweiMfY1lbxswj41w
-   aWAyK9nifE0bnl4YlPiwlc95z2Cz/i4T7nXuxzrPsLPmE0ke5xJAzlimj
-   fIj1KEozGPklLWa0JBWcwXXc1wln5pQP7cG54n1kb/d2Vt2F8WYrz3Sfd
-   48kIbt9+L2QtRAWmnaOjpQUm3LPN6oAfkeloEVYYzoHmOJVkjvAB261oB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269315114"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="269315114"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 16:46:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="630919269"
-Received: from ywagle-mobl.amr.corp.intel.com (HELO [10.209.29.213]) ([10.209.29.213])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 16:46:38 -0700
-Message-ID: <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
-Date:   Tue, 2 Aug 2022 16:46:38 -0700
+        Tue, 2 Aug 2022 19:47:14 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E8C54673;
+        Tue,  2 Aug 2022 16:47:14 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id u9so18237550oiv.12;
+        Tue, 02 Aug 2022 16:47:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1r7BMu+e52KMvTlTlsEeBScPSgTDXdrzxQKCaN3tXo4=;
+        b=XVCcSxO3BZdIRw4f2nvR2JflUa7kglCJoL2GSedsRetwLgzVEDh5EzKXXRNEeV0XT1
+         m4bgsDJX8j/FcIjsuMQEC5Yjp3sJgJpsFfkpP8WoYpWIMAh8Y4ZB/upSMKLuUrkvdads
+         Wkzm8w0F+nbBcKlbl0rsUMrEgPj7L8YTioNCtF2cOlJiwVn+dHgnWdRf/82vATVw9QOg
+         Dt2MtyXjPDUBmcFaDKqWsCpLEoByoyDDm+aN98LEV6V3deKyvUT5g7TqMiFUtrqJMp/l
+         B77O9+AbfJma94wV6x4XbnnWghvLJQWUB1TmKYHjg+v10WKJ2RpUXfHmqCH+aPpgXC+X
+         n/vg==
+X-Gm-Message-State: ACgBeo1ySmKGfKBeQODHSJzEOSrrM5sz950vwYUUfpA2wbZLKJwPAb99
+        1zxWexi5lUH82Xzsw5Y8agPWNGmzyf8rZ75qOws=
+X-Google-Smtp-Source: AA6agR5x52u8VYhoCIElD40vDyBxJ/TgfmRg47KshUBAkgN+Tu5P0Fy1+73Yiz32f52GD4qI1QyVBFQibNauTtPwZks=
+X-Received: by 2002:a05:6808:1492:b0:33a:7448:8b98 with SMTP id
+ e18-20020a056808149200b0033a74488b98mr736688oiw.92.1659484033343; Tue, 02 Aug
+ 2022 16:47:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
- into unaccepted memory
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <20220802191004.347740-1-namhyung@kernel.org> <YumRXcxc5XIUwlBO@kernel.org>
+In-Reply-To: <YumRXcxc5XIUwlBO@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 2 Aug 2022 16:47:02 -0700
+Message-ID: <CAM9d7choD8v8Bxu3w4V1Q3M1i7SwP2W+pY5ZWLqUqr89O2PLOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] perf lock: Introduce struct lock_contention
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
- <Yt/ANO5usdV+JSSW@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Yt/ANO5usdV+JSSW@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <songliubraving@fb.com>,
+        Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 03:21, Borislav Petkov wrote:
-> On Tue, Jun 14, 2022 at 03:02:27PM +0300, Kirill A. Shutemov wrote:
->> But, this approach does not work for unaccepted memory. For TDX, a load
->> from unaccepted memory will not lead to a recoverable exception within
->> the guest. The guest will exit to the VMM where the only recourse is to
->> terminate the guest.
-> FTR, this random-memory-access-to-unaccepted-memory-is-deadly thing is
-> really silly. We should be able to handle such cases - because they do
-> happen often - in a more resilient way. Just look at the complex dance
-> this patch needs to do just to avoid this.
-> 
-> IOW, this part of the coco technology needs improvement.
+On Tue, Aug 2, 2022 at 2:04 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Tue, Aug 02, 2022 at 12:10:02PM -0700, Namhyung Kim escreveu:
+> > The lock_contention struct is to carry related fields together and to
+> > minimize the change when we add new config options.
+>
+>
+> Thanks, applied. Forgot the cover letter? :-)
 
-This particular wound is self-inflicted.  The hardware can *today*
-generate a #VE for these accesses.  But, to make writing the #VE code
-more straightforward, we asked that the hardware not even bother
-delivering the exception.  At the time, nobody could come up with a case
-why there would ever be a legitimate, non-buggy access to unaccepted memory.
+Thank you!
 
-We learned about load_unaligned_zeropad() the hard way.  I never ran
-into it and never knew it was there.  Dangit.
+I thought it's a small change that doesn't require a cover letter.
+But if you prefer seeing it for small changes too, I'd write a
+short letter next time.
 
-We _could_ go back to the way it was originally.  We could add
-load_unaligned_zeropad() support to the #VE handler, and there's little
-risk of load_unaligned_zeropad() itself being used in the
-interrupts-disabled window early in the #VE handler.  That would get rid
-of all the nasty adjacent page handling in the unaccepted memory code.
-
-But, that would mean that we can land in the #VE handler from more
-contexts.  Any normal, non-buggy use of load_unaligned_zeropad() can end
-up there, obviously.  We would, for instance, need to be more careful
-about #VE recursion.  We'd also have to make sure that _bugs_ that land
-in the #VE handler can still be handled in a sane way.
-
-To sum it all up, I'm not happy with the complexity of the page
-acceptance code either but I'm not sure that it's bad tradeoff compared
-to greater #VE complexity or fragility.
-
-Does anyone think we should go back and really reconsider this?
+Thanks,
+Namhyung

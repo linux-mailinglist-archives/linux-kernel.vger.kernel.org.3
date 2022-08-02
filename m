@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84502587E93
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00557587E97
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbiHBPHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 11:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
+        id S236533AbiHBPIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiHBPHD (ORCPT
+        with ESMTP id S236092AbiHBPIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 11:07:03 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1A426AC9;
-        Tue,  2 Aug 2022 08:06:59 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id q14so10857024iod.3;
-        Tue, 02 Aug 2022 08:06:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=x3XCynuR0M/TShCzZqty0IPaAPxLKscWE0q3SESViQY=;
-        b=sZ2/KGY4P5ArWjEmWyxYN+gLytq0vpghkwgxQ78Gju8M9hRoHVIBr1BGWh5nRdhB/c
-         sJjdfCwP6Zl9tVyNkMN6rxXVivhgiYKdVuvQNUOLR6mAhgVuL9AW4lsRHvKD/QintXQZ
-         oUHSS5vypdxvdndsmmxEYBcAcjhz1J5pUMiDf+cP9q4SWBmQdB0ikjw5ux0FoJdYnGiY
-         U+Z3CboyoW4srCHwc0tioFOhaP9K3x8PwZ7EGKGzX8ws0gSEclgaalsD6PaALsQI1qzd
-         buSlkwWFeUDCZGD3J6hGN6K09KknjNdloDDvjXgArj5tx7EqrqksfxvoobN+u2eLTcnj
-         eEYw==
-X-Gm-Message-State: AJIora9BCqN5o3GAbZzMjQ2izScku/MeKFmyk0+QlbfrCVMeZMq0b7we
-        KOmZ8N+YPNr3qH0j4IyuSg==
-X-Google-Smtp-Source: AGRyM1sKUi6tiTehYE0cNjPculTasu4AM874RxolsEPrxNCFivhQUiMOpXnNKOlKQq9dYYA+GOxGFQ==
-X-Received: by 2002:a05:6638:1305:b0:33f:7e59:4bc7 with SMTP id r5-20020a056638130500b0033f7e594bc7mr7940473jad.316.1659452818161;
-        Tue, 02 Aug 2022 08:06:58 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q28-20020a02a99c000000b0033a29ec646dsm6568358jam.4.2022.08.02.08.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 08:06:57 -0700 (PDT)
-Received: (nullmailer pid 112022 invoked by uid 1000);
-        Tue, 02 Aug 2022 15:06:56 -0000
-Date:   Tue, 2 Aug 2022 09:06:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 1/4] dt-bindings: sram: sunxi-sram: Add optional
- regulators child
-Message-ID: <20220802150656.GB86158-robh@kernel.org>
-References: <20220802053213.3645-1-samuel@sholland.org>
- <20220802053213.3645-2-samuel@sholland.org>
+        Tue, 2 Aug 2022 11:08:35 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1FA27FCE;
+        Tue,  2 Aug 2022 08:08:34 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 17:08:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1659452912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HOmzx5X/2eLrjxlYnOrFg9UpgbpOI38C9+XdzR+VyrQ=;
+        b=DMW0vs/3nwTLly38qcUsKHzMAw4HMl+cqxh6QYRpfHDrPHtmBhW5XzovQCnU4JnErUEIS7
+        e4EszGZ4jyfQDUcONWvb+3FCd1cHpIrFpvD05hejtZ0m/QCvYjVVRVTQ9dAJcjCpMEYJTk
+        Dsy2jjTJcJkABPk5vNuGe20xKPputeA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: Fix a compile error in
+ selftests/kvm/rseq_test.c
+Message-ID: <20220802150830.rgzeg47enbpsucbr@kamzik>
+References: <20220802071240.84626-1-cloudliang@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220802053213.3645-2-samuel@sholland.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220802071240.84626-1-cloudliang@tencent.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 12:32:10AM -0500, Samuel Holland wrote:
-> Some sunxi SoCs have in-package regulators controlled by a register in
-> the system control MMIO block. Allow a child node for these regulators
-> in addition to SRAM child nodes.
+On Tue, Aug 02, 2022 at 03:12:40PM +0800, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> The following warning appears when executing:
+> 	make -C tools/testing/selftests/kvm
+> 
+> rseq_test.c: In function ‘main’:
+> rseq_test.c:237:33: warning: implicit declaration of function ‘gettid’; did you mean ‘getgid’? [-Wimplicit-function-declaration]
+>           (void *)(unsigned long)gettid());
+>                                  ^~~~~~
+>                                  getgid
+> /usr/bin/ld: /tmp/ccr5mMko.o: in function `main':
+> ../kvm/tools/testing/selftests/kvm/rseq_test.c:237: undefined reference to `gettid'
+> collect2: error: ld returned 1 exit status
+> make: *** [../lib.mk:173: ../kvm/tools/testing/selftests/kvm/rseq_test] Error 1
+
+The man page says we need
+
+ #define _GNU_SOURCE
+ #include <unistd.h>
+
+which rseq_test.c doesn't have. We have _GNU_SOURCE, but not unistd.h.
+IOW, I think this patch can be
+
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index a54d4d05a058..8d3d5eab5e19 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -9,6 +9,7 @@
+ #include <string.h>
+ #include <signal.h>
+ #include <syscall.h>
++#include <unistd.h>
+ #include <sys/ioctl.h>
+ #include <sys/sysinfo.h>
+ #include <asm/barrier.h>
+
+Thanks,
+drew
+
+> 
+> Use the more compatible syscall(SYS_gettid) instead of gettid() to fix it.
+> More subsequent reuse may cause it to be wrapped in a lib file.
+> 
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 > ---
+>  tools/testing/selftests/kvm/rseq_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Changes in v2:
->  - New patch for v2
-> 
->  .../bindings/sram/allwinner,sun4i-a10-system-control.yaml      | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> index 1c426c211e36..cc57836b2906 100644
-> --- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> +++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> @@ -56,6 +56,9 @@ properties:
+> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+> index a54d4d05a058..299d316cc759 100644
+> --- a/tools/testing/selftests/kvm/rseq_test.c
+> +++ b/tools/testing/selftests/kvm/rseq_test.c
+> @@ -229,7 +229,7 @@ int main(int argc, char *argv[])
+>  	ucall_init(vm, NULL);
 >  
->    ranges: true
+>  	pthread_create(&migration_thread, NULL, migration_worker,
+> -		       (void *)(unsigned long)gettid());
+> +		       (void *)(unsigned long)syscall(SYS_gettid));
 >  
-> +  regulators:
-> +    type: object
-
-This should reference the regulator schema.
-
-Also, it's preferred to have 1 complete example here rather than 
-piecemeal examples in each child schema.
-
-> +
->  patternProperties:
->    "^sram@[a-z0-9]+":
->      type: object
+>  	for (i = 0; !done; i++) {
+>  		vcpu_run(vcpu);
 > -- 
-> 2.35.1
-> 
+> 2.37.1
 > 

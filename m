@@ -2,170 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB1E5876CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB7F5876D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 07:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbiHBFik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 01:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S235805AbiHBFlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 01:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235707AbiHBFi3 (ORCPT
+        with ESMTP id S231804AbiHBFlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 01:38:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E5BF4330B;
-        Mon,  1 Aug 2022 22:38:28 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxoM5KuOhiZCABAA--.2520S6;
-        Tue, 02 Aug 2022 13:38:22 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Arnd Bergmann <arnd@arndb.de>, hejinyang@loongson.cn,
-        tangyouling@loongson.cn, zhangqing@loongson.cn
-Subject: [PATCH v3 4/4] LoongArch: Add USER_STACKTRACE support
-Date:   Tue,  2 Aug 2022 13:38:18 +0800
-Message-Id: <20220802053818.18051-5-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220802053818.18051-1-zhangqing@loongson.cn>
-References: <20220802053818.18051-1-zhangqing@loongson.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxoM5KuOhiZCABAA--.2520S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxCryUZw1rCF1DtrW5KFWxWFg_yoW5ZF4fpF
-        nFy3ZxtrWUWw4Skr9xZrykXr98Xw4kG3y2gFZxta45Zr17Xry8Wr4IyFyvqFyUJ397Ja4S
-        ga43Krn0qF4DZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
-        1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-        3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-        x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8
-        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-        C2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7VUjQ6ptUUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 01:41:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED541D0F
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 22:41:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD4E61268
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 05:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970CCC433C1;
+        Tue,  2 Aug 2022 05:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659418894;
+        bh=XiNVPCCjZTk5RLrsO9cH4qo3IAgxOvd2KtAeNjJF290=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VYkk0rIwcA8d96qC8zLVkkea8moJw92aGxY3Ym09OCBDtzik1CfZLt4l/gtVtH9TV
+         OSfqBNS2GfiRSDIghgxOuDrZfBI4O6RDFkrzSTgCSwlvwT2HsijMUSgqFF7MSoTV93
+         rJ/mhyzGBlpHGbnNNWk2hRsZpfoo6mEB+RXZ6Vl17AxbB3tAzhhzk+Zs1yiGPXn5Id
+         BR3MHWwAMet+lDNs9cRNIovzaR3OaMPyIcdOu9DSdOKfxvaZGWgxM9OZWwwhKmdPl2
+         j82gi5LEizIKJKCh9yZIdpYw62jqpQaq9rZLX7KXGb3x1MwpQL/d+IyQem+G+qL23v
+         Y1eiZgH/uSdkQ==
+Date:   Tue, 2 Aug 2022 14:41:30 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Tom Zanussi <zanussi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] tracing/hist: Add percentage histogram suffixes
+Message-Id: <20220802144130.52a75346b03fcb7c92f29db6@kernel.org>
+In-Reply-To: <20220801165840.2fe7e5b0@gandalf.local.home>
+References: <165932284025.2881436.6085809619146158354.stgit@devnote2>
+        <20220801165840.2fe7e5b0@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To get the best output you can compile your userspace programs with
-frame pointers (at least glibc + the app you are tracing export "CC
-=gcc -fno-omit-frame-pointer".
+On Mon, 1 Aug 2022 16:58:40 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-...
-     echo 'p:malloc /usr/lib64/libc.so.6:0x0a4704 size=%r4:u64'
-                                                > uprobe_events
-     echo 'p:free /usr/lib64/libc.so.6:0x0a4d50 ptr=%r4:x64'
-                                               >> uprobe_events
-     echo 'comm == "demo"' > ./events/uprobes/malloc/filter
-     echo 'comm == "demo"' > ./events/uprobes/free/filter
-     echo 1 > ./options/userstacktrace
-     echo 1 > ./options/sym-userobj
- ...
+> On Mon,  1 Aug 2022 12:00:40 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > Here are a couple of patches to add .percent and .graph histogram
+> > value suffixes to show the value in percentage and in bar-graph.
+> > 
+> > This will help us to check the trend of the histogram instantly
+> > without the post processing tool.
+> > 
+> > Here shows the example of the percentage and the bar graph of
+> > the runtime of the running tasks.
+> > 
+> > /sys/kernel/tracing # echo hist:keys=pid:vals=runtime.percent,runtime.graph:sort
+> > =pid >> events/sched/sched_stat_runtime/trigger
+> > /sys/kernel/tracing # sleep 10
+> > /sys/kernel/tracing # cat events/sched/sched_stat_runtime/hist
+> > # event histogram
+> > #
+> > # trigger info: hist:keys=pid:vals=hitcount,runtime.percent,runtime.graph:sort=pid:size=2048 [active]
+> > #
+> > 
+> > { pid:          8 } hitcount:         11  runtime:       4.11  runtime: #                   
+> > { pid:          9 } hitcount:          4  runtime:       1.28  runtime:                     
+> > { pid:         14 } hitcount:         10  runtime:       2.22  runtime:                     
+> > { pid:         15 } hitcount:          1  runtime:       0.07  runtime:                     
+> > { pid:         16 } hitcount:         21  runtime:       3.35  runtime: #                   
+> > { pid:         57 } hitcount:          6  runtime:       2.41  runtime: #                   
+> > { pid:         61 } hitcount:         42  runtime:       9.79  runtime: ####                
+> > { pid:         66 } hitcount:          5  runtime:       0.69  runtime:                     
+> > { pid:        147 } hitcount:         36  runtime:      45.33  runtime: ####################
+> > { pid:       8548 } hitcount:          9  runtime:      17.25  runtime: #######             
+> > { pid:       8549 } hitcount:          8  runtime:      13.43  runtime: #####               
+> > 
+> > Totals:
+> >     Hits: 153
+> >     Entries: 11
+> >     Dropped: 0
+> > 
+> 
+> Hi Masami,
+> 
+> Thanks for this as well. But as it's a new feature, and I freeze new
+> features when the merge window starts, I'll add this to my queue for the
+> next window.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/Kconfig                  |  1 +
- arch/loongarch/include/asm/stacktrace.h |  5 +++
- arch/loongarch/kernel/stacktrace.c      | 41 +++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
+Yeah, that's no problem. Please queue it for the next window :)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 85d0fa3147cd..05906384d564 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -107,6 +107,7 @@ config LOONGARCH
- 	select SWIOTLB
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select USE_PERCPU_NUMA_NODE_ID
-+	select USER_STACKTRACE_SUPPORT
- 	select ZONE_DMA32
- 	select MMU_GATHER_MERGE_VMAS if MMU
- 
-diff --git a/arch/loongarch/include/asm/stacktrace.h b/arch/loongarch/include/asm/stacktrace.h
-index 49cb89213aeb..77fdb8ad662d 100644
---- a/arch/loongarch/include/asm/stacktrace.h
-+++ b/arch/loongarch/include/asm/stacktrace.h
-@@ -21,6 +21,11 @@ struct stack_info {
- 	unsigned long begin, end, next_sp;
- };
- 
-+struct stack_frame {
-+	unsigned long	fp;
-+	unsigned long	ra;
-+};
-+
- bool in_task_stack(unsigned long stack, struct task_struct *task,
- 			struct stack_info *info);
- bool in_irq_stack(unsigned long stack, struct stack_info *info);
-diff --git a/arch/loongarch/kernel/stacktrace.c b/arch/loongarch/kernel/stacktrace.c
-index f4f4b8ad3917..cba1b6ab8a1a 100644
---- a/arch/loongarch/kernel/stacktrace.c
-+++ b/arch/loongarch/kernel/stacktrace.c
-@@ -6,6 +6,7 @@
-  */
- #include <linux/sched.h>
- #include <linux/stacktrace.h>
-+#include <linux/uaccess.h>
- 
- #include <asm/stacktrace.h>
- #include <asm/unwind.h>
-@@ -35,3 +36,43 @@ void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
- 			break;
- 	}
- }
-+
-+static int
-+copy_stack_frame(unsigned long fp, struct stack_frame *frame)
-+{
-+	int ret = 1;
-+	unsigned long err;
-+	unsigned long __user *user_frame_tail;
-+
-+	user_frame_tail = (unsigned long *)(fp - sizeof(struct stack_frame));
-+	if (!access_ok(user_frame_tail, sizeof(*frame)))
-+		return 0;
-+
-+	pagefault_disable();
-+	err = (__copy_from_user_inatomic(frame, user_frame_tail, sizeof(*frame)));
-+	if (err || (unsigned long)user_frame_tail >= frame->fp)
-+		ret = 0;
-+	pagefault_enable();
-+
-+	return ret;
-+}
-+
-+void arch_stack_walk_user(stack_trace_consume_fn consume_entry, void *cookie,
-+			  const struct pt_regs *regs)
-+{
-+	unsigned long fp = regs->regs[22];
-+
-+	while (fp && !((unsigned long)fp & 0xf)) {
-+		struct stack_frame frame;
-+
-+		frame.fp = 0;
-+		frame.ra = 0;
-+		if (!copy_stack_frame(fp, &frame))
-+			break;
-+		if (!frame.ra)
-+			break;
-+		if (!consume_entry(cookie, frame.ra))
-+			break;
-+		fp = frame.fp;
-+	}
-+}
+Thank you!
+
+> 
+> -- Steve
+
+
 -- 
-2.20.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

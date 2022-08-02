@@ -2,202 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6875881BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE955881BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 20:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiHBSLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 14:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
+        id S237534AbiHBSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 14:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237793AbiHBSLE (ORCPT
+        with ESMTP id S231440AbiHBSLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 14:11:04 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B98117E13;
-        Tue,  2 Aug 2022 11:11:00 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 23so13012873pgc.8;
-        Tue, 02 Aug 2022 11:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VSuThS25A1SmF3lUm9zKQZW1zZmHE3Wa8nzE8cQc3xY=;
-        b=MOST/R+9Pu82byZZKWzHAXHowM9RJkX/xUI4J81mR9yItGRirdWszF98BMKIxPBMMc
-         eFq/ID+KIn3x/BMcVPOq7Bi6XBg5OQUaHTKQSeADQsTn6iOtLRyvId6U1uDfwomtA5VZ
-         LTZH4P6s2gF4tLv4cWTa4PIDcuBkZngU3nUhgPvEwijLrDJnvgODE4I+eXddkoYr+NDr
-         YWjGTVn9AQV62O92oy4+KJLOmMYiUAVXVWkeBdR9jJyDgbNfe9Kj6ycgRhXB1t2+YFE8
-         FXXZi/GbneyhW1+4dplOoTGje3/dxMHcX5zm37yB1aLLe6C9uhdij9B4Ym+FUGaGfSEO
-         sjvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=VSuThS25A1SmF3lUm9zKQZW1zZmHE3Wa8nzE8cQc3xY=;
-        b=SYRQrTzij38LJm5CQ5gcoMeOPqMh4pr8QNimQUjx/Je/dxDPBuV7UgueaKaYuJ/RzD
-         ExqSXsL/h3ZJSgXliGHSISwl/o875NkVQDaCXUEOzQce5ItX+haChgjPpzVa4CKk1Cqz
-         YUEYyCoFsneXgpehZwmfI3LfQgFT4ljBKKjb8/m49oJv6CqHobFSSfibALiXO8TWimAK
-         fBuHEzkI9NS/LxpikLyzL5UlnTwBmjFZlwhRiy7LUGVprTRYwvFYysWnumD5nLlbSOmb
-         JmfsJZShQVYoVq8XWpIkAye5KDgMFkHZIdWRVewk3yuFyId/LeQt+5oDW3lnrWnH3Zxr
-         C8SA==
-X-Gm-Message-State: AJIora/m6mP3uUCBR4OiP2LyQy+JPaIzuV9v326Zmcj9ZbT8g9yGNetW
-        BqG4oapVFewCI2Rv8BMQGdWj9ql4EuE=
-X-Google-Smtp-Source: AGRyM1vyvI1vzvid8Bo8G+oWfNYRN17arAZ2ebp+U+Q4l6i2IbT8kUgZTGt/txgwEVoiTexo6aTxmA==
-X-Received: by 2002:a05:6a00:1a44:b0:52a:ecd5:bbef with SMTP id h4-20020a056a001a4400b0052aecd5bbefmr21566896pfv.28.1659463859515;
-        Tue, 02 Aug 2022 11:10:59 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1cc5:2406:5d81:6fe8:af08:c752])
-        by smtp.googlemail.com with ESMTPSA id z22-20020aa79496000000b0052d8d7269d7sm4420525pfk.53.2022.08.02.11.10.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Aug 2022 11:10:59 -0700 (PDT)
-From:   Vishal Badole <badolevishal1116@gmail.com>
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
-        vimal.kumar32@gmail.com,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        Mintu Patel <mintupatel89@gmail.com>
-Subject: [PATCH v3] Common clock: To list active consumers of clocks
-Date:   Tue,  2 Aug 2022 23:39:47 +0530
-Message-Id: <1659463787-25976-1-git-send-email-badolevishal1116@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20220624010550.582BBC341C7@smtp.kernel.org>
-References: <20220624010550.582BBC341C7@smtp.kernel.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 2 Aug 2022 14:11:53 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7601B792;
+        Tue,  2 Aug 2022 11:11:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gnE6zNQDyuUS0siMpvdiZgtUDB4P6hs29E1Ayuuv/OHn+ZIMAFTy5ksJJ+foy7zr4H3E84xt+q5Dkh/pnu9FwJH6S3xTU+6m20WopBdkljXKkdIu2E9LXEhnS5ut0guX5P3RB6iHNcWCjXcZ404t0I9OOuGY3/qWv95JopQIvRKgRxwNwFq2z9femijJu63tpIIBKkMnuJHC+4p0TzTvfdfo0+K+g6Z2bSwy5wMkbcaAVEa365vB0a183ZIHW/GIM3cr7MXHI1rGKlJYQ8vHKYeRDBXXsjECy53pAjkVFwVtSJk3J75zRe7yExhdzV5E2ZhsFU2iYNIU8CsNVvk0YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FDdSu01EgAfM6Bz8wpp3oP5AoxeLhVF9RCImp/ulKkw=;
+ b=n5KoAOy0yVVa0hEDdV2B+TkCHpMhiP0cuctylLKkddIDdpM13RdI4Sk4r03Rupobo5PMUr3sUQq8SzB7jFquGfIbSRcrv9inkcfx5jHBO4S2FR5/5ILFgWQRdYwurG6SvaMjO0Fmrl6bwXHIDeOg5KvlVufqM4I5sFWwsC9n4HqS9RvxLXJookFGWhMvUiLDId/rqYR5z97YwcVrG/cUsUOaA8fHxcTT22YG12c+3TUh83mHW+DFXfFXLnMMYEqeb9sIokoubtkMeB7yib9wXjhQ8dSRFX1ckxmIOGFo3qJFCyUqTcmOLa3CrBdL5qIVm1pH69YCJdWzvRW4uPNn+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FDdSu01EgAfM6Bz8wpp3oP5AoxeLhVF9RCImp/ulKkw=;
+ b=JZbe6tziSkdkxf24tCNBqkdGNjvqrlNl58ocr08my+UFmxhkGAK0pCBsPrXjJ2Sj6nD3uWQQT1P6VaIHxPCKHhiNRfJJSM+bnl6O8d03eD4biqUEFNGIEzUIsZp659UgqNAe2NW877XYkI/BOgqFWVKx5iR56On9rntcBtk+WkmRSm4hShpNVSAt+3RwQwpr+eCGUPRs9fTO1wqQY6CY7H6I6+w8g3Od66m6Kh0AGZUNoNZ08XDkFTJ8KN/qQvVPVV4gkzLqkNq9Z7Gw5ShdQ7g9ZE4lZJxFJNcNEhmO21yeSX/GIJHKrzt4QmwQbCy92Ca2FjxVLpZiJ6RyqtC3cA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SJ1PR12MB6364.namprd12.prod.outlook.com (2603:10b6:a03:452::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.10; Tue, 2 Aug
+ 2022 18:11:35 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 18:11:34 +0000
+Date:   Tue, 2 Aug 2022 15:11:33 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/ib_srpt: unify checking rdma_cm_id condition in
+ srpt_cm_req_recv()
+Message-ID: <Yulo1SNrjPYZuIFv@nvidia.com>
+References: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1659336226-2-1-git-send-email-lizhijian@fujitsu.com>
+X-ClientProxiedBy: BLAPR03CA0082.namprd03.prod.outlook.com
+ (2603:10b6:208:329::27) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 71c1669e-ef0d-4c05-0d63-08da74b26f40
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6364:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1qRbjCcgwGasIwka0YnPVmlG0BYNAuyz6nvJ6qlI93fI5yXhapSSAK1YzIXJxnhQ3Ip2kj1TWBSbExYnb4qXeHQMV1bxU5XcyezQQio0dtmdbm9SXbw+y9O01K2sdeb1XTqXjRhJDMocriO+rpBR39W2aeIeyghdOyCbqelAWnb+WbmEWJz3mtXjFBZgq4PnhbKXlguGHMzHj6NmGsJrlc8OhsCersG2SA5eKkJ7RXp/wBJrUBPax4devqO3iQ/xNHRddg76VjVuT5LDacTlAy+ewZSG9jDE95zZRHNkykTc8tzAOPXa8Xyi6iZXsXSdOCtZrXFpq+ijzOhVUzv2fAB47Xeb0WH1jX01ZKM/0KL3GVm7inaoGv8di6Ky++Xb4h0wYjow4AalYzkPad3ccq/3EiJAn11/4AbGFp11ouJwrQyFjbC8GvqAUJ4VZSz10s/vfyvktQY8e05x7yWW8P4GXWaav0PoJErSlp2/Wmkg0DLYQgkTHLOJrKv/u9NNjIhzFZP5NfwseA/vfX2PKnranflbfw5tDC833sJ9ttG0pDnKKGqYqYpr9IJcfDelHn3j/CSrq8AmYH1pwiMDLviqntcVAfDIQEH+0LPYhW2CJEI73d4gCa0i3VvdPClOohzCMwhpya/xNtYR6kQ7KC+MrZH+seXCZIB8zjXZwXnaox018QMNz/7uNMBKQiqe4+6u5ta1VFv+/MqaeuUqgj6U3WKV30yEO7lyiRKbQTI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(41300700001)(2906002)(2616005)(83380400001)(86362001)(54906003)(6916009)(6506007)(36756003)(4744005)(26005)(6512007)(186003)(38100700002)(6486002)(5660300002)(66476007)(66946007)(66556008)(8936002)(478600001)(8676002)(4326008)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PdYqzbFkIUYBmS5je89mll9nD9GV75HXH9C92zYhYvdzA30/lgBjVc7Zn7PH?=
+ =?us-ascii?Q?v0vzN6rUMrEjbceI8TqxeL/AWN4/2O3MBY8XeiywXr2H2J5Ek0P/ZJZwTZlg?=
+ =?us-ascii?Q?wP9b9FfR2QJKqHpgOze/wKHYL2P58h241SdMvFoVquIZoNLq/B3BZPSqcgD3?=
+ =?us-ascii?Q?HBiakE92CuD+pSNNd+ZX1xGmOSPDc1uL4Jj2lGjH2Tzg2eZ1ocDYeW+G4/Rn?=
+ =?us-ascii?Q?fMeq+d1c02XF4bm3P59MvnQFbR2oMcF5FAVk3e1GjOOkyZ7OCCXQbXP+omxz?=
+ =?us-ascii?Q?4BOjqqKs3wardQC4z8QjGKg8fQHTwJiM69xmHgeHkL+pOACFauyQfKm981u2?=
+ =?us-ascii?Q?FBeGLw7uh0j3CmVDe6ia5NYnAR8nGz/XZ71pnXbO7Ig2+gVDtoQauIh6nnxG?=
+ =?us-ascii?Q?tgSZ+7C4c7Te84HfNHYh8r7+ooYMXIqSkxbpETsidR4prykckac1JMXN/fOy?=
+ =?us-ascii?Q?XQq8mqLnrjLT6SAP5mgcoepUlskrrQ2lkfR0u9s34SZdQsJyYlFF9qUEd33y?=
+ =?us-ascii?Q?GytASVZmEVeSqSKHbNTqDx7YvDlz0CNQktXAwbZN6V0MBfQleh9ahmtltOSN?=
+ =?us-ascii?Q?B0a+9zqc89XJZJz+DAe2hmbyqqLd10dELG7yqo5YJr3ZmfjuNHtXRkk+nUfA?=
+ =?us-ascii?Q?p1hU48jefC3z+Wh8AGYBQAGWlLqlIlCF5Y/zVwRks48XvPONIkw+XLKK1mWN?=
+ =?us-ascii?Q?VqOxhzPbdaY2rhH+tHfcWF2wz2pLNcRydqAI1DFDhYGwZikH2+B3kapp5RMK?=
+ =?us-ascii?Q?n+m3yGCWwR2Sz/a2UySw+67fR0F2fty+2ijnAO4Wmi2a/ApoWBWrdWktzHQb?=
+ =?us-ascii?Q?/KyV+mBh3uII7SumUZJlLwUaAyCcnkEa4YiEEn/OIOJzPQ6vQofMvEEZVoAQ?=
+ =?us-ascii?Q?VcnnsNiA2psQaiE3g1Ne3+tKb3WKHlw9Zmixmq+2mPfsUI0FaaT739P9dGQN?=
+ =?us-ascii?Q?VYZHRrkmNVaC7Uwp8qaPwPy6BjUbeeBt5Q3w/vmXj6/oFCSNeRtBHiZ334/D?=
+ =?us-ascii?Q?tywE1pMtAg7TkX8HUck6Gmpfa085X1sKXoLoaKnWJAruvRSvQ45pe/PgX/1t?=
+ =?us-ascii?Q?OonQjLBWnUERjY7Cg/RvlX7kS4lYmVwNRRQsNOqZutBQg4mT66AOUL93sM0c?=
+ =?us-ascii?Q?UYJOt8ZXbWiAb13PdQaCErOVY9PvJFAfRJ/dKJio4F6v2e7dEoOe64BWkY/7?=
+ =?us-ascii?Q?gwNb76GReDJefZD+7Dh35GBPS6OcBU+AhIXHTc9OMshLXL3eu74l+MPptRAb?=
+ =?us-ascii?Q?VvU2OrurX7uT2DLI6Gz6kTujoMeXXKfLYkE1nDMSNLj2SvMGKmvoSC7HI/2O?=
+ =?us-ascii?Q?XIqTODFPq44A6+UlWE7+pehNxjeplcR10P2Cq+kYOvyydyTR8A2DfvCOHQ8m?=
+ =?us-ascii?Q?CzUEVg8VKoFCMmdj9FYbHYdxPcXRpyxTedVpsa4IAtaXGLqtGVfqWdvVrsjH?=
+ =?us-ascii?Q?9hIIeTT9UJl2jl2HK73IB28JlxHCkqvzL49T0Q9WYkbNyej1itvwCNQ/3zAV?=
+ =?us-ascii?Q?uOyH2OU8NnkgDWO6Gh5l09qa6a7b7THrneowB48W2yIV8u9ugxSyHuwtA4rQ?=
+ =?us-ascii?Q?c5hhd3+YUZbNgtvSFZhxJfUN4XYewY+iBt4ij2fG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71c1669e-ef0d-4c05-0d63-08da74b26f40
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 18:11:34.7377
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BkDGTjbmSewq74tLyhR8n208WswblkD8Jf1L2QSEBW8WJMRL5S4SMyM8dURKOpa0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6364
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This feature lists the clock consumer's name and per-user enable count
-in clock summary. Using this feature user can easily check which device
-has acquired a perticular clock and it is enabled by respective device
-or not.
-for example:
-$ cat /sys/kernel/debug/clk/clk_summary
-                      enable  prepare  protect                           duty  hardware                            per-user
-   clock               count    count    count    rate   accuracy phase cycle    enable   consumer                    count
-----------------------------------------------------------------------------------------------------------------------------
- clk_mcasp0_fixed         0        0        0    24576000      0     0  50000     Y      deviceless                      0
-                                                                                         deviceless                      0
-    clk_mcasp0            0        0        0    24576000      0     0  50000     N          simple-audio-card,cpu           0
-                                                                                             deviceless                      0
+On Mon, Aug 01, 2022 at 06:43:46AM +0000, Li Zhijian wrote:
+> Although rdma_cm_id and ib_cm_id passing to srpt_cm_req_recv() are
+> exclusive currently, all other checking condition are using rdma_cm_id.
+> So unify the 'if' condition to make the code more clear.
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/infiniband/ulp/srpt/ib_srpt.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-Co-developed-by: Vimal Kumar <vimal.kumar32@gmail.com>
-Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
-Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
----
- drivers/clk/clk.c | 46 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 35 insertions(+), 11 deletions(-)
+Applied to for-next.
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index f00d4c1..c96079f 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -102,6 +102,7 @@ struct clk {
- 	unsigned long min_rate;
- 	unsigned long max_rate;
- 	unsigned int exclusive_count;
-+	unsigned int enable_count;
- 	struct hlist_node clks_node;
- };
- 
-@@ -1008,6 +1009,10 @@ void clk_disable(struct clk *clk)
- 		return;
- 
- 	clk_core_disable_lock(clk->core);
-+
-+	if (clk->enable_count > 0)
-+		clk->enable_count--;
-+
- }
- EXPORT_SYMBOL_GPL(clk_disable);
- 
-@@ -1169,10 +1174,16 @@ EXPORT_SYMBOL_GPL(clk_restore_context);
-  */
- int clk_enable(struct clk *clk)
- {
-+	int ret;
-+
- 	if (!clk)
- 		return 0;
- 
--	return clk_core_enable_lock(clk->core);
-+	ret = clk_core_enable_lock(clk->core);
-+	if (!ret)
-+		clk->enable_count++;
-+
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(clk_enable);
- 
-@@ -2953,28 +2964,41 @@ static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
- 				 int level)
- {
- 	int phase;
-+	struct clk *clk_user;
-+	int multi_node = 0;
- 
--	seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
-+	seq_printf(s, "%*s%-*s %-7d %-8d %-8d %-11lu %-10lu ",
- 		   level * 3 + 1, "",
--		   30 - level * 3, c->name,
-+		   35 - level * 3, c->name,
- 		   c->enable_count, c->prepare_count, c->protect_count,
- 		   clk_core_get_rate_recalc(c),
- 		   clk_core_get_accuracy_recalc(c));
- 
- 	phase = clk_core_get_phase(c);
- 	if (phase >= 0)
--		seq_printf(s, "%5d", phase);
-+		seq_printf(s, "%-5d", phase);
- 	else
- 		seq_puts(s, "-----");
- 
--	seq_printf(s, " %6d", clk_core_get_scaled_duty_cycle(c, 100000));
-+	seq_printf(s, " %-6d", clk_core_get_scaled_duty_cycle(c, 100000));
- 
- 	if (c->ops->is_enabled)
--		seq_printf(s, " %9c\n", clk_core_is_enabled(c) ? 'Y' : 'N');
-+		seq_printf(s, " %5c ", clk_core_is_enabled(c) ? 'Y' : 'N');
- 	else if (!c->ops->enable)
--		seq_printf(s, " %9c\n", 'Y');
-+		seq_printf(s, " %5c ", 'Y');
- 	else
--		seq_printf(s, " %9c\n", '?');
-+		seq_printf(s, " %5c ", '?');
-+
-+	hlist_for_each_entry(clk_user, &c->clks, clks_node) {
-+		seq_printf(s, "%*s%-*s  %-4d\n",
-+			   level * 3 + 2 + 105 * multi_node, "",
-+			   30,
-+			   clk_user->dev_id ? clk_user->dev_id : "deviceless",
-+			   clk_user->enable_count);
-+
-+		multi_node = 1;
-+	}
-+
- }
- 
- static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
-@@ -2995,9 +3019,9 @@ static int clk_summary_show(struct seq_file *s, void *data)
- 	struct clk_core *c;
- 	struct hlist_head **lists = (struct hlist_head **)s->private;
- 
--	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware\n");
--	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable\n");
--	seq_puts(s, "-------------------------------------------------------------------------------------------------------\n");
-+	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware                            per-user\n");
-+	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable   consumer                    count\n");
-+	seq_puts(s, "-------------------------------------------------------------------------------------------------------------------------------------------\n");
- 
- 	clk_prepare_lock();
- 
--- 
-2.7.4
-
+Thanks,
+Jason

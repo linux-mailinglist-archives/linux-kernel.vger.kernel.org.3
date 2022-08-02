@@ -2,139 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F885879F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD1F5879F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 11:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiHBJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 05:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S236050AbiHBJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 05:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiHBJiO (ORCPT
+        with ESMTP id S232727AbiHBJix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:38:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9DF930F55
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 02:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659433093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SR3OgXv0SWMYMM8P/TFLmgsz2VZ9k//RlVH2mPzgJ3c=;
-        b=acAvV0J6Um2cK4CM2SwACruAoN5MExUdR2WtIYrMjPkZeBe7xhyM8Sw86dwQJbu9ThouBB
-        9nDtfdiUBbsjgBUuP3b3XVGl1UwQYyy5Y1dk8SkEKJANgYsGgXiYU9UgxefgZNTqfHesuk
-        U01ibrdZ9UFrMHEc8SmgB/awHZvmxkk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-m0Iv7aYfMBuYu_3h_S2j4w-1; Tue, 02 Aug 2022 05:38:11 -0400
-X-MC-Unique: m0Iv7aYfMBuYu_3h_S2j4w-1
-Received: by mail-wr1-f69.google.com with SMTP id t12-20020adfba4c000000b0021e7440666bso3333898wrg.22
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 02:38:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=SR3OgXv0SWMYMM8P/TFLmgsz2VZ9k//RlVH2mPzgJ3c=;
-        b=qgXmeIEv3jKK07yNnCkU9SjFDx0YqpAA1y4DjtITRkYZ0wUz+inPEjEtDyjUFg1Z3U
-         ch9o93haxkGXFYm9HvnTfbA72SJ/UQTw3WeK+9RD73KheoHRdFwA3lKAT3J0WH+ia8LU
-         ijLwv+HSp6u/QekffYgnfSH8qV9l4Up1lHRfbCFDIOke/SuPHyDnT3nfCL0BgBeCbBL/
-         pibVTG2MgeMWzk0409mwIHgLB3hqsmV9bQdXulpZr2p+Bztvwef2Q/z4plTOLBlFe6NQ
-         PdGieTFqlWGmbfBSwKmkw++VTII50OslhRPtrTgRqQLVUzNtiM8h06951tVJ7N07MzXn
-         9bKQ==
-X-Gm-Message-State: ACgBeo3nzFFfeC2ql08VvDDDicsN7gXtEIC8YCdzEAMLDOgREseaFNej
-        UdwjCA2phV/z+jr881i5LuDS6HLuYa2ZDEhKMWHto9a+YTtXYffwUKcLR0f61CZPxsAjdKWzzgm
-        JnoX80Epf1VHxNzrJnMMs9tM0
-X-Received: by 2002:a5d:688c:0:b0:21f:160d:8859 with SMTP id h12-20020a5d688c000000b0021f160d8859mr11197295wru.711.1659433090731;
-        Tue, 02 Aug 2022 02:38:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7QvrzYHDIVdY2kldi5Z2ZLSFcbNVD5KQ4xGD3XDy95tXVmMZVaEQX5WnRvFqmY9FJgBMUgBw==
-X-Received: by 2002:a5d:688c:0:b0:21f:160d:8859 with SMTP id h12-20020a5d688c000000b0021f160d8859mr11197274wru.711.1659433090539;
-        Tue, 02 Aug 2022 02:38:10 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6405000000b0021f138e07acsm12028845wru.35.2022.08.02.02.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 02:38:10 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>, linux-kernel@vger.kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
- spread API
-In-Reply-To: <9401f754-d4d6-9fbd-7354-3103ececddda@gmail.com>
-References: <20220728191203.4055-1-tariqt@nvidia.com>
- <20220728191203.4055-2-tariqt@nvidia.com>
- <7f1ab968-cc10-f0a7-cac8-63dd60021493@gmail.com>
- <9401f754-d4d6-9fbd-7354-3103ececddda@gmail.com>
-Date:   Tue, 02 Aug 2022 10:38:08 +0100
-Message-ID: <xhsmhpmhjc7en.mognet@vschneid.remote.csb>
+        Tue, 2 Aug 2022 05:38:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89B1D30F55;
+        Tue,  2 Aug 2022 02:38:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 015E013D5;
+        Tue,  2 Aug 2022 02:38:52 -0700 (PDT)
+Received: from [10.57.13.116] (unknown [10.57.13.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D247A3F67D;
+        Tue,  2 Aug 2022 02:38:48 -0700 (PDT)
+Message-ID: <e11096bd-7053-d7e7-738c-1241f2351307@arm.com>
+Date:   Tue, 2 Aug 2022 10:38:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support for ARM
+ CoreSight PMU driver
+To:     Besar Wicaksono <bwicaksono@nvidia.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
+        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>
+References: <20220621055035.31766-1-bwicaksono@nvidia.com>
+ <20220621055035.31766-2-bwicaksono@nvidia.com>
+ <73dafe08-d1f1-90b6-995e-7d38e9e1dce7@arm.com>
+ <SJ0PR12MB567600F730B47F3A1007775AA0829@SJ0PR12MB5676.namprd12.prod.outlook.com>
+ <20220712163638.GA2945984@p14s>
+ <632f5c80-2be3-ace5-6b0d-ee0c9e5560ff@arm.com>
+ <SJ0PR12MB567612C18D20A0C0243F0D23A0889@SJ0PR12MB5676.namprd12.prod.outlook.com>
+ <9d36f053-f929-204b-fb47-60c685b06717@arm.com>
+ <CANLsYkz6yAMU-PHpjjBr6WwpJ3tKvGew0+Y_sZHfQgwJDptskA@mail.gmail.com>
+ <SJ0PR12MB56761FF81566AE17DC10A2ACA09A9@SJ0PR12MB5676.namprd12.prod.outlook.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <SJ0PR12MB56761FF81566AE17DC10A2ACA09A9@SJ0PR12MB5676.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/08/22 09:40, Tariq Toukan wrote:
-> On 7/30/2022 8:29 PM, Tariq Toukan wrote:
->>
->>
->> On 7/28/2022 10:12 PM, Tariq Toukan wrote:
->>> Implement and expose API that sets the spread of CPUs based on distance,
->>> given a NUMA node.=C2=A0 Fallback to legacy logic that uses
->>> cpumask_local_spread.
->>>
->>> This logic can be used by device drivers to prefer some remote cpus over
->>> others.
->>>
->>> Reviewed-by: Gal Pressman <gal@nvidia.com>
->>> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
->>> ---
->>> =C2=A0 include/linux/sched/topology.h |=C2=A0 5 ++++
->>> =C2=A0 kernel/sched/topology.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 49 ++++++++++++++++++++++++++++++++++
->>> =C2=A0 2 files changed, 54 insertions(+)
->>>
->>
->> ++
->>
->> Dear SCHEDULER maintainers,
->>
->> V3 of my series was submitted ~12 days ago and had significant changes.
->> I'd appreciate your review to this patch, so we could make it to the
->> upcoming kernel.
->>
->> Regards,
->> Tariq
->
-> Hi,
-> Another reminder.
-> Do you have any comments on this patch?
-> If not, please provide your Ack.
+Hi
 
-It's not even been a week since you submitted v4 (and ~3 days since you
-last pinged this thread), and not all of us are limitless reviewing
-machines :-)
+On 01/08/2022 23:27, Besar Wicaksono wrote:
+> Hi
+> 
+>> -----Original Message-----
+>> From: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Sent: Thursday, July 21, 2022 10:36 AM
+>> To: Suzuki K Poulose <suzuki.poulose@arm.com>
+>> Cc: Besar Wicaksono <bwicaksono@nvidia.com>; Robin Murphy
+>> <robin.murphy@arm.com>; catalin.marinas@arm.com; will@kernel.org;
+>> mark.rutland@arm.com; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; linux-tegra@vger.kernel.org;
+>> sudeep.holla@arm.com; thanu.rangarajan@arm.com;
+>> Michael.Williams@arm.com; Thierry Reding <treding@nvidia.com>; Jonathan
+>> Hunter <jonathanh@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>;
+>> mike.leach@linaro.org; leo.yan@linaro.org
+>> Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support for
+>> ARM CoreSight PMU driver
+>>
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On Thu, 21 Jul 2022 at 03:19, Suzuki K Poulose <suzuki.poulose@arm.com>
+>> wrote:
+>>>
+>>> Hi
+>>>
+>>> On 14/07/2022 05:47, Besar Wicaksono wrote:
+>>>>
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: Robin Murphy <robin.murphy@arm.com>
+>>>>> Sent: Wednesday, July 13, 2022 3:13 AM
+>>>>> To: Mathieu Poirier <mathieu.poirier@linaro.org>; Besar Wicaksono
+>>>>> <bwicaksono@nvidia.com>
+>>>>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>;
+>> catalin.marinas@arm.com;
+>>>>> will@kernel.org; mark.rutland@arm.com; linux-arm-
+>>>>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+>>>>> tegra@vger.kernel.org; sudeep.holla@arm.com;
+>>>>> thanu.rangarajan@arm.com; Michael.Williams@arm.com; Thierry
+>> Reding
+>>>>> <treding@nvidia.com>; Jonathan Hunter <jonathanh@nvidia.com>;
+>> Vikram
+>>>>> Sethi <vsethi@nvidia.com>; mike.leach@linaro.org; leo.yan@linaro.org
+>>>>> Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support
+>> for
+>>>>> ARM CoreSight PMU driver
+>>>>>
+>>>>> External email: Use caution opening links or attachments
+>>>>>
+>>>>>
+>>>>> On 2022-07-12 17:36, Mathieu Poirier wrote:
+>>>>> [...]
+>>>>>>>> If we have decied to call this arm_system_pmu, (which I am
+>> perfectly
+>>>>>>>> happy with), could we please stick to that name for functions that
+>> we
+>>>>>>>> export ?
+>>>>>>>>
+>>>>>>>> e.g,
+>>>>>>>>
+>>>>>
+>> s/coresight_pmu_sysfs_event_show/arm_system_pmu_event_show()/
+>>>>>>>>
+>>>>>>>
+>>>>>>> Just want to confirm, is it just the public functions or do we need to
+>>>>> replace
+>>>>>>> all that has "coresight" naming ? Including the static functions, structs,
+>>>>> filename.
+>>>>>>
+>>>>>> I think all references to "coresight" should be changed to
+>>>>> "arm_system_pmu",
+>>>>>> including filenames.  That way there is no doubt this IP block is not
+>>>>>> related, and does not interoperate, with the any of the "coresight" IP
+>>>>> blocks
+>>>>>> already supported[1] in the kernel.
+>>>>>>
+>>>>>> I have looked at the documentation[2] in the cover letter and I agree
+>>>>>> with an earlier comment from Sudeep that this IP has very little to do
+>> with
+>>>>> any
+>>>>>> of the other CoreSight IP blocks found in the CoreSight framework[1].
+>>>>> Using the
+>>>>>> "coresight" naming convention in this driver would be _extremely_
+>>>>> confusing,
+>>>>>> especially when it comes to exported functions.
+>>>>>
+>>>>> But conversely, how is it not confusing to make up completely different
+>>>>> names for things than what they're actually called? The CoreSight
+>>>>> Performance Monitoring Unit is a part of the Arm CoreSight
+>> architecture,
+>>>>> it says it right there on page 1. What if I instinctively associate the
+>>>>> name Mathieu with someone more familiar to me, so to avoid confusion
+>> I'd
+>>>>> prefer to call you Steve? Is that OK?
+>>>>>
+>>>>
+>>>> What is the naming convention for modules under drivers/perf ?
+>>>> In my observation, the names there correspond to the part monitored by
+>>>> the PMU. The confusion on using "coresight_pmu" naming could be that
+>>>> people may think the PMU monitors coresight system, i.e the trace
+>> system under hwtracing.
+>>>> However, the driver in this patch is for a new PMU standard that
+>> monitors uncore
+>>>> parts. Uncore was considered as terminology from Intel, so "system" was
+>> picked instead.
+>>>> Please see this thread for reference:
+>>>>     https://lore.kernel.org/linux-arm-
+>> kernel/20220510111318.GD27557@willie-the-truck/
+>>>
+>>> I think we all understand the state of affairs.
+>>>
+>>> - We have an architecutre specification for PMUs, Arm CoreSight PMU
+>>> Architecutre, which has absolutely no relationship with :
+>>>
+>>>      either CoreSight Self-Hosted Tracing (handled by "coresight"
+>>> subsystem in the kernel under drivers/hwtracing/coresight/, with a user
+>>> visible pmu as "cs_etm")
+>>>
+>>>      or the CoreSight Architecture (except for the name). This is of less
+>>> significance in general. But has a significant impact on the "name"
+>>> users might expect for the driver/Kconfig etc.
+>>>
+>>> - We want to be able to make it easier for the users/developers to
+>>> choose what they want without causing confusion.
+>>>
+>>> For an end-user: Having the PMU instance named after the "System IP"
+>>> (as implememented in the driver solves the problem and falling back to
+>>> arm_system_pmu is a good enough choice. So let us stick with that)
+>>>
+>>> Kconfig: May be we can choose
+>>> CONFIG_ARM_CORESIGHT_PMU_ARCH_PMU
+>>> or even
+>>> CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+>>>
+>>> with appropriate help text to ensure there is enough stress about what
+>>> this is and what this is not would be sufficient.
+>>>
+> 
+> CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU sounds good to me.
+> 
+>>> Now the remaining contention is about the name of the "subsystem" and
+>>> also the dir/files.  This may sound insignificant. But it is also
+>>> important to get this right. e.g., helps the reviewers unambiguously
+>>> identify the change or maintainers accepting pull requests (remember
+>>> these two PMUs (cs_etm and this one) go via different trees.). Not
+>>> everyone who deals with this in the community may be aware of how
+>>> these are different.
+>>>
+>>> We could choose arm_cspmu_ or simply cspmu. Given that only the
+>>> "normal" users care about the "association" with the "architecture"
+>>> and more advanced users (e.g, developers) can easily map "Kconfig"
+>>> to driver files, may be we could even stick to the "arm_syspmu"
+>>> (from "arm system pmu") ?
+>>>
+>>
+>> +1 on "arm_syspmu"
+>>
+> 
+> I am fine too with arm_syspmu.
+> 
+> If there is no objection, I am going to post new update by end of this week
+> or early next week.
 
-This is already in my todo-list, but isn't the topmost item yet.
+Unfortunately, I have been told that we have a potential problem with
+"arm_syspmu" and even choosing "arm-system-pmu" for the name as it may
+conflict with something that is coming soon. So we may have to go back
+to something else, to avoid this exact same conversation in the near
+future. Apologies for that.
+
+Could we use "arm_cspmu" for the code/subsystem and may be
+"arm-csarch-pmu" / "arm-cs-arch-pmu" for the device name ?
+
+Other suggestions ?
+
+Suzuki
+
+
+> 
+> Thanks,
+> Besar
+> 
+>>> Suzuki
+>>>
+>>>
+>>>>
+>>>>> As it happens, Steve, I do actually agree with you that "coresight_" is
+>>>>> a bad prefix here, but only for the reason that it's too general. TBH I
+>>>>> think that's true of the existing Linux subsystem too, but that damage
+>>>>> is already done, and I'd concur that there's little value in trying to
+>>>>> unpick that now, despite the clear existence of products like CoreSight
+>>>>> DAP and CoreSight ELA which don't have all that much to do with
+>> program
+>>>>> trace either.
+>>>>>
+>>>>> However, hindsight and inertia are hardly good reasons to double down
+>> on
+>>>>> poor decisions, so if I was going to vote for anything here it would be
+>>>>> "cspmu_", which is about as
+>>>>> obviously-related-to-the-thing-it-actually-is as we can get while also
+>>>>> being pleasantly concise.
+>>>>>
+>>>>> [ And no, this isn't bikeshedding. Naming things right is *important* ]
+>>>>>
+>>>>
+>>>> I agree having the correct name is important, especially at this early stage.
+>>>> A direction of what the naming should describe would be very helpful
+>> here.
+>>>>
+>>>>> Cheers,
+>>>>> Robin.
+>>>>>
+>>>>>>
+>>>>>> Thanks,
+>>>>>> Steve
+>>>>>>
+>>>>>> [1]. drivers/hwtracing/coresight/
+>>>>>> [2]. https://developer.arm.com/documentation/ihi0091/latest
+>>>
 

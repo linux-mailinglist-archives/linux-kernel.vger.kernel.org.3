@@ -2,77 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DA058761B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 05:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277EC587565
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiHBD6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 23:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S235281AbiHBCGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiHBD54 (ORCPT
+        with ESMTP id S232419AbiHBCGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 23:57:56 -0400
-X-Greylist: delayed 7332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 Aug 2022 20:57:55 PDT
-Received: from mail.rv.npu.gov.ua (mail.rv.npu.gov.ua [85.159.5.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526E7192A8;
-        Mon,  1 Aug 2022 20:57:55 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 053A246D4BAC;
-        Tue,  2 Aug 2022 04:02:56 +0300 (EEST)
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GXDaLlUDo2TC; Tue,  2 Aug 2022 04:02:54 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id ED40946D4BB8;
-        Tue,  2 Aug 2022 04:02:53 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rv.npu.gov.ua ED40946D4BB8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rv.npu.gov.ua;
-        s=D9C6921A-69F2-11EB-967E-80F8358BD1FC; t=1659402174;
-        bh=rXKZG/8bQHY28IslpDmB9+1lxzhBpWrTxjnUDTFW+HM=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=B+fh0x4+m1U5svqm9ddTjmUyb/BM7Cz77GNcdl3GPSNWztwPoxM6uJXrqTAJyKh0k
-         n9rOu5hCbKRXEvtkm7p0/FCZh2isUEUQ2gBTDH0L4PGrg7MFnCCyaCKkIca69XXEtn
-         spVR2L5hnWzf49tv30VIQ7PQkPVQbpYMRdCC0h/xrKJVgfMNYFBpry5YlEto8ppGbc
-         pAR44TAF2LvEYyt50/6XMRyGrTRaiP1sUB/6cRKLrHuJt8Id9hvmFl1v2ndLEF/8Tf
-         Y6H3WWCA+WtrYlQkmQ9NozN97a3jzrg04YcNpcN36D71WVrJO9lQazN4s3mNqy/AC3
-         rmoW/1EoS7L5g==
-X-Virus-Scanned: amavisd-new at rv.npu.gov.ua
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id friiuF2eU68a; Tue,  2 Aug 2022 04:02:53 +0300 (EEST)
-Received: from DESKTOP-CJHK18M.home (gateway [101.19.1.22])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTPSA id 3B75946D4BAC;
-        Tue,  2 Aug 2022 04:02:51 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 1 Aug 2022 22:06:12 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763D18E32;
+        Mon,  1 Aug 2022 19:06:09 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxdZ10bhGzlW8N;
+        Tue,  2 Aug 2022 10:03:21 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 10:06:02 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 2 Aug 2022 10:06:01 +0800
+Subject: Re: [PATCH v3 1/3] rcu/exp: Use NMI to get the backtrace of
+ cpu_curr(other_cpu) first
+To:     <paulmck@kernel.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
+References: <20220730102330.1255-1-thunder.leizhen@huawei.com>
+ <20220730102330.1255-2-thunder.leizhen@huawei.com>
+ <20220801231415.GC2860372@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <1fd08a9a-fd2b-2608-da55-5bc526515131@huawei.com>
+Date:   Tue, 2 Aug 2022 10:06:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:
-To:     Recipients <kt@rv.npu.gov.ua>
-From:   "MacKenzie Scott" <kt@rv.npu.gov.ua>
-Date:   Tue, 02 Aug 2022 09:09:34 +0800
-Reply-To: mackenziescott@reservasgoldenwayki.com
-Message-Id: <20220802010251.3B75946D4BAC@mail.rv.npu.gov.ua>
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+In-Reply-To: <20220801231415.GC2860372@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, =
 
-                          =
 
-I'm MacKenzie Scott Ex-wife of Amazon CEO and founder, I'm donating $ 4 bil=
-lion Dollars to charities, individuals, colleges across the Globe from Scot=
-t's foundation, to provide immediate support to people suffering economical=
-ly from COVID-19 pandemic and you're one of the lucky winners, i have a don=
-ation grant worth $100,800,000.00 Dollars for you, you can contact me for m=
-ore information if you're interested.
+On 2022/8/2 7:14, Paul E. McKenney wrote:
+> On Sat, Jul 30, 2022 at 06:23:28PM +0800, Zhen Lei wrote:
+>> The backtrace of cpu_curr(other_cpu) is unwinded based on the 'fp' saved
+>> during its last switch-out. For the most part, it's out of date. So try
+>> to use NMI to get the backtrace first, just like those functions in
+>> "tree_stall.h" did. Such as rcu_dump_cpu_stacks().
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> Much better, thank you!
+> 
+>> ---
+>>  kernel/rcu/tree_exp.h | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+>> index 0f70f62039a9090..21381697de23f0b 100644
+>> --- a/kernel/rcu/tree_exp.h
+>> +++ b/kernel/rcu/tree_exp.h
+>> @@ -665,7 +665,8 @@ static void synchronize_rcu_expedited_wait(void)
+>>  				mask = leaf_node_cpu_bit(rnp, cpu);
+>>  				if (!(READ_ONCE(rnp->expmask) & mask))
+>>  					continue;
+>> -				dump_cpu_task(cpu);
+>> +				if (!trigger_single_cpu_backtrace(cpu))
+>> +					dump_cpu_task(cpu);
+> 
+> But why not just leave this unchanged, rather than adding the call to
+> trigger_single_cpu_backtrace() in this patch and then removing it in
+> the next patch?
 
+To make the patch clear and easy to describe. Otherwise, I need to
+give an additional description of it in the next patch, because I
+searched all dump_cpu_task(). This seems to make the next patch
+less simple.
+
+Some of the patch sets I've seen have been done step by step like
+this. But I can't find it now.
+
+On the other hand, this patch is a small fix. Earlier versions may
+only backport it, not the next cleanup patch.
+
+> 
+> 							Thanx, Paul
+> 
+>>  			}
+>>  		}
+>>  		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
+>> -- 
+>> 2.25.1
+>>
+> .
+> 
+
+-- 
 Regards,
-MacKenzie Scott.
+  Zhen Lei

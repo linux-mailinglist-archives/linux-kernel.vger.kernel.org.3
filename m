@@ -2,113 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62899587E7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78153587E81
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 17:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbiHBO7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        id S237168AbiHBPB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 11:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiHBO7h (ORCPT
+        with ESMTP id S233060AbiHBPBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:59:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 777061EEC9
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659452375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TiEVWlyldriK6u+7IZclS64oyMv2tQAk41MyojiltD4=;
-        b=hy8pn/cbvBX0kEdiSVCh/smgAkI+pvRli0UxJq9YHGTSGsrGZtCVavRkmvt6KUpD/n/WEK
-        Z+UYNzzFV3UbPwtPcp9bly/1YFYALwMp2godAn/WKVQ4qSRetuCqVy88lSGTM3YQ0q2CWL
-        LT4d3SR1GOha0ir3ZjE3XycsRI8Hen0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-sUT9OL9lNUKPkV9Wvxzazw-1; Tue, 02 Aug 2022 10:59:34 -0400
-X-MC-Unique: sUT9OL9lNUKPkV9Wvxzazw-1
-Received: by mail-wm1-f70.google.com with SMTP id ay19-20020a05600c1e1300b003a315c2c1c0so9600294wmb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:59:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=TiEVWlyldriK6u+7IZclS64oyMv2tQAk41MyojiltD4=;
-        b=nMaplOICQobUwHchehfXrFU90Ya5RyjeFudrtbDINncrLRCtgrynvmsPNLg5PZwPqY
-         /yS/XvXjiz/m6X1b+701XUi/LpT5LfkelLFJGTmefMmg8Khmh2Ih92FnjGE4BZ4L3kpo
-         yZXNsLZBmv5qSyhK2mvlvBh7EAAYI3lUDGmNvwyTRIl8uDEYEcm+HUrCZ9bHBUW3UBCO
-         xvrJ2YJRUTM7Ip5N5/S8HAD8NYKOagD1qEcvthZOiA+fRWFs1EUZu/xE+8wtgYwg9OQq
-         13MHYMoSuRxi+y3bncqBar9urZMksyrQjAz1o9e3NGSgYB2U/Kl+TDif3CepYvVz5Zub
-         BNLQ==
-X-Gm-Message-State: AJIora/kvkHJtMJvkynhnqzUWm6SlGom+boh1UkCb+JfNYYFy4AiGvEb
-        kvR6MIlMsv8IT+KfXxCAS/Vh9mWhOaf4doQjRNw5U56Iq00jYQYIPUvwHWrZ+OPGbGsvw5RSDVC
-        QjRcq7hsyGiEg3zfnBZmJsWBr
-X-Received: by 2002:a05:600c:a41:b0:39c:1512:98bd with SMTP id c1-20020a05600c0a4100b0039c151298bdmr14793140wmq.88.1659452373044;
-        Tue, 02 Aug 2022 07:59:33 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uVcy9Uhg/u4K309FT0W3bmnAaw4bdK83/8GL9sXHMylj8ESdtJLqkyEA7z9bDjEmji9qyLrA==
-X-Received: by 2002:a05:600c:a41:b0:39c:1512:98bd with SMTP id c1-20020a05600c0a4100b0039c151298bdmr14793119wmq.88.1659452372798;
-        Tue, 02 Aug 2022 07:59:32 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3800:8435:659e:f80:9b3d? (p200300cbc70738008435659e0f809b3d.dip0.t-ipconnect.de. [2003:cb:c707:3800:8435:659e:f80:9b3d])
-        by smtp.gmail.com with ESMTPSA id u11-20020a056000038b00b0021e4829d359sm16597094wrf.39.2022.08.02.07.59.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 07:59:32 -0700 (PDT)
-Message-ID: <01362246-05e6-f57f-9f64-c8d2524e685d@redhat.com>
-Date:   Tue, 2 Aug 2022 16:59:31 +0200
+        Tue, 2 Aug 2022 11:01:25 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722DDB1E3;
+        Tue,  2 Aug 2022 08:01:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BF7DE3B95B7;
+        Tue,  2 Aug 2022 11:01:20 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id OsEnzjYzB6w4; Tue,  2 Aug 2022 11:01:20 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id F3EAB3B94D0;
+        Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F3EAB3B94D0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1659452480;
+        bh=bVG2zyAAyFZSYcpouAX+4anDt1x5+l+apwXOG9Uq0l8=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=VGcoTt3+r5S+Xff6eEGdSbW5xVsSjtZupC7Yc1jt9zHv50xJLJCskRc3mTER23RGI
+         SFMMBZBSecknVn/HbWgRX5H0fta4CcLp1B7QeEM4FflhAqjklZpcuhy8lZWOZXZ6mK
+         RBnkPnY/RhJ4sfmMAd4Z/Br4w9gBt2soYXeXnpr12jeu4htyhG10GfXuF5cSSbh24v
+         zaBCR4irk780nF7KcgQM8L+iEK9ZKCkm0c6EPxfKHY66DaE+ehtNHYKqfNMMPXSKJ3
+         IebBXBi7+5nVRdykbWmwiqBN+WOJNdFutEtykSYSswxAed22xfx9txkoRwoqfFmP0s
+         OnC7VWVwloGhw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id a_9Zkqfwy8ch; Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id E12DA3B9371;
+        Tue,  2 Aug 2022 11:01:19 -0400 (EDT)
+Date:   Tue, 2 Aug 2022 11:01:19 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@aculab.com>,
+        carlos <carlos@redhat.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Peter Oskolkov <posk@google.com>
+Message-ID: <500891137.95782.1659452479846.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAFTs51UAyc4Z5WUFdMXCTYR6zji6NwLeBxYsp9GQZvFdEtUm1w@mail.gmail.com>
+References: <20220729190225.12726-1-mathieu.desnoyers@efficios.com> <CAFTs51UAyc4Z5WUFdMXCTYR6zji6NwLeBxYsp9GQZvFdEtUm1w@mail.gmail.com>
+Subject: Re: [PATCH v3 00/23] RSEQ node id and virtual cpu id extensions
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm: Split huge PUD on wp_huge_pud fallback
-Content-Language: en-US
-To:     "Gowans, James" <jgowans@amazon.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?U2Now7ZuaGVyciwgSmFuIEgu?= <jschoenh@amazon.de>,
-        "thomas.hellstrom@linux.intel.com" <thomas.hellstrom@linux.intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-References: <6f48d622eb8bce1ae5dd75327b0b73894a2ec407.camel@amazon.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <6f48d622eb8bce1ae5dd75327b0b73894a2ec407.camel@amazon.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
+Thread-Topic: RSEQ node id and virtual cpu id extensions
+Thread-Index: 56GbPqtcNuVVI1uvQlqn/jwXHtFfHg==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.06.22 07:24, Gowans, James wrote:
-> Currently the implementation will split the PUD when a fallback is taken
-> inside the create_huge_pud function. This isn't where it should be done:
-> the splitting should be done in wp_huge_pud, just like it's done for
-> PMDs. Reason being that if a callback is taken during create, there is
-> no PUD yet so nothing to split, whereas if a fallback is taken when
-> encountering a write protection fault there is something to split.
+----- On Aug 1, 2022, at 1:07 PM, Peter Oskolkov posk@posk.io wrote:
+
+> On Fri, Jul 29, 2022 at 12:02 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> Extend the rseq ABI to expose a NUMA node ID and a vm_vcpu_id field.
 > 
-> It looks like this was the original intention with the commit where the
-> splitting was introduced, but somehow it got moved to the wrong place
-> between v1 and v2 of the patch series. Rebase mistake perhaps.
+> Thanks a lot, Mathieu - it is really exciting to see this happening!
 > 
-> Fixes: 327e9fd48972 ("mm: Split huge pages on write-notify or COW")
+> I'll share our experiences here, with the hope that it may be useful.
+> I've also cc-ed
+> Chris Kennelly, who worked on the userspace/tcmalloc side, as he can provide
+> more context/details if I miss or misrepresent something.
 
-Right, the functions should just look like create_huge_pmd()/wp_huge_pmd().
+Thanks for sharing your experiences at Google. This helps put things in
+perspective.
 
-I do wonder if there was a reason to do it differently, though ... I
-can't spot any in current code.
+> 
+> The problem:
+> 
+> tcmalloc maintains per-cpu freelists in the userspace to make userspace
+> memory allocations fast and efficient; it relies on rseq to do so, as
+> any manipulation
+> of the freelists has to be protected vs thread migrations.
+> 
+> However, as a typical userspace process at a Google datacenter is confined to
+> a relatively small number of CPUs (8-16) via cgroups, while the
+> servers typically
+> have a much larger number of physical CPUs, the per-cpu freelist model
+> is somewhat
+> wasteful: if a process has only at most 10 threads running, for
+> example, but these threads
+> can "wander" across 100 CPUs over the lifetime of the process, keeping 100
+> freelists instead of 10 noticeably wastes memory.
+> 
+> Note that although a typical process at Google has a limited CPU
+> quota, thus using
+> only a small number of CPUs at any given time, the process may often have many
+> hundreds or thousands of threads, so per-thread freelists are not a viable
+> solution to the problem just described.
+> 
+> Our current solution:
+> 
+> As you outlined in patch 9, tracking the number of currently running threads per
+> address space and exposing this information via a vcpu_id abstraction helps
+> tcmalloc to noticeably reduce its freelist overhead in the "narrow
+> process running
+> on a wide server" situation, which is typical at Google.
+> 
+> We have experimented with several approaches here. The one that we are
+> currently using is the "flat" model: we allocate vcpu IDs ignoring numa nodes.
+> 
+> We did try per-numa-node vcpus, but it did not show any material improvement
+> over the "flat" model, perhaps because on our most "wide" servers the CPU
+> topology is multi-level. Chris Kennelly may provide more details here.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+I would really like to know more about Google's per-numa-node vcpus implementation.
+I suspect you guys may have taken a different turn somewhere in the design which
+led to these results. But having not seen that implementation, I can only guess.
+
+I notice the following Google-specific prototype extension in tcmalloc:
+
+  // This is a prototype extension to the rseq() syscall.  Since a process may
+  // run on only a few cores at a time, we can use a dense set of "v(irtual)
+  // cpus."  This can reduce cache requirements, as we only need N caches for
+  // the cores we actually run on simultaneously, rather than a cache for every
+  // physical core.
+  union {
+    struct {
+      short numa_node_id;
+      short vcpu_id;
+    };
+    int vcpu_flat;
+  };
+
+Can you tell me more about the way the numa_node_id and vcpu_id are allocated
+internally, and how they are expected to be used by userspace ?
+
+> 
+> On a more technical note, we do use atomic operations extensively in
+> the kernel to make sure
+> vcpu IDs are "tightly packed", i.e. if only N threads of a process are currently
+> running on physical CPUs, vcpu IDs will be in the range [0, N-1], i.e. no gaps,
+> no going to N and above; this does consume some extra CPU cycles, but the
+> RAM savings we gain far outweigh the extra CPU cost; it will be interesting to
+> see what you can do with the optimizations you propose in this patchset.
+
+The optimizations I propose keep those "tightly packed" characteristics, but skip
+the atomic operations in common scenarios. I'll welcome benchmarks of the added
+overhead in representative workloads.
+
+> Again, thanks a lot for this effort!
+
+Thanks for your input. It really helps steering the effort in the right direction.
+
+Mathieu
+
+> 
+> Peter
+> 
+> [...]
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

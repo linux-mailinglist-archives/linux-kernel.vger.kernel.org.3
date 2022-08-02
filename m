@@ -2,202 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CF4587933
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D844587934
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 10:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbiHBIlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 04:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S236039AbiHBIm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 04:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiHBIls (ORCPT
+        with ESMTP id S235746AbiHBImZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 04:41:48 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210A31ADB1
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:41:47 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id a9so8143257lfm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zzB0a7bJOMuRv01PGiHsY1rvic1GuiUFISUsomCCCOo=;
-        b=FGiOqoB701ZWcSGMUaQswKviPECFcCRkpb1CO5b7T7slyTtpMvgZLLV6NZv4POrW3A
-         8KxoyNm4hvlQ39tHXnv1WTlPGfm4VwNAbmheiMYG5htaEo9wiHviHhhbehHK9+BM69dZ
-         NyZ3qlzJbke68yc7fuGUCf8nJYbMAcXy/exARn+DYXlbv/5Ldrl5wN1FhsetYXS/rNlo
-         MsVvjSNyIdpmYIMdW+LURg68QqTKLFfEEha5nzX/+71DcMi352uN2HPEY2i/zJj5Vrob
-         Sc7aki4z/6Cvxbx2OQ4zEY8V4gYluEfFcHvtaYS+MRvfu6PGwN79mL3GtQHxzWt/Rqec
-         xT0w==
+        Tue, 2 Aug 2022 04:42:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FE091834B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659429743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4OpWRpLrMYsL2KSFpwdyO4aF9mwz1xUB24NEFQPJIA0=;
+        b=Q+s+fqJPSFlzMrkrlSYdS05L+iEEBs4gKqs4JsYuSBlfZWu38h97c6QbI2Pf1q490JBQ4t
+        Z70XJh6HuHLRGThIttO7bbtCwbw4/FI/Igkq0BGcKEPEoid1fhftECcKpjKWo8RJpzD3MX
+        klabLJuXQ90xv24DA5o25ZyaS7vE0h0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-345E7Fa6MOuxg8G5ZMY-gA-1; Tue, 02 Aug 2022 04:42:22 -0400
+X-MC-Unique: 345E7Fa6MOuxg8G5ZMY-gA-1
+Received: by mail-wm1-f72.google.com with SMTP id c189-20020a1c35c6000000b003a4bfb16d86so2833722wma.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 01:42:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zzB0a7bJOMuRv01PGiHsY1rvic1GuiUFISUsomCCCOo=;
-        b=DFG/3Ke3scp9c3t388T3c2SYMbKVoC++KBk8+Jb76rQgxMwPTDeeaYpa2vJkKiZXCa
-         GsadbB4HuVWv6D1+XZf89jn0q2UiZ2lkLcXGXgI2N1zy3X9/lkZVypyzn4ZTFkYi/Oza
-         0Fpw6+t/XEE6xS5abwHkYzUlsszFp/cG+xHTZO4GiMAmf6L5tJJwgEVOO9kQFP2I3ySx
-         fV9XAohX73LF0B74otDZah5M/k5YkDIf5uTBtMyvpG1AXerk7QRNF7307BBZSovrn3Yh
-         oVl2ZaQukH7xp/Xpg0Rv6kGsZ4Hq/4f1j0VXNesuk1Q9GDhzMh6yCuwevG9Duee/E0lb
-         e8MQ==
-X-Gm-Message-State: AJIora8bchHzuOxf8kHhqB+Xp0fbWdp+i0jIfs9RebsWLEZOKcZJw0UF
-        yzCzAzL4gGQo2/2h17C1DH4j/w==
-X-Google-Smtp-Source: AGRyM1vJSAY2q/uqhkA1XSIumtj2KvUDJDe8nq4mEflYQj1coZO+qe9bEl83kK9K5j3RD9tqV2NHeg==
-X-Received: by 2002:a19:6d0d:0:b0:48a:8b3c:e28 with SMTP id i13-20020a196d0d000000b0048a8b3c0e28mr6420470lfc.265.1659429705435;
-        Tue, 02 Aug 2022 01:41:45 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id e12-20020a19674c000000b00489e2156285sm2021463lfj.104.2022.08.02.01.41.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 01:41:44 -0700 (PDT)
-Message-ID: <cc60401b-ecb8-4907-af3e-bb437ae1421b@linaro.org>
-Date:   Tue, 2 Aug 2022 10:41:42 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=4OpWRpLrMYsL2KSFpwdyO4aF9mwz1xUB24NEFQPJIA0=;
+        b=P6IyEsuoA28d8p37ZHELbbMCL7/+A3CJwpwjoXmozgaa/iBW/fbaO95ozrUGf+GVdm
+         fPfUI/RYgFtnDn6j3v4e/DyjbHdXSLP9C2ldmpGyRGE7rcyEE6Pg5/USH2rYQjdfS1U5
+         ebdAKsJWCI9xfegcgGtBhn17TtGZ9M7oBAutbKEcRzOAj5PhMNY7ohHh3T0F0TUiiN75
+         ip3S6l4PIl6qmlE2dgu285ygI009qmv+DIhywSUFaYngG/f3IQbsso2hQlzQpo1QAKKm
+         uOCv2ONYLOzY+/kqYXfTncZbvfZ+ZHBysWbRe24Bfp5fUWjBLgTRO1UlSxM7TZ7ekUT1
+         CcsQ==
+X-Gm-Message-State: ACgBeo0BK5ql4e2xtKroCvQYWzYsU7ii2KinArE0OM8qniqmnd6u+Y29
+        PnyIb7b32T+EVpQKnijurZXr0VaFapJssfwkexAhE31R364RgLf3Pjx9jELVWO6tBdZ7y6SfMZq
+        MXrBB61kPniYR/q8eRBVFHc3/t3hRv8Jw6dJUCx/hklB2fuKvg+vTMVA3qYVZJq770p+L2Iab5g
+        P8
+X-Received: by 2002:a5d:64e5:0:b0:21d:945a:e7c4 with SMTP id g5-20020a5d64e5000000b0021d945ae7c4mr12739886wri.0.1659429740561;
+        Tue, 02 Aug 2022 01:42:20 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5ZT/ezv8pPGE/YiUn43hbl6B4IHxF8QvzdUybP5iii4Pf6qdVOgMEyx7XOkycwno9a8TZ+4w==
+X-Received: by 2002:a5d:64e5:0:b0:21d:945a:e7c4 with SMTP id g5-20020a5d64e5000000b0021d945ae7c4mr12739867wri.0.1659429740295;
+        Tue, 02 Aug 2022 01:42:20 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003a31169a7f4sm24825800wmg.12.2022.08.02.01.42.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 01:42:19 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [RFC PATCH v3 0/3] workqueue: destroy_worker() vs isolated CPUs
+Date:   Tue,  2 Aug 2022 09:41:43 +0100
+Message-Id: <20220802084146.3922640-1-vschneid@redhat.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/4] dt-bindings: net: dsa: mediatek,mt7530: make trivial
- changes
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220730142627.29028-1-arinc.unal@arinc9.com>
- <20220730142627.29028-2-arinc.unal@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220730142627.29028-2-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/07/2022 16:26, Arınç ÜNAL wrote:
-> Make trivial changes on the binding.
-> 
-> - Update title to include MT7531 switch.
-> - Add me as a maintainer. List maintainers in alphabetical order by first
-> name.
-> - Add description to compatible strings.
-> - Fix MCM description. mediatek,mcm is not used on MT7623NI.
-> - Add description for reset-gpios.
-> - Remove quotes from $ref: "dsa.yaml#".
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  .../bindings/net/dsa/mediatek,mt7530.yaml     | 27 ++++++++++++++-----
->  1 file changed, 20 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index 17ab6c69ecc7..541984a7d2d4 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> @@ -4,12 +4,13 @@
->  $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Mediatek MT7530 Ethernet switch
-> +title: Mediatek MT7530 and MT7531 Ethernet Switches
->  
->  maintainers:
-> -  - Sean Wang <sean.wang@mediatek.com>
-> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
->    - Landen Chao <Landen.Chao@mediatek.com>
->    - DENG Qingfang <dqfext@gmail.com>
-> +  - Sean Wang <sean.wang@mediatek.com>
->  
->  description: |
->    Port 5 of mt7530 and mt7621 switch is muxed between:
-> @@ -66,6 +67,14 @@ properties:
->        - mediatek,mt7531
->        - mediatek,mt7621
->  
-> +    description: |
-> +      mediatek,mt7530:
-> +        For standalone MT7530 and multi-chip module MT7530 in MT7623AI SoC.
-> +      mediatek,mt7531:
-> +        For standalone MT7531.
-> +      mediatek,mt7621:
-> +        For multi-chip module MT7530 in MT7621AT, MT7621DAT and MT7621ST SoCs.
+Hi folks,
 
-If compatible: is changed to oneOf, you can use description for each
-item. Look at board compatibles (arm/fsl.yaml)
+Using a work struct from within the workqueue code itself is a bit scary, but
+it seems to be holding up (at the very least on the locking side of things).
 
-> +
->    reg:
->      maxItems: 1
->  
-> @@ -79,7 +88,7 @@ properties:
->    gpio-controller:
->      type: boolean
->      description:
-> -      if defined, MT7530's LED controller will run on GPIO mode.
-> +      If defined, MT7530's LED controller will run on GPIO mode.
->  
->    "#interrupt-cells":
->      const: 1
-> @@ -98,11 +107,15 @@ properties:
->    mediatek,mcm:
->      type: boolean
->      description:
-> -      if defined, indicates that either MT7530 is the part on multi-chip
-> -      module belong to MT7623A has or the remotely standalone chip as the
-> -      function MT7623N reference board provided for.
-> +      Used for MT7621AT, MT7621DAT, MT7621ST and MT7623AI SoCs which the MT7530
-> +      switch is a part of the multi-chip module.
+Note that this affects all kworkers (not just percpu ones) for the sake of
+consistency and to prevent adding extra corner cases. kthread_set_per_cpu(p, -1)
+is a no-op for unbound kworkers, and IIUC the affinity change is not required
+since unbound workers have to be affined to a subset of wq_unbound_cpumask, but
+it shouldn't be harmful either.
 
-Does this mean it is valid only on these variants? If yes, this should
-have a "mediatek,mcm:false" in allOf:if:then as separate patch (with
-this change in description).
+3/3 (not for merging!) is a simple and stupid stresser that forces extra pcpu
+kworkers to be spawned on a specific CPU - I can then quickly test this on QEMU
+by making sure said CPU is isolated on the cmdline.
 
->  
->    reset-gpios:
-> +    description:
-> +      GPIO to reset the switch. Use this if mediatek,mcm is not used.
+Thanks to Tejun & Lai for the discussion thus far.
 
-The same. Example:
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml#L155
+Revisions
+=========
 
-> +      This property is optional because some boards share the reset line with
-> +      other components which makes it impossible to probe the switch if the
-> +      reset line is used.
->      maxItems: 1
->  
->    reset-names:
-> @@ -148,7 +161,7 @@ required:
->    - reg
->  
->  allOf:
-> -  - $ref: "dsa.yaml#"
-> +  - $ref: dsa.yaml#
->    - if:
->        required:
->          - mediatek,mcm
+RFCv2 -> RFCv3
+++++++++++++++
 
+o Rebase onto v5.19
+o Add new patch (1/3) around accessing wq_unbound_cpumask
 
-Best regards,
-Krzysztof
+o Prevent WORKER_DIE workers for kfree()'ing themselves before the idle reaper
+  gets to handle them (Tejun)
+
+  Bit of an aside on that: I've been struggling to convince myself this can
+  happen due to spurious wakeups and would like some help here.
+
+  Idle workers are TASK_UNINTERRUPTIBLE, so they can't be woken up by
+  signals. That state is set *under* pool->lock, and all wakeups (before this
+  patch) are also done while holding pool->lock.
+  
+  wake_up_worker() is done under pool->lock AND only wakes a worker on the
+  pool->idle_list. Thus the to-be-woken worker *cannot* have WORKER_DIE, though
+  it could gain it *after* being woken but *before* it runs, e.g.:
+                          
+  LOCK pool->lock
+  wake_up_worker(pool)
+      wake_up_process(p)
+  UNLOCK pool->lock
+                          idle_reaper_fn()
+                            LOCK pool->lock
+                            destroy_worker(worker, list);
+			    UNLOCK pool->lock
+			                            worker_thread()
+						      goto woke_up;
+                                                      LOCK pool->lock
+						      READ worker->flags & WORKER_DIE
+                                                          UNLOCK pool->lock
+                                                          ...
+						          kfree(worker);
+                            reap_worker(worker);
+			        // Uh-oh
+			  
+  ... But IMO that's not a spurious wakeup, that's a concurrency issue. I don't
+  see any spurious/unexpected worker wakeup happening once a worker is off the
+  pool->idle_list.
+  
+
+RFCv1 -> RFCv2
+++++++++++++++
+
+o Change the pool->timer into a delayed_work to have a sleepable context for
+  unbinding kworkers
+
+Cheers,
+Valentin
+
+Valentin Schneider (3):
+  workqueue: Hold wq_pool_mutex while affining tasks to
+    wq_unbound_cpumask
+  workqueue: Unbind workers before sending them to exit()
+  DEBUG-DO-NOT-MERGE: workqueue: kworker spawner
+
+ kernel/Makefile             |   2 +-
+ kernel/workqueue.c          | 169 +++++++++++++++++++++++++++++-------
+ kernel/workqueue_internal.h |   1 +
+ kernel/wqstress.c           |  69 +++++++++++++++
+ 4 files changed, 207 insertions(+), 34 deletions(-)
+ create mode 100644 kernel/wqstress.c
+
+--
+2.31.1
+

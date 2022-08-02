@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030DE5874FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4A6587500
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234779AbiHBBMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S231731AbiHBBPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiHBBL6 (ORCPT
+        with ESMTP id S230227AbiHBBPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:11:58 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D472125EAC;
-        Mon,  1 Aug 2022 18:11:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VL8sRT9_1659402713;
-Received: from 30.178.81.22(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VL8sRT9_1659402713)
-          by smtp.aliyun-inc.com;
-          Tue, 02 Aug 2022 09:11:54 +0800
-Message-ID: <4bff1924-ef4b-2c88-e3d3-a60ed5bf6599@linux.alibaba.com>
-Date:   Tue, 2 Aug 2022 09:11:52 +0800
+        Mon, 1 Aug 2022 21:15:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2763ED4C
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659402900; x=1690938900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OZXhPBn9vpiv0ww0MnLmMIWNJZyX7Dvtmhzvm8JB3i4=;
+  b=IgMtFH0yBZNgDOi22eYqjBgScZAZXnDxf9AevMALma3t5vAyLLo++0sQ
+   tHjdu0sk2cu7cav+dMT25XrmXPrUWj0LRn3IBMRVmSfisrwfgU1wYl4lX
+   WgPNvTRMlouYcI754ROL1Zrwv6q6fPM+N2PGjwj/jkK50NC3lQdhfFwpX
+   jcWq7dsQIbYv8z7crMGlcDwHac3L82ConHFkSRxRx7FjjiUl5I5b0j/Iz
+   PUXxa/1YvasIk+EQWoSImtKYmPxcLFMWp4N2uyDO+gJmxjImnWin9bk90
+   m6V+IhUel6uDlvyJ/9CAXMs5bNzV9Zg8EiJZnjhkzS/hbv2ixaEOnlF7X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10426"; a="269672253"
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="269672253"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2022 18:15:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,209,1654585200"; 
+   d="scan'208";a="578007463"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Aug 2022 18:14:57 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oIgUr-000FXb-0Z;
+        Tue, 02 Aug 2022 01:14:57 +0000
+Date:   Tue, 2 Aug 2022 09:14:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brent Lu <brent.lu@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set
+ but not used
+Message-ID: <202208020937.s1Een9WX-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [PATCH] PCI: eliminate abnormal characters when reads help
- information of "PCI_P2PDMA" under menuconfig
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-References: <20220801215623.GA676484@bhelgaas>
-From:   Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <20220801215623.GA676484@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Brent,
 
-在 2022/8/2 05:56, Bjorn Helgaas 写道:
-> On Wed, Jul 20, 2022 at 12:23:29PM -0500, Bjorn Helgaas wrote:
->> [+cc Andy, Joe, possible checkpatch question]
->>
->> On Wed, Jul 20, 2022 at 03:22:03PM +0800, Liu Song wrote:
->>> From: Liu Song <liusong@linux.alibaba.com>
->>>
->>> Read the help information of PCI_P2PDMA through make menuconfig,
->>> "Enables" is partially displayed as garbled characters, so fix it.
->>>
->>> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
->>> ---
->>>   drivers/pci/Kconfig | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
->>> index 133c732..8102b78 100644
->>> --- a/drivers/pci/Kconfig
->>> +++ b/drivers/pci/Kconfig
->>> @@ -166,7 +166,7 @@ config PCI_P2PDMA
->>>   	depends on ZONE_DEVICE
->>>   	select GENERIC_ALLOCATOR
->>>   	help
->>> -	  Enableѕ drivers to do PCI peer-to-peer transactions to and from
->>> +	  Enables drivers to do PCI peer-to-peer transactions to and from
->> I see this problem ("Enables" renders as "Enable ~U" because the "s"
->> is actually UTF-8 D195, CYRILLIC SMALL LETTER DZE).
->>
->> "file" found the following other Kconfig files that also contain
->> UTF-8:
->>
->>    drivers/pci/Kconfig
->>      D195 CYRILLIC SMALL LETTER DZE, which looks like "s"
->>      "Enables" renders as "Enable ~U"
->>    net/netfilter/ipvs/Kconfig
->>      C2A0 NO-BREAK SPACE
->>      renders fine
->>    drivers/mtd/nand/raw/Kconfig
->>      MTD_NAND_CAFE  C389 LATIN CAPITAL LETTER E WITH ACUTE
->>      "CAFÉ" renders as "CAF ~I"
->>    drivers/mtd/spi-nor/Kconfig
->>      MTD_SPI_NOR_USE_4K_SECTORS
->>      "16 × 4 KiB" renders as "16  ~W 4 KiB"
->>    drivers/net/can/usb/Kconfig
->>    drivers/net/can/peak_canfd/Kconfig
->>    drivers/gpu/drm/panel/Kconfig
->>    drivers/platform/mellanox/Kconfig
->>    kernel/time/Kconfig
->>    crypto/Kconfig
->>    arch/Kconfig
->>
->> Some of these are clearly wrong (Cyrillic letter), some are
->> unnecessary (non-breakable space), some are arguable ("CAFÉ" and "16 ×
->> 4 KiB" -- these take advantage of UTF-8 in useful ways).
->>
->> Not being a charset guru, I dunno if the rendering problem means
->> my terminal is set incorrectly or if they all need to be changed.
->>
->> But I think we should address all of them at the same time.  If we do
->> need to avoid UTF-8 in Kconfig help, maybe checkpatch should look for
->> it.
-> Any progress on this problem?  I certainly agree that it should be
-> fixed; I would just like to fix all the problems, not just the PCI
-> one.
->
-> Bjorn
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9de1f9c8ca5100a02a2e271bdbde36202e251b4b
+commit: 2fe14ff61bd6d4fabe313435dd378b5a38eb6102 ASoC: Intel: sof_ssp_amp: rename driver and support cs35l41 amplifier
+date:   5 months ago
+config: x86_64-randconfig-r006-20220801 (https://download.01.org/0day-ci/archive/20220802/202208020937.s1Een9WX-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2fe14ff61bd6d4fabe313435dd378b5a38eb6102
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2fe14ff61bd6d4fabe313435dd378b5a38eb6102
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/intel/boards/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/intel/boards/sof_ssp_amp.c:97:6: warning: variable 'i' set but not used [-Wunused-but-set-variable]
+           int i = 0;
+               ^
+   1 warning generated.
 
 
-Totally agree, according to your suggestion, I will resubmit with all 
-the revisions.
+vim +/i +97 sound/soc/intel/boards/sof_ssp_amp.c
 
+    89	
+    90	static int sof_card_late_probe(struct snd_soc_card *card)
+    91	{
+    92		struct sof_card_private *ctx = snd_soc_card_get_drvdata(card);
+    93		struct snd_soc_component *component = NULL;
+    94		char jack_name[NAME_SIZE];
+    95		struct sof_hdmi_pcm *pcm;
+    96		int err;
+  > 97		int i = 0;
+    98	
+    99		if (!(sof_ssp_amp_quirk & SOF_HDMI_PLAYBACK_PRESENT))
+   100			return 0;
+   101	
+   102		/* HDMI is not supported by SOF on Baytrail/CherryTrail */
+   103		if (!ctx->idisp_codec)
+   104			return 0;
+   105	
+   106		if (list_empty(&ctx->hdmi_pcm_list))
+   107			return -EINVAL;
+   108	
+   109		if (ctx->common_hdmi_codec_drv) {
+   110			pcm = list_first_entry(&ctx->hdmi_pcm_list, struct sof_hdmi_pcm,
+   111					       head);
+   112			component = pcm->codec_dai->component;
+   113			return hda_dsp_hdmi_build_controls(card, component);
+   114		}
+   115	
+   116		list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
+   117			component = pcm->codec_dai->component;
+   118			snprintf(jack_name, sizeof(jack_name),
+   119				 "HDMI/DP, pcm=%d Jack", pcm->device);
+   120			err = snd_soc_card_jack_new(card, jack_name,
+   121						    SND_JACK_AVOUT, &pcm->sof_hdmi,
+   122						    NULL, 0);
+   123	
+   124			if (err)
+   125				return err;
+   126	
+   127			err = hdac_hdmi_jack_init(pcm->codec_dai, pcm->device,
+   128						  &pcm->sof_hdmi);
+   129			if (err < 0)
+   130				return err;
+   131	
+   132			i++;
+   133		}
+   134	
+   135		return hdac_hdmi_jack_port_init(component, &card->dapm);
+   136	}
+   137	
 
-Thanks
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

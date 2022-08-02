@@ -2,443 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC1958848A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A93A58848C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiHBWtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S232270AbiHBWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiHBWtJ (ORCPT
+        with ESMTP id S229787AbiHBWth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:49:09 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEAB12601;
-        Tue,  2 Aug 2022 15:49:07 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id l9so1131956ilq.1;
-        Tue, 02 Aug 2022 15:49:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=83SX3G3GXScUYiAxDWt7vHUCfZO9exjn5F+MrxCqXB0=;
-        b=A9o35uGTLnMzQCwOjlqycO5+PuYGot88hp7jeeXSV4zY7QYUbsn1XazCJMzIROHg6u
-         kz3hJWEVtD8DcamG1L4yVce+mbY1W59ZXUVv39QThi2mSJOjVYjsDf7PCCZjh8NjHem3
-         lSzuoJF62ucnl6KrGG28ydconvXaNm3QDe5MPb+2xUIpsM6BhdmGvaXSdk0XWlHPkHqp
-         H1Tk+e2r3JNPKndJAlLPyeVsfrofCn/k8VfxHj7oEN6Kz34KpE2Omif3i27Hfgdkc7TW
-         DDaP8nM55u1tRGdwpD3eJofZqAqBg4bECTnnw9xoBj6Qq6uM+HnMx3093k4JtANuxr/v
-         JT1A==
-X-Gm-Message-State: AJIora+eQb32TYOaetNd4ivCSe7yPjj2nrKnzs92tD3gLFYkDetAMJxO
-        rYAoSF4a36Pv5j3kJBGmsbfHlEbhZw==
-X-Google-Smtp-Source: AGRyM1tcIDuzJmhK5hGOex8hzt3p8cJfjNwGSaF0J1HNeYaw8ouAbZkwsJkT7mopfWRTTSkqv+pEcA==
-X-Received: by 2002:a92:ca06:0:b0:2dc:fc55:83b7 with SMTP id j6-20020a92ca06000000b002dcfc5583b7mr9400085ils.139.1659480546531;
-        Tue, 02 Aug 2022 15:49:06 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a15-20020a027a0f000000b0032e3b0933c6sm6973353jac.162.2022.08.02.15.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 15:49:05 -0700 (PDT)
-Received: (nullmailer pid 799223 invoked by uid 1000);
-        Tue, 02 Aug 2022 22:49:04 -0000
-Date:   Tue, 2 Aug 2022 16:49:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree updates for v6.0
-Message-ID: <20220802224904.GA796923-robh@kernel.org>
+        Tue, 2 Aug 2022 18:49:37 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0552E12767;
+        Tue,  2 Aug 2022 15:49:36 -0700 (PDT)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 272MibsG015986;
+        Tue, 2 Aug 2022 22:49:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=aBcwqy5rVuadZreo5FWlVUOrcn121dA1tLTMwt/VlW0=;
+ b=nn+FYBnnAvwjEEecRWIgeXnudvUWZeCAevyeDk+g30cDwkVlu34201wEn/rdjW1t0hga
+ yR3ndrns/2bRbVBmPRgZetpTl9cNUs1ChWTYy+mpU2iYwKX6LXJtL2jt0hfkS7P2230R
+ 5WonxW7nsL77vJ9olqQXwm/XwGxxTTBpf8iivwmKJAUZPEBq5K2kT1yskJBaR0VINvyG
+ njlXLaKQN/2F0iVsr31WQ5UsTpsuTEwHtX/y0+VRkfqn2ihZWHHZWM8jmtdRcZUf7+kz
+ l6pQy+3uxz8ma0oDQ6b8WNktj6xuOsLG4G8/XdjEc21TMUVz9h3xnzpY53zjqQ3Lc2KK cQ== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3hqcyyr0s2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Aug 2022 22:49:27 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 06BB6804CB5;
+        Tue,  2 Aug 2022 22:49:26 +0000 (UTC)
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 2 Aug 2022 10:49:18 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Tue, 2 Aug 2022 10:49:18 -1200
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 2 Aug 2022 10:49:18 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q+QEbOqEuPWuvcDzGJtDuCSJ6zegXqw9weg9bEvS5XpBP2aMKwlEgdBq8blsBEQEASNirD4Cn7E1Jv+Zp1K/0SuNI7obtIsRX9nUU0UIMDV+sm2RIBMDjAbw7eKbcR72vGtexIK6btqUpYSZmdFZo3P370UbI/vB1jHOp1GQeVB1QsheaiQKPsVz0ZAf0rgbEnP6NPcLTKstIFskjcwcOLrhoGRCVgcPvJYq1yAt0/mmv6u1wYQoRlOFSph/NIH2zL7iXIl/KvxNMqa9VQ5+1nKZI+fW5MtzMhAHwoWnjdbvKEeJlHP76kB8WjIdmokjUPDPYwRTeL9OMXOkhEP54w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aBcwqy5rVuadZreo5FWlVUOrcn121dA1tLTMwt/VlW0=;
+ b=XLthTer3k7UNC+re8aeAP5f45nmCoQbpc7wn/6vTo180kw/K4z1ZD8d+4+QkfvRo5KTm604xc2Y2OMgswv9g6U9ZhO/oWqB5uwJTDrGscwWKtwSBmIq1tEU+q0viEL0rdh7heDezPaUKGqpTr677uwS6H6y0G1hDViWUhhmZB5NxTLn5RRS3JF/qMx8w1yRoh5wONWVe3N03/Bk4FJj6Ib1mvwacMgtCU6ZLQZljXLr10kPmpg6K7dAVxiZjXn7PpWfBDzd8Azskh4b/4bK+UYCF+Oei2ft2lFjrehLNtOjxeCrmTpK7AwS0jBsHQOU2dpPD/B9iPS2WDpDbudJfgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
+ by MN0PR84MB3072.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:3c8::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Tue, 2 Aug
+ 2022 22:49:17 +0000
+Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::1cc2:4b7b:f4c5:fbb4]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::1cc2:4b7b:f4c5:fbb4%4]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
+ 22:49:17 +0000
+From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
+To:     "'<Vishal Badole>'" <badolevishal1116@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "inux-clk@vger.kernel.org" <inux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "chinmoyghosh2001@gmail.com" <chinmoyghosh2001@gmail.com>,
+        "mintupatel89@gmail.com" <mintupatel89@gmail.com>,
+        "vimal.kumar32@gmail.com" <vimal.kumar32@gmail.com>
+Subject: =?utf-8?B?UkU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFjdGl2?=
+ =?utf-8?Q?e_consumers_of_clocks?=
+Thread-Topic: =?utf-8?B?W1BBVENIXSBDb21tb24gY2xvY2s6IOKAi+KAi1RvIGxpc3QgYWN0aXZlIGNv?=
+ =?utf-8?Q?nsumers_of_clocks?=
+Thread-Index: AQHYhlnsnUQ3P7E53E2XSWzjiEGgZ61iCBkZgDptc7A=
+Date:   Tue, 2 Aug 2022 22:49:17 +0000
+Message-ID: <MW5PR84MB1842824E0F57D0EC46381B09AB9D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
+ <20220610194013.DD39DC34114@smtp.kernel.org> <20220622170219.GA6978@Mahakal>
+ <20220624010550.582BBC341C7@smtp.kernel.org> <20220626182517.GA26001@Mahakal>
+In-Reply-To: <20220626182517.GA26001@Mahakal>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3638ea31-5579-4513-b5a1-08da74d93ada
+x-ms-traffictypediagnostic: MN0PR84MB3072:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cDUYV0SV+bq/asY2nbAhXR80tSJMcxmTe6detlxBaWyGcMtJhwe3vYXlpL0E1XebtVm0sbIYTAm9WIo+0aI0sbkECb7l0VC/jNif/BwH9j7/DdP9NbGI2lcstL65/Qbii3h2ePs7NYUqAVSsirRN8JIShqXH41MQUEyiNbomCT8N9Wi00jlXtsduhqLjxBKxqnp5Nj1dZuITT0DZybOdjRev1dqCxDKuTTS3H/fe+57gtAkwTzCd3MDqvr0Z2+CBxFhomuXzq3nLT/vOBedweAKrWwqo9915Z8AyOMiAg/2JGlr6HcuYCzXdi7OzmoZKgtjbtUjigSyiaVviaB/RNM9+Y9qCff7bVlevEUsQrh3q8/ICOv1xBwo7vsaIW8yCJh91M2Yi+FAENdA4mpNhY7ys1R+7r0kiy6Tfkjp8DrMSHAxt9YsLql+qiIp96PM6HSvheUgailQ9Wd3huYkQjLgCoAt5zWKH9EEqu+nBfxQZu7g8+K+GEE5V5uLBsdJMWSco3gcXTkfB85cjfOuvDosFHM00XR7+/FaBscCrVs/AWtAXnWDlaq4dlrnKDxtUAKY9+7q902HMZEbmuSFbX/C6XZJ7auE/Y55MWJrVuaPGs3kIeHClgi74LASPWF1DIOQlsdlnWIH/N1UuotWsCDy6ppGMuGVUS7A4nu5173vBIfC7/mf0s2oYEAvBpTXp/4OY6sqDwJH/jJnYBbEx4GooOSL0LtvO9Xcjd9zxldMWt63EtZnztYc7MSYYf2Ts3GVnj1fyWbRwf0/XsOnDyLZicDAuRN2dm5GniN5QJew=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(136003)(366004)(39860400002)(6506007)(53546011)(7696005)(41300700001)(26005)(9686003)(316002)(55016003)(478600001)(54906003)(86362001)(71200400001)(82960400001)(122000001)(38070700005)(38100700002)(186003)(83380400001)(4744005)(2906002)(8936002)(66446008)(66556008)(76116006)(66476007)(64756008)(33656002)(66946007)(52536014)(5660300002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?azVtY2VDODByMmlGeWlnM2dIdmh6Nmk4UnFBL2hhK2l4VjZkdHF0U2daMFZh?=
+ =?utf-8?B?SXpWVE9WWUFhQ3E5UXFHMjkzWkFrWVE0VVdnQ0hFSjVFdEFoRE55UG5zR1E1?=
+ =?utf-8?B?TjRZeDRXMHRjR0pTQm1VOHNyZWpqTi81OGdUTGQrWnhtaUQ3Mzl2SGlsYU1v?=
+ =?utf-8?B?am5qN1QyRFRQaEVVMUJMcUlRbmlBSnQ2RzVuRjRDR2JOaGtRVE1DdnVLaHdv?=
+ =?utf-8?B?amM1S3U2RHR3YUdtbDlEeUVSNDlWb3JOS2g5TTlLaTRtWTNYY2dhOC9uRVkw?=
+ =?utf-8?B?R3h0bmt3aDRXdlNrZkZhQzJXbmpJaEVTeS9rMkcwa1ErZUxMSFI4c3ZBcElE?=
+ =?utf-8?B?dStuVjVSRUhIS1ZmalcrckVmY2FIWjgvRnUxZm1lakZWR01HekU5RmpMNVBp?=
+ =?utf-8?B?WlZINWQ4WGVuM0VGYUpzMUFrZVNCdWVsVm1NcFp5TXBiUkk5SFg3VlMxSUFq?=
+ =?utf-8?B?T2RZTTBJd2JTOTVrdlB5VlpCN3lwMUZTTmVNN1BxaGZlVEhJdzFsNmE0OTFY?=
+ =?utf-8?B?VCtQaFNVb1QwRFd3Y1pDTkpmTHZ0R0RmWkpmMlV4QUl2S3RsbnlPS2oyaGZk?=
+ =?utf-8?B?eFJ1LzhQbHl3MkJObVl3KzZ6M1RpTTJHWjJXd2FDaFJLOVJDL3orM2orWitQ?=
+ =?utf-8?B?L3dRVG1nNHJCdGY4U1FZa1JZeTVPaXNyUTlRRUlnREJvYVJvbmwwQ1VqRnlj?=
+ =?utf-8?B?ZnZNK0ZES01YYTJXNm1DRG1aMldiSE9XR245VWM0Tldaa3A4NkNyS2txenlZ?=
+ =?utf-8?B?R0RVek9obWVYei9YYXlndEFDcFJRelVYZVk4bVJNMUkrMkFHSUljNERFUkZh?=
+ =?utf-8?B?K0dxZEhDOXJNNTZsL3U4YXBLUC8vREdXOVJvWTB3MEdUWlpiOVduNTJWZzYr?=
+ =?utf-8?B?a2dQMzhxUnowaTBEVkkxekVQS2dxVmNSUlZVaTFQbGtrS3VwdlozMTBrOTdQ?=
+ =?utf-8?B?Unh4UXJGUFRMZ3p0a0ZwRFF4Z01kK0RnNkh4aFEzUmMvWnUwdHhYVkpWSG9o?=
+ =?utf-8?B?Wk1IRVJJbHRyM3RBcGlLN2Fjck41dEFzRDgxRFVia1JNM01YTFhiYm4xdVl5?=
+ =?utf-8?B?NHBHSTBzSHhsRWo5ZGtjcG1ZcllidjVLOUszbjBjUlluQ1VQa2NUZ3ZKZ093?=
+ =?utf-8?B?TlAxamZMZnl1YXYvY3EyKzVidm1Cdi93VGZwWWFSRGJONitML2t0N3V6SUtF?=
+ =?utf-8?B?Y0plQUlEeFA3TzFZdEtDclR3TG5wR01GWnh2Z1ZsbjE3eFZXbEkzbkQ0Y200?=
+ =?utf-8?B?cmR6NHRrai9VcGwzYlYrVUxhSXNJRnhMU0R0cTZYc2EwUndqeTdwZHBxQlY2?=
+ =?utf-8?B?bk9wTFJJQzE5UnNoV2lWU2VMbFN1c1Y5bE82OWY0bVBNRnZhQ2paVHdnYmxB?=
+ =?utf-8?B?dFBXeS90K2wzYVh4cmY1cWFYdDdqZTFUd3U2NElCOEgzQmkrNENod1A3aVVF?=
+ =?utf-8?B?MG16YVFyaGJXTFlhSk1ZUjVyck8yWkRoV1pNVnc5OHBySGhmRnVVQ2JiaGRT?=
+ =?utf-8?B?MlZYMU1ka0F6d2Y2V0dVUlo5TUwxMVorYlNNditOVVhUMGZySmpjYjk3RGRM?=
+ =?utf-8?B?L2Y1dFBsRE5XYWVYdFNWWnJURENOUkt0UG9BbmNpNVNPMWNvV1R4Tzk1MUVi?=
+ =?utf-8?B?RjBYZkZUN2VWSCtOWTZOVkNobHlpSDdpUDlKY0hHWklpWHk0WEx4a0tPQUM3?=
+ =?utf-8?B?dDh1YnVtRDNIeDBuS1JWV2JERVd5U1Y4azZKZ3BaNjE4WXI3TzdnYndPeDJz?=
+ =?utf-8?B?emZVQWllQUtFYU1BcVZhc3ZRVXpWaUFNd1lQWGhsTjEyTFA1YlE1aUpqSEhw?=
+ =?utf-8?B?RlhNMU0zZk5wZmxzZENaQnh6SGtUby8xdmcxSktFQTBGQkx1aTk2ZmhxYVNE?=
+ =?utf-8?B?WUdCcTgrbWR0eEFVVy90OWVtMy9LanZMZFp6YmI4Q0g0d2V3UFJTdEx0VllC?=
+ =?utf-8?B?KzB0UlVpMmcwWDJrVEJ4L3VpTjdpWm95ZVU3NDlNLzV0TERvRlluU0tJRzAx?=
+ =?utf-8?B?RThGVUkzVktPUnRBR1NkdGZDN2V1aTJybkFiM3dpQ2JjNE42allXdlNaY0RF?=
+ =?utf-8?B?NjVuTWwzd2d0MkRFdzhiV1MvTXZla0tqUTJKWktjZlU0UkY3TlMzWFpoYjlM?=
+ =?utf-8?Q?lzzE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3638ea31-5579-4513-b5a1-08da74d93ada
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 22:49:17.0171
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JZZQc2Pvt5IOsYU37EYeIia7rOgqkvPES5IKxVRy1CiAAF+Pj6fyeKCMQxYauE+t
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR84MB3072
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: lo4tTA-65mt5taWWMlMGQZQpzk11olHE
+X-Proofpoint-GUID: lo4tTA-65mt5taWWMlMGQZQpzk11olHE
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-02_14,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1011 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208020107
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
-
-Please pull DT updates.
-
-Rob
-
-
-The following changes since commit 0b9431c8221cfe73d06f6b9cd37b813fa52be8ce:
-
-  dt-bindings: display: arm,malidp: remove bogus RQOS property (2022-06-10 12:32:05 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-for-6.0
-
-for you to fetch changes up to 7e7a24c3c6c98abc4425abd1dbf2a71b42dfafcf:
-
-  dt-bindings: mtd: microchip,mchp48l640: use spi-peripheral-props.yaml (2022-08-02 11:08:27 -0600)
-
-----------------------------------------------------------------
-Devicetree updates for v6.0:
-
-Bindings:
-- Add spi-peripheral-props.yaml references to various SPI device
-  bindings
-
-- Convert qcom,pm8916-wdt, ds1307, Qualcomm BAM DMA, is31fl319x,
-  skyworks,aat1290, Rockchip EMAC, gpio-ir-receiver, ahci-ceva, Arm CCN
-  PMU, rda,8810pl-intc, sil,sii9022, ps2-gpio, and arm-firmware-suite
-  bindings to DT schema format
-
-- New bindings for Arm virtual platforms display, Qualcomm IMEM memory
-  region, Samsung S5PV210 ChipID, EM Microelectronic EM3027 RTC, and
-  arm,cortex-a78ae
-
-- Add vendor prefixes for asrock, bytedance, hxt, ingrasys, inventec,
-  quanta, and densitron
-
-- Add missing MSI and IOMMU properties to host-generic-pci
-
-- Remove bindings for removed EFM32 platform
-
-- Remove old chosen.txt binding (replaced by schema)
-
-- Treewide add missing type information for properties
-
-- Treewide fixing of typos and its vs. it's in bindings. Its all good
-  now.
-
-- Drop unnecessary quoting in power related schemas
-
-- Several LED binding updates which didn't get picked up
-
-- Move various bindings to proper directories
-
-DT core code:
-- Convert unittest GPIO related tests to use fwnode
-
-- Check ima-kexec-buffer against memory bounds
-
-- Print reserved-memory allocation/reservation failures as errors
-
-- Cleanup early_init_dt_reserve_memory_arch()
-
-- Simplify of_overlay_fdt_apply() tail
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      of: unittest: Switch to use fwnode instead of of_node
-      of: unittest: make unittest_gpio_remove() consistent with unittest_gpio_probe()
-
-Chanho Park (1):
-      dt-bindings: arm: cpus: add cortex-a78ae compatible
-
-Clément Léger (1):
-      of: constify of_property_check_flags() prop argument
-
-Danilo Krummrich (2):
-      dt-bindings: ps2-gpio: convert binding to json-schema
-      dt-bindings: ps2-gpio: document bus signals open drain
-
-Deming Wang (1):
-      of: Drop duplicate 'the' in of_find_last_cache_level kerneldoc
-
-Geert Uytterhoeven (3):
-      dt-bindings: display: bridge: sil,sii9022: Convert to json-schema
-      of: overlay: Move devicetree_corrupt() check up
-      of: overlay: Simplify of_overlay_fdt_apply() tail
-
-Jason A. Donenfeld (1):
-      dt-bindings: chosen: remove old .txt binding
-
-Johan Jonker (1):
-      dt-bindings: net: convert emac_rockchip.txt to YAML
-
-Krzysztof Kozlowski (19):
-      dt-bindings: vendor-prefixes: document several vendors for Aspeed BMC boards
-      dt-bindings: sram: qcom,ocmem: cleanup example coding style
-      dt-bindings: sram: qcom,imem: add IMEM memory region
-      dt-bindings: connector: usb: align example indentation to four-space
-      dt-bindings: hwinfo: group Chip ID-like devices
-      dt-bindings: hwinfo: samsung,s5pv210-chipid: add S5PV210 ChipID
-      dt-bindings: bus: qcom,ssc-block-bus: rework arrays and drop redundant minItems
-      dt-bindings: leds: lp50xx: correct reg/unit addresses in example
-      dt-bindings: leds: fix indentation in examples
-      dt-bindings: leds: skyworks,aat1290: convert to dtschema
-      dt-bindings: power: reset: qcom,pon: use absolute path to other schema
-      dt-bindings: watchdog: qcom,pm8916-wdt: convert to dtschema
-      dt-bindings: display: use spi-peripheral-props.yaml
-      dt-bindings: eeprom: at25: use spi-peripheral-props.yaml
-      dt-bindings: eeprom: microchip,93lc46b: move to eeprom directory
-      dt-bindings: power: drop quotes when not needed
-      dt-bindings: power: reset: drop quotes when not needed
-      dt-bindings: power: supply: drop quotes when not needed
-      dt-bindings: mtd: microchip,mchp48l640: use spi-peripheral-props.yaml
-
-Kuldeep Singh (1):
-      dt-bindings: dma: Convert Qualcomm BAM DMA binding to json format
-
-Liang He (1):
-      of: device: Fix missing of_node_put() in of_dma_set_restricted_buffer
-
-Marek Vasut (1):
-      dt-bindings: vendor-prefixes: add Densitron
-
-Marijn Suijten (1):
-      dt-bindings: leds: qcom-lpg: Add compatible for PM660L LPG block
-
-Michael Walle (1):
-      dt-bindings: nfc: nxp,nci: drop Charles Gorand's mail
-
-Paul Cercueil (1):
-      docs: dt: writing-bindings: Update URL to DT schemas
-
-Peter Collingbourne (1):
-      of/fdt: Clean up early_init_dt_reserve_memory_arch()
-
-Piyush Mehta (1):
-      dt-bindings: ata: ahci-ceva: convert to yaml
-
-Randy Dunlap (1):
-      devicetree/bindings: correct possessive "its" typos
-
-Rob Herring (15):
-      dt-bindings: display: Add Arm virtual platforms display
-      dt-bindings: perf: Convert Arm CCN to DT schema
-      dt-bindings: vexpress-sysreg: Add deprecated GPIO provider properties
-      dt-bindings: vexpress-sysreg: Allow for no child nodes
-      media: dt-bindings: rc: Allow 'ir-receiver' node names
-      media: dt-bindings: Convert gpio-ir-receiver to DT schema
-      Merge branch 'dt/linus' into dt/next
-      dt-bindings: watchdog: faraday: Fix typo in example 'timeout-sec' property
-      dt-bindings: arm: nvidia,tegra20-pmc: Move fixed string property names under 'properties'
-      dt-bindings: mtd/partitions: Convert arm-firmware-suite to DT schema
-      dt-bindings: PCI: fsl,imx6q-pcie: Add missing type for 'reset-gpio-active-high'
-      dt-bindings: panel: raydium,rm67191: Add missing type to 'video-mode'
-      dt-bindings: power: supply: charger-manager: Add missing type for 'cm-battery-stat'
-      dt-bindings: iio/dac: adi,ad5766: Add missing type to 'output-range-microvolts'
-      dt-bindings: PCI: host-generic-pci: Allow IOMMU and MSI properties
-
-Slark Xiao (1):
-      dt-bindings: Fix typo in comment
-
-Stanislav Jakubek (1):
-      dt-bindings: interrupt-controller: Convert rda,8810pl-intc to YAML
-
-Thierry Reding (2):
-      dt-bindings: rtc: ds1307: Convert to json-schema
-      dt-bindings: rtc: Add EM Microelectronic EM3027 bindings
-
-Vaibhav Jain (1):
-      of: check previous kernel's ima-kexec-buffer against memory bounds
-
-Vincent Knecht (2):
-      dt-bindings: leds: Convert is31fl319x to dtschema
-      dt-bindings: leds: is31fl319x: Document variants specificities
-
-Vincent Whitchurch (1):
-      of: reserved-memory: Print allocation/reservation failures as error
-
-Wolfram Sang (2):
-      dt-bindings: hwmon: move ibm,p8-occ bindings to proper folder
-      dt-bindings: efm32: remove bindings for deleted platform
-
-Xu Qiang (1):
-      of/fdt: declared return type does not match actual return type
-
- Documentation/devicetree/bindings/arm/cpus.yaml    |   1 +
- .../devicetree/bindings/arm/msm/qcom,saw2.txt      |   2 +-
- .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml     |   2 +-
- .../devicetree/bindings/arm/vexpress-sysreg.yaml   |  10 +-
- .../devicetree/bindings/ata/ahci-ceva.txt          |  63 ------
- .../devicetree/bindings/ata/ceva,ahci-1v84.yaml    | 189 ++++++++++++++++++
- .../bindings/bus/qcom,ssc-block-bus.yaml           |  25 +--
- Documentation/devicetree/bindings/chosen.txt       | 137 -------------
- .../devicetree/bindings/clock/efm32-clock.txt      |  11 -
- .../devicetree/bindings/clock/st/st,flexgen.txt    |   2 +-
- .../devicetree/bindings/clock/ti/davinci/pll.txt   |   2 +-
- .../devicetree/bindings/clock/ti/dra7-atl.txt      |   2 +-
- .../bindings/connector/usb-connector.yaml          | 152 +++++++-------
- .../devicetree/bindings/display/arm,pl11x.yaml     |  15 +-
- .../devicetree/bindings/display/bridge/sii902x.txt |  78 --------
- .../bindings/display/bridge/sil,sii9022.yaml       | 131 ++++++++++++
- .../bindings/display/panel/arm,rtsm-display.yaml   |  27 +++
- .../bindings/display/panel/lg,lg4573.yaml          |   2 +-
- .../bindings/display/panel/raydium,rm67191.yaml    |   1 +
- .../bindings/display/sitronix,st7735r.yaml         |   1 +
- .../bindings/display/solomon,ssd1307fb.yaml        |   7 +-
- .../devicetree/bindings/dma/qcom,bam-dma.yaml      | 100 ++++++++++
- .../devicetree/bindings/dma/qcom_bam_dma.txt       |  52 -----
- Documentation/devicetree/bindings/eeprom/at25.yaml |   5 +-
- .../microchip,93lc46b.yaml}                        |  11 +-
- .../devicetree/bindings/fpga/fpga-region.txt       |   2 +-
- .../devicetree/bindings/gpio/gpio-pisosr.txt       |   2 +-
- .../samsung,exynos-chipid.yaml}                    |   2 +-
- .../bindings/hwinfo/samsung,s5pv210-chipid.yaml    |  30 +++
- .../k3-socinfo.yaml => hwinfo/ti,k3-socinfo.yaml}  |   2 +-
- .../devicetree/bindings/hwmon/adt7475.yaml         |   2 +-
- .../bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt   |   0
- .../devicetree/bindings/i2c/i2c-efm32.txt          |  33 ---
- .../devicetree/bindings/iio/dac/adi,ad5766.yaml    |   2 +
- .../bindings/input/touchscreen/ektf2127.txt        |   2 +-
- .../interrupt-controller/rda,8810pl-intc.txt       |  61 ------
- .../interrupt-controller/rda,8810pl-intc.yaml      |  43 ++++
- .../devicetree/bindings/leds/issi,is31fl319x.yaml  | 193 ++++++++++++++++++
- .../devicetree/bindings/leds/leds-aat1290.txt      |  77 -------
- .../devicetree/bindings/leds/leds-is31fl319x.txt   |  61 ------
- .../devicetree/bindings/leds/leds-lp50xx.yaml      | 104 +++++-----
- .../devicetree/bindings/leds/leds-lp55xx.yaml      | 222 ++++++++++-----------
- .../bindings/leds/leds-pwm-multicolor.yaml         |  36 ++--
- .../devicetree/bindings/leds/leds-qcom-lpg.yaml    |   1 +
- .../devicetree/bindings/leds/skyworks,aat1290.yaml |  95 +++++++++
- .../devicetree/bindings/media/gpio-ir-receiver.txt |  20 --
- .../bindings/media/gpio-ir-receiver.yaml           |  40 ++++
- Documentation/devicetree/bindings/media/rc.yaml    |   2 +-
- .../devicetree/bindings/mfd/rohm,bd71815-pmic.yaml |   2 +-
- .../devicetree/bindings/mips/lantiq/rcu.txt        |   2 +-
- .../bindings/mtd/microchip,mchp48l640.yaml         |   7 +-
- .../mtd/partitions/arm,arm-firmware-suite.txt      |  17 --
- .../mtd/partitions/arm,arm-firmware-suite.yaml     |  28 +++
- .../devicetree/bindings/net/altera_tse.txt         |   2 +-
- Documentation/devicetree/bindings/net/cpsw.txt     |   2 +-
- .../devicetree/bindings/net/emac_rockchip.txt      |  52 -----
- .../devicetree/bindings/net/nfc/nxp,nci.yaml       |   1 -
- .../devicetree/bindings/net/qcom-emac.txt          |   2 +-
- .../devicetree/bindings/net/rockchip,emac.yaml     | 115 +++++++++++
- .../devicetree/bindings/pci/fsl,imx6q-pcie.yaml    |   1 +
- .../devicetree/bindings/pci/host-generic-pci.yaml  |   3 +
- .../devicetree/bindings/perf/arm,ccn.yaml          |  40 ++++
- Documentation/devicetree/bindings/perf/arm-ccn.txt |  23 ---
- .../phy/amlogic,meson-axg-mipi-pcie-analog.yaml    |   2 +-
- .../bindings/pinctrl/aspeed,ast2400-pinctrl.yaml   |   2 +-
- .../bindings/pinctrl/aspeed,ast2500-pinctrl.yaml   |   2 +-
- .../bindings/pinctrl/aspeed,ast2600-pinctrl.yaml   |   2 +-
- .../bindings/power/amlogic,meson-ee-pwrc.yaml      |   6 +-
- .../bindings/power/amlogic,meson-sec-pwrc.yaml     |   4 +-
- .../bindings/power/apple,pmgr-pwrstate.yaml        |   2 +-
- .../bindings/power/brcm,bcm63xx-power.yaml         |   4 +-
- .../devicetree/bindings/power/renesas,apmu.yaml    |   4 +-
- .../bindings/power/renesas,rcar-sysc.yaml          |   4 +-
- .../devicetree/bindings/power/reset/qcom,pon.yaml  |   8 +-
- .../bindings/power/reset/regulator-poweroff.yaml   |   2 +-
- .../bindings/power/reset/xlnx,zynqmp-power.yaml    |   2 +-
- .../power/supply/active-semi,act8945a-charger.yaml |   4 +-
- .../devicetree/bindings/power/supply/bq2415x.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq24190.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq24257.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq24735.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq2515x.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq256xx.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq25890.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq25980.yaml  |   4 +-
- .../devicetree/bindings/power/supply/bq27xxx.yaml  |   4 +-
- .../bindings/power/supply/charger-manager.yaml     |   1 +
- .../bindings/power/supply/cpcap-battery.yaml       |   4 +-
- .../bindings/power/supply/cpcap-charger.yaml       |   4 +-
- .../bindings/power/supply/dlg,da9150-charger.yaml  |   4 +-
- .../power/supply/dlg,da9150-fuel-gauge.yaml        |   4 +-
- .../bindings/power/supply/ingenic,battery.yaml     |   4 +-
- .../devicetree/bindings/power/supply/isp1704.yaml  |   4 +-
- .../bindings/power/supply/lego,ev3-battery.yaml    |   4 +-
- .../bindings/power/supply/lltc,lt3651-charger.yaml |   4 +-
- .../bindings/power/supply/lltc,ltc294x.yaml        |   4 +-
- .../bindings/power/supply/ltc4162-l.yaml           |   4 +-
- .../bindings/power/supply/maxim,ds2760.yaml        |   4 +-
- .../bindings/power/supply/maxim,max14656.yaml      |   4 +-
- .../bindings/power/supply/maxim,max17040.yaml      |   4 +-
- .../bindings/power/supply/maxim,max17042.yaml      |   4 +-
- .../bindings/power/supply/maxim,max8903.yaml       |   4 +-
- .../bindings/power/supply/nokia,n900-battery.yaml  |   4 +-
- .../bindings/power/supply/olpc-battery.yaml        |   4 +-
- .../bindings/power/supply/power-supply.yaml        |   4 +-
- .../power/supply/richtek,rt5033-battery.yaml       |   4 +-
- .../bindings/power/supply/richtek,rt9455.yaml      |   4 +-
- .../bindings/power/supply/sc2731-charger.yaml      |   4 +-
- .../bindings/power/supply/sc27xx-fg.yaml           |   4 +-
- .../power/supply/stericsson,ab8500-btemp.yaml      |   4 +-
- .../power/supply/stericsson,ab8500-chargalg.yaml   |   4 +-
- .../power/supply/stericsson,ab8500-charger.yaml    |   4 +-
- .../power/supply/stericsson,ab8500-fg.yaml         |   4 +-
- .../power/supply/summit,smb347-charger.yaml        |   4 +-
- .../bindings/power/supply/tps65090-charger.yaml    |   4 +-
- .../bindings/power/supply/tps65217-charger.yaml    |   4 +-
- .../bindings/power/supply/twl4030-charger.yaml     |   4 +-
- .../supply/x-powers,axp20x-ac-power-supply.yaml    |   4 +-
- .../x-powers,axp20x-battery-power-supply.yaml      |   4 +-
- .../supply/x-powers,axp20x-usb-power-supply.yaml   |   4 +-
- .../devicetree/bindings/powerpc/fsl/cpus.txt       |   2 +-
- .../devicetree/bindings/powerpc/fsl/mpc5200.txt    |   2 +-
- .../devicetree/bindings/powerpc/opal/power-mgt.txt |   2 +-
- .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |   2 +-
- .../devicetree/bindings/rtc/rtc-ds1307.txt         |  52 -----
- .../devicetree/bindings/rtc/rtc-ds1307.yaml        | 102 ++++++++++
- .../devicetree/bindings/rtc/trivial-rtc.yaml       |   2 +
- .../devicetree/bindings/serial/efm32-uart.txt      |  20 --
- .../devicetree/bindings/serio/ps2-gpio.txt         |  23 ---
- .../devicetree/bindings/serio/ps2-gpio.yaml        |  64 ++++++
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   2 +-
- Documentation/devicetree/bindings/sound/da9055.txt |   2 +-
- .../devicetree/bindings/sound/tlv320adcx140.yaml   |   4 +-
- .../devicetree/bindings/spi/efm32-spi.txt          |  39 ----
- .../devicetree/bindings/sram/qcom,imem.yaml        |  75 +++++++
- .../devicetree/bindings/sram/qcom,ocmem.yaml       |  10 +-
- .../bindings/thermal/brcm,avs-ro-thermal.yaml      |   2 +-
- .../bindings/thermal/nvidia,tegra124-soctherm.txt  |   2 +-
- .../devicetree/bindings/thermal/rcar-thermal.yaml  |   2 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |  18 +-
- .../bindings/watchdog/faraday,ftwdt010.yaml        |   2 +-
- .../bindings/watchdog/qcom,pm8916-wdt.txt          |  28 ---
- .../bindings/watchdog/qcom,pm8916-wdt.yaml         |  51 +++++
- .../devicetree/bindings/writing-bindings.rst       |   2 +-
- MAINTAINERS                                        |   4 +-
- drivers/of/base.c                                  |   2 +-
- drivers/of/device.c                                |   5 +-
- drivers/of/fdt.c                                   |  19 +-
- drivers/of/kexec.c                                 |  17 ++
- drivers/of/of_reserved_mem.c                       |   3 +-
- drivers/of/overlay.c                               |  20 +-
- drivers/of/unittest.c                              |  17 +-
- include/dt-bindings/clock/efm32-cmu.h              |  43 ----
- include/linux/of.h                                 |   5 +-
- 154 files changed, 1846 insertions(+), 1373 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ata/ahci-ceva.txt
- create mode 100644 Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
- delete mode 100644 Documentation/devicetree/bindings/chosen.txt
- delete mode 100644 Documentation/devicetree/bindings/clock/efm32-clock.txt
- delete mode 100644 Documentation/devicetree/bindings/display/bridge/sii902x.txt
- create mode 100644 Documentation/devicetree/bindings/display/bridge/sil,sii9022.yaml
- create mode 100644 Documentation/devicetree/bindings/display/panel/arm,rtsm-display.yaml
- create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
- rename Documentation/devicetree/bindings/{misc/eeprom-93xx46.yaml => eeprom/microchip,93lc46b.yaml} (89%)
- rename Documentation/devicetree/bindings/{soc/samsung/exynos-chipid.yaml => hwinfo/samsung,exynos-chipid.yaml} (92%)
- create mode 100644 Documentation/devicetree/bindings/hwinfo/samsung,s5pv210-chipid.yaml
- rename Documentation/devicetree/bindings/{soc/ti/k3-socinfo.yaml => hwinfo/ti,k3-socinfo.yaml} (92%)
- rename Documentation/devicetree/bindings/{i2c => hwmon}/ibm,p8-occ-hwmon.txt (100%)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-efm32.txt
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/rda,8810pl-intc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/rda,8810pl-intc.yaml
- create mode 100644 Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-aat1290.txt
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-is31fl319x.txt
- create mode 100644 Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/gpio-ir-receiver.txt
- create mode 100644 Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml
- delete mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-suite.txt
- create mode 100644 Documentation/devicetree/bindings/mtd/partitions/arm,arm-firmware-suite.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/emac_rockchip.txt
- create mode 100644 Documentation/devicetree/bindings/net/rockchip,emac.yaml
- create mode 100644 Documentation/devicetree/bindings/perf/arm,ccn.yaml
- delete mode 100644 Documentation/devicetree/bindings/perf/arm-ccn.txt
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
- delete mode 100644 Documentation/devicetree/bindings/serial/efm32-uart.txt
- delete mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.txt
- create mode 100644 Documentation/devicetree/bindings/serio/ps2-gpio.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/efm32-spi.txt
- create mode 100644 Documentation/devicetree/bindings/sram/qcom,imem.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
- delete mode 100644 include/dt-bindings/clock/efm32-cmu.h
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogPFZpc2hhbCBCYWRvbGU+
+IDxiYWRvbGV2aXNoYWwxMTE2QGdtYWlsLmNvbT4NCj4gU2VudDogU3VuZGF5LCBKdW5lIDI2LCAy
+MDIyIDE6MjUgUE0NCj4gVG86IFN0ZXBoZW4gQm95ZCA8c2JveWRAa2VybmVsLm9yZz47IG10dXJx
+dWV0dGVAYmF5bGlicmUuY29tOyBpbnV4LQ0KPiBjbGtAdmdlci5rZXJuZWwub3JnOyBsaW51eC1r
+ZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiBjaGlubW95Z2hvc2gyMDAxQGdtYWlsLmNvbTsg
+bWludHVwYXRlbDg5QGdtYWlsLmNvbTsNCj4gdmltYWwua3VtYXIzMkBnbWFpbC5jb20NCj4gU3Vi
+amVjdDogUmU6IFtQQVRDSF0gQ29tbW9uIGNsb2NrOiDigIvigItUbyBsaXN0IGFjdGl2ZSBjb25z
+dW1lcnMgb2YgY2xvY2tzDQo+IA0KLi4uDQo+IFdlIHdpbGwgcmVtb3ZlIGFib3ZlIHByaW50cyBp
+biB0aGUgcmV2aXNlZCBwYXRjaC4gV2UgYXJlIGZhY2luZw0KPiBpbmRlbnRhdGlvbiBpc3N1ZSB3
+aGxlIHByaW50aW5nIGNvbnN1bWVyIGluIHN1bW1hcnkNCj4gYXMgZ2l2ZW4gYmVsb3cNCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZW5hYmxlICBwcmVwYXJlICBwcm90ZWN0ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGR1dHkgIGhhcmR3YXJlICAgICAgICAgICAgcGVyLXVz
+ZXINCj4gICBjbG9jayAgICAgICAgICAgICAgICAgICAgICAgICAgY291bnQgICAgY291bnQgICAg
+Y291bnQgICAgICAgIHJhdGVjY3VyYWN5IHBoYXNlICBjeWNsZSAgICBlbmFibGUgIGNvbnN1bWVy
+ICAgY291bnQNCj4gICBjbGtfbWNhc3AwX2ZpeGVkICAgICAgICAgICAgICAgICAgIDAgICAgICAg
+IDAgICAgICAgIDAgICAgICAgICAgIDI0NTc2MDAwICAgICAwICA1MDAwMCAgICAgICAgIFkgICAN
+Cj4gICBkZXZpY2VsZXNzICAgICAgICAwDQoNCg0KQ29uc2lkZXIgbWFraW5nIHRoZSBrZXJuZWwg
+b3V0cHV0IHNpbXBsZSwgZ3JlcHBhYmxlLCBhbmQgcGFyc2VhYmxlIChlLmcuLA0KY29tbWEtc2Vw
+YXJhdGVkIGZpZWxkcywgb25lIGVudHJ5IHBlciBsaW5lLCBubyBtdWx0aS1saW5lIGNvbHVtbiBo
+ZWFkZXJzKQ0KYW5kIGxldCBhIHVzZXJzcGFjZSB0b29sIGRvIHRoZSBmYW5jeSBmb3JtYXR0aW5n
+Lg0KDQoNCg0KDQo=

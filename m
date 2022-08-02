@@ -2,382 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA385876FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FC3587700
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 08:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235136AbiHBGKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 02:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S235318AbiHBGLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 02:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiHBGKx (ORCPT
+        with ESMTP id S232759AbiHBGLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 02:10:53 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349A26321
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 23:10:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Df7OOeRf2E5iLYYa4Axtn6GvHhL9IfuMO++shrFO5QQ1+lEP2XXGTm9wNWMKcTEbs+bkU42bWvcdp8AztlCcghI5qXNG3G8skRd2L1lcUCPW2q4+FlWueK6lQFsHvZGBnZ6UHkjoBi7HL3IT9v7zuitIHpxpCXQl521owWJXzwyqkUabuxPCJHKAqIzRVmKwNbY9GFhDhdiivo/T4KbMCegWQroEzZatg/ErcG8OENVL6HaJbSFmo3XZzbZrpV53LvBAmAuZ3d/Tn4IB6PgIJZRsCmEXUk5yaUMzmqEMyi2W4VE3KbCmizRS8/gNCkjDU2oDfWTpYNt5014THoDCaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nc/34UIQVFBImIo5M8hbAFTVF/3Sdbxm5PKwkP4HICo=;
- b=FWOjQXxK0JKbSvzrJWoWmhkf/GsM98ohDb8GNumQCV1qPTYiXK3Utr1smyp184zBHiPfmj3l8ra3j9uVKPYgLt7xtThQEUvBvCmxYaneipdJ50kUs1gXfubwJlhODVrrXuzoYOujAiluVelbJmRMTMv5vyvnHyIyVO5rUXOeKZvdkh2t4nMbhinIQTLV2FljHpZoqvOD4LzojhMGeiQtjmmXoq6iK0e4g8awMGNVXjOEh2vDGXC1WWPUg+GnobQ5DVS/PYr3/Ksfj1v29l0Ra7H0c6eXoQKJePTsuGd3pTdA+NAISAx49us152FN/7ELUIViRMyyC/O62lV9+9bGOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nc/34UIQVFBImIo5M8hbAFTVF/3Sdbxm5PKwkP4HICo=;
- b=fUHbyoW9AlSmk+rnKlgLM5zoywN4Kd0Z8uRXhBcIBOrjhkxpsO2oJ0q3N2PHr0hTKYXeLlCP89iWS1ri0kGAf++ArevOrIm8ulW3nsdezoPJSU1Vwj72QkRQlKGZQyBDRs3B0ugA5Z0ng6hEnzYAyJJ3gs1U/Ttl7yCsXUSo2v8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by MN2PR12MB3293.namprd12.prod.outlook.com (2603:10b6:208:106::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Tue, 2 Aug
- 2022 06:10:49 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::1c48:55fc:da99:87c9%3]) with mapi id 15.20.5482.011; Tue, 2 Aug 2022
- 06:10:49 +0000
-Message-ID: <35394cb7-a490-5aeb-b3a8-0f46e3c8ca28@amd.com>
-Date:   Tue, 2 Aug 2022 11:40:34 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com, ravi.bangoria@amd.com
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <YqdP4NExuwOHdC0G@hirez.programming.kicks-ass.net>
-Content-Language: en-US
-In-Reply-To: <YqdP4NExuwOHdC0G@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::19) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Tue, 2 Aug 2022 02:11:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5F4BC04;
+        Mon,  1 Aug 2022 23:11:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BEA361274;
+        Tue,  2 Aug 2022 06:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB83C433B5;
+        Tue,  2 Aug 2022 06:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659420676;
+        bh=tiyHVlD3ZkLzVx6LnghtnX6LgJI8/Cjj7jV1ChAFCw4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tOe2tLTGWrXQrOHMuvKBvjP/LwE++5FmKUqb2XAs5StJVO0zbJMGO0XgGrL1p7pam
+         QG3Qee7QC1rM3/kCsrSr+FglJspoFJeEPxfv4f1ySTgDqu0B+yMse+7nnH7cezO09e
+         kKa6hJXhq+xRA91xqDejvfuz6d9BcgCHEgmB3b3DtpTzkxYugWp/jgYrfyvgQHcI/A
+         78ZiDpLaglMOROgWE3CA1MNR/a6akRu644tmJ/08b1QrIbKr7yHuVTVL3CoK0RDnOz
+         cgKWUgwi/SB3uC7PcjvKi0jMFT4OeEXEQ8TNuWBL7py8KPx2VGJ/OJQMLY1bTZV7z6
+         gOo2lAoaA+OLg==
+Received: by mail-vs1-f43.google.com with SMTP id j2so7038413vsp.1;
+        Mon, 01 Aug 2022 23:11:16 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2e2np0U7c9MvBBrHVEXLSV9zfCDzHfexLkuQrWWpM+r8aSmlVj
+        5XbaNsXXA3+laaZqZtPsWsuqDvcpof/vNdqDAyQ=
+X-Google-Smtp-Source: AA6agR7p5e2XvJpvlE8ak+eWU2KGofGN3AAhvnYLRLMsCiw1zvv7pqToqzGCfUCQYZ3bS4hb16B4PLa5yifyFjQ+b3c=
+X-Received: by 2002:a67:d487:0:b0:385:1a6b:6f33 with SMTP id
+ g7-20020a67d487000000b003851a6b6f33mr3004698vsj.59.1659420675550; Mon, 01 Aug
+ 2022 23:11:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2c57023-ebb3-4a4a-b37c-08da744dbeef
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3293:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FWh7Tq7glQMkk6LpoaZfr8hFGLinslpsNNlimF7zVH7LEt5jkTnRwLpfgdw6la63bqkDssX8eCBBBm7QeY745/PSr9yqeQyN3vWGcxHWLfwARk5XdJtZK7pzhbpsS7r18mxPBD6Dvmgv/VY4Yvx6XUKPi3uZC2AxY5hoV/uKUzS2F3CYbbEwEJ3VLmV6Q5zhtc3rXO6KyHGVjk9c3JJKKl0mf7yhIlK+qKS3m0ukiXSlv+5uFq91lCavnCuQkDSD09aq6h4zpPrQdNxtdNoICvbtgdi5qYEs63lAqW0oMNXL1Uw0YrIWvmAWk/DibKD8Qm+lBwWCMw00SDpoBEbz6wtRMn0LjEZBhfDX3gKHa2puGCYUEXocKa3xaWR/KTeOPzxuQxbHagonjTOSloJAssZTHFj/wNqdnAuhDx0bhQng7ImnZsasmk8hsYYWF+0MVIc4OdCGN31BI3n494OguC/UOtwI6AFuFp3dux49l8MnbjFY9Ijy49ilzlSeCTgfDMFMBj2PAyNr39Bt5SgEPOJbiF3k4CF/obrcGSfM6MEZyClhvGQrACOYdhbOgjaLSRsPROa1aFFSg17bA3vMrqubVqsVClOnDHZ/BQQsfYT29ml0lrann+0HHCuC5kpUWesRnZoYWbiDtcyrBGOtJmSp7TcK62YckzeR+3nDar0XzSfmKFhFWXw2AG0m1XyLjg4yrhjQin53xI+XaeGTC2UDs9xpr01bbMfHXd+Q+wZf4xFnVh9aana0ttgOfsmIMSastZDZaDsp2WrgRneXMKGaduNY74IwnTyc6roKDeuhbbEp+jOkklW0vHnCZUDQqirDDMnjvbMSxqxEJW4drjlzVe7Du6fXWxQhqy/3CoAlccRK9jOF6RRZJ9kHdCjz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(53546011)(6512007)(26005)(6506007)(31696002)(6666004)(41300700001)(86362001)(6916009)(316002)(6486002)(966005)(478600001)(38100700002)(2616005)(186003)(83380400001)(2906002)(66946007)(66556008)(8676002)(4326008)(66476007)(8936002)(44832011)(31686004)(5660300002)(7416002)(36756003)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YlJQWVVGTDBiRjhLQ2cxMlVKdGErcUVDTzl0TC9NQkI3UDVFN3FHZy8yU0hJ?=
- =?utf-8?B?d1owMEp2NTJlb0VpeTFvS0NwSUk2SitpL0pnMGtRYys0Sktzd0NsVkU5U3hw?=
- =?utf-8?B?UFUvZno3LzJCOXJBUXRjS2IwOFVJTHBBa0hDOFBZaWtxT0ZoU0FCVDU5Mmkx?=
- =?utf-8?B?NXcyMWhLVmdCaHY5V1ZNanRKQ1lIVW5ZTEF4dWhIaFVwOElRdUpkeXp6MkRV?=
- =?utf-8?B?L1lITDFYTnp0TUJSRC9NUFhZdmZ2c2ZKN3djVnp3MEgxU3pxUWNPd1l5ZEF4?=
- =?utf-8?B?a2tqZGJucTlyOFQ4cmxWNzlzaUM2QmVSQm1ITlhBRWZER0lWUGNFb1U3bkRP?=
- =?utf-8?B?bXUrTmxBVEJ2angzdTgrbHFhcGowMG5adUp0YzhHNlAzdjN1MFh3WTBUY2FL?=
- =?utf-8?B?Y2puaEUwNW1Gb3hJN0hTekszZTl1UzdpNThISmV2OHR6N3NYRkoyZTF0dFRr?=
- =?utf-8?B?dXJPZ0llMlpKaFVLS0RIek1FSVZXbHNsTVFFT1JPeWxlZStBQTdqaFJMNVJI?=
- =?utf-8?B?YStabHc5QWlORkhFYk13R3JFQmZwUkxWcys5SThaZ2Fsa1F1cU11VHh3MThS?=
- =?utf-8?B?U1lhTno4eDJFVU15UlJZSFlmNEYwbnVIZlU5NEcvMm1jblZGQ1JlSzNHNmlx?=
- =?utf-8?B?b1pSd2xGZE1ZSVdoeUNrcENtOTZqQmhlT015a2ZXWHRVVVZ4ZkFsOS84SU5O?=
- =?utf-8?B?bURkWkFqNFI3WGY1bzVBbDdQUENGdklQS0ZOWDY2UXlBUXc4ZzBoZ2lwcFJT?=
- =?utf-8?B?b1JnSjhqdUJPWTNDYUcySDRyV2sxcW42Z21uZHVta29pZWlGMXE1UmpZc2lr?=
- =?utf-8?B?MVFiM3BQUVUxREwvZnhxeVRPK0xvVnpMaEhwMVdJeU9GQVFLM2tqSmpqeUgy?=
- =?utf-8?B?V3FQMFBpZ0FKMExHbmg3eHFCMWxiRk54aUZOSVpmeTlSTHZ0U3dhN1JSZXNx?=
- =?utf-8?B?dXFIbzJDb204a01vbWxocmM1WGU4RStJMXhkK3cvMHZuVTRIaDlLcUJ0azJk?=
- =?utf-8?B?MURMaTRjS2NaSUdSVGFrNjZpRGdUdmN0MmM4dTNkSlVhT3FlMmlFakdhK0gw?=
- =?utf-8?B?d0pZaExNdEJ3Z1FudGNYd3dLeVI1alNZNGZtcytsb1JuZWFnejN2ajBMaW9n?=
- =?utf-8?B?czVoR3lNQUptK0c5M3ErSkZFNEpHcldFUWNRS3llWE1BUVZaeDRQS3VmU2Rj?=
- =?utf-8?B?bW5Ha09xbHlXc2VUN0hxYmxCUGtZTnc5RldiQno4b3c3RGl6Q2hFbi9YenF4?=
- =?utf-8?B?N25vcjdDalZ4b0JCQjFVQzN1MTlSOUFXdWt4REpUSlVyTWlneHJ5czVTQVBR?=
- =?utf-8?B?QmRPVlBQcG5UcDJZU2N2T0hUSXdkNXNGRE9odmQ5QWVCejQ4WUhJNEtHYjYv?=
- =?utf-8?B?aUxGWlJVMHluaUpOaWdnQUIwVXdnbGI0WkNyL3k3V2g4VzZURlRUOXhDZjNv?=
- =?utf-8?B?T05CT1YyM1FEZHMxWGxjUEYyWVYxaG9MeEpnWUpWVUM1cTJHWFZWc2s3SmpV?=
- =?utf-8?B?VTFuNVVBS2VwdVR0THB2TmljRThBYm1xbHk1QWNGT0xiUkkyakJKNlZZS1Nv?=
- =?utf-8?B?ZUpxTUpYR2Q0SkxhUjhRVm5jWGFvdUpMdERZb1ljdEU3bkcwOW5teFZBaGZk?=
- =?utf-8?B?b3c2aXB3ZVJJZ0sxR09xbzB4MzBEQjMwYm42ajYzYmpjN2JVNGpZTWJEL3Np?=
- =?utf-8?B?ZDU2RU9IcVFuWFdlb0FyYTdGQlZlZktIaDAwYmxZb0dUM0dsNDZpSEx0TW1z?=
- =?utf-8?B?eFFmbDFPbkxFYVZXR3BHQkdyM01PRjlIbXk4MmZEeFEvdmxLMFh4Y3FyQ1U1?=
- =?utf-8?B?Qmw5Q0Fwc2NIUStpZnNMM0hxOVZvMml2c0lnS3hYRE9PQ2dreDlQQ0lVWGR5?=
- =?utf-8?B?SEtEaGhYZk5iNW9peDhRQiszZTVwQWNaQk1lZW1BY0NqMWhHdDM0KzE0ZWM4?=
- =?utf-8?B?QlJZdm5KTENYaWUvSWxoOXZhTkp2U0g1czczcmpVbzhpaDhGR25OaTRZdXpW?=
- =?utf-8?B?elhuSXFES05TcTduNG9GNEVGZmNnakZlSmkwWldVZytsaW94UUFNRk5UK2JN?=
- =?utf-8?B?Z2VqSGZwbUVwVzBhaDBFOXJsSVV5S2pSdllNbU0rS2xFZDM2UmFnMkx4S1M3?=
- =?utf-8?Q?sC/YT+oyor2xzBaNBaqO7ZQG4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2c57023-ebb3-4a4a-b37c-08da744dbeef
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 06:10:49.4623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SFJXIi8fT1IsZckgxW3Y7SDhVOu5fElDdJDu2SGBNv93z7ggHZherlE9YTS8UDj0OowbWlgwRhc618d6fo3TQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3293
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220802053818.18051-1-zhangqing@loongson.cn> <20220802053818.18051-3-zhangqing@loongson.cn>
+In-Reply-To: <20220802053818.18051-3-zhangqing@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 2 Aug 2022 14:11:01 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H59mdBp4g3hh4AU6KQC-ZdekY1v+2awU-jpNNy9_mrzVQ@mail.gmail.com>
+Message-ID: <CAAhV-H59mdBp4g3hh4AU6KQC-ZdekY1v+2awU-jpNNy9_mrzVQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] LoongArch: Add prologue unwinder support
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-Jun-22 8:25 PM, Peter Zijlstra wrote:
-> On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
->> @@ -12125,6 +12232,8 @@ SYSCALL_DEFINE5(perf_event_open,
->>  		goto err_task;
->>  	}
->>  
->> +	// XXX premature; what if this is allowed, but we get moved to a PMU
->> +	// that doesn't have this.
->>  	if (is_sampling_event(event)) {
->>  		if (event->pmu->capabilities & PERF_PMU_CAP_NO_INTERRUPT) {
->>  			err = -EOPNOTSUPP;
-> 
-> No; this really should be against the event's native PMU. If the event
-> can't natively sample, it can't sample when placed in another group
-> either.
+Hi, Qing,
 
-Right. But IIUC, the question was, would there be any issue if we allow
-grouping of perf_sw_context sampling event as group leader and
-perf_{hw|invalid}_context counting event as group member. I think no. It
-should just work fine. And, there could be real usecases of it as you
-described in one old thread[1].
+On Tue, Aug 2, 2022 at 1:38 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>
+> It unwind the stack frame based on prologue code analyze.
+> CONFIG_KALLSYMS is needed, at least the address and length
+> of each function.
+>
+> Three stages when we do unwind,
+>   1) unwind_start(), the prapare of unwinding, fill unwind_state.
+>   2) unwind_done(), judge whether the unwind process is finished or not.
+>   3) unwind_next_frame(), unwind the next frame.
+>
+> Dividing unwinder helps to add new unwinders in the future, eg:
+> unwind_frame, unwind_orc .etc
+I think you want to say unwinder_frame, unwinder_orc here, and please
+also check other patches' commit messages, thank you.
 
-TL;DR
-
-Although I can't find any such pmu combination on AMD(not considering real
-sw pmus), I just tried opposite scenario:
-
-    Group leader: msr/tsc/ as counting event (perf_sw_context)
-    Group member: ibs_op/cnt_ctl=1/ as sampling event (perf_invalid_context)
-
-And a simple test program seems to work fine:
-
-  #include <unistd.h>
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <errno.h>
-  #include <sys/stat.h>
-  #include <fcntl.h>
-  #include <string.h>
-  #include <linux/perf_event.h>
-  #include <sys/types.h>
-  #include <sys/mman.h>
-  #include <sys/syscall.h>
-  #include <sys/ioctl.h>
-  
-  #define PAGE_SIZE               sysconf(_SC_PAGESIZE)
-  
-  #define PERF_MMAP_DATA_PAGES    256
-  #define PERF_MMAP_DATA_SIZE     (PERF_MMAP_DATA_PAGES * PAGE_SIZE)
-  #define PERF_MMAP_DATA_MASK     (PERF_MMAP_DATA_SIZE - 1)
-  #define PERF_MMAP_TOTAL_PAGES   (PERF_MMAP_DATA_PAGES + 1)
-  #define PERF_MMAP_TOTAL_SIZE    (PERF_MMAP_TOTAL_PAGES * PAGE_SIZE)
-  
-  #define rmb()   asm volatile("lfence":::"memory")
-  
-  struct perf_event {
-          int fd;
-          void *p;
-  };
-  
-  static int perf_event_open(struct perf_event_attr *attr, pid_t pid,
-                             int cpu, int group_fd, unsigned long flags)
-  {
-          int fd = syscall(__NR_perf_event_open, attr, pid, cpu,
-                          group_fd, flags);
-          if (fd < 0)
-                  perror("perf_event_open() failed.");
-          return fd;
-  }
-  
-  static void *perf_event_mmap(int fd)
-  {
-          void *p = mmap(NULL, PERF_MMAP_TOTAL_SIZE,
-                          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-          if (p == MAP_FAILED)
-                  perror("mmap() failed.");
-          return p;
-  }
-  
-  static void
-  copy_event_data(void *src, unsigned long offset, void *dest, size_t size)
-  {
-          size_t chunk1_size, chunk2_size;
-  
-          if ((offset + size) < PERF_MMAP_DATA_SIZE) {
-                  memcpy(dest, src + offset, size);
-          } else {
-                  chunk1_size = PERF_MMAP_DATA_SIZE - offset;
-                  chunk2_size = size - chunk1_size;
-  
-                  memcpy(dest, src + offset, chunk1_size);
-                  memcpy(dest + chunk1_size, src, chunk2_size);
-          }
-  }
-  
-  static int mmap_read(struct perf_event_mmap_page *p, void *dest, size_t size)
-  {
-          void *base;
-          unsigned long data_tail, data_head;
-  
-          /* Casting to (void *) is needed. */
-          base = (void *)p + PAGE_SIZE;
-  
-          data_head = p->data_head;
-          rmb();
-          data_tail = p->data_tail;
-  
-          if ((data_head - data_tail) < size)
-                  return -1;
-  
-          data_tail &= PERF_MMAP_DATA_MASK;
-          copy_event_data(base, data_tail, dest, size);
-          p->data_tail += size;
-          return 0;
-  }
-  
-  static void mmap_skip(struct perf_event_mmap_page *p, size_t size)
-  {
-          int data_head = p->data_head;
-  
-          rmb();
-  
-          if ((p->data_tail + size) > data_head)
-                  p->data_tail = data_head;
-          else
-                  p->data_tail += size;
-  }
-  
-  static void perf_read_event_details(struct perf_event_mmap_page *p)
-  {
-          struct perf_event_header hdr;
-          unsigned int pid, tid;
-  
-          /*
-           * PERF_RECORD_SAMPLE:
-           * struct {
-           *     struct perf_event_header hdr;
-           *     u32 pid;                         // PERF_SAMPLE_TID
-           *     u32 tid;                         // PERF_SAMPLE_TID
-           * };
-           */
-          while(1) {
-                  if (mmap_read(p, &hdr, sizeof(hdr)))
-                          return;
-  
-                  if (hdr.type == PERF_RECORD_SAMPLE) {
-                          if (mmap_read(p, &pid, sizeof(pid)))
-                                  perror("Error reading pid.");
-  
-                          if (mmap_read(p, &tid, sizeof(tid)))
-                                  perror("Error reading tid.");
-  
-                          printf("pid: %d, tid: %d\n", pid, tid);
-                  } else {
-                          mmap_skip(p, hdr.size - sizeof(hdr));
-                  }
-          }
-  }
-  
-  int main(int argc, char *argv[])
-  {
-          struct perf_event_attr attr;
-          struct perf_event events[2];
-          int i;
-          long long count1, count2;
-  
-          memset(&attr, 0, sizeof(struct perf_event_attr));
-          attr.size = sizeof(struct perf_event_attr);
-  
-          attr.type = 16; /* /sys/bus/event_source/devices/msr/type */
-          attr.config = 0x0; /* /sys/bus/event_source/devices/msr/events/tsc */
-          attr.disabled = 1;
-          events[0].fd = perf_event_open(&attr, -1, 0, -1, 0);
-  
-          attr.type = 9; /* /sys/bus/event_source/devices/ibs_op/type */
-          attr.config = (0x1 << 19); /* /sys/bus/event_source/devices/ibs_op/format/cnt_ctl */
-          attr.disabled = 1;
-          /* perf_read_event_details() can parse PERF_SAMPLE_TID only */
-          attr.sample_type = PERF_SAMPLE_TID;
-          attr.sample_period = 10000000;
-          events[1].fd = perf_event_open(&attr, -1, 0, events[0].fd, 0);
-          events[1].p = perf_event_mmap(events[1].fd);
-  
-          ioctl(events[0].fd, PERF_EVENT_IOC_RESET, 0);
-          ioctl(events[1].fd, PERF_EVENT_IOC_RESET, 0);
-          ioctl(events[0].fd, PERF_EVENT_IOC_ENABLE, 0);
-          ioctl(events[1].fd, PERF_EVENT_IOC_ENABLE, 0);
-  
-          i = 5;
-          while(i--) {
-                  sleep(1);
-                  read(events[0].fd, &count1, sizeof(long long));
-                  read(events[1].fd, &count2, sizeof(long long));
-                  perf_read_event_details(events[1].p);
-                  ioctl(events[0].fd, PERF_EVENT_IOC_RESET, 0);
-                  ioctl(events[1].fd, PERF_EVENT_IOC_RESET, 0);
-  
-                  printf("%lld, %lld\n", count1, count2);
-          }
-  
-          close(events[1].fd);
-          close(events[0].fd);
-  }
-
-Example run:
-
-  [term1~]$ taskset -c 0 top
-
-  [term2~]$ pgrep top
-  85747
-
-  [term2~]$ sudo ./perf-group-sample-count
-  1996319080, 0
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 0, tid: 0
-  1996510960, 150000000
-  1996325400, 0
-  1996348600, 0
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 85747, tid: 85747
-  pid: 0, tid: 0
-  1996341420, 130000000
-
-Thanks,
-Ravi
-
-[1] https://lore.kernel.org/all/20150204125954.GL21418@twins.programming.kicks-ass.net
+Huacai
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig.debug            |  19 +++
+>  arch/loongarch/include/asm/inst.h       |  52 +++++++
+>  arch/loongarch/include/asm/unwind.h     |  12 +-
+>  arch/loongarch/kernel/Makefile          |   1 +
+>  arch/loongarch/kernel/traps.c           |   3 +
+>  arch/loongarch/kernel/unwind_prologue.c | 172 ++++++++++++++++++++++++
+>  6 files changed, 258 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/loongarch/kernel/unwind_prologue.c
+>
+> diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
+> index 68634d4fa27b..57cdbe0cfd98 100644
+> --- a/arch/loongarch/Kconfig.debug
+> +++ b/arch/loongarch/Kconfig.debug
+> @@ -1,3 +1,11 @@
+> +choice
+> +       prompt "Choose kernel unwinder"
+> +       default UNWINDER_PROLOGUE if KALLSYMS
+> +       help
+> +         This determines which method will be used for unwinding kernel stack
+> +         traces for panics, oopses, bugs, warnings, perf, /proc/<pid>/stack,
+> +         lockdep, and more.
+> +
+>  config UNWINDER_GUESS
+>         bool "Guess unwinder"
+>         help
+> @@ -7,3 +15,14 @@ config UNWINDER_GUESS
+>
+>           While this option often produces false positives, it can still be
+>           useful in many cases.
+> +
+> +config UNWINDER_PROLOGUE
+> +       bool "Prologue unwinder"
+> +       depends on KALLSYMS
+> +       help
+> +         This option enables the "prologue" unwinder for unwinding kernel stack
+> +         traces.  It unwind the stack frame based on prologue code analyze.  Symbol
+> +         information is needed, at least the address and length of each function.
+> +         Some of the addresses it reports may be incorrect.
+> +
+> +endchoice
+> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+> index 575d1bb66ffb..b876907ca65a 100644
+> --- a/arch/loongarch/include/asm/inst.h
+> +++ b/arch/loongarch/include/asm/inst.h
+> @@ -23,12 +23,33 @@ enum reg1i20_op {
+>         lu32id_op       = 0x0b,
+>  };
+>
+> +enum reg1i21_op {
+> +       beqz_op         = 0x10,
+> +       bnez_op         = 0x11,
+> +};
+> +
+>  enum reg2i12_op {
+> +       addiw_op        = 0x0a,
+> +       addid_op        = 0x0b,
+>         lu52id_op       = 0x0c,
+> +       ldb_op          = 0xa0,
+> +       ldh_op          = 0xa1,
+> +       ldw_op          = 0xa2,
+> +       ldd_op          = 0xa3,
+> +       stb_op          = 0xa4,
+> +       sth_op          = 0xa5,
+> +       stw_op          = 0xa6,
+> +       std_op          = 0xa7,
+>  };
+>
+>  enum reg2i16_op {
+>         jirl_op         = 0x13,
+> +       beq_op          = 0x16,
+> +       bne_op          = 0x17,
+> +       blt_op          = 0x18,
+> +       bge_op          = 0x19,
+> +       bltu_op         = 0x1a,
+> +       bgeu_op         = 0x1b,
+>  };
+>
+>  struct reg0i26_format {
+> @@ -110,6 +131,37 @@ enum loongarch_gpr {
+>         LOONGARCH_GPR_MAX
+>  };
+>
+> +#define is_imm12_negative(val) is_imm_negative(val, 12)
+> +
+> +static inline bool is_imm_negative(unsigned long val, unsigned int bit)
+> +{
+> +       return val & (1UL << (bit - 1));
+> +}
+> +
+> +static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
+> +{
+> +       /* addi.d $sp, $sp, -imm */
+> +       return ip->reg2i12_format.opcode == addid_op &&
+> +               ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
+> +               ip->reg2i12_format.rd == LOONGARCH_GPR_SP &&
+> +               is_imm12_negative(ip->reg2i12_format.immediate);
+> +}
+> +
+> +static inline bool is_ra_save_ins(union loongarch_instruction *ip)
+> +{
+> +       /* st.d $ra, $sp, offset */
+> +       return ip->reg2i12_format.opcode == std_op &&
+> +               ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
+> +               ip->reg2i12_format.rd == LOONGARCH_GPR_RA &&
+> +               !is_imm12_negative(ip->reg2i12_format.immediate);
+> +}
+> +
+> +static inline bool is_branch_insn(union loongarch_instruction insn)
+> +{
+> +       return insn.reg1i21_format.opcode >= beqz_op &&
+> +               insn.reg1i21_format.opcode <= bgeu_op;
+> +}
+> +
+>  u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
+>  u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+>  u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
+> diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
+> index 243330b39d0d..67e542e136af 100644
+> --- a/arch/loongarch/include/asm/unwind.h
+> +++ b/arch/loongarch/include/asm/unwind.h
+> @@ -11,10 +11,20 @@
+>
+>  #include <asm/stacktrace.h>
+>
+> +enum unwinder_type {
+> +       UNWINDER_GUESS,
+> +       UNWINDER_PROLOGURE,
+> +};
+> +
+>  struct unwind_state {
+> +       /*
+> +        * UNWINDER_PROLOGURE is the prologue analysis method
+> +        * UNWINDER_GUESS is the way to guess.
+> +        */
+> +       char type;
+>         struct stack_info stack_info;
+>         struct task_struct *task;
+> -       unsigned long sp, pc;
+> +       unsigned long sp, pc, ra;
+>         bool first;
+>         bool error;
+>  };
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index c5fa4adb23b6..918600e7b30f 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -23,5 +23,6 @@ obj-$(CONFIG_SMP)             += smp.o
+>  obj-$(CONFIG_NUMA)             += numa.o
+>
+>  obj-$(CONFIG_UNWINDER_GUESS)   += unwind_guess.o
+> +obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+>
+>  CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
+> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> index f65fdf90d29e..aa1c95aaf595 100644
+> --- a/arch/loongarch/kernel/traps.c
+> +++ b/arch/loongarch/kernel/traps.c
+> @@ -71,6 +71,9 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
+>         if (!task)
+>                 task = current;
+>
+> +       if (user_mode(regs))
+> +               state.type = UNWINDER_GUESS;
+> +
+>         printk("%sCall Trace:", loglvl);
+>         for (unwind_start(&state, task, pregs);
+>               !unwind_done(&state); unwind_next_frame(&state)) {
+> diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
+> new file mode 100644
+> index 000000000000..3860d17aad74
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/unwind_prologue.c
+> @@ -0,0 +1,172 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/kallsyms.h>
+> +
+> +#include <asm/inst.h>
+> +#include <asm/ptrace.h>
+> +#include <asm/unwind.h>
+> +
+> +unsigned long unwind_get_return_address(struct unwind_state *state)
+> +{
+> +
+> +       if (unwind_done(state))
+> +               return 0;
+> +       else if (state->type)
+> +               return state->pc;
+> +       else if (state->first)
+> +               return state->pc;
+> +
+> +       return *(unsigned long *)(state->sp);
+> +
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_get_return_address);
+> +
+> +static bool unwind_by_prologue(struct unwind_state *state)
+> +{
+> +       struct stack_info *info = &state->stack_info;
+> +       union loongarch_instruction *ip, *ip_end;
+> +       unsigned long frame_size = 0, frame_ra = -1;
+> +       unsigned long size, offset, pc = state->pc;
+> +
+> +       if (state->sp >= info->end || state->sp < info->begin)
+> +               return false;
+> +
+> +       if (!kallsyms_lookup_size_offset(pc, &size, &offset))
+> +               return false;
+> +
+> +       ip = (union loongarch_instruction *)(pc - offset);
+> +       ip_end = (union loongarch_instruction *)pc;
+> +
+> +       while (ip < ip_end) {
+> +               if (is_stack_alloc_ins(ip)) {
+> +                       frame_size = (1 << 12) - ip->reg2i12_format.immediate;
+> +                       ip++;
+> +                       break;
+> +               }
+> +               ip++;
+> +       }
+> +
+> +       if (!frame_size) {
+> +               if (state->first)
+> +                       goto first;
+> +
+> +               return false;
+> +       }
+> +
+> +       while (ip < ip_end) {
+> +               if (is_ra_save_ins(ip)) {
+> +                       frame_ra = ip->reg2i12_format.immediate;
+> +                       break;
+> +               }
+> +               if (is_branch_insn(*ip))
+> +                       break;
+> +               ip++;
+> +       }
+> +
+> +       if (frame_ra < 0) {
+> +               if (state->first) {
+> +                       state->sp = state->sp + frame_size;
+> +                       goto first;
+> +               }
+> +               return false;
+> +       }
+> +
+> +       if (state->first)
+> +               state->first = false;
+> +
+> +       state->pc = *(unsigned long *)(state->sp + frame_ra);
+> +       state->sp = state->sp + frame_size;
+> +       return !!__kernel_text_address(state->pc);
+> +
+> +first:
+> +       state->first = false;
+> +       if (state->pc == state->ra)
+> +               return false;
+> +
+> +       state->pc = state->ra;
+> +
+> +       return !!__kernel_text_address(state->ra);
+> +}
+> +
+> +static bool unwind_by_guess(struct unwind_state *state)
+> +{
+> +       struct stack_info *info = &state->stack_info;
+> +       unsigned long addr;
+> +
+> +       for (state->sp += sizeof(unsigned long);
+> +            state->sp < info->end;
+> +            state->sp += sizeof(unsigned long)) {
+> +               addr = *(unsigned long *)(state->sp);
+> +               if (__kernel_text_address(addr))
+> +                       return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+> +void unwind_start(struct unwind_state *state, struct task_struct *task,
+> +                   struct pt_regs *regs)
+> +{
+> +       memset(state, 0, sizeof(*state));
+> +
+> +       if (__kernel_text_address(regs->csr_era))
+> +               state->type = UNWINDER_PROLOGURE;
+> +
+> +       state->task = task;
+> +       state->pc = regs->csr_era;
+> +       state->sp = regs->regs[3];
+> +       state->ra = regs->regs[1];
+> +       state->first = true;
+> +
+> +       get_stack_info(state->sp, state->task, &state->stack_info);
+> +
+> +       if (!unwind_done(state) && !__kernel_text_address(state->pc))
+> +               unwind_next_frame(state);
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_start);
+> +
+> +bool unwind_next_frame(struct unwind_state *state)
+> +{
+> +       struct stack_info *info = &state->stack_info;
+> +       struct pt_regs *regs;
+> +       unsigned long pc;
+> +
+> +       if (unwind_done(state))
+> +               return false;
+> +
+> +       do {
+> +               if (state->type) {
+> +                       if (unwind_by_prologue(state))
+> +                               return true;
+> +
+> +                       if (info->type == STACK_TYPE_IRQ &&
+> +                               info->end == state->sp) {
+> +                               regs = (struct pt_regs *)info->next_sp;
+> +                               pc = regs->csr_era;
+> +                               if (user_mode(regs) || !__kernel_text_address(pc))
+> +                                       return false;
+> +
+> +                               state->pc = pc;
+> +                               state->sp = regs->regs[3];
+> +                               state->ra = regs->regs[1];
+> +                               state->first = true;
+> +                               get_stack_info(state->sp, state->task, info);
+> +
+> +                               return true;
+> +                       }
+> +               } else {
+> +                       if (state->first)
+> +                               state->first = false;
+> +                       else if (unwind_by_guess(state))
+> +                               return true;
+> +               }
+> +
+> +               state->sp = info->next_sp;
+> +
+> +       } while (!get_stack_info(state->sp, state->task, info));
+> +
+> +       return false;
+> +}
+> +EXPORT_SYMBOL_GPL(unwind_next_frame);
+> --
+> 2.20.1
+>

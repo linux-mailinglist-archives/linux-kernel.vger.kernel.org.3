@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC58E58847B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804C258847D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 00:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237271AbiHBWjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 18:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S236845AbiHBWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 18:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237207AbiHBWiw (ORCPT
+        with ESMTP id S237342AbiHBWiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:38:52 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B3254CBF;
-        Tue,  2 Aug 2022 15:38:36 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id z132so11795351iof.0;
-        Tue, 02 Aug 2022 15:38:36 -0700 (PDT)
+        Tue, 2 Aug 2022 18:38:50 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AACC57242;
+        Tue,  2 Aug 2022 15:38:34 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id b12so7024760ils.9;
+        Tue, 02 Aug 2022 15:38:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=xc7pVcgM8oggfYYoDi+YgFJKASpGtHTVPBIB9MLasi0=;
-        b=U68JPjhcBKABY2EvsarONwVp5tohHQCtr7S63ThToKpvKEov9ALIHsiM+hl/1/X51v
-         ZZ8SkqvresjW37+CbExxB/IiJ1OJdmem9wQgLH3siNzkk5gL7SnFNdXbrNqbr/WjAbJp
-         aBjKeCOet+qZ6l1F1o8bjOBsCVHITkvvWx3U6R9TlG2J8eHQPcX2sLBkBGn7pt5qrDmf
-         XQ2Pzj7czWDUYtlia7mbWCxx+Hf6xQ21npZXIYBQ/US2UTo8c/ynR86GAwnlIQzcJZxo
-         chROhYDn5JzRgRFjitmcK7FKSnuDUQ67ikb5Fv3QHGXFOJlcaGkJyZCG4VzzdoGo7rpO
-         VxBQ==
-X-Gm-Message-State: AJIora+opKqbpGMhWwm9yl+DQ15SC8nwvzUV8CkfVwkGq8RCvoWnRU68
-        FGBAlwt3HygFoaJu9AdFbQ==
-X-Google-Smtp-Source: AGRyM1uvjDnbb8GnFfjBfYlQ83bdSSQK2oBX9P0LrOPi4jW/MSL2a2C/PDhZtFJlJhS9j6J7oaGaYQ==
-X-Received: by 2002:a02:9046:0:b0:341:af23:4bb5 with SMTP id y6-20020a029046000000b00341af234bb5mr8385992jaf.44.1659479911950;
-        Tue, 02 Aug 2022 15:38:31 -0700 (PDT)
+        bh=4M0eNIcFrYgM5K/B0q/9btVK0E4O23iIxQ1FHEylB2U=;
+        b=TG8lkkOyxPw0P1EV4FBtI/TxCLA8iJdOBkDguv+NJKMEPw5sVJHR5JX00VJOEbvn4v
+         ny3J3iCOjQeUtjDExcjaH8yoc18Jxnpgv0qsImtbB63JEczz4thsGa97uV69NCLROiED
+         f8hbV0iRXTkPaX1OkHxwxSvMV9JHVd/dFeyYioikso3RhWVcGRSIEY+zHauH8F1Cu5pV
+         b/W02YTOCpBDHo2oFnILQqEKUfHaNih1+ytv7Wb0FFA6VJf9I2E9uAn6ClZwmuoCijB/
+         v02zf/hXUNongpn3FY406MMnZGvVeX42bitNApHWdBVZMZ8l+Nww85fY87VGb2YbYQ6F
+         CbvQ==
+X-Gm-Message-State: AJIora9lOzEzMfKia5Q1GKpxWb7eoi0mUvIwG/j1OyUc0xC7tinu4Qdo
+        3Po9XDsK+WDXRwMMPnm4Vw==
+X-Google-Smtp-Source: AGRyM1t4Mw6kVtI+EzyL63IE/rpUMY/PA8D8Z57S4TVy7ZVABHlfY8+rPMcwlSBHTLSqzeTeseVjDQ==
+X-Received: by 2002:a92:cbd1:0:b0:2dd:ab8f:ed15 with SMTP id s17-20020a92cbd1000000b002ddab8fed15mr9012529ilq.251.1659479909841;
+        Tue, 02 Aug 2022 15:38:29 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id d191-20020a0262c8000000b00341927a1e0dsm7109249jac.72.2022.08.02.15.38.30
+        by smtp.gmail.com with ESMTPSA id h14-20020a02b60e000000b0033ebbb649fasm6918776jam.101.2022.08.02.15.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 15:38:31 -0700 (PDT)
-Received: (nullmailer pid 758799 invoked by uid 1000);
+        Tue, 02 Aug 2022 15:38:29 -0700 (PDT)
+Received: (nullmailer pid 758795 invoked by uid 1000);
         Tue, 02 Aug 2022 22:38:27 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Jai Luthra <j-luthra@ti.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20220802214811.29033-1-j-luthra@ti.com>
-References: <20220802214811.29033-1-j-luthra@ti.com>
-Subject: Re: [PATCH] dt-bindings: sound: tlv320aic3x: Convert to dtschema
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        linux@roeck-us.net, devicetree@vger.kernel.org, jdelvare@suse.com,
+        joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org
+In-Reply-To: <20220802194656.240564-2-eajames@linux.ibm.com>
+References: <20220802194656.240564-1-eajames@linux.ibm.com> <20220802194656.240564-2-eajames@linux.ibm.com>
+Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
 Date:   Tue, 02 Aug 2022 16:38:27 -0600
-Message-Id: <1659479907.575212.758797.nullmailer@robh.at.kernel.org>
+Message-Id: <1659479907.535740.758793.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -61,16 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 02 Aug 2022 16:48:11 -0500, Jai Luthra wrote:
-> Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
+On Tue, 02 Aug 2022 14:46:54 -0500, Eddie James wrote:
+> These bindings describe the POWER processor On Chip Controller accessed
+> from a service processor or baseboard management controller (BMC).
 > 
-> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../devicetree/bindings/sound/tlv320aic3x.txt |  97 ------------
->  .../bindings/sound/tlv320aic3x.yaml           | 145 ++++++++++++++++++
->  2 files changed, 145 insertions(+), 97 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.txt
->  create mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
+>  .../bindings/hwmon/ibm,occ-hmwon.yaml         | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -79,15 +77,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: properties:ai3x-gpio-func:maxItems: False schema does not allow 3
-	hint: Scalar properties should not have array keywords
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: properties:ai3x-gpio-func:minItems: False schema does not allow 3
-	hint: Scalar properties should not have array keywords
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml: ignoring, error in schema: properties: ai3x-gpio-func: maxItems
-Documentation/devicetree/bindings/sound/tlv320aic3x.example.dtb:0:0: /example-0/i2c/tlv320aic3x@1b: failed to match any schema with compatible: ['ti,tlv320aic3x']
-Documentation/devicetree/bindings/sound/tlv320aic3x.example.dtb:0:0: /example-1/spi/codec@0: failed to match any schema with compatible: ['ti,tlv320aic3x']
+./Documentation/devicetree/bindings/hwmon/ibm,occ-hmwon.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/hwmon/ibm,occ-hmwon.yaml#
 
 doc reference errors (make refcheckdocs):
 

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8345877EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DFA5877EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 09:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbiHBHfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 03:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S236001AbiHBHfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 03:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235951AbiHBHfW (ORCPT
+        with ESMTP id S235963AbiHBHfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 2 Aug 2022 03:35:22 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552D9BB3;
-        Tue,  2 Aug 2022 00:35:16 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id w7so12670745ply.12;
-        Tue, 02 Aug 2022 00:35:16 -0700 (PDT)
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A16DA9;
+        Tue,  2 Aug 2022 00:35:17 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id e132so11675823pgc.5;
+        Tue, 02 Aug 2022 00:35:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc;
-        bh=vAzhrMBx41KR5/QG49vw9E4uZBLDwRnUFTHGl01xlEo=;
-        b=RVoX+oNvi3wLv+gFmrUDMvRnRcajnaVlHF1+LRCCNEafSkBuFdDkheCPjeQwkvD8AX
-         rP+QLJAZ1hk+Mc1FPVvig3j7oyiCX+mXCD1kxvT2hVI4lWu+emV8pbDHBvRH8jAjBoa5
-         XJqrv21XW10YxTxfZNS5lP3nnCqbtFFBdbT5vjtAzAR4jLcaqg0Fxf7DmVoidqa9WzSs
-         OwbcuZzI4aho5iu5UCTicihTnlKTI+W8u2GmOldE0dE0h0JIYmUO7IQwV2O54cCXFzCk
-         jeeJgGcaCm2rJwyCaqFj8wS+BkRVVKzp0sOOwSQYCBECc3XYM0bV4CP8D1YZygo6rT21
-         VNRw==
+        bh=IBAUG/bpyaU3jSgEVIxzzw7oGbIuCDdRdzuZfuiuEAw=;
+        b=Jp9o7eugy/hHZDd7bXj/4H+3k/axx1aahcm1LXz1kXeJH/cFOPUP+y2Suac9P3wU6u
+         QdmlUnbzjoqSnLMsmz2cqiIXAdUZy35CmDFP+stgkuJxBDSA9Wjmd/hQCdAn5b9QkSgM
+         X229t+rX4VFgc8b4x3xvSPfLk0YEPW3cGsqN6M5gSirsizW+IRkDENgmirZstDMha7rw
+         9m/wOJ+5Dk+6CUska7yR0sOUZI6bT11BgBRbP9JXFJO7xgEfPmrE8okECzfrh70ZfGtb
+         pLDObnWl5vN/fYxvGty/Z345tyCOCi9hAczFG8avJPwLT40sR+WnOz7V6PL5gSE2UI1V
+         NnOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc;
-        bh=vAzhrMBx41KR5/QG49vw9E4uZBLDwRnUFTHGl01xlEo=;
-        b=xEvF8xCIbYJIZf1iaW9VH3ROC5CdeUuUvoQl9fjm/+iCCPbVYOtNQ3RdnNgprTC6lk
-         oeVv1/Ge5NIbHjATnY5tjASfQ3z+J3IP+80JP11o/7H2nUJU2oZLfjvbFoiWZt2vzCxB
-         gJpVdrr/QOKyIPbvk5TvkDq3DWwSaFWTMOGmNWVA/HiIPhhIpgvanq1SWOKMjd3yeyzC
-         qZzbepcrWEctM6AfpJYWbA7keg9p5y2NE2fW83gBiF5fqCzjgs/QCZX2UKDnCqUoJrPQ
-         O7qIHv7yX15Bwrh21rUHR8fhvKwR0Byb1o0fABUW7o+rl0CMuDU43fYuynbpwBFQ8Qnp
-         k0jQ==
-X-Gm-Message-State: ACgBeo0SZ+a5sbYRcnqv9elxrNqcEhyViuP+I94xwBoVuxDwZSvAjW1U
-        v1qPJGq9nT9ajPAjkdY1XSw=
-X-Google-Smtp-Source: AA6agR4JLhNrB9e/Ypel7vrYIOsBmhaYjmC00U2EzNV4RpDycq71/0jAM90ukDYzPVPibMaGtF9G7A==
-X-Received: by 2002:a17:903:230e:b0:16f:784:ea3f with SMTP id d14-20020a170903230e00b0016f0784ea3fmr1155785plh.160.1659425715684;
-        Tue, 02 Aug 2022 00:35:15 -0700 (PDT)
+        bh=IBAUG/bpyaU3jSgEVIxzzw7oGbIuCDdRdzuZfuiuEAw=;
+        b=v53Quqi8//xELTRJsi1wXfI9xQJQESyCxubBrHNhK5ZoNvgGznQawlclI6Hcp5tG6A
+         qaTkhVrC7i34COE89tnH5aDpsqVuHTSrMkcRxH9FnTr9Bh8ib9Wr7lL/gsBSUr8uNaZ5
+         CWVitRtM0SJIDuY7ylRAdxvcpsn+6DqNPQaucsSyGtrKtQUybF5poTmD9knrcd9k5Umn
+         ntKLSRmeYW+QAdIpzfLOSlPvpSAOaVHX+tmzG8u/KbP25/zI2W2ctTX8ZCvHJJwq7jbh
+         N3dgMfC3l7FRi0boDvCr8pbzGm0+YbeIOzpJwababwxGqmCdejnw2F9OPEkEcESKtSQE
+         wptA==
+X-Gm-Message-State: ACgBeo3O2mkcBuit0LQXHOacQFgyI0uTaIf2B2GuvE4m39rNR4sL+ecV
+        QgT5qEXGJnWwjgRHFREW02g=
+X-Google-Smtp-Source: AA6agR54oRROMzJT8jLOonCUny0A47nV7r5P0gVpqM1pSG8Ju6rTq1/SMHOt3qMD1xUPomB0Nzrgsg==
+X-Received: by 2002:a65:5383:0:b0:41c:1148:5d6b with SMTP id x3-20020a655383000000b0041c11485d6bmr6826856pgq.24.1659425717280;
+        Tue, 02 Aug 2022 00:35:17 -0700 (PDT)
 Received: from balhae.roam.corp.google.com (rrcs-173-196-215-70.west.biz.rr.com. [173.196.215.70])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902e14c00b0016be368fb30sm10802896pla.212.2022.08.02.00.35.14
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902e14c00b0016be368fb30sm10802896pla.212.2022.08.02.00.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 00:35:15 -0700 (PDT)
+        Tue, 02 Aug 2022 00:35:16 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Song Liu <songliubraving@fb.com>,
         Blake Jones <blakejones@google.com>
-Subject: [PATCH 2/3] perf lock: Add -m/--map-length option
-Date:   Tue,  2 Aug 2022 00:35:10 -0700
-Message-Id: <20220802073511.299459-2-namhyung@kernel.org>
+Subject: [PATCH 3/3] perf lock: Print lost entries at the end
+Date:   Tue,  2 Aug 2022 00:35:11 -0700
+Message-Id: <20220802073511.299459-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
 In-Reply-To: <20220802073511.299459-1-namhyung@kernel.org>
 References: <20220802073511.299459-1-namhyung@kernel.org>
@@ -81,112 +81,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The -m/--map-length option is to control number of max entries in the
-perf lock contention BPF maps.
+Like the normal perf lock report output, it'd print bad stats at the end
+if exists or -v option is passed.  Currently it uses BROKEN_CONTENDED
+stat for the lost count (due to full stack maps).
+
+  $ sudo perf lock con -a -b -m 128 sleep 5
+  ...
+  === output for debug===
+
+  bad: 43, total: 14903
+  bad rate: 0.29 %
+  histogram of events caused bad sequence
+      acquire: 0
+     acquired: 0
+    contended: 43
+      release: 0
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/Documentation/perf-lock.txt |  4 ++++
- tools/perf/builtin-lock.c              | 23 ++++++++++++++++++++++-
- tools/perf/util/bpf_lock_contention.c  |  3 +++
- tools/perf/util/lock-contention.h      |  1 +
- 4 files changed, 30 insertions(+), 1 deletion(-)
+ tools/perf/builtin-lock.c                      | 8 +++++++-
+ tools/perf/util/bpf_lock_contention.c          | 6 ++++--
+ tools/perf/util/bpf_skel/lock_contention.bpf.c | 9 +++++++--
+ tools/perf/util/lock-contention.h              | 1 +
+ 4 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-index 7949d2e6891b..2101644785e0 100644
---- a/tools/perf/Documentation/perf-lock.txt
-+++ b/tools/perf/Documentation/perf-lock.txt
-@@ -145,6 +145,10 @@ CONTENTION OPTIONS
- --tid=::
-         Record events on existing thread ID (comma separated list).
- 
-+-m::
-+--map-length::
-+	Maximum number of BPF map entries (default: 10240).
-+
- 
- SEE ALSO
- --------
 diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index eef778b7d33d..e32fdcd497e0 100644
+index e32fdcd497e0..8065f0268e55 100644
 --- a/tools/perf/builtin-lock.c
 +++ b/tools/perf/builtin-lock.c
-@@ -55,6 +55,7 @@ static struct rb_root		thread_stats;
- static bool combine_locks;
- static bool show_thread_stats;
- static bool use_bpf;
-+static unsigned long bpf_map_len = 10240;
+@@ -1471,8 +1471,11 @@ static void print_contention_result(void)
+ 		pr_info("  %10s   %s\n\n", "type", "caller");
  
- static enum {
- 	LOCK_AGGR_ADDR,
-@@ -1597,6 +1598,7 @@ static int __cmd_contention(int argc, const char **argv)
- 	struct lock_contention con = {
- 		.target = &target,
- 		.result = &lockhash_table[0],
-+		.map_len = bpf_map_len,
- 	};
- 
- 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
-@@ -1786,6 +1788,24 @@ static int __cmd_record(int argc, const char **argv)
- 	return ret;
- }
- 
-+static int parse_map_length(const struct option *opt, const char *str,
-+			    int unset __maybe_unused)
-+{
-+	unsigned long *len = (unsigned long *)opt->value;
-+	unsigned long val;
-+	char *endptr;
+ 	bad = total = 0;
++	if (use_bpf)
++		bad = bad_hist[BROKEN_CONTENDED];
 +
-+	errno = 0;
-+	val = strtoul(str, &endptr, 0);
-+	if (*endptr != '\0' || errno != 0) {
-+		pr_err("invalid BPF map length: %s\n", str);
-+		return -1;
-+	}
-+
-+	*len = val;
-+	return 0;
-+}
-+
- int cmd_lock(int argc, const char **argv)
- {
- 	const struct option lock_options[] = {
-@@ -1835,9 +1855,10 @@ int cmd_lock(int argc, const char **argv)
- 		    "List of cpus to monitor"),
- 	OPT_STRING('p', "pid", &target.pid, "pid",
- 		   "Trace on existing process id"),
--	/* TODO: Add short option -t after -t/--tracer can be removed. */
- 	OPT_STRING(0, "tid", &target.tid, "tid",
- 		   "Trace on existing thread id (exclusive to --pid)"),
-+	OPT_CALLBACK('m', "map-length", &bpf_map_len, "len",
-+		     "Max number of BPF map entries", parse_map_length),
- 	OPT_PARENT(lock_options)
- 	};
+ 	while ((st = pop_from_result())) {
+-		total++;
++		total += use_bpf ? st->nr_contended : 1;
+ 		if (st->broken)
+ 			bad++;
  
+@@ -1686,6 +1689,9 @@ static int __cmd_contention(int argc, const char **argv)
+ 
+ 		lock_contention_stop();
+ 		lock_contention_read(&con);
++
++		/* abuse bad hist stats for lost entries */
++		bad_hist[BROKEN_CONTENDED] = con.lost;
+ 	} else {
+ 		err = perf_session__process_events(session);
+ 		if (err)
 diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index f5e2b4f19a72..26128e5bb659 100644
+index 26128e5bb659..65f51cc25236 100644
 --- a/tools/perf/util/bpf_lock_contention.c
 +++ b/tools/perf/util/bpf_lock_contention.c
-@@ -40,6 +40,9 @@ int lock_contention_prepare(struct lock_contention *con)
- 		return -1;
- 	}
+@@ -16,7 +16,7 @@ static struct lock_contention_bpf *skel;
  
-+	bpf_map__set_max_entries(skel->maps.stacks, con->map_len);
-+	bpf_map__set_max_entries(skel->maps.lock_stat, con->map_len);
+ /* should be same as bpf_skel/lock_contention.bpf.c */
+ struct lock_contention_key {
+-	u32 stack_id;
++	s32 stack_id;
+ };
+ 
+ struct lock_contention_data {
+@@ -110,7 +110,7 @@ int lock_contention_stop(void)
+ int lock_contention_read(struct lock_contention *con)
+ {
+ 	int fd, stack;
+-	u32 prev_key, key;
++	s32 prev_key, key;
+ 	struct lock_contention_data data;
+ 	struct lock_stat *st;
+ 	struct machine *machine = con->machine;
+@@ -119,6 +119,8 @@ int lock_contention_read(struct lock_contention *con)
+ 	fd = bpf_map__fd(skel->maps.lock_stat);
+ 	stack = bpf_map__fd(skel->maps.stacks);
+ 
++	con->lost = skel->bss->lost;
 +
- 	if (target__has_cpu(target))
- 		ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
- 	if (target__has_task(target))
+ 	prev_key = 0;
+ 	while (!bpf_map_get_next_key(fd, &prev_key, &key)) {
+ 		struct map *kmap;
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index 67d46533e518..9e8b94eb6320 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -12,7 +12,7 @@
+ #define MAX_ENTRIES  10240
+ 
+ struct contention_key {
+-	__u32 stack_id;
++	__s32 stack_id;
+ };
+ 
+ struct contention_data {
+@@ -27,7 +27,7 @@ struct tstamp_data {
+ 	__u64 timestamp;
+ 	__u64 lock;
+ 	__u32 flags;
+-	__u32 stack_id;
++	__s32 stack_id;
+ };
+ 
+ /* callstack storage  */
+@@ -73,6 +73,9 @@ int enabled;
+ int has_cpu;
+ int has_task;
+ 
++/* error stat */
++unsigned long lost;
++
+ static inline int can_record(void)
+ {
+ 	if (has_cpu) {
+@@ -116,6 +119,8 @@ int contention_begin(u64 *ctx)
+ 	pelem->flags = (__u32)ctx[1];
+ 	pelem->stack_id = bpf_get_stackid(ctx, &stacks, BPF_F_FAST_STACK_CMP);
+ 
++	if (pelem->stack_id < 0)
++		lost++;
+ 	return 0;
+ }
+ 
 diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-index a0df5308cca4..b09fd6eb978a 100644
+index b09fd6eb978a..d9fc5f076567 100644
 --- a/tools/perf/util/lock-contention.h
 +++ b/tools/perf/util/lock-contention.h
-@@ -112,6 +112,7 @@ struct lock_contention {
- 	struct target *target;
+@@ -113,6 +113,7 @@ struct lock_contention {
  	struct machine *machine;
  	struct hlist_head *result;
-+	unsigned long map_len;
+ 	unsigned long map_len;
++	unsigned long lost;
  };
  
  #ifdef HAVE_BPF_SKEL

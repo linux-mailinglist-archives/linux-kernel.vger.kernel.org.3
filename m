@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D59758827D
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B67588280
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 21:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiHBT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 15:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S232769AbiHBT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 15:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiHBT0t (ORCPT
+        with ESMTP id S230207AbiHBT2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 15:26:49 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057D652DC3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 12:26:49 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bv3so5147923wrb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 12:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=+D1zF2DCKf5WB+zgoPewh33B5r7wz0pan/6d9WW6hok=;
-        b=dkrkBbBKoC3+PoFqP3hU0vD20tcfeRRJsOkZZ3XUo/S8MxXU1G6P7eXayGzHWfn9n8
-         NL9hmvOfm6bmM3sLJyOwfIEPgZzUKBbHyZGldc4e3Wrclo9FaogvY3CbvTkBGH/RMtm9
-         Tr4x+p2DtZB7kDgptfNs0AYpKCpsnQoOPAX4WdrHzbzkq68Hx8sH4ArqC6Crf9v+NyTx
-         wKZHbHQhR71ylsZ2MAZShJKsWN+X/z0a4hCIIWgr0r6EuDbRooS+j/RRwh+79y7+ID9H
-         8XysGsxXmj8uoD53iMJI7KRI8ohZ182F4jeXb58bYsFVQhiYvKx+lWUBWnCxQ/qa0/hQ
-         V7og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=+D1zF2DCKf5WB+zgoPewh33B5r7wz0pan/6d9WW6hok=;
-        b=D4ufVkvdAw4GhLEJ9crHfgKs2Uyg5ffEDF+LGSZQdRoHtRTckaSt01DbHTLrfw6/kS
-         vcRY8Y6rOsXMEcBkqVTTSnRn9shz3pijIZeRskI8MspioT6QaIqfXOVpuhTo6zDH1ub3
-         pQyt/BcRVPypNUYp7V/gwPc6/HRqiNcKE4cULj56rU0mEKw1ca6KvvZ3aJToSdaEQlR1
-         XTLUdP5Jn5W3BU9p5scSr436tGotUm6DBT27pQi7EXQWGlFjwgUpPSwdVzoFvY2ay9Ov
-         R+sAFH8SuKdMyDOeQenni/rzjSIUwz4Sm40rxLOM51v2dJWiXoordARepxE/s/AQIBHA
-         NozQ==
-X-Gm-Message-State: ACgBeo1umtcsMYK+Ls8u5I3Z/ms5siAFFq/8HUt6BJYAgqzlf1e8JCv/
-        jiWd+27p3n9yRt5Er3wKUXbdB+3jwlzqEkRmfbk=
-X-Google-Smtp-Source: AA6agR5TBxpXHT7EpPjr3B0WtXj0voQO9SYrcriDZuDPCVMzJ4RCjFZbbF1xi2RE0vkDpduSEesL7HuzsLCUCb48ul0=
-X-Received: by 2002:a05:6000:1c11:b0:21f:5abc:e777 with SMTP id
- ba17-20020a0560001c1100b0021f5abce777mr10629582wrb.221.1659468407472; Tue, 02
- Aug 2022 12:26:47 -0700 (PDT)
+        Tue, 2 Aug 2022 15:28:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C365932ECA;
+        Tue,  2 Aug 2022 12:28:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 722FD1FD18;
+        Tue,  2 Aug 2022 19:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659468489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bg9h887C8gVWobrXRdOT9+x2p3w/uvq6a0lh9g6ugdw=;
+        b=sPQYvAQERl6eWHdAPuPNsyhfaVCEmkC9r8nSCcKD4psu/To3u5G33OiKMg8Ee+at+kjS46
+        lY21UGgRR9gRSNkgmOd1CZ9ZVjw8h/UYU/VgJYTubmxycxMqNdzEp5hcoWkCXJEg3OXQXL
+        b2fRFFAs4LcTotsP2QVkgkgV65An0P8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659468489;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bg9h887C8gVWobrXRdOT9+x2p3w/uvq6a0lh9g6ugdw=;
+        b=gHBnpQbwmKAesnR9qkEQagwr1eS9+zywFq4ADlHcZMXXXuLNNmJJAeNUfpu2sHUUhVE1Y5
+        fffmCIMNujceztBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E1C1913A8E;
+        Tue,  2 Aug 2022 19:28:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ok4kKMh66WI/aQAAMHmgww
+        (envelope-from <ematsumiya@suse.de>); Tue, 02 Aug 2022 19:28:08 +0000
+Date:   Tue, 2 Aug 2022 16:28:06 -0300
+From:   Enzo Matsumiya <ematsumiya@suse.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-cifs@vger.kernel.org, smfrench@gmail.com, pc@cjr.nz,
+        ronniesahlberg@gmail.com, nspmangalore@gmail.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        tom@talpey.com, samba-technical@lists.samba.org,
+        pshilovsky@samba.org, jlayton@kernel.org, rpenny@samba.org
+Subject: Re: [RFC PATCH v2 0/5] Rename "cifs" module to "smbfs"
+Message-ID: <20220802192806.6ryronlqvus2ua26@cyberdelia>
+References: <20220802190048.19881-1-ematsumiya@suse.de>
+ <Yul5hBFmwoOQ0cxG@casper.infradead.org>
 MIME-Version: 1.0
-Reply-To: kristalinageorgieva5503@gmail.com
-Sender: group511930service@gmail.com
-Received: by 2002:a5d:6e8b:0:0:0:0:0 with HTTP; Tue, 2 Aug 2022 12:26:46 -0700 (PDT)
-From:   Kristalina Georgieva <kristalinageorgieva5503@gmail.com>
-Date:   Tue, 2 Aug 2022 19:26:46 +0000
-X-Google-Sender-Auth: 49WITtOwH_z0gd2oQNY42Iied3o
-Message-ID: <CAOx31BO4i8=05axpP-V+EtSxOW4hgF0rJoa01MczyFPiR3GUEA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yul5hBFmwoOQ0cxG@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,8 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good afternoon!
+On 08/02, Matthew Wilcox wrote:
+>On Tue, Aug 02, 2022 at 04:00:43PM -0300, Enzo Matsumiya wrote:
+>> Hi,
+>>
+>> As part of the ongoing effort to remove the "cifs" nomenclature from the
+>> Linux SMB client, I'm proposing the rename of the module to "smbfs".
+>>
+>> As it's widely known, CIFS is associated to SMB1.0, which, in turn, is
+>> associated with the security issues it presented in the past. Using
+>> "SMBFS" makes clear what's the protocol in use for outsiders, but also
+>> unties it from any particular protocol version. It also fits in the
+>> already existing "fs/smbfs_common" and "fs/ksmbd" naming scheme.
+>>
+>> This short patch series only changes directory names and includes/ifdefs in
+>> headers and source code, and updates docs to reflect the rename. Other
+>> than that, no source code/functionality is modified (WIP though).
+>
+>Why did you not reply to Jeff Layton's concern before posting a v2?
 
-Recently I have forwarded you a necessary documentation.
+Hm, I was pretty sure I did. Sorry about that, I got confused on how my
+mail client organized the replies to the initial thread.
 
-Have you already seen it?
+Replying to Jeff right now.

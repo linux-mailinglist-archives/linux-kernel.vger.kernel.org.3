@@ -2,125 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A9A587E52
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AD5587E57
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbiHBOqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S237244AbiHBOrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237056AbiHBOqG (ORCPT
+        with ESMTP id S237115AbiHBOrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:46:06 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302BA286C7;
-        Tue,  2 Aug 2022 07:46:05 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id d4so7097893ilc.8;
-        Tue, 02 Aug 2022 07:46:05 -0700 (PDT)
+        Tue, 2 Aug 2022 10:47:14 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BE01F620
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:47:10 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id x39so12707741lfu.7
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sTUnnkEh4NNYaXKOrpgiX4GocnwHMt13gQIUfZPwT5Q=;
+        b=XVHmeFYHUbieZS2wrbrZqk04cu4LCv8SG7DF2kaGzB1SWJ32c8gevXmNe9xqZglLn1
+         cJWzXbyni5EPpuMpGH3AU1O7WnYvQkzsbXuUqecRj47r5KPmbVz/JVJ6HNxnCVyZoUhG
+         3e/TlfR1SNnk8ddzRl+nXGOt0CPbDjeotLGHQlG1doSqx6RqlmNfsnY97hUcu3IVgha5
+         LaE/z73yq0MUrjGuswBnlh8ZiOmT6qNgXMqu6EFLx5pCWXW7RkNaH3OraUWRPIyryWbe
+         3ide4rBv4ovrEg6EP0pe71sO3TWU10/3eobcFnF59FPIp8VFf6PtejKoSYLAnsb63Tp1
+         1BXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YWdMhY/w6xJGnTNrD3+yPIQp9IMoWMfQJOwkWlFi+RQ=;
-        b=UkfW133lkPqM4U5g4pZNc5TWRf77vc0/jF1Ip42D0q+33NTLSi/zumy1ARwbUnRF7M
-         6Mg14nQJumaeG1GqJ3wn76MNOIkUhBLUaBzqXiG7OrPX7wChWJ8UpZJ/TmSFdCfRm9gw
-         H+Vm+3o8ID1fnpbZsf9WNZfLd0uMm1ctbQz+MQtipGj9BkwVqHNF0dY8KAC+UWzR9f3N
-         l2s3XN5ogPtppoTx3eegxt1MAQycLMzzlL9OGST4XGnZf5lWirBrqnAVbcx0Tvy7fnrf
-         GVhJe1WiVGY5I79cdpkEe/adU048JiRW75WO+wRvOIop1W3aS7d0tqKY3VhDMBjaNncs
-         k/PA==
-X-Gm-Message-State: ACgBeo3GPxPt2xFtkl2KvOq8n5dE9gzZmWWT+mFFqj5dDFw4ncW+0/v9
-        dvkDUf1zD8e1D2hGM/WwkQ==
-X-Google-Smtp-Source: AA6agR5WgaywX71Mi/tssUPXgR+p0/h9FgYemIjJDIjmuwbCJAULertTvwumkbhjtOaFmgv9kXdbvQ==
-X-Received: by 2002:a05:6e02:1d18:b0:2de:b805:99f1 with SMTP id i24-20020a056e021d1800b002deb80599f1mr3169607ila.61.1659451564182;
-        Tue, 02 Aug 2022 07:46:04 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j4-20020a026304000000b00341d7c43ed5sm6405840jac.73.2022.08.02.07.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 07:46:03 -0700 (PDT)
-Received: (nullmailer pid 79583 invoked by uid 1000);
-        Tue, 02 Aug 2022 14:46:02 -0000
-Date:   Tue, 2 Aug 2022 08:46:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sameer Pujar <spujar@nvidia.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, perex@perex.cz,
-        kuninori.morimoto.gx@renesas.com, alsa-devel@alsa-project.org,
-        broonie@kernel.org, tiwai@suse.com, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] ASoC: dt-bindings: Add schema for common DAI
- params
-Message-ID: <20220802144602.GA30116-robh@kernel.org>
-References: <1659370052-18966-1-git-send-email-spujar@nvidia.com>
- <1659370052-18966-2-git-send-email-spujar@nvidia.com>
- <1659382247.124005.1380281.nullmailer@robh.at.kernel.org>
- <982b3f0c-0b6c-d531-3d75-27d5ca1aabec@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sTUnnkEh4NNYaXKOrpgiX4GocnwHMt13gQIUfZPwT5Q=;
+        b=lo6ugcaPm/FKCHFK0Jfvlfq5RNVUwI3VBLVDHPbPKLOAp1Fzs2ASixNvKZQoS08NhH
+         DN54sBIKumbIgFngWNJIMNfKc+Lc+YlOoluWcuGy0SsAwzQp0vHBKCZMyyOo4ZOrbh79
+         YfSSkWRXEQXWp6NLyq8tqWrnBVuxi68HWhMbxRudswNAIoPBJoh9L8ur7FgGlmIp+ToM
+         7unpBLLznLswEIkcDu/cEPU4GDne46cxQItHfv4C2oNLs/gl0JbrArhosyaUaL4rcTX5
+         qGjhtY9veFsuV7HqUw+SZgnbscYAV+uNt8yoH4+s7W3I43CKGaDwj4+9iWXWB6suzxH6
+         dOQg==
+X-Gm-Message-State: AJIora92NuHHO/hXUp0ZLRSKn7fYe3exSoJqMC1gEslf2dXrrrBTHpls
+        SboUzHYngdKghhZPt6vORVyA+admZCMkLS1cbureGg==
+X-Google-Smtp-Source: AGRyM1ujOsv60zFk5C2kFsDffVdWhAxt1WaPDA4jhOgW9ZQumeIJ7JyANGSZtvcUz44wGhEEfQ7HaSNV4el+EBXK7ZE=
+X-Received: by 2002:a05:6512:21a7:b0:48a:a06e:1d21 with SMTP id
+ c7-20020a05651221a700b0048aa06e1d21mr7435055lft.494.1659451627302; Tue, 02
+ Aug 2022 07:47:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <982b3f0c-0b6c-d531-3d75-27d5ca1aabec@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220801201109.825284-1-pgonda@google.com> <20220801201109.825284-8-pgonda@google.com>
+ <20220802095437.fbho3bwgs3yi3fur@kamzik>
+In-Reply-To: <20220802095437.fbho3bwgs3yi3fur@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 2 Aug 2022 08:46:55 -0600
+Message-ID: <CAMkAt6qTBHhVhKBO3g6NR9=wiiE03Na3WrHiUzMo2G8-qY8JOQ@mail.gmail.com>
+Subject: Re: [V2 07/11] KVM: selftests: Consolidate boilerplate code in get_ucall()
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 04:15:28PM +0530, Sameer Pujar wrote:
-> Hi Rob, Krzysztof
-> 
-> On 02-08-2022 01:00, Rob Herring wrote:
-> > On Mon, 01 Aug 2022 21:37:30 +0530, Sameer Pujar wrote:
-> > > The "convert-channels" and "convert-rate" bindings are provided for both
-> > > simple-card and audio-graph-card. However these are separately defined in
-> > > their respective schemas. For any new binding addition, which is common to
-> > > both, there will be duplication.
-> > > 
-> > > Introduce a new schema to have common DAI params properties and these can
-> > > be re-used in other schemas wherever applicable.
-> > > 
-> > > Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> > > Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> > > ---
-> > >   .../bindings/sound/audio-graph-port.yaml           | 13 ++++------
-> > >   .../devicetree/bindings/sound/audio-graph.yaml     |  7 +++---
-> > >   .../devicetree/bindings/sound/dai-params.yaml      | 28 ++++++++++++++++++++++
-> > >   .../devicetree/bindings/sound/simple-card.yaml     | 16 ++++---------
-> > >   4 files changed, 40 insertions(+), 24 deletions(-)
-> > >   create mode 100644 Documentation/devicetree/bindings/sound/dai-params.yaml
-> > > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/simple-card.yaml: properties:simple-audio-card,convert-rate: 'oneOf' conditional failed, one must be fixed:
-> >          'type' is a required property
-> >                  hint: A vendor boolean property can use "type: boolean"
-> >          'description' is a required property
-> >                  hint: A vendor boolean property can use "type: boolean"
-> >          Additional properties are not allowed ('$ref' was unexpected)
-> >                  hint: A vendor boolean property can use "type: boolean"
-> >          /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/simple-card.yaml: properties:simple-audio-card,convert-rate: 'oneOf' conditional failed, one must be fixed:
-> >                  'enum' is a required property
-> >                  'const' is a required property
-> >                  hint: A vendor string property with exact values has an implicit type
-> >                  from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> >          '/schemas/sound/dai-params.yaml#/properties/dai-sample-rate' does not match 'types.yaml#/definitions/'
-> >                  hint: A vendor property needs a $ref to types.yaml
-> >          '/schemas/sound/dai-params.yaml#/properties/dai-sample-rate' does not match '^#/(definitions|\\$defs)/'
-> >                  hint: A vendor property can have a $ref to a a $defs schema
-> >          hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-> >          from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-> 
-> I am hitting this error if I use properties/definitions from another schema.
-> If I define it locally, it works. I see there are examples where properties
-> from different schema are used. But not able to understand why errors are
-> seen in my case. Am I missing anything here?
+On Tue, Aug 2, 2022 at 3:54 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Mon, Aug 01, 2022 at 01:11:05PM -0700, Peter Gonda wrote:
+> > From: Sean Christopherson <seanjc@google.com>
+> >
+> > Consolidate the actual copying of a ucall struct from guest=>host into
+> > the common get_ucall().  Return a host virtual address instead of a guest
+> > virtual address even though the addr_gva2hva() part could be moved to
+> > get_ucall() too.  Conceptually, get_ucall() is invoked from the host and
+> > should return a host virtual address (and returning NULL for "nothing to
+> > see here" is far superior to returning 0).
+>
+> The code does not match this description anymore, now that
+> ucall_arch_get_ucall() returns a gva (as a uint64_t), but the description
+> is good, the code is wrong. Please restore the spirit of Sean's patch
+> (particularly because it still says it's from Sean...)
 
-You either need to use 'properties' with actual property names and 
-reference that schema from the node level. Or you use '$defs' if you are 
-going to have references from the (DT) property level. I think I'd just 
-leave simple-card out of this and do the former.
+As discussed in the encrypted ucall patch I'll get this fixed up to
+return gva from ucall_arch_get_ucall() and return a vm_addr_t.
+
+>
+> Thanks,
+> drew
+>
+> >
+> > Use pointer shenanigans instead of an unnecessary bounce buffer when the
+> > caller of get_ucall() provides a valid pointer.
+> >
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > ---
+> >  .../selftests/kvm/include/ucall_common.h      |  8 ++------
+> >  .../testing/selftests/kvm/lib/aarch64/ucall.c | 13 +++----------
+> >  tools/testing/selftests/kvm/lib/riscv/ucall.c | 19 +++----------------
+> >  tools/testing/selftests/kvm/lib/s390x/ucall.c | 16 +++-------------
+> >  .../testing/selftests/kvm/lib/ucall_common.c  | 19 +++++++++++++++++++
+> >  .../testing/selftests/kvm/lib/x86_64/ucall.c  | 16 +++-------------
+> >  6 files changed, 33 insertions(+), 58 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+> > index 5a85f5318bbe..c1bc8e33ef3f 100644
+> > --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> > +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> > @@ -27,9 +27,10 @@ struct ucall {
+> >  void ucall_arch_init(struct kvm_vm *vm, void *arg);
+> >  void ucall_arch_uninit(struct kvm_vm *vm);
+> >  void ucall_arch_do_ucall(vm_vaddr_t uc);
+> > -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+> >
+> >  void ucall(uint64_t cmd, int nargs, ...);
+> > +uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> >
+> >  static inline void ucall_init(struct kvm_vm *vm, void *arg)
+> >  {
+> > @@ -41,11 +42,6 @@ static inline void ucall_uninit(struct kvm_vm *vm)
+> >       ucall_arch_uninit(vm);
+> >  }
+> >
+> > -static inline uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > -{
+> > -     return ucall_arch_get_ucall(vcpu, uc);
+> > -}
+> > -
+> >  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)       \
+> >                               ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+> >  #define GUEST_SYNC(stage)    ucall(UCALL_SYNC, 2, "hello", stage)
+> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > index 1c81a6a5c1f2..d2f099caa9ab 100644
+> > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > @@ -78,24 +78,17 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >  uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> > -     struct ucall ucall = {};
+> > -
+> > -     if (uc)
+> > -             memset(uc, 0, sizeof(*uc));
+> >
+> >       if (run->exit_reason == KVM_EXIT_MMIO &&
+> >           run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
+> > -             vm_vaddr_t gva;
+> > +             uint64_t ucall_addr;
+> >
+> >               TEST_ASSERT(run->mmio.is_write && run->mmio.len == 8,
+> >                           "Unexpected ucall exit mmio address access");
+> >               memcpy(&gva, run->mmio.data, sizeof(gva));
+> > -             memcpy(&ucall, addr_gva2hva(vcpu->vm, gva), sizeof(ucall));
+> >
+> > -             vcpu_run_complete_io(vcpu);
+> > -             if (uc)
+> > -                     memcpy(uc, &ucall, sizeof(ucall));
+> > +             return ucall_addr;
+> >       }
+> >
+> > -     return ucall.cmd;
+> > +     return 0;
+> >  }
+> > diff --git a/tools/testing/selftests/kvm/lib/riscv/ucall.c b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > index b1598f418c1f..3f000d0b705f 100644
+> > --- a/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/riscv/ucall.c
+> > @@ -51,27 +51,15 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >                 uc, 0, 0, 0, 0, 0);
+> >  }
+> >
+> > -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> > -     struct ucall ucall = {};
+> > -
+> > -     if (uc)
+> > -             memset(uc, 0, sizeof(*uc));
+> >
+> >       if (run->exit_reason == KVM_EXIT_RISCV_SBI &&
+> >           run->riscv_sbi.extension_id == KVM_RISCV_SELFTESTS_SBI_EXT) {
+> >               switch (run->riscv_sbi.function_id) {
+> >               case KVM_RISCV_SELFTESTS_SBI_UCALL:
+> > -                     memcpy(&ucall,
+> > -                            addr_gva2hva(vcpu->vm, run->riscv_sbi.args[0]),
+> > -                            sizeof(ucall));
+> > -
+> > -                     vcpu_run_complete_io(vcpu);
+> > -                     if (uc)
+> > -                             memcpy(uc, &ucall, sizeof(ucall));
+> > -
+> > -                     break;
+> > +                     return vcpu->vm, run->riscv_sbi.args[0];
+> >               case KVM_RISCV_SELFTESTS_SBI_UNEXP:
+> >                       vcpu_dump(stderr, vcpu, 2);
+> >                       TEST_ASSERT(0, "Unexpected trap taken by guest");
+> > @@ -80,6 +68,5 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >                       break;
+> >               }
+> >       }
+> > -
+> > -     return ucall.cmd;
+> > +     return 0;
+> >  }
+> > diff --git a/tools/testing/selftests/kvm/lib/s390x/ucall.c b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > index 114cb4af295f..f7a5a7eb4aa8 100644
+> > --- a/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/s390x/ucall.c
+> > @@ -20,13 +20,9 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >       asm volatile ("diag 0,%0,0x501" : : "a"(uc) : "memory");
+> >  }
+> >
+> > -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> > -     struct ucall ucall = {};
+> > -
+> > -     if (uc)
+> > -             memset(uc, 0, sizeof(*uc));
+> >
+> >       if (run->exit_reason == KVM_EXIT_S390_SIEIC &&
+> >           run->s390_sieic.icptcode == 4 &&
+> > @@ -34,13 +30,7 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >           (run->s390_sieic.ipb >> 16) == 0x501) {
+> >               int reg = run->s390_sieic.ipa & 0xf;
+> >
+> > -             memcpy(&ucall, addr_gva2hva(vcpu->vm, run->s.regs.gprs[reg]),
+> > -                    sizeof(ucall));
+> > -
+> > -             vcpu_run_complete_io(vcpu);
+> > -             if (uc)
+> > -                     memcpy(uc, &ucall, sizeof(ucall));
+> > +             return run->s.regs.gprs[reg];
+> >       }
+> > -
+> > -     return ucall.cmd;
+> > +     return 0;
+> >  }
+> > diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > index 749ffdf23855..a060252bab40 100644
+> > --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> > +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > @@ -18,3 +18,22 @@ void ucall(uint64_t cmd, int nargs, ...)
+> >
+> >       ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> >  }
+> > +
+> > +uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +{
+> > +     struct ucall ucall;
+> > +     void *addr;
+> > +
+> > +     if (!uc)
+> > +             uc = &ucall;
+> > +
+> > +     addr = addr_gva2hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
+> > +     if (addr) {
+> > +             memcpy(uc, addr, sizeof(*uc));
+> > +             vcpu_run_complete_io(vcpu);
+> > +     } else {
+> > +             memset(uc, 0, sizeof(*uc));
+> > +     }
+> > +
+> > +     return uc->cmd;
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > index 9f532dba1003..24746120a593 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
+> > @@ -22,25 +22,15 @@ void ucall_arch_do_ucall(vm_vaddr_t uc)
+> >               : : [port] "d" (UCALL_PIO_PORT), "D" (uc) : "rax", "memory");
+> >  }
+> >
+> > -uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > +uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+> >  {
+> >       struct kvm_run *run = vcpu->run;
+> > -     struct ucall ucall = {};
+> > -
+> > -     if (uc)
+> > -             memset(uc, 0, sizeof(*uc));
+> >
+> >       if (run->exit_reason == KVM_EXIT_IO && run->io.port == UCALL_PIO_PORT) {
+> >               struct kvm_regs regs;
+> >
+> >               vcpu_regs_get(vcpu, &regs);
+> > -             memcpy(&ucall, addr_gva2hva(vcpu->vm, (vm_vaddr_t)regs.rdi),
+> > -                    sizeof(ucall));
+> > -
+> > -             vcpu_run_complete_io(vcpu);
+> > -             if (uc)
+> > -                     memcpy(uc, &ucall, sizeof(ucall));
+> > +             return regs.rdi;
+> >       }
+> > -
+> > -     return ucall.cmd;
+> > +     return 0;
+> >  }
+> > --
+> > 2.37.1.455.g008518b4e5-goog
+> >

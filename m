@@ -2,143 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F70587B6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A2D587B6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 13:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236999AbiHBLPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 07:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S236964AbiHBLQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 07:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236944AbiHBLO4 (ORCPT
+        with ESMTP id S237020AbiHBLPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 07:14:56 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71CD51429;
-        Tue,  2 Aug 2022 04:14:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id i13so17148671edj.11;
-        Tue, 02 Aug 2022 04:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=Q2ZorbTmwuDDxNcSA+CRBMBDw68FJCVnA16N7n1OJ/A=;
-        b=GcVjzh0/p/KZxLPeq9Lz5V9KkQ42dJ5jDt3hPxamKoboGjTcWIZzyWnJsflK2gDYLG
-         5U8G9FdO3l+Gp2VJb0vhMjbmtvXE4xfmjUcybdMpAw6PHSqqZWOCkEuIzgSJsNJcKLTc
-         oCpbLjQEsyYroswpxkE2M3KeQVi8Q++wZUcUjrbMpFV+yoKLptXNx43WPtWhpmWxz6jB
-         b33HyGAnSgnzBAApBZwqbYlYfxNkYZeB/JJK5BBtoA70UTiqPLP4Oop4GQxvsPRVfOy9
-         wMFvMItd8yiNBtH4NEwjuv2QeU7z1Zl9YrpKb2IgqduySvRnbp5ZjrGXid1hq12IlkYW
-         qRWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=Q2ZorbTmwuDDxNcSA+CRBMBDw68FJCVnA16N7n1OJ/A=;
-        b=EAfWSu1jD7WPmtGdFQU6lQCNu33KujoL9FHCCZLJjx9W63QUFtPE5YDWVhAKuChTJc
-         XvTekF7WTexzA66gQduN5cFQ5pX2AmtXZ5pjlgR4j5uGHu3/XLdM5CKJSkUpMIxfKkXU
-         /3jWtdHjUqmDW3oKy4BaXdeWnjxdZIvNIVn4ebwPB0bGQ1x/AMUOpT/cZnA20vmI0k6S
-         Yj/TmHEVlIhiyUGKQO8OAYui0yoOSuOwvpaJRiMESomQNpBWAf3ts/4EL6xpYcMhsX09
-         Rx+PCV0yg8npSnThmNqVP19usHuz+0isBXa4eg6L2c8xIKha+izt3ZouBcb/lmxoaVf3
-         uuZA==
-X-Gm-Message-State: ACgBeo1AgVtg9+r7AxUxj/zjjJlJh0W8Vehx6sPSeOsj/gtkF6/7TaLB
-        MRxYmoY5LMbcUeOTTptcZfO9nUbh4dUlyA==
-X-Google-Smtp-Source: AA6agR5UcuaS8vPj9XcBz003e15FHdv+aI5UwWD92shAWBxTd8rRwTZEqw39EWLljnGhUdgQ0+OIJg==
-X-Received: by 2002:a05:6402:14b:b0:43d:a7dd:4376 with SMTP id s11-20020a056402014b00b0043da7dd4376mr8621228edu.89.1659438879075;
-        Tue, 02 Aug 2022 04:14:39 -0700 (PDT)
-Received: from krava ([83.240.61.12])
-        by smtp.gmail.com with ESMTPSA id kx6-20020a170907774600b00724261b592esm6138051ejc.186.2022.08.02.04.14.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 04:14:38 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 2 Aug 2022 13:14:36 +0200
-To:     Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH bpf-next v1] bpf, iter: clean up bpf_seq_read().
-Message-ID: <YukHHCF0DA6Xb/Rf@krava>
-References: <20220801205039.2755281-1-haoluo@google.com>
+        Tue, 2 Aug 2022 07:15:40 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E8418B3F;
+        Tue,  2 Aug 2022 04:15:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lxspq5mcDz4x1P;
+        Tue,  2 Aug 2022 21:15:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659438916;
+        bh=QUd6PC2Si9JD8mo+JkMA5SafHzZ0731ZhqbEwcSaXJE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OKnuybTApefW3m2zs2oGXCdRishriCtmSW4T2xlKbFjRyRvkkXlPz4XQu2L8O0DCn
+         aAMr/nrOZLjsE29c2uHvHC8ohh9YbosZMpduZiwzQrkXSaQqOarrhv+vaHjEv8FU2V
+         R+Y+UETZJBMYDbdAPusbFDS6hQTBrHAr2B2ztUdfd1a+jNIaugE/JLOE6dNaQirsVD
+         P/eaFSzleC+g5qSR+FErP1Gj5mIQZlfEzAnq9DTuJyvesQ9//GGLJ3BaUWqpBAuSmv
+         46gJgdOg4NdKl88iZknrEq8l30I2QPJEzqOb4kDEIwZirLlfq7EbJAiPubwuGNcEse
+         mU0EriPxZC6yg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-edac@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] EDAC/ppc_4xx: Include required of_irq header directly
+In-Reply-To: <993f5a7da371458cb819b5f3f569073c78523b01.1659436180.git.christophe.leroy@csgroup.eu>
+References: <993f5a7da371458cb819b5f3f569073c78523b01.1659436180.git.christophe.leroy@csgroup.eu>
+Date:   Tue, 02 Aug 2022 21:15:15 +1000
+Message-ID: <87zggmaocc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801205039.2755281-1-haoluo@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 01:50:39PM -0700, Hao Luo wrote:
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Commit 4d5c5bad5193 ("powerpc: Remove asm/prom.h from asm/mpc52xx.h
+> and asm/pci.h") that cleans up powerpc's asm/prom.h leads to build
+> errors in ppc4xx_edac.c due to missing header. Include required
+> header directly to avoid the build failure.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 4d5c5bad5193 ("powerpc: Remove asm/prom.h from asm/mpc52xx.h and asm/pci.h")
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  drivers/edac/ppc4xx_edac.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-SNIP
+I'll pick this up as I merged the commit that broke it.
 
-> +static int do_seq_show(struct seq_file *seq, void *p, size_t offs)
-> +{
-> +	int err;
-> +
-> +	WARN_ON(IS_ERR_OR_NULL(p));
-> +
-> +	err = seq->op->show(seq, p);
-> +	if (err > 0) {
-> +		/* object is skipped, decrease seq_num, so next
-> +		 * valid object can reuse the same seq_num.
-> +		 */
-> +		bpf_iter_dec_seq_num(seq);
-> +		seq->count = offs;
-> +		return err;
-> +	}
-> +
-> +	if (err < 0 || seq_has_overflowed(seq)) {
-> +		seq->count = offs;
-> +		return err ? err : -E2BIG;
-> +	}
-> +
-> +	/* err == 0 and no overflow */
-> +	return 0;
-> +}
-> +
-> +/* do_seq_stop, stops at the given object 'p'. 'p' could be an ERR or NULL. If
-> + * 'p' is an ERR or there was an overflow, reset seq->count to 'offs' and
-> + * returns error. Returns 0 otherwise.
-> + */
-> +static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
-> +{
-> +	if (IS_ERR(p)) {
-> +		seq->op->stop(seq, NULL);
-> +		seq->count = offs;
+cheers
 
-should we set seq->count to 0 in case of error?
-
-jirka
-
-> +		return PTR_ERR(p);
-> +	}
-> +
-> +	seq->op->stop(seq, p);
-> +	if (!p) {
-> +		if (!seq_has_overflowed(seq)) {
-> +			bpf_iter_done_stop(seq);
-> +		} else {
-> +			seq->count = offs;
-> +			if (offs == 0)
-> +				return -E2BIG;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
->  /* maximum visited objects before bailing out */
->  #define MAX_ITER_OBJECTS	1000000
+> diff --git a/drivers/edac/ppc4xx_edac.c b/drivers/edac/ppc4xx_edac.c
+> index 6793f6d799e7..0bc670778c99 100644
+> --- a/drivers/edac/ppc4xx_edac.c
+> +++ b/drivers/edac/ppc4xx_edac.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/types.h>
 >  
-
-SNIP
+> -- 
+> 2.36.1

@@ -2,91 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4ED58835C
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CEF58835E
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 23:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiHBVVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 17:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S231909AbiHBVVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 17:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiHBVVJ (ORCPT
+        with ESMTP id S229485AbiHBVVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:21:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59F4BC88;
-        Tue,  2 Aug 2022 14:21:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 651EE614FC;
-        Tue,  2 Aug 2022 21:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F279C433C1;
-        Tue,  2 Aug 2022 21:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659475265;
-        bh=PUqEeO+GLm9+nx051DoVWrljhcKSN1GEPZE+s1wniz0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X0iYOOetTx7VBG1bw1B40MG1KGmED3sh/YX2xRyJlx+5NygaVYGGfkE5AE3nAi0XM
-         OMgwTDPP/V6QTUAGcAjk8jHrDousLsxSOw5O6o96z5nYowdYlOsa2i4iTKg/5zFfwI
-         iownstjvS4E8K9vvsd0uqPTmr7eCAw9UGYzXg9Q1TC1TXnM/kZ/8FnG3qAMBTRCFSc
-         fCef3g2uEzzMT5nMnfld8Q6d8rhs9pFS7YofCMi8jneqO5qEGcMUIYDIYOlUSL3eoM
-         cMz9egbO/a2Oma850SBxC2FB1PGBP+60+DnSy1phk5lydnMWqcp038VzMvCkgGDbOW
-         J35BYu8qdUehw==
-Date:   Tue, 2 Aug 2022 17:21:04 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Geliang Tang <geliang.tang@suse.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 5.18 72/88] mptcp: dont send RST for single subflow
-Message-ID: <YumVQNNn3xS2Hf/C@sashalap>
-References: <20220801114138.041018499@linuxfoundation.org>
- <20220801114141.321741611@linuxfoundation.org>
- <9ff367ab-bd52-3c3a-a62-2ade761b18f@linux.intel.com>
+        Tue, 2 Aug 2022 17:21:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A2C2F663;
+        Tue,  2 Aug 2022 14:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659475300; x=1691011300;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kK0hPRdSyvWlZo38p4QMgn/ySqgObmyyzYJGxFidk7g=;
+  b=l+9Ut9bwPznKk2SEo1deNvWRc4tQaEoiD0ak0+m5r/OO6uCaXa2nN+Yu
+   mrNTTahAkrl3f/B5yIMYbLgV/qBawOrjyYDtH79mkFfx0us4Zosbb7rJr
+   HcPnI7mgw5QpdBBc7k+YdKhNIPAfG2wTJlO5szhhfcKXT9TDrBx6xDYTo
+   gaSkxH6EVOatub0rb/YBDIch9XuUA4Dic0DZZjGXV1focUJgIR5IDuqnv
+   eUa8J8Q4VRoRZfiWEE/w18lIP0UPLGgG6tbaiQLU3PrXsNJPqLXuh1fEu
+   N9Yawbld8vwIxOUc/5YhQwcktyBVfYH+zSTJp09OTFVoiiWxRbwUv1FUL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289533759"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="289533759"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 14:21:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="692001798"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2022 14:21:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C211EF7; Wed,  3 Aug 2022 00:21:47 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kurt Kanzenbach <kurt@linutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next v1 1/1] net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
+Date:   Wed,  3 Aug 2022 00:21:44 +0300
+Message-Id: <20220802212144.6743-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <9ff367ab-bd52-3c3a-a62-2ade761b18f@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 01:52:15PM -0700, Mat Martineau wrote:
->On Mon, 1 Aug 2022, Greg Kroah-Hartman wrote:
->
->>From: Geliang Tang <geliang.tang@suse.com>
->>
->>[ Upstream commit 1761fed2567807f26fbd53032ff622f55978c7a9 ]
->>
->>When a bad checksum is detected and a single subflow is in use, don't
->>send RST + MP_FAIL, send data_ack + MP_FAIL instead.
->>
->>So invoke tcp_send_active_reset() only when mptcp_has_another_subflow()
->>is true.
->>
->>Signed-off-by: Geliang Tang <geliang.tang@suse.com>
->>Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
->>Signed-off-by: David S. Miller <davem@davemloft.net>
->>Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Hi Greg -
->
->Please drop this patch from the 5.18-stable queue. It was the first of 
->an 8-patch series and doesn't really stand alone.
->
->This commit message lacks the Fixes: tag and the magic commit message 
->words that I've seen the scripts pick up, so I'm curious: was this 
->patch selected by hand?
+LED core provides a helper to parse default state from firmware node.
+Use it instead of custom implementation.
 
-Yup, between the commit message and the code itself, it looked like a
-fix for AUTOSEL.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/dsa/hirschmann/hellcreek_ptp.c | 45 ++++++++++++----------
+ 1 file changed, 24 insertions(+), 21 deletions(-)
 
+diff --git a/drivers/net/dsa/hirschmann/hellcreek_ptp.c b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+index b28baab6d56a..793b2c296314 100644
+--- a/drivers/net/dsa/hirschmann/hellcreek_ptp.c
++++ b/drivers/net/dsa/hirschmann/hellcreek_ptp.c
+@@ -297,7 +297,8 @@ static enum led_brightness hellcreek_led_is_gm_get(struct led_classdev *ldev)
+ static int hellcreek_led_setup(struct hellcreek *hellcreek)
+ {
+ 	struct device_node *leds, *led = NULL;
+-	const char *label, *state;
++	enum led_default_state state;
++	const char *label;
+ 	int ret = -EINVAL;
+ 
+ 	of_node_get(hellcreek->dev->of_node);
+@@ -318,16 +319,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
+ 	ret = of_property_read_string(led, "label", &label);
+ 	hellcreek->led_sync_good.name = ret ? "sync_good" : label;
+ 
+-	ret = of_property_read_string(led, "default-state", &state);
+-	if (!ret) {
+-		if (!strcmp(state, "on"))
+-			hellcreek->led_sync_good.brightness = 1;
+-		else if (!strcmp(state, "off"))
+-			hellcreek->led_sync_good.brightness = 0;
+-		else if (!strcmp(state, "keep"))
+-			hellcreek->led_sync_good.brightness =
+-				hellcreek_get_brightness(hellcreek,
+-							 STATUS_OUT_SYNC_GOOD);
++	state = led_init_default_state_get(of_fwnode_handle(led));
++	switch (state) {
++	case LEDS_DEFSTATE_ON:
++		hellcreek->led_sync_good.brightness = 1;
++		break;
++	case LEDS_DEFSTATE_KEEP:
++		hellcreek->led_sync_good.brightness =
++				hellcreek_get_brightness(hellcreek, STATUS_OUT_SYNC_GOOD);
++		break;
++	default:
++		hellcreek->led_sync_good.brightness = 0;
+ 	}
+ 
+ 	hellcreek->led_sync_good.max_brightness = 1;
+@@ -344,16 +346,17 @@ static int hellcreek_led_setup(struct hellcreek *hellcreek)
+ 	ret = of_property_read_string(led, "label", &label);
+ 	hellcreek->led_is_gm.name = ret ? "is_gm" : label;
+ 
+-	ret = of_property_read_string(led, "default-state", &state);
+-	if (!ret) {
+-		if (!strcmp(state, "on"))
+-			hellcreek->led_is_gm.brightness = 1;
+-		else if (!strcmp(state, "off"))
+-			hellcreek->led_is_gm.brightness = 0;
+-		else if (!strcmp(state, "keep"))
+-			hellcreek->led_is_gm.brightness =
+-				hellcreek_get_brightness(hellcreek,
+-							 STATUS_OUT_IS_GM);
++	state = led_init_default_state_get(of_fwnode_handle(led));
++	switch (state) {
++	case LEDS_DEFSTATE_ON:
++		hellcreek->led_is_gm.brightness = 1;
++		break;
++	case LEDS_DEFSTATE_KEEP:
++		hellcreek->led_is_gm.brightness =
++				hellcreek_get_brightness(hellcreek, STATUS_OUT_IS_GM);
++		break;
++	default:
++		hellcreek->led_is_gm.brightness = 0;
+ 	}
+ 
+ 	hellcreek->led_is_gm.max_brightness = 1;
 -- 
-Thanks,
-Sasha
+2.35.1
+

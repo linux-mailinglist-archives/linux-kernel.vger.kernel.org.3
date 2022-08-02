@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D8A588119
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F42C588124
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 19:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiHBReC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 13:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S232681AbiHBRgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 13:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiHBRd6 (ORCPT
+        with ESMTP id S231450AbiHBRgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 13:33:58 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C22B21242;
-        Tue,  2 Aug 2022 10:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659461637; x=1690997637;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Xg0j2fV5pjKaMVpU3vjT96qHabloA6UA5+zz85rlDHc=;
-  b=TBJgClY5ZqJ0hhVX5mzw3mUfTGec7Gh0qPMw47D85m3grIplpgkkW8OT
-   XytW3fP5xBHH/x1AanccSwpq1zghsUnwVUutGA8v8P+RPb4S50fGZdxWI
-   qwcO3Yui2b+GBoc58a8Sl1SUwgW2rs6iIVcWR9ZssfV0BVCiiTW6u/74T
-   o=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Aug 2022 10:33:56 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 10:33:55 -0700
-Received: from [10.110.16.211] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 2 Aug 2022
- 10:33:54 -0700
-Message-ID: <23ae507d-1a01-9a33-52fb-73ac9efca8aa@quicinc.com>
-Date:   Tue, 2 Aug 2022 10:33:39 -0700
+        Tue, 2 Aug 2022 13:36:43 -0400
+Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [IPv6:2001:67c:1be8::25:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC6DF00;
+        Tue,  2 Aug 2022 10:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Cc:To:From:Sender:
+        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+        :Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/XIWlzqkr1Js3B0BB649mTkJR8GdTs5awWpSmRtzimU=; b=DYxK+YN8QnkGK/pQ5PewvbG0Xv
+        2TAU9t48tYA1cJuRBgw8hSX/9yrkqa7mI31CL0kU0lNeB8iQWYf7TpajxxaWUv6o5y9T15ZSHZG9t
+        pjqcIRwDsP1eaEkLVUYVQU2DhrcQPKHDoH8RttlVqMLu5Wvm750mWd+2EpxzAo7OoQa+TztaDrOiM
+        EU1Gs9UJHEZdmsOZMrhcu1GRqvMOvgf1VbzC+sUDrVf+bLOdbq9dT0OJThMzRAB9fQD0Fr+ghdvBn
+        bKoWfHucaHUIkpmQMPr/FndznXt/UYIk7PpVObmI1JjDzK14nSZLry/sNcXzkZnoxgkA6P6cBCuhy
+        F1Jk6wOg==;
+Received: from a82-197-11-249.mpynet.fi ([82.197.11.249]:55982 helo=localhost)
+        by mailserv1.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maukka@ext.kapsi.fi>)
+        id 1oIvon-008Ymu-9I; Tue, 02 Aug 2022 20:36:34 +0300
+Received: by localhost (sSMTP sendmail emulation); Tue, 02 Aug 2022 20:36:31 +0300
+From:   Mauri Sandberg <maukka@ext.kapsi.fi>
+To:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     bhelgaas@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+        sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, lpieralisi@kernel.org, kw@linux.com,
+        thomas.petazzoni@bootlin.com, pali@kernel.org,
+        Mauri Sandberg <maukka@ext.kapsi.fi>
+Date:   Tue,  2 Aug 2022 20:34:21 +0300
+Message-Id: <20220802173423.47230-1-maukka@ext.kapsi.fi>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220718202843.6766-1-maukka@ext.kapsi.fi>
+References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v12 0/9] Coresight: Add support for TPDM and TPDA
-Content-Language: en-US
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20220710021032.27455-1-quic_jinlmao@quicinc.com>
- <3f714c34-277d-ef71-b527-f758172160f9@quicinc.com>
- <20260db2-8c7e-e2b6-2385-74f433e4b55e@quicinc.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <20260db2-8c7e-e2b6-2385-74f433e4b55e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 82.197.11.249
+X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: [PATCH v2 0/2] PCI: mvebu: add support for orion soc
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello all,
+
+Here a cleaned up version of the previous series.
+
+Changes
+ - instead of removing PCIe related mvebu windows add them in pcie_setup()
+
+I intentionally left the ORION5X_PCIE_WA_VIRT_BASE in place as all pieces
+in the puzzle have not found their place yet. It will be replaced with
+ioremap() or similar when the problem of passing the address to
+configuration space from a device tree is solved.
+
+Tested with DNS323 both DT and non-DT builds.
+
+Thanks,
+Mauri
+
+Mauri Sandberg (2):
+  dt-bindings: PCI: mvebu: Add orion5x compatible
+  PCI: mvebu: add support for orion5x
+
+ .../devicetree/bindings/pci/mvebu-pci.txt     |  1 +
+ arch/arm/mach-orion5x/common.c                | 13 ----
+ arch/arm/mach-orion5x/pci.c                   | 14 +++++
+ drivers/pci/controller/Kconfig                |  2 +-
+ drivers/pci/controller/pci-mvebu.c            | 59 +++++++++++++++++++
+ 5 files changed, 75 insertions(+), 14 deletions(-)
 
 
-On 8/2/2022 7:43 AM, Jinlong Mao wrote:
-> Hi Reviewers,
-> 
-> Please help to review V12 series of TPDM/TPDA patches.
-> 
-> Thanks
-> 
-
-Suzuki and Mathieu, we are almost there it seems in getting the 
-acceptance of these patches, so I hope you find the time to review these 
-patches. I guess it is almost a year now for these patches and had a 
-good amount of reviews and revisions :)
-
----Trilok Soni
+base-commit: 7d0d3fa7339ed5a06d6608b7cde9f079eba62bb1
+--
+2.25.1

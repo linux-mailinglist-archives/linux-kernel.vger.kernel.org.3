@@ -2,187 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B365A58751F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDCE587524
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 03:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiHBBlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 21:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S235377AbiHBBqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 21:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbiHBBlr (ORCPT
+        with ESMTP id S231389AbiHBBp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 21:41:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED21836F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:41:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFB7EB81624
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588EAC433D6;
-        Tue,  2 Aug 2022 01:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659404503;
-        bh=t/fKJPC3nkSuPHZydD7hHIqWuTS2YprxFWHmP6K1j7Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lOvN2Hqe9BFF2CjdZi4YiWsLDiqMoVNlE3OxhGkIkDitkLzVE0TSRkErXGdTQ7PdE
-         3xkASBgR2Nocikr2Jfaq7/hu2dB9jm4e71Cl5uk5bLko/GryZVXB+3sSIhCUYdbnsw
-         CLmPzajrmkOKSAIL37EAGP08CNUWYE3VE3C/gbao/Y3Yrfd1oEnYly6GNoOVHl+e8R
-         88/9EbYvQLjdsby4uj6p22X4A9OgIXEn5nczXeZ3IcEqOnoA7qLQRFNG/buG8XLVfR
-         Ykytx5kVSJuJcrG7Guo0YiTbPHBM4YT672HmLFNkoKbtHSJ8Vq3vlpiFRyg6uWCu62
-         2af3UPUZn6q/g==
-Date:   Mon, 1 Aug 2022 18:41:41 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Daeho Jeong <daeho43@gmail.com>
-Cc:     Ye Bin <yebin10@huawei.com>, Chao Yu <chao@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH -next v2] f2fs: fix null-ptr-deref in
- f2fs_get_dnode_of_data
-Message-ID: <YuiA1UcEV8PnUXeU@google.com>
-References: <20220801112604.3406642-1-yebin10@huawei.com>
- <CACOAw_yes-aq2EMvXA6hCmV9FLXtRXXwaMW2iB3d7ynjPKa78Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACOAw_yes-aq2EMvXA6hCmV9FLXtRXXwaMW2iB3d7ynjPKa78Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 Aug 2022 21:45:59 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64C27CC7
+        for <linux-kernel@vger.kernel.org>; Mon,  1 Aug 2022 18:45:56 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220802014555epoutp018d58fefe8c120ff1466d74c435d4d360~HY9U0FY7d2943429434epoutp01I
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 01:45:55 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220802014555epoutp018d58fefe8c120ff1466d74c435d4d360~HY9U0FY7d2943429434epoutp01I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659404755;
+        bh=Q956tALq6kvKLNuJeQDGrC56P4MalXRdUlX1/LqVvak=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=KA2BJdFdnoLMt9bbjwLUTPpFDnosmIre/nkOmhn/T1MC4Gs/BTxdeIJC1BaXqppd0
+         T09HXX+7YgMwnYSDiqh7qNbt5Vs4hpBZbPeRlmuSkFDhM3+9EyqPi40kDuMe2fsMmE
+         N9M/vsVI8DQGheCBHPm9RRKwdZl0Xc58hXu/Qr2c=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220802014554epcas2p47d16d5368e5966106ba33ca66ee34592~HY9UE2u9Y1398513985epcas2p4X;
+        Tue,  2 Aug 2022 01:45:54 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lxd9s2drKz4x9Q2; Tue,  2 Aug
+        2022 01:45:53 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.95.09662.1D188E26; Tue,  2 Aug 2022 10:45:53 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220802014552epcas2p236519c03464ab32d9a877887710b1c10~HY9SxpeNi2956229562epcas2p2I;
+        Tue,  2 Aug 2022 01:45:52 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220802014552epsmtrp25687b3c86d3a62cbba76d37917a81bdb~HY9SwrOih0405604056epsmtrp2m;
+        Tue,  2 Aug 2022 01:45:52 +0000 (GMT)
+X-AuditID: b6c32a48-9f7ff700000025be-78-62e881d1a865
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1A.94.08905.0D188E26; Tue,  2 Aug 2022 10:45:52 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220802014552epsmtip2b6e0a15be128dbf8bcbe0afe2596aea2~HY9ShJ_Sg2693826938epsmtip2B;
+        Tue,  2 Aug 2022 01:45:52 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v2] scsi: ufs: enable link lost interrupt
+Date:   Tue,  2 Aug 2022 10:42:31 +0900
+Message-Id: <1659404551-160958-1-git-send-email-kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmhe7FxhdJBtOfCVicfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Xi69JnrBarFz9gsVh0YxuTxc0tR1ksLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
+        WPrvLYsDr8fiPS+ZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7VLZNRmpiSmqR
+        Qmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtC5SgpliTmlQKGAxOJi
+        JX07m6L80pJUhYz84hJbpdSClJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTsjB13HrIXfGWv
+        WDvjBnsD41G2LkZODgkBE4kXDeeZuxi5OIQEdjBKvPx3jAkkISTwiVHiSH8whP2NUaJ3igJM
+        w7HTixghGvYCNcxcwQTh/GCUeP56FVg3m4CmxNObU8ESIgIrmSRuvFoGlmAWUJfYNeEEmC0s
+        YCmx7/EtFhCbRUBV4tOKmYwgNq+Am0Tr3gOMEOvkJG6e62SGsN+yS+x5Kwxhu0ic7jsCFReW
+        eHV8CzuELSXx+d1eoN84gOxiiU375EFukBBoYJRY8mkzC0SNscSsZ+2MIDXMQIeu36UPUa4s
+        cQTiGmYBPomOw3/ZIcK8Eh1tQhCNyhK/Jk2GOkxSYubNO1AlHhI9BxQgQRUr8WHvJuYJjLKz
+        EMYvYGRcxSiWWlCcm55abFRgAo+h5PzcTYzg5KflsYNx9tsPeocYmTgYDzFKcDArifDecXme
+        JMSbklhZlVqUH19UmpNafIjRFBhYE5mlRJPzgek3ryTe0MTSwMTMzNDcyNTAXEmc1ytlQ6KQ
+        QHpiSWp2ampBahFMHxMHp1QDU5z/KYl/bm6CcxYsDq1NWctQsJ3pfFfbfY+fqhmGn9KUFD2r
+        NvRlJ265+SfN4fu3Hdnsrs+fOG1dtevHi2yxhDdrbtc7dnd6+P8T12JYVtkeOOeQs0PJ7l0y
+        STYzzsalGO/5turkjOz6nav27Zl2dE9tQqGa79FcA9e0iKY9mW7z/uhsEP0w7eHF2LPrz0ws
+        Z1uT9+Pg7WfP1nzaWnvb9/Xb7V9WpSQFrpjw3uTPwuqSfr3X9/t+7VW5uzljXifDp/Cc0p5f
+        c0uCz6a2in1bx380s9Ymp9ki/8uaW2cSkpMO+d+U3W8Rk7+6fWNRx+YjQTeuP5Sp2Wkrsbxz
+        QcQKO4kJHKfeRkVYfzny9fibrPdKLMUZiYZazEXFiQC5osuMBwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGLMWRmVeSWpSXmKPExsWy7bCSvO6FxhdJBreP6lmcfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Xi69JnrBarFz9gsVh0YxuTxc0tR1ksLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
+        WPrvLYsDr8fiPS+ZPCYsOsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwB7FJdNSmpOZllq
+        kb5dAlfGjjsP2Qu+slesnXGDvYHxKFsXIyeHhICJxLHTixi7GLk4hAR2M0pMajvNBJGQlDix
+        8zkjhC0scb/lCCuILSTwjVFi/k4xEJtNQFPi6c2pYPUiAtuZJH59TAOxmQXUJXZNOAEWFxaw
+        lNj3+BYLiM0ioCrxacVMsJm8Am4SrXsPQM2Xk7h5rpN5AiPPAkaGVYySqQXFuem5xYYFhnmp
+        5XrFibnFpXnpesn5uZsYwUGppbmDcfuqD3qHGJk4GA8xSnAwK4nw3nF5niTEm5JYWZValB9f
+        VJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU4Ps/pMnuq4IbrTyCdVJSnSX
+        z5vwX9s244VQxrHjr1YdSGFvzvXb8LLN7th10SYX9+CZG3lFZOd6vFw9W3flVHa7/M0tDA+L
+        VWI3v0sV6rv0Y9vKP0tVJr402CBVLPXg/8v7Vk8vvfz5YVFTs8e3teVtrDN4a4onSk393/Zd
+        /Zdx1Q7zqPlTZ2wXy3i2TMyV/UGIIEPglxmMecynV7cy//xhnXXvYmCEzYQmriqR3UG1ux/6
+        xU3ga+ufHLJuQvu024f2fd3ockvV+u0+rfqL6zbe1/OTdPvFfOCU+BS/7fO1lt4K27qi82jN
+        94zE001uu3fuS/04v+P1PplbRV6/p1gftN2efMbt0ZEt29/8nrhbiaU4I9FQi7moOBEAnlgh
+        NLkCAAA=
+X-CMS-MailID: 20220802014552epcas2p236519c03464ab32d9a877887710b1c10
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220802014552epcas2p236519c03464ab32d9a877887710b1c10
+References: <CGME20220802014552epcas2p236519c03464ab32d9a877887710b1c10@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/01, Daeho Jeong wrote:
-> On Mon, Aug 1, 2022 at 4:15 AM Ye Bin via Linux-f2fs-devel
-> <linux-f2fs-devel@lists.sourceforge.net> wrote:
-> >
-> > There is issue as follows when test f2fs atomic write:
-> > F2FS-fs (loop0): Can't find valid F2FS filesystem in 2th superblock
-> > F2FS-fs (loop0): invalid crc_offset: 0
-> > F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=1, run fsck to fix.
-> > F2FS-fs (loop0): f2fs_check_nid_range: out-of-range nid=2, run fsck to fix.
-> > ==================================================================
-> > BUG: KASAN: null-ptr-deref in f2fs_get_dnode_of_data+0xac/0x16d0
-> > Read of size 8 at addr 0000000000000028 by task rep/1990
-> >
-> > CPU: 4 PID: 1990 Comm: rep Not tainted 5.19.0-rc6-next-20220715 #266
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x6e/0x91
-> >  print_report.cold+0x49a/0x6bb
-> >  kasan_report+0xa8/0x130
-> >  f2fs_get_dnode_of_data+0xac/0x16d0
-> >  f2fs_do_write_data_page+0x2a5/0x1030
-> >  move_data_page+0x3c5/0xdf0
-> >  do_garbage_collect+0x2015/0x36c0
-> >  f2fs_gc+0x554/0x1d30
-> >  f2fs_balance_fs+0x7f5/0xda0
-> >  f2fs_write_single_data_page+0xb66/0xdc0
-> >  f2fs_write_cache_pages+0x716/0x1420
-> >  f2fs_write_data_pages+0x84f/0x9a0
-> >  do_writepages+0x130/0x3a0
-> >  filemap_fdatawrite_wbc+0x87/0xa0
-> >  file_write_and_wait_range+0x157/0x1c0
-> >  f2fs_do_sync_file+0x206/0x12d0
-> >  f2fs_sync_file+0x99/0xc0
-> >  vfs_fsync_range+0x75/0x140
-> >  f2fs_file_write_iter+0xd7b/0x1850
-> >  vfs_write+0x645/0x780
-> >  ksys_write+0xf1/0x1e0
-> >  do_syscall_64+0x3b/0x90
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > As 3db1de0e582c commit changed atomic write way which new a cow_inode for
-> > atomic write file, and also mark cow_inode as FI_ATOMIC_FILE.
-> > When f2fs_do_write_data_page write cow_inode will use cow_inode's cow_inode
-> > which is NULL. Then will trigger null-ptr-deref.
-> > To solve above issue, introduce FI_COW_FILE flag for COW inode.
-> >
-> > Fiexes: 3db1de0e582c("f2fs: change the current atomic write way")
-> > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > ---
-> >  fs/f2fs/f2fs.h    | 6 ++++++
-> >  fs/f2fs/file.c    | 2 +-
-> >  fs/f2fs/segment.c | 5 +++--
-> >  3 files changed, 10 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index 8579b59b8a05..101f0064ee25 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -758,6 +758,7 @@ enum {
-> >         FI_ENABLE_COMPRESS,     /* enable compression in "user" compression mode */
-> >         FI_COMPRESS_RELEASED,   /* compressed blocks were released */
-> >         FI_ALIGNED_WRITE,       /* enable aligned write */
-> > +       FI_COW_FILE,            /* indicate COW file */
-> >         FI_MAX,                 /* max flag, never be used */
-> >  };
-> >
-> > @@ -3207,6 +3208,11 @@ static inline bool f2fs_is_atomic_file(struct inode *inode)
-> >         return is_inode_flag_set(inode, FI_ATOMIC_FILE);
-> >  }
-> >
-> > +static inline bool f2fs_is_cow_file(struct inode *inode)
-> > +{
-> > +       return is_inode_flag_set(inode, FI_COW_FILE);
-> > +}
-> > +
-> >  static inline bool f2fs_is_first_block_written(struct inode *inode)
-> >  {
-> >         return is_inode_flag_set(inode, FI_FIRST_BLOCK_WRITTEN);
-> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > index a90184900698..973a479f9a3d 100644
-> > --- a/fs/f2fs/file.c
-> > +++ b/fs/f2fs/file.c
-> > @@ -2062,7 +2062,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
-> >         spin_unlock(&sbi->inode_lock[ATOMIC_FILE]);
-> >
-> >         set_inode_flag(inode, FI_ATOMIC_FILE);
-> > -       set_inode_flag(fi->cow_inode, FI_ATOMIC_FILE);
-> > +       set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >         clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> >         f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> >
-> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> > index 44a04a832e24..6d5fc221ef35 100644
-> > --- a/fs/f2fs/segment.c
-> > +++ b/fs/f2fs/segment.c
-> > @@ -193,7 +193,7 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
-> >         if (f2fs_is_atomic_file(inode)) {
-> >                 if (clean)
-> >                         truncate_inode_pages_final(inode->i_mapping);
-> > -               clear_inode_flag(fi->cow_inode, FI_ATOMIC_FILE);
-> > +               clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >                 iput(fi->cow_inode);
-> >                 fi->cow_inode = NULL;
-> >                 clear_inode_flag(inode, FI_ATOMIC_FILE);
-> > @@ -3166,7 +3166,8 @@ static int __get_segment_type_6(struct f2fs_io_info *fio)
-> >                         return CURSEG_COLD_DATA;
-> >                 if (file_is_hot(inode) ||
-> >                                 is_inode_flag_set(inode, FI_HOT_DATA) ||
-> > -                               f2fs_is_atomic_file(inode))
-> > +                               f2fs_is_atomic_file(inode) ||
-> 
-> I think we can remove f2fs_is_atomic_file(inode) now.
+v1 -> v2: add a fixes tag
 
-I removed it and applied the patch. :)
-Thanks,
+Link lost is treated as fatal error with the patch
+c99b9b2, but its event isn't registered as interrupt source,
+so I enable it.
 
-> 
-> > +                               f2fs_is_cow_file(inode))
-> >                         return CURSEG_HOT_DATA;
-> >                 return f2fs_rw_hint_to_seg_type(inode->i_write_hint);
-> >         } else {
-> > --
-> > 2.31.1
-> >
-> >
-> >
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Fixes: c99b9b2 ("scsi: ufs: Treat link loss as fatal error")
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+---
+ drivers/scsi/ufs/ufshci.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
+index a7ff0e5..0b627f4 100644
+--- a/drivers/scsi/ufs/ufshci.h
++++ b/drivers/scsi/ufs/ufshci.h
+@@ -133,11 +133,7 @@ static inline u32 ufshci_version(u32 major, u32 minor)
+ 
+ #define UFSHCD_UIC_MASK		(UIC_COMMAND_COMPL | UFSHCD_UIC_PWR_MASK)
+ 
+-#define UFSHCD_ERROR_MASK	(UIC_ERROR |\
+-				DEVICE_FATAL_ERROR |\
+-				CONTROLLER_FATAL_ERROR |\
+-				SYSTEM_BUS_FATAL_ERROR |\
+-				CRYPTO_ENGINE_FATAL_ERROR)
++#define UFSHCD_ERROR_MASK	(UIC_ERROR | INT_FATAL_ERRORS)
+ 
+ #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
+ 				CONTROLLER_FATAL_ERROR |\
+-- 
+2.7.4
+

@@ -2,188 +2,439 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DD0587D72
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EF9587D78
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiHBNuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S234099AbiHBNv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235894AbiHBNui (ORCPT
+        with ESMTP id S233816AbiHBNv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:50:38 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2072.outbound.protection.outlook.com [40.107.95.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07982250F
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:50:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gjdsOAueknxboDt12qZejYBfZOMHdraGhoqXugK1o7SEBiyh02GupTtxOPQo/v3xzZ/Gmmrqo9PU01r+uRbR639961SY6qLEf4JJIZaQnAXsaHzT1cb/diEHGxpQ/U+D9vZsaR/15Ltl4Kfe/prJA4InVuXY6twIpge5WDhpil2cCPhJcsbvZal8yY/1CzyXxvj46xqfGwS5XrKnf1sf6rDufPSqKXYgmMQuQVsqXERyvdHCnjxAlwAGz6BVB8+xLvFhW2iRpzIionCfH2NTqKxNxG4P0Lg3TOD3mPaxvMYm5xjEEiHKU7tUkqNd8i6feyaKPD9xkKNi4PAovISdZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R+FcjkGAXcPVnPWYWTsmIQjEfWjM1nYILmjLrcF8dHA=;
- b=PpxnEw6bodd2598EtlvOCZ44kgu3UBmNnbxlrWFdNIpQWhZ9JDTK2qpAaCOsEiHTsh3d9zWv6i6imSSYvAZjjsLGDE415wnLhjz6qF3489AupK5fjHIHKuzqzXsoSXDi3RwX333Ouwww8KLpySA14iqWkmdHcIseWr0/A+pmTE5pzHx0YnwjqFPk0ttFfs8vHD+u5V5ZEBYhokt0EGQ4HapomOcXCaKUYfCapKCo+NcfFh56Dym+eAyHFsy7s772psD5hD8uoulVMaN32IIcxVoOIO2RDE/faqRO4KisdIzXJY0rKIWWzpxh+gZnox46e9edf9beAYSCPXH84t/BJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R+FcjkGAXcPVnPWYWTsmIQjEfWjM1nYILmjLrcF8dHA=;
- b=IVKjut8MkQIccc1R0BQp/kiI+rwKCBDTPHUVg9cyugzjnVNTuDL2ml6orcmt0bKG4iHmhnAVULCle8pn7o4wM91cg4mj31JX1WVcp3evlRKhal2lY1c1vY7E27nBDlFopJG0nYVtGd5FnFqEua6h+rSxFdJTv37EMGWAg+dBuOPvDLEIZRrpaDwzQRgYIujYL9uzQmyLvosuzyeDOLKsvw8Dd7CHUUBSvZ4TvNNZm7/LHsIgySyyXMARwNGPL7WnC2zOg0B7ScpjO5cwDqiRK+Rl+en8jbaLQhtkdxqbRpGH280OhJp4GshRcjsIDpzqIJ1pM9w0XhKlTRtphD62Ww==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN1PR12MB2447.namprd12.prod.outlook.com (2603:10b6:802:27::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.13; Tue, 2 Aug
- 2022 13:50:35 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::4cce:310f:93:5d58%8]) with mapi id 15.20.5482.016; Tue, 2 Aug 2022
- 13:50:35 +0000
-Date:   Tue, 2 Aug 2022 10:50:34 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, minchan@kernel.org,
-        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
-        pasha.tatashin@soleen.com, david@redhat.com
-Subject: Re: [PATCH v2] mm/gup.c: Simplify and fix
- check_and_migrate_movable_pages() return codes
-Message-ID: <YukrqnbnkltxVHvM@nvidia.com>
-References: <814dee5d3aadd38c3370eaaf438ba7eee9bf9d2b.1659399696.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <814dee5d3aadd38c3370eaaf438ba7eee9bf9d2b.1659399696.git-series.apopple@nvidia.com>
-X-ClientProxiedBy: BL1PR13CA0371.namprd13.prod.outlook.com
- (2603:10b6:208:2c0::16) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 2 Aug 2022 09:51:56 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF71025285
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 06:51:54 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id z25so22078903lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 06:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zhLuWLbw0kiaNFqGEueOyVeSmyLtxQGa71kXwG3YeUI=;
+        b=MIChBv1OfJIqk+8MFXkXJb+AtwawHLCVHZlps/AcfW7FO7e50iRZn5yJAxr0SS5CIX
+         +8ouZB7kUEPCZdBD1C0cvUeGVBu/zorsJrVUf3mdMw+HZi/1nThiaLpUQIbaERVAjctU
+         x06Gr7QRZ/Gk3z3HwsgdJliyzu/oIoy/h3/0Sc2OjQ5rO3LGJsCdlb0gtFYO9SdDmZbL
+         wrH/Tj3WAbIIDy9wuVo10Va6LvWKY3M7Q/2vSYmVe7KyfZ0Ez6qTYvvmdlukfR6vpFO/
+         BWcMMJKswXmal+qnjBY0wZPcXfzz5x7Hf9Ihmb9mrd1qPM5zTNd2JJi1Oqv6xnEMLr30
+         uMkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zhLuWLbw0kiaNFqGEueOyVeSmyLtxQGa71kXwG3YeUI=;
+        b=vckFuS/G4sTrRnf5aWmzWITuLAeczMrWWgEymP7ka97aQpC0p82biF7syFa+6Hs3mH
+         3/vXPefNycFqPFt8vT3tLxrwtV8aeeyICjd0bLXZbe0JnFgr7IGjCogeIke+G4rgZhJe
+         6nQhIf5OGpPbbYfzkzSKrN7MDDxMPoqpRzKdTdlk7F6Bry415Hcr9dCBedlNFeecb87c
+         ALz4zEcgXTN43aX0Y0pVsK1tPUzC7ljT9Y4EO7hu57Lm0v2CehiOjBxG7GUiRdImwYm4
+         Jmn228CGHPgqCZw2fcn02bzfXc6VyLZdLzcGnrs3a1ttrX2gMeWWEsqKO/DL8NZUQ1rr
+         Lb+A==
+X-Gm-Message-State: AJIora+EvC3su+2FPHelaaAirHCMx0qDey0HmKQicQhGWe2ie56pylV9
+        EXxsr9KWKYDz4LHmCGjQVyxbXK3W0C568lijOXYUZg==
+X-Google-Smtp-Source: AGRyM1sCFSnFXUfLp+M+Q0nLrnBFC7wEiMrLo41kgA1Cnw/jpUh0QVWJJOTAIMxRLd3CXBMrQEqh+bOWv6FtaWMlN9o=
+X-Received: by 2002:a05:6512:21a7:b0:48a:a06e:1d21 with SMTP id
+ c7-20020a05651221a700b0048aa06e1d21mr7352366lft.494.1659448312830; Tue, 02
+ Aug 2022 06:51:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7d3f93c2-28f9-4321-34a5-08da748df9c7
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2447:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mbWy7K7K7s5xUY1uqstrKJvKhnmBKMcibhlrWpp4fYiAc2nFtvNIlGZ00UbxNdIkyr/d15DM/ZxPP+lAFUH//PcyPR/S2Nlpa7DpNJcYXFxqjW832dfGNQRc1MGrt9p4TY1NZC/2MDcdlSiS8dusoZsuFUewyckyW0kTHq45vp3tDArY+1US6C+NzQbP2dcf+19qNyhrP9llyWDtuoSXbk3f5dhFxLVVH3j0ut/pJs5+hX4+Kb6AS21+s/hekyVCyCCyYtopH6g+wjWOrIKCvHH2VCU0bN/gJsu6WBYZJP7iwZ+F0t6/IakYs5DPpPAtysrON2OJfIJTJygoxR/7TfOt3SCTvpBh+U2nAfynAOS7lO184xtyz4EYqqZkbHK9/9piQrTocjXPkqDPHKJJ4UlOUKBNH8qGpdbxfK8xE1KjMN0AwWDVkMnin8Z1+1+quK9HGNa+0xoN85RtB1OnvA4YK7G1cOM8IduEtB3X18NgNixWpDaGBwAjkb6aOlS1NkFevK0XJnKbDTU01ESUg062fkkOdvaW+Q9dPn5dzi6R6u1YJ/vXRbZSoXe04y5x/YuHnPNuKnb7iq8L/1HeEpGqPmmc/IrnRy6ESYTn+KSOVZRC+4vq58qspPL03cqfTtRHK1zhbXbjoe9DTrtcoHuwBc5ICe4frvd04mSXXNcKcpEldp1QfLkNiBGrcXKfR0LPEXPY11UPgKx7ovPn1H+4mSBF/lXHi2rA8wgCSyE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(366004)(396003)(39860400002)(346002)(5660300002)(8676002)(4326008)(66476007)(66946007)(66556008)(8936002)(6862004)(2906002)(83380400001)(36756003)(86362001)(38100700002)(6486002)(478600001)(6636002)(37006003)(316002)(41300700001)(186003)(2616005)(26005)(6512007)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C4Bi3c4XcgoP8DgQ0j172snTym4vLcFKg7DCPFPogNRsgsJ2L8B3HtCLNEsd?=
- =?us-ascii?Q?VoL8SQHiRzTAPaYQeVRNyb+Mt3JgoDhyPwbtwD951u9ZBUMP0BX3Q2d1rZD9?=
- =?us-ascii?Q?Vq8RKAfogfodEZuLonbd/ZshsmhL4kwAheQluncFYO5VrJweCFGYE3GuJYbc?=
- =?us-ascii?Q?/BVM0ZLvjz5d4enDLapF4yWTPOj5ywudkGAqMuyjNNVjI8gvPQOZdXLH+r8Z?=
- =?us-ascii?Q?gpZGH3h/z/oM5zoer7pWQRDZyujtoHIj4PmKNslnRUO6ceDUeZbLfB85/BAL?=
- =?us-ascii?Q?x2ZfUvjonGE6DxPjGYoU/BS/e/VEH+1iYr8TWQcs5IdyUqOx6ahN2gpdbeZ4?=
- =?us-ascii?Q?wsw3i7kbXMmaQisP/QTeKEW5Vy2OWhnLRMRen8G8d0fN/aOk9gK1FYrahvK5?=
- =?us-ascii?Q?D9wezeoIK3HOWi5iAEXf0TvJudKAkaxpQBZLV2Xl/PpBz8BBnHwsS4KDBmX1?=
- =?us-ascii?Q?omZUfUgvVCkLx6okdOOrHTLTcoM/Cr1NOU6V61yKrpsqYLOQF8OJPXZDxBEn?=
- =?us-ascii?Q?iaqtkHYz8O+OZD4nqN4qxcvZ8d5LitXrVDg4HJMmzPQ3AcjUBtHX5PtLlxt8?=
- =?us-ascii?Q?rymQkKJfiNnD52mFxZWQcJcid7+HtTl8OCCXG4zmalMAi151D2KwhyXSO1VI?=
- =?us-ascii?Q?Tw3VFCwlFOQuibmzg+0QyjW4PLo3EqaWR+s3L8XjN5ckZAwuzaK6UbN4a/af?=
- =?us-ascii?Q?Nxa1oZkg5chysJznD2gqT3MtzyKUCZBu5sAHkDMWJsDpPpF7llvIXvauHkbw?=
- =?us-ascii?Q?qulwXAwk7xbnn2bOKWrcHxB5ZmdBLI/3ToKG6V4pUXguLp/3uIynK4v2yzV3?=
- =?us-ascii?Q?8NJiGMxTPUjWcwWubfYXSzbi8KkJEc0cuqG7/kOCOfShlTnXahDghyBdA2ff?=
- =?us-ascii?Q?9rt9HWESiD/qFT5qhI4WXPb5Khffh4Hzlhv1ru79j9YuI3cj1SBfeqzVXjEV?=
- =?us-ascii?Q?UMazHtXMmBWFhVqG+fTeu/8Y2WNGBrScDqEwMAmX+TMPOUh9122SkkZD2rhl?=
- =?us-ascii?Q?p6ZHrtFK1sbkoRaO3GSvSmTf8gOnRFmPJb4hEeQCGPF2ZawZUylJbXIQZxIo?=
- =?us-ascii?Q?sXLQRfBm4EifYMefyb9fUOhP1PFGKGIKMUdHgfKmH5cJGEoBMsm9jdju1wV5?=
- =?us-ascii?Q?vU1RUaEKse1sug6fNzdGaEOiloeRvLGWpKbeuAj/sGm529BspVL4v9Ps6n19?=
- =?us-ascii?Q?rwkk1i7oBLFBP9D8ACqJrROBBgnpfTgP03H3aZGfSyx9jUI8dRyUpkboqnum?=
- =?us-ascii?Q?suZFW6lBMImfuW6LA2pPC9mwiUz+UBroOSGxaxWZsk22PbeBfaHs/9pLzCye?=
- =?us-ascii?Q?GNA3i7R0pTcS0FRdxDdtctQXvBFnnQ+GbdiHMSawiscvnH4slePP8kzUuDyd?=
- =?us-ascii?Q?WJzpcBO3m/C8yynkYVv/2++Vd8wNQMYAjZ6MRnGKrlh8m/488EbwVC87efHL?=
- =?us-ascii?Q?SuJNW/CGARMQRoBs5lDnKU9UrUfC64o+7aFXe9u9XTDHS7AOVXEgW+CSeW7i?=
- =?us-ascii?Q?uF5wou6gj2TxsDrYKXfKo8Di0GWVjE4Dv3SIdfXnc0nEVdwJkfU2Bmuuf8TI?=
- =?us-ascii?Q?mgHyclCplO1gKUjJOtvBxBEAFs6j502LSAIw017e?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d3f93c2-28f9-4321-34a5-08da748df9c7
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2022 13:50:35.7400
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NDqJjFrau/TZpAxahgujlXynem1mtpMt+teNC1wkT/NQiFDfs3+YYgr9/VdU2nSH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2447
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220801201109.825284-1-pgonda@google.com> <20220801201109.825284-10-pgonda@google.com>
+ <20220802094915.lkmoz52gztzjjun4@kamzik>
+In-Reply-To: <20220802094915.lkmoz52gztzjjun4@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 2 Aug 2022 07:51:40 -0600
+Message-ID: <CAMkAt6q9OSXCfj7y=g5H-82tRQfFvX84fjpcfYUrs+mKtGMHzg@mail.gmail.com>
+Subject: Re: [V2 09/11] KVM: selftests: Make ucall work with encrypted guests
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:30:12AM +1000, Alistair Popple wrote:
-> When pinning pages with FOLL_LONGTERM check_and_migrate_movable_pages()
-> is called to migrate pages out of zones which should not contain any
-> longterm pinned pages.
-> 
-> When migration succeeds all pages will have been unpinned so pinning
-> needs to be retried. This is indicated by returning zero. When all pages
-> are in the correct zone the number of pinned pages is returned.
-> 
-> However migration can also fail, in which case pages are unpinned and
-> -ENOMEM is returned. However if the failure was due to not being unable
-> to isolate a page zero is returned. This leads to indefinite looping in
-> __gup_longterm_locked().
-> 
-> Fix this by simplifying the return codes such that zero indicates all
-> pages were successfully pinned in the correct zone while errors indicate
-> either pages were migrated and pinning should be retried or that
-> migration has failed and therefore the pinning operation should fail.
-> 
-> This fixes the indefinite looping on page isolation failure by failing
-> the pin operation instead of retrying indefinitely.
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> 
-> ---
-> 
-> Changes for v2:
->  - Changed error handling to be move conventional using goto as
->    suggested by Jason.
->  - Removed coherent_pages check as it isn't necessary.
-> ---
->  mm/gup.c | 81 ++++++++++++++++++++++++++++-----------------------------
->  1 file changed, 41 insertions(+), 40 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 364b274..5707c56 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -1901,20 +1901,24 @@ struct page *get_dump_page(unsigned long addr)
->  
->  #ifdef CONFIG_MIGRATION
->  /*
-> - * Check whether all pages are pinnable, if so return number of pages.  If some
-> - * pages are not pinnable, migrate them, and unpin all pages. Return zero if
-> - * pages were migrated, or if some pages were not successfully isolated.
-> - * Return negative error if migration fails.
-> + * Check whether all pages are pinnable. If some pages are not pinnable migrate
-> + * them and unpin all the pages. Returns -EAGAIN if pages were unpinned or zero
-> + * if all pages are pinnable and in the right zone. Other errors indicate
-> + * migration failure.
->   */
->  static long check_and_migrate_movable_pages(unsigned long nr_pages,
->  					    struct page **pages,
->  					    unsigned int gup_flags)
+On Tue, Aug 2, 2022 at 3:49 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Mon, Aug 01, 2022 at 01:11:07PM -0700, Peter Gonda wrote:
+> > Add support for encrypted, SEV, guests in the ucall framework. If
+> > encryption is enabled set up a pool of ucall structs in the guests'
+> > shared memory region. This was suggested in the thread on "[RFC PATCH
+> > 00/10] KVM: selftests: Add support for test-selectable ucall
+> > implementations". Using a listed as suggested there doesn't work well
+> > because the list is setup using HVAs not GVAs so use a bitmap + array
+> > solution instead to get the same pool result.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > ---
+> >  .../selftests/kvm/include/kvm_util_base.h     |   3 +
+> >  .../selftests/kvm/include/ucall_common.h      |  14 +--
+> >  .../testing/selftests/kvm/lib/ucall_common.c  | 112 +++++++++++++++++-
+> >  3 files changed, 115 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index 8ce9e5be70a3..ad4abc6be1ab 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -102,6 +102,9 @@ struct kvm_vm {
+> >       int stats_fd;
+> >       struct kvm_stats_header stats_header;
+> >       struct kvm_stats_desc *stats_desc;
+> > +
+> > +     bool use_ucall_list;
+>
+> use_ucall_pool
+>
+> > +     struct list_head ucall_list;
+> >  };
+
+Will do. I also need to remove this |ucall_list| member.
+
+> >
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
+> > index c1bc8e33ef3f..a96220ac6024 100644
+> > --- a/tools/testing/selftests/kvm/include/ucall_common.h
+> > +++ b/tools/testing/selftests/kvm/include/ucall_common.h
+> > @@ -22,6 +22,10 @@ enum {
+> >  struct ucall {
+> >       uint64_t cmd;
+> >       uint64_t args[UCALL_MAX_ARGS];
+> > +
+> > +     /* For encrypted guests. */
+>
+> Please, no 'encrypted' words in ucall files. ucalls shouldn't care about
+> guest types. Indeed, the summary of this patch could even drop the word
+> 'encrypted'. This patch is adding support for ucall pools, which is
+> motivated by the need to support encrypted guests (the motivation should
+> go in the commit message, but otherwise the patch should be ucall specific
+> and guest type agnostic)
+>
+> > +     uint64_t idx;
+>
+> We don't need 'idx' because 'hva' will always be at the
+> idx * sizeof(struct ucall) offset of ucall_hdr->ucalls, which means
+> we can always calculate it,
+>
+>  static inline size_t uc_pool_idx(struct ucall *uc)
 >  {
-> -	unsigned long isolation_error_count = 0, i;
-> +	unsigned long i;
->  	struct folio *prev_folio = NULL;
->  	LIST_HEAD(movable_page_list);
-> -	bool drain_allow = true, coherent_pages = false;
-> -	int ret = 0;
-> +	bool drain_allow = true;
-> +	int ret = -EAGAIN;
+>         return uc->hva - ucall_hdr->ucalls;
+>  }
 
-It looked like every goto error set this? Why initialize it?
+Good call, I didn't think of that.
 
-It looks OK to me, a lot clearer
+>
+> > +     struct ucall *hva;
+> >  };
+> >
+> >  void ucall_arch_init(struct kvm_vm *vm, void *arg);
+> > @@ -32,15 +36,9 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
+> >  void ucall(uint64_t cmd, int nargs, ...);
+> >  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
+> >
+> > -static inline void ucall_init(struct kvm_vm *vm, void *arg)
+> > -{
+> > -     ucall_arch_init(vm, arg);
+> > -}
+> > +void ucall_init(struct kvm_vm *vm, void *arg);
+> >
+> > -static inline void ucall_uninit(struct kvm_vm *vm)
+> > -{
+> > -     ucall_arch_uninit(vm);
+> > -}
+> > +void ucall_uninit(struct kvm_vm *vm);
+> >
+> >  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)       \
+> >                               ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
+> > diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > index a060252bab40..feb0173179ec 100644
+> > --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> > +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> > @@ -1,22 +1,122 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  #include "kvm_util.h"
+> > +#include "linux/types.h"
+> > +#include "linux/bitmap.h"
+> > +#include "linux/atomic.h"
+> > +
+> > +struct ucall_header {
+> > +     DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
+> > +     struct ucall ucalls[KVM_MAX_VCPUS];
+> > +};
+> > +
+> > +static bool use_ucall_list;
+>
+> use_ucall_pool
+>
+> > +static struct ucall_header *ucall_hdr;
+>
+> ucall_pool
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Will update naming here.
 
-Thanks,
-Jason
+>
+> > +
+> > +void ucall_init(struct kvm_vm *vm, void *arg)
+> > +{
+> > +     struct ucall *uc;
+> > +     struct ucall_header *hdr;
+> > +     vm_vaddr_t vaddr;
+> > +     int i;
+> > +
+> > +     use_ucall_list = vm->use_ucall_list;
+> > +     sync_global_to_guest(vm, use_ucall_list);
+> > +     if (!use_ucall_list)
+> > +             goto out;
+> > +
+> > +     TEST_ASSERT(!ucall_hdr,
+> > +                 "Only a single encrypted guest at a time for ucalls.");
+>
+> single VM at a time
+>
+> And I'd leave that on a single line. checkpatch allows up to 100 chars and
+> I'm included to use all 110 chars of it.
+
+Sounds good.
+
+>
+> > +     vaddr = vm_vaddr_alloc_shared(vm, sizeof(*hdr), vm->page_size);
+> > +     hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
+> > +     memset(hdr, 0, sizeof(*hdr));
+> > +
+> > +     for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> > +             uc = &hdr->ucalls[i];
+> > +             uc->hva = uc;
+> > +             uc->idx = i;
+> > +     }
+> > +
+> > +     ucall_hdr = (struct ucall_header *)vaddr;
+> > +     sync_global_to_guest(vm, ucall_hdr);
+> > +
+> > +out:
+> > +     ucall_arch_init(vm, arg);
+> > +}
+> > +
+> > +void ucall_uninit(struct kvm_vm *vm)
+> > +{
+> > +     use_ucall_list = false;
+> > +     ucall_hdr = NULL;
+>
+> It's unlikely we'd ever change the ucall setup on a running VM,
+> but we should sync these changes to the guest for good measure.
+
+Hmm I'll need to have some notion of encrypted guests here then. Since
+the guests page tables also get encrypted we can no longer get the
+gva2gpa translations so sync_global_to_guest() cannot be done due to
+the addr_ga2hva(). So is it OK if this call references encryption like
+below?
+
+    use_ucall_list = false;
+     ucall_hdr = NULL;
+if (!vm->memencrypt.encrypted) {
+   sync_global_to_guest(vm, use_ucall_list);
+  sync_global_to_guest(vm, ucall_hdr);
+}
+
+>
+> > +
+> > +     ucall_arch_uninit(vm);
+> > +}
+> > +
+> > +static struct ucall *ucall_alloc(void)
+> > +{
+> > +     struct ucall *uc = NULL;
+> > +     int i;
+> > +
+> > +     if (!use_ucall_list)
+> > +             goto out;
+> > +
+> > +     for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> > +             if (atomic_test_and_set_bit(i, ucall_hdr->in_use))
+> > +                     continue;
+> > +
+> > +             uc = &ucall_hdr->ucalls[i];
+> > +     }
+>
+> This is not what I suggested in the last revision and it's still wrong.
+> Here, you're still looping through all of the pool and returning the last
+> one.
+>
+> What I suggested was
+>
+>         for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+>                 if (!atomic_test_and_set_bit(i, ucall_hdr->in_use)) {
+>                         uc = &ucall_hdr->ucalls[i];
+>                         break;
+>                 }
+>         }
+>
+> Notice how we leave the loop early when we find a free uc.
+
+Ah my mistake, I didn't get this fix into this series
+
+>
+> We should also zero the contents of the uc buffer before returning.
+
+Ack will do.
+
+>
+> > +
+> > +out:
+> > +     return uc;
+> > +}
+> > +
+> > +static void ucall_free(struct ucall *uc)
+> > +{
+> > +     if (!use_ucall_list)
+> > +             return;
+> > +
+> > +     clear_bit(uc->idx, ucall_hdr->in_use);
+>
+> This seems to be the one and only use of idx which is another argument for
+> dropping the variable and just calculating it instead.
+
+Will do.
+
+>
+> > +}
+> > +
+> > +static vm_vaddr_t get_ucall_addr(struct ucall *uc)
+> > +{
+> > +     if (use_ucall_list)
+> > +             return (vm_vaddr_t)uc->hva;
+>
+> A comment explaining that this hva has already been synchronized
+> with the guest would be good. Or maybe a different name for the
+> pointer than hva, one which conveys that it's a pointer that works
+> as both an hva and gva would be better.
+
+I don't think this pointer does work as a gva though since its created
+by just taking &uc during host execution. I can add a comment that
+mentions this is a hva is already translated for the host and not for
+guest use other than communicating with the host. I thought 'hva' was
+a good name here since it is literally the hva of this ucall struct,
+what name would you prefer?
+
+>
+>
+> > +
+> > +     return (vm_vaddr_t)uc;
+> > +}
+> >
+> >  void ucall(uint64_t cmd, int nargs, ...)
+> >  {
+> > -     struct ucall uc = {
+> > -             .cmd = cmd,
+> > -     };
+>
+> This zeros all members except cmd.
+>
+> > +     struct ucall *uc;
+> > +     struct ucall tmp;
+>
+> And this makes tmp full of stack garbage, so in the non uc-pool case we
+> no longer have an equivalent uc. Please initialize tmp the same way uc
+> was initialized.
+
+Ack, I'll get this fixed.
+
+>
+> >       va_list va;
+> >       int i;
+> >
+> > +     uc = ucall_alloc();
+> > +     if (!uc)
+> > +             uc = &tmp;
+> > +
+> > +     uc->cmd = cmd;
+> > +
+> >       nargs = min(nargs, UCALL_MAX_ARGS);
+> >
+> >       va_start(va, nargs);
+> >       for (i = 0; i < nargs; ++i)
+> > -             uc.args[i] = va_arg(va, uint64_t);
+> > +             uc->args[i] = va_arg(va, uint64_t);
+> >       va_end(va);
+> >
+> > -     ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> > +     ucall_arch_do_ucall(get_ucall_addr(uc));
+>
+> We don't need get_ucall_addr(). Just do the if-else right here
+>
+>    if (use_ucall_list)
+>        ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
+>    else
+>       ucall_arch_do_ucall((vm_vaddr_t)uc);
+
+Will do.
+
+>
+> > +
+> > +     ucall_free(uc);
+> > +}
+> > +
+> > +static void *get_ucall_hva(struct kvm_vm *vm, uint64_t uc)
+> > +{
+> > +     if (vm->use_ucall_list)
+> > +             return (void *)uc;
+> > +
+> > +     return addr_gva2hva(vm, uc);
+> >  }
+> >
+> >  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> > @@ -27,7 +127,7 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+> >       if (!uc)
+> >               uc = &ucall;
+> >
+> > -     addr = addr_gva2hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
+> > +     addr = get_ucall_hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
+>
+> Wait, I thought we wanted ucall_arch_get_ucall() to return hvas?
+> It would make more sense if it did, since it's called from the
+> host.
+
+As you noted in [V2 07/11] I updated ucall_arch_get_ucall() to return
+the gva. I figured this was just more boilerplate which could be
+consolidated given all archs right now just use the addr_gva2hva()
+helper to do this translation. This change also allowed for the
+"use_ucall_pool" to be completely contained in ucall_common.c instead
+of spilling into each arch specific file. If there is a preference to
+have the arch specific calls translate from gva to hva I can do that,
+I think I'll need to have them all check if "use_ucall_pool" is set
+though. Thoughts?
+
+We can still update ucall_arch_get_ucall() to return a pointer type so
+that we can return NULL instead of 0.
+
+>
+> >       if (addr) {
+> >               memcpy(uc, addr, sizeof(*uc));
+> >               vcpu_run_complete_io(vcpu);
+> > --
+> > 2.37.1.455.g008518b4e5-goog
+> >
+>
+> Thanks,
+> drew

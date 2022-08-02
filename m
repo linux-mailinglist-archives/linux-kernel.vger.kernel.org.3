@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EEB587CE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18806587CEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 15:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiHBNNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 09:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S236483AbiHBNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 09:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiHBNNN (ORCPT
+        with ESMTP id S232503AbiHBNRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 09:13:13 -0400
+        Tue, 2 Aug 2022 09:17:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DED2737;
-        Tue,  2 Aug 2022 06:13:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21AB12D19;
+        Tue,  2 Aug 2022 06:17:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F35C1B81EFC;
-        Tue,  2 Aug 2022 13:13:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D47C433C1;
-        Tue,  2 Aug 2022 13:13:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B345B81EF3;
+        Tue,  2 Aug 2022 13:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3833C433C1;
+        Tue,  2 Aug 2022 13:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659445989;
-        bh=nCaDyEtIbkjRMPVGtA72MurPtE7v7zbuYlbgSxCOwzc=;
+        s=k20201202; t=1659446271;
+        bh=p4m28G7V5HhenGiD2H4zOI1QhZVoWGXr14bSJRSRAdg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jbZnIEPs5d5t6TfoNGHqIkchT4qm6G7Mkj4udtHDw1CKcGfezN8bBfmcEF+h9Bth1
-         eAfTEFmw8/9EpbN0TP/2FteEi6XORFBMgZSqxU3T1b2v8zSg4Ph16aZPmGRDnpU+V6
-         rehOjEvOY2QAPQFLOgeG1c91Pc0QiLs1GWNA+hEC9O9rspphdyQ0W5SMNy0Wf2YDGN
-         +5R4RcNeIjXsBBsrcz9jBWrmiRxt+KbXV4BMyz1yUyUJE8oKmRdtaMV9Mf2ZYqtrAo
-         PC07zmMh9z2Lp3rw1okcL/EvioI2OFx7StndikvU7NrE2Fs1Ioy1/yqRcmLwxrpZ2Q
-         M0ewtz6H6c4sw==
-Date:   Tue, 2 Aug 2022 14:13:02 +0100
+        b=PFXQbQPz1/L9eDzHSURbtzxxo3qdNlR+j2Fxcv8i/YkMjW80rur039virDvzrjCQt
+         7wbJawZkiTY9bGFbkjWmxkqbBXJJIlkygGCk+/MQ3wa7tMw6M5CzJtX2gfH7pOfocZ
+         fY2AFs7BiDwWiutDOasuNvlzogaKtRaFe2gkZZWb4Tp3xNZVvOfA/lcWWNd0F/h7pG
+         HVtafQyh7mmzugH4aCjIWzgvA7Ys3WfibMfMmXQRtfV2rl/Bc1Oo1NdyS3M1dior20
+         6bW+NAdletbIl5XB/HzrwQVM+tQzMYtXqYQJqUFSY4Ax4AJb9WeJoZSR1+d9ARkOdH
+         eOQnyY+qcd7ng==
+Date:   Tue, 2 Aug 2022 14:17:41 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-Message-ID: <Yuki3jpCSJDdXcWA@sirena.org.uk>
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com>
- <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
+Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>
+Subject: Re: [PATCH v3 05/13] regulator: qcom_spmi: Add support for new
+ regulator types
+Message-ID: <Yukj9bjX+O0Yab3q@sirena.org.uk>
+References: <20220731223736.1036286-1-iskren.chernev@gmail.com>
+ <20220731223736.1036286-6-iskren.chernev@gmail.com>
+ <3f56541a-29c1-af76-0de3-b20eb81a5fa8@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FG8oGUKVhgxoIQ9N"
+        protocol="application/pgp-signature"; boundary="TszTQpVlg1sWIkv4"
 Content-Disposition: inline
-In-Reply-To: <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
+In-Reply-To: <3f56541a-29c1-af76-0de3-b20eb81a5fa8@linaro.org>
 X-Cookie: Stay on the trail.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,40 +68,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---FG8oGUKVhgxoIQ9N
+--TszTQpVlg1sWIkv4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
-> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
+On Tue, Aug 02, 2022 at 12:46:48PM +0200, Krzysztof Kozlowski wrote:
+> On 01/08/2022 00:37, Iskren Chernev wrote:
 
-> > -    enum:
-> > -      - microchip,mpfs-spi
-> > -      - microchip,mpfs-qspi
-> > +    oneOf:
-> > +      - description: Microchip's Polarfire SoC SPI controller.
-> > +        const: microchip,mpfs-spi
-> > +      - description: Microchip's Polarfire SoC QSPI controller.
+> > +/*
+> > + * Third common register layout
+> > + */
+> > +enum spmi_ftsmps3_regulator_registers {
+> > +	SPMI_FTSMPS3_REG_STEP_CTRL		=3D 0x3c,
+> > +};
+> > +
+> > +
+>=20
+> Just one blank line.
 
-> Useless descriptions - they repeat compatible. Just keep it as enum and
-> skip descriptions. What value do they bring?
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-Someone not familiar with the full Microchip product line might not be
-aware of the expansion of mpfs, it's not blindingly obvious.
-
---FG8oGUKVhgxoIQ9N
+--TszTQpVlg1sWIkv4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpIt0ACgkQJNaLcl1U
-h9COjAf/fxpLRWiWJdErAvsAeQsUJGuknUyrw2SIHq2AcHl3fZaG6JY7zA2qplg0
-sMM/s6UW+GVyBhx2T8ghJcHWqu550wxYi2TVcBsktNnrGIZZN0VOad8BJggO9MOa
-+nF1G6gIomc8Y1b9LpaWaxyNtjIwIKYPMJ8THcaiuBL5csuiQt4rDMrVjLJd+fUH
-OJXaaGAjmJzm9Cutj43JdmA95h/qtcpRc3OhCj4A1inkPGFr4f3sNdKwPROstQq2
-4xYMWLg9dinePs8LU2wK7S6cc65XAgJmJPJJf8+Q4TZWKfek23laLVZL+MXci7uL
-Wi0Kj7DGa5QTdtaYOktYxZpT+TCeZQ==
-=VsFA
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpI/QACgkQJNaLcl1U
+h9CIzQf+NuTTebaileZ8U06bnAkY26XDIkyB3jsbaiecRfzdZzXZw+icUg3nKpAG
+eZhtg6qhX9zUSrvy0e2yjmXuvfplFxgRM1kk+YNe4vUJ1NEn+K5Rq71mgUJP5djN
+vetDDdZmJ78dSTNPLLZNpNnPR2fkzFKdeBjxs2I/4N2Ci3MaGol+Tse41H34lGQX
+myMJ9KHpGHKC8I/s8rBporzSxK4L/q60srqhutdJIcOT4lyqumKbSzLBfEZwRfFv
+EWDyr0ea9Qs9RHtEVOag5+DDRqXTV40iK756MlRQic9a4ngw1l6SfB92iwalC5pV
+KKk62Ean6wM2YOVdq5jLxaTbVY0zKQ==
+=HoLP
 -----END PGP SIGNATURE-----
 
---FG8oGUKVhgxoIQ9N--
+--TszTQpVlg1sWIkv4--

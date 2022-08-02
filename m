@@ -2,494 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DC5587E35
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F85587E36
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 16:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbiHBOgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 10:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S237171AbiHBOgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 10:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235854AbiHBOgV (ORCPT
+        with ESMTP id S237309AbiHBOgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 10:36:21 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ADD1401B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 07:36:19 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s9so9856051ljs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 07:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=huC84LMiy+idHDE21Unxrvvu2T75Kh3TW5BAOkVTxO8=;
-        b=UdkutpezbIz7IvZ0bjwjBY7/MOV2acSpRQ2/b4lcqhAXYjpX5xzQwozI6kN227DxeH
-         csIyrQd+bX1wXRx0QwdbfAl4GgNSgHBEPXJTgsPYOrKzEfZy0Hkx9oAKFjVKfgXAxhWz
-         fplb6T+JL/ZAAHwSTsuTz3N9++qXm2nGlksTDaJ+Fa0Z0cRNhbLUiuiiqlO7WhWogfKD
-         tyIxZ/uxjz9a9LmKC7RDXbJod/RSmZVOho37v6xXrZjDLYQICzI3j1ZNe6ITobRb5JnP
-         opayq1fxu1Q7qZjI6Y3t1s8W7Rgq4nXQNU/znJqQeTaXT41LuCVPO9OcDqdVyJP1qgi8
-         B01A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=huC84LMiy+idHDE21Unxrvvu2T75Kh3TW5BAOkVTxO8=;
-        b=qVstCySHbDi1IudEz/56oSLwDoA07Pof90X347yB7b5BukeIkrcZqowEqwIRh5nXZf
-         xlLpQNd+MxDqeevsjY9WkONIyeMahjiB+YmafMWFAQLVa7MlHY2rpxlryW/03GcRvCjm
-         BIlMBqi6RrWnU6IZAD5aniYnmvFAWijT4MvCGpCnRu22tiEDZQK1zNJxAASBXwH39WUQ
-         MPR+TxsQB6GDeGqPYuX8MZJZWWHpQSe2AZ/XilKD0TqF6h5oA8BEKS9BDaQtvnbf3h7m
-         4//gymM1xK3PCPuIAaHZ8PGuiUVDVJw4+lcym+GqEH84/wepWoT0e/OCt3fTHrKllLlW
-         w5jw==
-X-Gm-Message-State: AJIora/34NCRWkLyJvWHQFCwYmA6SNyeJR1fZsrONgNGj1jbZttR9o7E
-        Z98zAmSPL0Z+hao9I/XntUGkYof9AJeu5DJZfcY4Sg==
-X-Google-Smtp-Source: AGRyM1tJBLXWpcqQ/Ki4PVddkrlU/e224GlT35CJe+d2xyD2RwF/6UGgMpWnPMJjaIvC3Vi0q09l3RpSrhGy4WIAVgw=
-X-Received: by 2002:a2e:a7c8:0:b0:25e:200a:74cf with SMTP id
- x8-20020a2ea7c8000000b0025e200a74cfmr7260650ljp.271.1659450977682; Tue, 02
- Aug 2022 07:36:17 -0700 (PDT)
+        Tue, 2 Aug 2022 10:36:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D7215704;
+        Tue,  2 Aug 2022 07:36:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D66BEB81F38;
+        Tue,  2 Aug 2022 14:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F34C43470;
+        Tue,  2 Aug 2022 14:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659450988;
+        bh=+PJ10EgQjsPT7oxrxxYmU/pdwHPBRJXP/f0aFyyVyCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CYRkGnkk7ynHJXIZFQNM2lzIiYDPvGvdardxlgv3WKP3YjAqplJP37mAp0Er0wzyU
+         +wRwq7q3iMcx63hti66TQjI5tRc9OUyo/KMpUGYUcIBOJ7gBIzd7xm9eyI1H5g0mOj
+         DFr1Y1gO3rGXxJnsArwmoO64yJh/a+kBiJ1h108I=
+Date:   Tue, 2 Aug 2022 16:36:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>,
+        Dan Robertson <daniel.robertson@starlab.io>,
+        Viktor Garske <viktor@v-gar.de>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        =?iso-8859-1?B?TOlv?= Lanteri Thauvin 
+        <leseulartichaut@gmail.com>, Niklas Mohrin <dev@niklasmohrin.de>,
+        Gioh Kim <gurugio@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Milan Landaverde <milan@mdaverde.com>,
+        Morgan Bartlett <mjmouse9999@gmail.com>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        =?iso-8859-1?Q?N=E1ndor_Istv=E1n_Kr=E1cser?= <bonifaido@gmail.com>,
+        David Gow <davidgow@google.com>,
+        John Baublitz <john.m.baublitz@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH v8 17/31] rust: add `kernel` crate
+Message-ID: <Yuk2aSxydi37eRXq@kroah.com>
+References: <20220802015052.10452-1-ojeda@kernel.org>
+ <20220802015052.10452-18-ojeda@kernel.org>
+ <Yukn3vNJ8iGuXgiz@kroah.com>
+ <CANiq72kzoVcMNeJgDc+rQ_0S+5u2RB9UkCx-SZUAxm=Km=gjrQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220801201109.825284-1-pgonda@google.com> <20220801201109.825284-10-pgonda@google.com>
- <20220802094915.lkmoz52gztzjjun4@kamzik> <CAMkAt6q9OSXCfj7y=g5H-82tRQfFvX84fjpcfYUrs+mKtGMHzg@mail.gmail.com>
- <20220802142638.vw6iw3dvyl4j5iyr@kamzik>
-In-Reply-To: <20220802142638.vw6iw3dvyl4j5iyr@kamzik>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 2 Aug 2022 08:36:06 -0600
-Message-ID: <CAMkAt6qzKo5Q+KVqf0vrqYqoBd-S2aPxF56n1gOKhu=Z9CVokw@mail.gmail.com>
-Subject: Re: [V2 09/11] KVM: selftests: Make ucall work with encrypted guests
-To:     Andrew Jones <andrew.jones@linux.dev>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marc Orr <marcorr@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiq72kzoVcMNeJgDc+rQ_0S+5u2RB9UkCx-SZUAxm=Km=gjrQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-()
+On Tue, Aug 02, 2022 at 04:33:17PM +0200, Miguel Ojeda wrote:
+> Hi Greg,
+> 
+> On Tue, Aug 2, 2022 at 3:34 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is huge for a single commit, and pretty much impossible to review
+> > as-is.
+> >
+> > Any chance you can turn this into a series of commits, that starts with
+> > the basics and builds on top of that?  Right now you are mixing many
+> > many different subsystems all at once into one commit, guaranteeing that
+> > no one can review the whole thing properly :(
+> 
+> Yeah, of course, I am happy to do that -- I did it for the `sync`
+> module, but stopped splitting further since I understood you wanted it
+> this way from what you told me on February.
 
-On Tue, Aug 2, 2022 at 8:26 AM Andrew Jones <andrew.jones@linux.dev> wrote:
->
-> On Tue, Aug 02, 2022 at 07:51:40AM -0600, Peter Gonda wrote:
-> > On Tue, Aug 2, 2022 at 3:49 AM Andrew Jones <andrew.jones@linux.dev> wrote:
-> > >
-> > > On Mon, Aug 01, 2022 at 01:11:07PM -0700, Peter Gonda wrote:
-> > > > Add support for encrypted, SEV, guests in the ucall framework. If
-> > > > encryption is enabled set up a pool of ucall structs in the guests'
-> > > > shared memory region. This was suggested in the thread on "[RFC PATCH
-> > > > 00/10] KVM: selftests: Add support for test-selectable ucall
-> > > > implementations". Using a listed as suggested there doesn't work well
-> > > > because the list is setup using HVAs not GVAs so use a bitmap + array
-> > > > solution instead to get the same pool result.
-> > > >
-> > > > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > > > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > > > ---
-> > > >  .../selftests/kvm/include/kvm_util_base.h     |   3 +
-> > > >  .../selftests/kvm/include/ucall_common.h      |  14 +--
-> > > >  .../testing/selftests/kvm/lib/ucall_common.c  | 112 +++++++++++++++++-
-> > > >  3 files changed, 115 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > > > index 8ce9e5be70a3..ad4abc6be1ab 100644
-> > > > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > > > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > > > @@ -102,6 +102,9 @@ struct kvm_vm {
-> > > >       int stats_fd;
-> > > >       struct kvm_stats_header stats_header;
-> > > >       struct kvm_stats_desc *stats_desc;
-> > > > +
-> > > > +     bool use_ucall_list;
-> > >
-> > > use_ucall_pool
-> > >
-> > > > +     struct list_head ucall_list;
-> > > >  };
-> >
-> > Will do. I also need to remove this |ucall_list| member.
-> >
-> > > >
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-> > > > index c1bc8e33ef3f..a96220ac6024 100644
-> > > > --- a/tools/testing/selftests/kvm/include/ucall_common.h
-> > > > +++ b/tools/testing/selftests/kvm/include/ucall_common.h
-> > > > @@ -22,6 +22,10 @@ enum {
-> > > >  struct ucall {
-> > > >       uint64_t cmd;
-> > > >       uint64_t args[UCALL_MAX_ARGS];
-> > > > +
-> > > > +     /* For encrypted guests. */
-> > >
-> > > Please, no 'encrypted' words in ucall files. ucalls shouldn't care about
-> > > guest types. Indeed, the summary of this patch could even drop the word
-> > > 'encrypted'. This patch is adding support for ucall pools, which is
-> > > motivated by the need to support encrypted guests (the motivation should
-> > > go in the commit message, but otherwise the patch should be ucall specific
-> > > and guest type agnostic)
-> > >
-> > > > +     uint64_t idx;
-> > >
-> > > We don't need 'idx' because 'hva' will always be at the
-> > > idx * sizeof(struct ucall) offset of ucall_hdr->ucalls, which means
-> > > we can always calculate it,
-> > >
-> > >  static inline size_t uc_pool_idx(struct ucall *uc)
-> > >  {
-> > >         return uc->hva - ucall_hdr->ucalls;
-> > >  }
-> >
-> > Good call, I didn't think of that.
-> >
-> > >
-> > > > +     struct ucall *hva;
-> > > >  };
-> > > >
-> > > >  void ucall_arch_init(struct kvm_vm *vm, void *arg);
-> > > > @@ -32,15 +36,9 @@ uint64_t ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
-> > > >  void ucall(uint64_t cmd, int nargs, ...);
-> > > >  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
-> > > >
-> > > > -static inline void ucall_init(struct kvm_vm *vm, void *arg)
-> > > > -{
-> > > > -     ucall_arch_init(vm, arg);
-> > > > -}
-> > > > +void ucall_init(struct kvm_vm *vm, void *arg);
-> > > >
-> > > > -static inline void ucall_uninit(struct kvm_vm *vm)
-> > > > -{
-> > > > -     ucall_arch_uninit(vm);
-> > > > -}
-> > > > +void ucall_uninit(struct kvm_vm *vm);
-> > > >
-> > > >  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)       \
-> > > >                               ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
-> > > > diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> > > > index a060252bab40..feb0173179ec 100644
-> > > > --- a/tools/testing/selftests/kvm/lib/ucall_common.c
-> > > > +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> > > > @@ -1,22 +1,122 @@
-> > > >  // SPDX-License-Identifier: GPL-2.0-only
-> > > >  #include "kvm_util.h"
-> > > > +#include "linux/types.h"
-> > > > +#include "linux/bitmap.h"
-> > > > +#include "linux/atomic.h"
-> > > > +
-> > > > +struct ucall_header {
-> > > > +     DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
-> > > > +     struct ucall ucalls[KVM_MAX_VCPUS];
-> > > > +};
-> > > > +
-> > > > +static bool use_ucall_list;
-> > >
-> > > use_ucall_pool
-> > >
-> > > > +static struct ucall_header *ucall_hdr;
-> > >
-> > > ucall_pool
-> >
-> > Will update naming here.
-> >
-> > >
-> > > > +
-> > > > +void ucall_init(struct kvm_vm *vm, void *arg)
-> > > > +{
-> > > > +     struct ucall *uc;
-> > > > +     struct ucall_header *hdr;
-> > > > +     vm_vaddr_t vaddr;
-> > > > +     int i;
-> > > > +
-> > > > +     use_ucall_list = vm->use_ucall_list;
-> > > > +     sync_global_to_guest(vm, use_ucall_list);
-> > > > +     if (!use_ucall_list)
-> > > > +             goto out;
-> > > > +
-> > > > +     TEST_ASSERT(!ucall_hdr,
-> > > > +                 "Only a single encrypted guest at a time for ucalls.");
-> > >
-> > > single VM at a time
-> > >
-> > > And I'd leave that on a single line. checkpatch allows up to 100 chars and
-> > > I'm included to use all 110 chars of it.
-> >
-> > Sounds good.
-> >
-> > >
-> > > > +     vaddr = vm_vaddr_alloc_shared(vm, sizeof(*hdr), vm->page_size);
-> > > > +     hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
-> > > > +     memset(hdr, 0, sizeof(*hdr));
-> > > > +
-> > > > +     for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-> > > > +             uc = &hdr->ucalls[i];
-> > > > +             uc->hva = uc;
-> > > > +             uc->idx = i;
-> > > > +     }
-> > > > +
-> > > > +     ucall_hdr = (struct ucall_header *)vaddr;
-> > > > +     sync_global_to_guest(vm, ucall_hdr);
-> > > > +
-> > > > +out:
-> > > > +     ucall_arch_init(vm, arg);
-> > > > +}
-> > > > +
-> > > > +void ucall_uninit(struct kvm_vm *vm)
-> > > > +{
-> > > > +     use_ucall_list = false;
-> > > > +     ucall_hdr = NULL;
-> > >
-> > > It's unlikely we'd ever change the ucall setup on a running VM,
-> > > but we should sync these changes to the guest for good measure.
-> >
-> > Hmm I'll need to have some notion of encrypted guests here then. Since
-> > the guests page tables also get encrypted we can no longer get the
-> > gva2gpa translations so sync_global_to_guest() cannot be done due to
-> > the addr_ga2hva(). So is it OK if this call references encryption like
-> > below?
-> >
-> >     use_ucall_list = false;
-> >      ucall_hdr = NULL;
-> > if (!vm->memencrypt.encrypted) {
-> >    sync_global_to_guest(vm, use_ucall_list);
-> >   sync_global_to_guest(vm, ucall_hdr);
-> > }
->
-> Yes, I guess that's the best we can do.
->
-> If sync_global_to_guest() becomes useless once a guest is encrypted then
-> maybe it should assert !vm->memencrypt.encrypted.
+I did?  Maybe I didn't realize we would end up with 15k lines of code
+from different parts of the kernel like amba bus and filesystem apis all
+in a single commit.  If so, my fault, but as other parts of this
+discussion show, it is going to be required to get the subsystem
+maintainers to be able to review the interfaces to their code in order
+to get any further.
 
-In the last patch I have edited addr_gva2gpa like below to assert.
-This should cover sync_global_to_guest() and other similar cases.
+thanks,
 
- static inline vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
- {
-+       TEST_ASSERT(!vm->memcrypt.encrypted,
-+                   "Encrypted guests have their page tables encrypted
-so gva2* conversions are not possible.");
-        return addr_arch_gva2gpa(vm, gva);
- }
-
-Speaking of that though I should move that to 10/11 instead of 11/11.
-
->
-> >
-> > >
-> > > > +
-> > > > +     ucall_arch_uninit(vm);
-> > > > +}
-> > > > +
-> > > > +static struct ucall *ucall_alloc(void)
-> > > > +{
-> > > > +     struct ucall *uc = NULL;
-> > > > +     int i;
-> > > > +
-> > > > +     if (!use_ucall_list)
-> > > > +             goto out;
-> > > > +
-> > > > +     for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-> > > > +             if (atomic_test_and_set_bit(i, ucall_hdr->in_use))
-> > > > +                     continue;
-> > > > +
-> > > > +             uc = &ucall_hdr->ucalls[i];
-> > > > +     }
-> > >
-> > > This is not what I suggested in the last revision and it's still wrong.
-> > > Here, you're still looping through all of the pool and returning the last
-> > > one.
-> > >
-> > > What I suggested was
-> > >
-> > >         for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-> > >                 if (!atomic_test_and_set_bit(i, ucall_hdr->in_use)) {
-> > >                         uc = &ucall_hdr->ucalls[i];
-> > >                         break;
-> > >                 }
-> > >         }
-> > >
-> > > Notice how we leave the loop early when we find a free uc.
-> >
-> > Ah my mistake, I didn't get this fix into this series
-> >
-> > >
-> > > We should also zero the contents of the uc buffer before returning.
-> >
-> > Ack will do.
-> >
-> > >
-> > > > +
-> > > > +out:
-> > > > +     return uc;
-> > > > +}
-> > > > +
-> > > > +static void ucall_free(struct ucall *uc)
-> > > > +{
-> > > > +     if (!use_ucall_list)
-> > > > +             return;
-> > > > +
-> > > > +     clear_bit(uc->idx, ucall_hdr->in_use);
-> > >
-> > > This seems to be the one and only use of idx which is another argument for
-> > > dropping the variable and just calculating it instead.
-> >
-> > Will do.
-> >
-> > >
-> > > > +}
-> > > > +
-> > > > +static vm_vaddr_t get_ucall_addr(struct ucall *uc)
-> > > > +{
-> > > > +     if (use_ucall_list)
-> > > > +             return (vm_vaddr_t)uc->hva;
-> > >
-> > > A comment explaining that this hva has already been synchronized
-> > > with the guest would be good. Or maybe a different name for the
-> > > pointer than hva, one which conveys that it's a pointer that works
-> > > as both an hva and gva would be better.
-> >
-> > I don't think this pointer does work as a gva though since its created
-> > by just taking &uc during host execution. I can add a comment that
-> > mentions this is a hva is already translated for the host and not for
-> > guest use other than communicating with the host. I thought 'hva' was
-> > a good name here since it is literally the hva of this ucall struct,
-> > what name would you prefer?
->
-> My mistake, I forgot how we initialized uc->hva. 'hva' is a good name.
->
-> >
-> > >
-> > >
-> > > > +
-> > > > +     return (vm_vaddr_t)uc;
-> > > > +}
-> > > >
-> > > >  void ucall(uint64_t cmd, int nargs, ...)
-> > > >  {
-> > > > -     struct ucall uc = {
-> > > > -             .cmd = cmd,
-> > > > -     };
-> > >
-> > > This zeros all members except cmd.
-> > >
-> > > > +     struct ucall *uc;
-> > > > +     struct ucall tmp;
-> > >
-> > > And this makes tmp full of stack garbage, so in the non uc-pool case we
-> > > no longer have an equivalent uc. Please initialize tmp the same way uc
-> > > was initialized.
-> >
-> > Ack, I'll get this fixed.
-> >
-> > >
-> > > >       va_list va;
-> > > >       int i;
-> > > >
-> > > > +     uc = ucall_alloc();
-> > > > +     if (!uc)
-> > > > +             uc = &tmp;
-> > > > +
-> > > > +     uc->cmd = cmd;
-> > > > +
-> > > >       nargs = min(nargs, UCALL_MAX_ARGS);
-> > > >
-> > > >       va_start(va, nargs);
-> > > >       for (i = 0; i < nargs; ++i)
-> > > > -             uc.args[i] = va_arg(va, uint64_t);
-> > > > +             uc->args[i] = va_arg(va, uint64_t);
-> > > >       va_end(va);
-> > > >
-> > > > -     ucall_arch_do_ucall((vm_vaddr_t)&uc);
-> > > > +     ucall_arch_do_ucall(get_ucall_addr(uc));
-> > >
-> > > We don't need get_ucall_addr(). Just do the if-else right here
-> > >
-> > >    if (use_ucall_list)
-> > >        ucall_arch_do_ucall((vm_vaddr_t)uc->hva);
-> > >    else
-> > >       ucall_arch_do_ucall((vm_vaddr_t)uc);
-> >
-> > Will do.
-> >
-> > >
-> > > > +
-> > > > +     ucall_free(uc);
-> > > > +}
-> > > > +
-> > > > +static void *get_ucall_hva(struct kvm_vm *vm, uint64_t uc)
-> > > > +{
-> > > > +     if (vm->use_ucall_list)
-> > > > +             return (void *)uc;
-> > > > +
-> > > > +     return addr_gva2hva(vm, uc);
-> > > >  }
-> > > >
-> > > >  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> > > > @@ -27,7 +127,7 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> > > >       if (!uc)
-> > > >               uc = &ucall;
-> > > >
-> > > > -     addr = addr_gva2hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
-> > > > +     addr = get_ucall_hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
-> > >
-> > > Wait, I thought we wanted ucall_arch_get_ucall() to return hvas?
-> > > It would make more sense if it did, since it's called from the
-> > > host.
-> >
-> > As you noted in [V2 07/11] I updated ucall_arch_get_ucall() to return
-> > the gva. I figured this was just more boilerplate which could be
-> > consolidated given all archs right now just use the addr_gva2hva()
-> > helper to do this translation. This change also allowed for the
-> > "use_ucall_pool" to be completely contained in ucall_common.c instead
-> > of spilling into each arch specific file. If there is a preference to
-> > have the arch specific calls translate from gva to hva I can do that,
-> > I think I'll need to have them all check if "use_ucall_pool" is set
-> > though. Thoughts?
->
-> I just checked what I wrote for the last version of this patch,
-> "[RFC V1 08/10] KVM: selftests: Make ucall work with encrypted guests".
-> It was
->
-> > ...we're only updating x86's ucall_arch_get_ucall() to return gvas.
-> > What about the other architectures? Anyway, I'd rather we don't
-> > change ucall_arch_get_ucall() to return gvas. They should continue
-> > returning hvas and any trickery needed to translate a pool uc to
-> > an hva should be put inside ucall_arch_get_ucall().
->
-> (It's comforting to see I was consistent, at least wrt the last review.)
->
-> So, I would keep returning hvas and put the 'if use_ucall_pool' inside
-> the ucall_arch_get_ucall() functions.
-
-Makes sense. I'll have ucall_arch_get_ucall() return hvas and deal
-with the use_pool trickery. Sorry for not following that for this
-version I had just thought consolidating that logic would be cleaner.
-
-Thanks for thorough review Drew!
-
->
-> Thanks,
-> drew
->
-> >
-> > We can still update ucall_arch_get_ucall() to return a pointer type so
-> > that we can return NULL instead of 0.
-> >
-> > >
-> > > >       if (addr) {
-> > > >               memcpy(uc, addr, sizeof(*uc));
-> > > >               vcpu_run_complete_io(vcpu);
-> > > > --
-> > > > 2.37.1.455.g008518b4e5-goog
-> > > >
-> > >
-> > > Thanks,
-> > > drew
+greg k-h

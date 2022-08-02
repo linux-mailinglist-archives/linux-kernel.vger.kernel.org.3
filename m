@@ -2,132 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277EC587565
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17E558756B
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 Aug 2022 04:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiHBCGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 Aug 2022 22:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S235236AbiHBCIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 Aug 2022 22:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiHBCGM (ORCPT
+        with ESMTP id S230338AbiHBCId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 Aug 2022 22:06:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763D18E32;
-        Mon,  1 Aug 2022 19:06:09 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LxdZ10bhGzlW8N;
-        Tue,  2 Aug 2022 10:03:21 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 10:06:02 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 10:06:01 +0800
-Subject: Re: [PATCH v3 1/3] rcu/exp: Use NMI to get the backtrace of
- cpu_curr(other_cpu) first
-To:     <paulmck@kernel.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
-References: <20220730102330.1255-1-thunder.leizhen@huawei.com>
- <20220730102330.1255-2-thunder.leizhen@huawei.com>
- <20220801231415.GC2860372@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <1fd08a9a-fd2b-2608-da55-5bc526515131@huawei.com>
-Date:   Tue, 2 Aug 2022 10:06:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 1 Aug 2022 22:08:33 -0400
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8C64331E;
+        Mon,  1 Aug 2022 19:08:31 -0700 (PDT)
+Received: by mail-pl1-f193.google.com with SMTP id x10so11422311plb.3;
+        Mon, 01 Aug 2022 19:08:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=5t8YdSCit9Ty96RekM4UJNc7grp60HZVSHT6eIxMCH0=;
+        b=kmBnknLPeKUDam4c7UBEkrNkPtQlxMd80yFwjXDaDSU4VDnUkCR7vS7PbV4zBov5c4
+         BCVhOsNJ/2SlRKe3RVi5Vn49BGPLNAkEPHdPMZeQJuQ/aY/wRJc49RNS74OWz6rZdFxQ
+         XsVRC50o1hvrCh2NaOUyALIIuaExsNnQyteHprTw3CTqg8q4utAeDIr+WSz5aajTS9u7
+         61aQR17ljpZrnz21K8L9lDLpmJpvx7Tx9fvOxATb6TF1ppwgCHW1FWThgZJH+ktDoTKc
+         k0z+7T2w3bV4B1uR+VfeHOT67KPhvQPB8nHnLcYoy1JrFdEcOxrdR7/bWgQrGV1G1c53
+         a/wA==
+X-Gm-Message-State: ACgBeo3srDXyBR/ggQapI6HUvsbBJtOHwAFczrtVUR+W/ynj/IODg50a
+        bohAWffxrdJRlYxWNwocSA==
+X-Google-Smtp-Source: AA6agR4uxWsch5pYg/gaUsVGabaIimDA5ozylNx1b/0zOzvhXRQDY4OmqBDM1jvUKD6TOLaENZlqRg==
+X-Received: by 2002:a17:90b:3b49:b0:1f4:df09:d671 with SMTP id ot9-20020a17090b3b4900b001f4df09d671mr13940191pjb.129.1659406110927;
+        Mon, 01 Aug 2022 19:08:30 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id n7-20020a622707000000b0052dbad1ea2esm1552941pfn.6.2022.08.01.19.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 19:08:30 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, arnd@arndb.de
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com, sunliming <sunliming@kylinos.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] watchdog: sa1100: make variable sa1100dog_driver static
+Date:   Tue,  2 Aug 2022 10:08:19 +0800
+Message-Id: <20220802020819.1226454-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220801231415.GC2860372@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This symbol is not used outside of sa1100_wdt.c, so marks it static.
 
+Fixes the following warning:
 
-On 2022/8/2 7:14, Paul E. McKenney wrote:
-> On Sat, Jul 30, 2022 at 06:23:28PM +0800, Zhen Lei wrote:
->> The backtrace of cpu_curr(other_cpu) is unwinded based on the 'fp' saved
->> during its last switch-out. For the most part, it's out of date. So try
->> to use NMI to get the backtrace first, just like those functions in
->> "tree_stall.h" did. Such as rcu_dump_cpu_stacks().
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> Much better, thank you!
-> 
->> ---
->>  kernel/rcu/tree_exp.h | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
->> index 0f70f62039a9090..21381697de23f0b 100644
->> --- a/kernel/rcu/tree_exp.h
->> +++ b/kernel/rcu/tree_exp.h
->> @@ -665,7 +665,8 @@ static void synchronize_rcu_expedited_wait(void)
->>  				mask = leaf_node_cpu_bit(rnp, cpu);
->>  				if (!(READ_ONCE(rnp->expmask) & mask))
->>  					continue;
->> -				dump_cpu_task(cpu);
->> +				if (!trigger_single_cpu_backtrace(cpu))
->> +					dump_cpu_task(cpu);
-> 
-> But why not just leave this unchanged, rather than adding the call to
-> trigger_single_cpu_backtrace() in this patch and then removing it in
-> the next patch?
+>> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver'
+was not declared. Should it be static?
 
-To make the patch clear and easy to describe. Otherwise, I need to
-give an additional description of it in the next patch, because I
-searched all dump_cpu_task(). This seems to make the next patch
-less simple.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ drivers/watchdog/sa1100_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Some of the patch sets I've seen have been done step by step like
-this. But I can't find it now.
-
-On the other hand, this patch is a small fix. Earlier versions may
-only backport it, not the next cleanup patch.
-
-> 
-> 							Thanx, Paul
-> 
->>  			}
->>  		}
->>  		jiffies_stall = 3 * rcu_exp_jiffies_till_stall_check() + 3;
->> -- 
->> 2.25.1
->>
-> .
-> 
-
+diff --git a/drivers/watchdog/sa1100_wdt.c b/drivers/watchdog/sa1100_wdt.c
+index 2d0a06a158a8..82ac5d19f519 100644
+--- a/drivers/watchdog/sa1100_wdt.c
++++ b/drivers/watchdog/sa1100_wdt.c
+@@ -238,7 +238,7 @@ static int sa1100dog_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-struct platform_driver sa1100dog_driver = {
++static struct platform_driver sa1100dog_driver = {
+ 	.driver.name = "sa1100_wdt",
+ 	.probe	  = sa1100dog_probe,
+ 	.remove	  = sa1100dog_remove,
 -- 
-Regards,
-  Zhen Lei
+2.25.1
+

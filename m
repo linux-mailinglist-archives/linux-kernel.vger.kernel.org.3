@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF38A588BBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D245588BC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237687AbiHCMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S237739AbiHCMFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiHCMDk (ORCPT
+        with ESMTP id S233640AbiHCMFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:03:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F335F1A072;
-        Wed,  3 Aug 2022 05:03:39 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273BgHoB023513;
-        Wed, 3 Aug 2022 12:03:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=GnzalkEgh8cDTb75tWrLwtPfYTUvsZnCQhi2QQqTBzc=;
- b=eHB1otNZGzEIiY6kitI6Wxukbi55TjmemyWCgVhlK/XPdaHgBxSN8OyGy3bJSqbqV9Kb
- LSRWvQQSr8x9fCbhcAAUCAc3QqWhF05dBHaCih8DbcT1ZgBf/PgPYlcVGX+fHIi0z4pF
- WgjuKUYDbEhaqonggiolRp9UXwJywqYimBH2Fg/qCqTDIDI5zwEyaDnQ38UZrnVqmOcN
- 54bAPb5tR7PYKQTixdjFeKyosU6a+C0USSWzQlswkachvtNTXFrc+VoUlEfcH66pouiz
- LvaHnzHLLLlLR88hyNFGOg0BOE319bE2ZKVjUcUg+ayBybSH+Y4hdKzdqPR/LQQuNvLP kw== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqrcbrp1a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 12:03:06 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 273BmEhu029360;
-        Wed, 3 Aug 2022 12:01:37 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3hmuwhsr07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 12:01:37 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 273C1nRQ28508616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Aug 2022 12:01:49 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC62242049;
-        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E00142042;
-        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
-Received: from [9.171.89.39] (unknown [9.171.89.39])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
-Message-ID: <f2c6f744-7139-05b6-6d96-4e207dcd9c1f@linux.ibm.com>
-Date:   Wed, 3 Aug 2022 14:01:31 +0200
+        Wed, 3 Aug 2022 08:05:03 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820391A072;
+        Wed,  3 Aug 2022 05:04:59 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id z187so6347941pfb.12;
+        Wed, 03 Aug 2022 05:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=HdGfOeXezbgbP8QayfnATfWBu9OsYip9xRe8mOklBIU=;
+        b=Yld7l631oi7+tpGn2LNv1r9k2u5LqzevMC3SrNO59N0kMRFPtcjsbLfolY7UC+5bSG
+         sQSQi1jnYV8dkbCE4CcAI4IJdN/g+uTCLqgxxvXp8/sRrMUyrYevsjnccK82GbLnLrvb
+         jZ3A5FtFAJT75izRgKquodxyRyUK6FGaUWCesNegPU/Dec8EKV/3/lmhRZXHAczh+18a
+         /qLLoUzO0VhxJZgcLS0YcIv7OsGsfJSl+4nllmAzsB1nMdGU8qAqzzfPgrpQURVAjjHw
+         kDsdFEfLV6xD49wES8JcKdkD47kA8Vvb3StYMZ5km8aD8x49XxQ35vyPdaUiVM5NXlaw
+         Z2tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=HdGfOeXezbgbP8QayfnATfWBu9OsYip9xRe8mOklBIU=;
+        b=xwIfT5oN7KJJ/To6HBSfpVadJsoWaknojXiL4n2s7v284Tvp/HlCtYp5/gcKFBpfwe
+         E/4OGqM9+ulTwD9g2tzIF609f09OrHNitMMfFerTpIphaworW19wpsGemE9r4TdlQIcs
+         hR3YuE01HD1HPyH2Fc5NBsFvzh9bSz1M/GWJVfTqrrrUZzzVj4d1u7YSAi5HcOUGFL54
+         GR9Hd+wPehPUqq5IyXayS6Hij6sY/MZxet5Zz5R0tOxtyAKMmTaLrjwlen5Za70AmPJ9
+         /2syHdVQd1p7hN0RnfxC8rdNAHCBZZfaw1FnjnkWXxF/3Q7zZcbHfWLAXJxdx7A3dQ4X
+         tPPA==
+X-Gm-Message-State: AJIora9VtSnH6vGkPTTtMY717xNjGIjBp295GGQ/pVnxevLVxKTPfQud
+        KhMgy8KpJqSMxlaRzVVjemKnsATyUeduD9JML1s=
+X-Google-Smtp-Source: AGRyM1uBEjXqXRfTk40XskdX+hFpRZxnzbZ9QsDJaRBmrFW2gVZcgKhRFP2q6mOE/9NUtyDMwGof3T8qrWCFWFob6oE=
+X-Received: by 2002:a63:570b:0:b0:41a:5129:42d3 with SMTP id
+ l11-20020a63570b000000b0041a512942d3mr21078017pgb.216.1659528299014; Wed, 03
+ Aug 2022 05:04:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] random: handle archrandom in plural words
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        x86@kernel.org, Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Harald Freudenberger <freude@linux.ibm.com>
-References: <YtP1+MJ1tNdJA60l@zx2c4.com>
- <20220717200356.75060-1-Jason@zx2c4.com>
- <46c1a7be-080b-3315-50cc-d3c848fd99e3@linux.ibm.com>
- <YtqIbrds53EuyqPE@zx2c4.com>
-From:   Holger Dengler <dengler@linux.ibm.com>
-In-Reply-To: <YtqIbrds53EuyqPE@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HRjzL3yFJDN9d8vu57sKCKxbeNHkTfQy
-X-Proofpoint-ORIG-GUID: HRjzL3yFJDN9d8vu57sKCKxbeNHkTfQy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=635
- lowpriorityscore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208030052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CANXPkT6mYusYe8O0dbq3vW+24SsUZ19PqhOL+wLFRnbFXwu0Zg@mail.gmail.com>
+ <CANXPkT7nOhH+5bD0ycyRBT9FKQBBszCVuWkqp4tFtVRf2+8DFg@mail.gmail.com>
+ <CANXPkT5k9Pw4ka6CihyCg0oTd-32Te-ox=f3=9rtCphVgrdctA@mail.gmail.com>
+ <165590120140.1149771.2257818527859865760@Monstersaurus> <4883f0a7-6a1b-31bd-33fe-db8f6dcf73fa@selasky.org>
+ <CANXPkT73ssg6RRyfDtp7c_8sO60a-UT0-Y4S1_=D=M_mcLNN9g@mail.gmail.com>
+In-Reply-To: <CANXPkT73ssg6RRyfDtp7c_8sO60a-UT0-Y4S1_=D=M_mcLNN9g@mail.gmail.com>
+From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
+Date:   Wed, 3 Aug 2022 21:04:51 +0900
+Message-ID: <CANXPkT4qYOYPL+F=-Pi_NbQErq9WwrR-M-BHe=gP9Ay4bSs+=w@mail.gmail.com>
+Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
+To:     Hans Petter Selasky <hps@selasky.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org
+Cc:     =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>,
+        0215yys@hanmail.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+Dear All.
+Too much time has already passed since I first sent this Email.
+Can you share how this patch is going ?
 
-On 22/07/2022 13:22, Jason A. Donenfeld wrote:
-> On Fri, Jul 22, 2022 at 10:08:05AM +0200, Holger Dengler wrote:
->> Why not changing the API to take bytes instead of words? Sure, at the
->> moment it looks like all platforms with TRNG support are able to
->> deliver at least one word, but bytes would be more flexible. 
-> 
-> The idea is to strike a sweet spot between capabilities. S390x is fine
-> with byte-level granularity up to arbitrary lengths, while x86 is best
-> with word-level granularity of length 1. The happy intersection between
-> the two is just word-level granularity of arbitrary length. Yes we
-> _could_ introduce a lot of code complexity by cascading the x86 case
-> down into smaller and smaller registers, ignoring the fact that it's no
-> longer efficient below 32- or 64-bit registers depending on vendor. But
-> then we're relying on the inliner to remove all of that extra code,
-> since all callers actually only ever want 32 or 64 bytes. Why bloat for
-> nothing? The beauty of this approach is that it translates very
-> naturally over all the various quirks of architectures without having to
-> have a lot of coupling code.
-
-You're absolutely right. Your solution addresses all needs of current architectures. My proposal was just meant as preparation for the case, that new (smaller) architectures may come up in the future with a TRNG support, but with other granularity. But anyhow: we can handle it as soon as it happens, fine with me.
-
-
--- 
-Mit freundlichen Grüßen / Kind regards
-Holger Dengler
---
-IBM Systems, Linux on IBM Z Development
-dengler@linux.ibm.com
+2022=EB=85=84 6=EC=9B=94 23=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 6:11, =
+=EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=
+=9E=91=EC=84=B1:
+>
+> Dear Kieran Bingham
+>
+> I sent E-mail again by Linux terminal by using the command " ... git
+> send-email .."
+> I believe that you will surely get the diff file.
+>
+> Thank you
+>
+> 2022=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 10:12=
+, Hans Petter Selasky <hps@selasky.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
+> >
+> > Hi Kieran,
+> >
+> > The consumed variable should not be negative. This bug has been there
+> > since the beginning of the GIT at Linux from what I can see.
+> >
+> > +1
+> >
+> > --HPS
+> >
+> >  From 108c6acb2cc4bc4314b96f6f254a04b2873a096c Mon Sep 17 00:00:00 2001
+> > From: YongSu Yoo <yongsuyoo0215@gmail.com>
+> > Date: Sun, 22 May 2022 04:53:12 +0000
+> > Subject: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
+> >
+> > Signed-off-by:Yongsu Yoo <yongsuyoo0215@gmail.com>
+> >
+> > The function dvb_ringbuffer_pkt_next in
+> > /linux-next/drviers/media/dvb-core/dvb_ringbuffer.c,
+> > which searches the idx of the next valid packet in the ring
+> > buffer of the ca->slot_info[slot].rx_buffer at
+> > /linux-next/drivers/media/dvb-core/dvb_ca_en50221.c,
+> > has the following problem.
+> > In calculating the amounts of the consumed address of the ring
+> > buffer, if the read address(rbuf->pread) of the ring buffer is
+> > smaller than the idx, the amounts of the searched address
+> > should be (idx - rbuf->pread),
+> > whereas if the read address(rbuf->pread) of the ring buffer is
+> > larger than the idx, the amounts of the consumed address should
+> > be (idx - rbuf->pread + rbug->size). But there exists an
+> > incorrect logic that the rbug-size was not properly added on
+> > (idx - rbug->pread) in the later case. With this commit, we
+> > fixed this bug.
+> > ---
+> >   drivers/media/dvb-core/dvb_ringbuffer.c | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c
+> > b/drivers/media/dvb-core/dvb_ringbuffer.c
+> > index d1d471af0636..7d4558de8e83 100644
+> > --- a/drivers/media/dvb-core/dvb_ringbuffer.c
+> > +++ b/drivers/media/dvb-core/dvb_ringbuffer.c
+> > @@ -335,7 +335,9 @@ ssize_t dvb_ringbuffer_pkt_next(struct
+> > dvb_ringbuffer *rbuf, size_t idx, size_t*
+> >                 idx =3D (idx + curpktlen + DVB_RINGBUFFER_PKTHDRSIZE) %=
+ rbuf->size;
+> >         }
+> >
+> > -       consumed =3D (idx - rbuf->pread) % rbuf->size;
+> > +       consumed =3D (idx - rbuf->pread);
+> > +       if (consumed < 0)
+> > +               consumed +=3D rbuf->size;
+> >
+> >         while((dvb_ringbuffer_avail(rbuf) - consumed) >
+> > DVB_RINGBUFFER_PKTHDRSIZE) {
+> >
+> > --
+> > 2.17.1

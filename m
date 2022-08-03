@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF5F5890CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE725890D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236612AbiHCQuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S237048AbiHCQu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiHCQuO (ORCPT
+        with ESMTP id S237274AbiHCQux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:50:14 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F460BF5
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:50:12 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id f28so8742226pfk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:50:12 -0700 (PDT)
+        Wed, 3 Aug 2022 12:50:53 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05CCA189;
+        Wed,  3 Aug 2022 09:50:51 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z2so11828781edc.1;
+        Wed, 03 Aug 2022 09:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=jkIYKsD9lrw3uE90N/4tV6//zCQKJHpCWp1vVAkBqpg=;
-        b=O1bIaiehSPJ023eJzn0byVCJzUWKRdGefLRKyjRS46PMir40fV3t3+NLw/kDLxrwJ2
-         VgQwIUD4kdVWxa6cUir+v3PqxA6hDA82wt8FrnII62+OY4JgP7JNdRygd/Isd7n9uOMd
-         /fzhD6PYZrOiRfY2xKOcGm3qlOcgfOlFaMttgInqfaex7BnAsL0Ca4WXlQ8xVv/WM17O
-         Az7cNW/eLHZr8eofqRNxCSlvJeszlPaF7NONwZVCN5JeVvkb4JnBLaoSBeHKK0Mng7yC
-         OnN2Pvgq/UWvbwyE2I7bzWuKqP5eEs+ICIiWNvXUovvFun+GmqXK6hsmxu3AWSyWWQbL
-         3+Cw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=PjTfETeJx0AMMZL3GKU4/eS5rgFKC9COqcGk3w/9o1g=;
+        b=RPjG5sqWlEVUG+FaGHhTHzrtfDDIQy9PaG+zA5JW9dlCiZ3Z0LE11d9jbNzc0GzWlv
+         7dxRtQPzF6XErhrq213RJiKzm2AYDl54i1HidvN4HOG0qWwJnPRh1g8LuPk4wljOGZyd
+         /dJQgFe95fwphCbKi9lPhv5qNjOlc/BNyGFOV1rFJzqlJe2C+2GVezKeI2lJaZ1T8KzD
+         FqD6PYeueeqHeAi/ndyUbJ2El51k69i2NbFDCWe5T4L3VApZzJ6c6SHsFl2IhopQbSMi
+         nqZ8zwRckOsGv0lE9TTC3I6O4n+vNunzXzY09C40PZCu9lQO+tH7JTDXuNd6vv/JnqA9
+         Bxpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=jkIYKsD9lrw3uE90N/4tV6//zCQKJHpCWp1vVAkBqpg=;
-        b=NkTZuK2xkqPKlQCriT+uxLLuCzY2rNGJUUjnalt7Nvv3dnTGgg30fYYHKiO0U4z066
-         iZCuG9ef26uoCrLbPL99ZPM8rVETY6JWrUMmDFJjfHcQ8bCelpPuZ1V6bKcBegulpQI7
-         f2m1AKWf79sISrw6Bv6ZyGcxJZN0/mgh5nPzvBHT1yYGgTR1DZ+PhGLZ0I0e7qGN11cw
-         ScTQuPcoH2iHcw8iL/NCN3faxxPvqg+0C7X9eTPEVonbd7tu8gBXZGdXOiblnHIqK4Zg
-         5siT6r6hF9raG14kiot4iB66jfM1toBb65I+dPu16/ti7fX2qydGdmjKuzmKQRv75OpQ
-         u4HQ==
-X-Gm-Message-State: ACgBeo13m5CPOcte/1nipSOKUlQypplPC7JxLD9cLrMq61ndpvbix4o0
-        PX7jrw5pgeMEp9PmFr1qtEV0sCwZH9G55Q==
-X-Google-Smtp-Source: AA6agR6Gpgcfh7KmFXDbxj8v9aK/yRABJ1gY0ELz/5l4842hvZCikwR38aHSAZfIt8ay5GOW0u59Xw==
-X-Received: by 2002:aa7:8421:0:b0:52d:344f:8674 with SMTP id q1-20020aa78421000000b0052d344f8674mr19325405pfn.60.1659545411518;
-        Wed, 03 Aug 2022 09:50:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170903210b00b0016d2db82962sm2151834ple.16.2022.08.03.09.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 09:50:11 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 16:50:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v2 1/2] KVM: nested/x86: update trace_kvm_nested_vmrun()
- to suppot VMX
-Message-ID: <YuqnP318U1Cwd6qX@google.com>
-References: <20220718171333.1321831-1-mizhang@google.com>
- <20220718171333.1321831-2-mizhang@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=PjTfETeJx0AMMZL3GKU4/eS5rgFKC9COqcGk3w/9o1g=;
+        b=5ZV8SfI6DBtobuh9wLR0x45d4mJVkUjBnTGN2s5WNMQl2DVLCxBNLJ506NOKFwASXG
+         Thm32fkQaamP8K0mYaRE6NQ8UN2Qe4XlZKxO1atbDFvlj2nxv7joi0mg7403F1uyBBuC
+         tDkctvd3Nm+/8rlELnSbr6rfNQbNLkd1o0JrBV6VwIi3LU7aGQrsDxtEOX5rP03mesoY
+         5b8eNHkMi0ByDAlCQKaSFcmt70Xiibovb3MPmq1Bnwq7oarakAmJyYGfKgt6Ttmdx05T
+         7GkMaXI9e5Pl+ebuEyTgJzL5/En0Mycttpe5BjBYQ/hQ1wDEPVIKmz6i03dNi7fn0Edb
+         qZ4Q==
+X-Gm-Message-State: ACgBeo1+oiGuxEWito5VSj9CdC17qd44fnpuL5KFpdb2XVVfYpYf2XXP
+        G/uPNkW0CCYGq9dnXrl1goPxcaAS++wJ340kydw=
+X-Google-Smtp-Source: AA6agR7vS40R5OQ498i9IT1CvyAd1hMJU4jDcIj/iSesCqOe/KJJq7hhbIxQYX/cnqzG52JaEKruskYuCXMZqJxqPpg=
+X-Received: by 2002:a50:cccb:0:b0:43d:efd3:88fb with SMTP id
+ b11-20020a50cccb000000b0043defd388fbmr9358488edj.265.1659545450254; Wed, 03
+ Aug 2022 09:50:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718171333.1321831-2-mizhang@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+References: <20220803153300.58732-1-sebastian.wuerl@ororatech.com> <CAHp75VdCH2tJQq3v_-iNP27oWFGF7EtKc-w299tLhDV85WbroQ@mail.gmail.com>
+In-Reply-To: <CAHp75VdCH2tJQq3v_-iNP27oWFGF7EtKc-w299tLhDV85WbroQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 Aug 2022 18:50:13 +0200
+Message-ID: <CAHp75VcTyubQFXyKA1RoYkpWowfKYwA1N_zZtmvGTeCmDG89Ow@mail.gmail.com>
+Subject: Re: [PATCH] drivers/net/can/spi/mcp251x.c: Fix race condition on
+ receive interrupt
+To:     =?UTF-8?Q?Sebastian_W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,140 +81,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we want to add a unique identifier for nested x86, use "KVM: x86/nested:" to
-align with the MMU and to make `grep "KVM: x86"` viable.  Ideally, we'd align with
-nVMX and nSVM, but nx86 is pretty gross and looks like a typo.
+On Wed, Aug 3, 2022 at 6:48 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Aug 3, 2022 at 5:36 PM Sebastian W=C3=BCrl
+> <sebastian.wuerl@ororatech.com> wrote:
+> >
+> > The mcp251x driver uses both receiving mailboxes of the can controller
+>
+> CAN
+>
+> > chips. For retrieving the CAN frames from the controller via SPI, it ch=
+ecks
+> > once per interrupt which mailboxes have been filled, an will retrieve t=
+he
+> > messages accordingly.
+> >
+> > This introduces a race condition, as another CAN frame can enter mailbo=
+x 1
+> > while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 u=
+ntil
+> > the interrupt handler is called next, mailbox 0 is emptied before
+> > mailbox 1, leading to out-of-order CAN frames in the network device.
+> >
+> > This is fixed by checking the interrupt flags once again after freeing
+> > mailbox 0, to correctly also empty mailbox 1 before leaving the handler=
+.
+> >
+> > For reproducing the bug I created the following setup:
+> >  - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any=
+.
+> >  - Setup CAN to 1 MHz
+> >  - Spam bursts of 5 CAN-messages with increasing CAN-ids
+> >  - Continue sending the bursts while sleeping a second between the burs=
+ts
+> >  - Check on the RPi whether the received messages have increasing CAN-i=
+ds
+> >  - Without this patch, every burst of messages will contain a flipped p=
+air
+>
+> Fixes tag?
 
-I have a slight preference for using a plain "KVM: x86:", as I suspect we'll never
-have enough common nested to make it worth differentiating, but I've no objection
-if you want to go with "KVM: x86/nested:".
+Also fix the Subject prefix (you may see the most used ones by running
+`git log --no-merges --oneline -- drivers/net/can/spi/mcp251x.c`).
 
-On Mon, Jul 18, 2022, Mingwei Zhang wrote:
-> Update trace_kvm_nested_vmrun() to support VMX by adding a new field 'isa';
-> update the output to print out VMX/SVM related naming respectively,
-> eg., vmcb vs. vmcs; npt vs. ept.
-> 
-> In addition, print nested EPT/NPT address instead of the 1bit of nested
-> ept/npt on/off. This should convey more information in the trace. When
-> nested ept/npt is not used, simply print "0x0" so that we don't lose any
-> information.
-
-Adding a new field that's not related to the VMX vs. SVM change belongs in a
-separate patch.
-
-> Opportunistically update the call site of trace_kvm_nested_vmrun() to make
-> one line per parameter.
-> 
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/svm/nested.c |  7 +++++--
->  arch/x86/kvm/trace.h      | 29 ++++++++++++++++++++---------
->  2 files changed, 25 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index ba7cd26f438f..8581164b6808 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -724,11 +724,14 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  	int ret;
->  
-> -	trace_kvm_nested_vmrun(svm->vmcb->save.rip, vmcb12_gpa,
-> +	trace_kvm_nested_vmrun(svm->vmcb->save.rip,
-> +			       vmcb12_gpa,
->  			       vmcb12->save.rip,
->  			       vmcb12->control.int_ctl,
->  			       vmcb12->control.event_inj,
-> -			       vmcb12->control.nested_ctl);
-> +			       vmcb12->control.nested_ctl,
-> +			       vmcb12->control.nested_cr3,
-> +			       KVM_ISA_SVM);
->  
->  	trace_kvm_nested_intercepts(vmcb12->control.intercepts[INTERCEPT_CR] & 0xffff,
->  				    vmcb12->control.intercepts[INTERCEPT_CR] >> 16,
-> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-> index de4762517569..aac4c8bd2c3a 100644
-> --- a/arch/x86/kvm/trace.h
-> +++ b/arch/x86/kvm/trace.h
-> @@ -580,8 +580,10 @@ TRACE_EVENT(kvm_pv_eoi,
->   */
->  TRACE_EVENT(kvm_nested_vmrun,
-
-I think it makes sense to rename this to kvm_nested_vmenter.  VMRUN is SVM-only,
-and tracepoints aren't ABI.
-
->  	    TP_PROTO(__u64 rip, __u64 vmcb, __u64 nested_rip, __u32 int_ctl,
-> -		     __u32 event_inj, bool npt),
-> -	    TP_ARGS(rip, vmcb, nested_rip, int_ctl, event_inj, npt),
-> +		     __u32 event_inj, bool npt_enabled, __u64 npt_addr,
-> +		     __u32 isa),
-> +	    TP_ARGS(rip, vmcb, nested_rip, int_ctl, event_inj, npt_enabled,
-> +		    npt_addr, isa),
->  
->  	TP_STRUCT__entry(
->  		__field(	__u64,		rip		)
-> @@ -589,7 +591,9 @@ TRACE_EVENT(kvm_nested_vmrun,
->  		__field(	__u64,		nested_rip	)
->  		__field(	__u32,		int_ctl		)
->  		__field(	__u32,		event_inj	)
-> -		__field(	bool,		npt		)
-> +		__field(	bool,		npt_enabled	)
-
-s/npt_enabled/tdp_enabled, or maybe ntdp_enabled?
-
-> +		__field(	__u64,		npt_addr	)
-
-Hmm, either
-
-  s/npt_addr/nested_pgd
-
-or 
-
-  s/npt_addr/guest_pgd
-
-"npt_addr" or "tdp_addr" is too ambiguous, e.g. it can be interpreted as the address
-of a TDP page fault.
-
-My vote would be for "guest_pgd" and then pass in the non-nested CR3 when L1 isn't
-using nTDP.
-
-> +		__field(	__u32,		isa		)
->  	),
->  
->  	TP_fast_assign(
-> @@ -598,14 +602,21 @@ TRACE_EVENT(kvm_nested_vmrun,
->  		__entry->nested_rip	= nested_rip;
->  		__entry->int_ctl	= int_ctl;
->  		__entry->event_inj	= event_inj;
-> -		__entry->npt		= npt;
-> +		__entry->npt_enabled	= npt_enabled;
-> +		__entry->npt_addr	= npt_addr;
-> +		__entry->isa		= isa;
->  	),
->  
-> -	TP_printk("rip: 0x%016llx vmcb: 0x%016llx nrip: 0x%016llx int_ctl: 0x%08x "
-> -		  "event_inj: 0x%08x npt: %s",
-> -		__entry->rip, __entry->vmcb, __entry->nested_rip,
-> -		__entry->int_ctl, __entry->event_inj,
-> -		__entry->npt ? "on" : "off")
-> +	TP_printk("rip: 0x%016llx %s: 0x%016llx nested rip: 0x%016llx "
-> +		  "int_ctl: 0x%08x event_inj: 0x%08x nested %s: 0x%016llx",
-
-This needs to explicitly print "nTDP on/off".  As proposed, "nested ept/npt: %addr"
-doesn't capture that.  (a) addr=0 is perfectly legal, and (b) addr!=0 is also legal
-if nTDP isn't enabled, i.e. a non-zero nested_cr3/eptp is ignore by hardware
-
-> +		__entry->rip,
-> +		__entry->isa == KVM_ISA_VMX ? "vmcs" : "vmcb",
-> +		__entry->vmcb,
-> +		__entry->nested_rip,
-> +		__entry->int_ctl,
-> +		__entry->event_inj,
-> +		__entry->isa == KVM_ISA_VMX ? "ept" : "npt",
-> +		__entry->npt_enabled ? __entry->npt_addr : 0x0)
->  );
->  
->  TRACE_EVENT(kvm_nested_intercepts,
-> -- 
-> 2.37.0.170.g444d1eabd0-goog
-> 
+--=20
+With Best Regards,
+Andy Shevchenko

@@ -2,344 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC413588F3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BBB588F3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbiHCPRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S238008AbiHCPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237005AbiHCPRo (ORCPT
+        with ESMTP id S236253AbiHCPUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:17:44 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6C714091;
-        Wed,  3 Aug 2022 08:17:42 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 273FHVQp065485;
-        Wed, 3 Aug 2022 10:17:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1659539851;
-        bh=M8BR7YcPHv4X+xqfFgqPGOSLRe1lMXcOL7q6dov7XMs=;
-        h=From:To:CC:Subject:Date;
-        b=hcQ5gR6tFU8yoYOE+j6IprtiQmBfW7r98IjkhsHyLDqUpkQdazB7hPBoGOPAAKb8t
-         uR4bLHM9xaAoYhPUymRgaF1TEJQF1QK8jRbd1q7fczZqn1efLrqKXYgusyqAGaT6rD
-         7Ycc9uuJLHkZG1G6GQULhcB3PfeVIVhjqLRGC1yU=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 273FHVXL082567
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 Aug 2022 10:17:31 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
- Aug 2022 10:17:30 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 3 Aug 2022 10:17:30 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 273FHUKI011873;
-        Wed, 3 Aug 2022 10:17:30 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v2] dt-bindings: sound: tlv320aic3x: Convert to dtschema
-Date:   Wed, 3 Aug 2022 10:17:26 -0500
-Message-ID: <20220803151726.31628-1-j-luthra@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 3 Aug 2022 11:20:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D050CE01
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4B08B822B6
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B08C433D6;
+        Wed,  3 Aug 2022 15:20:16 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 11:20:14 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Li kunyu <kunyu@nfschina.com>, Li zeming <zeming@nfschina.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Slark Xiao <slark_xiao@163.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        sunliming <sunliming@kylinos.cn>
+Subject: [GIT PULL] tracing: Updates for 5.20 / 6.0
+Message-ID: <20220803112014.7ffed04e@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
 
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- .../bindings/sound/ti,tlv320aic3x.yaml        | 158 ++++++++++++++++++
- .../devicetree/bindings/sound/tlv320aic3x.txt |  97 -----------
- 2 files changed, 158 insertions(+), 97 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/ti,tlv320aic3x.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/tlv320aic3x.txt
+Linus,
 
-diff --git a/Documentation/devicetree/bindings/sound/ti,tlv320aic3x.yaml b/Documentation/devicetree/bindings/sound/ti,tlv320aic3x.yaml
-new file mode 100644
-index 000000000000..f0ed856162ea
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/ti,tlv320aic3x.yaml
-@@ -0,0 +1,158 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/ti,tlv320aic3x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments TLV320AIC3x Codec
-+
-+description: |
-+  TLV320AIC3x are a series of low-power stereo audio codecs with stereo
-+  headphone amplifier, as well as multiple inputs and outputs programmable in
-+  single-ended or fully differential configurations.
-+
-+  The serial control bus supports SPI or I2C protocols, while the serial audio
-+  data bus is programmable for I2S, left/right-justified, DSP, or TDM modes.
-+
-+  The following pins can be referred in the sound node's audio routing property:
-+
-+  CODEC output pins:
-+     LLOUT
-+     RLOUT
-+     MONO_LOUT
-+     HPLOUT
-+     HPROUT
-+     HPLCOM
-+     HPRCOM
-+
-+  CODEC input pins for TLV320AIC3104:
-+     MIC2L
-+     MIC2R
-+     LINE1L
-+     LINE1R
-+
-+  CODEC input pins for other compatible codecs:
-+     MIC3L
-+     MIC3R
-+     LINE1L
-+     LINE2L
-+     LINE1R
-+     LINE2R
-+
-+maintainers:
-+  - Jai Luthra <j-luthra@ti.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tlv320aic3x
-+      - ti,tlv320aic33
-+      - ti,tlv320aic3007
-+      - ti,tlv320aic3106
-+      - ti,tlv320aic3104
-+
-+  reg:
-+    maxItems: 1
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description:
-+      GPIO specification for the active low RESET input.
-+
-+  gpio-reset:
-+    maxItems: 1
-+    description:
-+      Deprecated, please use reset-gpios instead.
-+    deprecated: true
-+
-+  ai3x-gpio-func:
-+    description: AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 2
-+    maxItems: 2
-+
-+  ai3x-micbias-vg:
-+    description: MicBias required voltage. If node is omitted then MicBias is powered down.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    oneOf:
-+      - const: 1
-+        description: MICBIAS output is powered to 2.0V.
-+      - const: 2
-+        description: MICBIAS output is powered to 2.5V.
-+      - const: 3
-+        description: MICBIAS output is connected to AVDD.
-+
-+  ai3x-ocmv:
-+    description: Output Common-Mode Voltage selection.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    oneOf:
-+      - const: 0
-+        description: 1.35V
-+      - const: 1
-+        description: 1.5V
-+      - const: 2
-+        description: 1.65V
-+      - const: 3
-+        description: 1.8V
-+
-+  AVDD-supply:
-+    description: Analog DAC voltage.
-+
-+  IOVDD-supply:
-+    description: I/O voltage.
-+
-+  DRVDD-supply:
-+    description: ADC analog and output driver voltage.
-+
-+  DVDD-supply:
-+    description: Digital core voltage.
-+
-+  '#sound-dai-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tlv320aic3x_i2c: tlv320aic3x@1b {
-+        compatible = "ti,tlv320aic3x";
-+        reg = <0x1b>;
-+
-+        reset-gpios = <&gpio1 17 GPIO_ACTIVE_LOW>;
-+
-+        AVDD-supply = <&regulator>;
-+        IOVDD-supply = <&regulator>;
-+        DRVDD-supply = <&regulator>;
-+        DVDD-supply = <&regulator>;
-+      };
-+    };
-+
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tlv320aic3x_spi: codec@0 {
-+        compatible = "ti,tlv320aic3x";
-+        reg = <0>; /* CS number */
-+        #sound-dai-cells = <0>;
-+
-+        AVDD-supply = <&regulator>;
-+        IOVDD-supply = <&regulator>;
-+        DRVDD-supply = <&regulator>;
-+        DVDD-supply = <&regulator>;
-+        ai3x-ocmv = <0>;
-+      };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/sound/tlv320aic3x.txt b/Documentation/devicetree/bindings/sound/tlv320aic3x.txt
-deleted file mode 100644
-index 20931a63fd64..000000000000
---- a/Documentation/devicetree/bindings/sound/tlv320aic3x.txt
-+++ /dev/null
-@@ -1,97 +0,0 @@
--Texas Instruments - tlv320aic3x Codec module
--
--The tlv320aic3x serial control bus communicates through both I2C and SPI bus protocols
--
--Required properties:
--
--- compatible - "string" - One of:
--    "ti,tlv320aic3x" - Generic TLV320AIC3x device
--    "ti,tlv320aic33" - TLV320AIC33
--    "ti,tlv320aic3007" - TLV320AIC3007
--    "ti,tlv320aic3106" - TLV320AIC3106
--    "ti,tlv320aic3104" - TLV320AIC3104
--
--
--- reg - <int> -  I2C slave address
--
--
--Optional properties:
--
--- reset-gpios - GPIO specification for the active low RESET input.
--- ai3x-gpio-func - <array of 2 int> - AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
--				    - Not supported on tlv320aic3104
--- ai3x-micbias-vg - MicBias Voltage required.
--	1 - MICBIAS output is powered to 2.0V,
--	2 - MICBIAS output is powered to 2.5V,
--	3 - MICBIAS output is connected to AVDD,
--	If this node is not mentioned or if the value is incorrect, then MicBias
--	is powered down.
--- ai3x-ocmv - Output Common-Mode Voltage selection:
--	0 - 1.35V,
--	1 - 1.5V,
--	2 - 1.65V,
--	3 - 1.8V
--- AVDD-supply, IOVDD-supply, DRVDD-supply, DVDD-supply : power supplies for the
--  device as covered in Documentation/devicetree/bindings/regulator/regulator.txt
--
--Deprecated properties:
--
--- gpio-reset - gpio pin number used for codec reset
--
--CODEC output pins:
--  * LLOUT
--  * RLOUT
--  * MONO_LOUT
--  * HPLOUT
--  * HPROUT
--  * HPLCOM
--  * HPRCOM
--
--CODEC input pins for TLV320AIC3104:
--  * MIC2L
--  * MIC2R
--  * LINE1L
--  * LINE1R
--
--CODEC input pins for other compatible codecs:
--  * MIC3L
--  * MIC3R
--  * LINE1L
--  * LINE2L
--  * LINE1R
--  * LINE2R
--
--The pins can be used in referring sound node's audio-routing property.
--
--I2C example:
--
--#include <dt-bindings/gpio/gpio.h>
--
--tlv320aic3x: tlv320aic3x@1b {
--	compatible = "ti,tlv320aic3x";
--	reg = <0x1b>;
--
--	reset-gpios = <&gpio1 17 GPIO_ACTIVE_LOW>;
--
--	AVDD-supply = <&regulator>;
--	IOVDD-supply = <&regulator>;
--	DRVDD-supply = <&regulator>;
--	DVDD-supply = <&regulator>;
--};
--
--SPI example:
--
--spi0: spi@f0000000 {
--	tlv320aic3x: codec@0 {
--		compatible = "ti,tlv320aic3x";
--		reg = <0>; /* CS number */
--		#sound-dai-cells = <0>;
--		spi-max-frequency = <1000000>;
--
--		AVDD-supply = <&regulator>;
--		IOVDD-supply = <&regulator>;
--		DRVDD-supply = <&regulator>;
--		DVDD-supply = <&regulator>;
--		ai3x-ocmv = <0>;
--	};
--};
--- 
-2.17.1
+Tracing updates for 5.20 / 6.0
 
+- Runtime verification infrastructure
+  This is the biggest change for this pull request. It introduces the
+  runtime verification that is necessary for running Linux on safety
+  critical systems. It allows for deterministic automata models to be
+  inserted into the kernel that will attach to tracepoints, where the
+  information on these tracepoints will move the model from state to state.
+  If a state is encountered that does not belong to the model, it will then
+  activate a given reactor, that could just inform the user or even panic
+  the kernel (for which safety critical systems will detect and can recover
+  from).
+
+- Two monitor models are also added: Wakeup In Preemptive (WIP - not to be
+  confused with "work in progress"), and Wakeup While Not Running (WWNR).
+
+- Added __vstring() helper to the TRACE_EVENT() macro to replace several
+  vstring() usages that were all doing it wrong.
+
+- eprobes now can have their event autogenerated when the event name is left
+  off.
+
+- The rest is various cleanups and fixes.
+
+
+Please pull the latest trace-v5.20 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-v5.20
+
+Tag SHA1: 2e24f04e0370495112b3ec2b37152272322b434c
+Head SHA1: 09794a5a6c348f629b35fc1687071a1622ef4265
+
+
+Daniel Bristot de Oliveira (16):
+      rv: Add Runtime Verification (RV) interface
+      rv: Add runtime reactors interface
+      rv/include: Add helper functions for deterministic automata
+      rv/include: Add deterministic automata monitor definition via C macros
+      rv/include: Add instrumentation helper functions
+      Documentation/rv: Add a basic documentation
+      tools/rv: Add dot2c
+      Documentation/rv: Add deterministic automaton documentation
+      tools/rv: Add dot2k
+      Documentation/rv: Add deterministic automata monitor synthesis documentation
+      Documentation/rv: Add deterministic automata instrumentation documentation
+      rv/monitor: Add the wip monitor skeleton created by dot2k
+      rv/monitor: Add the wip monitor
+      rv/monitor: Add the wwnr monitor
+      rv/reactor: Add the printk reactor
+      rv/reactor: Add the panic reactor
+
+Douglas Anderson (1):
+      tracing: Fix sleeping while atomic in kdb ftdump
+
+Li kunyu (1):
+      blk-iocost: tracing: atomic64_read(&ioc->vtime_rate) is assigned an extra semicolon
+
+Li zeming (1):
+      tracepoints: It is CONFIG_TRACEPOINTS not CONFIG_TRACEPOINT
+
+Linyu Yuan (4):
+      tracing: eprobe: Add missing log index
+      tracing: eprobe: Remove duplicate is_good_name() operation
+      tracing: Auto generate event name when creating a group of events
+      selftests/ftrace: Add test case for GRP/ only input
+
+Masami Hiramatsu (Google) (2):
+      selftests/kprobe: Update test for no event name syntax error
+      tracing/eprobe: Show syntax error logs in error_log file
+
+Slark Xiao (1):
+      scripts/tracing: Fix typo 'the the' in comment
+
+Steven Rostedt (Google) (23):
+      ftrace: Be more specific about arch impact when function tracer is enabled
+      tracing: devlink: Use static array for string in devlink_trap_report event
+      tracing/ipv4/ipv6: Use static array for name field in fib*_lookup_table event
+      neighbor: tracing: Have neigh_create event use __string()
+      tracing/events: Add __vstring() and __assign_vstr() helper macros
+      tracing/IB/hfi1: Use the new __vstring() helper
+      tracing/ath: Use the new __vstring() helper
+      tracing/brcm: Use the new __vstring() helper
+      tracing/iwlwifi: Use the new __vstring() helper
+      usb: chipidea: tracing: Use the new __vstring() helper
+      xhci: tracing: Use the new __vstring() helper
+      usb: musb: tracing: Use the new __vstring() helper
+      scsi: iscsi: tracing: Use the new __vstring() helper
+      scsi: qla2xxx: tracing: Use the new __vstring() helper
+      mac80211: tracing: Use the new __vstring() helper
+      selftests/kprobe: Do not test for GRP/ without event failures
+      tracing: Add example and documentation for new __vstring() macro
+      USB: mtu3: tracing: Use the new __vstring() helper
+      batman-adv: tracing: Use the new __vstring() helper
+      tracing: Use a copy of the va_list for __assign_vstr()
+      ftrace/x86: Add back ftrace_expected assignment
+      tracing: Use a struct alignof to determine trace event field alignment
+      tracing: Use alignof__(struct {type b;}) instead of offsetof()
+
+Tiezhu Yang (1):
+      samples: Use KSYM_NAME_LEN for kprobes
+
+Xiang wangx (1):
+      tracing/user_events: Fix syntax errors in comments
+
+Zheng Yejian (2):
+      tracing/histograms: Fix memory leak problem
+      tracing/histograms: Simplify create_hist_fields()
+
+Zhiqiang Liu (1):
+      tracing: Use free_trace_buffer() in allocate_trace_buffers()
+
+sunliming (1):
+      fprobe/samples: Make sample_probe static
+
+----
+ Documentation/trace/index.rst                      |   1 +
+ Documentation/trace/kprobetrace.rst                |   8 +-
+ .../trace/rv/da_monitor_instrumentation.rst        | 171 +++++
+ Documentation/trace/rv/da_monitor_synthesis.rst    | 147 ++++
+ Documentation/trace/rv/deterministic_automata.rst  | 184 +++++
+ Documentation/trace/rv/index.rst                   |  14 +
+ Documentation/trace/rv/monitor_wip.rst             |  55 ++
+ Documentation/trace/rv/monitor_wwnr.rst            |  45 ++
+ Documentation/trace/rv/runtime-verification.rst    | 231 ++++++
+ Documentation/trace/uprobetracer.rst               |   8 +-
+ arch/x86/kernel/ftrace.c                           |   1 +
+ drivers/infiniband/hw/hfi1/trace_dbg.h             |   8 +-
+ drivers/net/wireless/ath/ath10k/trace.h            |  14 +-
+ drivers/net/wireless/ath/ath11k/trace.h            |   7 +-
+ drivers/net/wireless/ath/ath6kl/trace.h            |  14 +-
+ drivers/net/wireless/ath/trace.h                   |   7 +-
+ drivers/net/wireless/ath/wil6210/trace.h           |   7 +-
+ .../broadcom/brcm80211/brcmfmac/tracepoint.h       |  12 +-
+ .../brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h  |  12 +-
+ .../net/wireless/intel/iwlwifi/iwl-devtrace-msg.h  |  12 +-
+ drivers/usb/chipidea/trace.h                       |   4 +-
+ drivers/usb/host/xhci-trace.h                      |   4 +-
+ drivers/usb/mtu3/mtu3_trace.h                      |   6 +-
+ drivers/usb/musb/musb_trace.h                      |   4 +-
+ include/linux/rv.h                                 |  70 ++
+ include/linux/sched.h                              |  11 +
+ include/linux/trace_events.h                       |  18 +
+ include/linux/tracepoint.h                         |   2 +-
+ include/rv/automata.h                              |  75 ++
+ include/rv/da_monitor.h                            | 544 ++++++++++++++
+ include/rv/instrumentation.h                       |  29 +
+ include/trace/events/devlink.h                     |   7 +-
+ include/trace/events/fib.h                         |   6 +-
+ include/trace/events/fib6.h                        |   8 +-
+ include/trace/events/iocost.h                      |   2 +-
+ include/trace/events/iscsi.h                       |   4 +-
+ include/trace/events/neigh.h                       |   2 +-
+ include/trace/events/qla.h                         |   4 +-
+ include/trace/events/rv.h                          | 142 ++++
+ include/trace/stages/stage1_struct_define.h        |   3 +
+ include/trace/stages/stage2_data_offsets.h         |   3 +
+ include/trace/stages/stage4_event_fields.h         |  11 +-
+ include/trace/stages/stage5_get_offsets.h          |   4 +
+ include/trace/stages/stage6_event_callback.h       |  12 +
+ kernel/fork.c                                      |  14 +
+ kernel/trace/Kconfig                               |   5 +-
+ kernel/trace/Makefile                              |   1 +
+ kernel/trace/rv/Kconfig                            |  78 ++
+ kernel/trace/rv/Makefile                           |   8 +
+ kernel/trace/rv/monitors/wip/wip.c                 |  88 +++
+ kernel/trace/rv/monitors/wip/wip.h                 |  46 ++
+ kernel/trace/rv/monitors/wwnr/wwnr.c               |  87 +++
+ kernel/trace/rv/monitors/wwnr/wwnr.h               |  46 ++
+ kernel/trace/rv/reactor_panic.c                    |  43 ++
+ kernel/trace/rv/reactor_printk.c                   |  42 ++
+ kernel/trace/rv/rv.c                               | 799 +++++++++++++++++++++
+ kernel/trace/rv/rv.h                               |  68 ++
+ kernel/trace/rv/rv_reactors.c                      | 508 +++++++++++++
+ kernel/trace/trace.c                               |  46 +-
+ kernel/trace/trace.h                               |   9 +
+ kernel/trace/trace_dynevent.c                      |   2 +-
+ kernel/trace/trace_eprobe.c                        |  37 +-
+ kernel/trace/trace_events_hist.c                   |   7 +-
+ kernel/trace/trace_events_user.c                   |   2 +-
+ kernel/trace/trace_kprobe.c                        |  16 +-
+ kernel/trace/trace_probe.c                         |   4 +
+ kernel/trace/trace_probe.h                         |   5 +-
+ kernel/trace/trace_uprobe.c                        |  12 +-
+ net/batman-adv/trace.h                             |   9 +-
+ net/mac80211/trace_msg.h                           |   6 +-
+ samples/fprobe/fprobe_example.c                    |   2 +-
+ samples/kprobes/kprobe_example.c                   |   5 +-
+ samples/kprobes/kretprobe_example.c                |   5 +-
+ samples/trace_events/trace-events-sample.c         |  14 +-
+ samples/trace_events/trace-events-sample.h         |  32 +-
+ scripts/tracing/draw_functrace.py                  |   2 +-
+ .../ftrace/test.d/dynevent/add_remove_eprobe.tc    |   9 +-
+ .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |   7 +
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   2 +-
+ tools/verification/dot2/Makefile                   |  26 +
+ tools/verification/dot2/automata.py                | 174 +++++
+ tools/verification/dot2/dot2c                      |  26 +
+ tools/verification/dot2/dot2c.py                   | 254 +++++++
+ tools/verification/dot2/dot2k                      |  47 ++
+ tools/verification/dot2/dot2k.py                   | 177 +++++
+ .../dot2/dot2k_templates/main_global.c             |  91 +++
+ .../dot2/dot2k_templates/main_per_cpu.c            |  91 +++
+ .../dot2/dot2k_templates/main_per_task.c           |  91 +++
+ tools/verification/models/wip.dot                  |  16 +
+ tools/verification/models/wwnr.dot                 |  16 +
+ 90 files changed, 4822 insertions(+), 186 deletions(-)
+ create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
+ create mode 100644 Documentation/trace/rv/deterministic_automata.rst
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/monitor_wip.rst
+ create mode 100644 Documentation/trace/rv/monitor_wwnr.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
+ create mode 100644 include/linux/rv.h
+ create mode 100644 include/rv/automata.h
+ create mode 100644 include/rv/da_monitor.h
+ create mode 100644 include/rv/instrumentation.h
+ create mode 100644 include/trace/events/rv.h
+ create mode 100644 kernel/trace/rv/Kconfig
+ create mode 100644 kernel/trace/rv/Makefile
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.c
+ create mode 100644 kernel/trace/rv/monitors/wip/wip.h
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
+ create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
+ create mode 100644 kernel/trace/rv/reactor_panic.c
+ create mode 100644 kernel/trace/rv/reactor_printk.c
+ create mode 100644 kernel/trace/rv/rv.c
+ create mode 100644 kernel/trace/rv/rv.h
+ create mode 100644 kernel/trace/rv/rv_reactors.c
+ create mode 100644 tools/verification/dot2/Makefile
+ create mode 100644 tools/verification/dot2/automata.py
+ create mode 100644 tools/verification/dot2/dot2c
+ create mode 100644 tools/verification/dot2/dot2c.py
+ create mode 100644 tools/verification/dot2/dot2k
+ create mode 100644 tools/verification/dot2/dot2k.py
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
+ create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
+ create mode 100644 tools/verification/models/wip.dot
+ create mode 100644 tools/verification/models/wwnr.dot
+---------------------------

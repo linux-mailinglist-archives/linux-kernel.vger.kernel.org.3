@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C9B588FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01F7588FA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbiHCPqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S237837AbiHCPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiHCPqf (ORCPT
+        with ESMTP id S231493AbiHCPr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:46:35 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EE3E08A;
-        Wed,  3 Aug 2022 08:46:33 -0700 (PDT)
-Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E96CA3F672;
-        Wed,  3 Aug 2022 17:46:31 +0200 (CEST)
-Message-ID: <d5a35d28-3b4e-c763-a1fb-89aa3dae6fd2@somainline.org>
-Date:   Wed, 3 Aug 2022 17:46:31 +0200
+        Wed, 3 Aug 2022 11:47:57 -0400
+Received: from smtp86.ord1d.emailsrvr.com (smtp86.ord1d.emailsrvr.com [184.106.54.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D2DF57
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
+        s=20170822-45nk5nwl; t=1659541676;
+        bh=i/m2J20otiRpiEV1Tx+blspiXLX0KONsIWyQG+pcTiU=;
+        h=Date:Subject:To:From:From;
+        b=huUq7ZsKeZpZCi7rOTPb9Z+dMn3GHOzc0b6J5Nw6GYqHFBmBIwpAReWJ+xvJqpXBT
+         BDyXY9lvsMALa+BXOaBYmkBZEpMbRpwCdSXJl/A2u+v2h/+yyz94b6DBFye1QOFMtE
+         PMitvMUdrcUDz+DI/WjSAcuWoT0z65sD2Md2QFZQ=
+X-Auth-ID: antonio@openvpn.net
+Received: by smtp11.relay.ord1d.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id 9666A60083;
+        Wed,  3 Aug 2022 11:47:55 -0400 (EDT)
+Message-ID: <1219c53f-362e-cd55-73e0-87dfe281ec34@openvpn.net>
+Date:   Wed, 3 Aug 2022 17:48:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sdm845-db845c: drop power-domains
- from CCI I2C sensors
+ Thunderbird/91.12.0
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     corbet@lwn.net
-References: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
- <20220802153947.44457-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220802153947.44457-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220719014704.21346-1-antonio@openvpn.net>
+ <20220719014704.21346-2-antonio@openvpn.net> <YtbNBUZ0Kz7pgmWK@lunn.ch>
+ <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net> <YuKKJxSFOgOL836y@lunn.ch>
+ <52b9d7c9-9f7c-788e-2327-33af63b9c748@openvpn.net>
+ <20220803084202.4e249bdb@hermes.local>
+From:   Antonio Quartulli <antonio@openvpn.net>
+Organization: OpenVPN Inc.
+In-Reply-To: <20220803084202.4e249bdb@hermes.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Classification-ID: 70813dac-6f10-4cbb-869c-dc05eee17d75-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stephen,
+
+On 03/08/2022 17:42, Stephen Hemminger wrote:
+> Kernel submissions for upstream must be standalone, and any infrastructure
+> that is only used by an out of tree kernel driver will not be accepted.
+> 
+> The version you propose upstream must have no linux-compat wrappers.
+> Sorry kernel developers don't care or want to be concerned about some
+> out of tree project.
+
+There must have been some confusion - sorry about that.
+
+The repository I linked in my previous email is this very same driver 
+packaged as "out-of-tree" module (i.e. for people running a kernel that 
+does not yet ship ovpn-dco) and contains some compat wrapper.
 
 
-On 2.08.2022 17:39, Krzysztof Kozlowski wrote:
-> The Camera Control Interface I2C controller device node belongs to
-> TITAN_TOP_GDSC power domain, so its children do not need to specify it
-> again.  The OV7251 and OV8856 camera sensor bindings do not allow
-> power-domains.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Not tested on hardware.
-> ---
-Not tested on hardware either, but looks good.
+The driver I have submitted to the list is 100% standalone and does not 
+contain any compat code.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> index c6e2c571b452..b9304f81290a 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> @@ -1228,8 +1228,6 @@ camera@10 {
->  		 * both have to be enabled through the power management
->  		 * gpios.
->  		 */
-> -		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
-> -
->  		dovdd-supply = <&vreg_lvs1a_1p8>;
->  		avdd-supply = <&cam0_avdd_2v8>;
->  		dvdd-supply = <&cam0_dvdd_1v2>;
-> @@ -1273,8 +1271,6 @@ camera@60 {
->  		 *
->  		 * No 1.2V vddd-supply regulator is used.
->  		 */
-> -		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
-> -
->  		vdddo-supply = <&vreg_lvs1a_1p8>;
->  		vdda-supply = <&cam3_avdd_2v8>;
->  
+The only extra component required to do something useful with this 
+driver is the OpenVPN software in userspace.
+
+
+I hope this clarifies.
+
+Regards,
+
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.

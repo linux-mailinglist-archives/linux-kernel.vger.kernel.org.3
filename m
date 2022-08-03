@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7622D5892FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02A158930E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiHCUL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S238257AbiHCUOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237045AbiHCULY (ORCPT
+        with ESMTP id S237819AbiHCUOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:11:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429A92CE33
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659557483; x=1691093483;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XbZ53r6B8R3LHJCIt1u2TZm9MjwOkIGTnjtsaMOUn4M=;
-  b=nHa8rKdknD0vOiRAeiE6KVA7qDCkR3UbYYZaulnZV0E6ZdJReHh5BMpC
-   E9wXtlr9q0vmoajIcOlwhCaMA90/C0yrKVIq4trYhBallaiMo0a6cPON1
-   pMCWF4BUlak8zgGqSygBLpb6hHqQXwZVk3pMPwtSbZINRXPNIl31KUceQ
-   l0vpXpihltQBh+FzxZnuhjbNZZg1PmfM1gEElA/KqmqxokRUL92GZQ/IM
-   dVputpTyUrC6jlU3k67R9bKLRwkKoiI/oIfBdwc8Gr8HQDqPaepjlIZ8y
-   qCClDO/SZPCZDlIh/WMiOnzz0WKYZVl1303PmH8FVW9aWj1g85O9UmgLZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="270149266"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="270149266"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 13:11:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="692370071"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2022 13:11:21 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJKi9-000HcO-0e;
-        Wed, 03 Aug 2022 20:11:21 +0000
-Date:   Thu, 4 Aug 2022 04:10:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:guest 2/4] arch/x86/kernel/tdx-tests.c:66:12: sparse:
- sparse: symbol 'kvm_unit_test_debug_init' was not declared. Should it be
- static?
-Message-ID: <202208040410.dDBmxB5X-lkp@intel.com>
+        Wed, 3 Aug 2022 16:14:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1FF4E86B;
+        Wed,  3 Aug 2022 13:14:21 -0700 (PDT)
+Received: from localhost.localdomain (92.40.178.37.threembb.co.uk [92.40.178.37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E86BD66017FE;
+        Wed,  3 Aug 2022 21:14:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659557658;
+        bh=tabkDjgdyw2xBTyi9xcIpJHbuW1UrDhBK1x+ki9o6ZM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QvWsQUzNeyhffDtJ4G0dvV5w50VTfSz0XgJeveb597J1f6azxDYwGtR4npfykBqv0
+         pcAakntnog4hv3M/eiRmjHRFrtvpvxJ948Wn8LayWOmdtJBdaL3IR18QOvSygvSMq/
+         qHOOmVtwnW5X9qsOBxohmnWH+T5hYNpe4ycNPMlAe4y4oUekY4TcXpVEbtV68SFQ3x
+         zNL4VMCvAuqw4r+VhEmb5jv4pH8/KyDynLvq4Lxr2uMCX2H+HqJ7jYLHQ+ZJdop1AT
+         K8c55HlfExrQoAiZy1ZPOh5y0AlwxWCB3+lEBcUHaCyYskBe6XhZFCjQVPonzbR33I
+         rkQ6/GBiA8tzA==
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH] selftests/landlock: fix broken include of linux/landlock.h
+Date:   Wed,  3 Aug 2022 22:13:54 +0200
+Message-Id: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest
-head:   f3d7a7e86bf2f0d5ce629f2fb7be11dca88ac06d
-commit: 4cd6be90a565d847e1d7ccfe28264a1610a02a34 [2/4] x86/tdx-tests: Add a port of a kvm unit test
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220804/202208040410.dDBmxB5X-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel/tdx/commit/4cd6be90a565d847e1d7ccfe28264a1610a02a34
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest
-        git checkout 4cd6be90a565d847e1d7ccfe28264a1610a02a34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ lib/
+Revert part of the earlier changes to fix the kselftest build when
+using a sub-directory from the top of the tree as this broke the
+landlock test build as a side-effect when building with "make -C
+tools/testing/selftests/landlock".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Mickaël Salaün <mic@digikod.net>
+Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
+Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+---
+ tools/testing/selftests/landlock/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-sparse warnings: (new ones prefixed by >>)
->> arch/x86/kernel/tdx-tests.c:66:12: sparse: sparse: symbol 'kvm_unit_test_debug_init' was not declared. Should it be static?
-
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+index a6959df28eb0..02868ac3bc71 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
+ TEST_GEN_PROGS_EXTENDED := true
+ 
+ OVERRIDE_TARGETS := 1
++top_srcdir := ../../../..
+ include ../lib.mk
+ 
++khdr_dir = $(top_srcdir)/usr/include
++
+ $(OUTPUT)/true: true.c
+ 	$(LINK.c) $< $(LDLIBS) -o $@ -static
+ 
+-$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+-	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
++$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
++	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

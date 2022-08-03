@@ -2,147 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44702588831
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD04588832
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiHCHqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S236133AbiHCHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234974AbiHCHqk (ORCPT
+        with ESMTP id S235774AbiHCHq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:46:40 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E4B27B39;
-        Wed,  3 Aug 2022 00:46:39 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z16so20443691wrh.12;
-        Wed, 03 Aug 2022 00:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=I336059hUhtPeHDoaaIpuKg419qdPUulZW8pRMrdOCQ=;
-        b=hPMDk+B5MFdjHfySxJPi1wx5TbVV3Cg2LAHwgl8y+kFWBK3kx4OVXKMEfAPg/SG5fm
-         bVeHg9ugxTLs6J7JBoBMb56XRytLK7kSMD1EhlmHDq32T5+CrNkNvldo+xcUohx5yIty
-         0Lqth9AEx3oHB9zCHcgK8T4rlT7xD2gXIquz9qiXkI9wNU1fXXql6ns8yA8QNi8LOpAi
-         LPfr301OCZ4+rVfDD/2N4xK2B/xiK2JzZyMMyz5KFPa1U/ZlXSRIzdbgT0h9pm01ZT3C
-         QiXkWnYx1WEt2VLg4KNbUI3f5gIBynsNCAa9AuwPM+NdoZLWygw/E/xh9FTxrY/0uutn
-         SVnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=I336059hUhtPeHDoaaIpuKg419qdPUulZW8pRMrdOCQ=;
-        b=a5kAAppQQyv6dfuYXbJHw8E6w4WF0APZrDnfPm35rBgN753S7784p+5jAraCtHNh11
-         KSgaOSvXjha18I2UHwIAB1SLNNYLVyswrbPyWmqBaxNMhdCbaGCAhmki1FMup4ELtuxe
-         SPW7KTySvs/TGRsBdxATtrdeQGZyc2q7g/ukx4MoQJBk0yr4zDa7T3slXhwELGhJV5LW
-         ynVnYdYYZRBmV7cawzciOdJH2xlzatYnXOuAgtMRbQh3eGpBwdi/XIxxcu7nxUooG/fH
-         C4skOnwMPy8lwGnf3rlVJuNdj+3rZIXiQ+hLIiZv3KUeRIo8UYuzZYQdF/3PwYznXjyZ
-         mfDw==
-X-Gm-Message-State: ACgBeo1REyEAZ4SERYGdRpmZjOWUu/mnis1LhvLzUSORC8Rcsv8yHvdQ
-        ICJZt2J6u4M0Gt1f/cP9xGjIclb3HLUE2w==
-X-Google-Smtp-Source: AA6agR5XPSD6S7JLAYUPl8iTo8MWqmsqnxkKHS6mEj8TlHgabno488AXSIhpWEyr0e3/9tdx6QbdMw==
-X-Received: by 2002:a05:6000:1a8e:b0:21d:a7a8:54f4 with SMTP id f14-20020a0560001a8e00b0021da7a854f4mr15376651wry.654.1659512797152;
-        Wed, 03 Aug 2022 00:46:37 -0700 (PDT)
-Received: from ainazi.fritz.box (p200300d09706d9000384b2cb471c28f8.dip0.t-ipconnect.de. [2003:d0:9706:d900:384:b2cb:471c:28f8])
-        by smtp.gmail.com with ESMTPSA id 123-20020a1c1981000000b003a4c6e67f01sm1505065wmz.6.2022.08.03.00.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 00:46:36 -0700 (PDT)
-From:   Shinjo Park <peremen@gmail.com>
-Cc:     peremen@gmail.com, David Heidelberg <david@ixit.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] ARM: dts: qcom: msm8960: add the device node of USB1
-Date:   Wed,  3 Aug 2022 09:46:08 +0200
-Message-Id: <20220803074608.21048-1-peremen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2654048.mvXUDI8C0e@ainazi>
-References: <2654048.mvXUDI8C0e@ainazi>
+        Wed, 3 Aug 2022 03:46:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBB31A07A
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659512817; x=1691048817;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/7yiVIZ/eNTs32/hZKE0mUwCtUBTSnNfc124NTOUsmk=;
+  b=RvtljYYGmTCvUwMTi2CbF6tW/cZWUkZXvFAaAUI3OP1TVOvNPJQ17rjf
+   4vPWcee4+zcMty0Xr+mv0hUQ7w5dfR6XpE83qCBHvIm4V//O+R58fqiqn
+   +nM5akY7Zb3Mo4x06xEPsuvrbVJVMkHpZcj4QUztq/DMxDMok4e/OCv43
+   RxXCpNmU5Er3LbTUTuTYgIUvYE0vEbxK8pQfv74Np+UkNGsXVLSAbw5dL
+   kidaWYprgnP/TzGiadPRmfHCfB71V7ZEG/cZKhhQecNKdrd3JfwhKoSZk
+   NKSoAAsIweat+NwC+R6VLSav8hF8nCDD6gQ+jWoHTIjDka1myi1zpH2cl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="272659585"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="272659585"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 00:46:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="599558522"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Aug 2022 00:46:55 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ95i-000H0F-33;
+        Wed, 03 Aug 2022 07:46:54 +0000
+Date:   Wed, 3 Aug 2022 15:46:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.18.y 467/2461]
+ huge_count_read_write.c:23:9: warning: 'write' reading 4294967295 bytes from
+ a region of size 1
+Message-ID: <202208031525.w6ang25V-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the same USB definition as qcom-apq8064.dtsi, tested on Casio GzOne.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+head:   7e8a7b1c98057a3014222a505c28c6bd43ed5666
+commit: e1ea40d9d6fc3d408390cb42d8f3c9d1466a62f3 [467/2461] selftests/damon: add damon to selftests root Makefile
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e1ea40d9d6fc3d408390cb42d8f3c9d1466a62f3
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.18.y
+        git checkout e1ea40d9d6fc3d408390cb42d8f3c9d1466a62f3
+        make O=/tmp/kselftest headers
+        make O=/tmp/kselftest -C tools/testing/selftests
 
-Signed-off-by: Shinjo Park <peremen@gmail.com>
-Reviewed-by: David Heidelberg <david@ixit.cz>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-v3:
- - Include missing clock/qcom,lcc-msm8960.h to make cleanly applicable
+All warnings (new ones prefixed by >>):
 
-v2:
- - Rewrite commit message
- - Reorder status line
+   huge_count_read_write.c: In function 'write_read_with_huge_count':
+>> huge_count_read_write.c:23:9: warning: 'write' reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
+      23 |         write(filedesc, "", 0xfffffffful);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from huge_count_read_write.c:8:
+   /usr/include/unistd.h:367:16: note: in a call to function 'write' declared with attribute 'access (read_only, 2, 3)'
+     367 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
+         |                ^~~~~
+>> huge_count_read_write.c:25:15: warning: 'read' writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
+      25 |         ret = read(filedesc, buf, 0xfffffffful);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   huge_count_read_write.c:14:14: note: destination object 'buf' of size 25
+      14 |         char buf[25];
+         |              ^~~
+   In file included from huge_count_read_write.c:8:
+   /usr/include/unistd.h:360:16: note: in a call to function 'read' declared with attribute 'access (write_only, 2, 3)'
+     360 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
+         |                ^~~~
 
- arch/arm/boot/dts/qcom-msm8960.dtsi | 33 +++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index e14e1c5d1..0e099aa7c 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -3,6 +3,8 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-msm8960.h>
-+#include <dt-bindings/clock/qcom,lcc-msm8960.h>
-+#include <dt-bindings/reset/qcom,gcc-msm8960.h>
- #include <dt-bindings/mfd/qcom-rpm.h>
- #include <dt-bindings/soc/qcom,gsbi.h>
- 
-@@ -167,6 +169,37 @@ regulators {
- 			};
- 		};
- 
-+		usb1: usb@12500000 {
-+			compatible = "qcom,ci-hdrc";
-+			reg = <0x12500000 0x200>,
-+			      <0x12500200 0x200>;
-+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc USB_HS1_XCVR_CLK>, <&gcc USB_HS1_H_CLK>;
-+			clock-names = "core", "iface";
-+			assigned-clocks = <&gcc USB_HS1_XCVR_CLK>;
-+			assigned-clock-rates = <60000000>;
-+			resets = <&gcc USB_HS1_RESET>;
-+			reset-names = "core";
-+			phy_type = "ulpi";
-+			ahb-burst-config = <0>;
-+			phys = <&usb_hs1_phy>;
-+			phy-names = "usb-phy";
-+			#reset-cells = <1>;
-+			status = "disabled";
-+
-+			ulpi {
-+				usb_hs1_phy: phy {
-+					compatible = "qcom,usb-hs-phy-msm8960",
-+						     "qcom,usb-hs-phy";
-+					clocks = <&sleep_clk>, <&cxo_board>;
-+					clock-names = "sleep", "ref";
-+					resets = <&usb1 0>;
-+					reset-names = "por";
-+					#phy-cells = <0>;
-+				};
-+			};
-+		};
-+
- 		acc0: clock-controller@2088000 {
- 			compatible = "qcom,kpss-acc-v1";
- 			reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

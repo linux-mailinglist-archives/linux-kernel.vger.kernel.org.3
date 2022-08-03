@@ -2,77 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32E2588FFE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42C3589000
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiHCQDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S237917AbiHCQEO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 Aug 2022 12:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234006AbiHCQDQ (ORCPT
+        with ESMTP id S233632AbiHCQEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:03:16 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B47140D9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:03:14 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id n138so13230181iod.4
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7OygQDDOouiCiPlbWs7isceuYzV4DhEDfDd1Dqaw+Fk=;
-        b=E2jMAjUkqHKj0vnFAxpfKrRcV7XNkEoSEbS/+BpgFbNEaGQdfJogCTXFyTTg3oPdxu
-         W4Tg6IOdDVeix86om4oE8kGNrzh9M7t/I5oop39zGGh9naC7R1e239QiPSlOC6Zl1Vj2
-         6MUgEnkwt1g+02rvhOq4hZbXbGUWqyLcE8Zlbj/oq+sQtpuhmIVJp4gml2ezY48ZumFI
-         oj4C/3DDYbpIWHIxJXicHUZzIeGjqaDLswcDU0kE0SDZoPs85eANnO1uCfAYieNfcWHQ
-         AkY7Vhn5ggpuxKKJA9qcgNsOucsoeyr7RQKxxD1Sj0Qzsm/DV62sJA4dsLACAT97zcda
-         kioA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7OygQDDOouiCiPlbWs7isceuYzV4DhEDfDd1Dqaw+Fk=;
-        b=443RIMKpyFjIAd/57d4z1yTdar2/z6Wuepj7jzmxHGTL+cJ/ZaEZfNZ5iYB3LaJisf
-         mXJ46XTDpl4HI8WAL3aszzxETTnqMM7VmP/wrJM2D8AxoBptcr0CF8PzUbltNBtiAkqu
-         4Mu7dBg+99cHJoOi5n9WYSvIZ8JZzn+UWTYEUx8ieWj766JTBtyAvTk1JipdmBgpJDHt
-         X+S3pzo7HqiuQrFlMvhAIGbA42AoyxUyfAS0lnTwuZTm/8mubWNmHXoMRD7k4EfNo0fb
-         t69OSX/sJhO1SDOog1sGe9iKGz3HCp1TqTeCF1nojeunEiwJhEBptd6bbvh1/FHbdlh4
-         AZvg==
-X-Gm-Message-State: AJIora+VRqKUbj7H19gD2dfYEDCVMB5wJf9oWHNGkn9TvHMNSkbZlQVe
-        vTq6FYiZzouNfO0qKwAUrvWKfWGIeHukw+0ZduP1YOlRgIw=
-X-Google-Smtp-Source: AGRyM1s4mmvAjontxpiPUsqZ9BL+Z+O7jvL4u8eHKd3PuNbn9A7qwR3L2BfuiAthTAB+fTMfrg1DJ1ld3fzRbyA4n14=
-X-Received: by 2002:a6b:6105:0:b0:67b:e68f:c9ee with SMTP id
- v5-20020a6b6105000000b0067be68fc9eemr9828309iob.154.1659542593947; Wed, 03
- Aug 2022 09:03:13 -0700 (PDT)
+        Wed, 3 Aug 2022 12:04:12 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB3C13D59;
+        Wed,  3 Aug 2022 09:04:10 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay05.hostedemail.com (Postfix) with ESMTP id 9A685415AB;
+        Wed,  3 Aug 2022 16:04:09 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 85DAF20027;
+        Wed,  3 Aug 2022 16:04:07 +0000 (UTC)
+Message-ID: <04c967669e4ed8845323f1487fff86949f07a81d.camel@perches.com>
+Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
+From:   Joe Perches <joe@perches.com>
+To:     Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Date:   Wed, 03 Aug 2022 09:04:06 -0700
+In-Reply-To: <20220719014704.21346-2-antonio@openvpn.net>
+References: <20220719014704.21346-1-antonio@openvpn.net>
+         <20220719014704.21346-2-antonio@openvpn.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-References: <20220614021116.1101331-1-sashal@kernel.org> <YrI25yOy7WMqr+x3@sashalap>
-In-Reply-To: <YrI25yOy7WMqr+x3@sashalap>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 3 Aug 2022 18:02:37 +0200
-Message-ID: <CAG48ez36K0YzkQRF4UNf6HccackSKXvb4BYm=tqjNw8hjXm1cQ@mail.gmail.com>
-Subject: Re: [PATCH MANUALSEL 5.18 1/6] KVM: x86: do not report a vCPU as
- preempted outside instruction boundaries
-To:     Sasha Levin <sashal@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 85DAF20027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: ztcdnm9ndary5wdcrw8jjpb7yjr6ewt6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+NxlwGsrjEsOp3yX577wwnzhNPxY7WYmg=
+X-HE-Tag: 1659542647-117471
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:23 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> Paolo, ping?
+On Tue, 2022-07-19 at 03:47 +0200, Antonio Quartulli wrote:
+> OpenVPN is a userspace software existing since around 2005 that allows
+> users to create secure tunnels.
+> 
+> So far OpenVPN has implemented all operations in userspace, which
+> implies several back and forth between kernel and user land in order to
+> process packets (encapsulate/decapsulate, encrypt/decrypt, rerouting..).
+> 
+> With ovpn-dco, we intend to move the fast path (data channel) entirely
+> in kernel space and thus improve user measured throughput over the
+> tunnel.
 
-What happened here? From what I can tell, even the backports that
-Sasha already wrote didn't get applied?
+Logging trivia:
+
+> diff --git a/drivers/net/ovpn-dco/crypto.c b/drivers/net/ovpn-dco/crypto.c
+> new file mode 100644
+> index 000000000000..fcc3a351ba9d
+> --- /dev/null
+> +++ b/drivers/net/ovpn-dco/crypto.c
+> @@ -0,0 +1,154 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*  OpenVPN data channel accelerator
+> + *
+> + *  Copyright (C) 2020-2022 OpenVPN, Inc.
+> + *
+> + *  Author:	James Yonan <james@openvpn.net>
+> + *		Antonio Quartulli <antonio@openvpn.net>
+> + */
+
+Please add
+
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+before any #include when a logging message is output
+
+[]
+> +void ovpn_crypto_key_slot_delete(struct ovpn_crypto_state *cs,
+> +				 enum ovpn_key_slot slot)
+> +{
+> +	struct ovpn_crypto_key_slot *ks = NULL;
+> +
+> +	mutex_lock(&cs->mutex);
+> +	switch (slot) {
+> +	case OVPN_KEY_SLOT_PRIMARY:
+> +		ks = rcu_replace_pointer(cs->primary, NULL,
+> +					 lockdep_is_held(&cs->mutex));
+> +		break;
+> +	case OVPN_KEY_SLOT_SECONDARY:
+> +		ks = rcu_replace_pointer(cs->secondary, NULL,
+> +					 lockdep_is_held(&cs->mutex));
+> +		break;
+> +	default:
+> +		pr_warn("Invalid slot to release: %u\n", slot);
+
+So messages like these are prefixed appropriately.
+
+> +		break;
+> +	}
+> +	mutex_unlock(&cs->mutex);
+> +
+> +	if (!ks) {
+> +		pr_debug("Key slot already released: %u\n", slot);
+> +		return;
+> +	}
+> +	pr_debug("deleting key slot %u, key_id=%u\n", slot, ks->key_id);
+> +
+> +	ovpn_crypto_key_slot_put(ks);
+> +}
+
+> diff --git a/drivers/net/ovpn-dco/crypto_aead.c b/drivers/net/ovpn-dco/crypto_aead.c
+[]
+> +/* Initialize a struct crypto_aead object */
+> +struct crypto_aead *ovpn_aead_init(const char *title, const char *alg_name,
+> +				   const unsigned char *key, unsigned int keylen)
+> +{
+> +	struct crypto_aead *aead;
+> +	int ret;
+> +
+> +	aead = crypto_alloc_aead(alg_name, 0, 0);
+> +	if (IS_ERR(aead)) {
+> +		ret = PTR_ERR(aead);
+> +		pr_err("%s crypto_alloc_aead failed, err=%d\n", title, ret);
+> +		aead = NULL;
+> +		goto error;
+> +	}
+> +
+> +	ret = crypto_aead_setkey(aead, key, keylen);
+> +	if (ret) {
+> +		pr_err("%s crypto_aead_setkey size=%u failed, err=%d\n", title,
+> +		       keylen, ret);
+> +		goto error;
+> +	}
+> +
+> +	ret = crypto_aead_setauthsize(aead, AUTH_TAG_SIZE);
+> +	if (ret) {
+> +		pr_err("%s crypto_aead_setauthsize failed, err=%d\n", title,
+> +		       ret);
+
+Could use another #define pr_fmt(fmt) etc...
+

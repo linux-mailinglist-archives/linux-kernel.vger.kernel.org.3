@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D673589433
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD83589436
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238139AbiHCV6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 17:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S238387AbiHCV7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 17:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236277AbiHCV6i (ORCPT
+        with ESMTP id S236278AbiHCV7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:58:38 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA665B7BB
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:58:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 130so9840458pfv.13
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 14:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SCTW2VGVCe70yjzOhwev7SpsmSsxdAFKcNcUxQ5cnTk=;
-        b=QvmYegVWwxzQMt9s8BVNHqdrotBTolyCG/Brqb8N2NC5qkIEgQFxdpmLRxPp+hbh4S
-         Pmc3cs1KKel2tDx+PfmPx+2gfU+Z29b0/yQYOhIXj4wPGlZYg9cp63doNcV0OlbH0C7D
-         JNQn2LB8ONdwnRZWz9ufaT1pfS/qNuZgq9Dzc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SCTW2VGVCe70yjzOhwev7SpsmSsxdAFKcNcUxQ5cnTk=;
-        b=tELzhipVnpRJV5m1I8WOxDi+BX54cEAC8GXOT/ZkFnyUOaBWuIrT1TkD7IBTIqxI1H
-         Ywt9QGVl2+ALcFtemPThE9gv9lW+FOU+ApTiO6PGBIdaVDoZnOgFmY4vhFxo0lxx9WXa
-         MZ94U/jdfN5VJW9IhddPKgjbJFT8osd6KTpAMcUaKxEuScdGjqGZhtqmXY1JgE7xTnvT
-         SLvncjv68/PT/YdL8i6O75IMNnxkqdgSAJ/gGRI0MizJwX3eQl/EYp35BGBpqYsG/BaD
-         kfd7vtNete9c+I5ewe9kKUs34pVAP7TYbexjOO4T2YhK6fXP5GYDCsM7WbVZD+nW91vR
-         od8w==
-X-Gm-Message-State: AJIora+cZazNjOPKDKPTmd5KlBIsLd4zlCmGFhOSibJwj5Gt9KZAVI0v
-        Mrp3C+fFG7Yu0VEVoPDUXgAVxw==
-X-Google-Smtp-Source: AGRyM1v7t6ywdISV+g82lYVUwLGYI/OHQiSZ7PwIQ4O0SpDyjUA11aPQKQKyGvDOsWyGYUJnoagBlg==
-X-Received: by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with SMTP id h4-20020a056a001a4400b005286af7ff4amr28142758pfv.78.1659563916450;
-        Wed, 03 Aug 2022 14:58:36 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:238b:c074:f5f8:56d0])
-        by smtp.gmail.com with UTF8SMTPSA id a8-20020a631a48000000b0040c9df2b060sm11384657pgm.30.2022.08.03.14.58.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 14:58:36 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 14:58:33 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] usb: dwc3: qcom: fix runtime PM wakeup
-Message-ID: <YurviWfzut9sursr@google.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-5-johan+linaro@kernel.org>
+        Wed, 3 Aug 2022 17:59:09 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022F35B7BB;
+        Wed,  3 Aug 2022 14:59:08 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4Lym3J0TtJzDq9t;
+        Wed,  3 Aug 2022 21:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1659563948; bh=kT4jHofE9XJAS5PI3Ljks9oJ2ktctNUJKIGMWAhOUC8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W+cXsHa2uAWkgMvLw5tnGv3Z4SUEEcWQnNS51NAm7zx6846H2U+Z4jqhnm+sN00cr
+         C5YBtYPU+KwWOhZadXlvBwyPomIdzGXDDeL3o2OKmOJvm2r/FmnafFllvoRP8WpPqg
+         V9EUQJiTSJnFZLhNuObcmKPd/C5TqPMLhsOxdEiE=
+X-Riseup-User-ID: E1B64DBF1CF74C19EA12FC11482FCC9C6B1345351CAFEC908DC484D45983046F
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lym3B3mh0z1ySb;
+        Wed,  3 Aug 2022 21:59:02 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        Daniel Latypov <dlatypov@google.com>, airlied@linux.ie,
+        daniel@ffwll.ch, davem@davemloft.net, kuba@kernel.org,
+        jose.exposito89@gmail.com, javierm@redhat.com
+Cc:     andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+Date:   Wed,  3 Aug 2022 18:58:52 -0300
+Message-Id: <20220803215855.258704-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220802151404.1797-5-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:14:00PM +0200, Johan Hovold wrote:
-> A device must enable wakeups during runtime suspend regardless of
-> whether it is capable and allowed to wake the system up from system
-> suspend.
-> 
-> Fixes: 2664deb09306 ("usb: dwc3: qcom: Honor wakeup enabled/disabled state")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ or
+KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
+such as:
+  KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 
-Ah, I wasn't aware that the same wakeup mechanism is used in runtime suspend.
+Although this usage produces correct results for the test cases, if the
+expectation fails the error message is not very helpful, indicating only the
+return of the memcmp function.
 
-In how far is runtime PM actually supported/used by this driver? The device is
-set 'active' in _probe(), and there are no other pm_runtime_* calls, except
-in dwc3_qcom_remove() and qcom_dwc3_resume_irq(). How does the device get from
-'active' into 'suspended'?
+Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. In
+case of expectation failure, those macros print the hex dump of the memory
+blocks, making it easier to debug test failures for memory blocks.
+
+Other than the style changes, this v3 brings alignment to the bytes, making
+it easier to identify the faulty bytes. So, on the previous version, the
+output from a failure would be:
+[14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
+[14:27:42] Expected dst == result->expected, but
+[14:27:42] dst ==
+[14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
+[14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
+[14:27:42] result->expected ==
+[14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
+[14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
+
+Now, with the alignment, the output is:
+[14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
+[14:27:42] Expected dst == result->expected, but
+[14:27:42] dst ==
+[14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60  12
+[14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
+[14:27:42] result->expected ==
+[14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60  12
+[14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
+
+Moreover, on the raw output, there were some indentation problems. Those
+problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
+
+The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
+KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
+expectations on the kunit-example-test.c. And the last patch replaces the
+KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+
+Best Regards,
+- Maíra Canal
+
+v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+
+- Change "determinated" to "specified" (Daniel Latypov).
+- Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
+it easier for users to infer the right size unit (Daniel Latypov).
+- Mark the different bytes on the failure message with a <> (Daniel Latypov).
+- Replace a constant number of array elements for ARRAY_SIZE() (André Almeida).
+- Rename "array" and "expected" variables to "array1" and "array2" (Daniel Latypov).
+
+v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1-mairacanal@riseup.net/T/#t
+
+- Make the bytes aligned at output.
+- Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
+- Line up the trailing \ at macros using tabs (Daniel Latypov).
+- Line up the params to the functions (Daniel Latypov).
+- Change "Increament" to "Augment" (Daniel Latypov).
+- Use sizeof() for array sizes (Daniel Latypov).
+
+Maíra Canal (3):
+  kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+  kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
+  kunit: Use KUNIT_EXPECT_MEMEQ macro
+
+ .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
+ include/kunit/assert.h                        | 34 +++++++++
+ include/kunit/test.h                          | 76 +++++++++++++++++++
+ lib/kunit/assert.c                            | 56 ++++++++++++++
+ lib/kunit/kunit-example-test.c                |  7 ++
+ net/core/dev_addr_lists_test.c                |  4 +-
+ 6 files changed, 178 insertions(+), 5 deletions(-)
+
+--
+2.37.1
+

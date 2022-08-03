@@ -2,99 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D0B588EA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7778B588EA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiHCOZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S236554AbiHCO0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiHCOZU (ORCPT
+        with ESMTP id S229723AbiHCO0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:25:20 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B333616B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:25:18 -0700 (PDT)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 9E6521F5C9;
-        Wed,  3 Aug 2022 16:25:14 +0200 (CEST)
-Date:   Wed, 3 Aug 2022 16:25:12 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
+        Wed, 3 Aug 2022 10:26:43 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB424F595;
+        Wed,  3 Aug 2022 07:26:41 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 16:26:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1659536799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a21Mzo/WHyccC08tC0VXa91bkOq8OW9CcHwOisfYdPQ=;
+        b=EqFaUed3/VNo8MquR1lHM+NIh+hCWF2/EI8Frah6p7AL20Lw8DLnrvPhlPSevM03w2knZG
+        kchAKMl5wnl/lUjTKU6T/NqDJVaduzMDAyWZyxCD3qqiUHKpngV0b3gmK8OaWLp60QWZYy
+        t/CZbZxG5y/ZJE9C5l1p1AMwVEOa2So=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] drm/msm/dsi: Fix number of regulators for SDM660
-Message-ID: <20220803142512.f5d2umiymqwbxfzt@SoMainline.org>
-References: <20220802223738.898592-1-dianders@chromium.org>
- <20220802153434.v3.2.I94b3c3e412b7c208061349f05659e126483171b1@changeid>
+Subject: Re: [PATCH] selftests: kvm: Fix a compile error in
+ selftests/kvm/rseq_test.c
+Message-ID: <20220803142637.3y5fj2cwyvbrwect@kamzik>
+References: <20220802071240.84626-1-cloudliang@tencent.com>
+ <20220802150830.rgzeg47enbpsucbr@kamzik>
+ <CAFg_LQWB5hV9CLnavsCmsLbQCMdj1wqe-gVP7vp_mRGt+Eh+nQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802153434.v3.2.I94b3c3e412b7c208061349f05659e126483171b1@changeid>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAFg_LQWB5hV9CLnavsCmsLbQCMdj1wqe-gVP7vp_mRGt+Eh+nQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-02 15:37:34, Douglas Anderson wrote:
-> 1 regulators is specified listed but the number 2 is specified. This
-> presumably means we try to get a regulator with no name. Fix it.
-> 
-> Fixes: 033f47f7f121 ("drm/msm/dsi: Add DSI configuration for SDM660")
+On Wed, Aug 03, 2022 at 09:58:51PM +0800, Jinrong Liang wrote:
+> My ldd version is (GNU libc) 2.28, and I get a compilation error in this case.
+> But I use another ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31 is compiling fine.
+> This shows that compilation errors may occur in different GNU libc environments.
+> Would it be more appropriate to use syscall for better compatibility?
 
-This should be:
+OK, it's a pity, but no big deal to use syscall().
 
-Fixes: 462f7017a691 ("drm/msm/dsi: Fix DSI and DSI PHY regulator config from SDM660")
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
 
-The original patch included two regulators; that "fix" patch removed
-"vdd".
-
-After that:
-
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
-> - ("Fix number of regulators for SDM660") new for v2.
-> 
->  drivers/gpu/drm/msm/dsi/dsi_cfg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> index 02000a7b7a18..72c018e26f47 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> @@ -148,7 +148,7 @@ static const char * const dsi_sdm660_bus_clk_names[] = {
->  static const struct msm_dsi_config sdm660_dsi_cfg = {
->  	.io_offset = DSI_6G_REG_SHIFT,
->  	.reg_cfg = {
-> -		.num = 2,
-> +		.num = 1,
->  		.regs = {
->  			{"vdda", 12560, 4 },	/* 1.2 V */
->  		},
-> -- 
-> 2.37.1.455.g008518b4e5-goog
-> 
+Thanks,
+drew

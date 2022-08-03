@@ -2,74 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD3D588EB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37EC588EBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiHCOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S236646AbiHCOfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiHCOdf (ORCPT
+        with ESMTP id S232879AbiHCOfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:33:35 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435F519C1D;
-        Wed,  3 Aug 2022 07:33:35 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 13so825051pgc.8;
-        Wed, 03 Aug 2022 07:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=JatyaQMvZqRXSjhM9SX5yq+wyykzu0VcX/V1mI7x90M=;
-        b=Z+oHhlo/XD9ocZVdOJ0c+UZb3W11uDME3Qg2tHGTXVHWL4aDTC61JQtsNimBuRJLoN
-         YpDwo6Vbf6pbrA88WEIMwXMDA38XnzjJIu8cxpMbjtpeD2g1D5LJmZqH5yuXqUNklZFL
-         ROzrMa/+1l4gm/wiLEmStEoccMRQtslyNYVDC3Oj3Ayy+ngQGJrkO1XyXXe60AoDoCX3
-         Az4nj0c267sLERFKjdjG5iJSPaG+WSuomTcs+68t2ZL3M/DwUARcn3dKK3xP12FQW0fq
-         v7ZKWjrKiWkoF7Mq7dw/pLOC/dQs6L3tMN6FSV6h1uJZyv3IUlGGZKSw2CNIbpxOuOvl
-         5ebg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=JatyaQMvZqRXSjhM9SX5yq+wyykzu0VcX/V1mI7x90M=;
-        b=4vFVANzbrK5EbsoAMOVHj92ZZ//vy5fs8zMWaI8TCzb+zJH3WdCA7l96RUhcwUBpMG
-         JKK3Lauxe8aqBF8PosR3G6GXOcbKlPdSUSr9I2nq+dY4c61xAoWTI6Qqu5svY9cRB5mi
-         ClILHjazZmu8FUcmQkhaU5dxhgJTiJGg4lN0OogeqjRLX7iWVsWgcItC9flYZ8iCBRzH
-         2i/clhXvQ+CVCDUXlMyhGowqN0eC9AvEHH9NrAykznVU0XK3U0zFLFGrwdpKWb8SR4Hz
-         O5AZXFOzTJNFZA4JJBLToUFrt0guEjYwLu6Ft+E7M84lq8y8twcSw+nMQwPrUkon6e/d
-         bf4A==
-X-Gm-Message-State: AJIora98jv86F0NrrO/EVQsoz/x/6Zrx0rQa+RinzKm7+ANw792phIR7
-        0aAVq0Qkb6QucbdSloJmP6mKTBEr490qho58Kqc=
-X-Google-Smtp-Source: AGRyM1vP9Wcav9fDnhpdb+EB0Rimz1tLt2/rBavNmiFZ1ASdoV5B5U3LnQ/1bALs6pU/xjs+eY5A0yif49ONvSG69Ag=
-X-Received: by 2002:a63:2a95:0:b0:41a:27e5:1996 with SMTP id
- q143-20020a632a95000000b0041a27e51996mr21207142pgq.447.1659537214627; Wed, 03
- Aug 2022 07:33:34 -0700 (PDT)
+        Wed, 3 Aug 2022 10:35:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83D5C5A;
+        Wed,  3 Aug 2022 07:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659537313; x=1691073313;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=467MqZTPTGhJZVmTBdgipMMRNgFOH6x08fDl7lIVEqc=;
+  b=lVUf90ZafUXR22PZuDE74FRDijAcxJDBCyVPugKS/+KeV5N7WWQ6VP5V
+   ZyVVj0G29IHOfZcVhqcLcgdespHMLObF+6mEKPceOOGzVtNV+Rh2Z3NsU
+   RzRtTaIPmvGbl0qpYiymVHsbUT0p1dB1TAzkIAm89vGCpSePTdPPWcVhi
+   +vc4KADJCXcybV3vxzmaZjoBhNhsk6AEolO6GYAdB+VOJcqbeqsWdiOS6
+   5Uy1O62dPoi8aJh2Z03kcgBUrVfyzCY8h2ygdWzv+csw3B276lF4R4WD+
+   wYzZFmeN9iO9aH2tOBCumsnlhwq7ne4UzCjCbepla9jCQDwdTLXV83VJB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="351398936"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="351398936"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:35:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="635701620"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Aug 2022 07:35:10 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJFSn-000HMb-1x;
+        Wed, 03 Aug 2022 14:35:09 +0000
+Date:   Wed, 3 Aug 2022 22:34:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li Jinlin <lijinlin3@huawei.com>, lduncan@suse.com,
+        cleech@redhat.com, michael.christie@oracle.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, mark.mielke@gmail.com
+Cc:     kbuild-all@lists.01.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linfeilong@huawei.com, liuzhiqiang26@huawei.com
+Subject: Re: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
+ getpeername()
+Message-ID: <202208032214.0FELL5gK-lkp@intel.com>
+References: <20220802101939.3972556-1-lijinlin3@huawei.com>
 MIME-Version: 1.0
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Wed, 3 Aug 2022 16:33:23 +0200
-Message-ID: <CAEwRq=qe+Frwpe=Zr4n_8A6vjOJnV3noegdnHSN7NTazkKejBA@mail.gmail.com>
-Subject: Re: [PATCH v2] regulator: core: Resolve supply name earlier to
- prevent double-init
-To:     christian@kohlschutter.com
-Cc:     broonie@kernel.org, heiko@sntech.de, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        m.reichl@fivetechno.de, robin.murphy@arm.com, wens@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802101939.3972556-1-lijinlin3@huawei.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Li,
 
-it looks like you left a test for '&& rdev->constraints' in the if after you
-moved the 'if (!rdev->constraints) {' above it.
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220803/202208032214.0FELL5gK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/ccc367df3fdba07b24eeda721ca928cce50f40d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Li-Jinlin/scsi-iscsi-iscsi_tcp-Fix-null-ptr-deref-while-calling-getpeername/20220802-173945
+        git checkout ccc367df3fdba07b24eeda721ca928cce50f40d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/scsi/iscsi_tcp.c: In function 'iscsi_sw_tcp_conn_get_param':
+>> drivers/scsi/iscsi_tcp.c:798:26: warning: passing argument 1 of 'fget' makes integer from pointer without a cast [-Wint-conversion]
+     798 |                 fget(sock->file);
+         |                      ~~~~^~~~~~
+         |                          |
+         |                          struct file *
+   In file included from drivers/scsi/iscsi_tcp.c:25:
+   include/linux/file.h:48:39: note: expected 'unsigned int' but argument is of type 'struct file *'
+      48 | extern struct file *fget(unsigned int fd);
+         |                          ~~~~~~~~~~~~~^~
+   drivers/scsi/iscsi_tcp.c: In function 'iscsi_sw_tcp_host_get_param':
+   drivers/scsi/iscsi_tcp.c:852:26: warning: passing argument 1 of 'fget' makes integer from pointer without a cast [-Wint-conversion]
+     852 |                 fget(sock->file);
+         |                      ~~~~^~~~~~
+         |                          |
+         |                          struct file *
+   In file included from drivers/scsi/iscsi_tcp.c:25:
+   include/linux/file.h:48:39: note: expected 'unsigned int' but argument is of type 'struct file *'
+      48 | extern struct file *fget(unsigned int fd);
+         |                          ~~~~~~~~~~~~~^~
+
+
+vim +/fget +798 drivers/scsi/iscsi_tcp.c
+
+   777	
+   778	static int iscsi_sw_tcp_conn_get_param(struct iscsi_cls_conn *cls_conn,
+   779					       enum iscsi_param param, char *buf)
+   780	{
+   781		struct iscsi_conn *conn = cls_conn->dd_data;
+   782		struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+   783		struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+   784		struct sockaddr_in6 addr;
+   785		struct socket *sock;
+   786		int rc;
+   787	
+   788		switch(param) {
+   789		case ISCSI_PARAM_CONN_PORT:
+   790		case ISCSI_PARAM_CONN_ADDRESS:
+   791		case ISCSI_PARAM_LOCAL_PORT:
+   792			spin_lock_bh(&conn->session->frwd_lock);
+   793			if (!tcp_sw_conn || !tcp_sw_conn->sock) {
+   794				spin_unlock_bh(&conn->session->frwd_lock);
+   795				return -ENOTCONN;
+   796			}
+   797			sock = tcp_sw_conn->sock;
+ > 798			fget(sock->file);
+   799			spin_unlock_bh(&conn->session->frwd_lock);
+   800	
+   801			if (param == ISCSI_PARAM_LOCAL_PORT)
+   802				rc = kernel_getsockname(sock,
+   803							(struct sockaddr *)&addr);
+   804			else
+   805				rc = kernel_getpeername(sock,
+   806							(struct sockaddr *)&addr);
+   807			spin_lock_bh(&conn->session->frwd_lock);
+   808			sockfd_put(sock);
+   809			spin_unlock_bh(&conn->session->frwd_lock);
+   810			if (rc < 0)
+   811				return rc;
+   812	
+   813			return iscsi_conn_get_addr_param((struct sockaddr_storage *)
+   814							 &addr, param, buf);
+   815		default:
+   816			return iscsi_conn_get_param(cls_conn, param, buf);
+   817		}
+   818	
+   819		return 0;
+   820	}
+   821	
 
 -- 
-Vincent Legoll
+0-DAY CI Kernel Test Service
+https://01.org/lkp

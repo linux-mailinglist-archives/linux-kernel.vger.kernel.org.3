@@ -2,145 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02448588872
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7166A588875
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbiHCIGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S237419AbiHCIHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbiHCIGN (ORCPT
+        with ESMTP id S235199AbiHCIHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:06:13 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C93220E4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:06:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a9so12488735lfm.12
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 01:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ZWDDdDUD/SeLY4Y1864eieW1iTgOf5yvfzhjZam9Gdo=;
-        b=UNQND0cz6Sg0ZYwWcksx3XWvJ3WA4eaJxJp4yui/nV3EMdbkFSaBpOGwZnon5itiyZ
-         eywb/D5cj+hY1KS92HUbT03Xzas2PMYxD5h5Q0Y0DXf4MLApk1H/im+q2nbWQuI/3srA
-         JbcxOqZhrwiuK+nf5i/uzmxpRWcKaxLW84wVDO6hw8G1VTgEX9mUuFsTcRgXNuqhqmED
-         QejTlDnrX6hYUCBUgZEX4fTFRURYsPw2lSkBZ7uWPUVZXutxAK4LsNlnQ14O34pEI+NI
-         I7UYa7XeYFObT79SeRKCG9CY6UvSMaYOTBdtpWbCHenXA7328Ga6gOZ+RoxN5Xg3UHFk
-         H/KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ZWDDdDUD/SeLY4Y1864eieW1iTgOf5yvfzhjZam9Gdo=;
-        b=EGU/G4mN5M6697BXeV4OrC5fPPTM+Ukl0yO4HAI9QVyVObv2P0FyThs5f/S67YDIDi
-         9lBmexl1VzrnlXx2rlWsHmzMsPaGecGKlru9SlXlW95W+8gClmigPT3X88z9pCJHA33b
-         YoKg0p+FzjvGJMmqX4DMnUWHOF1cp1FhoGb3Vs/Zg/IQPvS21wt54Aeg2X2R0HLFkZ2U
-         vrNi3sQI/gESXi0PrpnjBZ2gaO6ZjHgYK/1qnydvz1ZL0aJXOOVWvh91O1mURrfoQ6iM
-         czrVtXM06VIhDUaptc6u67ggWZrMoI3k9wxpN+uQm1qvmES0LcEaspHFBjEu7OhJDPLg
-         hnjw==
-X-Gm-Message-State: ACgBeo028BLgSrHPb1BkIDVTnMuQ/qJqvhm3kSZYdM8Zy+WzKXpSqDZ6
-        u2H3aTDODOmtki7ZlQMn/KXlVA==
-X-Google-Smtp-Source: AA6agR6YIKvmWjYaexviQIzgrn1Fy4OPtC8l6gFirTc4+daaC5Q/9KztGMbcs4zaIhmKkO0ln/EelA==
-X-Received: by 2002:ac2:43c8:0:b0:48a:f0e9:fc06 with SMTP id u8-20020ac243c8000000b0048af0e9fc06mr6238061lfl.458.1659513970078;
-        Wed, 03 Aug 2022 01:06:10 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t9-20020ac24c09000000b0048a8586293asm2368309lfq.48.2022.08.03.01.06.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 01:06:09 -0700 (PDT)
-Message-ID: <89469b0d-e6aa-4d60-c93c-a99256f65445@linaro.org>
-Date:   Wed, 3 Aug 2022 11:06:08 +0300
+        Wed, 3 Aug 2022 04:07:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE7B2181C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:07:04 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2737CGgG005901;
+        Wed, 3 Aug 2022 08:06:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cD/HLOT1RCr5FLze4xYHuh82tvZmGK0k7ghWRsfmnMs=;
+ b=s7VdRk7u/VPgZX+3zRnI5WEBcaEr49EVC9har418PaXIytMUYVl3Z3KmOfxJIUmzvpnn
+ IZICnARoFMQEKx0JoHxtdFJMrWwRIYUrCUBwz/WICyuI+vdpRzGrV3ZZ6w9/oNpibLlJ
+ ubGoesRJ5TnWxAFJ1NucRrDjTfpbWQqvqgQQ5RLjd/vUyJoy+w2Egg0w2OetFbXcTSto
+ vLviHrZ1/Fs92jzv20jzTqK80h6LufA0ilQ7if22I32sGtQIdGJsulcRTz6qiGJCFUPn
+ S313xNuwe/0TzqQ6SxdZh9Ohihl/ERzr0/y/NRGcQE2UrUvlDG0CU2Ke6sWQVMgvcSDI EA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqmdu1bx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Aug 2022 08:06:41 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27386GEr017991;
+        Wed, 3 Aug 2022 08:06:39 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3hmv98vgnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Aug 2022 08:06:39 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27386qMM31326540
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Aug 2022 08:06:52 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E7DF42041;
+        Wed,  3 Aug 2022 08:06:36 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D93E84203F;
+        Wed,  3 Aug 2022 08:06:35 +0000 (GMT)
+Received: from localhost (unknown [9.43.94.156])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  3 Aug 2022 08:06:35 +0000 (GMT)
+Date:   Wed, 03 Aug 2022 13:36:34 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH 2/3] powerpc/ppc-opcode: Define and use PPC_RAW_TRAP() and
+ PPC_RAW_TW()
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <b2d762191b095530789ac8b71b167c6740bb6aed.1657205708.git.christophe.leroy@csgroup.eu>
+        <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 00/13] PM6125 regulator support
-Content-Language: en-GB
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220731223736.1036286-1-iskren.chernev@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220731223736.1036286-1-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 91osUYcya-v8DiiS0T0UMNk2AIlwaNzq
+X-Proofpoint-GUID: 91osUYcya-v8DiiS0T0UMNk2AIlwaNzq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=898 lowpriorityscore=0 spamscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208030037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/08/2022 01:37, Iskren Chernev wrote:
-> This patch series adds SPMI and SMD regulator support for the PM6125 found on
-> SM4250/SM6115 SoCs from QCom.
-> 
-> This code has been tested on:
-> * OnePlus Nord N100 (oneplus,billie2, SoC sm4250)
-> * Redmi 9T (redmi,lemon, SoC sm6115)
-> 
-> The main source used for this change is qpnp pm6125 support patch from caf [1]:
-> 
-> [1]: https://source.codeaurora.org/quic/la/kernel/msm-5.4/commit/?h=kernel.lnx.5.4.r1-rel&id=d1220daeffaa440ffff0a8c47322eb0033bf54f5
-> 
-> v2: https://lkml.org/lkml/2022/7/26/885
-> v1: https://lkml.org/lkml/2021/8/28/144
-> 
-> Changes from v2:
-> - split spmi new regulator support in 2 patches
-> - FTS and LDOs now have set_load and set_pull_down ops
-> - add better commit messages on spmi patches
-> - fix sob header order
-> - fix tested device info (Redmi 9T, NOT Xiaomi 9T)
-> - improve formatting in spmi binding docs
-> - sort alphabetically in smd binding docs
-> - sort alphabetically spmi pmics
-> - sort alphabetically smd pmics
-> Changes from v1:
-> - add dt-bindings
-> - split SPMI patch into new reg types and the new PMIC
-> - add correct supply mapping
-> 
-> Iskren Chernev (13):
->    dt-bindings: regulator: qcom_spmi: Improve formatting of if-then
->      blocks
->    dt-bindings: regulator: qcom_spmi: Document PM6125 PMIC
->    dt-bindings: regulator: qcom_smd: Sort compatibles alphabetically
->    dt-bindings: regulator: qcom_smd: Document PM6125 PMIC
->    regulator: qcom_spmi: Add support for new regulator types
->    regulator: qcom_spmi: Add support for HFSMPS regulator type
->    regulator: qcom_spmi: Sort pmics alphabetically (part 1)
->    regulator: qcom_spmi: Sort pmics alphabetically (part 2)
->    regulator: qcom_spmi: Add PM6125 PMIC support
->    regulator: qcom_smd: Sort pmics alphabetically (part 1)
->    regulator: qcom_smd: Sort pmics alphabetically (part 2)
->    regulator: qcom_smd: Sort pmics alphabetically (part 3)
+Christophe Leroy wrote:
+> Add and use PPC_RAW_TRAP() instead of opencoding.
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/include/asm/ppc-opcode.h | 2 ++
+>  arch/powerpc/include/asm/probes.h     | 3 ++-
+>  arch/powerpc/xmon/xmon.c              | 2 +-
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include=
+/asm/ppc-opcode.h
+> index 89beabf5325c..5527a955fb4a 100644
+> --- a/arch/powerpc/include/asm/ppc-opcode.h
+> +++ b/arch/powerpc/include/asm/ppc-opcode.h
+> @@ -581,6 +581,8 @@
+> =20
+>  #define PPC_RAW_BRANCH(offset)		(0x48000000 | PPC_LI(offset))
+>  #define PPC_RAW_BL(offset)		(0x48000001 | PPC_LI(offset))
+> +#define PPC_RAW_TW(t0, a, b)		(0x7f000008 | ___PPC_RS(t0) | ___PPC_RA(a)=
+ | ___PPC_RB(b))
 
-What is the reason for these part1/2 and part1/2/3 splits? I think you 
-can collapse them into two respective patches, one sorting of spmi, 
-another one sorting the smd regulators
+Shouldn't that be 0x7c000008 ?
 
->    regulator: qcom_smd: Add PM6125 regulators support
-> 
->   .../regulator/qcom,smd-rpm-regulator.yaml     |  26 +-
->   .../regulator/qcom,spmi-regulator.yaml        |  32 ++
->   drivers/regulator/qcom_smd-regulator.c        | 400 ++++++++++--------
->   drivers/regulator/qcom_spmi-regulator.c       | 383 ++++++++++++-----
->   4 files changed, 556 insertions(+), 285 deletions(-)
-> 
+- Naveen
 
 
--- 
-With best wishes
-Dmitry
+> +#define PPC_RAW_TRAP()			PPC_RAW_TW(31, 0, 0)
+> =20
+>  /* Deal with instructions that older assemblers aren't aware of */
+>  #define	PPC_BCCTR_FLUSH		stringify_in_c(.long PPC_INST_BCCTR_FLUSH)
+> diff --git a/arch/powerpc/include/asm/probes.h b/arch/powerpc/include/asm=
+/probes.h
+> index 00634e3145e7..e77a2ed7d938 100644
+> --- a/arch/powerpc/include/asm/probes.h
+> +++ b/arch/powerpc/include/asm/probes.h
+> @@ -9,8 +9,9 @@
+>   */
+>  #include <linux/types.h>
+>  #include <asm/disassemble.h>
+> +#include <asm/ppc-opcode.h>
+> =20
+> -#define BREAKPOINT_INSTRUCTION	0x7fe00008	/* trap */
+> +#define BREAKPOINT_INSTRUCTION	PPC_RAW_TRAP()	/* trap */
+> =20
+>  /* Trap definitions per ISA */
+>  #define IS_TW(instr)		(((instr) & 0xfc0007fe) =3D=3D 0x7c000008)
+> diff --git a/arch/powerpc/xmon/xmon.c b/arch/powerpc/xmon/xmon.c
+> index f80c714f1d49..26ef3388c24c 100644
+> --- a/arch/powerpc/xmon/xmon.c
+> +++ b/arch/powerpc/xmon/xmon.c
+> @@ -116,7 +116,7 @@ struct bpt {
+>  static struct bpt bpts[NBPTS];
+>  static struct bpt dabr[HBP_NUM_MAX];
+>  static struct bpt *iabr;
+> -static unsigned bpinstr =3D 0x7fe00008;	/* trap */
+> +static unsigned int bpinstr =3D PPC_RAW_TRAP();
+> =20
+>  #define BP_NUM(bp)	((bp) - bpts + 1)
+> =20
+> --=20
+> 2.36.1
+>=20
+>=20
+>=20

@@ -2,65 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C78588ADA
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2601A588ADB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbiHCK6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        id S235569AbiHCLCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiHCK6X (ORCPT
+        with ESMTP id S230272AbiHCLCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:58:23 -0400
+        Wed, 3 Aug 2022 07:02:51 -0400
 Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B68F1A82B;
-        Wed,  3 Aug 2022 03:58:22 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i14so12025627ejg.6;
-        Wed, 03 Aug 2022 03:58:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CCDA45A
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:02:50 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gb36so5221359ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 04:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I1FIOHOmLG3ZAOn9JnnVVb/4WhmWslDALaYP6wwRvqo=;
-        b=fqt8XPiSqidHdR+5+8rGKYuggGtr7ulGWqMK4Vn9jS73p+H5p4TOy9A9dz1MkmisKs
-         QLTHZVDs5V3EzUAnRMTo5R6Vc90KdvkUC/Xzgesfvj0I7r+CDr+WsvHuUAh48Cq4VLHT
-         hvXu6H6R+JEmVftc8kpcRKgB3xVBZ+d0IR1FODtnXMzz6HU8gvssntYt6M/c731aOP7/
-         5KW7tNSFoFvUOblAKlQDz2oW6yqEELDFJlbR8GSrvU+9Fls5buAxYxCpMUvAGgOHjd3G
-         Vet694tKXS8QgplcIlH+Y4dOhHkMyOw1O884X1hFFv2SLGAjjlFHmDsv8huPIk+p8FEU
-         4+CQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=zxgCuHXvqBGV53L1EzFqMcpK4LaucGFDh7Te55uTYfI=;
+        b=F3Lf5AT5HNki4cKAvSdXFqMfIWzz1TfCcYy+1hPz1R6nHXiIut+qNKn60SlWPW+3/y
+         YfjUtWaLxatamH3JPmWeS4hkuRABneECWZTVIISUgmeFl1BD50UQgrJvEv4Wgte7xfpx
+         SSHhO4njWJJlcXEuwNIa0ktmNRm0Ej3K29Qqsrsvmh30h46DilKnagQCIQ0dEQnWyKGK
+         3WDo46XHPjL1aBI99Crh0mxrKCTdL4ZMwJ3bZdcLFhKnW9eyXm0j4s33TudMxh5Imy8M
+         XRAKQIcjIqvdiWNNlVMx+1VkMIjEzxlsX27X9aJa2wbDtz2qkFiMO71vCZBQbjPWkinG
+         fPYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I1FIOHOmLG3ZAOn9JnnVVb/4WhmWslDALaYP6wwRvqo=;
-        b=opBoLN2mtp62F43trDcoI+Fjqp97IfAUX4FoW0TiziXx4ttuIptRaH6KQ5uzMzJm+3
-         nwoz85mIxparU2JpmUK+XgOKumECafirNjaDIZQrKvbS0jRTMutsfTAP+o5La+4CoGY2
-         HcfEh+Fm3s2uwGb+9MeluPnFpzZ2Q5ZTWoihA9oaNPqq69D/N1ELj+fql9NsOXh982Az
-         7sqitExHdUpoASZ5Gf/4x1lj19/sA9vIuOW31Yi6Qr80V7KAtsJz1JiApYvRfXUlaEj6
-         RJDy7xMHtFYOiB/u/9qyYo0aaXt/Nvfezke9TIM5s64v2MvCLxkSBq59teWbTPToVVkT
-         i3Xg==
-X-Gm-Message-State: ACgBeo1bse5fIznR0n3+ZfV8Vm9liyn9/4oZBGmMoZqoSpRaUvoXXgvU
-        2Y63PsGMzbctNWQ5nUO1O5+QVk6eED5ljesmRaFcVfxb3m8=
-X-Google-Smtp-Source: AA6agR7H8JWRm5hObSDAE2iorsDN1qcSEerzGKlicv5cXzq9Cdv1Ij/V5v273OdQDFTkXBcthaLXVI/vAUgmKvTY1gw=
-X-Received: by 2002:a17:907:c0e:b0:730:79ec:73a1 with SMTP id
- ga14-20020a1709070c0e00b0073079ec73a1mr12374767ejc.283.1659524300529; Wed, 03
- Aug 2022 03:58:20 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=zxgCuHXvqBGV53L1EzFqMcpK4LaucGFDh7Te55uTYfI=;
+        b=xhdl2PK36l3333KyhL21CrlINHEX8tviO3Y084omxPKJKSp0q9eMIa1rRdBqwgAdG/
+         3xe1+hnN8VdeVK2FCLTC6+dp+tW9zAx79mQaiP1+xFagjqDjZr0pZVEnEczrVVMS4jkf
+         +w3y30TzhIe/Mkqr5NlSkH4aIT1z5BCH81eORrWtzffxRCb+wT8X+hf6LWL2GW0FfNOk
+         4h2HW2vbiNnSYgN4nDwi92wLQzfAIZ6yO8Kk09/8GrqiPE/TG7TdTgmQ8Awb/qBPcvRi
+         FinrBpu+0rxw6AU4perIQ3dyCS/Ml+AXuDJbSt3AzrOy0lhWFTkIVHG3k/iw8KUjcTbL
+         qdow==
+X-Gm-Message-State: ACgBeo2rnSSjW4boVcq1Fa/vhqI4qVuFJ2KKjuaepIKaTH0uVHqjFe1l
+        v6hWOcYshtI858LbFlBT4eY4GRCsMiTWV6KyZSQ=
+X-Google-Smtp-Source: AA6agR7ObxEWtwATMauPJTbh0Azra7vBLI4e8TscLwSRwrNkywCyZlDAjLltwHNg7cP/LTzPSuwmoMfcWmPJhJ9oras=
+X-Received: by 2002:a17:907:a428:b0:730:aee3:2da7 with SMTP id
+ sg40-20020a170907a42800b00730aee32da7mr2164462ejc.613.1659524568874; Wed, 03
+ Aug 2022 04:02:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803090218.1313187-1-kkamagui@gmail.com>
-In-Reply-To: <20220803090218.1313187-1-kkamagui@gmail.com>
-From:   Daniele Palmas <dnlplm@gmail.com>
-Date:   Wed, 3 Aug 2022 12:59:08 +0200
-Message-ID: <CAGRyCJHX1X238TkiTaML3WJ+rdc1-m82_d3Ut4jCVDmuQ=cMOQ@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: cdc_mbim: adding Microsoft mobile broadband modem
-To:     Seunghun Han <kkamagui@gmail.com>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        David Miller <davem@davemloft.net>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
+References: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+ <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
+ <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
+ <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
+ <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+ <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com> <20220803062024.vn7awasmifkp5xow@pengutronix.de>
+In-Reply-To: <20220803062024.vn7awasmifkp5xow@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 3 Aug 2022 06:02:37 -0500
+Message-ID: <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,142 +91,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Seunghun,
+On Wed, Aug 3, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+>
+> On 22-08-02, Adam Ford wrote:
+>
+> ...
+>
+> > > I did some reading about the internal timing generator.  It appears
+> > > that it's required when video formats use fractional bytes, and it's
+> > > preconfigured to run at 720p by default, but registers 28h through 37h
+> > > configure it for other video modes.
+> >
+> > I think there may still be some issues with the DSIM since some of the
+> > clock frequencies are set in the device tree.
+> >
+> > From what I can tell, the pixel rate is calculated based on the
+>
+> By pixel rate you mean the HDMI pixel rate from the ADV? If so then yes.
+> The ADV has an divider which is already configured by the driver but
+> meaningless since the driver is lacking of setting the "manual-divider"
+> bit within the same register.
 
-Il giorno mer 3 ago 2022 alle ore 11:10 Seunghun Han
-<kkamagui@gmail.com> ha scritto:
+I was thinking about the pixel clock from the DSI to the ADV.  I did
+see the manual-divider bit was missing.  I tried enabling that bit,
+but it didn't appear to make much difference.
 >
-> Microsoft branded mobile broadband modems typically used in the Surface series
-> don't work with the Linux kernel. When I query firmware information to the
-> modem using the mbimcli tool, it always returns the Failure (0x02) value like
-> below.
+> > burst-clock-frequency and that generates a byte clock.  For 891000000,
+> > the byte clock is 111375000.
 >
-> === Start of the firmware id query ===
-> $> mbimcli -d /dev/cdc-wdm4 --ms-query-firmware-id -v
-> [26  Jul 2022, 05:24:07] [Debug] opening device...
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Queried max control message size: 4096
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Sent message...
-> <<<<<< RAW:
-> <<<<<<   length = 16
-> <<<<<<   data   = 01:00:00:00:10:00:00:00:01:00:00:00:00:10:00:00
+> The burst-clock-frequency is the hs-clk and DDR. So the MIPI-DSI clock
+> is burst-clock-frequency/2 which is in your case: 891000000/2 =
+> 445500000. This clock is than divided by 3 within the ADV and you get
+> your 148500000 pixel clock. This divide by 3 is detected automatically
+> by the ADV due to the missing bit (see above).
 >
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Sent message (translated)...
-> <<<<<< Header:
-> <<<<<<   length      = 16
-> <<<<<<   type        = open (0x00000001)
-> <<<<<<   transaction = 1
-> <<<<<< Contents:
-> <<<<<<   max control transfer = 4096
+> > Modetest timings for 1080p show:
+> >
+> > index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
+> >   #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
+> > flags: nhsync, nvsync; type: driver
+> >
+> >
+> > When looking at modetest, there is a clock for 1080p which appears to be 148500.
+> > 111375000/148500 = 750.
 >
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Received message...
-> >>>>>> RAW:
-> >>>>>>   length = 16
-> >>>>>>   data   = 01:00:00:80:10:00:00:00:01:00:00:00:02:00:00:00
+> Please see above.
 >
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Received message...Message Type 80000001
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 864
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 897
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 923
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 930
-> [26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 935
-> [26  Jul 2022, 05:24:07] [Debug] getting open done result failed: closed
-> error: couldn't open the MbimDevice: Failure
-> === End of the firmware id query ===
+> > The rest of the entries in my table do not divide evenly.  I don;t
+> > know if that explains the lack of display, but it's something to note.
+> > It seems to me that instead of fixing the
+> > samsung,burst-clock-frequency to 891000000, we should make the desired
+> > PLL related to the desired pixel clock so it divides evenly.
 >
-> After kernel debugging, I found that the modem reported that the dwNtbInMaxSize
-> value of ncm_parm was 16384 during the initialization sequence.
-> So the cdc_ncm_update_rxtx_max() in cdc_ncm_bind_common() didn't send
-> USB_CDC_SET_NTB_INPUT_SIZE command because the default input size was the same,
-> 16384.
+> Please see above.
 >
-> It's good and proper behavior. However, Microsoft branded MBMs (including the
-> latest one in Surface Go 3) fail until the kernel explicitly sets the input
-> size.
+> > Looking at NXP's kernel, I also noticed that their esc_prescaler is
+> > based on the byte clock divided by 20MHz.  With some small code
+> > changes to get the PLL based on the desired pixel clock instead of
+> > hard-coded,  I was able to set
+> >
+> > samsung,burst-clock-frequency = <1500000000>;
 >
-> This patch adds a new table and code changes that explicitly send
-> the USB_CDC_SET_NTB_INPUT_SIZE command to support Microsoft branded MBMs.
->
+> This is not correct since the burst-clock-freq. specifies the hs-clock
+> for the data lanes (see above).
 
-Just for reference, are you allowed to disclose which chipsets these
-modems are based on?
+But I don't think the clock should be fixed. I think it should vary as
+the resolution changes.  From what I can tell, NXP's DSI code doesn't
+hard code this value, but it does appear to cap it at 1.5G.  I did
+soom looking into the NXP frequency calculation and it is capable of
+adjusting resolutions to some extent and from what I can see the
+891MHz clock is only set when 1080p.  At 720p, thier kernel shows the
+output frequency at  445.5 MHz.  The way the DSIM is currently
+configured, it's fixed at 891MHz, so I don't expect the output feeding
+the adv7535 to be correct for the different resolutions.
 
-Thanks,
-Daniele
 
-> Signed-off-by: Seunghun Han <kkamagui@gmail.com>
-> ---
->  drivers/net/usb/cdc_mbim.c  | 24 ++++++++++++++++++++++++
->  drivers/net/usb/cdc_ncm.c   |  2 +-
->  include/linux/usb/cdc_ncm.h |  1 +
->  3 files changed, 26 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-> index c89639381eca..c0c23cfc02a7 100644
-> --- a/drivers/net/usb/cdc_mbim.c
-> +++ b/drivers/net/usb/cdc_mbim.c
-> @@ -618,6 +618,22 @@ static const struct driver_info cdc_mbim_info_avoid_altsetting_toggle = {
->         .data = CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE,
->  };
+> > samsung,esc-clock-frequency = <20000000>;
 >
-> +/* Microsoft branded modems do not work properly without setting the input size
-> + * explicitly in cdc_ncm_bind_common.
-> + * CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY flag is used to set the input size
-> + * during initialization.
-> + */
-> +static const struct driver_info cdc_mbim_info_set_input_size_explicitly = {
-> +       .description = "CDC MBIM",
-> +       .flags = FLAG_NO_SETINT | FLAG_MULTI_PACKET | FLAG_WWAN | FLAG_SEND_ZLP,
-> +       .bind = cdc_mbim_bind,
-> +       .unbind = cdc_mbim_unbind,
-> +       .manage_power = cdc_mbim_manage_power,
-> +       .rx_fixup = cdc_mbim_rx_fixup,
-> +       .tx_fixup = cdc_mbim_tx_fixup,
-> +       .data = CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY,
-> +};
-> +
->  static const struct usb_device_id mbim_devs[] = {
->         /* This duplicate NCM entry is intentional. MBIM devices can
->          * be disguised as NCM by default, and this is necessary to
-> @@ -665,6 +681,14 @@ static const struct usb_device_id mbim_devs[] = {
->           .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
->         },
+> This is correct, we also use a esc-clock of 20MHz.
 >
-> +       /* Some Microsoft branded mobile broadband modems used in the Surface
-> +        * seires are known to fail unless the input size is set explicitly.
-> +        * Applying it to all Microsoft branded MBMs.
-> +        */
-> +       { USB_VENDOR_AND_INTERFACE_INFO(0x045e, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-> +         .driver_info = (unsigned long)&cdc_mbim_info_set_input_size_explicitly,
-> +       },
-> +
->         /* default entry */
->         { USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
->           .driver_info = (unsigned long)&cdc_mbim_info_zlp,
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 8d5cbda33f66..915e29c987cb 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -407,7 +407,7 @@ static void cdc_ncm_update_rxtx_max(struct usbnet *dev, u32 new_rx, u32 new_tx)
->         val = cdc_ncm_check_rx_max(dev, new_rx);
+> > With these settings and the above mentioned code changes, 1080p still
+> > appears, however when attempting other modes, the display still fails
+> > to load.  I also noticed that the phy ref clock is set to 27MHz
+> > instead of NXP's 12MHz.
 >
->         /* inform device about NTB input size changes */
-> -       if (val != ctx->rx_max) {
-> +       if (val != ctx->rx_max || ctx->drvflags & CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY) {
->                 __le32 dwNtbInMaxSize = cpu_to_le32(val);
+> That's interesting, I didn't noticed that NXP uses 12 MHz as refclock
+> but I don't think that this is the problem. Since we have other
+> converter chips using the bridge driver and they work fine. I still
+> think that the main problem is within the ADV driver.
+
+Do the other converter chips work fine at different resolutions?
+
 >
->                 dev_info(&dev->intf->dev, "setting rx_max = %u\n", val);
-> diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-> index 2d207cb4837d..a24f84b31a54 100644
-> --- a/include/linux/usb/cdc_ncm.h
-> +++ b/include/linux/usb/cdc_ncm.h
-> @@ -88,6 +88,7 @@
->  #define CDC_NCM_FLAG_NDP_TO_END                        0x02    /* NDP is placed at end of frame */
->  #define CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE  0x04    /* Avoid altsetting toggle during init */
->  #define CDC_NCM_FLAG_PREFER_NTB32 0x08 /* prefer NDP32 over NDP16 */
-> +#define CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY        0x10    /* Set input size explicitly during init */
+> > I attempted to play with that setting, but I couldn't get 1080p to
+> > work again, so I backed it out.
+> >
+> > Maybe I am headed in the wrong direction, but I'm going to examine the
+> > P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
+> > this code compares.
 >
->  #define cdc_ncm_comm_intf_is_mbim(x)  ((x)->desc.bInterfaceSubClass == USB_CDC_SUBCLASS_MBIM && \
->                                        (x)->desc.bInterfaceProtocol == USB_CDC_PROTO_NONE)
-> --
-> 2.30.2
+> I think the pms values are fine.
+
+I compared the P/M/S values between this driver and NXP's and they
+calculate different values of PMS when running at 1080P.
+NXP @ 1080p:
+fout = 891000, fin = 12000, m = 297, p = 2, s = 1, best_delta = 0
+
+This kernel @ 1080p:
+
+PLL freq 891000000, (p 3, m 99, s 0)
+
+at 720P, the NXP Kernel
+fout = 445500, fin = 12000, m = 297, p = 2, s = 2, best_delta = 0
+(working)
+
+at 720P, this kernel:
+PLL freq 891000000, (p 3, m 99, s 0)
+hs_clk = 891000000, byte_clk = 111375000, esc_clk = 18562500
+(not working)
+
+
 >
+> > If someone who understands the interactions between these different
+> > components has suggestions, I'm willing to run some experiments.
+>
+> Did managed to get access to the ADV7535 programming guide? This is the
+> black box here. Let me check if I can provide you a link with our repo
+> so you can test our current DSIM state if you want.
+
+I do have access to the programming guide, but it's under NDA, but
+I'll try to answer questions if I can.
+
+adam
+>
+> Regards,
+>   Marco

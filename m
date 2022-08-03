@@ -2,160 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE55558897D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF9E588983
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbiHCJdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S237046AbiHCJhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiHCJdr (ORCPT
+        with ESMTP id S235108AbiHCJhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:33:47 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015605A15F
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:33:45 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z17so16145144wrq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 02:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ddO3ywJTMVY8uUYUGZPTsg2lBYXEiN0lWJt0Y7mrAIQ=;
-        b=YDGKu39f+OtWlmddc8xVSJYhf6YlhhWkJlNG8TE5ZBDGj4WQ1rpDVjWq8ztcP1YIH8
-         CJ8Q/K5dZBPyXeD8nbA2YxDRbHqgvIrzvDZIgrtChfSh5SB5hP7FXaHZHV8yG57JdUmP
-         pGvCbkTuVqY/3nwiZXDvED8fFG1ZCsF+bJYkOlVc740fccJHkWtifgMlDJKlgpWvknyK
-         E2PKGtJbS1dbWZI52lwCuaClbmNPpj+Aw9AcBbns5vxV/AVU7qWteu3Pbn6FkYvvKxLH
-         /Tagw/JNzUuGOXsYBe+mAgzNSTrQijETwGYOc2hyTkcDN6du5IGuDxP18IqFSaq1yeKs
-         DyeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ddO3ywJTMVY8uUYUGZPTsg2lBYXEiN0lWJt0Y7mrAIQ=;
-        b=HH06Xs+21hyj2Wx8o2aj7M4gphG4e6qwpVdVtZneroUJcILYnbsKXpNzkC/InU2u7L
-         DlRy1fX88QcnBXjwIT50iCFCOQU9We3DQZo1yVrEnCPzuAvmQyjOoZFemC5I9sIeQaX0
-         OIcfxPd3SyDvu9QTwqdg590e5yoCgqqUM+cobx4HaEZdCZteamGYiMTqO3QtE3cOq1+T
-         ZtV9FaWyXcgpij3aqjUlzkcM1WeO36bJHLwCQXox8BuBIZesBVN6r1pChFjSKzxzy8Gg
-         /VfDi7bJnWfg5HDKHadSWU6Dp/OmWKaOh/5l/saapHmUvJsh7lLFDlnMwTx0B58aFK9U
-         EVrw==
-X-Gm-Message-State: ACgBeo36AEm8Vx/TPEqffU0WL9/1VHM094l30DGpDb81RCH+sr77KnTQ
-        dYrpe31hDjgueTF0yvCbEVE=
-X-Google-Smtp-Source: AA6agR5Dk0UkJV9JoFdhfw2ZgjIQZnnZIKLTm9bifqG/n998YPmlQ2ZcI/YsV+ItxNiJEG/duvWPNQ==
-X-Received: by 2002:a5d:47c4:0:b0:21f:f34:56fd with SMTP id o4-20020a5d47c4000000b0021f0f3456fdmr14812442wrc.585.1659519224593;
-        Wed, 03 Aug 2022 02:33:44 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id l7-20020a05600c088700b003a35ec4bf4fsm1726292wmp.20.2022.08.03.02.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 02:33:44 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 3 Aug 2022 11:33:42 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/boot/arch/variable: I don't think (void *) Pointers
- need to be cast
-Message-ID: <YupA9iqo4PxDvVTY@gmail.com>
-References: <20220725042358.3377-1-kunyu@nfschina.com>
+        Wed, 3 Aug 2022 05:37:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57B8E15839
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659519423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GPXAddURibjR5gNG74JLG3Yxvxf3ub55xbLwHgxY1zI=;
+        b=hBjj1mtkTcOMbGynSMA54LjL++UvUM2W7Bp9HU5DXU8gXwO2X5F/zEEzi1gQ5vuaGNqxJ2
+        c/TEnTv0EOR6G9IBmPNiWR+KCgyqO1TUU59TKWkZPa8UbksqnZxK0Sgs5inY9DkM8dao5x
+        ireQU0mjr2iZep2uCGLeo1ECd+nBzHQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-70-E4qMBiBTNLunRNeqbJX5Zg-1; Wed, 03 Aug 2022 05:37:00 -0400
+X-MC-Unique: E4qMBiBTNLunRNeqbJX5Zg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB2FD85A584;
+        Wed,  3 Aug 2022 09:36:58 +0000 (UTC)
+Received: from localhost (ovpn-13-216.pek2.redhat.com [10.72.13.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 913C540CFD0A;
+        Wed,  3 Aug 2022 09:36:57 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 17:36:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
+Message-ID: <YupBtiVkrmE7YQnr@MiWiFi-R3L-srv>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-9-gpiccoli@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725042358.3377-1-kunyu@nfschina.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220719195325.402745-9-gpiccoli@igalia.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Li kunyu <kunyu@nfschina.com> wrote:
-
-> I first observe (void *) type coercion and non coercion through assembly
-> language. It seems that there is no difference.
-> Then I output the assigned information through the print function and
-> found that the pointer that is not coerced is directly assigned when
-> executing the print function (opcode a1), while the coerced pointer
-> needs to execute the assembly instruction xlat (opcode d7), which seems
-> to be more efficient without coerced conversion.
-> At present, I just started to try to analyze this part of knowledge
-> (machine code), please forgive me if the analysis is wrong.
+On 07/19/22 at 04:53pm, Guilherme G. Piccoli wrote:
+> Currently the tracing dump_on_oops feature is implemented
+> through separate notifiers, one for die/oops and the other
+> for panic - given they have the same functionality, let's
+> unify them.
 > 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> Also improve the function comment and change the priority of
+> the notifier to make it execute earlier, avoiding showing useless
+> trace data (like the callback names for the other notifiers);
+> finally, we also removed an unnecessary header inclusion.
+> 
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
 > ---
->  arch/x86/boot/bitops.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/boot/bitops.h b/arch/x86/boot/bitops.h
-> index 02e1dea11d94..8518ae214c9b 100644
-> --- a/arch/x86/boot/bitops.h
-> +++ b/arch/x86/boot/bitops.h
-> @@ -19,13 +19,13 @@
+> V2:
+> - Different approach; instead of using IDs to distinguish die and
+> panic events, rely on address comparison like other notifiers do
+> and as per Petr's suggestion;
+> 
+> - Removed ACK from Steven since the code changed.
+> 
+>  kernel/trace/trace.c | 55 ++++++++++++++++++++++----------------------
+>  1 file changed, 27 insertions(+), 28 deletions(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index b8dd54627075..2a436b645c70 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/kallsyms.h>
+>  #include <linux/security.h>
+>  #include <linux/seq_file.h>
+> -#include <linux/notifier.h>
+>  #include <linux/irqflags.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/tracefs.h>
+> @@ -9777,40 +9776,40 @@ static __init int tracer_init_tracefs(void)
 >  
->  static inline bool constant_test_bit(int nr, const void *addr)
->  {
-> -	const u32 *p = (const u32 *)addr;
-> +	const u32 *p = addr;
->  	return ((1UL << (nr & 31)) & (p[nr >> 5])) != 0;
->  }
->  static inline bool variable_test_bit(int nr, const void *addr)
->  {
->  	bool v;
-> -	const u32 *p = (const u32 *)addr;
-> +	const u32 *p = addr;
+>  fs_initcall(tracer_init_tracefs);
 >  
->  	asm("btl %2,%1" CC_SET(c) : CC_OUT(c) (v) : "m" (*p), "Ir" (nr));
->  	return v;
+> -static int trace_panic_handler(struct notifier_block *this,
+> -			       unsigned long event, void *unused)
+> -{
+> -	if (ftrace_dump_on_oops)
+> -		ftrace_dump(ftrace_dump_on_oops);
+> -	return NOTIFY_OK;
+> -}
+> +static int trace_die_panic_handler(struct notifier_block *self,
+> +				unsigned long ev, void *unused);
+>  
+>  static struct notifier_block trace_panic_notifier = {
+> -	.notifier_call  = trace_panic_handler,
+> -	.next           = NULL,
+> -	.priority       = 150   /* priority: INT_MAX >= x >= 0 */
+> +	.notifier_call = trace_die_panic_handler,
+> +	.priority = INT_MAX - 1,
+>  };
+>  
+> -static int trace_die_handler(struct notifier_block *self,
+> -			     unsigned long val,
+> -			     void *data)
+> -{
+> -	switch (val) {
+> -	case DIE_OOPS:
+> -		if (ftrace_dump_on_oops)
+> -			ftrace_dump(ftrace_dump_on_oops);
+> -		break;
+> -	default:
+> -		break;
+> -	}
+> -	return NOTIFY_OK;
+> -}
+> -
+>  static struct notifier_block trace_die_notifier = {
+> -	.notifier_call = trace_die_handler,
+> -	.priority = 200
+> +	.notifier_call = trace_die_panic_handler,
+> +	.priority = INT_MAX - 1,
+>  };
+>  
+> +/*
+> + * The idea is to execute the following die/panic callback early, in order
+> + * to avoid showing irrelevant information in the trace (like other panic
+> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
+> + * warnings get disabled (to prevent potential log flooding).
+> + */
+> +static int trace_die_panic_handler(struct notifier_block *self,
+> +				unsigned long ev, void *unused)
+> +{
+> +	if (!ftrace_dump_on_oops)
+> +		goto out;
+> +
+> +	if (self == &trace_die_notifier && ev != DIE_OOPS)
+> +		goto out;
 
-It's true that the forced-type casting of 'addr' is unnecessary in the 
-cases above, I'm not sure how the kernel would end up with an XLAT 
-instruction being generated in that sequence.
+Although the switch-case code of original trace_die_handler() is werid, 
+this unification is not much more comfortable. Just personal feeling
+from code style, not strong opinion. Leave it to trace reviewers.
 
-But your patch is a good cleanup in its own right - I've applied the patch 
-below to tip:x86/cleanups, with a different changelog.
+> +
+> +	ftrace_dump(ftrace_dump_on_oops);
+> +
+> +out:
+> +	return NOTIFY_DONE;
+> +}
+> +
+>  /*
+>   * printk is set to max of 1024, we really don't need it that big.
+>   * Nothing should be printing 1000 characters anyway.
+> -- 
+> 2.37.1
+> 
 
-Thanks,
-
-	Ingo
-
-===================>
-From: Li kunyu <kunyu@nfschina.com>
-Date: Mon, 25 Jul 2022 12:23:58 +0800
-Subject: [PATCH] x86/boot: Remove superfluous type casting from arch/x86/boot/bitops.h
-
-'const void *' will auto-type-convert to just about any other const pointer type,
-no need to force it.
-
-[ mingo: Rewrote the changelog. ]
-
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20220725042358.3377-1-kunyu@nfschina.com
----
- arch/x86/boot/bitops.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/boot/bitops.h b/arch/x86/boot/bitops.h
-index 02e1dea11d94..8518ae214c9b 100644
---- a/arch/x86/boot/bitops.h
-+++ b/arch/x86/boot/bitops.h
-@@ -19,13 +19,13 @@
- 
- static inline bool constant_test_bit(int nr, const void *addr)
- {
--	const u32 *p = (const u32 *)addr;
-+	const u32 *p = addr;
- 	return ((1UL << (nr & 31)) & (p[nr >> 5])) != 0;
- }
- static inline bool variable_test_bit(int nr, const void *addr)
- {
- 	bool v;
--	const u32 *p = (const u32 *)addr;
-+	const u32 *p = addr;
- 
- 	asm("btl %2,%1" CC_SET(c) : CC_OUT(c) (v) : "m" (*p), "Ir" (nr));
- 	return v;

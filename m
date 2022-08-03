@@ -2,145 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4F35889E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A805889E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237754AbiHCJxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S237772AbiHCJxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237705AbiHCJwr (ORCPT
+        with ESMTP id S237511AbiHCJxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:52:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49A45B074
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:52:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DB4734629;
-        Wed,  3 Aug 2022 09:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659520331; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 3 Aug 2022 05:53:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2950746D8D
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659520389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/0gkymsQMT+3p07Wmp2Go5vhAryU8sKMLilIM8iKdig=;
-        b=hZk0vWqajdiWp10AiAtouLUKdzyRExhdBJ5uzM3Z6JK3zC7XwPJrYU+nKwbDlnv4NYQ5Yd
-        H/tcNEzoQYHybwx2fR+1INdT6BefIPyt99Pp2y+ZM5VZBpOWdt3FClA9KzIlAKUmg1hYqo
-        RdG6NH3o2AAHXYabtkqni8CnuCiG3dg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=kc/D6eFmNXdc/PlI526NFHqk9sVSNen1MCJD2u5ZFKQ=;
+        b=QqawPrTOQznULcwRmjh0WvDTrRFKIjlPGHJ8jkQtPOAr8yMKH4Cgt5ynCUwEoAZ3vWAvZ2
+        AUP6VbU4duxLSoTU24WyHf3rRzNFUwtLeYQG8hMYa6Z9ckD2mvEPFuAmKNyO9pBb5U7IX6
+        5+9V5DfXCWyCdJHT+1kq2mYhZRAXLxc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-531-VvdGeYMLPhaxQBkXtxi7Zw-1; Wed, 03 Aug 2022 05:53:03 -0400
+X-MC-Unique: VvdGeYMLPhaxQBkXtxi7Zw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3DDE813AD8;
-        Wed,  3 Aug 2022 09:52:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zDH8C0tF6mIxFAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 03 Aug 2022 09:52:11 +0000
-Date:   Wed, 3 Aug 2022 11:52:10 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dma/pool: do not complain if DMA pool is not allocated
-Message-ID: <YupFSpXOrcfXJNya@dhcp22.suse.cz>
-References: <20220325122559.14251-1-mhocko@kernel.org>
- <Yj28gjonUa9+0yae@dhcp22.suse.cz>
- <20220325164856.GA16800@lst.de>
- <Yj3zyLs4f+ba6UqF@dhcp22.suse.cz>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A5E185A584;
+        Wed,  3 Aug 2022 09:53:01 +0000 (UTC)
+Received: from localhost (ovpn-13-216.pek2.redhat.com [10.72.13.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5F5EC2166B26;
+        Wed,  3 Aug 2022 09:53:00 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 17:52:57 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Subject: Re: [PATCH v2 08/13] tracing: Improve panic/die notifiers
+Message-ID: <YupFeQ6AcfjUVpOW@MiWiFi-R3L-srv>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-9-gpiccoli@igalia.com>
+ <YupBtiVkrmE7YQnr@MiWiFi-R3L-srv>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yj3zyLs4f+ba6UqF@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YupBtiVkrmE7YQnr@MiWiFi-R3L-srv>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 25-03-22 17:54:33, Michal Hocko wrote:
-> On Fri 25-03-22 17:48:56, Christoph Hellwig wrote:
-> > On Fri, Mar 25, 2022 at 01:58:42PM +0100, Michal Hocko wrote:
-> > > Dang, I have just realized that I have misread the boot log and it has
-> > > turned out that a674e48c5443 is covering my situation because the
-> > > allocation failure message says:
-> > >
-> > > Node 0 DMA free:0kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:636kB managed:0kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+On 08/03/22 at 05:36pm, Baoquan He wrote:
+> On 07/19/22 at 04:53pm, Guilherme G. Piccoli wrote:
+> > Currently the tracing dump_on_oops feature is implemented
+> > through separate notifiers, one for die/oops and the other
+> > for panic - given they have the same functionality, let's
+> > unify them.
 > > 
-> > As in your report is from a kernel that does not have a674e48c5443
-> > yet?
-> 
-> yes. I just mixed up the early boot messages and thought that DMA zone
-> ended up with a single page. That message was saying something else
-> though.
-
-OK, so I have another machine spewing this warning. Still on an older
-kernel but I do not think the current upstream would be any different in
-that regards. This time the DMA zone is populated and consumed from
-large part and the pool size request is just too large for it:
-
-[   14.017417][    T1] swapper/0: page allocation failure: order:10, mode:0xcc1(GFP_KERNEL|GFP_DMA), nodemask=(null),cpuset=/,mems_allowed=0-7
-[   14.017429][    T1] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.14.21-150400.22-default #1 SLE15-SP4 0b6a6578ade2de5c4a0b916095dff44f76ef1704
-[   14.017434][    T1] Hardware name: XXXX
-[   14.017437][    T1] Call Trace:
-[   14.017444][    T1]  <TASK>
-[   14.017449][    T1]  dump_stack_lvl+0x45/0x57
-[   14.017469][    T1]  warn_alloc+0xfe/0x160
-[   14.017490][    T1]  __alloc_pages_slowpath.constprop.112+0xc27/0xc60
-[   14.017497][    T1]  ? rdinit_setup+0x2b/0x2b
-[   14.017509][    T1]  ? rdinit_setup+0x2b/0x2b
-[   14.017512][    T1]  __alloc_pages+0x2d5/0x320
-[   14.017517][    T1]  alloc_page_interleave+0xf/0x70
-[   14.017531][    T1]  atomic_pool_expand+0x4a/0x200
-[   14.017541][    T1]  ? rdinit_setup+0x2b/0x2b
-[   14.017544][    T1]  __dma_atomic_pool_init+0x44/0x90
-[   14.017556][    T1]  dma_atomic_pool_init+0xad/0x13f
-[   14.017560][    T1]  ? __dma_atomic_pool_init+0x90/0x90
-[   14.017562][    T1]  do_one_initcall+0x41/0x200
-[   14.017581][    T1]  kernel_init_freeable+0x236/0x298
-[   14.017589][    T1]  ? rest_init+0xd0/0xd0
-[   14.017596][    T1]  kernel_init+0x16/0x120
-[   14.017599][    T1]  ret_from_fork+0x22/0x30
-[   14.017604][    T1]  </TASK>
-[...]
-[   14.018026][    T1] Node 0 DMA free:160kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
-[   14.018035][    T1] lowmem_reserve[]: 0 0 0 0 0
-[   14.018339][    T1] Node 0 DMA: 0*4kB 0*8kB 0*16kB 1*32kB (U) 0*64kB 1*128kB (U) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 160kB
-
-So the DMA zone has only 160kB free while the pool would like to use 4MB
-of it which obviously fails. I haven't tried to check who is consuming
-the DMA zone memory and why but this shouldn't be all that important
-because the pool clearly cannot allocate and there is not much the
-user/admin can do about that. Well, the pool could be explicitly
-requested smaller but is that really what we expect them to do?
-  
-> > > I thought there are only few pages in the managed by the DMA zone. This
-> > > is still theoretically possible so I think __GFP_NOWARN makes sense here
-> > > but it would require to change the patch description.
-> > > 
-> > > Is this really worth it?
+> > Also improve the function comment and change the priority of
+> > the notifier to make it execute earlier, avoiding showing useless
+> > trace data (like the callback names for the other notifiers);
+> > finally, we also removed an unnecessary header inclusion.
 > > 
-> > In general I think for kernels where we need the pool and can't allocate
-> > it, a warning is very useful.  We just shouldn't spew it when there is
-> > no need for the pool to start with.
+> > Cc: Petr Mladek <pmladek@suse.com>
+> > Cc: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> > 
+> > ---
+> > 
+> > V2:
+> > - Different approach; instead of using IDs to distinguish die and
+> > panic events, rely on address comparison like other notifiers do
+> > and as per Petr's suggestion;
+> > 
+> > - Removed ACK from Steven since the code changed.
+> > 
+> >  kernel/trace/trace.c | 55 ++++++++++++++++++++++----------------------
+> >  1 file changed, 27 insertions(+), 28 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > index b8dd54627075..2a436b645c70 100644
+> > --- a/kernel/trace/trace.c
+> > +++ b/kernel/trace/trace.c
+> > @@ -19,7 +19,6 @@
+> >  #include <linux/kallsyms.h>
+> >  #include <linux/security.h>
+> >  #include <linux/seq_file.h>
+> > -#include <linux/notifier.h>
+> >  #include <linux/irqflags.h>
+> >  #include <linux/debugfs.h>
+> >  #include <linux/tracefs.h>
+> > @@ -9777,40 +9776,40 @@ static __init int tracer_init_tracefs(void)
+> >  
+> >  fs_initcall(tracer_init_tracefs);
+> >  
+> > -static int trace_panic_handler(struct notifier_block *this,
+> > -			       unsigned long event, void *unused)
+> > -{
+> > -	if (ftrace_dump_on_oops)
+> > -		ftrace_dump(ftrace_dump_on_oops);
+> > -	return NOTIFY_OK;
+> > -}
+> > +static int trace_die_panic_handler(struct notifier_block *self,
+> > +				unsigned long ev, void *unused);
+> >  
+> >  static struct notifier_block trace_panic_notifier = {
+> > -	.notifier_call  = trace_panic_handler,
+> > -	.next           = NULL,
+> > -	.priority       = 150   /* priority: INT_MAX >= x >= 0 */
+> > +	.notifier_call = trace_die_panic_handler,
+> > +	.priority = INT_MAX - 1,
+> >  };
+> >  
+> > -static int trace_die_handler(struct notifier_block *self,
+> > -			     unsigned long val,
+> > -			     void *data)
+> > -{
+> > -	switch (val) {
+> > -	case DIE_OOPS:
+> > -		if (ftrace_dump_on_oops)
+> > -			ftrace_dump(ftrace_dump_on_oops);
+> > -		break;
+> > -	default:
+> > -		break;
+> > -	}
+> > -	return NOTIFY_OK;
+> > -}
+> > -
+> >  static struct notifier_block trace_die_notifier = {
+> > -	.notifier_call = trace_die_handler,
+> > -	.priority = 200
+> > +	.notifier_call = trace_die_panic_handler,
+> > +	.priority = INT_MAX - 1,
+> >  };
+> >  
+> > +/*
+> > + * The idea is to execute the following die/panic callback early, in order
+> > + * to avoid showing irrelevant information in the trace (like other panic
+> > + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
+> > + * warnings get disabled (to prevent potential log flooding).
+> > + */
+> > +static int trace_die_panic_handler(struct notifier_block *self,
+> > +				unsigned long ev, void *unused)
+> > +{
+> > +	if (!ftrace_dump_on_oops)
+> > +		goto out;
+> > +
+> > +	if (self == &trace_die_notifier && ev != DIE_OOPS)
+> > +		goto out;
 > 
-> Well, do we have any way to find that out during early boot?
+> Although the switch-case code of original trace_die_handler() is werid, 
+> this unification is not much more comfortable. Just personal feeling
+> from code style, not strong opinion. Leave it to trace reviewers.
 
-Thinking about it. We should get a warning when the actual allocation
-from the pool fails no? That would be more useful information than the
-pre-allocation failure when it is not really clear whether anybody is
-ever going to consume it.
+Please ignore this comment.
 
-What do you think? Should I repost my original patch with the updated
-changelog?
--- 
-Michal Hocko
-SUSE Labs
+I use b4 to grab this patchset and applied, and started to check patch
+one by one. Then I realize it's all about cleanups which have got
+consensus in earlier rounds. Hope it can be merged when other people's
+concern is addressed, the whole series looks good to me, I have no
+strong concern to them.
+
+> 
+> > +
+> > +	ftrace_dump(ftrace_dump_on_oops);
+> > +
+> > +out:
+> > +	return NOTIFY_DONE;
+> > +}
+> > +
+> >  /*
+> >   * printk is set to max of 1024, we really don't need it that big.
+> >   * Nothing should be printing 1000 characters anyway.
+> > -- 
+> > 2.37.1
+> > 
+> 
+

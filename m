@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57387588769
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EDC58876C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbiHCGeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S234724AbiHCGfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 02:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiHCGeE (ORCPT
+        with ESMTP id S230290AbiHCGfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:34:04 -0400
-Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17D554C9B
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:33:59 -0700 (PDT)
-Received: from [192.168.192.146] (port=55826 helo=nx64de-df6d00)
-        by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <gszymaszek@short.pl>)
-        id 1oJ7wm-0000Oz-EM; Wed, 03 Aug 2022 08:33:38 +0200
-Date:   Wed, 3 Aug 2022 08:33:35 +0200
-From:   Grzegorz Szymaszek <gszymaszek@short.pl>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: add firmware dependency
-Message-ID: <YuoWvwUer1bF0BtQ@nx64de-df6d00>
-Mail-Followup-To: Grzegorz Szymaszek <gszymaszek@short.pl>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <YukkBu3TNODO3or9@nx64de-df6d00>
- <YukvnVWuhUeOgRyZ@kroah.com>
- <Yukx8KEEOhKTJ7HQ@nx64de-df6d00>
- <c82114b6-1003-bfb5-0550-98dcbf1a3761@lwfinger.net>
- <YulcdKfhA8dPQ78s@nx64de-df6d00>
- <YuoQ37PIKzWO1zIY@kroah.com>
+        Wed, 3 Aug 2022 02:35:08 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1249557258
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:35:07 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 7so26992939ybw.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 23:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=drdaKm1rYuNx2R4KHfm7Yuhd8hot7Jil0OwecH2OJZo=;
+        b=fA3tCgNA8/kv8khG6b3Xdam/7tcuG+JeJwmweOfpHzpztZAnDserPJvMqR2r2r/C/u
+         X49qugF1JZZbrmhbU5EYIaMrcPuC/uhPzpYccgsscTQnftqdUQTDgaxEVpLDwdH6X0bh
+         mAOTqV9zaajB6c+182EQqxsb1NVnGj70hK7/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=drdaKm1rYuNx2R4KHfm7Yuhd8hot7Jil0OwecH2OJZo=;
+        b=fZ2d8kC5I8vItWndhmL/ThzpbTtG4RgE+ZIeACpiXUnxP78zXaa1+4XS9ZSbyN3JND
+         3uQ/nRbaYJfJISX/t9bp+VpVTHEjpjvIuShCJ2MoiXepXtGSxqSTcNY8AYVmUduxaElE
+         6k8G3/GdxbJ8XLv6mMYcWlJNx4ggKRjrnWg49dN7BP4MNEJgXvymhyUXLUdcKE27+c02
+         bevoTOA+RCF6I7pYYsRmvtTt3wufvSVNhFVIW5poFwzRVivD+mTlHlZhuAPTdbg9RQMb
+         PpyE5ypc2KCeyXNphO4auwGA5dxabtuBZMfpefr8CCmmyp+I5OPBqEPP++sqgfnHJVRJ
+         pbuA==
+X-Gm-Message-State: ACgBeo2I6mjIUi3IE1itCRlRiUfGJ37aC3vDmkFdvNssscKP/y2AWrZi
+        OQuVFdqR8qo1N/g4WKAhAA9PdiU1OKHKjOpBYNi12PSdepg=
+X-Google-Smtp-Source: AA6agR7dFKricjPxEoi6JyVu40+XkuE9ZHzhJkC86xfuVNHsey1GnmspDjZQ3n+eC17M2de7P8dtpd1WNS1Vahex1BI=
+X-Received: by 2002:a25:c206:0:b0:67a:6ba0:98f5 with SMTP id
+ s6-20020a25c206000000b0067a6ba098f5mr1253055ybf.507.1659508506351; Tue, 02
+ Aug 2022 23:35:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BNbrgnEDe9bruiv0"
-Content-Disposition: inline
-In-Reply-To: <YuoQ37PIKzWO1zIY@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220803074955.v6.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+ <YuoRuP2pxgSQ6c9E@kroah.com>
+In-Reply-To: <YuoRuP2pxgSQ6c9E@kroah.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Wed, 3 Aug 2022 16:34:55 +1000
+Message-ID: <CAONX=-f8kHWCEEyqUdpn5wsyMZKa4eJSSCLvPDn3R5mQF9FSMA@mail.gmail.com>
+Subject: Re: [PATCH v6] ufs: core: print UFSHCD capabilities in controller's
+ sysfs node
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---BNbrgnEDe9bruiv0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Aug 03, 2022 at 08:08:31AM +0200, Greg KH wrote:
-> This looks good, and I'll apply it after 5.20-rc1 is out,
-
-I didn=E2=80=99t Cc stable since the =E2=80=9CSubmitting patches=E2=80=9D g=
-uide says it=E2=80=99s for
-=E2=80=9Csevere bugs=E2=80=9D, but would it be possible to backport the pat=
-ch to the
-older kernels?
-
-> but you might want to send a follow-on patch that removes the hard-coded
-> string in 2 places in the driver, and just puts it into a single define
-> somewhere, to make it a bit easier over time.
-
-Good idea, will do so. I didn=E2=80=99t check if the filename is already us=
-ed.
-Would something like =E2=80=9Cthis patch depends on patch=E2=80=A6=E2=80=9D=
- (again from the
-guide) be enough (assuming I will send the new patch before this one
-is applied)?
-
---=20
-Grzegorz Szymaszek
-
---BNbrgnEDe9bruiv0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEZT55kPBhnB69hD4ZeE9lGUIcpz4FAmLqFr4ACgkQeE9lGUIc
-pz4PAg/7B1xc/lVHAuVd9qvRqvKG3z4y6TEYCKM6hdm6sIphbPtuzE/Q6pIkYbBO
-X8iw6++zOMfQtn1ioI3GeiuUpuJXRhuk6IqxVVbZDuMvY9wB5vL5Dv9tSGEgHs91
-SqTPb2Ie4euU6p4eEdFZ/Yog2gAJ9+7n+ItfD0RtcaOKYKDlonjKEh+Zbfx4TQP/
-0lq200J2HcigAJ4/R909bjWMHesnA7f2PgVUlkxZNKnWt6YebD0Pgg7/Vmyn0wYm
-3iSxRpiB1MoovwI7uYzAXZWLk1SMkEIx5C/mLlqtVTeXNYbo1ZZV2z2QrxL7HCNy
-JebbV5OOoDwnr+MjpjmtsTwDxOIREPviwZ7KNKzkUX9Lpw3yBLlFf4b2RF6j+Lp8
-Q/D4wvbdS3nViH9TlPTGOsLpXuWa1FFOSzHbhjVsqZwrDESOSIg1/BT1bKsYuCMR
-gveZq/+b1MYYUeKlpo9Px4ll+XYryusexLfvTI62uESf2LHmZBsaSqQXwYq/uSdG
-mDELZUlb8TD/JUYbtx7CjdMeK7gLPjy3nvQ9SpapVWDkEkpa53xwWXnvRDglNalB
-iuL2CEH6z6zY2MJvxSHGXg48pUjGZLPkB2aCh5PXSqhAddKv+0q52f1izU1vHFhH
-Q03ymY5rDn4cYvYZ4BInU3Iahs7h7sV2ddCDKiGzu8YfTZ/RVJM=
-=qW8y
------END PGP SIGNATURE-----
-
---BNbrgnEDe9bruiv0--
+> Why is this information not also in the Documentation/ABI/ entries as
+> well?
+How would you want me to word it in there? For each entry? There
+will be more in the future, would we need to just copy it as a
+boilerplate? Bart suggested it be added in the code, do you see
+a good way to mention the same in the doc?
+Thanks,
+--Daniil

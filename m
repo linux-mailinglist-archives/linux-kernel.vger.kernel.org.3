@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6C4589365
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5356658936B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbiHCUku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S234135AbiHCUoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbiHCUkl (ORCPT
+        with ESMTP id S235125AbiHCUoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:40:41 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7E26C2;
-        Wed,  3 Aug 2022 13:40:40 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id s7so1348324ioa.0;
-        Wed, 03 Aug 2022 13:40:39 -0700 (PDT)
+        Wed, 3 Aug 2022 16:44:03 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3019FC5;
+        Wed,  3 Aug 2022 13:44:02 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id g18so9071476ilk.4;
+        Wed, 03 Aug 2022 13:44:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=e7d61MtbAqIhTPAJtqOPhqsXJEq15naLy9VOm7xbRLc=;
-        b=14ZwRW9Jh4JVBfxkLtKX6sbZyQb8rz3w0jzyu11o1Bk+f/yMJvhSPqKR2j6CBEBL3T
-         2JjVXnFKH9TQ9VJmnf01LlsbNaeLX1MR9nex3BDj1VkRXOuwfjO13HFDwKumRtf38ITK
-         PiX6nnahzB/viIivtBJzZMha28t2/MCk2QWulpBAVD+quXY9PKLawWeETluhoK6I/v9g
-         1ub9aAc2mNRPNaWHUu83/2pf7/O661DvEYmsKEOl1lDgVWVSpsYRXjKnHYvUDLxDDg+b
-         PLBdHZVg5sqDWlUmKqmtqJXtpYf317s+JcYPBiC4eqBepQ4CF6Jw276WuV7+bIr11X6m
-         xBxQ==
-X-Gm-Message-State: ACgBeo1BzARt/XJ2b54qn4VtV5nGFLNmQcsFENW97YAjHrmxTKCYSS6o
-        ujzPijoH9mQ23sTpn/0xLw==
-X-Google-Smtp-Source: AA6agR6T0gg1QanRocjsUtRCxVAzvpPriklD63k5r+J0Z6AmYlxq2sr43p8fQ1ZGc1kfdV80bDwTlw==
-X-Received: by 2002:a02:b098:0:b0:342:9c0a:6254 with SMTP id v24-20020a02b098000000b003429c0a6254mr653937jah.81.1659559239204;
-        Wed, 03 Aug 2022 13:40:39 -0700 (PDT)
+        bh=5ihkIh4wV1fLXjf3U2JooUONElLr3RHi6M3ZqoiMU1c=;
+        b=UuN5xGmUyP3ssVu+e40gt2vuozli/tKcwHNdC2Kq9v2V3ipsf+NF91v0FUUIPUOil2
+         uPubgaedIGWxXCuAVhZ2cd11biiFSDmZE/gZYKMf1KEjmpxTYGP+tO/Fmue67KfJ9Ouf
+         MHd6wAZkNED/5zt9ed4W2kUl56BwpXHT25uyOrW79TiFRjmcXnqftgbuYJa8DhQ2SaeN
+         4Dl3DFbzNQvi+k1zSZjyUyE1Fo5bDYCB/1v6ZVWUc9eX8IQ4Hy/Ddefml5uo2DXg2xjv
+         BPcybb8HtoKFMmgkY3jgBmDDoKyab526nYy8wbo0gA2UjRqco9IQk1CftzDGt4g58e0D
+         s/rA==
+X-Gm-Message-State: AJIora9WMyUbo3vILpbTMTcH2g+FzKwuIkiGvfMf/h6U4vPM5LBWGV00
+        t+By59l3XABPhxdefqBADUz7gfJ3Lw==
+X-Google-Smtp-Source: AGRyM1tBRJ9MpqM0nDRf8tCJ080e9rYHNY/c2FkMyOFX/aZRufmggHz0JsQQ23h/hJREgb+v8jolfw==
+X-Received: by 2002:a92:c544:0:b0:2dc:f222:9fba with SMTP id a4-20020a92c544000000b002dcf2229fbamr11586142ilj.270.1659559441945;
+        Wed, 03 Aug 2022 13:44:01 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bc11-20020a0566383ccb00b00335b403c3b4sm8077066jab.48.2022.08.03.13.40.37
+        by smtp.gmail.com with ESMTPSA id u133-20020a02238b000000b0033f4a1114a6sm8130652jau.178.2022.08.03.13.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 13:40:38 -0700 (PDT)
-Received: (nullmailer pid 2585450 invoked by uid 1000);
-        Wed, 03 Aug 2022 20:40:36 -0000
-Date:   Wed, 3 Aug 2022 14:40:36 -0600
+        Wed, 03 Aug 2022 13:44:01 -0700 (PDT)
+Received: (nullmailer pid 2590318 invoked by uid 1000);
+        Wed, 03 Aug 2022 20:43:59 -0000
+Date:   Wed, 3 Aug 2022 14:43:59 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     andrei.tachici@stud.acs.upb.ro
-Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        vegard.nossum@oracle.com, joel@jms.id.au, l.stelmach@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [net-next v3 3/3] dt-bindings: net: adin1110: Add docs
-Message-ID: <20220803204036.GA2583313-robh@kernel.org>
-References: <20220802155947.83060-1-andrei.tachici@stud.acs.upb.ro>
- <20220802155947.83060-4-andrei.tachici@stud.acs.upb.ro>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/8] dt-bindings: remoteproc: qcom: adsp: Add compatible
+ name for SC7280
+Message-ID: <20220803204359.GA2586715-robh@kernel.org>
+References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
+ <1659536480-5176-3-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802155947.83060-4-andrei.tachici@stud.acs.upb.ro>
+In-Reply-To: <1659536480-5176-3-git-send-email-quic_srivasam@quicinc.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,110 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 06:59:47PM +0300, andrei.tachici@stud.acs.upb.ro wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
+On Wed, Aug 03, 2022 at 07:51:14PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add compatible name and update max reg items for SC7280 base platforms.
 > 
-> Add bindings for the ADIN1110/2111 MAC-PHY/SWITCH.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 > ---
->  .../devicetree/bindings/net/adi,adin1110.yaml | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+>  .../devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml          | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/adi,adin1110.yaml b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-> new file mode 100644
-> index 000000000000..b929b677f16a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/adi,adin1110.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ADI ADIN1110 MAC-PHY
-> +
-> +maintainers:
-> +  - Alexandru Tachici <alexandru.tachici@analog.com>
-> +
-> +description: |
-> +  The ADIN1110 is a low power single port 10BASE-T1L MAC-
-> +  PHY designed for industrial Ethernet applications. It integrates
-> +  an Ethernet PHY core with a MAC and all the associated analog
-> +  circuitry, input and output clock buffering.
-> +
-> +  The ADIN2111 is a low power, low complexity, two-Ethernet ports
-> +  switch with integrated 10BASE-T1L PHYs and one serial peripheral
-> +  interface (SPI) port. The device is designed for industrial Ethernet
-> +  applications using low power constrained nodes and is compliant
-> +  with the IEEE 802.3cg-2019 Ethernet standard for long reach
-> +  10 Mbps single pair Ethernet (SPE).
-> +
-> +  The device has a 4-wire SPI interface for communication
-> +  between the MAC and host processor.
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,adin1110
-> +      - adi,adin2111
-> +
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+> index 9f11332..147996f 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
+> @@ -17,11 +17,12 @@ properties:
+>    compatible:
+>      enum:
+>        - qcom,sdm845-adsp-pil
+> +      - qcom,sc7280-adsp-pil
+>  
+>    reg:
+> -    maxItems: 1
+> +    maxItems: 2
 
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
+sdm845 has 2 entries too?
 
-These apply to child nodes, but you don't have any child nodes.
+>      description:
+> -      The base address and size of the qdsp6ss register
+> +      The base address and size of the qdsp6ss register and mcc register
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  adi,spi-crc:
-> +    description: |
-> +      Enable CRC8 checks on SPI read/writes.
-> +    type: boolean
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spi {
-> +        ethernet@0 {
-> +            compatible = "adi,adin2111";
-> +            reg = <0>;
-> +            spi-max-frequency = <24500000>;
-> +
-> +            adi,spi-crc;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            interrupt-parent = <&gpio>;
-> +            interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            local-mac-address = [ 00 11 22 33 44 55 ];
-> +        };
-> +    };
-> -- 
-> 2.25.1
-> 
-> 
+Better expressed as:
+
+minItems: 1
+items:
+  - description: qdsp6ss register
+  - description: mcc register
+
+Though the descriptions could expand on what those registers are.
+
+Rob

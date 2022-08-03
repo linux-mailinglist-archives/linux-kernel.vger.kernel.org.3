@@ -2,124 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CDD588E0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F00588E14
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238173AbiHCN45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S238346AbiHCN6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238764AbiHCNzw (ORCPT
+        with ESMTP id S238326AbiHCN6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:55:52 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446002F4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:55:41 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id l14so12618382qtv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=lQmTwuH19noXU8KpeeAnN5wF6xxdpiMxXJOzXODGwqU=;
-        b=0k7nUrbpXLcaPeWPf60nz1yNFjZ/YkPDFzWTlv1KmmrFzIm2f1cMvivgKSu1u7TEZj
-         2/sbX9+byvfdjE8wK0tdzxTYiK9YqK0GqsDv3ZaJyUgmRpW/TDs25YzEqrKcMRorAeg5
-         LiokXNEF0dr/rKiTJ4Zfg6MK37m6TDHh54mrkeWee6VD1B+Rqi11t/5jN7REjUJ7xY4s
-         qk5npgwTzDiP0tc6ngdQKBYVXNW4nTWseViEXG/GTiHT2/jR9tEz9XjLjRoAFqIEZBi+
-         w6PIhKBI8RBsl0tVVG8jKY6bRweyNTxw+0N3M/4feZe2Bg8zPMnKsg+6n3cJTZtAJS2d
-         zAdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=lQmTwuH19noXU8KpeeAnN5wF6xxdpiMxXJOzXODGwqU=;
-        b=q47UoaJkqdxE8lp1u9Qr5p2qjMwsYv08Cy6Ij24aXpNZ1I9oVfIn4jJniowGNIHoXM
-         65B0bI94CuSOz+wgYXINttxDcn3XqZFuhEQt4pcj3yMk6pyakYHYHs1xgajaNcv8oMo1
-         3cik2afZKWtkEAQHPBj12IftXUG3nHBY33pNY7mj19CytSMhRNlWwzrhjgiSgsydbKZq
-         GigBI8GZ8GlR+o1jPYn8iC/avUng9bF0Ugxo78miZZYbwU1lBRDwahsdVgHPhBL85w7Z
-         cCisb9bXac7GW8hw/R9OfW8s5ScMvcD/UbRxg94mPbQTEdZJwh6tLZipUgYmJJ+voXTc
-         7/XQ==
-X-Gm-Message-State: ACgBeo2++op3Tzb5imAX+X4Dg56qdzb+YHtc55ZQYbVXBKP6NYnZc7Al
-        S1Fmif7SAPDY/z5cuuwVtloNhA==
-X-Google-Smtp-Source: AA6agR55ZUMakwR8gOPEEriFgNS65we8TZqR5lyXHTta3pfmlHq7HU0LVG3E/Eq2e/cr6AkfR2Y4IQ==
-X-Received: by 2002:ac8:7396:0:b0:33f:4f21:59d6 with SMTP id t22-20020ac87396000000b0033f4f2159d6mr1194652qtp.453.1659534940438;
-        Wed, 03 Aug 2022 06:55:40 -0700 (PDT)
-Received: from localhost (2603-7000-0c01-2716-00ea-7f88-5fd9-01cd.res6.spectrum.com. [2603:7000:c01:2716:ea:7f88:5fd9:1cd])
-        by smtp.gmail.com with ESMTPSA id do54-20020a05620a2b3600b006b5e1aeb777sm3106801qkb.43.2022.08.03.06.55.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 06:55:40 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 09:55:39 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     cgel.zte@gmail.com
-Cc:     akpm@linux-foundation.org, tj@kernel.org, axboe@kernel.dk,
-        vdavydov.dev@gmail.com, ran.xiaokai@zte.com.cn, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, cgel <cgel@zte.com.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH 1/2] psi: introduce memory.pressure.stat
-Message-ID: <Yup+W/EFzkfSqRnW@cmpxchg.org>
-References: <20220801004205.1593100-1-ran.xiaokai@zte.com.cn>
+        Wed, 3 Aug 2022 09:58:13 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D106DF46;
+        Wed,  3 Aug 2022 06:58:10 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 677FC5FD2E;
+        Wed,  3 Aug 2022 16:58:08 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1659535088;
+        bh=J9ER1HEmraVRx9h4m7Z/Hk7Bb9oPnBAWW3L1QrdyfYY=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=kn/GaERL4M8G6sFAX1LPUGgkXbjOoyQU8UQX5Ai8IreW1Sv3Am839Z1n39MG0xaG5
+         Wd4/t6EICVjXSsadyhFlvpdRfh7gkepaUVSGgbRxOkapjcfb8HrbCEveaW4LQKIXax
+         IrZpbzJC7MIC1h1UfmM0n3BjH8ZaT63g+Z+WZaxbn0ECVrmqaw1KTDnzd9AsG21+R1
+         5QJZq9EYtt0cBrQQD6KwfIG3Fk+fRXGKMBsNpI0tuLg45Txb4UJd5VLUeIVM8VP8L/
+         psxM3bIE1D2Yn5qLg3SM4xs3Sjvk+03ajg9lH4NaG0blyTP12E0SFtUC0jhcVmnsRI
+         an/c2LSRKkTeA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  3 Aug 2022 16:58:07 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "Arseniy Krasnov" <AVKrasnov@sberdevices.ru>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v3 4/9] vmci/vsock: use 'target' in notify_poll_in
+ callback
+Thread-Topic: [RFC PATCH v3 4/9] vmci/vsock: use 'target' in notify_poll_in
+ callback
+Thread-Index: AQHYp0EHffgjd/zij0eqhutm7RAwxw==
+Date:   Wed, 3 Aug 2022 13:57:54 +0000
+Message-ID: <2e420c8e-9550-c8c5-588f-e13b79a057ff@sberdevices.ru>
+In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DBC437AB8ABBA54AB5A398157F78EA17@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801004205.1593100-1-ran.xiaokai@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:42:04AM +0000, cgel.zte@gmail.com wrote:
-> From: cgel <cgel@zte.com.cn>
-> 
-> For now psi memory pressure account for all the mem stall in the
-> system, And didnot provide a detailed information why the stall
-> happens. This patch introduce a cgroupu knob memory.pressure.stat,
-> it tells the detailed stall information of all memory events and it
-> format and the corresponding proc interface.
-> 
-> for the cgroup, add memory.pressure.stat and it shows:
-> kswapd: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> direct reclaim: avg10=0.00 avg60=0.00 avg300=0.12 total=42356
-> kcompacted: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> direct compact: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> cgroup reclaim: avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> workingset thrashing:   avg10=0.00 avg60=0.00 avg300=0.00 total=0
-> 
-> for the system wide, a proc file introduced as pressure/memory_stat
-> and the format is the same as the cgroup interface.
-> 
-> With this detaled information, for example, if the system is stalled
-> because of kcompacted, compaction_proactiveness can be promoted so
-> pro-compaction can be involved earlier.
-> 
-> Signed-off-by: cgel <cgel@zte.com.cn>
-
-> @@ -64,9 +91,11 @@ struct psi_group_cpu {
->  
->  	/* Aggregate pressure state derived from the tasks */
->  	u32 state_mask;
-> +	u32 state_memstall;
->  
->  	/* Period time sampling buckets for each state of interest (ns) */
->  	u32 times[NR_PSI_STATES];
-> +	u32 times_mem[PSI_MEM_STATES];
-
-This doubles the psi cache footprint on every context switch, wakeup,
-sleep, etc. in the scheduler. You're also adding more branches to
-those same paths. It'll measurably affect everybody who is using psi.
-
-Yet, in the years of using psi in production myself, I've never felt
-the need for what this patch provides. There are event counters for
-everything that contributes to pressure, and it's never been hard to
-rootcause spikes. There are also things like bpftrace that let you
-identify who is stalling for how long in order to do one-off tuning
-and systems introspection.
-
-For this to get merged, it needs a better explanation of the usecase
-that requires this information to be broadly available all the time.
-And it needs to bring down the impact on everybody else who doesn't
-want this - either by reducing the footprint or by making the feature
-optional.
+VGhpcyBjYWxsYmFjayBjb250cm9scyBzZXR0aW5nIG9mIFBPTExJTixQT0xMUkROT1JNIG91dHB1
+dCBiaXRzIG9mIHBvbGwoKQ0Kc3lzY2FsbCxidXQgaW4gc29tZSBjYXNlcyxpdCBpcyBpbmNvcnJl
+Y3RseSB0byBzZXQgaXQsIHdoZW4gc29ja2V0IGhhcw0KYXQgbGVhc3QgMSBieXRlcyBvZiBhdmFp
+bGFibGUgZGF0YS4gVXNlICd0YXJnZXQnIHdoaWNoIGlzIGFscmVhZHkgZXhpc3RzDQphbmQgZXF1
+YWwgdG8gc2tfcmN2bG93YXQgaW4gdGhpcyBjYXNlLg0KDQpTaWduZWQtb2ZmLWJ5OiBBcnNlbml5
+IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0tLQ0KIG5ldC92bXdfdnNvY2sv
+dm1jaV90cmFuc3BvcnRfbm90aWZ5LmMgICAgICAgIHwgOCArKysrLS0tLQ0KIG5ldC92bXdfdnNv
+Y2svdm1jaV90cmFuc3BvcnRfbm90aWZ5X3FzdGF0ZS5jIHwgOCArKysrLS0tLQ0KIDIgZmlsZXMg
+Y2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEv
+bmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydF9ub3RpZnkuYyBiL25ldC92bXdfdnNvY2svdm1j
+aV90cmFuc3BvcnRfbm90aWZ5LmMNCmluZGV4IGQ2OWZjNGI1OTVhZC4uODUyMDk3ZTJiOWU2IDEw
+MDY0NA0KLS0tIGEvbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydF9ub3RpZnkuYw0KKysrIGIv
+bmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydF9ub3RpZnkuYw0KQEAgLTM0MCwxMiArMzQwLDEy
+IEBAIHZtY2lfdHJhbnNwb3J0X25vdGlmeV9wa3RfcG9sbF9pbihzdHJ1Y3Qgc29jayAqc2ssDQog
+ew0KIAlzdHJ1Y3QgdnNvY2tfc29jayAqdnNrID0gdnNvY2tfc2soc2spOw0KIA0KLQlpZiAodnNv
+Y2tfc3RyZWFtX2hhc19kYXRhKHZzaykpIHsNCisJaWYgKHZzb2NrX3N0cmVhbV9oYXNfZGF0YSh2
+c2spID49IHRhcmdldCkgew0KIAkJKmRhdGFfcmVhZHlfbm93ID0gdHJ1ZTsNCiAJfSBlbHNlIHsN
+Ci0JCS8qIFdlIGNhbid0IHJlYWQgcmlnaHQgbm93IGJlY2F1c2UgdGhlcmUgaXMgbm90aGluZyBp
+biB0aGUNCi0JCSAqIHF1ZXVlLiBBc2sgZm9yIG5vdGlmaWNhdGlvbnMgd2hlbiB0aGVyZSBpcyBz
+b21ldGhpbmcgdG8NCi0JCSAqIHJlYWQuDQorCQkvKiBXZSBjYW4ndCByZWFkIHJpZ2h0IG5vdyBi
+ZWNhdXNlIHRoZXJlIGlzIG5vdCBlbm91Z2ggZGF0YQ0KKwkJICogaW4gdGhlIHF1ZXVlLiBBc2sg
+Zm9yIG5vdGlmaWNhdGlvbnMgd2hlbiB0aGVyZSBpcyBzb21ldGhpbmcNCisJCSAqIHRvIHJlYWQu
+DQogCQkgKi8NCiAJCWlmIChzay0+c2tfc3RhdGUgPT0gVENQX0VTVEFCTElTSEVEKSB7DQogCQkJ
+aWYgKCFzZW5kX3dhaXRpbmdfcmVhZChzaywgMSkpDQpkaWZmIC0tZ2l0IGEvbmV0L3Ztd192c29j
+ay92bWNpX3RyYW5zcG9ydF9ub3RpZnlfcXN0YXRlLmMgYi9uZXQvdm13X3Zzb2NrL3ZtY2lfdHJh
+bnNwb3J0X25vdGlmeV9xc3RhdGUuYw0KaW5kZXggMGYzNmQ3YzQ1ZGIzLi4xMmYwY2I4ZmU5OTgg
+MTAwNjQ0DQotLS0gYS9uZXQvdm13X3Zzb2NrL3ZtY2lfdHJhbnNwb3J0X25vdGlmeV9xc3RhdGUu
+Yw0KKysrIGIvbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydF9ub3RpZnlfcXN0YXRlLmMNCkBA
+IC0xNjEsMTIgKzE2MSwxMiBAQCB2bWNpX3RyYW5zcG9ydF9ub3RpZnlfcGt0X3BvbGxfaW4oc3Ry
+dWN0IHNvY2sgKnNrLA0KIHsNCiAJc3RydWN0IHZzb2NrX3NvY2sgKnZzayA9IHZzb2NrX3NrKHNr
+KTsNCiANCi0JaWYgKHZzb2NrX3N0cmVhbV9oYXNfZGF0YSh2c2spKSB7DQorCWlmICh2c29ja19z
+dHJlYW1faGFzX2RhdGEodnNrKSA+PSB0YXJnZXQpIHsNCiAJCSpkYXRhX3JlYWR5X25vdyA9IHRy
+dWU7DQogCX0gZWxzZSB7DQotCQkvKiBXZSBjYW4ndCByZWFkIHJpZ2h0IG5vdyBiZWNhdXNlIHRo
+ZXJlIGlzIG5vdGhpbmcgaW4gdGhlDQotCQkgKiBxdWV1ZS4gQXNrIGZvciBub3RpZmljYXRpb25z
+IHdoZW4gdGhlcmUgaXMgc29tZXRoaW5nIHRvDQotCQkgKiByZWFkLg0KKwkJLyogV2UgY2FuJ3Qg
+cmVhZCByaWdodCBub3cgYmVjYXVzZSB0aGVyZSBpcyBub3QgZW5vdWdoIGRhdGENCisJCSAqIGlu
+IHRoZSBxdWV1ZS4gQXNrIGZvciBub3RpZmljYXRpb25zIHdoZW4gdGhlcmUgaXMgc29tZXRoaW5n
+DQorCQkgKiB0byByZWFkLg0KIAkJICovDQogCQlpZiAoc2stPnNrX3N0YXRlID09IFRDUF9FU1RB
+QkxJU0hFRCkNCiAJCQl2c29ja19ibG9ja191cGRhdGVfd3JpdGVfd2luZG93KHNrKTsNCi0tIA0K
+Mi4yNS4xDQo=

@@ -2,73 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E7758900A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185F1589007
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiHCQNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S238127AbiHCQLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbiHCQNe (ORCPT
+        with ESMTP id S236287AbiHCQLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:13:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0532DAA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:13:33 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9FBE93FB30;
-        Wed,  3 Aug 2022 16:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659543209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=JfQwF4E7OboR29C8Isxq3UTgiJebTWsqig0GU3KaiGI=;
-        b=Cw3HYPSYQIc1yFmx/vH7yzfG4Gr0wYT49nrb4jw0ehEcXHUsyO1TTElIdinWunD0Hn0a4W
-        X/K4JxdvBunhZ7LyyCP4Kh/7Pu50MpF0M/XjHimpQ9DvAdnj6fJO/TSvAkFfofvY87wXtS
-        uSI87KkF/6aV85kU5yEGm5JoDyGXYjY=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 928CC2C141;
-        Wed,  3 Aug 2022 16:13:29 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 5E50EDA85A; Wed,  3 Aug 2022 18:08:28 +0200 (CEST)
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] AFFS fix for 5.20
-Date:   Wed,  3 Aug 2022 18:08:26 +0200
-Message-Id: <cover.1659542557.git.dsterba@suse.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 3 Aug 2022 12:11:00 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B232EDC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:10:59 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso2496734pjf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=P8Kl/xKU4IYrDHB8lVGv34ItbSelul5121WYDgLOaI0=;
+        b=AxI/+//w2k08IiKw07QSnQ9ESu4dwG+wQ2H1SGE72Li0sSxNMpJ1h74H0Sl4CJKqsa
+         ih4rUvBv/IKrC+E+wGXXNKFxSl7R7LsDyo7QhY8j3ZKQFk/x5XOWF3SohPzArzZc4FId
+         y0S0s1uCBL7zRxZmyrax7xPhctcK9wyQJl1iQa3qwhzZBZ1qUWh6cU1SwH23tg25LmC8
+         jBcT2MqicnNp3pX3l51BnQDlLyL6gz89Z9nzF04zcjcJZEzZWF8b1I0ueoZnVcTP6M/F
+         8B2+3QzRsv2P/2XqGNrJUbuo11iswfZMfh/VT12eZ01MuohkIatWG1v+qHWPimCnW99S
+         FJPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=P8Kl/xKU4IYrDHB8lVGv34ItbSelul5121WYDgLOaI0=;
+        b=x9vfZJ2MYwiCHM9c0MuSVZMKXPdKt9aqUOHRQ3SyB/cCN3p7jfNsh1E3pY8HA9kKBq
+         i2W8AMfqAA8CB2jBcP46UJ1kl6elf0vN3RIoI0+s/JDNGHdNNp7RJwXOlK8zTOarYbbr
+         esqXAUXw+ZXYe1R/wYSB5/g0xW/LTxybI4uvRXgsbOv1oWRW77KY8INhqe/gnxBDZiKf
+         3CKaXzhSKkekLR/gP/bPyQjOrGW6mQO4gKJbFED3RHE4vvPO0DT6eWEylB3AYncHAird
+         gQWUyE795z3JlDI5sTGusURwkGlw+DDX5KNLD8aOqQHc4cQiFKqAOoFn7guut90TzuU+
+         Eybw==
+X-Gm-Message-State: ACgBeo27UYcxG3IvAtyjm8x5FPXI2ezxzRPfzBgSqwY/s/FIK9UBxB9p
+        a5kTjjlcb7UMjWK7IeefF4qJ5Q==
+X-Google-Smtp-Source: AA6agR5JGK8PeZUbKGzAWb+OwiWFpZoHLTuXqycARkDvNa2Nl3oOUNhgSpR3SKoJI1jAkIYufUZsSw==
+X-Received: by 2002:a17:90a:b010:b0:1f3:161c:30a0 with SMTP id x16-20020a17090ab01000b001f3161c30a0mr5426664pjq.243.1659543058557;
+        Wed, 03 Aug 2022 09:10:58 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d9-20020a170903230900b0016f057b88c9sm2226388plh.26.2022.08.03.09.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 09:10:57 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 16:10:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     Jinrong Liang <ljr.kernel@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: kvm: Fix a compile error in
+ selftests/kvm/rseq_test.c
+Message-ID: <YuqeDetNukKp9lyF@google.com>
+References: <20220802071240.84626-1-cloudliang@tencent.com>
+ <20220802150830.rgzeg47enbpsucbr@kamzik>
+ <CAFg_LQWB5hV9CLnavsCmsLbQCMdj1wqe-gVP7vp_mRGt+Eh+nQ@mail.gmail.com>
+ <20220803142637.3y5fj2cwyvbrwect@kamzik>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803142637.3y5fj2cwyvbrwect@kamzik>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Aug 03, 2022, Andrew Jones wrote:
+> On Wed, Aug 03, 2022 at 09:58:51PM +0800, Jinrong Liang wrote:
+> > My ldd version is (GNU libc) 2.28, and I get a compilation error in this case.
+> > But I use another ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31 is compiling fine.
+> > This shows that compilation errors may occur in different GNU libc environments.
+> > Would it be more appropriate to use syscall for better compatibility?
+> 
+> OK, it's a pity, but no big deal to use syscall().
 
-one update to AFFS, switching the kmap/kmap_atomic API. Please pull,
-thanks.
+Ya, https://man7.org/linux/man-pages/man2/gettid.2.html says:
 
-----------------------------------------------------------------
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+  The gettid() system call first appeared on Linux in kernel 2.4.11.  Library
+  support was added in glibc 2.30.
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
+But there are already two other instances of syscall(SYS_gettid) in KVM selftests,
+tools/testing/selftests/kvm/lib/assert.c even adds a _gettid() wrapper.
 
-are available in the Git repository at:
+So rather than having to remember (or discover) to use syscall(SYS_gettid), I wonder
+if it's possible to conditionally define gettid()?  E.g. check for GLIBC version?
+Or do
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git affs-5.20-tag
+  #define gettid() syscall(SYS_gettid)
 
-for you to fetch changes up to 5abbb7b92820cf6ba9154a35cff6d64b62d7f273:
-
-  affs: use memcpy_to_page and remove replace kmap_atomic() (2022-08-01 19:53:31 +0200)
-
-----------------------------------------------------------------
-David Sterba (1):
-      affs: use memcpy_to_page and remove replace kmap_atomic()
-
- fs/affs/file.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+so that it's always available and simply overrides the library's gettid() if it's
+provided?

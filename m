@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3668588954
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145DD588951
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbiHCJYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S235609AbiHCJXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHCJYM (ORCPT
+        with ESMTP id S229445AbiHCJXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:24:12 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9DE59250;
-        Wed,  3 Aug 2022 02:24:12 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id i71so9065908pge.9;
-        Wed, 03 Aug 2022 02:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=tS3mRZvJWrf/7SzFXiZtx7ISgrebWavHAsTW6VGynXM=;
-        b=kGTKMTb+HSH6m7jZIuNtSr/DpHHsSeqNYwcU/hQqyEdbStTE+OzwhA/gCRA7dFsw7D
-         tq6TRy7KdIzv4Z7DaqwSwO66EylYdHzanmmpY9apntU3unk6Gwigo6GB6VAevwdMJzK8
-         SxdlBepdBi3/BbuBhtMWTCZPZuTYRrKwtHKuW+wVKmsLI9PeRsa7gRBuVs9Jh0ipXYFc
-         Ew9r3rSj7fZ0VhPQwIpmawzanWPkxAkX0lIiualaMlGfbTVDLSxFoRuTw6NuoQ0pX5q+
-         Wz2COtvMLjrUIx1xlFEhnTM64jmW2GuDvrHYVZifRpub7U7OTP5tgudoEbuV8cYDGC/p
-         M0bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=tS3mRZvJWrf/7SzFXiZtx7ISgrebWavHAsTW6VGynXM=;
-        b=fAypYqGHQ4bdM85crXOL0DRRipg5GPqscRQKSpYcy0MV9CcHbWc39E/z/TItLSO8yn
-         2W0fM9As2IlX49AR2Nn/STXWwkZO7TjQO1SMZurUXvosUt0eKM3aFD1CSvaAw9Lz8LjT
-         O0zDraGtnQ+RZRX6whtAScmE5RSUF/o9MyzYKudcx5OXcDNaC/YR0JA6/D5kv7zcYWJv
-         fEoLddI8BjWKWzxaJWdAnSTSajYR0bsft3OVo5AHNlJy1QpD5vQ3PQcYvS9ACN0oJCii
-         rGqMapH79IlabWJlT0FVmYaxluOUPEGx1AHQCIucrPF/eE5Eg//0NuzI8yIOqIYTz/LC
-         mo9Q==
-X-Gm-Message-State: AJIora/rtpO2DbQOyUl1qn9+btzVjtI8GpjFG992lSu3L/78XPtmMMOq
-        CJMkByeWWudATNvBcQynPA==
-X-Google-Smtp-Source: AGRyM1uI2TLufQHOlnZpHYuLzE8YTQKSPWaB/HVJF9Fil5jZlAKjJuydRElg/PzGI69BpZZvg2CMtA==
-X-Received: by 2002:a05:6a00:24ce:b0:52b:f337:e2d3 with SMTP id d14-20020a056a0024ce00b0052bf337e2d3mr24805747pfv.36.1659518651537;
-        Wed, 03 Aug 2022 02:24:11 -0700 (PDT)
-Received: from localhost.localdomain ([166.111.133.51])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090322d200b0016f02fceff4sm1393203plg.57.2022.08.03.02.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 02:24:11 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     Helge Deller <deller@gmx.de>,
-        Ondrej Zajicek <santiago@crfreenet.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Antonino Daplas <adaplas@gmail.com>
-Cc:     Zheyu Ma <zheyuma97@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] video: fbdev: arkfb: Fix a divide-by-zero bug in ark_set_pixclock()
-Date:   Wed,  3 Aug 2022 17:23:12 +0800
-Message-Id: <20220803092313.2492371-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 3 Aug 2022 05:23:45 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7919C09;
+        Wed,  3 Aug 2022 02:23:44 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id A9E2141242;
+        Wed,  3 Aug 2022 09:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:message-id:subject:subject:from:from:date:date
+        :received:received:received:received; s=mta-01; t=1659518621; x=
+        1661333022; bh=dmK9vb916vEJit/OWSlYMYSc9OyvaPfGlvzUpn8CPy0=; b=H
+        +mZPSiOYVV8T9u0b8koKSuwRNCM1G0WnnH5fwmEM82Ht4Lx2v0utndBFK4N4bdJc
+        7gttPR5Xo30OtmpxNxw2oGAQTtZG1xCuSpitfvKONLsop0/0I77qkyvg2A6A/0kG
+        YSFDGtLguXzM7M9HKHJapXIP5+WE9ad+slDstYliAc=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WeuR4BRE3RPB; Wed,  3 Aug 2022 12:23:41 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 9A12E4014D;
+        Wed,  3 Aug 2022 12:23:39 +0300 (MSK)
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Wed, 3 Aug 2022 12:23:39 +0300
+Received: from yadro.com (10.178.118.226) by T-EXCH-09.corp.yadro.com
+ (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 3 Aug 2022
+ 12:23:38 +0300
+Date:   Wed, 3 Aug 2022 12:23:37 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     <wei.liu@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <ojeda@kernel.org>,
+        <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH v8 28/31] samples: add Rust examples
+Message-ID: <Yuo+mWyF8hgOdfCs@yadro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220802200430.qiyy2utts4lai3ac@liuwe-devbox-debian-v2>
+X-Originating-IP: [10.178.118.226]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the user can control the arguments of the ioctl() from the user
-space, under special arguments that may result in a divide-by-zero bug
-in:
-  drivers/video/fbdev/arkfb.c:784: ark_set_pixclock(info, (hdiv * info->var.pixclock) / hmul);
-with hdiv=1, pixclock=1 and hmul=2 you end up with (1*1)/2 = (int) 0.
-and then in:
-  drivers/video/fbdev/arkfb.c:504: rv = dac_set_freq(par->dac, 0, 1000000000 / pixclock);
-we'll get a division-by-zero.
+> Their types are different. One is for u8. The other is for UTF-8.
 
-The following log can reveal it:
+Yes, but:
 
-divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-RIP: 0010:ark_set_pixclock drivers/video/fbdev/arkfb.c:504 [inline]
-RIP: 0010:arkfb_set_par+0x10fc/0x24c0 drivers/video/fbdev/arkfb.c:784
-Call Trace:
- fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
- do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
- fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
+  +#[derive(Debug, Default)]
+  +struct ModuleInfo {
+  +    type_: String,
+  +    license: String,
+  +    name: String,
+  +    author: Option<String>,
+  +    description: Option<String>,
+  +    alias: Option<String>,
+  +    params: Option<Group>,
+  +}
 
-Fix this by checking the argument of ark_set_pixclock() first.
+  [...]
 
-Fixes: 681e14730c73 ("arkfb: new framebuffer driver for ARK Logic cards")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/video/fbdev/arkfb.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+  +impl ModuleInfo {
+  +    fn parse(it: &mut token_stream::IntoIter) -> Self {
+  +            match key.as_str() {
+  +                "type" => info.type_ = expect_ident(it),
+  +                "name" => info.name = expect_byte_string(it),
+  +                "author" => info.author = Some(expect_byte_string(it)),
+  +                "description" => info.description = Some(expect_byte_string(it)),
+  +                "license" => info.license = expect_byte_string(it),
+  +                "alias" => info.alias = Some(expect_byte_string(it)),
+  +                "alias_rtnl_link" => {
+  +                    info.alias = Some(format!("rtnl-link-{}", expect_byte_string(it)))
+  +                }
+  +                "params" => info.params = Some(expect_group(it)),
+  +                _ => panic!(
+  +                    "Unknown key \"{}\". Valid keys are: {:?}.",
+  +                    key, EXPECTED_KEYS
+  +                ),
+  +            }
 
-diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
-index eb3e47c58c5f..ed76ddc7df3d 100644
---- a/drivers/video/fbdev/arkfb.c
-+++ b/drivers/video/fbdev/arkfb.c
-@@ -781,7 +781,12 @@ static int arkfb_set_par(struct fb_info *info)
- 		return -EINVAL;
- 	}
- 
--	ark_set_pixclock(info, (hdiv * info->var.pixclock) / hmul);
-+	value = (hdiv * info->var.pixclock) / hmul;
-+	if (!value) {
-+		fb_dbg(info, "invalid pixclock\n");
-+		value = 1;
-+	}
-+	ark_set_pixclock(info, value);
- 	svga_set_timings(par->state.vgabase, &ark_timing_regs, &(info->var), hmul, hdiv,
- 			 (info->var.vmode & FB_VMODE_DOUBLE)     ? 2 : 1,
- 			 (info->var.vmode & FB_VMODE_INTERLACED) ? 2 : 1,
--- 
-2.25.1
-
+In the the end all module parameters are String, so why not use &str in
+the API?

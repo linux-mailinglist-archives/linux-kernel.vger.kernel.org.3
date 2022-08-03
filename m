@@ -2,226 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48EB588F22
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC384588F26
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiHCPLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S237916AbiHCPMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235868AbiHCPLq (ORCPT
+        with ESMTP id S237915AbiHCPMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:11:46 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F1E105;
-        Wed,  3 Aug 2022 08:11:44 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 273FBU04064031;
-        Wed, 3 Aug 2022 10:11:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1659539490;
-        bh=peLk7igHpDJqfv6EMWNdPZHTWycmcc3LsA19pplDeQE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=f0eDlCIB2spYCffXhw7qTXkkXpFUl1v2u2jtBUQBWQLwCJ59BchBhByJQe/XJBT4t
-         E7wNe7lypugCCXSjDoi7z/M/nP30FKv8nciQMcb1czYFc+DQPmMeGquRIwxer3BwZK
-         24P3taMPVx6EPbSUfgZ0d0ZR3QYxwAb4sxDmiJbg=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 273FBUAI079389
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 3 Aug 2022 10:11:30 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 3
- Aug 2022 10:11:30 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 3 Aug 2022 10:11:29 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 273FBTMV002223;
-        Wed, 3 Aug 2022 10:11:29 -0500
-Date:   Wed, 3 Aug 2022 10:11:27 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: sound: tlv320aic3x: Convert to dtschema
-Message-ID: <20220803151127.23tmkvobrh5so46v@uda0497096>
-References: <20220802214811.29033-1-j-luthra@ti.com>
- <7effc23b-b61a-9887-3875-d102b8fa270e@linaro.org>
+        Wed, 3 Aug 2022 11:12:46 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0503A4AF
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:12:45 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s206so15385920pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=dxKpudtpM9c04gsBALLT5GNJ4ez+VeuhMNxM61Y7Zys=;
+        b=TlUkKbkwpzJsUZQMWGVpPpZ+n5EKDY68Z5Q48koM0MZ/0s82onEnukdVx8O037K9O4
+         tPFkAD159kuoDvC0yngRjF0POp9zlUTXGgFOCHt8Gd7dvduyBaiyx2Hj7D0LWsVp0pkt
+         hApAo7lBEXQda8i1Ed4XJBy6d13ZneFaijFw7ZW15sp5UnsX+6Xwrr7EGxvEo7Bc/k3i
+         zvIn6tapOBjYzmqxjlj7XkQiqBaAqM55kMdtB3u9Hbvyh75X8Uxs4Fm9T4Be/QqfMrLk
+         1ex5bWBzzp+9iTi4NLuio/uUjE45ou1ye/hUEcXH9x3KvZiHnDBiBdwvDWIrc5RehhxU
+         MqSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=dxKpudtpM9c04gsBALLT5GNJ4ez+VeuhMNxM61Y7Zys=;
+        b=BJR6rSJ1C/6m09lzmVLlMzLSJggUjRfV3axVWHtS1vVP3WvdEzzUosj4nWwxPiO8nB
+         7NRuO8j6m3MKMqlHeN+H9du9x4KrtlidIHchbQLSPZuIQZRFWjtOdlPc2yjN0YcCo+Kc
+         tr+FHfHUA5TXezG0OZ1sAHZW+/1tCr6rTUCNXEoLn7UEhKrcBAPsQAhSMdtZJxGXEp4P
+         DdYSqp5ko9Xs1iylu5mPesTDGafkakLKbk3aN4ckqHQ8kCCo1LjneZm/AIyghUoU4ky6
+         aWpDjBQ2M2uYNtbt8FAg6gKA3PVCn4wD/nv3Ii8U6Ny26T7dt6h6unhBZMoogGoaqSLH
+         +fYg==
+X-Gm-Message-State: AJIora8aB7GhcEefKV+49VlYZJynLcfo5XKXmN70aQgMEm+Ac9qBg0w1
+        8KfFEv4n181cGLV1GP4M61o=
+X-Google-Smtp-Source: AGRyM1uUuXwBDm/bVaj3vqKbwti9dLWNE6+XW69yeoBDMEc2GahmO9mpjYWsUtcGHrUjpMDSy7aMDg==
+X-Received: by 2002:a63:d5:0:b0:41a:58f:929e with SMTP id 204-20020a6300d5000000b0041a058f929emr21171472pga.260.1659539564401;
+        Wed, 03 Aug 2022 08:12:44 -0700 (PDT)
+Received: from localhost.localdomain ([211.226.85.205])
+        by smtp.gmail.com with ESMTPSA id mn19-20020a17090b189300b001f4f40763b1sm1750325pjb.29.2022.08.03.08.12.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 03 Aug 2022 08:12:44 -0700 (PDT)
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     catalin.marinas@arm.com, will@kernel.org, chenzhou10@huawei.com,
+        nramas@linux.microsoft.com, thunder.leizhen@huawei.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Levi Yun <ppbuk5246@gmail.com>
+Subject: [PATCH] arm64/kexec: Fix missing extra range for crashkres_low.
+Date:   Thu,  4 Aug 2022 00:12:17 +0900
+Message-Id: <20220803151217.75962-1-ppbuk5246@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7effc23b-b61a-9887-3875-d102b8fa270e@linaro.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Like crashk_res, Calling crash_exclude_mem_range function with
+crashk_low_res area would need extra crash_mem range too.
+Add one extra crash_mem range when crashk_low_res is used.
 
-Thanks for the review.
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+---
+ arch/arm64/kernel/machine_kexec_file.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 08:29-20220803, Krzysztof Kozlowski wrote:
-> On 02/08/2022 23:48, Jai Luthra wrote:
-> > Convert bindings for TI's TLV320AIC3x audio codecs to dtschema.
-> > 
-> > Signed-off-by: Jai Luthra <j-luthra@ti.com>
-> > ---
-> 
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> > diff --git a/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
-> > new file mode 100644
-> > index 000000000000..6efb1d459543
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/sound/tlv320aic3x.yaml
-> > @@ -0,0 +1,145 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/sound/tlv320aic3x.yaml#
-> 
-> Filename with vendor prefix, so ti,tlv320aic3x.yaml
-> 
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Texas Instruments TLV320AIC3x Codec Device Tree Bindings
-> 
-> s/Device Tree Bindings//
-> 
-> > +
-> > +maintainers:
-> > +  - Jai Luthra <j-luthra@ti.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - ti,tlv320aic3x
-> > +      - ti,tlv320aic33
-> > +      - ti,tlv320aic3007
-> > +      - ti,tlv320aic3106
-> > +      - ti,tlv320aic3104
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +    description: i2c slave address
-> 
-> Skip description.
-> 
-> > +
-> > +  reset-gpios:
-> > +    maxItems: 1
-> > +    description:
-> > +      GPIO specification for the active low RESET input.
-> > +
-> > +  ai3x-gpio-func:
-> > +    description: AIC3X_GPIO1 & AIC3X_GPIO2 Functionality
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    minItems: 3
-> 
-> uint32-array. Old bindings say about two items only. Mention any changes
-> to binding in cover letter.
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 889951291cc0..378aee04e7d4 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -51,6 +51,9 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
+ 	for_each_mem_range(i, &start, &end)
+ 		nr_ranges++;
 
-My bad, that should still be 2 items.
-
-> 
-> > +    maxItems: 3
-> > +
-> 
-> You lost gpio-reset property. Also not explained in commit msg.
-> 
-> > +  ai3x-micbias-vg:
-> > +    description: MicBias required voltage. If node is omitted then MicBias is powered down.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    oneOf:
-> > +      - const: 1
-> > +        description: MICBIAS output is powered to 2.0V.
-> > +      - const: 2
-> > +        description: MICBIAS output is powered to 2.5V.
-> > +      - const: 3
-> > +        description: MICBIAS output is connected to AVDD.
-> > +
-> > +  ai3x-ocmv:
-> > +    description: Output Common-Mode Voltage selection.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    oneOf:
-> > +      - const: 0
-> > +        description: 1.35V
-> > +      - const: 1
-> > +        description: 1.5V
-> > +      - const: 2
-> > +        description: 1.65V
-> > +      - const: 3
-> > +        description: 1.8V
-> > +
-> > +  AVDD-supply:
-> > +    description: Analog DAC voltage.
-> 
-> New properties?
-> 
-
-These regulator properties were mentioned in the txt as well.
-
-> > +
-> > +  IOVDD-supply:
-> > +    description: I/O voltage.
-> > +
-> > +  DRVDD-supply:
-> > +    description: ADC analog and output driver voltage.
-> > +
-> > +  DVDD-supply:
-> > +    description: Digital core voltage.
-> > +
-> > +  '#sound-dai-cells':
-> > +    const: 0
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +#The pins can be used in referring sound node's audio-routing property.
-> > +
-> > +#CODEC output pins:
-> > +  # LLOUT
-> > +  # RLOUT
-> > +  # MONO_LOUT
-> > +  # HPLOUT
-> > +  # HPROUT
-> > +  # HPLCOM
-> > +  # HPRCOM
-> > +
-> > +#CODEC input pins for TLV320AIC3104:
-> > +  # MIC2L
-> > +  # MIC2R
-> > +  # LINE1L
-> > +  # LINE1R
-> > +
-> > +#CODEC input pins for other compatible codecs:
-> > +  # MIC3L
-> > +  # MIC3R
-> > +  # LINE1L
-> > +  # LINE2L
-> > +  # LINE1R
-> > +  # LINE2R
-> 
-> All this goes to top level description.
-> 
-> 
-> Best regards,
-> Krzysztof
-
-Fixed rest of the comments in v2.
-
-Thanks,
-Jai
++	if (crashk_low_res.end)
++		nr_ranges++; /**< for exclusion of crashkernel=size,low region */
++
+ 	cmem = kmalloc(struct_size(cmem, ranges, nr_ranges), GFP_KERNEL);
+ 	if (!cmem)
+ 		return -ENOMEM;
+--
+2.35.1

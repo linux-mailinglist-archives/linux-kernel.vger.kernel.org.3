@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33235589372
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1D9589374
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiHCUr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S238635AbiHCUsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236104AbiHCUrx (ORCPT
+        with ESMTP id S238558AbiHCUsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:47:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7556619298
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:47:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 3 Aug 2022 16:48:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BE75C95D;
+        Wed,  3 Aug 2022 13:47:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25FA5B8227E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 20:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6920C433D7;
-        Wed,  3 Aug 2022 20:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659559669;
-        bh=RlTuo1i+4pM+HN9bjpGtA2gdc9l9lCSXBNKfstXa1hM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F9xW+EwZlQM6GsSRwgwAl3ZwmobV2Bpr/q4Xy1rnM3X4IHDq0DnRt6KS0zBldqArc
-         Ji7olAuzo8Obj/C3B4XPVGU44Q4nxbKBDRDfKisDuPt1Tdviu4HgF7at4MmblLwWYl
-         dHmNWyH2TMkaUflkwsHGz49seToq+J0k290UwpAnwZHRcAn3vtmT2dw93ywyw3kcWt
-         NNGZfFA60pmdDyxrZ7We3AGEAURVak0dQOQC3bfKRzV6v38Wq7cD36i6gH51+GCaAz
-         X0XjQ+ftN3/4jjUSYcwVu7YG0N5LJR/IxH02JfiD+iO+Qd20tYfjFUDooDJdEfgjA3
-         mnoeof0xeM9RQ==
-Date:   Wed, 3 Aug 2022 13:47:47 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH resend] ASoC: SOF: ipc3-topology: Fix clang -Wformat
- warning
-Message-ID: <Yure82N7/4NLEMsW@dev-arch.thelio-3990X>
-References: <20220803204442.2996580-1-justinstitt@google.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DC72F205AE;
+        Wed,  3 Aug 2022 20:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659559676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vKzaXxOuodAWNmH75tEbExlIwhjF1u2srkFX6cUqy68=;
+        b=1N9xrFj3qsgIi07FRZeT3t2v17ay2mE/+y9hObqOxXtEZRK9BaVfbGIK0zbZTMvY7BqOdb
+        M736F8TLWcuN3f6+uxonNWXujE9Bnm+s5rXFIPbYDQ8K4+bHznI0Dqlx3KevV+EkGiv8I3
+        AcKeH+t2EsxqZnN2dBvJXzNvJCDTEps=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659559676;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vKzaXxOuodAWNmH75tEbExlIwhjF1u2srkFX6cUqy68=;
+        b=uP6uiImSTFu9yAAlNQcJk5kVRF+mp7dHlSeJ8nLrZo59FuJ/Ob2qdmuAbTTDKl27qA780e
+        gBCD5X7pmiIli+Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FAE113A94;
+        Wed,  3 Aug 2022 20:47:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KBlkIfze6mJbMwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 03 Aug 2022 20:47:56 +0000
+Date:   Wed, 3 Aug 2022 22:47:55 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org
+Cc:     Declan Murphy <declan.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Prabhjot Khurana <prabhjot.khurana@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH] crypto: keembay-ocs - Drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <20220803224755.177de90e@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803204442.2996580-1-justinstitt@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 01:44:42PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter these warnings:
-> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
-> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
-> 
-> Use correct format specifier `%d` since args are of type int.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Thanks for resending!
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Declan Murphy <declan.murphy@intel.com>
+Cc: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+Cc: Mark Gross <mgross@linux.intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Prabhjot Khurana <prabhjot.khurana@intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+---
+ drivers/crypto/keembay/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> ---
-> Note: resending with the subject corrected, this patch fixes a build
-> warning that will break the Clang build when CONFIG_WERROR=y.
-> 
-> Original patch: https://lore.kernel.org/all/20220721211218.4039288-1-justinstitt@google.com/
-> Reported by Nathan here: https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
-> 
->  sound/soc/sof/ipc3-topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
-> index b2cc046b9f60..65923e7a5976 100644
-> --- a/sound/soc/sof/ipc3-topology.c
-> +++ b/sound/soc/sof/ipc3-topology.c
-> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
->  	}
->  
->  	dev_info(scomp->dev,
-> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
-> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
->  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
->  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->  
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 
+--- linux-5.18.orig/drivers/crypto/keembay/Kconfig	2022-05-22 21:52:31.000000000 +0200
++++ linux-5.18/drivers/crypto/keembay/Kconfig	2022-08-03 22:36:27.354500492 +0200
+@@ -42,7 +42,7 @@ config CRYPTO_DEV_KEEMBAY_OCS_AES_SM4_CT
+ config CRYPTO_DEV_KEEMBAY_OCS_ECC
+ 	tristate "Support for Intel Keem Bay OCS ECC HW acceleration"
+ 	depends on ARCH_KEEMBAY || COMPILE_TEST
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on HAS_IOMEM
+ 	select CRYPTO_ECDH
+ 	select CRYPTO_ENGINE
+@@ -64,7 +64,7 @@ config CRYPTO_DEV_KEEMBAY_OCS_HCU
+ 	select CRYPTO_ENGINE
+ 	depends on HAS_IOMEM
+ 	depends on ARCH_KEEMBAY || COMPILE_TEST
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  Support for Intel Keem Bay Offload and Crypto Subsystem (OCS) Hash
+ 	  Control Unit (HCU) hardware acceleration for use with Crypto API.
+
+
+-- 
+Jean Delvare
+SUSE L3 Support

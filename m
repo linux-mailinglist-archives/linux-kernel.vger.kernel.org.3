@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8A5588C19
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC17588C1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbiHCM3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S238011AbiHCMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237945AbiHCM3x (ORCPT
+        with ESMTP id S236240AbiHCMaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:29:53 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B908FD0D;
-        Wed,  3 Aug 2022 05:29:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id f192so6856476pfa.9;
-        Wed, 03 Aug 2022 05:29:52 -0700 (PDT)
+        Wed, 3 Aug 2022 08:30:22 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA585A478;
+        Wed,  3 Aug 2022 05:30:21 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so802003wmm.4;
+        Wed, 03 Aug 2022 05:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G9PkH1/+GSbUEltcAckBvLGPMw9ebhk3UR1knPNLOvw=;
-        b=H/bRb9Kwk/bGwyd2hcLSttkHtaI3MrIO/s2OzV56iHRYxjMs0qsifuzdE7dX4IvKEE
-         nmvpYl5ku3U9U63wrULY1ffbd+IfBIMrqR06i/fHa6VWO+enWRu0UUfus6ce/HT32isN
-         JEhQzAFoOmtPgrl4MiuRuVJjFEE5i71LFV2nHkUN6w9TdY4Xwt1T1phEuQVyp/p2o7vL
-         AaEs/wRTz8U2Hq+c4OKSRz89SVEoCHqVebYOHIU6w6x+Y1VZDFxiAvGVvlbrNDDV4BMJ
-         vGrxgKGp46R+eR7J5d6k6pI1TZS0RBCPKisPmsfMIZCc5OWd1u0TzgDsEOnAK3zj584n
-         QB3Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
+        b=ZWCrDmJsaF5rjaaPFXOCezlG5Hrqxmd82nrthFSbU7rDxjbViSCm0+ug895yBlMx6Y
+         O0jzll/IIgV/E6VOt0upI8VMeu3aRPr41B0d6MxNWKDOz95WJwkedTKRWVCu4OIPg2qH
+         hlMN/3G9NQjJkpU4uT1048gpDStaZ3joVuzb9O72zv7+YB+WOheB3YY/2cOoA1BSA8Fr
+         zFpQcmqnzsnaE6wttEL/FK4F9VGcaqOuSCjeyFZNiUvsW3f0mXc7iUssweq9FB16uB7w
+         4SahDV4gENBpOo3hiz8NiYUnYSTbNA5MKlWNTlSwDH1InQDzKgOQL6+bCSGoJX5vSdeg
+         3sxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=G9PkH1/+GSbUEltcAckBvLGPMw9ebhk3UR1knPNLOvw=;
-        b=YJZe+a5yyq9boiCjSG0L/oKfJxEsqecg0yRFyzQ9lqBcxvmhGnTT0cvlyS6k5qT/F/
-         FwuVNdpoYorXpvBgTlWvXZJAmpJJ01N/48EcSuawaz4vQOZtz4tKSAmMJ121Ou0FgHaQ
-         UjSqED9ayE5VngpHPv656N7EIHCcJ3SUn6hWryTo5S6cgnQcfkZ2gLqL6MRj5cOfBxa8
-         Z4iSZVjJxmpiYihgOAw769iVcALJEwQ8cGh74BJuDaxjz4EQPWih4w3vMPuwZ565+ESf
-         eCD2tN6WnAk/KNB3s/wTm1upowGDzzpfvBFPGoVV42FvpzKHgVU/wCuJBxO7ZzsJ0WX4
-         /M5A==
-X-Gm-Message-State: AJIora/eOiYr6qhOihUMeptRgfrBrIvOyTdmeI5ngRyAHYDigbmtwLC1
-        hjpOOEUqmgRUrXS0q3n/oj0=
-X-Google-Smtp-Source: AGRyM1s8bondd8Jp4I0QaatBDW4onlA7wRxIJAUprYTmbXa3rVXPggduaz3fc7qDzbNej1zDsCgZEw==
-X-Received: by 2002:a65:49c5:0:b0:412:6e3e:bd91 with SMTP id t5-20020a6549c5000000b004126e3ebd91mr20998201pgs.221.1659529791821;
-        Wed, 03 Aug 2022 05:29:51 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id g205-20020a6252d6000000b0052d952b3276sm5916311pfb.103.2022.08.03.05.29.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 05:29:51 -0700 (PDT)
-Message-ID: <cb631fe5-103d-30f5-d800-4748f4ea41fa@gmail.com>
-Date:   Wed, 3 Aug 2022 20:29:43 +0800
+        bh=g9heR4TjDoATr+7jD8mL256mkC9k3Sq6Q/fNFgtLRcY=;
+        b=DvaEUHqlVhMooU7YQcX1JCEBAL++DF25xhlnX4sIFyfO9Fd/93XGxWUb0UndXvC6Gh
+         dFKRX0vxwe7IwchtgjTr5T4eli7X9IZSaOwIP7JqTM1AZLBhdZ0Nhtnq3S9pJSelOWqN
+         0yN1ROorQnusVh7HwX2RbuSt5X5YkESZvTeaF1hmPH1un0c5zkyxb682a08TbQRP0Rpp
+         NK4/FNKumzWxDeOwJ4bRIiXLq6AXnzthlgC/A0Xs+eTPrvaB4zNePH7ukxbbsbYc/4Nf
+         GUOCLkslb3ya4wQ5hPFsJ5duHZP5uEd2WlCg6P6NER2qJaghNYBdLnfFKkbhtzTBHgCH
+         G33w==
+X-Gm-Message-State: ACgBeo03MS/teHlEuda8pnT1heqLi1sF9FRBuox8zzc9miCQnP7v9EJU
+        yGdizrS5UrtH+aD+ZQOVF7k=
+X-Google-Smtp-Source: AA6agR7wc8Pn+zYiaa70OFAL33BgIf99foNkbLKIHZ+NKhsuREFIuv3RbzZoZ7tixwIznPMyvCeHdA==
+X-Received: by 2002:a05:600c:511f:b0:3a3:254c:b079 with SMTP id o31-20020a05600c511f00b003a3254cb079mr2898294wms.68.1659529820167;
+        Wed, 03 Aug 2022 05:30:20 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k18-20020a5d6292000000b0021ec32d130asm18346111wru.74.2022.08.03.05.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 05:30:19 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        linux-usb@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: typec: ucsi: stm32g0: Fix spelling mistake "booloader" -> "bootloader"
+Date:   Wed,  3 Aug 2022 13:30:18 +0100
+Message-Id: <20220803123018.913710-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] KVM: x86: Refresh PMU after writes to
- MSR_IA32_PERF_CAPABILITIES
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220727233424.2968356-1-seanjc@google.com>
- <20220727233424.2968356-2-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20220727233424.2968356-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,44 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/7/2022 7:34 am, Sean Christopherson wrote:
-> Refresh the PMU if userspace modifies MSR_IA32_PERF_CAPABILITIES.  KVM
-> consumes the vCPU's PERF_CAPABILITIES when enumerating PEBS support, but
-> relies on CPUID updates to refresh the PMU.  I.e. KVM will do the wrong
-> thing if userspace stuffs PERF_CAPABILITIES _after_ setting guest CPUID.
-> 
-> Opportunistically fix a curly-brace indentation.
-> 
-> Fixes: c59a1f106f5c ("KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS")
+There is a spelling mistake in a dev_err_probe message. Fix it.
 
-Shouldn't it be: Fixes: 27461da31089 ("KVM: x86/pmu: Support full width counting") ?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Now, all the dots have been connected. As punishment, I'd like to cook this 
-patch set more
-with trackable tests so that you have more time for other things that are not 
-housekeeping.
+diff --git a/drivers/usb/typec/ucsi/ucsi_stm32g0.c b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+index 061551d464f1..6ced49e4d208 100644
+--- a/drivers/usb/typec/ucsi/ucsi_stm32g0.c
++++ b/drivers/usb/typec/ucsi/ucsi_stm32g0.c
+@@ -599,7 +599,7 @@ static int ucsi_stm32g0_probe_bootloader(struct ucsi *ucsi)
+ 		g0->i2c_bl = i2c_new_dummy_device(g0->client->adapter, STM32G0_I2C_BL_ADDR);
+ 		if (IS_ERR(g0->i2c_bl)) {
+ 			ret = dev_err_probe(g0->dev, PTR_ERR(g0->i2c_bl),
+-					    "Failed to register booloader I2C address\n");
++					    "Failed to register bootloader I2C address\n");
+ 			return ret;
+ 		}
+ 	}
+-- 
+2.35.3
 
-Thank you, Sean.
-
-> Cc: Like Xu <like.xu.linux@gmail.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/x86.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5366f884e9a7..362c538285db 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3543,9 +3543,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   			return 1;
->   
->   		vcpu->arch.perf_capabilities = data;
-> -
-> +		kvm_pmu_refresh(vcpu);
->   		return 0;
-> -		}
-> +	}
->   	case MSR_EFER:
->   		return set_efer(vcpu, msr_info);
->   	case MSR_K7_HWCR:

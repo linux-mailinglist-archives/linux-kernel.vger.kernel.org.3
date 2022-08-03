@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE765890FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3737558910A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237355AbiHCRI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S235697AbiHCRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiHCRI4 (ORCPT
+        with ESMTP id S237411AbiHCRLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:08:56 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDB518B13
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:08:55 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id z16so22249882wrh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:08:54 -0700 (PDT)
+        Wed, 3 Aug 2022 13:11:17 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C61ADB3;
+        Wed,  3 Aug 2022 10:11:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dc19so9883537ejb.12;
+        Wed, 03 Aug 2022 10:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dMyk+vGh97dwFGrHtgjmGaoaeUpNPz+yXvZWtKarsAQ=;
-        b=Isv3ghlMDIeIF1lhKbk60FETWFH1rKqXWmJbXrnsX7IkeHypwhcx2rSHRmjoqfxtLA
-         MpUyXXHIPf//JWKOQpT1oBGoSUgJggyFPuiY/LVTTVD/cHdvxpK9Bst7rGfsc2Xmx9Y6
-         hwW7ocHyPgGVu6BAU0Unu84L7BrtnJaQmjxfLgCQxA2KnXe/868B2j4hIRHFRlHi23sZ
-         MolPi4p7M/1XlwvmW247kFUpRkem7BpsXZludRJqaXG5CigiYfRNhFu4YAoDR7jyeKNL
-         m3G6XgIYVsVaT6gA6MCtwf1zhV+nW10fGTH8jBCbEz18LSQeGvV/diCiHWhrkrR/Yj0L
-         Px6Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8oQ+hf3D0+Iz/d+O+xc/TfT4v6mJXLjzNBvcBlenzqY=;
+        b=ov6hOt/BSeqHJycDTI4xQ8tHEssAK4e6pv8KL2MGFYp5an1I+hA2JKmORXNMnc/BC0
+         JLzyM8gGPgfC0f/MbA19BRta3K0YAMCcNkhAuj1W1f1wBbhgRqbsVg/kzQvg1YyqK49K
+         CnQKlSx/EYBXxsTJUbBnRhmHKQruwbpNZCcPSfHJpD7fw3czkgyD0E0mHiKFlijV7F7s
+         8a+IVQcSRjjkiI9aPMrKiUSZPk3jQEBZOFN4quS8DPu1Q3X25Lf2rlYUl6dZ6bxfx8SX
+         WcLv4WSddaqNFmrF39M5hln8GcLMf74Xv44vmCRoFzSM/KyBDJDIH2dyopAYijD6iiGM
+         kOtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=dMyk+vGh97dwFGrHtgjmGaoaeUpNPz+yXvZWtKarsAQ=;
-        b=TptLc8lDw8mUpdEwnWXRuF+LJTHhXJpbPcZQlG6t8uLuj+m9LzA0qPkQrGVLWTfV5W
-         coa85Phhn1J7nChRgDzMifbYWzuIhMU0UQ6uywudhDcQejrZAYnrBq1lOLXBR67K6Bfk
-         crIs+bNynpd0S21mEkBvLbIcBdUjrADtwX1ZGZVRCRDui8GRqpz8Go4zZQHtkD9sJzt6
-         Pp3ZRxd85rYBARoAbUm7f9NFEj2JQTaiaumf3Pj6WI8j2YR954bCeMSGqkRKaVaEHVu7
-         nMadcJBPErbyjDVISDS5ILBga26DT3k3EZ8XKAiA1AgbXV9Bj+R5x2qWXnEK+GyPAueP
-         I9zQ==
-X-Gm-Message-State: ACgBeo0DqzixftciSfjD8SwhgzTQhs5Nsx8I5+H5vXWuXBOKKaj/J5GF
-        3xKfjavJpaRxHO0tVI6s/NYmgKzNg4A=
-X-Google-Smtp-Source: AA6agR5Cmj1toyThbOFQMulJaWwbyS1GynqdK7FieO+wnvW5tFFwWleXWMztiEZz/V71k0yI7yAMaA==
-X-Received: by 2002:adf:e282:0:b0:21e:5546:5a26 with SMTP id v2-20020adfe282000000b0021e55465a26mr17395926wri.77.1659546533515;
-        Wed, 03 Aug 2022 10:08:53 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id n36-20020a05600c502400b003a37d8b864esm3237524wmr.30.2022.08.03.10.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 10:08:52 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 3 Aug 2022 19:08:51 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] printk for 5.20
-Message-ID: <YuqroyYLQua8y+L3@gmail.com>
-References: <YufsTLpighCI7qSf@alley>
- <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
- <YuqXkCZEfsSKoIX6@alley>
- <CAHk-=wj0umHOtL1TB_7Tvinoqhxz6BnL-jEC0eQfVihHOmbWjw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8oQ+hf3D0+Iz/d+O+xc/TfT4v6mJXLjzNBvcBlenzqY=;
+        b=4PO8SVjxlTLp3ow2MnFF1bd8Cg/39HFoF7/L1m5gWYf1PZzwK3AAiyGWLXKMoWFlg7
+         fLx6EokIGcyZdlPqAeorPVlLvOHhDrN9UaAd9dtBYk+/zos2SVWnKhM8AMaS1QSB9bqi
+         Apzn8+7x/x34z7vwkf4PX52TaGRLON0Uv3om954eSVWXShj2cavGL4sLtg7vyT6XFSRg
+         /ykkfJzSN0Nb06A/1G/yLT1BaZjtH0y1yQ6VFhNNjPA0dX/VAGyibEOhi2tIEf+uMlBt
+         hKMpd+nq92ZPlFHrG0cXyV9EMLLWR/rRRBIAH5uUW2qfrZBd1Gl0gWbqIB7VQRMnqVxo
+         eCDQ==
+X-Gm-Message-State: AJIora9yfro7XgEuQ+7blDT8xUD/4Da/ImI2C0ulUjI70S2MxI923kgD
+        Am/qasr2upLt/n+rSielhbUc8NfYuDXZzHE6ldw=
+X-Google-Smtp-Source: AGRyM1tTTR3G9549yX73eQmQTpxd1p9fgq0l/oy3EMq/u9/1sLQ+bNeKFbPKdFBm+Otw2j6/Zefjxq05v3uZxvWohXs=
+X-Received: by 2002:a17:906:7950:b0:72f:d4a4:564d with SMTP id
+ l16-20020a170906795000b0072fd4a4564dmr20739399ejo.479.1659546675350; Wed, 03
+ Aug 2022 10:11:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj0umHOtL1TB_7Tvinoqhxz6BnL-jEC0eQfVihHOmbWjw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220803054728.1541104-1-colin.foster@in-advantage.com>
+ <20220803054728.1541104-10-colin.foster@in-advantage.com> <CAHp75Vc30VW_dYGodyw4mrMwFgTVyDFaMP2ZJXQEB2nFOB2RWw@mail.gmail.com>
+ <YuqarB067s+rqFKe@euler>
+In-Reply-To: <YuqarB067s+rqFKe@euler>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 Aug 2022 19:10:38 +0200
+Message-ID: <CAHp75VeXtuR=CYyPE9VEE0+QoQ3hgVYCoSu4Yb8EycvChi86BQ@mail.gmail.com>
+Subject: Re: [PATCH v15 mfd 9/9] mfd: ocelot: add support for the vsc7512 chip
+ via spi
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, katie.morris@in-advantage.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 3, 2022 at 5:56 PM Colin Foster
+<colin.foster@in-advantage.com> wrote:
+> On Wed, Aug 03, 2022 at 01:45:04PM +0200, Andy Shevchenko wrote:
+> > On Wed, Aug 3, 2022 at 7:48 AM Colin Foster
+> > <colin.foster@in-advantage.com> wrote:
 
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+...
 
-> On Wed, Aug 3, 2022 at 8:43 AM Petr Mladek <pmladek@suse.com> wrote:
+> > > +       regmap_config.max_register = res->end - res->start;
 > >
-> > On Tue 2022-08-02 20:19:34, Linus Torvalds wrote:
-> > > And printing messages to a console is not some "oh, we'll just stop
-> > > doing that because you asked for PREEMPT_RT".
-> >
-> > My thinking was that PREEMPT_RT was used only by some rather small
-> > community that was very well aware of the upstream status. I kind of
-> > though that this was their choice.
-> 
-> Oh, I agree that it probably is a pretty small community.
-> 
-> And I also think that people who are really into RT are basically
-> always going to have extra patches anyway - I think the bulk of the
-> core stuff has made it upstream, but not *all* has made it.
-> 
-> And the "real RT" people tend to also have long lead times - it's not
-> just about "we need guaranteed latency", it also tends to be about
-> "our hardware is special and stays around for years" too - and likely
-> wouldn't ever really use upstream kernels directly anyway.
-> 
-> In fact, I don't think anybody can currently even enable PREEMPT_RT in
-> an upstream kernel anyway without extra patches. Much of the RT
-> infrastructure has been merged, but some of the grottier parts are
-> literally just "to make it easier to maintain the real external
-> patch".
-> 
-> So I agree with you that in reality it probably wouldn't really affect
-> very many people, if any.
-> 
-> I suspect the most immediate effect would literally be people who want
-> to experiment with it, "just because".
-> 
-> Not the serious RT users who probably have special hardware anyway and
-> are likely to also have special debug interfaces (exactly _because_
-> they have special latency concerns).
+> > Hmm... First of all, resource_size() is for that (with - 1 to the
+> > result). But don't you need to use stride in the calculations?
+>
+> DEFINE_RES_NAMED populates the resource .end with (_start) + (_size) - 1
+> so I don't think resource_size is correct to use here.
 
-As a side note, Red Hat is productizing -rt, and in general lots of systems 
-with non-broken hardware will work mostly fine under -rt. For the really 
-hairy hard-realtime usecases a lot of verification is done - often as part 
-of the project.
+Have you read what I put in parentheses? Basically it becomes very
+well the same as a result, but in a cleaner manner (you calculate
+resource size - 1 which will be exactly the last byte offset of the
+register file), no?
 
-With all the 'edge computing' usecases arising & the automotive industry 
-getting much more software-intense, I think it's a safe policy to make -rt 
-less special & adhere to the same quality and upstream maintenance 
-standards as regular Linux distributions.
+> reg_stride gets handled at the top of regmap_read(), so I don't think
+> that's really needed either.
 
-In a few years PREEMPT_RT won't be all that special anymore, and working 
-consoles are very much part of a usable product.
+Okay.
 
-> So that's why I'd suspect that the actual effect would be on people who 
-> just want to tinker with it, and download the necessary RT patches and 
-> set up some data acquisition station for their own use or whatever.
-> 
-> But thinking some more about it, even the "serious RT" people almost 
-> certainly don't really want some kind of static "disable it all". Not 
-> even if it was a separate Kconfig question like I suggested.
-> 
-> You'd most likely want it to be dynamic, because things like "log to 
-> console" is different at bootup when the system hasn't started yet - you 
-> can't really have realtime response when your hardware hasn't even 
-> initialized yet - and when things are actually running.
-> 
-> So I think even then you really just want a "turn off console logging" 
-> dynamic flag, not a Kconfig option.
-> 
-> Which I think we already have, in the form of log levels. No?
+> For reference:
+>
+> #define VSC7512_DEVCPU_ORG_RES_START    0x71000000
+> #define VSC7512_DEVCPU_ORG_RES_SIZE     0x38
 
-Yeah:
+Right, for 0x38 you supply 0x37, which is exactly resource_size() - 1.
 
-  CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
-  CONFIG_CONSOLE_LOGLEVEL_QUIET=4
+> # cat range
+> 0-34
 
-What we could do is to set the default console loglevel really low by on 
-PREEMPT_RT - say to 1. Serious crashes would still show up - but random 
-console chatter wouldn't.
-
-Thanks,
-
-	Ingo
+-- 
+With Best Regards,
+Andy Shevchenko

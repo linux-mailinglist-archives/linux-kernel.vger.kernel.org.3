@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C875885FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A557B588609
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiHCDT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 23:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S237584AbiHCDYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 23:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiHCDTz (ORCPT
+        with ESMTP id S237568AbiHCDXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 23:19:55 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CB43342A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 20:19:54 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i14so10406609ejg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 20:19:54 -0700 (PDT)
+        Tue, 2 Aug 2022 23:23:45 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD0551A05;
+        Tue,  2 Aug 2022 20:23:40 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b133so15334110pfb.6;
+        Tue, 02 Aug 2022 20:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qy1jWYwnG9452wugTCrRTZvi4+IrGNxgDbnguzeYbro=;
-        b=FtIvVutQFKN66fPCXnRjzeFpwAvWlpKdRLN0f0WYZSsGsfCwW8tE2K6dWJp4NVXzLM
-         xoqWoshHqUhjfVnshp2MVtFU62WEAnAnmQ3yAwpXwVbJkaFxFvnGUWTvxHEgxuvJfBiT
-         qSaFctrDD77fGQ5r5BzrDxED59aKc+efhPRHA=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hQ/MHL3AvHE6awMttMKHegw9J9rY4eAGNJ5s9dewrd8=;
+        b=CHPXie25jR2yWr9q5odc83pPNnA80K0CM8v9EuqtArCTlfixskGUqP5vwCjZClW/QS
+         GfR6JSopZS+FH/bzKW/g2bL5z0clGf/22+e0F9Z2eQIb74nGjanx4AKahht+Ouu0OBs8
+         dEpg+ur6KU8Zv4ZEbgF5JBzpT5hQSWG5GI4aNsCzR3R3D8As8ne+iLXa7mFAWZVgvsAJ
+         wqfm3DWlOnODenQn0n0wb/6L3PtnZ3UlOwLj8XXo8VEpl4x1sG30qi+POOPaD63ADxlO
+         pXzI5WrL1kXH41AkH6Hq+k2ych93SEJr9RlfaUy8OwlODbzsOImZKh415RlHhdYM0Fpi
+         Yvdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qy1jWYwnG9452wugTCrRTZvi4+IrGNxgDbnguzeYbro=;
-        b=yXtji6EUb8olPKFLjR2pBW8q5G+6V5V3NxDGII3CpfPQAPRG5eoYzuDahHQ8m/o46g
-         HYyV6ym5iSJTWzuRgmrJ8msPNut0/stSmr25NAXPdaib1Np51yN/orn5oZgRjvs3fx+C
-         8RJmQuJ2XZ5jr3Xov3m4NkhdiR7HCqfwjMEGAztaSfEee88HKfySKilJ8+W5IrHpbQbH
-         sMViPuvfk7hTOqAEaDhCfuAWWFnwC2RwpF8qNXVoWXBUCDZCHDW18E3WGoioYO9INkKx
-         rDcZwiTGevdveTcJUIfLol6k9k76PtMo//OHmH1Rru1yntcxF6wTNHHbucpUFVoZZfXn
-         mMSA==
-X-Gm-Message-State: AJIora/ms3o3Y2UHYHyr4ZEslpLrE3zjdxqKCW0UUArdcraaHf4kRUIX
-        0/Wh3NA/acW2044Ypc62dRILf7zTmmUfeW7E
-X-Google-Smtp-Source: AGRyM1uVMesfJLWYIKW8VJ+FEIHLC7QqmCisppYVtdeYh/jdxcQRsIijIKM3+fTzf41zmiXjZ73Lig==
-X-Received: by 2002:a17:907:60cc:b0:72b:40a8:a5b with SMTP id hv12-20020a17090760cc00b0072b40a80a5bmr18444401ejc.379.1659496792395;
-        Tue, 02 Aug 2022 20:19:52 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id sy7-20020a1709076f0700b0073054d7c51csm4402794ejc.37.2022.08.02.20.19.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 20:19:51 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id h13so719259wrf.6
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 20:19:50 -0700 (PDT)
-X-Received: by 2002:adf:edcb:0:b0:21e:d043:d271 with SMTP id
- v11-20020adfedcb000000b0021ed043d271mr14820445wro.274.1659496790456; Tue, 02
- Aug 2022 20:19:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hQ/MHL3AvHE6awMttMKHegw9J9rY4eAGNJ5s9dewrd8=;
+        b=Yvj0SDBoRKXLXFHyzEP43d15g25MrMqrMPCwad12Fu4qUtF7c+BgKVqV/d1QzY6z48
+         kK+owOrrYpbMfwVe/gdGMGT3b1kEuRFCbrPuRwhlHJXtn8oybRNZRGF6IY3q1nFuLLnw
+         VwnljDNqYrxBlEobFCi4rKdjG+fCLxwX0EZIrMLyOxiJxAXJDQwJbB4cRnVdqilkwq8l
+         kHblXFdpYr5KDVcBc759KHPyHXWdzQjVbqKgZDFeKYm325V+fEiI+7ufwGIplT4MthjC
+         iGVVGpiGPc6u8ZLjcUfPRWoNpGQa7tYwec/ZNawn4rryB8qXild8VM5po9yN57st14YO
+         gdow==
+X-Gm-Message-State: AJIora9/5LHZ8+uYLnFiC0G/1fA1HzgPLX/24wNhkQdQW720acjxoJF1
+        QZ/mmUr/6LppxfIg1fYRSn0=
+X-Google-Smtp-Source: AGRyM1sCSz0Ss42sowkoQjXeEl16MwPxdyBbyTUiA1CDxjKiO/EnKpC5aN4upe+iDII6riEw+RVOMw==
+X-Received: by 2002:a63:f502:0:b0:415:ee58:b22b with SMTP id w2-20020a63f502000000b00415ee58b22bmr19076904pgh.349.1659497019088;
+        Tue, 02 Aug 2022 20:23:39 -0700 (PDT)
+Received: from biggie.. ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902d50900b0016dbdf7b97bsm458620plg.266.2022.08.02.20.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 20:23:38 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v2] selftests/net: Refactor xfrm_fill_key() to use array of structs
+Date:   Wed,  3 Aug 2022 08:53:12 +0530
+Message-Id: <20220803032312.3939-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <YufsTLpighCI7qSf@alley>
-In-Reply-To: <YufsTLpighCI7qSf@alley>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 2 Aug 2022 20:19:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
-Message-ID: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
-Subject: Re: [GIT PULL] printk for 5.20
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +72,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
->
-> - Completely disable printing on consoles with CONFIG_RT.
+A TODO in net/ipsec.c asks to refactor the code in xfrm_fill_key() to
+use set/map to avoid manually comparing each algorithm with the "name" 
+parameter passed to the function as an argument. This patch refactors 
+the code to create an array of structs where each struct contains the 
+algorithm name and its corresponding key length.
 
-I don't think this is acceptable.
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+changes in v2:
+1. Fix the compilation warnings for struct and variable declaration
 
-We don't suddenly change behavior just because some random developer
-has decided "this is the RightThing(tm) to do".
+ tools/testing/selftests/net/ipsec.c | 108 +++++++++++++---------------
+ 1 file changed, 49 insertions(+), 59 deletions(-)
 
-Users matter.
+diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+index cc10c10c5ed9..4a0eeb5b71d2 100644
+--- a/tools/testing/selftests/net/ipsec.c
++++ b/tools/testing/selftests/net/ipsec.c
+@@ -58,6 +58,8 @@
+ #define VETH_FMT	"ktst-%d"
+ #define VETH_LEN	12
+ 
++#define XFRM_ALGO_NR_KEYS 29
++
+ static int nsfd_parent	= -1;
+ static int nsfd_childa	= -1;
+ static int nsfd_childb	= -1;
+@@ -75,6 +77,46 @@ const unsigned int ping_timeout		= 300;
+ const unsigned int ping_count		= 100;
+ const unsigned int ping_success		= 80;
+ 
++struct xfrm_key_entry {
++	char algo_name[35];
++	int key_len;
++};
++
++struct xfrm_key_entry xfrm_key_entries[XFRM_ALGO_NR_KEYS];
++
++static void init_xfrm_algo_keys(void)
++{
++	xfrm_key_entries[0] = (struct xfrm_key_entry) {"digest_null", 0};
++	xfrm_key_entries[1] = (struct xfrm_key_entry) {"ecb(cipher_null)", 0};
++	xfrm_key_entries[2] = (struct xfrm_key_entry) {"cbc(des)", 64};
++	xfrm_key_entries[3] = (struct xfrm_key_entry) {"hmac(md5)", 128};
++	xfrm_key_entries[4] = (struct xfrm_key_entry) {"cmac(aes)", 128};
++	xfrm_key_entries[5] = (struct xfrm_key_entry) {"xcbc(aes)", 128};
++	xfrm_key_entries[6] = (struct xfrm_key_entry) {"cbc(cast5)", 128};
++	xfrm_key_entries[7] = (struct xfrm_key_entry) {"cbc(serpent)", 128};
++	xfrm_key_entries[8] = (struct xfrm_key_entry) {"hmac(sha1)", 160};
++	xfrm_key_entries[9] = (struct xfrm_key_entry) {"hmac(rmd160)", 160};
++	xfrm_key_entries[10] = (struct xfrm_key_entry) {"cbc(des3_ede)", 192};
++	xfrm_key_entries[11] = (struct xfrm_key_entry) {"hmac(sha256)", 256};
++	xfrm_key_entries[12] = (struct xfrm_key_entry) {"cbc(aes)", 256};
++	xfrm_key_entries[13] = (struct xfrm_key_entry) {"cbc(camellia)", 256};
++	xfrm_key_entries[14] = (struct xfrm_key_entry) {"cbc(twofish)", 256};
++	xfrm_key_entries[15] = (struct xfrm_key_entry) {"rfc3686(ctr(aes))", 288};
++	xfrm_key_entries[16] = (struct xfrm_key_entry) {"hmac(sha384)", 384};
++	xfrm_key_entries[17] = (struct xfrm_key_entry) {"cbc(blowfish)", 448};
++	xfrm_key_entries[18] = (struct xfrm_key_entry) {"hmac(sha512)", 512};
++	xfrm_key_entries[19] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-128", 160};
++	xfrm_key_entries[20] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-128", 160};
++	xfrm_key_entries[21] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-128", 152};
++	xfrm_key_entries[22] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-192", 224};
++	xfrm_key_entries[23] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-192", 224};
++	xfrm_key_entries[24] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-192", 216};
++	xfrm_key_entries[25] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-256", 288};
++	xfrm_key_entries[26] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-256", 288};
++	xfrm_key_entries[27] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-256", 280};
++	xfrm_key_entries[28] = (struct xfrm_key_entry) {"rfc7539(chacha20,poly1305)-128", 0};
++}
++
+ static void randomize_buffer(void *buf, size_t buflen)
+ {
+ 	int *p = (int *)buf;
+@@ -767,65 +809,12 @@ static int do_ping(int cmd_fd, char *buf, size_t buf_len, struct in_addr from,
+ static int xfrm_fill_key(char *name, char *buf,
+ 		size_t buf_len, unsigned int *key_len)
+ {
+-	/* TODO: use set/map instead */
+-	if (strncmp(name, "digest_null", ALGO_LEN) == 0)
+-		*key_len = 0;
+-	else if (strncmp(name, "ecb(cipher_null)", ALGO_LEN) == 0)
+-		*key_len = 0;
+-	else if (strncmp(name, "cbc(des)", ALGO_LEN) == 0)
+-		*key_len = 64;
+-	else if (strncmp(name, "hmac(md5)", ALGO_LEN) == 0)
+-		*key_len = 128;
+-	else if (strncmp(name, "cmac(aes)", ALGO_LEN) == 0)
+-		*key_len = 128;
+-	else if (strncmp(name, "xcbc(aes)", ALGO_LEN) == 0)
+-		*key_len = 128;
+-	else if (strncmp(name, "cbc(cast5)", ALGO_LEN) == 0)
+-		*key_len = 128;
+-	else if (strncmp(name, "cbc(serpent)", ALGO_LEN) == 0)
+-		*key_len = 128;
+-	else if (strncmp(name, "hmac(sha1)", ALGO_LEN) == 0)
+-		*key_len = 160;
+-	else if (strncmp(name, "hmac(rmd160)", ALGO_LEN) == 0)
+-		*key_len = 160;
+-	else if (strncmp(name, "cbc(des3_ede)", ALGO_LEN) == 0)
+-		*key_len = 192;
+-	else if (strncmp(name, "hmac(sha256)", ALGO_LEN) == 0)
+-		*key_len = 256;
+-	else if (strncmp(name, "cbc(aes)", ALGO_LEN) == 0)
+-		*key_len = 256;
+-	else if (strncmp(name, "cbc(camellia)", ALGO_LEN) == 0)
+-		*key_len = 256;
+-	else if (strncmp(name, "cbc(twofish)", ALGO_LEN) == 0)
+-		*key_len = 256;
+-	else if (strncmp(name, "rfc3686(ctr(aes))", ALGO_LEN) == 0)
+-		*key_len = 288;
+-	else if (strncmp(name, "hmac(sha384)", ALGO_LEN) == 0)
+-		*key_len = 384;
+-	else if (strncmp(name, "cbc(blowfish)", ALGO_LEN) == 0)
+-		*key_len = 448;
+-	else if (strncmp(name, "hmac(sha512)", ALGO_LEN) == 0)
+-		*key_len = 512;
+-	else if (strncmp(name, "rfc4106(gcm(aes))-128", ALGO_LEN) == 0)
+-		*key_len = 160;
+-	else if (strncmp(name, "rfc4543(gcm(aes))-128", ALGO_LEN) == 0)
+-		*key_len = 160;
+-	else if (strncmp(name, "rfc4309(ccm(aes))-128", ALGO_LEN) == 0)
+-		*key_len = 152;
+-	else if (strncmp(name, "rfc4106(gcm(aes))-192", ALGO_LEN) == 0)
+-		*key_len = 224;
+-	else if (strncmp(name, "rfc4543(gcm(aes))-192", ALGO_LEN) == 0)
+-		*key_len = 224;
+-	else if (strncmp(name, "rfc4309(ccm(aes))-192", ALGO_LEN) == 0)
+-		*key_len = 216;
+-	else if (strncmp(name, "rfc4106(gcm(aes))-256", ALGO_LEN) == 0)
+-		*key_len = 288;
+-	else if (strncmp(name, "rfc4543(gcm(aes))-256", ALGO_LEN) == 0)
+-		*key_len = 288;
+-	else if (strncmp(name, "rfc4309(ccm(aes))-256", ALGO_LEN) == 0)
+-		*key_len = 280;
+-	else if (strncmp(name, "rfc7539(chacha20,poly1305)-128", ALGO_LEN) == 0)
+-		*key_len = 0;
++	int i;
++
++	for (i = 0; i < XFRM_ALGO_NR_KEYS; i++) {
++		if (strncmp(name, xfrm_key_entries[i].algo_name, ALGO_LEN) == 0)
++			*key_len = xfrm_key_entries[i].key_len;
++	}
+ 
+ 	if (*key_len > buf_len) {
+ 		printk("Can't pack a key - too big for buffer");
+@@ -2305,6 +2294,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
++	init_xfrm_algo_keys();
+ 	srand(time(NULL));
+ 	page_size = sysconf(_SC_PAGESIZE);
+ 	if (page_size < 1)
+-- 
+2.34.1
 
-For all we know, there may be random users who are playing around with
-PREEMPT_RT. They don't *have* to, but they want to.
-
-Just saying "you get no console because you wanted to try it out" is
-simply not acceptable.
-
-It's also NOT SANE.
-
-Seriously, even if you have strict RT requirements, you may also have
-strict debugging requirements, and if something goes wrong, you want
-to KNOW ABOUT IT. At that point, your RT rules may well fly out the
-window, because you have more serious problems.
-
-End result: no way will I accept this kind of completely arbitrary and
-frankly not very intelligent patch.
-
-If people want to disable console printing, that's THEIR CHOICE. It
-could be a new config variable where you ASK people about what they
-want. Not this kind of idiotic tying together of things.
-
-And guys, I want to make it really clear how disappointed I am with
-the printk tree lately. There seems to be some kind of hardline
-religious fervor having taken over to make these kinds of "this is how
-it has to be done, screw any sanity or common sense".
-
-There is exactly one thing you should hold sacred: don't break
-people's setups. All the rest is just engineering, and a HUGE part of
-"engineering" is to realize that everything is a trade-off.
-
-Linux kernel development is a pragmatic thing where existing users and
-existing code matters, and you don't get to just throw it all away
-because you have some odd personal hangup.
-
-And printing messages to a console is not some "oh, we'll just stop
-doing that because you asked for PREEMPT_RT".
-
-Put another way: not only am I not pulling this, I'm concerned that I
-will not be pulling printk patches in the future either because of
-where these pull requests seem to be trending.
-
-               Linus

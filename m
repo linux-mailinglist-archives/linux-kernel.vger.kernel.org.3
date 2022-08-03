@@ -2,170 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3FD588B2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38935588B3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbiHCL3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S236355AbiHCLaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiHCL3D (ORCPT
+        with ESMTP id S233781AbiHCLaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:29:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B711427B14
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:29:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 3 Aug 2022 07:30:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E5E42
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:30:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5FDC533FC5;
-        Wed,  3 Aug 2022 11:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659526140; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dYSp9FkxWYhq7shbNgnFFdDe+YIHT7/x9Ijr1mix0I=;
-        b=fcYHHTuqTlfgxJZcvyxGKgTu1VnPjFXTOUt52Ni4Bw7g85QoBmSi4vKwbJPKPNXDrCdZra
-        cplMKPt/0pFTe9HQlH6cvsO98tf3NZ6XHPh9IufME2nCHwRwCP1bfXB1qDcSNfbpwLG+fx
-        xnnm2nF/mGmZl3fwq5oA261sUfGmXRU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CA2913A94;
-        Wed,  3 Aug 2022 11:29:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RYNeDPxb6mIyQgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 03 Aug 2022 11:29:00 +0000
-Date:   Wed, 3 Aug 2022 13:28:59 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH] mm: mempolicy: fix policy_nodemask() for
- MPOL_PREFERRED_MANY case
-Message-ID: <Yupb+1mmn9sQ/G8K@dhcp22.suse.cz>
-References: <YueXhmiFcI8iw3OI@dhcp22.suse.cz>
- <YuecP/RKXWz7QAs0@feng-skl>
- <YuidPA9knCOoaT0c@FVFYT0MHHV2J>
- <Yui7hWZYMX31ktOr@feng-skl>
- <YujGy8EIeZc1Avc7@FVFYT0MHHV2J>
- <YujUyCIBjFj+FzX5@feng-skl>
- <YujoLQt09Js/sSQL@dhcp22.suse.cz>
- <YuoYkPk+YzdPNvmN@feng-snb>
- <YuolieBmdaIzoS3t@dhcp22.suse.cz>
- <Yuqs+BTpfh9/PjtP@feng-clx>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E070761073
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A78C433C1;
+        Wed,  3 Aug 2022 11:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659526210;
+        bh=gatN8ijDZVwF4fArqbchwbk0TWiuIZ1lb2Y6a4di8rU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ORM3M12TTZUk1D4DeCm0153pl+Tb2qLL5glZWRFYUkVeuqvRPzLhJ5pEEIpmwOXMC
+         LfjbAwheH/SHSdv17EE1LxCNHJOmjuA+7n8BUf/eU8mFH/PVkV2wZ0YWtFov9RLkDe
+         ddoS3wBZNRvp+mb/ykUMOiDlja2wPAdHzY4f6l8Pi++kyE8zec6c2H9WoY0oo6Xd8A
+         2Q2ElGtJzfZt2Zb2sVEM3EToCwXfWhK6bQO2fnLJDRfH9amKhz2tlRLLyaUxa1BEEo
+         XjKc6oiwrm9Vtklp1xMOA87mH9RXau2ghOmghoYaTkgapUXug3GDN6Ke6NJhw1F5jw
+         fPjPYgQ0L0Anw==
+Date:   Wed, 3 Aug 2022 17:00:04 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+Subject: Re: [PATCH 2/5] soundwire: sysfs: cleanup the logic for creating the
+ dp0 sysfs attributes
+Message-ID: <YupcPEbc0xD5pDtt@matsya>
+References: <20220729135041.2285908-1-gregkh@linuxfoundation.org>
+ <20220729135041.2285908-2-gregkh@linuxfoundation.org>
+ <9365e038-2146-98f8-f989-02827f221c34@linux.intel.com>
+ <YuP0Ffs3G7ZBR0AC@kroah.com>
+ <cfacb124-a9ff-0a93-8f92-93d164b15966@linux.intel.com>
+ <YuP2pjhyKTTfpXQq@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yuqs+BTpfh9/PjtP@feng-clx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuP2pjhyKTTfpXQq@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 04-08-22 01:14:32, Feng Tang wrote:
-[...]
-> Ok, I change it as below:
+On 29-07-22, 17:03, Greg Kroah-Hartman wrote:
+> On Fri, Jul 29, 2022 at 09:57:52AM -0500, Pierre-Louis Bossart wrote:
+> > 
+> > 
+> > On 7/29/22 09:52, Greg Kroah-Hartman wrote:
+> > > On Fri, Jul 29, 2022 at 09:46:26AM -0500, Pierre-Louis Bossart wrote:
+> > >>
+> > >>
+> > >> On 7/29/22 08:50, Greg Kroah-Hartman wrote:
+> > >>> There's no need to special-case the dp0 sysfs attributes, the
+> > >>> is_visible() callback in the attribute group can handle that for us, so
+> > >>> add that and add it to the attribute group list making the logic simpler
+> > >>> overall.
+> > >>>
+> > >>> This is a step on the way to moving all of the sysfs attribute handling
+> > >>> into the default driver core attribute group logic so that the soundwire
+> > >>> core does not have to do any of it manually.
+> > >>>
+> > >>> Cc: Vinod Koul <vkoul@kernel.org>
+> > >>> Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > >>> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > >>> Cc: Sanyog Kale <sanyog.r.kale@intel.com>
+> > >>> Cc: alsa-devel@alsa-project.org
+> > >>> Cc: linux-kernel@vger.kernel.org
+> > >>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >>> ---
+> > >>>  drivers/soundwire/sysfs_slave.c | 18 ++++++++++++------
+> > >>>  1 file changed, 12 insertions(+), 6 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/soundwire/sysfs_slave.c b/drivers/soundwire/sysfs_slave.c
+> > >>> index 83e3f6cc3250..3723333a5c2b 100644
+> > >>> --- a/drivers/soundwire/sysfs_slave.c
+> > >>> +++ b/drivers/soundwire/sysfs_slave.c
+> > >>> @@ -174,6 +174,16 @@ static ssize_t words_show(struct device *dev,
+> > >>>  }
+> > >>>  static DEVICE_ATTR_RO(words);
+> > >>>  
+> > >>> +static umode_t dp0_is_visible(struct kobject *kobj, struct attribute *attr,
+> > >>> +			      int n)
+> > >>> +{
+> > >>> +	struct sdw_slave *slave = dev_to_sdw_dev(kobj_to_dev(kobj));
+> > >>> +
+> > >>> +	if (slave->prop.dp0_prop)
+> > >>> +		return attr->mode;
+> > >>> +	return 0;
+> > >>> +}
+> > >>
+> > >> This changes the results slightly by creating an empty 'dp0' directory
+> > >> with no attributes inside.
+> > >>
+> > >> Before:
+> > >>
+> > >> [root@fedora ~]# cd /sys/bus/soundwire/devices/sdw:3:025d:0714:01
+> > >> [root@fedora sdw:3:025d:0714:01]# ls dp0
+> > >> ls: cannot access 'dp0': No such file or directory
+> > >>
+> > >> After:
+> > >> [root@fedora sdw:3:025d:0714:01]# ls dp0
+> > > 
+> > > That should be fine, tools should just be looking for the attributes,
+> > > not the existance of a directory, right?
+> > 
+> > The idea what that we would only expose ports that actually exist.
+> > That's helpful information anyone with a basic knowledge of the
+> > SoundWire specification would understand.
+> 
+> Is "dp0" a port?  If so, why isn't it a real device?
 
-Wouldn't it be better to make this allowed_mems_nr specific to be
-explicit about the intention?
+No they are not. It is a logical channel to send data to the device. The
+device can have one or many data ports...
 
-Not that I feel strongly about that.
+So the device logic or usb-endpoint style maynot look good here...
 
-> ---
->  mm/hugetlb.c | 28 +++++++++++++++++++++++-----
->  1 file changed, 23 insertions(+), 5 deletions(-)
+The change looks good though, dp0 maybe present and empty, we should
+looks for attributes...
 
-Not even compile tested
- include/linux/mempolicy.h | 12 ------------
- mm/hugetlb.c              | 24 ++++++++++++++++++++----
- 2 files changed, 20 insertions(+), 16 deletions(-)
+> > The attributes are really details that few people/applications would
+> > understand, and unfortunately the information reported in DSDT is more
+> > often than not complete garbage.
+> 
+> I don't understand what DSDT is, or how it is relevant here :(
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/include/linux/mempolicy.h b/include/linux/mempolicy.h
-index 668389b4b53d..e38b0ef20b8b 100644
---- a/include/linux/mempolicy.h
-+++ b/include/linux/mempolicy.h
-@@ -151,13 +151,6 @@ extern bool mempolicy_in_oom_domain(struct task_struct *tsk,
- 				const nodemask_t *mask);
- extern nodemask_t *policy_nodemask(gfp_t gfp, struct mempolicy *policy);
- 
--static inline nodemask_t *policy_nodemask_current(gfp_t gfp)
--{
--	struct mempolicy *mpol = get_task_policy(current);
--
--	return policy_nodemask(gfp, mpol);
--}
--
- extern unsigned int mempolicy_slab_node(void);
- 
- extern enum zone_type policy_zone;
-@@ -294,11 +287,6 @@ static inline void mpol_put_task_policy(struct task_struct *task)
- {
- }
- 
--static inline nodemask_t *policy_nodemask_current(gfp_t gfp)
--{
--	return NULL;
--}
--
- static inline bool mpol_is_preferred_many(struct mempolicy *pol)
- {
- 	return  false;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index a18c071c294e..6cacbc9b15a1 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4330,18 +4330,34 @@ static int __init default_hugepagesz_setup(char *s)
- }
- __setup("default_hugepagesz=", default_hugepagesz_setup);
- 
-+struct mempolicy *policy_mbind_nodemask(gfp_t gfp)
-+{
-+#ifdef CONFIG_MEMPOLICY
-+	struct mempolicy *mpol = get_task_policy(current);
-+
-+	/*
-+	 * only enforce MBIND which overlaps with cpuset policy (from policy_nodemask)
-+	 * specifically for hugetlb case
-+	 */
-+	if (mpol->mode == MPOL_BIND &&
-+		(apply_policy_zone(mpol, gfp_zone(gfp)) &&
-+		 cpuset_nodemask_valid_mems_allowed(&policy->nodes))
-+		return &mpol->nodes;
-+#endif
-+	return NULL;
-+}
-+
- static unsigned int allowed_mems_nr(struct hstate *h)
- {
- 	int node;
- 	unsigned int nr = 0;
--	nodemask_t *mpol_allowed;
-+	nodemask_t *mbind_nodemask;
- 	unsigned int *array = h->free_huge_pages_node;
- 	gfp_t gfp_mask = htlb_alloc_mask(h);
- 
--	mpol_allowed = policy_nodemask_current(gfp_mask);
--
-+	mbind_nodemask = policy_mbind_nodemask(gfp_mask);
- 	for_each_node_mask(node, cpuset_current_mems_allowed) {
--		if (!mpol_allowed || node_isset(node, *mpol_allowed))
-+		if (!mbind_nodemask || node_isset(node, *mbind_nodemask))
- 			nr += array[node];
- 	}
- 
 -- 
-Michal Hocko
-SUSE Labs
+~Vinod

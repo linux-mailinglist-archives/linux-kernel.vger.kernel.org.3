@@ -2,1505 +2,519 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BDC588CBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1C1588CBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbiHCNMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S237910AbiHCNNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237701AbiHCNLp (ORCPT
+        with ESMTP id S237665AbiHCNNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:11:45 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56444165A7;
-        Wed,  3 Aug 2022 06:11:40 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 0E4425FD30;
-        Wed,  3 Aug 2022 16:11:38 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659532298;
-        bh=AE5llR+16aQjO2+hKOY6W8PbmoS8/clw4wGiHTgow04=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=rqhPWfpiNWnHSguQumqj2hmC5l8VkFnZ1D7PM/d3k/7t1PRumm0mDExBliip9quFs
-         yxVyRRS/546UDQCkAdYZ27/m2oNS5O1dfhgTB69S4E+FwrRSUbmx0IazL9SLirBYXE
-         cPPwHz18BV+FA+cJBT1bn9O7C2QWDyLXL1WJdGsMxMogNLsWHv4jE/N3jegaTelW84
-         I6P3uxK1hKiJeI8JpCTzuVTEDGspnpGu9mZWwGYOzBambUK4ZK/vh62qVnRdcvuAaM
-         Dy8SVOcGXv882b0Chs+d5q/LqEKRYn0K5pRwgYBOdD0opMu51NertUojZjLKLFi7w1
-         q9yo3BJ81RXRg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 16:11:38 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>
-CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer driver
-Thread-Topic: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Index: AQHYpzqIoQnaRj7vNkq2cXUUGjAB/w==
-Date:   Wed, 3 Aug 2022 13:11:25 +0000
-Message-ID: <20220803131132.19630-3-ddrokosov@sberdevices.ru>
-References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
+        Wed, 3 Aug 2022 09:13:08 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAC7165BC;
+        Wed,  3 Aug 2022 06:13:04 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=QT1ERpR4w3J/SrKCVabNVU65xo79gsV4zJPhirQW4B0BFH+UFfzFZn0VDehA5QvFXZxGnAzPwkLDB1G5xVw0gBTVUHd5Xc5LZVJXVuonv3DAg5kY+/JyCGiqNKwHta3e9ofNukT9Js6PMDHc0ob39jCAs6ddnviDANajSbqJexoNPP8yKgZGY8cmb1sQ2L/XgiRGwFl6gxeVl36/UlCow5uXGBKK7GTdPBGVtvE3s6hUvg6lZ/DHc4W9sDdY+rlf8fL0gJ38rZJXzXWND9mcOd6jm2AIgApbQuhnPf8EMxpr9fpQ93CkTAiCxoXg3tSEf/ZprlL3leqKclIt6GNkqQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BJua4CRkGkjb0WX90QJ/EgcST9dbKAsp5Nt7xVHFdag=;
+ b=TVHnyRVAiOAdGz/yGpAtkc1I4EMEAiS6n7f5nsgbrPf4NgCIePpzTBA5pTiimoF/yTVQ8fdIoMZmbx08jWplYu2LUJ+FrTXeUnpXjU0p7aEanDnS0rpfJWWAxJq/BI/hK6DJNJ0BKSXSlouZWS05OOkS0DuwGPZb3Pov65QGJ+RVHBoBrbpX/ZQGuQ0p3V20YstaLW30FxvUWBrmOTB2ILmRmWpAXJQg0jhOBGMIABLk04y0d37CfnO6d6J8LHmBPDag1kXWWWutjprwUGzrb0SEZqNyxHykWsgq7jUhbJLcIRHCnAEvFbC+zzbqno/n6Fvm7BsxOj3ov76ag6rg1w==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BJua4CRkGkjb0WX90QJ/EgcST9dbKAsp5Nt7xVHFdag=;
+ b=Ti7BM+qqchTNcOeTPhA9rscrxpk61LNWJcXSEeLHzGQqXN9chPfag63PkuFjfVcl3GoxKr2hHXUFzfWWFuK+ZaAo6Dl59RrFYMi80orE0ohHxEYxhTyWR4s1m2quih6fTsGEldaFX3om+U4ZuQ1kDyv22GRsJ6wGRSozqj7/r3g=
+Received: from DU2PR04CA0248.eurprd04.prod.outlook.com (2603:10a6:10:28e::13)
+ by AM5PR0801MB1876.eurprd08.prod.outlook.com (2603:10a6:203:42::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Wed, 3 Aug
+ 2022 13:12:50 +0000
+Received: from DBAEUR03FT063.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:28e:cafe::b9) by DU2PR04CA0248.outlook.office365.com
+ (2603:10a6:10:28e::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
+ Transport; Wed, 3 Aug 2022 13:12:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT063.mail.protection.outlook.com (100.127.142.255) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.12 via Frontend Transport; Wed, 3 Aug 2022 13:12:50 +0000
+Received: ("Tessian outbound 73dd6a25223d:v123"); Wed, 03 Aug 2022 13:12:50 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 947e47f3a6a58daf
+X-CR-MTA-TID: 64aa7808
+Received: from ea7f46e12334.2
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id DF972CD9-4384-4E61-A4AB-20322E4ECD88.1;
+        Wed, 03 Aug 2022 13:12:39 +0000
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id ea7f46e12334.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Wed, 03 Aug 2022 13:12:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sq9Li2MwxildXWKlRdly9tuMYQDtLd/m2Is7Nxw/UMwFjOPpab+5y1zhOzbOEnK3acD9m1XNqdztft4G+n5cqJu9jYqKGAJ3f05lZBg1rNPVYoa9AqRr8AX8xTfkTiREdahB4VuFsziOVCuWqYRub+VMawgAavbFTDUWWStAflPORMVTbPCtl25RlV+6qHZmAJegbyFHnTTwUaYWHuc5KkiZfBVy+2uOeEpXSUIdVkomraqOcbkvKp0wuClA+3rYN87T3QRwR1WTidAPacjGe/MQ8eEr1Byjt9IrKI8hxXPCYgeQrb8ZJAjtt6MqzqjP+fP2W93msz6qKQq0+IvN6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BJua4CRkGkjb0WX90QJ/EgcST9dbKAsp5Nt7xVHFdag=;
+ b=P1+jBQOgFo9wM4YvyWF+9Ot6VLCinlSKrFiK3ANYkZQQyU9X17JMNoI8pTSLnG8S/xsKh6CRic753lFU3xc3X18W2Gy9ljb9I3AfIxMfeJTI3GWn603suO4VGlEhmbhbq8u9YYfIJm6vwVZkP6dhH8/iRH7Y0J7HfgYfjaoZh6aKBy/Mx/PvR2lSg05EXc6YmyAe8R85EeZaPWki/VEDEXJQAx3k8V44QRB8/K5h9+Fm+HRp2Z3aF9bNz4WPxV8V2VgMXuC1hqvA6XvLP+9Wy5U/wzu2X9Y2UEWERcHX8Eg6Eh9b6sEYSnowAPCU9/bcBZ5dEavltU2NUiQUk3Iadg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BJua4CRkGkjb0WX90QJ/EgcST9dbKAsp5Nt7xVHFdag=;
+ b=Ti7BM+qqchTNcOeTPhA9rscrxpk61LNWJcXSEeLHzGQqXN9chPfag63PkuFjfVcl3GoxKr2hHXUFzfWWFuK+ZaAo6Dl59RrFYMi80orE0ohHxEYxhTyWR4s1m2quih6fTsGEldaFX3om+U4ZuQ1kDyv22GRsJ6wGRSozqj7/r3g=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from AM6PR08MB4070.eurprd08.prod.outlook.com (2603:10a6:20b:a3::25)
+ by VI1PR08MB4574.eurprd08.prod.outlook.com (2603:10a6:803:e3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Wed, 3 Aug
+ 2022 13:12:27 +0000
+Received: from AM6PR08MB4070.eurprd08.prod.outlook.com
+ ([fe80::95c2:18d2:e878:d541]) by AM6PR08MB4070.eurprd08.prod.outlook.com
+ ([fe80::95c2:18d2:e878:d541%7]) with mapi id 15.20.5482.016; Wed, 3 Aug 2022
+ 13:12:26 +0000
+Message-ID: <a18f9406-fdc5-130b-0460-eb5ad75d8876@arm.com>
+Date:   Wed, 3 Aug 2022 14:12:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/4] hwrng: virtio - always add a pending request
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="iso-8859-1"
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laurent Vivier <lvivier@redhat.com>, linux-kernel@vger.kernel.org,
+        amit@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Matt Mackall <mpm@selenic.com>,
+        virtualization@lists.linux-foundation.org,
+        Dmitriy Vyukov <dvyukov@google.com>, rusty@rustcorp.com.au,
+        akong@redhat.com, Alexander Potapenko <glider@google.com>,
+        linux-crypto@vger.kernel.org,
+        Mauricio De Carvalho <Mauricio.DeCarvalho@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>
+References: <20211028101111.128049-1-lvivier@redhat.com>
+ <20211028101111.128049-5-lvivier@redhat.com>
+ <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
+ <2c1198c4-77aa-5cb8-6bb4-b974850651be@arm.com>
+ <20220803073243-mutt-send-email-mst@kernel.org>
+ <33f0f429-491c-49da-bd2e-bf9f62cb3efb@arm.com>
+ <20220803083406-mutt-send-email-mst@kernel.org>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+Organization: ARM Ltd.
+In-Reply-To: <20220803083406-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P265CA0104.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c3::8) To AM6PR08MB4070.eurprd08.prod.outlook.com
+ (2603:10a6:20b:a3::25)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Office365-Filtering-Correlation-Id: 0ea10cac-1f88-4092-6de2-08da7551de0a
+X-MS-TrafficTypeDiagnostic: VI1PR08MB4574:EE_|DBAEUR03FT063:EE_|AM5PR0801MB1876:EE_
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 8esSzHDl3H5bC+1ftrCIipa+VWT44V3inOTXws3txkQVXqMbGmgwrhoVsLO991TUZmGTNOAig7zxY27yfZTRLNI6PkNjt6gY9xqsLpz2fb7z2LiUrVONgVKlQUwW7j3mqqO8oDcALzIbOI2kxS/ImjpQdpiAs2t4g2+Pxp6dvAOvR1JBd8gQ5RSxbdz2QM6jrgvLA/T92pnVcdU6W0FnF8Y7Wb1dsn3c56+ccppH5GF6xXENKhNE+ibShNwO/Hlu/QN4wz5Agr/kLrfL/eTFIFf9xPWEFSJ+KV5MnHCOBy9DbdP3VoKxTmNW8XpF8ZnbFQvU4UkZQPdiGnhhVtyBOBBa6RQ4r0WNXr2s2scwbNi1wtKHdmZtst7VQUbD2+pghtlfFQv9aYCK5G8Go3GgnjGEO9CbSVDIcMIR+wYyxQIyJU7/ULKg/2nMKitbGIi6p408dg96lkhQo4215aw3VcphEGT9uEkBZnlalEFfuHqYeboWJkJ5A3v2WSGmg/HJtYL41t96hCgxEi026DSXqlDAeRYooA6dZwQX7Pma1K1enjGkr+lEL6gcsCOwKqV1YDtKHH+MwJOQc0CvS049gfk7UEIBlF4gh4Yo1ySNKOUas5xPSfHhgco22idT8AqSmtNpumsSHar3i4hn49AOvJQ6flewH4B8Jipb9pyRYk5G5UyKY0WiAzP3LYnnuqawDH2mPUXt1O3sJduwOtWL7kbbP0c9gjyuRm3RSy+k/nKKBcqJGTi/v/6CUhIWnC6ZQo0bDNgdEeotIOZuZUKikh9Ysp7Fzu4xr0DTPRJ5q8s0xQnRceUBd7RwPobgj1FSPaqS7tRbNjRLX4nZWDO0zA==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB4070.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(396003)(366004)(39860400002)(6916009)(54906003)(31696002)(478600001)(6486002)(4326008)(66556008)(66476007)(8676002)(66946007)(2616005)(316002)(19627235002)(83380400001)(26005)(6512007)(186003)(36916002)(41300700001)(38100700002)(53546011)(30864003)(6506007)(7416002)(31686004)(36756003)(5660300002)(2906002)(44832011)(86362001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB4574
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT063.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 919ace43-ae9a-47ff-1d88-08da7551cfef
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5IodrvxgXXNqFzuyvqLwvNRGbvRqCl8LYLsDVUD9asgldTR/jNIzwzX3OzvlV0ZkDNWJz+6TyynJTssf+lmT4Y2L5Km1bBNh1vclMNr2uZSvihcG4UviwLRotGpxTVsuSjH3HNLIzaX3sOMadhItTYuaKZVL5tjwFMkHD95jopapf/sYB2HM7XWQ0NOcTvS6AuGHAxfneMsEnWvJI9I1t4CjRkaJTaP49FXeadXbliESEGAkd+GhZK+s28dcxJMVh7aKmkk+JzY88AQlCHRGwB7GTiJIUbPPvaLtjxA7Z8HC/NeWcv5MW9scC5mwaOQnFKq7XDmkUA21TM+JJiMtBkWTZSC+QzryS4L7c8p1Wd1wdBOuwX4UX2sbygNXFCp7d1K+57lTM/UE+MxNV9VhePjgjvJC7iNHMDkB+uau0Rf02nf0S9NmpLjUPnZwnkjRqIGMT/zLd3Kl+ajGE+SGBOpNw81gYLEB0STVm9cZeBMFDeUQtGccT5RUJPn9pHxxf9kisURPYeQq06YzsgOWww0NH2zTjIHSAj29TyHAal29PYEPqzLNIy9ygZ2BvglbRH1bqS/lSCoYzZSGJ6W2yhyWe0f9wdVCguifPV5Ujj9BAuBTNgIPozlu8EhVhG/PeTWb1qo47va9nrgCCvH/b0z2f5cCUUmTun2ZQp49D4LSNTfemXE1l++7uBfXsafTNhBdYQqdKOGNcXVBMIT9Y18Skwm8+riiYUBLg2fklJUybRic7/K1Ij3clfR44ooCrhuzp0JZwR/DKXBPXuYUSTCfd+kPOVtiQrAc+saB7pKWgb1pUUWqD9MnyFp5UTfAU83FK0fClsEjmoSKhkk5wA==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(376002)(396003)(36840700001)(40470700004)(46966006)(30864003)(82740400003)(31696002)(40460700003)(6862004)(5660300002)(19627235002)(86362001)(31686004)(6486002)(316002)(70206006)(4326008)(356005)(70586007)(8936002)(450100002)(81166007)(8676002)(54906003)(40480700001)(6512007)(26005)(36860700001)(47076005)(336012)(36756003)(53546011)(186003)(44832011)(83380400001)(478600001)(82310400005)(36916002)(6506007)(2906002)(41300700001)(2616005)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 13:12:50.4372
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ea10cac-1f88-4092-6de2-08da7551de0a
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT063.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0801MB1876
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-sensitivity consumer applications. It has dynamic user-selectable full
-scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
-with output data rates from 1Hz to 1000Hz.
+On 8/3/22 13:55, Michael S. Tsirkin wrote:
+> On Wed, Aug 03, 2022 at 01:25:15PM +0100, Vladimir Murzin wrote:
+>> On 8/3/22 12:39, Michael S. Tsirkin wrote:
+>>> On Wed, Aug 03, 2022 at 09:57:35AM +0100, Vladimir Murzin wrote:
+>>>> On 8/2/22 13:49, Vladimir Murzin wrote:
+>>>>> Hi Laurent,
+>>>>>
+>>>>> On 10/28/21 11:11, Laurent Vivier wrote:
+>>>>>> If we ensure we have already some data available by enqueuing
+>>>>>> again the buffer once data are exhausted, we can return what we
+>>>>>> have without waiting for the device answer.
+>>>>>>
+>>>>>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>>>>>> ---
+>>>>>>  drivers/char/hw_random/virtio-rng.c | 26 ++++++++++++--------------
+>>>>>>  1 file changed, 12 insertions(+), 14 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_r=
+andom/virtio-rng.c
+>>>>>> index 8ba97cf4ca8f..0a7dde135db1 100644
+>>>>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>>>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>>>>> @@ -20,7 +20,6 @@ struct virtrng_info {
+>>>>>>          struct virtqueue *vq;
+>>>>>>          char name[25];
+>>>>>>          int index;
+>>>>>> -        bool busy;
+>>>>>>          bool hwrng_register_done;
+>>>>>>          bool hwrng_removed;
+>>>>>>          /* data transfer */
+>>>>>> @@ -44,16 +43,18 @@ static void random_recv_done(struct virtqueue *v=
+q)
+>>>>>>                  return;
+>>>>>>
+>>>>>>          vi->data_idx =3D 0;
+>>>>>> -        vi->busy =3D false;
+>>>>>>
+>>>>>>          complete(&vi->have_data);
+>>>>>>  }
+>>>>>>
+>>>>>> -/* The host will fill any buffer we give it with sweet, sweet rando=
+mness. */
+>>>>>> -static void register_buffer(struct virtrng_info *vi)
+>>>>>> +static void request_entropy(struct virtrng_info *vi)
+>>>>>>  {
+>>>>>>          struct scatterlist sg;
+>>>>>>
+>>>>>> +        reinit_completion(&vi->have_data);
+>>>>>> +        vi->data_avail =3D 0;
+>>>>>> +        vi->data_idx =3D 0;
+>>>>>> +
+>>>>>>          sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>>>>
+>>>>>>          /* There should always be room for one buffer. */
+>>>>>> @@ -69,6 +70,8 @@ static unsigned int copy_data(struct virtrng_info =
+*vi, void *buf,
+>>>>>>          memcpy(buf, vi->data + vi->data_idx, size);
+>>>>>>          vi->data_idx +=3D size;
+>>>>>>          vi->data_avail -=3D size;
+>>>>>> +        if (vi->data_avail =3D=3D 0)
+>>>>>> +                request_entropy(vi);
+>>>>>>          return size;
+>>>>>>  }
+>>>>>>
+>>>>>> @@ -98,13 +101,7 @@ static int virtio_read(struct hwrng *rng, void *=
+buf, size_t size, bool wait)
+>>>>>>           * so either size is 0 or data_avail is 0
+>>>>>>           */
+>>>>>>          while (size !=3D 0) {
+>>>>>> -                /* data_avail is 0 */
+>>>>>> -                if (!vi->busy) {
+>>>>>> -                        /* no pending request, ask for more */
+>>>>>> -                        vi->busy =3D true;
+>>>>>> -                        reinit_completion(&vi->have_data);
+>>>>>> -                        register_buffer(vi);
+>>>>>> -                }
+>>>>>> +                /* data_avail is 0 but a request is pending */
+>>>>>>                  ret =3D wait_for_completion_killable(&vi->have_data=
+);
+>>>>>>                  if (ret < 0)
+>>>>>>                          return ret;
+>>>>>> @@ -126,8 +123,7 @@ static void virtio_cleanup(struct hwrng *rng)
+>>>>>>  {
+>>>>>>          struct virtrng_info *vi =3D (struct virtrng_info *)rng->pri=
+v;
+>>>>>>
+>>>>>> -        if (vi->busy)
+>>>>>> -                complete(&vi->have_data);
+>>>>>> +        complete(&vi->have_data);
+>>>>>>  }
+>>>>>>
+>>>>>>  static int probe_common(struct virtio_device *vdev)
+>>>>>> @@ -163,6 +159,9 @@ static int probe_common(struct virtio_device *vd=
+ev)
+>>>>>>                  goto err_find;
+>>>>>>          }
+>>>>>>
+>>>>>> +        /* we always have a pending entropy request */
+>>>>>> +        request_entropy(vi);
+>>>>>> +
+>>>>>>          return 0;
+>>>>>>
+>>>>>>  err_find:
+>>>>>> @@ -181,7 +180,6 @@ static void remove_common(struct virtio_device *=
+vdev)
+>>>>>>          vi->data_idx =3D 0;
+>>>>>>          complete(&vi->have_data);
+>>>>>>          vdev->config->reset(vdev);
+>>>>>> -        vi->busy =3D false;
+>>>>>>          if (vi->hwrng_register_done)
+>>>>>>                  hwrng_unregister(&vi->hwrng);
+>>>>>>          vdev->config->del_vqs(vdev);
+>>>>>
+>>>>> We observed that after this commit virtio-rng implementation in FVP d=
+oesn't
+>>>>> work
+>>>>>
+>>>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVIC=
+E
+>>>>> INFO: bp.virtio_rng: Using seed value: 0x5674bba8
+>>>>> Error: FVP_Base_AEMvA: bp.virtio_rng: <vq0-requestq> Found invalid de=
+scriptor index
+>>>>> In file: (unknown):0
+>>>>> In process: FVP_Base_AEMvA.thread_p_12 @ 935500020 ns
+>>>>> Info: FVP_Base_AEMvA: bp.virtio_rng: Could not extract buffer
+>>>>>
+>>>>> while basic baremetal test works as expected
+>>>>>
+>>>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVIC=
+E
+>>>>> INFO: bp.virtio_rng: Using seed value: 0x541c142e
+>>>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0x4b098991ceb=
+377e6
+>>>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0xbdcbe3f765b=
+a62f7
+>>>>>
+>>>>> We are trying to get an idea what is missing and where, yet none of u=
+s familiar
+>>>>> with the driver :(
+>>>>>
+>>>>> I'm looping Kevin who originally reported that and Mauricio who is lo=
+oking form
+>>>>> the FVP side.
+>>>>
+>>>> With the following diff FVP works agin
+>>>>
+>>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_ran=
+dom/virtio-rng.c
+>>>> index a6f3a8a2ac..042503ad6c 100644
+>>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>>> @@ -54,6 +54,7 @@ static void request_entropy(struct virtrng_info *vi)
+>>>>         reinit_completion(&vi->have_data);
+>>>>         vi->data_avail =3D 0;
+>>>>         vi->data_idx =3D 0;
+>>>> +       smp_mb();
+>>>>
+>>>>         sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>>
+>>>>
+>>>> What do you reckon?
+>>>>
+>>>> Cheers
+>>>> Vladimir
+>>>
+>>> Thanks for debugging this!
+>>>
+>>> OK, interesting.
+>>>
+>>> data_idx and data_avail are accessed from virtio_read.
+>>>
+>>> Which as far as I can tell is invoked just with reading_mutex.
+>>>
+>>>
+>>> But, request_entropy is called from probe when device is registered
+>>> this time without locks
+>>> so it can trigger while another thread is calling virtio_read.
+>>>
+>>> Second request_entropy is called from a callback random_recv_done
+>>> also without locks.
+>>>
+>>> So it's great that smp_mb helped here but I suspect in fact we
+>>> need locking. Laurent?
+>>>
+>>
+>> I'm sorry for the noise, but it looks like I'm seeing issue for some dif=
+ferent reasons.
+>> I manage to reproduce issue even with smb_mb() in place. The reason I th=
+ough it helped
+>> is because I changed both environment and added smb_mb().
+>>
+>> Anyway, thank you for your time!
+>>
+>> Cheers
+>> Vladimir
+>
+> Well we at least have a race condition found by code review here. Here's
+> a quick hack attempting to fix it. I don't like it much since
+> it adds buffers with GFP_ATOMIC and kicks under a spinlock, but
+> for now we can at least test it. I did a quick build but that's
+> all, a bit rushed now sorry. Would appreciate knowing whether
+> this addresses the issue for you.
+>
+>
+> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random=
+/virtio-rng.c
+> index a6f3a8a2aca6..36121c8d0315 100644
+> --- a/drivers/char/hw_random/virtio-rng.c
+> +++ b/drivers/char/hw_random/virtio-rng.c
+> @@ -23,6 +23,7 @@ struct virtrng_info {
+>       bool hwrng_register_done;
+>       bool hwrng_removed;
+>       /* data transfer */
+> +     spinlock_t lock;
+>       struct completion have_data;
+>       unsigned int data_avail;
+>       unsigned int data_idx;
+> @@ -37,6 +38,9 @@ struct virtrng_info {
+>  static void random_recv_done(struct virtqueue *vq)
+>  {
+>       struct virtrng_info *vi =3D vq->vdev->priv;
+> +     unsigned long flags;
+> +
+> +     spin_lock_irqsave(&vi->lock, flags);
+>
+>       /* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
+>       if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
+> @@ -45,20 +49,20 @@ static void random_recv_done(struct virtqueue *vq)
+>       vi->data_idx =3D 0;
+>
+>       complete(&vi->have_data);
+> +     spin_unlock_irqrestore(&vi->lock, flags);
+>  }
+>
+>  static void request_entropy(struct virtrng_info *vi)
+>  {
+>       struct scatterlist sg;
+>
+> -     reinit_completion(&vi->have_data);
+> -     vi->data_avail =3D 0;
+> +     BUG_ON(vi->data_avail !=3D 0);
+>       vi->data_idx =3D 0;
+>
+>       sg_init_one(&sg, vi->data, sizeof(vi->data));
+>
+>       /* There should always be room for one buffer. */
+> -     virtqueue_add_inbuf(vi->vq, &sg, 1, vi->data, GFP_KERNEL);
+> +     virtqueue_add_inbuf(vi->vq, &sg, 1, vi->data, GFP_ATOMIC);
+>
+>       virtqueue_kick(vi->vq);
+>  }
+> @@ -70,8 +74,10 @@ static unsigned int copy_data(struct virtrng_info *vi,=
+ void *buf,
+>       memcpy(buf, vi->data + vi->data_idx, size);
+>       vi->data_idx +=3D size;
+>       vi->data_avail -=3D size;
+> -     if (vi->data_avail =3D=3D 0)
+> +     if (vi->data_avail =3D=3D 0) {
+> +             reinit_completion(&vi->have_data);
+>               request_entropy(vi);
+> +     }
+>       return size;
+>  }
+>
+> @@ -81,18 +87,21 @@ static int virtio_read(struct hwrng *rng, void *buf, =
+size_t size, bool wait)
+>       struct virtrng_info *vi =3D (struct virtrng_info *)rng->priv;
+>       unsigned int chunk;
+>       size_t read;
+> +     unsigned long flags;
+>
+>       if (vi->hwrng_removed)
+>               return -ENODEV;
+>
+>       read =3D 0;
+>
+> +     spin_lock_irqsave(&vi->lock, flags);
+>       /* copy available data */
+>       if (vi->data_avail) {
+>               chunk =3D copy_data(vi, buf, size);
+>               size -=3D chunk;
+>               read +=3D chunk;
+>       }
+> +     spin_unlock_irqrestore(&vi->lock, flags);
+>
+>       if (!wait)
+>               return read;
+> @@ -108,12 +117,14 @@ static int virtio_read(struct hwrng *rng, void *buf=
+, size_t size, bool wait)
+>               /* if vi->data_avail is 0, we have been interrupted
+>                * by a cleanup, but buffer stays in the queue
+>                */
+> +             spin_lock_irqsave(&vi->lock, flags);
+>               if (vi->data_avail =3D=3D 0)
+>                       return read;
+>
+>               chunk =3D copy_data(vi, buf + read, size);
+>               size -=3D chunk;
+>               read +=3D chunk;
+> +             spin_unlock_irqrestore(&vi->lock, flags);
+>       }
+>
+>       return read;
+> @@ -122,19 +133,25 @@ static int virtio_read(struct hwrng *rng, void *buf=
+, size_t size, bool wait)
+>  static void virtio_cleanup(struct hwrng *rng)
+>  {
+>       struct virtrng_info *vi =3D (struct virtrng_info *)rng->priv;
+> +     unsigned long flags;
+>
+> +     spin_lock_irqsave(&vi->lock, flags);
+>       complete(&vi->have_data);
+> +     spin_unlock_irqrestore(&vi->lock, flags);
+>  }
+>
+>  static int probe_common(struct virtio_device *vdev)
+>  {
+>       int err, index;
+>       struct virtrng_info *vi =3D NULL;
+> +     unsigned long flags;
+>
+>       vi =3D kzalloc(sizeof(struct virtrng_info), GFP_KERNEL);
+>       if (!vi)
+>               return -ENOMEM;
+>
+> +     spin_lock_init(&vi->lock);
+> +
+>       vi->index =3D index =3D ida_simple_get(&rng_index_ida, 0, 0, GFP_KE=
+RNEL);
+>       if (index < 0) {
+>               err =3D index;
+> @@ -162,7 +179,10 @@ static int probe_common(struct virtio_device *vdev)
+>       virtio_device_ready(vdev);
+>
+>       /* we always have a pending entropy request */
+> -     request_entropy(vi);
+> +     spin_lock_irqsave(&vi->lock, flags);
+> +     if (vi->data_avail =3D=3D 0)
+> +             request_entropy(vi);
+> +     spin_unlock_irqrestore(&vi->lock, flags);
+>
+>       return 0;
+>
+>
 
-Spec: https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+Thanks a lot! I gave it a go and it did not help. I think I need to find ou=
+t how exactly
+my environment affected... it not necessary need to be kernel related.
 
-This driver supports following MSA311 features:
-    - IIO interface
-    - Different power modes: NORMAL and SUSPEND (using pm_runtime)
-    - ODR (Output Data Rate) selection
-    - Scale and samp_freq selection
-    - IIO triggered buffer, IIO reg access
-    - NEW_DATA interrupt + trigger
-
-Below features to be done:
-    - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
-    - Low Power mode
-
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- MAINTAINERS                |    6 +
- drivers/iio/accel/Kconfig  |   13 +
- drivers/iio/accel/Makefile |    2 +
- drivers/iio/accel/msa311.c | 1323 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 1344 insertions(+)
- create mode 100644 drivers/iio/accel/msa311.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..010e7d854bf7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12992,6 +12992,12 @@ F:	drivers/mtd/
- F:	include/linux/mtd/
- F:	include/uapi/mtd/
-=20
-+MEMSENSING MICROSYSTEMS MSA311 DRIVER
-+M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
-+L:	linux-iio@vger.kernel.org
-+S:	Maintained
-+F:	drivers/iio/accel/msa311.c
-+
- MEN A21 WATCHDOG DRIVER
- M:	Johannes Thumshirn <morbidrsa@gmail.com>
- L:	linux-watchdog@vger.kernel.org
-diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-index b53f010f3e40..36a5ddf631ef 100644
---- a/drivers/iio/accel/Kconfig
-+++ b/drivers/iio/accel/Kconfig
-@@ -539,6 +539,19 @@ config MMA9553
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called mma9553.
-=20
-+config MSA311
-+	tristate "MEMSensing Digital 3-Axis Accelerometer Driver"
-+	depends on I2C
-+	select IIO_BUFFER
-+	select IIO_TRIGGERED_BUFFER
-+	select REGMAP_I2C
-+	help
-+	  Say yes here to build support for the MEMSensing MSA311
-+	  accelerometer driver.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called msa311.
-+
- config MXC4005
- 	tristate "Memsic MXC4005XC 3-Axis Accelerometer Driver"
- 	depends on I2C
-diff --git a/drivers/iio/accel/Makefile b/drivers/iio/accel/Makefile
-index 4d8792668838..5e45b5fa5ab5 100644
---- a/drivers/iio/accel/Makefile
-+++ b/drivers/iio/accel/Makefile
-@@ -58,6 +58,8 @@ obj-$(CONFIG_MMA9551_CORE)	+=3D mma9551_core.o
- obj-$(CONFIG_MMA9551)		+=3D mma9551.o
- obj-$(CONFIG_MMA9553)		+=3D mma9553.o
-=20
-+obj-$(CONFIG_MSA311)		+=3D msa311.o
-+
- obj-$(CONFIG_MXC4005)		+=3D mxc4005.o
- obj-$(CONFIG_MXC6255)		+=3D mxc6255.o
-=20
-diff --git a/drivers/iio/accel/msa311.c b/drivers/iio/accel/msa311.c
-new file mode 100644
-index 000000000000..763e16a5d7ae
---- /dev/null
-+++ b/drivers/iio/accel/msa311.c
-@@ -0,0 +1,1323 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * MEMSensing digital 3-Axis accelerometer
-+ *
-+ * MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-+ * sensitivity consumer applications. It has dynamic user-selectable full
-+ * scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measuremen=
-ts
-+ * with output data rates from 1Hz to 1000Hz.
-+ *
-+ * MSA311 is available in an ultra small (2mm x 2mm, height 0.95mm) LGA pa=
-ckage
-+ * and is guaranteed to operate over -40C to +85C.
-+ *
-+ * This driver supports following MSA311 features:
-+ *     - IIO interface
-+ *     - Different power modes: NORMAL, SUSPEND
-+ *     - ODR (Output Data Rate) selection
-+ *     - Scale selection
-+ *     - IIO triggered buffer
-+ *     - NEW_DATA interrupt + trigger
-+ *
-+ * Below features to be done:
-+ *     - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
-+ *     - Low Power mode
-+ *
-+ * Copyright (c) 2022, SberDevices. All Rights Reserved.
-+ *
-+ * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
-+#include <linux/iio/trigger.h>
-+#include <linux/iio/trigger_consumer.h>
-+#include <linux/iio/triggered_buffer.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/pm.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <linux/string_helpers.h>
-+#include <linux/units.h>
-+
-+/* Register map */
-+
-+#define MSA311_SOFT_RESET_REG     0x00
-+#define MSA311_PARTID_REG         0x01
-+#define MSA311_ACC_X_REG          0x02
-+#define MSA311_ACC_Y_REG          0x04
-+#define MSA311_ACC_Z_REG          0x06
-+#define MSA311_MOTION_INT_REG     0x09
-+#define MSA311_DATA_INT_REG       0x0A
-+#define MSA311_TAP_ACTIVE_STS_REG 0x0B
-+#define MSA311_ORIENT_STS_REG     0x0C
-+#define MSA311_RANGE_REG          0x0F
-+#define MSA311_ODR_REG            0x10
-+#define MSA311_PWR_MODE_REG       0x11
-+#define MSA311_SWAP_POLARITY_REG  0x12
-+#define MSA311_INT_SET_0_REG      0x16
-+#define MSA311_INT_SET_1_REG      0x17
-+#define MSA311_INT_MAP_0_REG      0x19
-+#define MSA311_INT_MAP_1_REG      0x1A
-+#define MSA311_INT_CONFIG_REG     0x20
-+#define MSA311_INT_LATCH_REG      0x21
-+#define MSA311_FREEFALL_DUR_REG   0x22
-+#define MSA311_FREEFALL_TH_REG    0x23
-+#define MSA311_FREEFALL_HY_REG    0x24
-+#define MSA311_ACTIVE_DUR_REG     0x27
-+#define MSA311_ACTIVE_TH_REG      0x28
-+#define MSA311_TAP_DUR_REG        0x2A
-+#define MSA311_TAP_TH_REG         0x2B
-+#define MSA311_ORIENT_HY_REG      0x2C
-+#define MSA311_Z_BLOCK_REG        0x2D
-+#define MSA311_OFFSET_X_REG       0x38
-+#define MSA311_OFFSET_Y_REG       0x39
-+#define MSA311_OFFSET_Z_REG       0x3A
-+
-+enum msa311_fields {
-+	/* Soft_Reset */
-+	F_SOFT_RESET_I2C, F_SOFT_RESET_SPI,
-+	/* Motion_Interrupt */
-+	F_ORIENT_INT, F_S_TAP_INT, F_D_TAP_INT, F_ACTIVE_INT, F_FREEFALL_INT,
-+	/* Data_Interrupt */
-+	F_NEW_DATA_INT,
-+	/* Tap_Active_Status */
-+	F_TAP_SIGN, F_TAP_FIRST_X, F_TAP_FIRST_Y, F_TAP_FIRST_Z, F_ACTV_SIGN,
-+	F_ACTV_FIRST_X, F_ACTV_FIRST_Y, F_ACTV_FIRST_Z,
-+	/* Orientation_Status */
-+	F_ORIENT_Z, F_ORIENT_X_Y,
-+	/* Range */
-+	F_FS,
-+	/* ODR */
-+	F_X_AXIS_DIS, F_Y_AXIS_DIS, F_Z_AXIS_DIS, F_ODR,
-+	/* Power Mode/Bandwidth */
-+	F_PWR_MODE, F_LOW_POWER_BW,
-+	/* Swap_Polarity */
-+	F_X_POLARITY, F_Y_POLARITY, F_Z_POLARITY, F_X_Y_SWAP,
-+	/* Int_Set_0 */
-+	F_ORIENT_INT_EN, F_S_TAP_INT_EN, F_D_TAP_INT_EN, F_ACTIVE_INT_EN_Z,
-+	F_ACTIVE_INT_EN_Y, F_ACTIVE_INT_EN_X,
-+	/* Int_Set_1 */
-+	F_NEW_DATA_INT_EN, F_FREEFALL_INT_EN,
-+	/* Int_Map_0 */
-+	F_INT1_ORIENT, F_INT1_S_TAP, F_INT1_D_TAP, F_INT1_ACTIVE,
-+	F_INT1_FREEFALL,
-+	/* Int_Map_1 */
-+	F_INT1_NEW_DATA,
-+	/* Int_Config */
-+	F_INT1_OD, F_INT1_LVL,
-+	/* Int_Latch */
-+	F_RESET_INT, F_LATCH_INT,
-+	/* Freefall_Hy */
-+	F_FREEFALL_MODE, F_FREEFALL_HY,
-+	/* Active_Dur */
-+	F_ACTIVE_DUR,
-+	/* Tap_Dur */
-+	F_TAP_QUIET, F_TAP_SHOCK, F_TAP_DUR,
-+	/* Tap_Th */
-+	F_TAP_TH,
-+	/* Orient_Hy */
-+	F_ORIENT_HYST, F_ORIENT_BLOCKING, F_ORIENT_MODE,
-+	/* Z_Block */
-+	F_Z_BLOCKING,
-+	/* Offset_compensation */
-+	F_MAX_FIELDS,
-+};
-+
-+static const struct reg_field msa311_reg_fields[] =3D {
-+	[F_SOFT_RESET_I2C] =3D REG_FIELD(MSA311_SOFT_RESET_REG, 2, 2),
-+	[F_SOFT_RESET_SPI] =3D REG_FIELD(MSA311_SOFT_RESET_REG, 5, 5),
-+
-+	[F_ORIENT_INT] =3D REG_FIELD(MSA311_MOTION_INT_REG, 6, 6),
-+	[F_S_TAP_INT] =3D REG_FIELD(MSA311_MOTION_INT_REG, 5, 5),
-+	[F_D_TAP_INT] =3D REG_FIELD(MSA311_MOTION_INT_REG, 4, 4),
-+	[F_ACTIVE_INT] =3D REG_FIELD(MSA311_MOTION_INT_REG, 2, 2),
-+	[F_FREEFALL_INT] =3D REG_FIELD(MSA311_MOTION_INT_REG, 0, 0),
-+
-+	[F_NEW_DATA_INT] =3D REG_FIELD(MSA311_DATA_INT_REG, 0, 0),
-+
-+	[F_TAP_SIGN] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 7, 7),
-+	[F_TAP_FIRST_X] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 6, 6),
-+	[F_TAP_FIRST_Y] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 5, 5),
-+	[F_TAP_FIRST_Z] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 4, 4),
-+	[F_ACTV_SIGN] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 3, 3),
-+	[F_ACTV_FIRST_X] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 2, 2),
-+	[F_ACTV_FIRST_Y] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 1, 1),
-+	[F_ACTV_FIRST_Z] =3D REG_FIELD(MSA311_TAP_ACTIVE_STS_REG, 0, 0),
-+
-+	[F_ORIENT_Z] =3D REG_FIELD(MSA311_ORIENT_STS_REG, 6, 6),
-+	[F_ORIENT_X_Y] =3D REG_FIELD(MSA311_ORIENT_STS_REG, 4, 5),
-+
-+	[F_FS] =3D REG_FIELD(MSA311_RANGE_REG, 0, 1),
-+
-+	[F_X_AXIS_DIS] =3D REG_FIELD(MSA311_ODR_REG, 7, 7),
-+	[F_Y_AXIS_DIS] =3D REG_FIELD(MSA311_ODR_REG, 6, 6),
-+	[F_Z_AXIS_DIS] =3D REG_FIELD(MSA311_ODR_REG, 5, 5),
-+	[F_ODR] =3D REG_FIELD(MSA311_ODR_REG, 0, 3),
-+
-+	[F_PWR_MODE] =3D REG_FIELD(MSA311_PWR_MODE_REG, 6, 7),
-+	[F_LOW_POWER_BW] =3D REG_FIELD(MSA311_PWR_MODE_REG, 1, 4),
-+
-+	[F_X_POLARITY] =3D REG_FIELD(MSA311_SWAP_POLARITY_REG, 3, 3),
-+	[F_Y_POLARITY] =3D REG_FIELD(MSA311_SWAP_POLARITY_REG, 2, 2),
-+	[F_Z_POLARITY] =3D REG_FIELD(MSA311_SWAP_POLARITY_REG, 1, 1),
-+	[F_X_Y_SWAP] =3D REG_FIELD(MSA311_SWAP_POLARITY_REG, 0, 0),
-+
-+	[F_ORIENT_INT_EN] =3D REG_FIELD(MSA311_INT_SET_0_REG, 6, 6),
-+	[F_S_TAP_INT_EN] =3D REG_FIELD(MSA311_INT_SET_0_REG, 5, 5),
-+	[F_D_TAP_INT_EN] =3D REG_FIELD(MSA311_INT_SET_0_REG, 4, 4),
-+	[F_ACTIVE_INT_EN_Z] =3D REG_FIELD(MSA311_INT_SET_0_REG, 2, 2),
-+	[F_ACTIVE_INT_EN_Y] =3D REG_FIELD(MSA311_INT_SET_0_REG, 1, 1),
-+	[F_ACTIVE_INT_EN_X] =3D REG_FIELD(MSA311_INT_SET_0_REG, 0, 0),
-+
-+	[F_NEW_DATA_INT_EN] =3D REG_FIELD(MSA311_INT_SET_1_REG, 4, 4),
-+	[F_FREEFALL_INT_EN] =3D REG_FIELD(MSA311_INT_SET_1_REG, 3, 3),
-+
-+	[F_INT1_ORIENT] =3D REG_FIELD(MSA311_INT_MAP_0_REG, 6, 6),
-+	[F_INT1_S_TAP] =3D REG_FIELD(MSA311_INT_MAP_0_REG, 5, 5),
-+	[F_INT1_D_TAP] =3D REG_FIELD(MSA311_INT_MAP_0_REG, 4, 4),
-+	[F_INT1_ACTIVE] =3D REG_FIELD(MSA311_INT_MAP_0_REG, 2, 2),
-+	[F_INT1_FREEFALL] =3D REG_FIELD(MSA311_INT_MAP_0_REG, 0, 0),
-+
-+	[F_INT1_NEW_DATA] =3D REG_FIELD(MSA311_INT_MAP_1_REG, 0, 0),
-+
-+	[F_INT1_OD] =3D REG_FIELD(MSA311_INT_CONFIG_REG, 1, 1),
-+	[F_INT1_LVL] =3D REG_FIELD(MSA311_INT_CONFIG_REG, 0, 0),
-+
-+	[F_RESET_INT] =3D REG_FIELD(MSA311_INT_LATCH_REG, 7, 7),
-+	[F_LATCH_INT] =3D REG_FIELD(MSA311_INT_LATCH_REG, 0, 3),
-+
-+	[F_FREEFALL_MODE] =3D REG_FIELD(MSA311_FREEFALL_HY_REG, 2, 2),
-+	[F_FREEFALL_HY] =3D REG_FIELD(MSA311_FREEFALL_HY_REG, 0, 1),
-+
-+	[F_ACTIVE_DUR] =3D REG_FIELD(MSA311_ACTIVE_DUR_REG, 0, 1),
-+
-+	[F_TAP_QUIET] =3D REG_FIELD(MSA311_TAP_DUR_REG, 7, 7),
-+	[F_TAP_SHOCK] =3D REG_FIELD(MSA311_TAP_DUR_REG, 6, 6),
-+	[F_TAP_DUR] =3D REG_FIELD(MSA311_TAP_DUR_REG, 0, 2),
-+
-+	[F_TAP_TH] =3D REG_FIELD(MSA311_TAP_TH_REG, 0, 4),
-+
-+	[F_ORIENT_HYST] =3D REG_FIELD(MSA311_ORIENT_HY_REG, 4, 6),
-+	[F_ORIENT_BLOCKING] =3D REG_FIELD(MSA311_ORIENT_HY_REG, 2, 3),
-+	[F_ORIENT_MODE] =3D REG_FIELD(MSA311_ORIENT_HY_REG, 0, 1),
-+
-+	[F_Z_BLOCKING] =3D REG_FIELD(MSA311_Z_BLOCK_REG, 0, 3),
-+};
-+
-+#define MSA311_WHO_AM_I 0x13
-+
-+/*
-+ * Possible Full Scale ranges
-+ *
-+ * Axis data is 12-bit signed value, so
-+ *
-+ * fs0 =3D (2 + 2) * 9.81 / (2<<11) =3D 0.009580
-+ * fs1 =3D (4 + 4) * 9.81 / (2<<11) =3D 0.019160
-+ * fs2 =3D (8 + 8) * 9.81 / (2<<11) =3D 0.038320
-+ * fs3 =3D (16 + 16) * 9.81 / (2<<11) =3D 0.076641
-+ */
-+enum {
-+	MSA311_FS_2G,
-+	MSA311_FS_4G,
-+	MSA311_FS_8G,
-+	MSA311_FS_16G,
-+};
-+
-+static const struct {
-+	int val;
-+	int val2;
-+} msa311_fs_table[] =3D {
-+	{0, 9580}, {0, 19160}, {0, 38320}, {0, 76641}
-+};
-+
-+/* Possible Output Data Rate values */
-+enum {
-+	MSA311_ODR_1_HZ,
-+	MSA311_ODR_1_95_HZ,
-+	MSA311_ODR_3_9_HZ,
-+	MSA311_ODR_7_81_HZ,
-+	MSA311_ODR_15_63_HZ,
-+	MSA311_ODR_31_25_HZ,
-+	MSA311_ODR_62_5_HZ,
-+	MSA311_ODR_125_HZ,
-+	MSA311_ODR_250_HZ,
-+	MSA311_ODR_500_HZ,
-+	MSA311_ODR_1000_HZ,
-+};
-+
-+static const struct {
-+	int val;
-+	int val2;
-+} msa311_odr_table[] =3D {
-+	{1, 0}, {1, 950000}, {3, 900000}, {7, 810000}, {15, 630000},
-+	{31, 250000}, {62, 500000}, {125, 0}, {250, 0}, {500, 0}, {1000, 0}
-+};
-+
-+/* All supported power modes */
-+#define MSA311_PWR_MODE_NORMAL  0b00
-+#define MSA311_PWR_MODE_LOW     0b01
-+#define MSA311_PWR_MODE_UNKNOWN 0b10
-+#define MSA311_PWR_MODE_SUSPEND 0b11
-+static const char * const msa311_pwr_modes[] =3D {
-+	[MSA311_PWR_MODE_NORMAL] =3D "normal",
-+	[MSA311_PWR_MODE_LOW] =3D "low",
-+	[MSA311_PWR_MODE_UNKNOWN] =3D "unknown",
-+	[MSA311_PWR_MODE_SUSPEND] =3D "suspend"
-+};
-+
-+/* Autosuspend delay */
-+#define MSA311_PWR_SLEEP_DELAY_MS 2000
-+
-+/* Possible INT1 types and levels */
-+enum {
-+	MSA311_INT1_OD_PUSH_PULL,
-+	MSA311_INT1_OD_OPEN_DRAIN,
-+};
-+
-+enum {
-+	MSA311_INT1_LVL_LOW,
-+	MSA311_INT1_LVL_HIGH,
-+};
-+
-+/* Latch INT modes */
-+#define MSA311_LATCH_INT_NOT_LATCHED 0b0000
-+#define MSA311_LATCH_INT_250MS       0b0001
-+#define MSA311_LATCH_INT_500MS       0b0010
-+#define MSA311_LATCH_INT_1S          0b0011
-+#define MSA311_LATCH_INT_2S          0b0100
-+#define MSA311_LATCH_INT_4S          0b0101
-+#define MSA311_LATCH_INT_8S          0b0110
-+#define MSA311_LATCH_INT_1MS         0b1010
-+#define MSA311_LATCH_INT_2MS         0b1011
-+#define MSA311_LATCH_INT_25MS        0b1100
-+#define MSA311_LATCH_INT_50MS        0b1101
-+#define MSA311_LATCH_INT_100MS       0b1110
-+#define MSA311_LATCH_INT_LATCHED     0b0111
-+
-+static const struct regmap_range msa311_readonly_registers[] =3D {
-+	regmap_reg_range(MSA311_PARTID_REG, MSA311_ORIENT_STS_REG),
-+};
-+
-+static const struct regmap_access_table msa311_writeable_table =3D {
-+	.no_ranges =3D msa311_readonly_registers,
-+	.n_no_ranges =3D ARRAY_SIZE(msa311_readonly_registers),
-+};
-+
-+static const struct regmap_range msa311_writeonly_registers[] =3D {
-+	regmap_reg_range(MSA311_SOFT_RESET_REG, MSA311_SOFT_RESET_REG),
-+};
-+
-+static const struct regmap_access_table msa311_readable_table =3D {
-+	.no_ranges =3D msa311_writeonly_registers,
-+	.n_no_ranges =3D ARRAY_SIZE(msa311_writeonly_registers),
-+};
-+
-+static const struct regmap_range msa311_volatile_registers[] =3D {
-+	regmap_reg_range(MSA311_ACC_X_REG, MSA311_ORIENT_STS_REG),
-+};
-+
-+static const struct regmap_access_table msa311_volatile_table =3D {
-+	.yes_ranges =3D msa311_volatile_registers,
-+	.n_yes_ranges =3D ARRAY_SIZE(msa311_volatile_registers),
-+};
-+
-+static const struct regmap_config msa311_regmap_config =3D {
-+	.name =3D "msa311",
-+	.reg_bits =3D 8,
-+	.val_bits =3D 8,
-+	.max_register =3D MSA311_OFFSET_Z_REG,
-+	.wr_table =3D &msa311_writeable_table,
-+	.rd_table =3D &msa311_readable_table,
-+	.volatile_table =3D &msa311_volatile_table,
-+	.cache_type =3D REGCACHE_RBTREE,
-+};
-+
-+#define MSA311_GENMASK(field) ({                \
-+	typeof(&(msa311_reg_fields)[0]) _field; \
-+	_field =3D &msa311_reg_fields[(field)];   \
-+	GENMASK(_field->msb, _field->lsb);      \
-+})
-+
-+/**
-+ * struct msa311_priv - MSA311 internal private state
-+ * @regs: Underlying I2C bus adapter used to abstract slave
-+ *        register accesses
-+ * @fields: Abstract objects for each registers fields access
-+ * @dev: Device handler associated with appropriate bus client
-+ * @lock: Protects msa311 device state between setup and data access routi=
-nes
-+ *        (power transitions, samp_freq/scale tune, retrieving axes data, =
-etc)
-+ * @new_data_trig: Optional NEW_DATA interrupt driven trigger used
-+ *                 to notify external consumers a new sample is ready
-+ * @vdd: Optional external voltage regulator for the device power supply
-+ */
-+struct msa311_priv {
-+	struct regmap *regs;
-+	struct regmap_field *fields[F_MAX_FIELDS];
-+
-+	struct device *dev;
-+	struct mutex lock; /* state guard */
-+
-+	struct iio_trigger *new_data_trig;
-+	struct regulator *vdd;
-+};
-+
-+/* Channels */
-+
-+enum msa311_si {
-+	MSA311_SI_X,
-+	MSA311_SI_Y,
-+	MSA311_SI_Z,
-+	MSA311_SI_TIMESTAMP,
-+};
-+
-+#define MSA311_ACCEL_CHANNEL(axis) {                                      =
-  \
-+	.type =3D IIO_ACCEL,                                                  \
-+	.modified =3D 1,                                                      \
-+	.channel2 =3D IIO_MOD_##axis,                                         \
-+	.info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW),                       \
-+	.info_mask_shared_by_type =3D BIT(IIO_CHAN_INFO_SCALE) |              \
-+				    BIT(IIO_CHAN_INFO_SAMP_FREQ),           \
-+	.info_mask_shared_by_type_available =3D BIT(IIO_CHAN_INFO_SCALE) |    \
-+					      BIT(IIO_CHAN_INFO_SAMP_FREQ), \
-+	.scan_index =3D MSA311_SI_##axis,                                     \
-+	.scan_type =3D {                                                      \
-+		.sign =3D 's',                                                \
-+		.realbits =3D 12,                                             \
-+		.storagebits =3D 16,                                          \
-+		.shift =3D 4,                                                 \
-+		.endianness =3D IIO_LE,                                       \
-+	},                                                                  \
-+	.datasheet_name =3D "ACC_"#axis                                       \
-+}
-+
-+static const struct iio_chan_spec msa311_channels[] =3D {
-+	MSA311_ACCEL_CHANNEL(X),
-+	MSA311_ACCEL_CHANNEL(Y),
-+	MSA311_ACCEL_CHANNEL(Z),
-+	IIO_CHAN_SOFT_TIMESTAMP(MSA311_SI_TIMESTAMP)
-+};
-+
-+/**
-+ * msa311_get_odr() - Read Output Data Rate (ODR) value from MSA311 accel
-+ * @msa311: MSA311 internal private state
-+ * @odr: output ODR value
-+ *
-+ * This function should be called under msa311->lock.
-+ *
-+ * Return: 0 on success, -ERRNO in other failures
-+ */
-+static inline int msa311_get_odr(struct msa311_priv *msa311, unsigned int =
-*odr)
-+{
-+	int err;
-+
-+	err =3D regmap_field_read(msa311->fields[F_ODR], odr);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Filter the same 1000Hz ODR register values based on datasheet info.
-+	 * ODR can be equal to 1010-1111 for 1000Hz, but function returns 1010
-+	 * all the time.
-+	 */
-+	if (*odr > MSA311_ODR_1000_HZ)
-+		*odr =3D MSA311_ODR_1000_HZ;
-+
-+	return 0;
-+}
-+
-+/**
-+ * msa311_set_odr() - Setup Output Data Rate (ODR) value for MSA311 accel
-+ * @msa311: MSA311 internal private state
-+ * @odr: requested ODR value
-+ *
-+ * This function should be called under msa311->lock. Possible ODR values:
-+ *     - 1Hz (not available in normal mode)
-+ *     - 1.95Hz (not available in normal mode)
-+ *     - 3.9Hz
-+ *     - 7.81Hz
-+ *     - 15.63Hz
-+ *     - 31.25Hz
-+ *     - 62.5Hz
-+ *     - 125Hz
-+ *     - 250Hz
-+ *     - 500Hz
-+ *     - 1000Hz
-+ *
-+ * Return: 0 on success, -EINVAL for bad ODR value in the certain power mo=
-de,
-+ *         -ERRNO in other failures
-+ */
-+static inline int msa311_set_odr(struct msa311_priv *msa311, unsigned int =
-odr)
-+{
-+	struct device *dev =3D msa311->dev;
-+	unsigned int pwr_mode;
-+	bool good_odr =3D false;
-+	int err;
-+
-+	err =3D regmap_field_read(msa311->fields[F_PWR_MODE], &pwr_mode);
-+	if (err)
-+		return err;
-+
-+	/* Filter bad ODR values */
-+	if (pwr_mode =3D=3D MSA311_PWR_MODE_NORMAL)
-+		good_odr =3D (odr > MSA311_ODR_1_95_HZ);
-+
-+	if (!good_odr) {
-+		dev_err(dev,
-+			"failed to set odr %u.%uHz, not available in %s mode\n",
-+			msa311_odr_table[odr].val,
-+			msa311_odr_table[odr].val2 / 1000,
-+			msa311_pwr_modes[pwr_mode]);
-+		return -EINVAL;
-+	}
-+
-+	return regmap_field_write(msa311->fields[F_ODR], odr);
-+}
-+
-+/**
-+ * msa311_wait_for_next_data() - Wait next accel data available after resu=
-me
-+ * @msa311: MSA311 internal private state
-+ *
-+ * Return: 0 on success, -EINTR if msleep() was interrupted,
-+ *         -ERRNO in other failures
-+ */
-+static int msa311_wait_for_next_data(struct msa311_priv *msa311)
-+{
-+	static const int unintr_thresh_ms =3D 20;
-+	struct device *dev =3D msa311->dev;
-+	unsigned long freq_uhz;
-+	unsigned long wait_ms;
-+	unsigned int odr;
-+	int err;
-+
-+	err =3D msa311_get_odr(msa311, &odr);
-+	if (err) {
-+		dev_err(dev, "cannot get actual freq (%d)\n", err);
-+		return err;
-+	}
-+
-+	/*
-+	 * After msa311 resuming is done, we need to wait for data
-+	 * to be refreshed by accel logic.
-+	 * A certain timeout is calculated based on the current ODR value.
-+	 * If requested timeout isn't so long (let's assume 20ms),
-+	 * we can wait for next data in uninterruptible sleep.
-+	 */
-+	freq_uhz =3D msa311_odr_table[odr].val * MICROHZ_PER_HZ +
-+		   msa311_odr_table[odr].val2;
-+	wait_ms =3D (MICROHZ_PER_HZ / freq_uhz) * MSEC_PER_SEC;
-+
-+	if (wait_ms < unintr_thresh_ms)
-+		usleep_range(wait_ms * USEC_PER_MSEC,
-+			     unintr_thresh_ms * USEC_PER_MSEC);
-+	else
-+		return msleep_interruptible(wait_ms) ? -EINTR : 0;
-+
-+	return 0;
-+}
-+
-+/**
-+ * msa311_set_pwr_mode() - Install certain MSA311 power mode
-+ * @msa311: MSA311 internal private state
-+ * @mode: Power mode can be equal to NORMAL or SUSPEND
-+ *
-+ * This function should be called under msa311->lock.
-+ *
-+ * Return: 0 on success, -ERRNO on failure
-+ */
-+static int msa311_set_pwr_mode(struct msa311_priv *msa311, unsigned int mo=
-de)
-+{
-+	struct device *dev =3D msa311->dev;
-+	unsigned int prev_mode;
-+	int err;
-+
-+	if (mode >=3D ARRAY_SIZE(msa311_pwr_modes))
-+		return -EINVAL;
-+
-+	dev_dbg(dev, "transition to %s mode\n", msa311_pwr_modes[mode]);
-+
-+	err =3D regmap_field_read(msa311->fields[F_PWR_MODE], &prev_mode);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_field_write(msa311->fields[F_PWR_MODE], mode);
-+	if (err)
-+		return err;
-+
-+	/* Wait actual data if we wake up */
-+	if (prev_mode =3D=3D MSA311_PWR_MODE_SUSPEND &&
-+	    mode =3D=3D MSA311_PWR_MODE_NORMAL)
-+		return msa311_wait_for_next_data(msa311);
-+
-+	return 0;
-+}
-+
-+/**
-+ * msa311_get_axis() - Read MSA311 accel data for certain IIO channel axis=
- spec
-+ * @msa311: MSA311 internal private state
-+ * @chan: IIO channel specification
-+ * @axis: Output accel axis data for requested IIO channel spec
-+ *
-+ * This function should be called under msa311->lock.
-+ *
-+ * Return: 0 on success, -EINVAL for unknown IIO channel specification,
-+ *         -ERRNO in other failures
-+ */
-+static int msa311_get_axis(struct msa311_priv *msa311,
-+			   const struct iio_chan_spec * const chan,
-+			   __le16 *axis)
-+{
-+	struct device *dev =3D msa311->dev;
-+	unsigned int axis_reg;
-+
-+	if (chan->scan_index < MSA311_SI_X || chan->scan_index > MSA311_SI_Z) {
-+		dev_err(dev, "invalid scan_index value [%d]\n",
-+			chan->scan_index);
-+		return -EINVAL;
-+	}
-+
-+	/* Axes data layout has 2 byte gap for each axis starting from X axis */
-+	axis_reg =3D MSA311_ACC_X_REG + (chan->scan_index << 1);
-+
-+	return regmap_bulk_read(msa311->regs, axis_reg, axis, sizeof(*axis));
-+}
-+
-+static int msa311_read_raw_data(struct iio_dev *indio_dev,
-+				struct iio_chan_spec const *chan,
-+				int *val, int *val2)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	__le16 axis;
-+	int err;
-+
-+	err =3D pm_runtime_resume_and_get(dev);
-+	if (err)
-+		return err;
-+
-+	err =3D iio_device_claim_direct_mode(indio_dev);
-+	if (err)
-+		return err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D msa311_get_axis(msa311, chan, &axis);
-+	mutex_unlock(&msa311->lock);
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	if (err) {
-+		dev_err(dev, "cannot get axis %s (%d)\n",
-+			chan->datasheet_name, err);
-+		return err;
-+	}
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	/*
-+	 * Axis data format is:
-+	 * ACC_X =3D (ACC_X_MSB[7:0] << 4) | ACC_X_LSB[7:4]
-+	 */
-+	*val =3D sign_extend32(le16_to_cpu(axis) >> chan->scan_type.shift,
-+			     chan->scan_type.realbits - 1);
-+
-+	return IIO_VAL_INT;
-+}
-+
-+static int msa311_read_scale(struct iio_dev *indio_dev, int *val, int *val=
-2)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	unsigned int fs;
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D regmap_field_read(msa311->fields[F_FS], &fs);
-+	mutex_unlock(&msa311->lock);
-+	if (err) {
-+		dev_err(dev, "cannot get actual scale (%d)\n", err);
-+		return err;
-+	}
-+
-+	*val =3D msa311_fs_table[fs].val;
-+	*val2 =3D msa311_fs_table[fs].val2;
-+
-+	return IIO_VAL_INT_PLUS_MICRO;
-+}
-+
-+static int msa311_read_samp_freq(struct iio_dev *indio_dev,
-+				 int *val, int *val2)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	unsigned int odr;
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D msa311_get_odr(msa311, &odr);
-+	mutex_unlock(&msa311->lock);
-+	if (err) {
-+		dev_err(dev, "cannot get actual freq (%d)\n", err);
-+		return err;
-+	}
-+
-+	*val =3D msa311_odr_table[odr].val;
-+	*val2 =3D msa311_odr_table[odr].val2;
-+
-+	return IIO_VAL_INT_PLUS_MICRO;
-+}
-+
-+static int msa311_read_raw(struct iio_dev *indio_dev,
-+			   struct iio_chan_spec const *chan,
-+			   int *val, int *val2, long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		return msa311_read_raw_data(indio_dev, chan, val, val2);
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		return msa311_read_scale(indio_dev, val, val2);
-+
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		return msa311_read_samp_freq(indio_dev, val, val2);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int msa311_read_avail(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     const int **vals, int *type,
-+			     int *length, long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		*vals =3D (int *)msa311_odr_table;
-+		*type =3D IIO_VAL_INT_PLUS_MICRO;
-+		/* ODR value has 2 ints (integer and fractional parts) */
-+		*length =3D ARRAY_SIZE(msa311_odr_table) * 2;
-+		return IIO_AVAIL_LIST;
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		*vals =3D (int *)msa311_fs_table;
-+		*type =3D IIO_VAL_INT_PLUS_MICRO;
-+		/* FS value has 2 ints (integer and fractional parts) */
-+		*length =3D ARRAY_SIZE(msa311_fs_table) * 2;
-+		return IIO_AVAIL_LIST;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int msa311_write_scale(struct iio_dev *indio_dev, int val, int val2=
-)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	unsigned int fs;
-+	int err;
-+
-+	/* We do not have fs >=3D 1, so skip such values */
-+	if (val)
-+		return 0;
-+
-+	err =3D pm_runtime_resume_and_get(dev);
-+	if (err)
-+		return err;
-+
-+	err =3D -EINVAL;
-+	for (fs =3D 0; fs < ARRAY_SIZE(msa311_fs_table); ++fs)
-+		/* Do not check msa311_fs_table[fs].val, it's always 0 */
-+		if (val2 =3D=3D msa311_fs_table[fs].val2) {
-+			mutex_lock(&msa311->lock);
-+			err =3D regmap_field_write(msa311->fields[F_FS], fs);
-+			mutex_unlock(&msa311->lock);
-+			if (err)
-+				dev_err(dev, "cannot update scale (%d)\n", err);
-+			break;
-+		}
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return err;
-+}
-+
-+static int msa311_write_samp_freq(struct iio_dev *indio_dev, int val, int =
-val2)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	unsigned int odr;
-+	int err;
-+
-+	err =3D pm_runtime_resume_and_get(dev);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Sampling frequency changing is prohibited when buffer mode is
-+	 * enabled, because sometimes MSA311 chip returns outliers during
-+	 * frequency values growing up in the read operation moment.
-+	 */
-+	err =3D iio_device_claim_direct_mode(indio_dev);
-+	if (err)
-+		return err;
-+
-+	err =3D -EINVAL;
-+	for (odr =3D 0; odr < ARRAY_SIZE(msa311_odr_table); ++odr)
-+		if (val =3D=3D msa311_odr_table[odr].val &&
-+		    val2 =3D=3D msa311_odr_table[odr].val2) {
-+			mutex_lock(&msa311->lock);
-+			err =3D msa311_set_odr(msa311, odr);
-+			mutex_unlock(&msa311->lock);
-+			if (err)
-+				dev_err(dev, "cannot update freq (%d)\n", err);
-+			break;
-+		}
-+
-+	iio_device_release_direct_mode(indio_dev);
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return err;
-+}
-+
-+static int msa311_write_raw(struct iio_dev *indio_dev,
-+			    struct iio_chan_spec const *chan,
-+			    int val, int val2, long mask)
-+{
-+	switch (mask) {
-+	case IIO_CHAN_INFO_SCALE:
-+		return msa311_write_scale(indio_dev, val, val2);
-+
-+	case IIO_CHAN_INFO_SAMP_FREQ:
-+		return msa311_write_samp_freq(indio_dev, val, val2);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int msa311_debugfs_reg_access(struct iio_dev *indio_dev,
-+				     unsigned int reg, unsigned int writeval,
-+				     unsigned int *readval)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	int err;
-+
-+	if (reg > regmap_get_max_register(msa311->regs))
-+		return -EINVAL;
-+
-+	err =3D pm_runtime_resume_and_get(dev);
-+	if (err)
-+		return err;
-+
-+	mutex_lock(&msa311->lock);
-+
-+	if (readval)
-+		err =3D regmap_read(msa311->regs, reg, readval);
-+	else
-+		err =3D regmap_write(msa311->regs, reg, writeval);
-+
-+	mutex_unlock(&msa311->lock);
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	if (err)
-+		dev_err(dev, "cannot %s register %u from debugfs (%d)\n",
-+			readval ? "read" : "write", reg, err);
-+
-+	return err;
-+}
-+
-+static int msa311_buffer_preenable(struct iio_dev *indio_dev)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+
-+	return pm_runtime_resume_and_get(dev);
-+}
-+
-+static int msa311_buffer_postdisable(struct iio_dev *indio_dev)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	return 0;
-+}
-+
-+static int msa311_set_new_data_trig_state(struct iio_trigger *trig, bool s=
-tate)
-+{
-+	struct iio_dev *indio_dev =3D iio_trigger_get_drvdata(trig);
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	struct device *dev =3D msa311->dev;
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D regmap_field_write(msa311->fields[F_NEW_DATA_INT_EN], state);
-+	mutex_unlock(&msa311->lock);
-+	if (err)
-+		dev_err(dev,
-+			"cannot %s buffer due to new_data_int failure (%d)\n",
-+			str_enable_disable(state), err);
-+
-+	return err;
-+}
-+
-+static int msa311_validate_device(struct iio_trigger *trig,
-+				  struct iio_dev *indio_dev)
-+{
-+	return iio_trigger_get_drvdata(trig) =3D=3D indio_dev ? 0 : -EINVAL;
-+}
-+
-+static irqreturn_t msa311_buffer_thread(int irq, void *p)
-+{
-+	struct iio_poll_func *pf =3D p;
-+	struct msa311_priv *msa311 =3D iio_priv(pf->indio_dev);
-+	struct iio_dev *indio_dev =3D pf->indio_dev;
-+	const struct iio_chan_spec *chan;
-+	struct device *dev =3D msa311->dev;
-+	int bit =3D 0, err, i =3D 0;
-+	__le16 axis;
-+	struct {
-+		__le16 channels[MSA311_SI_Z + 1];
-+		s64 ts __aligned(8);
-+	} buf;
-+
-+	memset(&buf, 0, sizeof(buf));
-+
-+	mutex_lock(&msa311->lock);
-+
-+	for_each_set_bit(bit, indio_dev->active_scan_mask,
-+			 indio_dev->masklength) {
-+		chan =3D &msa311_channels[bit];
-+
-+		err =3D msa311_get_axis(msa311, chan, &axis);
-+		if (err) {
-+			mutex_unlock(&msa311->lock);
-+			dev_err(dev, "cannot get axis %s (%d)\n",
-+				chan->datasheet_name, err);
-+			goto err;
-+		}
-+
-+		buf.channels[i++] =3D axis;
-+	}
-+
-+	mutex_unlock(&msa311->lock);
-+
-+	iio_push_to_buffers_with_timestamp(indio_dev, &buf,
-+					   iio_get_time_ns(indio_dev));
-+
-+err:
-+	iio_trigger_notify_done(indio_dev->trig);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t msa311_irq_thread(int irq, void *p)
-+{
-+	struct msa311_priv *msa311 =3D iio_priv(p);
-+	unsigned int new_data_int_enabled;
-+	struct device *dev =3D msa311->dev;
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+
-+	/*
-+	 * We do not check NEW_DATA int status, because of based on
-+	 * specification it's cleared automatically after a fixed time.
-+	 * So just check that is enabled by driver logic.
-+	 */
-+	err =3D regmap_field_read(msa311->fields[F_NEW_DATA_INT_EN],
-+				&new_data_int_enabled);
-+
-+	/* TODO: check motion interrupts status */
-+
-+	mutex_unlock(&msa311->lock);
-+	if (err) {
-+		dev_err(dev, "cannot read new_data int state (%d)\n", err);
-+		return IRQ_NONE;
-+	}
-+
-+	if (new_data_int_enabled)
-+		iio_trigger_poll_chained(msa311->new_data_trig);
-+
-+	/* TODO: send motion events if needed */
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct iio_info msa311_info =3D {
-+	.read_raw =3D msa311_read_raw,
-+	.read_avail =3D msa311_read_avail,
-+	.write_raw =3D msa311_write_raw,
-+	.debugfs_reg_access =3D msa311_debugfs_reg_access,
-+};
-+
-+static const struct iio_buffer_setup_ops msa311_buffer_setup_ops =3D {
-+	.preenable =3D msa311_buffer_preenable,
-+	.postdisable =3D msa311_buffer_postdisable,
-+};
-+
-+static const struct iio_trigger_ops msa311_new_data_trig_ops =3D {
-+	.set_trigger_state =3D msa311_set_new_data_trig_state,
-+	.validate_device =3D msa311_validate_device,
-+};
-+
-+static int msa311_check_partid(struct msa311_priv *msa311)
-+{
-+	struct device *dev =3D msa311->dev;
-+	unsigned int partid;
-+	int err;
-+
-+	err =3D regmap_read(msa311->regs, MSA311_PARTID_REG, &partid);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "failed to read partid (%d)\n", err);
-+
-+	if (partid =3D=3D MSA311_WHO_AM_I)
-+		dev_dbg(dev, "found MSA311 compatible chip[%#x]\n", partid);
-+	else
-+		dev_warn(dev, "invalid partid (%#x), expected (%#x)\n",
-+			 partid, MSA311_WHO_AM_I);
-+
-+	return 0;
-+}
-+
-+static int msa311_soft_reset(struct msa311_priv *msa311)
-+{
-+	struct device *dev =3D msa311->dev;
-+	int err;
-+
-+	err =3D regmap_write(msa311->regs, MSA311_SOFT_RESET_REG,
-+			   MSA311_GENMASK(F_SOFT_RESET_I2C) |
-+			   MSA311_GENMASK(F_SOFT_RESET_SPI));
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot soft reset all logic\n");
-+
-+	return 0;
-+}
-+
-+static int msa311_chip_init(struct msa311_priv *msa311)
-+{
-+	struct device *dev =3D msa311->dev;
-+	int err;
-+
-+	err =3D regmap_write(msa311->regs, MSA311_RANGE_REG, MSA311_FS_16G);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to setup accel range\n");
-+
-+	/* Disable all interrupts by default */
-+	err =3D regmap_write(msa311->regs, MSA311_INT_SET_0_REG, 0);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot disable set0 intrs\n");
-+
-+	err =3D regmap_write(msa311->regs, MSA311_INT_SET_1_REG, 0);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot disable set1 intrs\n");
-+
-+	/* Unmap all INT1 interrupts by default */
-+	err =3D regmap_write(msa311->regs, MSA311_INT_MAP_0_REG, 0);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to unmap map0 intrs\n");
-+
-+	err =3D regmap_write(msa311->regs, MSA311_INT_MAP_1_REG, 0);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to unmap map1 intrs\n");
-+
-+	/* Disable all axis by default */
-+	err =3D regmap_update_bits(msa311->regs, MSA311_ODR_REG,
-+				 MSA311_GENMASK(F_X_AXIS_DIS) |
-+				 MSA311_GENMASK(F_Y_AXIS_DIS) |
-+				 MSA311_GENMASK(F_Z_AXIS_DIS), 0);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot enable all axes\n");
-+
-+	err =3D msa311_set_odr(msa311, MSA311_ODR_125_HZ);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to set accel freq\n");
-+
-+	return 0;
-+}
-+
-+static int msa311_setup_interrupts(struct msa311_priv *msa311)
-+{
-+	struct device *dev =3D msa311->dev;
-+	struct i2c_client *i2c =3D to_i2c_client(dev);
-+	struct iio_dev *indio_dev =3D i2c_get_clientdata(i2c);
-+	struct iio_trigger *trig;
-+	int err;
-+
-+	/* Keep going without interrupts if no initialized I2C irq */
-+	if (i2c->irq <=3D 0)
-+		return 0;
-+
-+	err =3D devm_request_threaded_irq(&i2c->dev, i2c->irq,
-+					NULL, msa311_irq_thread,
-+					IRQF_ONESHOT,
-+					i2c->name,
-+					indio_dev);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to request irq\n");
-+
-+	trig =3D devm_iio_trigger_alloc(dev, "%s-new-data", i2c->name);
-+	if (!trig)
-+		return dev_err_probe(dev, -ENOMEM,
-+				     "cannot allocate newdata trig\n");
-+
-+	msa311->new_data_trig =3D trig;
-+	msa311->new_data_trig->dev.parent =3D dev;
-+	msa311->new_data_trig->ops =3D &msa311_new_data_trig_ops;
-+	iio_trigger_set_drvdata(msa311->new_data_trig, indio_dev);
-+
-+	err =3D devm_iio_trigger_register(dev, msa311->new_data_trig);
-+	if (err)
-+		return dev_err_probe(dev, err, "can't register newdata trig\n");
-+
-+	err =3D regmap_field_write(msa311->fields[F_INT1_OD],
-+				 MSA311_INT1_OD_PUSH_PULL);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot enable push-pull int\n");
-+
-+	err =3D regmap_field_write(msa311->fields[F_INT1_LVL],
-+				 MSA311_INT1_LVL_HIGH);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot set active int level\n");
-+
-+	err =3D regmap_field_write(msa311->fields[F_LATCH_INT],
-+				 MSA311_LATCH_INT_LATCHED);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot latch int\n");
-+
-+	err =3D regmap_field_write(msa311->fields[F_RESET_INT], 1);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot reset int\n");
-+
-+	err =3D regmap_field_write(msa311->fields[F_INT1_NEW_DATA], 1);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot map new data int\n");
-+
-+	return 0;
-+}
-+
-+static int msa311_regmap_init(struct msa311_priv *msa311)
-+{
-+	struct regmap_field **fields =3D msa311->fields;
-+	struct device *dev =3D msa311->dev;
-+	struct i2c_client *i2c =3D to_i2c_client(dev);
-+	struct regmap *regmap;
-+	int i;
-+
-+	regmap =3D devm_regmap_init_i2c(i2c, &msa311_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap),
-+				     "failed to register i2c regmap\n");
-+
-+	msa311->regs =3D regmap;
-+
-+	for (i =3D 0; i < F_MAX_FIELDS; ++i) {
-+		fields[i] =3D devm_regmap_field_alloc(dev,
-+						    msa311->regs,
-+						    msa311_reg_fields[i]);
-+		if (IS_ERR(msa311->fields[i]))
-+			return dev_err_probe(dev, PTR_ERR(msa311->fields[i]),
-+					     "cannot alloc reg field[%d]\n", i);
-+	}
-+
-+	return 0;
-+}
-+
-+static void msa311_powerdown(void *msa311)
-+{
-+	msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_SUSPEND);
-+}
-+
-+static void msa311_vdd_disable(void *vdd)
-+{
-+	regulator_disable(vdd);
-+}
-+
-+static int msa311_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev =3D &i2c->dev;
-+	struct msa311_priv *msa311;
-+	struct iio_dev *indio_dev;
-+	int err;
-+
-+	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*msa311));
-+	if (!indio_dev)
-+		return dev_err_probe(dev, -ENOMEM,
-+				     "iio device allocation failed\n");
-+
-+	msa311 =3D iio_priv(indio_dev);
-+	msa311->dev =3D dev;
-+	i2c_set_clientdata(i2c, indio_dev);
-+
-+	err =3D msa311_regmap_init(msa311);
-+	if (err)
-+		return err;
-+
-+	mutex_init(&msa311->lock);
-+
-+	msa311->vdd =3D devm_regulator_get_optional(dev, "vdd");
-+	if (IS_ERR(msa311->vdd)) {
-+		err =3D PTR_ERR(msa311->vdd);
-+		if (err =3D=3D -ENODEV)
-+			msa311->vdd =3D NULL;
-+		else
-+			return dev_err_probe(dev, PTR_ERR(msa311->vdd),
-+					     "cannot get vdd supply\n");
-+	}
-+
-+	if (msa311->vdd) {
-+		err =3D regulator_enable(msa311->vdd);
-+		if (err)
-+			return dev_err_probe(dev, err,
-+					     "cannot enable vdd supply\n");
-+
-+		err =3D devm_add_action_or_reset(dev, msa311_vdd_disable,
-+					       msa311->vdd);
-+		if (err) {
-+			regulator_disable(msa311->vdd);
-+			return dev_err_probe(dev, err,
-+					     "cannot add vdd disable action\n");
-+		}
-+	}
-+
-+	err =3D msa311_check_partid(msa311);
-+	if (err)
-+		return err;
-+
-+	err =3D msa311_soft_reset(msa311);
-+	if (err)
-+		return err;
-+
-+	err =3D msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_NORMAL);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "failed to power on device (%d)\n", err);
-+
-+	/*
-+	 * Register powerdown deferred callback which suspends the chip
-+	 * after module unloaded.
-+	 *
-+	 * MSA311 should be in SUSPEND mode in the two cases:
-+	 * 1) When driver is loaded, but we do not have any data or
-+	 *    configuration requests to it (we are solving it using
-+	 *    autosuspend feature).
-+	 * 2) When driver is unloaded and device is not used (devm action is
-+	 *    used in this case).
-+	 */
-+	err =3D devm_add_action_or_reset(dev, msa311_powerdown, msa311);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot add powerdown action\n");
-+
-+	err =3D devm_pm_runtime_enable(dev);
-+	if (err)
-+		return err;
-+
-+	pm_runtime_get_noresume(dev);
-+	pm_runtime_set_autosuspend_delay(dev, MSA311_PWR_SLEEP_DELAY_MS);
-+	pm_runtime_use_autosuspend(dev);
-+
-+	err =3D msa311_chip_init(msa311);
-+	if (err)
-+		return err;
-+
-+	indio_dev->modes =3D 0; /* setup buffered mode later */
-+	indio_dev->channels =3D msa311_channels;
-+	indio_dev->num_channels =3D ARRAY_SIZE(msa311_channels);
-+	indio_dev->name =3D i2c->name;
-+	indio_dev->info =3D &msa311_info;
-+
-+	err =3D devm_iio_triggered_buffer_setup(dev,
-+					      indio_dev,
-+					      iio_pollfunc_store_time,
-+					      msa311_buffer_thread,
-+					      &msa311_buffer_setup_ops);
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot setup iio trig buf\n");
-+
-+	err =3D msa311_setup_interrupts(msa311);
-+	if (err)
-+		return err;
-+
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
-+
-+	err =3D devm_iio_device_register(dev, indio_dev);
-+	if (err)
-+		return dev_err_probe(dev, err, "iio device register failed\n");
-+
-+	return 0;
-+}
-+
-+static int msa311_runtime_suspend(struct device *dev)
-+{
-+	struct iio_dev *indio_dev =3D dev_get_drvdata(dev);
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_SUSPEND);
-+	mutex_unlock(&msa311->lock);
-+	if (err)
-+		dev_err(dev, "failed to power off device (%d)\n", err);
-+
-+	return err;
-+}
-+
-+static int msa311_runtime_resume(struct device *dev)
-+{
-+	struct iio_dev *indio_dev =3D dev_get_drvdata(dev);
-+	struct msa311_priv *msa311 =3D iio_priv(indio_dev);
-+	int err;
-+
-+	mutex_lock(&msa311->lock);
-+	err =3D msa311_set_pwr_mode(msa311, MSA311_PWR_MODE_NORMAL);
-+	mutex_unlock(&msa311->lock);
-+	if (err)
-+		dev_err(dev, "failed to power on device (%d)\n", err);
-+
-+	return err;
-+}
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(msa311_pm_ops, msa311_runtime_suspend,
-+				 msa311_runtime_resume, NULL);
-+
-+static const struct i2c_device_id msa311_i2c_id[] =3D {
-+	{ .name =3D "msa311" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, msa311_i2c_id);
-+
-+static const struct of_device_id msa311_of_match[] =3D {
-+	{ .compatible =3D "memsensing,msa311" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, msa311_of_match);
-+
-+static struct i2c_driver msa311_driver =3D {
-+	.driver =3D {
-+		.name =3D "msa311",
-+		.owner =3D THIS_MODULE,
-+		.of_match_table =3D msa311_of_match,
-+		.pm =3D pm_ptr(&msa311_pm_ops),
-+	},
-+	.probe_new	=3D msa311_probe,
-+	.id_table	=3D msa311_i2c_id,
-+};
-+module_i2c_driver(msa311_driver);
-+
-+MODULE_AUTHOR("Dmitry Rokosov <ddrokosov@sberdevices.ru>");
-+MODULE_DESCRIPTION("MEMSensing MSA311 3-axis accelerometer driver");
-+MODULE_LICENSE("GPL");
---=20
-2.36.0
+Cheers
+Vladimir
+IMPORTANT NOTICE: The contents of this email and any attachments are confid=
+ential and may also be privileged. If you are not the intended recipient, p=
+lease notify the sender immediately and do not disclose the contents to any=
+ other person, use it for any purpose, or store or copy the information in =
+any medium. Thank you.

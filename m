@@ -2,301 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BBB588F3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56747588F45
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238008AbiHCPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S238042AbiHCPUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbiHCPUX (ORCPT
+        with ESMTP id S238097AbiHCPUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:20:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D050CE01
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4B08B822B6
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B08C433D6;
-        Wed,  3 Aug 2022 15:20:16 +0000 (UTC)
-Date:   Wed, 3 Aug 2022 11:20:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Li kunyu <kunyu@nfschina.com>, Li zeming <zeming@nfschina.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Slark Xiao <slark_xiao@163.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        sunliming <sunliming@kylinos.cn>
-Subject: [GIT PULL] tracing: Updates for 5.20 / 6.0
-Message-ID: <20220803112014.7ffed04e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 3 Aug 2022 11:20:38 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76431231
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:20:35 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id x1-20020a056830278100b00636774b0e54so2448643otu.4
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
+        b=eKxcY/wUV1t5iGFQOTkC3uUqXsNlO3wJPUXpinu2/pZFiIuEZDbShMVl1SWFB8VMKG
+         dN33busgN2TumcApmrWbU9bmxspzUC3EobauqLvOHnBA8X1FgGKATmogtCPRFVJX7swX
+         jnEljBTuf+JFh+gnVMEfcFQpvfPapnczKgq9A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
+        b=I5UBTZgdBufvX66Cl1EsEgdOdhQlXF+Pvrk3+WM9zb6n7K2CE8mi8FsGx4hgFkcJYV
+         hWWVgJN7HW3m1EEegt+ZjCsAnPknfcZ6+fliOFccHaKZXCMfNv9uarY2k5T/Q9hRIEFU
+         aNc8+epHDaeswwF2zQ7wDWdH1lAzYGXnHX1WEwc48Y9CG24Rga0/bHAUwFB4JdhxquHI
+         3XisqifcGwHpjBG3j06OgEolWQa3i/OEVjrkEkf8bGjTgVen5KGgtRKitJp0KzjMBuYv
+         qH0vLKixm2+EK1jk2oCJ1jC7UAIsrmo4XLPHcJfvWUDdMTqhqM+vHYoI2uFOQ4OiVpCW
+         SowQ==
+X-Gm-Message-State: AJIora+b3yfe3RRk/6u8J9g79ggh3LD60WIs1VPD/DgXtdfadcQqqO+D
+        poH1K/VtddEKH7W8jgw/QtUe1Q==
+X-Google-Smtp-Source: AGRyM1vhYxujzT2YaLXCnoBJSDqDHPUJMnPpsU0AX9VW0hT0pmIMq5BAvFR7alVbeYb7pUS4X0XAlA==
+X-Received: by 2002:a9d:6007:0:b0:61c:ecd2:ac55 with SMTP id h7-20020a9d6007000000b0061cecd2ac55mr8737434otj.32.1659540034249;
+        Wed, 03 Aug 2022 08:20:34 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id fo22-20020a0568709a1600b0010eaeee89a1sm3056992oab.46.2022.08.03.08.20.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 08:20:33 -0700 (PDT)
+Message-ID: <aad6c2cb-abdd-b066-9d1d-d0f415256ae6@cloudflare.com>
+Date:   Wed, 3 Aug 2022 10:20:32 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
+        yhs@fb.com, john.fastabend@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
+        tixxdz@gmail.com
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <87a68mcouk.fsf@email.froward.int.ebiederm.org>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <87a68mcouk.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/2/22 4:33 PM, Eric W. Biederman wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> 
+>> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>>
+>>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>>>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>>>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>>>> a call to create_user_ns().
+>>>>
+>>>> The calls look something like this:
+>>>>
+>>>> cred = prepare_creds()
+>>>> security_prepare_creds()
+>>>> call_int_hook(cred_prepare, ...
+>>>> if (cred)
+>>>> create_user_ns(cred)
+>>>>
+>>>> We noticed that error codes were not propagated from this hook and
+>>>> introduced a patch [1] to propagate those errors.
+>>>>
+>>>> The discussion notes that security_prepare_creds()
+>>>> is not appropriate for MAC policies, and instead the hook is
+>>>> meant for LSM authors to prepare credentials for mutation. [2]
+>>>>
+>>>> Ultimately, we concluded that a better course of action is to introduce
+>>>> a new security hook for LSM authors. [3]
+>>>>
+>>>> This patch set first introduces a new security_create_user_ns() function
+>>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+>>> Patch 1 and 4 still need review from the lsm/security side.
+>>
+>>
+>> This patchset is in my review queue and assuming everything checks
+>> out, I expect to merge it after the upcoming merge window closes.
+> 
+> It doesn't even address my issues with the last patchset.
 
-Linus,
+Are you referring to [1], and with regards to [2], is the issue that the 
+wording could be improved for both the cover letter and patch 1/4?
 
-Tracing updates for 5.20 / 6.0
+Ultimately, the goal of CF is to leverage and use user namespaces and 
+block tasks whose meta information do not align with our allow list 
+criteria. Yes, there is a higher goal of restricting our attack surface. 
+Yes, people will find ways around security. The point is to have 
+multiple levels of security, and this patch series allows people to add 
+another level.
 
-- Runtime verification infrastructure
-  This is the biggest change for this pull request. It introduces the
-  runtime verification that is necessary for running Linux on safety
-  critical systems. It allows for deterministic automata models to be
-  inserted into the kernel that will attach to tracepoints, where the
-  information on these tracepoints will move the model from state to state.
-  If a state is encountered that does not belong to the model, it will then
-  activate a given reactor, that could just inform the user or even panic
-  the kernel (for which safety critical systems will detect and can recover
-  from).
+Calling this hook a regression is not true since there's no actual 
+regression in the code. What would constitute a perceived regression is 
+an admin imposing such a SELinux or BPF restriction within their 
+company, but developers in that company ideally would try to work with 
+the admin to enable user namespaces for certain use cases, or 
+alternatively do what you don't want given current tooling: always run 
+code as root. That's where this hook comes in: let people observe and 
+enforce how they see fit. The average enthusiasts would see no impact.
 
-- Two monitor models are also added: Wakeup In Preemptive (WIP - not to be
-  confused with "work in progress"), and Wakeup While Not Running (WWNR).
+I was requested to add _some_ test to BPF and to add a SELinux 
+implementation. The low hanging fruit for a test to prove that the hook 
+is capable of doing _something_ was to simply just block outright, and 
+provide _some example_ of use. It doesn't make sense for us to write a 
+test that outlines specifically what CF or others are doing because that 
+would put too much emphasis on an implementation detail that doesn't 
+matter to prove that the hook works.
 
-- Added __vstring() helper to the TRACE_EVENT() macro to replace several
-  vstring() usages that were all doing it wrong.
+Without Djalal's comment, I can't defend an observability use case that 
+we're not currently leveraging. We have it now, so therefore I'll defend 
+it per KP's suggestion[3] in v5.
 
-- eprobes now can have their event autogenerated when the event name is left
-  off.
+By not responding to the email discussions, we can't accurately gauge 
+what should or should not be in the descriptions. No one here 
+necessarily disagrees with some of the points you made, and others have 
+appropriately responded. As others have also wrote, you're not proposing 
+alternatives. How do you expect us to work with that?
 
-- The rest is various cleanups and fixes.
+Please, let us know which bits and pieces ought to be included in the 
+descriptions, and let us know what things we should call out caveats to 
+that would satisfy your concerns.
 
+Links:
+1. 
+https://lore.kernel.org/all/01368386-521f-230b-1d49-de19377c27d1@cloudflare.com/
+2. 
+https://lore.kernel.org/all/877d45kri4.fsf@email.froward.int.ebiederm.org/#t
+3. 
+https://lore.kernel.org/all/CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com/
+4. 
+https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/#t
 
-Please pull the latest trace-v5.20 tree, which can be found at:
+> 
+> So it has my NACK.
+> 
+> Eric
 
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v5.20
-
-Tag SHA1: 2e24f04e0370495112b3ec2b37152272322b434c
-Head SHA1: 09794a5a6c348f629b35fc1687071a1622ef4265
-
-
-Daniel Bristot de Oliveira (16):
-      rv: Add Runtime Verification (RV) interface
-      rv: Add runtime reactors interface
-      rv/include: Add helper functions for deterministic automata
-      rv/include: Add deterministic automata monitor definition via C macros
-      rv/include: Add instrumentation helper functions
-      Documentation/rv: Add a basic documentation
-      tools/rv: Add dot2c
-      Documentation/rv: Add deterministic automaton documentation
-      tools/rv: Add dot2k
-      Documentation/rv: Add deterministic automata monitor synthesis documentation
-      Documentation/rv: Add deterministic automata instrumentation documentation
-      rv/monitor: Add the wip monitor skeleton created by dot2k
-      rv/monitor: Add the wip monitor
-      rv/monitor: Add the wwnr monitor
-      rv/reactor: Add the printk reactor
-      rv/reactor: Add the panic reactor
-
-Douglas Anderson (1):
-      tracing: Fix sleeping while atomic in kdb ftdump
-
-Li kunyu (1):
-      blk-iocost: tracing: atomic64_read(&ioc->vtime_rate) is assigned an extra semicolon
-
-Li zeming (1):
-      tracepoints: It is CONFIG_TRACEPOINTS not CONFIG_TRACEPOINT
-
-Linyu Yuan (4):
-      tracing: eprobe: Add missing log index
-      tracing: eprobe: Remove duplicate is_good_name() operation
-      tracing: Auto generate event name when creating a group of events
-      selftests/ftrace: Add test case for GRP/ only input
-
-Masami Hiramatsu (Google) (2):
-      selftests/kprobe: Update test for no event name syntax error
-      tracing/eprobe: Show syntax error logs in error_log file
-
-Slark Xiao (1):
-      scripts/tracing: Fix typo 'the the' in comment
-
-Steven Rostedt (Google) (23):
-      ftrace: Be more specific about arch impact when function tracer is enabled
-      tracing: devlink: Use static array for string in devlink_trap_report event
-      tracing/ipv4/ipv6: Use static array for name field in fib*_lookup_table event
-      neighbor: tracing: Have neigh_create event use __string()
-      tracing/events: Add __vstring() and __assign_vstr() helper macros
-      tracing/IB/hfi1: Use the new __vstring() helper
-      tracing/ath: Use the new __vstring() helper
-      tracing/brcm: Use the new __vstring() helper
-      tracing/iwlwifi: Use the new __vstring() helper
-      usb: chipidea: tracing: Use the new __vstring() helper
-      xhci: tracing: Use the new __vstring() helper
-      usb: musb: tracing: Use the new __vstring() helper
-      scsi: iscsi: tracing: Use the new __vstring() helper
-      scsi: qla2xxx: tracing: Use the new __vstring() helper
-      mac80211: tracing: Use the new __vstring() helper
-      selftests/kprobe: Do not test for GRP/ without event failures
-      tracing: Add example and documentation for new __vstring() macro
-      USB: mtu3: tracing: Use the new __vstring() helper
-      batman-adv: tracing: Use the new __vstring() helper
-      tracing: Use a copy of the va_list for __assign_vstr()
-      ftrace/x86: Add back ftrace_expected assignment
-      tracing: Use a struct alignof to determine trace event field alignment
-      tracing: Use alignof__(struct {type b;}) instead of offsetof()
-
-Tiezhu Yang (1):
-      samples: Use KSYM_NAME_LEN for kprobes
-
-Xiang wangx (1):
-      tracing/user_events: Fix syntax errors in comments
-
-Zheng Yejian (2):
-      tracing/histograms: Fix memory leak problem
-      tracing/histograms: Simplify create_hist_fields()
-
-Zhiqiang Liu (1):
-      tracing: Use free_trace_buffer() in allocate_trace_buffers()
-
-sunliming (1):
-      fprobe/samples: Make sample_probe static
-
-----
- Documentation/trace/index.rst                      |   1 +
- Documentation/trace/kprobetrace.rst                |   8 +-
- .../trace/rv/da_monitor_instrumentation.rst        | 171 +++++
- Documentation/trace/rv/da_monitor_synthesis.rst    | 147 ++++
- Documentation/trace/rv/deterministic_automata.rst  | 184 +++++
- Documentation/trace/rv/index.rst                   |  14 +
- Documentation/trace/rv/monitor_wip.rst             |  55 ++
- Documentation/trace/rv/monitor_wwnr.rst            |  45 ++
- Documentation/trace/rv/runtime-verification.rst    | 231 ++++++
- Documentation/trace/uprobetracer.rst               |   8 +-
- arch/x86/kernel/ftrace.c                           |   1 +
- drivers/infiniband/hw/hfi1/trace_dbg.h             |   8 +-
- drivers/net/wireless/ath/ath10k/trace.h            |  14 +-
- drivers/net/wireless/ath/ath11k/trace.h            |   7 +-
- drivers/net/wireless/ath/ath6kl/trace.h            |  14 +-
- drivers/net/wireless/ath/trace.h                   |   7 +-
- drivers/net/wireless/ath/wil6210/trace.h           |   7 +-
- .../broadcom/brcm80211/brcmfmac/tracepoint.h       |  12 +-
- .../brcm80211/brcmsmac/brcms_trace_brcmsmac_msg.h  |  12 +-
- .../net/wireless/intel/iwlwifi/iwl-devtrace-msg.h  |  12 +-
- drivers/usb/chipidea/trace.h                       |   4 +-
- drivers/usb/host/xhci-trace.h                      |   4 +-
- drivers/usb/mtu3/mtu3_trace.h                      |   6 +-
- drivers/usb/musb/musb_trace.h                      |   4 +-
- include/linux/rv.h                                 |  70 ++
- include/linux/sched.h                              |  11 +
- include/linux/trace_events.h                       |  18 +
- include/linux/tracepoint.h                         |   2 +-
- include/rv/automata.h                              |  75 ++
- include/rv/da_monitor.h                            | 544 ++++++++++++++
- include/rv/instrumentation.h                       |  29 +
- include/trace/events/devlink.h                     |   7 +-
- include/trace/events/fib.h                         |   6 +-
- include/trace/events/fib6.h                        |   8 +-
- include/trace/events/iocost.h                      |   2 +-
- include/trace/events/iscsi.h                       |   4 +-
- include/trace/events/neigh.h                       |   2 +-
- include/trace/events/qla.h                         |   4 +-
- include/trace/events/rv.h                          | 142 ++++
- include/trace/stages/stage1_struct_define.h        |   3 +
- include/trace/stages/stage2_data_offsets.h         |   3 +
- include/trace/stages/stage4_event_fields.h         |  11 +-
- include/trace/stages/stage5_get_offsets.h          |   4 +
- include/trace/stages/stage6_event_callback.h       |  12 +
- kernel/fork.c                                      |  14 +
- kernel/trace/Kconfig                               |   5 +-
- kernel/trace/Makefile                              |   1 +
- kernel/trace/rv/Kconfig                            |  78 ++
- kernel/trace/rv/Makefile                           |   8 +
- kernel/trace/rv/monitors/wip/wip.c                 |  88 +++
- kernel/trace/rv/monitors/wip/wip.h                 |  46 ++
- kernel/trace/rv/monitors/wwnr/wwnr.c               |  87 +++
- kernel/trace/rv/monitors/wwnr/wwnr.h               |  46 ++
- kernel/trace/rv/reactor_panic.c                    |  43 ++
- kernel/trace/rv/reactor_printk.c                   |  42 ++
- kernel/trace/rv/rv.c                               | 799 +++++++++++++++++++++
- kernel/trace/rv/rv.h                               |  68 ++
- kernel/trace/rv/rv_reactors.c                      | 508 +++++++++++++
- kernel/trace/trace.c                               |  46 +-
- kernel/trace/trace.h                               |   9 +
- kernel/trace/trace_dynevent.c                      |   2 +-
- kernel/trace/trace_eprobe.c                        |  37 +-
- kernel/trace/trace_events_hist.c                   |   7 +-
- kernel/trace/trace_events_user.c                   |   2 +-
- kernel/trace/trace_kprobe.c                        |  16 +-
- kernel/trace/trace_probe.c                         |   4 +
- kernel/trace/trace_probe.h                         |   5 +-
- kernel/trace/trace_uprobe.c                        |  12 +-
- net/batman-adv/trace.h                             |   9 +-
- net/mac80211/trace_msg.h                           |   6 +-
- samples/fprobe/fprobe_example.c                    |   2 +-
- samples/kprobes/kprobe_example.c                   |   5 +-
- samples/kprobes/kretprobe_example.c                |   5 +-
- samples/trace_events/trace-events-sample.c         |  14 +-
- samples/trace_events/trace-events-sample.h         |  32 +-
- scripts/tracing/draw_functrace.py                  |   2 +-
- .../ftrace/test.d/dynevent/add_remove_eprobe.tc    |   9 +-
- .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |   7 +
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   2 +-
- tools/verification/dot2/Makefile                   |  26 +
- tools/verification/dot2/automata.py                | 174 +++++
- tools/verification/dot2/dot2c                      |  26 +
- tools/verification/dot2/dot2c.py                   | 254 +++++++
- tools/verification/dot2/dot2k                      |  47 ++
- tools/verification/dot2/dot2k.py                   | 177 +++++
- .../dot2/dot2k_templates/main_global.c             |  91 +++
- .../dot2/dot2k_templates/main_per_cpu.c            |  91 +++
- .../dot2/dot2k_templates/main_per_task.c           |  91 +++
- tools/verification/models/wip.dot                  |  16 +
- tools/verification/models/wwnr.dot                 |  16 +
- 90 files changed, 4822 insertions(+), 186 deletions(-)
- create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
- create mode 100644 Documentation/trace/rv/da_monitor_synthesis.rst
- create mode 100644 Documentation/trace/rv/deterministic_automata.rst
- create mode 100644 Documentation/trace/rv/index.rst
- create mode 100644 Documentation/trace/rv/monitor_wip.rst
- create mode 100644 Documentation/trace/rv/monitor_wwnr.rst
- create mode 100644 Documentation/trace/rv/runtime-verification.rst
- create mode 100644 include/linux/rv.h
- create mode 100644 include/rv/automata.h
- create mode 100644 include/rv/da_monitor.h
- create mode 100644 include/rv/instrumentation.h
- create mode 100644 include/trace/events/rv.h
- create mode 100644 kernel/trace/rv/Kconfig
- create mode 100644 kernel/trace/rv/Makefile
- create mode 100644 kernel/trace/rv/monitors/wip/wip.c
- create mode 100644 kernel/trace/rv/monitors/wip/wip.h
- create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.c
- create mode 100644 kernel/trace/rv/monitors/wwnr/wwnr.h
- create mode 100644 kernel/trace/rv/reactor_panic.c
- create mode 100644 kernel/trace/rv/reactor_printk.c
- create mode 100644 kernel/trace/rv/rv.c
- create mode 100644 kernel/trace/rv/rv.h
- create mode 100644 kernel/trace/rv/rv_reactors.c
- create mode 100644 tools/verification/dot2/Makefile
- create mode 100644 tools/verification/dot2/automata.py
- create mode 100644 tools/verification/dot2/dot2c
- create mode 100644 tools/verification/dot2/dot2c.py
- create mode 100644 tools/verification/dot2/dot2k
- create mode 100644 tools/verification/dot2/dot2k.py
- create mode 100644 tools/verification/dot2/dot2k_templates/main_global.c
- create mode 100644 tools/verification/dot2/dot2k_templates/main_per_cpu.c
- create mode 100644 tools/verification/dot2/dot2k_templates/main_per_task.c
- create mode 100644 tools/verification/models/wip.dot
- create mode 100644 tools/verification/models/wwnr.dot
----------------------------

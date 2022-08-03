@@ -2,142 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBFF588587
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5B58858D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiHCBtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
+        id S234904AbiHCBzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234937AbiHCBtU (ORCPT
+        with ESMTP id S233423AbiHCBzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:49:20 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D921B29819
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 18:49:18 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so14054656fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 18:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WU2kUjnstyWYEWgZ7QsgdfMzDYXtd6/0pNDP+bXUFL0=;
-        b=pIWX4GwdMT4s1CNUKjFxa/wUxQiqlI9U7FowMhYAeZa7umj+sPRJbIpi+Z21gUEYYE
-         433Nns+UPJlflf0DqSQA3yiK/+50l7xj4k6R4ReZguOx2Cc7/g2fiMg95y1GNIUeDPMd
-         V+Lh9P03ep6UhJYdGI8gJ0zY7ai0eAd28oK81+97R9w7l1upYIeN8vIpaEkwxwy8kZyf
-         zZF9FkcCJzYUnpJN9gShop3mA/ecb4sYCuRekLHMd0Db1+9A7jivy5e5+ApU4h/2WX+4
-         wZ2wbKDaLe7tCDrW3/uZmwaFwlh/rdLDYVY7kNr+hj2ws8TkzMpzrBJENITBpvMBXF4g
-         ToUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WU2kUjnstyWYEWgZ7QsgdfMzDYXtd6/0pNDP+bXUFL0=;
-        b=W0NI2sW0nXnI10m3pyiDi7nAhPPWkj+J2TClngs2KDRqrAuoRQ/9blUojT+CG5zXSm
-         P44Q3jkyBpsjpoyuk4GWQv57RpUtKofK8K1qKxfYbVFb8ii35VjAYoloO4uCHZjz9GZY
-         0XasU1aEb5B77d5c55QFHwSCeGuLuUEyS8dnQ4dc7XvT6COgWxzC4q6P3cLsUT0RPIlw
-         0y6B1Z17GeM+7Dh7W0W5eGqgC0Tp/9GZY8tYzgjMi4pE8fod7Ko/PEFL4M+vD/0WIpg4
-         BoikVtgSyktU7s/uB3o7mgheO5QoBSAIaGUAbkgp+WS069EVW8DfvqIKB7Tf2bQz+Nok
-         7kEQ==
-X-Gm-Message-State: ACgBeo0+BVsplaqAIOuw9bBru63LFDFmRyWFqMosZ5xNKptD9RNLj38z
-        dl6ILHpi03M0WhvJnBjJM/ahcG1q2gWsOR2sEJ5q
-X-Google-Smtp-Source: AA6agR7k//bqv1RaCR4etWugLTK8eSl7/U9by+A0YLPK6GBwFTC/Luh5uDHGjqJVOoDgmY2y6IrjX0JtPhXr4FRQHZA=
-X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
- k8-20020a056870958800b00101c003bfe6mr993168oao.41.1659491357702; Tue, 02 Aug
- 2022 18:49:17 -0700 (PDT)
+        Tue, 2 Aug 2022 21:55:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46A78186D6
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 18:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659491720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HX8NATpwjkTcDpmelYUXYRI0qsy6slg8qubTweG5yEM=;
+        b=MtYcmS8hwGBR9Qc+VzevvsNJlo7e077sbHA6qFsrSlIRkEQ7RUquI6dMVrzXKPM7oBCtDw
+        ndHaUCDvD8ryxOGY0ig4rqlWKr2pmS79eh0Pkp/PxBOHrd1dnK+QMFCj9MAqxTtTCNDBPz
+        2j7Mxb3qMd4wcl25pIvsa5DpecUK0Ow=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-130-xp1F_XonMSCfCRwzY6-3vQ-1; Tue, 02 Aug 2022 21:55:16 -0400
+X-MC-Unique: xp1F_XonMSCfCRwzY6-3vQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE7413806703;
+        Wed,  3 Aug 2022 01:55:14 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88DD92166B26;
+        Wed,  3 Aug 2022 01:55:13 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] sched, cpuset: Fix dl_cpu_busy() panic due to empty cs->cpus_allowed
+Date:   Tue,  2 Aug 2022 21:54:51 -0400
+Message-Id: <20220803015451.2219567-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <CAHC9VhQw8LR9yJ9UkA-9aPNETQavt25G-GGSs-_ztg6ZpxNzxA@mail.gmail.com>
- <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
-In-Reply-To: <CACYkzJ7=Cvo9qncMX_5_Wp1zNNWDyh3DxdOLq_ysWxDCs8VC8g@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 2 Aug 2022 21:49:06 -0400
-Message-ID: <CAHC9VhRMcouRoGn1SbhcMXpeOzS-S+z-fkK-t4-uvib0MACLow@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     KP Singh <kpsingh@kernel.org>,
-        Frederick Lawler <fred@cloudflare.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 5:25 PM KP Singh <kpsingh@kernel.org> wrote:
-> On Mon, Aug 1, 2022 at 5:19 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Mon, Aug 1, 2022 at 9:13 AM Frederick Lawler <fred@cloudflare.com> wrote:
-> > > On 7/22/22 7:20 AM, Paul Moore wrote:
-> > > > On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> > > >
-> > > >> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
-> > > >>> While creating a LSM BPF MAC policy to block user namespace creation, we
-> > > >>> used the LSM cred_prepare hook because that is the closest hook to prevent
-> > > >>> a call to create_user_ns().
-> > > >>>
-> > > >>> The calls look something like this:
-> > > >>>
-> > > >>> cred = prepare_creds()
-> > > >>> security_prepare_creds()
-> > > >>> call_int_hook(cred_prepare, ...
-> > > >>> if (cred)
-> > > >>> create_user_ns(cred)
-> > > >>>
-> > > >>> We noticed that error codes were not propagated from this hook and
-> > > >>> introduced a patch [1] to propagate those errors.
-> > > >>>
-> > > >>> The discussion notes that security_prepare_creds()
-> > > >>> is not appropriate for MAC policies, and instead the hook is
-> > > >>> meant for LSM authors to prepare credentials for mutation. [2]
-> > > >>>
-> > > >>> Ultimately, we concluded that a better course of action is to introduce
-> > > >>> a new security hook for LSM authors. [3]
-> > > >>>
-> > > >>> This patch set first introduces a new security_create_user_ns() function
-> > > >>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
-> > > >> Patch 1 and 4 still need review from the lsm/security side.
-> > > >
-> > > > This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
-> > > >
-> > > > I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
-> > >
-> > > Based on last weeks comments, should I go ahead and put up v4 for
-> > > 5.20-rc1 when that drops, or do I need to wait for more feedback?
-> >
-> > In general it rarely hurts to make another revision, and I think
-> > you've gotten some decent feedback on this draft, especially around
-> > the BPF LSM tests; I think rebasing on Linus tree after the upcoming
-> > io_uring changes are merged would be a good idea.
+With cgroup v2, the cpuset's cpus_allowed mask can be empty indicating
+that the cpuset will just use the effective cpus of its parent. So
+cpuset_can_attach() can call task_can_attach() with an empty mask.
+This can lead to cpumask_any_and() returns nr_cpu_ids causing the call
+to dl_bw_of() to crash due to percpu value access of an out of bound
+cpu value. For example,
 
-As I was typing up my reply I realized I mistakenly mentioned the
-io_uring changes that Linus just merged today - oops!  If you haven't
-figured it out already, you can disregard that comment, that's a
-completely different problem and a completely different set of patches
-:)
+[80468.182258] BUG: unable to handle page fault for address: ffffffff8b6648b0
+  :
+[80468.191019] RIP: 0010:dl_cpu_busy+0x30/0x2b0
+  :
+[80468.207946] Call Trace:
+[80468.208947]  cpuset_can_attach+0xa0/0x140
+[80468.209953]  cgroup_migrate_execute+0x8c/0x490
+[80468.210931]  cgroup_update_dfl_csses+0x254/0x270
+[80468.211898]  cgroup_subtree_control_write+0x322/0x400
+[80468.212854]  kernfs_fop_write_iter+0x11c/0x1b0
+[80468.213777]  new_sync_write+0x11f/0x1b0
+[80468.214689]  vfs_write+0x1eb/0x280
+[80468.215592]  ksys_write+0x5f/0xe0
+[80468.216463]  do_syscall_64+0x5c/0x80
+[80468.224287]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-> > Although as a
-> > reminder to the BPF LSM folks - I'm looking at you KP Singh :) - I
-> > need an ACK from you guys before I merge the BPF related patches
->
-> Apologies, I was on vacation. I am looking at the patches now.
-> Reviews and acks coming soon :)
+Fix that by using effective_cpus instead. For cgroup v1, effective_cpus
+is the same as cpus_allowed. For v2, effective_cpus is the real cpumask
+to be used by tasks within the cpuset anyway.
 
-No worries, we've still got the two weeks of the merge window before I
-can do anything into linux-next - thanks KP!
+Also update task_can_attach()'s 2nd argument name to cs_effective_cpus to
+reflect the change. In addition, a check is added to task_can_attach()
+to guard against the possibility that cpumask_any_and() may return a
+value >= nr_cpu_ids.
 
+Fixes: 7f51412a415d ("sched/deadline: Fix bandwidth check/update when migrating tasks between exclusive cpusets")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/sched.h  | 2 +-
+ kernel/cgroup/cpuset.c | 2 +-
+ kernel/sched/core.c    | 8 +++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 88b8817b827d..6a060160f0db 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1813,7 +1813,7 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
+ }
+ 
+ extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
+-extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_cpus_allowed);
++extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
+ #ifdef CONFIG_SMP
+ extern void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask);
+ extern int set_cpus_allowed_ptr(struct task_struct *p, const struct cpumask *new_mask);
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 71a418858a5e..58aadfda9b8b 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2239,7 +2239,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+ 		goto out_unlock;
+ 
+ 	cgroup_taskset_for_each(task, css, tset) {
+-		ret = task_can_attach(task, cs->cpus_allowed);
++		ret = task_can_attach(task, cs->effective_cpus);
+ 		if (ret)
+ 			goto out_unlock;
+ 		ret = security_task_setscheduler(task);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 5555e49c4e12..addc3c2d2122 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8980,7 +8980,7 @@ int cpuset_cpumask_can_shrink(const struct cpumask *cur,
+ }
+ 
+ int task_can_attach(struct task_struct *p,
+-		    const struct cpumask *cs_cpus_allowed)
++		    const struct cpumask *cs_effective_cpus)
+ {
+ 	int ret = 0;
+ 
+@@ -8999,9 +8999,11 @@ int task_can_attach(struct task_struct *p,
+ 	}
+ 
+ 	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
+-					      cs_cpus_allowed)) {
+-		int cpu = cpumask_any_and(cpu_active_mask, cs_cpus_allowed);
++					      cs_effective_cpus)) {
++		int cpu = cpumask_any_and(cpu_active_mask, cs_effective_cpus);
+ 
++		if (unlikely(cpu >= nr_cpu_ids))
++			return -EINVAL;
+ 		ret = dl_cpu_busy(cpu, p);
+ 	}
+ 
 -- 
-paul-moore.com
+2.31.1
+

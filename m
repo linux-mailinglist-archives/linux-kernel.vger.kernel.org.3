@@ -2,154 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7166A588875
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C61588879
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237419AbiHCIHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S236888AbiHCII1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbiHCIHF (ORCPT
+        with ESMTP id S234652AbiHCIIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:07:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE7B2181C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:07:04 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2737CGgG005901;
-        Wed, 3 Aug 2022 08:06:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=cD/HLOT1RCr5FLze4xYHuh82tvZmGK0k7ghWRsfmnMs=;
- b=s7VdRk7u/VPgZX+3zRnI5WEBcaEr49EVC9har418PaXIytMUYVl3Z3KmOfxJIUmzvpnn
- IZICnARoFMQEKx0JoHxtdFJMrWwRIYUrCUBwz/WICyuI+vdpRzGrV3ZZ6w9/oNpibLlJ
- ubGoesRJ5TnWxAFJ1NucRrDjTfpbWQqvqgQQ5RLjd/vUyJoy+w2Egg0w2OetFbXcTSto
- vLviHrZ1/Fs92jzv20jzTqK80h6LufA0ilQ7if22I32sGtQIdGJsulcRTz6qiGJCFUPn
- S313xNuwe/0TzqQ6SxdZh9Ohihl/ERzr0/y/NRGcQE2UrUvlDG0CU2Ke6sWQVMgvcSDI EA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqmdu1bx1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 08:06:41 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27386GEr017991;
-        Wed, 3 Aug 2022 08:06:39 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3hmv98vgnq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 08:06:39 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27386qMM31326540
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Aug 2022 08:06:52 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E7DF42041;
-        Wed,  3 Aug 2022 08:06:36 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D93E84203F;
-        Wed,  3 Aug 2022 08:06:35 +0000 (GMT)
-Received: from localhost (unknown [9.43.94.156])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 08:06:35 +0000 (GMT)
-Date:   Wed, 03 Aug 2022 13:36:34 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH 2/3] powerpc/ppc-opcode: Define and use PPC_RAW_TRAP() and
- PPC_RAW_TW()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <b2d762191b095530789ac8b71b167c6740bb6aed.1657205708.git.christophe.leroy@csgroup.eu>
-        <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
+        Wed, 3 Aug 2022 04:08:25 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F69E220E4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:08:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id v5-20020a5d9405000000b0067c98e0011dso6598393ion.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 01:08:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=DnKgHfVeryvGCNoHB1EyKn+lx8bXA1rZCbfzsbzRrB4=;
+        b=xdlGgah4QEGsVNuZhaMPQdfY1lVDyewbQNBEX3MMETQd5ynpwQ+rytgFcqn3RBqTA+
+         5C9ByTkT6nzCkYswYW3+pcQRl8WYovKFwaCAppgatbRTd4zBEP07i9V0UsXcV4m+EH8d
+         Rj3+123cd2ZhxfQDzRDC8IdWoIjXej0GXwNwX6LX3aWUOVl8ZDHnbzL6bRFMSElzZY77
+         5z+gn5x782xC+MsZnoRxFqDtYoUh6YMOvKc8CllRiMCjaTYI09j1jZ9sA3vOPMfeKg8/
+         gJl0c1aNF8+CNsAZOeQTc+5ICSS5b2swyddRHVZKf2GCCSjsMqDqefW92zSL1J4bSSFj
+         QjGg==
+X-Gm-Message-State: AJIora+JC8nc15XzPPN2Rht9gc+XgQF2qehUdS8QHtOw4LlUh9pDG0VK
+        b9nAQB2bMBwsSfPM4IFi1LhXDTGD7bgktpkCV/Qu/aUKjjHq
+X-Google-Smtp-Source: AGRyM1uRqF+ppfRWmGMINjlhkoAsyyiv/kcTBOB7yLp+o6LFMAl6hFsPdPtUtinskQRHxOX03PyHY8yewA3xh1ZN567i19ofbiC2
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 91osUYcya-v8DiiS0T0UMNk2AIlwaNzq
-X-Proofpoint-GUID: 91osUYcya-v8DiiS0T0UMNk2AIlwaNzq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=898 lowpriorityscore=0 spamscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208030037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:602:b0:2de:693:e7f4 with SMTP id
+ t2-20020a056e02060200b002de0693e7f4mr10495029ils.278.1659514103476; Wed, 03
+ Aug 2022 01:08:23 -0700 (PDT)
+Date:   Wed, 03 Aug 2022 01:08:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a33d5b05e551bc31@google.com>
+Subject: [syzbot] general protection fault in br_nf_pre_routing_finish (2)
+From:   syzbot <syzbot+dc42341ea62e8eb6c1f7@syzkaller.appspotmail.com>
+To:     bridge@lists.linux-foundation.org, coreteam@netfilter.org,
+        davem@davemloft.net, edumazet@google.com, fw@strlen.de,
+        kadlec@netfilter.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
+        pablo@netfilter.org, razor@blackwall.org, roopa@nvidia.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Add and use PPC_RAW_TRAP() instead of opencoding.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/include/asm/ppc-opcode.h | 2 ++
->  arch/powerpc/include/asm/probes.h     | 3 ++-
->  arch/powerpc/xmon/xmon.c              | 2 +-
->  3 files changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include=
-/asm/ppc-opcode.h
-> index 89beabf5325c..5527a955fb4a 100644
-> --- a/arch/powerpc/include/asm/ppc-opcode.h
-> +++ b/arch/powerpc/include/asm/ppc-opcode.h
-> @@ -581,6 +581,8 @@
-> =20
->  #define PPC_RAW_BRANCH(offset)		(0x48000000 | PPC_LI(offset))
->  #define PPC_RAW_BL(offset)		(0x48000001 | PPC_LI(offset))
-> +#define PPC_RAW_TW(t0, a, b)		(0x7f000008 | ___PPC_RS(t0) | ___PPC_RA(a)=
- | ___PPC_RB(b))
+Hello,
 
-Shouldn't that be 0x7c000008 ?
+syzbot found the following issue on:
 
-- Naveen
+HEAD commit:    d7c4c9e075f8 ax25: fix incorrect dev_tracker usage
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=123a0cde080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+dashboard link: https://syzkaller.appspot.com/bug?extid=dc42341ea62e8eb6c1f7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dc42341ea62e8eb6c1f7@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 32332 Comm: kworker/0:4 Not tainted 5.19.0-rc8-syzkaller-00103-gd7c4c9e075f8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_power_efficient neigh_managed_work
+RIP: 0010:br_nf_pre_routing_finish+0x200/0x1ad0 net/bridge/br_netfilter_hooks.c:360
+Code: 83 c0 01 38 d0 7c 08 84 d2 0f 85 e3 12 00 00 48 8d 7b 02 45 0f b7 74 24 3e 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 b9
+RSP: 0018:ffffc90000007868 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: 0000000000000000 RSI: ffffffff883fc456 RDI: 0000000000000002
+RBP: ffff88801d0ee000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807e999000
+R13: 0000000000000010 R14: 00000000000005dc R15: ffff888074392800
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fde65908d64 CR3: 000000004d41b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ NF_HOOK include/linux/netfilter.h:301 [inline]
+ br_nf_pre_routing+0xae3/0x1f00 net/bridge/br_netfilter_hooks.c:531
+ nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
+ nf_hook_bridge_pre net/bridge/br_input.c:255 [inline]
+ br_handle_frame+0x8df/0x1280 net/bridge/br_input.c:399
+ __netif_receive_skb_core+0xa13/0x3920 net/core/dev.c:5378
+ __netif_receive_skb_one_core+0xae/0x180 net/core/dev.c:5482
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5598
+ process_backlog+0x3a0/0x7c0 net/core/dev.c:5926
+ __napi_poll+0xb3/0x6e0 net/core/dev.c:6492
+ napi_poll net/core/dev.c:6559 [inline]
+ net_rx_action+0x9c1/0xd90 net/core/dev.c:6670
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
+ do_softirq.part.0+0xde/0x130 kernel/softirq.c:472
+ </IRQ>
+ <TASK>
+ do_softirq kernel/softirq.c:464 [inline]
+ __local_bh_enable_ip+0x102/0x120 kernel/softirq.c:396
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:br_nf_pre_routing_finish+0x200/0x1ad0 net/bridge/br_netfilter_hooks.c:360
+Code: 83 c0 01 38 d0 7c 08 84 d2 0f 85 e3 12 00 00 48 8d 7b 02 45 0f b7 74 24 3e 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 b9
+RSP: 0018:ffffc90000007868 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: 0000000000000000 RSI: ffffffff883fc456 RDI: 0000000000000002
+RBP: ffff88801d0ee000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807e999000
+R13: 0000000000000010 R14: 00000000000005dc R15: ffff888074392800
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fde65908d64 CR3: 000000004d41b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	83 c0 01             	add    $0x1,%eax
+   3:	38 d0                	cmp    %dl,%al
+   5:	7c 08                	jl     0xf
+   7:	84 d2                	test   %dl,%dl
+   9:	0f 85 e3 12 00 00    	jne    0x12f2
+   f:	48 8d 7b 02          	lea    0x2(%rbx),%rdi
+  13:	45 0f b7 74 24 3e    	movzwl 0x3e(%r12),%r14d
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 01             	add    $0x1,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85                   	.byte 0x85
+  3f:	b9                   	.byte 0xb9
 
 
-> +#define PPC_RAW_TRAP()			PPC_RAW_TW(31, 0, 0)
-> =20
->  /* Deal with instructions that older assemblers aren't aware of */
->  #define	PPC_BCCTR_FLUSH		stringify_in_c(.long PPC_INST_BCCTR_FLUSH)
-> diff --git a/arch/powerpc/include/asm/probes.h b/arch/powerpc/include/asm=
-/probes.h
-> index 00634e3145e7..e77a2ed7d938 100644
-> --- a/arch/powerpc/include/asm/probes.h
-> +++ b/arch/powerpc/include/asm/probes.h
-> @@ -9,8 +9,9 @@
->   */
->  #include <linux/types.h>
->  #include <asm/disassemble.h>
-> +#include <asm/ppc-opcode.h>
-> =20
-> -#define BREAKPOINT_INSTRUCTION	0x7fe00008	/* trap */
-> +#define BREAKPOINT_INSTRUCTION	PPC_RAW_TRAP()	/* trap */
-> =20
->  /* Trap definitions per ISA */
->  #define IS_TW(instr)		(((instr) & 0xfc0007fe) =3D=3D 0x7c000008)
-> diff --git a/arch/powerpc/xmon/xmon.c b/arch/powerpc/xmon/xmon.c
-> index f80c714f1d49..26ef3388c24c 100644
-> --- a/arch/powerpc/xmon/xmon.c
-> +++ b/arch/powerpc/xmon/xmon.c
-> @@ -116,7 +116,7 @@ struct bpt {
->  static struct bpt bpts[NBPTS];
->  static struct bpt dabr[HBP_NUM_MAX];
->  static struct bpt *iabr;
-> -static unsigned bpinstr =3D 0x7fe00008;	/* trap */
-> +static unsigned int bpinstr =3D PPC_RAW_TRAP();
-> =20
->  #define BP_NUM(bp)	((bp) - bpts + 1)
-> =20
-> --=20
-> 2.36.1
->=20
->=20
->=20
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

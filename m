@@ -2,773 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD42588D00
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69934588D0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiHCNdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S237821AbiHCNgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiHCNdg (ORCPT
+        with ESMTP id S234360AbiHCNgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:33:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941D311A34;
-        Wed,  3 Aug 2022 06:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659533613; x=1691069613;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pm4jS0WedjEmg6RPWpI6a8ONTl6ZBUHsk3jqeXmV8HM=;
-  b=Fwah+P/TLwFG62khfFlHECZyVvyTiJOhxpp02tSLNpzir+FM6cU4AX43
-   /W57AYd6CG0jMsMj2/Hk48dunuLgLBX4IpACJt6V46jM6JmzzIs2NcWDZ
-   AWw5on9pWiWu6RsCgeDEJwNSQc2QHPplbkZluXiyuO8aYBxCF8+0z7ozt
-   b5RWBsKXOgdytr4Y3exPOTJAT43hAZWMTIijhMDDofhJergmPWm9wn59/
-   GfpAgEybrpswPVVfX2/MoJcEEipCr+8uPhHP1IIRM8iWo6csmHp6LqLKh
-   w2wcL+1vTyrffyRi3ynjRc/4OEG/Ie/M2tQ6d4xesRcgCTOKkdzf181hc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="315533418"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="315533418"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 06:33:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="602827511"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 03 Aug 2022 06:33:32 -0700
-Received: from [10.252.214.167] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 80B20580C55;
-        Wed,  3 Aug 2022 06:33:30 -0700 (PDT)
-Message-ID: <e3c3de8f-d285-963c-9a23-abe2616210fb@linux.intel.com>
-Date:   Wed, 3 Aug 2022 09:33:29 -0400
+        Wed, 3 Aug 2022 09:36:40 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231671835B;
+        Wed,  3 Aug 2022 06:36:39 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31f41584236so171611797b3.5;
+        Wed, 03 Aug 2022 06:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NbEkmhp4ylSkvGtJq77wNtGsbmQWNZVmdOV2TFt4T7E=;
+        b=OJhNdbraYgEHabTSeFWTYvJphQ3Pz27f+t7+ioW3V/haNlNvOn4wmk8v8YedDYZz9N
+         4USr7sCGi/lE7DF8TM4E3NMDBKErysp2FJioIhaY8m5cqtzxJN810g8h0LVS4Mu6yk31
+         hKzZKaZ5R3mH+aPk29TfE/PCOoBbcHoNPDSWE9XGTisbu1yhgw55AGVrfZis/sYXUlPA
+         /5qWyJAs/N1ZPzF9Jim4ibKFMlI8aumtoXyXwX3ho/hq287yhwElX/twYsiJ7vr0cARv
+         5wV14XcwNRLIjt1URTfHH+m5BUmYLBjEw232yVLG+sltUGiCgaHbuYhOg/SFCfs+Mytz
+         vJIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NbEkmhp4ylSkvGtJq77wNtGsbmQWNZVmdOV2TFt4T7E=;
+        b=HCAH/jcrOnZ0CqqETXWGyOUvE7lTsxstjGCGEzxP+DUPDS0XNap5E1VqTEXjUZihCs
+         K55MtKp4hw46xot5bYx6JCLtAVfADWBOJ971mz5EM08RHphgxXtMCiBBUb352/WO1LjF
+         QA57lo8qo0pNqbHgOhfkzbf7XQgHE3kOO3joKoyKFYdo1XI95vl/bIyZAvKQv4nd5RGa
+         1dCp5OGLfbwV0kTiKaKzZcBBWP6Y2BUBuAjaEOndIjYwn/B/r9ldVg590r4xd0Yk+0LH
+         PdgCuMcfwqDVdVMLXupkim8rDgB9cGiiN1rJyKU4LJPcmM6Pc4YwvUJD6V/pCsEckx3X
+         PEXg==
+X-Gm-Message-State: ACgBeo0cNF8AB+Y6U/Wx9mRISvV1NkaJjbqOLlRD6f/y70UGdH/lWgZ0
+        2VVeyWQP9ZerQEQaltLUDdwZSSOzNK7XYK6kLq0=
+X-Google-Smtp-Source: AA6agR4g0h3lylwEXIBoN0wpm372EG37CIaJoLbhb1HtoTHCDTPZtuSfCJzq9B64sIcZcGPri+8ZY1qT/quddQnfw1g=
+X-Received: by 2002:a0d:d60f:0:b0:325:1853:2b with SMTP id y15-20020a0dd60f000000b003251853002bmr11734428ywd.24.1659533798315;
+ Wed, 03 Aug 2022 06:36:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v1 1/3] perf vendor events: Remove bad broadwellde uncore
- events
-To:     Ian Rogers <irogers@google.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220803063820.1345011-1-irogers@google.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220803063820.1345011-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <4b1d5266-40a9-9897-7caf-d3d41c0aa598@linaro.org>
+In-Reply-To: <4b1d5266-40a9-9897-7caf-d3d41c0aa598@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 3 Aug 2022 14:36:11 +0100
+Message-ID: <CA+V-a8vWDk94kxWRF0App7fEmpeB6-rb0Nu8ZG+QuT10aC11=g@mail.gmail.com>
+Subject: Re: [PATCH 1/4] media: dt-bindings: media: Document RZ/G2L CSI-2 block
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
+Thank you for the review.
 
-On 2022-08-03 2:38 a.m., Ian Rogers wrote:
-> The event converter scripts at:
-> https://github.com/intel/event-converter-for-linux-perf
-> passes Filter values from data on 01.org that is bogus in a perf command
-> line and can cause perf to infinitely recurse in parse events. Remove
-> such events using the updated patch:
-> https://github.com/intel/event-converter-for-linux-perf/pull/15/commits/485e42418d4f520a641994a1b041c149bb34f4a6
-> 
-> Fixes: ef908a192512 ("perf vendor events: Update Intel broadwellde")
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  .../arch/x86/broadwellde/uncore-cache.json    | 455 ------------------
->  .../arch/x86/broadwellde/uncore-other.json    |  33 --
->  2 files changed, 488 deletions(-)
-> 
-> diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-> index caadbca1b15b..75655478952f 100644
-> --- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-> +++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-cache.json
-> @@ -32,72 +32,6 @@
->          "PublicDescription": "Counts the number of cycles either the local distress or incoming distress signals are asserted.  Incoming distress includes both up and dn.",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "Cache Lookups; Any Request",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.ANY",
-> -        "Filter": "CBoFilter0[23:17]",
+On Tue, Aug 2, 2022 at 8:36 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 01/08/2022 23:47, Lad Prabhakar wrote:
+> > Document the CSI-2 block which is part of CRU found in Renesas
+> > RZ/G2L SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > RFC v2 -> v1
+>
+> Too many "media" in the subject prefixes.
+>
+I followed the pattern seen by "git log --oneline
+Documentation/devicetree/bindings/media/", but I do agree I can drop
+the extra "media" after "dt-bindings:"
 
+> > * Fixed review comments pointed by Rob and Jacopo.
+> >
+> > RFC v1 -> RFC v2
+> > * New patch
+> > ---
+> >  .../bindings/media/renesas,rzg2l-csi2.yaml    | 149 ++++++++++++++++++
+> >  1 file changed, 149 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> > new file mode 100644
+> > index 000000000000..f82f88c096df
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
+> > @@ -0,0 +1,149 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2022 Renesas Electronics Corp.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-csi2.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Renesas RZ/G2L (and alike SoC's) MIPI CSI-2 receiver
+> > +
+> > +maintainers:
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +description:
+> > +  The CSI-2 receiver device provides MIPI CSI-2 capabilities for the Renesas RZ/G2L
+> > +  (and alike SoCs). MIPI CSI-2 is part of the CRU block which is used in conjunction
+> > +  with the Image Processing module, which provides the video capture capabilities.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
+> > +              - renesas,r9a07g054-csi2       # RZ/V2L
+> > +          - const: renesas,rzg2l-csi2
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  interrupt-names:
+> > +    const: csi2_link
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Internal clock for connecting CRU and MIPI
+> > +      - description: CRU Main clock
+> > +      - description: CPU Register access clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: sysclk
+> > +      - const: vclk
+> > +      - const: pclk
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    items:
+> > +      - description: CRU_CMN_RSTB reset terminal
+> > +
+> > +  reset-names:
+> > +    const: cmn-rstb
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description:
+> > +          Input port node, single endpoint describing the CSI-2 transmitter.
+> > +
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              data-lanes:
+> > +                minItems: 1
+> > +                maxItems: 4
+> > +                items:
+> > +                  maximum: 4
+> > +
+> > +            required:
+> > +              - clock-lanes
+> > +              - data-lanes
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description:
+> > +          Output port node, Image Processing block connected to the CSI-2 receiver.
+> > +
+> > +    required:
+> > +      - port@0
+> > +      - port@1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - power-domains
+> > +  - resets
+> > +  - reset-names
+> > +  - ports
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/r9a07g044-cpg.h>
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +    csi20: csi2@10830400 {
+>
+> Node name just "csi"
+>
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+OK will replace it with csi.
 
-The bogus Filter value is introduced from the previous commit ef908a192512.
+>
+> > +            compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
+> > +            reg = <0x10830400 0xfc00>;
+>
+> Please use 4-space indentation for example DTS.
+>
+Sure will do.
 
-+    {
-+        "BriefDescription": "Cache Lookups; Any Request",
-         "Counter": "0,1,2,3",
-         "EventCode": "0x34",
-         "EventName": "UNC_C_LLC_LOOKUP.ANY",
--        "Filter": "filter_state=0x1",
-+        "Filter": "CBoFilter0[23:17]",
-         "PerPkg": "1",
--        "ScaleUnit": "64Bytes",
-+        "PublicDescription": "Counts the number of times the LLC was
-accessed - this includes code, data, prefetches and hints coming from
-L2.  This has numerous filters available.  Note the non-standard
-filtering equation.  This event will count requests that lookup the
-cache multiple times with multiple increments.  One must ALWAYS set
-umask bit 0 and select a state or states to match.  Otherwise, the event
-will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI]
-state.; Filters for any transaction originating from the IPQ or IRQ.
-This does not include lookups originating from the ISMQ.",
-         "UMask": "0x11",
-         "Unit": "CBO"
-     },
+Cheers,
+Prabhakar
 
-If I recall correctly, the event list in the 01.org should always have
-Filter value CBoFilter0[23:17]. It probably be the converter tool to
-change it to "filter_state=0x1". I'm not sure why the converter tool
-doesn't do it now.
-
-If that's the case, I think we should fix the current converter tool,
-rather than simply delete the event.
-
-Also, it seems the bogus Filter value is not captured by the perf test.
-I think it's better to improve the perf test to test it.
-
-
-Thanks,
-Kan
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Filters for any transaction originating from the IPQ or IRQ.  This does not include lookups originating from the ISMQ.",
-> -        "UMask": "0x11",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "Cache Lookups; Data Read Request",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.DATA_READ",
-> -        "Filter": "CBoFilter0[23:17]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Read transactions",
-> -        "UMask": "0x3",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "Cache Lookups; Lookups that Match NID",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.NID",
-> -        "Filter": "CBoFilter0[23:17]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Qualify one of the other subevents by the Target NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.nid.   In conjunction with STATE = I, it is possible to monitor misses to specific NIDs in the system.",
-> -        "UMask": "0x41",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "Cache Lookups; Any Read Request",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.READ",
-> -        "Filter": "CBoFilter0[22:18]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Read transactions",
-> -        "UMask": "0x21",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "Cache Lookups; External Snoop Request",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.REMOTE_SNOOP",
-> -        "Filter": "CBoFilter0[23:17]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Filters for only snoop requests coming from the remote socket(s) through the IPQ.",
-> -        "UMask": "0x9",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "Cache Lookups; Write Requests",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x34",
-> -        "EventName": "UNC_C_LLC_LOOKUP.WRITE",
-> -        "Filter": "CBoFilter0[23:17]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times the LLC was accessed - this includes code, data, prefetches and hints coming from L2.  This has numerous filters available.  Note the non-standard filtering equation.  This event will count requests that lookup the cache multiple times with multiple increments.  One must ALWAYS set umask bit 0 and select a state or states to match.  Otherwise, the event will count nothing.   CBoGlCtrl[22:18] bits correspond to [FMESI] state.; Writeback transactions from L2 to the LLC  This includes all write transactions -- both Cachable and UC.",
-> -        "UMask": "0x5",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "Lines Victimized; Lines in E state",
->          "Counter": "0,1,2,3",
-> @@ -148,17 +82,6 @@
->          "UMask": "0x1",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "Lines Victimized; Victimized Lines that Match NID",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x37",
-> -        "EventName": "UNC_C_LLC_VICTIMS.NID",
-> -        "Filter": "CBoFilter1[17:10]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of lines that were victimized on a fill.  This can be filtered by the state that the line was in.; Qualify one of the other subevents by the Target NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.nid.   In conjunction with STATE = I, it is possible to monitor misses to specific NIDs in the system.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "Cbo Misc; DRd hitting non-M with raw CV=0",
->          "Counter": "0,1,2,3",
-> @@ -789,17 +712,6 @@
->          "UMask": "0x1",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "Probe Queue Retries; Target Node Filter",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x28",
-> -        "EventName": "UNC_C_RxR_IPQ_RETRY2.TARGET",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Number of times a snoop (probe) request had to retry.  Filters exist to cover some of the common cases retries.; Counts the number of times that a request from the IPQ was retried filtered by the Target NodeID as specified in the Cbox's Filter register.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "Ingress Request Queue Rejects; Address Conflict",
->          "Counter": "0,1,2,3",
-> @@ -840,17 +752,6 @@
->          "UMask": "0x20",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "Ingress Request Queue Rejects",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x32",
-> -        "EventName": "UNC_C_RxR_IRQ_RETRY.NID",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Qualify one of the other subevents by a given RTID destination NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER1.nid.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "Ingress Request Queue Rejects; No QPI Credits",
->          "Counter": "0,1,2,3",
-> @@ -891,17 +792,6 @@
->          "UMask": "0x2",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "Ingress Request Queue Rejects; Target Node Filter",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x29",
-> -        "EventName": "UNC_C_RxR_IRQ_RETRY2.TARGET",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times that a request from the IPQ was retried filtered by the Target NodeID as specified in the Cbox's Filter register.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "ISMQ Retries; Any Reject",
->          "Counter": "0,1,2,3",
-> @@ -932,17 +822,6 @@
->          "UMask": "0x20",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "ISMQ Retries",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x33",
-> -        "EventName": "UNC_C_RxR_ISMQ_RETRY.NID",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Number of times a transaction flowing through the ISMQ had to retry.  Transaction pass through the ISMQ as responses for requests that already exist in the Cbo.  Some examples include: when data is returned or when snoop responses come back from the cores.; Qualify one of the other subevents by a given RTID destination NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER1.nid.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "ISMQ Retries; No QPI Credits",
->          "Counter": "0,1,2,3",
-> @@ -963,17 +842,6 @@
->          "UMask": "0x8",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "ISMQ Retries",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x33",
-> -        "EventName": "UNC_C_RxR_ISMQ_RETRY.WB_CREDITS",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Number of times a transaction flowing through the ISMQ had to retry.  Transaction pass through the ISMQ as responses for requests that already exist in the Cbo.  Some examples include: when data is returned or when snoop responses come back from the cores.; Qualify one of the other subevents by a given RTID destination NID.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER1.nid.",
-> -        "UMask": "0x80",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "ISMQ Request Queue Rejects; No AD Sbo Credits",
->          "Counter": "0,1,2,3",
-> @@ -994,17 +862,6 @@
->          "UMask": "0x2",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "ISMQ Request Queue Rejects; Target Node Filter",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x2A",
-> -        "EventName": "UNC_C_RxR_ISMQ_RETRY2.TARGET",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of times that a request from the ISMQ was retried filtered by the Target NodeID as specified in the Cbox's Filter register.",
-> -        "UMask": "0x40",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "Ingress Occupancy; IPQ",
->          "EventCode": "0x11",
-> @@ -1109,17 +966,6 @@
->          "UMask": "0x28",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Local Memory - Opcode Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.LOCAL_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; All transactions, satisifed by an opcode,  inserted into the TOR that are satisifed by locally HOMed memory.",
-> -        "UMask": "0x21",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Inserts; Misses to Local Memory",
->          "Counter": "0,1,2,3",
-> @@ -1130,28 +976,6 @@
->          "UMask": "0x2A",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Misses to Local Memory - Opcode Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.MISS_LOCAL_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions, satisifed by an opcode, inserted into the TOR that are satisifed by locally HOMed memory.",
-> -        "UMask": "0x23",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Miss Opcode Match",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.MISS_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserted into the TOR that match an opcode.",
-> -        "UMask": "0x3",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Inserts; Misses to Remote Memory",
->          "Counter": "0,1,2,3",
-> @@ -1162,94 +986,6 @@
->          "UMask": "0x8A",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Misses to Remote Memory - Opcode Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.MISS_REMOTE_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions, satisifed by an opcode,  inserted into the TOR that are satisifed by remote caches or remote memory.",
-> -        "UMask": "0x83",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_ALL",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; All NID matched (matches an RTID destination) transactions inserted into the TOR.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.nid.  In conjunction with STATE = I, it is possible to monitor misses to specific NIDs in the system.",
-> -        "UMask": "0x48",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID Matched Evictions",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_EVICTION",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; NID matched eviction transactions inserted into the TOR.",
-> -        "UMask": "0x44",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID Matched Miss All",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_MISS_ALL",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; All NID matched miss requests that were inserted into the TOR.",
-> -        "UMask": "0x4A",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID and Opcode Matched Miss",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_MISS_OPCODE",
-> -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Miss transactions inserted into the TOR that match a NID and an opcode.",
-> -        "UMask": "0x43",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID and Opcode Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_OPCODE",
-> -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted into the TOR that match a NID and an opcode.",
-> -        "UMask": "0x41",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; NID Matched Writebacks",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.NID_WB",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; NID matched write transactions inserted into the TOR.",
-> -        "UMask": "0x50",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Opcode Match",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; Transactions inserted into the TOR that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc)",
-> -        "UMask": "0x1",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Inserts; Remote Memory",
->          "Counter": "0,1,2,3",
-> @@ -1260,17 +996,6 @@
->          "UMask": "0x88",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Inserts; Remote Memory - Opcode Matched",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x35",
-> -        "EventName": "UNC_C_TOR_INSERTS.REMOTE_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of entries successfuly inserted into the TOR that match  qualifications specified by the subevent.  There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc  to DRD (0x182).; All transactions, satisifed by an opcode,  inserted into the TOR that are satisifed by remote caches or remote memory.",
-> -        "UMask": "0x81",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Inserts; Writebacks",
->          "Counter": "0,1,2,3",
-> @@ -1308,16 +1033,6 @@
->          "UMask": "0x28",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Local Memory - Opcode Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.LOCAL_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding  transactions, satisifed by an opcode,  in the TOR that are satisifed by locally HOMed memory.",
-> -        "UMask": "0x21",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Occupancy; Miss All",
->          "EventCode": "0x36",
-> @@ -1336,26 +1051,6 @@
->          "UMask": "0x2A",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Misses to Local Memory - Opcode Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.MISS_LOCAL_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding Miss transactions, satisifed by an opcode, in the TOR that are satisifed by locally HOMed memory.",
-> -        "UMask": "0x23",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Miss Opcode Match",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.MISS_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); TOR entries for miss transactions that match an opcode. This generally means that the request was sent to memory or MMIO.",
-> -        "UMask": "0x3",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Occupancy",
->          "EventCode": "0x36",
-> @@ -1365,86 +1060,6 @@
->          "UMask": "0x8A",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Misses to Remote Memory - Opcode Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.MISS_REMOTE_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding Miss transactions, satisifed by an opcode, in the TOR that are satisifed by remote caches or remote memory.",
-> -        "UMask": "0x83",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_ALL",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of NID matched outstanding requests in the TOR.  The NID is programmed in Cn_MSR_PMON_BOX_FILTER.nid.In conjunction with STATE = I, it is possible to monitor misses to specific NIDs in the system.",
-> -        "UMask": "0x48",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID Matched Evictions",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_EVICTION",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding NID matched eviction transactions in the TOR .",
-> -        "UMask": "0x44",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_MISS_ALL",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding Miss requests in the TOR that match a NID.",
-> -        "UMask": "0x4A",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID and Opcode Matched Miss",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_MISS_OPCODE",
-> -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding Miss requests in the TOR that match a NID and an opcode.",
-> -        "UMask": "0x43",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID and Opcode Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_OPCODE",
-> -        "Filter": "CBoFilter1[28:20], CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); TOR entries that match a NID and an opcode.",
-> -        "UMask": "0x41",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; NID Matched Writebacks",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.NID_WB",
-> -        "Filter": "CBoFilter1[15:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); NID matched write transactions int the TOR.",
-> -        "UMask": "0x50",
-> -        "Unit": "CBO"
-> -    },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Opcode Match",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); TOR entries that match an opcode (matched by Cn_MSR_PMON_BOX_FILTER.opc).",
-> -        "UMask": "0x1",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Occupancy",
->          "EventCode": "0x36",
-> @@ -1454,16 +1069,6 @@
->          "UMask": "0x88",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "TOR Occupancy; Remote Memory - Opcode Matched",
-> -        "EventCode": "0x36",
-> -        "EventName": "UNC_C_TOR_OCCUPANCY.REMOTE_OPCODE",
-> -        "Filter": "CBoFilter1[28:20]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "For each cycle, this event accumulates the number of valid entries in the TOR that match qualifications specified by the subevent.   There are a number of subevent 'filters' but only a subset of the subevent combinations are valid.  Subevents that require an opcode or NID match require the Cn_MSR_PMON_BOX_FILTER.{opc, nid} field to be set.  If, for example, one wanted to count DRD Local Misses, one should select MISS_OPC_MATCH and set Cn_MSR_PMON_BOX_FILTER.opc to DRD (0x182); Number of outstanding  transactions, satisifed by an opcode,  in the TOR that are satisifed by remote caches or remote memory.",
-> -        "UMask": "0x81",
-> -        "Unit": "CBO"
-> -    },
->      {
->          "BriefDescription": "TOR Occupancy; Writebacks",
->          "EventCode": "0x36",
-> @@ -1610,66 +1215,6 @@
->          "UMask": "0x8",
->          "Unit": "CBO"
->      },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; AD Opcodes",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.AD",
-> -        "Filter": "HA_OpcodeMatch[5:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x4",
-> -        "Unit": "HA"
-> -    },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; Address",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.ADDR",
-> -        "Filter": "HA_AddrMatch0[31:6], HA_AddrMatch1[13:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x1",
-> -        "Unit": "HA"
-> -    },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; AK Opcodes",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.AK",
-> -        "Filter": "HA_OpcodeMatch[5:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x10",
-> -        "Unit": "HA"
-> -    },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; BL Opcodes",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.BL",
-> -        "Filter": "HA_OpcodeMatch[5:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x8",
-> -        "Unit": "HA"
-> -    },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; Address & Opcode Match",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.FILT",
-> -        "Filter": "HA_AddrMatch0[31:6], HA_AddrMatch1[13:0], HA_OpcodeMatch[5:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x3",
-> -        "Unit": "HA"
-> -    },
-> -    {
-> -        "BriefDescription": "QPI Address/Opcode Match; Opcode",
-> -        "Counter": "0,1,2,3",
-> -        "EventCode": "0x20",
-> -        "EventName": "UNC_H_ADDR_OPC_MATCH.OPC",
-> -        "Filter": "HA_OpcodeMatch[5:0]",
-> -        "PerPkg": "1",
-> -        "UMask": "0x2",
-> -        "Unit": "HA"
-> -    },
->      {
->          "BriefDescription": "BT Cycles Not Empty",
->          "Counter": "0,1,2,3",
-> diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-> index 71bdf75d8016..24c82ca873bd 100644
-> --- a/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-> +++ b/tools/perf/pmu-events/arch/x86/broadwellde/uncore-other.json
-> @@ -416,17 +416,6 @@
->          "UMask": "0x10",
->          "Unit": "IRP"
->      },
-> -    {
-> -        "BriefDescription": "Inbound Transaction Count; Select Source",
-> -        "Counter": "0,1",
-> -        "EventCode": "0x16",
-> -        "EventName": "UNC_I_TRANSACTIONS.ORDERINGQ",
-> -        "Filter": "IRPFilter[4:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Counts the number of Inbound transactions from the IRP to the Uncore.  This can be filtered based on request type in addition to the source queue.  Note the special filtering equation.  We do OR-reduction on the request type.  If the SOURCE bit is set, then we also do AND qualification based on the source portID.; Tracks only those requests that come from the port specified in the IRP_PmonFilter.OrderingQ register.  This register allows one to select one specific queue.  It is not possible to monitor multiple queues at a time.  If this bit is not set, then requests from all sources will be counted.",
-> -        "UMask": "0x40",
-> -        "Unit": "IRP"
-> -    },
->      {
->          "BriefDescription": "Inbound Transaction Count; Other",
->          "Counter": "0,1",
-> @@ -1112,17 +1101,6 @@
->          "UMask": "0x2",
->          "Unit": "UBOX"
->      },
-> -    {
-> -        "BriefDescription": "Filter Match",
-> -        "Counter": "0,1",
-> -        "EventCode": "0x41",
-> -        "EventName": "UNC_U_FILTER_MATCH.ENABLE",
-> -        "Filter": "UBoxFilter[3:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Filter match per thread (w/ or w/o Filter Enable).  Specify the thread to filter on using NCUPMONCTRLGLCTR.ThreadID.",
-> -        "UMask": "0x1",
-> -        "Unit": "UBOX"
-> -    },
->      {
->          "BriefDescription": "Filter Match",
->          "Counter": "0,1",
-> @@ -1133,17 +1111,6 @@
->          "UMask": "0x8",
->          "Unit": "UBOX"
->      },
-> -    {
-> -        "BriefDescription": "Filter Match",
-> -        "Counter": "0,1",
-> -        "EventCode": "0x41",
-> -        "EventName": "UNC_U_FILTER_MATCH.U2C_ENABLE",
-> -        "Filter": "UBoxFilter[3:0]",
-> -        "PerPkg": "1",
-> -        "PublicDescription": "Filter match per thread (w/ or w/o Filter Enable).  Specify the thread to filter on using NCUPMONCTRLGLCTR.ThreadID.",
-> -        "UMask": "0x4",
-> -        "Unit": "UBOX"
-> -    },
->      {
->          "BriefDescription": "Cycles PHOLD Assert to Ack; Assert to ACK",
->          "Counter": "0,1",
+> > +            interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
+> > +            clocks = <&cpg CPG_MOD R9A07G044_CRU_SYSCLK>,
+> > +                     <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
+> > +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>;
+> > +            clock-names = "sysclk", "vclk", "pclk";
+> > +            power-domains = <&cpg>;
+> > +            resets = <&cpg R9A07G044_CRU_CMN_RSTB>;
+> > +            reset-names = "cmn-rstb";
+> > +
+> > +            ports {
+> > +                    #address-cells = <1>;
+> > +                    #size-cells = <0>;
+> > +
+> > +                    port@0 {
+> > +                            reg = <0>;
+> > +
+> > +                            csi2_in: endpoint {
+> > +                                    clock-lanes = <0>;
+> > +                                    data-lanes = <1 2>;
+> > +                                    remote-endpoint = <&ov5645_ep>;
+> > +                            };
+> > +                    };
+> > +
+> > +                    port@1 {
+> > +                            #address-cells = <1>;
+> > +                            #size-cells = <0>;
+> > +
+> > +                            reg = <1>;
+> > +
+> > +                            csi2cru: endpoint@0 {
+> > +                                    reg = <0>;
+> > +                                    remote-endpoint = <&crucsi2>;
+> > +                            };
+> > +                    };
+> > +            };
+> > +    };
+>
+>
+> Best regards,
+> Krzysztof

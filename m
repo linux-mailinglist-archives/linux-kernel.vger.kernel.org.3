@@ -2,120 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA62588C9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E38588CA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbiHCNCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S237627AbiHCNFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiHCNCh (ORCPT
+        with ESMTP id S233605AbiHCNFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:02:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76113E35
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:02:36 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so1967319pjf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=/Ry3zzDkv6XblXGEI6RBqshIKSFKVZmsLhV6TX/Fy9g=;
-        b=GW+ly3iz+GWMy2FTnmCGJIGHfhDH3ahknX2uZ6/Mjd61PGwJ249V9oOBjQtuK6oqQG
-         C4wyHN51PIw0gKu1ZRCz2NXBrqYJXHex39uGxW88BR/ubvcepRE9iTJ9626Lq30TNZSF
-         pkgCc6NhLegVECcWldgscZFOpDW+82nXM45YDZBV4czQYzAx0gaVZpwUiwTERLMhXjJo
-         O+yd8DJXKW2k7HjnqUL2SZXfD+8+VX7CS80zJ9I0Tf1JamUAeGbucsH9KxRBbwdM9MJH
-         3/SpdkLV1OCcC7Ek8qS/Fc65zm2a5vCYiHqtiyUxKILWjaleG/02U7S+8s6lfZoyP6UA
-         uRKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=/Ry3zzDkv6XblXGEI6RBqshIKSFKVZmsLhV6TX/Fy9g=;
-        b=6CdoDdy3KBLJ0nh+ZQvdxgSUYl94GRyfKG/FHISwA2q3h9ReLVSBbRp+aN3REFu4mP
-         odcRvN+c3jEnjjuVFFXeKwVE8rWWRw/+yxQ5OSd0uszLEcEP/dsx7u0g38Op1EWYlGz9
-         bG5zYebVZw2tj5QRWbdfoBEOkUmrkoUpVCNdvt8u43IDcJ6PjgUECyR8nqk8KnTFYmRy
-         t2vbXTUcXFG3fkNk+HfAQEHzQhBU39RFnm0RIg50PaupE/VLfzMmWtuPNUXN+DeSlvxD
-         T9wJxuDKEhIlKC7U78KvICEUtoIv4cknk0SZ/Qsq1ZwSBjzQUUT19KLD15EczCD3O2jS
-         wtaw==
-X-Gm-Message-State: ACgBeo2U7+WiEyzDMxIOU8AmyxJFvlG+ZEXNQnbzE18waxNYuHnv9rAJ
-        nY6IsoKiC128jk++rob/vKkSOA==
-X-Google-Smtp-Source: AA6agR7F7CtHGW/mosj8VeMFYeR+Ew9PGPNdUTeRqY12r4rTkXbJjch3JLbnhAlv7SBnqMZ2wX4cSQ==
-X-Received: by 2002:a17:90b:3a90:b0:1f2:edfe:db4 with SMTP id om16-20020a17090b3a9000b001f2edfe0db4mr4750561pjb.105.1659531755942;
-        Wed, 03 Aug 2022 06:02:35 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id w126-20020a623084000000b0052d417039c2sm7870775pfw.133.2022.08.03.06.02.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 06:02:35 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH RESEND v2] sched/fair: Remove unused parameter idle of _nohz_idle_balance()
-Date:   Wed,  3 Aug 2022 21:02:23 +0800
-Message-Id: <20220803130223.70419-1-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Wed, 3 Aug 2022 09:05:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E096B14D24;
+        Wed,  3 Aug 2022 06:05:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4C5B8224F;
+        Wed,  3 Aug 2022 13:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDC9C433C1;
+        Wed,  3 Aug 2022 13:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659531904;
+        bh=fMUxhUc7uJ8+imfhsLv+MT5zBVy0Cj9HcWTQiwMqhn4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jJpSzA+/lwXrK0Xy9LM9rH6WHNlE6xLiFiLro2d5f35C26BN2f3fLzU9bh4UjrsI5
+         Q3EGnQY3+2O0xYJ1eDw0+W/X8DGEIJScfQPV4LWEIpDRQDPlJ71+BNrUCLwCDxetRq
+         ohevZN8qDvlCWZSI6BNDHNfJ7bjo9nOaotivcq+zMDucLhih+BIM2C/8KK3ouonrTC
+         TswIt5A6asrHkfJM+V0WGgPSj/BhqaxuMuceMxHFER5LGvzphEzw4lozdGCsrEnYAq
+         wW7ayosrmZ8OXAG3wWW7/FXXPg7/MCXnY7iO1/jCqjvKb0PfjoTaTAkZS32UZ9dVKP
+         nQiP1k3NA4TjQ==
+From:   broonie@kernel.org
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the thermal tree
+Date:   Wed,  3 Aug 2022 14:05:00 +0100
+Message-Id: <20220803130500.223005-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7a82e5f52a35 ("sched/fair: Merge for each idle cpu loop of ILB")
-has been merged. The parameter idle of _nohz_idle_balance()
-is not used anymore so we can remove it.
+Hi all,
 
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+After merging the thermal tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
----
- v2:
- - Modify the commit format, suggested by Vincent Guittot.
----
----
- kernel/sched/fair.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+/tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c: In function 'sun4i_gpadc_probe':
+/tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:640:44: error: passing argument 1 of 'thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
+  640 |   info->tzd = thermal_of_zone_register(info->sensor_device,
+      |                                        ~~~~^~~~~~~~~~~~~~~
+      |                                            |
+      |                                            struct device *
+In file included from /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:31:
+/tmp/next/build/include/linux/thermal.h:301:29: note: expected 'struct device_node *' but argument is of type 'struct device *'
+  301 | struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c: In function 'sun4i_gpadc_remove':
+/tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:684:2: error: implicit declaration of function 'thermal_zone_of_sensor_unregister'; did you mean 'thermal_zone_device_unregister'? [-Werror=implicit-function-declaration]
+  684 |  thermal_zone_of_sensor_unregister(info->sensor_device, info->tzd);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |  thermal_zone_device_unregister
+cc1: all warnings being treated as errors
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 914096c5b1ae..42f5b078d839 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10916,8 +10916,7 @@ static bool update_nohz_stats(struct rq *rq)
-  * can be a simple update of blocked load or a complete load balance with
-  * tasks movement depending of flags.
-  */
--static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags,
--			       enum cpu_idle_type idle)
-+static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags)
- {
- 	/* Earliest time when we have to do rebalance again */
- 	unsigned long now = jiffies;
-@@ -11032,7 +11031,7 @@ static bool nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)
- 	if (idle != CPU_IDLE)
- 		return false;
- 
--	_nohz_idle_balance(this_rq, flags, idle);
-+	_nohz_idle_balance(this_rq, flags);
- 
- 	return true;
- }
-@@ -11052,7 +11051,7 @@ void nohz_run_idle_balance(int cpu)
- 	 * (ie NOHZ_STATS_KICK set) and will do the same.
- 	 */
- 	if ((flags == NOHZ_NEWILB_KICK) && !need_resched())
--		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK, CPU_IDLE);
-+		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK);
- }
- 
- static void nohz_newidle_balance(struct rq *this_rq)
--- 
-2.32.0
+Caused by commit
+
+   990ee4496499ef61c06bbf ("iio/drivers/sun4i_gpadc: Switch to new of thermal API")
+
+I have used the version of the tree from 20220728 instead.
+
 

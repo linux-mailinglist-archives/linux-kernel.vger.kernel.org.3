@@ -2,135 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3872589267
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21C4589277
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbiHCSu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 14:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
+        id S238391AbiHCSw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 14:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236556AbiHCSuX (ORCPT
+        with ESMTP id S237919AbiHCSwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:50:23 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15AD12ADB;
-        Wed,  3 Aug 2022 11:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659552621; x=1691088621;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PZoNbmA1Fb2MlNefOhZyRwr/P3R3JKvVcAAgZO6IGco=;
-  b=eRsHUnH4oCPlrRS4ZgRVjUkoSzVTW7O3D+T5a/Z0MD5FnBK8YoAs63sl
-   rAlNhKlx1kTcgj1Js56FUZDKqz5lysA+ovZvheU8y4t2U3kTo8sz1yXiB
-   i1uugQg7K/suOmRbruSyWGHFZyICcKPUEK6pmEyH+a+jWYZv23L3d1tuq
-   P17+VqjGhTKYc+7oM3yyWCXBKrgUrKLGxSNBtLyxcWyqPNBN/zPG6OkfQ
-   wBQJx8/1IZ0jjU1WshI7hq3l3yv29T7uUQPPZbXoGd+cwx7WIIeXj6bf3
-   Sa/bg0jJlASV5AIiRE02A67MWEXPhrVPpMbMA6mfMD4gYVoA6Nkm38P2G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="269525474"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="269525474"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 11:50:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="578764377"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 11:50:19 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJJRi-000HZT-1k;
-        Wed, 03 Aug 2022 18:50:18 +0000
-Date:   Thu, 4 Aug 2022 02:49:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        linux-doc@vger.kernel.org
-Subject: fs/btrfs/raid56.c:1000: warning: This comment starts with '/**', but
- isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202208040217.jYokbVy6-lkp@intel.com>
+        Wed, 3 Aug 2022 14:52:53 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18374AD77
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:52:52 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id b7so12231409qvq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Y+G+jrXUwx1OFVkRbsD9P0MjCdrC773UGz0YrZMAGHM=;
+        b=Qg4toq1WD1Uy2p1uAeLCrkr1oBD2+u39M0rQvmgxPk9IkeLEwYJsu0vvypnj9MfQrW
+         wSumPzl0GmbYt9H1v+tjt7bs1cNk3LpB57pbUsVKRCztpU4EYsrUtDNxnlHGA6H+IGU4
+         wie1eavYiB0lBQXiN461/VNCdXdyDvmSKmEOx9XfkVpodVME7840n5Dk+h+XlP8OYkN/
+         Bg/puWBeQiyhMFdtGmnfWQZENx41uSP3gMEDcan8BwW6aPZ982q2c2J7/7JhWEdM7UvU
+         8TScbKXM/QjcDxh41gH7tzKO8EwZFHfi2E8Zi9KtCO0GJljeYsL7rH3kVsmV6q9HAb5G
+         pF3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Y+G+jrXUwx1OFVkRbsD9P0MjCdrC773UGz0YrZMAGHM=;
+        b=08EekGmihkAkQmyOy/dNxn8XTDHhBt+w04KKIt73aw8307IQClmEtPYDFg0osBZHCZ
+         5sGbS4+kYOpCcbC0GHstYjNRwX+hqPOOBIK/uDdmlHy0M3KRDzGqS9Omp3Ap7HMVWu5I
+         cphH6A8mpeyvgkk4iyf1zBn6EtvKbfXTXH6LdjFuMbWPSRTz9fED3noJj0V6TJoOGPiK
+         xZK+TtL1WdBWZXiP9dvlmS1XNyiKI2mzVoXcTjr5qvCvFohiWhZBIN/3V+gpwXET2u2V
+         IuV6lF/2qk0MJH2QP6ie4xG3QjVDIthXAtKjbVq8EVB+ZCkoXt39yL4f15a2oegorGkv
+         c8vg==
+X-Gm-Message-State: ACgBeo1DvaPKaCQMzmcYR6WdqrlGQxsJ4jubU7oneTbHrC9RmS2B79J8
+        BpU8Yf148Q9UBoR6PkdM63JphCO9y30=
+X-Google-Smtp-Source: AA6agR74ppXCaKEHgk4+1cmsF7Ddh8DdWtEaLMZBLJKNeaLHmfuwX1rZqctyKztkkOwksHzPmT+BJg==
+X-Received: by 2002:ad4:5ba5:0:b0:476:dcb9:684e with SMTP id 5-20020ad45ba5000000b00476dcb9684emr7798710qvq.83.1659552771857;
+        Wed, 03 Aug 2022 11:52:51 -0700 (PDT)
+Received: from localhost ([2601:c4:c432:f9:ee0c:bfa:a55f:3217])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac846c6000000b0033b6f4895afsm2910488qto.42.2022.08.03.11.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 11:52:51 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 11:52:49 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Neel Natu <neelnatu@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched, cpumask: don't leak impossible cpus via
+ for_each_cpu_wrap().
+Message-ID: <YurEAU5SlQaZ85vZ@yury-laptop>
+References: <20220802214041.2656586-1-neelnatu@google.com>
+ <CAAH8bW_z3TjjafPRJPZmzDdOFjmU7xTLxOinw8D4nsZ2B6WN4w@mail.gmail.com>
+ <CAJDe-O+8G=hyqWcaNk8_YP9S-R9-Xnn2_cLt8Loz9ru8V24K_Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJDe-O+8G=hyqWcaNk8_YP9S-R9-Xnn2_cLt8Loz9ru8V24K_Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
-commit: 3e77605d6a81efd39278a5ca2ee57737eb2659d2 btrfs: raid56: make rbio_add_io_page() subpage compatible
-date:   3 months ago
-config: hexagon-randconfig-r002-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040217.jYokbVy6-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e77605d6a81efd39278a5ca2ee57737eb2659d2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3e77605d6a81efd39278a5ca2ee57737eb2659d2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
+On Wed, Aug 03, 2022 at 10:49:57AM -0700, Neel Natu wrote:
+> On Tue, Aug 2, 2022 at 6:22 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > On Tue, Aug 2, 2022 at 2:41 PM Neel Natu <neelnatu@google.com> wrote:
+> > >
+> > > The value of 'nr_cpumask_bits' is dependent on CONFIG_CPUMASK_OFFSTACK.
+> > > This in turn can change the set of cpus visited by for_each_cpu_wrap()
+> > > with a mask that has bits set in the range [nr_cpu_ids, NR_CPUS).
+> > >
+> > > Specifically on !CONFIG_CPUMASK_OFFSTACK kernels the API can iterate
+> > > over cpus outside the 'cpu_possible_mask'.
+> > >
+> > > Fix this to make its behavior match for_each_cpu() which always limits
+> > > the iteration to the range [0, nr_cpu_ids).
+> > >
+> > > Signed-off-by: Neel Natu <neelnatu@google.com>
+> >
+> > The patch itself doesn't look correct because it randomly switches a piece
+> > of cpumask API from nr_cpumask_bits to nr_cpu_ids, and doesn't touch
+> > others.
+> >
+> > However...
+> >
+> > I don't know the story behind having 2 variables holding the max possible
+> > number of cpus, and it looks like it dates back to prehistoric times.  In
+> > modern kernel, there are 2 cases where nr_cpumask_bits == nr_cpu_ids
+> > for sure: it's CONFIG_CPUMASK_OFFSTACK=y and
+> > CONFIG_HOTPLUG_CPU=y. At least one of those is enabled in defconfig
+> > of every popular architecture.
+> >
+> 
+> Hmm, in a kernel with CONFIG_HOTPLUG_CPU=y but not CONFIG_CPUMASK_OFFSTACK
+> I see "nr_cpu_ids = 20, nr_cpumask_bits = 512". FYI since it doesn't
+> match the observation
+> above that nr_cpumask_bits == nr_cpu_ids when CONFIG_HOTPLUG_CPU=y.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I said this because the comment in include/linux/cpumaks.h says:
+ *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
+ *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
+ *  ACPI reports present at boot.
 
-All warnings (new ones prefixed by >>):
+And because of the code that sets nr_cpu_ids:
 
->> fs/btrfs/raid56.c:1000: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Get a sector pointer specified by its @stripe_nr and @sector_nr
+void __init setup_nr_cpu_ids(void)
+{
+        nr_cpu_ids = find_last_bit(cpumask_bits(cpu_possible_mask),NR_CPUS) + 1;
+}
 
+Some arches override it, so it may be an issue. Are you running x86,
+or maybe you have "nr_cpus" boot parameter?
 
-vim +1000 fs/btrfs/raid56.c
+But anyways, I feel like this should be investigated for more... Can you
+please share the config of your system and boot params?
+ 
+> > In case of HOTPLUG is off, I don't understand why we should have nr_cpu_ids
+> > and nr_cpumask_bits different - what case should it cover?... Interestingly, in
+> > comments to cpumask functions and in the code those two are referred
+> > interchangeably.
+> >
+> > Even more interestingly, we have a function bitmap_setall() that sets all bits
+> > up to nr_cpumask_bits, and it could trigger the problem that you described,
+> 
+> I think you mean cpumask_setall() that in turn calls
+> bitmap_fill(nr_cpumask_bits)?
 
-   998	
-   999	/**
-> 1000	 * Get a sector pointer specified by its @stripe_nr and @sector_nr
-  1001	 *
-  1002	 * @rbio:               The raid bio
-  1003	 * @stripe_nr:          Stripe number, valid range [0, real_stripe)
-  1004	 * @sector_nr:		Sector number inside the stripe,
-  1005	 *			valid range [0, stripe_nsectors)
-  1006	 * @bio_list_only:      Whether to use sectors inside the bio list only.
-  1007	 *
-  1008	 * The read/modify/write code wants to reuse the original bio page as much
-  1009	 * as possible, and only use stripe_sectors as fallback.
-  1010	 */
-  1011	static struct sector_ptr *sector_in_rbio(struct btrfs_raid_bio *rbio,
-  1012						 int stripe_nr, int sector_nr,
-  1013						 bool bio_list_only)
-  1014	{
-  1015		struct sector_ptr *sector;
-  1016		int index;
-  1017	
-  1018		ASSERT(stripe_nr >= 0 && stripe_nr < rbio->real_stripes);
-  1019		ASSERT(sector_nr >= 0 && sector_nr < rbio->stripe_nsectors);
-  1020	
-  1021		index = stripe_nr * rbio->stripe_nsectors + sector_nr;
-  1022		ASSERT(index >= 0 && index < rbio->nr_sectors);
-  1023	
-  1024		spin_lock_irq(&rbio->bio_list_lock);
-  1025		sector = &rbio->bio_sectors[index];
-  1026		if (sector->page || bio_list_only) {
-  1027			/* Don't return sector without a valid page pointer */
-  1028			if (!sector->page)
-  1029				sector = NULL;
-  1030			spin_unlock_irq(&rbio->bio_list_lock);
-  1031			return sector;
-  1032		}
-  1033		spin_unlock_irq(&rbio->bio_list_lock);
-  1034	
-  1035		return &rbio->stripe_sectors[index];
-  1036	}
-  1037	
+Yes, sorry.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > so that someone would complain. (Are there any other valid reasons to set
+> > bits behind nr_cpu_ids intentionally?)
+> >
+> 
+> I don't know of any although this wasn't the case that trigger in my case.
+> 
+> > Can you share more details about how you triggered that? If you observe
+> > those bits set, something else is probably already wrong...
+> 
+> The non-intuitive behavior of for_each_cpu_wrap() was triggered when iterating
+> over a cpumask passed by userspace that set a bit in the [nr_cpu_ids,
+> nr_cpumask_bits)
+> range.
+
+If you receive bitmap from userspace, you need to copy it with
+bitmap_copy_clear_tail(), or bitmap_from_arr{32,64}, as appropriate.
+That will clear unneeded bits.
+
+For user-to-kernel communications, I'd recommend passing bitmaps in a
+human-readable formats - hex string or bitmap list. Check the functions
+cpumask_parse_user() and cpumask_parselist_user(). This would help to
+avoid all possible issues related to endianness and 32/64 word length
+mismatch.
+
+> The kernel code is out of tree but open source so happy to provide a
+> pointer if needed.
+
+Yes please
+
+> I considered ANDing the user supplied mask with 'cpu_possible_mask'
+> but that felt
+> like working around an inconsistency in the kernel API (hence the proposed fix).
+> 
+> > So, if there is no real case in modern kernel to have nr_cpumask_bits and
+> > nr_cpu_ids different, the proper fix would be to just drop the first.
+> >
+> 
+> I'll let other people more knowledgable than me in this area chime in.
+> I'll be happy either
+> way if that fixes the problem at hand.
+> 
+> best
+> Neel
+> 
+> > If there is such a case, this is probably your case, and we'd know more
+> > details to understand how to deal with that.
+> >
+> > Thanks,
+> > Yury

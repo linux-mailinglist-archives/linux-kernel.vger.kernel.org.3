@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562EB58918C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92697589197
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238370AbiHCRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S238360AbiHCRie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238378AbiHCRfz (ORCPT
+        with ESMTP id S236811AbiHCRib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:35:55 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244258B7C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:35:48 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-324ec5a9e97so94515607b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Vw/moZJ/DE4Y4fjRyATUTV6Tvv5V7feioLAQ0kH+vK4=;
-        b=WfEzhn1NroNkWXhUm+yWWRbDkalIFdJCAvVk5wBrtjTpwz9vuISAprUXn9rYDLEzlR
-         f/fV46oP+mDo8wlsFZBt32UgEbr+Zr7HkL+dxOCgHEYTcmX2osg+EX4zV6WLx48lRCs7
-         qQDvoFMGb2aKrq8BwPpsEQrBObnznG4/QBi3tHhBSphFi2NUommqu+T+MlWGHf7Rvzqw
-         F70NprAGhQXtrPA9ziQC29Xs7YTqitIDhoR+1a/qldk4MOdHINDAlrF5qGJ+lxYdfRZN
-         ZgzTTrufMTMGV2UXN7TlWqhjOzeMTRGKgPdOXJy13cqFwGJYoG/Ifg6nYTOJ/VKgNlWf
-         syZg==
+        Wed, 3 Aug 2022 13:38:31 -0400
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662E411819;
+        Wed,  3 Aug 2022 10:38:30 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id f11so15737803pgj.7;
+        Wed, 03 Aug 2022 10:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Vw/moZJ/DE4Y4fjRyATUTV6Tvv5V7feioLAQ0kH+vK4=;
-        b=2DLyfp7IbBF2Rqo1RAHAJrPOuMoj3sG+tQl+VsXHYnLP26u0MdYWfncojtX9Dv/oal
-         qhhYWRK9iZOKqEaH6ZmJN1puiH5xx88sGUnguLfnuOmFQGdykTU4mvIwL7dUNk+IBAOD
-         NIiV3II0L2wPirpBxN9EMjPXmKJJFhbY12EnWU/8TzZbGZ9gj/ukfCmqa4HM0g89Hh8K
-         BJjIHSUM+QEAMzI5L1NzC/EJ06bXmmy5AZFq75LbEOzMJ8mQiFENh0rh44txz0NIRE0Z
-         lHbiBACepa1taU4JaNH9kqkhxaS2ToZnyUbzrO+vxjT2i7+tiD/wDaJTsC1q3SC731n8
-         VvsA==
-X-Gm-Message-State: ACgBeo1FBLFcT+21go/1IwF3Zy3mLYZAPJILuc7/IXCCoNVSh0h4tl6C
-        GzOH5TyRdYqob8zmU9FUdKWp+TFQTEJYNIdOWqib9A==
-X-Google-Smtp-Source: AA6agR7tfN2OQQF7AAQoTVTGEtkhnBr59+zuxMq/OnXw5taSmIWsWXbRTTTP6xQNb5FZtQjLcIB24ATaX88VfGYw2Wo=
-X-Received: by 2002:a81:9b47:0:b0:325:2240:ce5 with SMTP id
- s68-20020a819b47000000b0032522400ce5mr12252070ywg.210.1659548147968; Wed, 03
- Aug 2022 10:35:47 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=xeyAvaWQs5dfgAhmS4gZ7gMOAtV55SeWCgiHLiTRaxE=;
+        b=bcuNWb8B0rF5cxulLQ5LfToiFxLJHLxYNg0bvDqKXw3DM8/hT9MSeEV/j/6Q8mva4L
+         N/lRvbTyrwn/1rwbsm7P5sezR6GKv13A9wl0cMEcR4wi6tPFs5HrLkGfxPRfIfoDTllm
+         82EYIREcBPr7zQc3vLTx1mZ3aU/Fjv7Lo7lMvyI2AbDylwowoyp345HxqKK3Nx6h1Zqd
+         WDXZ0U7S3lar9ff88e1R2D3Ef34QNWDeDQGILDWtUbn/KWn1J2srT7ApYEApgCgOzizT
+         x1RDGPXTFqtnPrTWtyUYQg5hIxggvTP4R3yozxtCpv9HPs/L8taqA0ry1B+ZSYjK2oxi
+         kOtg==
+X-Gm-Message-State: ACgBeo3OtRycEbjWw7QQPSybCIK/9vwMI4CldI15emD2wkb3jRow0UPs
+        4w9h4nGJDIl9RrDIBUaMFaQ=
+X-Google-Smtp-Source: AA6agR55lAhIayHSvK572pxRLgZ0mTJXUgBk+a3seswhk0Zod29m6prJ06hcnejXdD2n4/czbP3N9Q==
+X-Received: by 2002:a63:6b81:0:b0:41c:3a8c:b4fe with SMTP id g123-20020a636b81000000b0041c3a8cb4femr10079727pgc.84.1659548309755;
+        Wed, 03 Aug 2022 10:38:29 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:db71:edb7:462a:44af? ([2620:15c:211:201:db71:edb7:462a:44af])
+        by smtp.gmail.com with ESMTPSA id u188-20020a6379c5000000b00419b128cf98sm11145939pgc.54.2022.08.03.10.38.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 10:38:29 -0700 (PDT)
+Message-ID: <28b41877-2697-6bbb-066d-ee0f6e330565@acm.org>
+Date:   Wed, 3 Aug 2022 10:38:26 -0700
 MIME-Version: 1.0
-References: <20220731050342.56513-1-khuey@kylehuey.com> <Yuo59tV071/i6yhf@gmail.com>
- <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com> <Yuqvkufu7Hu4drL6@gmail.com>
-In-Reply-To: <Yuqvkufu7Hu4drL6@gmail.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 3 Aug 2022 10:35:36 -0700
-Message-ID: <CAP045AoBZvcacHM=rEKC+Lc8XeQQVzCvnNvsU-o=-ZHi=pE=mA@mail.gmail.com>
-Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        kvm@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 3/6] scsi: ufs: wb: Add explicit flush sysfs attribute
+Content-Language: en-US
+To:     j-young.choi@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>
+References: <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
+ <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p3>
+ <20220802080740epcms2p3893fd9cfb765d4addbbfe58c68cf5af3@epcms2p3>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220802080740epcms2p3893fd9cfb765d4addbbfe58c68cf5af3@epcms2p3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 10:25 AM Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Kyle Huey <me@kylehuey.com> wrote:
->
-> > > Also, what's the security model for this register, do we trust all
-> > > input values user-space provides for the PKRU field in the XSTATE? I
-> > > realize that WRPKRU already gives user-space write access to the
-> > > register - but does the CPU write it all into the XSTATE, with no
-> > > restrictions on content whatsoever?
-> >
-> > There is no security model for this register. The CPU does write whatever
-> > is given to WRPKRU (or XRSTOR) into the PKRU register. The pkeys(7) man
-> > page notes:
-> >
-> > Protection keys have the potential to add a layer of security and
-> > reliability to applications. But they have not been primarily designed as
-> > a security feature. For instance, WRPKRU is a completely unprivileged
-> > instruction, so pkeys are useless in any case that an attacker controls
-> > the PKRU register or can execute arbitrary instructions.
->
-> Ok - allowing ptrace to set the full 32 bits of the PKRU register seems OK
-> then, and is 100% equivalent to using WRPKRU, right? So there's no implicit
-> masking/clearing of bits depending on how many keys are available, or other
-> details where WRPKRU might differ from a pure 32-bit per thread write,
-> correct?
+On 8/2/22 01:07, Jinyoung CHOI wrote:
+> +What:		/sys/bus/platform/drivers/ufshcd/*/wb_buf_flush_en
+> +What:		/sys/bus/platform/devices/*.ufs/wb_buf_flush_en
+> +Date:		July 2022
+> +Contact:	Jinyoung Choi <j-young.choi@samsung.com>
+> +Description:	This entry shows the status of WriteBooster buffer flushing
 
-Right. The hardware doesn't have any concept of what keys are
-available or not, that exists entirely in the kernel.
+Can we rename this attribute into something that has a word order that 
+is grammatically correct, e.g. enable_wb_buf_flush?
 
-- Kyle
+> +		and it can be used to allow or disallow the flushing.
+> +		If the flushing is allowed, the device executes the flush
+> +		operation when the command queue is empty.
 
-> Thanks,
->
->         Ingo
+The attribute has "enabled" in its name while the above text uses the 
+verb "allowed". Consider changing "allowed" into "enabled". Please also 
+change "If the flushing" into "If flushing".
+
+Thanks,
+
+Bart.

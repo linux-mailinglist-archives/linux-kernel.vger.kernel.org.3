@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DD658945D
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB94589462
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237812AbiHCW0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 18:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S238916AbiHCW3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237132AbiHCWZ6 (ORCPT
+        with ESMTP id S238884AbiHCW3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:25:58 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FB838A2;
-        Wed,  3 Aug 2022 15:25:56 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id z6so8196827iln.13;
-        Wed, 03 Aug 2022 15:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=75J351RhvLWaNaDEuKDQSYMAYS+EvEUS1HxFqA844aM=;
-        b=I7XRoEjwIypDIeh6aIaHHsDsuFe/vhOQLSfuTeEAt1VtQCmDGQN9eyqy6TKiSmPM7g
-         rey6oZ2owioNznHb0+qn1DMYFHcLu0ce15askHhQ8eONf4VLsiGRALH3FHmOzKyOdbl+
-         KzQDXTaxqOfw+eDTez5GtclEgwkZHUOxmGg8rZOKqvmisrs8eZggu8CVoVPjRVr/5S5x
-         F+PKrAtNWattw6iHVBuqwP8YckLUdAnUXJyDIfa5qE2p8XeUEXalHET+ThA/wQiiAzNS
-         Ng3WBfDxw4XOCqNOs3qXz15A43N3XTjvzbDe24DArW/Ulvd3wMbS5ZSwlXo7jJCQqxBt
-         /a6g==
-X-Gm-Message-State: AJIora9oatnpyCqIlr3vT3yeb33GSU5KSvnm+gQ5C3BRv3/HfNo4x86H
-        nGEgDPWYiNi2VfJ5BPTITQ==
-X-Google-Smtp-Source: AGRyM1vFgEiM4mqDqG8n02VeO5CgzGHFBqz8H57zw5X0V7f6EMV3CS5bmW+6+WMG6BHO7ysuxySmDQ==
-X-Received: by 2002:a05:6e02:1a25:b0:2dc:743c:864a with SMTP id g5-20020a056e021a2500b002dc743c864amr11342302ile.248.1659565555800;
-        Wed, 03 Aug 2022 15:25:55 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bc11-20020a0566383ccb00b00335b403c3b4sm8176076jab.48.2022.08.03.15.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 15:25:55 -0700 (PDT)
-Received: (nullmailer pid 2730520 invoked by uid 1000);
-        Wed, 03 Aug 2022 22:25:53 -0000
-Date:   Wed, 3 Aug 2022 16:25:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Elvis Wang <Elvis.Wang@mediatek.com>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        CK Hu <ck.hu@mediatek.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH 1/2] dt-bindings: mailbox: add definition for mt8188
-Message-ID: <20220803222553.GA2727128-robh@kernel.org>
-References: <20220729084319.6880-1-Elvis.Wang@mediatek.com>
- <20220729084319.6880-2-Elvis.Wang@mediatek.com>
+        Wed, 3 Aug 2022 18:29:13 -0400
+Received: from mx01.ayax.eu (mx01.ayax.eu [188.137.98.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540E15C94D
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:29:11 -0700 (PDT)
+Received: from [192.168.192.146] (port=40528 helo=nx64de-df6d00)
+        by mx01.ayax.eu with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <gszymaszek@short.pl>)
+        id 1oJMrB-0008T8-Ia; Thu, 04 Aug 2022 00:28:52 +0200
+Date:   Thu, 4 Aug 2022 00:28:48 +0200
+From:   Grzegorz Szymaszek <gszymaszek@short.pl>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>
+Cc:     Grzegorz Szymaszek <gszymaszek@short.pl>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH 1/3] staging: r8188eu: set firmware path in a macro
+Message-ID: <6c83e05e5dbccff5630ccfed9e40bf84c889b647.1659565180.git.gszymaszek@short.pl>
+Mail-Followup-To: Grzegorz Szymaszek <gszymaszek@short.pl>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <YuoQ37PIKzWO1zIY@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729084319.6880-2-Elvis.Wang@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 04:43:18PM +0800, Elvis Wang wrote:
-> Add dt-binding header for mt8188.
-> 
-> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/mailbox/mtk-gce.txt | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-> index c2aeba63bd47..50f97f6feeef 100644
-> --- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-> +++ b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
-> @@ -41,9 +41,9 @@ Optional properties for a client mutex node:
->    defined in 'dt-bindings/gce/<chip>-gce.h'.
->  
->  Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h',
-> -'dt-bindings/gce/mt8183-gce.h', 'dt-bindings/gce/mt8186-gce.h'
-> -'dt-bindings/gce/mt8192-gce.h', 'dt-bindings/gce/mt8195-gce.h' or
-> -'dt-bindings/gce/mt6779-gce.h'.
-> +'dt-bindings/gce/mt8183-gce.h', 'dt-bindings/gce/mt8186-gce.h',
-> +'dt-bindings/gce/mt8188-gce.h', 'dt-bindings/gce/mt8192-gce.h',
-> +'dt-bindings/gce/mt8195-gce.h' or 'dt-bindings/gce/mt6779-gce.h'.
->  Such as sub-system ids, thread priority, event ids.
+The r8188eu driver requires a firmware file, the path of which was
+hardcoded as constant strings in two places:
+(1) in core/rtw_fw.c, in function load_firmware(),
+(2) in os_dep/os_intfs.c, in the MODULE_FIRMWARE() call.
 
-What about a new compatible string?
+Declare the path using a macro, FW_RTL8188EU, and replace the above
+constant strings with the macro. That's the way it is done in many other
+drivers. The new macro is defined in include/drv_types.h, because that
+file is already included by both of the above files (or at least their
+headers) and because it already contains other driver constants, like
+its name and version.
 
-Really, this needs to be converted to schema...
+Link: https://lore.kernel.org/lkml/YuoQ37PIKzWO1zIY@kroah.com/
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Grzegorz Szymaszek <gszymaszek@short.pl>
+---
+ drivers/staging/r8188eu/core/rtw_fw.c       | 2 +-
+ drivers/staging/r8188eu/include/drv_types.h | 1 +
+ drivers/staging/r8188eu/os_dep/os_intfs.c   | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-Rob
+diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
+index 0451e5177644..0fe6d4944694 100644
+--- a/drivers/staging/r8188eu/core/rtw_fw.c
++++ b/drivers/staging/r8188eu/core/rtw_fw.c
+@@ -209,7 +209,7 @@ static int load_firmware(struct rt_firmware *rtfw, struct device *device)
+ {
+ 	int ret = _SUCCESS;
+ 	const struct firmware *fw;
+-	const char *fw_name = "rtlwifi/rtl8188eufw.bin";
++	const char *fw_name = FW_RTL8188EU;
+ 	int err = request_firmware(&fw, fw_name, device);
+ 
+ 	if (err) {
+diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
+index bba88a0ede61..f51b83515953 100644
+--- a/drivers/staging/r8188eu/include/drv_types.h
++++ b/drivers/staging/r8188eu/include/drv_types.h
+@@ -37,6 +37,7 @@
+ #include "rtw_fw.h"
+ 
+ #define DRIVERVERSION	"v4.1.4_6773.20130222"
++#define FW_RTL8188EU	"rtlwifi/rtl8188eufw.bin"
+ 
+ struct registry_priv {
+ 	u8	chip_version;
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index 5bd3022e4b40..5985054da935 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -18,7 +18,7 @@ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Realtek Wireless Lan Driver");
+ MODULE_AUTHOR("Realtek Semiconductor Corp.");
+ MODULE_VERSION(DRIVERVERSION);
+-MODULE_FIRMWARE("rtlwifi/rtl8188eufw.bin");
++MODULE_FIRMWARE(FW_RTL8188EU);
+ 
+ #define CONFIG_BR_EXT_BRNAME "br0"
+ #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
+-- 
+2.35.1

@@ -2,163 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2D5588691
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB092588694
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235753AbiHCEg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
+        id S235786AbiHCEhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiHCEgy (ORCPT
+        with ESMTP id S229457AbiHCEhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:36:54 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5354D146
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:36:52 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id kb8so14768513ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 21:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZrONgrMU4/j0YqOE8LxJizn19E/WThMbzwNaGuk0yHw=;
-        b=qowGaHhGR4RLjP9feKVtZpOeO1uUG0FmeEHBdll2wtdYVbbTqUg+t7ZPy5w2UXJ7xk
-         JDi9OIPw0UJDGIG5PFeN1as94WT20LblKu/9x/t9NwRA6Ysn+Ko6fNSA/CzY0UkzQ7tA
-         N8C8SDPmpN0SveMiH8dNIcerL7L2Uj8w9ijvQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZrONgrMU4/j0YqOE8LxJizn19E/WThMbzwNaGuk0yHw=;
-        b=J5lfSBKP9bUS3eTs0nOavo8HOt0sDwHuQQk3cl5q6Xd4xReUlQXFCmjdH8susS/5kS
-         rGzDF3uZaTfpYs7/eTtq4AvO4w9lAxdTYmtl5xzFJLe8hzug/MvfgBtmNNFoyZ+5ES6i
-         U5WdwMyKlgP0Ryfmaulmgv8nIhUuX6VNtcl1kDf3gnNOMi2+oo8eGuyDhfLnxyp8ZEUm
-         Ew12GFVALFri+n8Xj5KJ+JIupi7+SJaMDDn3a8SHVvO3lfoEOGnG+3Os3BP9HJ9oO3fL
-         D50vGuQuwwPiu4dw2qeQfK72xYwxx0oEWnTWjwPJdn81Wx4CFIcE1083wxY2VlXyEjkM
-         ItQg==
-X-Gm-Message-State: AJIora+4mLyo09tg2CTqmTM4HwrVntBbAUN6swiXhNdtKb6evEXYQPE3
-        Jr7hsXR1PZjnCgeUTuND79hbq34BjuSW5IFM9Ul8Fr1kM/2MRgWm
-X-Google-Smtp-Source: AGRyM1uGNnWdKexSU/vpaoXc5D0QH6TWSpKHZBMfW2czqTBdzoco+WHXeLVYCMFi6CIDXAOHzg+mUq61R5ZSHDiq+eI=
-X-Received: by 2002:a17:907:2855:b0:72b:700e:21eb with SMTP id
- el21-20020a170907285500b0072b700e21ebmr19087858ejc.270.1659501410566; Tue, 02
- Aug 2022 21:36:50 -0700 (PDT)
+        Wed, 3 Aug 2022 00:37:11 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A395467B;
+        Tue,  2 Aug 2022 21:37:10 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 0565520FFC0C; Tue,  2 Aug 2022 21:37:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0565520FFC0C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1659501430;
+        bh=aGFADYTmhfG3G/nJc1EU3o6+heuDU6xMfrYwIst6ego=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gOeW3fl49V+aGkpBFee5/bhUVVHJSX4+034spdXmC4DqX6J1l6qFfEdd1f2q98zvR
+         Yr76dKo8cooAPN6qlCidReDpiQcmoqPLBXuJzZU+84ePQb9tGYdZnUoIyaE5Pn/tQy
+         he/DTnIOzmApIFQwgJFeqAwmS3AJPlF15f5ZpAnk=
+Date:   Tue, 2 Aug 2022 21:37:09 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] Drivers: hv: vmbus: Optimize vmbus_on_event
+Message-ID: <20220803043709.GA26795@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
+ <33983fa2-c9a8-1ac1-2f75-8360a077cfc2@linux.microsoft.com>
 MIME-Version: 1.0
-References: <000000000000bdee330594070441@google.com>
-In-Reply-To: <000000000000bdee330594070441@google.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 3 Aug 2022 06:36:39 +0200
-Message-ID: <CAJfpeguS6Ta9LcGU0A_JkfvPWZup_Ndg+tpvpbzXJuWPNZwGgw@mail.gmail.com>
-Subject: Re: memory leak in cap_inode_getsecurity
-To:     syzbot <syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: multipart/mixed; boundary="00000000000014ef9a05e54ec82d"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33983fa2-c9a8-1ac1-2f75-8360a077cfc2@linux.microsoft.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000014ef9a05e54ec82d
-Content-Type: text/plain; charset="UTF-8"
+Thanks for your review, please find my comment inline.
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-master
+On Tue, Aug 02, 2022 at 01:44:23PM +0530, Praveen Kumar wrote:
+> On 25-07-2022 15:07, Saurabh Sengar wrote:
+> > In the vmbus_on_event loop, 2 jiffies timer will not serve the purpose if
+> > callback_fn takes longer. For effective use move this check inside of
+> > callback functions where needed. Out of all the VMbus drivers using
+> > vmbus_on_event, only storvsc has a high packet volume, thus add this limit
+> > only in storvsc callback for now.
+> > There is no apparent benefit of loop itself because this tasklet will be
+> > scheduled anyway again if there are packets left in ring buffer. This
+> > patch removes this unnecessary loop as well.
+> > 
+> 
+> In my understanding the loop was for optimizing the host to guest signaling for batched channels.
+> And the loop ensures that we process all the posted messages from the host before returning from the respective callbacks.
+> 
+> Am I missing something here.
 
-On Thu, 3 Oct 2019 at 21:59, syzbot
-<syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    0f1a7b3f timer-of: don't use conditional expression with m..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1329640d600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=9d66badf12ef344c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=942d5390db2d9624ced8
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1107b513600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com
->
-> 2019/10/03 14:00:37 executed programs: 36
-> 2019/10/03 14:00:43 executed programs: 44
-> 2019/10/03 14:00:49 executed programs: 63
-> BUG: memory leak
-> unreferenced object 0xffff8881202cb480 (size 32):
->    comm "syz-executor.0", pid 7246, jiffies 4294946879 (age 14.010s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<00000000a8379648>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:43 [inline]
->      [<00000000a8379648>] slab_post_alloc_hook mm/slab.h:586 [inline]
->      [<00000000a8379648>] slab_alloc mm/slab.c:3319 [inline]
->      [<00000000a8379648>] __do_kmalloc mm/slab.c:3653 [inline]
->      [<00000000a8379648>] __kmalloc_track_caller+0x165/0x300 mm/slab.c:3670
->      [<000000008858463c>] __do_krealloc mm/slab_common.c:1638 [inline]
->      [<000000008858463c>] krealloc+0x7f/0xb0 mm/slab_common.c:1689
->      [<0000000057f9eb8e>] vfs_getxattr_alloc+0x100/0x180 fs/xattr.c:289
->      [<00000000c2154e30>] cap_inode_getsecurity+0x9c/0x2c0
-> security/commoncap.c:389
->      [<00000000b2664a09>] security_inode_getsecurity+0x4c/0x90
-> security/security.c:1314
->      [<00000000921624c0>] xattr_getsecurity fs/xattr.c:244 [inline]
->      [<00000000921624c0>] vfs_getxattr+0xf2/0x1a0 fs/xattr.c:332
->      [<000000001ff6977b>] getxattr+0x97/0x240 fs/xattr.c:538
->      [<00000000b945681f>] path_getxattr+0x6b/0xc0 fs/xattr.c:566
->      [<000000001a9d3fce>] __do_sys_getxattr fs/xattr.c:578 [inline]
->      [<000000001a9d3fce>] __se_sys_getxattr fs/xattr.c:575 [inline]
->      [<000000001a9d3fce>] __x64_sys_getxattr+0x28/0x30 fs/xattr.c:575
->      [<000000002e998337>] do_syscall_64+0x73/0x1f0
-> arch/x86/entry/common.c:290
->      [<00000000f252aa21>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Out of all the drivers using vmbus_on_event, only storvsc have high packet volume.
+The callback for storvsc is storvsc_on_channel_callback function which anyway has
+loop to check if there are any completion packets left. After this change when we
+move timeout inside storvsc callback, there is a possibility it comes back from
+callback leaving packets in ring buffer, for such cases the tasklet will be rescheduled.
+This function handles single ring buffer per call there is no batching.
 
---00000000000014ef9a05e54ec82d
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="vfs_getxattr_alloc-dont-allocate-buf-on-failure.patch"
-Content-Disposition: attachment; 
-	filename="vfs_getxattr_alloc-dont-allocate-buf-on-failure.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l6d486bu0>
-X-Attachment-Id: f_l6d486bu0
-
-RnJvbTogTWlrbG9zIFN6ZXJlZGkgPG1zemVyZWRpQHJlZGhhdC5jb20+ClN1YmplY3Q6IHZmc19n
-ZXR4YXR0cl9hbGxvYygpOiBkb24ndCBhbGxvY2F0ZSBidWYgb24gZmFpbHVyZQoKU29tZSBjYWxs
-ZXJzIG9mIHZmc19nZXR4YXR0cl9hbGxvYygpIGFzc3VtZSB0aGF0IG9uIGZhaWx1cmUgdGhlIGFs
-bG9jYXRlZApidWZmZXIgZG9lcyBub3QgbmVlZCB0byBiZSBmcmVlZC4KCkNhbGxlcnMgY291bGQg
-YmUgZml4ZWQsIGJ1dCBmaXhpbmcgdGhlIHNlbWFudGljcyBvZiB2ZnNfZ2V0eGF0dHJfYWxsb2Mo
-KSBpcwpzaW1wbGVyIGFuZCBtYWtlcyBzdXJlIHRoYXQgdGhpcyBjbGFzcyBvZiBidWdzIGRvZXMg
-bm90IG9jY3VyIGFnYWluLgoKSWYgdGhpcyB3YXMgY2FsbGVkIGluIGEgbG9vcCAoaS5lLiB4YXR0
-cl92YWx1ZSBjb250YWlucyBhbiBhbHJlYWR5CmFsbG9jYXRlZCBidWZmZXIpLCB0aGVuIGNhbGxl
-ciB3aWxsIHN0aWxsIG5lZWQgdG8gY2xlYW4gdXAgYWZ0ZXIgYW4gZXJyb3IuCgpSZXBvcnRlZC1h
-bmQtdGVzdGVkLWJ5OiBzeXpib3QrOTQyZDUzOTBkYjJkOTYyNGNlZDhAc3l6a2FsbGVyLmFwcHNw
-b3RtYWlsLmNvbQpGaXhlczogMTYwMWZiYWQyYjE0ICgieGF0dHI6IGRlZmluZSB2ZnNfZ2V0eGF0
-dHJfYWxsb2MgYW5kIHZmc194YXR0cl9jbXAiKQpTaWduZWQtb2ZmLWJ5OiBNaWtsb3MgU3plcmVk
-aSA8bXN6ZXJlZGlAcmVkaGF0LmNvbT4KLS0tCiBmcy94YXR0ci5jIHwgICAgNSArKysrLQogMSBm
-aWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKLS0tIGEvZnMveGF0
-dHIuYworKysgYi9mcy94YXR0ci5jCkBAIC0zODMsNyArMzgzLDEwIEBAIHZmc19nZXR4YXR0cl9h
-bGxvYyhzdHJ1Y3QgdXNlcl9uYW1lc3BhY2UKIAl9CiAKIAllcnJvciA9IGhhbmRsZXItPmdldCho
-YW5kbGVyLCBkZW50cnksIGlub2RlLCBuYW1lLCB2YWx1ZSwgZXJyb3IpOwotCSp4YXR0cl92YWx1
-ZSA9IHZhbHVlOworCWlmIChlcnJvciA8IDAgJiYgKnhhdHRyX3ZhbHVlID09IE5VTEwpCisJCWtm
-cmVlKHZhbHVlKTsKKwllbHNlCisJCSp4YXR0cl92YWx1ZSA9IHZhbHVlOwogCXJldHVybiBlcnJv
-cjsKIH0KIAo=
---00000000000014ef9a05e54ec82d--
+- Saurabh
+> 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/hv/connection.c    | 33 ++++++++++++++-------------------
+> >  drivers/scsi/storvsc_drv.c |  9 +++++++++
+> >  2 files changed, 23 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+> > index eca7afd..9dc27e5 100644
+> > --- a/drivers/hv/connection.c
+> > +++ b/drivers/hv/connection.c
+> > @@ -431,34 +431,29 @@ struct vmbus_channel *relid2channel(u32 relid)
+> >  void vmbus_on_event(unsigned long data)
+> >  {
+> >  	struct vmbus_channel *channel = (void *) data;
+> > -	unsigned long time_limit = jiffies + 2;
+> > +	void (*callback_fn)(void *context);
+> >  
+> >  	trace_vmbus_on_event(channel);
+> >  
+> >  	hv_debug_delay_test(channel, INTERRUPT_DELAY);
+> > -	do {
+> > -		void (*callback_fn)(void *);
+> >  
+> > -		/* A channel once created is persistent even when
+> > -		 * there is no driver handling the device. An
+> > -		 * unloading driver sets the onchannel_callback to NULL.
+> > -		 */
+> > -		callback_fn = READ_ONCE(channel->onchannel_callback);
+> > -		if (unlikely(callback_fn == NULL))
+> > -			return;
+> > -
+> > -		(*callback_fn)(channel->channel_callback_context);
+> > +	/* A channel once created is persistent even when
+> > +	 * there is no driver handling the device. An
+> > +	 * unloading driver sets the onchannel_callback to NULL.
+> > +	 */
+> > +	callback_fn = READ_ONCE(channel->onchannel_callback);
+> > +	if (unlikely(!callback_fn))
+> > +		return;
+> >  
+> > -		if (channel->callback_mode != HV_CALL_BATCHED)
+> > -			return;
+> > +	(*callback_fn)(channel->channel_callback_context);
+> >  
+> > -		if (likely(hv_end_read(&channel->inbound) == 0))
+> > -			return;
+> > +	if (channel->callback_mode != HV_CALL_BATCHED)
+> > +		return;
+> >  
+> > -		hv_begin_read(&channel->inbound);
+> > -	} while (likely(time_before(jiffies, time_limit)));
+> > +	if (likely(hv_end_read(&channel->inbound) == 0))
+> > +		return;
+> >  
+> > -	/* The time limit (2 jiffies) has been reached */
+> > +	hv_begin_read(&channel->inbound);
+> >  	tasklet_schedule(&channel->callback_event);
+> >  }
+> >  
+> > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> > index fe000da..c457e6b 100644
+> > --- a/drivers/scsi/storvsc_drv.c
+> > +++ b/drivers/scsi/storvsc_drv.c
+> > @@ -60,6 +60,9 @@
+> >  #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
+> >  #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
+> >  
+> > +/* channel callback timeout in ms */
+> > +#define CALLBACK_TIMEOUT               2
+> > +
+> >  /*  Packet structure describing virtual storage requests. */
+> >  enum vstor_packet_operation {
+> >  	VSTOR_OPERATION_COMPLETE_IO		= 1,
+> > @@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
+> >  	struct hv_device *device;
+> >  	struct storvsc_device *stor_device;
+> >  	struct Scsi_Host *shost;
+> > +	unsigned long time_limit = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
+> >  
+> >  	if (channel->primary_channel != NULL)
+> >  		device = channel->primary_channel->device_obj;
+> > @@ -1224,6 +1228,11 @@ static void storvsc_on_channel_callback(void *context)
+> >  		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
+> >  			sizeof(enum vstor_packet_operation);
+> >  
+> > +		if (unlikely(time_after(jiffies, time_limit))) {
+> > +			hv_pkt_iter_close(channel);
+> > +			return;
+> > +		}
+> > +
+> >  		if (pktlen < minlen) {
+> >  			dev_err(&device->device,
+> >  				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
+> 
+> Regards,
+> 
+> ~Praveen.

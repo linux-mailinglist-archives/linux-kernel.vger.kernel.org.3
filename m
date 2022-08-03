@@ -2,182 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8A5589497
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A85E58949F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbiHCXAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
+        id S236673AbiHCXGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237090AbiHCW7y (ORCPT
+        with ESMTP id S232503AbiHCXGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:59:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00310186FC;
-        Wed,  3 Aug 2022 15:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659567593; x=1691103593;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=8fiq1XsVw/tB1TlcpSmU9962fV891+nSfOAoV0JkGQs=;
-  b=Zm0a4+/WxHqwOBL2Dz/dt+sW4h+acBX5gNPY4M+ZxsjAOle4MojsTmm7
-   NldB/UWl0jyQMYD/Vxoaeayzj0SiLsEvyCT+QU6HkGgBFSVvjapkQdBYz
-   1pJKR075bPKGHoZveqF0ns/38JznJYupl1oq6EQcW9m1HMomqB2Uk1EfQ
-   CGXriobEfZbCGTsTbj1ZujSnuSxfRL67Nd5W2pU8tgi7uGNPGiS2XbZ2l
-   huA+S852AHG+0PIHPRvd7pTjKsLA75Ps/9c4PL3OS/Uw1wZ7QGmdNgjSu
-   McP4fi2PptwLAD+EPv83vTSh0DQINSI/kKQWLDfFbdArFJsP9pxAfr7dM
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="287356137"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="287356137"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:59:52 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="779153724"
-Received: from bshamoun-mobl4.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.8.236])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:59:50 -0700
-Message-ID: <d924ec235d9b0fb27f80cb03b02b5c7d8466fec1.camel@intel.com>
-Subject: Re: [PATCH v2 2/3] KVM: x86/mmu: Fully re-evaluate MMIO caching
- when SPTE masks change
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Roth <michael.roth@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Date:   Thu, 04 Aug 2022 10:59:48 +1200
-In-Reply-To: <20220803224957.1285926-3-seanjc@google.com>
-References: <20220803224957.1285926-1-seanjc@google.com>
-         <20220803224957.1285926-3-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 3 Aug 2022 19:06:21 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5E4F1A4
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:06:18 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id j1so14864537wrw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FoVaTdVnnKpapjEtX/Bhowc8mgQLn0GKcR1f2+ULZaU=;
+        b=APJ5cgJSkIzr57+jBa3oRb2z34UPYSKa+b/ufo9X8GlDTJhGmNcxt2UT3D6O8AJhYv
+         fe5IJq6HulCvtyg8CEBqaW42GWRihB4xUrv+pfwV6jTLu8ALODD+UvWo7YAkZSg+fEbZ
+         MKb3WMm1e2aCQAqP4njGZA2TUVkUt8943tSPUhL7KeXr8V6xyKQ7v6xS1fVIJzCVbyyP
+         IZam3HmgWZFxPGIs9jNKGQK4P3cWsMaluPcDVgMpM0471A5r3wBE/ZPd6rzdt1KUGkRE
+         JEX+0paS44ZrXrteN3j02Bu63IsjIl/dZ2NV3sjzXinD1mgRelOh7orv8aabwA5dmSpV
+         C/bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FoVaTdVnnKpapjEtX/Bhowc8mgQLn0GKcR1f2+ULZaU=;
+        b=r8Pq1qjJuE/OjfQGSKbLDlsyDW5y5ohFDzRY6qjwbIeSYX2V7AiZACz6Kdoiha9Q0Z
+         zudRDncq32HFeBy0Av3+uRbXxRIqet5ak8picWnJuDl1+GTSK4jY7vaUj0c3TUAJlFRZ
+         EsLdDnZnYjlgH7xzt6yo7x8E48Zn+c2t6yDy8W6odd6g0fUsRQ+7YkVX16V89+bhFy/K
+         ctlztFOfyjLse9Cv1bS7+ednaWZXxIu63zXLqfF7rpKXD0itO4JScb30BQCGocX+Jpd9
+         5CSGQ7CgOZ0Gp47nnpONM5v/+aMtGsLDAClFRBv+IEZXQAd0THhNc7406VdSRMOhpfX2
+         j/mQ==
+X-Gm-Message-State: ACgBeo0bfWvT/uFZR98BFJVEilQTxJ2xargbCXyad1HvwqBPfh++lK0V
+        2QO+Lmd1rRKkMP2XHnxTsrHL540hNVm+gonFG8oDzw==
+X-Google-Smtp-Source: AA6agR5G0W57caREqGvPCwmAaQ13rQA8ouaOC7td77160JwzDVuMHiVltMu/kLxYKeaBwDLnuBQMRvDJKIsznsdbFjo=
+X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
+ i9-20020a0560001ac900b002207f4049e3mr1834734wry.40.1659567976810; Wed, 03 Aug
+ 2022 16:06:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220803150744.133128-1-leo.yan@linaro.org>
+In-Reply-To: <20220803150744.133128-1-leo.yan@linaro.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 3 Aug 2022 16:06:04 -0700
+Message-ID: <CAP-5=fWArHKrxu80WKZystkEDFW_jhuU02m89S8tXkqvOChpoA@mail.gmail.com>
+Subject: Re: [PATCH v1] perf test: Introduce script for data symbol parsing
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-03 at 22:49 +0000, Sean Christopherson wrote:
-> Fully re-evaluate whether or not MMIO caching can be enabled when SPTE
-> masks change; simply clearing enable_mmio_caching when a configuration
-> isn't compatible with caching fails to handle the scenario where the
-> masks are updated, e.g. by VMX for EPT or by SVM to account for the C-bit
-> location, and toggle compatibility from false=3D>true.
->=20
-> Snapshot the original module param so that re-evaluating MMIO caching
-> preserves userspace's desire to allow caching.  Use a snapshot approach
-> so that enable_mmio_caching still reflects KVM's actual behavior.
->=20
-> Fixes: 8b9e74bfbf8c ("KVM: x86/mmu: Use enable_mmio_caching to track if M=
-MIO caching is enabled")
-> Reported-by: Michael Roth <michael.roth@amd.com>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: stable@vger.kernel.org
-> Tested-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-Reviewed-by: Kai Huang <kai.huang@intel.com>
-
-One Nit below...
-
+On Wed, Aug 3, 2022 at 8:07 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> This commit introduces a shell script for data symbol parsing.
+>
+> The testing is designed a data structure with 64-byte alignment, and it
+> has two fields "data1" and "data2", and other fields are reserved.
+>
+> Using "perf mem" command, it records and reports memory samples for a
+> workload with 1 second duration.  If have no any memory sample for the
+> data structure "buf1", it reports failure;  and any memory accessing for
+> the data structure is not for "data1" and "data2" filed, it also means
+> the wrong data symbol parsing and returns failure.
+>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
 > ---
->  arch/x86/kvm/mmu/mmu.c  |  4 ++++
->  arch/x86/kvm/mmu/spte.c | 19 +++++++++++++++++++
->  arch/x86/kvm/mmu/spte.h |  1 +
->  3 files changed, 24 insertions(+)
->=20
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index bf808107a56b..48f34016cb0b 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6699,11 +6699,15 @@ static int set_nx_huge_pages(const char *val, con=
-st struct kernel_param *kp)
->  /*
->   * nx_huge_pages needs to be resolved to true/false when kvm.ko is loade=
-d, as
->   * its default value of -1 is technically undefined behavior for a boole=
-an.
-> + * Forward the module init call to SPTE code so that it too can handle m=
-odule
-> + * params that need to be resolved/snapshot.
->   */
->  void __init kvm_mmu_x86_module_init(void)
->  {
->  	if (nx_huge_pages =3D=3D -1)
->  		__set_nx_huge_pages(get_nx_auto_mode());
+>  tools/perf/tests/shell/test_data_symbol.sh | 94 ++++++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
+>
+> diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
+> new file mode 100755
+> index 000000000000..7039dae4e087
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/test_data_symbol.sh
+> @@ -0,0 +1,94 @@
+> +#!/bin/bash
+> +# Check perf data symbol parsing
 > +
-> +	kvm_mmu_spte_module_init();
->  }
-> =20
->  /*
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 7314d27d57a4..66f76f5a15bd 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -20,6 +20,7 @@
->  #include <asm/vmx.h>
-> =20
->  bool __read_mostly enable_mmio_caching =3D true;
-> +static bool __ro_after_init allow_mmio_caching;
->  module_param_named(mmio_caching, enable_mmio_caching, bool, 0444);
-> =20
->  u64 __read_mostly shadow_host_writable_mask;
-> @@ -43,6 +44,18 @@ u64 __read_mostly shadow_nonpresent_or_rsvd_lower_gfn_=
-mask;
-> =20
->  u8 __read_mostly shadow_phys_bits;
-> =20
-> +void __init kvm_mmu_spte_module_init(void)
-> +{
-> +	/*
-> +	 * Snapshot userspace's desire to allow MMIO caching.  Whether or not
-> +	 * KVM can actually enable MMIO caching depends on vendor-specific
-> +	 * hardware capabilities and other module params that can't be resolved
-> +	 * until the vendor module is loaded, i.e. enable_mmio_caching can and
-> +	 * will change when the vendor module is (re)loaded.
-> +	 */
-> +	allow_mmio_caching =3D enable_mmio_caching;
-
-... Perhaps 'use_mmio_caching' or 'want_mmio_caching' is better as it refle=
-cts
-userspace's desire? Anyway let you decide.
-
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Leo Yan <leo.yan@linaro.org>, 2022
+> +
+> +skip_if_no_mem_event() {
+> +       perf mem record -e list 2>&1 | egrep -q 'available' && return 0
+> +       return 2
 > +}
 > +
->  static u64 generation_mmio_spte_mask(u64 gen)
->  {
->  	u64 mask;
-> @@ -340,6 +353,12 @@ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 =
-mmio_mask, u64 access_mask)
->  	BUG_ON((u64)(unsigned)access_mask !=3D access_mask);
->  	WARN_ON(mmio_value & shadow_nonpresent_or_rsvd_lower_gfn_mask);
-> =20
-> +	/*
-> +	 * Reset to the original module param value to honor userspace's desire
-> +	 * to (dis)allow MMIO caching.  Update the param itself so that
-> +	 * userspace can see whether or not KVM is actually using MMIO caching.
-> +	 */
-> +	enable_mmio_caching =3D allow_mmio_caching;
->  	if (!enable_mmio_caching)
->  		mmio_value =3D 0;
-> =20
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index cabe3fbb4f39..26b144ffd146 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -450,6 +450,7 @@ static inline u64 restore_acc_track_spte(u64 spte)
-> =20
->  u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_p=
-fn);
-> =20
-> +void __init kvm_mmu_spte_module_init(void);
->  void kvm_mmu_reset_all_pte_masks(void);
-> =20
->  #endif
+> +skip_if_no_mem_event || exit 2
+> +
+> +# skip if there's no compiler
+> +if ! [ -x "$(command -v cc)" ]; then
+> +       echo "skip: no compiler, install gcc"
+> +       exit 2
+> +fi
+> +
+> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
+> +TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
+> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +
+> +check_result() {
+> +       # The memory report format is as below:
+> +       #    99.92%  ...  [.] buf1+0x38  ...
+> +       result=$(perf mem report -i ${PERF_DATA} --stdio 2>&1 | egrep "buf1" | \
+> +               awk '{ for (i = 1; i <= NF; i++) { if ($i ~ /^buf1/) { print $i; break; } } }')
+> +
+> +       # Testing is failed if has no any sample for "buf1"
+> +       [ -z "$result" ] && return 1
+> +
+> +       while IFS= read -r line; do
+> +               # The "data1" and "data2" fields in structure "buf1" have
+> +               # offset "0x0" and "0x38", returns failure if detect any
+> +               # other offset value.
+> +               if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
+> +                       return 1
+> +               fi
+> +       done <<< "$result"
+> +
+> +       return 0
+> +}
+> +
+> +cleanup_files()
+> +{
+> +       echo "Cleaning up files..."
+> +       rm -f ${PERF_DATA}
+> +       rm -f ${TEST_PROGRAM_SOURCE}
+> +       rm -f ${TEST_PROGRAM}
+> +}
+> +
+> +trap cleanup_files exit term int
+> +
+> +# compile test program
+> +cat << EOF > $TEST_PROGRAM_SOURCE
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +
+> +typedef struct _buf {
+> +       long data1;
+> +       long reserved[6];
+> +       long data2;
+> +} buf __attribute__((aligned (64)));
+> +
+> +static buf buf1;
+> +
+> +int main() {
+> +       int i;
+> +       for (;;) {
+> +               buf1.data1++;
+> +               buf1.data2 += buf1.data1;
+> +       }
+> +       return 0;
+> +}
+> +EOF
+> +
+> +echo "Compiling test program..."
+> +cc $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
+> +
+> +echo "Recording workload..."
+> +perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
+> +PERFPID=$!
 
+I wonder here you could do:
+TESTPID=$(ps -o pid -h --ppid "$PERFPID")
+
+> +sleep 1
+> +
+> +kill $PERFPID
+> +wait $PERFPID
+> +# test program may leave an orphan process running the workload
+> +killall $(basename $TEST_PROGRAM)
+
+And then here kill $TESTPID to avoid the killall which worries me a little.
+
+Thanks,
+Ian
+
+> +
+> +check_result "$variable_name"
+> +exit $?
+> --
+> 2.25.1
+>

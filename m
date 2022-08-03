@@ -2,146 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E0D5890DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2245890E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbiHCQ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S237368AbiHCRAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbiHCQ61 (ORCPT
+        with ESMTP id S232098AbiHCRAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:58:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802ADFA8;
-        Wed,  3 Aug 2022 09:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659545906; x=1691081906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+B1vsLU39VGsTpHwlt0Hln8FAe8XY68mIqJ4Xlv+sJo=;
-  b=F7DHFSD3b6M9nJMGS7G/8ZD/zZiWYdW0jWtQaqGDGmmBmxMmaTcrvTI7
-   zHv+RfWeknlGI2sozQ6IJ4aZO5QiXUOH0wb8fCGcTPsj6jaf/arJCmHS2
-   7fPHHgIXXHth6/G8oNxhhqdZhQzQG9QZONdQ8epxgWWMkzm2Fkg8U0sVI
-   5D9Ob6fqteaFRoPv0MvX7tIV67YDm+mS+2wgOdeqO6mb4bq6v1h4g14Fm
-   5WiVvA9cLWsk6UtYG4IXdMzE+SGzhnQf3vcoEECtg4u5jp6Q2twOTiGY9
-   v16+9511aH9pd7KRF6JMS9DPrZ/W6hFDZ8SOy2LhFG7YVKhQ5pd3FpEz+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="290943484"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="290943484"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 09:58:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="692312968"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2022 09:58:14 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJHhF-000HTV-1t;
-        Wed, 03 Aug 2022 16:58:13 +0000
-Date:   Thu, 4 Aug 2022 00:57:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        linux-doc@vger.kernel.org
-Subject: fs/btrfs/zstd.c:98: warning: This comment starts with '/**', but
- isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202208040057.KEoGGTvs-lkp@intel.com>
+        Wed, 3 Aug 2022 13:00:33 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B5F2AE1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:00:31 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id f11so15637638pgj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=fhbd9DQJ5D6KXAxH6rPNWphudRMxo7FuUfGNTHo4u9E=;
+        b=rPbZqOsAXcAEpup8KYY+VxUphb2xjMzZFqapiuN5pUFkOvsoVd/Igmcm7tOt63U5JB
+         shrZP2YQLPYg08a4TP4F+X9e3iI7BRvnxouDtn1zFpx6QXFtyGrUNnBdPakYRtbIIxpo
+         SnLjCWBja2N3vnnvbdE75nsb+7N9l+0b310thhZS6aCKYq1hPB3sXHEUEEi2snNIWHO7
+         FgQm+Tk6eCgPnmlEncrBrk0fhUuApKKWWpDFxxexQmhqZSqIHsBIEM9M91kxqNiIbTEP
+         tq+AgqlJjA9291+qEe+RDzdhOYtcJGGhShKmCxLkdgfU6KL+9MwsI8dpCdFdbIBolW+k
+         ctkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fhbd9DQJ5D6KXAxH6rPNWphudRMxo7FuUfGNTHo4u9E=;
+        b=1PPTFrcB79QhykEmRS9LZoeib/ehDjoquvDPpKjKw8DccPq+/baLsa2t6p6PhN7FFD
+         /vaiSGPKVlq58bkVOpcy1ZERq9PyuXJJRcphDXMMtpyRImE4Xy2Oh9py+n8Kh11mLxxN
+         sJ0T0iWKBRXdkruwsDz5Dr/0FfCRnvwKJzii3BBGoPzwEXU9uORhrWM8BugJwLRjCb7y
+         eO7NL/lwU07fL0B7bNltDcJuLIWeyAyo1uY9JVEsVNHmXHTe0Iksj2/j2Gf3OPaQqkdI
+         JCFB1e/1xkqyX9SqpE0iKynbY/d4Gz4deB0RI6WGxBsbz0in0UY7kSds0mAKsmW6MJqY
+         OGBQ==
+X-Gm-Message-State: AJIora9ZciE68FI1HSFT3+3U9Wy6FE+fOWefNLOrHZnmQg4UtSzTHnEJ
+        uGgVo884WOabmgZmfoHi8lKfJg==
+X-Google-Smtp-Source: AGRyM1smChntT6s3YdLIZiLzo4pEZXGS87emXegzZ85GtPVH6Ycah2LcWBmPta599eYePi0F1rU5Uw==
+X-Received: by 2002:a65:42c8:0:b0:41a:8138:f47f with SMTP id l8-20020a6542c8000000b0041a8138f47fmr21839456pgp.476.1659546030504;
+        Wed, 03 Aug 2022 10:00:30 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id q25-20020aa79839000000b0052deda6e3d2sm3901576pfl.98.2022.08.03.10.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 10:00:30 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 17:00:26 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
+ interrupts
+Message-ID: <Yuqpqr/aE6KN5MLv@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-2-mizhang@google.com>
+ <060419e118445978549f0c7d800f96a9728c157c.camel@redhat.com>
+ <YuqmKkxEsDwBvayo@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuqmKkxEsDwBvayo@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
-commit: dd7382a2a7da91a475703810a87a80d6eae14645 btrfs: use non-bh spin_lock in zstd timer callback
-date:   3 months ago
-config: hexagon-randconfig-r002-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040057.KEoGGTvs-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd7382a2a7da91a475703810a87a80d6eae14645
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dd7382a2a7da91a475703810a87a80d6eae14645
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
+On Wed, Aug 03, 2022, Mingwei Zhang wrote:
+> On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> > On Tue, 2022-08-02 at 23:07 +0000, Mingwei Zhang wrote:
+> > > From: Oliver Upton <oupton@google.com>
+> > > 
+> > > vmx_guest_apic_has_interrupts implicitly depends on the virtual APIC
+> > > page being present + mapped into the kernel address space. However, with
+> > > demand paging we break this dependency, as the KVM_REQ_GET_VMCS12_PAGES
+> > > event isn't assessed before entering vcpu_block.
+> > > 
+> > > Fix this by getting vmcs12 pages before inspecting the guest's APIC
+> > > page. Note that upstream does not have this issue, as they will directly
+> > > get the vmcs12 pages on vmlaunch/vmresume instead of relying on the
+> > > event request mechanism. However, the upstream approach is problematic,
+> > > as the vmcs12 pages will not be present if a live migration occurred
+> > > before checking the virtual APIC page.
+> > 
+> > Since this patch is intended for upstream, I don't fully understand
+> > the meaning of the above paragraph.
+> 
+> My apology. Some of the statement needs to be updated, which I should do
+> before sending. But I think the point here is that there is a missing
+> get_nested_state_pages() call here within vcpu_block() when there is the
+> request of KVM_REQ_GET_NESTED_STATE_PAGES.
+> 
+> > 
+> > 
+> > > 
+> > > Signed-off-by: Oliver Upton <oupton@google.com>
+> > > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > > ---
+> > >  arch/x86/kvm/x86.c | 17 +++++++++++++++++
+> > >  1 file changed, 17 insertions(+)
+> > > 
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index 5366f884e9a7..1d3d8127aaea 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -10599,6 +10599,23 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+> > >  {
+> > >  	bool hv_timer;
+> > >  
+> > > +	/*
+> > > +	 * We must first get the vmcs12 pages before checking for interrupts
+> > > +	 * that might unblock the guest if L1 is using virtual-interrupt
+> > > +	 * delivery.
+> > > +	 */
+> > > +	if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
+> > > +		/*
+> > > +		 * If we have to ask user-space to post-copy a page,
+> > > +		 * then we have to keep trying to get all of the
+> > > +		 * VMCS12 pages until we succeed.
+> > > +		 */
+> > > +		if (unlikely(!kvm_x86_ops.nested_ops->get_nested_state_pages(vcpu))) {
+> > > +			kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+> > > +			return 0;
+> > > +		}
+> > > +	}
+> > > +
+> > >  	if (!kvm_arch_vcpu_runnable(vcpu)) {
+> > >  		/*
+> > >  		 * Switch to the software timer before halt-polling/blocking as
+> > 
+> > 
+> > If I understand correctly, you are saying that if apic backing page is migrated in post copy
+> > then 'get_nested_state_pages' will return false and thus fail?
+> 
+> What I mean is that when the vCPU was halted and then migrated in this
+> case, KVM did not call get_nested_state_pages() before getting into
+> kvm_arch_vcpu_runnable(). This function checks the apic backing page and
+> fails on that check and triggered the warning.
+> > 
+> > AFAIK both SVM and VMX versions of 'get_nested_state_pages' assume that this is not the case
+> > for many things like MSR bitmaps and such - they always uses non atomic versions
+> > of guest memory access like 'kvm_vcpu_read_guest' and 'kvm_vcpu_map' which
+> > supposed to block if they attempt to access HVA which is not present, and then
+> > userfaultd should take over and wake them up.
+> 
+> You are right here.
+> > 
+> > If that still fails, nested VM entry is usually failed, and/or the whole VM
+> > is crashed with 'KVM_EXIT_INTERNAL_ERROR'.
+> > 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, I think I understand what you are saying. hmm, so basically the
+patch here is to continuously request vmcs12 pages if failed. But what
+you are saying is that we just need to call 'get_nested_state_pages'
+once. If it fails, then the VM fails to work. Let me double check and
+get back.
 
-All warnings (new ones prefixed by >>):
-
->> fs/btrfs/zstd.c:98: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Timer callback to free unused workspaces.
-
-
-vim +98 fs/btrfs/zstd.c
-
-    96	
-    97	/**
-  > 98	 * Timer callback to free unused workspaces.
-    99	 *
-   100	 * @t: timer
-   101	 *
-   102	 * This scans the lru_list and attempts to reclaim any workspace that hasn't
-   103	 * been used for ZSTD_BTRFS_RECLAIM_JIFFIES.
-   104	 *
-   105	 * The context is softirq and does not need the _bh locking primitives.
-   106	 */
-   107	static void zstd_reclaim_timer_fn(struct timer_list *timer)
-   108	{
-   109		unsigned long reclaim_threshold = jiffies - ZSTD_BTRFS_RECLAIM_JIFFIES;
-   110		struct list_head *pos, *next;
-   111	
-   112		spin_lock(&wsm.lock);
-   113	
-   114		if (list_empty(&wsm.lru_list)) {
-   115			spin_unlock(&wsm.lock);
-   116			return;
-   117		}
-   118	
-   119		list_for_each_prev_safe(pos, next, &wsm.lru_list) {
-   120			struct workspace *victim = container_of(pos, struct workspace,
-   121								lru_list);
-   122			unsigned int level;
-   123	
-   124			if (time_after(victim->last_used, reclaim_threshold))
-   125				break;
-   126	
-   127			/* workspace is in use */
-   128			if (victim->req_level)
-   129				continue;
-   130	
-   131			level = victim->level;
-   132			list_del(&victim->lru_list);
-   133			list_del(&victim->list);
-   134			zstd_free_workspace(&victim->list);
-   135	
-   136			if (list_empty(&wsm.idle_ws[level - 1]))
-   137				clear_bit(level - 1, &wsm.active_map);
-   138	
-   139		}
-   140	
-   141		if (!list_empty(&wsm.lru_list))
-   142			mod_timer(&wsm.timer, jiffies + ZSTD_BTRFS_RECLAIM_JIFFIES);
-   143	
-   144		spin_unlock(&wsm.lock);
-   145	}
-   146	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > Anything I missed? 
+> > 
+> > Best regards,
+> > 	Maxim Levitsky
+> > 

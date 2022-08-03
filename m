@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63767588AAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40855588AB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234558AbiHCKjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S235062AbiHCKl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiHCKi7 (ORCPT
+        with ESMTP id S233781AbiHCKlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:38:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8DADF81
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:38:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 3 Aug 2022 06:41:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1521EC4A;
+        Wed,  3 Aug 2022 03:41:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LySyP0kWzz4x1J;
-        Wed,  3 Aug 2022 20:38:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1659523133;
-        bh=cZzR6q2FC68zDJPpV+tjLqwkyB0kdhohIKX2ZW6ahVU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=KEW9aIfVu20bRph3tSKCXmLslC5VsGcwfUzOYm1MZslcIr9AYIP/4zoqQTWJ0391c
-         1W8yy9NLlPyQvZdSFlwpi13uMHfiIEASKn2U0dHJMaqZUWwBg5dHR0gvFu7tpwn4Sk
-         ZpOALjuJ9BGIN1npA4FJx4a7GKGM0+ECN2EtiP+7BvEg235qcaz2j5FH50/E4avAGd
-         cYlfmJMBBNveyoLDCBR3gV3kmCy4B/ytDh3hxLFgxrsigD3kHein5LaAKokvexOAbO
-         s/D3+NSVHju4MaQMaJXHmIyjbaVfUewfxnFX9joocEIBTn3/wGMrmzxflQG93ONquM
-         ZIIVJLeSAamAQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 2/3] powerpc/ppc-opcode: Define and use PPC_RAW_TRAP()
- and PPC_RAW_TW()
-In-Reply-To: <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
-References: <b2d762191b095530789ac8b71b167c6740bb6aed.1657205708.git.christophe.leroy@csgroup.eu>
- <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
- <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
-Date:   Wed, 03 Aug 2022 20:38:48 +1000
-Message-ID: <87les5a9xj.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41BD8B82230;
+        Wed,  3 Aug 2022 10:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F289C433D6;
+        Wed,  3 Aug 2022 10:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659523279;
+        bh=pZI1U0FPD8bdBXqWxXEXyQIrU/XYGuzEeKFaHUXpZVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNtcwmpooEAF5XSFoBUMlIUIg3AhNt9Zv383HegtlBczWGW6kz5BXkB/KDo5kT54h
+         0WznEinybK8Ybw1DP5/KLbjfYaLrE0x8f6MfXx9TeMl5gaJQxfV1I1Qd9knR42ZFMO
+         zD7CYcpRa3k/g09EeZgTj++z+JexSwdK+4ED2foWNc5Ja47iJARk6Kcpgcrs2QE70M
+         pEdhl8tQX2G5f7vJV7iaarq13+xHjJgBSp5u3uumAbsvtIczzpE8o6R9N8GqI3LJwR
+         Ppnk0dVyUKrdSFO+AEcXQEBQzeLqnZv6zybSUmfwaOin/ua2PgaIm9pK9Q4HhPXJKq
+         QkpnXPuE9tb5A==
+Date:   Wed, 3 Aug 2022 11:41:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <YupQy7O0CmONWJOd@sirena.org.uk>
+References: <20220802151932.2830110-1-broonie@kernel.org>
+ <CANn89iJ0pRrHQa+c4Rq3kC80zdjT86CAOecMKchURrRuNqMzMg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qv598XczHblz5oqF"
+Content-Disposition: inline
+In-Reply-To: <CANn89iJ0pRrHQa+c4Rq3kC80zdjT86CAOecMKchURrRuNqMzMg@mail.gmail.com>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Naveen N. Rao" <naveen.n.rao@linux.ibm.com> writes:
-> Christophe Leroy wrote:
->> Add and use PPC_RAW_TRAP() instead of opencoding.
->> 
->> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->> ---
->>  arch/powerpc/include/asm/ppc-opcode.h | 2 ++
->>  arch/powerpc/include/asm/probes.h     | 3 ++-
->>  arch/powerpc/xmon/xmon.c              | 2 +-
->>  3 files changed, 5 insertions(+), 2 deletions(-)
->> 
->> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
->> index 89beabf5325c..5527a955fb4a 100644
->> --- a/arch/powerpc/include/asm/ppc-opcode.h
->> +++ b/arch/powerpc/include/asm/ppc-opcode.h
->> @@ -581,6 +581,8 @@
->>  
->>  #define PPC_RAW_BRANCH(offset)		(0x48000000 | PPC_LI(offset))
->>  #define PPC_RAW_BL(offset)		(0x48000001 | PPC_LI(offset))
->> +#define PPC_RAW_TW(t0, a, b)		(0x7f000008 | ___PPC_RS(t0) | ___PPC_RA(a) | ___PPC_RB(b))
->
-> Shouldn't that be 0x7c000008 ?
 
-Yes, my script agrees.
+--qv598XczHblz5oqF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://github.com/mpe/misc-scripts/blob/master/ppc/ppc-instruction-encode
+On Wed, Aug 03, 2022 at 12:42:30AM -0700, Eric Dumazet wrote:
+> On Tue, Aug 2, 2022 at 8:19 AM <broonie@kernel.org> wrote:
 
-$ ./ppc-instruction-encode 0:31 6:t0 11:ra 16:rb 21:4 31:
-.long 0x7c000008
-t0 << 21
-ra << 16
-rb << 11
+> >                         s->ax25_dev = NULL;
+> >                         if (sk->sk_socket) {
+> > -                               dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
+> > +                               netdev_put(ax25_dev->dev,
+> >  -                                         &ax25_dev->dev_tracker);
 
+> This part seems wrong.
 
-I guess the only user is PPC_RAW_TRAP() which passes t0 = 31, so that's
-why nothing has broken.
+> Commit d7c4c9e075f8c only changed the two spots, one in ax25_release()
+> and one in ax25_bind()
 
-Send a fixup? :)
+It is, I fixed it up later.
 
-cheers
+--qv598XczHblz5oqF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLqUMoACgkQJNaLcl1U
+h9Bwwgf/TqOVG797V/gvWnDJGQk7byOYNghpu8I2/LyBSClinF2xw/TWBsnLWOyO
+g7VDWyPVfiCZVUDziztzip3b36KdnI7EMmFPF+ZvCmFaU/vguph8o0d6jAXyucPL
+znzaO6Nm0+FO8C/TiD5Fx43tD+JpjxGHgW3Xp4IyJ4o+1dT4kz+GVx8RbjfYRT/o
+gHYqFB0nOvJ3M0FwbaJu64KNeP4Ch/MCB0XoEpbdd1j1wYJC9as4C8xpgj997rS+
+UUCyF7Sma2aul4l2Nj0gTHK1wXeaiXfnzrcBKx7Aq8J8eL7OvjEDcH7Q83TQUSWz
+YqdIK1IWAv77LXYH5qLGeacdGHwgWA==
+=AJRT
+-----END PGP SIGNATURE-----
+
+--qv598XczHblz5oqF--

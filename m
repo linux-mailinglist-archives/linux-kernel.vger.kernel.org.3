@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7B2589449
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB1158944E
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbiHCWJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 18:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
+        id S236757AbiHCWNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236738AbiHCWJn (ORCPT
+        with ESMTP id S230499AbiHCWN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:09:43 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E96A26AD1
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:09:42 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id gk3so21617911ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 15:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=FsfXSqaJQraxiba0yKE7C4urEnasCW26TAfDOCyD+rA=;
-        b=D7xk4B/0uc5gGnqzfFElxKP+Iqc42KSnPce+upGB7rCrR4jPtMdmFjUR2TyN7QB4OP
-         b+/beAlyubgUFEawoiWGHAmM/UFwEl0BIVLs9Gvi9qpIgY2phnW1G1SfFywK9rfRft+F
-         nx8uD+1PQTNufdAH1gYGsaqjTN1kcFCXwg2Ow=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FsfXSqaJQraxiba0yKE7C4urEnasCW26TAfDOCyD+rA=;
-        b=Sykcj0KI7NWkrd/o9bhdTh6QU4b5zGfNl7mR7PZCiSYkAaCE7Ikc9e9t8JzdP4dhuK
-         2FE7KqkU2eJ4FzQnsQOpdHYg4xr+IMTz1MATqtsr6z2yc5yCiD0GuH2ph2OVdhCsR9V0
-         g77c/Z9m096fe5qfXsL6hiYJKH2fMkrzM11eo0aot9YbHz+V2uiI6Fe/d8hNTfVpwFW5
-         doXZu5Csj9LjFff20EBkpmMtMCFcfoNKOricG8s+fejndLX/VnJbHxsn8VliDWGamTdV
-         XRLOctdpwOmydLqWJKndoSMFeG046BJUqxjjrUeKdIMxf2/yne7F8x4fN9XEztj+dMqX
-         Ixmg==
-X-Gm-Message-State: AJIora9d9ldeNUPwC5XPIK4gkpu71yZjJdeCGB0b5DP+ymXLDdohbjp/
-        s2Y1sDb16h1uWGdGytQ+hGGu/dnUDKA5Ux5e
-X-Google-Smtp-Source: AGRyM1tgpxdc2wgc4jGr0jrmxBdrcohIzaMLGRiSPbyj0TZk/VapJIrXvcINgDZMty/kEStDa5C9rA==
-X-Received: by 2002:a17:906:6a26:b0:72e:cee5:d1b0 with SMTP id qw38-20020a1709066a2600b0072ecee5d1b0mr22088528ejc.404.1659564580876;
-        Wed, 03 Aug 2022 15:09:40 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id ec15-20020a0564020d4f00b0043c83ac66e3sm9955335edb.92.2022.08.03.15.09.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 15:09:40 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id l4so23079434wrm.13
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 15:09:40 -0700 (PDT)
-X-Received: by 2002:adf:edcb:0:b0:21e:d043:d271 with SMTP id
- v11-20020adfedcb000000b0021ed043d271mr17429839wro.274.1659564579607; Wed, 03
- Aug 2022 15:09:39 -0700 (PDT)
+        Wed, 3 Aug 2022 18:13:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF9F220E5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659564808; x=1691100808;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FyZaaNXlO9avdoPUq+PWtAEvmWODROa4pFcuQDEArzM=;
+  b=iTyOObSvNbNXsmzwYB29k7nHHOrhYrVzLHET89Y0/DSbZYMnvFbhVkkv
+   lb44HSk6pmSFIrr3WBSbyGrrfKoDkZ8GWyP6e/1Dc6CLcb2I1SYPoYFGp
+   TzXgIS8G56FQLETwkN4hjbdEvmow52UkRyolGfdSWkB+YoCiElOYJU3q0
+   3n5NIkrZagOFrJwTyTzCC1S0Z5WCSNJdVdkuv3E136C6c0lE0uGCBAb0Z
+   T8KCitt+tLPQwhR+DV1qUOBpTVvt9Ks4asoXH75Ugc9wSUE8Qi4lHH7Py
+   3gfY8ta+XXTTeh76FNkmHCw/hsZqzJF8VZF6cbjCtNS12l7u146h5W28X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="269561597"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="269561597"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:13:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="692403643"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2022 15:13:25 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJMcH-000Hid-0U;
+        Wed, 03 Aug 2022 22:13:25 +0000
+Date:   Thu, 4 Aug 2022 06:13:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [rmk-arm:zii 42/87] drivers/net/pcs/pcs-xpcs.c:178:9: error: call to
+ undeclared function 'mdiodev_c45_read'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202208040637.Ng1pO69r-lkp@intel.com>
 MIME-Version: 1.0
-References: <YurA3aSb4GRr4wlW@ZenIV> <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
- <YuruqoGHJONpdZcK@home.goodmis.org>
-In-Reply-To: <YuruqoGHJONpdZcK@home.goodmis.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 3 Aug 2022 15:09:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whJvgykcTnR+BMJNwd+me5wvg+CxjSBeiPYTR1B2g5NpQ@mail.gmail.com>
-Message-ID: <CAHk-=whJvgykcTnR+BMJNwd+me5wvg+CxjSBeiPYTR1B2g5NpQ@mail.gmail.com>
-Subject: Re: [git pull] vfs.git pile 3 - dcache
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 2:55 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> The original patch years ago use to have:
->
->  preempt_disable_rt()
->
->  preempt_enable_rt()
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
+head:   315d00812d1f8ed8bbbce4e4fd8d32fc883900a0
+commit: 8994c74ee066d099110807ffcee3f61ffd62d28b [42/87] net: pcs: xpcs: use mdiodev accessors
+config: arm-randconfig-r014-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040637.Ng1pO69r-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm zii
+        git checkout 8994c74ee066d099110807ffcee3f61ffd62d28b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/pcs/
 
-That may be visually simpler, but I dislike how it's named for some
-implementation detail, rather than for the semantic meaning.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Admittedly I think "preempt_enable_under_spinlock()" may be a bit
-*too* cumbersome as a name. It does explain what is going on - and
-both the implementation and the use end up being fairly clear (and the
-non-RT case could have some debug version that actually tests that
-preemption has already been disabled).
+All errors (new ones prefixed by >>):
 
-But it is also a ridiculously long name, no question about that.
+>> drivers/net/pcs/pcs-xpcs.c:178:9: error: call to undeclared function 'mdiodev_c45_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
+                  ^
+   drivers/net/pcs/pcs-xpcs.c:178:9: note: did you mean 'mdiobus_c45_read'?
+   include/linux/mdio.h:505:19: note: 'mdiobus_c45_read' declared here
+   static inline int mdiobus_c45_read(struct mii_bus *bus, int prtad, int devad,
+                     ^
+>> drivers/net/pcs/pcs-xpcs.c:183:9: error: call to undeclared function 'mdiodev_c45_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+                  ^
+   drivers/net/pcs/pcs-xpcs.c:183:9: note: did you mean 'mdiobus_c45_write'?
+   include/linux/mdio.h:511:19: note: 'mdiobus_c45_write' declared here
+   static inline int mdiobus_c45_write(struct mii_bus *bus, int prtad, int devad,
+                     ^
+   2 errors generated.
 
-I still feel is less cumbersome than having that
-"IS_ENABLED(CONFIG_PREEMPT_RT)" test that also then pretty much
-requires a comment to explain what is going on.
 
-            Linus
+vim +/mdiodev_c45_read +178 drivers/net/pcs/pcs-xpcs.c
+
+   172	
+   173	#define xpcs_linkmode_supported(compat, mode) \
+   174		__xpcs_linkmode_supported(compat, ETHTOOL_LINK_MODE_ ## mode ## _BIT)
+   175	
+   176	int xpcs_read(struct dw_xpcs *xpcs, int dev, u32 reg)
+   177	{
+ > 178		return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
+   179	}
+   180	
+   181	int xpcs_write(struct dw_xpcs *xpcs, int dev, u32 reg, u16 val)
+   182	{
+ > 183		return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+   184	}
+   185	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2F5588684
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FBF588689
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbiHCE35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
+        id S235735AbiHCEbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235650AbiHCE3z (ORCPT
+        with ESMTP id S229457AbiHCEbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:29:55 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A7D57201
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:29:52 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ef5380669cso159856027b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 21:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NbtXNCpzIHOXao+YSnQZdhcH786as3lUPJ/TZmv8CNw=;
-        b=Hgz4TqIWl4pJo49RQXXWoNPSdOSqCLbXTwSkc5BG1Ic5qEa+SMfmG/QhBSjdPZ3KNG
-         YhCBVCj1nZvne/4SQtLLhSIw7Vafg0bbVoqYdCBYeyYJXHkCXolxDZo/3EdPaB3cD6Ko
-         70Pq7cwbqCQeHKiQ0d+VxTSJ5b9vrJzqfFFWs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NbtXNCpzIHOXao+YSnQZdhcH786as3lUPJ/TZmv8CNw=;
-        b=tmwV7b6uY6wBm5INN05tgTqigmX7FHFO0A/LOxt3DVYykrGeMxkxvwbdqDGhs9K87u
-         9HC0i1IZkeGMcL4dj9H+4bkt/9RttJ6kjaKjcJO6mMrQebdRv4Rvl0JdFmj63uIulkaU
-         baysh7VfuaCpD9o7RZOLwkfG681wcJt0C3Q7cgn6ZE5nBA4ldQ+I14s6xqqTPR5Ngb3g
-         bw+7jqD2ATCGimtAhNk/fFNq5WejKDFagilwpHbSIzjjfF+NWRR5dZXG5Lz4LfOgPZko
-         0q2z7f+7c2tP/3bxeXN/GgtPfHqbEq+KG9zj2tTymXrTrIhomkVI8jI+cMy26tWVKN9J
-         cBBg==
-X-Gm-Message-State: ACgBeo0KRIDwM6Xbn6k9qcQFP973Cp27ZRA4TmSnUetSRFQcBgqxwXgF
-        +S7qMhFnH/AjIJZVo4nraouqO3/TDqpB8TywfnWo3g==
-X-Google-Smtp-Source: AA6agR4WjX/epmvJWCEqJybFZZuQMaMMSBvBmrgjPDfUnQXu59XYjGRrURmOgu9EbFsiDo3C7nrzNWdlWn0yVmaLHM8=
-X-Received: by 2002:a81:81c1:0:b0:31e:7378:960c with SMTP id
- r184-20020a8181c1000000b0031e7378960cmr21836822ywf.266.1659500991420; Tue, 02
- Aug 2022 21:29:51 -0700 (PDT)
+        Wed, 3 Aug 2022 00:31:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7001F4E873;
+        Tue,  2 Aug 2022 21:31:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07DCD612E4;
+        Wed,  3 Aug 2022 04:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65352C433D6;
+        Wed,  3 Aug 2022 04:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659501092;
+        bh=RXun5C6qA7jQQI2I72/bNDDoxKPWHaRc4EfuqcLowAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WhzkYpLX1hzGXOO1Jw3AF1Pd/TW9ezk3A+J2l+fZELKdb9Ggsn8QOuXYs+IYDBs/m
+         9BhnFijXHyIgJtDIi43RA8Woe2/BfT9TAxeIPmpYKJY9M1ipagl3EvWgf43LU30jXt
+         tFRrdwTRmJLdvbTCNyT96kDoWmtkwfy7iApzzZrhMQQLCHbzqIF4TQH2FZ0XIRqi/+
+         m5GuY42JTY9YLc33tJdbZZFjSzu/7wyAKVSn/2Xqw5mxtkD8svBik/WPIBmNR8Uw7D
+         pHfpgeYJXUgSpwzWPZ/RBVkpJy6l08GdpUKWjgpVe8RfSpzuwCFHXOEIimRDKvHTtP
+         tFWwzWnKYI0zg==
+Date:   Tue, 2 Aug 2022 21:31:31 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Sherry Yang <sherry.yang@oracle.com>, dchinner@redhat.com,
+        allison.henderson@oracle.com, chandanrlinux@gmail.com,
+        bfoster@redhat.com, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] xfs: initialize error in xfs_defer_finish_one
+Message-ID: <Yun6I/drpxG4L4RO@magnolia>
+References: <20220801190311.65703-1-sherry.yang@oracle.com>
+ <20220801204902.GA3600936@dread.disaster.area>
 MIME-Version: 1.0
-References: <20220704000225.345536-1-dlunev@chromium.org> <20220704100221.1.I15b3f7a84ba5a97fde9276648e391b54957103ff@changeid>
- <YtB45Lte5UhlEE6y@redhat.com> <CAONX=-dEG121RQ6L-4fPMXrLXb3JeYNVNiPzHXNaRLbwRzb3bw@mail.gmail.com>
- <alpine.LRH.2.02.2207150528170.5197@file01.intranet.prod.int.rdu2.redhat.com>
- <cca5b463-a860-de8d-b7e4-a8d30aef2ff2@gmail.com> <CAONX=-fJHgfGkwR5A1MT+8FHckueehOsUS_LyHkjrgp4Y+vOgw@mail.gmail.com>
- <CAONX=-ft=ewFDui4jmd2fvcNr2EJc90=ZNOueDdp6HaPZmvObQ@mail.gmail.com> <Yun4LH+StcuBXRtO@sol.localdomain>
-In-Reply-To: <Yun4LH+StcuBXRtO@sol.localdomain>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Wed, 3 Aug 2022 14:29:40 +1000
-Message-ID: <CAONX=-esLr5bGUks_a8wQBky37NnCawh2eOMemYg32HcPA7pmA@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH 1/1] dm: add message command to disallow device open
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Zdenek Kabelac <zdenek.kabelac@gmail.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801204902.GA3600936@dread.disaster.area>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This seems like an access control policy, which the Linux kernel already has a
-> lot of mechanisms for.  Chrome OS already uses SELinux.  Couldn't this be solved
-> by giving the device node an SELinux label that no one has permission to open?
-That would be the ideal solution, but there is a number of challenges
-that prevent
-us enabling enforcement on all SELinux domains unfortunately. While in the long
-run that would be a preferred option, in the short run this doesn't
-seem feasible. I
-would assume the problem of enabling full SELInux enforcement would plague
-any big project that didn't have them enabled from the get going.
---Daniil
+On Tue, Aug 02, 2022 at 06:49:02AM +1000, Dave Chinner wrote:
+> On Mon, Aug 01, 2022 at 12:03:11PM -0700, Sherry Yang wrote:
+> > Path through non-void function 'xfs_defer_finish_one' may return error
+> > uninitialized if no iteration of 'list_for_each_safe' occurs. Fix this
+> > by initializing error.
+> 
+> I didn't think this situation was possible - how do we get deferred
+> work queued with no work items on it?
+> 
+> If we can return an uninitialised error from xfs_defer_finish_one()
+> because of an empty queued work, then something else has gone wrong
+> earlier in the work deferral process. If this can actually happen,
+> then we need to fix whatever is creating the empty work rather than
+> paper over it by initialising the error being returned for empty
+> works...
+
+/me bets this is a response to a static checker that doesn't know that
+list_empty(&dfp->dfp_work) == false in all circumstances.  It's not
+possible for tp->t_dfops to contain an xfs_defer_pending with no work
+items.
+
+--D
+
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com

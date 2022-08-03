@@ -2,154 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E53588F71
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A389588F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238121AbiHCPdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S235486AbiHCPdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237297AbiHCPck (ORCPT
+        with ESMTP id S229723AbiHCPdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:32:40 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2CF6476
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:32:33 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id u10-20020a6be30a000000b0067bcbb8a637so7038661ioc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:32:33 -0700 (PDT)
+        Wed, 3 Aug 2022 11:33:47 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3338C614F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:33:46 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id p10so17811842wru.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ororatech.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=0umAYbB18JPdG3ZmPCkx39gW6/HCrNImGco95eRjbLE=;
+        b=vvAjKhTnMfE1WOtRIHrwn4aQceY66tnhhJIlJlrHfBzwCq0bZYCrg0b/5zBmJA0dXF
+         PPUKY4m9dc1sHGHSGEvHBIgoo+sCesx/L41p0YCubxRCLeQ3h10RM5gzqY9uqJ6zemEi
+         frnk20o0H3C9lb40mODLFBWypNX5I3zE01TUqxhZVHR+jNuBwmADZSO19GFf12l7vz5M
+         exH7JAIzyupcbiS3NppT1u9VVP+8QwZ9IZimwvUbRHg3GGWWJM6VBsKIVynKVsoRapxV
+         17pm9zUEXAhEcc++IrS1L1hwteHbT2RDw+e9IXcayc0kwummKPxpZYjXE72UR82tPyXz
+         wOrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=NCQwecGn3xAsWnvGAu1P1ORQUutISsgOm6rWC9dfUm8=;
-        b=FKzZ8I6A8X6RWWDxe7umY8CulXX0XmaDUGyJplGC3gXhvj8KuS7e1xHfYXYtIVGZxo
-         zlwvXcAKk3gPWPMIMkCfNSllBccVraVX8kH8Hm0egXXAqBNrTAKA00qozLFl0KynhVxQ
-         PcMkP2cNfMntbbl4UvMHQGnTkEZVCnpF9DGs/k3eek5P7aqbjjSkFibn0VAd86vK3Wgt
-         tDTEZglbk4YaU/TrhKC4T5jg2Bf66i4UQ13b8GFl/ufWoBah7q+wCDWawuaECEl20KmZ
-         uWSnZ/Jb7CpiitFckJ3yWODnwBT6MrZR4mcf3b58Cg913pgAt7TZ+y6queatGsJWwzjh
-         3ydQ==
-X-Gm-Message-State: AJIora9+twtkgT1d3cTCNzr8UuwtjzNwbc8hEIDkA0JITGT9cQBQAxzK
-        DmeJaxTCv9mFjO0vVvbUt9hGrQ9zvJhI/S/PIjMS1gL0bWwf
-X-Google-Smtp-Source: AGRyM1uylfr03iRWB0jV8Nrfpln7ZEQVnt1BA/lf+cJEAg1cpaxl0KOXF3mAEz66+BbFugtwWpcctxRcrj1S4NShoRABnrdGXwCm
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=0umAYbB18JPdG3ZmPCkx39gW6/HCrNImGco95eRjbLE=;
+        b=katKQAB7pB622wmziOPNXkZCYdKlqRrhbu/fXKaUgHytOisR2OJWBg2enpRQCZ3Yqq
+         fN+vejN4UBX6yizYbjkxqxJwqi/WG7Jt0u3AuMlLTGsYfiAy9btvtShY9womrb+lHQhu
+         mj+D06OhVmJO02R+zdLPQoY9/YxHdFNtHqOfVF2STee+VuNiJW9rujYuuR+o59TnP5CV
+         hcxAiQ1JDmuOl8D6tbSbIeEgHz9msE9/UW4pPaH25kdUB66sRSqeWFEtgzxhmkwr1WNp
+         CClbjFthGhL30aoCkozhcN2AqPNetw+B3JWFAgHrFy6iJtnqCi/8P5tof1jEZSDB2Ks8
+         geMQ==
+X-Gm-Message-State: ACgBeo13m0js7h+rLnuL1HIuQIJ+id85ytOcs6fpGsepTyc9IllUI6P4
+        QTib3iKfKR0EAm3eS2WOemuo2A==
+X-Google-Smtp-Source: AA6agR54iLIwbRC1Xy7tswVJx/HIgfcNEe28F3bPGIew4YgTJg3SKqCQfhPDdp/mo4fOcZJPCH7SNg==
+X-Received: by 2002:adf:da45:0:b0:21d:8f3e:a3e0 with SMTP id r5-20020adfda45000000b0021d8f3ea3e0mr16366749wrl.310.1659540824764;
+        Wed, 03 Aug 2022 08:33:44 -0700 (PDT)
+Received: from toolbox.dsn.orora.tech (host-88-217-137-115.customer.m-online.net. [88.217.137.115])
+        by smtp.googlemail.com with ESMTPSA id n18-20020a5d67d2000000b0020fff0ea0a3sm18273804wrw.116.2022.08.03.08.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 08:33:44 -0700 (PDT)
+From:   =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
+To:     sebastian.wuerl@ororatech.com
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/net/can/spi/mcp251x.c: Fix race condition on receive interrupt
+Date:   Wed,  3 Aug 2022 17:32:59 +0200
+Message-Id: <20220803153300.58732-1-sebastian.wuerl@ororatech.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:6504:0:b0:2dd:8201:fdeb with SMTP id
- z4-20020a926504000000b002dd8201fdebmr10369595ilb.98.1659540752401; Wed, 03
- Aug 2022 08:32:32 -0700 (PDT)
-Date:   Wed, 03 Aug 2022 08:32:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000098a0105e557f130@google.com>
-Subject: [syzbot] WARNING in hugetlb_change_protection
-From:   syzbot <syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The mcp251x driver uses both receiving mailboxes of the can controller
+chips. For retrieving the CAN frames from the controller via SPI, it checks
+once per interrupt which mailboxes have been filled, an will retrieve the
+messages accordingly.
 
-syzbot found the following issue on:
+This introduces a race condition, as another CAN frame can enter mailbox 1
+while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 until
+the interrupt handler is called next, mailbox 0 is emptied before
+mailbox 1, leading to out-of-order CAN frames in the network device.
 
-HEAD commit:    e65c6a46df94 Merge tag 'drm-fixes-2022-07-30' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=139cc282080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
-dashboard link: https://syzkaller.appspot.com/bug?extid=824e71311e757a9689ff
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+This is fixed by checking the interrupt flags once again after freeing
+mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+For reproducing the bug I created the following setup:
+ - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
+ - Setup CAN to 1 MHz
+ - Spam bursts of 5 CAN-messages with increasing CAN-ids
+ - Continue sending the bursts while sleeping a second between the bursts
+ - Check on the RPi whether the received messages have increasing CAN-ids
+ - Without this patch, every burst of messages will contain a flipped pair
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+824e71311e757a9689ff@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker_entry include/linux/swapops.h:319 [inline]
-WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 make_pte_marker include/linux/swapops.h:342 [inline]
-WARNING: CPU: 1 PID: 28745 at include/linux/swapops.h:319 hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
-Modules linked in:
-CPU: 1 PID: 28745 Comm: syz-executor.3 Not tainted 5.19.0-rc8-syzkaller-00146-ge65c6a46df94 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:make_pte_marker_entry include/linux/swapops.h:319 [inline]
-RIP: 0010:make_pte_marker include/linux/swapops.h:342 [inline]
-RIP: 0010:hugetlb_change_protection+0xf85/0x1610 mm/hugetlb.c:6392
-Code: e8 d0 5a b7 ff 0f b6 94 24 80 00 00 00 48 8b 84 24 98 00 00 00 84 d2 0f 84 ef 02 00 00 49 89 c4 e9 48 fb ff ff e8 ab 5e b7 ff <0f> 0b 48 b9 00 00 00 00 00 fc ff df 48 89 d8 48 c1 e8 03 80 3c 08
-RSP: 0018:ffffc90014cc7780 EFLAGS: 00010212
-RAX: 000000000000082a RBX: ffff88807750e820 RCX: ffffc90006723000
-RDX: 0000000000040000 RSI: ffffffff81c30c25 RDI: 0000000000000007
-RBP: ffff888074de5ea0 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000004 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000004 R15: ffff88801fcc8e00
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0063) knlGS:00000000f7f06b40
-CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-CR2: 0000000020000040 CR3: 000000001b84c000 CR4: 00000000003526e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- change_protection+0x96b/0x3ad0 mm/mprotect.c:463
- mwriteprotect_range+0x387/0x5c0 mm/userfaultfd.c:759
- userfaultfd_writeprotect fs/userfaultfd.c:1823 [inline]
- userfaultfd_ioctl+0x438/0x4340 fs/userfaultfd.c:1997
- compat_ptr_ioctl+0x67/0x90 fs/ioctl.c:906
- __do_compat_sys_ioctl+0x1c7/0x290 fs/ioctl.c:968
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-RIP: 0023:0xf7f0b549
-Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-RSP: 002b:00000000f7f065cc EFLAGS: 00000296 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000c018aa06
-RDX: 00000000200000c0 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
-   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
-   a:	10 06                	adc    %al,(%rsi)
-   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
-  10:	10 07                	adc    %al,(%rdi)
-  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
-  16:	10 08                	adc    %cl,(%rax)
-  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
-  1c:	00 00                	add    %al,(%rax)
-  1e:	00 00                	add    %al,(%rax)
-  20:	00 51 52             	add    %dl,0x52(%rcx)
-  23:	55                   	push   %rbp
-  24:	89 e5                	mov    %esp,%ebp
-  26:	0f 34                	sysenter
-  28:	cd 80                	int    $0x80
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	5a                   	pop    %rdx
-  2c:	59                   	pop    %rcx
-  2d:	c3                   	retq
-  2e:	90                   	nop
-  2f:	90                   	nop
-  30:	90                   	nop
-  31:	90                   	nop
-  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-
-
+Signed-off-by: Sebastian Würl <sebastian.wuerl@ororatech.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/net/can/spi/mcp251x.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 666a4505a55a..687aafef4717 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -1063,17 +1063,14 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 	mutex_lock(&priv->mcp_lock);
+ 	while (!priv->force_quit) {
+ 		enum can_state new_state;
+-		u8 intf, eflag;
++		u8 intf, intf0, intf1, eflag, eflag0, eflag1;
+ 		u8 clear_intf = 0;
+ 		int can_id = 0, data1 = 0;
+ 
+-		mcp251x_read_2regs(spi, CANINTF, &intf, &eflag);
+-
+-		/* mask out flags we don't care about */
+-		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++		mcp251x_read_2regs(spi, CANINTF, &intf0, &eflag0);
+ 
+ 		/* receive buffer 0 */
+-		if (intf & CANINTF_RX0IF) {
++		if (intf0 & CANINTF_RX0IF) {
+ 			mcp251x_hw_rx(spi, 0);
+ 			/* Free one buffer ASAP
+ 			 * (The MCP2515/25625 does this automatically.)
+@@ -1083,14 +1080,24 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 						   CANINTF_RX0IF, 0x00);
+ 		}
+ 
++		/* intf needs to be read again to avoid a race condition */
++		mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
++
+ 		/* receive buffer 1 */
+-		if (intf & CANINTF_RX1IF) {
++		if (intf1 & CANINTF_RX1IF) {
+ 			mcp251x_hw_rx(spi, 1);
+ 			/* The MCP2515/25625 does this automatically. */
+ 			if (mcp251x_is_2510(spi))
+ 				clear_intf |= CANINTF_RX1IF;
+ 		}
+ 
++		/* combine flags from both operations for error handling */
++		intf = intf0 | intf1;
++		eflag = eflag0 | eflag1;
++
++		/* mask out flags we don't care about */
++		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++
+ 		/* any error or tx interrupt we need to clear? */
+ 		if (intf & (CANINTF_ERR | CANINTF_TX))
+ 			clear_intf |= intf & (CANINTF_ERR | CANINTF_TX);
+-- 
+2.36.1
+

@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626D458917D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE906589180
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbiHCRdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S236577AbiHCRdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbiHCRdj (ORCPT
+        with ESMTP id S238310AbiHCRdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:33:39 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB375725A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:33:32 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x23so8383557pll.7
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Dy6IYhyMjLV91h2ReHssZ9zYJNgTd/qtSQuKQsaMXrc=;
-        b=Nfb88RfP6LTCuL8dBDqDdh5UI6nFNU8KegwOL3F3TogolrjKRmHfAk7/BKpHwdDW5O
-         K1GxOxMdZmzLEJXC82fmsI0F07sfzJrrrrl+50+7vp4n2xdF1yKh7sf1hL4udl/GKUrs
-         r7wF/sNJAba2N0BzIvwwiQCmir5APDQxjGvxg=
+        Wed, 3 Aug 2022 13:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 995845727A
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659548028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+5QAlTD0yVo3KUlmnd7w4NlvzNv43A/mFCjPCFZegUM=;
+        b=Nk38WKu5DsyfQcDtXoMj9DCJ8w75rjyG1Di9whCV9hr3seZXd0z+pY7JFi0ET6j7vV5rGV
+        qVmzpr6HB/H+oVSUme7RNsu0KMOXp0UtpPbJL91mmr6BTVhEbYOBZgBNMLOLUiukENP2RW
+        0vss2p120iR0+1nLNpZQmVKyoiuyH3Y=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-HiAS59uBOkqL4MXJz728cw-1; Wed, 03 Aug 2022 13:33:47 -0400
+X-MC-Unique: HiAS59uBOkqL4MXJz728cw-1
+Received: by mail-wm1-f72.google.com with SMTP id m4-20020a7bce04000000b003a386063752so382263wmc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:33:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dy6IYhyMjLV91h2ReHssZ9zYJNgTd/qtSQuKQsaMXrc=;
-        b=l+p2TvBdMpQV4ure18W9Cuhk8HQP1xQw9xK3HkM3XMEDHdp5pJ8UfArpefs8gGgJQV
-         il7aYqf40BMWshqVl+eDQfwdeh0JC1kg2HcNbGu1X1w+lMVWz3pE9NI0EcIdnZZ57dpY
-         MzRtF8XcZplVP0A8lqjh+/ib7gKA4E8LSM0XZvuKfWbQRHxghCP6+JM1oCO/cjZ4/Vjf
-         3cKFqxgc5AZOiYM0wSlAfuvmfs8smVKHsqzTbgrQrkSgouhMgCGvmV9cS8YzPELmDFoB
-         GmOMepoUJuwEmnGHRrNjfF3+ZLCMUIMoJkwTfc3H2mbc8lhF0T6wxqXFw3niulLG4IyP
-         oQBQ==
-X-Gm-Message-State: ACgBeo2jgnCOjruXs0pHoudMjtNLNMJl9UCVngYd42DRZZIH3zGTdm3F
-        M7ib0BCk6semhkqCgLmeA9B1RA==
-X-Google-Smtp-Source: AA6agR4OTofGOrxUeI0Yz5ovXwcIJgH+wgxqCKULul0vj1fASevyAdjtsOHPEKEqbnSejux4ft0vvA==
-X-Received: by 2002:a17:90b:4b91:b0:1f4:e116:8f1 with SMTP id lr17-20020a17090b4b9100b001f4e11608f1mr6031640pjb.121.1659548012211;
-        Wed, 03 Aug 2022 10:33:32 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:238b:c074:f5f8:56d0])
-        by smtp.gmail.com with UTF8SMTPSA id e6-20020a17090a728600b001f31468f2f4sm1883181pjg.46.2022.08.03.10.33.30
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+5QAlTD0yVo3KUlmnd7w4NlvzNv43A/mFCjPCFZegUM=;
+        b=ONcFQiWGZGtiKf+7fhccBou1kQfu6VZIz/mUPzxHpNRyVu3VvlfsKFP9rElcOG+5If
+         Eytw9UrzRtywSwrB5UFZ94Ww8RZhQasbO0WeYDqvj2B8DuX+QU4J+hxk7GCv4tf8EZnW
+         lsrVDTDp+SIXjecM586o2YSzQLPd4UaCm0K+ssAnwFagxvScTRxDd1iz6NpnRdH0ltZG
+         y2IPOY9PhWtXJspCVqnTQ/PR/XyhTuWMkoN0pjcwDVDWTpvi9MMBNnLIw+c3+9sG058o
+         VyFHRCp0ykp/3ynWvPBtQKQOz9GTwredE4qz/WmUrhmz5nzO1NznjH/6pO3cGHdghxEB
+         PK+g==
+X-Gm-Message-State: ACgBeo3oYAfqXpN/s5Vb6TSmrV1mW7ZuCa/kR7TxTOE1p43Rdeq9RHXf
+        OS8faa1E5fQpj7DgayLgDQDxK18nB5XfcwB5IwhTwn8k/A+QrvfmU9kUkC5kEWmcLiHVa82UvKl
+        DPZISky7hmOUZzCbQK5h6qDvM
+X-Received: by 2002:a5d:5a1a:0:b0:21f:a9b:62c6 with SMTP id bq26-20020a5d5a1a000000b0021f0a9b62c6mr16526613wrb.20.1659548026122;
+        Wed, 03 Aug 2022 10:33:46 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7NS7DQx36jQ4hn2m0a7zi3iwiyfGu90K9fZ7IwCQxglzQUf40ZJcqhUqtqEInch/OWlH0/yQ==
+X-Received: by 2002:a5d:5a1a:0:b0:21f:a9b:62c6 with SMTP id bq26-20020a5d5a1a000000b0021f0a9b62c6mr16526595wrb.20.1659548025917;
+        Wed, 03 Aug 2022 10:33:45 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id m15-20020adffa0f000000b0021e5f32ade7sm18593005wrr.68.2022.08.03.10.33.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 10:33:31 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 10:33:29 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/8] usb: dwc3: fix PHY disable sequence
-Message-ID: <Yuqxaf2nvegDyLtp@google.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-2-johan+linaro@kernel.org>
+        Wed, 03 Aug 2022 10:33:45 -0700 (PDT)
+Message-ID: <899e4d3d-e086-71a5-38f9-17e85ce11ea4@redhat.com>
+Date:   Wed, 3 Aug 2022 19:33:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220802151404.1797-2-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>, Kyle Huey <me@kylehuey.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        kvm@vger.kernel.org, stable@vger.kernel.org
+References: <20220731050342.56513-1-khuey@kylehuey.com>
+ <Yuo59tV071/i6yhf@gmail.com>
+ <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com>
+ <Yuqvkufu7Hu4drL6@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yuqvkufu7Hu4drL6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:13:57PM +0200, Johan Hovold wrote:
-> Generic PHYs must be powered-off before they can be tore down.
-> 
-> Similarly, suspending legacy PHYs after having powered them off makes no
-> sense.
-> 
-> Fix the dwc3_core_exit() (e.g. called during suspend) and open-coded
-> dwc3_probe() error-path sequences that got this wrong.
-> 
-> Note that this makes dwc3_core_exit() match the dwc3_core_init() error
-> path with respect to powering off the PHYs.
-> 
-> Fixes: 03c1fd622f72 ("usb: dwc3: core: add phy cleanup for probe error handling")
-> Fixes: c499ff71ff2a ("usb: dwc3: core: re-factor init and exit paths")
-> Cc: stable@vger.kernel.org      # 4.8
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On 8/3/22 19:25, Ingo Molnar wrote:
+> Ok - allowing ptrace to set the full 32 bits of the PKRU register seems OK
+> then, and is 100% equivalent to using WRPKRU, right? So there's no implicit
+> masking/clearing of bits depending on how many keys are available, or other
+> details where WRPKRU might differ from a pure 32-bit per thread write,
+> correct?
 
-I also wondered about this earlier, but didn't take action.
+Yes, it's the same.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Paolo
+

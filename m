@@ -2,167 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C61588879
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F63588874
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiHCII1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S237410AbiHCIG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiHCIIZ (ORCPT
+        with ESMTP id S235199AbiHCIGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:08:25 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F69E220E4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:08:24 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id v5-20020a5d9405000000b0067c98e0011dso6598393ion.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 01:08:24 -0700 (PDT)
+        Wed, 3 Aug 2022 04:06:24 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C978220E6;
+        Wed,  3 Aug 2022 01:06:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id m22so13481456lfl.9;
+        Wed, 03 Aug 2022 01:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
+        bh=TSlAb8QUNSWyAXVGnp8zPCHMrFa9cMCzn91LI53nZo8=;
+        b=F+Ir1CBQi581OpNqvOJ9SHUtV8QZSI2B+x1iNa8Z6Nd/CgF+xd2WlCeFVF7JxRu8zG
+         F+KPZisK6zCLTgA8pPctB8f4QaQqgKqvXvMT4JAbsJ2nZQO4tf7pYE5UZgOM3TDPju/q
+         Q4PNb6krIwj0i0F9jrqDMxrOkJNo4dWmbK0ZJ6A1t8JdUqzy2qD7rGRusBFMMSoBkXG6
+         irVoWmM2lVrLujVRr7UAtH6Biq/d2qPNeZolKjkb9FXwwkpnSODPDvxYUeGuZHGhYzKI
+         LOOQL/BID6iPDuMuGVblRg+GjzvHlKMdcmOHz6mxy9los9KbZRLCl6IApaPz91aUANpK
+         6/LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=DnKgHfVeryvGCNoHB1EyKn+lx8bXA1rZCbfzsbzRrB4=;
-        b=xdlGgah4QEGsVNuZhaMPQdfY1lVDyewbQNBEX3MMETQd5ynpwQ+rytgFcqn3RBqTA+
-         5C9ByTkT6nzCkYswYW3+pcQRl8WYovKFwaCAppgatbRTd4zBEP07i9V0UsXcV4m+EH8d
-         Rj3+123cd2ZhxfQDzRDC8IdWoIjXej0GXwNwX6LX3aWUOVl8ZDHnbzL6bRFMSElzZY77
-         5z+gn5x782xC+MsZnoRxFqDtYoUh6YMOvKc8CllRiMCjaTYI09j1jZ9sA3vOPMfeKg8/
-         gJl0c1aNF8+CNsAZOeQTc+5ICSS5b2swyddRHVZKf2GCCSjsMqDqefW92zSL1J4bSSFj
-         QjGg==
-X-Gm-Message-State: AJIora+JC8nc15XzPPN2Rht9gc+XgQF2qehUdS8QHtOw4LlUh9pDG0VK
-        b9nAQB2bMBwsSfPM4IFi1LhXDTGD7bgktpkCV/Qu/aUKjjHq
-X-Google-Smtp-Source: AGRyM1uRqF+ppfRWmGMINjlhkoAsyyiv/kcTBOB7yLp+o6LFMAl6hFsPdPtUtinskQRHxOX03PyHY8yewA3xh1ZN567i19ofbiC2
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=TSlAb8QUNSWyAXVGnp8zPCHMrFa9cMCzn91LI53nZo8=;
+        b=elMQlGC4kfdXvgCrpvMMDzXlfmCCfcL3vgFPmsRp+KCY0fsnh1071syQ0oeFKWtT8J
+         kKiONuRKdtOEkTZWWTWPfCJBmmVTzeXYHJGsz55yR9YEdv8TffViWWeBTM86Pr0cFatD
+         5NGAddKvVL0lRfFepo33KEgOvIfOaDRxSAaNEW6kPy5oMrQIUzouL+XnDF61UkkDc9h1
+         +5I63BiROjdmf9nP3oQn7xuz5v5EKIxPQGFgvafO8ihucac8QwEQSDXLOYqgBC7NnVFV
+         cyI9drPkH2X/dplChw005AYmO61kcgbwKDm0YQwPmxnWP6PGQ+EF097AfJkF+ajHjTjV
+         JAGA==
+X-Gm-Message-State: AJIora94nHO1nLvkLX9geD4y3AMtg3INKQBeu0PAbuakiPMFgefK8mjm
+        Eu83Ng/V86k0jgDrK4NPwBxE4nMKmee1tA==
+X-Google-Smtp-Source: AGRyM1tvVtEhDOQtk8IqozLo5JNRTUFSzsv1FwStjTEl+Nv54p5O3Pd3FhzdrOcI8ZSZgHIq+2l+Ig==
+X-Received: by 2002:a05:6512:13a1:b0:47f:787b:4e6a with SMTP id p33-20020a05651213a100b0047f787b4e6amr8213312lfa.64.1659513979143;
+        Wed, 03 Aug 2022 01:06:19 -0700 (PDT)
+Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id o3-20020a2e9b43000000b0025e2cb58c6esm2223420ljj.37.2022.08.03.01.06.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 01:06:18 -0700 (PDT)
+Message-ID: <0fa5fdeb-b633-c543-3e98-1f5e1f064c34@gmail.com>
+Date:   Wed, 3 Aug 2022 11:08:29 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:602:b0:2de:693:e7f4 with SMTP id
- t2-20020a056e02060200b002de0693e7f4mr10495029ils.278.1659514103476; Wed, 03
- Aug 2022 01:08:23 -0700 (PDT)
-Date:   Wed, 03 Aug 2022 01:08:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a33d5b05e551bc31@google.com>
-Subject: [syzbot] general protection fault in br_nf_pre_routing_finish (2)
-From:   syzbot <syzbot+dc42341ea62e8eb6c1f7@syzkaller.appspotmail.com>
-To:     bridge@lists.linux-foundation.org, coreteam@netfilter.org,
-        davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        kadlec@netfilter.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
-        pablo@netfilter.org, razor@blackwall.org, roopa@nvidia.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     nm@ti.com, vigneshr@ti.com, j-keerthy@ti.com, m-khayami@ti.com,
+        stanley_liu@ti.com
+References: <20220802054835.19482-1-vaishnav.a@ti.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH v3] dmaengine: ti: k3-udma: Reset UDMA_CHAN_RT byte
+ counters to prevent overflow
+In-Reply-To: <20220802054835.19482-1-vaishnav.a@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    d7c4c9e075f8 ax25: fix incorrect dev_tracker usage
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=123a0cde080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc42341ea62e8eb6c1f7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc42341ea62e8eb6c1f7@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 32332 Comm: kworker/0:4 Not tainted 5.19.0-rc8-syzkaller-00103-gd7c4c9e075f8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_power_efficient neigh_managed_work
-RIP: 0010:br_nf_pre_routing_finish+0x200/0x1ad0 net/bridge/br_netfilter_hooks.c:360
-Code: 83 c0 01 38 d0 7c 08 84 d2 0f 85 e3 12 00 00 48 8d 7b 02 45 0f b7 74 24 3e 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 b9
-RSP: 0018:ffffc90000007868 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: 0000000000000000 RSI: ffffffff883fc456 RDI: 0000000000000002
-RBP: ffff88801d0ee000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807e999000
-R13: 0000000000000010 R14: 00000000000005dc R15: ffff888074392800
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fde65908d64 CR3: 000000004d41b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- NF_HOOK include/linux/netfilter.h:307 [inline]
- NF_HOOK include/linux/netfilter.h:301 [inline]
- br_nf_pre_routing+0xae3/0x1f00 net/bridge/br_netfilter_hooks.c:531
- nf_hook_entry_hookfn include/linux/netfilter.h:142 [inline]
- nf_hook_bridge_pre net/bridge/br_input.c:255 [inline]
- br_handle_frame+0x8df/0x1280 net/bridge/br_input.c:399
- __netif_receive_skb_core+0xa13/0x3920 net/core/dev.c:5378
- __netif_receive_skb_one_core+0xae/0x180 net/core/dev.c:5482
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5598
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5926
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6492
- napi_poll net/core/dev.c:6559 [inline]
- net_rx_action+0x9c1/0xd90 net/core/dev.c:6670
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
- do_softirq.part.0+0xde/0x130 kernel/softirq.c:472
- </IRQ>
- <TASK>
- do_softirq kernel/softirq.c:464 [inline]
- __local_bh_enable_ip+0x102/0x120 kernel/softirq.c:396
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:br_nf_pre_routing_finish+0x200/0x1ad0 net/bridge/br_netfilter_hooks.c:360
-Code: 83 c0 01 38 d0 7c 08 84 d2 0f 85 e3 12 00 00 48 8d 7b 02 45 0f b7 74 24 3e 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 b9
-RSP: 0018:ffffc90000007868 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: 0000000000000000 RSI: ffffffff883fc456 RDI: 0000000000000002
-RBP: ffff88801d0ee000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: ffff88807e999000
-R13: 0000000000000010 R14: 00000000000005dc R15: ffff888074392800
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fde65908d64 CR3: 000000004d41b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	83 c0 01             	add    $0x1,%eax
-   3:	38 d0                	cmp    %dl,%al
-   5:	7c 08                	jl     0xf
-   7:	84 d2                	test   %dl,%dl
-   9:	0f 85 e3 12 00 00    	jne    0x12f2
-   f:	48 8d 7b 02          	lea    0x2(%rbx),%rdi
-  13:	45 0f b7 74 24 3e    	movzwl 0x3e(%r12),%r14d
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 01             	add    $0x1,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85                   	.byte 0x85
-  3f:	b9                   	.byte 0xb9
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 02/08/2022 08:48, Vaishnav Achath wrote:
+> UDMA_CHAN_RT_*BCNT_REG stores the real-time channel bytecount statistics.
+> These registers are 32-bit hardware counters and the driver uses these
+> counters to monitor the operational progress status for a channel, when
+> transferring more than 4GB of data it was observed that these counters
+> overflow and completion calculation of a operation gets affected and the
+> transfer hangs indefinitely.
+> 
+> This commit adds changes to decrease the byte count for every complete
+> transaction so that these registers never overflow and the proper byte
+> count statistics is maintained for ongoing transaction by the RT counters.
+> 
+> Earlier uc->bcnt used to maintain a count of the completed bytes at driver
+> side, since the RT counters maintain the statistics of current transaction
+> now, the maintenance of uc->bcnt is not necessary.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks for the updates:
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+
+btw: did you encountered issues with cyclic (audio, ADC) regarding to
+wrapping of the counters? S16_LE, stereo, 48KHz should wrap around
+22.369 hours.
+It is a bit trickier as we might be running without interrupts, so we
+can not rely on the same trick.
+
+> 
+> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+> ---
+> V2->V3 :
+> 		* Remove unnecessary checks for uc->tchan and uc->rchan in 
+> 		udma_decrement_byte_counters()
+> V1->V2 :
+> 		* Update bcnt reset based on uc->desc->dir
+> 		* change order of udma_decrement_byte_counters() to before udma_start()
+> 		* update subsystem tag
+> 
+>  drivers/dma/ti/k3-udma.c | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index 2f0d2c68c93c..fcfcde947b30 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -300,8 +300,6 @@ struct udma_chan {
+>  
+>  	struct udma_tx_drain tx_drain;
+>  
+> -	u32 bcnt; /* number of bytes completed since the start of the channel */
+> -
+>  	/* Channel configuration parameters */
+>  	struct udma_chan_config config;
+>  
+> @@ -757,6 +755,20 @@ static void udma_reset_rings(struct udma_chan *uc)
+>  	}
+>  }
+>  
+> +static void udma_decrement_byte_counters(struct udma_chan *uc, u32 val)
+> +{
+> +	if (uc->desc->dir == DMA_DEV_TO_MEM) {
+> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
+> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
+> +		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+> +	} else {
+> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_BCNT_REG, val);
+> +		udma_tchanrt_write(uc, UDMA_CHAN_RT_SBCNT_REG, val);
+> +		if (!uc->bchan)
+> +			udma_tchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+> +	}
+> +}
+> +
+>  static void udma_reset_counters(struct udma_chan *uc)
+>  {
+>  	u32 val;
+> @@ -790,8 +802,6 @@ static void udma_reset_counters(struct udma_chan *uc)
+>  		val = udma_rchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
+>  		udma_rchanrt_write(uc, UDMA_CHAN_RT_PEER_BCNT_REG, val);
+>  	}
+> -
+> -	uc->bcnt = 0;
+>  }
+>  
+>  static int udma_reset_chan(struct udma_chan *uc, bool hard)
+> @@ -1115,7 +1125,7 @@ static void udma_check_tx_completion(struct work_struct *work)
+>  		if (uc->desc) {
+>  			struct udma_desc *d = uc->desc;
+>  
+> -			uc->bcnt += d->residue;
+> +			udma_decrement_byte_counters(uc, d->residue);
+>  			udma_start(uc);
+>  			vchan_cookie_complete(&d->vd);
+>  			break;
+> @@ -1168,7 +1178,7 @@ static irqreturn_t udma_ring_irq_handler(int irq, void *data)
+>  				vchan_cyclic_callback(&d->vd);
+>  			} else {
+>  				if (udma_is_desc_really_done(uc, d)) {
+> -					uc->bcnt += d->residue;
+> +					udma_decrement_byte_counters(uc, d->residue);
+>  					udma_start(uc);
+>  					vchan_cookie_complete(&d->vd);
+>  				} else {
+> @@ -1204,7 +1214,7 @@ static irqreturn_t udma_udma_irq_handler(int irq, void *data)
+>  			vchan_cyclic_callback(&d->vd);
+>  		} else {
+>  			/* TODO: figure out the real amount of data */
+> -			uc->bcnt += d->residue;
+> +			udma_decrement_byte_counters(uc, d->residue);
+>  			udma_start(uc);
+>  			vchan_cookie_complete(&d->vd);
+>  		}
+> @@ -3809,7 +3819,6 @@ static enum dma_status udma_tx_status(struct dma_chan *chan,
+>  			bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_BCNT_REG);
+>  		}
+>  
+> -		bcnt -= uc->bcnt;
+>  		if (bcnt && !(bcnt % uc->desc->residue))
+>  			residue = 0;
+>  		else
+
+-- 
+Péter

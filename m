@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BB158889A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC945888A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiHCIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S237062AbiHCISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237388AbiHCIQX (ORCPT
+        with ESMTP id S234027AbiHCISA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:16:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF3A65C1
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:16:21 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oJ9Xy-0000MF-BC; Wed, 03 Aug 2022 10:16:06 +0200
-Message-ID: <d4838245-030c-39b4-df4b-17b3b4c73a5b@pengutronix.de>
-Date:   Wed, 3 Aug 2022 10:16:03 +0200
+        Wed, 3 Aug 2022 04:18:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60736162
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659514678; x=1691050678;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3K3b321UPGFc06pTNH6+VZ1/KdoV4hSzLaFNFRLMr/k=;
+  b=QsNMl73oFeVeOd7tjE+XCdUDEJMgUeDIJifOiOze6/fHeX03TrWqDEiH
+   QeeOnS1/fmdRQDHI/23WghVBC0O5EXs8cJHYH/j6MQANl/NJU7T3hQ3ot
+   gbtXf9w24CrMF3PFMsZyRBCSAJI/racHaSF+hpnaPHnFCo0SEhNqUdcM3
+   lftvchv+HVhRc6CrA7ec37ov6U6Ck8Y8mfT0a752MC3UCm+kgvr4aolh8
+   K08KQuUYo3sls5ystntJrmSEqnK/t/v7ROgTWCZe50AgyJ8u7wOuwZ+cN
+   IEGFZ2YZStSWcszwOnW4+dhBPTCDV1rBCwO9Vi1cTgPBn46v2jw3QHrLp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="351329811"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="351329811"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:17:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="578555713"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 01:17:57 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ9Zk-000H2R-1m;
+        Wed, 03 Aug 2022 08:17:56 +0000
+Date:   Wed, 03 Aug 2022 16:17:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/core] BUILD SUCCESS
+ 0f03d6805bfc454279169a1460abb3f6b3db317f
+Message-ID: <62ea2f03.JhD03AzH4xs9MeCP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH] tty: serial: imx: initialize
- peripheral_config/peripheral_size for sdma config
-To:     Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-imx@nxp.com
-References: <20220803065737.14752-1-sherry.sun@nxp.com>
-Content-Language: en-US
-In-Reply-To: <20220803065737.14752-1-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sherry,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+branch HEAD: 0f03d6805bfc454279169a1460abb3f6b3db317f  sched/debug: Print each field value left-aligned in sched_show_task()
 
-On 03.08.22 08:57, Sherry Sun wrote:
-> Since commit 824a0a02cd74 ("dmaengine: imx-sdma: Add multi fifo support")
-> adds the use of dma_slave_config->peripheral_config/peripheral_size to
-> sdma driver, the client drivers like uart need to initialize the
-> peripheral_config/peripheral_size for sdma, otherwise, the random value
-> of local variable slave_config may cause unexpected peripheral_config
-> and make sdma mess up.
-> 
+elapsed time: 721m
 
-If this a fix, please add a Fixes: tag. I am not sure it is though,
-see below.
+configs tested: 53
+configs skipped: 2
 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  drivers/tty/serial/imx.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> index 522445a8f666..bb8c2a712e94 100644
-> --- a/drivers/tty/serial/imx.c
-> +++ b/drivers/tty/serial/imx.c
-> @@ -1320,6 +1320,8 @@ static int imx_uart_dma_init(struct imx_port *sport)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This function starts with 
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+i386                                defconfig
+x86_64                           allyesconfig
+powerpc                           allnoconfig
+i386                             allyesconfig
+x86_64               randconfig-a014-20220801
+powerpc                          allmodconfig
+m68k                             allmodconfig
+x86_64               randconfig-a011-20220801
+arc                              allyesconfig
+x86_64               randconfig-a012-20220801
+alpha                            allyesconfig
+m68k                             allyesconfig
+i386                 randconfig-a012-20220801
+mips                             allyesconfig
+i386                 randconfig-a013-20220801
+x86_64               randconfig-a013-20220801
+arm                                 defconfig
+x86_64               randconfig-a016-20220801
+x86_64               randconfig-a015-20220801
+i386                 randconfig-a011-20220801
+arc                  randconfig-r043-20220801
+i386                 randconfig-a016-20220801
+i386                 randconfig-a015-20220801
+i386                 randconfig-a014-20220801
+sh                               allmodconfig
+ia64                             allmodconfig
+s390                 randconfig-r044-20220801
+riscv                randconfig-r042-20220801
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+arm                              allyesconfig
+x86_64                           rhel-8.3-syz
+arm64                            allyesconfig
 
-struct dma_slave_config slave_config = {};
-
->  	slave_config.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
->  	/* one byte less than the watermark level to enable the aging timer */
->  	slave_config.src_maxburst = RXTL_DMA - 1;
-> +	slave_config.peripheral_config = NULL;
-> +	slave_config.peripheral_size = 0;
-
-So these are already zero-initialized.
-
->  	ret = dmaengine_slave_config(sport->dma_chan_rx, &slave_config);
->  	if (ret) {
->  		dev_err(dev, "error in RX dma configuration.\n");
-> @@ -1346,6 +1348,8 @@ static int imx_uart_dma_init(struct imx_port *sport)
->  	slave_config.dst_addr = sport->port.mapbase + URTX0;
->  	slave_config.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
->  	slave_config.dst_maxburst = TXTL_DMA;
-> +	slave_config.peripheral_config = NULL;
-> +	slave_config.peripheral_size = 0;
-
-Not sure if this is required. If preceding dmaengine_slave_config()
-indeed makes clearing necessary, you should note that in the commit
-message.
-
-Cheers,
-Ahmad
-
->  	ret = dmaengine_slave_config(sport->dma_chan_tx, &slave_config);
->  	if (ret) {
->  		dev_err(dev, "error in TX dma configuration.");
-
+clang tested configs:
+x86_64               randconfig-a002-20220801
+x86_64               randconfig-a001-20220801
+x86_64               randconfig-a003-20220801
+x86_64               randconfig-a004-20220801
+x86_64               randconfig-a005-20220801
+x86_64               randconfig-a006-20220801
+i386                 randconfig-a001-20220801
+i386                 randconfig-a002-20220801
+i386                 randconfig-a003-20220801
+i386                 randconfig-a005-20220801
+i386                 randconfig-a004-20220801
+hexagon              randconfig-r045-20220801
+hexagon              randconfig-r041-20220801
+i386                 randconfig-a006-20220801
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+0-DAY CI Kernel Test Service
+https://01.org/lkp

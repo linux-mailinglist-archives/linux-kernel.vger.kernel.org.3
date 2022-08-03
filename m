@@ -2,249 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE79B588FC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC3F588FB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238251AbiHCPwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
+        id S231230AbiHCPvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbiHCPvx (ORCPT
+        with ESMTP id S238365AbiHCPvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:51:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 598C54E613
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659541873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PD5y4cQGbEfNPI2pCjHVa112SuT0OnV1h5+PPA1jp5U=;
-        b=aY9BVgqiA35uZwfPMnM1WKViMfyOGSYBNBTCt4nY7n3mLaJXyXIQNwUmqDg5YfzNGFlBAo
-        gboFcu8oklJNr5TQWsyBtNfd0iG/MHU4L3bDtXgm7gAl/uX8gFpv7DOK68i6dI6TUukyUb
-        9u+3bSnODj+OaViSJ5LNtpvh33sO9pk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-634-ENQY38BNMcuj35Ofl0mepA-1; Wed, 03 Aug 2022 11:51:11 -0400
-X-MC-Unique: ENQY38BNMcuj35Ofl0mepA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F7E6185A79C;
-        Wed,  3 Aug 2022 15:51:11 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.194.242])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD6ED1121314;
-        Wed,  3 Aug 2022 15:51:06 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH v3 13/13] KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
-Date:   Wed,  3 Aug 2022 18:50:11 +0300
-Message-Id: <20220803155011.43721-14-mlevitsk@redhat.com>
-In-Reply-To: <20220803155011.43721-1-mlevitsk@redhat.com>
-References: <20220803155011.43721-1-mlevitsk@redhat.com>
+        Wed, 3 Aug 2022 11:51:00 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA90463AE
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:50:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1659541851; x=1691077851;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vbNjvWo9f+/d+tD4NWqVeIvN7ZjhWAIDsLKKATW3nhM=;
+  b=bp79CEhMiMrdAX6Vw2yUTIqQJmLyJsC1PHCtZNG5hKv71ZUYVNl0M7HS
+   zoG6nsglRGlTc9j89cj2adZ2TTnyQnWrRvop1PxaRJWFh9cEwRkB3bUjE
+   Y84lNyNf5tJTs6yEd+b41r8zKbgbiabmSkrQplt76VB8+rAy3LFIYxjqn
+   E=;
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:50:34 +0000
+Received: from EX13D37EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com (Postfix) with ESMTPS id F405C4326B;
+        Wed,  3 Aug 2022 15:50:32 +0000 (UTC)
+Received: from [192.168.18.61] (10.43.162.227) by EX13D37EUA003.ant.amazon.com
+ (10.43.165.7) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Wed, 3 Aug
+ 2022 15:50:28 +0000
+Message-ID: <ccc1112e-7ae9-3c81-0b72-41bdd7c058ec@amazon.es>
+Date:   Wed, 3 Aug 2022 17:50:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH 0/2] virt: vmgenid: add generation counter
+Content-Language: en-US
+To:     <linux-kernel@vger.kernel.org>
+CC:     <tytso@mit.edu>, <Jason@zx2c4.com>, <dwmw@amazon.co.uk>,
+        <graf@amazon.de>, <xmarcalx@amazon.co.uk>,
+        <gregkh@linuxfoundation.org>,
+        <"mst@redhat.com ani@anisinha.ca imammedo"@redhat.com>
+References: <20220803152127.48281-1-bchalios@amazon.es>
+From:   "Chalios, Babis" <bchalios@amazon.es>
+In-Reply-To: <20220803152127.48281-1-bchalios@amazon.es>
+X-Originating-IP: [10.43.162.227]
+X-ClientProxiedBy: EX13D25UWC004.ant.amazon.com (10.43.162.201) To
+ EX13D37EUA003.ant.amazon.com (10.43.165.7)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When #SMI is asserted, the CPU can be in interrupt shadow
-due to sti or mov ss.
-
-It is not mandatory in  Intel/AMD prm to have the #SMI
-blocked during the shadow, and on top of
-that, since neither SVM nor VMX has true support for SMI
-window, waiting for one instruction would mean single stepping
-the guest.
-
-Instead, allow #SMI in this case, but both reset the interrupt
-window and stash its value in SMRAM to restore it on exit
-from SMM.
-
-This fixes rare failures seen mostly on windows guests on VMX,
-when #SMI falls on the sti instruction which mainfest in
-VM entry failure due to EFLAGS.IF not being set, but STI interrupt
-window still being set in the VMCS.
-
-
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/emulate.c     | 17 ++++++++++++++---
- arch/x86/kvm/kvm_emulate.h | 10 ++++++----
- arch/x86/kvm/x86.c         | 12 ++++++++++++
- 3 files changed, 32 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 4bdbc5893a1657..b4bc45cec3249d 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2447,7 +2447,7 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
- 			     const struct kvm_smram_state_32 *smstate)
- {
- 	struct desc_ptr dt;
--	int i;
-+	int i, r;
- 
- 	ctxt->eflags =  smstate->eflags | X86_EFLAGS_FIXED;
- 	ctxt->_eip =  smstate->eip;
-@@ -2482,8 +2482,16 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
- 
- 	ctxt->ops->set_smbase(ctxt, smstate->smbase);
- 
--	return rsm_enter_protected_mode(ctxt, smstate->cr0,
--					smstate->cr3, smstate->cr4);
-+	r = rsm_enter_protected_mode(ctxt, smstate->cr0,
-+				     smstate->cr3, smstate->cr4);
-+
-+	if (r != X86EMUL_CONTINUE)
-+		return r;
-+
-+	ctxt->ops->set_int_shadow(ctxt, 0);
-+	ctxt->interruptibility = (u8)smstate->int_shadow;
-+
-+	return X86EMUL_CONTINUE;
- }
- 
- #ifdef CONFIG_X86_64
-@@ -2532,6 +2540,9 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
- 	rsm_load_seg_64(ctxt, &smstate->fs, VCPU_SREG_FS);
- 	rsm_load_seg_64(ctxt, &smstate->gs, VCPU_SREG_GS);
- 
-+	ctxt->ops->set_int_shadow(ctxt, 0);
-+	ctxt->interruptibility = (u8)smstate->int_shadow;
-+
- 	return X86EMUL_CONTINUE;
- }
- #endif
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 76c0b8e7890b5d..a7313add0f2a58 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -234,6 +234,7 @@ struct x86_emulate_ops {
- 	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
- 
- 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
-+	void (*set_int_shadow)(struct x86_emulate_ctxt *ctxt, u8 shadow);
- 
- 	unsigned (*get_hflags)(struct x86_emulate_ctxt *ctxt);
- 	void (*exiting_smm)(struct x86_emulate_ctxt *ctxt);
-@@ -518,7 +519,8 @@ struct kvm_smram_state_32 {
- 	u32 reserved1[62];
- 	u32 smbase;
- 	u32 smm_revision;
--	u32 reserved2[5];
-+	u32 reserved2[4];
-+	u32 int_shadow; /* KVM extension */
- 	u32 cr4; /* CR4 is not present in Intel/AMD SMRAM image */
- 	u32 reserved3[5];
- 
-@@ -566,6 +568,7 @@ static inline void __check_smram32_offsets(void)
- 	__CHECK_SMRAM32_OFFSET(smbase,		0xFEF8);
- 	__CHECK_SMRAM32_OFFSET(smm_revision,	0xFEFC);
- 	__CHECK_SMRAM32_OFFSET(reserved2,	0xFF00);
-+	__CHECK_SMRAM32_OFFSET(int_shadow,	0xFF10);
- 	__CHECK_SMRAM32_OFFSET(cr4,		0xFF14);
- 	__CHECK_SMRAM32_OFFSET(reserved3,	0xFF18);
- 	__CHECK_SMRAM32_OFFSET(ds,		0xFF2C);
-@@ -625,7 +628,7 @@ struct kvm_smram_state_64 {
- 	u64 io_restart_rsi;
- 	u64 io_restart_rdi;
- 	u32 io_restart_dword;
--	u32 reserved1;
-+	u32 int_shadow;
- 	u8 io_inst_restart;
- 	u8 auto_hlt_restart;
- 	u8 reserved2[6];
-@@ -663,7 +666,6 @@ struct kvm_smram_state_64 {
- 	u64 gprs[16]; /* GPRS in a reversed "natural" X86 order (R15/R14/../RCX/RAX.) */
- };
- 
--
- static inline void __check_smram64_offsets(void)
- {
- #define __CHECK_SMRAM64_OFFSET(field, offset) \
-@@ -684,7 +686,7 @@ static inline void __check_smram64_offsets(void)
- 	__CHECK_SMRAM64_OFFSET(io_restart_rsi,		0xFEB0);
- 	__CHECK_SMRAM64_OFFSET(io_restart_rdi,		0xFEB8);
- 	__CHECK_SMRAM64_OFFSET(io_restart_dword,	0xFEC0);
--	__CHECK_SMRAM64_OFFSET(reserved1,		0xFEC4);
-+	__CHECK_SMRAM64_OFFSET(int_shadow,		0xFEC4);
- 	__CHECK_SMRAM64_OFFSET(io_inst_restart,		0xFEC8);
- 	__CHECK_SMRAM64_OFFSET(auto_hlt_restart,	0xFEC9);
- 	__CHECK_SMRAM64_OFFSET(reserved2,		0xFECA);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4e3ef63baf83df..ae4c20cec7a9fc 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8041,6 +8041,11 @@ static void emulator_set_nmi_mask(struct x86_emulate_ctxt *ctxt, bool masked)
- 	static_call(kvm_x86_set_nmi_mask)(emul_to_vcpu(ctxt), masked);
- }
- 
-+static void emulator_set_int_shadow(struct x86_emulate_ctxt *ctxt, u8 shadow)
-+{
-+	 static_call(kvm_x86_set_interrupt_shadow)(emul_to_vcpu(ctxt), shadow);
-+}
-+
- static unsigned emulator_get_hflags(struct x86_emulate_ctxt *ctxt)
- {
- 	return emul_to_vcpu(ctxt)->arch.hflags;
-@@ -8121,6 +8126,7 @@ static const struct x86_emulate_ops emulate_ops = {
- 	.guest_has_fxsr      = emulator_guest_has_fxsr,
- 	.guest_has_rdpid     = emulator_guest_has_rdpid,
- 	.set_nmi_mask        = emulator_set_nmi_mask,
-+	.set_int_shadow      = emulator_set_int_shadow,
- 	.get_hflags          = emulator_get_hflags,
- 	.exiting_smm         = emulator_exiting_smm,
- 	.leave_smm           = emulator_leave_smm,
-@@ -9903,6 +9909,8 @@ static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, struct kvm_smram_stat
- 	smram->cr4 = kvm_read_cr4(vcpu);
- 	smram->smm_revision = 0x00020000;
- 	smram->smbase = vcpu->arch.smbase;
-+
-+	smram->int_shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
- }
- 
- #ifdef CONFIG_X86_64
-@@ -9951,6 +9959,8 @@ static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, struct kvm_smram_stat
- 	enter_smm_save_seg_64(vcpu, &smram->ds, VCPU_SREG_DS);
- 	enter_smm_save_seg_64(vcpu, &smram->fs, VCPU_SREG_FS);
- 	enter_smm_save_seg_64(vcpu, &smram->gs, VCPU_SREG_GS);
-+
-+	smram->int_shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
- }
- #endif
- 
-@@ -9987,6 +9997,8 @@ static void enter_smm(struct kvm_vcpu *vcpu)
- 	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
- 	kvm_rip_write(vcpu, 0x8000);
- 
-+	static_call(kvm_x86_set_interrupt_shadow)(vcpu, 0);
-+
- 	cr0 = vcpu->arch.cr0 & ~(X86_CR0_PE | X86_CR0_EM | X86_CR0_TS | X86_CR0_PG);
- 	static_call(kvm_x86_set_cr0)(vcpu, cr0);
- 	vcpu->arch.cr0 = cr0;
--- 
-2.26.3
+Q0MnaW5nIHNvbWUgbW9yZSBwZW9wbGUgdG8gdGhlIGRpc2N1c3Npb24uCgpPbiAzLzgvMjIgMTc6
+MjEsIGJjaGFsaW9zQGFtYXpvbi5lcyB3cm90ZToKPiBGcm9tOiBCYWJpcyBDaGFsaW9zIDxiY2hh
+bGlvc0BhbWF6b24uZXM+Cj4KPiBMaW51eCByZWNlbnRseSBhZGRlZCBzdXBwb3J0IGZvciB0aGUg
+Vk0gR2VuZXJhdGlvbiBJRCBtZWNoYW5pc20gZnJvbQo+IE1pY3Jvc29mdC4gVGhlIHdheSB0aGlz
+IHdvcmtzIGN1cnJlbnRseSBpcyB1c2luZyB0aGUgMTI4LWJpdCBibG9iCj4gcHJvdmlkZWQgYnkg
+dGhlIHZtZ2VuaWQgZGV2aWNlIHRvIHJlLXNlZWQgdGhlIFJORy4gV2hpbGUgdGhpcyB3b3JrcyBp
+dAo+IGhhcyB0d28gbWFpbiBpc3N1ZXMsIChhKSBpdCBpcyBpbmhlcmVudGx5IHJhY3kgZHVlIHRv
+IHRoZSBmYWN0IHRoYXQgaXQKPiByZWxpZXMgb24gYSBBQ1BJIG5vdGlmaWNhdGlvbiBiZWluZyBk
+ZWxpdmVyZWQgYW5kIGhhbmRsZWQgYW5kIChiKSB0aGUgSUQKPiBpcyB1bnN1aXRhYmxlIGZvciBl
+eHBvc2luZyB0byB1c2VyLXNwYWNlLgo+Cj4gVGhpcyBwYXRjaC1zZXQgZXh0ZW5kcyB0aGUgdm1n
+ZW5pZCBkZXZpY2UgdG8gaW50cm9kdWNlIGEgZ2VuZXJhdGlvbgo+IGNvdW50ZXIsIGEgMzItYml0
+IGNvdW50ZXIgd2hpY2ggaXMgZGlmZmVyZW50IGV2ZXJ5IHRpbWUgdGhlIHVuaXF1ZSBJRAo+IGNo
+YW5nZXMuIFRoZSBhZGRpdGlvbiB0byB0aGUgb3JpZ2luYWwgaW1wbGVtZW50YXRpb24gaW4gUUVN
+VSBjYW4gYmUKPiBmb3VuZCBoZXJlOgo+IGh0dHBzOi8vbGlzdHMubm9uZ251Lm9yZy9hcmNoaXZl
+L2h0bWwvcWVtdS1kZXZlbC8yMDIyLTA4L21zZzAwNTI0Lmh0bWwuCj4KPiBUaGUgZmlyc3QgcGF0
+Y2ggcmUtd29ya3Mgc2xpZ2h0bHkgdGhlIGN1cnJlbnQgdm1nZW5pZCBkcml2ZXIgdG8gYWRkIGEK
+PiBmdW5jdGlvbiB0aGF0IHBhcnNlcyBhbiBvYmplY3QgZnJvbSB0aGUgdm1nZW5pZCBkZXZpY2Ug
+YW5kIHJldHVybnMgdGhlCj4gcGh5c2ljYWwgYWRkcmVzcyBvZiB0aGUgdm1nZW5pZCBkYXRhLiBU
+aGUgc2Vjb25kIHBhdGNoIHVzZXMgdGhhdAo+IGZ1bmN0aW9uIHRvIHBhcnNlIGFkZGl0aW9uYWxs
+eSB0aGUgYWRkcmVzcyBvZiB0aGUgZ2VuZXJhdGlvbiBjb3VudGVyCj4gZnJvbSB0aGUgdm1nZW5p
+ZCBuYW1lc3BhY2UuIFRoZSBjb3VudGVyIGlzIHRoZW4gZXhwb3NlZCB0byB0aGUKPiB1c2VyLXNw
+YWNlIHRocm91Z2ggYSBtaXNjLWRldmljZSB3aGljaCBwcm92aWRlcyBgcmVhZGAgYW5kIGBtbWFw
+YAo+IGludGVyZmFjZXMuCj4KPiBCYWJpcyBDaGFsaW9zICgyKToKPiAgICB2aXJ0OiB2bWdlbmlk
+OiBhZGQgaGVscGVyIGZ1bmN0aW9uIHRvIHBhcnNlIEFERFIKPiAgICB2aXJ0OiB2bWdlbmlkOiBh
+ZGQgc3VwcG9ydCBmb3IgZ2VuZXJhdGlvbiBjb3VudGVyCj4KPiAgIERvY3VtZW50YXRpb24vdmly
+dC92bWdlbmlkLnJzdCB8IDEyMCArKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAgZHJpdmVy
+cy92aXJ0L3ZtZ2VuaWQuYyAgICAgICAgIHwgMTUxICsrKysrKysrKysrKysrKysrKysrKysrKysr
+KystLS0tLQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAyNTEgaW5zZXJ0aW9ucygrKSwgMjAgZGVsZXRp
+b25zKC0pCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi92aXJ0L3ZtZ2VuaWQu
+cnN0Cj4KCkFtYXpvbiBTcGFpbiBTZXJ2aWNlcyBzb2NpZWRhZCBsaW1pdGFkYSB1bmlwZXJzb25h
+bCwgQ2FsbGUgUmFtaXJleiBkZSBQcmFkbyA1LCAyODA0NSBNYWRyaWQuIFJlZ2lzdHJvIE1lcmNh
+bnRpbCBkZSBNYWRyaWQgLiBUb21vIDIyNDU4IC4gRm9saW8gMTAyIC4gSG9qYSBNLTQwMTIzNCAu
+IENJRiBCODQ1NzA5MzYK
 

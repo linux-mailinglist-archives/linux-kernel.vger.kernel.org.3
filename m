@@ -2,105 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145DD588951
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7DD588955
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiHCJXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S235921AbiHCJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHCJXp (ORCPT
+        with ESMTP id S234601AbiHCJYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:23:45 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7919C09;
-        Wed,  3 Aug 2022 02:23:44 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id A9E2141242;
-        Wed,  3 Aug 2022 09:23:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:message-id:subject:subject:from:from:date:date
-        :received:received:received:received; s=mta-01; t=1659518621; x=
-        1661333022; bh=dmK9vb916vEJit/OWSlYMYSc9OyvaPfGlvzUpn8CPy0=; b=H
-        +mZPSiOYVV8T9u0b8koKSuwRNCM1G0WnnH5fwmEM82Ht4Lx2v0utndBFK4N4bdJc
-        7gttPR5Xo30OtmpxNxw2oGAQTtZG1xCuSpitfvKONLsop0/0I77qkyvg2A6A/0kG
-        YSFDGtLguXzM7M9HKHJapXIP5+WE9ad+slDstYliAc=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WeuR4BRE3RPB; Wed,  3 Aug 2022 12:23:41 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 9A12E4014D;
-        Wed,  3 Aug 2022 12:23:39 +0300 (MSK)
-Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 3 Aug 2022 12:23:39 +0300
-Received: from yadro.com (10.178.118.226) by T-EXCH-09.corp.yadro.com
- (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 3 Aug 2022
- 12:23:38 +0300
-Date:   Wed, 3 Aug 2022 12:23:37 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     <wei.liu@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <ojeda@kernel.org>,
-        <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v8 28/31] samples: add Rust examples
-Message-ID: <Yuo+mWyF8hgOdfCs@yadro.com>
+        Wed, 3 Aug 2022 05:24:12 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5E5925A;
+        Wed,  3 Aug 2022 02:24:06 -0700 (PDT)
+X-UUID: d9d12955ca5d450897c69e1b2d0e25d7-20220803
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Fl4bATNs9s6unC164yvwNu/u3cuRgxNAqyKpfiZDxTU=;
+        b=tRr2BpF6bXQHeRTdkQ8mBlDuNHlynml/3HvyUPJsSSRYdqLfXRyo+rlklcnTxV9dXNtgvC+cwG41FcpKdYAdj+cCeRG8rdtNgPEwz55yQDpQ4ghEs04WCNhCrwEkQcqlJhjW5SsTToHFTZFtcPKBUIKl2nM6jMlecFm8gnw0XG0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:18b1fdb5-e3a0-42c0-bd57-d9af0ff2e881,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:119a2625-a982-4824-82d2-9da3b6056c2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: d9d12955ca5d450897c69e1b2d0e25d7-20220803
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 917243406; Wed, 03 Aug 2022 17:23:59 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 3 Aug 2022 17:23:57 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 3 Aug 2022 17:23:57 +0800
+Message-ID: <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
+ fallbacks and example
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        <nfraprado@collabora.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 3 Aug 2022 17:23:57 +0800
+In-Reply-To: <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
+References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
+         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
+         <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
+         <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220802200430.qiyy2utts4lai3ac@liuwe-devbox-debian-v2>
-X-Originating-IP: [10.178.118.226]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Their types are different. One is for u8. The other is for UTF-8.
+Hi Chen-Yu and Mathias,
 
-Yes, but:
+Sincere apologies for the delayed response.
 
-  +#[derive(Debug, Default)]
-  +struct ModuleInfo {
-  +    type_: String,
-  +    license: String,
-  +    name: String,
-  +    author: Option<String>,
-  +    description: Option<String>,
-  +    alias: Option<String>,
-  +    params: Option<Group>,
-  +}
+On Tue, 2022-08-02 at 13:04 +0200, Matthias Brugger wrote:
+> 
+> On 01/08/2022 11:29, Chen-Yu Tsai wrote:
+> > On Thu, Jul 21, 2022 at 10:50 AM Allen-KH Cheng
+> > <allen-kh.cheng@mediatek.com> wrote:
+> > > 
+> > > The watchdog timer of mt8186. mt8195 and mt7986 have their DT
+> > > data.
+> > > We should not use 'mediatek,mt6589-wdt' as fallback.
+> > > 
+> > > For mediatek,wdt example of mt8183, We remove mediatek,mt6589-wdt 
+> > > fallback.
+> > 
+> > I think this needs some more information.
+> > 
+> > Right now on the kernel side, mt6589-wdt provides just watchdog
+> > support.
+> > The SoC-specific compatibles that are touched by this patch provide
+> > reset
+> > controls in addition to the standard watchdog, which remains the
+> > same.
+> > 
+> > If that is the case, then the fallback compatibles are correct. A
+> > fallback
+> > says that the new hardware is compatible with some older hardware,
+> > and
+> > can be run with the driver supporting that older hardware, likely
+> > with
+> > reduced functionality.
+> > 
+> 
+> My understanding is, that we add a fallback because although at the
+> time we 
+> entered the compatible, the functionality of the device is the same
+> as the 
+> fallback. Nonetheless we add a compatible specific for the device in
+> case in the 
+> future we realize that the device has some functionality that is not
+> and can not 
+> be covered by the fallback.
+> 
+> This is the case here. Actually adding the fallback in the first
+> place was 
+> wrong, because the driver since ever supports the extra function for
+> the device, 
+> the reset.
+> 
+> So this is a mere cleanup of the binding to reflect what was always
+> present in 
+> the driver.
+> 
+> Regards,
+> Matthias
+> 
 
-  [...]
+mt6589-wdt dosen't contains a reset control for other modules, like
+chen-yu mention "mt6589-wdt provides just watchdog support."
 
-  +impl ModuleInfo {
-  +    fn parse(it: &mut token_stream::IntoIter) -> Self {
-  +            match key.as_str() {
-  +                "type" => info.type_ = expect_ident(it),
-  +                "name" => info.name = expect_byte_string(it),
-  +                "author" => info.author = Some(expect_byte_string(it)),
-  +                "description" => info.description = Some(expect_byte_string(it)),
-  +                "license" => info.license = expect_byte_string(it),
-  +                "alias" => info.alias = Some(expect_byte_string(it)),
-  +                "alias_rtnl_link" => {
-  +                    info.alias = Some(format!("rtnl-link-{}", expect_byte_string(it)))
-  +                }
-  +                "params" => info.params = Some(expect_group(it)),
-  +                _ => panic!(
-  +                    "Unknown key \"{}\". Valid keys are: {:?}.",
-  +                    key, EXPECTED_KEYS
-  +                ),
-  +            }
+For instance, there is a reset control in mt8195-wdt and we have a DT
+data to define its reset number of TOPRGU. I thought it's better not
+use mt6589-wdt as fallback.
 
-In the the end all module parameters are String, so why not use &str in
-the API?
+Please let me know if this works and if you have any suggestions or
+comments.
+
+Thanks,
+Allen
+
+> > As an example, if mt8195-wdt is backward compatible with mt6589-
+> > wdt,
+> > then it should run as mt6589-wdt, and would just be missing new
+> > functionality, in this case the reset controls.
+> > 
+> > So either mt6589-wdt also contains a reset control that is not the
+> > same
+> > as the other newer chips, or has some other functionality that the
+> > other
+> > chips contain, and justifies the removal of the fallback, or this
+> > patch
+> > is incorrect. Note that mt2701-wdt and mt762*-wdt are still listed
+> > as
+> > compatible with mt6589-wdt. So I think a better explanation is
+> > required.
+> > 
+> > 
+> > Regards
+> > ChenYu
+> > 
+> > 
+> > > Fixes:a45b408a020b("dt-bindings: watchdog: Add compatible for
+> > > MediaTek MT8186")
+> > > Fixes:b326f2c85f3d("dt-bindings: watchdog: Add compatible for
+> > > Mediatek MT8195")
+> > > Fixes:41e73feb1024("dt-bindings: watchdog: Add compatible for
+> > > Mediatek MT7986")
+> > > Fixes:f43f97a0fc0e("dt-bindings: mediatek: mt8183: Add #reset-
+> > > cells")
+> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > angelogioacchino.delregno@collabora.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 9
+> > > ++++-----
+> > >   1 file changed, 4 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/watchdog/mtk-
+> > > wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > > index 762c62e428ef..67ef991ec4cf 100644
+> > > --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > > +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > > @@ -14,12 +14,12 @@ Required properties:
+> > >          "mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
+> > >          "mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
+> > >          "mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
+> > > -       "mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
+> > > +       "mediatek,mt7986-wdt": for MT7986
+> > >          "mediatek,mt8183-wdt": for MT8183
+> > > -       "mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
+> > > +       "mediatek,mt8186-wdt": for MT8186
+> > >          "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+> > >          "mediatek,mt8192-wdt": for MT8192
+> > > -       "mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
+> > > +       "mediatek,mt8195-wdt": for MT8195
+> > > 
+> > >   - reg : Specifies base physical address and size of the
+> > > registers.
+> > > 
+> > > @@ -32,8 +32,7 @@ Optional properties:
+> > >   Example:
+> > > 
+> > >   watchdog: watchdog@10007000 {
+> > > -       compatible = "mediatek,mt8183-wdt",
+> > > -                    "mediatek,mt6589-wdt";
+> > > +       compatible = "mediatek,mt8183-wdt";
+> > >          mediatek,disable-extrst;
+> > >          reg = <0 0x10007000 0 0x100>;
+> > >          interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
+> > > --
+> > > 2.18.0
+> > > 
+> > > 
+

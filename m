@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF958910F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39AD589111
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbiHCRON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S236677AbiHCROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236024AbiHCROL (ORCPT
+        with ESMTP id S237371AbiHCROU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:14:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF6251A03;
-        Wed,  3 Aug 2022 10:14:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE6CF60B4D;
-        Wed,  3 Aug 2022 17:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6ABDC433D6;
-        Wed,  3 Aug 2022 17:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659546849;
-        bh=bkDv/IJGf4huqlJShfUhZJTAGsDhgiK7rkVACQwjEj4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AfmV3uyW1sqz8a+hoj6x2h5jMxXZvPxYyy1fX++srDGYIcV0GsLXYhisM9NDZfntU
-         JZAk3+z4d+ZxdCDhhfl9sRd4Y1iopv4r4+Q9FBA0bKm1QmbrT1DJVZRbjVvekVztpL
-         ss1hv/ru/EW5ye4/K+wk9JOScIwDNDAYDW/zlgg6NULRFE0eRCNf6Iz8+LWNlfu5PZ
-         7FuUi+eDRkIIBiuibub0k3tJPflpnOjdOLe8ZxeajGLolUsmmapSSghgS2r6Mzep5j
-         0Ux4edssawTsc63/hKJyt1bTlQCoaAxYAb4TuXgLVJhlRqugKQ6nC8ybUMEKc/XgEY
-         jTZUqO73ClBgw==
-Date:   Wed, 3 Aug 2022 20:14:05 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     dave@sr71.net, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Message-ID: <Yuqs3ZdyBMkgQUd6@kernel.org>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+        Wed, 3 Aug 2022 13:14:20 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966552FE3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:14:19 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id p10so18124908wru.8
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
+        b=hgURM5ANxcvq1WQMcHsEFrKc4g+wG97zSAqfnwBblL3ajda7Es9x+8sBzkuDU52XUm
+         EUqhtzZNWYFzJzAgxjM15fqdeIybTL0lvpKoWK9e2lTFNC/KfjYJY04zznzuuKdt66iD
+         ZRy1T+eqNlsZVTZQFUtLmK8GZAXV7qH5itA3HPzClVL+tGOhvWX7KzJj9rGlVYS/NqTR
+         WYfjkgjREasgWqrvTY/hVSMONzXDc6qUnlFFoe/IwD1HZgifZgXMhtBaPkz7VpG2jUav
+         eK4L+Ki4uqVT6GCPgitAAHVtDaUFtpFKMPGTows4TQTFLvXZE/XCVX67duIp15OuLV1Y
+         NEjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=GUtktyRkXIhS+Fz7PPmZmEHdzJqtBsKjE1UhF4HSDMo=;
+        b=q7043pXWSLmQP8dUoc1x0TPEBDGSTfB3OH7CIsspVBZKgmIFB4rmZHNz6I0FDyq9Ck
+         CFd3wLm4Vg5S+qofgSmMvFQENLt2+kiyT9Vs+4M1/xnFhUd6AAIVu9rsRLMinOw+9n0D
+         YOlloI1Mzk+okR/NWooEOGMteBOdXKXd6JPM5nNMK/4Rt96mMuxDJwQa/opeI8iZkNXX
+         Li7YXeag0g7G3ulv5moyQM0lamBfpuM08InohlBF1AgkqPdMFqEihqiR/xmozz8kU/1/
+         v27xFjrFBtz2WEhA1i6R5OOtKO3NcFJJUb6unjGWFBHIBtpWJNJSXveutrpo97zZHu/4
+         LwVA==
+X-Gm-Message-State: ACgBeo19ZalcZsXP2mS1bCiEBNm8MDyAfr2v29t5TdUV4fgp5v2A3fM2
+        mRDWEc/7pAoufxLJIb0MaxRQzA==
+X-Google-Smtp-Source: AA6agR5wBU/h1VzY7Of86k5Vjs0Yjyf4+h43iAnWFK5iP7bOZIUoXZkeuCrQwsHl+8vX59zAdlFSXg==
+X-Received: by 2002:a5d:6b10:0:b0:21e:4bbd:e893 with SMTP id v16-20020a5d6b10000000b0021e4bbde893mr16903170wrw.613.1659546857496;
+        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:6e48:fbdd:280d:6dac? ([2a05:6e02:1041:c10:6e48:fbdd:280d:6dac])
+        by smtp.googlemail.com with ESMTPSA id r4-20020a05600c158400b0039c96b97359sm2780146wmf.37.2022.08.03.10.14.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 10:14:17 -0700 (PDT)
+Message-ID: <9110a859-9885-1dab-0412-e8f62cfff458@linaro.org>
+Date:   Wed, 3 Aug 2022 19:14:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] tools/thermal: Fix possible path truncations
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+References: <20220725173755.2993805-1-f.fainelli@gmail.com>
+ <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hL46vdr=f8YiAPnRmmehZs51n+tkgoY7PMTVyJD0cpEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,113 +80,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:13:47PM -0700, Dave Hansen wrote:
-> Changes from v1:
->  * Make sure SGX_ATTR_ASYNC_EXIT_NOTIFY is in the masks that are
->    used at bare-metal enclave initialization and that enumerates
->    available attributes to KVM guests.
+On 03/08/2022 19:07, Rafael J. Wysocki wrote:
+> On Mon, Jul 25, 2022 at 7:38 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>
+>> A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
+>>
+>> sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
+>>    snprintf(filepath, 256, "%s/%s", path, filename);
+>>                                ^~
+>> Bump up the buffer to PATH_MAX which is the limit and account for all of
+>> the possible NUL and separators that could lead to exceeding the
+>> allocated buffer sizes.
+>>
+>> Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > 
-> --
+> Daniel, are you going to pick up this one or should I?
 > 
-> Short Version:
-> 
-> Allow enclaves to use the new Asynchronous EXit (AEX)
-> notification mechanism.  This mechanism lets enclaves run a
-> handler after an AEX event.  These handlers can run mitigations
-> for things like SGX-Step[1].
-> 
-> AEX Notify will be made available both on upcoming processors and
-> on some older processors through microcode updates.
-> 
-> Long Version:
-> 
-> == SGX Attribute Background ==
-> 
-> The SGX architecture includes a list of SGX "attributes".  These
-> attributes ensure consistency and transparency around specific
-> enclave features.
-> 
-> As a simple example, the "DEBUG" attribute allows an enclave to
-> be debugged, but also destroys virtually all of SGX security.
-> Using attributes, enclaves can know that they are being debugged.
-> Attributes also affect enclave attestation so an enclave can, for
-> instance, be denied access to secrets while it is being debugged.
-> 
-> The kernel keeps a list of known attributes and will only
-> initialize enclaves that use a known set of attributes.  This
-> kernel policy eliminates the chance that a new SGX attribute
-> could cause undesired effects.
-> 
-> For example, imagine a new attribute was added called
-> "PROVISIONKEY2" that provided similar functionality to
-> "PROVISIIONKEY".  A kernel policy that allowed indiscriminate use
-> of unknown attributes and thus PROVISIONKEY2 would undermine the
-> existing kernel policy which limits use of PROVISIONKEY enclaves.
-> 
-> == AEX Notify Background ==
-> 
-> "Intel Architecture Instruction Set Extensions and Future
-> Features - Version 45" is out[2].  There is a new chapter:
-> 
-> 	Asynchronous Enclave Exit Notify and the EDECCSSA User Leaf Function.
-> 
-> Enclaves exit can be either synchronous and consensual (EEXIT for
-> instance) or asynchronous (on an interrupt or fault).  The
-> asynchronous ones can evidently be exploited to single step
-> enclaves[1], on top of which other naughty things can be built.
-> 
-> AEX Notify will be made available both on upcoming processors and
-> on some older processors through microcode updates.
-> 
-> == The Problem ==
-> 
-> These attacks are currently entirely opaque to the enclave since
-> the hardware does the save/restore under the covers. The
-> Asynchronous Enclave Exit Notify (AEX Notify) mechanism provides
-> enclaves an ability to detect and mitigate potential exposure to
-> these kinds of attacks.
-> 
-> == The Solution ==
-> 
-> Define the new attribute value for AEX Notification.  Ensure the
-> attribute is cleared from the list reserved attributes.  Instead
-> of adding to the open-coded lists of individual attributes,
-> add named lists of privileged (disallowed by default) and
-> unprivileged (allowed by default) attributes.  Add the AEX notify
-> attribute as an unprivileged attribute, which will keep the kernel
-> from rejecting enclaves with it set.
-> 
-> I just built this and ran it to make sure there were no obvious
-> regressions since I do not have the hardware (and new microcde)
-> to test it.
-> 
-> Testing on bare-metal and in VMs accompanied by Tested-by's
-> would be much appreciated.  (This means you, Intel folks who
-> actually have systems with the microcode that can do this.)
-> 
-> 1. https://github.com/jovanbulck/sgx-step
-> 2. https://cdrdv2.intel.com/v1/dl/getContent/671368?explicitVersion=true
-> 
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Kai Huang <kai.huang@intel.com>
-> Cc: Haitao Huang <haitao.huang@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-sgx@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> There is also a tmon patch from Florian that seems to be pending.
+> Should I take care of it?
 
-I think it would make sense to have a co-maintainer with better
-access to unreleased ucode patches, if anyone is willing to
-consider. Perhaps someone from Intel given the constraints.
+Mmh, let me check. I thought I picked them :/
 
-This would help with features such as AEX Notify. I can work
-out issues with existing hardware and also make sure that the
-whole stack is usable (as I'm also consumer for SGX).
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-BR, Jarkko
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

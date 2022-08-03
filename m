@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A20058924F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9818C589253
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238231AbiHCScQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 14:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S238137AbiHCSdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 14:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHCScO (ORCPT
+        with ESMTP id S235127AbiHCSdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:32:14 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796B85A2CF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:32:13 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id r4so14826066edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:32:13 -0700 (PDT)
+        Wed, 3 Aug 2022 14:33:36 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEDB5A2D9
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:33:34 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id k26so17252829ejx.5
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZXfRi2mrIZZJ4KT+IlnXdFrbfLahWQ9yKxKFGGib4WU=;
-        b=vJpjJnv819lAmb+wvmRcOd8vOeY1RIek0+vV+Gvx04J52TG/kQshlpRjluOXzezWi8
-         KsSRCBaBh91P9wcB9L4OqcYXySGjKAiTUU0MwekqbLpXpIiu/ikZaEU797i4da4Mu/WB
-         MfWjXUZLSff3XLo49IyYW3v5TmtFEFBfX5Iz63fY8JvnacQbmrPZtp9wiQUa1BfeRvor
-         zx8zLjlpbfINh/gd8LoJGXEAkRHmyRva3QwXYaOk9bsakjtT2Cl0Zr7RcUlF1HyQXEWz
-         gALAqQ2cgwzfCrF3oRakUrh4qMF1NZ+vJKXLThiF/ZM0gOKqvbSAKJT1Z466VKdSG2h2
-         fklg==
+        bh=XZCzsgK5M5q8NHzi6xmbpn9gZoRddz3iFPlOf7axKvY=;
+        b=YsMk8HXIgSnPt5mzM6iWp0him4MjXKkA/oabwfudv/iVdDck0f5XFcrhAHm94TLKaa
+         FVmrXILtDZhQR2QGQa3natCmZCcPto2ksYOM/B2ofRhAbbhUmjRM583QE3TdcU/MWrVh
+         MkP+MuKuFgupQuaZp7A/GlNgGuyXOf3Ob+AfNI92aqnCYZ85AvcdPc4iwkdshnhSH7GX
+         K227BeQFZPX0fZMjCvgarbyKz0Lp/kL60YHyNP6xu/kDY/7tZgHwhq0+P5pi23ukZ52/
+         gBZRLOw/mSh3TTv4TAgEzvbHCR1wlz00w+aqA9xg61GuUWyTtQsHBfCxnjoN0SeX+TIn
+         JUMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZXfRi2mrIZZJ4KT+IlnXdFrbfLahWQ9yKxKFGGib4WU=;
-        b=3uVyYnNXLSWA/gZ5XWweBxhROJ3dBHSnpaCiVU6aaRAMuJVrN+hXrLfKiPSo5Q2KOj
-         03FtIt6RxGhtf+ffDh8iQ9THroTHIwDEQI7NOdQJLsik79MsiaPA/bX17slIF1mKNsiH
-         Hp6Iy0WmiYjfxOZKmynnPFJugLNhKScFTeeO2UamQPI1VYmekefO4rGSwlvPrKFPlOYS
-         DzBPiyQcZ16DiBykVuMXl5TMpicp11TMM55yCTvC7Vjorib29t0Z7qZrmy+XWfex2TZq
-         9ZLAThfP0BocyZhWP2M4KIGD8TkJGnRi0wo2/Kc5cPLoYEeGE+tFzNfT4LbD/SnIfL0r
-         v9AQ==
-X-Gm-Message-State: AJIora/I+XmcnHKSDKB2WuZhFnWA6YHV3krsHtIOdLyRTGHDTyaHTzrB
-        J6aqXhJjQf+POJxxeR4w6nEGs2Mkfl+SOWuDd0o5eQ==
-X-Google-Smtp-Source: AGRyM1t1FAn79Uu5qj6TGgqMXM+EElLhXe+jDnN9s2bDbKN0iwuzIaboCHGHmWpqhGheaaxbcHfZn4zes/4QxnrfeAw=
-X-Received: by 2002:a05:6402:371a:b0:43a:ece9:ab8e with SMTP id
- ek26-20020a056402371a00b0043aece9ab8emr26744736edb.126.1659551532069; Wed, 03
- Aug 2022 11:32:12 -0700 (PDT)
+        bh=XZCzsgK5M5q8NHzi6xmbpn9gZoRddz3iFPlOf7axKvY=;
+        b=wo6cRBOz5hgFbY8ZDHMXiDcHuRku/OjIAGzBo5BP4OyOLhxN/9Q3PPxEUz5obhy9qL
+         ZhNrNIcvqgWUZF5ohKdpZ8Jhi/hvbUqe+h/ZKz4JQ2TE01OsQnnDu9MExgpzkXYyT62R
+         iH3UjPLbjU7fp+Ot4moaFMsP1JehH2MnuZPbwJsp6XeKobhB2dclLgZW1bHTg6+uTZ2H
+         mtgdEWL+KCjL+TU4V2IrIKRE5HDEz6fG3OHiZKacqBjBCN5a7pD09zmUpZjIMNBjQ4YW
+         JZVE2ycJb9EVzlE/8fZD5Txob/jv23AfdFApuV1bjZR3Ay15ZJuHGvw8oku5bo3L5G+v
+         VPlw==
+X-Gm-Message-State: ACgBeo1ik2RjbhNrt9CpJYda90CoD3Z0Mnh2UkxrxOWk8373A41QWPw2
+        dYZUCF61F93BjUHcpQLYkb6/5BDg2r/T2WRrKdGCTw==
+X-Google-Smtp-Source: AA6agR4OstbR2Blalqyf5WPQMnigPvrCXTR7+IxtC9eyJeScjSiiGyZ90qL+i68vNdVIhdN0pk0iNNMFEQPaH/XqO5c=
+X-Received: by 2002:a17:907:6890:b0:730:ba11:3bda with SMTP id
+ qy16-20020a170907689000b00730ba113bdamr1975386ejc.208.1659551613320; Wed, 03
+ Aug 2022 11:33:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658829764-124936-1-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1658829764-124936-1-git-send-email-john.garry@huawei.com>
+References: <20220726115202.99108-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726115202.99108-1-krzysztof.kozlowski@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 3 Aug 2022 20:32:01 +0200
-Message-ID: <CACRpkdb5Af+7xb+QaSqAq9tkSwth58P9j2qZUdcRkDh62kbbcA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: Make PINCTRL_SM8450 depend on PINCTRL_MSM
-To:     John Garry <john.garry@huawei.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+Date:   Wed, 3 Aug 2022 20:33:22 +0200
+Message-ID: <CACRpkdaba9QoMi0J2icp91hBYC6x7VAi=Dh9fjOVHuLnNUmzwA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-gpio: add PM8226 constraints
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, olof@lixom.net, soc@kernel.org,
-        arnd@arndb.de
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -67,17 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:08 PM John Garry <john.garry@huawei.com> wrote:
+On Tue, Jul 26, 2022 at 1:52 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-> All the many other configs depend on config PINCTRL_MSM, yet for config
-> PINCTRL_SM8450 we select config PINCTRL_MSM. Make config PINCTRL_SM8450
-> depend on PINCTRL_MSM to be consistent with the rest.
+> Document the constraints (number of GPIOs) for PM8226 variant.
 >
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Patch applied. Seems self-evident 2 me, if Bjorn gets upset he
-can beat me up for it later.
+Patch applied.
 
 Yours,
 Linus Walleij

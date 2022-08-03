@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1DB5892C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9735892CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238777AbiHCT3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S237143AbiHCTfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238444AbiHCT3c (ORCPT
+        with ESMTP id S230396AbiHCTe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:29:32 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135385B798;
-        Wed,  3 Aug 2022 12:28:43 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id u12so13434176qtk.0;
-        Wed, 03 Aug 2022 12:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=j6ua6sSOMR01Px12y7LQZ7sRXPuWjo+RHnWucuaPxno=;
-        b=nFavfSVf4GaJ45pNBa9bpH1I0dEul2AoNgoS13aXm0cw3J1IxW3XneSEKO50iU6gLm
-         vHp4LOsHMcUKGSckeiHJ0xUW1XG6tdXTb9YvHA/bc5ZThulmvQgUSzSsrnZyIkye2WNf
-         Gd+2kZaE9opkD31v/NFditb0gS4/TSv4tYTFzcyHPIQQNnBWgyRBTEECim2q+smDEffS
-         5EGy2EeXXALA03Q5io8L0M0jxbcwRr/U7e/bDcSgqmYwXvfacsYVY9v6yLgKUsr4ZZ3/
-         MRN9aoatDVS7+GSYyT9YQGYObw3wa+pqhu5srDsRx+jBuBYXpDvMdjpO8JTjRLTIolPI
-         4XJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=j6ua6sSOMR01Px12y7LQZ7sRXPuWjo+RHnWucuaPxno=;
-        b=V3YINXf4Iz/nyEk5zREIduvMDc4iKABLBz9Nk7B0QZo/DGMeWwBtg9H185Rr5sS7bq
-         EuD1/eqmmU/0guIWK3UzAPn/8u4VID74iZW1TkKK9a1c92sL6GVrQLBYyDR2pkq+G0Es
-         k6muTCUaQe9HLQq4NWKB8AZLZ+7KdDz/8N/qvgkR0IAs6uWWxwXFJKVS51ntk4ocDjQ1
-         WBY8RWBu2K2wqqZLtYTgyy+iY7IDx948QI2o6oD1BGcz+M5gQyGdAge/EB+MfBdfqaQe
-         iHF1X7lAxrybcwu1seXw0/fwnRtppXW+874QLQBUjWZjkLiTjV1wTXJey8GnusAEvxC2
-         B/uQ==
-X-Gm-Message-State: AJIora+G7oZfLm7EextXOudxF0IJQD2bOuZCWfM5NxpvX48gYChZIReY
-        CuKFFW6Ml+bSnWK5srxvlo5QUtY/nNkIX8fDgFI=
-X-Google-Smtp-Source: AGRyM1sKsNtOmA0uxL5XpZY/qqHfTGj5qb1aIPlGf97a4nzpeDMDnxOUU7vl0oK8CDue6thIYHzB0UU5X3wkc9Vl6uw=
-X-Received: by 2002:ac8:5fd1:0:b0:31f:31a6:55c0 with SMTP id
- k17-20020ac85fd1000000b0031f31a655c0mr23480147qta.506.1659554922083; Wed, 03
- Aug 2022 12:28:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
- <20220726164250.GE13489@twin.jikos.cz>
-In-Reply-To: <20220726164250.GE13489@twin.jikos.cz>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Thu, 4 Aug 2022 00:28:31 +0500
-Message-ID: <CABXGCsMNF_SKns-av1kAWtR5Yd7u6sjwsFT9er8tSebfuLG8VQ@mail.gmail.com>
-Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
-To:     dsterba@suse.cz, Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        dvyukov@google.com
+        Wed, 3 Aug 2022 15:34:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB98FD9F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659555295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ol5/DqxddFZ4BAtkyhBvW+y2rS0eKBcgrLEzGa8qNys=;
+        b=dZLqyr9gxUedtBk5bKJJNhTq2VvtoAtMhWZhCHPoz7Gf2lL332SzmJBbADVPHFc0BmB1R6
+        CV+3+3xdvrI1+yGyVZs9NfMzklLCoqvrB/tXBAHUng/+p9Ot7EUMpdE7JsIvV83kLPhkoE
+        9N80pfSJ1rtfg4ofW2zME4E/mmKQJyI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-132-gOk7WubEMHGqo2gqfqE9rA-1; Wed, 03 Aug 2022 15:34:52 -0400
+X-MC-Unique: gOk7WubEMHGqo2gqfqE9rA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 375958032F1;
+        Wed,  3 Aug 2022 19:34:52 +0000 (UTC)
+Received: from starship (unknown [10.40.194.242])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C1F41121314;
+        Wed,  3 Aug 2022 19:34:49 +0000 (UTC)
+Message-ID: <17505e309d02cf5a96e33f75ccdd6437a8c79222.camel@redhat.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
+ interrupts
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>
+Date:   Wed, 03 Aug 2022 22:34:48 +0300
+In-Reply-To: <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+         <20220802230718.1891356-2-mizhang@google.com>
+         <b03adf94-5af2-ff5e-1dbb-6dd212790083@redhat.com>
+         <CAL715WLQa5yz7SWAfOBUzQigv2JG1Ao+rwbeSJ++rKccVoZeag@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
->
-> On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
-> > Hi guys.
-> > Always with intensive writing on a btrfs volume, the message "BUG:
-> > MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
->
-> Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
-> tends to work.
+On Wed, 2022-08-03 at 10:51 -0700, Mingwei Zhang wrote:
+> On Wed, Aug 3, 2022 at 10:18 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > On 8/3/22 01:07, Mingwei Zhang wrote:
+> > > +     /*
+> > > +      * We must first get the vmcs12 pages before checking for interrupts
+> > > +      * that might unblock the guest if L1 is using virtual-interrupt
+> > > +      * delivery.
+> > > +      */
+> > > +     if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
+> > > +             /*
+> > > +              * If we have to ask user-space to post-copy a page,
+> > > +              * then we have to keep trying to get all of the
+> > > +              * VMCS12 pages until we succeed.
+> > > +              */
+> > > +             if (unlikely(!kvm_x86_ops.nested_ops->get_nested_state_pages(vcpu))) {
+> > > +                     kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+> > > +                     return 0;
+> > > +             }
+> > > +     }
+> > > +
+> > 
+> > I think request handling (except for KVM_REQ_EVENT) could be more
+> > generically moved from vcpu_enter_guest() to vcpu_run().
+> 
+> Yeah, sounds good to me. I can come up with an updated version. At
+> least, I will remove the repeat request here.
 
-I confirm that after bumping LOCKDEP_CHAINS_BITS to 18 several days of
-continuous writing on the BTRFS partition with different files with a
-total size of 10Tb I didn't see this kernel bug message again.
-Tetsuo, I saw your commit 5dc33592e95534dc8455ce3e9baaaf3dae0fff82 [1]
-set for LOCKDEP_CHAINS_BITS default value 16.
-Why not increase LOCKDEP_CHAINS_BITS to 18 by default?
-Thanks.
+
+Now it all makes sense. I do think that KVM_REQ_GET_NESTED_STATE_PAGES processing
+when the vCPU is halted is indeed missing.
+
+This reminds me that I would be *very* happy to remove the KVM_REQ_GET_NESTED_STATE_PAGES,
+if by any chance there is an agreement to do so upstream.
+This is yet another reason to do so to be honest.
+Just my 0.2 cents of course.
 
 
-[1] https://github.com/torvalds/linux/blame/master/lib/Kconfig.debug#L1387
+Best regards,
+	Maxim Levitsky
 
--- 
-Best Regards,
-Mike Gavrilov.
+
+
+PS:
+This also reminded me of an related issue:
+https://lore.kernel.org/lkml/20220427173758.517087-1-pbonzini@redhat.com/T/
+Any update on it?
+
+> 
+> > Paolo
+> > 
+
+

@@ -2,151 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42C3589000
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4FC589003
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbiHCQEO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 3 Aug 2022 12:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
+        id S238082AbiHCQHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbiHCQEM (ORCPT
+        with ESMTP id S234851AbiHCQHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:04:12 -0400
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB3C13D59;
-        Wed,  3 Aug 2022 09:04:10 -0700 (PDT)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 9A685415AB;
-        Wed,  3 Aug 2022 16:04:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 85DAF20027;
-        Wed,  3 Aug 2022 16:04:07 +0000 (UTC)
-Message-ID: <04c967669e4ed8845323f1487fff86949f07a81d.camel@perches.com>
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-From:   Joe Perches <joe@perches.com>
-To:     Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Date:   Wed, 03 Aug 2022 09:04:06 -0700
-In-Reply-To: <20220719014704.21346-2-antonio@openvpn.net>
-References: <20220719014704.21346-1-antonio@openvpn.net>
-         <20220719014704.21346-2-antonio@openvpn.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Wed, 3 Aug 2022 12:07:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019F91A82F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:07:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9894C6176F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B64C433C1;
+        Wed,  3 Aug 2022 16:06:59 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 12:06:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] printk for 5.20
+Message-ID: <20220803120657.03f35595@gandalf.local.home>
+In-Reply-To: <YuqXkCZEfsSKoIX6@alley>
+References: <YufsTLpighCI7qSf@alley>
+        <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
+        <YuqXkCZEfsSKoIX6@alley>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 85DAF20027
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: ztcdnm9ndary5wdcrw8jjpb7yjr6ewt6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+NxlwGsrjEsOp3yX577wwnzhNPxY7WYmg=
-X-HE-Tag: 1659542647-117471
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-19 at 03:47 +0200, Antonio Quartulli wrote:
-> OpenVPN is a userspace software existing since around 2005 that allows
-> users to create secure tunnels.
-> 
-> So far OpenVPN has implemented all operations in userspace, which
-> implies several back and forth between kernel and user land in order to
-> process packets (encapsulate/decapsulate, encrypt/decrypt, rerouting..).
-> 
-> With ovpn-dco, we intend to move the fast path (data channel) entirely
-> in kernel space and thus improve user measured throughput over the
-> tunnel.
+On Wed, 3 Aug 2022 17:43:12 +0200
+Petr Mladek <pmladek@suse.com> wrote:
 
-Logging trivia:
+> On the positive side. My intuition told me that it was very controversial.
+> This is why I clearly described the effect. And it was the very first
+> sentence in the commit message. I think that I made it _very visible_.
 
-> diff --git a/drivers/net/ovpn-dco/crypto.c b/drivers/net/ovpn-dco/crypto.c
-> new file mode 100644
-> index 000000000000..fcc3a351ba9d
-> --- /dev/null
-> +++ b/drivers/net/ovpn-dco/crypto.c
-> @@ -0,0 +1,154 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*  OpenVPN data channel accelerator
-> + *
-> + *  Copyright (C) 2020-2022 OpenVPN, Inc.
-> + *
-> + *  Author:	James Yonan <james@openvpn.net>
-> + *		Antonio Quartulli <antonio@openvpn.net>
-> + */
+Right. I do not see you doing anything to lose Linus's trust. You stated
+upfront exactly what it was doing. And let Linus decide if it was right or
+not. Maybe it was a misjudgment on your part. But chalk it up as a learning
+experience. I personally find you a good maintainer.
 
-Please add
-
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-
-before any #include when a logging message is output
-
-[]
-> +void ovpn_crypto_key_slot_delete(struct ovpn_crypto_state *cs,
-> +				 enum ovpn_key_slot slot)
-> +{
-> +	struct ovpn_crypto_key_slot *ks = NULL;
-> +
-> +	mutex_lock(&cs->mutex);
-> +	switch (slot) {
-> +	case OVPN_KEY_SLOT_PRIMARY:
-> +		ks = rcu_replace_pointer(cs->primary, NULL,
-> +					 lockdep_is_held(&cs->mutex));
-> +		break;
-> +	case OVPN_KEY_SLOT_SECONDARY:
-> +		ks = rcu_replace_pointer(cs->secondary, NULL,
-> +					 lockdep_is_held(&cs->mutex));
-> +		break;
-> +	default:
-> +		pr_warn("Invalid slot to release: %u\n", slot);
-
-So messages like these are prefixed appropriately.
-
-> +		break;
-> +	}
-> +	mutex_unlock(&cs->mutex);
-> +
-> +	if (!ks) {
-> +		pr_debug("Key slot already released: %u\n", slot);
-> +		return;
-> +	}
-> +	pr_debug("deleting key slot %u, key_id=%u\n", slot, ks->key_id);
-> +
-> +	ovpn_crypto_key_slot_put(ks);
-> +}
-
-> diff --git a/drivers/net/ovpn-dco/crypto_aead.c b/drivers/net/ovpn-dco/crypto_aead.c
-[]
-> +/* Initialize a struct crypto_aead object */
-> +struct crypto_aead *ovpn_aead_init(const char *title, const char *alg_name,
-> +				   const unsigned char *key, unsigned int keylen)
-> +{
-> +	struct crypto_aead *aead;
-> +	int ret;
-> +
-> +	aead = crypto_alloc_aead(alg_name, 0, 0);
-> +	if (IS_ERR(aead)) {
-> +		ret = PTR_ERR(aead);
-> +		pr_err("%s crypto_alloc_aead failed, err=%d\n", title, ret);
-> +		aead = NULL;
-> +		goto error;
-> +	}
-> +
-> +	ret = crypto_aead_setkey(aead, key, keylen);
-> +	if (ret) {
-> +		pr_err("%s crypto_aead_setkey size=%u failed, err=%d\n", title,
-> +		       keylen, ret);
-> +		goto error;
-> +	}
-> +
-> +	ret = crypto_aead_setauthsize(aead, AUTH_TAG_SIZE);
-> +	if (ret) {
-> +		pr_err("%s crypto_aead_setauthsize failed, err=%d\n", title,
-> +		       ret);
-
-Could use another #define pr_fmt(fmt) etc...
-
+-- Steve

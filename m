@@ -2,162 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7BA5885FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C875885FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiHCDS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 23:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S234019AbiHCDT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 23:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiHCDSv (ORCPT
+        with ESMTP id S232491AbiHCDTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 23:18:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8723342A
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 20:18:46 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2733Fwdp025452;
-        Wed, 3 Aug 2022 03:18:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=QjcNgPogLbvM2Fn56mi7nrWF2hFA8ulaHD5phxyXE14=;
- b=XXYfIaDWrvvzZGwES7qwXT+30jL8724kbMfZRlIotNORsl71MTVvLarZEOcDUWa2NWEF
- 7YQ7ragwVzGxxZFEXvLmekRrPd9X7R/94NnkjyyD1RDpucS/lPGm8nef0+vcpslqoGed
- 1IDZquAiUWlUlUWWxRu2+NLeA+VN5UAS/0bVz6KN+vbN34Eakfuq+VKvO7+5zO7iUdBs
- XoqV4NvCgag76Rrp4umHPbaaXiHnZ/rqOWO/BLT+NJuQnQhZVnWicCQWH9qk7+Fhe4sc
- 3eIXH4YEQn1wsY0DG3MigvpdhPPnmpGIpxziMW+hQ8Tkli7QfjUQjyUUlOrd3H0XoOpQ eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqgy280xr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 03:18:29 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2733ISQK029903;
-        Wed, 3 Aug 2022 03:18:29 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqgy280xh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 03:18:28 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27336C0r001985;
-        Wed, 3 Aug 2022 03:18:28 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03wdc.us.ibm.com with ESMTP id 3hmv99ds4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Aug 2022 03:18:28 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2733IRi941156984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Aug 2022 03:18:27 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3FC1FC6057;
-        Wed,  3 Aug 2022 03:18:27 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFC11C6055;
-        Wed,  3 Aug 2022 03:18:21 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.62.91])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 03:18:21 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v10 5/8] mm/demotion: Build demotion targets based on
- explicit memory tiers
-In-Reply-To: <87h733uyc8.fsf@yhuang6-desk2.ccr.corp.intel.com>
-References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
- <20220720025920.1373558-6-aneesh.kumar@linux.ibm.com>
- <871qu8wc6c.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <9f14814c-cb08-8032-caff-edcd0594ad41@linux.ibm.com>
- <87h733uyc8.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Wed, 03 Aug 2022 08:48:19 +0530
-Message-ID: <878ro6rp50.fsf@linux.ibm.com>
+        Tue, 2 Aug 2022 23:19:55 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CB43342A
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 20:19:54 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id i14so10406609ejg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 20:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qy1jWYwnG9452wugTCrRTZvi4+IrGNxgDbnguzeYbro=;
+        b=FtIvVutQFKN66fPCXnRjzeFpwAvWlpKdRLN0f0WYZSsGsfCwW8tE2K6dWJp4NVXzLM
+         xoqWoshHqUhjfVnshp2MVtFU62WEAnAnmQ3yAwpXwVbJkaFxFvnGUWTvxHEgxuvJfBiT
+         qSaFctrDD77fGQ5r5BzrDxED59aKc+efhPRHA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qy1jWYwnG9452wugTCrRTZvi4+IrGNxgDbnguzeYbro=;
+        b=yXtji6EUb8olPKFLjR2pBW8q5G+6V5V3NxDGII3CpfPQAPRG5eoYzuDahHQ8m/o46g
+         HYyV6ym5iSJTWzuRgmrJ8msPNut0/stSmr25NAXPdaib1Np51yN/orn5oZgRjvs3fx+C
+         8RJmQuJ2XZ5jr3Xov3m4NkhdiR7HCqfwjMEGAztaSfEee88HKfySKilJ8+W5IrHpbQbH
+         sMViPuvfk7hTOqAEaDhCfuAWWFnwC2RwpF8qNXVoWXBUCDZCHDW18E3WGoioYO9INkKx
+         rDcZwiTGevdveTcJUIfLol6k9k76PtMo//OHmH1Rru1yntcxF6wTNHHbucpUFVoZZfXn
+         mMSA==
+X-Gm-Message-State: AJIora/ms3o3Y2UHYHyr4ZEslpLrE3zjdxqKCW0UUArdcraaHf4kRUIX
+        0/Wh3NA/acW2044Ypc62dRILf7zTmmUfeW7E
+X-Google-Smtp-Source: AGRyM1uVMesfJLWYIKW8VJ+FEIHLC7QqmCisppYVtdeYh/jdxcQRsIijIKM3+fTzf41zmiXjZ73Lig==
+X-Received: by 2002:a17:907:60cc:b0:72b:40a8:a5b with SMTP id hv12-20020a17090760cc00b0072b40a80a5bmr18444401ejc.379.1659496792395;
+        Tue, 02 Aug 2022 20:19:52 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id sy7-20020a1709076f0700b0073054d7c51csm4402794ejc.37.2022.08.02.20.19.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 20:19:51 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id h13so719259wrf.6
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 20:19:50 -0700 (PDT)
+X-Received: by 2002:adf:edcb:0:b0:21e:d043:d271 with SMTP id
+ v11-20020adfedcb000000b0021ed043d271mr14820445wro.274.1659496790456; Tue, 02
+ Aug 2022 20:19:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 99ovNddF_lANY-HwnyZu8JMSOUYxsvHV
-X-Proofpoint-ORIG-GUID: Yqul1cIHAeXJaD41LjHv8Jn9K-doIERY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-03_01,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208030014
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YufsTLpighCI7qSf@alley>
+In-Reply-To: <YufsTLpighCI7qSf@alley>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 2 Aug 2022 20:19:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
+Message-ID: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
+Subject: Re: [GIT PULL] printk for 5.20
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Huang, Ying" <ying.huang@intel.com> writes:
-
-> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+On Mon, Aug 1, 2022 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
 >
->> On 7/26/22 1:14 PM, Huang, Ying wrote:
->>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> - Completely disable printing on consoles with CONFIG_RT.
 
-....
+I don't think this is acceptable.
 
->>> +
->>>>  static void init_node_memory_tier(int node)
->>>>  {
->>>>  	int perf_level;
->>>> @@ -84,11 +285,19 @@ static void init_node_memory_tier(int node)
->>>>  	mutex_lock(&memory_tier_lock);
->>>>  
->>>>  	memtier = __node_get_memory_tier(node);
->>>> +	/*
->>>> +	 * if node is already part of the tier proceed with the
->>>> +	 * current tier value, because we might want to establish
->>>> +	 * new migration paths now. The node might be added to a tier
->>>> +	 * before it was made part of N_MEMORY, hence estabilish_migration_targets
->>>> +	 * will have skipped this node.
->>>> +	 */
->>>>  	if (!memtier) {
->>>>  		perf_level = node_devices[node]->perf_level;
->>>>  		memtier = find_create_memory_tier(perf_level);
->>>>  		node_set(node, memtier->nodelist);
->>>>  	}
->>>> +	establish_migration_targets();
->>> 
->>> Why combines memory tiers establishing with demotion targets building?
->>> I think that it's better to separate them.   For example, if we move a
->>> set of NUMA node from one memory tier to another memory tier, we only
->>> need to run establish_migration_targets() once after moving all nodes.
->>> 
->>
->> Yes agree. I am not sure I followed your comment here. 
->>
->> Demotion target rebuilding is a separate helper. Any update to memory tiers needs rebuilding
->> of demotion targets. Also any change in node mask of memory tier needs
->> demotion target rebuild. Can you clarify the code change you are suggesting here?
->
-> I think we should call establish_migration_targets() in
-> migrate_on_reclaim_callback() directly.  As the example I mentioned
-> above, sometimes, we don't need to call establish_migration_targets()
-> for each node changing.
->
+We don't suddenly change behavior just because some random developer
+has decided "this is the RightThing(tm) to do".
 
-We need to hold memory_tier_lock while updating node's memory tier and
-rebuilding demotion targets. All of that is done in the same function
-here. An update node memory tier that allow for updating multiple node's
-memory tier together would do what you mentioned above under
-memory_tier_lock ie, update all the nodes memory tier and then call
-establish_migration_targets() once.
+Users matter.
 
--aneesh
+For all we know, there may be random users who are playing around with
+PREEMPT_RT. They don't *have* to, but they want to.
+
+Just saying "you get no console because you wanted to try it out" is
+simply not acceptable.
+
+It's also NOT SANE.
+
+Seriously, even if you have strict RT requirements, you may also have
+strict debugging requirements, and if something goes wrong, you want
+to KNOW ABOUT IT. At that point, your RT rules may well fly out the
+window, because you have more serious problems.
+
+End result: no way will I accept this kind of completely arbitrary and
+frankly not very intelligent patch.
+
+If people want to disable console printing, that's THEIR CHOICE. It
+could be a new config variable where you ASK people about what they
+want. Not this kind of idiotic tying together of things.
+
+And guys, I want to make it really clear how disappointed I am with
+the printk tree lately. There seems to be some kind of hardline
+religious fervor having taken over to make these kinds of "this is how
+it has to be done, screw any sanity or common sense".
+
+There is exactly one thing you should hold sacred: don't break
+people's setups. All the rest is just engineering, and a HUGE part of
+"engineering" is to realize that everything is a trade-off.
+
+Linux kernel development is a pragmatic thing where existing users and
+existing code matters, and you don't get to just throw it all away
+because you have some odd personal hangup.
+
+And printing messages to a console is not some "oh, we'll just stop
+doing that because you asked for PREEMPT_RT".
+
+Put another way: not only am I not pulling this, I'm concerned that I
+will not be pulling printk patches in the future either because of
+where these pull requests seem to be trending.
+
+               Linus

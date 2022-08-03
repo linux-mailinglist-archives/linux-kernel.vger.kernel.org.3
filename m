@@ -2,164 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017B158860E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54568588611
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 05:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiHCDlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 23:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S234077AbiHCDqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 23:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbiHCDlF (ORCPT
+        with ESMTP id S232287AbiHCDqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 23:41:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5BD1D0FF;
-        Tue,  2 Aug 2022 20:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659498062; x=1691034062;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/PpJ9OOIYmw8GdhYc+SyoE4NEN+x7pnsx7eNU1nhOoU=;
-  b=CDrgzsfyz6yDSbUOIsB9jCorTJ+zMGUHPC1HcX0rY4zPT6OX10E94bkC
-   frApt9N19UUczUiYeU64DNkFOLvdannerZRqc887FmfOFhz3qiRIktiX+
-   PX1vQ6HzfabInHCaNVbwvCsvcHGqLmba1e/DeLgJ2rtVWGJGQiuo21Cvc
-   yjSak24MdvUXFQQWAbYR5jMlnjYtWvLd7dX8xSi94E2ttlxAFr3NzKb2f
-   WVerMcmFArA1O5MPr0so5qOfCKJI+Ge7FPBCBaTrGYULBPe2zZPN7voYm
-   ONDufsYVlPiDT252yOrQ5Mo2tmay7u+asJ7ZPpNZxLXq0c+4k+XTKSe0J
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269954305"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="269954305"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 20:41:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="661901185"
-Received: from wmoon-mobl.gar.corp.intel.com (HELO [10.255.29.176]) ([10.255.29.176])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 20:40:56 -0700
-Message-ID: <041f2d03-c32f-c578-f714-5b01bb8bc46b@linux.intel.com>
-Date:   Wed, 3 Aug 2022 11:40:54 +0800
+        Tue, 2 Aug 2022 23:46:00 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034D318395
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 20:45:55 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220803034550epoutp0145067d6df49f7c15c8430614cb339ff7~HuPUV4VKI2939829398epoutp01p
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:45:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220803034550epoutp0145067d6df49f7c15c8430614cb339ff7~HuPUV4VKI2939829398epoutp01p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659498350;
+        bh=PUUwWz7qYnjhog9hyEmOfU8Csx6pYpGDAJULPZxjVe0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=pWaIBD8uJ31gMozOwlPsvBFwCRwxZAC2nd076NORlpfVNviQ6P0E/xIGh/TG4Yz6e
+         dTgEB/BFvkJ/Cr4IvIilR6oP0zkQe4eXFH9Anm0Pnn7DDfdCWZR5os4B1e1OueV/sP
+         Tq8zOzWOdEb0V7invYXZWssOduVk3JjGezrAUR9g=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220803034549epcas1p36bc120a5873be65994c27a9356f5c89e~HuPTu72Rs2509525095epcas1p3P;
+        Wed,  3 Aug 2022 03:45:49 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.242]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4LyHnn3Pknz4x9Q0; Wed,  3 Aug
+        2022 03:45:49 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0D.46.09678.D6FE9E26; Wed,  3 Aug 2022 12:45:49 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220803034548epcas1p4473bebafd065a21923f3031f02fc4243~HuPS1SV062861328613epcas1p4Q;
+        Wed,  3 Aug 2022 03:45:48 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220803034548epsmtrp1416fc08776567dc5597514a678a70d96~HuPS0EpF10447104471epsmtrp1B;
+        Wed,  3 Aug 2022 03:45:48 +0000 (GMT)
+X-AuditID: b6c32a39-e51ff700000025ce-3c-62e9ef6da8e1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C9.DD.08905.C6FE9E26; Wed,  3 Aug 2022 12:45:48 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220803034548epsmtip21782747ddfc5184c2bf577e5cfd27e30~HuPSf_Ygt2281722817epsmtip2h;
+        Wed,  3 Aug 2022 03:45:48 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'Jaewook Kim'" <jw5454.kim@samsung.com>, <jaegeuk@kernel.org>,
+        <chao@kernel.org>
+Cc:     <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <junbeom.yeom@samsung.com>,
+        <youngjin.gil@samsung.com>, <sj1557.seo@samsung.com>
+In-Reply-To: <20220803023431.30214-1-jw5454.kim@samsung.com>
+Subject: RE: [PATCH] f2fs: do not allow to decompress files have
+ FI_COMPRESS_RELEASED
+Date:   Wed, 3 Aug 2022 12:45:48 +0900
+Message-ID: <25e501d8a6eb$84cf4090$8e6dc1b0$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
- CPU hotplug
-To:     Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     linux-acpi@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, rdunlap@infradead.org, Jason@zx2c4.com,
-        juri.lelli@redhat.com, mark.rutland@arm.com, frederic@kernel.org,
-        yuehaibing@huawei.com, dongli.zhang@oracle.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
- <43a67bfe-9707-33e0-2574-1e6eca6aa24b@intel.com>
- <5ebd7c3cfb3ab9d77a2577c4864befcffe5359d4.camel@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <5ebd7c3cfb3ab9d77a2577c4864befcffe5359d4.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQET2ImLkCT1gyMsL1LuCjdD7mUqEQItVpSrrxS4FXA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmgW7u+5dJBv87JC1OTz3LZPFk/Sxm
+        i4NXjjBarLzym8Xi0iJ3i8u75rBZbPl3hNVixv6n7A4cHptWdbJ57F7wmcmjb8sqRo/Pm+QC
+        WKIaGG0Si5IzMstSFVLzkvNTMvPSbZVCQ9x0LZQUMvKLS2yVog0NjfQMDcz1jIyM9IwtY62M
+        TJUU8hJzU22VKnShepUUipILgGpzK4uBBuSk6kHF9YpT81IcsvJLQU7XK07MLS7NS9dLzs9V
+        UihLzCkFGqGkn/CNMeN+xzKmgr2CFa8uLGdvYOzh62Lk5JAQMJG4seIgC4gtJLCDUeJve1wX
+        IxeQ/YlR4t2v6cwQzjdGiXVXt7LCdKy78Z4JIrGXUeLnoulsEM5LRolZ7X1sIFVsAroST278
+        ZAaxRQTCJd5MnsUKUsQssIhR4uHRdYxdjBwcnAI2Epv+G4GYwkA1B/8YgpgsAioSh29ogXTy
+        ClhKXF18nR3CFpQ4OfMJ2KXMAvIS29/OYYa4R0Fi96ejrBCbrCTmvrvNDlEjIjG7sw3sAQmB
+        mRwSV3bsgWpwkXj26Q/UM8ISr45vYYewpSRe9rdB2c2MEs2NRhB2B6PE042yILdJCNhLvL9k
+        AWIyC2hKrN+lD1GhKLHz91xGCFtQ4vS1bmaIE/gk3n3tYYXo5JXoaBOCKFGR+P5hJ8sERuVZ
+        SB6bheSxWUgemIWwbAEjyypGsdSC4tz01GLDAlPkyN7ECE60WpY7GKe//aB3iJGJg/EQowQH
+        s5II7x2X50lCvCmJlVWpRfnxRaU5qcWHGJOBIT2RWUo0OR+Y6vNK4g1NjA0MjIBp0NzS3JgI
+        YUsDEzMjEwtjS2MzJXHeVdNOJwoJpCeWpGanphakFsFsYeLglGpgmrLt3Gulm8qG6wwZU3pP
+        aunYrxHwz+uba9VYvXyemsTTG/+Pe9w7sfOS+L4i/4VzhGVWpqxPlH7UfU/30e1/Z55Pjde3
+        CIuxv+TY7WLy+sLbY98quoyfcp1aVucxPeuMWOAaR0YNjgv1qtKh2QsnfZslP2dKkbHGilk/
+        eDy0FbZul3B/mPP6/jW93tsLNBa9Ovol74vfLTW9Ns7fKdpGy3zeNEZc+7gs0v6/3Br+D+sk
+        ns5eq/lCYdMfQTWrfS8mlW2qufzQUan3uvscAYEumVlnXV+X2dgVCPHd/nKu2HdFxv4PbG1y
+        d+aaPD4WmD19wm23gypl6/yuVic0/L4758odl4zpDvMMP9zXyvrxylmJpTgj0VCLuag4EQDb
+        bfQgawQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJXjfn/cskgxkfdSxOTz3LZPFk/Sxm
+        i4NXjjBarLzym8Xi0iJ3i8u75rBZbPl3hNVixv6n7A4cHptWdbJ57F7wmcmjb8sqRo/Pm+QC
+        WKK4bFJSczLLUov07RK4Mu53LGMq2CtY8erCcvYGxh6+LkZODgkBE4l1N94zdTFycQgJ7GaU
+        WLJnJksXIwdQQkri4D5NCFNY4vDhYoiS54wSxxdfYwbpZRPQlXhy4yeYLSIQKdH5YjkjSBGz
+        wDJGiauTdjNCdPQySszd/4AVZBKngI3Epv9GIA3CAqESyyfuYQcJswioSBy+oQUS5hWwlLi6
+        +Do7hC0ocXLmExYQm1lAW6L3YSsjhC0vsf3tHGaI+xUkdn86ygpxg5XE3He32SFqRCRmd7Yx
+        T2AUnoVk1Cwko2YhGTULScsCRpZVjJKpBcW56bnFhgWGeanlesWJucWleel6yfm5mxjBkaSl
+        uYNx+6oPeocYmTgYDzFKcDArifDecXmeJMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB
+        9MSS1OzU1ILUIpgsEwenVAMT1xnT40sPrZewXfRhmuA2Y5cdXPF3H1iwWV61/v759SGVoLsh
+        GvcVvDa2cO+J0UxblZyuxLhbxTRqlZPU9ztvqjIvnSuKi/c9cbD70IKAaSr8wSJXlW+x/u4N
+        15mr/73l0dyK/7JK/sV/Qprnp7m9ydbcurovrjyJb0Jf1PoD88ouzjcM6o4JfaK/TmCRjKax
+        1lI9zg39f1UfvMrdI2/rdOTx9BdP9p91lnryc9qrQ2dbXTvbr0W7zVm2Rn19aL9w0fSjgtdT
+        2HKSl275cfGPlYKUR8dPBfHgBZJ1Loyb5txeKV+1+OdhVinPS42qW/43GIdfXr9TomD3x/NL
+        sjodJDaXlJvlzPypI2Vo9tNXiaU4I9FQi7moOBEAt2VwZxMDAAA=
+X-CMS-MailID: 20220803034548epcas1p4473bebafd065a21923f3031f02fc4243
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3
+References: <CGME20220803023449epcas1p4a9b09cdc73878c8ee40ae10523279dc3@epcas1p4.samsung.com>
+        <20220803023431.30214-1-jw5454.kim@samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> If a file has FI_COMPRESS_RELEASED, all writes for it should not be
+> allowed. However, as of now, in case of compress_mode=user, writes
+> triggered by IOCTLs like F2FS_IOC_DE/COMPRESS_FILE are allowed unexpectly,
+> which could crash that file.
+> To fix it, let's do not allow F2FS_IOC_DE/COMPRESS_IOCTL if a file already
+> has FI_COMPRESS_RELEASED flag.
+> 
+> This is the reproduction process:
+> 1. $ chattr +c ./file
+> 2. $ dd if=/dev/zero of=./file bs=4096 count=2000 oflag=append
+> conv=notrunc 3. $ sync
+> 4. $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE
+> 5. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS
 
-On 2022/6/27 13:05, Kai Huang wrote:
-> On Fri, 2022-06-24 at 11:57 -0700, Dave Hansen wrote:
->> On 6/22/22 04:15, Kai Huang wrote:
->>> Platforms with confidential computing technology may not support ACPI
->>> CPU hotplug when such technology is enabled by the BIOS.  Examples
->>> include Intel platforms which support Intel Trust Domain Extensions
->>> (TDX).
->>>
->>> If the kernel ever receives ACPI CPU hotplug event, it is likely a BIOS
->>> bug.  For ACPI CPU hot-add, the kernel should speak out this is a BIOS
->>> bug and reject the new CPU.  For hot-removal, for simplicity just assume
->>> the kernel cannot continue to work normally, and BUG().
->> So, the kernel is now declaring ACPI CPU hotplug and TDX to be
->> incompatible and even BUG()'ing if we see them together.  Has anyone
->> told the firmware guys about this?  Is this in a spec somewhere?  When
->> the kernel goes boom, are the firmware folks going to cry "Kernel bug!!"?
->>
->> This doesn't seem like something the kernel should be doing unilaterally.
-> TDX doesn't support ACPI CPU hotplug (both hot-add and hot-removal) is an
-> architectural behaviour.  The public specs doesn't explicitly say  it, but it is
-> implied:
->
-> 1) During platform boot MCHECK verifies all logical CPUs on all packages that
-> they are TDX compatible, and it keeps some information, such as total CPU
-> packages and total logical cpus at some location of SEAMRR so it can later be
-> used by P-SEAMLDR and TDX module.  Please see "3.4 SEAMLDR_SEAMINFO" in the P-
-> SEAMLDR spec:
->
-> https://cdrdv2.intel.com/v1/dl/getContent/733584
->
-> 2) Also some SEAMCALLs must be called on all logical CPUs or CPU packages that
-> the platform has (such as such as TDH.SYS.INIT.LP and TDH.SYS.KEY.CONFIG),
-> otherwise the further step of TDX module initialization will fail.
->
-> Unfortunately there's no public spec mentioning what's the behaviour of ACPI CPU
-> hotplug on TDX enabled platform.  For instance, whether BIOS will ever get the
-> ACPI CPU hot-plug event, or if BIOS gets the event, will it suppress it.  What I
-> got from Intel internally is a non-buggy BIOS should never report such event to
-> the kernel, so if kernel receives such event, it should be fair enough to treat
-> it as BIOS bug.
->
-> But theoretically, the BIOS isn't in TDX's TCB, and can be from 3rd party..
->
-> Also, I was told "CPU hot-plug is a system feature, not a CPU feature or Intel
-> architecture feature", so Intel doesn't have an architectural specification for
-> CPU hot-plug.
->
-> At the meantime, I am pushing Intel internally to add some statements regarding
-> to the TDX and CPU hotplug interaction to the BIOS write guide and make it
-> public.  I guess this is the best thing we can do.
->
-> Regarding to the code change, I agree the BUG() isn't good.  I used it because:
-> 1) this basically on a theoretical problem and shouldn't happen in practice; 2)
-> because there's no architectural specification regarding to the behaviour of TDX
-> when CPU hot-removal, so I just used BUG() in assumption that TDX isn't safe to
-> use anymore.
+Oops! Do we need to call F2FS_IOC_RELEASE_COMPRESS_BLOCKS here?
+Maybe, you need to revise reproduction process and to make v2 patch.
 
-host kernel is also not in TDX's TCB either, what would happen if kernel 
-doesn't
-do anything in case of buggy BIOS? How does TDX handle the case to 
-enforce the
-secure of TDs?
-
-
->
-> But Rafael doesn't like current code change either. I think maybe we can just
-> disable CPU hotplug code when TDX is enabled by BIOS (something like below):
->
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -707,6 +707,10 @@ bool acpi_duplicate_processor_id(int proc_id)
->   void __init acpi_processor_init(void)
->   {
->          acpi_processor_check_duplicates();
+> 6. $ do_compress ./file      ; call F2FS_IOC_COMPRESS_FILE again
+> 7. $ get_compr_blocks ./file ; call F2FS_IOC_GET_COMPRESS_BLOCKS again
+> 
+> You can find compr_blocks has a negative value.
+> 
+> Fixes: 5fdb322ff2c2b ("f2fs: add F2FS_IOC_DECOMPRESS_FILE and
+> F2FS_IOC_COMPRESS_FILE")
+> 
+> Signed-off-by: Junbeom Yeom <junbeom.yeom@samsung.com>
+> Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+> Signed-off-by: Youngjin Gil <youngjin.gil@samsung.com>
+> Signed-off-by: Jaewook Kim <jw5454.kim@samsung.com>
+> ---
+>  fs/f2fs/file.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c index
+> 6b1b030830ca..a4713b7e12cb 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -3945,6 +3945,11 @@ static int f2fs_ioc_decompress_file(struct file
+> *filp, unsigned long arg)
+>  		goto out;
+>  	}
+> 
+> +	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
 > +
-> +       if (cc_platform_has(CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED))
-> +               return;
+>  	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+>  	if (ret)
+>  		goto out;
+> @@ -4012,6 +4017,11 @@ static int f2fs_ioc_compress_file(struct file *filp,
+> unsigned long arg)
+>  		goto out;
+>  	}
+> 
+> +	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
 > +
->          acpi_scan_add_handler_with_hotplug(&processor_handler, "processor");
->          acpi_scan_add_handler(&processor_container_handler);
->   }
->
-> This approach is cleaner I think, but we won't be able to report "BIOS bug" when
-> ACPI CPU hotplug happens.  But to me it's OK as perhaps it's arguable to treat
-> it as BIOS bug (as theoretically BIOS can be from 3rd party).
->
-> What's your opinion?
->
+>  	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+>  	if (ret)
+>  		goto out;
+> --
+> 2.17.1
+
+

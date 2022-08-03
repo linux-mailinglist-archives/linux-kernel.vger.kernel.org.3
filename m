@@ -2,143 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117265885C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EE15885C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiHCC3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 22:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S235063AbiHCCas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 22:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbiHCC2x (ORCPT
+        with ESMTP id S230348AbiHCCaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 22:28:53 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130057.outbound.protection.outlook.com [40.107.13.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2F85467C;
-        Tue,  2 Aug 2022 19:28:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWA25vHrVCuEyJl18matP0mowD6bDjtIqmdFlBl2AG+VvkBeWu4xsKmWbOzPcnHpy0nHK1muBnLqclNbdAZw0ML1izhBalH9D2Q5GAQNz3YS/s+t/Ieg9QutQlrtu1Otsf5GVFgKtX/xg8XQJXoukiyAqQHM4nK3Eejszc9QdbDAvvRJHpIZ73T0PwJrULvmMGuADDbsHe4UdYjOg854HYVgv3POT0HLvkYq02a00hWRySJfnDK+tzYiTvscM4ZehQChHyUTZe51WIzZxPSrEPp23jpUPUn4N3KVi+Qde41upLMd+LwTFpfcloySLm//EbO4aHo+bF0A7X9P22aNhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kN1Qwcq9eoWUxIJU9Yd2T4IGLMbZMN7Zb5GLCZFJBrk=;
- b=B35z5IPVN1D0IuKVq+3SDYGDN/R/VPFMo2fQpX/pNuuMd12MJ2hBTRt0v8k4x1DgUP43BmDuF3KaVXLlQUHj/BIZm7fZGX361IPB8h4TxKTBn0G8t5FIDy1HGHIPZG20dM+CHW6LoPRPhP+gofsnauWeRmHOxPjwOdJap1/Q0WXMK3BSTpMHW83AagB0RvI0FePZEUS5qPLyiXHps9OTCDfT3blNFRECHyAVhT8gu1BOevkhcJKtzshe+RYgRsFAqbY+KeQCcTVBurREgHG23WlOE4zz3B/4ZDMpnQ0/2JjUIc3kaseMrhViEXqJ19FoK9v7gWVuN1sWafrva4Y6Bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kN1Qwcq9eoWUxIJU9Yd2T4IGLMbZMN7Zb5GLCZFJBrk=;
- b=fjf4pP9vLzJDSYQas0cSNV01iwrE/OTihdpaL/Ny80+I2gkJlbECnCdguiK4Rz/lkg1FNOyITBnfQzUpCNVtiYKzFX51l4ts8z5NqWz8KYQXThM+H2RxxnmtVXkrvY6KOjd+oz0MsBD7NPWcB6JcwyeicCTfioLuJoF11A/+JK0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by DB6PR04MB3077.eurprd04.prod.outlook.com (2603:10a6:6:8::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5482.13; Wed, 3 Aug 2022 02:28:49 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::5db6:3f08:2e04:33c]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::5db6:3f08:2e04:33c%4]) with mapi id 15.20.5504.014; Wed, 3 Aug 2022
- 02:28:49 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        xiahong.bao@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 4/4] media: amphion: encoder add support for contiguous planes
-Date:   Wed,  3 Aug 2022 10:27:22 +0800
-Message-Id: <9d563ad6ad660414e433a1197125b57b1ce8906d.1659493105.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1659493105.git.ming.qian@nxp.com>
-References: <cover.1659493105.git.ming.qian@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0022.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::9)
- To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+        Tue, 2 Aug 2022 22:30:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818A1CFDE
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659493845; x=1691029845;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=svzXtL8TTiYXT6mqM+2nXiVLdwwSFUZuQYT7SkfHC6E=;
+  b=EgYlklvGbZMPfqXaHOsJiIgr0I2YixTsMz0+EF3NQI8eSU28ATuidogG
+   EsgubqkmkIt93eN9tkcaboqKlELjGmEtHqwbQivlsWZyn3M3Lek3sJXxF
+   AhWLSi/mEP+uu5Uy1XhLAw+CQW48jcynjES0mEhfpPl8VIm2Afgv1K67f
+   XP09YYOfEEwa0yrqOktJXj8ckIcr5mB06JdUGyw0pByo5/5QBW7ImCqFa
+   +Z62mJzXUYGUlHPReiMS4aX2sAOhd4MpAnj+3gAbbgZFIgIrC4Ln1mfzP
+   ocjL53AX3zC7jpBcVHJSXoZHKjIrD0W1j6hmmKv82OJcCTIzItQJENbCG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="315421059"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="315421059"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 19:30:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="553151453"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 Aug 2022 19:30:43 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ49j-000Ghd-0n;
+        Wed, 03 Aug 2022 02:30:43 +0000
+Date:   Wed, 3 Aug 2022 10:29:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Saleem Abdulrasool <abdulras@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: arch/riscv/kernel/signal.c:197:28: error: use of undeclared
+ identifier '__vdso_rt_sigreturn_offset'
+Message-ID: <202208031019.E5mj21An-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1586e37c-32cf-449e-95d9-08da74f7e5cc
-X-MS-TrafficTypeDiagnostic: DB6PR04MB3077:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kXi1YvNSxzkRggry4EY2pRRMg6do0mF0hdCxvfCuoRpx2peWlkn3dPLzoGK8EACAlfk1Pba8Cd8HHMug3Ongxxs33Nx/EGhESYtYxuKXgzCDvIEuB9BlEep+sh349wpUWlsfz9fwXNxt29yLdKXPWP6YuDVIu7hSIhalVhyPk3vl44BQDANuGD3HveHjC0P3S/xwfe7z5SSASiA2NCtY9da2uL+h9rc6N2teLi7kT5i9goF0QxWVqswkK61BuEZyDfEVfKDEZL7iFXtgGZUQBZb3F97OHrZHpjcUG5BacRZT67XfpcHLACT3peYalYrbKaTULTih5g+V1oFbOnWru7PAUcMzX0/ubliYHRGY1TDt+p7xsGS5wz/Nn/lwWDcQqTvGoue3jBcgmykv93QE2HfOlgZOn/u8QdweWdwKrqQ48VJMNQvA6pkpORyVHX8kTOlx7mSC6g1DRncJWh51ofisV6CZ2lrP+VvEnGyk0eQrJMOo053ThA1763+XPDdPkjreIrCw95CP3wyjQJ6RdDoNIheceTgQYhgjLzLBSbLEKG5dKpAYad1MoDPqbex7+iZKopMePbkPi2HRi5+m/ZS4zVwVsG1hi52N7X36jk+C8DPX/gBwwr0Prjsf/9AOrUIOmM1T4VDrKhOFPwZuuccA2BZTlqPZQa6ldMkEswF6xY32/LUOgB0UtPtXei2Q4nuq8Asv/zBmxv24XyH3ChKgqfanyfIacaJPF8IoW1Ifsul52sRDWWSQi/vijdRhQLPObZ6v3/b4yCPShQrUvkJoltZgPKzSfqjPiMbFyL5dk65Zx9KVwTD+FsR/+yYy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(44832011)(5660300002)(8676002)(4326008)(66476007)(66556008)(66946007)(8936002)(4744005)(7416002)(2906002)(36756003)(86362001)(38100700002)(6486002)(478600001)(41300700001)(38350700002)(316002)(186003)(2616005)(26005)(6666004)(6506007)(6512007)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BcKvHULpYAM90ye5Mi5EKIdt4u/q5kgpfq1YFWXW0kn0sh/54zhqgUDOGLMX?=
- =?us-ascii?Q?EG3/qlWrqGR90MGC7ad5Ceq74aVOuH6BsgcaV4CPLb8xjnacWpIoDMThJiMY?=
- =?us-ascii?Q?ydfo5Jd/xLZrYO7dRYERn4a5uUciGpBDzcXD9+Q7reFqfXaUqTyqh2JSIfD2?=
- =?us-ascii?Q?RxBPvOZc60rLM+EDRJgJn+w8H+1jp9WMO217gX8ggy9KMcVpwb8yNRs/hpMf?=
- =?us-ascii?Q?hl/L47rUFI61rnBY4ta76UWCNLMQES6zpmBXR8kObT/q2ZtP5L8AcJogR7Ns?=
- =?us-ascii?Q?gJDsGd+692g/hB4f9aKM5CtmIJI1TZOgbv7AU3DLJPaCyGkhrUaYL9j00leB?=
- =?us-ascii?Q?1TUmGP29wayh2clVspxrGHbwIrj3weHqjgFlJCjlnr92n8qJUu85zH6XtDtd?=
- =?us-ascii?Q?rsv5MDHmx1b0vHhGPnfDNc0T6xc8bpyDo4JlBvK0eloshNiHKsjto22K6+7o?=
- =?us-ascii?Q?yRCFIPmYtQjRHDQr2RxB9qnPxjuMuXVTCKASfbDvwUDXcJstZ+i5IwdgJhkX?=
- =?us-ascii?Q?z7rq4YbtpH0FAwrGJD3ky2CAGc46ROJObCqeQSkYvnWJOx3g0Ar9y1FoW1GR?=
- =?us-ascii?Q?2wluJTNcjNkjYN1PpuiPkV7l/X1EQpOAtod2IZ46FBoPkbWDqFUdoU7ELKm6?=
- =?us-ascii?Q?nw+UqrNXoh9Pdo57ENFMag19fayFh8Dd3HdJ328U2nlPy3exHeuxFK73Tyyl?=
- =?us-ascii?Q?ZcqfEEt1rqbe6mO+uWgFdvfQE5RcI31ymxboXK/9ywwNRY9iRQFe0VzBxJqp?=
- =?us-ascii?Q?PuNvFdOyLJFLFWtLiWQMNZYxmYztTu9K5tC70vO8XwPbrSX7xFkO/VZx5P57?=
- =?us-ascii?Q?oe13lnCeQikHkcGB3HTAmYb7B38owxVgJeTMgwgdPdtO5FstwWvoFYw2TvrN?=
- =?us-ascii?Q?2xXZ8Fpl0q/u682v/cajrSTWSM5bS+Fze8H1fYoPtw9HRZ3E0IvJglK906MM?=
- =?us-ascii?Q?rqJfzGjbAgnm3HiMBn03nQRB+OAiUaV2b0kJovjuq5MXp+0xtIlhN9s0U8GD?=
- =?us-ascii?Q?+/5OEBqgVhiUp/Z+nLEKYsilqevoFqiA0/ogysHr2bFkjD161UXj/HdC4cRK?=
- =?us-ascii?Q?2B2x+EJc03kByZYSTd9Fwt3Q/dad65xnba9Pcrz4qL4RS5cLSNIyy11/+Yxp?=
- =?us-ascii?Q?4iEzcUVbIPIUCmvxxWSX9fokCk6MwzmgmqofpuyOG5Pd77IiGQFvBEWf3XWu?=
- =?us-ascii?Q?+vM3uaqhcD5yLeTyDt12seh3ElQKYQBWe/HtI1TPQpwxxm/Ia7crOgi4JOto?=
- =?us-ascii?Q?N82I4o1TVKwjmYT+pFeuuKsKh6nntyThJ9H8mgOjwWCNgt0i4CgedxM3xUcS?=
- =?us-ascii?Q?lxnOD/LYFYdYvjmqpIim4raO71wq6r7AEd2CjQLzrb3j27p0wOw00E9UtDuh?=
- =?us-ascii?Q?4i6oYr3vlr0WwX8x5SM9yHGoU405J99QPfi6R6Y3vtg3bDMovA/a2bLeLeVD?=
- =?us-ascii?Q?9e8kBhEtYtV2KqnUxseH1u22tTJrEfShKpRWpYU+rJOrLZitLJwVqas3Ffdd?=
- =?us-ascii?Q?NfxKHAxgi8QWVenQ+ivfMDjvBgfvsB8WSqphK4cxuJZAw5Wn13A5pyX1J+1m?=
- =?us-ascii?Q?tQysDnMkEooSaM4kEfFuxNOW8Cwqke9dkKd1LeZQ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1586e37c-32cf-449e-95d9-08da74f7e5cc
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 02:28:49.0293
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tbTwy5wJWqcOHjH2ezG0VyHEAtKRNiqbhE4PUVawiNOVXp0TpCyVVi0MroYouIwmdC2dQ3Rd5TMzqXHGWdA+Vw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3077
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-encoder add support for contiguous formats NV12
+Hi Saleem,
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- drivers/media/platform/amphion/venc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platform/amphion/venc.c
-index 060a1ee78b17..3cbe8ce637e5 100644
---- a/drivers/media/platform/amphion/venc.c
-+++ b/drivers/media/platform/amphion/venc.c
-@@ -72,6 +72,14 @@ static const struct vpu_format venc_formats[] = {
- 		.mem_planes = 2,
- 		.comp_planes = 2,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.sibling = V4L2_PIX_FMT_NV12,
-+	},
-+	{
-+		.pixfmt = V4L2_PIX_FMT_NV12,
-+		.mem_planes = 1,
-+		.comp_planes = 2,
-+		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.sibling = V4L2_PIX_FMT_NV12M,
- 	},
- 	{
- 		.pixfmt = V4L2_PIX_FMT_H264,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c2a24a7a036b3bd3a2e6c66730dfc777cae6540a
+commit: fde9c59aebafb91caeed816cc510b56f14aa63ae riscv: explicitly use symbol offsets for VDSO
+date:   11 months ago
+config: riscv-randconfig-c006-20220802 (https://download.01.org/0day-ci/archive/20220803/202208031019.E5mj21An-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde9c59aebafb91caeed816cc510b56f14aa63ae
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fde9c59aebafb91caeed816cc510b56f14aa63ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/signal.c:197:28: error: use of undeclared identifier '__vdso_rt_sigreturn_offset'
+           regs->ra = (unsigned long)VDSO_SYMBOL(
+                                     ^
+   arch/riscv/include/asm/vdso.h:20:42: note: expanded from macro 'VDSO_SYMBOL'
+           (void __user *)((unsigned long)(base) + __vdso_##name##_offset)
+                                                   ^
+   <scratch space>:132:1: note: expanded from here
+   __vdso_rt_sigreturn_offset
+   ^
+   arch/riscv/kernel/signal.c:309:27: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
+   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
+                             ^
+   arch/riscv/kernel/signal.c:309:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
+                        ^
+                        static 
+   1 warning and 1 error generated.
+--
+   ld.lld: error: section .text load address range overlaps with .eh_frame_hdr
+   >>> .text range is [0x800, 0x1733]
+   >>> .eh_frame_hdr range is [0x9C0, 0x9E3]
+>> llvm-nm: error: arch/riscv/kernel/vdso/vdso.so.dbg: No such file or directory
+
+
+vim +/__vdso_rt_sigreturn_offset +197 arch/riscv/kernel/signal.c
+
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  173  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  174  static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  175  	struct pt_regs *regs)
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  176  {
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  177  	struct rt_sigframe __user *frame;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  178  	long err = 0;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  179  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  180  	frame = get_sigframe(ksig, regs, sizeof(*frame));
+96d4f267e40f95 Linus Torvalds    2019-01-03  181  	if (!access_ok(frame, sizeof(*frame)))
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  182  		return -EFAULT;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  183  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  184  	err |= copy_siginfo_to_user(&frame->info, &ksig->info);
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  185  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  186  	/* Create the ucontext. */
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  187  	err |= __put_user(0, &frame->uc.uc_flags);
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  188  	err |= __put_user(NULL, &frame->uc.uc_link);
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  189  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  190  	err |= setup_sigcontext(frame, regs);
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  191  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  192  	if (err)
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  193  		return -EFAULT;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  194  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  195  	/* Set up to return from userspace. */
+6bd33e1ece528f Christoph Hellwig 2019-10-28  196  #ifdef CONFIG_MMU
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10 @197  	regs->ra = (unsigned long)VDSO_SYMBOL(
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  198  		current->mm->context.vdso, rt_sigreturn);
+6bd33e1ece528f Christoph Hellwig 2019-10-28  199  #else
+6bd33e1ece528f Christoph Hellwig 2019-10-28  200  	/*
+6bd33e1ece528f Christoph Hellwig 2019-10-28  201  	 * For the nommu case we don't have a VDSO.  Instead we push two
+6bd33e1ece528f Christoph Hellwig 2019-10-28  202  	 * instructions to call the rt_sigreturn syscall onto the user stack.
+6bd33e1ece528f Christoph Hellwig 2019-10-28  203  	 */
+6bd33e1ece528f Christoph Hellwig 2019-10-28  204  	if (copy_to_user(&frame->sigreturn_code, __user_rt_sigreturn,
+6bd33e1ece528f Christoph Hellwig 2019-10-28  205  			 sizeof(frame->sigreturn_code)))
+6bd33e1ece528f Christoph Hellwig 2019-10-28  206  		return -EFAULT;
+6bd33e1ece528f Christoph Hellwig 2019-10-28  207  	regs->ra = (unsigned long)&frame->sigreturn_code;
+6bd33e1ece528f Christoph Hellwig 2019-10-28  208  #endif /* CONFIG_MMU */
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  209  
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  210  	/*
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  211  	 * Set up registers for signal handler.
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  212  	 * Registers that we don't modify keep the value they had from
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  213  	 * user-space at the time we took the signal.
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  214  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  215  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  216  	 */
+a4c3733d32a72f Christoph Hellwig 2019-10-28  217  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  218  	regs->sp = (unsigned long)frame;
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  219  	regs->a0 = ksig->sig;                     /* a0: signal number */
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  220  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  221  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
+e2c0cdfba7f699 Palmer Dabbelt    2017-07-10  222  
+
+:::::: The code at line 197 was first introduced by commit
+:::::: e2c0cdfba7f69925afc92b20cd9835d81e11a4f1 RISC-V: User-facing API
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

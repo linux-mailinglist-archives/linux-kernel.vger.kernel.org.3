@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA3558933E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83077589343
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiHCUaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S238740AbiHCUbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbiHCUaE (ORCPT
+        with ESMTP id S230499AbiHCUbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:30:04 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522055B79C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:30:03 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id u12so13556824qtk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:30:03 -0700 (PDT)
+        Wed, 3 Aug 2022 16:31:51 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30887F68
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:31:50 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gb36so7865582ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dsz8IHMohhYZ2cZL5pWvVqmp+AxFsLxkDLJLSy2o2N4=;
-        b=qhvgEU9aNbRaLz1LZz5Di83doxE96N37k+dzlmaEWg5j2FL+um8PmgRkdOPCt9li8w
-         d6I9EofHmCIIm5a5qQKRxvYyHNjc/oSKXVrzBEYTWXJxPsC9SdRj1z3GYLR95V0+NkFw
-         lgyrS8WvaiBPjACPGlGDABCkAa+ybGB/6Uv/er7mt+cMRI1NTghVCOUPKzd2udTCZ6Kc
-         +Ti6RiS7W6hdxcjcgYGDJ/Ujgc9ms5B7xl43PRhb/E298i9nxm26sTuM2DhKkPlQ9DEg
-         Q2NcVHoYtWH31WyzoWtwIiBrvvxg4ctBJQuILoR82lLcUyoK2mZZvbPldxUKnIwE1sE7
-         EVeg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=n8pKImfx8Za6eHn+m1TtvWVUUWC/l25+Sr2AOODiNHU=;
+        b=S31AfcWvWmUKKe89ihAv8h9HB4X+QuSLQ50vKDCY7bJY0i4bFO98tMAnEmfu1BNYP7
+         HD41b/1p9GTXLpsG5g7oypfQ5V41+OnhOO6bQeLQwFz6CQ6l3DcDIPK+BWYiH6vKDsxw
+         pm9/F+Cln/OOqur/QEVVQ8ksN2jPXycWsM2FamD2e4i/uaQMvu1ObPykgp5+il8v3ZUn
+         GTOFDsaX+ejctGxg3328WnxSKRDzj4NHkNFYcISP14GdXSBzaEmlfU6cXMCKCV4aQS5x
+         /ImLT40tAOGcKH8kwDjTCvcSRJIHYByQfBV1y0oenW06d/+gzZ0xI6xPRE0VpQARD2/8
+         JY8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dsz8IHMohhYZ2cZL5pWvVqmp+AxFsLxkDLJLSy2o2N4=;
-        b=fKJeCMbnEuX4HdW+hPzCjW0L/jFKD0TLPhGpcoa0qg1TvivSNCz2Qp+yNZvAVNj6za
-         lsWfVLJa0LH6pBm7zYLMjfDGwmlZV3SmzvUXm1BGmuo1VDV6FGb1wVDbpruTgIvJXG52
-         dq3hG0bBAs7oMP76de5RZFVABJ5FaiWTlxiESZRko1u+oWuAgI3wvP6ERAYui8/4bYF/
-         RNGfJr5RngOemtdLDMnzvX79YlnTjiGdVRu4W5MtTUzN6y3ZEuRq422mo77uU3ar9Oi0
-         KorvyivHacO7JCYxg+kWTCbqZLpeEacxj5OJZSEXzix6Ul2KwArz68zgp9if1Ymo8oW6
-         2STA==
-X-Gm-Message-State: AJIora9kZMZb1AyKdkn4XHj8rI7DM+TArckWdvxn1bisiepIzKJctjoM
-        HmXyhyB/pSRznuag+DachCKWA09SfSsoXgRZeYVQdTOD4UIYYsyy
-X-Google-Smtp-Source: AGRyM1ti9ieZjz4Bqd1rv5WpcT/IAZQJCQDgsCwKz5/2E/kmqsJiz+J94HVKuJdGxSnCmLHnF8Cz6vGIuC+uc33d2sw=
-X-Received: by 2002:a05:622a:8e:b0:31f:371f:e6a1 with SMTP id
- o14-20020a05622a008e00b0031f371fe6a1mr24197038qtw.565.1659558602311; Wed, 03
- Aug 2022 13:30:02 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=n8pKImfx8Za6eHn+m1TtvWVUUWC/l25+Sr2AOODiNHU=;
+        b=uaxFm+WAxF4hYJ5XovdP+7s9siruq9N6nxZo+VkOXV4WO89q664y725mo9G1mAKBa5
+         zFjNVspY0AndAIcWGor1KM2fLxk9z8liIOiX+uixwWYWvprFnx+LnUMQtv/bp0G4aVBv
+         X9AIQe2LSLtsAm82PKU5tlhLSa6LCRU0MzpLyz3sCcV7ctP0OyLSPkoQaqMpqTgfn+bU
+         b5+nI3HY6UzmOhtZSbk5o3Azg03jEk7umrKEOiEHb2TH4bobjHudlbpDr9iHBe54xcZf
+         cPUHh+ANQfIN1hkT5yIgJcFT+t38ZFyZ2VqDoCSSNoUw9F3TbUZRYXm+Z3CTbHJc71rK
+         HQzg==
+X-Gm-Message-State: ACgBeo0iU5KjVlnfr3FAdEHI4FGEKjn3MfKPkOkPbdfT/N3GK99mUgsM
+        pAPwYwWVIlMijg1k0S7ndoTrXqQ7eLInZMhMMXoitg==
+X-Google-Smtp-Source: AA6agR6xltbU2DJGqBal3KX71f6EjA835Dlm+EK4mwQrI6M78ca2wmVSAssvbra/rDYa4OqgVKCEfF88QL3JIh6NQ+w=
+X-Received: by 2002:a17:907:9726:b0:730:9e04:f738 with SMTP id
+ jg38-20020a170907972600b007309e04f738mr8421050ejc.631.1659558708460; Wed, 03
+ Aug 2022 13:31:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722174829.3422466-1-yosryahmed@google.com>
- <20220722174829.3422466-5-yosryahmed@google.com> <CAEf4BzbD38XFVxMy5crO-=+Xg7U3Vc_fB4Ntug4BEbmdLpvuDQ@mail.gmail.com>
- <CA+khW7jftQikVsc8moM6rNRqBerUHDM6WRDjb33exdbogDc7aQ@mail.gmail.com> <CAEf4BzYDqaTQr-S8TuLkysQ+FhT+6qMS0z=Sp_7+-wk84_4h6Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzYDqaTQr-S8TuLkysQ+FhT+6qMS0z=Sp_7+-wk84_4h6Q@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 3 Aug 2022 13:29:51 -0700
-Message-ID: <CA+khW7jDD9p80xnZj0Z3m5oFHjb2u___NAiJkbyRgD5FKopGhg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        Kui-Feng Lee <kuifeng@fb.com>
+References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+ <Ytbw1T6uspICqj5B@bombadil.infradead.org> <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+ <YthllWFPAjq5YHpL@bombadil.infradead.org> <CABVgOSnYQyRg8+nysnRAqn9-jEG+UzEdU7gSUOOEzU-aqYLSMQ@mail.gmail.com>
+In-Reply-To: <CABVgOSnYQyRg8+nysnRAqn9-jEG+UzEdU7gSUOOEzU-aqYLSMQ@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 3 Aug 2022 16:31:36 -0400
+Message-ID: <CAFd5g46wqLTEqF=yRV6H=jR4d+n-qHy42coUFjH+ETMowoTAyQ@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     David Gow <davidgow@google.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -89,176 +76,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 3:50 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Thu, Jul 28, 2022 at 4:42 AM David Gow <davidgow@google.com> wrote:
 >
-> On Tue, Aug 2, 2022 at 3:27 PM Hao Luo <haoluo@google.com> wrote:
+> On Thu, Jul 21, 2022 at 4:29 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > >
-> > Hi Andrii,
-> >
-> > On Mon, Aug 1, 2022 at 8:43 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Jul 22, 2022 at 10:48 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-[...]
+> > On Wed, Jul 20, 2022 at 05:26:02PM +0800, David Gow wrote:
+> > > On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > > > >
-> > > > +enum bpf_iter_cgroup_traversal_order {
-> > > > +       BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
-> > > > +       BPF_ITER_CGROUP_POST,           /* post-order traversal */
-> > > > +       BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
+> > > > On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> > > > > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> > > > > >
+> > > > > > The new KUnit module handling has KUnit test suites listed in a
+> > > > > > .kunit_test_suites section of each module. This should be loaded when
+> > > > > > the module is, but at the moment this only happens if KUnit is built-in.
+> > > > > >
+> > > > > > Also load this when KUnit is enabled as a module: it'll not be usable
+> > > > > > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > > > > > anyway, so it's unlikely to ever be loaded needlessly.
+> > > > >
+> > > > > This seems reasonable to me.
+> > > > >
+> > > > > Question: what happens in this case?
+> > > > > 1. insmod <test-module>
+> > > > > 2. insmod kunit
+> > > > > 3. rmmod <test-module>
+> > > > >
+> > > > > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> > > > > for <test-module>, I think?
+> > > > > But we never called __kunit_test_suites_init().
+> > > > > My fear is what breaks as a result of this precondition break.
 > > >
-> > > I've just put up my arguments why it's a good idea to also support a
-> > > "trivial" mode of only traversing specified cgroup and no descendants
-> > > or parents. Please see [0].
+> > > I don't think this should be possible: any module with KUnit tests
+> > > will depend on the 'kunit' module (or, at least, kunit symbols), so
+> > > shouldn't load without kunit already present.
+> > >
+> > > If modprobe is used, kunit will automatically be loaded. If insmod is
+> > > used directly, loading the first module should error out with
+> > > something like:
+> > > [   82.393629] list_test: loading test module taints kernel.
+> > > [   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
+> > > [   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
+> > > [   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
+> > > [   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
+> > > insmod: ERROR: could not insert module
+> > > /lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
+> > > Unknown symbol in module
 > >
-> > cc Kui-Feng in this thread.
-> >
-> > Yeah, I think it's a good idea. It's useful when we only want to show
-> > a single object, which can be common. Going further, I think we may
-> > want to restructure bpf_iter to optimize for this case.
-> >
-> > > I think the same applies here, especially
-> > > considering that it seems like a good idea to support
-> > > task/task_vma/task_files iteration within a cgroup.
-> >
-> > I have reservations on these use cases. I don't see immediate use of
-> > iterating vma or files within a cgroup. Tasks within a cgroup? Maybe.
-> > :)
+> > This can be fixed with a request_module() call. And since this is a
+> > generic requirement, you can have the wrappers do it for you.
 > >
 >
-> iter/task was what I had in mind in the first place. But I can also
-> imagine tools utilizing iter/task_files for each process within a
-> cgroup, so given iter/{task, task_file, task_vma} share the same UAPI
-> and internals, I don't see why we'd restrict this to only iter/task.
+> I'm not convinced that this is worth the trouble, particularly since
+> KUnit needs to be loaded already before any test-specific code in a
+> module is run. _Maybe_ we could put it in the code which looks for the
+> .kunit_test_suites section, but even then it seems like a bit of an
+> ugly hack.
+>
+> Personally, I'm not particularly concerned about test modules failing
+> to load if KUnit isn't already present -- if people want all of a
+> module's dependencies loaded, that's what modprobe is for.
+>
+> That being said, if you feel particularly strongly about it, this is
+> something we can look at. Let's do so in a separate patch though: this
+> one does fix a regression as-is.
 
-No problem. I was hoping we don't over-design the interface. IMHO keep
-it simple stupid. :)
+I agree. We need a fix for 3d6e44623841 to go in for 5.20 - we've
+gotten several complaints about it. This patch seems to accomplish
+that.
 
->
-[...]
-> >
-> > [1] https://lwn.net/Articles/902405/
-> >
-> > >
-> > > Some more naming nits. I find BPF_ITER_CGROUP_PRE and
-> > > BPF_ITER_CGROUP_POST a bit confusing. Even internally in kernel we
-> > > have css_next_descendant_pre/css_next_descendant_post, so why not
-> > > reflect the fact that we are going to iterate descendants:
-> > > BPF_ITER_CGROUP_DESCENDANTS_{PRE,POST}. And now that we use
-> > > "descendants" terminology, PARENT_UP should be ANCESTORS. ANCESTORS_UP
-> > > probably is fine, but seems a bit redundant (unless we consider a
-> > > somewhat weird ANCESTORS_DOWN, where we find the furthest parent and
-> > > then descend through preceding parents until we reach specified
-> > > cgroup; seems a bit exotic).
-> > >
-> >
-> > BPF_ITER_CGROUP_DESCENDANTS_PRE is too verbose. If there is a
-> > possibility of merging rbtree and supporting walk order of rbtree
-> > iter, maybe the name here could be general, like
-> > BPF_ITER_DESCENDANTS_PRE, which seems better.
->
-> it's not like you'll be typing this hundreds of type, so verboseness
-> doesn't seem to be too problematic, but sure, BPF_ITER_DESCENDANTS_PRE
-> is fine with me
->
-> >
-> > >   [0] https://lore.kernel.org/bpf/f92e20e9961963e20766e290ee6668edd4bacf06.camel@fb.com/T/#m5ce50632aa550dd87a99241efb168cbcde1ee98f
-> > >
-> > > > +};
-> > > > +
-> > > >  union bpf_iter_link_info {
-> > > >         struct {
-> > > >                 __u32   map_fd;
-> > > >         } map;
-> > > > +
-> > > > +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
-> > > > +        * ancestors of a given cgroup.
-> > > > +        */
-> > > > +       struct {
-> > > > +               /* Cgroup file descriptor. This is root of the subtree if walking
-> > > > +                * descendants; it's the starting cgroup if walking the ancestors.
-> > > > +                * If it is left 0, the traversal starts from the default cgroup v2
-> > > > +                * root. For walking v1 hierarchy, one should always explicitly
-> > > > +                * specify the cgroup_fd.
-> > > > +                */
-> > > > +               __u32   cgroup_fd;
-> > >
-> > > Now, similar to what I argued in regard of pidfd vs pid, I think the
-> > > same applied to cgroup_fd vs cgroup_id. Why can't we support both?
-> > > cgroup_fd has some benefits, but cgroup_id is nice due to simplicity
-> > > and not having to open/close/keep extra FDs (which can add up if we
-> > > want to periodically query something about a large set of cgroups).
-> > > Please see my arguments from [0] above.
-> > >
-> > > Thoughts?
-> > >
-> >
-> > We can support both, it's a good idea IMO. But what exactly is the
-> > interface going to look like? Can you be more specific about that?
-> > Below is something I tried based on your description.
-> >
-> > @@ -91,6 +91,18 @@ union bpf_iter_link_info {
-> >         struct {
-> >                 __u32   map_fd;
-> >         } map;
-> > +       struct {
-> > +               /* PRE/POST/UP/SELF */
-> > +               __u32 order;
-> > +               struct {
-> > +                       __u32 cgroup_fd;
-> > +                       __u64 cgroup_id;
-> > +               } cgroup;
-> > +               struct {
-> > +                       __u32 pid_fd;
-> > +                       __u64 pid;
-> > +               } task;
-> > +       };
-> >  };
-> >
->
-> So I wouldn't combine task and cgroup definition together, let's keep
-> them independent.
->
-> then for cgroup we can do something like:
->
-> struct {
->     __u32 order;
->     __u32 cgroup_fd; /* cgroup_fd ^ cgroup_id, exactly one can be non-zero */
->     __u32 cgroup_id;
-> } cgroup
->
-> Similar idea with task, but it's a bit more complicated because there
-> we have target that can be pid, pidfd, or cgroup (cgroup_fd and
-> cgroup_id). I haven't put much thought into the best representation,
-> though.
->
+I am not an expert on the module stuff by any means, so I am
+absolutely open to continuing this discussion in a follow-up patch,
+but I think we need this fix now.
 
-The cgroup part sounds good to me. For the full picture, how about
-this? I'm just trying  a prototype, hoping that it can help people to
-get a clear picture.
+If no one objects, I am going to ask Shuah to take this patch.
 
-union bpf_iter_link_info {
-          struct {
-                  __u32   map_fd;
-          } map;
-          struct {
-                  __u32   order; /* PRE/POST/UP/SELF */
-                  __u32   cgroup_fd;
-                  __u64   cgroup_id;
-          } cgroup;
-          struct {
-                  __u32   pid;
-                  __u32   pid_fd;
-                  __u64   cgroup_id;
-                  __u32   cgroup_fd;
-                  __u32   mode; /* SELF or others */
-          } task;
-};
+> > > Maybe you could get into some trouble by force-removing modules at
+> > > various points, but you're in undefined behaviour generally at that
+> > > point, so I don't think there's much point going out-of-our-way to try
+> > > to support that.
+> >
+> > You can prevent that by refcounting the kunit module / symbols, by each test.
+> >
+>
+> Again, I don't think KUnit is any more special than any other module
+> here. I don't think we need to do this ourselves, as it shouldn't be
+> possible to remove kunit without first removing any dependent modules.
+>
+> Of course, happy to look into this again if anyone can come up with an
+> actual crash, but I'd rather get this fix in first. At the very least,
+> this patch shouldn't introduce any _new_ issues.
 
-> > > > +               __u32   traversal_order;
-> > > > +       } cgroup;
-> > > >  };
-> > > >
-> > > >  /* BPF syscall commands, see bpf(2) man-page for more details. */
-> > >
-> > > [...]
+Sounds good. I will send my Reviewed-by in a separate email, as per usual.
+
+Cheers

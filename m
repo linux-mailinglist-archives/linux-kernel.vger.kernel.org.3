@@ -2,156 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565FF589207
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B8058920A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237005AbiHCSF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 14:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S237615AbiHCSG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 14:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiHCSF4 (ORCPT
+        with ESMTP id S236461AbiHCSGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:05:56 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8305F77;
-        Wed,  3 Aug 2022 11:05:55 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id y127so29547925yby.8;
-        Wed, 03 Aug 2022 11:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EbdbY8yIJ0uTWf9qBQFzv9nINeYGG1xxo79cVcNxuOM=;
-        b=p/1Iqv7TWGZVayT5NBG3z12I5BwshJFtf9TWoEZFTFDwxSRDRql8/+X6BmA7Lj1Ed9
-         1KbYWeUV2FHXogaHAo5+JKLkKoQ2/0zs4x5jLNeItJZFeef2vr/eiXTy+GJBBYzW2WRn
-         aCctA6DFwAx34OoeQHaGLFBT8PtWvmHX9XTNH17EfEf6Fe/bUhBk5SS+UrCQzAj6Elw7
-         R45SUz1YBQqvlbowOJkKPqVWZ/jU/Mv8zopLVZl67/L4U/pUx2xe0TznIvQswQRuyViE
-         Jd1SLP9dSw+ocrIUoo/iUlvNKdwgcjTyU0gHsWNX00sAv6+7jSWR1fUpDBKiwDdmnb0X
-         a1Iw==
+        Wed, 3 Aug 2022 14:06:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEC44491C8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659550013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rh/D//LpX2EQSZeExryw0yfWU5X+yGvodAZfXC00FRk=;
+        b=Ulrh6H41Y/U5woryt2wWSjl+QNkcIJ844XUKDhlULo0J9+tmvkWvpjh+aXa2Mvh6H3XhEp
+        iOB483qdoy1GC56g58gt5JSJ17Jk8w0Lt48GwNirADESCXmGsT62zNGR1/4nbq4RH52jLw
+        NNYcp9bTl9oFAnQca5l/PDkbs30g09k=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-WkxZuoy4Peiwx6GJp5GYmw-1; Wed, 03 Aug 2022 14:06:51 -0400
+X-MC-Unique: WkxZuoy4Peiwx6GJp5GYmw-1
+Received: by mail-qk1-f198.google.com with SMTP id m8-20020a05620a24c800b006b5d8eb23efso14117668qkn.10
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:06:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EbdbY8yIJ0uTWf9qBQFzv9nINeYGG1xxo79cVcNxuOM=;
-        b=wXcNlcDkAGSvfAAAz4dfX8UrT65+AZb/xhmZAIgiDWQvZ+5ZBjjIBn58N3seXa2vXh
-         QidVHdgt86nHtDb8K+Wdqus2ChKMorsnlkAZz2hkKm50fN/nTJjfouc4vv3SpoyjelC6
-         C4dg706BHIazpX3zhRuuWx1X4XgHQ49JJ9EEGl/2o1sRZ1ABu1+sKr8oggngPJngYgEU
-         iAFjUO1eab44LT1eOibO88kz2OdI9RgqwnHInKqjzZLwCfpHFd6d+/wcPUcF/Exij6wM
-         sGqoGl5kMndv8aldpMUf0PE8y0xIQHqbjL8lWph4vPJkAshyPdJP+teBya+SL/j+fmqe
-         4NoQ==
-X-Gm-Message-State: ACgBeo0vkj77faBmGqhdbs191U74iCQOg0J+jm1mPk4MPVHEuPHRJSue
-        yR9hdi/ZdamQAJGeZUwHmk6ufV+2SStnpgZ7e6N6gSCeWKk=
-X-Google-Smtp-Source: AA6agR6/GpsUxAsAd2SvFQEnjYRrDx7CLHP/H3v2FCH7RFWu3DCf8qB72XIkMLxWd3n3T7bVTBLjo6AgRxb1o35vEYg=
-X-Received: by 2002:a25:75d7:0:b0:66f:cdfc:a986 with SMTP id
- q206-20020a2575d7000000b0066fcdfca986mr19678173ybc.268.1659549954471; Wed, 03
- Aug 2022 11:05:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220718153448.173652-1-jason.gerecke@wacom.com>
- <20220803145937.698603-1-jason.gerecke@wacom.com> <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
-In-Reply-To: <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Wed, 3 Aug 2022 11:06:18 -0700
-Message-ID: <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=Rh/D//LpX2EQSZeExryw0yfWU5X+yGvodAZfXC00FRk=;
+        b=ReS8mcSJ/ARJdIKY0uuqDRW2RNlAV1tW+Y7mR2rL7bsJTpQxEv2PFkLLUYC2tS/6Mp
+         rJSVA+KT2P1Q8Fdm3OuLruGiudOHGveucGwz9zs9EhakCCNNPcchKQT0y39Ps4FnYgwm
+         xsIyHBZ2+o8TEVmuO6f4kloiDsXYrvsddKypnB9tkQ4LHQE6/z2/9wxGV/zSDBvO6yUx
+         hWa6H87cNfHqx3iieixFAEWog22A4OWgfPQrA+7j9QXbwZ3C/CZDK1KEaaUFnA4FyFB3
+         y253dTBzujwRv6M0FgoyIlyWov0daN6JW87jZJiumLZftQPEFD0sVRr8WN2hO69SYJUg
+         29vw==
+X-Gm-Message-State: AJIora9CwS2t6CzHTMxPP7CkDGz9bQ+HdzYfdGBWaCzpF06t77G/afyM
+        cVUJ5y8RU8VS3Wz40hwVNEG3Z0Gu4QdlXwRp8x4DFU3s0sw/4Zov4YM9Cs0+EH5mIfw5N9rMOPx
+        E3PWnkGDWew2jx5D/dVZER2sX
+X-Received: by 2002:a05:620a:28cf:b0:6b5:e32f:febb with SMTP id l15-20020a05620a28cf00b006b5e32ffebbmr18518177qkp.258.1659550011426;
+        Wed, 03 Aug 2022 11:06:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v1wP4M+hCDHMvv7zAVXU8ZZsm0m0Hr8gMyZl3KqH9ZCDJtIXmNHrJmFeE8kKzevcYazksmzg==
+X-Received: by 2002:a05:620a:28cf:b0:6b5:e32f:febb with SMTP id l15-20020a05620a28cf00b006b5e32ffebbmr18518161qkp.258.1659550011181;
+        Wed, 03 Aug 2022 11:06:51 -0700 (PDT)
+Received: from [192.168.8.138] (pool-100-0-245-4.bstnma.fios.verizon.net. [100.0.245.4])
+        by smtp.gmail.com with ESMTPSA id g1-20020a05620a40c100b006b55036fd3fsm13720397qko.70.2022.08.03.11.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 11:06:50 -0700 (PDT)
+Message-ID: <4fd72edfab4cfb6e8ca9731f1087c2209299bdd2.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau: recognise GA103
+From:   Lyude Paul <lyude@redhat.com>
+To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     nouveau@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
+        stable@vger.kernel.org
+Date:   Wed, 03 Aug 2022 14:06:49 -0400
+In-Reply-To: <20220803142745.2679510-1-kherbst@redhat.com>
+References: <20220803142745.2679510-1-kherbst@redhat.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 9:47 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Aug 3, 2022 at 4:59 PM Jason Gerecke <killertofu@gmail.com> wrote:
-> >
-> > The 'i2c_transfer_buffer_flags' function (and related inlines) defines its
->
-> We refer to the functions like func() (without any quotes as well).
->
-> > 'buf' argument to be of type 'char*'. This is a poor choice of type given
->
-> char *
->
-> > that most callers actually pass a 'u8*' and that the function itself ends
->
-> most of the callers
->
-> u8 *
->
-> > up just storing the variable to a 'u8*'-typed member of 'struct i2c_msg'
->
-> u8 *
->
-> > anyway.
-> >
-> > Changing the type of the 'buf' argument to 'u8*' vastly reduces the number
->
-> u8 *
->
-> > of (admittedly usually-silent) Wpointer-sign warnings that are generated
->
-> -Wpointer-sign or replace with simple English words.
->
-> > as the types get needlessly juggled back and forth.
-> >
-> > At the same time, update the max1363 driver to match the new interface so
-> > we don't introduce a new Wincompatible-function-pointer-types warning.
->
-> -Wincompatible-function-pointer-types
->
-> ...
->
-Ack to all.
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-> > Changes in v2:
-> >   - Added modifications to the max1363 driver required to avoid warnings
->
-> Have you really checked _all_ callers of APIs that you have changed here?
->
-> For example, drivers/media/usb/em28xx/em28xx-input.c still uses
-> unsigned char for i2c_master_recv().
->
+On Wed, 2022-08-03 at 16:27 +0200, Karol Herbst wrote:
+> Appears to be ok with general GA10x code.
+> 
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> Cc: <stable@vger.kernel.org> # v5.15+
+> ---
+>  .../gpu/drm/nouveau/nvkm/engine/device/base.c | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
+> b/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
+> index 62efbd0f3846..b7246b146e51 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
+> @@ -2605,6 +2605,27 @@ nv172_chipset = {
+>         .fifo     = { 0x00000001, ga102_fifo_new },
+>  };
+>  
+> +static const struct nvkm_device_chip
+> +nv173_chipset = {
+> +       .name = "GA103",
+> +       .bar      = { 0x00000001, tu102_bar_new },
+> +       .bios     = { 0x00000001, nvkm_bios_new },
+> +       .devinit  = { 0x00000001, ga100_devinit_new },
+> +       .fb       = { 0x00000001, ga102_fb_new },
+> +       .gpio     = { 0x00000001, ga102_gpio_new },
+> +       .i2c      = { 0x00000001, gm200_i2c_new },
+> +       .imem     = { 0x00000001, nv50_instmem_new },
+> +       .mc       = { 0x00000001, ga100_mc_new },
+> +       .mmu      = { 0x00000001, tu102_mmu_new },
+> +       .pci      = { 0x00000001, gp100_pci_new },
+> +       .privring = { 0x00000001, gm200_privring_new },
+> +       .timer    = { 0x00000001, gk20a_timer_new },
+> +       .top      = { 0x00000001, ga100_top_new },
+> +       .disp     = { 0x00000001, ga102_disp_new },
+> +       .dma      = { 0x00000001, gv100_dma_new },
+> +       .fifo     = { 0x00000001, ga102_fifo_new },
+> +};
+> +
+>  static const struct nvkm_device_chip
+>  nv174_chipset = {
+>         .name = "GA104",
+> @@ -3092,6 +3113,7 @@ nvkm_device_ctor(const struct nvkm_device_func *func,
+>                 case 0x167: device->chip = &nv167_chipset; break;
+>                 case 0x168: device->chip = &nv168_chipset; break;
+>                 case 0x172: device->chip = &nv172_chipset; break;
+> +               case 0x173: device->chip = &nv173_chipset; break;
+>                 case 0x174: device->chip = &nv174_chipset; break;
+>                 case 0x176: device->chip = &nv176_chipset; break;
+>                 case 0x177: device->chip = &nv177_chipset; break;
 
-This particular example shouldn't result in a new warning since
-unsigned char and u8 are equivalent types, and u8 is used by the new
-API.
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-Assuming you're referring to callers that are still using *signed*
-variables with this API, however, I intentionally ignored them. IIRC,
-there were about 400 files using unsigned and about 60 files using
-signed. Those 60 files will now generate their own pointer-sign
-warnings, but I rationalized it as a still-substantial improvement
-over the current state of things.
-
-As for normally-silent warnings *other* than Wpointer-sign (e.g. the
-Wincompatible-pointer-types in max1363), I also did not explicitly
-check for those. It is possible other warnings may be out there.
-
-> I believe you need to create a coccinelle script and run it over the
-> kernel source tree and then create a patch out of it.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-This would definitely be necessary to unify all callers to using
-unsigned variables rather than just swapping which callers generate
-the pointer-sign warnings.
-
-Jason

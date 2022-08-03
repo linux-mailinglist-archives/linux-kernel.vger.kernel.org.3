@@ -2,345 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D58588D6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F13D588D88
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238247AbiHCNmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S231585AbiHCNpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiHCNln (ORCPT
+        with ESMTP id S238062AbiHCNpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:41:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321581CB1B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:41:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id f22so10511831edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=G1ZD0h2YWrR0hMjVozSrbot3VwSQIRL5ULo1ojHt/wI=;
-        b=pQXBP9zB/5FoJoNLS/7/ZY55/FGlmxrPg/TLdHOBr63hmDFhK5qhq4im/D7R9m2qqm
-         6SgfKoPXBurhnCZ2DbbKJyxsioz7A9niypOjNU46BgcwsIilqTIJUuWFfLtoqAF34+Ks
-         BZGVVB8nca+7awkw7PhHa30On+19lUmhOhE5ZT1yvd1dSE2ECleSdEBs7aHkk5FpFDdS
-         m1LeaGSylWpmIhDeNq4rriuNpVNhc7/EYQumlueInxlCE4Geb3e1gwdFMOuG7hBhm/O7
-         fSOAhKDenBg6/eaGfcqBwFk7l1gx+chgePmp2xKQlCeTque5Vn2MV1UHzU0njHtd9ba2
-         9ebQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=G1ZD0h2YWrR0hMjVozSrbot3VwSQIRL5ULo1ojHt/wI=;
-        b=6LLUnn7d32SKuprvdTXxCLq+AbISeczsG2UTvA4p7LViJBFIQcl/0afbMkwBKtDpts
-         C7qlSA1LmsFwhc2WqI5YvtbXcxuQUPDLbdS2pvS+an41LgyIuRtujkXLRDA8CD7/mMCy
-         WtjnuL9xzMeCfKnvsoVVQA35BleeE8DUYTdPUxj40MI6pQ6304qF3fBJzCTUu2QGFjGO
-         XTvM7BpqYEmPo5r1vQq0+30mGXXMbRB9ONFy8g+8dYxRaq8NYxoKxDXGC0WtfKrpfbBU
-         l37xE5er45HWpk42cULFSPWHbtmUuG8D4umIEFX78ELrfVOBcUuhkABk32dFrsA83Qv+
-         jEqw==
-X-Gm-Message-State: AJIora8urnchhnFgjGIYSg6gb2DKnGEw+of+sVrxM4ZAx8cEb69l00HN
-        8WpPr6i3VfUogpApzNroratMhHM+6Rd9+7ZcBCJrlw==
-X-Google-Smtp-Source: AGRyM1seWScXiWZMavg3EsgpzdbrT3+jpm6LSsu2M8qVNr3eC/2rjrG3Fxr0Mrrn6er3AkGl4oLgu7SJU7bTicpn3K8=
-X-Received: by 2002:aa7:d60b:0:b0:43c:f7ab:3c8f with SMTP id
- c11-20020aa7d60b000000b0043cf7ab3c8fmr25516672edr.6.1659534095310; Wed, 03
- Aug 2022 06:41:35 -0700 (PDT)
+        Wed, 3 Aug 2022 09:45:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3672C5F47
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659534343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B7Bnmjr1GYcy9AYoYFcWJ7ZyYTvu6PCIgTkw/CC+mfQ=;
+        b=Ho5KQ/aeu67qcmeIzEBvKT1lK7wDJa8p6m/PbFPfdWC/xHWav9VRJAXzB4Z3N1qERvbXVt
+        sBYhPvgogAmSeelBOU5A2vdwZV56SxYkNIuFXjk/8dbdKmaZdhBQJ65xO4sI5zyVbpZ96n
+        R7RBBcpZNnY6qOXKMHcFP+ksDtj4gW8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-kBTFjs_mMI2X5-iNfCnS1w-1; Wed, 03 Aug 2022 09:45:41 -0400
+X-MC-Unique: kBTFjs_mMI2X5-iNfCnS1w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B684382C96F;
+        Wed,  3 Aug 2022 13:45:40 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 100BC2166B26;
+        Wed,  3 Aug 2022 13:45:37 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 11/40] KVM: x86: hyper-v: Create a separate fifo for L2 TLB flush
+Date:   Wed,  3 Aug 2022 15:45:37 +0200
+Message-Id: <20220803134537.399208-1-vkuznets@redhat.com>
+In-Reply-To: <20220803134110.397885-1-vkuznets@redhat.com>
+References: <20220803134110.397885-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-References: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
- <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
- <20220803062024.vn7awasmifkp5xow@pengutronix.de> <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
- <CAPY8ntBBz56Es=pK+KpqhyYLUET95DT_zE6gorOWx4WkCSxJAg@mail.gmail.com> <CAHCN7x+HSPJpYYDgV_F91ZsPHW9Uwze8KRAqWE-XAyp5yzB9Hw@mail.gmail.com>
-In-Reply-To: <CAHCN7x+HSPJpYYDgV_F91ZsPHW9Uwze8KRAqWE-XAyp5yzB9Hw@mail.gmail.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Wed, 3 Aug 2022 14:41:18 +0100
-Message-ID: <CAPY8ntCeUXRqNVyxU7ey6P99pZ3XAXcVHL65bdb3f0qbcK+rBA@mail.gmail.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marek Vasut <marex@denx.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com, NXP Linux Team <linux-imx@nxp.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 Aug 2022 at 13:31, Adam Ford <aford173@gmail.com> wrote:
->
-> On Wed, Aug 3, 2022 at 7:17 AM Dave Stevenson
-> <dave.stevenson@raspberrypi.com> wrote:
-> >
-> > Hi Adam
-> >
-> > On Wed, 3 Aug 2022 at 12:03, Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > On Wed, Aug 3, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de>=
- wrote:
-> > > >
-> > > > On 22-08-02, Adam Ford wrote:
-> > > >
-> > > > ...
-> > > >
-> > > > > > I did some reading about the internal timing generator.  It app=
-ears
-> > > > > > that it's required when video formats use fractional bytes, and=
- it's
-> > > > > > preconfigured to run at 720p by default, but registers 28h thro=
-ugh 37h
-> > > > > > configure it for other video modes.
-> > > > >
-> > > > > I think there may still be some issues with the DSIM since some o=
-f the
-> > > > > clock frequencies are set in the device tree.
-> > > > >
-> > > > > From what I can tell, the pixel rate is calculated based on the
-> > > >
-> > > > By pixel rate you mean the HDMI pixel rate from the ADV? If so then=
- yes.
-> > > > The ADV has an divider which is already configured by the driver bu=
-t
-> > > > meaningless since the driver is lacking of setting the "manual-divi=
-der"
-> > > > bit within the same register.
-> > >
-> > > I was thinking about the pixel clock from the DSI to the ADV.  I did
-> > > see the manual-divider bit was missing.  I tried enabling that bit,
-> > > but it didn't appear to make much difference.
-> > > >
-> > > > > burst-clock-frequency and that generates a byte clock.  For 89100=
-0000,
-> > > > > the byte clock is 111375000.
-> > > >
-> > > > The burst-clock-frequency is the hs-clk and DDR. So the MIPI-DSI cl=
-ock
-> > > > is burst-clock-frequency/2 which is in your case: 891000000/2 =3D
-> > > > 445500000. This clock is than divided by 3 within the ADV and you g=
-et
-> > > > your 148500000 pixel clock. This divide by 3 is detected automatica=
-lly
-> > > > by the ADV due to the missing bit (see above).
-> > > >
-> > > > > Modetest timings for 1080p show:
-> > > > >
-> > > > > index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-> > > > >   #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 1485=
-00
-> > > > > flags: nhsync, nvsync; type: driver
-> > > > >
-> > > > >
-> > > > > When looking at modetest, there is a clock for 1080p which appear=
-s to be 148500.
-> > > > > 111375000/148500 =3D 750.
-> > > >
-> > > > Please see above.
-> > > >
-> > > > > The rest of the entries in my table do not divide evenly.  I don;=
-t
-> > > > > know if that explains the lack of display, but it's something to =
-note.
-> > > > > It seems to me that instead of fixing the
-> > > > > samsung,burst-clock-frequency to 891000000, we should make the de=
-sired
-> > > > > PLL related to the desired pixel clock so it divides evenly.
-> > > >
-> > > > Please see above.
-> > > >
-> > > > > Looking at NXP's kernel, I also noticed that their esc_prescaler =
-is
-> > > > > based on the byte clock divided by 20MHz.  With some small code
-> > > > > changes to get the PLL based on the desired pixel clock instead o=
-f
-> > > > > hard-coded,  I was able to set
-> > > > >
-> > > > > samsung,burst-clock-frequency =3D <1500000000>;
-> > > >
-> > > > This is not correct since the burst-clock-freq. specifies the hs-cl=
-ock
-> > > > for the data lanes (see above).
-> > >
-> > > But I don't think the clock should be fixed. I think it should vary a=
-s
-> > > the resolution changes.  From what I can tell, NXP's DSI code doesn't
-> > > hard code this value, but it does appear to cap it at 1.5G.  I did
-> > > soom looking into the NXP frequency calculation and it is capable of
-> > > adjusting resolutions to some extent and from what I can see the
-> > > 891MHz clock is only set when 1080p.  At 720p, thier kernel shows the
-> > > output frequency at  445.5 MHz.  The way the DSIM is currently
-> > > configured, it's fixed at 891MHz, so I don't expect the output feedin=
-g
-> > > the adv7535 to be correct for the different resolutions.
-> > >
-> > >
-> > > >
-> > > > > samsung,esc-clock-frequency =3D <20000000>;
-> > > >
-> > > > This is correct, we also use a esc-clock of 20MHz.
-> > > >
-> > > > > With these settings and the above mentioned code changes, 1080p s=
-till
-> > > > > appears, however when attempting other modes, the display still f=
-ails
-> > > > > to load.  I also noticed that the phy ref clock is set to 27MHz
-> > > > > instead of NXP's 12MHz.
-> > > >
-> > > > That's interesting, I didn't noticed that NXP uses 12 MHz as refclo=
-ck
-> > > > but I don't think that this is the problem. Since we have other
-> > > > converter chips using the bridge driver and they work fine. I still
-> > > > think that the main problem is within the ADV driver.
-> > >
-> > > Do the other converter chips work fine at different resolutions?
-> > >
-> > > >
-> > > > > I attempted to play with that setting, but I couldn't get 1080p t=
-o
-> > > > > work again, so I backed it out.
-> > > > >
-> > > > > Maybe I am headed in the wrong direction, but I'm going to examin=
-e the
-> > > > > P/M/S calculation of the timing on NXP's kernel to see how the DS=
-IM in
-> > > > > this code compares.
-> > > >
-> > > > I think the pms values are fine.
-> > >
-> > > I compared the P/M/S values between this driver and NXP's and they
-> > > calculate different values of PMS when running at 1080P.
-> > > NXP @ 1080p:
-> > > fout =3D 891000, fin =3D 12000, m =3D 297, p =3D 2, s =3D 1, best_del=
-ta =3D 0
-> > >
-> > > This kernel @ 1080p:
-> > >
-> > > PLL freq 891000000, (p 3, m 99, s 0)
-> > >
-> > > at 720P, the NXP Kernel
-> > > fout =3D 445500, fin =3D 12000, m =3D 297, p =3D 2, s =3D 2, best_del=
-ta =3D 0
-> > > (working)
-> > >
-> > > at 720P, this kernel:
-> > > PLL freq 891000000, (p 3, m 99, s 0)
-> > > hs_clk =3D 891000000, byte_clk =3D 111375000, esc_clk =3D 18562500
-> > > (not working)
-> > >
-> > >
-> > > >
-> > > > > If someone who understands the interactions between these differe=
-nt
-> > > > > components has suggestions, I'm willing to run some experiments.
-> > > >
-> > > > Did managed to get access to the ADV7535 programming guide? This is=
- the
-> > > > black box here. Let me check if I can provide you a link with our r=
-epo
-> > > > so you can test our current DSIM state if you want.
-> > >
-> > > I do have access to the programming guide, but it's under NDA, but
-> > > I'll try to answer questions if I can.
-> >
-> > Not meaning to butt in, but I have datasheets for ADV7533 and 7535
-> > from previously looking at these chips.
->
-> Thanks for the feedback.
->
-> > Mine fairly plainly states:
-> > "The DSI receiver input supports DSI video mode operation only, and
-> > specifically, only supports nonburst mode with sync pulses".
-> > Non-burst mode meaning that the DSI pixel rate MUST be the same as the
-> > HDMI pixel rate.
->
-> Mine also states the DSI source needs to provide correct video timing
-> with start and stop sync packets.
->
-> If I remember correctly, it seemed like Marek V wanted the hard coded
-> samsung,burst-clock-frequency to go away so the clock frequency could
-> be set dynamically.
+To handle L2 TLB flush requests, KVM needs to use a separate fifo from
+regular (L1) Hyper-V TLB flush requests: e.g. when a request to flush
+something in L2 is made, the target vCPU can transition from L2 to L1,
+receive a request to flush a GVA for L1 and then try to enter L2 back.
+The first request needs to be processed at this point. Similarly,
+requests to flush GVAs in L1 must wait until L2 exits to L1.
 
-I've never worked with Exynos or imx8, but my view would be that
-samsung,burst-clock-frequency should only be used if
-MIPI_DSI_MODE_VIDEO_BURST is set in the mode_flags (it isn't for
-adv7533/5).
-Without that flag the DSI link frequency should be running at the rate
-defined by the mode clock, number of lanes, bpp, etc.
+No functional change as KVM doesn't handle L2 TLB flush requests from
+L2 yet.
 
-From the DSI spec (v 1.1 section 8.11.1):
-"Non-Burst Mode with Sync Pulses =E2=80=93 enables the peripheral to
-accurately reconstruct original video timing, including sync pulse
-widths."
-"RGB pixel packets are time-compressed, leaving more time during a
-scan line for LP mode (saving power) or for multiplexing other
-transmissions onto the DSI link."
-How can the peripheral reconstruct the video timing off a quirky link frequ=
-ency?
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/include/asm/kvm_host.h |  8 +++++++-
+ arch/x86/kvm/hyperv.c           | 11 +++++++----
+ arch/x86/kvm/hyperv.h           | 18 +++++++++++++++---
+ 3 files changed, 29 insertions(+), 8 deletions(-)
 
-Unless the Exynos DSIM_CONFIG_REG register bit DSIM_BURST_MODE [1]
-reconfigures the clock setup of the DSI block, then I don't see how
-the Exynos driver can follow the DSI spec in that regard.
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index c16f74beb047..83c2331f7701 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -612,6 +612,12 @@ struct kvm_vcpu_hv_synic {
+  */
+ #define KVM_HV_TLB_FLUSHALL_ENTRY  ((u64)-1)
+ 
++enum hv_tlb_flush_fifos {
++	HV_L1_TLB_FLUSH_FIFO,
++	HV_L2_TLB_FLUSH_FIFO,
++	HV_NR_TLB_FLUSH_FIFOS,
++};
++
+ struct kvm_vcpu_hv_tlb_flush_fifo {
+ 	spinlock_t write_lock;
+ 	DECLARE_KFIFO(entries, u64, KVM_HV_TLB_FLUSH_FIFO_SIZE);
+@@ -637,7 +643,7 @@ struct kvm_vcpu_hv {
+ 		u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
+ 	} cpuid_cache;
+ 
+-	struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo;
++	struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo[HV_NR_TLB_FLUSH_FIFOS];
+ };
+ 
+ /* Xen HVM per vcpu emulation context */
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index b903c9de8d39..d27fb4a6d94b 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -956,8 +956,10 @@ static int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+ 
+ 	hv_vcpu->vp_index = vcpu->vcpu_idx;
+ 
+-	INIT_KFIFO(hv_vcpu->tlb_flush_fifo.entries);
+-	spin_lock_init(&hv_vcpu->tlb_flush_fifo.write_lock);
++	for (i = 0; i < HV_NR_TLB_FLUSH_FIFOS; i++) {
++		INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
++		spin_lock_init(&hv_vcpu->tlb_flush_fifo[i].write_lock);
++	}
+ 
+ 	return 0;
+ }
+@@ -1843,7 +1845,8 @@ static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
+ 	if (!hv_vcpu)
+ 		return;
+ 
+-	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
++	/* kvm_hv_flush_tlb() is not ready to handle requests for L2s yet */
++	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo[HV_L1_TLB_FLUSH_FIFO];
+ 
+ 	spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
+ 
+@@ -1880,7 +1883,7 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+ 		return;
+ 	}
+ 
+-	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
++	tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu, is_guest_mode(vcpu));
+ 
+ 	count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
+ 
+diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+index e5b32266ff7d..8a902b59aa46 100644
+--- a/arch/x86/kvm/hyperv.h
++++ b/arch/x86/kvm/hyperv.h
+@@ -22,6 +22,7 @@
+ #define __ARCH_X86_KVM_HYPERV_H__
+ 
+ #include <linux/kvm_host.h>
++#include "x86.h"
+ 
+ /*
+  * The #defines related to the synthetic debugger are required by KDNet, but
+@@ -147,16 +148,27 @@ int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
+ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+ 		     struct kvm_cpuid_entry2 __user *entries);
+ 
++static inline struct kvm_vcpu_hv_tlb_flush_fifo *kvm_hv_get_tlb_flush_fifo(struct kvm_vcpu *vcpu,
++									   bool is_guest_mode)
++{
++	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
++	int i = is_guest_mode ? HV_L2_TLB_FLUSH_FIFO :
++				HV_L1_TLB_FLUSH_FIFO;
++
++	/* KVM does not handle L2 TLB flush requests yet */
++	WARN_ON_ONCE(i != HV_L1_TLB_FLUSH_FIFO);
++
++	return &hv_vcpu->tlb_flush_fifo[i];
++}
+ 
+ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
+-	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+ 
+-	if (!hv_vcpu || !kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
++	if (!to_hv_vcpu(vcpu) || !kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
+ 		return;
+ 
+-	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
++	tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu, is_guest_mode(vcpu));
+ 
+ 	kfifo_reset_out(&tlb_flush_fifo->entries);
+ }
+-- 
+2.35.3
 
-Hope that helps.
-
-  Dave
-
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/exynos/e=
-xynos_drm_dsi.c#L803
-
-> I have attempted to do some of this work based on
-> what I am seeing in the NXP kernel, and I get get my monitor to sync
-> at some resolutions, but the screen is usually all green or all blue,
-> so it's not really a success.  The clock part appears to be good
-> enough to make the monitor see some sort of signal, so I am going to
-> investigate the calculation of the rest of the video timings to see if
-> I can fix the color issue.
->
-> > Section 6.1.1 "DSI Input Modes" of adv7533_hardware_user_s_guide is
-> > even more explicit about the requirement of DSI timing matching
-> >
-> > The NXP kernel switching down to an hs_clk of 445.5MHz would therefore
-> > be correct for 720p operation.
-> >
-> > If you do program the manual DSI divider register to allow a DSI pixel
-> > rate of 148.5MHz vs HDMI pixel rate of 74.25MHz, you'd be relying on
-> > the ADV753x having at least a half-line FIFO between DSI rx and HDMI
-> > tx to compensate for the differing data rates. I see no reference to
-> > such, and I'd be surprised if it was more than a half dozen pixels to
-> > compensate for the jitter in the cases where the internal timing
-> > generator is mandatory due to fractional bytes.
->
-> Thanks Dave!
->
-> adam
->
-> >
-> >   Dave
-> >
-> > > adam
-> > > >
-> > > > Regards,
-> > > >   Marco

@@ -2,115 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284255891D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5375891DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbiHCRy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S236846AbiHCRzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbiHCRyY (ORCPT
+        with ESMTP id S237613AbiHCRzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:54:24 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9437152473
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:54:23 -0700 (PDT)
+        Wed, 3 Aug 2022 13:55:41 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC77595B1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:55:38 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f65so15765461pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
-  t=1659549263; x=1691085263;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=GL+dF9KFJisyAzA1sIBj6riKCUrDbge5lJzcDwW1M18=;
-  b=kKeiqwtN58Q0mMi6Eo2ABfRF25F9VcN06amBFRnPF5hxByDOCJEWfn3j
-   fYZHpZwEJE/rGY9CuhDQGxgrn9zaoPbpn8BKdMkws3lXbbWkvBuOzofxu
-   Q+hqlbGoD8llj3E9hVAHXeYZ5VbFgYO8Tvo0V1T5shEoHqvjjcD2/UBdh
-   g=;
-X-IronPort-AV: E=Sophos;i="5.93,214,1654560000"; 
-   d="scan'208";a="1040624458"
-Subject: Re: [PATCH 2/2] virt: vmgenid: add support for generation counter
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 17:54:06 +0000
-Received: from EX13D37EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id 1B879201075;
-        Wed,  3 Aug 2022 17:54:04 +0000 (UTC)
-Received: from [192.168.18.61] (10.43.162.134) by EX13D37EUA003.ant.amazon.com
- (10.43.165.7) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Wed, 3 Aug
- 2022 17:53:59 +0000
-Message-ID: <88126336-191f-8e19-a32a-6ee653d28db0@amazon.es>
-Date:   Wed, 3 Aug 2022 19:53:55 +0200
+        d=broadcom.com; s=google;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc;
+        bh=hChtaKxVCJZDIhgaotXsSJqbLIg3MCALgbNzUQgvIjc=;
+        b=HtOgcE/JJzyGf3zkm1Fa6NuLmbtuZRE3bb7QzO5t+ebTVFByik4oeitinOl/3V9q8F
+         WW2AUu24pEhXAkZZGxUVLTnaYYJ3vMSY2rCsvDKox2bwEJoyCMNrbjrEFD89EfPDl+pk
+         pAJ0Yl4UTKQQyso1ie+oZsKf/mGd69sdEZDCE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc;
+        bh=hChtaKxVCJZDIhgaotXsSJqbLIg3MCALgbNzUQgvIjc=;
+        b=xrKHv7kv4385um8fXipyF3pvSbduOmGo1yrejNhTsGUuUDaMxPCErMiilfV8m0VCV0
+         v2cw9dTFX2wOIqAYGT6f3P6YH1+5lE64ZVIg02CsCPLXH/PT5gxd0QlmIqwltP625aLD
+         7GbmuZFuLAWcUokVVSGuuJv2J7YY89VgB3DOFcPQcmboxDZ97rnKAx7oVm7LDBHB+2LT
+         H+kOp77bskp5BKWbCISfnZKmaB9+Os63bkLmkfKyb0UsJEpoqWFQLgP1AblspkXsnkHj
+         BCgbGn6SQeoq47F8DyiMe/ZQtSV9aJZHMuEeZ8HaFPuWUt5SoT1ROcQJ0AVx+XAO+7ZQ
+         yQSA==
+X-Gm-Message-State: AJIora+5lBYX1kYTdEOSbQlSFG0HlHXgGEXgX1fUszyIfSuuqGfYbQyw
+        BlCjguA51v3ugHPr0+oomsxXOw==
+X-Google-Smtp-Source: AGRyM1vlkoaI20p/BpkCX3BLfVXJxUkwzNyyCPxrki36VpTCnSdv/zY6bmlRD4yqhoStLPiwAvTLKg==
+X-Received: by 2002:a63:2bc4:0:b0:419:7b8c:210a with SMTP id r187-20020a632bc4000000b004197b8c210amr21830478pgr.439.1659549338018;
+        Wed, 03 Aug 2022 10:55:38 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id iw4-20020a170903044400b0016d150c6c6dsm2238639plb.45.2022.08.03.10.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 10:55:36 -0700 (PDT)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
+        f.fainelli@gmail.com, krzysztof.kozlowski@linaro.org,
+        rafal@milecki.pl, William Zhang <william.zhang@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+        linux-mtd@lists.infradead.org (open list:MEMORY TECHNOLOGY DEVICES
+        (MTD)), netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-pci@vger.kernel.org (open list:PCI NATIVE HOST BRIDGE AND
+        ENDPOINT DRIVERS),
+        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK),
+        linux-gpio@vger.kernel.org (open list:PIN CONTROL SUBSYSTEM),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v3 0/9] arm64: bcmbca: Move BCM4908 SoC support under ARCH_BCMBCA
+Date:   Wed,  3 Aug 2022 10:54:46 -0700
+Message-Id: <20220803175455.47638-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <tytso@mit.edu>, <Jason@zx2c4.com>,
-        <dwmw@amazon.co.uk>, <graf@amazon.de>, <xmarcalx@amazon.co.uk>,
-        "Michael S. Tsirkin" <mst@redhat.com>, <ani@anisinha.ca>,
-        <imammedo@redhat.com>, <bchalios@amazon.es>
-References: <20220803152127.48281-1-bchalios@amazon.es>
- <20220803152127.48281-3-bchalios@amazon.es> <YuqUjUBxq6X738t/@kroah.com>
-From:   "Chalios, Babis" <bchalios@amazon.es>
-In-Reply-To: <YuqUjUBxq6X738t/@kroah.com>
-X-Originating-IP: [10.43.162.134]
-X-ClientProxiedBy: EX13D47UWA002.ant.amazon.com (10.43.163.30) To
- EX13D37EUA003.ant.amazon.com (10.43.165.7)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cdf07f05e559f06d"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpPbiAzLzgvMjIgMTc6MzAsIEdyZWcgS0ggd3JvdGU6Cj4gQ0FVVElPTjogVGhpcyBlbWFpbCBv
-cmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sg
-bGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGNhbiBjb25maXJtIHRoZSBzZW5k
-ZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4KPgo+Cj4KPiBPbiBXZWQsIEF1ZyAwMywg
-MjAyMiBhdCAwNToyMToyN1BNICswMjAwLCBiY2hhbGlvc0BhbWF6b24uZXMgd3JvdGU6Cj4+ICtz
-dGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBmb3BzID0gewo+PiArICAgICAub3du
-ZXIgPSBUSElTX01PRFVMRSwKPj4gKyAgICAgLm9wZW4gPSB2bWdlbmlkX29wZW4sCj4+ICsgICAg
-IC5yZWFkID0gdm1nZW5pZF9yZWFkLAo+PiArICAgICAubW1hcCA9IHZtZ2VuaWRfbW1hcCwKPj4g
-KyAgICAgLmxsc2VlayA9IG5vb3BfbGxzZWVrLAo+IFdoZXJlIGlzIHRoaXMgbmV3IHVzZXIva2Vy
-bmVsIGFwaSBiZWluZyBkb2N1bWVudGVkPwo+Cj4gU2VlLCBwdXQgaXQgaW4gdGhlIGNvZGUgcGxl
-YXNlLCBubyBvbmUga25vd3MgdG8gbG9vayBpbiBhIHJhbmRvbSBmaWxlIGluCj4gRG9jdW1lbnRh
-dGlvbi8KQWdyZWVkISBXaWxsIG1vdmUgaXQgaW4gdGhlIGNvZGUuCj4KPgo+PiArfTsKPj4gKwo+
-PiArc3RhdGljIHN0cnVjdCBtaXNjZGV2aWNlIHZtZ2VuaWRfbWlzYyA9IHsKPj4gKyAgICAgLm1p
-bm9yID0gTUlTQ19EWU5BTUlDX01JTk9SLAo+PiArICAgICAubmFtZSA9ICJ2bWdlbmlkIiwKPj4g
-KyAgICAgLmZvcHMgPSAmZm9wcywKPj4gICB9Owo+Pgo+PiAgIHN0YXRpYyBpbnQgcGFyc2Vfdm1n
-ZW5pZF9hZGRyZXNzKHN0cnVjdCBhY3BpX2RldmljZSAqZGV2aWNlLCBhY3BpX3N0cmluZyBvYmpl
-Y3RfbmFtZSwKPj4gQEAgLTU3LDcgKzEyNCw3IEBAIHN0YXRpYyBpbnQgdm1nZW5pZF9hZGQoc3Ry
-dWN0IGFjcGlfZGV2aWNlICpkZXZpY2UpCj4+ICAgICAgICBwaHlzX2FkZHJfdCBwaHlzX2FkZHI7
-Cj4+ICAgICAgICBpbnQgcmV0Owo+Pgo+PiAtICAgICBzdGF0ZSA9IGRldm1fa21hbGxvYygmZGV2
-aWNlLT5kZXYsIHNpemVvZigqc3RhdGUpLCBHRlBfS0VSTkVMKTsKPj4gKyAgICAgc3RhdGUgPSBk
-ZXZtX2t6YWxsb2MoJmRldmljZS0+ZGV2LCBzaXplb2YoKnN0YXRlKSwgR0ZQX0tFUk5FTCk7Cj4+
-ICAgICAgICBpZiAoIXN0YXRlKQo+PiAgICAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsKPj4K
-Pj4gQEAgLTc0LDYgKzE0MSwyNyBAQCBzdGF0aWMgaW50IHZtZ2VuaWRfYWRkKHN0cnVjdCBhY3Bp
-X2RldmljZSAqZGV2aWNlKQo+Pgo+PiAgICAgICAgZGV2aWNlLT5kcml2ZXJfZGF0YSA9IHN0YXRl
-Owo+Pgo+PiArICAgICAvKiBCYWNrd2FyZHMgY29tcGF0aWJpbGl0eS4gSWYgQ1RSQSBpcyBub3Qg
-dGhlcmUgd2UganVzdCBkb24ndCBleHBvc2UKPj4gKyAgICAgICogdGhlIGNoYXIgZGV2aWNlCj4+
-ICsgICAgICAqLwo+PiArICAgICByZXQgPSBwYXJzZV92bWdlbmlkX2FkZHJlc3MoZGV2aWNlLCAi
-Q1RSQSIsICZzdGF0ZS0+Z2VuX2NudHJfYWRkcik7Cj4+ICsgICAgIGlmIChyZXQpCj4+ICsgICAg
-ICAgICAgICAgcmV0dXJuIDA7Cj4+ICsKPj4gKyAgICAgc3RhdGUtPm5leHRfY291bnRlciA9IGRl
-dm1fbWVtcmVtYXAoJmRldmljZS0+ZGV2LCBzdGF0ZS0+Z2VuX2NudHJfYWRkciwKPj4gKyAgICAg
-ICAgICAgICAgICAgICAgIHNpemVvZih1MzIpLCBNRU1SRU1BUF9XQik7Cj4+ICsgICAgIGlmIChJ
-U19FUlIoc3RhdGUtPm5leHRfY291bnRlcikpCj4+ICsgICAgICAgICAgICAgcmV0dXJuIDA7Cj4+
-ICsKPj4gKyAgICAgbWVtY3B5KCZzdGF0ZS0+bWlzYywgJnZtZ2VuaWRfbWlzYywgc2l6ZW9mKHN0
-YXRlLT5taXNjKSk7Cj4+ICsgICAgIHJldCA9IG1pc2NfcmVnaXN0ZXIoJnN0YXRlLT5taXNjKTsK
-Pj4gKyAgICAgaWYgKHJldCkgewo+PiArICAgICAgICAgICAgIGRldm1fbWVtdW5tYXAoJmRldmlj
-ZS0+ZGV2LCBzdGF0ZS0+bmV4dF9jb3VudGVyKTsKPj4gKyAgICAgICAgICAgICByZXR1cm4gMDsK
-PiBXaHkgYXJlIHlvdSBub3QgcmV0dXJuaW5nIGFuIGVycm9yPyAgV2h5IGlzIHRoaXMgb2s/Cj4K
-PiBBbmQgd2h5IGNhbGwgZGV2bV9tZW11bm1hcCgpIGRpcmVjdGx5PyAgVGhhdCBraW5kIG9mIGRl
-ZmVhdHMgdGhlIHB1cnBvc2UKPiBvZiB1c2luZyBkZXZtX21lbXJlbWFwKCksIHJpZ2h0PwpUaGUg
-aW50ZW50aW9uIGhlcmUgd2FzIHRvIG5vdCBmYWlsIHRoZSB3aG9sZSBBQ1BJIGRldmljZSBpZiBy
-ZWdpc3RlcmluZyAKdGhlIG1pc2MgZGV2aWNlIGZhaWxzLiBNeSByYXRpb25hbGUKd2FzIHRoYXQg
-dGhlIEFDUEkgZGV2aWNlIGlzIHVzZWQgZm9yIG90aGVyIHRoaW5ncyBhcyB3ZWxsIChyZS1zZWVk
-aW5nIFJORykuCgo+Cj4gdGhhbmtzLAo+Cj4gZ3JlZyBrLWgKCkNoZWVycywKQmFiaXMKQW1hem9u
-IFNwYWluIFNlcnZpY2VzIHNvY2llZGFkIGxpbWl0YWRhIHVuaXBlcnNvbmFsLCBDYWxsZSBSYW1p
-cmV6IGRlIFByYWRvIDUsIDI4MDQ1IE1hZHJpZC4gUmVnaXN0cm8gTWVyY2FudGlsIGRlIE1hZHJp
-ZCAuIFRvbW8gMjI0NTggLiBGb2xpbyAxMDIgLiBIb2phIE0tNDAxMjM0IC4gQ0lGIEI4NDU3MDkz
-Ngo=
+--000000000000cdf07f05e559f06d
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+BCM4908 is one of the Broadcom Broadband origin WLAN Router/Access
+Pointer SoCs. It was originally added by Rafał before Broadcom started
+to upstream the support for broadband SoCs. All other ARM based Broadcom
+Broadband SoCs are now supported under arch ARCH_BCMBCA. This patch
+series migrate the BCM4908 support to ARCH_BCMBCA.
+
+Changes in v3:
+- Add Reviewed-by tag
+- Add Acked-by tags
+- Remove the dts break warning from commit message
+
+Changes in v2:
+- Add Acked-by tag
+- Improve commit message with more details
+- Insert the 4908 generic compatible string in alphabetical order
+
+William Zhang (9):
+  dt-bindings: arm64: bcmbca: Merge BCM4908 into BCMBCA
+  dt-bindings: arm64: bcmbca: Update BCM4908 description
+  arm64: dts: bcmbca: update BCM4908 board dts files
+  arm64: dts: Move BCM4908 dts to bcmbca folder
+  arm64: dts: Add BCM4908 generic board dts
+  arm64: bcmbca: Make BCM4908 drivers depend on ARCH_BCMBCA
+  arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA
+  MAINTAINERS: Add BCM4908 maintainer to BCMBCA entry
+  arm64: defconfig: remove BCM4908
+
+ .../bindings/arm/bcm/brcm,bcm4908.yaml        | 42 -------------------
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         | 25 +++++++++++
+ MAINTAINERS                                   |  1 +
+ arch/arm64/Kconfig.platforms                  | 10 +----
+ arch/arm64/boot/dts/broadcom/Makefile         |  1 -
+ arch/arm64/boot/dts/broadcom/bcm4908/Makefile |  5 ---
+ arch/arm64/boot/dts/broadcom/bcmbca/Makefile  |  5 +++
+ .../bcm4906-netgear-r8000p.dts                |  2 +-
+ .../bcm4906-tplink-archer-c2300-v1.dts        |  2 +-
+ .../broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi |  0
+ .../bcm4908-asus-gt-ac5300.dts                |  2 +-
+ .../bcm4908-netgear-raxe500.dts               |  2 +-
+ .../broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi |  0
+ .../boot/dts/broadcom/bcmbca/bcm94908.dts     | 30 +++++++++++++
+ arch/arm64/configs/defconfig                  |  1 -
+ drivers/i2c/busses/Kconfig                    |  4 +-
+ drivers/mtd/parsers/Kconfig                   |  6 +--
+ drivers/net/ethernet/broadcom/Kconfig         |  4 +-
+ drivers/pci/controller/Kconfig                |  2 +-
+ drivers/phy/broadcom/Kconfig                  |  4 +-
+ drivers/pinctrl/bcm/Kconfig                   |  4 +-
+ drivers/reset/Kconfig                         |  2 +-
+ drivers/soc/bcm/bcm63xx/Kconfig               |  4 +-
+ drivers/tty/serial/Kconfig                    |  4 +-
+ drivers/watchdog/Kconfig                      |  2 +-
+ 25 files changed, 84 insertions(+), 80 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
+ delete mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/Makefile
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906-netgear-r8000p.dts (96%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906-tplink-archer-c2300-v1.dts (99%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi (100%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908-asus-gt-ac5300.dts (97%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908-netgear-raxe500.dts (89%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi (100%)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm94908.dts
+
+-- 
+2.34.1
+
+
+--000000000000cdf07f05e559f06d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJi7Jochq0m9DJtt7E7KnJczdnMn
+KTqhDwinhgdh42k+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDgwMzE3NTUzOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCfPwsDJOMs3Zes99X6w8tgi6Z+lxLFzWKzNNkJkTbAL5jm
+RPKduRypa/oJBfkRhDkb0xYg9+o3EVEiZoddSG1U6Bh+ly3DmtKFPjKREkelem2lum0/nF9Rp/nQ
+stG5r4gFNHmHEopwK7Kce8zs19TtAVCpXraWga6mRqmC7khj5yKEBF830BxDO0T3UGAUPJ8fagr6
+jfaOUh0YqL9sQAE7XHfSaEYDt1dse+uU0grH1u2bNpPSvfQT7OaBBQc/CiIpIMVqoQf9UzsTQkY2
+NpWb7tIjpcuB9EJhaD1IsXiXvQ5SbGCQK7pvhgIGRQX5OsT2tRxLcYEpaCr7IsVwfKgw
+--000000000000cdf07f05e559f06d--

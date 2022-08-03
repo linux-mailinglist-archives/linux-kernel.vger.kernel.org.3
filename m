@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E877F588CF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E5C588CF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbiHCN2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S236039AbiHCN3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiHCN2X (ORCPT
+        with ESMTP id S234827AbiHCN3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:28:23 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE71DEFC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:28:22 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id ct13so9201063qvb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:28:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=l1+ReZVsy/Zcurp2LBAdNEnjUAZDeBVBQCSKwElpoHA=;
-        b=IJR9r4ZEJjJUnPG965qhC0VKQvDBH0yM3l6doIUqvPl7zXv5UEqVv+VfILs7nN7ocu
-         e5jDWTAu5km8uvKGd+leIaPbWV7M4LAJQqlucsBeFpOImJ9bZbbVZ4EGNYpaFTciIn6U
-         WdYH8ozSGG7fv48a465UVpd8HfUjdtQoEkrUVIus8//VFQ/wlNO0T3h6XdxUyRgARejI
-         aL7I8J1nPdHCgA640YB/LHb7Y7/uTsy29RDcg3dkeSR+kl2Z9I6OxBxVxLpol1eGGFYh
-         xEgAqupGbBMk4RbLutYpM2G2jPyEredCLcnKN9O4Kse2i9ZabQd83xwFFbk6aKsqq4/k
-         O8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=l1+ReZVsy/Zcurp2LBAdNEnjUAZDeBVBQCSKwElpoHA=;
-        b=RonZz1X51rOYFlF3YcTH3P4EDB6glajhSph9QENuiMQya/tMUhJAjhbkoe62ocqCgM
-         pJX81Tmc1Sxun1I/mntIRSx/N93kHNlZl3NN8BoKJx7KEYj5AQy4bjTn5tW7eHjRzQ3Z
-         TNJ+jDHVvKTevArvE0os+CLik6A4S45mm4hIVkB9biKMnv2J24SdmAAEsdnssJqeQJUm
-         /oAKiKTZi6yteF0cIUdJnPNVH2y79+cl0VvPkMlgoa0lRr5TQlzTnv3Ys4NKCJmj21G5
-         BcJqkRRNXrkvfMOzhJSs761MjuGw2jnvZ4XZquXSQdBIJdZ4NKtjohxx/EKF1JpvFbCd
-         grWg==
-X-Gm-Message-State: ACgBeo2J3verx+JFy5SFtH2Kuo4Ukr4dtZwQ9pEN6yvnRHOIibBhUTJN
-        Kj9HLIm49gQPiFoZ07342SEJuQ==
-X-Google-Smtp-Source: AA6agR4DEAiwhB2lCAnu3LaEohloPb2G3Wpp2+C7glrjShJCrOyz8r1FN2sCA8pNkHOibWtuXx7KBg==
-X-Received: by 2002:a0c:8bd2:0:b0:474:7d1a:eb5b with SMTP id a18-20020a0c8bd2000000b004747d1aeb5bmr21858640qvc.18.1659533300175;
-        Wed, 03 Aug 2022 06:28:20 -0700 (PDT)
-Received: from localhost (2603-7000-0c01-2716-00ea-7f88-5fd9-01cd.res6.spectrum.com. [2603:7000:c01:2716:ea:7f88:5fd9:1cd])
-        by smtp.gmail.com with ESMTPSA id d21-20020a05620a241500b006b249cc505fsm13434291qkn.82.2022.08.03.06.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 06:28:19 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 09:28:19 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH] mm: vmscan: fix extreme overreclaim and swap floods
-Message-ID: <Yup386Bq8Ek1VHJq@cmpxchg.org>
-References: <20220802162811.39216-1-hannes@cmpxchg.org>
- <20220802170619.250e1a0b475222a82e7077b3@linux-foundation.org>
+        Wed, 3 Aug 2022 09:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70FF1572F;
+        Wed,  3 Aug 2022 06:29:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8480E61474;
+        Wed,  3 Aug 2022 13:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33014C433C1;
+        Wed,  3 Aug 2022 13:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659533352;
+        bh=H+0eDJ9Sq1WjJkKL0Z8+pd7LyjWylUny76gy/Ij3f0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GpLpRo9OQZ71Mz+mO+dd4t106jmQ2vV8Pgj8KDlM7iv0z8fIC+8a/AQ92j65f7KM6
+         q8i0lJXr+bxl3Z2dkhjlsNVNAPjiCAQXHFZpVQ/hEpJtTRi40nrCfHzAJjHPZN2lxR
+         rze7BJItI3RXxCcbqBmdjvjLGd6F37/mVWnDTbSlQ0UKGea9tzX1jGhthzeogq6I6q
+         bYg+A3u3odn3MTxXUN5eCLFZmGxpADkRjyANqhJSWfZOBu/4AUK/yI8jP3ayfDlDEE
+         sXkQS1TKDCTzU5A2AARQpiiLFpsQtP3q1ciY9CkbvPuTjqc0HkpblpTtRzIy+5aQdf
+         nBNWha1A6JxYw==
+Date:   Wed, 3 Aug 2022 14:29:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
+Message-ID: <Yup4JLh00HZxFQLc@sirena.org.uk>
+References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
+ <20220801094255.664548-2-nagasuresh.relli@microchip.com>
+ <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
+ <Yuki3jpCSJDdXcWA@sirena.org.uk>
+ <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZnAW8elfYnmgY8P/"
 Content-Disposition: inline
-In-Reply-To: <20220802170619.250e1a0b475222a82e7077b3@linux-foundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:06:19PM -0700, Andrew Morton wrote:
-> On Tue,  2 Aug 2022 12:28:11 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
-> 
-> > Change the code such that only one SWAP_CLUSTER_MAX-sized nudge toward
-> > the larger LRU lists is made before bailing out on a met reclaim goal.
-> 
-> It seems rash to jam this into 5.20-rc1 at this stage.  I'm thinking
-> 5.21-rc1 with a cc:stable?
 
-Yeah, 5.20-rc1 sounds fast. Let's wait for reviews first and see how
-much confidence we get on that change. I can't help but feel, reading
-logs and comments (commit 1a501907bbea8e6ebb0b16cf6db9e9cbf1d2c813),
-that my fix is how the code was intended to work from the start.
+--ZnAW8elfYnmgY8P/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-5.21 does sound a biiiit on the long side for fixing such extreme
-misbehavior, IMO, once it's proven to affect production workloads in
-the wild. I was hoping -rc2 or so...
+On Wed, Aug 03, 2022 at 08:11:03AM +0200, Krzysztof Kozlowski wrote:
+> On 02/08/2022 15:13, Mark Brown wrote:
+> > On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
+> >> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
+
+> >>> +    oneOf:
+> >>> +      - description: Microchip's Polarfire SoC SPI controller.
+> >>> +        const: microchip,mpfs-spi
+> >>> +      - description: Microchip's Polarfire SoC QSPI controller.
+
+> >> Useless descriptions - they repeat compatible. Just keep it as enum and
+> >> skip descriptions. What value do they bring?
+
+> > Someone not familiar with the full Microchip product line might not be
+> > aware of the expansion of mpfs, it's not blindingly obvious.
+
+> Then it should be explained in title/description of the binding, not in
+> compatible. This is the usual way of providing some text description,
+> not for each compatible by repeating the compatible text.
+
+I'm not convinced this is a useful rule to try to enforce, and I'm not
+sure how well it will work if the same IP is used in several different
+places.  It's not clear to me what the benefit is intended to be.
+
+--ZnAW8elfYnmgY8P/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLqeCMACgkQJNaLcl1U
+h9BtCwf/Twfz4j0RnwW5hKGkDaikzKjLIzHtIBcnlnyLGkREvr5gdchiKFrLQx9s
+fqfJaEQZAWbaNHb41xJe9xewfWxVSyAifK+ryID6BEh+qwCq6LqmXPLBVvNUgQyO
+gy7nZbCshtfhU0MWhJ0OjU/v6jXQ6eVjv7QehggDLra30JV3PCK0tps0p+xeQEUx
+z+Tu1q47knfkj9MfPypKvRGvUk2V41drFPijq0DMCuHUJYgjS6W7+OS5dwLQXX5h
+S1t6EYEjjX+D6uFceV6a1lt0eQl82DUxysuDCPRok4SAW0TjA3/DuwIdyobv4fYM
+j1XNW2JUkWuVJGuKM5aYvwu8A+In1w==
+=6o4p
+-----END PGP SIGNATURE-----
+
+--ZnAW8elfYnmgY8P/--

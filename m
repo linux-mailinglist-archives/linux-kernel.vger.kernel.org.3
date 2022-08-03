@@ -2,278 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32C4589505
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D681589507
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240383AbiHCXvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S240601AbiHCXwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240290AbiHCXvQ (ORCPT
+        with ESMTP id S240520AbiHCXwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 19:51:16 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB86F3D
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:51:13 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id u12so13865563qtk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=PVlr/wP1iJpQXnjx/usv9VDWekQ3lTtnV5e8WZv8x48=;
-        b=qKYroUFYwskMz0W56Qyd7/F3VZAWiS+ng+Y1u05aJSY3/NaYQrVAely1fG77ilrqzH
-         KmRJUu6e/xHdAqDcl8wa2XLynBngE37Mb4feyPKJRsPVlPLjAtMXuEUVExJzkyedr9UU
-         +/L2nKXGhHfZL+AsEyMNkevij8PrzcpqLFviJcFWI2jyEYyWHdc/DrYJv20PPQsfHjFu
-         SLD+T6JhfiKtF9K8NZVGXNNH8sqAUB0M9MCUvdrtLJ+oF7gYfLA5tKyV/Xwe53RUtO9N
-         oQXHqILMSpsoKlyvAbFgIiIk0TNc9w/M2WqTIgiZ+9FKPNHjdLdj9FiPU3SDMrmeQUAM
-         SdUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=PVlr/wP1iJpQXnjx/usv9VDWekQ3lTtnV5e8WZv8x48=;
-        b=uaYE5aRL5Q61MdbWVeffbmp6ykmyYbpcz5fv347wbtsXMGhnp3YtfkE719ZLugm0+r
-         +6sg8otkQHjckRqh+wi+FLDQe49BBuhNd4szRrJnMWWhouREyrmXg8IEo5s61V0FR5M8
-         G6r0T5riEFsX8x4WdmjRPvFcfopmsCxKVv6owlxclJIKU4YE9G221BCivm/xf8xiuIog
-         UHad5PXdnDfpVOjSqgelEstYo3wQPorf6TcRbdV3BCD1BUW+qv7CTdXeVoicYdoTQLTv
-         EyYz+nTBsEoRHmUYo9NLidXXmMMj9COO2l82YmVkIXQKnagodsD1qdj97jA1pnRMFk8j
-         O95A==
-X-Gm-Message-State: AJIora8/ADYJwyNR1dOOq4OCLHe/la5IlpczP2I08Uvadja/1e0eqXyv
-        a+msSB1xxxc68eVWWc8Sssq90CBWUtc=
-X-Google-Smtp-Source: AGRyM1vEUq5JiLpjTas3X1ElFFHb04VQmNKmuIpB+l8MqPUxdYuJbJZQGHJmh8kUK2M8Zo0t8D2agw==
-X-Received: by 2002:a05:622a:30a:b0:31e:fa39:2dd with SMTP id q10-20020a05622a030a00b0031efa3902ddmr24617308qtw.679.1659570672345;
-        Wed, 03 Aug 2022 16:51:12 -0700 (PDT)
-Received: from localhost ([2601:c4:c432:f9:ee0c:bfa:a55f:3217])
-        by smtp.gmail.com with ESMTPSA id dm51-20020a05620a1d7300b006af147d4876sm3728132qkb.30.2022.08.03.16.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 16:51:11 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 16:51:07 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Neel Natu <neelnatu@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH] sched, cpumask: don't leak impossible cpus via
- for_each_cpu_wrap().
-Message-ID: <YusJ6/q/rXclCn8F@yury-laptop>
-References: <20220802214041.2656586-1-neelnatu@google.com>
- <CAAH8bW_z3TjjafPRJPZmzDdOFjmU7xTLxOinw8D4nsZ2B6WN4w@mail.gmail.com>
- <CAJDe-O+8G=hyqWcaNk8_YP9S-R9-Xnn2_cLt8Loz9ru8V24K_Q@mail.gmail.com>
- <YurEAU5SlQaZ85vZ@yury-laptop>
- <CAJDe-O+7mqqrGvWimztYgEqDDqJGH=EA1NgJyiJjnurLASOQ8w@mail.gmail.com>
+        Wed, 3 Aug 2022 19:52:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD885E328;
+        Wed,  3 Aug 2022 16:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659570724; x=1691106724;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6w6uyJGZmcWyYDKn9e2+081kc5HVG8rSUB24TtrPnGk=;
+  b=MKtzlDBnIGShsO7sz8pEYDHZnsvX6sjYfv3V3kkIHd+xv7IvW73q7bWk
+   gHBH6aJTZtlWvpoQ4wabPfR7Q0wO9i7tZxYElCG8xuK8kta2qjqUKaguh
+   v8MPDmUp5WIl5xELkCqBnt9hz8xkLm53bsnzv03GP1ohnFFjt+IcLc2ON
+   gjeQGLBgciDqBGeIYoB4RfYHkqMH5+lhltj0a5+OoFrpW32nTZWsvT0KH
+   tIiiHUMxSXm42JsoqjNl9ptMz4MvBkGPcUQyCcCMl/rWbebXtNJt10Z2p
+   4VELUdtWjV8jtyxq3Q5ffpvTxSE0Bz7Sgnc4XOf07d8kSNhvYdDt74k2m
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="353800140"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="353800140"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 16:52:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="662296186"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Aug 2022 16:52:03 -0700
+Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 3 Aug 2022 16:52:03 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 3 Aug 2022 16:52:03 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 3 Aug 2022 16:51:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WiEQRX3d14s0Wm6Cbg72RiYNqNO43/UZdLkpYWD52guYt61wZnO+KyOQ1Bq5W+tIlyRapUt5kjbJoNhkRQhX9PDx5wpWbNDjPv4YDThjxvpB+MXUjL3SkT1ObcXzIALrej1GNNYgoilnvDG0Q+syKqtsRneiCs//ELPZlR1XUFfUHgq/JD0l/PPpFogcC9zHhWiEtYgruK1jqHk0y5ArYP9QAi1YM8TOhX1mBa9wZTCW4GK3U+Y3FARn7DHB6WvzDcUbU6PmsqXPpKiE9l+bvlyhYWn1PH6fUAFmbTJiAQAR/zRPPu4lU8O/y7qeEX2pQDjUwWVx8gwD40l/+bxfsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=reRloh19s6Asm7uesznEkADjwnWaW1cghdSvrGAbvfg=;
+ b=C5yWooyfdnBqYJCDsHM/KqXyDzYC3v1qHXAhK/LBtO5cR9rLtoZzdNwaPpUnR+utBxB90dPnLu/vypyqKT+i/zis0LdYrcpWKmPT3ZY8Z9C4sHtt+t6N8Ovs/lpzW7brtt7YVUzR8k/VF3bDdkA+LgXDOVXxxmeB2K/1Ttxlpzs5Q0lQDIDkmBMkErF1HteEgkFx5r17KZMg9P6JQBvcFeR7zRO7bpLDoouZ8jZRRoDlZU/hrQg7fuAh2p66aRokOZ88j1odX6TLyjnWksazOLUa8p8C9DI/Yqd9/gpuq0cnVDQ5QFsVwVUMmfUkj9DMo2XEq4jzkBTPDwlVw2Qk/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
+ by IA1PR11MB6217.namprd11.prod.outlook.com (2603:10b6:208:3eb::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Wed, 3 Aug
+ 2022 23:51:57 +0000
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::58c7:c869:bd32:963]) by MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::58c7:c869:bd32:963%7]) with mapi id 15.20.5482.016; Wed, 3 Aug 2022
+ 23:51:57 +0000
+From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>
+Subject: RE: [PATCH] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor
+ Lake IOM device
+Thread-Topic: [PATCH] usb: typec: intel_pmc_mux: Add new ACPI ID for Meteor
+ Lake IOM device
+Thread-Index: AQHYouJz7thRnPvu+UeuQ1FvnIN3Dq2bVpcAgAKK6cA=
+Date:   Wed, 3 Aug 2022 23:51:56 +0000
+Message-ID: <MWHPR11MB00484EFF0A94ABEFC0885F3EA99C9@MWHPR11MB0048.namprd11.prod.outlook.com>
+References: <20220729003033.771761-1-utkarsh.h.patel@intel.com>
+ <YujndMdpS+4L0AiL@kuha.fi.intel.com>
+In-Reply-To: <YujndMdpS+4L0AiL@kuha.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 14083289-0b6b-4993-6f7a-08da75ab265c
+x-ms-traffictypediagnostic: IA1PR11MB6217:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V7jQ5sf+Xv36sPYt1mwWh3CXmeyZeke26jqDj0Xq0XuBnytpthhxAoTDZd1WvBQZ91X8MkdGsSddBrc59OLRYCbN5ZxXarFzEZZsYv7d56YZvyKAdnF+qYN2TgP8CwgqogarT3GwRcp4i2nR+UWlgz2LhbmTyrKe1EuHkCjYtsJV63c9TdVYM1I2xsp/fifoZwWHwhA675dK5KlCXQHZ2WwhbzofRh5J8jX8TnYrvIweoUcjQiX8Hjv9AJHNwDmGf7WMtoSfjZvqIjzDAj3iYv4R8XatNAy7ONMZ1N1n46OZWkbCmf1XY9s4o+fE8X/pR5pDNi6J8VM7m2lfqzRCdRk3e/+qrYJdSFqHbugzgZrxiBA2k5VO7XDphiPnS0AYpmkrM+5l7dRbZqnOouBA9RyJKJbA1OSZQdhs6is7Xno6STYPV2ffD9s+XmSxDXE6IFUOYRRL3IWIm2RL2ip/K24lVrNmr2IlBKGowJImm0TGNEcXIoqF5CLTbU4bdjeykAWpQ5qia2dyvHzNLpxJri6DeETB9zDmUo+ArMZ5w/WkCIS+1iNj8wM2TSbBIG6lzTF0oGN+uDfd3dwgcpKe4vgNVhdQ5XOIt+jtznPbrGf8Y48v6jgO3D4Fy32YiU1/NUywklXe91lcm0k7JeGMxqPxRYqtyggY2ky+VaAMb3E7dfPtg6Z+o/CkccFL/MGng1rPIMeQAJi0tRQHjGfuye/bNJfamKURzMZAm3J8dout2UpCGG+hTf8e0xD1H4JfxtTFFczPnzQvVgyJYfPvg6BMUPCuOCAVJ7dG9mJ5cpUr8UuTIvtCXkhRTJt2PN2K
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(396003)(39860400002)(136003)(346002)(7696005)(8936002)(86362001)(6506007)(52536014)(5660300002)(9686003)(26005)(33656002)(54906003)(6916009)(122000001)(38100700002)(41300700001)(2906002)(316002)(71200400001)(38070700005)(55016003)(82960400001)(478600001)(8676002)(66446008)(76116006)(4326008)(66476007)(66556008)(64756008)(83380400001)(66946007)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fIrTol1IwjyVUXAKYFly5xtKNTxtXzcYSEQNN80GOW2wHaxxD67j1cQ/SL1p?=
+ =?us-ascii?Q?5f2vKReMgqCupaD9URHLlh/GV83lPmv7bBesPq7geXrH59oZoHE+zbq0hx/j?=
+ =?us-ascii?Q?nT7JRukmadrXrSqL14Qck+Il7y62Pe7LsBBS5jWsdlR0r/4s9E1I0jbNKCMZ?=
+ =?us-ascii?Q?NQ3xxDz0e8b9Z/TIWf6lEytpQx1RDmPObh0P3nLIFww2RpHE9yUNH30u8Uo5?=
+ =?us-ascii?Q?uFYfHfbQq3ZuDWKoxr6UJmz2cAGPbbmzYDMDjFcgD8pxX5OICxpiliS+VNrU?=
+ =?us-ascii?Q?3Oh/Beq9aqSEdWgdrsHOBUa73TvtfpX/vQCroiY2RF7bbWOTBlVcKMPUI4Wa?=
+ =?us-ascii?Q?QkeqwRpbQxiLlyYYR/cBSgJKlrRKYao8vjTNC0VFLVndMJ5cY1Q1EcXup223?=
+ =?us-ascii?Q?TKEvXxPUb6mgTzJ8ffXbKdM/TT3rUryn60bIsHY0QzJ96fo7DQ8AfmHRusbv?=
+ =?us-ascii?Q?9WeuVNa2GcrDSMkQ8Y3DOXVp1Tct6WYWmQkohzFr3b2WTVtK33aI/e/uPFs1?=
+ =?us-ascii?Q?lBCgGyegLIJrcqM/0MfoxjpzBvdWmypvUEzYU41z+KZ2MO8sbknU734r34Nx?=
+ =?us-ascii?Q?FON8GrZCjaheLzDRKhPgPgzticFveBaFhQuKzUHFmOTUyNEPtfT37PZ8Otr/?=
+ =?us-ascii?Q?qHCk/iGFS4wCZxu6wmM0lrGvpXDAGL9YJNvh4BaGcowWTVVwfxnFmwwaWWVc?=
+ =?us-ascii?Q?uvSSpXSkDxGA5KvHvVcktq7qtNtQB90nGL6bgq2AyjmxeJvW0+wHBwMolStd?=
+ =?us-ascii?Q?mv/rHcyR5aCR2+ItlzieUcC25h3edczOLDMnlcxmqmKBkcba1GRXfODXEQYm?=
+ =?us-ascii?Q?h2rSd4MIdYbv0aEeOHeKIOl0FMPf2M6PZPTv4cyjopYnJkJU5bgm1yknJkoP?=
+ =?us-ascii?Q?MoHYRwKfkjcNtS7OLhXptiRtEFhJt1AzWCI21bWu402TauyVKR2mu6lfkN5O?=
+ =?us-ascii?Q?S4ASkLeFdko8o3bgHvYxeKTdx8nlq3S/B+ndqp/RSpkIXkfsE7dcuorvDEt3?=
+ =?us-ascii?Q?zlCw7YyhDtYztDdPHc3nhkEdoODFzZjDBhX0slJNSFAJEyab6Cws9h1w7bhu?=
+ =?us-ascii?Q?1bQlclL2tNMtrYnV3iZRrN7Vgmtlh/Udl44Ll5/Hi0l9R06gGXf1GE2/QZcF?=
+ =?us-ascii?Q?LlfUr7hAuZ6PS4OAHHKfm39Bq/5ns3AtmCKvVTvLULKRRgQzoNb6qxPALrla?=
+ =?us-ascii?Q?JNZqEmxzZSsNkzvj0rftvIYRTHmrelQIioAvBQR9oQHYQdUi/L3tbVbEnhtt?=
+ =?us-ascii?Q?jsGmsDwoCHCeAQQFw7Aw3nkmX+n/dKmJwh9KSBHMmPdQklRsPJ7HUYDXrSqg?=
+ =?us-ascii?Q?OgRArUyz8KT6d6dh/nQ2jXcH+5SmlAsnXhpr65m9OYo2SMA9j33jFrsQ7jl9?=
+ =?us-ascii?Q?H0WNew7+wmLf4yryVrok7pwpQjOiKOfEElvLYQYbzYpZ42jbE37yL36EvwHf?=
+ =?us-ascii?Q?SJvWZyKaWnfW7V+ivSqatCYdF4ElMi2fPSrc7VB0sOw5/WNb5cHdjFyws2JC?=
+ =?us-ascii?Q?KvhIWLZobT1IrxDXL6U0PFutdE5M9jaazr7phWIW0o2DiMxoKaleV8xakJRV?=
+ =?us-ascii?Q?FImy9o7N5U/97qyCSekKPXsSLFfpBC6J25PMhgD/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJDe-O+7mqqrGvWimztYgEqDDqJGH=EA1NgJyiJjnurLASOQ8w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14083289-0b6b-4993-6f7a-08da75ab265c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2022 23:51:56.9483
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: c8VnsIKVvDw9ex9gYy4mibK/tk+PoarM/3WOhsCY9Mt8vkWrUABKmhifngyO6RrGx15GRrqphDzMy3ipekRAuq+1+mtrp8CAX2gDv9ndlMM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6217
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Andy Lutomirski <luto@kernel.org>
-+ Thomas Gleixner <tglx@linutronix.de>
+Hi Heikki,
 
-On Wed, Aug 03, 2022 at 02:21:46PM -0700, Neel Natu wrote:
-> ject: Re: [PATCH] sched, cpumask: don't leak impossible cpus via for_each_cpu_wrap().
-> To: Yury Norov <yury.norov@gmail.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-> 	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Peter Zijlstra <peterz@infradead.org>, 
-> 	linux-kernel@vger.kernel.org
-> Content-Type: text/plain; charset="UTF-8"
-> Status: O
-> Content-Length: 6037
-> Lines: 152
-> 
-> On Wed, Aug 3, 2022 at 11:52 AM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > On Wed, Aug 03, 2022 at 10:49:57AM -0700, Neel Natu wrote:
-> > > On Tue, Aug 2, 2022 at 6:22 PM Yury Norov <yury.norov@gmail.com> wrote:
-> > > >
-> > > > On Tue, Aug 2, 2022 at 2:41 PM Neel Natu <neelnatu@google.com> wrote:
-> > > > >
-> > > > > The value of 'nr_cpumask_bits' is dependent on CONFIG_CPUMASK_OFFSTACK.
-> > > > > This in turn can change the set of cpus visited by for_each_cpu_wrap()
-> > > > > with a mask that has bits set in the range [nr_cpu_ids, NR_CPUS).
-> > > > >
-> > > > > Specifically on !CONFIG_CPUMASK_OFFSTACK kernels the API can iterate
-> > > > > over cpus outside the 'cpu_possible_mask'.
-> > > > >
-> > > > > Fix this to make its behavior match for_each_cpu() which always limits
-> > > > > the iteration to the range [0, nr_cpu_ids).
-> > > > >
-> > > > > Signed-off-by: Neel Natu <neelnatu@google.com>
-> > > >
-> > > > The patch itself doesn't look correct because it randomly switches a piece
-> > > > of cpumask API from nr_cpumask_bits to nr_cpu_ids, and doesn't touch
-> > > > others.
-> > > >
-> > > > However...
-> > > >
-> > > > I don't know the story behind having 2 variables holding the max possible
-> > > > number of cpus, and it looks like it dates back to prehistoric times.  In
-> > > > modern kernel, there are 2 cases where nr_cpumask_bits == nr_cpu_ids
-> > > > for sure: it's CONFIG_CPUMASK_OFFSTACK=y and
-> > > > CONFIG_HOTPLUG_CPU=y. At least one of those is enabled in defconfig
-> > > > of every popular architecture.
-> > > >
-> > >
-> > > Hmm, in a kernel with CONFIG_HOTPLUG_CPU=y but not CONFIG_CPUMASK_OFFSTACK
-> > > I see "nr_cpu_ids = 20, nr_cpumask_bits = 512". FYI since it doesn't
-> > > match the observation
-> > > above that nr_cpumask_bits == nr_cpu_ids when CONFIG_HOTPLUG_CPU=y.
-> >
-> > I said this because the comment in include/linux/cpumaks.h says:
-> >  *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
-> >  *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
-> >  *  ACPI reports present at boot.
-> >
-> > And because of the code that sets nr_cpu_ids:
-> >
-> > void __init setup_nr_cpu_ids(void)
-> > {
-> >         nr_cpu_ids = find_last_bit(cpumask_bits(cpu_possible_mask),NR_CPUS) + 1;
-> > }
-> >
-> > Some arches override it, so it may be an issue. Are you running x86,
-> > or maybe you have "nr_cpus" boot parameter?
-> >
-> > But anyways, I feel like this should be investigated for more... Can you
-> > please share the config of your system and boot params?
-> >
-> 
-> Yeah, this is a stock defconfig compiled on an x86_64 host and booted
-> inside a 20 vcpu virtual machine (virtme). There are no command line
-> params to modify the number of cpus.
-> 
-> I think everything is working as expected based on some debug prints I
-> added during boot:
-> [    0.641798] smp: setup_nr_cpu_ids: nr_cpu_ids 20, cpu_possible_mask 0-19
-> [    0.648424] setup_percpu: NR_CPUS:64 nr_cpumask_bits:64
-> nr_cpu_ids:20 nr_node_ids:2
-> 
-> The first one is from setup_nr_cpu_ids() in kernel/smp.c. The second
-> one is from setup_per_cpu_areas() from arch/x86/setup_percpu.c.
+Thank you for the review and feedback.=20
 
-So it doesn't look correct. When HOTPLUG is ON, than cpu_possible_mask must
-be 0-NR_CPUS, as it's mentioned in include/linux/cpumaks.h, because
-user may add up to NR_CPUS...
-
-Adding Thomas, Peter and Andy.
-
-Guys, can you please clarify:
-1. What for do we have both nr_cpu_ids and nr_cpumask_bits variables? In
-   case of CPUMSAK_OFFSTACK, nr_cpumask_bits is aliased to nr_cpu_ids, and
-   in case of HOTPLUG both should be equal to NR_CPUS. In HOTPLUG=off,
-   everything is set up at boot time and never changes, so again - why do
-   we need 2 variables?
-2. Neel observes that with HOTPLUG_CPU=y, nr_cpu_ids differs from
-   nr_cpumask_bits because cpu_possible_mask is not set completely, despite
-   the comment in cpumask.h:
-     *  If HOTPLUG is enabled, then cpu_possible_mask is forced to have
-     *  all NR_CPUS bits set, otherwise it is just the set of CPUs that
-     *  ACPI reports present at boot.
-   Is that a bug, or just incorrect comment? If not a bug, what code
-   increases nr_cpu_ids when a cpu goes up? From what I see, nr_cpu_ids
-   is set only once in start_kernel(), and then never changes.
- 
-> > > > In case of HOTPLUG is off, I don't understand why we should have nr_cpu_ids
-> > > > and nr_cpumask_bits different - what case should it cover?... Interestingly, in
-> > > > comments to cpumask functions and in the code those two are referred
-> > > > interchangeably.
-> > > >
-> > > > Even more interestingly, we have a function bitmap_setall() that sets all bits
-> > > > up to nr_cpumask_bits, and it could trigger the problem that you described,
-> > >
-> > > I think you mean cpumask_setall() that in turn calls
-> > > bitmap_fill(nr_cpumask_bits)?
+> >  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
 > >
-> > Yes, sorry.
+> > diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c
+> > b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > index 47b733f78fb0..a8e273fe204a 100644
+> > --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> > +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> > @@ -571,9 +571,11 @@ static int pmc_usb_register_port(struct pmc_usb
+> > *pmc, int index,
 > >
-> > > > so that someone would complain. (Are there any other valid reasons to set
-> > > > bits behind nr_cpu_ids intentionally?)
-> > > >
-> > >
-> > > I don't know of any although this wasn't the case that trigger in my case.
-> > >
-> > > > Can you share more details about how you triggered that? If you observe
-> > > > those bits set, something else is probably already wrong...
-> > >
-> > > The non-intuitive behavior of for_each_cpu_wrap() was triggered when iterating
-> > > over a cpumask passed by userspace that set a bit in the [nr_cpu_ids,
-> > > nr_cpumask_bits)
-> > > range.
+> >  static int is_memory(struct acpi_resource *res, void *data)  {
+> > -	struct resource r;
+> > +	struct resource_win win =3D {};
+> > +	struct resource *r =3D &win.res;
 > >
-> > If you receive bitmap from userspace, you need to copy it with
-> > bitmap_copy_clear_tail(), or bitmap_from_arr{32,64}, as appropriate.
-> > That will clear unneeded bits.
-> >
-> > For user-to-kernel communications, I'd recommend passing bitmaps in a
-> > human-readable formats - hex string or bitmap list. Check the functions
-> > cpumask_parse_user() and cpumask_parselist_user(). This would help to
-> > avoid all possible issues related to endianness and 32/64 word length
-> > mismatch.
-> >
-> > > The kernel code is out of tree but open source so happy to provide a
-> > > pointer if needed.
-> >
-> > Yes please
-> >
-> 
-> Here is where we copy the user supplied cpumask using the
-> get_user_cpu_mask() helper:
-> https://github.com/google/ghost-kernel/blob/c21b36f87663efa2189876b2caa701fe74e72adf/kernel/sched/ghost.c#L5729
-> 
-> For performance reasons we cannot use human readable cpu masks in this
-> code path.
+> > -	return !acpi_dev_resource_memory(res, &r);
+> > +	return !(acpi_dev_resource_memory(res, r) ||
+> > +		 acpi_dev_resource_address_space(res, &win));
+> >  }
+>=20
+> I realised that now that is_memory() function is basically just a copy of=
+ the
+> is_memory() function that's in drivers/acpi/resources.c, so I think we ne=
+ed to
+> handle this a bit differently. There are a few places in kernel that have=
+ that
+> same check.
+>=20
+> One way would be to just export the is_memory() function that's in
+> drivers/acpi/resources.c, but since we have already a wrapper function
+> acpi_dev_get_dma_resources() for DMA resouces, I think we could have a
+> similar wrapper for common memory resources.
+>=20
+> I'll prepare a patch(s) where I'll propose a new wrapper function
+> acpi_dev_get_memory_resources() that will take care of the is_memory()
+> check, and then convert the users (including this driver). After that, th=
+is patch
+> only needs to add the ID.
 
-If nr_cpu_ids == 20, I can't imagine a case where copying 4 bytes
-string to bitmap_parse() instead of 3 bytes of plain bitmap would
-affect your performance.
+I will wait for your changes then.=20
 
-Even if you're going to scale, it's hard to believe that code that
-calls alloc() functions 3 times without GFP_ATOMIC is so critical...
-I didn't look at the code deeply, but it looks like it sends many
-IPIs, which also doesn't look deterministic in terms of high-perf
-loads.
- 
-> Note that the helper copies up to 'nr_cpumask_bits' which in some
-> kernels (!CONFIG_CPUMASK_OFFSTACK) can copy bits beyond 'nr_cpu_ids'.
-> A possible option could be to fix this helper but I do feel that
-> for_each_cpu() and for_each_cpu_wrap() should visit the same set of
-> cpus given the same cpumask (ordering can be different but the set of
-> cpus should remain the same).
-> 
-> What do you think?
+Sincerely,
+Utkarsh Patel.=20
 
-I think that for_each_cpu{,_wrap} is correct here because you have
-HOTPLUG=y, and any cpu may be present.
-
-Let's see what Peter, Andy and Tomas will say. I have a feeling that
-we need to drop nr_cpumask_bits, and always rely on nr_cpu_ids.
-
-For your problem, because you are passed with the mask from userspace,
-you shouldn't rely on it anyways and need some sanity checks. Maybe
-like this:
-        if (!cpumask_subset(user_mask, cpu_possible_mask))
-                return -EINVAL;
-
-Thanks,
-Yury
-
-> best
-> Neel
-> 
-> > > I considered ANDing the user supplied mask with 'cpu_possible_mask'
-> > > but that felt
-> > > like working around an inconsistency in the kernel API (hence the proposed fix).
-> > >
-> > > > So, if there is no real case in modern kernel to have nr_cpumask_bits and
-> > > > nr_cpu_ids different, the 

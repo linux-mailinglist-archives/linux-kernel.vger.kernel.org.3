@@ -2,89 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9946E588EE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF453588EE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiHCOqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S235971AbiHCOtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbiHCOqO (ORCPT
+        with ESMTP id S232079AbiHCOth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:46:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0128E5FAA
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:46:11 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-308-B58XJMnkPz25bSYtoz8p9A-1; Wed, 03 Aug 2022 15:46:09 +0100
-X-MC-Unique: B58XJMnkPz25bSYtoz8p9A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 3 Aug 2022 15:46:08 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 3 Aug 2022 15:46:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Sebastian Andrzej Siewior' <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>, Jan Kara <jack@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [GIT PULL] printk for 5.20
-Thread-Topic: [GIT PULL] printk for 5.20
-Thread-Index: AQHYp0ZOrCjhEtlBF0OMnCiDcM8gDa2dPvww
-Date:   Wed, 3 Aug 2022 14:46:08 +0000
-Message-ID: <45448fe59f7242fd90c5271a72ca937c@AcuMS.aculab.com>
-References: <YufsTLpighCI7qSf@alley>
- <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
- <YuqHvu4zAzwq+BdZ@linutronix.de>
-In-Reply-To: <YuqHvu4zAzwq+BdZ@linutronix.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 3 Aug 2022 10:49:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57AF5FAA;
+        Wed,  3 Aug 2022 07:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659538176; x=1691074176;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Faqqo9HzJfxgdrGCas4xFN7qzs/Hy63rrU1AKfXxIXk=;
+  b=AiBuY1cQJM94eFRkPaVPf4ilNH8w1IUeacqMax2nnrlcmTV+KQZgCGNq
+   Kymz/myNWFift8c0Ina36KPV3ll9cBy7Ez+3IHzZowwP4BoA0oWwnTGV4
+   j0jxINiJjL4TNMwWA6fmGEaH3DIEmhbwsbOb9sDmCCHS4rf1MR2nkEHFS
+   QKv2BXKmc9GoAQwrqESY88SzVPk/L5JrqERBVw8rP8Imj7eXsoGQ2sM3p
+   +t3UYIFBhzF4/bJzQSi2taew4mDtyKUdp70S+2nuyfwfFwQJYiPnGhKYv
+   3yaG4NGlNb0o1dK9dAnqzkZPkDNPJpioFMh+ZcUC0wU3NOVJmIA+nWTbb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="353690230"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="353690230"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:49:35 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="631175430"
+Received: from buichris-mobl.amr.corp.intel.com (HELO [10.209.124.150]) ([10.209.124.150])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:49:34 -0700
+Message-ID: <61ce1a14-7bac-fea8-b065-83a1c0704258@intel.com>
+Date:   Wed, 3 Aug 2022 07:49:34 -0700
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] x86,mm: print likely CPU at segfault time
 Content-Language: en-US
+To:     Rik van Riel <riel@surriel.com>, linux-kernel@vger.kernel.org
+Cc:     x86@vger.kernel.org, kernel-team@fb.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Dave Jones <dsj@fb.com>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220802160900.7a68909b@imladris.surriel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220802160900.7a68909b@imladris.surriel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiAyMDIyLTA4LTAyIDIwOjE5OjM0IFstMDcwMF0sIExpbnVzIFRvcnZhbGRzIHdyb3RlOg0K
-PiA+IFNlcmlvdXNseSwgZXZlbiBpZiB5b3UgaGF2ZSBzdHJpY3QgUlQgcmVxdWlyZW1lbnRzLCB5
-b3UgbWF5IGFsc28gaGF2ZQ0KPiA+IHN0cmljdCBkZWJ1Z2dpbmcgcmVxdWlyZW1lbnRzLCBhbmQg
-aWYgc29tZXRoaW5nIGdvZXMgd3JvbmcsIHlvdSB3YW50DQo+ID4gdG8gS05PVyBBQk9VVCBJVC4g
-QXQgdGhhdCBwb2ludCwgeW91ciBSVCBydWxlcyBtYXkgd2VsbCBmbHkgb3V0IHRoZQ0KPiA+IHdp
-bmRvdywgYmVjYXVzZSB5b3UgaGF2ZSBtb3JlIHNlcmlvdXMgcHJvYmxlbXMuDQo+ID4NCj4gPiBF
-bmQgcmVzdWx0OiBubyB3YXkgd2lsbCBJIGFjY2VwdCB0aGlzIGtpbmQgb2YgY29tcGxldGVseSBh
-cmJpdHJhcnkgYW5kDQo+ID4gZnJhbmtseSBub3QgdmVyeSBpbnRlbGxpZ2VudCBwYXRjaC4NCj4g
-Pg0KPiA+IElmIHBlb3BsZSB3YW50IHRvIGRpc2FibGUgY29uc29sZSBwcmludGluZywgdGhhdCdz
-IFRIRUlSIENIT0lDRS4gSXQNCj4gPiBjb3VsZCBiZSBhIG5ldyBjb25maWcgdmFyaWFibGUgd2hl
-cmUgeW91IEFTSyBwZW9wbGUgYWJvdXQgd2hhdCB0aGV5DQo+ID4gd2FudC4gTm90IHRoaXMga2lu
-ZCBvZiBpZGlvdGljIHR5aW5nIHRvZ2V0aGVyIG9mIHRoaW5ncy4NCg0KVGhlcmUgaXMgYWxyZWFk
-eSB0aGUgc3lzY3RsIGtlcm5lbC5wcmludGsNClRoYXQgY2FuIGJlIHVzZWQgdG8gbGltaXQgdGhl
-IGVmZmVjdHMgb2YgY29uc29sZSBsb2dnaW5nLg0KDQpJIGRvbid0IGFjdHVhbGx5IHJlbWVtYmVy
-IHRoZSAndGhyZWFkZWQgY29uc29sZScgc3R1ZmYgYmVpbmcNCmVuYWJsZWQvZGlzYWJsZWQgaW4g
-bXVjaCB0aGUgc2FtZSB3YXkuDQoNCkkgZW5kIHVwIHNldHRpbmcgJzYgNCAxIDcnIHRvIGF2b2lk
-IHNlcmlhbCBwb3J0IGRlbGF5cy4NCkJ1dCAoaW4gc29tZSBzZW5zZSkgaXQgbWlnaHQgYmUgdXNl
-ZnVsIHRvIGhhdmUgdGhlIHN1cHJlc3NlZA0KJ2luZm8nIG1lc3NhZ2VzIG91dHB1dCBieSBhIHRo
-cmVhZC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On 8/2/22 13:09, Rik van Riel wrote:
+> Add a printk to show_signal_msg() to print the CPU, core, and socket
 
+Nit:     ^ printk(), please
+
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -782,6 +782,12 @@ show_signal_msg(struct pt_regs *regs, unsigned long error_code,
+>  
+>  	print_vma_addr(KERN_CONT " in ", regs->ip);
+>  
+> +	printk(KERN_CONT " on CPU %d (core %d, socket %d)",
+> +	       raw_smp_processor_id(),
+> +	       topology_core_id(raw_smp_processor_id()),
+> +	       topology_physical_package_id(raw_smp_processor_id()));
+
+This seems totally sane to me.  I have found myself looking through
+customer-provided *oopses* more than once trying to figure out if the
+same CPU cores were at fault.  This extends that to userspace crashes
+too.  I've also found myself trying to map back from logical CPU numbers
+to core and package.
+
+One nit: Preempt is enabled here, right?  I understand that this thing
+is fundamentally racy, but if we did:
+
+	int cpu = READ_ONCE(raw_smp_processor_id());
+
+it would make it internally *consistent*.  Without that, we could
+theoretically get three different raw_smp_processor_id()'s.  It might
+even make the code look a wee bit nicer.
+
+The changelog here is great, but  couple of comments would also be nice:
+
+	/* This is a racy snapshot, but is better than nothing: */
+	int cpu = READ_ONCE(raw_smp_processor_id());
+...
+	/*
+	 * Dump the likely CPU where the fatal segfault happened.  This
+	 * can help help identify buggy pieces of hardware.
+	 */
+	printk(KERN_CONT " on CPU %d (core %d, socket %d)", cpu,
+	       topology_core_id(cpu),
+	       topology_physical_package_id(cpu));
+
+If you want to wait a bit and see if you get any other comments, this
+seems like something we can suck in after the merge window.

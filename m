@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0935892C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1DB5892C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238715AbiHCT3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S238777AbiHCT3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbiHCT31 (ORCPT
+        with ESMTP id S238444AbiHCT3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:29:27 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466795B7B9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:28:31 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso12824444otb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:28:31 -0700 (PDT)
+        Wed, 3 Aug 2022 15:29:32 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135385B798;
+        Wed,  3 Aug 2022 12:28:43 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id u12so13434176qtk.0;
+        Wed, 03 Aug 2022 12:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Ma+GO/hD9k5uL8nV2uPuPKZ6xfDbN3leVgMyW3x8EzM=;
-        b=cU5Dz45nQxDCY+ew1N6b4BGoTz0YJ+6Hx1M/ps70yMybGUMYiHzX2ttWRTuko4dIVa
-         We1IACBgxYr5wdas0wvD+oW2Da36FiWIQreawSglwLlOBQg6MR3XKvqelHsmvz/FHI7i
-         PbvYADYL2xyD/g/O6E9fB+zwJgzjCAemvWo+1MVNg42j/mCzVervTproAE8q2cSRy8sj
-         H6+QrGhUX5qsExHVuEXlggmxZQ5KpVFu5CzJ8dJQ9K+yHVojKkQc7PvEIWV1RAaGCO0i
-         2b3Gn/lJ2z0l7w3DC6msInIGFEUXCNrx9AeOAQQd8fBPdb4mtIDRC8XjbMMXcN+LIgWz
-         gLfQ==
+        bh=j6ua6sSOMR01Px12y7LQZ7sRXPuWjo+RHnWucuaPxno=;
+        b=nFavfSVf4GaJ45pNBa9bpH1I0dEul2AoNgoS13aXm0cw3J1IxW3XneSEKO50iU6gLm
+         vHp4LOsHMcUKGSckeiHJ0xUW1XG6tdXTb9YvHA/bc5ZThulmvQgUSzSsrnZyIkye2WNf
+         Gd+2kZaE9opkD31v/NFditb0gS4/TSv4tYTFzcyHPIQQNnBWgyRBTEECim2q+smDEffS
+         5EGy2EeXXALA03Q5io8L0M0jxbcwRr/U7e/bDcSgqmYwXvfacsYVY9v6yLgKUsr4ZZ3/
+         MRN9aoatDVS7+GSYyT9YQGYObw3wa+pqhu5srDsRx+jBuBYXpDvMdjpO8JTjRLTIolPI
+         4XJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Ma+GO/hD9k5uL8nV2uPuPKZ6xfDbN3leVgMyW3x8EzM=;
-        b=An4Qw4Xkp29pGj5PUU5QxIe/BMHZjBkgMHvKLnE8wzLW7UwzgRiJDsNIfDxdYPMmsx
-         NYlaWP75kIcM7zrGol03WlYp48+rvNBgavUshggovW1EowPUogU+lJOU1ZBsTETtASM4
-         e3K++msfA4UiefUNWIvnRVeH0LO0x6JyzNnzo6DmeJGE0HfrIsoSSeN9cKNHETUgJsRy
-         ecOH9wZhyzN82WOVFKJN9J/7gbacB3iKMZTfkGbyT2iZVGhSVfS6pNoOHgu0/joO6sNp
-         1dyEFU3uJGnvd66smcfF9DIqoHFGIaw0RVu18AG7R59hammr5yPndZiF/lgFVx1TLt3X
-         SJYA==
-X-Gm-Message-State: ACgBeo2BsCdNuQFnY8oSW+5hUDIbGdswcGw1cgKsTvPrqOL8tpNCwSJA
-        sPyyfXXTeazGe0h1Nl9bXKFEEyfbKgcofdmjmuuDuXF3faAwUvk=
-X-Google-Smtp-Source: AA6agR65YbUsom0l8+z3HcAytfFP/DS8Hy63Nzjz/gN2pAojoVadBWhpqA+NfhwSgMPzKKw8l438M5lfkaYbM/gHSmU=
-X-Received: by 2002:a05:6830:33e4:b0:636:732d:5a48 with SMTP id
- i4-20020a05683033e400b00636732d5a48mr2750250otu.69.1659554910465; Wed, 03 Aug
- 2022 12:28:30 -0700 (PDT)
+        bh=j6ua6sSOMR01Px12y7LQZ7sRXPuWjo+RHnWucuaPxno=;
+        b=V3YINXf4Iz/nyEk5zREIduvMDc4iKABLBz9Nk7B0QZo/DGMeWwBtg9H185Rr5sS7bq
+         EuD1/eqmmU/0guIWK3UzAPn/8u4VID74iZW1TkKK9a1c92sL6GVrQLBYyDR2pkq+G0Es
+         k6muTCUaQe9HLQq4NWKB8AZLZ+7KdDz/8N/qvgkR0IAs6uWWxwXFJKVS51ntk4ocDjQ1
+         WBY8RWBu2K2wqqZLtYTgyy+iY7IDx948QI2o6oD1BGcz+M5gQyGdAge/EB+MfBdfqaQe
+         iHF1X7lAxrybcwu1seXw0/fwnRtppXW+874QLQBUjWZjkLiTjV1wTXJey8GnusAEvxC2
+         B/uQ==
+X-Gm-Message-State: AJIora+G7oZfLm7EextXOudxF0IJQD2bOuZCWfM5NxpvX48gYChZIReY
+        CuKFFW6Ml+bSnWK5srxvlo5QUtY/nNkIX8fDgFI=
+X-Google-Smtp-Source: AGRyM1sKsNtOmA0uxL5XpZY/qqHfTGj5qb1aIPlGf97a4nzpeDMDnxOUU7vl0oK8CDue6thIYHzB0UU5X3wkc9Vl6uw=
+X-Received: by 2002:ac8:5fd1:0:b0:31f:31a6:55c0 with SMTP id
+ k17-20020ac85fd1000000b0031f31a655c0mr23480147qta.506.1659554922083; Wed, 03
+ Aug 2022 12:28:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803050230.30152-1-yepeilin.cs@gmail.com> <CAHC9VhRXypjNgDAwdARZz-md_DaSTs+9BpMik8AzWojG7ChexA@mail.gmail.com>
-In-Reply-To: <CAHC9VhRXypjNgDAwdARZz-md_DaSTs+9BpMik8AzWojG7ChexA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 3 Aug 2022 15:28:19 -0400
-Message-ID: <CAHC9VhRYGgCLiWx5LCoqgTj_RW_iQRLrzivWci7_UneN_=rwmw@mail.gmail.com>
-Subject: Re: [PATCH] audit, io_uring, io-wq: Fix memory leak in io_sq_thread()
- and io_wqe_worker()
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Eric Paris <eparis@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-audit@redhat.com
+References: <CABXGCsN+BcaGO0+0bJszDPvA=5JF_bOPfXC=OLzMzsXY2M8hyQ@mail.gmail.com>
+ <20220726164250.GE13489@twin.jikos.cz>
+In-Reply-To: <20220726164250.GE13489@twin.jikos.cz>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Thu, 4 Aug 2022 00:28:31 +0500
+Message-ID: <CABXGCsMNF_SKns-av1kAWtR5Yd7u6sjwsFT9er8tSebfuLG8VQ@mail.gmail.com>
+Subject: Re: BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!
+To:     dsterba@suse.cz, Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        dvyukov@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,88 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 9:16 AM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Aug 3, 2022 at 1:03 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> >
-> > Currently @audit_context is allocated twice for io_uring workers:
-> >
-> >   1. copy_process() calls audit_alloc();
-> >   2. io_sq_thread() or io_wqe_worker() calls audit_alloc_kernel() (which
-> >      is effectively audit_alloc()) and overwrites @audit_context,
-> >      causing:
-> >
-> >   BUG: memory leak
-> >   unreferenced object 0xffff888144547400 (size 1024):
-> > <...>
-> >     hex dump (first 32 bytes):
-> >       00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
-> >       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> >     backtrace:
-> >       [<ffffffff8135cfc3>] audit_alloc+0x133/0x210
-> >       [<ffffffff81239e63>] copy_process+0xcd3/0x2340
-> >       [<ffffffff8123b5f3>] create_io_thread+0x63/0x90
-> >       [<ffffffff81686604>] create_io_worker+0xb4/0x230
-> >       [<ffffffff81686f68>] io_wqe_enqueue+0x248/0x3b0
-> >       [<ffffffff8167663a>] io_queue_iowq+0xba/0x200
-> >       [<ffffffff816768b3>] io_queue_async+0x113/0x180
-> >       [<ffffffff816840df>] io_req_task_submit+0x18f/0x1a0
-> >       [<ffffffff816841cd>] io_apoll_task_func+0xdd/0x120
-> >       [<ffffffff8167d49f>] tctx_task_work+0x11f/0x570
-> >       [<ffffffff81272c4e>] task_work_run+0x7e/0xc0
-> >       [<ffffffff8125a688>] get_signal+0xc18/0xf10
-> >       [<ffffffff8111645b>] arch_do_signal_or_restart+0x2b/0x730
-> >       [<ffffffff812ea44e>] exit_to_user_mode_prepare+0x5e/0x180
-> >       [<ffffffff844ae1b2>] syscall_exit_to_user_mode+0x12/0x20
-> >       [<ffffffff844a7e80>] do_syscall_64+0x40/0x80
-> >
-> > Then,
-> >
-> >   3. io_sq_thread() or io_wqe_worker() frees @audit_context using
-> >      audit_free();
-> >   4. do_exit() eventually calls audit_free() again, which is okay
-> >      because audit_free() does a NULL check.
-> >
-> > Free the old @audit_context first in audit_alloc_kernel(), and delete
-> > the redundant calls to audit_free() for less confusion.
-> >
-> > Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-> > ---
-> > Hi all,
-> >
-> > A better way to fix this memleak would probably be checking
-> > @args->io_thread in copy_process()?  Something like:
-> >
-> >     if (args->io_thread)
-> >         retval = audit_alloc_kernel();
-> >     else
-> >         retval = audit_alloc();
-> >
-> > But I didn't want to add another if to copy_process() for this bugfix.
-> > Please suggest, thanks!
+On Tue, Jul 26, 2022 at 9:47 PM David Sterba <dsterba@suse.cz> wrote:
 >
-> Thanks for the report and patch!  I'll take a closer look at this
-> today and get back to you.
+> On Tue, Jul 26, 2022 at 05:32:54PM +0500, Mikhail Gavrilov wrote:
+> > Hi guys.
+> > Always with intensive writing on a btrfs volume, the message "BUG:
+> > MAX_LOCKDEP_CHAIN_HLOCKS too low!" appears in the kernel logs.
+>
+> Increase the config value of LOCKDEP_CHAINS_BITS, default is 16, 18
+> tends to work.
 
-I think the best solution to this is simply to remove the calls to
-audit_alloc_kernel() in the io_uring and io-wq code, as well as the
-audit_alloc_kernel() function itself.  As long as create_io_thread()
-ends up calling copy_process to create the new kernel thread the
-audit_context should be allocated correctly.  Peilin Ye, are you able
-to draft a patch to do that and give it a test?
+I confirm that after bumping LOCKDEP_CHAINS_BITS to 18 several days of
+continuous writing on the BTRFS partition with different files with a
+total size of 10Tb I didn't see this kernel bug message again.
+Tetsuo, I saw your commit 5dc33592e95534dc8455ce3e9baaaf3dae0fff82 [1]
+set for LOCKDEP_CHAINS_BITS default value 16.
+Why not increase LOCKDEP_CHAINS_BITS to 18 by default?
+Thanks.
 
-For those that may be wondering how this happened (I definitely was!),
-it looks like when I first started working on the LSM/audit support
-for io_uring it was before the v5.12-rc1 release when
-create_io_thread() was introduced.  Prior to create_io_thread() it
-appears that io_uring/io-wq wasn't calling into copy_process() and
-thus was not getting an audit_context allocated in the kernel thread's
-task_struct; the solution for those original development drafts was to
-add a call to a new audit_alloc_kernel() which would handle the
-audit_context allocation.  Unfortunately, I didn't notice the move to
-create_io_thread() during development and the redundant
-audit_alloc_kernel() calls remained :/
+
+[1] https://github.com/torvalds/linux/blame/master/lib/Kconfig.debug#L1387
 
 -- 
-paul-moore.com
+Best Regards,
+Mike Gavrilov.

@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AA2588F33
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DB9588F38
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiHCPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S236670AbiHCPRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiHCPQG (ORCPT
+        with ESMTP id S236201AbiHCPR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:16:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE265F46
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:16:02 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id f22so10883287edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:16:02 -0700 (PDT)
+        Wed, 3 Aug 2022 11:17:29 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427265F52;
+        Wed,  3 Aug 2022 08:17:28 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d20so9314654pfq.5;
+        Wed, 03 Aug 2022 08:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3YBGLkEwVoW2LvMmulWhsVedej5Z16WRTdg7cXlL6ZM=;
-        b=FAmdOiYinoDcAA+TehBhqXwLHOb5zIazpi+mrI1vLtK/rnldnfEHhN5ZH30Fdx9a4m
-         Y0255Pf9D10Wbh9iRwbIRfvKgsQliOtPODqyA4i/tIBke1EZl7wEkOy4GmCqQs3cL9Cj
-         NuVHiYQCFX0pAAw/b+vVjNC3cHK2mBmsAv4u0dXyTy4HPDChtjYyZQ23UWJp9SnA4Rki
-         3BJRG5OGqgZLde8JlaKhROSyDJyzRI8x8af8/JzTomoTuKXes2zitp478Yqan9WiOrrA
-         BN4AoIYT4Kjjqh56tAkMFbcEap9vnaKqkArGWSwQPfFEZdNgVratpkOnkk5GwMJPJChI
-         MmDQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=oNr9cYrhYYJ71xIwjeGTHZcy87EslxiZzIalDyvPVWc=;
+        b=CwYeSEKCKvrVEdtvKHnBCKsNkdIOx9HcWLN6NVQXi85JWEkFg/5BAaVI8bQnVpAR9f
+         DfnukQoWDW738z5+6eeKeN9/ZI77LCtLtq77MwfL9Cj2a5JGN/50Ie27Wr7XTmu1gqN2
+         p2PB7DdQ/Mc5haRlWmeCS2yWS+c9roPuFKfUL1NI6SDCMu0Ur9RZ0S1oPb9+9TnBFoZs
+         vPiehKD6dvc+HOl5aYw+mxrbxR466Rc9WFzL7w2KOlfUhistrUnM0IwppggXlTdFrIYG
+         IHP/I9mtcFNUfAjGde1f3nSAl/UYbtEBhMHFCU8KNvdu3XtwMLutyrj2rYrmEtWqMdGR
+         4chA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3YBGLkEwVoW2LvMmulWhsVedej5Z16WRTdg7cXlL6ZM=;
-        b=T1sUyYed699N91ZdxCiJy076DGeqe2yRb/NFLKpEzXPQZ8sg34fKmnl+MC7jNZQFGt
-         zrLnQayJY2d2UE9t/34AgEvsAG/EpavUBFh7s2wSpprWczD5ndD//2jmOr1EGoBqWMOR
-         cuNetOaPjGvOFuuAoI7teLAa8d7f8CEn24Z9ukam/sP+Jq4dQDeC2Dlh0CmceB1dYq0C
-         8ucoINtg5NsgJxjco2CFjSNG9x9kjpuThrZeoESQGrraxgiiqiS/vNc2R4oirBv2LQ8u
-         PuFWViDqmqBEgcUu6WydrJNpTzcnGRJp9wv4/dRun7QTekz9O5x5IxbtTO/a+J3PwbO1
-         OIiA==
-X-Gm-Message-State: ACgBeo3zxyVEv0Hus4tpTOk9+KuJjkd1U058kfy83/d2/5oX5U6GZshK
-        5gprgxN7IkNbRdLwArFlHyi/PF0VsS85w9Tr0vPBQA==
-X-Google-Smtp-Source: AA6agR4x6DtXirRxnhTcls5sJ1R5pcmz41UUXPIYNZ/mJKy08n/wCbqtZlcFh9LoYFeOtjo6MIlDSO9MH73iYHQ787g=
-X-Received: by 2002:a05:6402:2790:b0:43e:5a76:4d20 with SMTP id
- b16-20020a056402279000b0043e5a764d20mr1877144ede.175.1659539761132; Wed, 03
- Aug 2022 08:16:01 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=oNr9cYrhYYJ71xIwjeGTHZcy87EslxiZzIalDyvPVWc=;
+        b=Ye6fBG+N4NWIwPJmOvwVBg0vKUX/JsLsN+RDyH4rm+0mHoreIuPi+VmKPPNKpK/E9J
+         gPJv/pU4L+ARZaIvMRDy6yX1Po1K9zQ1umk2judSOeQ7M3ypK3xYMmmVReI9Nse5yKSL
+         sNRl7tNtONkhHlq3cWRWuTOHTOlf4mQ1ZQ67tfdR4mA16j3KX0a5F6veF3WFPJEHI4KU
+         +WTYFKw2n2hZ/NGTrlR9iDuaLjPsOLXJ/A21lB8bGZWBjT3wdnR1dWUEtnj2X9RKmDzq
+         tnLQQBq4nBNY42ozFwFYqmo0rV1kPIHT4QH3L1rj0eDlI/qAWHCBv6w04TAKpvMHVbRt
+         sAcg==
+X-Gm-Message-State: AJIora/xOH4rRPomAS2aBe+WWk0zOPkDVO2lO2lmRdj0j8x4dCwjcVb5
+        SPQrkQ45VwSdq5BJ93/HLGKwvPMcSEjB+JHply8=
+X-Google-Smtp-Source: AGRyM1sDxF9LFw5yhJVEcTicuVVo87n4bzo3w7dEvTUf3KF6IhSgAcbtG0vVoZ9p148276XCHYdfpTsnuXqq2hRjnFc=
+X-Received: by 2002:a05:6a00:2282:b0:52a:e79b:16e4 with SMTP id
+ f2-20020a056a00228200b0052ae79b16e4mr26012746pfe.79.1659539847508; Wed, 03
+ Aug 2022 08:17:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220803010139.GA32634@rajth-NUC10i7FNH> <YuoJceCfuJ4RKon5@lahna>
-In-Reply-To: <YuoJceCfuJ4RKon5@lahna>
-From:   Benson Leung <bleung@google.com>
-Date:   Wed, 3 Aug 2022 08:15:49 -0700
-Message-ID: <CANLzEkucqXP6fU1OZ0+B4p10SXiR7-BJa+dn5xjp20UhE8UsEg@mail.gmail.com>
-Subject: Re: [PATCH] Supporting wake on DP hot events behind TBT/USB4 routers
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@intel.com>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmalani@google.com
+References: <20220802232741.481145-1-james.hilliard1@gmail.com> <Yuovl3ycDfflqV9h@krava>
+In-Reply-To: <Yuovl3ycDfflqV9h@krava>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Wed, 3 Aug 2022 09:17:14 -0600
+Message-ID: <CADvTj4omSZvx1EBAaMCBCqw=wYjEjX6aK57hhfvDA2Nc9P_yVA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: ensure functions with always_inline attribute are inline
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,54 +74,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mika,
-
-On Tue, Aug 2, 2022 at 10:37 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
+On Wed, Aug 3, 2022 at 2:19 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> Hi,
->
-> On Wed, Aug 03, 2022 at 06:31:39AM +0530, Rajat Khandelwal wrote:
-> > Current implementation doesn't allow user to go into system suspend
-> > and simultaneously project the screen on an external display connected
-> > to a TBT/USB4 device. This patch enables this feature.
+> On Tue, Aug 02, 2022 at 05:27:41PM -0600, James Hilliard wrote:
+> > GCC expects the always_inline attribute to only be set on inline
+> > functions, as such we should make all functions with this attribute
+> > inline.
 > >
-> > Let me know what you think about this.
+> > Fixes errors like:
+> > /home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/=
+bpf_tracing.h:439:1: error: =E2=80=98always_inline=E2=80=99 function might =
+not be inlinable [-Werror=3Dattributes]
+> >   439 | ____##name(unsigned long long *ctx, ##args)
+> >       | ^~~~
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  tools/lib/bpf/bpf_tracing.h | 14 +++++++-------
+> >  tools/lib/bpf/usdt.bpf.h    |  4 ++--
+> >  2 files changed, 9 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> > index 43ca3aff2292..ae67fcee912c 100644
+> > --- a/tools/lib/bpf/bpf_tracing.h
+> > +++ b/tools/lib/bpf/bpf_tracing.h
+> > @@ -426,7 +426,7 @@ struct pt_regs;
+> >   */
+> >  #define BPF_PROG(name, args...)                                       =
+           \
+> >  name(unsigned long long *ctx);                                        =
+           \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
 >
-> Please prefix patches to follow the sybsystem style. For Thunderbolt it
-> should be "thunderbolt: ....".
->
-> This will cause any monitor plug to wake up the system and I'm not sure
-> we want that, at least to be default behaviour. If you have a regular
-> Type-C (non-USB4/TBT) dock and you plug in a monitor to that, does it
-> wake up?
+> could you use __always_inline that does exactly that?
 
-Speaking for Google and our ChromeOS USB-C policy, yes, if the host is
-in S0iX or S3, an already attached USB-C docking station in DP Alt
-Mode will respond to a display attach via HPD via an Alert message in
-USB PD. We called this feature wake-on-dock.
-
-We implemented wake-on-dock for DP Alt Mode in the EC, since our EC
-handles USB PD anyway, and is handling the PD Alert message which
-contains the HPD status.
-
-However, when the dock supports USB4 or Thunderbolt, those modes don't
-involve USB PD for device attach, so our EC doesn't have the role of
-waking the system, so something else on the system must, which is this
-feature being discussed.
+Sure, changed to use the __always_inline macro in v2:
+https://lore.kernel.org/bpf/20220803151403.793024-1-james.hilliard1@gmail.c=
+om/
 
 >
-> IIRC I already suggested you to do this for the USB4 ports themselves
-> (struct usb4_port) so that userspace can make them wake up the system on
-> any event by writing "enabled > .../wakeup" which is the normal way.
-
-Yes, I would support making this toggle-able like other wakeup sources.
-
--- 
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+> jirka
+>
+> >  ____##name(unsigned long long *ctx, ##args);                          =
+   \
+> >  typeof(name(0)) name(unsigned long long *ctx)                         =
+           \
+> >  {                                                                     =
+   \
+> > @@ -435,7 +435,7 @@ typeof(name(0)) name(unsigned long long *ctx)      =
+                           \
+> >       return ____##name(___bpf_ctx_cast(args));                        =
+   \
+> >       _Pragma("GCC diagnostic pop")                                    =
+   \
+> >  }                                                                     =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(unsigned long long *ctx, ##args)
+> >
+> >  struct pt_regs;
+> > @@ -460,7 +460,7 @@ struct pt_regs;
+> >   */
+> >  #define BPF_KPROBE(name, args...)                                     =
+   \
+> >  name(struct pt_regs *ctx);                                            =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args);                              =
+   \
+> >  typeof(name(0)) name(struct pt_regs *ctx)                             =
+   \
+> >  {                                                                     =
+   \
+> > @@ -469,7 +469,7 @@ typeof(name(0)) name(struct pt_regs *ctx)          =
+                   \
+> >       return ____##name(___bpf_kprobe_args(args));                     =
+   \
+> >       _Pragma("GCC diagnostic pop")                                    =
+   \
+> >  }                                                                     =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args)
+> >
+> >  #define ___bpf_kretprobe_args0()       ctx
+> > @@ -484,7 +484,7 @@ ____##name(struct pt_regs *ctx, ##args)
+> >   */
+> >  #define BPF_KRETPROBE(name, args...)                                  =
+   \
+> >  name(struct pt_regs *ctx);                                            =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args);                              =
+   \
+> >  typeof(name(0)) name(struct pt_regs *ctx)                             =
+   \
+> >  {                                                                     =
+   \
+> > @@ -540,7 +540,7 @@ static __always_inline typeof(name(0)) ____##name(s=
+truct pt_regs *ctx, ##args)
+> >  #define BPF_KSYSCALL(name, args...)                                   =
+   \
+> >  name(struct pt_regs *ctx);                                            =
+   \
+> >  extern _Bool LINUX_HAS_SYSCALL_WRAPPER __kconfig;                     =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args);                              =
+   \
+> >  typeof(name(0)) name(struct pt_regs *ctx)                             =
+   \
+> >  {                                                                     =
+   \
+> > @@ -555,7 +555,7 @@ typeof(name(0)) name(struct pt_regs *ctx)          =
+                   \
+> >               return ____##name(___bpf_syscall_args(args));            =
+   \
+> >       _Pragma("GCC diagnostic pop")                                    =
+   \
+> >  }                                                                     =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args)
+> >
+> >  #define BPF_KPROBE_SYSCALL BPF_KSYSCALL
+> > diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+> > index 4f2adc0bd6ca..2bd2d80b3751 100644
+> > --- a/tools/lib/bpf/usdt.bpf.h
+> > +++ b/tools/lib/bpf/usdt.bpf.h
+> > @@ -232,7 +232,7 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
+> >   */
+> >  #define BPF_USDT(name, args...)                                       =
+           \
+> >  name(struct pt_regs *ctx);                                            =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args);                              =
+   \
+> >  typeof(name(0)) name(struct pt_regs *ctx)                             =
+   \
+> >  {                                                                     =
+   \
+> > @@ -241,7 +241,7 @@ typeof(name(0)) name(struct pt_regs *ctx)          =
+                   \
+> >          return ____##name(___bpf_usdt_args(args));                    =
+   \
+> >          _Pragma("GCC diagnostic pop")                                 =
+           \
+> >  }                                                                     =
+   \
+> > -static __attribute__((always_inline)) typeof(name(0))                 =
+           \
+> > +static inline __attribute__((always_inline)) typeof(name(0))          =
+   \
+> >  ____##name(struct pt_regs *ctx, ##args)
+> >
+> >  #endif /* __USDT_BPF_H__ */
+> > --
+> > 2.34.1
+> >

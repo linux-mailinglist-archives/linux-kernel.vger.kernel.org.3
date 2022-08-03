@@ -2,96 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A4A588AA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E031588AA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbiHCKdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S235763AbiHCKdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238050AbiHCKb2 (ORCPT
+        with ESMTP id S238047AbiHCKb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:31:28 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EB732DAB
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:30:59 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id g5so3324839ybg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 03:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=BnCISkt/rTW8As5S0Z1/CmUKmWtp6KufxVc54xAHFLs=;
-        b=bTMMrVHLEXsaZsPJ4ir9RlmOn/kRdosyeadx3rkmGXU4lflYbV46JM5DZksUMtzIVN
-         U/XEZSrcnqjbOBxVyOOXZVWlx0hp9Fu5nKxWv12BNG1XktevXZFB3m/Y6U7AR+1tVcE2
-         moSCPz5d5L9dbdRbJMQnG2/CX8KHw3/wr6ghKVtubKYXwknqG+9T92FwxaKne2npOKfO
-         fDB0cU62aoS1208GpKYOLg5LwYk5buP/sgF+RjfJpmGKtXJeAinS5Jzr3wLXQdoHpwkg
-         lGa+9i5+l/igcHME3dLynxA3WXk5TN5TBIaxPE4oeCTUDNBsXUUsFu1mf5QJV6HhkRE8
-         9BPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=BnCISkt/rTW8As5S0Z1/CmUKmWtp6KufxVc54xAHFLs=;
-        b=VsPMBKkLqnh8OyFa64+A/98rngqoDrHGRcsbr735k5QBtX7UXFiUueBKGnk2Q3Mxz0
-         TEbDq+KTvxobVTWiGZ11VHTzlmBhi3C9P8Bdlw4gtRGvlqlwgECKaHvqzZUmrepr774c
-         D/1nE6C23Ue0/12ZlSQWz+mOCv0ZUIvqECaD+r32GiPJ9I4bc7CJgStEaVeQtjhLU87H
-         7us9ugM8SAvQzyDvOJBCy538Q/icmCVMJ4YT7llyctsFhbAY1lP+0VzCuwuKGCMg9JS4
-         UjaqqEDlr+dLfirVI2qf52cloJII1Zc597ayCvBl2BYBu1ynjsh18elCQsCs2A1CAgru
-         lJdQ==
-X-Gm-Message-State: ACgBeo1U4jDwOtx9wZKIlbcWTkZpTaiFfhXdEWLhi68nsh8qhytUsdm4
-        QMSOAsJfrOT6A88X51OBNxbfeFFi0brLu7uq5A9OYg==
-X-Google-Smtp-Source: AA6agR7fdKTqJ79i3lBMbE47XG4iizoPXTEVMh+XjGTeEPP0Bf+PZ8XOj+9lhkdsDhh+hXPLRsJykxdjz32sjCymNEA=
-X-Received: by 2002:a05:6902:1348:b0:671:78a4:471f with SMTP id
- g8-20020a056902134800b0067178a4471fmr19280596ybu.242.1659522658125; Wed, 03
- Aug 2022 03:30:58 -0700 (PDT)
+        Wed, 3 Aug 2022 06:31:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83F6140AE;
+        Wed,  3 Aug 2022 03:30:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360A7113E;
+        Wed,  3 Aug 2022 03:30:30 -0700 (PDT)
+Received: from [10.57.12.36] (unknown [10.57.12.36])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4093F3F67D;
+        Wed,  3 Aug 2022 03:30:28 -0700 (PDT)
+Message-ID: <50d04f45-6aa9-dee8-6647-3f0b909049ea@arm.com>
+Date:   Wed, 3 Aug 2022 11:30:22 +0100
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-15-glider@google.com>
- <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
-In-Reply-To: <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 3 Aug 2022 12:30:21 +0200
-Message-ID: <CAG_fn=X8zV2j9aPviz23UH8tsbRTqefGoZOCRgJeVtcivdhKVA@mail.gmail.com>
-Subject: Re: [PATCH v4 14/45] mm: kmsan: maintain KMSAN metadata for page operations
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: PCI: host-generic-pci: Allow IOMMU and MSI
+ properties
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220728175137.1172841-1-robh@kernel.org>
+ <a673e846-e3d7-63e3-70cd-4adef3f761cc@arm.com>
+ <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,102 +52,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 2:21 PM Marco Elver <elver@google.com> wrote:
->
-> On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrot=
-e:
-> >
-> > Insert KMSAN hooks that make the necessary bookkeeping changes:
-> >  - poison page shadow and origins in alloc_pages()/free_page();
-> >  - clear page shadow and origins in clear_page(), copy_user_highpage();
-> >  - copy page metadata in copy_highpage(), wp_page_copy();
-> >  - handle vmap()/vunmap()/iounmap();
-> >
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > ---
-> > v2:
-> >  -- move page metadata hooks implementation here
-> >  -- remove call to kmsan_memblock_free_pages()
-> >
-> > v3:
-> >  -- use PAGE_SHIFT in kmsan_ioremap_page_range()
-> >
-> > v4:
-> >  -- change sizeof(type) to sizeof(*ptr)
-> >  -- replace occurrences of |var| with @var
-> >  -- swap mm: and kmsan: in the subject
-> >  -- drop __no_sanitize_memory from clear_page()
-> >
-> > Link: https://linux-review.googlesource.com/id/I6d4f53a0e7eab46fa29f034=
-8f3095d9f2e326850
-> > ---
-> >  arch/x86/include/asm/page_64.h |  12 ++++
-> >  arch/x86/mm/ioremap.c          |   3 +
-> >  include/linux/highmem.h        |   3 +
-> >  include/linux/kmsan.h          | 123 +++++++++++++++++++++++++++++++++
-> >  mm/internal.h                  |   6 ++
-> >  mm/kmsan/hooks.c               |  87 +++++++++++++++++++++++
-> >  mm/kmsan/shadow.c              | 114 ++++++++++++++++++++++++++++++
-> >  mm/memory.c                    |   2 +
-> >  mm/page_alloc.c                |  11 +++
-> >  mm/vmalloc.c                   |  20 +++++-
-> >  10 files changed, 379 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page=
-_64.h
-> > index baa70451b8df5..227dd33eb4efb 100644
-> > --- a/arch/x86/include/asm/page_64.h
-> > +++ b/arch/x86/include/asm/page_64.h
-> > @@ -45,14 +45,26 @@ void clear_page_orig(void *page);
-> >  void clear_page_rep(void *page);
-> >  void clear_page_erms(void *page);
-> >
-> > +/* This is an assembly header, avoid including too much of kmsan.h */
->
-> All of this code is under an "#ifndef __ASSEMBLY__" guard, does it matter=
-?
-Actually, the comment is a bit outdated. kmsan-checks.h doesn't
-introduce any unnecessary declarations and can be used here.
+On 2022-08-02 23:21, Rob Herring wrote:
+> On Tue, Aug 2, 2022 at 3:26 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>>
+>> On 2022-07-28 18:51, Rob Herring wrote:
+>>> Allow 'iommu-map', 'iommu-map-mask', and 'msi-parent' properties for
+>>> generic host. This fixes unevaluated property warnings on Arm Juno, AMD
+>>> Seattle, and FSL LS1028a.
+>>>
+>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>> ---
+>>>    Documentation/devicetree/bindings/pci/host-generic-pci.yaml | 3 +++
+>>>    1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
+>>> index 6bcaa8f2c3cf..d25423aa7167 100644
+>>> --- a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
+>>> +++ b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
+>>> @@ -106,6 +106,9 @@ properties:
+>>>        maxItems: 3
+>>>
+>>>      dma-coherent: true
+>>> +  iommu-map: true
+>>> +  iommu-map-mask: true
+>>> +  msi-parent: true
+>>
+>> Hmm, in general this set looks suspiciously incomplete without msi-map
+>> and msi-map-mask too. Am I right in thinking that the ideal thing to do
+>> here would be to convert pci-msi.txt and pci-iommu.txt to schema and
+>> $ref them?
+> 
+> I already added msi-map/msi-map-mask to pci-bus.yaml[1] as well as
+> schemas for iommu-map/iommu-map-mask[2] and msi-parent[3]. Since
+> msi-map is already in the referenced schema, it is allowed here.
+> msi-parent is separate because it is used elsewhere. iommu-map is
+> separate largely to make copying pci-iommu.txt as-is easier.
+> 
+> And yes, pci-iommu.txt can now be removed. pci-msi.txt is more
+> complicated as all of it hasn't been moved into schemas.
 
-> > +#ifdef CONFIG_KMSAN
-> > +void kmsan_unpoison_memory(const void *addr, size_t size);
-> > +#endif
-> >  static inline void clear_page(void *page)
-> >  {
-> > +#ifdef CONFIG_KMSAN
-> > +       /* alternative_call_2() changes @page. */
-> > +       void *page_copy =3D page;
-> > +#endif
-> >         alternative_call_2(clear_page_orig,
-> >                            clear_page_rep, X86_FEATURE_REP_GOOD,
-> >                            clear_page_erms, X86_FEATURE_ERMS,
-> >                            "=3DD" (page),
-> >                            "0" (page)
-> >                            : "cc", "memory", "rax", "rcx");
-> > +#ifdef CONFIG_KMSAN
-> > +       /* Clear KMSAN shadow for the pages that have it. */
-> > +       kmsan_unpoison_memory(page_copy, PAGE_SIZE);
->
-> What happens if this is called before the alternative-call? Could this
-> (in the interest of simplicity) be moved above it? And if you used the
-> kmsan-checks.h header, it also doesn't need any "ifdef CONFIG_KMSAN"
-> anymore.
+Ah, great! One general comment, though - iommu-map/msi-map have pretty 
+much grown into common IOMMU/MSI consumer properties by now, so IMO 
+they'd be better off living alongside their respective iommus/msi-parent 
+counterparts, so that other consumers like fsl-mc and host1x can 
+reference a common definition rather than duplicating their own. The 
+only aspect that should still belong to the PCI binding is the detail of 
+how PCI B:D:F forms the input ID for the mappings (and equivalently for 
+other bus bindings).
 
-Good idea, that'll work.
+Thanks,
+Robin.
 
-> > +#endif
-> >  }
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+> 
+> Rob
+> 
+> [1] https://github.com/devicetree-org/dt-schema/commit/109bde712466281e8c96a4fadb0f68e7a90a6eca
+> [2] https://github.com/devicetree-org/dt-schema/commit/3d44bf2b46a9ac638550ca3916d7d7f70823bb58
+> [3] https://github.com/devicetree-org/dt-schema/commit/59f2e3103b6e776afe4f42e45897f7eabae06fa4

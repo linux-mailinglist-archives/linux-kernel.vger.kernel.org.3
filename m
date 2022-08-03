@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D23A588E94
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A7B588E96
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238749AbiHCOWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S238518AbiHCOXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238575AbiHCOW2 (ORCPT
+        with ESMTP id S238815AbiHCOWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:22:28 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DD532EFF;
-        Wed,  3 Aug 2022 07:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1659536547; x=1691072547;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ab1zJS9fWPNKtBxryvC014d7x2EEfYkbWTsZfGv2w4c=;
-  b=wJ4I1NQzI/Ph9jkr7rk+WP9e8VkoxRH+bGkg3CwyPbQGwM5gY+hO6lG6
-   aEyajIb4D+HUmQxdHOcUQQBHm9p276fkYll03g2VUei+XKx8ttVD+nzoZ
-   lIoWNLizpCUpujFSSP+mfXBwiYkKNRIEp2Wagqvj9uj1/OC84PhpIdT3i
-   c=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 03 Aug 2022 07:22:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:22:26 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 3 Aug 2022 07:22:26 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 3 Aug 2022 07:22:20 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH 8/8] remoteproc: qcom: Update QDSP6 out-of-reset timeout value
-Date:   Wed, 3 Aug 2022 19:51:20 +0530
-Message-ID: <1659536480-5176-9-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1659536480-5176-1-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 3 Aug 2022 10:22:53 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30BF2A244;
+        Wed,  3 Aug 2022 07:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659536571; x=1691072571;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ARwyAl2EszMC/rUU5o5wSvHaFBqvGsQKMB4jjBXC5Dw=;
+  b=NVwjBQNvq8ZpNqCxZyyESGSiGG5FRgnZDqFldz6PGKRC/4vW3PlxoUx1
+   xSEmR/dmjRBQTUNrr0QpXY2AIO9+H6DepC20FRU4KtWATHCmmleqjd3TG
+   OPUTyt0FwRUiuB950TDpcbfeb3VN8JZr0FME6g1NLoOb8YHdGVDMcdS02
+   XZkedO+TAjIqc6+mHrNjnlHPxxBeW2m21XJztYLRntne83ShOcQ4fDF0e
+   RxJMBpE/jr4kfi0O8hpTM2yvUAHpHvcxFwEmrMQ3Q8l69yZIC/33YXn0v
+   7aUzZgFb9VA9wm9uOjfAxG76LX4cEQUSmXMrCxb/TkhES2CqMGHN0+/J1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="290900314"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="290900314"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:22:51 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="631166445"
+Received: from buichris-mobl.amr.corp.intel.com (HELO [10.209.124.150]) ([10.209.124.150])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 07:22:50 -0700
+Message-ID: <675ac8a7-be1c-9e9e-9530-bd1488c99dc9@intel.com>
+Date:   Wed, 3 Aug 2022 07:22:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 12/22] x86/virt/tdx: Convert all memory regions in
+ memblock to TDX memory
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <8288396be7fedd10521a28531e138579594d757a.1655894131.git.kai.huang@intel.com>
+ <20d63398-928f-0c6f-47ec-8e225c049ad8@intel.com>
+ <76d7604ff21b26252733165478d5c54035d84d98.camel@intel.com>
+ <880f3991-09e5-2f96-d5ba-213cff05c458@intel.com>
+ <da423f82faec260150b158381a24300f3cd00ffa.camel@intel.com>
+ <d3236016c46da2cbdf314839255e8806ae23f228.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <d3236016c46da2cbdf314839255e8806ae23f228.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update QDSP6 out-of-reset timeout value to 1 second, as sometimes
-ADSP boot failing on SC7280 based platforms with existing value.
-Also add few micro seconds sleep after enabling boot core
-start register.
+On 8/2/22 18:30, Kai Huang wrote:
+> On Fri, 2022-07-08 at 11:34 +1200, Kai Huang wrote:
+>>> Why not just entirely remove the lower 1MB from the memblock structure
+>>> on TDX systems?  Do something equivalent to adding this on the kernel
+>>> command line:
+>>>
+>>>  	memmap=1M$0x0
+>> I will explore this option.  Thanks!
+> Hi Dave,
+> 
+> After investigating and testing, we cannot simply remove first 1MB from e820
+> table which is similar to what 'memmap=1M$0x0' does, as the kernel needs low
+> memory as trampoline to bring up all APs.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
- drivers/remoteproc/qcom_q6v5_adsp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index f81da47..1c0adc9 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -34,7 +34,7 @@
- /* time out value */
- #define ACK_TIMEOUT			1000
- #define ACK_TIMEOUT_US			1000000
--#define BOOT_FSM_TIMEOUT		10000
-+#define BOOT_FSM_TIMEOUT		1000000
- /* mask values */
- #define EVB_MASK			GENMASK(27, 4)
- /*QDSP6SS register offsets*/
-@@ -468,13 +468,14 @@ static int adsp_start(struct rproc *rproc)
- 
- 	/* De-assert QDSP6 stop core. QDSP6 will execute after out of reset */
- 	writel(LPASS_BOOT_CORE_START, adsp->qdsp6ss_base + CORE_START_REG);
-+	usleep_ranage(100, 110);
- 
- 	/* Trigger boot FSM to start QDSP6 */
- 	writel(LPASS_BOOT_CMD_START, adsp->qdsp6ss_base + BOOT_CMD_REG);
- 
- 	/* Wait for core to come out of reset */
- 	ret = readl_poll_timeout(adsp->qdsp6ss_base + BOOT_STATUS_REG,
--			val, (val & BIT(0)) != 0, 10, BOOT_FSM_TIMEOUT);
-+			val, (val & BIT(0)) != 0, 100, BOOT_FSM_TIMEOUT);
- 	if (ret) {
- 		dev_err(adsp->dev, "failed to bootup adsp\n");
- 		goto disable_adsp_clks;
--- 
-2.7.4
-
+OK, so don't remove it, but reserve it so that the trampoline code can
+use it.

@@ -2,152 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA2B58898A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21EA588992
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbiHCJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S237468AbiHCJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiHCJk5 (ORCPT
+        with ESMTP id S237460AbiHCJmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:40:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F24D95A0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:40:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJArv-0002el-Br; Wed, 03 Aug 2022 11:40:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJArr-001SQ3-Ra; Wed, 03 Aug 2022 11:40:46 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oJArt-009GoG-6h; Wed, 03 Aug 2022 11:40:45 +0200
-Date:   Wed, 3 Aug 2022 11:40:41 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH] tty: serial: imx: initialize
- peripheral_config/peripheral_size for sdma config
-Message-ID: <20220803094041.cmjublrg3nu4odlt@pengutronix.de>
-References: <20220803065737.14752-1-sherry.sun@nxp.com>
- <d4838245-030c-39b4-df4b-17b3b4c73a5b@pengutronix.de>
- <AS8PR04MB8404990740869737F326D302929C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+        Wed, 3 Aug 2022 05:42:24 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD781CB12
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:42:23 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id n8so27565966yba.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 02:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/5J/hTicAQKvIdTCsN8vIr3eGdVqz6oWNgR8PbCUFZ0=;
+        b=UW16xIvrWocqAhSPd2fuZKeM91zaflQgPYWDJgcud8Cri8Ym2URa03dCI1zYrFIezW
+         fICUhA0MZ7uec2/HuZSKY8g8uGB5q9N7Au4XQr5K6FFHmZ0hO8ktztxtkSHEE/vb6IJn
+         KEbgA906UOjZ2Rsii9K4/vyPRuud1tCOtgEnGKmFhWYZsrm+DJlhbb1l0W8029yPcEw/
+         8c52Bmse7AJhuI4irdCL1QGGKXLNRBxfMKaBMuCSsl1oJGfOPZbVh8tpZKDkfDCUULtN
+         JQPCee3tCjakxMT3yWiBiUPIVoXDmFby7RIPPsTaDJd+7IqvhfoTZn6FAP+2a7YrsBk5
+         gNYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/5J/hTicAQKvIdTCsN8vIr3eGdVqz6oWNgR8PbCUFZ0=;
+        b=z0Fs0EpFe6MuqpKki3zm2vNwqWgY6iMSRz5RcpnGS8GWqcmhAcQE9nuyj0EkESYXmP
+         6aS07jOiIK/PiOT8ZpVI7E1rySycMor5zDo/jUgvhnlG6XvIeEZ20AJan/6vPYJgVWCC
+         iJuYtMUtDyu1jqeG0HXwOuZRVa9sIY3aIaf7bm4V+IHyMJOQXCq/QuT4WaA6BbSWrxQe
+         o9yrJeB4Q3uAlZ9RsK0B3j1CP9W08wuJ2zyDB7g+HCh8CVj9HlQS7pWHmGxGvYu6iGHM
+         pA+WPxEacRxQunozEunBOquSZRZXBS6Dpb4FCbT7uiT4MSiqa618V4MX9a+BZUdiGSuQ
+         cIzg==
+X-Gm-Message-State: ACgBeo28ZxgApPY/2zcxck9E6p3BZmFG0AD3RsO4SoojC54L/KwZNuob
+        vDlkk1jCnACw9WbNGTUJBqyjA4PrLOf1TwffbGzpmg==
+X-Google-Smtp-Source: AA6agR7WMDXiL70b6NLngI/XHKFbP2/r+w7WmXN1qYL7/w1ywK0n4OfWAmZKsLbnW7QxKw6oUWpd6k7KLsAW0q+NLBo=
+X-Received: by 2002:a25:d7d3:0:b0:671:899b:eafc with SMTP id
+ o202-20020a25d7d3000000b00671899beafcmr18510665ybg.485.1659519742790; Wed, 03
+ Aug 2022 02:42:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pczzzgzfmnqb6ml6"
-Content-Disposition: inline
-In-Reply-To: <AS8PR04MB8404990740869737F326D302929C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
+ <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+In-Reply-To: <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 3 Aug 2022 11:41:46 +0200
+Message-ID: <CAG_fn=UToPvi8-1puuCS95o1V36MkAwFyQKFgp0AxBROcNgfKg@mail.gmail.com>
+Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+To:     Marco Elver <elver@google.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+(+ Dan Williams)
 
---pczzzgzfmnqb6ml6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
+>
+> On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
+> >
+> > KMSAN adds extra metadata fields to struct page, so it does not fit into
+> > 64 bytes anymore.
+>
+> Does this somehow cause extra space being used in all kernel configs?
+> If not, it would be good to note this in the commit message.
 
-On Wed, Aug 03, 2022 at 09:15:58AM +0000, Sherry Sun wrote:
-> > On 03.08.22 08:57, Sherry Sun wrote:
-> > > Since commit 824a0a02cd74 ("dmaengine: imx-sdma: Add multi fifo
-> > > support") adds the use of
-> > > dma_slave_config->peripheral_config/peripheral_size to sdma driver,
-> > > the client drivers like uart need to initialize the
-> > > peripheral_config/peripheral_size for sdma, otherwise, the random
-> > > value of local variable slave_config may cause unexpected
-> > peripheral_config and make sdma mess up.
-> > >
-> >=20
-> > If this a fix, please add a Fixes: tag. I am not sure it is though, see=
- below.
->=20
-> Hi Ahmad, thanks for the comments.
-> I don't think this patch is a fix for a specific commit, so we don't need=
- the Fixes tag.
->=20
-> >=20
-> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > ---
-> > >  drivers/tty/serial/imx.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c index
-> > > 522445a8f666..bb8c2a712e94 100644
-> > > --- a/drivers/tty/serial/imx.c
-> > > +++ b/drivers/tty/serial/imx.c
-> > > @@ -1320,6 +1320,8 @@ static int imx_uart_dma_init(struct imx_port
-> > > *sport)
-> >=20
-> > This function starts with
-> >=20
-> > struct dma_slave_config slave_config =3D {};
-> >=20
-> > >  	slave_config.src_addr_width =3D DMA_SLAVE_BUSWIDTH_1_BYTE;
-> > >  	/* one byte less than the watermark level to enable the aging timer
-> > */
-> > >  	slave_config.src_maxburst =3D RXTL_DMA - 1;
-> > > +	slave_config.peripheral_config =3D NULL;
-> > > +	slave_config.peripheral_size =3D 0;
-> >=20
-> > So these are already zero-initialized.
->=20
-> I am not sure actually, I think initialize a struct with {} cannot
-> guarantee that all members are initialized to 0, it may depend on the
-> compiler.
+I actually couldn't verify this on QEMU, because the driver never got loaded.
+Looks like this increases the amount of memory used by the nvdimm
+driver in all kernel configs that enable it (including those that
+don't use KMSAN), but I am not sure how much is that.
 
-I'm sure and even reverified in my C book[1].
+Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
 
-	struct mystruct variable =3D {};
-
-results in all components being initialized to their default initial
-value (which is 0 for numbers and NULL for pointers). This works for
-automatic variables since "Standard C" which should cover everthing that
-is capable to compile today's kernel.
-
-Best regards
-Uwe
-
-[1] C - A Reference Manual, 978-0130895929
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---pczzzgzfmnqb6ml6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLqQpcACgkQwfwUeK3K
-7An8pgf/VzQqhI58KMP5SdQ95NCfJx3qJCjreDoSPsWih4UQPZsZG9nbmtcXLCFI
-C3+U1kqWTFNDPtpiRIQS9/0pNPSu/WoUqGCEoyoKb5x4ohcVHjzNAoxKDuDviD7u
-A5dx8whr78xqGiZfUDtWnf32AQ64eeFy293jFirq1SXAIyCM9CA6g7hBEBkZLalg
-89ri6dtY9LiQEEBQ7dKETJff3IisRkp21ntRtpIG1i9l8YhykOEmuTzL+Fb1K0Uc
-/Nxe3nm9Baq4qmSL49gI+32rAD4xU/ihDgy/d74wFitF5i25ofSp44L6nfNvGSHN
-eTu/qYF/Im3KcJvGdO40Pr8qMJ6lJg==
-=uK5I
------END PGP SIGNATURE-----
-
---pczzzgzfmnqb6ml6--
+>
+> > Signed-off-by: Alexander Potapenko <glider@google.com>
+>
+> Reviewed-by: Marco Elver <elver@google.com>

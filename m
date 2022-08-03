@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FB7589487
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3452589489
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237165AbiHCWt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 18:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S238135AbiHCWuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiHCWtZ (ORCPT
+        with ESMTP id S229529AbiHCWuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:49:25 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB3C205E3
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:49:24 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id i71so10834253pge.9
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 15:49:24 -0700 (PDT)
+        Wed, 3 Aug 2022 18:50:03 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A2B22B29
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:50:02 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id i9-20020a170902cf0900b0016d1e277547so11206197plg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 15:50:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1BxpsamUUhc+oDoAp2dc++aXjCc5DZvHk2oG33loPcU=;
-        b=JBoHWU2120zTexjAsT7PmeWUqmxQ02GyiAnAppkYJ4nq4lJO3pgP4vDtVbztybQ9Vi
-         timpynQe4PJTFgh2kzC88KJHuwQ26mJ/nDcgF4QYvJ1NHNCFBrudswCIt45PrWF7OtvQ
-         dMwWESRQyM303XbXBDUoTlBwUcOy2hWaVnFgjEi0gzOOUohkSPu95oa9VG/jtq+NrCLh
-         sfm1Jb64hJLcSl+AemAmXy7xs1NWS02+evHn/Zd/ZeSxsu5cTKxLZiEGOoNBp5IlRUQd
-         hX+HFTqn84lJ9jVDojLqJ+UNGAb38zxa6Cs7lYOCCZ5ReQ2DNFjdJpNVt2ilW+eEWmIT
-         FHQw==
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to:from:to:cc;
+        bh=iEzoP/rzV++W5PuQTMr3p4g6UHkwxev9hZqYhDsH6KM=;
+        b=fg0NieWPjppblCtDTg4aMqdocCfyzqxgG9lCZtICe/JTQk93ItMtHMyUv+ZYutbgoW
+         R5VAlz0yoTISOD7oHNjX16xPpkkENt7PCxIU+HvKudOgylzd+jRyoSC/SWQbBfhagTLm
+         w9pnlLHaZHHosa0LiAFOzGoMG74SdF0zGPA8OFrZciu4CSl7tgppVpAoYSLhMIQsjBeO
+         Hz7JDdiiKhrOFnZ1E9QxOnXzYFSKSv4rG09pIcDf//pK4SJVdtVN7ekBQG6eJqbj/ouV
+         61t0NU55auFycc0z/bZeFVXFyDLr8fWa/3bMggIEIJhzNzr9LFawkjdWKkqE/N4yR8+y
+         aBKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1BxpsamUUhc+oDoAp2dc++aXjCc5DZvHk2oG33loPcU=;
-        b=lDzNozD2+dw0vfvzUOlV6AKaAJgABBdzlb4NeoGlxG+/A/Xp3IahGTZvNopSfz7PLW
-         z3dQNGebGL3ebWbrx++WaHx4xj82/m93JvdcCPOgv5rn0mg4APJnJWx0w+T0mVGjOwY0
-         sqHXiaKkOQhyQJcTPz/4cfGd5d0eItXkR5NsmXITNlbkGx7I8vEC1Z4kovVvAjZsrBfb
-         cNqO3bJGf57l/oJEHc0VIXIpTTN+C2tmG0+gs4nF0pP9fnKc8p+z23NBdmIZjwnVYjze
-         hBcA2HoBEl56gSY1uRacvX1Jt06GUwaKl9j2qLTN7Q/7hsn41hq53o0S73NSs5lE7W0I
-         nF0A==
-X-Gm-Message-State: ACgBeo0Lv8tt2fOD2JP2TTedzyrdArMJZrDDPvozD95EBLIB61pWmCH/
-        hlSwAfWwqbZdxUh7jH4iuhj4IQ==
-X-Google-Smtp-Source: AA6agR43o51+/1qGwupcZlAEZg68WvjfmprQ123VTOtSyp8ZmdbU4+ohLj2PnVXHV+s9B91Tk+G6nw==
-X-Received: by 2002:a63:ec04:0:b0:41c:1149:4523 with SMTP id j4-20020a63ec04000000b0041c11494523mr13383085pgh.62.1659566964272;
-        Wed, 03 Aug 2022 15:49:24 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p2-20020a625b02000000b0052d63fb109asm7762271pfb.20.2022.08.03.15.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 15:49:23 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 22:49:20 +0000
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=iEzoP/rzV++W5PuQTMr3p4g6UHkwxev9hZqYhDsH6KM=;
+        b=dplRWElHdkxHVjmw1904mKAOWKHqWBO9sb+KtwUydWBjjBc9kFjP6yWfkXMdiI8y4C
+         smjh0juxniR+BKTWsHwu23fbjm4DVZ3CxMA8uGKznTdp9fXYkO8+hz6Km3olYhr6867B
+         K7Df3bmt2ANeQRBJ/KWEoiQHNKFBQXClcS6JTz7itVgq/dKWveZocCNw71ToF16739kd
+         h2wFRYrsh9DGWJuvopHHK23vSrFvZUrocL4cDi6wfD5Y74+Tl06/MbFeKJOP5TC/X4Xi
+         xaNNXPPOgnZlw3/iLtQ+wNdLxGD7D+xgXiW9+MXWJnOStwn4cHhqWlW2R/mv6vKZmShe
+         Zzbg==
+X-Gm-Message-State: ACgBeo1Mxp9T6s7jR//HuKOWG5yiRpWAb4ZMj6DBXVTCXqcAbaC9JUcM
+        ua0a93KyA0zY8meQCYkV9gHFftP9VFg=
+X-Google-Smtp-Source: AA6agR6ySTXk29zEprgrEcThxpNov93eCKFnf3IvrbZBrpzjSFBg1a3DNOh7HKzpQ/nk2Yrodg3QktCCgTA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:842:b0:52e:2515:d657 with SMTP id
+ q2-20020a056a00084200b0052e2515d657mr5697818pfk.31.1659567001835; Wed, 03 Aug
+ 2022 15:50:01 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  3 Aug 2022 22:49:54 +0000
+Message-Id: <20220803224957.1285926-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v2 0/3] KVM: x86/mmu: MMIO caching bug fixes
 From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: Add sanity check that MMIO SPTE mask
- doesn't overlap gen
-Message-ID: <Yur7cGigN3MIrQO9@google.com>
-References: <20220803213354.951376-1-seanjc@google.com>
- <be0767a74a80cf8d749003cc73a9aa316ab49821.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be0767a74a80cf8d749003cc73a9aa316ab49821.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai Huang <kai.huang@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,19 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022, Kai Huang wrote:
-> On Wed, 2022-08-03 at 21:33 +0000, Sean Christopherson wrote:
-> > Add compile-time and init-time sanity checks to ensure that the MMIO SPTE
-> > mask doesn't overlap the MMIO SPTE generation.  The generation currently
-> > avoids using bit 63, but that's as much coincidence as it is strictly
-> > necessarly.  That will change in the future, as TDX support will require
-> > setting bit 63 (SUPPRESS_VE) in the mask.  Explicitly carve out the bits
-> > that are allowed in the mask so that any future shuffling of SPTE MMIO
-> > bits doesn't silently break MMIO caching.
-> 
-> Reviwed-by: Kai Huang <kai.huang@intel.com>
-> 
-> Btw, should you also check SPTE_MMU_PRESENT_MASK (or in another patch)?
+Fix two bugs I introduced when adding the enable_mmio_caching module param.
 
-Rats, I thought we already checked that, but it's only the MMIO generation that
-checks for overlap.  I'll send a v2.
+Bug #1 is that KVM unintentionally makes disabling caching due to a config
+incompatibility "sticky", e.g. disabling caching because there are no
+reserved PA bits prevents KVM from enabling when "switching" to an EPT
+config (doesn't rely on PA bits) or when SVM adjusts the MMIO masks to
+account for C-bit shenanigans (even if MAXPHYADDR=52 and C-bit=51, there
+can be reserved PA bits due to the "real" MAXPHYADDR being reduced).
+
+Bug #2 is that KVM doesn't explicitly check that MMIO caching is enabled
+when doing SEV-ES setup.  Prior to the module param, MMIO caching was
+guaranteed when SEV-ES could be enabled as SEV-ES-capable CPUs effectively
+guarantee there will be at least one reserved PA bit (see above).  With
+the module param, userspace can explicitly disable MMIO caching, thus
+silently breaking SEV-ES.
+
+v2:
+ - Collect *-by. [Mike, Kai]
+ - Squash patches 3 and 4 together. [Kai]
+
+v1:
+ - https://lore.kernel.org/all/20220728221759.3492539-1-seanjc@google.com
+
+Sean Christopherson (3):
+  KVM: x86: Tag kvm_mmu_x86_module_init() with __init
+  KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change
+  KVM: SVM: Disable SEV-ES support if MMIO caching is disable
+
+ arch/x86/include/asm/kvm_host.h |  2 +-
+ arch/x86/kvm/mmu.h              |  2 ++
+ arch/x86/kvm/mmu/mmu.c          |  6 +++++-
+ arch/x86/kvm/mmu/spte.c         | 20 ++++++++++++++++++++
+ arch/x86/kvm/mmu/spte.h         |  3 +--
+ arch/x86/kvm/svm/sev.c          | 10 ++++++++++
+ arch/x86/kvm/svm/svm.c          |  9 ++++++---
+ 7 files changed, 45 insertions(+), 7 deletions(-)
+
+
+base-commit: 93472b79715378a2386598d6632c654a2223267b
+-- 
+2.37.1.559.g78731f0fdb-goog
+

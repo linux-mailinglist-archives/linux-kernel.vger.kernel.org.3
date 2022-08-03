@@ -2,110 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A14958854E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450BC588554
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiHCBQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S235277AbiHCBQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiHCBQR (ORCPT
+        with ESMTP id S234911AbiHCBQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:16:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F70422532;
-        Tue,  2 Aug 2022 18:16:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 210896110F;
-        Wed,  3 Aug 2022 01:16:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF4DC433C1;
-        Wed,  3 Aug 2022 01:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659489375;
-        bh=4hAj5swXgHDnxb10vMlloiSdI7KbG9hPid+FRMnvni0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GDfEfES8aloL6MhzNoaLmD/6xw+dBsC76ivGrEX2iOS4wC6IWL/XE7TAqZsl+tcPw
-         1J4a/46fyM8PgCNDGrWneKJAxSIEZ5ashF9zae9ubl4hScsscij5RfwDeCjmW5QKku
-         DvCXlAIYn5jfRHa3T71RxkLMQQjsND8JBBhs7mWq5tZBALDzadOP3y26DolIIF2Ynn
-         4H3HYkl9Dn+dgvo9nXhkyl2GCv0wXxcYP8yNoO2FWE7sZqUrDxt6yhzeZq9Jfwutzr
-         YL0niMjFVCm0969OT04TeYC9IgiQRFLBSBO5o7m+3U6ow1JNLrGtN1qNvZgfIeNTlA
-         eDut7lRBbwIDA==
-Date:   Tue, 2 Aug 2022 18:16:13 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Dipanjan Das <mail.dipanjan.das@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        syzbot+c70d87ac1d001f29a058 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        linux-security-modules <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH v3] kernel/watch_queue: Make pipe NULL while clearing
- watch_queue
-Message-ID: <YunMXRhAM5g3tNnJ@sol.localdomain>
-References: <20220728155121.12145-1-code@siddh.me>
- <18258c1d370.6c4bec7a269297.4170944235031209431@siddh.me>
- <Yuepw21SyLbWt9F+@kroah.com>
- <182597c78f6.70a93066293735.4741894763116073008@siddh.me>
- <182597eccd3.14cac6a4293987.1730526835854998440@siddh.me>
- <20220801161642.GA1932489@berlinger>
- <1825abd83c7.2fc2819e194605.6286442523651645797@siddh.me>
+        Tue, 2 Aug 2022 21:16:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303DE54647;
+        Tue,  2 Aug 2022 18:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659489404; x=1691025404;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z30jiwqxYungx4RUyICnlg/pLFR417/GCMVuPX0HlwI=;
+  b=E3nxrkVvZx83Z7YlqXfFUJI8ZHy9tTxCDnm0siJKppnW1jg320VuWy4s
+   8xh33EthREnl0McC5O+3K0OAQRukrVq9MX1IVtH8ClZVAfH/VZoXoGP+V
+   NJkAZtAm2WThtj/bCvgnoQRAEqmIePTCFGUGURfJKF6ey8nAhPhxvxwah
+   V1VRCtrdfzL+XnFK7cwrVX0+WvwGraALnWQ3o29RpPxS911MbXbas2YnF
+   PngJNE8822BL9ncCjqN/JREFo4ryaqtcioNGkeTBgWtF/V20iywbC1rOX
+   yBIvuBuaMIgSNCNBpfLMPG8Hw5UKIz1j7aLSs4doqoxy3f9YBJC+vg+Cm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353559020"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="353559020"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:16:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="692058813"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2022 18:16:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ305-000Ge3-0x;
+        Wed, 03 Aug 2022 01:16:41 +0000
+Date:   Wed, 3 Aug 2022 09:16:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v1 1/1] leds: pm8058: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <202208030942.Sh3TajDz-lkp@intel.com>
+References: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1825abd83c7.2fc2819e194605.6286442523651645797@siddh.me>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 12:19:05AM +0530, Siddh Raman Pant wrote:
-> On Mon, 01 Aug 2022 21:46:42 +0530  Dipanjan Das <mail.dipanjan.das@gmail.com> wrote:
-> > Are you referring to the reproducer attached to our original report?
-> > https://lore.kernel.org/all/CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com/
->  
-> Yes, I meant the reproducer you gave.
-> 
-> I suspect I must have missed CONFIG_WATCH_QUEUE=y while setting the kernel
-> up, extremely sorry for it.
-> 
-> I now tried 5.10.y with it (using a modification of syzkaller's dashboard
-> config I had been using[1]), and I'm getting a __post_watch_notification()
-> crash (which is a related crash, as the fix[2][3] for that causes the
-> reproducer to not reproduce the post_one_notification crash on mainline),
-> but not the post_one_notification() crash you had reported. It seems if I
-> apply my patch, it doesn't trigger this related crash, so these bugs are
-> seem to be very related maybe due to racing? I haven't looked at that yet.
-> 
-> I then tried on v5.10.131 since that was the exact version you had
-> reproduced on, and it reproduces the post_one_notification() error
-> successfully. Applying 353f7988dd84 causes __post_watch_notification()
-> crash, and then applying this v3 patch does not trigger the issue, but
-> the patch to fix __post_watch_notification() crash is [2], which does
-> not really address the issue of post_one_notification() crash which
-> is due to the dangling reference to a freed pipe.
-> 
-> Can you please try reproducer at your end?
-> 
-> Thanks,
-> Siddh
+Hi Andy,
 
-There were several watch_queue fixes that got merged in v5.10.134, so there's no
-point in testing v5.10.131.  If you're still seeing a bug in the *latest*
-5.10.y, then please check whether it's also present upstream.  If yes, then send
-out a fix for it.  If no, then tell stable@vger.kernel.org what commit(s) need
-to be backported.  Please provide *full* details in each case, including any
-KASAN reports or other information that would help people understand the bug.
+I love your patch! Yet something to improve:
 
-- Eric
+[auto build test ERROR on pavel-leds/for-next]
+[also build test ERROR on linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
+config: arm-buildonly-randconfig-r002-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030942.Sh3TajDz-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/58bf03fa835e906a28c49e4aef6060d140239d7f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
+        git checkout 58bf03fa835e906a28c49e4aef6060d140239d7f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/leds/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/leds/leds-pm8058.c:130:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           state = led_init_default_state_get(init_data.fwnode);
+                   ^
+   1 error generated.
+
+
+vim +/led_init_default_state_get +130 drivers/leds/leds-pm8058.c
+
+    87	
+    88	static int pm8058_led_probe(struct platform_device *pdev)
+    89	{
+    90		struct led_init_data init_data = {};
+    91		struct device *dev = &pdev->dev;
+    92		struct pm8058_led *led;
+    93		struct device_node *np;
+    94		int ret;
+    95		struct regmap *map;
+    96		enum led_brightness maxbright;
+    97		enum led_default_state state;
+    98	
+    99		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
+   100		if (!led)
+   101			return -ENOMEM;
+   102	
+   103		led->ledtype = (u32)(unsigned long)of_device_get_match_data(dev);
+   104	
+   105		map = dev_get_regmap(dev->parent, NULL);
+   106		if (!map) {
+   107			dev_err(dev, "Parent regmap unavailable.\n");
+   108			return -ENXIO;
+   109		}
+   110		led->map = map;
+   111	
+   112		np = dev_of_node(dev);
+   113	
+   114		ret = of_property_read_u32(np, "reg", &led->reg);
+   115		if (ret) {
+   116			dev_err(dev, "no register offset specified\n");
+   117			return -EINVAL;
+   118		}
+   119	
+   120		led->cdev.brightness_set = pm8058_led_set;
+   121		led->cdev.brightness_get = pm8058_led_get;
+   122		if (led->ledtype == PM8058_LED_TYPE_COMMON)
+   123			maxbright = 31; /* 5 bits */
+   124		else
+   125			maxbright = 15; /* 4 bits */
+   126		led->cdev.max_brightness = maxbright;
+   127	
+   128		init_data.fwnode = of_fwnode_handle(np);
+   129	
+ > 130		state = led_init_default_state_get(init_data.fwnode);
+   131		switch (state) {
+   132		case LEDS_DEFSTATE_ON:
+   133			led->cdev.brightness = maxbright;
+   134			pm8058_led_set(&led->cdev, maxbright);
+   135			break;
+   136		case LEDS_DEFSTATE_KEEP:
+   137			led->cdev.brightness = pm8058_led_get(&led->cdev);
+   138			break;
+   139		default:
+   140			led->cdev.brightness = LED_OFF;
+   141			pm8058_led_set(&led->cdev, LED_OFF);
+   142		}
+   143	
+   144		if (led->ledtype == PM8058_LED_TYPE_KEYPAD ||
+   145		    led->ledtype == PM8058_LED_TYPE_FLASH)
+   146			led->cdev.flags	= LED_CORE_SUSPENDRESUME;
+   147	
+   148		ret = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
+   149		if (ret)
+   150			dev_err(dev, "Failed to register LED for %pOF\n", np);
+   151	
+   152		return ret;
+   153	}
+   154	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAA5589135
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4890D589147
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238001AbiHCRWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S238037AbiHCRXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237884AbiHCRWf (ORCPT
+        with ESMTP id S237942AbiHCRXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:22:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E7E52FD9;
-        Wed,  3 Aug 2022 10:22:34 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso2806458pjl.4;
-        Wed, 03 Aug 2022 10:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=9lYXINAlxxMxWSbvsI8AJB5wGlCbPGWBgmb6qoY0xm4=;
-        b=icUeEm2PKM5WXTxzKJFNcPkN/1w9jNcDpqXthRNOePTbuqlNuwmsHAHZh0UYrco2uV
-         lXR+rVyNGmoAWv2aWAhcNwvpmQzwtQesbe+v/Vzh/lmNO5VFrkMlvjCx1WaQz+PFah+h
-         nTS71/uWhVJcrBUL5v0Rh5eVesXhkBSiPFXfVDPdFjGvxOeSPA5xtcsNWf4+Ub3z+cMc
-         6Fz98feK5mr4tkjugDJfIg1LD6KD2ldbfQ8BeLTqMnNiCsbCvMoO1loqoZA2xHNycKDK
-         jv5vbUFjaZiD8X/ER6DfsPMdoKir8DziTFI6T8paN+D6pEsBOjegHkOKpkn2FYbpFvzC
-         IXBw==
+        Wed, 3 Aug 2022 13:23:48 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17F952FD9;
+        Wed,  3 Aug 2022 10:23:47 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id g12so17079298pfb.3;
+        Wed, 03 Aug 2022 10:23:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=9lYXINAlxxMxWSbvsI8AJB5wGlCbPGWBgmb6qoY0xm4=;
-        b=SBt7pKBe9ERS+2WV7MswMCIz56NMoJjsGkJIyf0sgzyJhUARZtxE5JI5h/XUobItuq
-         Ui6kpdNJWMGZs3Ji0hwAp9rq/wGDvi6d5IOgoKLd51pKTo21OAHimc6dxawroy71b1if
-         gsylA1nk9dW4w9apt2P2hJm7PwjFVvOFwgYBt66g6M8QduZDRIXNJ9JIR6we+jR8VvCm
-         BSxyLhworNkWiLVebzctdwRsZKnmQ280OCLQO25PKbEctFYvgjpR1fo6ZYVISMtkKD20
-         4ThfFOGTpLyaS5TPbmkOj2GsOXniHlnw388QWHYBFJ8Get/Jag5G14qHQSk8gQ6g4Azs
-         O/0w==
-X-Gm-Message-State: ACgBeo0qqd6DUU6OKUGMx3fHKZLZOsHNCBYYhcMxhJjenqeCSBeMvow9
-        Nsm+eInU5N+FSqUh3LSV/X2EeeBx9ZQ=
-X-Google-Smtp-Source: AA6agR4anjaSlbUEFkuNTyBJBYjx1Dfme76YDiiwhXa3CuIz6Y3YjdykMMx8iwP5lYQ+74B54uQZXg==
-X-Received: by 2002:a17:90b:1c8e:b0:1f1:b5a8:330f with SMTP id oo14-20020a17090b1c8e00b001f1b5a8330fmr5815071pjb.179.1659547353432;
-        Wed, 03 Aug 2022 10:22:33 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170903024c00b0016d01c133e1sm2226044plh.248.2022.08.03.10.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 10:22:31 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] drm/msm/rd: Fix FIFO-full deadlock
-Date:   Wed,  3 Aug 2022 10:23:02 -0700
-Message-Id: <20220803172302.1976981-2-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220803172302.1976981-1-robdclark@gmail.com>
-References: <20220803172302.1976981-1-robdclark@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0/8nr848GRaOG+Fxstqzc9TigPNxYkNf2h7q9hGBHq8=;
+        b=3AjFLDDtX7qJms2TlRarbvxUmnm19BBZuKbRI+YINw7uleTiJpgFzHw48DGCg+R5MD
+         bNDVzMoGIJoG80satlc0PqeZrcLM0lXZz75c8IjulAxr0C7HQvU6mIGKLQE0wq1EJTdQ
+         hNKBQc370lJuQ5nDk+jg0gWH/CoPxERmKh08b8UlIKsPFXfNEEltCdQRiYKPr/cQ3k8A
+         aDLHl50L53LI0Y+yJ38cdmPUE8Y3rPOipx5a3vLY7nYiMJcrnOPOUVOZ546P1qYK6X5x
+         4a8KTWcSguk8omMv2XHxaxNWsuwfp7Y3Q1xEW8OYDxHRncDU58VkJY+kXi9gdSO1g1jE
+         L8rw==
+X-Gm-Message-State: AJIora+hdFxprqbtSTGSJlIOD8V7el4Wc/YcZdBjM2NwB4l4KTttPmXm
+        zpTijuGawkQ0OsF34u4VDQ0=
+X-Google-Smtp-Source: AGRyM1vgZohnjas8fupQWk0TGJ1ujqQbQ0c9VjCzhrzKOA3JUzR8cBuYkbzDzRvd/ngCVEXerrSzcQ==
+X-Received: by 2002:a63:4f52:0:b0:41a:3744:d952 with SMTP id p18-20020a634f52000000b0041a3744d952mr21509471pgl.186.1659547427197;
+        Wed, 03 Aug 2022 10:23:47 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:db71:edb7:462a:44af? ([2620:15c:211:201:db71:edb7:462a:44af])
+        by smtp.gmail.com with ESMTPSA id c25-20020aa79539000000b0052dfe83e19csm3180967pfp.16.2022.08.03.10.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 10:23:46 -0700 (PDT)
+Message-ID: <4b6f14a1-2a96-da20-d56c-032a87dee7d2@acm.org>
+Date:   Wed, 3 Aug 2022 10:23:43 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v9 09/13] dm-zone: use generic helpers to calculate offset
+ from zone start
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, Johannes.Thumshirn@wdc.com,
+        snitzer@kernel.org, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, agk@redhat.com, hch@lst.de
+Cc:     dm-devel@redhat.com, matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, pankydev8@gmail.com,
+        jaegeuk@kernel.org, hare@suse.de, linux-block@vger.kernel.org,
+        linux-nvme@lists.infradead.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220803094801.177490-1-p.raghav@samsung.com>
+ <CGME20220803094812eucas1p271cea804453d9dd379b919067fe5b154@eucas1p2.samsung.com>
+ <20220803094801.177490-10-p.raghav@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220803094801.177490-10-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 8/3/22 02:47, Pankaj Raghav wrote:
+> -		if ((clone->bi_iter.bi_sector & (zsectors - 1)) != zwp_offset)
+> +		if ((bdev_offset_from_zone_start(md->disk->part0,
+> +						 clone->bi_iter.bi_sector)) != zwp_offset)
 
-If the previous thing cat'ing $debugfs/rd left the FIFO full, then
-subsequent open could deadlock in rd_write() (because open is blocked,
-not giving a chance for read() to consume any data in the FIFO).  Also
-it is generally a good idea to clear out old data from the FIFO.
+If this patch series needs to be reposted, please leave out the 
+superfluous parentheses from the above statement.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_rd.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks,
 
-diff --git a/drivers/gpu/drm/msm/msm_rd.c b/drivers/gpu/drm/msm/msm_rd.c
-index a92ffde53f0b..db2f847c8535 100644
---- a/drivers/gpu/drm/msm/msm_rd.c
-+++ b/drivers/gpu/drm/msm/msm_rd.c
-@@ -196,6 +196,9 @@ static int rd_open(struct inode *inode, struct file *file)
- 	file->private_data = rd;
- 	rd->open = true;
- 
-+	/* Reset fifo to clear any previously unread data: */
-+	rd->fifo.head = rd->fifo.tail = 0;
-+
- 	/* the parsing tools need to know gpu-id to know which
- 	 * register database to load.
- 	 *
--- 
-2.36.1
-
+Bart.

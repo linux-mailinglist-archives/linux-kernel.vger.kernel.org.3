@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450BC588554
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEB0588555
 	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbiHCBQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S235224AbiHCBQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbiHCBQp (ORCPT
+        with ESMTP id S234910AbiHCBQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:16:45 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303DE54647;
-        Tue,  2 Aug 2022 18:16:44 -0700 (PDT)
+        Tue, 2 Aug 2022 21:16:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1F4558D0
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 18:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659489404; x=1691025404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z30jiwqxYungx4RUyICnlg/pLFR417/GCMVuPX0HlwI=;
-  b=E3nxrkVvZx83Z7YlqXfFUJI8ZHy9tTxCDnm0siJKppnW1jg320VuWy4s
-   8xh33EthREnl0McC5O+3K0OAQRukrVq9MX1IVtH8ClZVAfH/VZoXoGP+V
-   NJkAZtAm2WThtj/bCvgnoQRAEqmIePTCFGUGURfJKF6ey8nAhPhxvxwah
-   V1VRCtrdfzL+XnFK7cwrVX0+WvwGraALnWQ3o29RpPxS911MbXbas2YnF
-   PngJNE8822BL9ncCjqN/JREFo4ryaqtcioNGkeTBgWtF/V20iywbC1rOX
-   yBIvuBuaMIgSNCNBpfLMPG8Hw5UKIz1j7aLSs4doqoxy3f9YBJC+vg+Cm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353559020"
+  t=1659489403; x=1691025403;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AIh/XZVzO2WS1Fk61O5ECpym1wGw37w9jLK4tchGzNU=;
+  b=ax0oRvxXDCa/Hg83UGho42RTHmIhnfVfZvQGUtHMtLumwTAXj71pH7e7
+   7+iLgIepIYl2QFLh8QTL1Qs4JclPgNqcSsYPOliV2BUX0CatOInzyrQN1
+   4JqLcOGZ5dRDdRn13uZm7T4MfXpu37fJN+b0zhuAs8Gol3YNnEqVqKcXX
+   J1OPVVv+mYtV+lhBKvzTpTVRXpaL0hu7P+26abymfb90bFJB+it4wxPhG
+   nkrOL/Dw2AhFFmg8PtMaiz56ZZ2+0sHPwoO8chqxV1jHuhFhRhYP/43Qu
+   lRxvo5Ph/McMfhOFzI+1UjUVCw/0fFyJLwnFBjtCVqabFTVCglgfIGQyB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289566986"
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="353559020"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:16:43 -0700
+   d="scan'208";a="289566986"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:16:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="692058813"
+   d="scan'208";a="930192032"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Aug 2022 18:16:41 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 18:16:41 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oJ305-000Ge3-0x;
+        id 1oJ305-000Gdz-0o;
         Wed, 03 Aug 2022 01:16:41 +0000
-Date:   Wed, 3 Aug 2022 09:16:14 +0800
+Date:   Wed, 3 Aug 2022 09:16:16 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: pm8058: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208030942.Sh3TajDz-lkp@intel.com>
-References: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
+        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [hverkuil-media-tree:for-v5.21b 12/13]
+ drivers/media/platform/nxp/dw100/dw100.c:382:18: warning: variable 'dh' set
+ but not used
+Message-ID: <202208030910.mKccvhw6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802212513.7029-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,114 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arm-buildonly-randconfig-r002-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030942.Sh3TajDz-lkp@intel.com/config)
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.21b
+head:   ac27e33a9e4dd1487bde072493d9303358af0507
+commit: b92bfb7b8350160895d0ea34a98831ed4f01af1d [12/13] media: dw100: Add i.MX8MP dw100 dewarper driver
+config: arm-randconfig-c002-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030910.mKccvhw6-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/58bf03fa835e906a28c49e4aef6060d140239d7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-pm8058-Get-rid-of-custom-led_init_default_state_get/20220803-052610
-        git checkout 58bf03fa835e906a28c49e4aef6060d140239d7f
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.21b
+        git checkout b92bfb7b8350160895d0ea34a98831ed4f01af1d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/platform/nxp/dw100/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/leds/leds-pm8058.c:130:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           state = led_init_default_state_get(init_data.fwnode);
-                   ^
-   1 error generated.
+>> drivers/media/platform/nxp/dw100/dw100.c:382:18: warning: variable 'dh' set but not used [-Wunused-but-set-variable]
+           u32 sw, sh, dw, dh, mw, mh, idx;
+                           ^
+>> drivers/media/platform/nxp/dw100/dw100.c:382:14: warning: variable 'dw' set but not used [-Wunused-but-set-variable]
+           u32 sw, sh, dw, dh, mw, mh, idx;
+                       ^
+   In file included from drivers/media/platform/nxp/dw100/dw100.c:20:
+   In file included from include/media/v4l2-ctrls.h:13:
+   In file included from include/linux/videodev2.h:61:
+   include/uapi/linux/videodev2.h:1776:2: warning: field  within 'struct v4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous at include/uapi/linux/videodev2.h:1776:2)' and is usually due to 'struct v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+   3 warnings generated.
 
 
-vim +/led_init_default_state_get +130 drivers/leds/leds-pm8058.c
+vim +/dh +382 drivers/media/platform/nxp/dw100/dw100.c
 
-    87	
-    88	static int pm8058_led_probe(struct platform_device *pdev)
-    89	{
-    90		struct led_init_data init_data = {};
-    91		struct device *dev = &pdev->dev;
-    92		struct pm8058_led *led;
-    93		struct device_node *np;
-    94		int ret;
-    95		struct regmap *map;
-    96		enum led_brightness maxbright;
-    97		enum led_default_state state;
-    98	
-    99		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   100		if (!led)
-   101			return -ENOMEM;
-   102	
-   103		led->ledtype = (u32)(unsigned long)of_device_get_match_data(dev);
-   104	
-   105		map = dev_get_regmap(dev->parent, NULL);
-   106		if (!map) {
-   107			dev_err(dev, "Parent regmap unavailable.\n");
-   108			return -ENXIO;
-   109		}
-   110		led->map = map;
-   111	
-   112		np = dev_of_node(dev);
-   113	
-   114		ret = of_property_read_u32(np, "reg", &led->reg);
-   115		if (ret) {
-   116			dev_err(dev, "no register offset specified\n");
-   117			return -EINVAL;
-   118		}
-   119	
-   120		led->cdev.brightness_set = pm8058_led_set;
-   121		led->cdev.brightness_get = pm8058_led_get;
-   122		if (led->ledtype == PM8058_LED_TYPE_COMMON)
-   123			maxbright = 31; /* 5 bits */
-   124		else
-   125			maxbright = 15; /* 4 bits */
-   126		led->cdev.max_brightness = maxbright;
-   127	
-   128		init_data.fwnode = of_fwnode_handle(np);
-   129	
- > 130		state = led_init_default_state_get(init_data.fwnode);
-   131		switch (state) {
-   132		case LEDS_DEFSTATE_ON:
-   133			led->cdev.brightness = maxbright;
-   134			pm8058_led_set(&led->cdev, maxbright);
-   135			break;
-   136		case LEDS_DEFSTATE_KEEP:
-   137			led->cdev.brightness = pm8058_led_get(&led->cdev);
-   138			break;
-   139		default:
-   140			led->cdev.brightness = LED_OFF;
-   141			pm8058_led_set(&led->cdev, LED_OFF);
-   142		}
-   143	
-   144		if (led->ledtype == PM8058_LED_TYPE_KEYPAD ||
-   145		    led->ledtype == PM8058_LED_TYPE_FLASH)
-   146			led->cdev.flags	= LED_CORE_SUSPENDRESUME;
-   147	
-   148		ret = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   149		if (ret)
-   150			dev_err(dev, "Failed to register LED for %pOF\n", np);
-   151	
-   152		return ret;
-   153	}
-   154	
+   363	
+   364	/*
+   365	 * Initialize the dewarping map with an identity mapping.
+   366	 *
+   367	 * A 16 pixels cell size grid is mapped on the destination image.
+   368	 * The last cells width/height might be lesser than 16 if the destination image
+   369	 * width/height is not divisible by 16. This dewarping grid map specifies the
+   370	 * source image pixel location (x, y) on each grid intersection point.
+   371	 * Bilinear interpolation is used to compute inner cell points locations.
+   372	 *
+   373	 * The coordinates are saved in UQ12.4 fixed point format.
+   374	 */
+   375	static void dw100_ctrl_dewarping_map_init(const struct v4l2_ctrl *ctrl,
+   376						  u32 from_idx, u32 elems,
+   377						  union v4l2_ctrl_ptr ptr)
+   378	{
+   379		struct dw100_ctx *ctx =
+   380			container_of(ctrl->handler, struct dw100_ctx, hdl);
+   381	
+ > 382		u32 sw, sh, dw, dh, mw, mh, idx;
+   383		u16 qx, qy, qdx, qdy, qsh, qsw;
+   384		u32 *map = ctrl->p_cur.p_u32;
+   385	
+   386		sw = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.width;
+   387		dw = ctx->q_data[DW100_QUEUE_DST].pix_fmt.width;
+   388		sh = ctx->q_data[DW100_QUEUE_SRC].pix_fmt.height;
+   389		dh = ctx->q_data[DW100_QUEUE_DST].pix_fmt.height;
+   390	
+   391		mw = ctrl->dims[0];
+   392		mh = ctrl->dims[1];
+   393	
+   394		qsw = dw100_map_convert_to_uq12_4(sw);
+   395		qsh = dw100_map_convert_to_uq12_4(sh);
+   396		qdx = qsw / (mw - 1);
+   397		qdy = qsh / (mh - 1);
+   398	
+   399		ctx->map_width = mw;
+   400		ctx->map_height = mh;
+   401		ctx->map_size = mh * mw * sizeof(u32);
+   402	
+   403		for (idx = from_idx; idx < elems; idx++) {
+   404			qy = min_t(u32, (idx / mw) * qdy, qsh);
+   405			qx = min_t(u32, (idx % mw) * qdx, qsw);
+   406			map[idx] = dw100_map_format_coordinates(qx, qy);
+   407		}
+   408	
+   409		ctx->user_map_is_set = false;
+   410	}
+   411	
 
 -- 
 0-DAY CI Kernel Test Service

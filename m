@@ -2,152 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CC5588FF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C36588FF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiHCQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S236275AbiHCQB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238423AbiHCQAs (ORCPT
+        with ESMTP id S238154AbiHCQBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:00:48 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22311054B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:00:46 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id j4-20020a05600c1c0400b003a4f287418bso1079544wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QzJ33F4bJ7lwM5+m7mFsAcHdJMltjNvGnkKDEEt7hbs=;
-        b=GPH5p6d1RDaRq+0Zommh1vpqc/rVqUPvZhgldr8qZLtuDtE+SjR13i2nnWrfSbH75X
-         qH5TcRiDQCDkmHTRELxZKGL/gFt67o+6ViJ+oDt9+KG1Lwic6XzFNMun+N8rPczXN8W4
-         MTDKYbO2iyKrdEidEOrGgAiFv4c/E4OYYPnl+cs+s62wkPZkf3e5TOXU+l/Z0JyESNA7
-         NsIzQl7NiZdXhG+lljjL0B+6CtN9qZkrY72e6LOe5lCyspAg2xuxetRXFIBHg5s0VnJ0
-         V23kNJBsAeweX1hyiYcF36v1+dLZFqZ7JgEOqKBihdHIUGBen9+3IkYt51PmcNaaTJVB
-         WT1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QzJ33F4bJ7lwM5+m7mFsAcHdJMltjNvGnkKDEEt7hbs=;
-        b=aBMgDo4RdEH/Po8cS9M1577TbCuv7wKXx/BTZUazWRcEHimk2Um7esFCNPvbFuctLI
-         cDTgFq0LpTTvN7DFlypybQMk6z4OrvPQqmpV2FXZs78k3cCoprxU5FmoA5dr44nlNYgF
-         xdXuDWQ1Xc878BGwP9rCR6JSXWrV5VNcWWkft8KE9gSVBpVRzf066Qf4Z6ukyWRD6QqC
-         OPtZvaRo4SEfdFN0btYXo8IWV4McM5Ejwh+hpl3Yt5eriSk49QzLoMjqg5W8IYcG4oA+
-         l1o8aFPrnTSlXLhIE+/KjXX7ZnyJ2xTCBd3Z6gGqUa+v8RePcrmz99jKUDBxWznYAkgi
-         DKrw==
-X-Gm-Message-State: ACgBeo3dPtPnB7jaajGW00VZYiUKTF2UZ3DKCmzJwS3bX3B8GGezI+D2
-        1GlHYzvTKCVvsbvRw3a31aU=
-X-Google-Smtp-Source: AA6agR7gh74XwmyAbfY14lbZQdG53vZykNPX0zVuHCQF2W2ATYMiBkU9yNmH2ufnF7yDHKBOcRrXaQ==
-X-Received: by 2002:a05:600c:35c6:b0:3a3:4217:f06e with SMTP id r6-20020a05600c35c600b003a34217f06emr3167664wmq.95.1659542445094;
-        Wed, 03 Aug 2022 09:00:45 -0700 (PDT)
-Received: from localhost.localdomain (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
-        by smtp.gmail.com with ESMTPSA id u11-20020a05600c19cb00b003a302fb9df7sm3240896wmq.21.2022.08.03.09.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 09:00:43 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH v3] kexec: Replace kmap() with kmap_local_page()
-Date:   Wed,  3 Aug 2022 18:00:38 +0200
-Message-Id: <20220803160038.22322-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 3 Aug 2022 12:01:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC18B48C97;
+        Wed,  3 Aug 2022 09:01:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78064B82306;
+        Wed,  3 Aug 2022 16:01:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EB1C433D7;
+        Wed,  3 Aug 2022 16:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659542470;
+        bh=ag/lSTQWRd8gqBoVPmhF9Le1IGQ4IHOAtatLaz5Oc50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B5xyF8osvAl4j2QkDFLrHszV+msLoA2Y7AIEdlCUxic278wSuJnZ6TsijTh3Tjkg2
+         wY4RyDxIqyTqFrfrXXSJmoNQPwWiTGrLW97FB/PaDHFHhhIi+p0/sApQBy+8F+NKCc
+         XbWOQtcVGfw7xmOYZ9TNl8eCbuJLq6aOHiq0LmKuXVpiVVI8SK3vXmON+kxgZVnRDY
+         TKf+FZSTvUf4TMXMn1Aa17Aeakz3Nb7Ri9piwSmaiO36Pdp/u+8wazZWXyMRV9Vono
+         NeU8cNRYBt9emO+NtYyKlvLCuCchGmgKEkf+58AhXU6W37nlDO+Myp82lvPEwDDBjX
+         eVBiXkGRfMUhA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 593C240736; Wed,  3 Aug 2022 13:01:07 -0300 (-03)
+Date:   Wed, 3 Aug 2022 13:01:07 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        =?utf-8?B?6LCt5qKT54WK?= <tanzixuan.me@gmail.com>,
+        Zixuan Tan <tanzixuangg@gmail.com>, terrelln@fb.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
+ libcrypto feature test
+Message-ID: <Yuqbw8rTWLL+njpc@kernel.org>
+References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
+ <YrhxE4s0hLvbbibp@krava>
+ <CABwm_eT_LE6VbLMgT31yqW=tc_obLP=6E0jnMqVn1sMdWrVVNw@mail.gmail.com>
+ <Yrqcpr7ICzpsoGrc@krava>
+ <YufUAiLqKiuwdvcP@krava>
+ <YuloQYU72pe4p3eK@kernel.org>
+ <YuokoBdtJ2Jp1R25@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YuokoBdtJ2Jp1R25@krava>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+Em Wed, Aug 03, 2022 at 09:32:48AM +0200, Jiri Olsa escreveu:
+> On Tue, Aug 02, 2022 at 03:09:05PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Mon, Aug 01, 2022 at 03:24:18PM +0200, Jiri Olsa escreveu:
+> > > On Tue, Jun 28, 2022 at 08:16:06AM +0200, Jiri Olsa wrote:
+> > > > On Mon, Jun 27, 2022 at 11:08:34AM +0800, 谭梓煊 wrote:
+> > > > > #ifdef HAVE_LIBCRYPTO                <-- but check this, it's always false
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+> > > > nice :)
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and are still valid.
+> > > > > #define BUILD_ID_MD5
+> > > > > #undef BUILD_ID_SHA /* does not seem to work well when linked with Java */
+> > > > > #undef BUILD_ID_URANDOM /* different uuid for each run */
 
-Since its use in kexec_core.c is safe everywhere, it should be preferred.
+> > > > > #ifdef BUILD_ID_SHA
+> > > > > #include <openssl/sha.h>
+> > > > > #endif
 
-Therefore, replace kmap() with kmap_local_page() in kexec_core.c.
+> > > > > #ifdef BUILD_ID_MD5
+> > > > > #include <openssl/md5.h>
+> > > > > #endif
+> > > > > #endif                               <-- this block will be skipped
+> > > > > ```
 
-Tested on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-HIGHMEM64GB enabled.
+> > > > > Maybe we should fix this, to really make use of libcrypto if it is available?
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Acked-by: Baoquan He <bhe@redhat.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+> > > > yea, I think that was the original idea, let's keep the variable with
+> > > > SUPPORT suffix and use the -Wdeprecated-declarations for genelf.c
+> > > > 
+> > > > full fix would be to detect the new API and use it when it's available but..
+> > > > given that the check was false at least since 2016, perhaps we could remove
+> > > > that code? ;-) Stephane?
+> > > 
+> > > ping
+> > 
+> > So, we should start with 谭梓煊 patch, then fix that ifdef and go on
+> > from there?
+> 
+> yes, I thought we could remove that, but there's no reply from
+> Stephane so let's fix that
 
-v2->v3: Add more information in the commit message as requested by Baoquan
-He and forward two tags, respectively from Ira Weiny and Baoquan He (many
-thanks to them two!).
+Yeah, I did it and it seems to build, so lets ship it :-)
 
-v1->v2: A sentence of the commit message contained an error due to a
-mistake in copy-pasting from a previous patch. Replace "aio.c" with
-"kexec_core.c".
-
- kernel/kexec_core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 4d34c78334ce..6f98274765d4 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -814,7 +814,7 @@ static int kimage_load_normal_segment(struct kimage *image,
- 		if (result < 0)
- 			goto out;
- 
--		ptr = kmap(page);
-+		ptr = kmap_local_page(page);
- 		/* Start with a clear page */
- 		clear_page(ptr);
- 		ptr += maddr & ~PAGE_MASK;
-@@ -827,7 +827,7 @@ static int kimage_load_normal_segment(struct kimage *image,
- 			memcpy(ptr, kbuf, uchunk);
- 		else
- 			result = copy_from_user(ptr, buf, uchunk);
--		kunmap(page);
-+		kunmap_local(ptr);
- 		if (result) {
- 			result = -EFAULT;
- 			goto out;
-@@ -878,7 +878,7 @@ static int kimage_load_crash_segment(struct kimage *image,
- 			goto out;
- 		}
- 		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
--		ptr = kmap(page);
-+		ptr = kmap_local_page(page);
- 		ptr += maddr & ~PAGE_MASK;
- 		mchunk = min_t(size_t, mbytes,
- 				PAGE_SIZE - (maddr & ~PAGE_MASK));
-@@ -894,7 +894,7 @@ static int kimage_load_crash_segment(struct kimage *image,
- 		else
- 			result = copy_from_user(ptr, buf, uchunk);
- 		kexec_flush_icache_page(page);
--		kunmap(page);
-+		kunmap_local(ptr);
- 		arch_kexec_pre_free_pages(page_address(page), 1);
- 		if (result) {
- 			result = -EFAULT;
--- 
-2.37.1
-
+- Arnaldo

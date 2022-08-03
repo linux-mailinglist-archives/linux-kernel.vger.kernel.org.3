@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3B55892A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001445892A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbiHCTUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S238059AbiHCTVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236531AbiHCTUX (ORCPT
+        with ESMTP id S236278AbiHCTVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:20:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA7BFF0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659554421; x=1691090421;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rl2R1qjRCRU+vzbaaCeJiDEaUiNnBfejz426x45jxV8=;
-  b=FZvEXcJ0xSJmlhzLrJjpEG4BywsdV+7nIZGgXVhyBIh5UiOrsJ30sgQr
-   WPiRYxJec/pdSMKiTd3AEWeJPxZoNfw+Kub/g7Dlc5601aNUiG0IDWGfL
-   igML+cw2UrL9UL33us8iQunv6t3embHaRq/elRT+cyLVktkkKEfP6jbzH
-   xWWxfo48nnT8reIDzD5NfiZtexUAaJAV0/cgr5cGFU3jchxpIYXj82LPW
-   W64A7Fd+jCRSMWsk1LY9qJjsNcnAhF/UYMM9XaaFq0tKmHwPSUopYQH+p
-   0+DHh0UIg24rq/AJo3zndHt3JEPe+w4D+CyLRrlNDSJhcCMmLqdZS9xs+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="270140882"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="270140882"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 12:20:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="631274932"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2022 12:20:19 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJJul-000Had-0x;
-        Wed, 03 Aug 2022 19:20:19 +0000
-Date:   Thu, 4 Aug 2022 03:19:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202208040356.e8qCh15B-lkp@intel.com>
+        Wed, 3 Aug 2022 15:21:50 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2FD3E750
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:21:48 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id s206so15984696pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=L3BXoDAnjXKl7DF5MAL+W0kL9WnJVL0b1/HkhEfMB6o=;
+        b=TjQRomc0BncZKstd0VtuEoVthcM/oSbSEL77eNSNYn0WzPnp2Edcq9KcBb1Vq9iXMx
+         2FmV8jclNZmRNGHba1FWsdthmkJ3V4XXTaPSkSqHuDG+9xKpKQMzBZUI3PtLAXEjMSIz
+         Gsakob4IjBskgerDp8blcso3BMVVtiZZkx/Wh29jgydRdN9W2q6mqYzP6nrkyvIwEGKp
+         aA43mf6vjD++eHQcpNNLrIcszEocGgEAwKLJL4QV4ONcaqkiXH7d2l0r8KzwbTGlDJhS
+         vSQNrYdhUKAT6TmlwJoMLYxkENEXLhmJxpPs3aqiGDEtrp8sozaZxufTWJ3DaD6N/QRB
+         gDdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=L3BXoDAnjXKl7DF5MAL+W0kL9WnJVL0b1/HkhEfMB6o=;
+        b=z2nd/yI8iqc5kuTzYFfVEQHIOJ80v70Tcli4X1uDIbQqHq1iFgVr1Algqa0LJ2O3Zm
+         Qvs0P0Nc9tY6NcTtPacs5l8U3+lFoOSLozn2R/GC6RFvddFrYUeVskMvvxuKYqht2+TZ
+         ahRAn4C1Ul9oHuU5FwswDZUr1Onu8u/SC2ARjL99u8CMpsokYhMOVB79frbqYM+kKHhx
+         cxZ3gzV6OMnd0pejOyS13wfiU0zm9QS96K70E8jJI3W6VmhOCTKiZd3vOSx/TJA5tgYS
+         ptXEGeP1WhGIGulwQZrHNYVBZBWH9KDB/0O01LWKV52kjhLxUsHkTVJx9H+pp978DZxF
+         s4qQ==
+X-Gm-Message-State: AJIora+ZTNi7NoddM4sy3blKJVzjAprM88y6cMv6MJTvzN2n82TnZ09m
+        bLSG712Nuj5y4YROmAzD1w/iYQ==
+X-Google-Smtp-Source: AGRyM1sYEfRp+NhnfWgOD9pnywTRoeKibbqNbFltK9LYASso7bT1OFsTtRUBKZ37SNcDWD/PUDLZ6A==
+X-Received: by 2002:a05:6a00:234f:b0:525:1f7c:f2bf with SMTP id j15-20020a056a00234f00b005251f7cf2bfmr27173548pfj.14.1659554508054;
+        Wed, 03 Aug 2022 12:21:48 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t124-20020a635f82000000b0040d75537824sm8339323pgb.86.2022.08.03.12.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 12:21:47 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 19:21:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] selftests: KVM/x86: Fix vcpu_{save,load}_state() by
+ adding APIC state into kvm_x86_state
+Message-ID: <YurKx+gFAWPvj35L@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-3-mizhang@google.com>
+ <YurCI5PQu44UJ0a7@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <YurCI5PQu44UJ0a7@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,159 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e2b542100719a93f8cdf6d90185410d38a57a4c1
-commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
-date:   6 months ago
-config: powerpc-randconfig-s031-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040356.e8qCh15B-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f68f2ff91512c199ec24883001245912afc17873
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/512x/
+KVM: selftests: for the shortlog.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Aug 03, 2022, Oliver Upton wrote:
+> Hi Mingwei,
+> 
+> On Tue, Aug 02, 2022 at 11:07:15PM +0000, Mingwei Zhang wrote:
+> > Fix vcpu_{save,load}_state() by adding APIC state into kvm_x86_state and
+> > properly save/restore it in vcpu_{save,load}_state(). When vcpu resets,
+> > APIC state become software disabled in kernel and thus the corresponding
+> > vCPU is not able to receive posted interrupts [1].  So, add APIC
+> > save/restore in userspace in selftest library code.
+> 
+> Of course, there are no hard rules around it but IMO a changelog is
+> easier to grok if it first describes the what/why of the problem, then
+> afterwards how it is fixed by the commit.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/platforms/512x/mpc512x_shared.c:239:25: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:239:25: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:239:25: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:245:38: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:245:38: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:245:38: sparse:     got restricted __be32 [noderef] __iomem *
->> arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
->> arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:251:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:256:24: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:256:24: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:256:24: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:264:25: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int const volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:264:25: sparse:     expected unsigned int const volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:264:25: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] vaddr @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     expected void const *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:271:9: sparse:     got void [noderef] __iomem *[assigned] vaddr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:277:19: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:277:19: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:277:19: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:278:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:278:32: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:278:32: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:279:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:279:32: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:279:32: sparse:     got restricted __be32 [noderef] __iomem *
-   arch/powerpc/platforms/512x/mpc512x_shared.c:280:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int volatile [noderef] [usertype] __iomem *addr @@     got restricted __be32 [noderef] __iomem * @@
-   arch/powerpc/platforms/512x/mpc512x_shared.c:280:32: sparse:     expected unsigned int volatile [noderef] [usertype] __iomem *addr
-   arch/powerpc/platforms/512x/mpc512x_shared.c:280:32: sparse:     got restricted __be32 [noderef] __iomem *
+I strongly disagree.  :-)  To some extent, it's a personal preference, e.g. I
+find it easier to understand the details (why something is a problem) if I have
+the extra context of how a problem is fixed (or: what code was broken).
 
-vim +251 arch/powerpc/platforms/512x/mpc512x_shared.c
+But beyond personal preference, there are less subjective reasons for stating
+what a patch does before diving into details.  First and foremost, what code is
+actually being changed is the most important information, and so that information
+should be easy to find.  Changelogs that bury the "what's actually changing" in a
+one-liner after 3+ paragraphs of background make it very hard to find that information.
 
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  208  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  209  /*
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  210   * Check if DIU was pre-initialized. If so, perform steps
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  211   * needed to continue displaying through the whole boot process.
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  212   * Move area descriptor and gamma table elsewhere, they are
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  213   * destroyed by bootmem allocator otherwise. The frame buffer
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  214   * address range will be reserved in setup_arch() after bootmem
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  215   * allocator is up.
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  216   */
-7e198197ec878c Brian Norris       2013-10-11  217  static void __init mpc512x_init_diu(void)
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  218  {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  219  	struct device_node *np;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  220  	struct diu __iomem *diu_reg;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  221  	phys_addr_t desc;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  222  	void __iomem *vaddr;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  223  	unsigned long mode, pix_fmt, res, bpp;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  224  	unsigned long dst;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  225  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  226  	np = of_find_compatible_node(NULL, NULL, "fsl,mpc5121-diu");
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  227  	if (!np) {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  228  		pr_err("No DIU node\n");
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  229  		return;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  230  	}
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  231  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  232  	diu_reg = of_iomap(np, 0);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  233  	of_node_put(np);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  234  	if (!diu_reg) {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  235  		pr_err("Can't map DIU\n");
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  236  		return;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  237  	}
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  238  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23 @239  	mode = in_be32(&diu_reg->diu_mode);
-c4e5a0232763db Timur Tabi         2011-09-28  240  	if (mode == MFB_MODE0) {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  241  		pr_info("%s: DIU OFF\n", __func__);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  242  		goto out;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  243  	}
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  244  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  245  	desc = in_be32(&diu_reg->desc[0]);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  246  	vaddr = ioremap(desc, sizeof(struct diu_ad));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  247  	if (!vaddr) {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  248  		pr_err("Can't map DIU area desc.\n");
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  249  		goto out;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  250  	}
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23 @251  	memcpy(&diu_shared_fb.ad0, vaddr, sizeof(struct diu_ad));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  252  	/* flush fb area descriptor */
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  253  	dst = (unsigned long)&diu_shared_fb.ad0;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  254  	flush_dcache_range(dst, dst + sizeof(struct diu_ad) - 1);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  255  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  256  	res = in_be32(&diu_reg->disp_size);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  257  	pix_fmt = in_le32(vaddr);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  258  	bpp = ((pix_fmt >> 16) & 0x3) + 1;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  259  	diu_shared_fb.fb_phys = in_le32(vaddr + 4);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  260  	diu_shared_fb.fb_len = ((res & 0xfff0000) >> 16) * (res & 0xfff) * bpp;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  261  	diu_shared_fb.in_use = true;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  262  	iounmap(vaddr);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  263  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  264  	desc = in_be32(&diu_reg->gamma);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  265  	vaddr = ioremap(desc, sizeof(diu_shared_fb.gamma));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  266  	if (!vaddr) {
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  267  		pr_err("Can't map DIU area desc.\n");
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  268  		diu_shared_fb.in_use = false;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  269  		goto out;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  270  	}
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  271  	memcpy(&diu_shared_fb.gamma, vaddr, sizeof(diu_shared_fb.gamma));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  272  	/* flush gamma table */
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  273  	dst = (unsigned long)&diu_shared_fb.gamma;
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  274  	flush_dcache_range(dst, dst + sizeof(diu_shared_fb.gamma) - 1);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  275  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  276  	iounmap(vaddr);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  277  	out_be32(&diu_reg->gamma, virt_to_phys(&diu_shared_fb.gamma));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  278  	out_be32(&diu_reg->desc[1], 0);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  279  	out_be32(&diu_reg->desc[2], 0);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  280  	out_be32(&diu_reg->desc[0], virt_to_phys(&diu_shared_fb.ad0));
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  281  
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  282  out:
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  283  	iounmap(diu_reg);
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  284  }
-4b5006ec7bb73c Anatolij Gustschin 2010-07-23  285  
+Maybe for initial review one could argue that "what's the bug" is more important,
+but for skimming logs and git archeology, the gory details matter less and less.
+E.g. when doing a series of "git blame", the details of each change along the way
+are useless, the details only matter for the culprit; I just want to quickly
+determine whether or not a commit might be of interest.
 
-:::::: The code at line 251 was first introduced by commit
-:::::: 4b5006ec7bb73cd9d4c8a723d484b4c87fad4123 powerpc/5121: shared DIU framebuffer support
+Another argument for stating "what's changing" first is that it's almost always
+possible to state "what's changing" in a single sentence.  Conversely, all but the
+most simple bugs require multiple sentences or paragraphs to fully describe the
+problem.  If both the "what's changing" and "what's the bug" are super short then
+the order doesn't matter.  But if one is shorter (almost always the "what's changing),
+then covering the shorter one first is advantageous because it's less of an
+inconvenience for readers/reviewers that have a strict ordering preference.  E.g.
+having to skip one sentence to get to the stuff you care about is less painful than
+me having to skip three paragraphs to get to the stuff that I care about.
 
-:::::: TO: Anatolij Gustschin <agust@denx.de>
-:::::: CC: Grant Likely <grant.likely@secretlab.ca>
+I think the underlying problem with this changelog (and the shortlog) is that it's
+too literal about what is being fixed.  Shortlogs and changelogs shouldn't be
+play-by-play descriptions of the code changes, they should be abstractions of the
+problem and the fix.  E.g. 
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  KVM: selftests: Save/restore vAPIC state in "migration" tests
+  
+  Save/restore vAPIC state as part of vCPU save/load so that it's preserved
+  across VM "migration".  This will allow testing that posted interrupts
+  are properly handled across VM migration.
+
+With that, the first sentence covers both the "what's changing" and provides a
+high-level description of the "bug" it's fixing.  And the second sentence covers
+(a) "why do we want this patch", (b) "why wasn't this a problem before", and (c)
+"what's the urgency of this patch".

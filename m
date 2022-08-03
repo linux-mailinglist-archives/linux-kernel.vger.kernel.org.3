@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106425892E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746DB5892E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbiHCTsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S238480AbiHCTtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiHCTsW (ORCPT
+        with ESMTP id S233409AbiHCTti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:48:22 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C37A20BD9;
-        Wed,  3 Aug 2022 12:48:21 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso3198166pjd.3;
-        Wed, 03 Aug 2022 12:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=/TnexTjdFrc/Gu2edl42Moooc6kFX3TgYFD+N6FTpm4=;
-        b=QDt3cfQte/Zl4k0s/nJQy5IJo4lGn44+dOrM6ddgvuwo9jKvKLbbnFoL0T8cgQYOoj
-         uyUgupOxmCC9zuOi67Jlg1e05mjmaBm5vyCdVxr8VZ+3I3kbNaPxUxd5pndHkzsGdXVR
-         n6bZmfKul/vPUIzryzxQ2Ft1gRS7bSyHNWqwz9AgtmOVYtR25fuSYtUDLA+QVH8PZ2Pk
-         7HRvQUPlLZBaBFjljW4kobGO084v6+zwuGGUoLlSx6QX8wCQBzBMrxxbP81PFCwFzTvl
-         8wxBz+pFiD2rTjn1YZJw3IIgfYhVurD3fyzwJJ324pEp5BArGPhMHE4/0WcYjnYCgi7v
-         gV0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=/TnexTjdFrc/Gu2edl42Moooc6kFX3TgYFD+N6FTpm4=;
-        b=vCyfse7aBBn9wj0bj6Z9cTDuFsMtu0KvaoSzoPtFOS6Laxy00VDBy2LKPOUTuYgHM8
-         UB2EL2gy+ROZfh3IGu0JXYFsWg4ubtiXU19GdsLrk1CeIpxbBqhsIFrO0ujbbL2+l6bk
-         bakFQTCoQfJrgjP7tx8hCiLyIwVCOP1ZB9CZ+O2Qf5xHX4rgXSRe1wlSzNxMqMq/Y8J7
-         AcZxG7NR8CkHv697eyFy/2lfdCRPIrZ5HwHPXRmzffrhNZuxZD29lfvYkxHfnwMdNx//
-         LLlBqN9/RJMbSwltDHRLSgWMCJPCijfRv/YZDX4Y+xZ7SWk2uUY2A1F9E5qyLvVKg+Pm
-         SmZA==
-X-Gm-Message-State: ACgBeo0R1HakEI0SbXDCHRZOlNWVCiOzWwPUIiJHEaVJ836mK49hmfd8
-        9sWXL8/NMYTE/qFPTI0Fzro=
-X-Google-Smtp-Source: AA6agR4MAA7iZXP0Vp6HgNcIKaEx75jEF2GI4Q5XeVva0iVZGej1zllK3JXKe+IVCW9uLC3y4JNyJQ==
-X-Received: by 2002:a17:902:d4c2:b0:16d:c317:ee9d with SMTP id o2-20020a170902d4c200b0016dc317ee9dmr26053515plg.25.1659556100608;
-        Wed, 03 Aug 2022 12:48:20 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7c3a])
-        by smtp.gmail.com with ESMTPSA id w1-20020a656941000000b0041a919ed63dsm11347439pgq.3.2022.08.03.12.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 12:48:20 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 Aug 2022 09:48:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>, surenb@google.com,
-        mingo@redhat.com, peterz@infradead.org, corbet@lwn.net,
-        akpm@linux-foundation.org, rdunlap@infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
- psi_inner_cgroup
-Message-ID: <YurRAnUEloaYMx0W@slm.duckdns.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-9-zhouchengming@bytedance.com>
- <Yt7KQc0nnOypB2b2@cmpxchg.org>
- <YuAqWprKd6NsWs7C@slm.duckdns.org>
- <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
- <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
- <YurK6MXdJPrV2VYS@cmpxchg.org>
+        Wed, 3 Aug 2022 15:49:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36177248FB;
+        Wed,  3 Aug 2022 12:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZWxbbnA21y0t6xKiYRqKvDsF1ANgoMiT3UqVXr62jW8=; b=mkpdGKKxh/8AWrjM3cHiHjNIQn
+        Ncudfbw+CQQ1JyuOtXr9PQBC/D+yGe1fRbeskX1lECGyAhuLhsrROwwPe1YUbgd8EbJTIpkL+oxUJ
+        W9aAuOaYabYkjj8ekbFfAQGwGgNVoiujl1JPXV/g7+GhU4DjgyszZj2YCtwoo2X2pNcJkXMVVwQYk
+        R9yQ8cTIRCjg9QDl81tQmncfWTxYjzni8CJ0MbGyqWo3rf9ARNli6tvUsLBCEZmZuQSFryB4iOaK+
+        iiwhrMWr5aHClmKXr7t+jkGYubh5rZnMsPrd6h6hQuPEvg4mv8uUFulECuh0MFPoG7R/ucsMRxk1m
+        jlR7Z3Sg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oJKN3-000va8-00;
+        Wed, 03 Aug 2022 19:49:33 +0000
+Date:   Wed, 3 Aug 2022 20:49:32 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git pile 3 - dcache
+Message-ID: <YurRTBO40kil4Bw5@ZenIV>
+References: <YurA3aSb4GRr4wlW@ZenIV>
+ <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YurK6MXdJPrV2VYS@cmpxchg.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Aug 03, 2022 at 11:57:27AM -0700, Linus Torvalds wrote:
+> On Wed, Aug 3, 2022 at 11:39 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> >         Main part here is making parallel lookups safe for RT - making
+> > sure preemption is disabled in start_dir_add()/ end_dir_add() sections (on
+> > non-RT it's automatic, on RT it needs to to be done explicitly) and moving
+> > wakeups from __d_lookup_done() inside of such to the end of those sections.
+> 
+> Ugh.
+> 
+> I really dislike this pattern:
+> 
+>         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 preempt_disable();
+>        ...
+>         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 preempt_enable();
+> 
+> and while the new comment explains *why* it exists, it's still very ugly indeed.
+> 
+> We have it in a couple of other places, and we also end up having
+> another variation on the theme that is about "migrate_{dis,en}able()",
+> except it is written as
+> 
+>         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 migrate_disable();
+>         else
+>                 preempt_disable();
+> 
+> because on non-PREEMPT_RT obviously preempt_disable() is the better
+> and simpler thing.
+> 
+> Can we please just introduce helper functions?
+> 
+> At least that
+> 
+>         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 preempt_disable();
+>         ...
+> 
+> pattern could be much more naturally expressed as
+> 
+>         preempt_disable_under_spinlock();
+>         ...
+> 
+> which would make the code really explain what is going on. I would
+> still encourage that *comment* about it, but I think we really should
+> strive for code that makes sense even without a comment.
+> 
+> The fact that then without PREEMPT_RT, the whole
+> "preempt_disable_under_spinlock()" becomes a no-op is then an
+> implementation detail - and not so different from how a regular
+> preempt_disable() becomes a no-op when on UP (or with PREEMPT_NONE).
+> 
+> And that "preempt_disable_under_spinlock()" really documents what is
+> going on, and I feel would make that code easier to understand? The
+> fact that PREEMPT_RT has different rules about preemption is not
+> something that the dentry code should care about.
+> 
+> The dentry code could just say "I want to disable preemption, and I
+> already hold a spinlock, so do what is best".
+> 
+> So then "preempt_disable_under_spinlock()" precisely documents what
+> the dentry code really wants.
+> 
+> No?
 
-On Wed, Aug 03, 2022 at 03:22:16PM -0400, Johannes Weiner wrote:
-> Where it gets trickier is also stopping the tracking of task counts in
-> a cgroup. For re-enabling afterwards, we'd have to freeze scheduler
-> and cgroup state and find all tasks of interest across all CPUs for
-> the given cgroup to recreate the counts. I'm not quite sure whether
-> that's feasible, and if so, whether it's worth the savings.
-
-If this turns out to be necessary, I wonder whether we can just be
-opportunistic. ie. don't bother with walking all the tasks but only remember
-whether a task is accounted at a given level or not (this can be a bitmap
-which is allocated at cgroup attach type and in most caess will be pretty
-small). Then, maybe we can just start accounting them as they cycle through
-state transitions - we ignore the ones leaving states that they weren't
-accounted for and start remembering the new states they enter.
-
-Thanks.
-
--- 
-tejun
+Fine by me, but I think that this is better dealt with by the rt folks;
+I've no objections to replacing that open-coded stuff in dcache.c with
+better documented primitives, so when such patches materialize...

@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F70588FEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161F8588FEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238264AbiHCP5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S238338AbiHCP6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238094AbiHCP5t (ORCPT
+        with ESMTP id S229487AbiHCP6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:57:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2465FBB;
-        Wed,  3 Aug 2022 08:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659542268; x=1691078268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mOIJWP9CHMh9BXUsNu+7KhdpzZU4fbVzJUvkLwDE/es=;
-  b=QbLDW4YmZiS65dZx1CEWrJvy79Ep5fHw6NRbMfoKG2x7kGTK7/BY9h6x
-   4wOzSyXCu4Yttk7YXpHABiHcQeP1ccKivAF9ajUtM2IAtaDeFTXQqgZH9
-   3G6wg+5dsLfVYjJk1XM6SgU1owwjSHYty/DBhKZWt1AZSAkz5zpq3cfPY
-   PVSoQEhX5Kq6cih3ZnGk99CaHgS9i/QXq2WdNN/zyAW1JpakaRN4jV7uf
-   aFGnNS31xAV0B5CN4q1WsBUKqH1PnqzwXMc3z6uCwp9Rlg7YZ1X1RDt/B
-   aie24LNOk7vE8wdI3IBU83h0SnFW7qr2Etc8hZPH6p0CNzWYWcVsaoWvM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="287270048"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="287270048"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 08:57:48 -0700
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="729250577"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 08:57:44 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 03 Aug 2022 18:57:42 +0300
-Date:   Wed, 3 Aug 2022 18:57:42 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Benson Leung <bleung@google.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@intel.com>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmalani@google.com
-Subject: Re: [PATCH] Supporting wake on DP hot events behind TBT/USB4 routers
-Message-ID: <Yuqa9vjEBjWAMyf9@lahna>
-References: <20220803010139.GA32634@rajth-NUC10i7FNH>
- <YuoJceCfuJ4RKon5@lahna>
- <CANLzEkucqXP6fU1OZ0+B4p10SXiR7-BJa+dn5xjp20UhE8UsEg@mail.gmail.com>
+        Wed, 3 Aug 2022 11:58:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616D563BA;
+        Wed,  3 Aug 2022 08:58:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0AE0616CF;
+        Wed,  3 Aug 2022 15:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E069C433C1;
+        Wed,  3 Aug 2022 15:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659542293;
+        bh=lR8gU7F9lxbc9MFMV0oOm7Xx0O1v2jB8GQ+wFUgCPVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LEqO+ziORPJEZduazYvVU/bZ+XQ1SPZvGIRZlOJDer05IgdrtpFpWK1xHlpZm5jzE
+         cx3NQRJRNb5Fd4f/wBErOamuZJetDKoBDCHaw1egSMyxCrFPLTYeDPdAGzlfhiGNWr
+         horByRrynN94mT9KIl+CkFQRPW9mfmD5vcq/oF2WUZv0ulQZFzMmRQ7+g/uaCKkwWk
+         IZZsMkBlkx6Dn9JARVWKSD/xeem0Wciim/2e+2CE9vyVgKO2+Md/fI6/3dhqfQ/LMm
+         TI19MghIuB4JWhkDRE5UQ6bliZY5/xVVdO4QTaXaS492O/+9z3Z++gavu6koM1Ehze
+         vkqjuK3q79fVQ==
+Date:   Wed, 3 Aug 2022 08:58:10 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Andrey Strachuk <strochuk@ispras.ru>
+Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 6.0-rc1
+Message-ID: <YuqbEuYZc4Lz5l0g@dev-arch.thelio-3990X>
+References: <YuqB0tl2hjT3x7a4@kroah.com>
+ <YuqXtcaUPflINBd6@dev-arch.thelio-3990X>
+ <YuqZU/JJyMQJxva0@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANLzEkucqXP6fU1OZ0+B4p10SXiR7-BJa+dn5xjp20UhE8UsEg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YuqZU/JJyMQJxva0@kroah.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benson,
+On Wed, Aug 03, 2022 at 05:50:43PM +0200, Greg KH wrote:
+> On Wed, Aug 03, 2022 at 08:43:49AM -0700, Nathan Chancellor wrote:
+> > On Wed, Aug 03, 2022 at 04:10:26PM +0200, Greg KH wrote:
+> > > Andrey Strachuk (1):
+> > >       usb: cdns3: change place of 'priv_ep' assignment in cdns3_gadget_ep_dequeue(), cdns3_gadget_ep_enable()
+> > 
+> > For the record, this breaks allmodconfig with clang (I haven't seen a
+> > formal report on it anywhere and this missed -next coverage because
+> > Stephen is on vacation):
+> > 
+> >     drivers/usb/cdns3/cdns3-gadget.c:2290:11: error: variable 'priv_dev' is uninitialized when used here [-Werror,-Wuninitialized]
+> >                     dev_dbg(priv_dev->dev, "usbss: invalid parameters\n");
+> >                             ^~~~~~~~
+> >     include/linux/dev_printk.h:155:18: note: expanded from macro 'dev_dbg'
+> >             dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+> >                             ^~~
+> >     include/linux/dynamic_debug.h:167:7: note: expanded from macro 'dynamic_dev_dbg'
+> >                             dev, fmt, ##__VA_ARGS__)
+> >                             ^~~
+> >     include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+> >             __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+> >                                                                 ^~~~~~~~~~~
+> >     include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+> >                     func(&id, ##__VA_ARGS__);               \
+> >                                 ^~~~~~~~~~~
+> >     drivers/usb/cdns3/cdns3-gadget.c:2278:31: note: initialize the variable 'priv_dev' to silence this warning
+> >             struct cdns3_device *priv_dev;
+> >                                         ^
+> >                                         = NULL
+> >     1 error generated.
+> > 
+> > I know you don't take patches during the merge window, so I guess we'll
+> > just have to have x86_64 allmodconfig be broken with clang for -rc1? :/
+> 
+> I can send fix-up patches that break the build before -rc1 if you have
+> it.  Also you can send it and Linus can pick it up directly if it breaks
+> his workflow.
 
-On Wed, Aug 03, 2022 at 08:15:49AM -0700, Benson Leung wrote:
-> Hi Mika,
-> 
-> On Tue, Aug 2, 2022 at 10:37 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Aug 03, 2022 at 06:31:39AM +0530, Rajat Khandelwal wrote:
-> > > Current implementation doesn't allow user to go into system suspend
-> > > and simultaneously project the screen on an external display connected
-> > > to a TBT/USB4 device. This patch enables this feature.
-> > >
-> > > Let me know what you think about this.
-> >
-> > Please prefix patches to follow the sybsystem style. For Thunderbolt it
-> > should be "thunderbolt: ....".
-> >
-> > This will cause any monitor plug to wake up the system and I'm not sure
-> > we want that, at least to be default behaviour. If you have a regular
-> > Type-C (non-USB4/TBT) dock and you plug in a monitor to that, does it
-> > wake up?
-> 
-> Speaking for Google and our ChromeOS USB-C policy, yes, if the host is
-> in S0iX or S3, an already attached USB-C docking station in DP Alt
-> Mode will respond to a display attach via HPD via an Alert message in
-> USB PD. We called this feature wake-on-dock.
-> 
-> We implemented wake-on-dock for DP Alt Mode in the EC, since our EC
-> handles USB PD anyway, and is handling the PD Alert message which
-> contains the HPD status.
-> 
-> However, when the dock supports USB4 or Thunderbolt, those modes don't
-> involve USB PD for device attach, so our EC doesn't have the role of
-> waking the system, so something else on the system must, which is this
-> feature being discussed.
+Sounds good, I'll send one shortly.
 
-Okay understood. Thanks for explaining!
+> Odd that this was never reported, 0-day didn't even say anything?
+
+Unfortunately, it does not look like it, as least not on a mailing list
+that is archived on lore (meaning it wasn't sent to our mailing list).
+
+Cheers,
+Nathan

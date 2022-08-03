@@ -2,131 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF9758943D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8FC589443
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236668AbiHCV7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 17:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S233816AbiHCWDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238501AbiHCV72 (ORCPT
+        with ESMTP id S229529AbiHCWDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:59:28 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513EC5C9D6;
-        Wed,  3 Aug 2022 14:59:27 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Lym3f4tmrz9t4M;
-        Wed,  3 Aug 2022 21:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659563966; bh=46QMNNu+FK8isynfWdGkGqc+HS477sp2/1QXbvEgpxg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lwKy0nEglZFjSrWXbCi+YN3PgxPSU54SKWCfW0GdbtSrKpbGhjKsq34U29UBrAIJ4
-         cJSIzAxnHVl0CimnwMxd5lksKmH/p0BN5TuHnyX7TWEDjlqONoolucf8xBFVHN9/gz
-         kmLdLAfsOamGY0mxo/jP6D6vr/OjdnKeyrlDPIHg=
-X-Riseup-User-ID: 932639AD08357356C2A742C45BE4863C0B8E1F17DB734F891B927579ABF1588D
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lym3Z104Sz1ySb;
-        Wed,  3 Aug 2022 21:59:21 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        Daniel Latypov <dlatypov@google.com>, airlied@linux.ie,
-        daniel@ffwll.ch, davem@davemloft.net, kuba@kernel.org,
-        jose.exposito89@gmail.com, javierm@redhat.com
-Cc:     andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v3 3/3] kunit: Use KUNIT_EXPECT_MEMEQ macro
-Date:   Wed,  3 Aug 2022 18:58:55 -0300
-Message-Id: <20220803215855.258704-4-mairacanal@riseup.net>
-In-Reply-To: <20220803215855.258704-1-mairacanal@riseup.net>
-References: <20220803215855.258704-1-mairacanal@riseup.net>
+        Wed, 3 Aug 2022 18:03:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62E9F5C9FA
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659564213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8Pg56FzwoyjSg3GyH/BFe7fw+AnDdom5pG01uC6nr8k=;
+        b=A7EAZfma39ubx17u4G5WuBnHqlntIMLAlC4twvXJxyc0V98iIIjycOel1rYfwImBOpCt7c
+        vhX/C2V+oQWpK70VT/KqVy0Ma/9It7miG+k0ooX41+4AIY8W1M372VLfO6oNCNk6EFjcT+
+        C5SOJDmAtYtEsPlOzezK8EaMeRK/ob0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-586-P5GsASqZP5mEK4qtdtPoEA-1; Wed, 03 Aug 2022 18:03:32 -0400
+X-MC-Unique: P5GsASqZP5mEK4qtdtPoEA-1
+Received: by mail-qt1-f198.google.com with SMTP id v6-20020ac87486000000b0031ee0ae1400so11948011qtq.14
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 15:03:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Pg56FzwoyjSg3GyH/BFe7fw+AnDdom5pG01uC6nr8k=;
+        b=ZvL+hRseNntC18J1Hm7tmPdTO6s52Iht8NIGmbDrUAa3+eNE8RK647LZkfKXKK6PW/
+         v1r2Wl4Fwww3plPJujgaqziuJagRLb5leDosI2r2NGgxNZIhtXdKNGut1/PMbZ28zbKo
+         4HDN/gUc5asY/rjTYZVRbFfzVrl2IAhX1Lb3wmlcik504PEk2tt5usuXoCYOAmX3LjiF
+         F4AON3rjHtQNPJy6UhQWfK55S8MDypQxOzdk3O0I+d/VNg/Y8lhMDFqj41hMqB1pIrfz
+         jkqXhtkwjUFMjAMwLFK0ORZ9njc0vywKpIP1TSKYHNnpoORu+Qb1SC4+fCkgYsbvsm/8
+         RFNg==
+X-Gm-Message-State: AJIora8JiI3YG3Q95YyUg7Pfxnxo+rggTWuq8JEUNSNI14TziUsvIqud
+        Tt46HpXXDL9xPDV9JRVcfNp1XAEqobmQHWrJ7nlNyetx57rvhu2ugwiuoKV+tuZuilZGHGIqhnu
+        RdVW7BIB26tx8DpysE1I75UALv/LuH5w06chtqnBRnxxmWIVPCj+yKfaLBm3l/SFkowKhWh0Zmg
+        ==
+X-Received: by 2002:ac8:7fcd:0:b0:31f:393a:7320 with SMTP id b13-20020ac87fcd000000b0031f393a7320mr24100646qtk.11.1659564211887;
+        Wed, 03 Aug 2022 15:03:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uFAhcA+0k626uPLuOPLEzIsTH3poxMxYEXMAQWRon6c0dxg1QwQiPtmHA90AdCiQ8qBd4agQ==
+X-Received: by 2002:ac8:7fcd:0:b0:31f:393a:7320 with SMTP id b13-20020ac87fcd000000b0031f393a7320mr24100611qtk.11.1659564211595;
+        Wed, 03 Aug 2022 15:03:31 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id dm40-20020a05620a1d6800b006a6ab259261sm3598994qkb.29.2022.08.03.15.03.30
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 03 Aug 2022 15:03:31 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     peterx@redhat.com, Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Konstantin Khlebnikov <khlebnikov@openvz.org>
+Subject: [PATCH] mm/smaps: Don't access young/dirty bit if pte unpresent
+Date:   Wed,  3 Aug 2022 18:03:29 -0400
+Message-Id: <20220803220329.46299-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use KUNIT_EXPECT_MEMEQ to compare memory blocks in replacement of the
-KUNIT_EXPECT_EQ macro. Therefor, the statement
+These bits should only be valid when the ptes are present.  Introducing two
+booleans for it and set it to false when !pte_present().
 
-    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
-
-is replaced by:
-
-    KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
-
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
-Acked-by: Daniel Latypov <dlatypov@google.com>
+Cc: Konstantin Khlebnikov <khlebnikov@openvz.org>
+Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries", 2012-05-31)
+Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
-v1 -> v2:
-- Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
-it easier for users to infer the right size unit (Daniel Latypov).
+ fs/proc/task_mmu.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-v2 -> v3: No changes.
----
- drivers/gpu/drm/tests/drm_format_helper_test.c | 6 +++---
- net/core/dev_addr_lists_test.c                 | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 26ecf3b4b137..482136282273 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -217,7 +217,7 @@ static void xrgb8888_to_rgb332_test(struct kunit *test)
-
- 	drm_fb_xrgb8888_to_rgb332(dst, result->dst_pitch, src, &fb,
- 				  &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected, dst_size);
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 9913f3be9fd2..482f91577f8c 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -527,10 +527,12 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
+-	bool migration = false;
++	bool migration = false, young = false, dirty = false;
+ 
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(vma, addr, *pte);
++		young = pte_young(*pte);
++		dirty = pte_dirty(*pte);
+ 	} else if (is_swap_pte(*pte)) {
+ 		swp_entry_t swpent = pte_to_swp_entry(*pte);
+ 
+@@ -560,8 +562,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	if (!page)
+ 		return;
+ 
+-	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
+-		      locked, migration);
++	smaps_account(mss, page, false, young, dirty, locked, migration);
  }
-
- static void xrgb8888_to_rgb565_test(struct kunit *test)
-@@ -245,11 +245,11 @@ static void xrgb8888_to_rgb565_test(struct kunit *test)
-
- 	drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, src, &fb,
- 				  &params->clip, false);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected, dst_size);
-
- 	drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, src, &fb,
- 				  &params->clip, true);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected_swab, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected_swab, dst_size);
- }
-
- static struct kunit_case drm_format_helper_test_cases[] = {
-diff --git a/net/core/dev_addr_lists_test.c b/net/core/dev_addr_lists_test.c
-index 049cfbc58aa9..90e7e3811ae7 100644
---- a/net/core/dev_addr_lists_test.c
-+++ b/net/core/dev_addr_lists_test.c
-@@ -71,11 +71,11 @@ static void dev_addr_test_basic(struct kunit *test)
-
- 	memset(addr, 2, sizeof(addr));
- 	eth_hw_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
-
- 	memset(addr, 3, sizeof(addr));
- 	dev_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- }
-
- static void dev_addr_test_sync_one(struct kunit *test)
---
-2.37.1
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-- 
+2.32.0
 

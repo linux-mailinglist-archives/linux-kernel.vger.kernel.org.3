@@ -2,89 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839145894CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351115894D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbiHCX1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S238341AbiHCX2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiHCX1b (ORCPT
+        with ESMTP id S229881AbiHCX2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 19:27:31 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D3A33402;
-        Wed,  3 Aug 2022 16:27:31 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id g14so4587143ile.11;
-        Wed, 03 Aug 2022 16:27:31 -0700 (PDT)
+        Wed, 3 Aug 2022 19:28:45 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709352B606;
+        Wed,  3 Aug 2022 16:28:44 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id m7so13937017qkk.6;
+        Wed, 03 Aug 2022 16:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0fTNd6U92aMpnpUk4vc+/qMilauOgZ+f0bSF9oL3Kd8=;
+        b=hMpNLPKlItbeL4FVVwcxF5vkjrf3ZW1ojnVtnJ1gUV32gqco84APvLVZoW25JNgnzG
+         K49N7Lb8+yP9rzO7Mcuu1HJRIvl4yz8K4N76S7wHHXogERApdk85u1FmHOMfknn2w/Rz
+         8qfxaZqDawhcLs5RWkKv1UfRQOCnGAaAX5QR80Ny4nBbLr8tkrDEwKNwycAjKzwc0Ffy
+         B1cakb/FKsPNA7DJfTw6Mc+xw9SGFFOTJK1MFV3cOD52sMGMKTT3pN7Hd9T6Wi/T33UA
+         gBwlwHXnjEDp/+TKv27lpvon3pCIp70e4VDT8KJq6Ztkjgx5aGQTqiRC6uWTI8j1Xznc
+         fj3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=8+lW0Y9sDchs80Qq4T1qb7tTF0HJKWej7kYS8TzYu58=;
-        b=T8mBU4/mTZY8Z5Gca73pGQpMkp1Fo3XtNNgZTUaP6//MI/Bkpt8pg44Oetf449Q1Rk
-         n4g/JYMfIoEZn2aNp5cD3cT/fSkb4L4fMpAUwHbCsbx8CpGSVVFY2voUFabqTjbH5O3q
-         ASe2jbL0E+9uYdoT+1ESJyLpwsK9+r0PFKc85Uqu778j6ilpXTFEmtpLnENx144dL7cn
-         8mOHyqQ6J5XAl1+gQGa9Uu84yvpwRjc8BN1SGWX/mHayiCI9gPSx93qom6O4FqXRiNlS
-         g4KSYyc3T81S6Iapypgo5IwO3cCmzOUJJr0Njjv0ufjn69nnqQgsW3GvqsUsrAryUnNf
-         6YKg==
-X-Gm-Message-State: ACgBeo3q7rrVccKpaNZxD2dfIiG1a/GAxP3kKbUAxsGuXt+DH72zVU7u
-        /WAsbBuDv2rCuLiUvIs8WEobv6o02w==
-X-Google-Smtp-Source: AA6agR4bXBAZCfXW1r/LVpF8cB9be1xlAxDX9s0E7aARWO/rzdLNYCLPOX6JoM0tH/h4aemZjwiYyw==
-X-Received: by 2002:a05:6e02:b4c:b0:2de:de3e:6c5a with SMTP id f12-20020a056e020b4c00b002dede3e6c5amr5212701ilu.6.1659569250712;
-        Wed, 03 Aug 2022 16:27:30 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t26-20020a02ccba000000b0034276516a5asm4245948jap.9.2022.08.03.16.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 16:27:29 -0700 (PDT)
-Received: (nullmailer pid 2810185 invoked by uid 1000);
-        Wed, 03 Aug 2022 23:27:27 -0000
-Date:   Wed, 3 Aug 2022 17:27:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>, quic_ppratap@quicinc.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, quic_vpulyala@quicinc.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 6/8] dt-bindings: usb: qcom,dwc3: add wakeup-source
- property
-Message-ID: <20220803232727.GA2810152-robh@kernel.org>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-7-johan+linaro@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0fTNd6U92aMpnpUk4vc+/qMilauOgZ+f0bSF9oL3Kd8=;
+        b=yXzUbCDTwbf9kSUWMLzqQK2jTpiuSBCyAHXV89OOfaz4WrLEIqQ6oeGF46USiogklm
+         RB5+LZi2FFItxM7OMyG7UpmdZomi9+9VjoeLCQF+Jto1V+1qbkktpwM8FnawMiKhd5Iz
+         ylddEZy5yCsUQ6Y9IgZ/6WgStjaj5ICiLAbI48AYcdUdzn7a0Y3mBPVQDB0e9dP/4IFd
+         ryLHqsMvDIxmpZyODhCOLKgVOXHvife28EfZsdEmEaVQrkEoTi9U7WUQ48mmEh1uCXdu
+         rSStbyEp2korkBUT/l2J13EdVml9nuWQ/f6B3vJA1S7O6d6O6SchVHlnapzNWWvW5z0C
+         UkhA==
+X-Gm-Message-State: ACgBeo2XcGjyGmNW1RpwfOYGTskjwtDgF/rfkINMsC+KOH1YgMXPNAcH
+        cDOjadTOPCdikwDk7rKki8Yknw7LH3A=
+X-Google-Smtp-Source: AA6agR6DoNY5ZIjsvWjEXQ8FVjBB0iTJ8DcVbRyqFHMS6j1cUcMIrYBZSZ0BZsOYSlCyAKSJh0nG8Q==
+X-Received: by 2002:a05:620a:22c4:b0:6b8:dcca:1368 with SMTP id o4-20020a05620a22c400b006b8dcca1368mr5866199qki.517.1659569323503;
+        Wed, 03 Aug 2022 16:28:43 -0700 (PDT)
+Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with ESMTPSA id c27-20020a05620a269b00b006b8cff25187sm4396904qkp.42.2022.08.03.16.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 16:28:42 -0700 (PDT)
+Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Yang Ling <gnaygnil@gmail.com>
+References: <20220419051114.1569291-1-seanga2@gmail.com>
+From:   Sean Anderson <seanga2@gmail.com>
+Message-ID: <d92dd996-6961-5291-9504-1fe284b40dd6@gmail.com>
+Date:   Wed, 3 Aug 2022 19:28:41 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802151404.1797-7-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220419051114.1569291-1-seanga2@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 02 Aug 2022 17:14:02 +0200, Johan Hovold wrote:
-> Add a wakeup-source property to the binding to describe whether the
-> wakeup interrupts can wake the system from suspend.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+On 4/19/22 1:11 AM, Sean Anderson wrote:
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1],=
+ I
+> noticed the following calculation, which is copied from
+> drivers/clk/loongson1/clk-loongson1c.c:
+>=20
+> ulong ls1c300_pll_get_rate(struct clk *clk)
+> {
+> 	unsigned int mult;
+> 	long long parent_rate;
+> 	void *base;
+> 	unsigned int val;
+>=20
+> 	parent_rate =3D clk_get_parent_rate(clk);
+> 	base =3D (void *)clk->data;
+>=20
+> 	val =3D readl(base + START_FREQ);
+> 	mult =3D FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+> 	return (mult * parent_rate) / 4;
+> }
+>=20
+> I would like to examine the use of M_PLL and FRAC_N to calculate the mu=
+ltiplier
+> for the PLL. The datasheet has the following to say:
+>=20
+> START_FREQ =E4=BD=8D    =E7=BC=BA=E7=9C=81=E5=80=BC      =E6=8F=8F=E8=BF=
+=B0
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FRAC_N     23:16 0           PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=95=B0=E7=
+=9A=84=E5=B0=8F=E6=95=B0=E9=83=A8=E5=88=86
+>=20
+>                   =E7=94=B1          PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=
+=95=B0=E7=9A=84=E6=95=B4=E6=95=B0=E9=83=A8=E5=88=86
+> M_PLL      15:8  NAND_D[3:0] (=E7=90=86=E8=AE=BA=E5=8F=AF=E4=BB=A5=E8=BE=
+=BE=E5=88=B0 255=EF=BC=8C=E5=BB=BA=E8=AE=AE=E4=B8=8D=E8=A6=81=E8=B6=85=E8=
+=BF=87 100)
+>                   =E9=85=8D=E7=BD=AE
+>=20
+> which according to google translate means
+>=20
+> START_FREQ Bits  Default       Description
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> FRAC_N     23:16 0             Fractional part of the PLL multiplicatio=
+n factor
+>=20
+>                   Depends on    Integer part of PLL multiplication fact=
+or
+> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] i=
+t is
+>                   configuration  recommended not to exceed 100)
+>=20
+> So just based on this description, I would expect that the formula to b=
+e
+> something like
+>=20
+> 	rate =3D parent * (255 * M_PLL + FRAC_N) / 255 / 4
+>=20
+> However, the datasheet also gives the following formula:
+>=20
+> 	rate =3D parent * (M_PLL + FRAC_N) / 4
+>=20
+> which is what the Linux driver has implemented. I find this very unusua=
+l.
+> First, the datasheet specifically says that these fields are the intege=
+r and
+> fractional parts of the multiplier. Second, I think such a construct do=
+es not
+> easily map to traditional PLL building blocks. Implementing this formul=
+a in
+> hardware would likely require an adder, just to then set the threshold =
+of a
+> clock divider.
+>=20
+> I think it is much more likely that the first formula is correct. The a=
+uthor of
+> the datasheet may think of a multiplier of (say) 3.14 as
+>=20
+> 	M_PLL =3D 3
+> 	FRAC_N =3D 0.14
+>=20
+> which together sum to the correct multiplier, even though the actual va=
+lue
+> stored in FRAC_N would be 36.
+>=20
+> I suspect that this has slipped by unnoticed because when FRAC_N is 0, =
+there is
+> no difference in the formulae. The following patch is untested, but I s=
+uspect
+> it will fix this issue. I would appreciate if anyone with access to the=
 
-Acked-by: Rob Herring <robh@kernel.org>
+> hardware could measure the output of the PLL (or one of its derived clo=
+cks) and
+> determine the correct formula.
+>=20
+> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrie=
+r.org/T/#u
+>=20
+> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> ---
+>=20
+>   drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loong=
+son1/clk-loongson1c.c
+> index 703f87622cf5..2b98a116c1ea 100644
+> --- a/drivers/clk/loongson1/clk-loongson1c.c
+> +++ b/drivers/clk/loongson1/clk-loongson1c.c
+> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_=
+hw *hw,
+>   	u32 pll, rate;
+>  =20
+>   	pll =3D __raw_readl(LS1X_CLK_PLL_FREQ);
+> -	rate =3D ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
+> +	rate =3D (pll & 0xff00) + ((pll >> 16) & 0xff);
+>   	rate *=3D OSC;
+> -	rate >>=3D 2;
+> +	rate >>=3D 10;
+>  =20
+>   	return rate;
+>   }
+>=20
+
+Since there have been no objections, can we apply this?
+
+--Sean
+

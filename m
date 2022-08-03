@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD967588934
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3600858893A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbiHCJSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S236006AbiHCJTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiHCJSc (ORCPT
+        with ESMTP id S234654AbiHCJTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:18:32 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DC620BE3
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:18:31 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso614608wma.2
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 02:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Tu5Rjm9YUzMsrXkU1Im8ttCQvcJ0mxBS+97HvYdI1IY=;
-        b=CWdr8BzjJ8oNBhmDZEORgFQdquBb/74+bsnrjpu1gRiw23jk2rQgA/WB7PEx5bFoCt
-         E+cfmGCV8Exs1H8xp8B86VYqjpFUZxegdDY8WPBtzJVBhDnvfufbzhSmYotc1AAAzsIj
-         mJwjYhZ0CbyC4UBromVSAEyV9e+W8vkE75xSJmKRxfiyN3syrxoAgRS7adI32ORGC4Uk
-         7qQmU6gE/ZX736L8WTq/GRBZ0s6arTC/a3cWYPlOvVR8t/gT4gtbMx1gUr7qSrEDusAU
-         Dfw+MUyHD2VIgoFtu6hpAON1N1R+s1VPAg6JInp/LyjLloHhIzQYXa2YdcGWV/yMxcaw
-         HOBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Tu5Rjm9YUzMsrXkU1Im8ttCQvcJ0mxBS+97HvYdI1IY=;
-        b=rhlIiz1kVUXBAcOxiT5P2Ry9PLewvr8wzlgE96rW7DvpPBoSQCqQpPOZ6abndHSRmQ
-         zTJr3Dj8YTnQQAiTpalcmgP52CHSnek40aLtKnuHU7E0ZMe0HyqYtWE/cy7k7rBJ31OD
-         hpjwAf1hEse8mCnfAodt2uJdwynATz6pWYjg3tHm+LCqdn0aU6hMmLiiux+8NwksE//z
-         0ar3dtpPTjciJ2Xf8TKv2bT47iUNJnAMoZ5veBnY3W59H4/R/04V11Xad8PIk03Tbah5
-         bxbjEgyggAYxcVWx/rJQuX6+WF3ACmCai+ivmfOolv/cenCL7gOe9wHoA1gKW/SSr6/R
-         J+oA==
-X-Gm-Message-State: ACgBeo30I2phizaPD+vsh9GIeoIQIK76g2s2ynWJ5Gn9so0KizOszn7x
-        OL4Enhp7CsJpKmj/9quNm9Y=
-X-Google-Smtp-Source: AA6agR5ZlPT6ihCvz7ujYfQaDW1jUgVtZKcW/aZYDJbmWgDyz0CDB6X0DQixVoWY4cohdgdJ8fXB/A==
-X-Received: by 2002:a05:600c:3549:b0:3a3:16af:d280 with SMTP id i9-20020a05600c354900b003a316afd280mr2058269wmq.142.1659518310241;
-        Wed, 03 Aug 2022 02:18:30 -0700 (PDT)
-Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
-        by smtp.gmail.com with ESMTPSA id g9-20020a7bc4c9000000b003a2fde6ef62sm1732144wmk.7.2022.08.03.02.18.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 02:18:29 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 3 Aug 2022 11:18:27 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Libo Chen <libo.chen@oracle.com>
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>, peterz@infradead.org,
-        vincent.guittot@linaro.org, mgorman@suse.de,
-        tim.c.chen@linux.intel.com, 21cnbao@gmail.com,
-        dietmar.eggemann@arm.com, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de
-Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
-Message-ID: <Yuo9Y4KvQQvvLC/r@gmail.com>
-References: <20220711224704.1672831-1-libo.chen@oracle.com>
- <c50bdbfe-02ce-c1bc-c761-c95f8e216ca0@amd.com>
- <YufUj4klPKmKNj26@gmail.com>
- <82620137-5aa5-6cf1-f7aa-6a298e2f7856@oracle.com>
+        Wed, 3 Aug 2022 05:19:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB4C2654E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659518369; x=1691054369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O2RWXOyQbCHw094fygQkTJRWCFZm1J7VsOY45hRzZ3g=;
+  b=fr/aUUP+yRaS579x7MpHXrCRED/KJUxVfMvIbIxnPWoMb0+LCA/WTYrB
+   OypIryYtMQ6Q+i3XOjtw0Gpo09FMxHU2fnRc56Q2ZjdNjFQoeU5LVcOEG
+   E+/2yg/dbIErHfEi4PuiiAR1y6jj1jtZTzRHZh+XHIhi6/A5zr0b8QFFo
+   aOa90OMDe4hF0Y3E7yFw5dXnc4FKefqJHKMqzObRHD0Eu2JS/2EWSeiyX
+   eYgfAanxcHrjbiHnIu4gqNdhkF2yIEGFKv9TSN/TamcOsCIDrLI4Y0imx
+   f05o8JCK8RQizR7OBZJH5Pnvnd0G+r4CSz03w733F7n27097Kh70abSte
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="290843985"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="290843985"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:19:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="662004375"
+Received: from alubinsk-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.61.200])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:19:24 -0700
+Date:   Wed, 3 Aug 2022 11:19:07 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Casey Bowman <casey.g.bowman@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Fei Yang <fei.yang@intel.com>
+Subject: Re: [PATCH v2 1/2] drm/i915/gt: Move TLB invalidation to its own file
+Message-ID: <Yuo9ixhBLYztz6CI@alfio.lan>
+References: <cover.1659077372.git.mchehab@kernel.org>
+ <f4d7b534511b57336eaea0ce696afdf675cf5892.1659077372.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <82620137-5aa5-6cf1-f7aa-6a298e2f7856@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <f4d7b534511b57336eaea0ce696afdf675cf5892.1659077372.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mauro,
 
-* Libo Chen <libo.chen@oracle.com> wrote:
-
+On Fri, Jul 29, 2022 at 09:03:54AM +0200, Mauro Carvalho Chehab wrote:
+> From: Chris Wilson <chris.p.wilson@intel.com>
 > 
+> Prepare for supporting more TLB invalidation scenarios by moving
+> the current MMIO invalidation to its own file.
 > 
-> On 8/1/22 06:26, Ingo Molnar wrote:
-> > * K Prateek Nayak <kprateek.nayak@amd.com> wrote:
-> > 
-> > > Hello Libo and Peter,
-> > > 
-> > > tl;dr
-> > > 
-> > > - We observed a major regression with tbench when testing the latest tip
-> > >    sched/core at:
-> > >    commit 14b3f2d9ee8d "sched/fair: Disallow sync wakeup from interrupt context"
-> > >    Reason for the regression are the fewer affine wakeups that leaves the
-> > >    client farther away from the data it needs to consume next primed in the
-> > >    waker's LLC.
-> > >    Such regressions can be expected from tasks that use sockets to communicate
-> > >    significant amount of data especially on system with multiple LLCs.
-> > > 
-> > > - Other benchmarks have a comparable behavior to the tip at previous commit
-> > >    commit : 91caa5ae2424 "sched/core: Fix the bug that task won't enqueue
-> > >    into core tree when update cookie"
-> > > 
-> > > I'll leave more details below.
-> > Mel Gorman also warned about this negative side-effect in:
-> > 
-> >     Subject: Re: [PATCH] sched/fair: no sync wakeup from interrupt context
-> >     Date: Fri, 15 Jul 2022 11:07:38 +0100
-> >     Message-ID: <20220715100738.GD3493@suse.de>
-> > 
-> >     https://urldefense.com/v3/__https://lore.kernel.org/all/20220715100738.GD3493@suse.de/__;!!ACWV5N9M2RV99hQ!PQsIeuK0UwII-A0xS-B3plepNniNeyw14OJowT1cYL-tnuN99MkWfg9C8P60tVFFrnxj0NEanUmEkA$
-> ?? Mel was talking about a completely different thing, I brought up a
-> different patch that I wanted to revert and Mel thought it would hurt other
-> workloads which don't benefit from pulling but
-> as you can see, tbench somehow benefits from it, at least according to one
-> metric from one workload.
+> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+> Cc: Fei Yang <fei.yang@intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Yeah - but nevertheless the discussion with Mel was open-ended AFAICS, and 
-the 'major tbench regression' report by K Prateek Nayak above still stands 
-and needs to be investigated/understood, right?
+I already reviewed this patch... anyway I checked it again and
+it's all correct.
+
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
 Thanks,
-
-	Ingo
+Andi

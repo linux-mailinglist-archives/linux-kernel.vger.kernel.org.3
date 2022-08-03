@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2CF588CC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA8A588CD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiHCNNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S236298AbiHCNQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237776AbiHCNNa (ORCPT
+        with ESMTP id S235851AbiHCNQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:13:30 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD0186E0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:13:17 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q184so890959oif.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:13:17 -0700 (PDT)
+        Wed, 3 Aug 2022 09:16:15 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F86A186E1
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:16:14 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id g19-20020a9d1293000000b0061c7bfda5dfso12196641otg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
-        b=jtodadUycK+1LkDSYjWv8XqXchbrV8seFLSfpmqa6P3sOQ/of4IOcRUxXS1Bd4JQBX
-         YhmbqlC+yxW9CTOk4i0D6sxWl0tLx5O0b/6PobzrrG7Khc1GwbaSCbDxfaFKRBlVF//X
-         yBzwRrxphm+rRMuCnO5lQIVW1fkXROZV4I73U=
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=75c/vhgfgwtPaSPTZIQ1nQmAabAmAJZb+69obINC/dg=;
+        b=cFH0wtURz57x5BNd0aYndz1RkpiNpoA3tV57uUKqVtm2xTlZaGsCJnUX0u9fIAwroZ
+         E8gzehLhLbXFO/Af26SlTxo8Lhvib3iRfHtSToAKw8nrKqxd38NOI1fPjENQ5jE+rGhN
+         Wh99bf7eb9+Jm8YoT5Z0Easx3yDYJMnTUUCzO8iwAzUOauHW3BcLW1QRtlkF+vlVe+I+
+         YMg+ODSyWGxFkpFmkgEeMTpuer9sQ6EQiAaibdkXHZ8JGIULNCq8dKb7D3yZBUMKo09r
+         APAdYMR4bpFQ7bD9XQ55yS+FV9HIIKWJ2dOmyerYGJR2gB+Z1z1blewa7sdAaVAe0rV5
+         0Pvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
-        b=r6/2oGXLr0WesHsl4xWosSwERBI9p0Lxb6adTeBnRAC9czzALcfjI7oluIRX5c6qo1
-         h6qpTra5w/56ZFWs2uKIYMeyTc+uaINoJECALtagDqnoocmly76sXHCivRif1H/Qw7R5
-         FNxD5Z7c2BcVAAOsCfZT8EhIH3tu9NJz4DTzP1W1UU0c5OA6rX0omnBCx0rG8WUBdgww
-         GfGK48exRXNfEcMw2rV6sO1vBsJj7Yl6V9U/9y4KitA5xohz8p75JHcLITw546d6ZLEO
-         wQ9FqWmIqErfKIjf5xhi6SgwQFTKUwe8gG/nuwkGVxSi5WR5ceFBNPyQb/NgZhejkMjr
-         Tp2A==
-X-Gm-Message-State: ACgBeo1keCnp/aXwlFUTE4en2zruMvtPydTsILXJAYv4NHcOfgmS5uGc
-        w0LRJF/Dw8mDs/MJ5uXupxcacg==
-X-Google-Smtp-Source: AA6agR4YcT+i543RaZOzyZZrxoYafQeMyJMNwQPlZAZ5N2PjqYDcx6ffwBEUmWSpOvruLmyqiKyulA==
-X-Received: by 2002:a05:6808:143:b0:33a:d513:1443 with SMTP id h3-20020a056808014300b0033ad5131443mr1620237oie.43.1659532396382;
-        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id t26-20020a0568080b3a00b0033a3e6e7ce9sm3539763oij.10.2022.08.03.06.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
-Message-ID: <11578cfd-3d19-8bda-b36e-5e522e7c4490@cloudflare.com>
-Date:   Wed, 3 Aug 2022 08:13:15 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=75c/vhgfgwtPaSPTZIQ1nQmAabAmAJZb+69obINC/dg=;
+        b=KTBFi2fLKpB1JqXlbmaveM44y1kNkDplDVc4k0ZuUmx2JoGYvU9E8NxXqNHRyRRMg3
+         6X2Dsrm+dVihclCkPKtqpjL1IiOIy2EH6+QLdi/Sc7X/hdznTeqbIm2H9U14v9nMQMPE
+         IpdxeMRO8Rot4dAsutttsy9/eeR+8s7mGm6Dz2v/DDUNM9ibCZDSvJ8dqMNadouj7+/1
+         2RywHWcCR6FZ3AUq8DbV2qfm7NvrS8yu0ehr52tKd+g/ZY1rvQMSB0ouMBcyWTi3tXw9
+         ZbLgct6UjHdZxUhoqgjyc8A0GBcklaCmZaagAZwseV90mGYSpnk98MZQDuFSkAnQ4EIm
+         d1CA==
+X-Gm-Message-State: ACgBeo3CYNkqNnrv2Vzz9kq6/HC/75PozUyNAG70B3iRvbUffahaA/AF
+        oSQuVY40RJr2pQ9S2ApjF7nhPH5m5nWzFLZPIktl
+X-Google-Smtp-Source: AA6agR5lF2ezYGoL7L/iHQdgF1Vg48H+ggFEYzoBeBmSq6NiT4lioUEV4iA4SbxXpUT2T96zPEw9KwBVBPGOJ4sJ78U=
+X-Received: by 2002:a9d:7a99:0:b0:629:805:bca4 with SMTP id
+ l25-20020a9d7a99000000b006290805bca4mr5874553otn.26.1659532573884; Wed, 03
+ Aug 2022 06:16:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
-Content-Language: en-US
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-References: <20220801180146.1157914-1-fred@cloudflare.com>
- <20220801180146.1157914-2-fred@cloudflare.com>
- <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20220803050230.30152-1-yepeilin.cs@gmail.com>
+In-Reply-To: <20220803050230.30152-1-yepeilin.cs@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 3 Aug 2022 09:16:02 -0400
+Message-ID: <CAHC9VhRXypjNgDAwdARZz-md_DaSTs+9BpMik8AzWojG7ChexA@mail.gmail.com>
+Subject: Re: [PATCH] audit, io_uring, io-wq: Fix memory leak in io_sq_thread()
+ and io_wqe_worker()
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Eric Paris <eparis@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-audit@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,163 +69,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 4:47 PM, KP Singh wrote:
-> On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
->>
->> Preventing user namespace (privileged or otherwise) creation comes in a
->> few of forms in order of granularity:
->>
->>          1. /proc/sys/user/max_user_namespaces sysctl
->>          2. OS specific patch(es)
->>          3. CONFIG_USER_NS
->>
->> To block a task based on its attributes, the LSM hook cred_prepare is a
->> good candidate for use because it provides more granular control, and
->> it is called before create_user_ns():
->>
->>          cred = prepare_creds()
->>                  security_prepare_creds()
->>                          call_int_hook(cred_prepare, ...
->>          if (cred)
->>                  create_user_ns(cred)
->>
->> Since security_prepare_creds() is meant for LSMs to copy and prepare
->> credentials, access control is an unintended use of the hook. Therefore
->> introduce a new function security_create_user_ns() with an accompanying
->> userns_create LSM hook.
->>
->> This hook takes the prepared creds for LSM authors to write policy
->> against. On success, the new namespace is applied to credentials,
->> otherwise an error is returned.
->>
->> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
->> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> 
-> Reviewed-by: KP Singh <kpsingh@kernel.org>
-> 
-> This looks useful, and I would also like folks to consider the
-> observability aspects of BPF LSM as
-> brought up here:
-> 
-> https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
-> 
-> Frederick, what about adding the observability aspects to the commit
-> description as well.
+On Wed, Aug 3, 2022 at 1:03 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+>
+> From: Peilin Ye <peilin.ye@bytedance.com>
+>
+> Currently @audit_context is allocated twice for io_uring workers:
+>
+>   1. copy_process() calls audit_alloc();
+>   2. io_sq_thread() or io_wqe_worker() calls audit_alloc_kernel() (which
+>      is effectively audit_alloc()) and overwrites @audit_context,
+>      causing:
+>
+>   BUG: memory leak
+>   unreferenced object 0xffff888144547400 (size 1024):
+> <...>
+>     hex dump (first 32 bytes):
+>       00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
+>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<ffffffff8135cfc3>] audit_alloc+0x133/0x210
+>       [<ffffffff81239e63>] copy_process+0xcd3/0x2340
+>       [<ffffffff8123b5f3>] create_io_thread+0x63/0x90
+>       [<ffffffff81686604>] create_io_worker+0xb4/0x230
+>       [<ffffffff81686f68>] io_wqe_enqueue+0x248/0x3b0
+>       [<ffffffff8167663a>] io_queue_iowq+0xba/0x200
+>       [<ffffffff816768b3>] io_queue_async+0x113/0x180
+>       [<ffffffff816840df>] io_req_task_submit+0x18f/0x1a0
+>       [<ffffffff816841cd>] io_apoll_task_func+0xdd/0x120
+>       [<ffffffff8167d49f>] tctx_task_work+0x11f/0x570
+>       [<ffffffff81272c4e>] task_work_run+0x7e/0xc0
+>       [<ffffffff8125a688>] get_signal+0xc18/0xf10
+>       [<ffffffff8111645b>] arch_do_signal_or_restart+0x2b/0x730
+>       [<ffffffff812ea44e>] exit_to_user_mode_prepare+0x5e/0x180
+>       [<ffffffff844ae1b2>] syscall_exit_to_user_mode+0x12/0x20
+>       [<ffffffff844a7e80>] do_syscall_64+0x40/0x80
+>
+> Then,
+>
+>   3. io_sq_thread() or io_wqe_worker() frees @audit_context using
+>      audit_free();
+>   4. do_exit() eventually calls audit_free() again, which is okay
+>      because audit_free() does a NULL check.
+>
+> Free the old @audit_context first in audit_alloc_kernel(), and delete
+> the redundant calls to audit_free() for less confusion.
+>
+> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> ---
+> Hi all,
+>
+> A better way to fix this memleak would probably be checking
+> @args->io_thread in copy_process()?  Something like:
+>
+>     if (args->io_thread)
+>         retval = audit_alloc_kernel();
+>     else
+>         retval = audit_alloc();
+>
+> But I didn't want to add another if to copy_process() for this bugfix.
+> Please suggest, thanks!
 
-Agreed. I'll include that in v5.
+Thanks for the report and patch!  I'll take a closer look at this
+today and get back to you.
 
-> 
-> - KP
-> 
->>
->> ---
->> Changes since v3:
->> - No changes
->> Changes since v2:
->> - Rename create_user_ns hook to userns_create
->> Changes since v1:
->> - Changed commit wording
->> - Moved execution to be after id mapping check
->> - Changed signature to only accept a const struct cred *
->> ---
->>   include/linux/lsm_hook_defs.h | 1 +
->>   include/linux/lsm_hooks.h     | 4 ++++
->>   include/linux/security.h      | 6 ++++++
->>   kernel/user_namespace.c       | 5 +++++
->>   security/security.c           | 5 +++++
->>   5 files changed, 21 insertions(+)
->>
->> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
->> index eafa1d2489fd..7ff93cb8ca8d 100644
->> --- a/include/linux/lsm_hook_defs.h
->> +++ b/include/linux/lsm_hook_defs.h
->> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
->>           unsigned long arg3, unsigned long arg4, unsigned long arg5)
->>   LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
->>           struct inode *inode)
->> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
->>   LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
->>   LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
->>           u32 *secid)
->> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->> index 91c8146649f5..54fe534d0e01 100644
->> --- a/include/linux/lsm_hooks.h
->> +++ b/include/linux/lsm_hooks.h
->> @@ -799,6 +799,10 @@
->>    *     security attributes, e.g. for /proc/pid inodes.
->>    *     @p contains the task_struct for the task.
->>    *     @inode contains the inode structure for the inode.
->> + * @userns_create:
->> + *     Check permission prior to creating a new user namespace.
->> + *     @cred points to prepared creds.
->> + *     Return 0 if successful, otherwise < 0 error code.
->>    *
->>    * Security hooks for Netlink messaging.
->>    *
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 7fc4e9f49f54..a195bf33246a 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
->>   int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
->>                          unsigned long arg4, unsigned long arg5);
->>   void security_task_to_inode(struct task_struct *p, struct inode *inode);
->> +int security_create_user_ns(const struct cred *cred);
->>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
->>   void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
->>   int security_msg_msg_alloc(struct msg_msg *msg);
->> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
->>   static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
->>   { }
->>
->> +static inline int security_create_user_ns(const struct cred *cred)
->> +{
->> +       return 0;
->> +}
->> +
->>   static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
->>                                            short flag)
->>   {
->> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
->> index 5481ba44a8d6..3f464bbda0e9 100644
->> --- a/kernel/user_namespace.c
->> +++ b/kernel/user_namespace.c
->> @@ -9,6 +9,7 @@
->>   #include <linux/highuid.h>
->>   #include <linux/cred.h>
->>   #include <linux/securebits.h>
->> +#include <linux/security.h>
->>   #include <linux/keyctl.h>
->>   #include <linux/key-type.h>
->>   #include <keys/user-type.h>
->> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
->>              !kgid_has_mapping(parent_ns, group))
->>                  goto fail_dec;
->>
->> +       ret = security_create_user_ns(new);
->> +       if (ret < 0)
->> +               goto fail_dec;
->> +
->>          ret = -ENOMEM;
->>          ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
->>          if (!ns)
->> diff --git a/security/security.c b/security/security.c
->> index 188b8f782220..ec9b4696e86c 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
->>          call_void_hook(task_to_inode, p, inode);
->>   }
->>
->> +int security_create_user_ns(const struct cred *cred)
->> +{
->> +       return call_int_hook(userns_create, 0, cred);
->> +}
->> +
->>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
->>   {
->>          return call_int_hook(ipc_permission, 0, ipcp, flag);
->> --
->> 2.30.2
->>
+>  fs/io-wq.c       | 1 -
+>  fs/io_uring.c    | 2 --
+>  kernel/auditsc.c | 1 +
+>  3 files changed, 1 insertion(+), 3 deletions(-)
 
+-- 
+paul-moore.com

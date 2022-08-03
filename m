@@ -2,166 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0F1588747
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4C858874A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbiHCGUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S234186AbiHCGVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 02:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiHCGUt (ORCPT
+        with ESMTP id S237052AbiHCGU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:20:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6D464E3
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:20:47 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJ7kF-0003De-Qv; Wed, 03 Aug 2022 08:20:39 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJ7k0-0002E4-PY; Wed, 03 Aug 2022 08:20:24 +0200
-Date:   Wed, 3 Aug 2022 08:20:24 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-Message-ID: <20220803062024.vn7awasmifkp5xow@pengutronix.de>
-References: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de>
- <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de>
- <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
- <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+        Wed, 3 Aug 2022 02:20:58 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F799FDD;
+        Tue,  2 Aug 2022 23:20:56 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10ee900cce0so7796089fac.5;
+        Tue, 02 Aug 2022 23:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UoDUfn07lj1EPRhh8vCnMbEYPXX0njhlmTS1Lk0TL0Y=;
+        b=iKd5MJRD5krxJ02QPiD8/KyWNZXIi0VhEBGz4zMktR9OIztE5FDw15/s4OGEaM6JH3
+         gF0MJRylprbfxt+WpYHCS0ghHUJk5YY3i5q5OYUPLROOOJVwrMCpdcvABuJWy9OXBHBk
+         ajZ1e8j/FrvtO0CnrByKkfy9kq9ffcXEY9tDS/yYpaphXNSNHzdaG6BJ2Nu/7FG/+VfT
+         9mgeuAhmtp6dNFRAlnROvF6/+eS0EUFxsLF4ufP7SzSQ/EC5iHHbn8wj5prOoxZoD+lH
+         NljnX1XGR3TRdYJ4Ri9VXwyojDgkuNvbBtPROHmQKENJCikTQgsMLRwPNjguMuGs1Jyc
+         WvFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UoDUfn07lj1EPRhh8vCnMbEYPXX0njhlmTS1Lk0TL0Y=;
+        b=jCr5B+YLs2VHlqwrqJA/mhMLM5hB8Vah47m8iKinPuyJPkYCMcvCNDXJx3dPBvV6jm
+         1RnE2fl2xqcASTeV/C3aXOyWCLFWJlMqmLGoEgN5UTW0HAvi39APcASOXaXRJoJj8p4V
+         MCUXrAxn9M59YDEqeAygzuUkv7UmjgUNRg7FdTbbBE78QcvK2IUUdfV+kwy3JXc7bLk/
+         vadhjGeMCv6kv2k2OcBp9fXy7nj8w8xK5QdLbM51XOBYDGeqJ0vyAZH2TxHjmb+jagBD
+         Z6M5oCsvhQ/iTk7GJp9Pxv38F1j/ZOIGzqlUVtk6uFCbzT0j9k7Hql/srXNIRdkHAK3i
+         aGpg==
+X-Gm-Message-State: ACgBeo2Dia7+IiEMY+izCYwq0X26+BDdYbV0cjbE/PsxhUG4VQwdRrdP
+        d+iho/0qA027oIrlv/FgU/sQWfEcQ+eISKf2Vx4=
+X-Google-Smtp-Source: AA6agR4v+Pr3+eXvow3XkcW2aCP5SX91uTNwvrEK7H5iLUE1rBO/FUR3hi5ms6WJJmS3Ym3cAJfxA92U2UTAz6vWyy0=
+X-Received: by 2002:a05:6870:ea8e:b0:fe:251a:3c3d with SMTP id
+ s14-20020a056870ea8e00b000fe251a3c3dmr1288561oap.62.1659507656067; Tue, 02
+ Aug 2022 23:20:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801101447.86207-1-gene.chen.richtek@gmail.com>
+ <20220801101447.86207-5-gene.chen.richtek@gmail.com> <YujeA2pHG2WnZjaF@kuha.fi.intel.com>
+ <20220802085848.GA3096405@roeck-us.net>
+In-Reply-To: <20220802085848.GA3096405@roeck-us.net>
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+Date:   Wed, 3 Aug 2022 14:20:44 +0800
+Message-ID: <CAE+NS34JmppcAXdYSynuX7wdNKgByogKDn=AmW_PgR13nZ48=g@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] usb: typec: tcpci_rt1711h: Add initial phy setting
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-02, Adam Ford wrote:
-
-...
-
-> > I did some reading about the internal timing generator.  It appears
-> > that it's required when video formats use fractional bytes, and it's
-> > preconfigured to run at 720p by default, but registers 28h through 37h
-> > configure it for other video modes.
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2022=E5=B9=B48=E6=9C=882=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=884:58=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> I think there may still be some issues with the DSIM since some of the
-> clock frequencies are set in the device tree.
-> 
-> From what I can tell, the pixel rate is calculated based on the
+> On Tue, Aug 02, 2022 at 11:19:15AM +0300, Heikki Krogerus wrote:
+> > Hi Gene,
+> >
+> > On Mon, Aug 01, 2022 at 06:14:44PM +0800, Gene Chen wrote:
+> > > From: Gene Chen <gene_chen@richtek.com>
+> > >
+> > > Add initial phy setting about phy dicard retry,
+> > > rx filter deglitech time and BMC-encoded wait time
+> >
+> > I'm sorry, but what does "deglitech" mean? Is it just a typo?
+> >
+>
+> deglitch ?
+>
 
-By pixel rate you mean the HDMI pixel rate from the ADV? If so then yes.
-The ADV has an divider which is already configured by the driver but
-meaningless since the driver is lacking of setting the "manual-divider"
-bit within the same register.
+Yes, typo, I will fix it.
 
-> burst-clock-frequency and that generates a byte clock.  For 891000000,
-> the byte clock is 111375000.
-
-The burst-clock-frequency is the hs-clk and DDR. So the MIPI-DSI clock
-is burst-clock-frequency/2 which is in your case: 891000000/2 =
-445500000. This clock is than divided by 3 within the ADV and you get
-your 148500000 pixel clock. This divide by 3 is detected automatically
-by the ADV due to the missing bit (see above).
-
-> Modetest timings for 1080p show:
-> 
-> index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
->   #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-> flags: nhsync, nvsync; type: driver
-> 
-> 
-> When looking at modetest, there is a clock for 1080p which appears to be 148500.
-> 111375000/148500 = 750.
-
-Please see above.
-
-> The rest of the entries in my table do not divide evenly.  I don;t
-> know if that explains the lack of display, but it's something to note.
-> It seems to me that instead of fixing the
-> samsung,burst-clock-frequency to 891000000, we should make the desired
-> PLL related to the desired pixel clock so it divides evenly.
-
-Please see above.
-
-> Looking at NXP's kernel, I also noticed that their esc_prescaler is
-> based on the byte clock divided by 20MHz.  With some small code
-> changes to get the PLL based on the desired pixel clock instead of
-> hard-coded,  I was able to set
-> 
-> samsung,burst-clock-frequency = <1500000000>;
-
-This is not correct since the burst-clock-freq. specifies the hs-clock
-for the data lanes (see above).
-
-> samsung,esc-clock-frequency = <20000000>;
-
-This is correct, we also use a esc-clock of 20MHz.
-
-> With these settings and the above mentioned code changes, 1080p still
-> appears, however when attempting other modes, the display still fails
-> to load.  I also noticed that the phy ref clock is set to 27MHz
-> instead of NXP's 12MHz. 
-
-That's interesting, I didn't noticed that NXP uses 12 MHz as refclock
-but I don't think that this is the problem. Since we have other
-converter chips using the bridge driver and they work fine. I still
-think that the main problem is within the ADV driver.
-
-> I attempted to play with that setting, but I couldn't get 1080p to
-> work again, so I backed it out.
-> 
-> Maybe I am headed in the wrong direction, but I'm going to examine the
-> P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
-> this code compares.
-
-I think the pms values are fine.
-
-> If someone who understands the interactions between these different
-> components has suggestions, I'm willing to run some experiments.
-
-Did managed to get access to the ADV7535 programming guide? This is the
-black box here. Let me check if I can provide you a link with our repo
-so you can test our current DSIM state if you want.
-
-Regards,
-  Marco
+> > > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 15 ++++++++++++++-
+> > >  1 file changed, 14 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typ=
+ec/tcpm/tcpci_rt1711h.c
+> > > index df7bfe299987..33d8ea95b7c1 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > > @@ -20,6 +20,9 @@
+> > >  #define RT1711H_VID                0x29CF
+> > >  #define RT1711H_PID                0x1711
+> > >
+> > > +#define RT1711H_PHYCTRL1   0x80
+> > > +#define RT1711H_PHYCTRL2   0x81
+> > > +
+> > >  #define RT1711H_RTCTRL8            0x9B
+> > >
+> > >  /* Autoidle timeout =3D (tout * 2 + 1) * 6.4ms */
+> > > @@ -107,8 +110,18 @@ static int rt1711h_init(struct tcpci *tcpci, str=
+uct tcpci_data *tdata)
+> > >             return ret;
+> > >
+> > >     /* dcSRC.DRP : 33% */
+> > > -   return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> > > +   ret =3D rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> > > +   if (ret < 0)
+> > > +           return ret;
+> > > +
+> > > +   /* Enable phy discard retry, retry count 7, rx filter deglitech 1=
+00 us */
+> > > +   ret =3D rt1711h_write8(chip, RT1711H_PHYCTRL1, 0xF1);
+> > > +   if (ret < 0)
+> > > +           return ret;
+> > >
+> > > +   /* Decrease wait time of BMC-encoded 1 bit from 2.67us to 2.55us =
+*/
+> > > +   /* wait time : (val * .4167) us */
+> > > +   return rt1711h_write8(chip, RT1711H_PHYCTRL2, 62);
+> > >  }
+> > >
+> > >  static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *=
+tdata,
+> > > --
+> > > 2.25.1
+> >
+> > thanks,
+> >
+> > --
+> > heikki

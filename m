@@ -2,162 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000635894AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D0C5894B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiHCXMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S237014AbiHCXNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiHCXMe (ORCPT
+        with ESMTP id S236179AbiHCXNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 19:12:34 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A46E5C36C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:12:33 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d4so9218199ilc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7Yh1GeaOYFjJIe9+oI56LqaRda7Oz6X4Jb6/nxg3/9U=;
-        b=N5uVyzQvv03TkDg8UyAd605uXTbQuazjvAkrI6JQpMVGUkEKHR4rKR8FxI6dTgw8vI
-         k1pPzVDnRQKYW9RNFv9ZR+4mBg5Jc0BlRRnPtZiwWgBE4TQH2GcNScnkW8F3kCKwYljF
-         bQzOld/VoOaupxxTHsqSwzGmB9ETtTpbsGMwo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7Yh1GeaOYFjJIe9+oI56LqaRda7Oz6X4Jb6/nxg3/9U=;
-        b=IB2UkQqH58MnNfQvPXBgPixq0pPoGUTY2TCwAnbjAi/fXxZO5ovLuEvkAULw/lAkok
-         wkGgte/mzmeKvQhJtvC7j//cnwE+uxmMTdQ9/rOpiIOCQwyj0KbSnS9AfuLzitH12lTt
-         uB8SUfOCYiwJ0CJr3R5C3e/wuTVOdYCd5e+88TMgbxLLBfu9uzl/tLG3sFAjOVHaBSB3
-         EnSK8aVby1JWnIxidvN9J6vXPn9kvQoIM+XH5iNIYnxZt6b5bEbPf+kMd5khNx0GGCBE
-         UTvRRnB6w6r1e457wq8FDk1tv/kze91kCderE1DerF/j+7GUGr6fkkAtrLHjMFWPohPX
-         nw2A==
-X-Gm-Message-State: AJIora+b9H0lMDzIpt47I3O+XgJYorlsSzmDD9PKLJxN3GFTBu6sA8uj
-        qJ+2SG0MRy/9JMoRYJO5WpeDLq6w/c96Ig==
-X-Google-Smtp-Source: AGRyM1vs1lsRZKuWF7cjOzHXC4X4N1DpumplKPDthw5AOMD4g9p5AQ1gT2p3Es01r6dY4WUaSPOhiA==
-X-Received: by 2002:a05:6e02:194f:b0:2dc:7d9d:3b06 with SMTP id x15-20020a056e02194f00b002dc7d9d3b06mr11515873ilu.242.1659568352770;
-        Wed, 03 Aug 2022 16:12:32 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id cx10-20020a056638490a00b0034142dad202sm1088057jab.31.2022.08.03.16.12.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 16:12:32 -0700 (PDT)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
- <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
- <84560b65-12ed-da24-3698-45484f80802a@linuxfoundation.org>
- <fa7fb9b3-169a-199f-22da-006777a14e03@collabora.com>
- <15a23d4b-ee26-a6a1-a785-b640c550bfb8@linuxfoundation.org>
- <7a412c45-4536-1f0b-d04e-24b2063ac034@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c227526a-6cf6-247a-df8f-6574e3c748ad@linuxfoundation.org>
-Date:   Wed, 3 Aug 2022 17:12:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 3 Aug 2022 19:13:44 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D606A5C366;
+        Wed,  3 Aug 2022 16:13:43 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3A6D85C00E4;
+        Wed,  3 Aug 2022 19:13:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 03 Aug 2022 19:13:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1659568421; x=1659654821; bh=2S3dkk1V93GUlpSfPmNI6IvpR
+        /zYbDMOPvlGhBYJCkQ=; b=C4X0B4pdOIL+fivNkP6ayga6ub/DnUcC/wgylWGsc
+        UWqnBMpZUv2/Iz++1UIoaVzqaGzvdiPbgZU3SJIkhCz2mS7G8XD0obnSjLYArDZH
+        /WJTwggECZlrFXIrfe3GFy9ahgfF9JFfyGLtpbg+a8L88PAe6FL/fG6vJfhSyBlJ
+        MhhgRoWiC850CNim9dgFgmM//txCYJ/tTxXi+i2pebF0Ih3lQGVlo4c+aZO9N2Gi
+        e+SLf25pgkkf/SBnJb9RgBBkLSSJ8Kt321faLDrc2nyCRZym8tG/UyGi8zMMcqmO
+        uYWG+pMBSVVtAxRPResyOSY1gwlirqsrXZXwsBB1l0YMw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1659568421; x=1659654821; bh=2S3dkk1V93GUlpSfPmNI6IvpR/zYbDMOPvl
+        GhBYJCkQ=; b=mBp2tlY8XgzEAvZC1JWz+1RXYnvXy5LzDnyGsIHJRnBnNflgL5Z
+        DgP8YOzfq1prXktHzqfhwwlzoGUmZRnngxoPmaaJpXJ8pJ5SfmgEKZRjY8m1t5uR
+        0zvEFrrpQ36XXuI7QufnZ9QG/PKg2PNOGfKLQySXfvc2IPyFcaFYKTK121+WzHUq
+        26k2ioNeQdxfPFjsOdzxZfivlWKmMdTfti1h+7NauxP82RW8DshZCD2AbnKz2guO
+        E2SmfwpMn+rs3rfjnLZUzlsfpPLVvk0w4rEAeTqepOX1dH5/0rn2WKdpBdDTiAuX
+        RiRTfIrKMJFtGwGKYnEf0V0VLK0OzZZhwnw==
+X-ME-Sender: <xms:JAHrYpGPdBjy94j1_5TwIcnM0u_KbWuuxB61C688xC6uR8jsgipI6w>
+    <xme:JAHrYuWCP4ItieE_7_HLYcmhXRtRgRPcfTptAmjW3z90nVz07379TvcgPtIV9LOvz
+    KI64bNLHc_R9O_PBTM>
+X-ME-Received: <xmr:JAHrYrLRIL2Vfd6tEVwUpRXHkffd_nty7WJe6TkphK1M-dNUutI0zORztsEE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvkedgvddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:JAHrYvGgWvTfE7gicJ1-WDIAsXyvZpxzlKuWTVHoteXHewUe_jFVdg>
+    <xmx:JAHrYvXQng8kEde1V4m3kUTEaM_EKwjg_DXnEZSqamZRbDGN0JPqXw>
+    <xmx:JAHrYqOyHe9sw0wkELS_NjyCr4CRXXFIE_-oLAUQC2CUlqEx2hN05w>
+    <xmx:JQHrYsgndcLahdFoMV2BhvgpmAF3o5tYBGm7a7CyU4JXmHUIwqa98A>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 3 Aug 2022 19:13:38 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     hdegoede@redhat.com
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH v2 0/1] asus-wmi: Add support for TUF laptop keyboard states
+Date:   Thu,  4 Aug 2022 11:13:30 +1200
+Message-Id: <20220803231331.48788-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <7a412c45-4536-1f0b-d04e-24b2063ac034@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 2:22 PM, Guillaume Tucker wrote:
-> On 03/08/2022 16:32, Shuah Khan wrote:
->> On 8/2/22 10:44 PM, Guillaume Tucker wrote:
->>> On 02/08/2022 15:29, Shuah Khan wrote:
->>>> On 8/2/22 3:51 AM, Mickaël Salaün wrote:
->>>>> Hi,
->>>>>
->>>>> This change breaks the Landlock test build when performed on the tools/testing/selftests/landlock directory because the (non-system/up-to-date) kernel headers aren't found. Looking at the use of top_srcdir and HDR_PATH, it seems that multiple subsystems are using this feature. I consider this change a regression.
->>>>>
->>>>
->>>> I did a build test from the top level before sending the pull request
->>>> and didn't catch this breakage as a result. This breaks when build is
->>>> run from the test directory.
->>>>
->>>> We have had several problems related to khdr_dir and target and decided
->>>> to move away from it with this change.
->>>>
->>>>> It also removes the check on up-to-date kernel headers (thanks to the Makefile's target timestamp).
->>>>>
->>>>> I wasn't CCed for this change impacting Landlock [1]. Please keep in mind to add at least maintainers and related mailing-lists for changes on related subsystems.
->>>>>
->>>>
->>>> That is the usual practice and if I notice missing maintainers, I add
->>>> them. We missed this one.
->>>>
->>>>> The following patch almost revert commit a917dd94b832 ("selftests/landlock: drop deprecated headers dependency") and partially fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
->>>>>
->>>>
->>>> Guillaume,
->>>>
->>>> Will you be able to look at this and send a patch on top? I will
->>>> send another pull request before merge window closes?
->>>
->>> Sure, I'll take a look today.
->>>
->>
->> Thank you.
-> 
-> OK I just sent "selftests/landlock: fix broken include of linux/landlock.h"
-> 
-> This does fix the build when doing:
-> 
->    make -C tools/testing/selftests/landlock
-> 
+Adds support for the TUF series laptop power states. This means
+control of if the LED's are on while awake, or an animation is
+shown while booting or suspended.
 
-Thank you for fixing this quickly.
+Changelog:
+- V2:
+  + Adds sysfs attr for tuf_krgb_state_index to provide index labels
 
-> However I've also noticed the landlock test is failing to build
-> when make is invoked from the top-level directory and using a
-> sub-directory for the build output, in other words my earlier
-> patches didn't fix the build for this test, but that's not a
-> regression.
-> 
+Luke D. Jones (1):
+  asus-wmi: Add support for TUF laptop keyboard states
 
-Okay.
+ drivers/platform/x86/asus-wmi.c            | 95 ++++++++++++++++++++++
+ include/linux/platform_data/x86/asus-wmi.h |  3 +
+ 2 files changed, 98 insertions(+)
 
-> I'll see if that can be fixed too while also not breaking
-> the "-C" sub-make build.
-> 
+-- 
+2.37.1
 
-Sounds good. Supporting all these use-cases makes it a bit hard.
-
->>> Also I'll see if we can add some extra build tests in KernelCI
->>> for the kselftest tree to catch issues like these automatically.
->>>
->>
-
-> Great.  Well I shall try and get that set up before making further changes ;)
-> 
-
-Thanks.
-
-> 
-> P.S. The output of gen_tar is showing "-ne " on every line, is that expected?
->       For example: -ne Emit Tests for alsa
-> 
-
-Hmm. I will try and let you. I haven't used this one in a bit.
-
-thanks,
--- Shuah

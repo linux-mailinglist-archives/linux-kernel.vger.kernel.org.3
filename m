@@ -2,73 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE94F589469
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57D058946F
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 00:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239006AbiHCW3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 18:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S236671AbiHCWeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 18:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238948AbiHCW3d (ORCPT
+        with ESMTP id S229579AbiHCWe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 18:29:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBB25D0E2;
-        Wed,  3 Aug 2022 15:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAB0D6162D;
-        Wed,  3 Aug 2022 22:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57A6BC433C1;
-        Wed,  3 Aug 2022 22:29:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659565764;
-        bh=t1RciV1xPTwChvX7bhjaTpzTaaf8NHf8H2MceaXA9Es=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FA7ifDjo8fQKjPmyhpleXkzlbWD/52IvOgoQ1HmxoGkdSwb3BDtzQWGLnYp8h8m2f
-         prIThBExJYNjCmJejX0Xxb4eR4hk5QoxZUDG1UnH/f9eKbplVbKa8dVfAPNrjm2eW3
-         GnSyPaJI651XljO335m4Y4plZbWjyH0x08rh0jmfCOvxtG5+A87oNpvimVx+cJpHVG
-         V1uodcFwwsAUlBtQWnzxZVNeYwQjF99z5FUY//RpTGmgaFCS3B8exYNRh0nHLUlUXb
-         o3SJTsH4NlPgdXWEHLX+W68ZB054+aYTACIUcRRGHSYqMpOMBmid/4yG3HjRloUdh0
-         2/9fU3NOX+Oaw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45E4EC43140;
-        Wed,  3 Aug 2022 22:29:24 +0000 (UTC)
-Subject: Re: [GIT PULL] Btrfs updates for 5.20
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <cover.1659357652.git.dsterba@suse.com>
-References: <cover.1659357652.git.dsterba@suse.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <cover.1659357652.git.dsterba@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.20-tag
-X-PR-Tracked-Commit-Id: 0b078d9db8793b1bd911e97be854e3c964235c78
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 353767e4aaeb7bc818273dfacbb01dd36a9db47a
-Message-Id: <165956576428.24057.5912940537330062229.pr-tracker-bot@kernel.org>
-Date:   Wed, 03 Aug 2022 22:29:24 +0000
-To:     David Sterba <dsterba@suse.com>
-Cc:     torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 3 Aug 2022 18:34:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83E01109
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 15:34:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659566067; x=1691102067;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Povb9iEscAxy2k1L/392Iysef0xGP+3Q3lx8hf5uHZU=;
+  b=DYsY7YYeYsqopsmnXR6PnsH+gBteX9PvVxrR8yHJFAQPU1NE6O6tKFT+
+   LedcCZXEFiBX5zw/2n9emvFqme2tOtZ1vF3Lls1jojaLTXPG0yJogby+q
+   4IULx2VB4N71W6k99pfV/Le1laUOk7S1uR/onH63bVPmeICqNEzOkTlCc
+   wemDXuzdFYLvM+ROLhurt+ID2zuxFXkDM4eV77ntuktyR0+xm2X53fYz6
+   445eJ6xJYguutDqkc1YTD2KCx7tzTapg1qBXLqIPwBBCCBeWC6D/P4J6f
+   zIijWjp2eloFzaUSS3dY+z6we6UTyEA84ix5x4ZJzvDrIKwThsMc/K4gW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="315661842"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="315661842"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 15:34:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="631327574"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2022 15:34:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJMwb-000HjT-2A;
+        Wed, 03 Aug 2022 22:34:25 +0000
+Date:   Thu, 4 Aug 2022 06:33:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [rmk-arm:zii 42/87] drivers/net/pcs/pcs-xpcs.c:178:16: error:
+ implicit declaration of function 'mdiodev_c45_read'; did you mean
+ 'mdiobus_c45_read'?
+Message-ID: <202208040620.UbUqOw7I-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 1 Aug 2022 18:40:03 +0200:
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
+head:   315d00812d1f8ed8bbbce4e4fd8d32fc883900a0
+commit: 8994c74ee066d099110807ffcee3f61ffd62d28b [42/87] net: pcs: xpcs: use mdiodev accessors
+config: arc-randconfig-r003-20220803 (https://download.01.org/0day-ci/archive/20220804/202208040620.UbUqOw7I-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm zii
+        git checkout 8994c74ee066d099110807ffcee3f61ffd62d28b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/pcs/
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.20-tag
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/353767e4aaeb7bc818273dfacbb01dd36a9db47a
+All errors (new ones prefixed by >>):
 
-Thank you!
+   drivers/net/pcs/pcs-xpcs.c: In function 'xpcs_read':
+>> drivers/net/pcs/pcs-xpcs.c:178:16: error: implicit declaration of function 'mdiodev_c45_read'; did you mean 'mdiobus_c45_read'? [-Werror=implicit-function-declaration]
+     178 |         return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
+         |                ^~~~~~~~~~~~~~~~
+         |                mdiobus_c45_read
+   drivers/net/pcs/pcs-xpcs.c: In function 'xpcs_write':
+>> drivers/net/pcs/pcs-xpcs.c:183:16: error: implicit declaration of function 'mdiodev_c45_write'; did you mean 'mdiobus_c45_write'? [-Werror=implicit-function-declaration]
+     183 |         return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+         |                ^~~~~~~~~~~~~~~~~
+         |                mdiobus_c45_write
+   cc1: some warnings being treated as errors
+
+
+vim +178 drivers/net/pcs/pcs-xpcs.c
+
+   172	
+   173	#define xpcs_linkmode_supported(compat, mode) \
+   174		__xpcs_linkmode_supported(compat, ETHTOOL_LINK_MODE_ ## mode ## _BIT)
+   175	
+   176	int xpcs_read(struct dw_xpcs *xpcs, int dev, u32 reg)
+   177	{
+ > 178		return mdiodev_c45_read(xpcs->mdiodev, dev, reg);
+   179	}
+   180	
+   181	int xpcs_write(struct dw_xpcs *xpcs, int dev, u32 reg, u16 val)
+   182	{
+ > 183		return mdiodev_c45_write(xpcs->mdiodev, dev, reg, val);
+   184	}
+   185	
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp

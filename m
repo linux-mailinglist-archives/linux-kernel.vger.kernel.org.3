@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C017A5888CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7622F5888D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235574AbiHCImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S233559AbiHCIsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiHCImM (ORCPT
+        with ESMTP id S229656AbiHCIsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:42:12 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A4A1D0E4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:42:11 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id r3so27341020ybr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 01:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oHeeDipADyRKO/ve/1YLa9FmmcLAxnnHkJPKVvR+xHQ=;
-        b=Kr1MIzRJHbp82BH18W4AiIBLq8Mi86rLgVOsKfFvL3BonO0chgUjPmci+J1zFj0Py2
-         Vo1igVL73/Wa5/hp4+/qxzpjIMlx2XY2Ds/XhZHMe9ePEt35zR/BnUR4i2Nz2Z+8rMhC
-         cRGa6vtBP8dSW8uSVD71BSwpgx6x7c0Z3mHyamN7dUZRzv+D5UAYGdt+73U2kTLvHEo1
-         cSZjxuVkheDOHbHpKHMzHl02RUM+2G2y3xLBmsepXPPNqOF5j/v68e/XovRKlgS5wqab
-         o8LoKWLP7R7ZYP3RE7Zap+r/9UUaC4/G5bDg9nff1q5y2xVYvCpmSbhNKruKOvrmplRC
-         3Jvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oHeeDipADyRKO/ve/1YLa9FmmcLAxnnHkJPKVvR+xHQ=;
-        b=U3GPgaEfSDOhGq3/ec2J+hIet0MRgL1n4Q5+ZC6OHSmDGXh6MeL74jv2lc/el0QIAz
-         l+l03g5sD0cCtg5dVswi5WbTidhiySbcKDUcymKWiX81k4K+nL+Fl2P8IAS+VgZZtrZT
-         mQnfDXcbpi1cihUEd2v6GOvhlXdvyuQh0Vjt44Q+wovCh/TumpuZVZ27hwGiq8DP1FvL
-         1EjTq8qioNX8VBazX69eHRrmmdOroi8P8u68nCl/U2KvTJL1oUu3nxTWW+fUMrrUzBl2
-         EiDTDtihN2qLatdr9n0Wjikwjqwf9G4zYUFe3v1/mgqo5PoTdjgaRhhEix5d60x1RVbG
-         ceFQ==
-X-Gm-Message-State: ACgBeo1zx8IRQKkN7dDwC6dzODrWvI3NjJoyRUmJgcQzO8a1xY5ExOST
-        AwBpHqVVYXdLYEraxqD3wwIaWyY6pK9DErno2l9EBw==
-X-Google-Smtp-Source: AA6agR6uuNuubZT7+RUDSt6unHI8cDiPiRdpN0Kt/LW3gXhEFlVJAevNuRyQP/VPFI/DHrq4f8ZEK0XNUzffYOzTlZA=
-X-Received: by 2002:a25:4941:0:b0:670:24c7:dc96 with SMTP id
- w62-20020a254941000000b0067024c7dc96mr18031735yba.22.1659516130367; Wed, 03
- Aug 2022 01:42:10 -0700 (PDT)
+        Wed, 3 Aug 2022 04:48:06 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C0A13F9C;
+        Wed,  3 Aug 2022 01:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659516485; x=1691052485;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+qvKUwqmQKAYYrLXg2GV2+q+xTQp35oEGWNYLkPBXjQ=;
+  b=eVXxiXVRBlghl14uriO3/0A7OYAP5mP7CBJ2hFSj3E/+xdRcc3X1hXt8
+   RkZnMkIU5IXJGfJCyw4wcOkZJCsBqULshqJAz11KIO+o0ZPWwpqvhKr2D
+   tBUC+8X6eUfmIftBqpR/Q2jDntBw4Kuh7Sx0cprtHm5WndMxdipVFNr3j
+   MQv1JD9TuIG0pwTalFwwJ1gu75OAxVZZHaLrJFfChHdKRqbqarhL2prDC
+   lvgQHuO4lng56KimDexgqzZPEGfrGZmkmByz7sRPEuZkzn+vh4iF9Oxv7
+   TNmjERU5Y+vjQxickkmhNGym6i9iHAmEmhvcoEpInInMABzBw4dtzKP3P
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="289632904"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="289632904"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:48:05 -0700
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="661991747"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.241.118]) ([10.99.241.118])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:48:03 -0700
+Message-ID: <2d4fac14-eaf8-c899-dba2-b2ffb484358d@linux.intel.com>
+Date:   Wed, 3 Aug 2022 10:48:01 +0200
 MIME-Version: 1.0
-References: <20220726135506.485108-1-bchihi@baylibre.com> <20220726135506.485108-2-bchihi@baylibre.com>
- <24250d03-b25f-e521-5abd-f36109885c36@linaro.org> <CAGuA+opxZ7DDrWHcnTRhMcm7YveCAypdy9MDSytt58asgekayw@mail.gmail.com>
- <CAGuA+ooOUXaBM+uPvEEohFLtO8sRd4T=DMcc6Fvo9P92gsq4yg@mail.gmail.com> <9b224465-e9e5-43d3-50eb-3614decbd8b2@linaro.org>
-In-Reply-To: <9b224465-e9e5-43d3-50eb-3614decbd8b2@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 3 Aug 2022 10:41:34 +0200
-Message-ID: <CAGuA+op-mO5ZMz_EvSOYUNiZ_4OOwLFQqFqMrCQBVMcG3mbcPQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] thermal: mediatek: Relocate driver to mediatek folder
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/3] sparc64: bitops: Change __fls to return unsigned
+ long
+Content-Language: en-US
+To:     Vineet Gupta <vgupta@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        linux-snps-arc@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+References: <20220527115345.2588775-1-amadeuszx.slawinski@linux.intel.com>
+ <20220527115345.2588775-4-amadeuszx.slawinski@linux.intel.com>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20220527115345.2588775-4-amadeuszx.slawinski@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 5:35 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Balsam,
->
-> On 29/07/2022 17:21, Balsam CHIHI wrote:
->
-> [ ... ]
->
-> You may want to wait next week before sending a new version, I'm still
-> reviewing your series (note you can send it anyway if you prefer)
->
+On 5/27/2022 1:53 PM, Amadeusz Sławiński wrote:
+> As per asm-generic definition and other architectures __fls should
+> return unsigned long.
+> 
+> No functional change is expected as return value should fit in unsigned
+> long.
+> 
+> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> ---
+>   arch/sparc/include/asm/bitops_64.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/sparc/include/asm/bitops_64.h b/arch/sparc/include/asm/bitops_64.h
+> index 005a8ae858f1..cdac39bd7b32 100644
+> --- a/arch/sparc/include/asm/bitops_64.h
+> +++ b/arch/sparc/include/asm/bitops_64.h
+> @@ -24,7 +24,7 @@ void clear_bit(unsigned long nr, volatile unsigned long *addr);
+>   void change_bit(unsigned long nr, volatile unsigned long *addr);
+>   
+>   int fls(unsigned int word);
+> -int __fls(unsigned long word);
+> +unsigned long __fls(unsigned long word);
+>   
+>   #include <asm-generic/bitops/non-atomic.h>
+>   
 
-Hi Daniel,
+Hi,
 
-Thank you for the review.
-I have finished implementing the changes requested by the maintainers
-and would like to resubmit the series.
-Do I still have to wait for your feedback to send it again?
+any chance this one could also get merged? Other two patches are already 
+in linux-next and I would like to remove it from list of things I have 
+to remember ;)
 
-Best regards,
-Balsam
+Amadeusz

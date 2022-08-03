@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E031588AA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63767588AAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbiHCKdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S234558AbiHCKjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238047AbiHCKb1 (ORCPT
+        with ESMTP id S233781AbiHCKi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:31:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83F6140AE;
-        Wed,  3 Aug 2022 03:30:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 360A7113E;
-        Wed,  3 Aug 2022 03:30:30 -0700 (PDT)
-Received: from [10.57.12.36] (unknown [10.57.12.36])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4093F3F67D;
-        Wed,  3 Aug 2022 03:30:28 -0700 (PDT)
-Message-ID: <50d04f45-6aa9-dee8-6647-3f0b909049ea@arm.com>
-Date:   Wed, 3 Aug 2022 11:30:22 +0100
+        Wed, 3 Aug 2022 06:38:59 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8DADF81
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:38:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LySyP0kWzz4x1J;
+        Wed,  3 Aug 2022 20:38:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659523133;
+        bh=cZzR6q2FC68zDJPpV+tjLqwkyB0kdhohIKX2ZW6ahVU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=KEW9aIfVu20bRph3tSKCXmLslC5VsGcwfUzOYm1MZslcIr9AYIP/4zoqQTWJ0391c
+         1W8yy9NLlPyQvZdSFlwpi13uMHfiIEASKn2U0dHJMaqZUWwBg5dHR0gvFu7tpwn4Sk
+         ZpOALjuJ9BGIN1npA4FJx4a7GKGM0+ECN2EtiP+7BvEg235qcaz2j5FH50/E4avAGd
+         cYlfmJMBBNveyoLDCBR3gV3kmCy4B/ytDh3hxLFgxrsigD3kHein5LaAKokvexOAbO
+         s/D3+NSVHju4MaQMaJXHmIyjbaVfUewfxnFX9joocEIBTn3/wGMrmzxflQG93ONquM
+         ZIIVJLeSAamAQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 2/3] powerpc/ppc-opcode: Define and use PPC_RAW_TRAP()
+ and PPC_RAW_TW()
+In-Reply-To: <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
+References: <b2d762191b095530789ac8b71b167c6740bb6aed.1657205708.git.christophe.leroy@csgroup.eu>
+ <52c7e522e56a38e3ff0363906919445920005a8f.1657205708.git.christophe.leroy@csgroup.eu>
+ <1659513939.dxqqwb8mat.naveen@linux.ibm.com>
+Date:   Wed, 03 Aug 2022 20:38:48 +1000
+Message-ID: <87les5a9xj.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: PCI: host-generic-pci: Allow IOMMU and MSI
- properties
-Content-Language: en-GB
-To:     Rob Herring <robh@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220728175137.1172841-1-robh@kernel.org>
- <a673e846-e3d7-63e3-70cd-4adef3f761cc@arm.com>
- <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAL_JsqL37RQqGv6ZB5uxsnPFoUjKPh6uc7_SWpaqDJqvWAF4Dg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-02 23:21, Rob Herring wrote:
-> On Tue, Aug 2, 2022 at 3:26 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2022-07-28 18:51, Rob Herring wrote:
->>> Allow 'iommu-map', 'iommu-map-mask', and 'msi-parent' properties for
->>> generic host. This fixes unevaluated property warnings on Arm Juno, AMD
->>> Seattle, and FSL LS1028a.
->>>
->>> Signed-off-by: Rob Herring <robh@kernel.org>
->>> ---
->>>    Documentation/devicetree/bindings/pci/host-generic-pci.yaml | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
->>> index 6bcaa8f2c3cf..d25423aa7167 100644
->>> --- a/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
->>> +++ b/Documentation/devicetree/bindings/pci/host-generic-pci.yaml
->>> @@ -106,6 +106,9 @@ properties:
->>>        maxItems: 3
->>>
->>>      dma-coherent: true
->>> +  iommu-map: true
->>> +  iommu-map-mask: true
->>> +  msi-parent: true
->>
->> Hmm, in general this set looks suspiciously incomplete without msi-map
->> and msi-map-mask too. Am I right in thinking that the ideal thing to do
->> here would be to convert pci-msi.txt and pci-iommu.txt to schema and
->> $ref them?
-> 
-> I already added msi-map/msi-map-mask to pci-bus.yaml[1] as well as
-> schemas for iommu-map/iommu-map-mask[2] and msi-parent[3]. Since
-> msi-map is already in the referenced schema, it is allowed here.
-> msi-parent is separate because it is used elsewhere. iommu-map is
-> separate largely to make copying pci-iommu.txt as-is easier.
-> 
-> And yes, pci-iommu.txt can now be removed. pci-msi.txt is more
-> complicated as all of it hasn't been moved into schemas.
+"Naveen N. Rao" <naveen.n.rao@linux.ibm.com> writes:
+> Christophe Leroy wrote:
+>> Add and use PPC_RAW_TRAP() instead of opencoding.
+>> 
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>  arch/powerpc/include/asm/ppc-opcode.h | 2 ++
+>>  arch/powerpc/include/asm/probes.h     | 3 ++-
+>>  arch/powerpc/xmon/xmon.c              | 2 +-
+>>  3 files changed, 5 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
+>> index 89beabf5325c..5527a955fb4a 100644
+>> --- a/arch/powerpc/include/asm/ppc-opcode.h
+>> +++ b/arch/powerpc/include/asm/ppc-opcode.h
+>> @@ -581,6 +581,8 @@
+>>  
+>>  #define PPC_RAW_BRANCH(offset)		(0x48000000 | PPC_LI(offset))
+>>  #define PPC_RAW_BL(offset)		(0x48000001 | PPC_LI(offset))
+>> +#define PPC_RAW_TW(t0, a, b)		(0x7f000008 | ___PPC_RS(t0) | ___PPC_RA(a) | ___PPC_RB(b))
+>
+> Shouldn't that be 0x7c000008 ?
 
-Ah, great! One general comment, though - iommu-map/msi-map have pretty 
-much grown into common IOMMU/MSI consumer properties by now, so IMO 
-they'd be better off living alongside their respective iommus/msi-parent 
-counterparts, so that other consumers like fsl-mc and host1x can 
-reference a common definition rather than duplicating their own. The 
-only aspect that should still belong to the PCI binding is the detail of 
-how PCI B:D:F forms the input ID for the mappings (and equivalently for 
-other bus bindings).
+Yes, my script agrees.
 
-Thanks,
-Robin.
+https://github.com/mpe/misc-scripts/blob/master/ppc/ppc-instruction-encode
 
-> 
-> Rob
-> 
-> [1] https://github.com/devicetree-org/dt-schema/commit/109bde712466281e8c96a4fadb0f68e7a90a6eca
-> [2] https://github.com/devicetree-org/dt-schema/commit/3d44bf2b46a9ac638550ca3916d7d7f70823bb58
-> [3] https://github.com/devicetree-org/dt-schema/commit/59f2e3103b6e776afe4f42e45897f7eabae06fa4
+$ ./ppc-instruction-encode 0:31 6:t0 11:ra 16:rb 21:4 31:
+.long 0x7c000008
+t0 << 21
+ra << 16
+rb << 11
+
+
+I guess the only user is PPC_RAW_TRAP() which passes t0 = 31, so that's
+why nothing has broken.
+
+Send a fixup? :)
+
+cheers

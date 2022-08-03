@@ -2,208 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C542588F04
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6924588F0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiHCO7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S236395AbiHCPCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236097AbiHCO7K (ORCPT
+        with ESMTP id S230055AbiHCPCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:59:10 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DE32B638;
-        Wed,  3 Aug 2022 07:59:08 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id y11so13096192qvn.3;
-        Wed, 03 Aug 2022 07:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5jqs8AHhBgImGBIE7SxgFEppiaXm4rdOvSDueZDLtEQ=;
-        b=J7iFFApEpmH/XmKfNn8NMMjeGffryiPx4XCa/yydrPs8YUy4GrSvGHHWWOl/8rJU3t
-         eJZIbrlmWFExYI4atGPR4oBVnSE5tUHTQQ/hBc0U002MlGFZisjcj9DU8JbNw+wZXtPn
-         x8eVaESQRCH0pSHTO5iSGIa/JLD3TQ7t/lBUa8LVsJA0nL7X6ICCo9rR8ZvH3k4GJJ6+
-         bicrLg9PQsgAnAyWxthKeGIW37GKLMKuf9k/efiwxhfAS6OGzpM/k3UTJPv8cw9tu2i2
-         /2geaj7Xy2EUrj7esWKiHsrFvkAX80QhPrhDyCV4XZVtifeRskgjrNNkXDY6agJRjMsb
-         uvog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5jqs8AHhBgImGBIE7SxgFEppiaXm4rdOvSDueZDLtEQ=;
-        b=IA6ctcPa7yMQzdKtMDmXjWLtOQyLPN5NyV9jNsJONYPsMG5RPu3LerQqtPXpznAa3B
-         Kh7Yq87ocQjaysC0Veri+8bDCelB6hppZQd7SiZ27Fp+smZhJ4bbgqMURJ82rWRsCeTy
-         LQx38XapCqk4Nj42r1uiGgagtYzdGOzLWa1wfIucwDc9WzOZSOx168R056zJfI8g8/0x
-         SbxlUaS+0tBTkqTqMGEMvzQAVbnbr6rHhrPkXYr6twKDNHu9RCU1ECqnKNnf7h8Q+AqN
-         gl7Qz8YFATGM4J9FwB0BLVQIH0tCYxz5TMcM8LsrzuSS8zk1FvjgWgbuEPdk+T1WG8Kh
-         wybg==
-X-Gm-Message-State: ACgBeo3Je3SEXpsIijdrTRKN6AQ1uh0FQzfa1LYHWOmjM+t3N7AtVHJG
-        I6nY4eQ+hBvuozO/Lf3Yka0345BzqAKtBQ==
-X-Google-Smtp-Source: AA6agR7lzgeVNFNaoBp35EMn0KFGA+BHcAQt5MkpfwMV1EzlLpl5AVjMEAylWuOjApBxSUAcBUHYzQ==
-X-Received: by 2002:a05:6214:20a2:b0:476:9071:2e60 with SMTP id 2-20020a05621420a200b0047690712e60mr12245740qvd.110.1659538747629;
-        Wed, 03 Aug 2022 07:59:07 -0700 (PDT)
-Received: from horus.lan (75-164-204-71.ptld.qwest.net. [75.164.204.71])
-        by smtp.gmail.com with ESMTPSA id ey19-20020a05622a4c1300b0031efc91644fsm11114114qtb.33.2022.08.03.07.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 07:59:07 -0700 (PDT)
-From:   Jason Gerecke <killertofu@gmail.com>
-X-Google-Original-From: Jason Gerecke <jason.gerecke@wacom.com>
-To:     linux-i2c@vger.kernel.org, linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ping Cheng <pinglinux@gmail.com>,
-        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>,
-        Ping Cheng <ping.cheng@wacom.com>
-Subject: [PATCH v2] i2c: Use u8 type in i2c transfer calls
-Date:   Wed,  3 Aug 2022 07:59:37 -0700
-Message-Id: <20220803145937.698603-1-jason.gerecke@wacom.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220718153448.173652-1-jason.gerecke@wacom.com>
-References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+        Wed, 3 Aug 2022 11:02:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF23343E;
+        Wed,  3 Aug 2022 08:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C33E3B822B6;
+        Wed,  3 Aug 2022 15:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D396C433D6;
+        Wed,  3 Aug 2022 15:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659538954;
+        bh=mG9KuClzuGA1M1GHAHw7JDlXdOb4ykyi/EyfmWqDpfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BbeYB2OsSGg7giWrkT7Sptux3c4hyupzhiA6jsBptzRGyo8oswcP5gjNiZnmV5mmM
+         1k2e9iOHfAZKJm0WaqNQHNw4G1e8Vob8fV0hGqJqnLxWRE8FDXPIpjWErTVlHHLOmR
+         YmwrNYsC0ZM96EL0x2C3chgl2BQJ+O+peJEuNgICrYGMIFiLHmyuWEFBULg2IG9ZB/
+         4/wjXDj0mujuwy7yWv/3p8Pd9x0K17qegzD76xPjg80N73wGSC2OIcAJ7//Lzm1Wh5
+         kxfd4e7juT4enx8FmNCbxKIlqzuZ3fS3DZmkTXPOJVuYSfuUNQ8je8/sWTy9YZByiq
+         ua5USfFotdYsQ==
+Date:   Wed, 3 Aug 2022 16:02:29 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Christian Hewitt <christianshewitt@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: bitbang: Fix lsb-first Rx
+Message-ID: <YuqOBYJSP8Pm7Bz5@sirena.org.uk>
+References: <28324d8622da80461cce35a82859b003d6f6c4b0.1659538737.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3VPCBSpUrVeeiBXd"
+Content-Disposition: inline
+In-Reply-To: <28324d8622da80461cce35a82859b003d6f6c4b0.1659538737.git.robin.murphy@arm.com>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'i2c_transfer_buffer_flags' function (and related inlines) defines its
-'buf' argument to be of type 'char*'. This is a poor choice of type given
-that most callers actually pass a 'u8*' and that the function itself ends
-up just storing the variable to a 'u8*'-typed member of 'struct i2c_msg'
-anyway.
 
-Changing the type of the 'buf' argument to 'u8*' vastly reduces the number
-of (admittedly usually-silent) Wpointer-sign warnings that are generated
-as the types get needlessly juggled back and forth.
+--3VPCBSpUrVeeiBXd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-At the same time, update the max1363 driver to match the new interface so
-we don't introduce a new Wincompatible-function-pointer-types warning.
+On Wed, Aug 03, 2022 at 03:58:57PM +0100, Robin Murphy wrote:
+> Shifting the recieved bit by "bits" inserts it at the top of the
+> *currently remaining* Tx data, so we end up accumulating the whole
+> transfer into bit 0 of the output word. Oops.
+>=20
+> For the algorithm to work as intended, we need to remember where the
+> top of the *original* word was, and shift Rx to there.
 
-Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
----
-Changes in v2:
-  - Added modifications to the max1363 driver required to avoid warnings
+So if this never worked we presumably have some systems out there which
+somehow rely on the old behaviour that we need to fix somehow - copying
+in everyone from the original change...
 
- drivers/i2c/i2c-core-base.c |  2 +-
- drivers/iio/adc/max1363.c   |  8 ++++----
- include/linux/i2c.h         | 14 +++++++-------
- 3 files changed, 12 insertions(+), 12 deletions(-)
+> Fixes: 1847e3046c52 ("spi: gpio: Implement LSB First bitbang support")
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/spi/spi-bitbang-txrx.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-bitbang-txrx.h b/drivers/spi/spi-bitbang-txr=
+x.h
+> index 267342dfa738..2dcbe166df63 100644
+> --- a/drivers/spi/spi-bitbang-txrx.h
+> +++ b/drivers/spi/spi-bitbang-txrx.h
+> @@ -116,6 +116,7 @@ bitbang_txrx_le_cpha0(struct spi_device *spi,
+>  {
+>  	/* if (cpol =3D=3D 0) this is SPI_MODE_0; else this is SPI_MODE_2 */
+> =20
+> +	u8 rxbit =3D bits - 1;
+>  	u32 oldbit =3D !(word & 1);
+>  	/* clock starts at inactive polarity */
+>  	for (; likely(bits); bits--) {
+> @@ -135,7 +136,7 @@ bitbang_txrx_le_cpha0(struct spi_device *spi,
+>  		/* sample LSB (from slave) on leading edge */
+>  		word >>=3D 1;
+>  		if ((flags & SPI_MASTER_NO_RX) =3D=3D 0)
+> -			word |=3D getmiso(spi) << (bits - 1);
+> +			word |=3D getmiso(spi) << rxbit;
+>  		setsck(spi, cpol);
+>  	}
+>  	return word;
+> @@ -148,6 +149,7 @@ bitbang_txrx_le_cpha1(struct spi_device *spi,
+>  {
+>  	/* if (cpol =3D=3D 0) this is SPI_MODE_1; else this is SPI_MODE_3 */
+> =20
+> +	u8 rxbit =3D bits - 1;
+>  	u32 oldbit =3D !(word & 1);
+>  	/* clock starts at inactive polarity */
+>  	for (; likely(bits); bits--) {
+> @@ -168,7 +170,7 @@ bitbang_txrx_le_cpha1(struct spi_device *spi,
+>  		/* sample LSB (from slave) on trailing edge */
+>  		word >>=3D 1;
+>  		if ((flags & SPI_MASTER_NO_RX) =3D=3D 0)
+> -			word |=3D getmiso(spi) << (bits - 1);
+> +			word |=3D getmiso(spi) << rxbit;
+>  	}
+>  	return word;
+>  }
+> --=20
+> 2.36.1.dirty
+>=20
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 10f35f942066a..2925507e8626d 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2184,7 +2184,7 @@ EXPORT_SYMBOL(i2c_transfer);
-  *
-  * Returns negative errno, or else the number of bytes transferred.
-  */
--int i2c_transfer_buffer_flags(const struct i2c_client *client, char *buf,
-+int i2c_transfer_buffer_flags(const struct i2c_client *client, u8 *buf,
- 			      int count, u16 flags)
- {
- 	int ret;
-diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
-index eef55ed4814a6..ebe6eb99583da 100644
---- a/drivers/iio/adc/max1363.c
-+++ b/drivers/iio/adc/max1363.c
-@@ -184,9 +184,9 @@ struct max1363_state {
- 	struct regulator		*vref;
- 	u32				vref_uv;
- 	int				(*send)(const struct i2c_client *client,
--						const char *buf, int count);
-+						const u8 *buf, int count);
- 	int				(*recv)(const struct i2c_client *client,
--						char *buf, int count);
-+						u8 *buf, int count);
- };
- 
- #define MAX1363_MODE_SINGLE(_num, _mask) {				\
-@@ -312,7 +312,7 @@ static const struct max1363_mode
- 	return NULL;
- }
- 
--static int max1363_smbus_send(const struct i2c_client *client, const char *buf,
-+static int max1363_smbus_send(const struct i2c_client *client, const u8 *buf,
- 		int count)
- {
- 	int i, err;
-@@ -323,7 +323,7 @@ static int max1363_smbus_send(const struct i2c_client *client, const char *buf,
- 	return err ? err : count;
- }
- 
--static int max1363_smbus_recv(const struct i2c_client *client, char *buf,
-+static int max1363_smbus_recv(const struct i2c_client *client, u8 *buf,
- 		int count)
- {
- 	int i, ret;
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 8eab5017bff30..3a94385f4642c 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -64,7 +64,7 @@ const char *i2c_freq_mode_string(u32 bus_freq_hz);
-  * @count must be less than 64k since msg.len is u16.
-  */
- int i2c_transfer_buffer_flags(const struct i2c_client *client,
--			      char *buf, int count, u16 flags);
-+			      u8 *buf, int count, u16 flags);
- 
- /**
-  * i2c_master_recv - issue a single I2C message in master receive mode
-@@ -75,7 +75,7 @@ int i2c_transfer_buffer_flags(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes read.
-  */
- static inline int i2c_master_recv(const struct i2c_client *client,
--				  char *buf, int count)
-+				  u8 *buf, int count)
- {
- 	return i2c_transfer_buffer_flags(client, buf, count, I2C_M_RD);
- };
-@@ -90,7 +90,7 @@ static inline int i2c_master_recv(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes read.
-  */
- static inline int i2c_master_recv_dmasafe(const struct i2c_client *client,
--					  char *buf, int count)
-+					  u8 *buf, int count)
- {
- 	return i2c_transfer_buffer_flags(client, buf, count,
- 					 I2C_M_RD | I2C_M_DMA_SAFE);
-@@ -105,9 +105,9 @@ static inline int i2c_master_recv_dmasafe(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes written.
-  */
- static inline int i2c_master_send(const struct i2c_client *client,
--				  const char *buf, int count)
-+				  const u8 *buf, int count)
- {
--	return i2c_transfer_buffer_flags(client, (char *)buf, count, 0);
-+	return i2c_transfer_buffer_flags(client, (u8 *)buf, count, 0);
- };
- 
- /**
-@@ -120,9 +120,9 @@ static inline int i2c_master_send(const struct i2c_client *client,
-  * Returns negative errno, or else the number of bytes written.
-  */
- static inline int i2c_master_send_dmasafe(const struct i2c_client *client,
--					  const char *buf, int count)
-+					  const u8 *buf, int count)
- {
--	return i2c_transfer_buffer_flags(client, (char *)buf, count,
-+	return i2c_transfer_buffer_flags(client, (u8 *)buf, count,
- 					 I2C_M_DMA_SAFE);
- };
- 
--- 
-2.37.1
+--3VPCBSpUrVeeiBXd
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLqjgUACgkQJNaLcl1U
+h9ALeAf/difGM2lFAlzO+P43em34PQsDdeREDNtiCsJ88CtKzfyDaTPzIwqQ14Of
+6lmj9dF2TdmBsQCa4j4db+RDA2tl2tQO8aWCoyYNbSVzj94/ck2yoiAIfbtM3UzU
+d8N83zetC8iyzBiMaisdZQYwVa6kGGQP/oHMp1S0P88MEc2MGw0kT9O94iDutRON
+Sk4oKEtOjYh/ID+Uv92J+145GnJlvXBsRJG2RB6X4lZ+unuOq9epdv6uKMXhSgDV
+DnfzGUshW+P42XDjtGsqUShxpKZieU7XPK1Etzg/AkZCIbidQupPBL72c8DFQraW
+kSBBGavACfbeU3N9JPBrVLUh6bWIlw==
+=xJUg
+-----END PGP SIGNATURE-----
+
+--3VPCBSpUrVeeiBXd--

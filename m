@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92D15886AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15D85886B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiHCE4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S236237AbiHCE4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235744AbiHCEzx (ORCPT
+        with ESMTP id S235740AbiHCEz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:55:53 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F182F1EEF9
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:55:48 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t2so15365080ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 21:55:48 -0700 (PDT)
+        Wed, 3 Aug 2022 00:55:56 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A18C57259
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:55:53 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso881858pjq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 21:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=+Bg0/hzsBzeEaLnlFG2eVMC0fwiochhIwopQzSHlnF0=;
-        b=eXDLsAVi/qU1zwxx8B+F0X+D+uS8Icx3KGjuoQGmVeTuQrrZAqrbiPuhXsopeqNeVm
-         j/tYZjbvtabwAsrunXdo3L4/fXm6LKx+LPQhy7ZqgO9wvD2ZwRfF3AAsCJo8euubmLVR
-         A3iEtpZWGBPylaGUwwi/f2PovMqqnanUiMVua4RcphStKfEE0OCdTmts7IvhcA2bA9wS
-         HaQbPBmBgI73+3EPN1AZlUKU31qAeHpMVjCNLYzyDhQpj8aU5zkFjg32LgHl2+y76xNN
-         tLK71zhkvBXQawus6FuQUTLgrTena8AgJKoDCKhEJq60DLc4TiOJfFOqcaA+dsaCwzmV
-         XCow==
+        bh=hgUcsbLKZ4Rgt07k54SbElcPFQpmm3f7G8+RpU13SUg=;
+        b=fpeJ7xTUvH9wLJZ4t2Yz/9i9se4FdQLsMDBZMhuL1w4DIvd5ciycFiMC/HYrVAoj3q
+         0dmuB3MjVS1v8gAyD0Ur4QVZnWLO3ZH6NjHOjqNXxxLgC5iCKlKm0gtyZQ/NofRD2qX2
+         s7iP2adJXRV+jhYbX9eT9MeBW14Z5ncN4ZR6X/my2dTaeArGVDj1zoa0X7C1TETyhgPv
+         ETU3GJzCOvlnU7tjHAiLpmqlClcNFBK0rjdwTWy/oyjDh+9Ix0jtwv4QX9+MrAygK06m
+         gzpn9mgCMq6Fsa9xBwXCuEmERAMZ/DEyOPLDAsDEGJnmucwdGa1YmkKga2mbvbSbTwoi
+         Nurw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=+Bg0/hzsBzeEaLnlFG2eVMC0fwiochhIwopQzSHlnF0=;
-        b=LupabcbbCAAQKNN+MSxOrURJcxAakGVgGZ1F1R3doJX0GdDwVVUvsa+QiZYCz3vMoq
-         Otn1TMsH76Z7VgtnbufJhu/9yA6n4DZczNerAGkEKjjwoHSWIvzphnLVPTMr95E+b5Hu
-         S18+n5vZ/G+ha5cWNk/xNhfAymY9taOfaTASwwPiCDOoqnyG3XEejLVy6sBdz5QXUXQo
-         xyS2hpHMKyRU/i+7fG8nJbhoikUVFIT6DR9k4aHbkpGoFj2ETqRx22OjNVSvmqsQCYqP
-         Wtn88yDs/uxeUcrpWCDbCycisXMOgT1uOwHrf8/0O/VFlk/EdbviOpOW0b1b36bx0SmR
-         wFHw==
-X-Gm-Message-State: ACgBeo3sk0x80wqywPXKr8atNRXTZsW2FHPA/P/AnGQf30qPPxywtMkb
-        B0HpwxlxrKdZmJYDtX92ehd4kWtyDgAB
-X-Google-Smtp-Source: AA6agR5fktHznQTjXzLBMcM42kVafR5wFMM1GP/zbZInJn3lE/bJYQe8cUiuKFOcJ3KpnwZkYFUEDQ==
-X-Received: by 2002:a17:902:7d89:b0:16e:f604:31b8 with SMTP id a9-20020a1709027d8900b0016ef60431b8mr10547529plm.0.1659502548236;
-        Tue, 02 Aug 2022 21:55:48 -0700 (PDT)
+        bh=hgUcsbLKZ4Rgt07k54SbElcPFQpmm3f7G8+RpU13SUg=;
+        b=R4g0AGC0jevrXyVjPrelvNXrbNM7OPvaD73ORCwgXV2oqheVfTlV13VKE6YuL74ufu
+         GqRg/hFcnrBxqpUuTCG5OGyP75DHvq+gEq4SG+u0PYC/CcJ/hDUA1mpmbDzeiAm/7yI7
+         xxCPszEDYy/ThOZvlhm9EPvhso+jWm6GiogZLdQ5gwSub9wzhfWkMH8kJOvyU9i0j2KX
+         W6LGH+aRK0pIjWTrYcpCVIqaLX8eXQgLXrN+foPg58iqb1WELRY3/UcUSUpIzB3sVIGX
+         mxuCA6gwhMFJGSvnFtlZpR6IyCGc2kKOq5aj4G2LSmIwNG2yQfq5jbUWczpBU9BBqn7A
+         jDjA==
+X-Gm-Message-State: ACgBeo15COz5dTNs1SCN9UJaHo8L7fyB7JHbNuB80z9APO6RUk1TsppW
+        x/7x4aB4k/E7QYKBpYdctUrI
+X-Google-Smtp-Source: AA6agR7UHS0TD8AwQSy0YC7IYcCatsXZxMGsIVZOBCSXZTOKVixgcy9b+wEopxtk1FDVDX1U1r1PzA==
+X-Received: by 2002:a17:902:e744:b0:16e:f6c2:3731 with SMTP id p4-20020a170902e74400b0016ef6c23731mr10504617plf.104.1659502552707;
+        Tue, 02 Aug 2022 21:55:52 -0700 (PDT)
 Received: from localhost ([139.177.225.247])
-        by smtp.gmail.com with ESMTPSA id n6-20020a1709026a8600b0015e8d4eb1f7sm657499plk.65.2022.08.02.21.55.46
+        by smtp.gmail.com with ESMTPSA id e16-20020a170902ef5000b0016ccbc9db0fsm659550plx.5.2022.08.02.21.55.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 21:55:47 -0700 (PDT)
+        Tue, 02 Aug 2022 21:55:51 -0700 (PDT)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     jasowang@redhat.com, mst@redhat.com, xiaodong.liu@intel.com,
         maxime.coquelin@redhat.com, stefanha@redhat.com
 Cc:     songmuchun@bytedance.com,
         virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>
-Subject: [PATCH v5 3/5] vduse: Support using userspace pages as bounce buffer
-Date:   Wed,  3 Aug 2022 12:55:21 +0800
-Message-Id: <20220803045523.23851-4-xieyongji@bytedance.com>
+Subject: [PATCH v5 4/5] vduse: Support registering userspace memory for IOVA regions
+Date:   Wed,  3 Aug 2022 12:55:22 +0800
+Message-Id: <20220803045523.23851-5-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220803045523.23851-1-xieyongji@bytedance.com>
 References: <20220803045523.23851-1-xieyongji@bytedance.com>
@@ -71,222 +71,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce two APIs: vduse_domain_add_user_bounce_pages()
-and vduse_domain_remove_user_bounce_pages() to support
-adding and removing userspace pages for bounce buffers.
-During adding and removing, the DMA data would be copied
-from the kernel bounce pages to the userspace bounce pages
-and back.
+Introduce two ioctls: VDUSE_IOTLB_REG_UMEM and
+VDUSE_IOTLB_DEREG_UMEM to support registering
+and de-registering userspace memory for IOVA
+regions.
+
+Now it only supports registering userspace memory
+for bounce buffer region in virtio-vdpa case.
 
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/vdpa/vdpa_user/iova_domain.c | 96 +++++++++++++++++++++++++---
- drivers/vdpa/vdpa_user/iova_domain.h |  8 +++
- 2 files changed, 96 insertions(+), 8 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 141 +++++++++++++++++++++++++++++
+ include/uapi/linux/vduse.h         |  23 +++++
+ 2 files changed, 164 insertions(+)
 
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-index 50d7c08d5450..e682bc7ee6c9 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.c
-+++ b/drivers/vdpa/vdpa_user/iova_domain.c
-@@ -178,8 +178,9 @@ static void vduse_domain_bounce(struct vduse_iova_domain *domain,
- 			    map->orig_phys == INVALID_PHYS_ADDR))
- 			return;
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 3bc27de58f46..eedff0a3885a 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -21,6 +21,8 @@
+ #include <linux/uio.h>
+ #include <linux/vdpa.h>
+ #include <linux/nospec.h>
++#include <linux/vmalloc.h>
++#include <linux/sched/mm.h>
+ #include <uapi/linux/vduse.h>
+ #include <uapi/linux/vdpa.h>
+ #include <uapi/linux/virtio_config.h>
+@@ -64,6 +66,13 @@ struct vduse_vdpa {
+ 	struct vduse_dev *dev;
+ };
  
--		addr = page_address(map->bounce_page) + offset;
--		do_bounce(map->orig_phys + offset, addr, sz, dir);
-+		addr = kmap_local_page(map->bounce_page);
-+		do_bounce(map->orig_phys + offset, addr + offset, sz, dir);
-+		kunmap_local(addr);
- 		size -= sz;
- 		iova += sz;
- 	}
-@@ -210,20 +211,23 @@ static struct page *
- vduse_domain_get_bounce_page(struct vduse_iova_domain *domain, u64 iova)
- {
- 	struct vduse_bounce_map *map;
--	struct page *page;
-+	struct page *page = NULL;
++struct vduse_umem {
++	unsigned long iova;
++	unsigned long npages;
++	struct page **pages;
++	struct mm_struct *mm;
++};
++
+ struct vduse_dev {
+ 	struct vduse_vdpa *vdev;
+ 	struct device *dev;
+@@ -95,6 +104,8 @@ struct vduse_dev {
+ 	u8 status;
+ 	u32 vq_num;
+ 	u32 vq_align;
++	struct vduse_umem *umem;
++	struct mutex mem_lock;
+ };
  
-+	read_lock(&domain->bounce_lock);
- 	map = &domain->bounce_maps[iova >> PAGE_SHIFT];
--	if (!map->bounce_page)
--		return NULL;
-+	if (domain->user_bounce_pages || !map->bounce_page)
-+		goto out;
- 
- 	page = map->bounce_page;
- 	get_page(page);
-+out:
-+	read_unlock(&domain->bounce_lock);
- 
- 	return page;
+ struct vduse_dev_msg {
+@@ -917,6 +928,102 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
+ 	return ret;
  }
  
- static void
--vduse_domain_free_bounce_pages(struct vduse_iova_domain *domain)
-+vduse_domain_free_kernel_bounce_pages(struct vduse_iova_domain *domain)
- {
- 	struct vduse_bounce_map *map;
- 	unsigned long pfn, bounce_pfns;
-@@ -243,6 +247,73 @@ vduse_domain_free_bounce_pages(struct vduse_iova_domain *domain)
- 	}
- }
- 
-+int vduse_domain_add_user_bounce_pages(struct vduse_iova_domain *domain,
-+				       struct page **pages, int count)
++static int vduse_dev_dereg_umem(struct vduse_dev *dev,
++				u64 iova, u64 size)
 +{
-+	struct vduse_bounce_map *map;
-+	int i, ret;
++	int ret;
 +
-+	/* Now we don't support partial mapping */
-+	if (count != (domain->bounce_size >> PAGE_SHIFT))
-+		return -EINVAL;
++	mutex_lock(&dev->mem_lock);
++	ret = -ENOENT;
++	if (!dev->umem)
++		goto unlock;
 +
-+	write_lock(&domain->bounce_lock);
-+	ret = -EEXIST;
-+	if (domain->user_bounce_pages)
-+		goto out;
++	ret = -EINVAL;
++	if (dev->umem->iova != iova || size != dev->domain->bounce_size)
++		goto unlock;
 +
-+	for (i = 0; i < count; i++) {
-+		map = &domain->bounce_maps[i];
-+		if (map->bounce_page) {
-+			/* Copy kernel page to user page if it's in use */
-+			if (map->orig_phys != INVALID_PHYS_ADDR)
-+				memcpy_to_page(pages[i], 0,
-+					       page_address(map->bounce_page),
-+					       PAGE_SIZE);
-+			__free_page(map->bounce_page);
-+		}
-+		map->bounce_page = pages[i];
-+		get_page(pages[i]);
-+	}
-+	domain->user_bounce_pages = true;
++	vduse_domain_remove_user_bounce_pages(dev->domain);
++	unpin_user_pages_dirty_lock(dev->umem->pages,
++				    dev->umem->npages, true);
++	atomic64_sub(dev->umem->npages, &dev->umem->mm->pinned_vm);
++	mmdrop(dev->umem->mm);
++	vfree(dev->umem->pages);
++	kfree(dev->umem);
++	dev->umem = NULL;
 +	ret = 0;
-+out:
-+	write_unlock(&domain->bounce_lock);
-+
++unlock:
++	mutex_unlock(&dev->mem_lock);
 +	return ret;
 +}
 +
-+void vduse_domain_remove_user_bounce_pages(struct vduse_iova_domain *domain)
++static int vduse_dev_reg_umem(struct vduse_dev *dev,
++			      u64 iova, u64 uaddr, u64 size)
 +{
-+	struct vduse_bounce_map *map;
-+	unsigned long i, count;
++	struct page **page_list = NULL;
++	struct vduse_umem *umem = NULL;
++	long pinned = 0;
++	unsigned long npages, lock_limit;
++	int ret;
 +
-+	write_lock(&domain->bounce_lock);
-+	if (!domain->user_bounce_pages)
++	if (!dev->domain->bounce_map ||
++	    size != dev->domain->bounce_size ||
++	    iova != 0 || uaddr & ~PAGE_MASK)
++		return -EINVAL;
++
++	mutex_lock(&dev->mem_lock);
++	ret = -EEXIST;
++	if (dev->umem)
++		goto unlock;
++
++	ret = -ENOMEM;
++	npages = size >> PAGE_SHIFT;
++	page_list = __vmalloc(array_size(npages, sizeof(struct page *)),
++			      GFP_KERNEL_ACCOUNT);
++	umem = kzalloc(sizeof(*umem), GFP_KERNEL);
++	if (!page_list || !umem)
++		goto unlock;
++
++	mmap_read_lock(current->mm);
++
++	lock_limit = PFN_DOWN(rlimit(RLIMIT_MEMLOCK));
++	if (npages + atomic64_read(&current->mm->pinned_vm) > lock_limit)
 +		goto out;
 +
-+	count = domain->bounce_size >> PAGE_SHIFT;
-+	for (i = 0; i < count; i++) {
-+		struct page *page = NULL;
-+
-+		map = &domain->bounce_maps[i];
-+		if (WARN_ON(!map->bounce_page))
-+			continue;
-+
-+		/* Copy user page to kernel page if it's in use */
-+		if (map->orig_phys != INVALID_PHYS_ADDR) {
-+			page = alloc_page(GFP_ATOMIC | __GFP_NOFAIL);
-+			memcpy_from_page(page_address(page),
-+					 map->bounce_page, 0, PAGE_SIZE);
-+		}
-+		put_page(map->bounce_page);
-+		map->bounce_page = page;
++	pinned = pin_user_pages(uaddr, npages, FOLL_LONGTERM | FOLL_WRITE,
++				page_list, NULL);
++	if (pinned != npages) {
++		ret = pinned < 0 ? pinned : -ENOMEM;
++		goto out;
 +	}
-+	domain->user_bounce_pages = false;
++
++	ret = vduse_domain_add_user_bounce_pages(dev->domain,
++						 page_list, pinned);
++	if (ret)
++		goto out;
++
++	atomic64_add(npages, &current->mm->pinned_vm);
++
++	umem->pages = page_list;
++	umem->npages = pinned;
++	umem->iova = iova;
++	umem->mm = current->mm;
++	mmgrab(current->mm);
++
++	dev->umem = umem;
 +out:
-+	write_unlock(&domain->bounce_lock);
++	if (ret && pinned > 0)
++		unpin_user_pages(page_list, pinned);
++
++	mmap_read_unlock(current->mm);
++unlock:
++	if (ret) {
++		vfree(page_list);
++		kfree(umem);
++	}
++	mutex_unlock(&dev->mem_lock);
++	return ret;
 +}
 +
- void vduse_domain_reset_bounce_map(struct vduse_iova_domain *domain)
+ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			    unsigned long arg)
  {
- 	if (!domain->bounce_map)
-@@ -318,13 +389,18 @@ dma_addr_t vduse_domain_map_page(struct vduse_iova_domain *domain,
- 	if (vduse_domain_init_bounce_map(domain))
- 		goto err;
- 
-+	read_lock(&domain->bounce_lock);
- 	if (vduse_domain_map_bounce_page(domain, (u64)iova, (u64)size, pa))
--		goto err;
-+		goto err_unlock;
- 
- 	if (dir == DMA_TO_DEVICE || dir == DMA_BIDIRECTIONAL)
- 		vduse_domain_bounce(domain, iova, size, DMA_TO_DEVICE);
- 
-+	read_unlock(&domain->bounce_lock);
+@@ -1089,6 +1196,38 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index].inject);
+ 		break;
+ 	}
++	case VDUSE_IOTLB_REG_UMEM: {
++		struct vduse_iova_umem umem;
 +
- 	return iova;
-+err_unlock:
-+	read_unlock(&domain->bounce_lock);
- err:
- 	vduse_domain_free_iova(iovad, iova, size);
- 	return DMA_MAPPING_ERROR;
-@@ -336,10 +412,12 @@ void vduse_domain_unmap_page(struct vduse_iova_domain *domain,
++		ret = -EFAULT;
++		if (copy_from_user(&umem, argp, sizeof(umem)))
++			break;
++
++		ret = -EINVAL;
++		if (!is_mem_zero((const char *)umem.reserved,
++				 sizeof(umem.reserved)))
++			break;
++
++		ret = vduse_dev_reg_umem(dev, umem.iova,
++					 umem.uaddr, umem.size);
++		break;
++	}
++	case VDUSE_IOTLB_DEREG_UMEM: {
++		struct vduse_iova_umem umem;
++
++		ret = -EFAULT;
++		if (copy_from_user(&umem, argp, sizeof(umem)))
++			break;
++
++		ret = -EINVAL;
++		if (!is_mem_zero((const char *)umem.reserved,
++				 sizeof(umem.reserved)))
++			break;
++
++		ret = vduse_dev_dereg_umem(dev, umem.iova,
++					   umem.size);
++		break;
++	}
+ 	default:
+ 		ret = -ENOIOCTLCMD;
+ 		break;
+@@ -1101,6 +1240,7 @@ static int vduse_dev_release(struct inode *inode, struct file *file)
  {
- 	struct iova_domain *iovad = &domain->stream_iovad;
+ 	struct vduse_dev *dev = file->private_data;
  
-+	read_lock(&domain->bounce_lock);
- 	if (dir == DMA_FROM_DEVICE || dir == DMA_BIDIRECTIONAL)
- 		vduse_domain_bounce(domain, dma_addr, size, DMA_FROM_DEVICE);
++	vduse_dev_dereg_umem(dev, 0, dev->domain->bounce_size);
+ 	spin_lock(&dev->msg_lock);
+ 	/* Make sure the inflight messages can processed after reconncection */
+ 	list_splice_init(&dev->recv_list, &dev->send_list);
+@@ -1163,6 +1303,7 @@ static struct vduse_dev *vduse_dev_create(void)
+ 		return NULL;
  
- 	vduse_domain_unmap_bounce_page(domain, (u64)dma_addr, (u64)size);
-+	read_unlock(&domain->bounce_lock);
- 	vduse_domain_free_iova(iovad, dma_addr, size);
- }
+ 	mutex_init(&dev->lock);
++	mutex_init(&dev->mem_lock);
+ 	spin_lock_init(&dev->msg_lock);
+ 	INIT_LIST_HEAD(&dev->send_list);
+ 	INIT_LIST_HEAD(&dev->recv_list);
+diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
+index 7cfe1c1280c0..9885e0571f09 100644
+--- a/include/uapi/linux/vduse.h
++++ b/include/uapi/linux/vduse.h
+@@ -210,6 +210,29 @@ struct vduse_vq_eventfd {
+  */
+ #define VDUSE_VQ_INJECT_IRQ	_IOW(VDUSE_BASE, 0x17, __u32)
  
-@@ -447,7 +525,8 @@ static int vduse_domain_release(struct inode *inode, struct file *file)
- 
- 	spin_lock(&domain->iotlb_lock);
- 	vduse_iotlb_del_range(domain, 0, ULLONG_MAX);
--	vduse_domain_free_bounce_pages(domain);
-+	vduse_domain_remove_user_bounce_pages(domain);
-+	vduse_domain_free_kernel_bounce_pages(domain);
- 	spin_unlock(&domain->iotlb_lock);
- 	put_iova_domain(&domain->stream_iovad);
- 	put_iova_domain(&domain->consistent_iovad);
-@@ -507,6 +586,7 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
- 		goto err_file;
- 
- 	domain->file = file;
-+	rwlock_init(&domain->bounce_lock);
- 	spin_lock_init(&domain->iotlb_lock);
- 	init_iova_domain(&domain->stream_iovad,
- 			PAGE_SIZE, IOVA_START_PFN);
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.h b/drivers/vdpa/vdpa_user/iova_domain.h
-index 2722d9b8e21a..4e0e50e7ac15 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.h
-+++ b/drivers/vdpa/vdpa_user/iova_domain.h
-@@ -14,6 +14,7 @@
- #include <linux/iova.h>
- #include <linux/dma-mapping.h>
- #include <linux/vhost_iotlb.h>
-+#include <linux/rwlock.h>
- 
- #define IOVA_START_PFN 1
- 
-@@ -34,6 +35,8 @@ struct vduse_iova_domain {
- 	struct vhost_iotlb *iotlb;
- 	spinlock_t iotlb_lock;
- 	struct file *file;
-+	bool user_bounce_pages;
-+	rwlock_t bounce_lock;
- };
- 
- int vduse_domain_set_map(struct vduse_iova_domain *domain,
-@@ -61,6 +64,11 @@ void vduse_domain_free_coherent(struct vduse_iova_domain *domain, size_t size,
- 
- void vduse_domain_reset_bounce_map(struct vduse_iova_domain *domain);
- 
-+int vduse_domain_add_user_bounce_pages(struct vduse_iova_domain *domain,
-+				       struct page **pages, int count);
++/**
++ * struct vduse_iova_umem - userspace memory configuration for one IOVA region
++ * @uaddr: start address of userspace memory, it must be aligned to page size
++ * @iova: start of the IOVA region
++ * @size: size of the IOVA region
++ * @reserved: for future use, needs to be initialized to zero
++ *
++ * Structure used by VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM
++ * ioctls to register/de-register userspace memory for IOVA regions
++ */
++struct vduse_iova_umem {
++	__u64 uaddr;
++	__u64 iova;
++	__u64 size;
++	__u64 reserved[3];
++};
 +
-+void vduse_domain_remove_user_bounce_pages(struct vduse_iova_domain *domain);
++/* Register userspace memory for IOVA regions */
++#define VDUSE_IOTLB_REG_UMEM	_IOW(VDUSE_BASE, 0x18, struct vduse_iova_umem)
 +
- void vduse_domain_destroy(struct vduse_iova_domain *domain);
++/* De-register the userspace memory. Caller should set iova and size field. */
++#define VDUSE_IOTLB_DEREG_UMEM	_IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
++
+ /* The control messages definition for read(2)/write(2) on /dev/vduse/$NAME */
  
- struct vduse_iova_domain *vduse_domain_create(unsigned long iova_limit,
+ /**
 -- 
 2.20.1
 

@@ -2,295 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8189D588CC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2CF588CC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbiHCNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S237981AbiHCNNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237828AbiHCNNN (ORCPT
+        with ESMTP id S237776AbiHCNNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:13:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1B0167CC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659532389; x=1691068389;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TawHr+6QsiY/jjacGydchtfHZmSS9CVayTTwNpgb7Dk=;
-  b=KaDD6kV5Rnj+Sw9NjRFhOMEAOwxtCLNBAwpOS6bEwWNuq/kEt3gz1iiZ
-   oumoBN1KmOY/X0IQv3SQWIyCatSrtNn+JQqm99dBey7dRWzeZkxByYT+H
-   C3d3DbMD5hSFTAooPWHTRp2hdDIPRv6D+Yqj4TB/rYFf0TDQ82zcgyDwz
-   zMa09FP5ctEdVdAH1VBXDy9ThA3kFMbxJ+FFZ+Xf1enBohDMqy1Zmb0vV
-   ymKMn+hVgtvbo7IwjTkD/Y5aWv3DukC3pXIA0xCzO3tVDONlhRaG1W0pG
-   ZpxNu0ZKt+5Squw4x+mogrb4EUJQUOGKIa2Kgpb+oQH5doKe1X1wljSyr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="290884510"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="290884510"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 06:13:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="602821832"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Aug 2022 06:13:08 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJEBP-000HIc-13;
-        Wed, 03 Aug 2022 13:13:07 +0000
-Date:   Wed, 3 Aug 2022 21:12:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/020-t6000-dart 7/11]
- drivers/iommu/apple-dart.c:345:62: error: passing argument 1 of
- 'atomic64_read' from incompatible pointer type
-Message-ID: <202208032102.cjuGgrTO-lkp@intel.com>
+        Wed, 3 Aug 2022 09:13:30 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD0186E0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:13:17 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q184so890959oif.1
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=jtodadUycK+1LkDSYjWv8XqXchbrV8seFLSfpmqa6P3sOQ/of4IOcRUxXS1Bd4JQBX
+         YhmbqlC+yxW9CTOk4i0D6sxWl0tLx5O0b/6PobzrrG7Khc1GwbaSCbDxfaFKRBlVF//X
+         yBzwRrxphm+rRMuCnO5lQIVW1fkXROZV4I73U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=r6/2oGXLr0WesHsl4xWosSwERBI9p0Lxb6adTeBnRAC9czzALcfjI7oluIRX5c6qo1
+         h6qpTra5w/56ZFWs2uKIYMeyTc+uaINoJECALtagDqnoocmly76sXHCivRif1H/Qw7R5
+         FNxD5Z7c2BcVAAOsCfZT8EhIH3tu9NJz4DTzP1W1UU0c5OA6rX0omnBCx0rG8WUBdgww
+         GfGK48exRXNfEcMw2rV6sO1vBsJj7Yl6V9U/9y4KitA5xohz8p75JHcLITw546d6ZLEO
+         wQ9FqWmIqErfKIjf5xhi6SgwQFTKUwe8gG/nuwkGVxSi5WR5ceFBNPyQb/NgZhejkMjr
+         Tp2A==
+X-Gm-Message-State: ACgBeo1keCnp/aXwlFUTE4en2zruMvtPydTsILXJAYv4NHcOfgmS5uGc
+        w0LRJF/Dw8mDs/MJ5uXupxcacg==
+X-Google-Smtp-Source: AA6agR4YcT+i543RaZOzyZZrxoYafQeMyJMNwQPlZAZ5N2PjqYDcx6ffwBEUmWSpOvruLmyqiKyulA==
+X-Received: by 2002:a05:6808:143:b0:33a:d513:1443 with SMTP id h3-20020a056808014300b0033ad5131443mr1620237oie.43.1659532396382;
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id t26-20020a0568080b3a00b0033a3e6e7ce9sm3539763oij.10.2022.08.03.06.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Message-ID: <11578cfd-3d19-8bda-b36e-5e522e7c4490@cloudflare.com>
+Date:   Wed, 3 Aug 2022 08:13:15 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
+Content-Language: en-US
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <20220801180146.1157914-2-fred@cloudflare.com>
+ <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/020-t6000-dart
-head:   50f73e1258c60ccd081a09339f77176f0f9bc49c
-commit: 82d7ff6fe9af1e8cd39bce1d46a679074b8d7749 [7/11] iommu: dart: Support >64 stream IDs
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220803/202208032102.cjuGgrTO-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/82d7ff6fe9af1e8cd39bce1d46a679074b8d7749
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/020-t6000-dart
-        git checkout 82d7ff6fe9af1e8cd39bce1d46a679074b8d7749
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+On 8/2/22 4:47 PM, KP Singh wrote:
+> On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
+>>
+>> Preventing user namespace (privileged or otherwise) creation comes in a
+>> few of forms in order of granularity:
+>>
+>>          1. /proc/sys/user/max_user_namespaces sysctl
+>>          2. OS specific patch(es)
+>>          3. CONFIG_USER_NS
+>>
+>> To block a task based on its attributes, the LSM hook cred_prepare is a
+>> good candidate for use because it provides more granular control, and
+>> it is called before create_user_ns():
+>>
+>>          cred = prepare_creds()
+>>                  security_prepare_creds()
+>>                          call_int_hook(cred_prepare, ...
+>>          if (cred)
+>>                  create_user_ns(cred)
+>>
+>> Since security_prepare_creds() is meant for LSMs to copy and prepare
+>> credentials, access control is an unintended use of the hook. Therefore
+>> introduce a new function security_create_user_ns() with an accompanying
+>> userns_create LSM hook.
+>>
+>> This hook takes the prepared creds for LSM authors to write policy
+>> against. On success, the new namespace is applied to credentials,
+>> otherwise an error is returned.
+>>
+>> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+>> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> 
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> 
+> This looks useful, and I would also like folks to consider the
+> observability aspects of BPF LSM as
+> brought up here:
+> 
+> https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
+> 
+> Frederick, what about adding the observability aspects to the commit
+> description as well.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Agreed. I'll include that in v5.
 
-All errors (new ones prefixed by >>):
+> 
+> - KP
+> 
+>>
+>> ---
+>> Changes since v3:
+>> - No changes
+>> Changes since v2:
+>> - Rename create_user_ns hook to userns_create
+>> Changes since v1:
+>> - Changed commit wording
+>> - Moved execution to be after id mapping check
+>> - Changed signature to only accept a const struct cred *
+>> ---
+>>   include/linux/lsm_hook_defs.h | 1 +
+>>   include/linux/lsm_hooks.h     | 4 ++++
+>>   include/linux/security.h      | 6 ++++++
+>>   kernel/user_namespace.c       | 5 +++++
+>>   security/security.c           | 5 +++++
+>>   5 files changed, 21 insertions(+)
+>>
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index eafa1d2489fd..7ff93cb8ca8d 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
+>>           unsigned long arg3, unsigned long arg4, unsigned long arg5)
+>>   LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+>>           struct inode *inode)
+>> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+>>   LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+>>   LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+>>           u32 *secid)
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index 91c8146649f5..54fe534d0e01 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -799,6 +799,10 @@
+>>    *     security attributes, e.g. for /proc/pid inodes.
+>>    *     @p contains the task_struct for the task.
+>>    *     @inode contains the inode structure for the inode.
+>> + * @userns_create:
+>> + *     Check permission prior to creating a new user namespace.
+>> + *     @cred points to prepared creds.
+>> + *     Return 0 if successful, otherwise < 0 error code.
+>>    *
+>>    * Security hooks for Netlink messaging.
+>>    *
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index 7fc4e9f49f54..a195bf33246a 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
+>>   int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+>>                          unsigned long arg4, unsigned long arg5);
+>>   void security_task_to_inode(struct task_struct *p, struct inode *inode);
+>> +int security_create_user_ns(const struct cred *cred);
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
+>>   void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
+>>   int security_msg_msg_alloc(struct msg_msg *msg);
+>> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
+>>   static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>   { }
+>>
+>> +static inline int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>>   static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
+>>                                            short flag)
+>>   {
+>> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+>> index 5481ba44a8d6..3f464bbda0e9 100644
+>> --- a/kernel/user_namespace.c
+>> +++ b/kernel/user_namespace.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/highuid.h>
+>>   #include <linux/cred.h>
+>>   #include <linux/securebits.h>
+>> +#include <linux/security.h>
+>>   #include <linux/keyctl.h>
+>>   #include <linux/key-type.h>
+>>   #include <keys/user-type.h>
+>> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
+>>              !kgid_has_mapping(parent_ns, group))
+>>                  goto fail_dec;
+>>
+>> +       ret = security_create_user_ns(new);
+>> +       if (ret < 0)
+>> +               goto fail_dec;
+>> +
+>>          ret = -ENOMEM;
+>>          ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
+>>          if (!ns)
+>> diff --git a/security/security.c b/security/security.c
+>> index 188b8f782220..ec9b4696e86c 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>          call_void_hook(task_to_inode, p, inode);
+>>   }
+>>
+>> +int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return call_int_hook(userns_create, 0, cred);
+>> +}
+>> +
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
+>>   {
+>>          return call_int_hook(ipc_permission, 0, ipcp, flag);
+>> --
+>> 2.30.2
+>>
 
-   drivers/iommu/apple-dart.c: In function 'apple_dart_domain_flush_tlb':
->> drivers/iommu/apple-dart.c:345:62: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     345 |                         stream_map.sidmap[j] = atomic64_read(&domain_stream_map->sidmap[j]);
-         |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                                              |
-         |                                                              atomic_long_t * {aka atomic_t *}
-   In file included from include/linux/atomic.h:82,
-                    from drivers/iommu/apple-dart.c:14:
-   include/linux/atomic/atomic-instrumented.h:644:33: note: expected 'const atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
-     644 | atomic64_read(const atomic64_t *v)
-         |               ~~~~~~~~~~~~~~~~~~^
-   drivers/iommu/apple-dart.c: In function 'apple_dart_finalize_domain':
->> drivers/iommu/apple-dart.c:441:38: error: passing argument 1 of 'atomic64_set' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     441 |                         atomic64_set(&dart_domain->stream_maps[i].sidmap[j],
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                      |
-         |                                      atomic_long_t * {aka atomic_t *}
-   include/linux/atomic/atomic-instrumented.h:658:26: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
-     658 | atomic64_set(atomic64_t *v, s64 i)
-         |              ~~~~~~~~~~~~^
-   drivers/iommu/apple-dart.c: In function 'apple_dart_mod_streams':
->> drivers/iommu/apple-dart.c:490:45: error: passing argument 2 of 'atomic64_or' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     490 |                                             &domain_maps[i].sidmap[j]);
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                             |
-         |                                             atomic_long_t * {aka atomic_t *}
-   include/linux/atomic/atomic-instrumented.h:1015:32: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
-    1015 | atomic64_or(s64 i, atomic64_t *v)
-         |                    ~~~~~~~~~~~~^
->> drivers/iommu/apple-dart.c:493:46: error: passing argument 2 of 'atomic64_and' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     493 |                                              &domain_maps[i].sidmap[j]);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                              |
-         |                                              atomic_long_t * {aka atomic_t *}
-   include/linux/atomic/atomic-instrumented.h:941:33: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
-     941 | atomic64_and(s64 i, atomic64_t *v)
-         |                     ~~~~~~~~~~~~^
-   cc1: some warnings being treated as errors
-
-
-vim +/atomic64_read +345 drivers/iommu/apple-dart.c
-
-   334	
-   335	static void apple_dart_domain_flush_tlb(struct apple_dart_domain *domain)
-   336	{
-   337		int i, j;
-   338		struct apple_dart_atomic_stream_map *domain_stream_map;
-   339		struct apple_dart_stream_map stream_map;
-   340	
-   341		for_each_stream_map(i, domain, domain_stream_map) {
-   342			stream_map.dart = domain_stream_map->dart;
-   343	
-   344			for (j = 0; j < BITS_TO_LONGS(stream_map.dart->num_streams); j++)
- > 345				stream_map.sidmap[j] = atomic64_read(&domain_stream_map->sidmap[j]);
-   346	
-   347			apple_dart_hw_invalidate_tlb(&stream_map);
-   348		}
-   349	}
-   350	
-   351	static void apple_dart_flush_iotlb_all(struct iommu_domain *domain)
-   352	{
-   353		apple_dart_domain_flush_tlb(to_dart_domain(domain));
-   354	}
-   355	
-   356	static void apple_dart_iotlb_sync(struct iommu_domain *domain,
-   357					  struct iommu_iotlb_gather *gather)
-   358	{
-   359		apple_dart_domain_flush_tlb(to_dart_domain(domain));
-   360	}
-   361	
-   362	static void apple_dart_iotlb_sync_map(struct iommu_domain *domain,
-   363					      unsigned long iova, size_t size)
-   364	{
-   365		apple_dart_domain_flush_tlb(to_dart_domain(domain));
-   366	}
-   367	
-   368	static phys_addr_t apple_dart_iova_to_phys(struct iommu_domain *domain,
-   369						   dma_addr_t iova)
-   370	{
-   371		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
-   372		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
-   373	
-   374		if (!ops)
-   375			return 0;
-   376	
-   377		return ops->iova_to_phys(ops, iova);
-   378	}
-   379	
-   380	static int apple_dart_map_pages(struct iommu_domain *domain, unsigned long iova,
-   381					phys_addr_t paddr, size_t pgsize,
-   382					size_t pgcount, int prot, gfp_t gfp,
-   383					size_t *mapped)
-   384	{
-   385		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
-   386		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
-   387	
-   388		if (!ops)
-   389			return -ENODEV;
-   390	
-   391		return ops->map_pages(ops, iova, paddr, pgsize, pgcount, prot, gfp,
-   392				      mapped);
-   393	}
-   394	
-   395	static size_t apple_dart_unmap_pages(struct iommu_domain *domain,
-   396					     unsigned long iova, size_t pgsize,
-   397					     size_t pgcount,
-   398					     struct iommu_iotlb_gather *gather)
-   399	{
-   400		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
-   401		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
-   402	
-   403		return ops->unmap_pages(ops, iova, pgsize, pgcount, gather);
-   404	}
-   405	
-   406	static void
-   407	apple_dart_setup_translation(struct apple_dart_domain *domain,
-   408				     struct apple_dart_stream_map *stream_map)
-   409	{
-   410		int i;
-   411		struct io_pgtable_cfg *pgtbl_cfg =
-   412			&io_pgtable_ops_to_pgtable(domain->pgtbl_ops)->cfg;
-   413	
-   414		for (i = 0; i < pgtbl_cfg->apple_dart_cfg.n_ttbrs; ++i)
-   415			apple_dart_hw_set_ttbr(stream_map, i,
-   416					       pgtbl_cfg->apple_dart_cfg.ttbr[i]);
-   417		for (; i < DART_MAX_TTBR; ++i)
-   418			apple_dart_hw_clear_ttbr(stream_map, i);
-   419	
-   420		apple_dart_hw_enable_translation(stream_map);
-   421		apple_dart_hw_invalidate_tlb(stream_map);
-   422	}
-   423	
-   424	static int apple_dart_finalize_domain(struct iommu_domain *domain,
-   425					      struct apple_dart_master_cfg *cfg)
-   426	{
-   427		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
-   428		struct apple_dart *dart = cfg->stream_maps[0].dart;
-   429		struct io_pgtable_cfg pgtbl_cfg;
-   430		int ret = 0;
-   431		int i, j;
-   432	
-   433		mutex_lock(&dart_domain->init_lock);
-   434	
-   435		if (dart_domain->finalized)
-   436			goto done;
-   437	
-   438		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   439			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
-   440			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
- > 441				atomic64_set(&dart_domain->stream_maps[i].sidmap[j],
-   442					     cfg->stream_maps[i].sidmap[j]);
-   443		}
-   444	
-   445		pgtbl_cfg = (struct io_pgtable_cfg){
-   446			.pgsize_bitmap = dart->pgsize,
-   447			.ias = 32,
-   448			.oas = dart->hw->oas,
-   449			.coherent_walk = 1,
-   450			.iommu_dev = dart->dev,
-   451		};
-   452	
-   453		dart_domain->pgtbl_ops =
-   454			alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg, domain);
-   455		if (!dart_domain->pgtbl_ops) {
-   456			ret = -ENOMEM;
-   457			goto done;
-   458		}
-   459	
-   460		domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
-   461		domain->geometry.aperture_start = 0;
-   462		domain->geometry.aperture_end = DMA_BIT_MASK(32);
-   463		domain->geometry.force_aperture = true;
-   464	
-   465		dart_domain->finalized = true;
-   466	
-   467	done:
-   468		mutex_unlock(&dart_domain->init_lock);
-   469		return ret;
-   470	}
-   471	
-   472	static int
-   473	apple_dart_mod_streams(struct apple_dart_atomic_stream_map *domain_maps,
-   474			       struct apple_dart_stream_map *master_maps,
-   475			       bool add_streams)
-   476	{
-   477		int i, j;
-   478	
-   479		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   480			if (domain_maps[i].dart != master_maps[i].dart)
-   481				return -EINVAL;
-   482		}
-   483	
-   484		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   485			if (!domain_maps[i].dart)
-   486				break;
-   487			for (j = 0; j < BITS_TO_LONGS(domain_maps[i].dart->num_streams); j++) {
-   488				if (add_streams)
-   489					atomic64_or(master_maps[i].sidmap[j],
- > 490						    &domain_maps[i].sidmap[j]);
-   491				else
-   492					atomic64_and(~master_maps[i].sidmap[j],
- > 493						     &domain_maps[i].sidmap[j]);
-   494			}
-   495		}
-   496	
-   497		return 0;
-   498	}
-   499	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

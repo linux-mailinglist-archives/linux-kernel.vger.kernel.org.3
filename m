@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A5E5887A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242EA5887A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiHCG7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
+        id S235520AbiHCHAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233079AbiHCG7U (ORCPT
+        with ESMTP id S233079AbiHCHAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:59:20 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47327FF5;
-        Tue,  2 Aug 2022 23:59:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id x10so14863264plb.3;
-        Tue, 02 Aug 2022 23:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LJeCWMPNDFa54lhhjjni8CvJbCR1cv8BE7+K+6PQWwE=;
-        b=mjUzUsPbeHIKPWm9YDLnJ8OmAZ5zDjlQPUA1SZHAEUj+Mfx/mDnJLipV/ZJOR54NUE
-         0z97qt3pqKYGBWQxJKJwGNgXDB7he0S4Swdlv0HbNM+fwtcvx1kwC6Ft7JoL1uJgYjo5
-         m7WpN3QDC48uieWJ0MAJAOHIHKFVKZ5F6k6uwvliNUZl6RXzx3SwBQn3rQYB9ucFgyp2
-         6orx86mS8IKx+44Adhp7I/xPrGs1HM5VXlB2TQ3fP8pXmNTWurdY2hiCj0K9TnfRgwq4
-         3QeAUR9VcI2MglUDwiKTF91QBPR4FGFYOy0iUPkslhfxXca50+HDYgBaJthiqwFogYUS
-         g1Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LJeCWMPNDFa54lhhjjni8CvJbCR1cv8BE7+K+6PQWwE=;
-        b=SYlcQ25EvFXmYQmprc13rWhkOQb1k0mj1QU6Xdc/8srFZYmxQctC9VI+Zl8pGT+ck9
-         1p92hzyA/HKaahz81SOMRLzWfaWQHmb4TwHk4jCb9VomXFyCivuaMRP14tvjnCTscsfH
-         dFsb2CB7FxuAjtkxLUAMWwlulYw4yZ1ji8ibcV+SOycX3dJPOJrE2/1+0jRngSYQjbOu
-         A7H4xl8cAP7Bqtfd4oVjDdrtK/JAsudQ9HwveSiDKcmYBRLI7MVZYgzz3RPLTna6vmP2
-         1g+mM9VlKVy6k4Ho1VbR/eygISoIRXC8Oj5QiP/JKFNlXMBSba3azpP6SH6IvXeRT8yw
-         YJ4Q==
-X-Gm-Message-State: ACgBeo1XT7teXsSJeizYQxC/vCglmrrUYd55Xq1PCZh/EOGe+hJcakSs
-        b1aDWub9iSU5Kp9ylA9SUtOPfdYli9JgQh8xcHY=
-X-Google-Smtp-Source: AA6agR7x4tyrWj2jq8pw1fQVi438CHYRFx6bDJavn8MPfXnWR/2ySDbcqvnMNXHaMqwdEW2iAG7k493kb+IO2L3URXE=
-X-Received: by 2002:a17:902:7293:b0:16f:17c3:e809 with SMTP id
- d19-20020a170902729300b0016f17c3e809mr740919pll.158.1659509958822; Tue, 02
- Aug 2022 23:59:18 -0700 (PDT)
+        Wed, 3 Aug 2022 03:00:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48FCC2A948
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659510008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NxGTTQQ2iBxQY08ALTbVtdri71RwhzNW5j1WwpD7bnw=;
+        b=R7+ucBk7vO99ywn3zSRPhBFh1fQPglLOGw0ZtgX3mXfI7wK1zf3vpLDNeKqsQrDqBKS3iB
+        zLVVe0A9RH213ZNpyiObFQ8I4JQHbd7zmBSBDfobBZHg9Khu93u2M/1OSx3sqK45O+3xFE
+        qcQwiwDxTMzGIcK6vRKHTYQm+P5nkRk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-qxDbqRMTOZSzwtp-RY6A1w-1; Wed, 03 Aug 2022 03:00:04 -0400
+X-MC-Unique: qxDbqRMTOZSzwtp-RY6A1w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CF2E380670A;
+        Wed,  3 Aug 2022 07:00:04 +0000 (UTC)
+Received: from fedora (unknown [10.40.192.214])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4AE1E1121315;
+        Wed,  3 Aug 2022 07:00:03 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 09:00:01 +0200
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ext4: Don't run ext4lazyinit for read-only filesystems
+Message-ID: <20220803070001.iygdreewgveotfwx@fedora>
+References: <48b41da1498fcac3287e2e06b660680646c1c050.1659323972.git.josh@joshtriplett.org>
 MIME-Version: 1.0
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com> <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
- <Yuki3jpCSJDdXcWA@sirena.org.uk> <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
-In-Reply-To: <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
-From:   naga sureshkumar <nagasuresh12@gmail.com>
-Date:   Wed, 3 Aug 2022 12:29:07 +0530
-Message-ID: <CAH_iE_3xfyPi4B+WopmZdFStQHeTb=31MqLs+aG12R=28yDuVg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48b41da1498fcac3287e2e06b660680646c1c050.1659323972.git.josh@joshtriplett.org>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Sun, Jul 31, 2022 at 08:24:53PM -0700, Josh Triplett wrote:
+> On a read-only filesystem, we won't invoke the block allocator, so we
+> don't need to prefetch the block bitmaps.
+> 
+> This avoids starting and running the ext4lazyinit thread at all on a
+> system with no read-write ext4 filesystems (for instance, a container VM
+> with read-only filesystems underneath an overlayfs).
+> 
+> Fixes: 21175ca434c5 ("ext4: make prefetch_block_bitmaps default")
+> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+> ---
 
-On Wed, Aug 3, 2022 at 11:42 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 02/08/2022 15:13, Mark Brown wrote:
-> > On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
-> >> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
-> >
-> >>> -    enum:
-> >>> -      - microchip,mpfs-spi
-> >>> -      - microchip,mpfs-qspi
-> >>> +    oneOf:
-> >>> +      - description: Microchip's Polarfire SoC SPI controller.
-> >>> +        const: microchip,mpfs-spi
-> >>> +      - description: Microchip's Polarfire SoC QSPI controller.
-> >
-> >> Useless descriptions - they repeat compatible. Just keep it as enum and
-> >> skip descriptions. What value do they bring?
-> >
-> > Someone not familiar with the full Microchip product line might not be
-> > aware of the expansion of mpfs, it's not blindingly obvious.
->
-> Then it should be explained in title/description of the binding, not in
-> compatible. This is the usual way of providing some text description,
-> not for each compatible by repeating the compatible text.
-Ok. In the next version I will update the bindings like below
+Looks good to me.
 
--title: Microchip MPFS {Q,}SPI Controller Device Tree Bindings
-+title: Microchip FPGA {Q,}SPI Controllers
-+
-+description:
-+  SPI and QSPI controllers on the Microchip PolarFire SoC and they are based
-+ on the "soft"  fabric IP cores.
- oneOf:
-       - items:
-+          - const: microchip,mpfs-qspi
-+          - const: microchip,coreqspi-rtl-v2
-+      - const: microchip,coreqspi-rtl-v2
-       - const: microchip,mpfs-spi
+Reviewed-by: Lukas Czerner <lczerner@redhat.com>
 
-Is that ok?
+> 
+> Tested in a VM, with a read-only ext4 root filesystem. Confirmed that
+> ext4lazyinit starts without this patch, and does not start with this
+> patch.
+> 
+> (For a future merge window, not the current one. Please let me know if I
+> need to re-send this at a later, more convenient time.)
+> 
+>  fs/ext4/super.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 845f2f8aee5f..20437acc8865 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -3973,9 +3973,9 @@ int ext4_register_li_request(struct super_block *sb,
+>  		goto out;
+>  	}
+>  
+> -	if (test_opt(sb, NO_PREFETCH_BLOCK_BITMAPS) &&
+> -	    (first_not_zeroed == ngroups || sb_rdonly(sb) ||
+> -	     !test_opt(sb, INIT_INODE_TABLE)))
+> +	if (sb_rdonly(sb) ||
+> +	    (test_opt(sb, NO_PREFETCH_BLOCK_BITMAPS) &&
+> +	     (first_not_zeroed == ngroups || !test_opt(sb, INIT_INODE_TABLE))))
+>  		goto out;
+>  
+>  	elr = ext4_li_request_new(sb, first_not_zeroed);
+> -- 
+> 2.36.1
+> 
 
-Thanks,
-Naga Sureshkumar Relli.
->
-> Best regards,
-> Krzysztof

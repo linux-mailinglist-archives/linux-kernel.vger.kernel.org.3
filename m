@@ -2,87 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F336589292
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6541D589297
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238397AbiHCTFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S238398AbiHCTIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiHCTFA (ORCPT
+        with ESMTP id S229680AbiHCTIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:05:00 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86115A8AC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:04:59 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id f22so11646794edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=TcHij1jogmYDOiRoe1Ans+jYqEJR2fqb0akEghqp0wY=;
-        b=TDAb8Q2BSRY+fzkzp3NCXhL2jfg6VSX92LMQtedyhdQI7E7FqxPNuryYUr8JaAHo3D
-         9kZ4Q/qwuW9K7W+0tviZZy5WEc0TUnTFy0VrPb8DfkdO6VEO4018Snzq6zvrplWq6Cnw
-         Z0mYSGqAhTKC7CfOCjhODPKCrZD4n+BcZ00j2EWspsjsZhjGlQEP4nR5+wXcVpVdYdGg
-         IMT/84IZueCHsJdildUEJKXbZRQuw/BvSYH4Zp2SGAuwLIFIzwD1FEgHtUbOOimY8jKA
-         XWFwyiNuYWiWLxTSudDfHXp0hPk0bOa2wSisxV29vrZhXzV6z9lHpgGrcIiAhYqlC+SB
-         bnCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=TcHij1jogmYDOiRoe1Ans+jYqEJR2fqb0akEghqp0wY=;
-        b=e1xkadve1wXpfHizyNEpAiR++vFXwZufnU7fURwcravQsX7lk3EeoKyiwAjpkR4Oh5
-         dwZK52aS9WRTqEFnsnby0voJ4Fwb/Dpj88CkJ91x5SKqH9FDiOckx/ozdLVimAtJc3Pv
-         ZXserz1rdZiDQCAyKjR1dFDb1A/9Dy7Ohsj+Im2VPGEQFxPbR7xsOcaqIvze2mggDlhU
-         S8GanLKwk4GFS3Yw/xrxrHRsVhl3JnbchVfETqu0i8UdFuPwoKZaxXYbk6I4ZyH1ULxN
-         5E0mCI+YqOkHpppDRTHhDJmsZimAttwfJlcs1j7DLGvd07jVbwVv3khy/OSUqSFeyN7i
-         I11w==
-X-Gm-Message-State: ACgBeo1w5D2DVO/CCeqip522h00WT4K3KyQ9gw2y/BNgBPfGT23WKHWM
-        UpbmxyIb+G+KykkUGAIJZjlpkkPaiW5A0+olPn0=
-X-Google-Smtp-Source: AA6agR7atFjtIr7kfyXUcnZ2swP1vrfXW+cFXDEcKLqxM6Mm85r9t9qhiZMSZA76PjAGAzOjz94KeHjv6lIDz2XCDZk=
-X-Received: by 2002:aa7:d6cd:0:b0:43d:4ab8:87b8 with SMTP id
- x13-20020aa7d6cd000000b0043d4ab887b8mr22346702edr.412.1659553498357; Wed, 03
- Aug 2022 12:04:58 -0700 (PDT)
+        Wed, 3 Aug 2022 15:08:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC45A2C2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:08:20 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oJJiy-0004kG-3b; Wed, 03 Aug 2022 21:08:08 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3035FC2431;
+        Wed,  3 Aug 2022 19:08:06 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 21:08:04 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers/net/can/spi/mcp251x.c: Fix race condition on
+ receive interrupt
+Message-ID: <20220803190804.b3p4iugcz3yp6mtc@pengutronix.de>
+References: <20220803153300.58732-1-sebastian.wuerl@ororatech.com>
+ <CAHp75VdCH2tJQq3v_-iNP27oWFGF7EtKc-w299tLhDV85WbroQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
-In-Reply-To: <CAFCwf11=9qpNAepL7NL+YAV_QO=Wv6pnWPhKHKAepK3fNn+2Dg@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Thu, 4 Aug 2022 05:04:47 +1000
-Message-ID: <CAPM=9tzWuoWAOjHJdJYVDRjoRq-4wpg2KGiCHjLLd+OfWEh5AQ@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Oded Gabbay <oded.gabbay@gmail.com>
-Cc:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5gaiw5anvnre55n2"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdCH2tJQq3v_-iNP27oWFGF7EtKc-w299tLhDV85WbroQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 31 Jul 2022 at 22:04, Oded Gabbay <oded.gabbay@gmail.com> wrote:
->
-> Hi,
-> Greg and I talked a couple of months ago about preparing a new accel
-> subsystem for compute/acceleration devices that are not GPUs and I
-> think your drivers that you are now trying to upstream fit it as well.
 
-We've had some submissions for not-GPUs to the drm subsystem recently.
+--5gaiw5anvnre55n2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Intel GNA, Intel VPU, NVDLA, rpmsg AI processor unit.
+On 03.08.2022 18:48:57, Andy Shevchenko wrote:
+> On Wed, Aug 3, 2022 at 5:36 PM Sebastian W=C3=BCrl
+> <sebastian.wuerl@ororatech.com> wrote:
+> >
+> > The mcp251x driver uses both receiving mailboxes of the can controller
+>=20
+> CAN
+>=20
+> > chips. For retrieving the CAN frames from the controller via SPI, it ch=
+ecks
+> > once per interrupt which mailboxes have been filled, an will retrieve t=
+he
+> > messages accordingly.
+> >
+> > This introduces a race condition, as another CAN frame can enter mailbo=
+x 1
+> > while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 u=
+ntil
+> > the interrupt handler is called next, mailbox 0 is emptied before
+> > mailbox 1, leading to out-of-order CAN frames in the network device.
+> >
+> > This is fixed by checking the interrupt flags once again after freeing
+> > mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
+> >
+> > For reproducing the bug I created the following setup:
+> >  - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
+> >  - Setup CAN to 1 MHz
+> >  - Spam bursts of 5 CAN-messages with increasing CAN-ids
+> >  - Continue sending the bursts while sleeping a second between the burs=
+ts
+> >  - Check on the RPi whether the received messages have increasing CAN-i=
+ds
+> >  - Without this patch, every burst of messages will contain a flipped p=
+air
+>=20
+> Fixes tag?
 
-why is creating a new subsystem at this time necessary?
+Should be:
+Fixes: bf66f3736a94 ("can: mcp251x: Move to threaded interrupts instead of =
+workqueues.")
 
-Are we just creating a subsystem to avoid the open source userspace
-consumer rules? Or do we have some concrete reasoning behind it?
+Marc
 
-Dave.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--5gaiw5anvnre55n2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLqx5EACgkQrX5LkNig
+010VYwf8CT/rSWhjeFgmdbbQt7DoVCZ8YkGWUSwHEcJX+j4cd2w1kBnpIeSLmOof
+BxT4dt/Oj4YLbeNRZV3ftD1zRPQX9Z9PqOjDvwstYKgvCOreIayI+ZR95jOZLH38
+FZ3moRFD2m2uCPl+N4pC8wPd1MgVQVgwjSKzIiIR5KVp0cWuv8StMTbfnTHV8rDH
++lROx4fwmYQk5iCSqWsMbtmfhEZtKmNXQpf3VGt95kLo51ManyG4A8ENIERT++vs
+2ZkzfW7h5L0TRs48mbPBTyN0fZnr1MLFSGEQGETAF1W0LrHg2QVl4wIPUaebRjgS
+mDXRac1avL8frKzPTMp/b2dVWFx09A==
+=bst2
+-----END PGP SIGNATURE-----
+
+--5gaiw5anvnre55n2--

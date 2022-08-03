@@ -2,134 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD26588891
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D465858889C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiHCIQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S235930AbiHCIRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiHCIP7 (ORCPT
+        with ESMTP id S233624AbiHCIRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:15:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6AB60E2
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659514558; x=1691050558;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FXwmgyslZZE5b28VYrKrk9yKDHO6M7WRyutjjaxjhcA=;
-  b=kVza93VKGnQJLxo/wJU8iK0cGSfQnGIJP8+nG2zI+SZUoPGIl99EanIA
-   4SJPKm4valSjbxNGIc6O91D3UMRnAgl2ROkjYIrT6R3jKzKRMCA8WLoV5
-   KTze/mJKfBreVn+HiXksByHpxDUcpyvKQqulE9QQAlJTOvgwBJ9gF8xn9
-   /cZjtSLVAdpW9XfzMBTVFRUBgLnl0cL9AOQrhKikulXcWCiL5pxxZbjcq
-   q2sHy4ZkqJqOx5DIh91mBCMGlFydzZ6gyB/5u8oXPukO2fYvOEvnub1I5
-   LrErMNbxWqGnIAF2Y3HhOJcQuiuo9tmfp9iEQJZcBMr+PCNv1UX++ADly
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353619615"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="353619615"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:15:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="848500924"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 01:15:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJ9Xo-000H2F-1Y;
-        Wed, 03 Aug 2022 08:15:56 +0000
-Date:   Wed, 03 Aug 2022 16:15:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- d171011e6adad135eaced630dce26cac9a174037
-Message-ID: <62ea2eaa.l7o3D6IbdFLnGN3r%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 3 Aug 2022 04:17:00 -0400
+Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4673460D0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:16:59 -0700 (PDT)
+Received: by mail.coredeal.pl (Postfix, from userid 1002)
+        id 7C67BA2A95; Wed,  3 Aug 2022 08:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
+        t=1659514617; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
+        h=Date:From:To:Subject:From;
+        b=FxqytcVXFJnaIsdJrWtHKOFkJMg7YO97qfqi9Su6U50YRRUAkblVmJAQ3UG/G8X1o
+         4f3fGUhzT7G+SX1yrYkM93ur79bqAuTvan+dkECkK3lOmvVBsvYRLbKS3QMUOQ8tOw
+         r82yB2OHTTF4oA2YUTSMWt9b0XqHdgE4+Gzwut2xgurB5bLXgQi36uPxPRadE2gaRK
+         iRZdYIiqKqR/8O//ctdGucLXdnPtoXot04hQz0BKgXmc0FPzM4QH7Ui5cc3b0pZaKc
+         352OJzW92to6Ap1f434eduU/JaLv2APKxYNe+iqGtEqbFEAhqPfcq/UpoIYkJEHeZs
+         hE5MHbuaN/nGQ==
+Received: by mail.coredeal.pl for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:15:47 GMT
+Message-ID: <20220803064500-0.1.4o.19968.0.m2ll2ne6ai@coredeal.pl>
+Date:   Wed,  3 Aug 2022 08:15:47 GMT
+From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Biznesowy angielski
+X-Mailer: mail.coredeal.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-branch HEAD: d171011e6adad135eaced630dce26cac9a174037  selftests: futex: Fix 'the the' typo in comment
+Dzie=C5=84 dobry,=20
 
-elapsed time: 717m
+czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
+swoich pracownik=C3=B3w?
 
-configs tested: 53
-configs skipped: 2
+Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
+w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
+ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
+=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
+=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
+re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
+o=C5=BCliwo=C5=9Bci biznesowe.=20
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-i386                                defconfig
-x86_64                           allyesconfig
-arc                  randconfig-r043-20220801
-i386                             allyesconfig
-powerpc                           allnoconfig
-s390                 randconfig-r044-20220801
-riscv                randconfig-r042-20220801
-powerpc                          allmodconfig
-x86_64               randconfig-a014-20220801
-arm                                 defconfig
-x86_64               randconfig-a015-20220801
-sh                               allmodconfig
-x86_64               randconfig-a011-20220801
-mips                             allyesconfig
-x86_64               randconfig-a012-20220801
-arm64                            allyesconfig
-arm                              allyesconfig
-x86_64               randconfig-a013-20220801
-x86_64               randconfig-a016-20220801
-m68k                             allmodconfig
-arc                              allyesconfig
-i386                 randconfig-a012-20220801
-alpha                            allyesconfig
-i386                 randconfig-a013-20220801
-i386                 randconfig-a014-20220801
-i386                 randconfig-a011-20220801
-i386                 randconfig-a016-20220801
-i386                 randconfig-a015-20220801
-m68k                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-ia64                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
+Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
+ kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
+za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
+=2E
 
-clang tested configs:
-hexagon              randconfig-r045-20220801
-hexagon              randconfig-r041-20220801
-i386                 randconfig-a004-20220801
-i386                 randconfig-a006-20220801
-i386                 randconfig-a001-20220801
-i386                 randconfig-a002-20220801
-i386                 randconfig-a003-20220801
-i386                 randconfig-a005-20220801
-x86_64               randconfig-a002-20220801
-x86_64               randconfig-a001-20220801
-x86_64               randconfig-a003-20220801
-x86_64               randconfig-a004-20220801
-x86_64               randconfig-a005-20220801
-x86_64               randconfig-a006-20220801
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
+w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+Pozdrawiam
+Krzysztof Maj

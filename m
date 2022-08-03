@@ -2,79 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4830E58883A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FA558883F
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiHCHs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S237108AbiHCHss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbiHCHsY (ORCPT
+        with ESMTP id S234663AbiHCHso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:48:24 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33962559B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:48:22 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t1so25223992lft.8
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 00:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=naQWXtnatP1uIx9793tQXrMdRUdYtFxkHdnpkeiVoxk=;
-        b=L/DGiGxJ0daSgKwBdyF3RxzXNufOyCdsVFi6qGXOELIBlS5cJIws0RKxA8JmAWXkro
-         xLJ3aMvzHay9C4yhQDJEpRt77XSqkCf5PbUJzQqr9Abxlu6X865XdReOKXbnhikxDG0i
-         eeZp9vJOf127Wt6dWmrNZZlo2oFKIIYJQ995eZ1kDR9Y4dKwz0oVXM/6IF4Nt+vhwViz
-         Eo1kSuKGGYdjWwB8qATV6MYYAzxlhwaWFQ4Yko72wDkxeQ38GJdrejJ3lZBibflxZOf5
-         LFquxzorZrfiIIyPEHFPExDVnaRQFtqkSSnEfmh0Ko2gHq13Dlhd2hpwcbvycnoyP3eS
-         +2nA==
+        Wed, 3 Aug 2022 03:48:44 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21562C122
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:48:31 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id f5-20020a056e020b4500b002df180f0997so1116560ilu.21
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 00:48:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=naQWXtnatP1uIx9793tQXrMdRUdYtFxkHdnpkeiVoxk=;
-        b=Bymym+c9/+IycTnQZ88HdaO06WCXIrnwrsClIWmlVXYBLuW5wkjZV4Tu+Tex4bmq0Z
-         YlwF51lHKxtP1UMyNJ7DaX2LIUKD5+omDdqVQWhkypZe4OC31/iw2y/os1uvBJvra8Ca
-         4WXk/fz2+QXbEKFe/UY8cjdxdO8LJIlMpNhJZM/fOKotSDK7AKERJJMjIgxEFJhKotFZ
-         RGFm3V3sedg7Lr/ZR+zNC4YwAA4op/WoFjhzTUsl9g1DXC1181xSCE2QoSUGXvJXYHdO
-         gAcTQ3r/Vh77/3a5LYRu2cofJ/yOgX+RJX+djZbrePvO1UMAsYL2PeVhAb71XV4mBp1E
-         CCpQ==
-X-Gm-Message-State: AJIora+IdJQnlCU7q4BnebICeidtYM8Y12eOvCgMJznYbmXK70/k1jVC
-        g6DVflm/BXzSAGOQVnfmxzDhaw==
-X-Google-Smtp-Source: AGRyM1t/ppcl0v01ORP/WV9e1oXDN1ERgXE1IHJZkeBiD+mqElAfO61Ag9deMVZ1tOqFI7ZVWb7eug==
-X-Received: by 2002:a19:e007:0:b0:481:c74:37b7 with SMTP id x7-20020a19e007000000b004810c7437b7mr8607075lfg.439.1659512901288;
-        Wed, 03 Aug 2022 00:48:21 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id y17-20020a2e3211000000b0025e4e7c016dsm1026745ljy.16.2022.08.03.00.48.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 00:48:20 -0700 (PDT)
-Message-ID: <dab84439-9d09-c7d1-35ab-ea02d69d40ec@linaro.org>
-Date:   Wed, 3 Aug 2022 09:48:18 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=YSnMrHMrPsBHb/tEhxAN/h9xAYXKwmQerCYhDV4MZTc=;
+        b=phfzvRf7+0mO5ZHYQmdoxYXCBpWb3C9obSfiZxst9+seIjqEGTod4BIixjgKVLzIu4
+         83gqmEvKxzDrtmsHZbcaXd9ZIiLX8vs8nRBAlrIllE3g9evoHSSsRMoTFcHEIFPAEilI
+         NroMQKzHEAUBd2kB6C7ND8khT+0a7lHQ2pOJsrEPAjpTaffTJn9SEgIjm9h5jQvSgaGj
+         PXQndHzgdyiiccWZr/A3mKIp0iH1LkXrm3JevQzswXiPutlycc/Un790Dl1dBo6bwyrE
+         a2gNbIosibusyPmBD9/qg5psSpjCSAOtKhNyHpF6ld2WbW5oxucc7/IzVzG0SaoHHcvf
+         z2iA==
+X-Gm-Message-State: ACgBeo3zBNQfZnjUJ/fJ5udHDeHUop35fqylia4kxor9Ph9ijpuxBUfz
+        P6BUfuY8I1l8iS5z5xm9q6Km7t/tikLiJfbcEYB46J01QBPD
+X-Google-Smtp-Source: AA6agR71T1a0cVtZLUcUJcKLcjgekUI0WZhfs7KqbxlbwGZ4RxEghGOYiX7kVlUvACZZQFi4hs5jZGhtj/3OKgiZVmWBYmCVf6Yl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-Content-Language: en-US
-To:     naga sureshkumar <nagasuresh12@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com>
- <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
- <Yuki3jpCSJDdXcWA@sirena.org.uk>
- <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
- <CAH_iE_3xfyPi4B+WopmZdFStQHeTb=31MqLs+aG12R=28yDuVg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAH_iE_3xfyPi4B+WopmZdFStQHeTb=31MqLs+aG12R=28yDuVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a05:6638:ca:b0:342:7d2f:d882 with SMTP id
+ w10-20020a05663800ca00b003427d2fd882mr4226214jao.220.1659512911270; Wed, 03
+ Aug 2022 00:48:31 -0700 (PDT)
+Date:   Wed, 03 Aug 2022 00:48:31 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000939c8b05e5517521@google.com>
+Subject: [syzbot] linux-next test error: WARNING: ODEBUG bug in mgmt_index_removed
+From:   syzbot <syzbot+b42805125f9a096b735d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,49 +58,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 08:59, naga sureshkumar wrote:
-> Hi Krzysztof,
-> 
-> On Wed, Aug 3, 2022 at 11:42 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 02/08/2022 15:13, Mark Brown wrote:
->>> On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
->>>> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
->>>
->>>>> -    enum:
->>>>> -      - microchip,mpfs-spi
->>>>> -      - microchip,mpfs-qspi
->>>>> +    oneOf:
->>>>> +      - description: Microchip's Polarfire SoC SPI controller.
->>>>> +        const: microchip,mpfs-spi
->>>>> +      - description: Microchip's Polarfire SoC QSPI controller.
->>>
->>>> Useless descriptions - they repeat compatible. Just keep it as enum and
->>>> skip descriptions. What value do they bring?
->>>
->>> Someone not familiar with the full Microchip product line might not be
->>> aware of the expansion of mpfs, it's not blindingly obvious.
->>
->> Then it should be explained in title/description of the binding, not in
->> compatible. This is the usual way of providing some text description,
->> not for each compatible by repeating the compatible text.
-> Ok. In the next version I will update the bindings like below
-> 
-> -title: Microchip MPFS {Q,}SPI Controller Device Tree Bindings
-> +title: Microchip FPGA {Q,}SPI Controllers
-> +
-> +description:
-> +  SPI and QSPI controllers on the Microchip PolarFire SoC and they are based
-> + on the "soft"  fabric IP cores.
->  oneOf:
->        - items:
-> +          - const: microchip,mpfs-qspi
-> +          - const: microchip,coreqspi-rtl-v2
+Hello,
 
-This piece should have its own explanation and preferably in its own
-commit. As I mentioned before, you change existing compatible so it
-should be explained.
+syzbot found the following issue on:
 
-Best regards,
-Krzysztof
+HEAD commit:    42d670bda02f Add linux-next specific files for 20220802
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17ed503a080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5e2cda601d1924a
+dashboard link: https://syzkaller.appspot.com/bug?extid=b42805125f9a096b735d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b42805125f9a096b735d@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
+WARNING: CPU: 0 PID: 3614 at lib/debugobjects.c:509 debug_print_object+0x16e/0x250 lib/debugobjects.c:509
+Modules linked in:
+CPU: 0 PID: 3614 Comm: syz-executor.0 Not tainted 5.19.0-next-20220802-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:509
+Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 60 01 49 8a 4c 89 ee 48 c7 c7 00 f5 48 8a e8 63 95 38 05 <0f> 0b 83 05 65 62 dd 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffc90003c2f6e8 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
+RDX: ffff88807eefbb00 RSI: ffffffff8161ee98 RDI: fffff52000785ecf
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff89eeff60
+R13: ffffffff8a48fbc0 R14: ffffffff816b2060 R15: 1ffff92000785ee8
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c0006a7000 CR3: 000000001841e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ debug_object_assert_init lib/debugobjects.c:899 [inline]
+ debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:870
+ debug_timer_assert_init kernel/time/timer.c:792 [inline]
+ debug_assert_init kernel/time/timer.c:837 [inline]
+ del_timer+0x6d/0x110 kernel/time/timer.c:1257
+ try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1275
+ __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3121
+ mgmt_index_removed+0x187/0x2e0 net/bluetooth/mgmt.c:8939
+ hci_unregister_dev+0x34f/0x4e0 net/bluetooth/hci_core.c:2688
+ vhci_release+0x7c/0xf0 drivers/bluetooth/hci_vhci.c:568
+ __fput+0x277/0x9d0 fs/file_table.c:320
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xc39/0x2b60 kernel/exit.c:813
+ do_group_exit+0xd0/0x2a0 kernel/exit.c:943
+ get_signal+0x238c/0x2610 kernel/signal.c:2858
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f986b488b47
+Code: Unable to access opcode bytes at RIP 0x7f986b488b1d.
+RSP: 002b:00007ffd39d91238 EFLAGS: 00000206 ORIG_RAX: 0000000000000057
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f986b488b47
+RDX: 00007ffd39d91270 RSI: 00007ffd39d91270 RDI: 00007ffd39d91300
+RBP: 00007ffd39d91300 R08: 0000000000000001 R09: 00007ffd39d910d0
+R10: 0000555556f9a853 R11: 0000000000000206 R12: 00007f986b4e22a6
+R13: 00007ffd39d923c0 R14: 0000555556f9a810 R15: 00007ffd39d92400
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

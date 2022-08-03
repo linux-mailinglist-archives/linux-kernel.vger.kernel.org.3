@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9850B5890A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B462B5890BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 18:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbiHCQkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 12:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S233822AbiHCQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 12:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiHCQkI (ORCPT
+        with ESMTP id S233814AbiHCQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 12:40:08 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE2BB1DC
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:40:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id o22so6725256edc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:40:06 -0700 (PDT)
+        Wed, 3 Aug 2022 12:45:38 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11AF1ADB0
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 09:45:35 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id f65so15588467pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 09:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KEbeV4OUpZWR/RMps+1B9ugXkfGh+UmPMJhS6NYk2ds=;
-        b=iTQLsQyrVlJvV4kz1DXLEuJDkKqnmFAsG85k2/+sz8Nij834Sp0Dkm/2zK0mlDi6Cc
-         Nfw2YdUCtVmQAsVEys9Qhau2GdKE+goGut8vyt6+45+2LXu7m5yS6uPaILQg1w5wHW7f
-         ij3juJ7pHyV7XPwyXvL3MFBjH3JNIovN2nshutItkoPjMN7Ey1A8YlBU/Fi1A2wS5j+8
-         DeN47iA+0yEdlL3xvDte7/S40wrq1Siic1bp6jq0p60fJ0xPy+uzk1eBxqhEVcaraVSV
-         Jbywxu+IwlumPMfFhcrb+gdLgztpmGCW3wGY4gqRtefwFn86m+PlMekInjlD6CVOPqns
-         8N5Q==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=zvXdeRuA5sLY5zynbWXHtTh6B+8PVsCOPRs6rWFCsCI=;
+        b=a4BdvhaGeDTpBJ744nfOprIfMN+VxMz6rcQGh159BErSpIQVDJJ8K5rcpUOiwkJIbq
+         ccSLQ1wgw9Ep9j++KSkTPXDXO8/n+JRs7l5XCCIZ2GAm8bzHnkQI0OPS40LNIPmfAsJ/
+         irRjfhnjq1cav+2d3lCNenk0kDxX+Ku/+0+0GtHaX2d1tChKTD8jju2INtlYSBOggylg
+         te/7q5M3lPuUquNndM2le/pCUfAFV7mv4Ymt/pySn7yd/xEeMb7Q6SUTYYfZOfmuGdb8
+         K+KRJjNHk2q55xTTigO8fVlwxsnr74LeBxbLHMgJ0ufrF3+9YIzk0RvatoJfq+gSYkLa
+         W1TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KEbeV4OUpZWR/RMps+1B9ugXkfGh+UmPMJhS6NYk2ds=;
-        b=Aq0BkoEZHiWrzX/NUYWrcc9T0ZqY7TqgGeR2Dog7+3RtJ/jQBVYs4+PoaFBS9zb1Z6
-         wLiURjukfS82ao/5oFv4hfXN6libslWxSvJj9aM6qnLgZLz5oj209zZDjYUT/MgLTtH1
-         erfi0ssX2M8ot6FOdEbul8Jygv7HQVDtiH9jNZwuKX7BFfGErIQUGJluLTbJ/she9McM
-         H2FsG+A1E4up8bTPj9J6Ga9DEXA7htlTp/l/ADilbSy5zaY/+TT8lj6VBWJARMmrWR4U
-         dEGp4L0MAPvfJTAmyTmXajJaTbXjRgWTo4DZBAKYXWfs+vLX821tgtq0PkAwseXhQ9BL
-         ua3g==
-X-Gm-Message-State: ACgBeo0dTEBzsCmvkIxbwGw9kqDN1MxoJL6B5kzfWOUCCOS9bgRXLO7y
-        4V66WBhK9J8CtPSNtfp1/iA=
-X-Google-Smtp-Source: AA6agR4mnj3cIl/ZowGRVGE7a3UvEnVHL/i/iyJJCDAW1fTvYCfEfo4eFVNVM2ePlqypc1ZG/yV6ng==
-X-Received: by 2002:a05:6402:95c:b0:43d:6297:f241 with SMTP id h28-20020a056402095c00b0043d6297f241mr20049333edz.373.1659544804580;
-        Wed, 03 Aug 2022 09:40:04 -0700 (PDT)
-Received: from x360.fritz.box ([2001:9e8:a511:4e00:667:64a6:5f64:1055])
-        by smtp.gmail.com with ESMTPSA id o26-20020a170906769a00b007304924d07asm1508032ejm.172.2022.08.03.09.40.03
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=zvXdeRuA5sLY5zynbWXHtTh6B+8PVsCOPRs6rWFCsCI=;
+        b=GzglVd2e8KgiHJgWLZYqYDUTCQT5Py9uBQvNc/kHiOYw5k7JoAE99TLB7VOcSkJ7e/
+         1XWMJ+68SK8+CFVat1WT6SSt0XXCkYGybaIaBYvhKlbdwS6qnZNuOFyhAFVJW00rWp2u
+         1IHhSIpabDTzunxV+WtoAvuJsqpbJopkiPQVhWMy3mXVqkXnH7NOaBHpT6hLnF94B/Iv
+         MNUKFwLWLDtzqNW+nb0ltIRUOViDJubS2zD7q4KCGi1jp6aKsBGFVovTNk8ItTxT/lB9
+         +EdpBj3iVZyN1ubNIHfzUjyGzs60oOyo4gU8V3d1lL37QWIWX7NIIRrUfcsYziM78Bre
+         myOA==
+X-Gm-Message-State: ACgBeo3f8IjbdJozKSpvCQqIoOceeEdymIyT+QXoPhl1b2cRW1zwx3Rl
+        gASPkiGnBi5xIYPVxro4QgDIoQ==
+X-Google-Smtp-Source: AA6agR6Au7Zfg+OM55tlZl8j7l1vuaz6zzcbeNJcOPK1uMadkFvbbF8MajabNMEfQA8B9JXdsg9kGA==
+X-Received: by 2002:a05:6a00:1993:b0:52d:951a:d0ad with SMTP id d19-20020a056a00199300b0052d951ad0admr13205062pfl.47.1659545134954;
+        Wed, 03 Aug 2022 09:45:34 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090341c300b0016d9d6d05f7sm2245614ple.273.2022.08.03.09.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 09:40:04 -0700 (PDT)
-From:   Ivan Hasenkampf <ivan.hasenkampf@gmail.com>
-To:     tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Ivan Hasenkampf <ivan.hasenkampf@gmail.com>
-Subject: [PATCH] ALSA: hda/realtek: Add quirk for HP Spectre x360 15-eb0xxx
-Date:   Wed,  3 Aug 2022 18:40:01 +0200
-Message-Id: <20220803164001.290394-1-ivan.hasenkampf@gmail.com>
-X-Mailer: git-send-email 2.37.0
+        Wed, 03 Aug 2022 09:45:34 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 16:45:30 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 1/5] KVM: x86: Get vmcs12 pages before checking pending
+ interrupts
+Message-ID: <YuqmKkxEsDwBvayo@google.com>
+References: <20220802230718.1891356-1-mizhang@google.com>
+ <20220802230718.1891356-2-mizhang@google.com>
+ <060419e118445978549f0c7d800f96a9728c157c.camel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <060419e118445978549f0c7d800f96a9728c157c.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +79,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes speaker output on HP Spectre x360 15-eb0xxx
+On Wed, Aug 03, 2022, Maxim Levitsky wrote:
+> On Tue, 2022-08-02 at 23:07 +0000, Mingwei Zhang wrote:
+> > From: Oliver Upton <oupton@google.com>
+> > 
+> > vmx_guest_apic_has_interrupts implicitly depends on the virtual APIC
+> > page being present + mapped into the kernel address space. However, with
+> > demand paging we break this dependency, as the KVM_REQ_GET_VMCS12_PAGES
+> > event isn't assessed before entering vcpu_block.
+> > 
+> > Fix this by getting vmcs12 pages before inspecting the guest's APIC
+> > page. Note that upstream does not have this issue, as they will directly
+> > get the vmcs12 pages on vmlaunch/vmresume instead of relying on the
+> > event request mechanism. However, the upstream approach is problematic,
+> > as the vmcs12 pages will not be present if a live migration occurred
+> > before checking the virtual APIC page.
+> 
+> Since this patch is intended for upstream, I don't fully understand
+> the meaning of the above paragraph.
 
-Signed-off-by: Ivan Hasenkampf <ivan.hasenkampf@gmail.com>
----
- sound/pci/hda/patch_realtek.c | 2 ++
- 1 file changed, 2 insertions(+)
+My apology. Some of the statement needs to be updated, which I should do
+before sending. But I think the point here is that there is a missing
+get_nested_state_pages() call here within vcpu_block() when there is the
+request of KVM_REQ_GET_NESTED_STATE_PAGES.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 2f55bc43bfa9..fe43e5807b8c 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9072,6 +9072,8 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x87f7, "HP Spectre x360 14", ALC245_FIXUP_HP_X360_AMP),
- 	SND_PCI_QUIRK(0x103c, 0x8805, "HP ProBook 650 G8 Notebook PC", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x880d, "HP EliteBook 830 G8 Notebook PC", ALC285_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x86e7, "HP Spectre x360 15-eb0xxx", ALC285_FIXUP_HP_SPECTRE_X360_EB1),
-+	SND_PCI_QUIRK(0x103c, 0x86e8, "HP Spectre x360 15-eb0xxx", ALC285_FIXUP_HP_SPECTRE_X360_EB1),
- 	SND_PCI_QUIRK(0x103c, 0x8811, "HP Spectre x360 15-eb1xxx", ALC285_FIXUP_HP_SPECTRE_X360_EB1),
- 	SND_PCI_QUIRK(0x103c, 0x8812, "HP Spectre x360 15-eb1xxx", ALC285_FIXUP_HP_SPECTRE_X360_EB1),
- 	SND_PCI_QUIRK(0x103c, 0x8846, "HP EliteBook 850 G8 Notebook PC", ALC285_FIXUP_HP_GPIO_LED),
--- 
-2.37.0
+> 
+> 
+> > 
+> > Signed-off-by: Oliver Upton <oupton@google.com>
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 5366f884e9a7..1d3d8127aaea 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -10599,6 +10599,23 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
+> >  {
+> >  	bool hv_timer;
+> >  
+> > +	/*
+> > +	 * We must first get the vmcs12 pages before checking for interrupts
+> > +	 * that might unblock the guest if L1 is using virtual-interrupt
+> > +	 * delivery.
+> > +	 */
+> > +	if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
+> > +		/*
+> > +		 * If we have to ask user-space to post-copy a page,
+> > +		 * then we have to keep trying to get all of the
+> > +		 * VMCS12 pages until we succeed.
+> > +		 */
+> > +		if (unlikely(!kvm_x86_ops.nested_ops->get_nested_state_pages(vcpu))) {
+> > +			kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+> > +			return 0;
+> > +		}
+> > +	}
+> > +
+> >  	if (!kvm_arch_vcpu_runnable(vcpu)) {
+> >  		/*
+> >  		 * Switch to the software timer before halt-polling/blocking as
+> 
+> 
+> If I understand correctly, you are saying that if apic backing page is migrated in post copy
+> then 'get_nested_state_pages' will return false and thus fail?
 
+What I mean is that when the vCPU was halted and then migrated in this
+case, KVM did not call get_nested_state_pages() before getting into
+kvm_arch_vcpu_runnable(). This function checks the apic backing page and
+fails on that check and triggered the warning.
+> 
+> AFAIK both SVM and VMX versions of 'get_nested_state_pages' assume that this is not the case
+> for many things like MSR bitmaps and such - they always uses non atomic versions
+> of guest memory access like 'kvm_vcpu_read_guest' and 'kvm_vcpu_map' which
+> supposed to block if they attempt to access HVA which is not present, and then
+> userfaultd should take over and wake them up.
+
+You are right here.
+> 
+> If that still fails, nested VM entry is usually failed, and/or the whole VM
+> is crashed with 'KVM_EXIT_INTERNAL_ERROR'.
+> 
+> Anything I missed? 
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 

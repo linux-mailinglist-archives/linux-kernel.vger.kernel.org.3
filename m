@@ -2,137 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048F2588821
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95B5588818
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235805AbiHCHmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S234316AbiHCHm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbiHCHmq (ORCPT
+        with ESMTP id S229480AbiHCHmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:42:46 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D042420F4C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:42:42 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31f445bd486so162861417b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 00:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KCC1H22JfcFImFZ8f0/O3OvqoGicHHaYF6oOYt/EeNg=;
-        b=LKDP6HYoD8gOHFhVvDAqBjfzNneb5oJAdTQQPGsnUZQ4ARkPv9mOuO98zVOUSCQC8t
-         RgGYIfmeIOdI5hr5u4KfY+TISS1uglXNW1FkWOMrBe9y3zcUXVTb73Y29uGeRoOpJu5I
-         nBAO1JxRM1VzjY7nFC21oYS+V3LA25oFwu8MDnzU/L+uUP/zHdEXVtHcq1UVXCDOYiig
-         OoJpLIq+QjTl3uPNiaSav+uE/EKfDHIxRuGavFetxeR8B3rEgT2mEiqaSez62PVBnNa0
-         RWCY0SU4ht8E9rT39rAIt//aMHZagmCqFXlM59FpE+lR5U9+BJAr87pOK/KHGXlp5lGB
-         62kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KCC1H22JfcFImFZ8f0/O3OvqoGicHHaYF6oOYt/EeNg=;
-        b=HtphTbestHRZzB9aaNwU6Xjh1HDl407W67qT2dUU0ZDtC0G75rxMUm/TGqa91u2BVH
-         Mulzry+00Xwgkhdd0RokWO4aUQsirYOSrGr6TCPnK4j8j/tvJvYk8+zvjSZu7Oz40vOK
-         SxWsn7WYbMS4GK64Fve6e4wu49aIgtiOIwMJiVqabi72f1/cmR0fQfHKeXmRpEhKkNmR
-         KZ+VFZcc8wKYYVK6MUYI7cQKI47fZAVm7sezvRNQRqJl4vh76NRYTdg08Ha/WQjn0dKD
-         v8MHcNdnOs4p4hZpW3ynSz52YO5B4pF4DLW7xoJ256+QfAP/4SW6VyvfGX8lEK9TAe4z
-         Qx/Q==
-X-Gm-Message-State: ACgBeo3H15qLnJIHEKqon6zcXmtVcYbXTonRciWA2MFHn7y2z6T2b/Ri
-        vb8AcIic/cgI5Ul1DxkBaTmKYz1vuStdqBuTfkvs7Q==
-X-Google-Smtp-Source: AA6agR7L9rliVyJ4YzP7LfPWbRwPNWb50DdUKo95gURH0wNt0ydiIT/0OaD9ijOV9atpnPVnuvrTmfDgANf/+tjySKA=
-X-Received: by 2002:a81:1204:0:b0:322:7000:4ecb with SMTP id
- 4-20020a811204000000b0032270004ecbmr21960785yws.47.1659512561838; Wed, 03 Aug
- 2022 00:42:41 -0700 (PDT)
+        Wed, 3 Aug 2022 03:42:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9EB1F613;
+        Wed,  3 Aug 2022 00:42:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E15C61549;
+        Wed,  3 Aug 2022 07:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632A1C433D6;
+        Wed,  3 Aug 2022 07:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659512541;
+        bh=C1RNQNhb6enxYiFbEUhew2HqPznAB4gqXj2tpJtcyZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k2iPDf+eltJE5B21ZIHSKvCu4VABtozVmm1EaM8KjBJlO6+PqP80veFq9Hgf4wits
+         Y5lBrNWixQ8rgkdslbeUwr/PlrOJxrcUSOW2ZgNBgTSWtb5wi2JLn7+b7IMk61NXLr
+         LnDuqYdx3U+Gz6Xcf6k1OkO/sLctnO6I42CM/mDglsByz/4BkiO+Ft9B428a326Xld
+         /uy+rz5gHXFhifH7ESC70NGBPecbwCNrQWzyssI2Ch5zmKIHzjV0nyGrKCOXr9ztHG
+         FX7YNUpoWRqTVXoKu4A2U6d1+LJtHsYkfayJYktLOi/1oTeEzyL1rT/GfUdeIKZ1Fl
+         Y+eW6JDeqejng==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oJ91a-0006mH-JA; Wed, 03 Aug 2022 09:42:39 +0200
+Date:   Wed, 3 Aug 2022 09:42:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] Revert "usb: dwc3: qcom: Keep power domain on to
+ retain controller status"
+Message-ID: <Yuom7k3Y4tDhy/QJ@hovoldconsulting.com>
+References: <20220802151404.1797-1-johan+linaro@kernel.org>
+ <20220802151404.1797-3-johan+linaro@kernel.org>
+ <3c175fd4-861a-37a9-4cd7-87370c2e46df@quicinc.com>
 MIME-Version: 1.0
-References: <20220802151932.2830110-1-broonie@kernel.org>
-In-Reply-To: <20220802151932.2830110-1-broonie@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 3 Aug 2022 00:42:30 -0700
-Message-ID: <CANn89iJ0pRrHQa+c4Rq3kC80zdjT86CAOecMKchURrRuNqMzMg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-To:     broonie@kernel.org
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3c175fd4-861a-37a9-4cd7-87370c2e46df@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 8:19 AM <broonie@kernel.org> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the net-next tree got a conflict in:
->
->   net/ax25/af_ax25.c
->
-> between commit:
->
->   d7c4c9e075f8c ("ax25: fix incorrect dev_tracker usage")
->
-> from the net tree and commit:
->
->   d62607c3fe459 ("net: rename reference+tracking helpers")
->
-> from the net-next tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc net/ax25/af_ax25.c
-> index 5b5363c99ed50,bbac3cb4dc99d..0000000000000
-> --- a/net/ax25/af_ax25.c
-> +++ b/net/ax25/af_ax25.c
-> @@@ -102,7 -102,8 +102,8 @@@ again
->                         ax25_disconnect(s, ENETUNREACH);
->                         s->ax25_dev = NULL;
->                         if (sk->sk_socket) {
-> -                               dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
-> +                               netdev_put(ax25_dev->dev,
->  -                                         &ax25_dev->dev_tracker);
+On Tue, Aug 02, 2022 at 11:30:34PM +0530, Krishna Kurapati PSSNV wrote:
+> 
+> On 8/2/2022 8:43 PM, Johan Hovold wrote:
+> > This reverts commit d9be8d5c5b032e5383ff5c404ff4155e9c705429.
+> >
+> > Generic power-domain flags must be set before the power-domain is
+> > initialised and must specifically not be modified by drivers for devices
+> > that happen to be in the domain.
+> >
+> > To make sure that USB power-domains are left enabled during system
+> > suspend when a device in the domain is in the wakeup path, the
+> > GENPD_FLAG_ACTIVE_WAKEUP flag should instead be set for the domain
+> > unconditionally when it is registered.
 
-This part seems wrong.
+> In case we need the genpd framework to set the GENPD_FLAG_ACTIVE_WAKEUP
+> flag for a particular domain that will be used by a device (which is
+> wakeup capable) and hasn't been probed yet , can you help me understand if
+> there any dt-flags we  can add to convey the same the genpd  framework
+> so that it will set that flag during domain registration ?
 
-Commit d7c4c9e075f8c only changed the two spots, one in ax25_release()
-and one in ax25_bind()
+This can't be expressed in DT (currently), so what you need is something
+like the below:
 
-> ++                                         &ax25->dev_tracker);
->                                 ax25_dev_put(ax25_dev);
->                         }
->                         ax25_cb_del(s);
-> @@@ -1065,7 -1066,7 +1066,7 @@@ static int ax25_release(struct socket *
->                         del_timer_sync(&ax25->t3timer);
->                         del_timer_sync(&ax25->idletimer);
->                 }
-> -               dev_put_track(ax25_dev->dev, &ax25->dev_tracker);
->  -              netdev_put(ax25_dev->dev, &ax25_dev->dev_tracker);
-> ++              netdev_put(ax25_dev->dev, &ax25->dev_tracker);
->                 ax25_dev_put(ax25_dev);
->         }
->
-> @@@ -1146,7 -1147,7 +1147,7 @@@ static int ax25_bind(struct socket *soc
->
->         if (ax25_dev) {
->                 ax25_fillin_cb(ax25, ax25_dev);
-> -               dev_hold_track(ax25_dev->dev, &ax25->dev_tracker, GFP_ATOMIC);
->  -              netdev_hold(ax25_dev->dev, &ax25_dev->dev_tracker, GFP_ATOMIC);
-> ++              netdev_hold(ax25_dev->dev, &ax25->dev_tracker, GFP_ATOMIC);
->         }
->
->   done:
+diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+index 7ff64d4d5920..4ff855269467 100644
+--- a/drivers/clk/qcom/gcc-sc7280.c
++++ b/drivers/clk/qcom/gcc-sc7280.c
+@@ -3125,6 +3125,7 @@ static struct gdsc gcc_usb30_prim_gdsc = {
+        .gdscr = 0xf004,
+        .pd = {
+                .name = "gcc_usb30_prim_gdsc",
++               .flags = GENPD_FLAG_ACTIVE_WAKEUP,
+        },
+        .pwrsts = PWRSTS_OFF_ON,
+        .flags = VOTABLE,
+@@ -3134,6 +3135,7 @@ static struct gdsc gcc_usb30_sec_gdsc = {
+        .gdscr = 0x9e004,
+        .pd = {
+                .name = "gcc_usb30_sec_gdsc",
++               .flags = GENPD_FLAG_ACTIVE_WAKEUP,
+        },
+        .pwrsts = PWRSTS_OFF_ON,
+        .flags = VOTABLE,
+
+to make sure that genpd keeps these domains powered during system
+suspend if they are used by devices that are in the wakeup path.
+
+Johan

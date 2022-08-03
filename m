@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3843589322
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EB2589324
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 22:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbiHCUY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 16:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S238617AbiHCUZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 16:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236138AbiHCUY5 (ORCPT
+        with ESMTP id S238573AbiHCUY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:24:57 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AA85018E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:24:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f56f635a9so151496767b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:24:56 -0700 (PDT)
+        Wed, 3 Aug 2022 16:24:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD589402DC
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 13:24:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z7-20020a25ba47000000b00677405b2d2dso7081336ybj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 13:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=MG4NVz9yj2aFOgp1HtlyEgPmRnBQqcRnRDU4maqxDLs=;
-        b=ac+Kon2BynLX4PUenHyxIDUcn1exeZCxVb3lFiCKZxJGscBLaZVq1IS4i8FPji9GSs
-         bPhe0/gEK3wWy3S/IUzPCtZc15S/x/0Qa+tsyQpNdPyJeuQKn4bsns/qb5XNKJ0SE4cc
-         BqSQecGZRufHziIFY7/jtCvQjU4p8FDdabjc2X/Tkcli6ZEg7sntef9yedlmVpTseUiW
-         VcH5HDzJNK3+ZLdx7K7rgeHIE110gCCu5t24Rh+XwnfnDJCwx8q2pq7wHdO+2y961y2O
-         TvxmZg9cx00v9XHwi46QDtHpv6k8qfLYhpjvUB50CMpM0dWKv+mmxaYUMtWmiMbfixBv
-         G5Rg==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=e8+BGqQecoK41rQp8eMnlTuoC90aodRWA08z3InPywM=;
+        b=NS2BEQEsOTnQcMqoV3YcJcS+hpOyHmOhc2HjEH1OQIR9pxGiv4vE3GLUv9zdTi6FRH
+         ePHs3re4GUcTVR9Nk2Xj2/7M+7LDFgeIk8X2E3g0PG+3XrWmZwNuURapOKOivwB+Rj2F
+         Uvp6FL9159m0qjmZg54yfShVwoARnBNYh8rWkltzB86bs29UVbCkhn1SnFDgTFfl4R6Z
+         Qo5jbMluBrAA8zoFBbrf/bmNXTxdt5/unLqNbYl/G9UxvrPte548Glb0CuPgEvNM5TjQ
+         8cVciqHa+aDxIea/kkXAm3Z/oDHdSkEycsfP/XCrYSddU4Vi0VAPPLTy0Nq0RDAShDEb
+         jZWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=MG4NVz9yj2aFOgp1HtlyEgPmRnBQqcRnRDU4maqxDLs=;
-        b=7g6KKr6+T+wfr8g6nOyTy4ctHlslLfpH6KXWSomVGZu6Rs87UdzVpFWnABWXGqrGTl
-         JdeUo/5Gca60UhhDBUwYNU/8S/CH3IYRCRnnErjOMu9uMyu8LF58CplVxCBU+MVPRYLH
-         1sV8x0izaQeYmuZjOo3x4PFYh2gETICHr8M1rlNCXHetHNi+bnd2sgeYihJkLZqiJMkD
-         Ke7k7hqnZfY+Jp59ZjvpO8yR+M5jPw/WLhOUEFjECSuMhQXgmIpXN5uvMwsCDDYNecDG
-         2snyfQqkx2BwEn4XeUWWxE2YsZHBy5yVEMnWHDvlbvOhRrn2kSVOAfTyOhLu0QOU+YXV
-         //zg==
-X-Gm-Message-State: ACgBeo07Sfbggp+7Z/8YxWVRNyG0fC9QErbWbmBrZS3h7N9bucwuyb+h
-        FeJ49/TpBxS+2GKpQygEuzT2+YqqH77/pg==
-X-Google-Smtp-Source: AA6agR6GOPUFJ2JZIHMbSya1BU/k700ZrXqbkMFCe1qQAwlRA+7nAqEtawU8/N9SY3T/bidZ3WK/nCw2KgfNhA==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=e8+BGqQecoK41rQp8eMnlTuoC90aodRWA08z3InPywM=;
+        b=Y3CYlRj9dK2WCEwzWneDKXwypxCu3v7fg9nrQbIgRmnrf6rYb0O2F8oJtrdsiU5MFU
+         svcLfRBjH9NMeNtUfSWBIIwO4a/XfxV+ijQIQYTLQbB750RqFZTpcDR1GQAqxds+pnfp
+         g63xKN5oi1cTNxGxUKQ3LzS2IHtdGnn/anUyj+iZS4Xy7YAQbeWKwiIHVSVAIipIiWGC
+         WvrDLidg9d1yx3iZcq9vL2aJ3tVrh2dPapt7Evpmpwwq9NQhlRdhkE9lotDJulmW8h76
+         bgrtcUaIUXsnclJm+r2N+Y/gUxfREAMSUOG1Wr7G8D93Y8TkqzjPg3e46sMuDjDpw1Ge
+         kBeQ==
+X-Gm-Message-State: ACgBeo3ROsU1zNZY2LlJjiGgyl/G0GfhoV7Sr7amWlXxQ0h+dGytcp2/
+        uoy83unnEaULFSjFD00m8sZfibcmykFUAQ==
+X-Google-Smtp-Source: AA6agR5oed7M2ZPhh2pVDRZ4G75naZJIM4bHGbCvOAyfYG+HLPdBKLHsBw1x0pYBJ6W5RKvPjSUJa2AQtU7EJQ==
 X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:6eae:dfce:5d69:e05f])
- (user=mmandlik job=sendgmr) by 2002:a0d:e8c1:0:b0:322:e31a:9c4a with SMTP id
- r184-20020a0de8c1000000b00322e31a9c4amr24937744ywe.334.1659558295388; Wed, 03
- Aug 2022 13:24:55 -0700 (PDT)
-Date:   Wed,  3 Aug 2022 13:24:50 -0700
-Message-Id: <20220803132319.1.I5acde3b5af78dbd2ea078d5eb4158d23b496ac87@changeid>
+ (user=mmandlik job=sendgmr) by 2002:a0d:d40d:0:b0:322:d4c0:c6f6 with SMTP id
+ w13-20020a0dd40d000000b00322d4c0c6f6mr25825644ywd.428.1659558298100; Wed, 03
+ Aug 2022 13:24:58 -0700 (PDT)
+Date:   Wed,  3 Aug 2022 13:24:51 -0700
+In-Reply-To: <20220803132319.1.I5acde3b5af78dbd2ea078d5eb4158d23b496ac87@changeid>
+Message-Id: <20220803132319.2.I27d3502a0851c75c0c31fb7fea9b09644d54d81d@changeid>
 Mime-Version: 1.0
+References: <20220803132319.1.I5acde3b5af78dbd2ea078d5eb4158d23b496ac87@changeid>
 X-Mailer: git-send-email 2.37.1.455.g008518b4e5-goog
-Subject: [PATCH 1/2] Bluetooth: Disable AdvMonitor SamplingPeriod while active scan
+Subject: [PATCH 2/2] Bluetooth: hci_sync: Cancel AdvMonitor interleave scan
+ when suspend
 From:   Manish Mandlik <mmandlik@google.com>
 To:     marcel@holtmann.org, luiz.dentz@gmail.com
 Cc:     chromeos-bluetooth-upstreaming@chromium.org,
@@ -65,7 +69,7 @@ Cc:     chromeos-bluetooth-upstreaming@chromium.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,161 +77,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some controllers apply Sampling Period even while active scanning.
-So, to keep the behavior consistent across all controllers, don't
-use Sampling Period during active scanning to force the controller
-to report all advertisements even if it matches the monitor.
+Cancel interleaved scanning for advertisement monitor when suspend.
+
+Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
 
 Signed-off-by: Manish Mandlik <mmandlik@google.com>
 Reviewed-by: Miao-chen Chou <mcchou@google.com>
 ---
 
- net/bluetooth/hci_sync.c |  6 ++++++
- net/bluetooth/msft.c     | 45 +++++++++++++++++++++++++++++++++++++---
- net/bluetooth/msft.h     |  2 ++
- 3 files changed, 50 insertions(+), 3 deletions(-)
+ net/bluetooth/hci_sync.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index e6d804b82b67..cb0c219ebe1c 100644
+index cb0c219ebe1c..33d2221b2bc4 100644
 --- a/net/bluetooth/hci_sync.c
 +++ b/net/bluetooth/hci_sync.c
-@@ -4649,6 +4649,9 @@ int hci_stop_discovery_sync(struct hci_dev *hdev)
- 	if (use_ll_privacy(hdev))
- 		hci_resume_advertising_sync(hdev);
+@@ -1721,6 +1721,9 @@ static bool is_interleave_scanning(struct hci_dev *hdev)
  
-+	/* Sampling Period is disabled while active scanning, re-enable it */
-+	msft_set_active_scan(hdev, false);
-+
- 	/* No further actions needed for LE-only discovery */
- 	if (d->type == DISCOV_TYPE_LE)
- 		return 0;
-@@ -5139,6 +5142,9 @@ int hci_start_discovery_sync(struct hci_dev *hdev)
- 	if (err)
- 		return err;
- 
-+	/* Disable Sampling Period while active scanning */
-+	msft_set_active_scan(hdev, true);
-+
- 	bt_dev_dbg(hdev, "timeout %u ms", jiffies_to_msecs(timeout));
- 
- 	/* When service discovery is used and the controller has a
-diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
-index bee6a4c656be..f63c911b210c 100644
---- a/net/bluetooth/msft.c
-+++ b/net/bluetooth/msft.c
-@@ -101,6 +101,7 @@ struct msft_data {
- 	struct list_head handle_map;
- 	__u8 resuming;
- 	__u8 suspending;
-+	__u8 active_scan;
- 	__u8 filter_enabled;
- };
- 
-@@ -333,14 +334,14 @@ static int msft_remove_monitor_sync(struct hci_dev *hdev,
- }
- 
- /* This function requires the caller holds hci_req_sync_lock */
--int msft_suspend_sync(struct hci_dev *hdev)
-+static void remove_all_monitors(struct hci_dev *hdev)
+ static void cancel_interleave_scan(struct hci_dev *hdev)
  {
- 	struct msft_data *msft = hdev->msft_data;
- 	struct adv_monitor *monitor;
- 	int handle = 0;
- 
- 	if (!msft || !msft_monitor_supported(hdev))
--		return 0;
-+		return;
- 
- 	msft->suspending = true;
- 
-@@ -356,6 +357,12 @@ int msft_suspend_sync(struct hci_dev *hdev)
- 
- 	/* All monitors have been removed */
- 	msft->suspending = false;
-+}
-+
-+/* This function requires the caller holds hci_req_sync_lock */
-+int msft_suspend_sync(struct hci_dev *hdev)
-+{
-+	remove_all_monitors(hdev);
- 
- 	return 0;
- }
-@@ -392,6 +399,7 @@ static bool msft_monitor_pattern_valid(struct adv_monitor *monitor)
- static int msft_add_monitor_sync(struct hci_dev *hdev,
- 				 struct adv_monitor *monitor)
- {
-+	struct msft_data *msft = hdev->msft_data;
- 	struct msft_cp_le_monitor_advertisement *cp;
- 	struct msft_le_monitor_advertisement_pattern_data *pattern_data;
- 	struct msft_le_monitor_advertisement_pattern *pattern;
-@@ -417,7 +425,16 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
- 	cp->rssi_high = monitor->rssi.high_threshold;
- 	cp->rssi_low = monitor->rssi.low_threshold;
- 	cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
--	cp->rssi_sampling_period = monitor->rssi.sampling_period;
-+
-+	/* Some controllers apply Sampling Period even while active scanning.
-+	 * So, to keep the behavior consistent across all controllers, don't
-+	 * use Sampling Period during active scanning to force the controller
-+	 * to report all advertisements even if it matches the monitor.
-+	 */
-+	if (msft->active_scan)
-+		cp->rssi_sampling_period = 0;
-+	else
-+		cp->rssi_sampling_period = monitor->rssi.sampling_period;
- 
- 	cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
- 
-@@ -815,6 +832,28 @@ void msft_req_add_set_filter_enable(struct hci_request *req, bool enable)
- 	hci_req_add(req, hdev->msft_opcode, sizeof(cp), &cp);
- }
- 
-+/* This function requires the caller holds hci_req_sync_lock */
-+void msft_set_active_scan(struct hci_dev *hdev, bool enable)
-+{
-+	struct msft_data *msft = hdev->msft_data;
-+
-+	if (!msft)
++	if (!is_interleave_scanning(hdev))
 +		return;
 +
-+	/* Remove all monitors */
-+	remove_all_monitors(hdev);
-+
-+	/* Clear all tracked devices */
-+	hci_dev_lock(hdev);
-+	hdev->advmon_pend_notify = false;
-+	msft_monitor_device_del(hdev, 0, NULL, 0, true);
-+	hci_dev_unlock(hdev);
-+
-+	/* Update active scan and reregister all monitors */
-+	msft->active_scan = enable;
-+	reregister_monitor(hdev);
-+}
-+
- int msft_set_filter_enable(struct hci_dev *hdev, bool enable)
- {
- 	struct hci_request req;
-diff --git a/net/bluetooth/msft.h b/net/bluetooth/msft.h
-index 2a63205b377b..7dfd866dacc4 100644
---- a/net/bluetooth/msft.h
-+++ b/net/bluetooth/msft.h
-@@ -22,6 +22,7 @@ __u64 msft_get_features(struct hci_dev *hdev);
- int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monitor *monitor);
- int msft_remove_monitor(struct hci_dev *hdev, struct adv_monitor *monitor);
- void msft_req_add_set_filter_enable(struct hci_request *req, bool enable);
-+void msft_set_active_scan(struct hci_dev *hdev, bool enable);
- int msft_set_filter_enable(struct hci_dev *hdev, bool enable);
- int msft_suspend_sync(struct hci_dev *hdev);
- int msft_resume_sync(struct hci_dev *hdev);
-@@ -55,6 +56,7 @@ static inline int msft_remove_monitor(struct hci_dev *hdev,
+ 	bt_dev_dbg(hdev, "cancelling interleave scan");
  
- static inline void msft_req_add_set_filter_enable(struct hci_request *req,
- 						  bool enable) {}
-+static inline void msft_set_active_scan(struct hci_dev *hdev, bool enable) {}
- static inline int msft_set_filter_enable(struct hci_dev *hdev, bool enable)
- {
- 	return -EOPNOTSUPP;
+ 	cancel_delayed_work_sync(&hdev->interleave_scan);
+@@ -5288,6 +5291,9 @@ int hci_suspend_sync(struct hci_dev *hdev)
+ 	/* Pause other advertisements */
+ 	hci_pause_advertising_sync(hdev);
+ 
++	/* Cancel interleaved scan */
++	cancel_interleave_scan(hdev);
++
+ 	/* Suspend monitor filters */
+ 	hci_suspend_monitor_sync(hdev);
+ 
 -- 
 2.37.1.455.g008518b4e5-goog
 

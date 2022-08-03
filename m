@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CA5588C3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3C4588C46
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiHCMh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S236440AbiHCMiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiHCMhZ (ORCPT
+        with ESMTP id S233057AbiHCMiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:37:25 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DAC24F05
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:37:23 -0700 (PDT)
+        Wed, 3 Aug 2022 08:38:05 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70087.outbound.protection.outlook.com [40.107.7.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518A124BDF;
+        Wed,  3 Aug 2022 05:38:02 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=SjePsTcqJMPGS8AfOBIQ/k8P9/cIYvJsILA8EsfO92cQv4bLBHMuDPV+mL5/lnjU6wvHdbUn3HyyxbvfjV8hW4yU9vpI8U+8Y6NlJiSavDll4WGlqh1clbbS9/iankjskv3o+1fT2+LTDRihgubYrePasMCK84QYwgb8TX1JOaCxWTQ3Vl0ykR5mqXhfIS7C/g0GOYp3X2SenwbEB5OQ9yTEtWMIPQunUO9KxPekdgnIa5W9KgHieb4zZOZzHbgA7W0k0ypVEKgt69zcych+UEPAdw1gcDBrwqjYFz61/mAqwrpkDGiL1Va1GeSGgXMpnmZshyfmTw0eaHMMGsQohw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lcBjmzVE6HDvyhZqqY5/JwK+mE2b8pOqMqTp8hTUsVY=;
+ b=iXupdhNTsMmM3DCk3eZpzKcmiP9mUWZvbcHeW9H74MTd0HsHgy+w4FSCk9sUkTl74DR1+S832eD5nbZG+fUQYINLU6up+sIrugQ2c64OAyqDZu/Wihn+z1bjVthrUawyA0ylpn3IiqwZ7dY7gUJdy1HWhHgGDe+D65dh5lHRiuWUhWIvHGpNlTsLDv0nkG9osX+nrHBtf77dBj5beLgzCWAUGjl5MLQozQgyxHciDDOv1Wozacz0XbIQF+jDBAQDvb6rSeiqKX9nr115YYRacvrz1G4yMMGLLZq+LeZza5rgJCHf8JJNHfWyFeZ9BTgvk5ceILzC7eXxX1nT9ZCMeA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lcBjmzVE6HDvyhZqqY5/JwK+mE2b8pOqMqTp8hTUsVY=;
+ b=wBlttEHyoXQto594r89J5qW5tAFQKGs8u3fLCyUa1oi96WoOayrVWdZw7n+94Cp4sqsUJmKgxACM7oC91PyjBEKtdfOO7ULtINWBuakcjaqzWZRms51GDVwjO0Mz1gHyWH+d4F6H1fyxl5HEAqYrEfOnsFUlcm1C1b1APYKemPU=
+Received: from AM6P193CA0085.EURP193.PROD.OUTLOOK.COM (2603:10a6:209:88::26)
+ by DB9PR08MB7130.eurprd08.prod.outlook.com (2603:10a6:10:2c8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Wed, 3 Aug
+ 2022 12:37:58 +0000
+Received: from AM5EUR03FT045.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:209:88:cafe::c5) by AM6P193CA0085.outlook.office365.com
+ (2603:10a6:209:88::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.10 via Frontend
+ Transport; Wed, 3 Aug 2022 12:37:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ AM5EUR03FT045.mail.protection.outlook.com (10.152.17.105) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.12 via Frontend Transport; Wed, 3 Aug 2022 12:37:58 +0000
+Received: ("Tessian outbound 63c09d5d38ac:v123"); Wed, 03 Aug 2022 12:37:58 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 5034b587eb3adb80
+X-CR-MTA-TID: 64aa7808
+Received: from 9496db128e22.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id E90BD2E8-77A0-4158-B8F2-AFBAB86BE029.1;
+        Wed, 03 Aug 2022 12:37:51 +0000
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 9496db128e22.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Wed, 03 Aug 2022 12:37:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NPnHZKlCD7QdePBynOM8q1yvcGAWUQqUJ5npvQbrr71ELDGxUtQZnE60blvVuPB3JDgNPlYJm5KWqPIXTNANJJtToPcHU/MHnxxO9DKytpVAKCMix0pf6THEXtYmk1C3/F/2a4/c0T7hLjlcNtatVZ3kWxDcGsuz3ysk6kMB6nTEjLIdKDJmhWk0K/n9T5x/6UlZ8b4JjNCLBGiAsyYMQCKFnvzsCrcx+JIS7SjuK8Us7tOnCsAbips6QDuo6SvX8bOxhuDiuRQUq91AIRhT+e187bCFwEU3s2UhoEUNDkIqjL1zZPq3ZSFAQyO6suu65N52QEHAkNFHp/pLEPfEdg==
+ b=eV7vfCrGUEAKG1MMZhqwlbRQPrsSqfU8Xd6BkoQp5Gzq9Av8GG4X1tmt1p61qPvwJ1MxAetOe1zf/Fx5wMl6B2St1RhZ6MVBzhpzcPngXpMDPDQ2+HDGyhmrMVM+ivccXbLUsEKkeMgrGDJSBE2LN0bCkODfZwClv/F5UkuLjGTgx+cakbdwKhv+iwmm25rJtAbqoCp8WJiyFzCuSR2/SMY5jyE9KoE5Yyyl6hOCwFzUruiSelcOkLZFXSYuumh98gwNg8omVZmozPnLxGgz+LJPdumLT8I6Uooz5s6MBhbbRWEIqy9UpNWpxg2hEakwZWVYyVSqzw/ZmByZSRq6DQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zx3SKa5Q59OoxHYn/oiZFMOoSqk57thxdLgQqGVFVe8=;
- b=ZeJVm3R6JX7EY3a7LVsPW/Wf0oLp8RK3CiePqr3wDMd8ZzQNjHr1TRLNYk/JV41+ixQ8fiN7rjUdM8MViYYoUj+10eI1IpVy+iGiEFKi+RZ6ZSLf2+J5oT5qszsIFt3NrVgxXRRrO+Jb2pKSykRdSavMq0Wyy64rkUriI+/qLcWT/CVRm1ctq6Vc3dLBEtzqxA1Zonjunv5hZz8h5gKcBl2losYEOak/ur1NtsqmmsKdwPJSUP7jq6YCZdxI1Owxg4d7NJJ3bnSL+O/SKahsk6HLE6EodITJCXwVxtoUCSToKJTp74np/EjWKbT+Np3rZkL7aMqgHEWRfXNgI5IlZA==
+ bh=lcBjmzVE6HDvyhZqqY5/JwK+mE2b8pOqMqTp8hTUsVY=;
+ b=g1avhy/O6iXh0KFAU98hqjED/FMgQbnQW26SfCwxryRSvlxqBNLtZcojiRw4SxkQOKD5tdZvWsdwyyKEmy2fILI9lQHBGuSAQ2cgAPMMUZTVBsK1CMymGLYEXHR5ayJz6un6Vaim9G4tprxVrzsWlmAn97uLk8PwWzVC9/P67QqOvj5cF2wJIDT8HaXJIJjL8Y7oEOly178AkKbynBscUjUdzH5o/4DPfGcrdhGf0SNHYXcOdro6Mk+3UGB6GUMNZdlUNjTOyI14Mxkxe0CD5sKUNOS0zg165ptBcmRh9d7dRSeh0nyvNvIIFsQrqhautpulZkZxegz4ZFWqzpyKqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zx3SKa5Q59OoxHYn/oiZFMOoSqk57thxdLgQqGVFVe8=;
- b=paGsiQpJmX44t80rwsFBLUS9YEZOmwhHcFl7Ap6W7S/mEvn0yw33gn8LX7hu8ls+2kzMbKz0fk8LkfEAqUg2ti1v0P7PM60jwZe6WFE3Bjz6mKWnD5SPUPUjcazW4b59ED1HorRQ4Euv+/XSwBcIoxPUCoF5deYbQeLsZ9wTXXc=
-Received: from DM6PR12MB3082.namprd12.prod.outlook.com (2603:10b6:5:11b::12)
- by MW2PR12MB2345.namprd12.prod.outlook.com (2603:10b6:907:2::22) with
+ bh=lcBjmzVE6HDvyhZqqY5/JwK+mE2b8pOqMqTp8hTUsVY=;
+ b=wBlttEHyoXQto594r89J5qW5tAFQKGs8u3fLCyUa1oi96WoOayrVWdZw7n+94Cp4sqsUJmKgxACM7oC91PyjBEKtdfOO7ULtINWBuakcjaqzWZRms51GDVwjO0Mz1gHyWH+d4F6H1fyxl5HEAqYrEfOnsFUlcm1C1b1APYKemPU=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from AM9PR08MB6803.eurprd08.prod.outlook.com (2603:10a6:20b:301::12)
+ by VI1PR08MB3821.eurprd08.prod.outlook.com (2603:10a6:803:b7::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Wed, 3 Aug
- 2022 12:37:16 +0000
-Received: from DM6PR12MB3082.namprd12.prod.outlook.com
- ([fe80::a166:9cab:a5c2:aeec]) by DM6PR12MB3082.namprd12.prod.outlook.com
- ([fe80::a166:9cab:a5c2:aeec%6]) with mapi id 15.20.5482.016; Wed, 3 Aug 2022
- 12:37:16 +0000
-From:   "Gupta, Nipun" <Nipun.Gupta@amd.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>
-Subject: RE: [RFC PATCH 1/2] irqchip: cdx-bus: add cdx-MSI domain with gic-its
- domain as parent
-Thread-Topic: [RFC PATCH 1/2] irqchip: cdx-bus: add cdx-MSI domain with
- gic-its domain as parent
-Thread-Index: AQHYpzRgdVlYVwtHmECHDGmKRNvx7a2dG/WAgAABFwA=
-Date:   Wed, 3 Aug 2022 12:37:16 +0000
-Message-ID: <DM6PR12MB308280D48C11912EF02DBF06E89C9@DM6PR12MB3082.namprd12.prod.outlook.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220803122655.100254-2-nipun.gupta@amd.com> <YuprA2OdGH6LSnZD@kroah.com>
-In-Reply-To: <YuprA2OdGH6LSnZD@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-08-03T12:38:29Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=4fe479b3-f9b8-470e-8374-ea42e8451487;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 37836a3e-25c9-4af6-ed67-08da754ce617
-x-ms-traffictypediagnostic: MW2PR12MB2345:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t+YeQCeb4WcBEndhC0rqJ5jK3AQA/c2QNNf+Nib1DiyvOvH74SbF3X/3PSoZsGaWBROl6J5iF20IByzBro29/CzyRDxjbqAKKU/4YgkKZJa6KPAiIHDZT6HXCucT4x5uAvRa5wetdHiBN7U2Q9nrc8JENQjoDSnu6jvveuKTt6GuDET8XW9RhYHOSxC8QooXQHGGz0wbtA96hionzMpGhHq2ND5/dxgzLmpbOf+mAmka/A69P06nKbvgJQergoDpc7JrgF1bl3nVcI/lgG0ipLGqhDvff4Wh2X1Ghuyr3bS28pg060l1fezt/gvmBWtx6TuDrl7Xi+sEBPH9zjGEI5kwpmNhcshpJzmca2tUnP/W8K+iodN7ZmpnLIceqYvlnY7I+q1zY8STQnZXeYy+F6WmF2iL2jXI4OR00ki8/fToJC+hzKyeaV9BFOI0Ftl7mtqku/cEgD4/5a7Y+9WUkP2ZrklGpzQjh/4Cc+wdme1/LDN+Tlg+PHXy24IA4HKYfc8xssEgnpzGCx5x+BIKFgDGf252Ab03w0xbeIlY7pAGe8eNtgaBod+t+Bp8QW6VSID8R/5DpSen5T1CQRK0K+tUlh114RvS+F5LkfRJR154eZZ/QrZ4GMGaf4jyMFfI+Os13YbrpgspPX2DvCR2IvT2kRxCjoAHAekuVLL1CmQ9YNZJEywwTW/ZjYRPBAXLACzgqH9l6KGDhZcWUEZmf5mYyOosxkDbsQ97j07svtIsjKW5Kt+LqbCmkvvSohcfmWu54oAmBWumi+7AUI+QgGAr+Onpi2L+dWpWbIRYW/UiSqVUn1TGpvZkRGYsoUKR
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3082.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(7696005)(76116006)(6506007)(41300700001)(26005)(5660300002)(9686003)(38100700002)(122000001)(33656002)(55236004)(38070700005)(53546011)(55016003)(316002)(186003)(52536014)(83380400001)(478600001)(66946007)(4326008)(71200400001)(8676002)(66476007)(66446008)(64756008)(66556008)(86362001)(8936002)(6916009)(54906003)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7AonW08/q8Bl2zbMCmfV4cMU4AmHpJp+NgOFEtL/g4ciNQ5bObhCNLINx8Aj?=
- =?us-ascii?Q?43e3fU/t4MTQwnheWaSP6rxNpShoeWdd1pC2DVHM0LsgF3GXwSwzwdSlKjdA?=
- =?us-ascii?Q?QLG1k1m/LknaRx8sZ2EhhlNFCyC0Qzuf0ejH6FGNBAINXLj/3vD4b+CP2kRH?=
- =?us-ascii?Q?bYYoV4wPv5cGQiJQrHU4lIitZX1a1/wGxs6n7Pg0IhRwyB948XyHL/5hODfp?=
- =?us-ascii?Q?rQTYIcZg6rvWw5W09A+WsZZEH8veo0s+/z8pUWIL4z6MiMpFnORmo+cagKBC?=
- =?us-ascii?Q?L9ntC3JoHCwrKGcUzw6hyUxtK20/bWDx1c5fwPieRJgPyIu2L2H97zzXr0I8?=
- =?us-ascii?Q?+ODwXn2sLzvZkZGVG3KYpxDkpfyhdNHWkuPZOYke4kv85eYEBZnsH9r4P0ZF?=
- =?us-ascii?Q?Zvz1oEeTMM8c3fPpTAooelGgmGvgZSSUkHn+tNcOqj6g6JXV3jwsEGWpRHix?=
- =?us-ascii?Q?oC+zQFHnzQCeNBgA2yt/lUZt//bjz9/cTw6v2X281TQIZLV8SVpB8yj0XYv+?=
- =?us-ascii?Q?pzQ7aXbPYfRTlfa0YZ/tcTG73KDwx4FJSwNVmbj3nfoGaZZnPijSMdy/1vMw?=
- =?us-ascii?Q?/XBFN+7y2wkD0tyUTeL8bhycNTm4pEkRVole8Gsc/dOvCPBNPSDUOpC9UPJc?=
- =?us-ascii?Q?lv0pIZ6LG3PyIT5VTj1jCLIRgeUPNH0GDAsREhHV7gEf2qIUaZxs8zhy4OwD?=
- =?us-ascii?Q?PlKJCcIacP0GgNbXW+NDFAZNgJy0zDgIXLOaGMMYa4rw68Yr9XMims3VEaCg?=
- =?us-ascii?Q?xfLYknTKvwgTpMbCCFq5UA/ERFBViM3HIbsTz+MK4/2BANQSIYNEIAPRFQhr?=
- =?us-ascii?Q?syZhmrtyMDgqkXKBPuHXVObs0RN5KeTT/ZJOAW97evh2grb6zg84STLSPFC3?=
- =?us-ascii?Q?HJo5V3cjZroUhkOhjrIBjlTiHc1Qhtn/NWXQ+a0KYQr2mSYgQx37o5udscYx?=
- =?us-ascii?Q?EUAHg9QrRhBQ7jtxPK4Yr/62crY+2jr6GTSmsw07lXnZI0ySwhzRSaYOQew0?=
- =?us-ascii?Q?2xgJu7QtdXgn2t5nnS3gl+gAjsr4y9ZQdMAd3fxg+lycCObArArgxeTpCQr+?=
- =?us-ascii?Q?0sCpeAldSMJ8RDalR9K7DXMnZmU9d3sgQPzCBQLPPfqxH+9hqN191hZs+kW7?=
- =?us-ascii?Q?xGy8CjEQ0q6RhCOy+EJeYdgjuG7qsX8chtDvNxHAzTKixIfkgkp3YGCKDwHR?=
- =?us-ascii?Q?Vbf7B56WVNRxjHdNjkXHa8L3WYprh+kWCQG7q/hiTTOXnQ7wn0AQojVbCLEA?=
- =?us-ascii?Q?Ua8Kiskum2i5tLyLJPa9cd3KnnXjjL8EkQ/ktEG9wXBvkTqJbGI56/uukovc?=
- =?us-ascii?Q?BCg5OmrE7w/C8q/yOwJ9QzzgM10j3NtNx4MqQ3r4zWD3XGtMIFFoMWTbNdzz?=
- =?us-ascii?Q?ElggiHZn7mWubBvgh6MV9aatOn2WMHhaZZrPaG6x1lLTceRCV2a3MTNn6IIX?=
- =?us-ascii?Q?fzdgK6tzzFxynVLt2JqGZyOQPxz9xsU2BnMbkXi+DAtbRuK8rQHGDeFjT5NU?=
- =?us-ascii?Q?RmTsuqxkj/nG0oTMZMOrpxy6XpmKMUPekqQjjuvtEKmnbuCvBNtcpKAC+dkL?=
- =?us-ascii?Q?WlUIyPg1S79LC0CS1tA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Wed, 3 Aug
+ 2022 12:37:47 +0000
+Received: from AM9PR08MB6803.eurprd08.prod.outlook.com
+ ([fe80::4cad:8ea2:a247:6bce]) by AM9PR08MB6803.eurprd08.prod.outlook.com
+ ([fe80::4cad:8ea2:a247:6bce%8]) with mapi id 15.20.5482.016; Wed, 3 Aug 2022
+ 12:37:46 +0000
+Date:   Wed, 3 Aug 2022 13:37:32 +0100
+From:   Brian Starkey <brian.starkey@arm.com>
+To:     Olivier Masse <olivier.masse@nxp.com>
+Cc:     "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "nd@arm.com" <nd@arm.com>,
+        =?utf-8?Q?Cl=C3=A9ment?= Faure <clement.faure@nxp.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>
+Subject: Re: [EXT] Re: [PATCH 3/5] dma-buf: heaps: add Linaro secure dmabuf
+ heap support
+Message-ID: <20220803123732.ohsy2j2y33zsrhlh@000377403353>
+References: <20220802095843.14614-1-olivier.masse@nxp.com>
+ <20220802095843.14614-4-olivier.masse@nxp.com>
+ <20220802143908.24vemxeon537cad2@000377403353>
+ <d11cd7921859c9b24db304107caa0fc2deb780e3.camel@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d11cd7921859c9b24db304107caa0fc2deb780e3.camel@nxp.com>
+X-ClientProxiedBy: SN7PR04CA0222.namprd04.prod.outlook.com
+ (2603:10b6:806:127::17) To AM9PR08MB6803.eurprd08.prod.outlook.com
+ (2603:10a6:20b:301::12)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3082.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37836a3e-25c9-4af6-ed67-08da754ce617
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2022 12:37:16.4326
+X-MS-Office365-Filtering-Correlation-Id: f3beb2c4-ec14-4f06-1910-08da754cff2b
+X-MS-TrafficTypeDiagnostic: VI1PR08MB3821:EE_|AM5EUR03FT045:EE_|DB9PR08MB7130:EE_
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: orMCJrPYe4YOPisWertJA2HXYB+zYjd5P9HCTpP9OEDJb/X47C262LGRwy5bbO/hnJjya2nJ0/ZdSV4KsqvHUPaQb4bw6BmQSL8S5Rs3ZstKQ6lIf9GyqoGU9qEv3P4rASc7W1CogAWQ7ViWL9UvcQ6L0nLj8dUENPShxJTUhu56mcGl9AXUByot1lwrSmvn71oJ3F+jyF0vpTreqMFJqcTFZrSJ7TpqlS2mwe7he73fXJ9vOUdwkRBLoJaFpjpI/ZzW9R5FWKxqzcIgLApxpjzTUEudmqmkdfPxOF0n3j8GbdJdj1r0uun4Ab5VgYG1io+jzO0mJTWxTRWns4R2Uyv/SK/Yg0JWuB/GNJEtFfgPa48lNqi0YlOU8rhNbQL2sjzZKY1OeK3gXQXR4FjRczfF0QCxy79zb4w4XQJJaM59nVyyGqjMmaItc28E5unVO19CQC3VKIk1sJOPw+r2Um6ZXes6tUicQrl27Qhx8VcGAytYZ980E8Z6E8W5DUeuQE0+QG7oh3oi7H5ElctyRwji5AOMIbMRB3e3kx1hPe5oi5exsPVDL9khU5XoSVCCuUx/lD5f3qtDKBxenp229dJ8hVNSHungjsRf+YMHFoixAyhCcGh4nThFRytGpYnbfitEVskk2Q7CD04Sb77jwLCxyVBkrP3mTjpsKjjYbBoClJvDeGYok5h6zqUF1PCj
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR08MB6803.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(376002)(396003)(136003)(346002)(39860400002)(186003)(6512007)(9686003)(30864003)(26005)(478600001)(5660300002)(966005)(6486002)(4326008)(66556008)(66476007)(44832011)(8676002)(66946007)(8936002)(83380400001)(38100700002)(6506007)(41300700001)(54906003)(6916009)(1076003)(6666004)(2906002)(86362001)(45080400002)(316002)(33716001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB3821
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM5EUR03FT045.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: b4fc7e92-58e5-4a0a-5578-08da754cf7f2
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: x+YxR40PCWugx/zGMmxgCT3pLJZmwlPkKkuHAGcXSLpCb+JmnjxfC7IFcr9xs4/FRz6hFBNGTfPt7vjeS+xThTjvvhcGon301cuU9vJKugvytuBmvKpJaimjYjNlctaRqwiYPA+FSdl6T8TFbmWzULbd2vfuS8DupiI/zoKLllvhy6U78A9MwyxkaFJT2KrsBzqYXfsJ8dioWuou9WsTvFaC2846ZFWVxzklavVyzKlW4agut0kCsGuN/X2nooZvI39LSLMCvQINEyRzohI0L6DSJEBBmNdA+QW1+N+bjZIUD/WsVhST5kKXFWMrhELCY8Aj5laoeAiEvlZevq7vxAuTlli5G8MjBL2LS43CS7xOggUv4zkNe7XcsSVu/fygCpJNSbWpXZJxYCmiBA4dZ1gOpHc0YVTzpSWMUr2zfoJ3rjNfwFcQdAi+e2++ykzq30U4T2O3kG9ED02zx3uLAA+LMc77FImcgxvj58JcoJ3QSV/cNlAOI9ibIXp/I5KZrRH5MBwSYKh5gAMcAPqjXDPc/svHCzD4Mr9qKqr5tqI79sONuAYVA5wcQY7haau+pj6xS4eYy9AEC/kFNpL8FGWHwnzrYP0DfIjEfMmdYXxcMZBAbkCVnOxHZ0St12VdCaK5khsJ8S8h6ZtiuBJq8Fh07rw1w4byFVGLQbDdvHEFQv1bNINKrhKTA7gzUKNrsCZtj5njkZ9isI/4eROgedYThw7PxKAos4dvzF06as3QHtx6+qALhdhTRIDLQU1d
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230016)(4636009)(7916004)(396003)(136003)(376002)(346002)(39860400002)(36840700001)(40470700004)(46966006)(45080400002)(33716001)(41300700001)(40460700003)(9686003)(6666004)(6506007)(26005)(966005)(82310400005)(6486002)(6512007)(81166007)(356005)(54906003)(82740400003)(5660300002)(316002)(40480700001)(478600001)(86362001)(1076003)(336012)(107886003)(186003)(47076005)(70586007)(450100002)(70206006)(83380400001)(6862004)(36860700001)(8936002)(4326008)(8676002)(2906002)(30864003)(44832011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 12:37:58.4387
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aT3sOiGMSkEkwcoxR34Zg/5d5g7edwyL3RTazCaVKn2ZJUH4nHv4ZuXUHZG0c/tL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2345
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3beb2c4-ec14-4f06-1910-08da754cff2b
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM5EUR03FT045.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB7130
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,165 +156,894 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi,
 
+On Wed, Aug 03, 2022 at 11:07:54AM +0000, Olivier Masse wrote:
+> Hi Brian,
+> 
+> Thanks for your comments, please find my reply below.
+> 
+> On mar., 2022-08-02 at 15:39 +0100, Brian Starkey wrote:
+> > Caution: EXT Email
+> > 
+> > Hi Olivier,
+> > 
+> > Some comments below as I mentioned off-list.
+> > 
+> > One additional point: some devices need to know if a buffer is
+> > protected, so that they can configure registers appropriately to make
+> > use of that protected buffer. There was previously a discussion about
+> > adding a flag to a dma_buf to indicate that it is allocated from
+> > protected memory[1].
+> > 
+> > [1] 
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flists.freedesktop.org%2Farchives%2Fdri-devel%2F2019-September%2F238059.html&amp;data=05%7C01%7Colivier.masse%40nxp.com%7C64e0ce1952ac4e926a8208da7494d0bb%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637950479760002497%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bmlw9uLeGtn%2F7JliZ07nSm6XDEzEqdwn4mBQHIVnma0%3D&amp;reserved=0
+> > 
+> > 
+> 
+> Interesting, could we introduce is_protected 1-bit flag into struct
+> dma_buf ?
 
+That was the earlier proposal, yeah.
 
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Wednesday, August 3, 2022 6:03 PM
-> To: Gupta, Nipun <Nipun.Gupta@amd.com>
-> Cc: linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> rafael@kernel.org; maz@kernel.org; tglx@linutronix.de; okaya@kernel.org;
-> Anand, Harpreet <harpreet.anand@amd.com>; Simek, Michal
-> <michal.simek@amd.com>; Agarwal, Nikhil <nikhil.agarwal@amd.com>
-> Subject: Re: [RFC PATCH 1/2] irqchip: cdx-bus: add cdx-MSI domain with gi=
-c-its
-> domain as parent
->=20
-> On Wed, Aug 03, 2022 at 05:56:54PM +0530, Nipun Gupta wrote:
-> > Devices on cdx bus are dynamically detected and registered using
-> > platform_device_register API. As these devices are not linked to
-> > of node they need a separate MSI domain for handling device ID
-> > to be provided to the GIC ITS domain.
-> >
-> > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-> > Signed-off-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-> > ---
-> > CONFIG_CDX_BUS and device tree bindings for xlnx,cdx-controller-1.0
-> > would be added as part of CDX bus patches
-> >
-> >  drivers/irqchip/Makefile                 |   1 +
-> >  drivers/irqchip/irq-gic-v3-its-cdx-msi.c | 113 +++++++++++++++++++++++
-> >  include/linux/cdx/cdx.h                  |  15 +++
-> >  3 files changed, 129 insertions(+)
-> >  create mode 100644 drivers/irqchip/irq-gic-v3-its-cdx-msi.c
-> >  create mode 100644 include/linux/cdx/cdx.h
-> >
-> > diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-> > index 5b67450a9538..623adb8a1f20 100644
-> > --- a/drivers/irqchip/Makefile
-> > +++ b/drivers/irqchip/Makefile
-> > @@ -115,3 +115,4 @@ obj-$(CONFIG_WPCM450_AIC)         +=3D irq-wpcm450-
-> aic.o
-> >  obj-$(CONFIG_IRQ_IDT3243X)           +=3D irq-idt3243x.o
-> >  obj-$(CONFIG_APPLE_AIC)                      +=3D irq-apple-aic.o
-> >  obj-$(CONFIG_MCHP_EIC)                       +=3D irq-mchp-eic.o
-> > +obj-$(CONFIG_CDX_BUS)                        +=3D irq-gic-v3-its-cdx-m=
-si.o
-> > diff --git a/drivers/irqchip/irq-gic-v3-its-cdx-msi.c b/drivers/irqchip=
-/irq-gic-v3-
-> its-cdx-msi.c
-> > new file mode 100644
-> > index 000000000000..eb17b74efdc5
-> > --- /dev/null
-> > +++ b/drivers/irqchip/irq-gic-v3-its-cdx-msi.c
-> > @@ -0,0 +1,113 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * AMD CDX bus driver MSI support
-> > + *
-> > + * Copyright(C) 2022 Xilinx Inc.
-> > + */
-> > +
-> > +#include <linux/irq.h>
-> > +#include <linux/msi.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_address.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/of_irq.h>
-> > +#include <linux/cdx/cdx.h>
-> > +
-> > +static struct irq_chip its_msi_irq_chip =3D {
-> > +     .name =3D "ITS-fMSI",
-> > +     .irq_mask =3D irq_chip_mask_parent,
-> > +     .irq_unmask =3D irq_chip_unmask_parent,
-> > +     .irq_eoi =3D irq_chip_eoi_parent,
-> > +     .irq_set_affinity =3D msi_domain_set_affinity
-> > +};
-> > +
-> > +static int its_cdx_msi_prepare(struct irq_domain *msi_domain,
-> > +                               struct device *dev,
-> > +                               int nvec, msi_alloc_info_t *info)
-> > +{
-> > +     struct msi_domain_info *msi_info;
-> > +     struct cdx_device_data *dev_data;
-> > +     u32 dev_id;
-> > +
-> > +     dev_data =3D dev->platform_data;
-> > +     dev_id =3D dev_data->dev_id;
-> > +
-> > +     /* Set the device Id to be passed to the GIC-ITS */
-> > +     info->scratchpad[0].ul =3D dev_id;
-> > +
-> > +     msi_info =3D msi_get_domain_info(msi_domain->parent);
-> > +
-> > +     /* Allocate at least 32 MSIs, and always as a power of 2 */
-> > +     nvec =3D max_t(int, 32, roundup_pow_of_two(nvec));
-> > +     return msi_info->ops->msi_prepare(msi_domain->parent, dev, nvec, =
-info);
-> > +}
-> > +
-> > +static struct msi_domain_ops its_cdx_msi_ops __ro_after_init =3D {
-> > +     .msi_prepare =3D its_cdx_msi_prepare,
-> > +};
-> > +
-> > +static struct msi_domain_info its_cdx_msi_domain_info =3D {
-> > +     .flags  =3D (MSI_FLAG_USE_DEF_DOM_OPS |
-> MSI_FLAG_USE_DEF_CHIP_OPS),
-> > +     .ops    =3D &its_cdx_msi_ops,
-> > +     .chip   =3D &its_msi_irq_chip,
-> > +};
-> > +
-> > +static const struct of_device_id cdx_device_id[] =3D {
-> > +     {.compatible =3D "xlnx,cdx-controller-1.0", },
-> > +     {},
-> > +};
-> > +
-> > +struct irq_domain *get_parent(struct fwnode_handle *handle)
-> > +{
-> > +     return irq_find_matching_fwnode(handle, DOMAIN_BUS_NEXUS);
-> > +}
-> > +
-> > +static void __init its_cdx_msi_init_one(struct device_node *np,
-> > +                                 const char *name)
-> > +{
-> > +     struct irq_domain *parent;
-> > +     struct irq_domain *cdx_msi_domain;
-> > +     struct fwnode_handle *fwnode_handle;
-> > +     struct device_node *parent_node;
-> > +
-> > +     parent_node =3D of_parse_phandle(np, "msi-parent", 0);
-> > +
-> > +     parent =3D get_parent(of_node_to_fwnode(parent_node));
-> > +     if (!parent || !msi_get_domain_info(parent)) {
-> > +             pr_err("%s: unable to locate ITS domain\n", name);
-> > +             return;
-> > +     }
-> > +
-> > +     fwnode_handle =3D of_node_to_fwnode(np);
-> > +     cdx_msi_domain =3D platform_msi_create_irq_domain(fwnode_handle,
-> > +                                             &its_cdx_msi_domain_info,
-> > +                                             parent);
-> > +     if (!cdx_msi_domain) {
-> > +             pr_err("%s: unable to create cdx bus domain\n", name);
-> > +             return;
-> > +     }
-> > +
-> > +     pr_info("cdx bus MSI: %s domain created\n", name);
->=20
-> When drivers work properly, they should be quiet.
->=20
-> Also, when drivers print lines to the kernel log, they need to use the
-> dev_*() calls, not "raw" pr_*() calls please.
+> struct dma_buf_ops.map_dma_buf and struct dma_buf_ops.unmap_dma_buf
+> could become optional for such buffer ?
+> 
 
-Totally agree on this.
-Will be updated in the formal series.
+map_dma_buf and unmap_dma_buf are needed to give devices access to the
+dma-buf, I don't think they should become optional.
+
+Mapping to the CPU maybe should be optional/disallowed for protected
+buffers.
+
+> > On Tue, Aug 02, 2022 at 11:58:41AM +0200, Olivier Masse wrote:
+> > > add Linaro secure heap bindings: linaro,secure-heap
+> > > use genalloc to allocate/free buffer from buffer pool.
+> > > buffer pool info is from dts.
+> > > use sg_table instore the allocated memory info, the length of
+> > > sg_table is 1.
+> > > implement secure_heap_buf_ops to implement buffer share in
+> > > difference device:
+> > > 1. Userspace passes this fd to all drivers it wants this buffer
+> > > to share with: First the filedescriptor is converted to a &dma_buf
+> > > using
+> > > dma_buf_get(). Then the buffer is attached to the device using
+> > > dma_buf_attach().
+> > > 2. Once the buffer is attached to all devices userspace can
+> > > initiate DMA
+> > > access to the shared buffer. In the kernel this is done by calling
+> > > dma_buf_map_attachment()
+> > > 3. get sg_table with dma_buf_map_attachment in difference device.
+> > > 
+> > > Signed-off-by: Olivier Masse <olivier.masse@nxp.com>
+> > > ---
+> > >  drivers/dma-buf/heaps/Kconfig       |  21 +-
+> > >  drivers/dma-buf/heaps/Makefile      |   1 +
+> > >  drivers/dma-buf/heaps/secure_heap.c | 588
+> > > ++++++++++++++++++++++++++++
+> > >  3 files changed, 606 insertions(+), 4 deletions(-)
+> > >  create mode 100644 drivers/dma-buf/heaps/secure_heap.c
+> > > 
+> > > diff --git a/drivers/dma-buf/heaps/Kconfig b/drivers/dma-
+> > > buf/heaps/Kconfig
+> > > index 6a33193a7b3e..b2406932192e 100644
+> > > --- a/drivers/dma-buf/heaps/Kconfig
+> > > +++ b/drivers/dma-buf/heaps/Kconfig
+> > > @@ -1,8 +1,12 @@
+> > > -config DMABUF_HEAPS_DEFERRED_FREE
+> > > -     tristate
+> > > +menuconfig DMABUF_HEAPS_DEFERRED_FREE
+> > > +     bool "DMA-BUF heaps deferred-free library"
+> > > +     help
+> > > +       Choose this option to enable the DMA-BUF heaps deferred-
+> > > free library.
+> > > 
+> > > -config DMABUF_HEAPS_PAGE_POOL
+> > > -     tristate
+> > > +menuconfig DMABUF_HEAPS_PAGE_POOL
+> > > +     bool "DMA-BUF heaps page-pool library"
+> > > +     help
+> > > +       Choose this option to enable the DMA-BUF heaps page-pool
+> > > library.
+> > > 
+> > >  config DMABUF_HEAPS_SYSTEM
+> > >       bool "DMA-BUF System Heap"
+> > > @@ -26,3 +30,12 @@ config DMABUF_HEAPS_DSP
+> > >            Choose this option to enable the dsp dmabuf heap. The
+> > > dsp heap
+> > >            is allocated by gen allocater. it's allocated according
+> > > the dts.
+> > >            If in doubt, say Y.
+> > > +
+> > > +config DMABUF_HEAPS_SECURE
+> > > +     tristate "DMA-BUF Secure Heap"
+> > > +     depends on DMABUF_HEAPS && DMABUF_HEAPS_DEFERRED_FREE
+> > > +     help
+> > > +       Choose this option to enable the secure dmabuf heap. The
+> > > secure heap
+> > > +       pools are defined according to the DT. Heaps are allocated
+> > > +       in the pools using gen allocater.
+> > > +       If in doubt, say Y.
+> > > diff --git a/drivers/dma-buf/heaps/Makefile b/drivers/dma-
+> > > buf/heaps/Makefile
+> > > index e70722ea615e..08f6aa5919d1 100644
+> > > --- a/drivers/dma-buf/heaps/Makefile
+> > > +++ b/drivers/dma-buf/heaps/Makefile
+> > > @@ -4,3 +4,4 @@ obj-$(CONFIG_DMABUF_HEAPS_PAGE_POOL)  +=
+> > > page_pool.o
+> > >  obj-$(CONFIG_DMABUF_HEAPS_SYSTEM)    += system_heap.o
+> > >  obj-$(CONFIG_DMABUF_HEAPS_CMA)               += cma_heap.o
+> > >  obj-$(CONFIG_DMABUF_HEAPS_DSP)          += dsp_heap.o
+> > > +obj-$(CONFIG_DMABUF_HEAPS_SECURE)    += secure_heap.o
+> > > diff --git a/drivers/dma-buf/heaps/secure_heap.c b/drivers/dma-
+> > > buf/heaps/secure_heap.c
+> > > new file mode 100644
+> > > index 000000000000..31aac5d050b4
+> > > --- /dev/null
+> > > +++ b/drivers/dma-buf/heaps/secure_heap.c
+> > > @@ -0,0 +1,588 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * DMABUF secure heap exporter
+> > > + *
+> > > + * Copyright 2021 NXP.
+> > > + */
+> > > +
+> > > +#include <linux/dma-buf.h>
+> > > +#include <linux/dma-heap.h>
+> > > +#include <linux/dma-mapping.h>
+> > > +#include <linux/err.h>
+> > > +#include <linux/genalloc.h>
+> > > +#include <linux/highmem.h>
+> > > +#include <linux/mm.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/of.h>
+> > > +#include <linux/of_fdt.h>
+> > > +#include <linux/of_reserved_mem.h>
+> > > +#include <linux/scatterlist.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/vmalloc.h>
+> > > +
+> > > +#include "deferred-free-helper.h"
+> > > +#include "page_pool.h"
+> > > +
+> > > +#define MAX_SECURE_HEAP 2
+> > > +#define MAX_HEAP_NAME_LEN 32
+> > > +
+> > > +struct secure_heap_buffer {
+> > > +     struct dma_heap *heap;
+> > > +     struct list_head attachments;
+> > > +     struct mutex lock;
+> > > +     unsigned long len;
+> > > +     struct sg_table sg_table;
+> > > +     int vmap_cnt;
+> > > +     struct deferred_freelist_item deferred_free;
+> > > +     void *vaddr;
+> > > +     bool uncached;
+> > > +};
+> > > +
+> > > +struct dma_heap_attachment {
+> > > +     struct device *dev;
+> > > +     struct sg_table *table;
+> > > +     struct list_head list;
+> > > +     bool no_map;
+> > > +     bool mapped;
+> > > +     bool uncached;
+> > > +};
+> > 
+> > I think dma_heap_attachment should have a more specific name,
+> > otherwise it looks like some generic part of the dma_heap framework.
+> 
+> ok, how about secure_heap_attachment which sound more logical ?
+> 
+
+Yes that sounds better.
+
+> > 
+> > > +
+> > > +struct secure_heap_info {
+> > > +     struct gen_pool *pool;
+> > > +
+> > > +     bool no_map;
+> > > +};
+> > > +
+> > > +struct rmem_secure {
+> > > +     phys_addr_t base;
+> > > +     phys_addr_t size;
+> > > +
+> > > +     char name[MAX_HEAP_NAME_LEN];
+> > > +
+> > > +     bool no_map;
+> > > +};
+> > > +
+> > > +static struct rmem_secure secure_data[MAX_SECURE_HEAP] = {0};
+> > > +static unsigned int secure_data_count;
+> > > +
+> > > +static struct sg_table *dup_sg_table(struct sg_table *table)
+> > > +{
+> > > +     struct sg_table *new_table;
+> > > +     int ret, i;
+> > > +     struct scatterlist *sg, *new_sg;
+> > > +
+> > > +     new_table = kzalloc(sizeof(*new_table), GFP_KERNEL);
+> > > +     if (!new_table)
+> > > +             return ERR_PTR(-ENOMEM);
+> > > +
+> > > +     ret = sg_alloc_table(new_table, table->orig_nents,
+> > > GFP_KERNEL);
+> > > +     if (ret) {
+> > > +             kfree(new_table);
+> > > +             return ERR_PTR(-ENOMEM);
+> > > +     }
+> > > +
+> > > +     new_sg = new_table->sgl;
+> > > +     for_each_sgtable_sg(table, sg, i) {
+> > > +             sg_set_page(new_sg, sg_page(sg), sg->length, sg-
+> > > >offset);
+> > > +             new_sg->dma_address = sg->dma_address;
+> > > +#ifdef CONFIG_NEED_SG_DMA_LENGTH
+> > > +             new_sg->dma_length = sg->dma_length;
+> > > +#endif
+> > > +             new_sg = sg_next(new_sg);
+> > > +     }
+> > > +
+> > > +     return new_table;
+> > > +}
+> > > +
+> > > +static int secure_heap_attach(struct dma_buf *dmabuf,
+> > > +                           struct dma_buf_attachment *attachment)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     struct secure_heap_info *info = dma_heap_get_drvdata(buffer-
+> > > >heap);
+> > > +     struct dma_heap_attachment *a;
+> > > +     struct sg_table *table;
+> > > +
+> > > +     a = kzalloc(sizeof(*a), GFP_KERNEL);
+> > > +     if (!a)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     table = dup_sg_table(&buffer->sg_table);
+> > > +     if (IS_ERR(table)) {
+> > > +             kfree(a);
+> > > +             return -ENOMEM;
+> > > +     }
+> > > +
+> > > +     a->table = table;
+> > > +     a->dev = attachment->dev;
+> > > +     INIT_LIST_HEAD(&a->list);
+> > > +     a->no_map = info->no_map;
+> > > +     a->mapped = false;
+> > > +     a->uncached = buffer->uncached;
+> > > +     attachment->priv = a;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +     list_add(&a->list, &buffer->attachments);
+> > > +     mutex_unlock(&buffer->lock);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static void secure_heap_detach(struct dma_buf *dmabuf,
+> > > +                            struct dma_buf_attachment *attachment)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     struct dma_heap_attachment *a = attachment->priv;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +     list_del(&a->list);
+> > > +     mutex_unlock(&buffer->lock);
+> > > +
+> > > +     sg_free_table(a->table);
+> > > +     kfree(a->table);
+> > > +     kfree(a);
+> > > +}
+> > > +
+> > > +static struct sg_table *secure_heap_map_dma_buf(struct
+> > > dma_buf_attachment *attachment,
+> > > +                                             enum
+> > > dma_data_direction direction)
+> > > +{
+> > > +     struct dma_heap_attachment *a = attachment->priv;
+> > > +     struct sg_table *table = a->table;
+> > > +     int attr = 0;
+> > > +     int ret;
+> > > +
+> > > +     if (!a->no_map) {
+> > 
+> > This looks strange - you're expecting this driver to be used on
+> > regions with no-map set, but if no-map _is_ set, you don't allow the
+> > dma_buf to get mapped to any devices. Doesn't that mean that these
+> > buffers can never actually be used?
+> 
+> if no-map is not set, map_dma_buf is mapping the buffer.
+> 
+
+no-map prevents the memory region from being added to the kernel's
+linear mapping. Irrespective of no-map, map_dma_buf is needed to map
+a buffer to a device, this should be orthogonal to no-map, and is
+definitely required for devices to be able to use these buffers.
+
+> > 
+> > > +             if (a->uncached)
+> > > +                     attr = DMA_ATTR_SKIP_CPU_SYNC;
+> > > +
+> > 
+> > If the CPU can never touch these buffers, is cached vs uncached
+> > meaningful?
+> 
+> indeed, but as dma_buf_ops.map_dma_buf is mandatory, this flag as well
+> as no-map were introduce to manage uncached mapped buffer.
+> 
+
+Uncached mapping where? I think we're agreed that these buffers can
+never be mapped for (non-trusted) CPU access, therefore (non-trusted)
+CPU cache maintenance doesn't apply. Devices may still have cached
+mappings, but it's up to device drivers to manage that.
+
+> to simplify everything, secure-heap could get rid of no-map and
+> uncached flags and set an is_protected flag in dma_buf ?
+> 
+
+I think that sounds better, yeah.
+
+> 
+> > If the TEE touches the buffers from the CPU then perhaps the TEE
+> > would
+> > need to do cache maintenance, but I'd expect that to be managed in
+> > the
+> > TEE.
+> 
+> yes, if needed cache maintenance should be done in TA.
+> 
+> > 
+> > > +             ret = dma_map_sgtable(attachment->dev, table,
+> > > direction, attr);
+> > > +             if (ret)
+> > > +                     return ERR_PTR(ret);
+> > > +
+> > > +             a->mapped = true;
+> > > +     }
+> > > +
+> > > +     return table;
+> > > +}
+> > > +
+> > > +static void secure_heap_unmap_dma_buf(struct dma_buf_attachment
+> > > *attachment,
+> > > +                                   struct sg_table *table,
+> > > +                                   enum dma_data_direction
+> > > direction)
+> > > +{
+> > > +     struct dma_heap_attachment *a = attachment->priv;
+> > > +     int attr = 0;
+> > > +
+> > > +     if (!a->no_map) {
+> > > +             if (a->uncached)
+> > > +                     attr = DMA_ATTR_SKIP_CPU_SYNC;
+> > > +
+> > > +             a->mapped = false;
+> > > +             dma_unmap_sgtable(attachment->dev, table, direction,
+> > > attr);
+> > > +     }
+> > > +}
+> > > +
+> > > +static int secure_heap_dma_buf_begin_cpu_access(struct dma_buf
+> > > *dmabuf,
+> > > +                                             enum
+> > > dma_data_direction direction)
+> > 
+> > If the firewall is preventing CPU accesses, then shouldn't
+> > begin_cpu_access and end_cpu_access either fail or be a no-op?
+> 
+> true, both of them are optional and could be removed.
+> 
+> > 
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     struct dma_heap_attachment *a;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +
+> > > +     if (buffer->vmap_cnt)
+> > > +             invalidate_kernel_vmap_range(buffer->vaddr, buffer-
+> > > >len);
+> > > +
+> > > +     if (!buffer->uncached) {
+> > > +             list_for_each_entry(a, &buffer->attachments, list) {
+> > > +                     if (!a->mapped)
+> > > +                             continue;
+> > > +                     dma_sync_sgtable_for_cpu(a->dev, a->table,
+> > > direction);
+> > > +             }
+> > > +     }
+> > > +     mutex_unlock(&buffer->lock);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int secure_heap_dma_buf_end_cpu_access(struct dma_buf
+> > > *dmabuf,
+> > > +                                           enum dma_data_direction
+> > > direction)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     struct dma_heap_attachment *a;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +
+> > > +     if (buffer->vmap_cnt)
+> > > +             flush_kernel_vmap_range(buffer->vaddr, buffer->len);
+> > > +
+> > > +     if (!buffer->uncached) {
+> > > +             list_for_each_entry(a, &buffer->attachments, list) {
+> > > +                     if (!a->mapped)
+> > > +                             continue;
+> > > +                     dma_sync_sgtable_for_device(a->dev, a->table, 
+> > > direction);
+> > > +             }
+> > > +     }
+> > > +     mutex_unlock(&buffer->lock);
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int secure_heap_mmap(struct dma_buf *dmabuf, struct
+> > > vm_area_struct *vma)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     struct sg_table *table = &buffer->sg_table;
+> > > +     unsigned long addr = vma->vm_start;
+> > > +     struct sg_page_iter piter;
+> > > +     int ret;
+> > > +
+> > > +     if (buffer->uncached)
+> > > +             vma->vm_page_prot = pgprot_writecombine(vma-
+> > > >vm_page_prot);
+> > > +
+> > > +     for_each_sgtable_page(table, &piter, vma->vm_pgoff) {
+> > > +             struct page *page = sg_page_iter_page(&piter);
+> > > +
+> > > +             ret = remap_pfn_range(vma, addr, page_to_pfn(page),
+> > > PAGE_SIZE,
+> > > +                                   vma->vm_page_prot);
+> > 
+> > If the CPU can't touch these buffers, what would they be mapped to
+> > userspace for?
+> 
+> again, let's remove this optional ops.
+> 
+> > 
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +             addr += PAGE_SIZE;
+> > > +     }
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static void *secure_heap_do_vmap(struct secure_heap_buffer
+> > > *buffer)
+> > > +{
+> > > +     struct sg_table *table = &buffer->sg_table;
+> > > +     int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
+> > > +     struct page **pages = vmalloc(sizeof(struct page *) *
+> > > npages);
+> > > +     struct page **tmp = pages;
+> > > +     struct sg_page_iter piter;
+> > > +     pgprot_t pgprot = PAGE_KERNEL;
+> > > +     void *vaddr;
+> > > +
+> > > +     if (!pages)
+> > > +             return ERR_PTR(-ENOMEM);
+> > > +
+> > > +     if (buffer->uncached)
+> > > +             pgprot = pgprot_writecombine(PAGE_KERNEL);
+> > > +
+> > > +     for_each_sgtable_page(table, &piter, 0) {
+> > > +             WARN_ON(tmp - pages >= npages);
+> > > +             *tmp++ = sg_page_iter_page(&piter);
+> > > +     }
+> > > +
+> > > +     vaddr = vmap(pages, npages, VM_MAP, pgprot);
+> > > +     vfree(pages);
+> > 
+> > Similar to above, if the CPU can't touch these buffers, what would be
+> > the point of mapping them to the kernel?
+> 
+> indeed, useless code.
+> 
+> > 
+> > > +
+> > > +     if (!vaddr)
+> > > +             return ERR_PTR(-ENOMEM);
+> > > +
+> > > +     return vaddr;
+> > > +}
+> > > +
+> > > +static int secure_heap_vmap(struct dma_buf *dmabuf, struct
+> > > dma_buf_map *map)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     void *vaddr;
+> > > +     int ret = 0;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +     if (buffer->vmap_cnt) {
+> > > +             buffer->vmap_cnt++;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     vaddr = secure_heap_do_vmap(buffer);
+> > > +     if (IS_ERR(vaddr)) {
+> > > +             ret = PTR_ERR(vaddr);
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     buffer->vaddr = vaddr;
+> > > +     buffer->vmap_cnt++;
+> > > +     dma_buf_map_set_vaddr(map, buffer->vaddr);
+> > > +out:
+> > > +     mutex_unlock(&buffer->lock);
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +static void secure_heap_vunmap(struct dma_buf *dmabuf, struct
+> > > dma_buf_map *map)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +
+> > > +     mutex_lock(&buffer->lock);
+> > > +     if (!--buffer->vmap_cnt) {
+> > > +             vunmap(buffer->vaddr);
+> > > +             buffer->vaddr = NULL;
+> > > +     }
+> > > +     mutex_unlock(&buffer->lock);
+> > > +     dma_buf_map_clear(map);
+> > > +}
+> > > +
+> > > +static void secure_heap_zero_buffer(struct secure_heap_buffer
+> > > *buffer)
+> > > +{
+> > > +     struct sg_table *sgt = &buffer->sg_table;
+> > > +     struct sg_page_iter piter;
+> > > +     struct page *p;
+> > > +     void *vaddr;
+> > > +
+> > > +     for_each_sgtable_page(sgt, &piter, 0) {
+> > > +             p = sg_page_iter_page(&piter);
+> > > +             vaddr = kmap_atomic(p);
+> > > +             memset(vaddr, 0, PAGE_SIZE);
+> > 
+> > How can you do memset on the buffer if the firewall is preventing CPU
+> > accesses?
+> > 
+> 
+> yes, useless if we set a secure flag to prevent driver from mapping
+> allocated buffer.
+> 
+
+Wouldn't you still want the buffers to be zeroed? I think you need
+a way to ask the TEE to zero them.
+
+This also makes me wonder about the deferred free mechanism. If you
+aren't zeroing then there's no need for the deferred free, and if
+allocations are coming from a reserved-memory region then the shrinker
+mechanism doesn't make sense because freeing up the deferred buffers
+won't help relieve memory pressure.
+
+I wonder if it would be better to have a more specialised deferred
+free mechanism as part of this heap (if necessary), rather than
+library-ise it as you have in patch 1.
+
+> > > +             kunmap_atomic(vaddr);
+> > > +     }
+> > > +}
+> > > +
+> > > +static void secure_heap_buf_free(struct deferred_freelist_item
+> > > *item,
+> > > +                              enum df_reason reason)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer;
+> > > +     struct secure_heap_info *info;
+> > > +     struct sg_table *table;
+> > > +     struct scatterlist *sg;
+> > > +     int i;
+> > > +
+> > > +     buffer = container_of(item, struct secure_heap_buffer,
+> > > deferred_free);
+> > > +     info = dma_heap_get_drvdata(buffer->heap);
+> > > +
+> > > +     if (!info->no_map) {
+> > > +             // Zero the buffer pages before adding back to the
+> > > pool
+> > > +             if (reason == DF_NORMAL)
+> > > +                     secure_heap_zero_buffer(buffer);
+> > > +     }
+> > > +
+> > > +     table = &buffer->sg_table;
+> > > +     for_each_sg(table->sgl, sg, table->nents, i)
+> > > +             gen_pool_free(info->pool, sg_dma_address(sg),
+> > > sg_dma_len(sg));
+> > > +
+> > > +     sg_free_table(table);
+> > > +     kfree(buffer);
+> > > +}
+> > > +
+> > > +static void secure_heap_dma_buf_release(struct dma_buf *dmabuf)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer = dmabuf->priv;
+> > > +     int npages = PAGE_ALIGN(buffer->len) / PAGE_SIZE;
+> > > +
+> > > +     deferred_free(&buffer->deferred_free, secure_heap_buf_free,
+> > > npages);
+> > > +}
+> > > +
+> > > +static const struct dma_buf_ops secure_heap_buf_ops = {
+> > > +     .attach = secure_heap_attach,
+> > > +     .detach = secure_heap_detach,
+> > > +     .map_dma_buf = secure_heap_map_dma_buf,
+> > > +     .unmap_dma_buf = secure_heap_unmap_dma_buf,
+> > > +     .begin_cpu_access = secure_heap_dma_buf_begin_cpu_access,
+> > > +     .end_cpu_access = secure_heap_dma_buf_end_cpu_access,
+> > > +     .mmap = secure_heap_mmap,
+> > > +     .vmap = secure_heap_vmap,
+> > > +     .vunmap = secure_heap_vunmap,
+> > > +     .release = secure_heap_dma_buf_release,
+> > > +};
+> > > +
+> > > +static struct dma_buf *secure_heap_do_allocate(struct dma_heap
+> > > *heap,
+> > > +                                            unsigned long len,
+> > > +                                            unsigned long
+> > > fd_flags,
+> > > +                                            unsigned long
+> > > heap_flags,
+> > > +                                            bool uncached)
+> > > +{
+> > > +     struct secure_heap_buffer *buffer;
+> > > +     struct secure_heap_info *info = dma_heap_get_drvdata(heap);
+> > > +     DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+> > > +     unsigned long size = roundup(len, PAGE_SIZE);
+> > > +     struct dma_buf *dmabuf;
+> > > +     struct sg_table *table;
+> > > +     int ret = -ENOMEM;
+> > > +     unsigned long phy_addr;
+> > > +
+> > > +     buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+> > > +     if (!buffer)
+> > > +             return ERR_PTR(-ENOMEM);
+> > > +
+> > > +     INIT_LIST_HEAD(&buffer->attachments);
+> > > +     mutex_init(&buffer->lock);
+> > > +     buffer->heap = heap;
+> > > +     buffer->len = size;
+> > > +     buffer->uncached = uncached;
+> > > +
+> > > +     phy_addr = gen_pool_alloc(info->pool, size);
+> > > +     if (!phy_addr)
+> > > +             goto free_buffer;
+> > > +
+> > > +     table = &buffer->sg_table;
+> > > +     if (sg_alloc_table(table, 1, GFP_KERNEL))
+> > > +             goto free_pool;
+> > > +
+> > > +     sg_set_page(table->sgl, phys_to_page(phy_addr), size, 0);
+> > > +     sg_dma_address(table->sgl) = phy_addr;
+> > > +     sg_dma_len(table->sgl) = size;
+> > > +
+> > > +     /* create the dmabuf */
+> > > +     exp_info.exp_name = dma_heap_get_name(heap);
+> > > +     exp_info.ops = &secure_heap_buf_ops;
+> > > +     exp_info.size = buffer->len;
+> > > +     exp_info.flags = fd_flags;
+> > > +     exp_info.priv = buffer;
+> > > +     dmabuf = dma_buf_export(&exp_info);
+> > > +     if (IS_ERR(dmabuf)) {
+> > > +             ret = PTR_ERR(dmabuf);
+> > > +             goto free_pages;
+> > > +     }
+> > > +
+> > > +     return dmabuf;
+> > > +
+> > > +free_pages:
+> > > +     sg_free_table(table);
+> > > +
+> > > +free_pool:
+> > > +     gen_pool_free(info->pool, phy_addr, size);
+> > > +
+> > > +free_buffer:
+> > > +     mutex_destroy(&buffer->lock);
+> > > +     kfree(buffer);
+> > > +
+> > > +     return ERR_PTR(ret);
+> > > +}
+> > > +
+> > > +static struct dma_buf *secure_heap_allocate(struct dma_heap *heap,
+> > > +                                         unsigned long len,
+> > > +                                         unsigned long fd_flags,
+> > > +                                         unsigned long heap_flags)
+> > > +{
+> > > +     // use uncache buffer here by default
+> > > +     return secure_heap_do_allocate(heap, len, fd_flags,
+> > > heap_flags, true);
+> > > +     // use cache buffer
+> > > +     // return secure_heap_do_allocate(heap, len, fd_flags,
+> > > heap_flags, false);
+> > > +}
+> > > +
+> > > +static const struct dma_heap_ops secure_heap_ops = {
+> > > +     .allocate = secure_heap_allocate,
+> > > +};
+> > > +
+> > > +static int secure_heap_add(struct rmem_secure *rmem)
+> > > +{
+> > > +     struct dma_heap *secure_heap;
+> > > +     struct dma_heap_export_info exp_info;
+> > > +     struct secure_heap_info *info = NULL;
+> > > +     struct gen_pool *pool = NULL;
+> > > +     int ret = -EINVAL;
+> > > +
+> > > +     if (rmem->base == 0 || rmem->size == 0) {
+> > > +             pr_err("secure_data base or size is not correct\n");
+> > > +             goto error;
+> > > +     }
+> > > +
+> > > +     info = kzalloc(sizeof(*info), GFP_KERNEL);
+> > > +     if (!info) {
+> > > +             pr_err("dmabuf info allocation failed\n");
+> > > +             ret = -ENOMEM;
+> > > +             goto error;
+> > > +     }
+> > > +
+> > > +     pool = gen_pool_create(PAGE_SHIFT, -1);
+> > > +     if (!pool) {
+> > > +             pr_err("can't create gen pool\n");
+> > > +             ret = -ENOMEM;
+> > > +             goto error;
+> > > +     }
+> > > +
+> > > +     if (gen_pool_add(pool, rmem->base, rmem->size, -1) < 0) {
+> > > +             pr_err("failed to add memory into pool\n");
+> > > +             ret = -ENOMEM;
+> > > +             goto error;
+> > > +     }
+> > > +
+> > > +     info->pool = pool;
+> > > +     info->no_map = rmem->no_map;
+> > 
+> > This kind of heap probably can't work if the region doesn't have
+> > no-map, so I think it would make sense to enforce that no_map is set
+> > (or ignore regions without no-map in DT).
+> 
+> if no-map is not set, secure-heap could be used as a heap with
+> dynamically protected buffer from the TEE.
+
+That would need a whole bunch more code to call in to the TEE to apply
+the protection. So hypothetically yes, that's true, but not without
+more code than what you have here.
+
+> but I agree that this is adding too much complexity and could be
+> simplify a lot without this mapping consideration.
+> 
+> then no-map is probably not the perfect term to describe this heap.
+> is_s
+> ecure or is_protected would be better ?
+
+You mean in device-tree? no-map has a well-defined meaning; and if
+this memory region shouldn't be added to the kernel's linear map
+then it should be tagged with no-map.
+
+Whether there should also be some DT property indicating that the
+region is protected and can't be accessed normally: I don't have
+much of an opinion on that.
 
 Thanks,
-Nipun
+-Brian
 
->=20
-> thanks,
->=20
-> greg k-h
+> 
+> > 
+> > Cheers,
+> > -Brian
+> > 
+> > > +
+> > > +     exp_info.name = rmem->name;
+> > > +     exp_info.ops = &secure_heap_ops;
+> > > +     exp_info.priv = info;
+> > > +
+> > > +     secure_heap = dma_heap_add(&exp_info);
+> > > +     if (IS_ERR(secure_heap)) {
+> > > +             pr_err("dmabuf secure heap allocation failed\n");
+> > > +             ret = PTR_ERR(secure_heap);
+> > > +             goto error;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +
+> > > +error:
+> > > +     kfree(info);
+> > > +     if (pool)
+> > > +             gen_pool_destroy(pool);
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +static int secure_heap_create(void)
+> > > +{
+> > > +     unsigned int i;
+> > > +     int ret;
+> > > +
+> > > +     for (i = 0; i < secure_data_count; i++) {
+> > > +             ret = secure_heap_add(&secure_data[i]);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int rmem_secure_heap_device_init(struct reserved_mem *rmem,
+> > > +                                      struct device *dev)
+> > > +{
+> > > +     dev_set_drvdata(dev, rmem);
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static void rmem_secure_heap_device_release(struct reserved_mem
+> > > *rmem,
+> > > +                                      struct device *dev)
+> > > +{
+> > > +     dev_set_drvdata(dev, NULL);
+> > > +}
+> > > +
+> > > +static const struct reserved_mem_ops rmem_dma_ops = {
+> > > +     .device_init    = rmem_secure_heap_device_init,
+> > > +     .device_release = rmem_secure_heap_device_release,
+> > > +};
+> > > +
+> > > +static int __init rmem_secure_heap_setup(struct reserved_mem
+> > > *rmem)
+> > > +{
+> > > +     if (secure_data_count < MAX_SECURE_HEAP) {
+> > > +             int name_len = 0;
+> > > +             char *s = rmem->name;
+> > > +
+> > > +             secure_data[secure_data_count].base = rmem->base;
+> > > +             secure_data[secure_data_count].size = rmem->size;
+> > > +             secure_data[secure_data_count].no_map =
+> > > +                     (of_get_flat_dt_prop(rmem->fdt_node, "no-
+> > > map", NULL) != NULL);
+> > > +
+> > > +             while (name_len < MAX_HEAP_NAME_LEN) {
+> > > +                     if ((*s == '@') || (*s == '\0'))
+> > > +                             break;
+> > > +                     name_len++;
+> > > +                     s++;
+> > > +             }
+> > > +             if (name_len == MAX_HEAP_NAME_LEN)
+> > > +                     name_len--;
+> > > +
+> > > +             strncpy(secure_data[secure_data_count].name, rmem-
+> > > >name, name_len);
+> > > +
+> > > +             rmem->ops = &rmem_dma_ops;
+> > > +             pr_info("Reserved memory: DMA buf secure pool %s at
+> > > %pa, size %ld MiB\n",
+> > > +                     secure_data[secure_data_count].name,
+> > > +                     &rmem->base, (unsigned long)rmem->size /
+> > > SZ_1M);
+> > > +
+> > > +             secure_data_count++;
+> > > +             return 0;
+> > > +     }
+> > > +     WARN_ONCE(1, "Cannot handle more than %u secure heaps\n",
+> > > MAX_SECURE_HEAP);
+> > > +     return -EINVAL;
+> > > +}
+> > > +
+> > > +RESERVEDMEM_OF_DECLARE(secure_heap, "linaro,secure-heap",
+> > > rmem_secure_heap_setup);
+> > > +
+> > > +module_init(secure_heap_create);
+> > > +MODULE_LICENSE("GPL v2");
+> > > --
+> > > 2.25.0
+> > > 

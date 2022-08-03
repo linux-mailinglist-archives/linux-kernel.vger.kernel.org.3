@@ -2,230 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AABC5885AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA015885B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233297AbiHCCOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 22:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S234385AbiHCCTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 22:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiHCCO3 (ORCPT
+        with ESMTP id S230348AbiHCCTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 22:14:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDBB50733
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:14:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ss3so28927524ejc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 19:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5PfzgdkwKk8vgPVTM9VmmwC+o/EB6JpB4y6rlRNyThM=;
-        b=WCDL7VdJKYamc04OZNM6Emi960roLI1Wg4lQOCL0k/GRrVSiXxLCr80L/Ph/kx8A6p
-         4eGb8Pr9BLTO0N5mIr8IRNe3C3QdpoG5mPykccOhVJxOXIpQBuCuFFsIg2qUtqFxV68C
-         SYyxbuwZFgo5g+0TtO0f+UCDzwQX/QJMReXFaQirKgGcvwmINj0WIuDd4AQvXGMlUEmR
-         BvuG7/BQa3OKK8m3Wm4XuesWDIF2w7qTRMoTnqiEnGIt99frrPl/f4QXsz2L5L/1bK0j
-         3vlR2t3JVUHmA2aISWQl9g+XofaUjZeNzB2pY3QqvOw5G9Wjs2HptoleurtoOm3b0ZCV
-         yIBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5PfzgdkwKk8vgPVTM9VmmwC+o/EB6JpB4y6rlRNyThM=;
-        b=hYunEWj5YEQg0gBjS/sjYl55z5GDh5Lk3496PTKv3hZpr/aWAYeOHgryKX+XldJq3M
-         w2juX1VFAxvodpK+iELa3LOUpyjLWWC2EIpaUJr/Ck8ASMVLfCnE4vO1GxZP5K35jtUD
-         GG56pu+xv87wuW9KZNWmfGvqZ3W2LiFaepnH6LuA0qbr7PW1eZgblc0c+9vTgyq+i044
-         ovfAg5eijweM1W0WfQ8f+KsSEBus3rGYj8B9lli/8przosMC33HQOuakzri/g/wSRWZJ
-         AZ7aXhx/luglrr3v6fmZiBhDr56OB8MJEOp1Awa8zsUzEsJLCS/heKYH+CJmUoE0cB2U
-         plgQ==
-X-Gm-Message-State: ACgBeo208BNur/lhV/6zxFzA42B3h3SH2uXZATQNpPR8umJcuhg3Oa1e
-        k8EAuyRD9wGBNflOan/iz0FvS6fC2MIEM55Zu/Y=
-X-Google-Smtp-Source: AA6agR4LB+/dYGmRzWqiOBOhzTd/1zOEZINeD17iFmHGwgfAGxP61hT2stDKtnxOlK9eu6dglwUMUEXjaXegPG5nVMU=
-X-Received: by 2002:a17:907:a428:b0:730:aee3:2da7 with SMTP id
- sg40-20020a170907a42800b00730aee32da7mr828489ejc.613.1659492866192; Tue, 02
- Aug 2022 19:14:26 -0700 (PDT)
+        Tue, 2 Aug 2022 22:19:47 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC23A54AC7;
+        Tue,  2 Aug 2022 19:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659493186; x=1691029186;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DPHASRO1Q4mcyIgeegJjXVGGp5M+MrqmwUvQvwVQFrU=;
+  b=HS4bQLnDBc0v7DAZ56YFIAj1zmLDUYZQiKyg1kbCFFoODlXJigg/WUEy
+   tHqYGqvbeJjIe7jFza5lbt0jcjci5LyNkPpfDnfKnBKYMilRsH8NIfkSh
+   bpPhdt1/d3oZVYh64IDLUH/jnCcaJoR6SsjnM0PNf+8yF6D+THUFPoUK4
+   VrtIhMMnzE8hwgcKa1Cj/et7nAI21C+My8NTQJS5IHgSvrkF3T2NWIUdf
+   18XK2twPxa+vTLXsvOm83TUL54oMd+86iLVG1xvAsA1CYUzuLTRuf2FZS
+   BZTIWp5bLrMd4ZRpaK/C7xYpPNeYD2hHZ1Gghq4nMzK8CkXtO8tPOGlD1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="272611473"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="272611473"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 19:19:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="630959183"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Aug 2022 19:19:43 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ3z4-000Ggt-27;
+        Wed, 03 Aug 2022 02:19:42 +0000
+Date:   Wed, 3 Aug 2022 10:19:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jacky Li <jackyli@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>
+Cc:     kbuild-all@lists.01.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
+        Peter Gonda <pgonda@google.com>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jacky Li <jackyli@google.com>
+Subject: Re: [PATCH 2/2] crypto: ccp - Fail the PSP initialization when
+ writing psp data file failed
+Message-ID: <202208031012.z1rYKkYA-lkp@intel.com>
+References: <20220802185534.735338-3-jackyli@google.com>
 MIME-Version: 1.0
-References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
- <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
-In-Reply-To: <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 2 Aug 2022 21:14:15 -0500
-Message-ID: <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802185534.735338-3-jackyli@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 8:51 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Tue, Aug 2, 2022 at 7:13 AM Adam Ford <aford173@gmail.com> wrote:
-> >
-> > On Tue, Aug 2, 2022 at 3:08 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
-> > >
-> > > Hi Adam, Fabio,
-> > >
-> > > On 22-08-01, Adam Ford wrote:
-> > > > On Mon, Aug 1, 2022 at 8:53 PM Fabio Estevam <festevam@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Aug 1, 2022 at 10:39 PM Adam Ford <aford173@gmail.com> wrote:
-> > > > >
-> > > > > > I managed to get my HDMI output working. I had the lanes set to 2
-> > > > > > instead of 4.  Once I switched to 4-lanes, the monitor came up in
-> > > > > > 1080p.  I haven't yet been able to get other modes to work.
-> > > > >
-> > > > > Ok, good. On another thread, you mentioned that you were also trying
-> > > > > to get LVDS to work via SN65DSI83.
-> > > > >
-> > > > > Does LVDS work for you on this branch?
-> > > >
-> > > > I haven't tried with Marek's latest suggestion.  In the other thread
-> > > > he mentioned a burst mode and setting the DSI speeds to higher
-> > > > frequencies, but the patch he had didn't look like it would apply
-> > > > cleanly, so I will need to dig into that a bit further.
-> > >
-> > > Can you provide me a link to this thread?
-> >
-> > Sure,
-> >
-> > https://www.spinics.net/lists/dri-devel/msg358301.html
-> >
-> > >
-> > > > Since my company doesn't really ship the LVDS displays with the kits,
-> > > > the HDMI is the default video, so I've been focusing on it.
-> > > >
-> > > > To answer Marco's question, I was able to revert "MLK-21958-13:
-> > > > drm/bridge: adv7511: Limit supported clocks" and still get a display
-> > > > at 1080p, but all the other resolutions I tried appear to come up
-> > > > blank.
-> > >
-> > > Cool so now you have the same state as we are.
-> >
-> > I have a couple patches applied to mine which mimic some of the stuff
-> > that NXP did.  Since I have access to a programmer manual, i was able
-> > to confirm some of the 7535 specific stuff and the low-refresh rate
-> > changes in their kernel appear appropriate and I also created a second
-> > table of default settings for the 7535 and if the type is set
-> > properly, i'll use the newer table instead of the older one. If anyone
-> > wants any of these patches, I can certainly share them, but I am not
-> > certain they make any difference.
-> >
-> > There are a few other items in the programmer manual that I want to
-> > attempt to implement once I have a chance to further review the
-> > document.
-> >
-> > >
-> > > I think that the most important one is the blanking calc. Can you try to
-> > > revert "drm/bridge: adv7511: Repair bus_flags and bus_format" and check
-> > > if you can get a output still? Also something to try would be to disable
-> > > the internal timing generator by specifying
-> > > 'adi,disable-timing-generator'. Also if you have an oscilloscope for
->
-> I did some reading about the internal timing generator.  It appears
-> that it's required when video formats use fractional bytes, and it's
-> preconfigured to run at 720p by default, but registers 28h through 37h
-> configure it for other video modes.
-I think there may still be some issues with the DSIM since some of the
-clock frequencies are set in the device tree.
+Hi Jacky,
 
-From what I can tell, the pixel rate is calculated based on the
-burst-clock-frequency and that generates a byte clock.  For 891000000,
-the byte clock is 111375000.
+Thank you for the patch! Perhaps something to improve:
 
-Modetest timings for 1080p show:
+[auto build test WARNING on herbert-cryptodev-2.6/master]
+[also build test WARNING on herbert-crypto-2.6/master kvm/queue linus/master v5.19 next-20220802]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-flags: nhsync, nvsync; type: driver
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Li/Improve-error-handling-during-INIT_EX-file-initialization/20220803-025617
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220803/202208031012.z1rYKkYA-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/3c3fe5b1821e961cbfe1f3724a5256e6e04bbe92
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacky-Li/Improve-error-handling-during-INIT_EX-file-initialization/20220803-025617
+        git checkout 3c3fe5b1821e961cbfe1f3724a5256e6e04bbe92
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/crypto/ccp/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from drivers/crypto/ccp/psp-dev.h:13,
+                    from drivers/crypto/ccp/sev-dev.c:30:
+   drivers/crypto/ccp/sev-dev.c: In function 'sev_write_init_ex_file':
+>> drivers/crypto/ccp/sev-dev.c:252:25: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'int' [-Wformat=]
+     252 |                         "SEV: could not open file for write, error %ld\n",
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/crypto/ccp/sev-dev.c:251:17: note: in expansion of macro 'dev_err'
+     251 |                 dev_err(sev->dev,
+         |                 ^~~~~~~
+   drivers/crypto/ccp/sev-dev.c:252:70: note: format string is defined here
+     252 |                         "SEV: could not open file for write, error %ld\n",
+         |                                                                    ~~^
+         |                                                                      |
+         |                                                                      long int
+         |                                                                    %d
 
 
-When looking at modetest, there is a clock for 1080p which appears to be 148500.
-111375000/148500 = 750.
+vim +252 drivers/crypto/ccp/sev-dev.c
 
-The rest of the entries in my table do not divide evenly.  I don;t
-know if that explains the lack of display, but it's something to note.
-It seems to me that instead of fixing the
-samsung,burst-clock-frequency to 891000000, we should make the desired
-PLL related to the desired pixel clock so it divides evenly.
+3d725965f836a7a David Rientjes 2021-12-07  235  
+3c3fe5b1821e961 Jacky Li       2022-08-02  236  static int sev_write_init_ex_file(void)
+3d725965f836a7a David Rientjes 2021-12-07  237  {
+3d725965f836a7a David Rientjes 2021-12-07  238  	struct sev_device *sev = psp_master->sev_data;
+3d725965f836a7a David Rientjes 2021-12-07  239  	struct file *fp;
+3d725965f836a7a David Rientjes 2021-12-07  240  	loff_t offset = 0;
+3d725965f836a7a David Rientjes 2021-12-07  241  	ssize_t nwrite;
+3d725965f836a7a David Rientjes 2021-12-07  242  
+3d725965f836a7a David Rientjes 2021-12-07  243  	lockdep_assert_held(&sev_cmd_mutex);
+3d725965f836a7a David Rientjes 2021-12-07  244  
+3d725965f836a7a David Rientjes 2021-12-07  245  	if (!sev_init_ex_buffer)
+3c3fe5b1821e961 Jacky Li       2022-08-02  246  		return 0;
+3d725965f836a7a David Rientjes 2021-12-07  247  
+05def5cacfa0bd5 Jacky Li       2022-04-14  248  	fp = open_file_as_root(init_ex_path, O_CREAT | O_WRONLY, 0600);
+3d725965f836a7a David Rientjes 2021-12-07  249  	if (IS_ERR(fp)) {
+3c3fe5b1821e961 Jacky Li       2022-08-02  250  		int ret = PTR_ERR(fp);
+3d725965f836a7a David Rientjes 2021-12-07  251  		dev_err(sev->dev,
+3d725965f836a7a David Rientjes 2021-12-07 @252  			"SEV: could not open file for write, error %ld\n",
+3c3fe5b1821e961 Jacky Li       2022-08-02  253  			ret);
+3c3fe5b1821e961 Jacky Li       2022-08-02  254  		return ret;
+3d725965f836a7a David Rientjes 2021-12-07  255  	}
+3d725965f836a7a David Rientjes 2021-12-07  256  
+3d725965f836a7a David Rientjes 2021-12-07  257  	nwrite = kernel_write(fp, sev_init_ex_buffer, NV_LENGTH, &offset);
+3d725965f836a7a David Rientjes 2021-12-07  258  	vfs_fsync(fp, 0);
+3d725965f836a7a David Rientjes 2021-12-07  259  	filp_close(fp, NULL);
+3d725965f836a7a David Rientjes 2021-12-07  260  
+3d725965f836a7a David Rientjes 2021-12-07  261  	if (nwrite != NV_LENGTH) {
+3d725965f836a7a David Rientjes 2021-12-07  262  		dev_err(sev->dev,
+3d725965f836a7a David Rientjes 2021-12-07  263  			"SEV: failed to write %u bytes to non volatile memory area, ret %ld\n",
+3d725965f836a7a David Rientjes 2021-12-07  264  			NV_LENGTH, nwrite);
+3c3fe5b1821e961 Jacky Li       2022-08-02  265  		return -EIO;
+3d725965f836a7a David Rientjes 2021-12-07  266  	}
+3d725965f836a7a David Rientjes 2021-12-07  267  
+3d725965f836a7a David Rientjes 2021-12-07  268  	dev_dbg(sev->dev, "SEV: write successful to NV file\n");
+3c3fe5b1821e961 Jacky Li       2022-08-02  269  
+3c3fe5b1821e961 Jacky Li       2022-08-02  270  	return 0;
+3d725965f836a7a David Rientjes 2021-12-07  271  }
+3d725965f836a7a David Rientjes 2021-12-07  272  
 
-Looking at NXP's kernel, I also noticed that their esc_prescaler is
-based on the byte clock divided by 20MHz.  With some small code
-changes to get the PLL based on the desired pixel clock instead of
-hard-coded,  I was able to set
-
-samsung,burst-clock-frequency = <1500000000>;
-samsung,esc-clock-frequency = <20000000>;
-
-With these settings and the above mentioned code changes, 1080p still
-appears, however when attempting other modes, the display still fails
-to load.  I also noticed that the phy ref clock is set to 27MHz
-instead of NXP's 12MHz.  I attempted to play with that setting, but I
-couldn't get 1080p to work again, so I backed it out.
-
-Maybe I am headed in the wrong direction, but I'm going to examine the
-P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
-this code compares.
-
-If someone who understands the interactions between these different
-components has suggestions, I'm willing to run some experiments.
-
-adam
-
-
-
->
-> Are you thinking the imx8mm DSI generator would do it better?
->
-> > > such frequencies you can check the hdmi clk-lane. I noticed that this is
-> > > sometimes wrong.
-> >
-> > I am doing this from my home office as a side project, so I don't have
-> > a scope, but I can try to revert the other patch and try to disable
-> > the internal timing generator when I get home tonight.  I'll report my
-> > findings.
-> >
-> > >
-> > > Regards,
-> > >   Marco
-> > >
-> > > > I didn't try every one.  With that revert, more options come
-> > > > available, but 1440x900 and 800x600 were options I tried
-> > > > unsuccessfullyl.
-> > >
-> > > >
-> > > > adam
-> > > >
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

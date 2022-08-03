@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A141E5888EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFAB5888F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234466AbiHCI5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S234673AbiHCI5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbiHCI5G (ORCPT
+        with ESMTP id S231671AbiHCI5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:57:06 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B871FCE4;
-        Wed,  3 Aug 2022 01:57:05 -0700 (PDT)
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LyQgN3vr8zTgTg;
-        Wed,  3 Aug 2022 16:55:44 +0800 (CST)
-Received: from [10.174.179.2] (10.174.179.2) by canpemm500008.china.huawei.com
- (7.192.105.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 3 Aug
- 2022 16:57:01 +0800
-Subject: Re: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
- getpeername()
-To:     Mike Christie <michael.christie@oracle.com>,
-        "lduncan@suse.com" <lduncan@suse.com>,
-        "cleech@redhat.com" <cleech@redhat.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "mark.mielke@gmail.com" <mark.mielke@gmail.com>
-CC:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linfeilong <linfeilong@huawei.com>,
-        "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>
-References: <20220802101939.3972556-1-lijinlin3@huawei.com>
- <d8afc88468ab481eb325e842ad384e0e@huawei.com>
- <f52cc786-be48-d670-6212-5ae6117d314d@oracle.com>
-From:   Li Jinlin <lijinlin3@huawei.com>
-Message-ID: <edd3f6af-98eb-2f17-2144-99daf6455be8@huawei.com>
-Date:   Wed, 3 Aug 2022 16:56:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 3 Aug 2022 04:57:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D711A1FCE4;
+        Wed,  3 Aug 2022 01:57:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 237BA13D5;
+        Wed,  3 Aug 2022 01:57:48 -0700 (PDT)
+Received: from [10.1.28.148] (e121487-lin.cambridge.arm.com [10.1.28.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E4F03F67D;
+        Wed,  3 Aug 2022 01:57:44 -0700 (PDT)
+Message-ID: <2c1198c4-77aa-5cb8-6bb4-b974850651be@arm.com>
+Date:   Wed, 3 Aug 2022 09:57:35 +0100
 MIME-Version: 1.0
-In-Reply-To: <f52cc786-be48-d670-6212-5ae6117d314d@oracle.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/4] hwrng: virtio - always add a pending request
 Content-Language: en-US
+To:     Laurent Vivier <lvivier@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     amit@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Matt Mackall <mpm@selenic.com>,
+        virtualization@lists.linux-foundation.org,
+        Dmitriy Vyukov <dvyukov@google.com>, rusty@rustcorp.com.au,
+        akong@redhat.com, Alexander Potapenko <glider@google.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        linux-crypto@vger.kernel.org,
+        Mauricio De Carvalho <Mauricio.DeCarvalho@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>
+References: <20211028101111.128049-1-lvivier@redhat.com>
+ <20211028101111.128049-5-lvivier@redhat.com>
+ <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.2]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500008.china.huawei.com (7.192.105.151)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,70 +54,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/3/2022 12:25 AM, Mike Christie wrote:
-> On 8/2/22 6:23 AM, lijinlin (A) wrote:
->> So sorry, this patch has problem, please ignore.
+On 8/2/22 13:49, Vladimir Murzin wrote:
+> Hi Laurent,
+> 
+> On 10/28/21 11:11, Laurent Vivier wrote:
+>> If we ensure we have already some data available by enqueuing
+>> again the buffer once data are exhausted, we can return what we
+>> have without waiting for the device answer.
 >>
+>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>> ---
+>>  drivers/char/hw_random/virtio-rng.c | 26 ++++++++++++--------------
+>>  1 file changed, 12 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>> index 8ba97cf4ca8f..0a7dde135db1 100644
+>> --- a/drivers/char/hw_random/virtio-rng.c
+>> +++ b/drivers/char/hw_random/virtio-rng.c
+>> @@ -20,7 +20,6 @@ struct virtrng_info {
+>>  	struct virtqueue *vq;
+>>  	char name[25];
+>>  	int index;
+>> -	bool busy;
+>>  	bool hwrng_register_done;
+>>  	bool hwrng_removed;
+>>  	/* data transfer */
+>> @@ -44,16 +43,18 @@ static void random_recv_done(struct virtqueue *vq)
+>>  		return;
+>>  
+>>  	vi->data_idx = 0;
+>> -	vi->busy = false;
+>>  
+>>  	complete(&vi->have_data);
+>>  }
+>>  
+>> -/* The host will fill any buffer we give it with sweet, sweet randomness. */
+>> -static void register_buffer(struct virtrng_info *vi)
+>> +static void request_entropy(struct virtrng_info *vi)
+>>  {
+>>  	struct scatterlist sg;
+>>  
+>> +	reinit_completion(&vi->have_data);
+>> +	vi->data_avail = 0;
+>> +	vi->data_idx = 0;
+>> +
+>>  	sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>  
+>>  	/* There should always be room for one buffer. */
+>> @@ -69,6 +70,8 @@ static unsigned int copy_data(struct virtrng_info *vi, void *buf,
+>>  	memcpy(buf, vi->data + vi->data_idx, size);
+>>  	vi->data_idx += size;
+>>  	vi->data_avail -= size;
+>> +	if (vi->data_avail == 0)
+>> +		request_entropy(vi);
+>>  	return size;
+>>  }
+>>  
+>> @@ -98,13 +101,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>  	 * so either size is 0 or data_avail is 0
+>>  	 */
+>>  	while (size != 0) {
+>> -		/* data_avail is 0 */
+>> -		if (!vi->busy) {
+>> -			/* no pending request, ask for more */
+>> -			vi->busy = true;
+>> -			reinit_completion(&vi->have_data);
+>> -			register_buffer(vi);
+>> -		}
+>> +		/* data_avail is 0 but a request is pending */
+>>  		ret = wait_for_completion_killable(&vi->have_data);
+>>  		if (ret < 0)
+>>  			return ret;
+>> @@ -126,8 +123,7 @@ static void virtio_cleanup(struct hwrng *rng)
+>>  {
+>>  	struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
+>>  
+>> -	if (vi->busy)
+>> -		complete(&vi->have_data);
+>> +	complete(&vi->have_data);
+>>  }
+>>  
+>>  static int probe_common(struct virtio_device *vdev)
+>> @@ -163,6 +159,9 @@ static int probe_common(struct virtio_device *vdev)
+>>  		goto err_find;
+>>  	}
+>>  
+>> +	/* we always have a pending entropy request */
+>> +	request_entropy(vi);
+>> +
+>>  	return 0;
+>>  
+>>  err_find:
+>> @@ -181,7 +180,6 @@ static void remove_common(struct virtio_device *vdev)
+>>  	vi->data_idx = 0;
+>>  	complete(&vi->have_data);
+>>  	vdev->config->reset(vdev);
+>> -	vi->busy = false;
+>>  	if (vi->hwrng_register_done)
+>>  		hwrng_unregister(&vi->hwrng);
+>>  	vdev->config->del_vqs(vdev);
 > 
-> Was the issue the fget use?
->> I know I gave the suggestion to do the get, but seeing it now makes
-> me think I was wrong and it's getting too messy.
+> We observed that after this commit virtio-rng implementation in FVP doesn't
+> work
 > 
-I use get_file() in local, and test the patch can fix this null-ptr-deref.
-But I got an INFO report as below, it only appears once in multiple
-tests. I'm not sure if this info report represents a possible problem
-with the patch. So I ask for ignore it.
-
-    INFO: trying to register non-static key.
-    The code is fine but needs lockdep annotation, or maybe
-    you didn't initialize this object before use?
-    turning off the locking correctness validator.
-    CPU: 21 PID: 1074 Comm: cat Not tainted 5.19.0 #44
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-    Call Trace:
-    <TASK>
-    dump_stack_lvl+0x49/0x63
-    dump_stack+0x10/0x16
-    register_lock_class+0x483/0x490
-    ? reacquire_held_locks+0xcb/0x1e0
-    ? release_sock+0x1e/0xb0
-    __lock_acquire.constprop.0+0x4e/0x530
-    ? lock_release+0x142/0x2d0
-    lock_acquire+0xc3/0x1b0
-    ? iscsi_sw_tcp_host_get_param+0xa4/0x120
-    _raw_spin_lock_bh+0x34/0x50
-    ? iscsi_sw_tcp_host_get_param+0xa4/0x120
-    iscsi_sw_tcp_host_get_param+0xa4/0x120
-    show_host_param_ISCSI_HOST_PARAM_IPADDRESS+0x56/0x70
-    dev_attr_show+0x1d/0x50
-    sysfs_kf_seq_show+0xad/0x120
-    kernfs_seq_show+0x2c/0x40
-    seq_read_iter+0x12e/0x4d0
-    ? aa_file_perm+0x177/0x5a0
-    kernfs_fop_read_iter+0x183/0x210
-    new_sync_read+0xfe/0x180
-    ? 0xffffffff81000000
-    vfs_read+0x14d/0x1a0
-    ksys_read+0x6d/0xf0
-    __x64_sys_read+0x1a/0x20
-    do_syscall_64+0x3b/0x90
-    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-> Let's just add a mutex for getting/setting the tcp_sw_conn->sock in
-> the non-io paths (io paths are flushed/locked already). Something like
-> this (patch is only compile tested):
+> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+> INFO: bp.virtio_rng: Using seed value: 0x5674bba8
+> Error: FVP_Base_AEMvA: bp.virtio_rng: <vq0-requestq> Found invalid descriptor index
+> In file: (unknown):0
+> In process: FVP_Base_AEMvA.thread_p_12 @ 935500020 ns
+> Info: FVP_Base_AEMvA: bp.virtio_rng: Could not extract buffer
 > 
+> while basic baremetal test works as expected
+> 
+> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+> INFO: bp.virtio_rng: Using seed value: 0x541c142e
+> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0x4b098991ceb377e6
+> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0xbdcbe3f765ba62f7
+> 
+> We are trying to get an idea what is missing and where, yet none of us familiar
+> with the driver :(
+> 
+> I'm looping Kevin who originally reported that and Mauricio who is looking form
+> the FVP side. 
 
-This patch is clean, I have tested it and it is effective.
-Please push this patch to the mainline, Thanks.
+With the following diff FVP works agin
 
-Jinlin
+diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+index a6f3a8a2ac..042503ad6c 100644
+--- a/drivers/char/hw_random/virtio-rng.c
++++ b/drivers/char/hw_random/virtio-rng.c
+@@ -54,6 +54,7 @@ static void request_entropy(struct virtrng_info *vi)
+        reinit_completion(&vi->have_data);
+        vi->data_avail = 0;
+        vi->data_idx = 0;
++       smp_mb();
+ 
+        sg_init_one(&sg, vi->data, sizeof(vi->data));
+ 
 
-> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-> index 9fee70d6434a..c1696472965e 100644
-> --- a/drivers/scsi/iscsi_tcp.c
-> +++ b/drivers/scsi/iscsi_tcp.c
+What do you reckon?
+
+Cheers
+Vladimir
+
+> 
+> Cheers
+> Vladimir
 

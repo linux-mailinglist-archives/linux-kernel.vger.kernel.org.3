@@ -2,81 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5865888F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E285888F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbiHCI6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S235111AbiHCI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiHCI6b (ORCPT
+        with ESMTP id S231495AbiHCI7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:58:31 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE282251E;
-        Wed,  3 Aug 2022 01:58:30 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ss3so30199431ejc.11;
-        Wed, 03 Aug 2022 01:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=FMuEkX1cuR0fLJAj2NpiHvom9cpz7zgbO733+2J3n5M=;
-        b=SGxUTOZjt0kkWQ0YjILDWUI/iQqjmr3lP5rGPGLbXvgH4MKcyRQxOsgrMBGXjzgiQs
-         MZczp4aP+enl8+HSdrOxgT7hZVQWujXQtUTtxkt8jVyvzBjleWLu7intoXYVYAys7SQD
-         GbBhJGsZtpfj0L4OlcdxSRh+N6KkhQb55I82p2H1sBrneUOEc3dybg5/vKjbA94+iqs9
-         G+C22iqkWncYAEguobYF1jfeN945IpC/2DsxfI0TFp/BRIS7cnoezkIuGrBETHv6glSn
-         0K8YF5IW5wL9waVGwWi/y3mdabmKLB0MewSpccRL2paQoR/LQ7iMZG0DaJUU5MuCi71A
-         +G2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FMuEkX1cuR0fLJAj2NpiHvom9cpz7zgbO733+2J3n5M=;
-        b=KIkJ+UhW0DgUNQe+jiYiqN0lvDWXM0yAodhVB/58HsvBurrYVFwK/ZSSyl9L6ef79g
-         cSue8CaS942qEdumAP3s4wJH4vPzpz1Ugkg5q3oy+3kISM9ZTMXpz6YFM2UbYRgq4hnn
-         xFUhkyKmlkmoWPF7n36tHZQmvatvlOZazKJoHFPNhHRnr4YWC1ohzzK3mO4rs4DvLVv9
-         A2mSrLuUbokupDSlhfblqgeLhvmeSfjBgWqRZf7SpWmY+JAzoBfVg0lCQnY5+KRjMni8
-         KxwM/gDsVCB5t9qO3PELuGR9A+Q7ktxExmjgkB/98/qxDgmHPdV7NhEetB/zfgTgcukj
-         PZNQ==
-X-Gm-Message-State: AJIora/IRu0XMT7nAmi1bxFOyoWsvR3pV/Rb/EY/l0cT+LtPsb0f+H3j
-        s8B5eOnH8TvCS6b4wM6IgtKS0wYaRbV7tE0J
-X-Google-Smtp-Source: AGRyM1umGkFw1eJ89UsPMftjXKOKWWCI95hu2K2npgGE7MmsfMTI1ig5d5ii1qqw/Bj3tqnGkBYShQ==
-X-Received: by 2002:a17:906:8cb0:b0:72f:6ce7:3a1 with SMTP id qr48-20020a1709068cb000b0072f6ce703a1mr18951830ejc.322.1659517108472;
-        Wed, 03 Aug 2022 01:58:28 -0700 (PDT)
-Received: from [192.168.74.101] ([77.78.38.236])
-        by smtp.gmail.com with ESMTPSA id f12-20020a17090631cc00b0073086d1afe3sm3105293ejf.86.2022.08.03.01.58.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 01:58:27 -0700 (PDT)
-Message-ID: <f44fc6d2-9d3b-2c37-15dd-d002dc09b7b0@gmail.com>
-Date:   Wed, 3 Aug 2022 11:58:26 +0300
+        Wed, 3 Aug 2022 04:59:06 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE432251E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:59:05 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VLGE8GG_1659517139;
+Received: from 30.178.80.143(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VLGE8GG_1659517139)
+          by smtp.aliyun-inc.com;
+          Wed, 03 Aug 2022 16:59:01 +0800
+Message-ID: <c4058896-947d-c802-ac57-bf03eb986378@linux.alibaba.com>
+Date:   Wed, 3 Aug 2022 16:58:59 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 00/13] PM6125 regulator support
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20220731223736.1036286-1-iskren.chernev@gmail.com>
- <89469b0d-e6aa-4d60-c93c-a99256f65445@linaro.org>
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-In-Reply-To: <89469b0d-e6aa-4d60-c93c-a99256f65445@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH] sched/debug: avoid executing show_state and causing rcu
+ stall warning
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+References: <1659489525-82994-1-git-send-email-liusong@linux.alibaba.com>
+ <Yuo0U2aWUZRLBAsA@gmail.com>
+From:   Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <Yuo0U2aWUZRLBAsA@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,25 +49,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
->>
->> Iskren Chernev (13):
->>    dt-bindings: regulator: qcom_spmi: Improve formatting of if-then
->>      blocks
->>    dt-bindings: regulator: qcom_spmi: Document PM6125 PMIC
->>    dt-bindings: regulator: qcom_smd: Sort compatibles alphabetically
->>    dt-bindings: regulator: qcom_smd: Document PM6125 PMIC
->>    regulator: qcom_spmi: Add support for new regulator types
->>    regulator: qcom_spmi: Add support for HFSMPS regulator type
->>    regulator: qcom_spmi: Sort pmics alphabetically (part 1)
->>    regulator: qcom_spmi: Sort pmics alphabetically (part 2)
->>    regulator: qcom_spmi: Add PM6125 PMIC support
->>    regulator: qcom_smd: Sort pmics alphabetically (part 1)
->>    regulator: qcom_smd: Sort pmics alphabetically (part 2)
->>    regulator: qcom_smd: Sort pmics alphabetically (part 3)
+> * Liu Song <liusong@linux.alibaba.com> wrote:
 >
-> What is the reason for these part1/2 and part1/2/3 splits? I think you can collapse them into two respective patches, one sorting of spmi, another one sorting the smd regulators
+>> From: Liu Song <liusong@linux.alibaba.com>
+>>
+>> If the number of CPUs is large, "sysrq_sched_debug_show" will execute for
+>> a long time. Every time I execute "echo t > /proc/sysrq-trigger" on my
+>> 128-core machine, the rcu stall warning will be triggered. Moreover,
+>> sysrq_sched_debug_show does not need to be protected by rcu_read_lock,
+>    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>> and no rcu stall warning will appear after adjustment.
+>>
+> That doesn't mean it doesn't have to be protected by *any* lock - which
+> your patch implements AFAICS.
+>
+> There's a couple of lines such as:
+>
+>          for_each_online_cpu(cpu) {
 
-The reason is that if I do collapse them the diff looks much more
-complicated and it's not obvious that the sections are in-fact only moved.
-I'm not sure how these are reviewed, but casually reading the patch will
-not instill confidence.
+Hi,
+
+Here I refer to the implementation of "sysrq_timer_list_show", and I 
+don't see any lock.
+
+Maybe there is a problem with the implementation of "sysrq_timer_list_show".
+
+
+Thanks
+
+>
+> ... which need to be protected against CPU hotplug events.
+>
+> I haven't checked any of the deeper code to see what RCU or other
+> protection it may need, but clearly you didn't either ...
+>
+> Thanks,
+>
+> 	Ingo

@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53353588BE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD030588BEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237857AbiHCMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S235900AbiHCMW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbiHCMWI (ORCPT
+        with ESMTP id S237851AbiHCMWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:22:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFF512AA6;
-        Wed,  3 Aug 2022 05:22:07 -0700 (PDT)
+        Wed, 3 Aug 2022 08:22:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A6513E35;
+        Wed,  3 Aug 2022 05:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659529327; x=1691065327;
+  t=1659529331; x=1691065331;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=X8fFu9QSmU9cXPCoF4NzSuBKpuk/b4Qx3+SeEQCPSlY=;
-  b=CYHPWRKey6ScoDu0srGvqAk8hx5IHEHjJmB2RieiPQc7qNOmFHDV0uqj
-   Px4UaNSNhVdDfGSU1iSUjmCQ2mvAHBdfs9E337R2EQwhUA/TlPale///7
-   A2M1m9LrC8NUvibBHNIWeyDs8FgmI84CpWS6IGG6n+ejeQeMHUEjbmFq7
-   C7wjaoU4IwQ9y3Xa5y/jXGFHWMFp7qrwXEjaw1zLhDOLVVJmNpoIy+N7A
-   TKyG+ByeIojeVpU9eEtMd9ifZNlC8Jb/4bdK8VtWXIgijVkZBFlJw40MH
-   XRJRwkjPOAfQmaZ6JR6K3fM38NLS9SWM9uw6iRWBLAoR4YslkgkOgl0x9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="290431412"
+  bh=8HOQd1wDQcuWohstXq9pTpJMEGYQijbNIPB9ABdU6tw=;
+  b=Wja+KGDF6ED1c/PFQeHRmrG6r5ex49D9qR0bCosND93NnD/0oGUlhxqm
+   DbDk0X7YVb1BXT92IvVGxosw2xj2SlrjQngSutyuI+mKkZwq9AKcifusJ
+   F1PlvUVHP6DHDG9O3kkv4Bp5S6Id9J6gxGXHOAjdk6QFzs9UBHqVTl79D
+   zbENzpk8tKVUgKyc0CpMZ8NWIXT8G94+pDaTiZaBHcXip7BR4hIAuV36p
+   25o5zofNGsJ3VtJ/nQyzIcCjCOejLyjIANZA6JhCmvqIi71PH0Os7W8+m
+   GlRjIUsCJdQVqzjzMLngLRwJXzkn/X0g6gcxgZYJWzv2TK3i8elyVIyxq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269427567"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="290431412"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:07 -0700
+   d="scan'208";a="269427567"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="635664871"
+   d="scan'208";a="848562337"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oJDO1-000HFd-0Q;
+        id 1oJDO1-000HFi-0X;
         Wed, 03 Aug 2022 12:22:05 +0000
-Date:   Wed, 3 Aug 2022 20:21:38 +0800
+Date:   Wed, 3 Aug 2022 20:21:40 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kbuild-all@lists.01.org, Pavel Machek <pavel@ucw.cz>
 Subject: Re: [PATCH v1 1/1] leds: bcm6328: Get rid of custom
  led_init_default_state_get()
-Message-ID: <202208032042.E6WmErcY-lkp@intel.com>
+Message-ID: <202208032028.jurRnUDS-lkp@intel.com>
 References: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -57,8 +57,7 @@ Content-Disposition: inline
 In-Reply-To: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,8 +76,8 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6328-Get-rid-of-custom-led_init_default_state_get/20220803-052959
 base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: openrisc-randconfig-r035-20220801 (https://download.01.org/0day-ci/archive/20220803/202208032042.E6WmErcY-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
+config: arc-randconfig-r016-20220801 (https://download.01.org/0day-ci/archive/20220803/202208032028.jurRnUDS-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -88,7 +87,7 @@ reproduce (this is a W=1 build):
         git checkout 514383e5dd28e25f812c88b0454a02d59e4d205c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/leds/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>

@@ -2,104 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9050588A00
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B399588A0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiHCJ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S235981AbiHCKCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbiHCJ6n (ORCPT
+        with ESMTP id S231533AbiHCKB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:58:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD2C1CB12;
-        Wed,  3 Aug 2022 02:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659520722; x=1691056722;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=7BjbHNcgAD7bFSogdESJhwwP2ibvONYz64wk3ueI8zI=;
-  b=Q2+lcvl/QSrOU1OynwwKSdO/LtrVKsEqCywYiV5zU9TtNBf2Dm1roNPq
-   2BWygZ4BEmHq2OwjBdJ/jxJdMwbx7YrJE+XvEHiE6TAsdW3sF29K1AGvc
-   71uhgxGgNi23yCUKrsqfnpLE/mYJvsH01o0UXOMRZ3KdKGH4B8hcqCkuP
-   DY/9O+mPIYly15gn0hYoDm9t7E6eP6h9pioFP/0fY8WzVsU0rCSOlTZzw
-   ux1TD2mGKSDrsdyliAo3qhPZI2em9AdobZr7acelF+RESoVqxHctFuGV6
-   MowTQAudtc/sdH5VkBczXYzuJ/pKOc8hp1k3noUHxJ2F4Hxqucg3IsQlI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="270013500"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="270013500"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:58:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="599589950"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 03 Aug 2022 02:58:31 -0700
-Date:   Wed, 3 Aug 2022 17:53:44 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 14/14] memfd_create.2: Describe MFD_INACCESSIBLE flag
-Message-ID: <20220803095344.GC607465@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-15-chao.p.peng@linux.intel.com>
- <dc878e6c-c1d2-c291-00ef-11cff6cb03ec@intel.com>
+        Wed, 3 Aug 2022 06:01:59 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78F91836B;
+        Wed,  3 Aug 2022 03:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1659520919; x=1691056919;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1rVxQ4eqI3N9wCVO+tgYoYxdpipoicSFsvvHXjVF02g=;
+  b=C3Cu6vOsuzPJuzImBkgFrMpA39OFtZBJnzHRhL1gPpYkCXFfM9ufo5Cm
+   f7HrPkGh/Jr7QW1INMGoqqL18jJuppc/P1JvnOESosfsiwojecjjsT1f6
+   iylDLVO+2Ny4jaDZ59bd4338xhctqw/rvWAMKsU2WR9bBE6LgbVmx+Eeu
+   E=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Aug 2022 03:01:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 03:01:58 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 3 Aug 2022 03:01:57 -0700
+Received: from [10.216.24.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 3 Aug 2022
+ 03:01:51 -0700
+Message-ID: <0f90ef4d-4b74-2746-a37c-4a661cc0d5ea@quicinc.com>
+Date:   Wed, 3 Aug 2022 15:31:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc878e6c-c1d2-c291-00ef-11cff6cb03ec@intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 0/5] clk/qcom: Support gdsc collapse polling using 'reset'
+ inteface
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
+ <34ae275e-8d4c-3735-c08c-4769caf2909c@linaro.org>
+ <CAF6AEGv_cgPtaFpxSPCzWXeBcJvqE2fGucriRvMAJMbQ7ULndQ@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGv_cgPtaFpxSPCzWXeBcJvqE2fGucriRvMAJMbQ7ULndQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 07:40:32AM -0700, Dave Hansen wrote:
-> This patch does not belong in this series.  It's not a patch to the
-> kernel.  This is a kernel series.
+On 8/3/2022 12:02 AM, Rob Clark wrote:
+> On Tue, Aug 2, 2022 at 12:02 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>> On 30/07/2022 12:17, Akhil P Oommen wrote:
+>>> Some clients like adreno gpu driver would like to ensure that its gdsc
+>>> is collapsed at hardware during a gpu reset sequence. This is because it
+>>> has a votable gdsc which could be ON due to a vote from another subsystem
+>>> like tz, hyp etc or due to an internal hardware signal.
+>> If this is votable, do we have any guarantee that the gdsc will collapse
+>> at all? How can we proceed if it did not collapse?
+> Other potential votes should be transient.  But I guess we eventually
+> need to timeout and give up.  At which point we are no worse off than
+> before.
+>
+> But hmm, we aren't using RBBM_SW_RESET_CMD for sw reset like we have
+> on previous generations?  That does seem a bit odd.  Looks like kgsl
+> does use it.
+>
+> BR,
+> -R
+Like Rob mentioned there could be transient votes from other 
+clients/subsystem. It could be even stuck ON when hardware is in bad 
+shape in some very rare cases. For the worst case scenario, I have added 
+a timeout (500msec) in the gdsc reset op.
 
-You are right.
+I have added the Soft reset in [1]. But this resets only the core gpu 
+blocks, not everything. For eg. GMU.
 
-> 
-> It would be much more appropriate to put a link to a separately posted
-> manpage patch in the cover letter.
+[1] [PATCH v3 7/8] drm/msm/a6xx: Improve gpu recovery sequence
 
-Thanks for suggesion.
+>
+>>> To allow
+>>> this, gpucc driver can expose an interface to the client driver using
+>>> reset framework. Using this the client driver can trigger a polling within
+>>> the gdsc driver.
+>> Trigger the polling made me think initially that we will actually
+>> trigger something in the HW. Instead the client uses reset framework to
+>> poll for the gdsc to be reset.
+Yes. I should replace 'trigger' with 'start' here.
 
-Chao
+-Akhil.
+>>
+>>> This series is rebased on top of linus's master branch.
+>>>
+>>> Related discussion: https://patchwork.freedesktop.org/patch/493144/
+>>>
+>>>
+>>> Akhil P Oommen (5):
+>>>     dt-bindings: clk: qcom: Support gpu cx gdsc reset
+>>>     clk: qcom: Allow custom reset ops
+>>>     clk: qcom: gpucc-sc7280: Add cx collapse reset support
+>>>     clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+>>>     arm64: dts: qcom: sc7280: Add Reset support for gpu
+>>>
+>>>    arch/arm64/boot/dts/qcom/sc7280.dtsi          |  3 +++
+>>>    drivers/clk/qcom/gdsc.c                       | 23 +++++++++++++++++++----
+>>>    drivers/clk/qcom/gdsc.h                       |  7 +++++++
+>>>    drivers/clk/qcom/gpucc-sc7280.c               |  6 ++++++
+>>>    drivers/clk/qcom/reset.c                      |  6 ++++++
+>>>    drivers/clk/qcom/reset.h                      |  2 ++
+>>>    include/dt-bindings/clock/qcom,gpucc-sc7280.h |  3 +++
+>>>    7 files changed, 46 insertions(+), 4 deletions(-)
+>>>
+>>
+>> --
+>> With best wishes
+>> Dmitry
+

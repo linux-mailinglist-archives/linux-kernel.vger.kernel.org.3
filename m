@@ -2,134 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECEC5888A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433565888A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235835AbiHCITE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S236417AbiHCITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234430AbiHCITA (ORCPT
+        with ESMTP id S233565AbiHCITk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:19:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0445E60D0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659514740; x=1691050740;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AxTT9CLPbIJFu1VLIYTyPklDwuwKIe3EdKtfLuw7R1E=;
-  b=CnkHCQJyKCBW1g4Hxx414Y+5efNrwxdzsNmbQjpWq+N+e2gGIm9kQwPz
-   O06nK2Uhp0pHrag4bmPEouXnobr82O4oUQ/rBZ9M11F8WVhLZKaRE7vYo
-   1xA5r5BV51GKJEDgg/NHSqx6NxH54tk3A/7dT5HVfoLJ9NpxlZcsqjIv3
-   qOtw5E7Nc6Ed3p8G9EoQIZsmgdRpq5o9TAJbHpZtWUvF5tNfOSZoIRXUs
-   IZbdPTYTdqBQO4IBscpENhMuBqMOqbn1PosCw48vxPVaVhxRrX1dqQqWd
-   Txo3t1qvA0QwysWmP+mNRgZRAEIt2CdmpXlJm44uXfUeMZi2beUdAovjf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="287177104"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="287177104"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:18:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="578555883"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 01:18:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJ9ai-000H2Z-1v;
-        Wed, 03 Aug 2022 08:18:56 +0000
-Date:   Wed, 03 Aug 2022 16:18:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 41101f1279fc264ae055400f752016bbca367012
-Message-ID: <62ea2f5c.ZmVipJOPJeplKZ5V%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 3 Aug 2022 04:19:40 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFE160D0;
+        Wed,  3 Aug 2022 01:19:39 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w3so4842773edc.2;
+        Wed, 03 Aug 2022 01:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc;
+        bh=l1hEI332NfT1JuaXAK4dv586CJr0lsUfuhuRLOyrE/U=;
+        b=PNxl3iOhkhoiomYAywGEUu6Or+U6/6U9qXaRBf+w5tOTvR7gDSZyLXxg85QTFLXOzZ
+         /3nOjeXG+5+i9nscnGlJnMU9w9li4lA1MZiISFbWjRsY6F2WWvDMKMN0QJOOzT3XT2nv
+         x0QmWevrvXfttf65MqnOUbrnBl7vZbFMJfV/ZeLxGNBKfRGvjRUg0wWuXmkuvYIHE89M
+         8bDQxO7PS3hoEa0R/CkH2AoiMVX/lMgeLR/s7Y4tubC+rpYQRlIv2OZcrgdIcha6Z+CM
+         0nRrGOxbTf8Eo4gHzyqNCGvo2AZcWCy/xB1/Qb74N1rhrQ9zD8zxMw9PflMkPUKXJRYO
+         m1Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc;
+        bh=l1hEI332NfT1JuaXAK4dv586CJr0lsUfuhuRLOyrE/U=;
+        b=PFL5xFTvq4zUk7Yf2HGD+EnHHTKH5ePgaLFFcO40M6E8gdHA7noA1I90fnToF49469
+         4yjSlqCAm7UMnSMcGqF8n+IT7gvHfIKf7fW6r1ON1KFXbTMpd9njSqppK6hNT5pUHNj0
+         FR1LdKwpCNRwaMXgLgh+ReQBdhgqmy+JpyqkioZXzGLar9tUsXfiw7MWcFEU6svUg3gF
+         fYVVwSECoICEPA6Ct2qqZWsACx81xpUJllkUeyeRjoBrqFQS3RKDoZKyHDwcv37TuvkD
+         hXva+NHIhsXHSaLHZJg+jwvby4n+C38LLM4xNWyOMINzVwyKcwotxdYEZt/2QiHs12tl
+         CN8Q==
+X-Gm-Message-State: AJIora+hsZKXF454xuPvxdHChx2HYdo6uFkByGFVjKBmqTCn3JnaBG8i
+        qB4KOovmeKOS4JhM60aiXhyeO75afJWK8Q==
+X-Google-Smtp-Source: AGRyM1tBFIv2Lax6dslMiZcXUev92ozsHx9/tOweo2qIno7yWaJHQjIaQZQd9EfW+yF9zCdUwO4ajw==
+X-Received: by 2002:a05:6402:430e:b0:43d:1cf6:61ec with SMTP id m14-20020a056402430e00b0043d1cf661ecmr23564547edc.194.1659514777992;
+        Wed, 03 Aug 2022 01:19:37 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id o17-20020a170906769100b007308bdef04bsm2813733ejm.103.2022.08.03.01.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 01:19:37 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 3 Aug 2022 10:19:35 +0200
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] libbpf: ensure functions with always_inline attribute
+ are inline
+Message-ID: <Yuovl3ycDfflqV9h@krava>
+References: <20220802232741.481145-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220802232741.481145-1-james.hilliard1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 41101f1279fc264ae055400f752016bbca367012  Merge branch into tip/master: 'perf/urgent'
+On Tue, Aug 02, 2022 at 05:27:41PM -0600, James Hilliard wrote:
+> GCC expects the always_inline attribute to only be set on inline
+> functions, as such we should make all functions with this attribute
+> inline.
+> 
+> Fixes errors like:
+> /home/buildroot/bpf-next/tools/testing/selftests/bpf/tools/include/bpf/bpf_tracing.h:439:1: error: ‘always_inline’ function might not be inlinable [-Werror=attributes]
+>   439 | ____##name(unsigned long long *ctx, ##args)
+>       | ^~~~
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  tools/lib/bpf/bpf_tracing.h | 14 +++++++-------
+>  tools/lib/bpf/usdt.bpf.h    |  4 ++--
+>  2 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> index 43ca3aff2292..ae67fcee912c 100644
+> --- a/tools/lib/bpf/bpf_tracing.h
+> +++ b/tools/lib/bpf/bpf_tracing.h
+> @@ -426,7 +426,7 @@ struct pt_regs;
+>   */
+>  #define BPF_PROG(name, args...)						    \
+>  name(unsigned long long *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
 
-elapsed time: 720m
+could you use __always_inline that does exactly that?
 
-configs tested: 53
-configs skipped: 2
+jirka
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-x86_64                              defconfig
-i386                                defconfig
-x86_64                               rhel-8.3
-i386                             allyesconfig
-x86_64                           allyesconfig
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-x86_64               randconfig-a011-20220801
-x86_64                         rhel-8.3-kunit
-m68k                             allmodconfig
-i386                 randconfig-a012-20220801
-x86_64                           rhel-8.3-kvm
-riscv                randconfig-r042-20220801
-arc                  randconfig-r043-20220801
-x86_64               randconfig-a012-20220801
-x86_64                    rhel-8.3-kselftests
-arm64                            allyesconfig
-x86_64                           rhel-8.3-syz
-arm                              allyesconfig
-x86_64               randconfig-a013-20220801
-arc                              allyesconfig
-x86_64               randconfig-a016-20220801
-s390                 randconfig-r044-20220801
-x86_64               randconfig-a014-20220801
-i386                 randconfig-a013-20220801
-alpha                            allyesconfig
-i386                 randconfig-a014-20220801
-m68k                             allyesconfig
-x86_64               randconfig-a015-20220801
-i386                 randconfig-a011-20220801
-i386                 randconfig-a016-20220801
-i386                 randconfig-a015-20220801
-ia64                             allmodconfig
-
-clang tested configs:
-x86_64               randconfig-a002-20220801
-x86_64               randconfig-a001-20220801
-x86_64               randconfig-a003-20220801
-x86_64               randconfig-a004-20220801
-x86_64               randconfig-a005-20220801
-x86_64               randconfig-a006-20220801
-hexagon              randconfig-r045-20220801
-hexagon              randconfig-r041-20220801
-i386                 randconfig-a001-20220801
-i386                 randconfig-a002-20220801
-i386                 randconfig-a003-20220801
-i386                 randconfig-a004-20220801
-i386                 randconfig-a005-20220801
-i386                 randconfig-a006-20220801
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>  ____##name(unsigned long long *ctx, ##args);				    \
+>  typeof(name(0)) name(unsigned long long *ctx)				    \
+>  {									    \
+> @@ -435,7 +435,7 @@ typeof(name(0)) name(unsigned long long *ctx)				    \
+>  	return ____##name(___bpf_ctx_cast(args));			    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(unsigned long long *ctx, ##args)
+>  
+>  struct pt_regs;
+> @@ -460,7 +460,7 @@ struct pt_regs;
+>   */
+>  #define BPF_KPROBE(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -469,7 +469,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  	return ____##name(___bpf_kprobe_args(args));			    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args)
+>  
+>  #define ___bpf_kretprobe_args0()       ctx
+> @@ -484,7 +484,7 @@ ____##name(struct pt_regs *ctx, ##args)
+>   */
+>  #define BPF_KRETPROBE(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -540,7 +540,7 @@ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+>  #define BPF_KSYSCALL(name, args...)					    \
+>  name(struct pt_regs *ctx);						    \
+>  extern _Bool LINUX_HAS_SYSCALL_WRAPPER __kconfig;			    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -555,7 +555,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  		return ____##name(___bpf_syscall_args(args));		    \
+>  	_Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args)
+>  
+>  #define BPF_KPROBE_SYSCALL BPF_KSYSCALL
+> diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+> index 4f2adc0bd6ca..2bd2d80b3751 100644
+> --- a/tools/lib/bpf/usdt.bpf.h
+> +++ b/tools/lib/bpf/usdt.bpf.h
+> @@ -232,7 +232,7 @@ long bpf_usdt_cookie(struct pt_regs *ctx)
+>   */
+>  #define BPF_USDT(name, args...)						    \
+>  name(struct pt_regs *ctx);						    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args);				    \
+>  typeof(name(0)) name(struct pt_regs *ctx)				    \
+>  {									    \
+> @@ -241,7 +241,7 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
+>          return ____##name(___bpf_usdt_args(args));			    \
+>          _Pragma("GCC diagnostic pop")					    \
+>  }									    \
+> -static __attribute__((always_inline)) typeof(name(0))			    \
+> +static inline __attribute__((always_inline)) typeof(name(0))		    \
+>  ____##name(struct pt_regs *ctx, ##args)
+>  
+>  #endif /* __USDT_BPF_H__ */
+> -- 
+> 2.34.1
+> 

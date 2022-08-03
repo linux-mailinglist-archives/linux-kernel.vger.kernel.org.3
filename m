@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CB2588F91
+	by mail.lfdr.de (Postfix) with ESMTP id CBB48588F92
 	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbiHCPmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S238147AbiHCPmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbiHCPmG (ORCPT
+        with ESMTP id S236797AbiHCPmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:42:06 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604B17E33
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 08:42:05 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s206so15460020pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 08:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1X8iIxmRWAvlqWrXHFS410p03/OzfP/+iRwjFFKXw30=;
-        b=IWftbW3+tqW97FEHybyJHufo830Yv1o7rS2J6bHvY9JGN02ViO+au41pbuoPhpI+kt
-         pIlRcqa3fWR93PHQ+M1rDFQh64MLMBySAoJBaTEYO0787n9Q/nkuLgnyMzYXTvGANfoX
-         8zn3bbh2ccye6cK/z2DWuxim5b/guuR2GxMvusoCYrOEshZxv53RP43qz5ih/KQiPMIr
-         1+o1/tVwFwSMZ8oYQs8ZBT4VbAJWX/uaci2i5xbJhCPrYPbBhrikg0zRG6CwCMzjfJFD
-         Hk47Wj+IA43z5oOQ5AJRt4eT8DxFhkISwAV1AA6vlhN4uflgzqx7WP513lVZJ3F1+Ylh
-         mxfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1X8iIxmRWAvlqWrXHFS410p03/OzfP/+iRwjFFKXw30=;
-        b=gL7xqOiz1QBMOLxBBWlKmletZuE2q5WVWAAz2NtYZAjbygkJlyZww+WsguSd2PyA4j
-         9iwqHj4szwmlOgDmOrJCaO+XFo/bpktDGs3SpIMaH3sCcf6Le9ATnYz+L0t8mfcHE2qK
-         Iwl0BLOKR+YEbv0IkMxDq+UDxiwevG8qBDWphbaN1f8ygBr7HSlno+9Gg6cy7rRbjuX5
-         Ct80WDZ2hMFdPaRCn7QYkT4QSPNAFgl7rgsFWA3X5CwroFvn9K1ZFgrp9ZEu118tJJrJ
-         VV2P+Yh9IlC/M8wf0ePVDIS+rGjFWTwGZv2QlN/kOl0ICB+TSQQ6NiaCh1zKsKTJoep3
-         wbMQ==
-X-Gm-Message-State: ACgBeo1nOwl7ezoi/lKfx8ku60Dtuqua5DbLoIAeoXRJLq70mPVYynzb
-        RL0d982WIfXepLYCCYFpkEg5CQ==
-X-Google-Smtp-Source: AA6agR4WsCRzuXEDoWPLWJFb/79WPlwW2sBPFFlB4dv+rWf+Aj+JYBgv7mg3i4CIzGFKZe1uV40rnQ==
-X-Received: by 2002:a05:6a00:4306:b0:52e:3bdc:2635 with SMTP id cb6-20020a056a00430600b0052e3bdc2635mr2351247pfb.79.1659541324477;
-        Wed, 03 Aug 2022 08:42:04 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id t1-20020a635341000000b0041c30def5e8sm5093221pgl.33.2022.08.03.08.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 08:42:04 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 08:42:02 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Antonio Quartulli <antonio@openvpn.net>
-Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 1/1] net: introduce OpenVPN Data Channel Offload
- (ovpn-dco)
-Message-ID: <20220803084202.4e249bdb@hermes.local>
-In-Reply-To: <52b9d7c9-9f7c-788e-2327-33af63b9c748@openvpn.net>
-References: <20220719014704.21346-1-antonio@openvpn.net>
-        <20220719014704.21346-2-antonio@openvpn.net>
-        <YtbNBUZ0Kz7pgmWK@lunn.ch>
-        <c490b87c-085b-baca-b7e4-c67a3ee2c25e@openvpn.net>
-        <YuKKJxSFOgOL836y@lunn.ch>
-        <52b9d7c9-9f7c-788e-2327-33af63b9c748@openvpn.net>
+        Wed, 3 Aug 2022 11:42:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E54418B0A;
+        Wed,  3 Aug 2022 08:42:07 -0700 (PDT)
+Date:   Wed, 03 Aug 2022 15:42:04 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1659541325;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IPf7laHJr6gLAnl9xbzWj6hPnYO44QtIRkP/NzRqwj4=;
+        b=pU0TEY1bKY8E5lCFO2/AQbzx1Ysga19d931OoZKDrO/YVZOApm/OPRT64pmnR/mt+XijYL
+        tx5wu9zbDVrkFxhlvvm08Ye3EubF2Mbmp1wFfjEvtGTdxuMvvp9wasfCcRxX4EIjAm3T3r
+        02H+VMhVGUGg9vrlz7xNug2kWKGCRoCCmMcGb2GroyVMCr621G2oVMAZOkLRjDBLRHvXrX
+        yCIIZ3fw7PdM9OxgcAQ5CaBHTWmr3Wi+ev59a7EsSRyHb9sfIfuZUdIWvZQkw8Cwh6du5U
+        ieaM9fltb//ntRDGcylO8KmEWJhwZFDbBpvufTzT/Criw7AVSgFRd3lAMeMq1g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1659541325;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IPf7laHJr6gLAnl9xbzWj6hPnYO44QtIRkP/NzRqwj4=;
+        b=0zNEGoKqhNL7DtOrQzrM4ORlKiIakvdg2Mr+2un7xd1I4s2zHCSVPJ6FDCJ17HOTXzbJq5
+        UT5vUBIaZ9P2PDAQ==
+From:   "tip-bot2 for Li kunyu" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/boot: Remove superfluous type casting from
+ arch/x86/boot/bitops.h
+Cc:     Li kunyu <kunyu@nfschina.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220725042358.3377-1-kunyu@nfschina.com>
+References: <20220725042358.3377-1-kunyu@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-ID: <165954132463.15455.4096087290275074737.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Jul 2022 15:16:10 +0200
-Antonio Quartulli <antonio@openvpn.net> wrote:
+The following commit has been merged into the x86/cleanups branch of tip:
 
-> Hi Andrew,
-> 
-> On 28/07/2022 15:07, Andrew Lunn wrote:
-> > Also, using a mainline driver out of tree is not easy. The code will
-> > make use of the latest APIs, and internal APIs are not stable, making
-> > it hard to use in older kernels. So you end up with out of tree
-> > wrapper code for whatever version of out of tree Linux you decide to
-> > support. Take a look at
-> > 
-> > https://github.com/open-mesh-mirror/batman-adv  
-> 
-> Yeah, this is exactly what we are already doing.
-> We're just trying to keep is as simple as possible for now:
-> 
-> https://github.com/OpenVPN/ovpn-dco/blob/master/linux-compat.h
-> 
-> Thanks for the pointer anyway (I am already deeply inspired by 
-> batman-adv, as you may imagine ;-)),
-> 
+Commit-ID:     a50be38f617b11b451c0a432c574859419e69471
+Gitweb:        https://git.kernel.org/tip/a50be38f617b11b451c0a432c574859419e69471
+Author:        Li kunyu <kunyu@nfschina.com>
+AuthorDate:    Mon, 25 Jul 2022 12:23:58 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 03 Aug 2022 11:32:29 +02:00
 
-Kernel submissions for upstream must be standalone, and any infrastructure
-that is only used by an out of tree kernel driver will not be accepted.
+x86/boot: Remove superfluous type casting from arch/x86/boot/bitops.h
 
-The version you propose upstream must have no linux-compat wrappers.
-Sorry kernel developers don't care or want to be concerned about some
-out of tree project.
+'const void *' will auto-type-convert to just about any other const pointer type,
+no need to force it.
+
+[ mingo: Rewrote the changelog. ]
+
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20220725042358.3377-1-kunyu@nfschina.com
+---
+ arch/x86/boot/bitops.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/boot/bitops.h b/arch/x86/boot/bitops.h
+index 02e1dea..8518ae2 100644
+--- a/arch/x86/boot/bitops.h
++++ b/arch/x86/boot/bitops.h
+@@ -19,13 +19,13 @@
+ 
+ static inline bool constant_test_bit(int nr, const void *addr)
+ {
+-	const u32 *p = (const u32 *)addr;
++	const u32 *p = addr;
+ 	return ((1UL << (nr & 31)) & (p[nr >> 5])) != 0;
+ }
+ static inline bool variable_test_bit(int nr, const void *addr)
+ {
+ 	bool v;
+-	const u32 *p = (const u32 *)addr;
++	const u32 *p = addr;
+ 
+ 	asm("btl %2,%1" CC_SET(c) : CC_OUT(c) (v) : "m" (*p), "Ir" (nr));
+ 	return v;

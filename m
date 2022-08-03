@@ -2,116 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1BA58941D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA78589422
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbiHCVn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 17:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S237466AbiHCVsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 17:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbiHCVn1 (ORCPT
+        with ESMTP id S231407AbiHCVsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:43:27 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B504C4D823
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:43:26 -0700 (PDT)
+        Wed, 3 Aug 2022 17:48:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF8A19008
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659563006; x=1691099006;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=31EkGTKWoJ67xuQHsf9/JeBk/obWAn8p0DWaIUbjN0o=;
-  b=U5F/a1AeCVsFt+ExOgAPk8D3JKAzceWLO1fJDUxuVqosaJnRX1fD0eHr
-   +vzd5CgsjcZGfqiSW9O/FHjZqAc/GoCSl+4hssVkYsNmFNLBUtO2UOGjP
-   9pIpkyqIh8pwPmbvIgB/ber+DmrmlZLt/37zzB1XlRO7hDef45nzyEUnt
-   8YuWUZ/fYKGbKK3yBgA3Yuhvbj7KI4W5fUmeHMhbpZt9BlnVyJ3ZwFvV3
-   gdRKASK1Xj0RlcIXHpt9JiZJqsDgRqkjlZXImiN+484tluYdz48UgTQOT
-   jaJCSO27aRXyxR03gQUCOJWdBsonfWW1wluEVJaquCa14pwtZ5/zlSLBv
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="276701223"
+  t=1659563311; x=1691099311;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r8fp3HpRpjrHVQPC0418ZRVChCErssWUoIAowUgyBdM=;
+  b=Ar5nLVUOY0g5FMT+0M5SllOFWo7WW770IqB0EL/5lrgoB7om/5kjxnNR
+   LFTIA+8R/F6zDZDyQvkFEFlTn6KK58RNDFKynp003a6YRP3/3jPczzTpK
+   16aN5ldq8P/TisEhE45lUnHRXSI7uzmwL2mtQjkXXs7mu1AgeD0yEx1ce
+   kc4SaJGVki35Von6Td2z+0bDX3KSix4jZAmM+pkPkILmHdy1/JH1jfkyx
+   xhP8Dy8gd+g0efAMOgzvpiJpT7TKK3bxKZg5n3m2lElvzVhAGiOu/F6xE
+   03GEUO30k0aPV+iXKSpmJaKFwTtrns3jx8t5WA47INq7kPz3XwF0orOLn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="351497907"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="276701223"
+   d="scan'208";a="351497907"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:43:26 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:48:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="578818113"
+   d="scan'208";a="578819551"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 14:43:24 -0700
+  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2022 14:48:24 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oJM9D-000HgN-2b;
-        Wed, 03 Aug 2022 21:43:23 +0000
-Date:   Thu, 4 Aug 2022 05:42:30 +0800
+        id 1oJME4-000Hgp-0H;
+        Wed, 03 Aug 2022 21:48:24 +0000
+Date:   Thu, 04 Aug 2022 05:47:38 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Hans-Christian Noren Egtvedt <egtvedt@samfundet.no>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [egtvedt-avr32:avr32-cleanup 9/9]
- drivers/net/ethernet/cadence/macb_main.c:4114:9: error: use of undeclared
- identifier 'MACB_MII_OFFSET'
-Message-ID: <202208040507.2IhizbEP-lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:sched/urgent] BUILD SUCCESS
+ 87514b2c24f294c32e9e743b095541dcf43928f7
+Message-ID: <62eaecfa.HmC6HgSby0na+npT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git avr32-cleanup
-head:   127c95b209653b261277d3a6346b6fc5f9a9ef2e
-commit: 127c95b209653b261277d3a6346b6fc5f9a9ef2e [9/9] net:cadence: remove bitfields only used by AVR32
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220804/202208040507.2IhizbEP-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git/commit/?id=127c95b209653b261277d3a6346b6fc5f9a9ef2e
-        git remote add egtvedt-avr32 https://git.kernel.org/pub/scm/linux/kernel/git/egtvedt/linux-avr32.git
-        git fetch --no-tags egtvedt-avr32 avr32-cleanup
-        git checkout 127c95b209653b261277d3a6346b6fc5f9a9ef2e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/cadence/
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
+branch HEAD: 87514b2c24f294c32e9e743b095541dcf43928f7  sched/rt: Fix Sparse warnings due to undefined rt.c declarations
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+elapsed time: 718m
 
-All errors (new ones prefixed by >>):
+configs tested: 84
+configs skipped: 3
 
->> drivers/net/ethernet/cadence/macb_main.c:4114:9: error: use of undeclared identifier 'MACB_MII_OFFSET'
-           .mii = MACB_BIT(MII),
-                  ^
-   drivers/net/ethernet/cadence/macb.h:725:8: note: expanded from macro 'MACB_BIT'
-           (1 << MACB_##name##_OFFSET)
-                 ^
-   <scratch space>:112:1: note: expanded from here
-   MACB_MII_OFFSET
-   ^
-   1 error generated.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20220803
+riscv                randconfig-r042-20220803
+s390                 randconfig-r044-20220803
+i386                                defconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+i386                             allyesconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+m68k                             allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a015
+m68k                             allmodconfig
+x86_64                           allyesconfig
+arc                              allyesconfig
+i386                          randconfig-a014
+x86_64                        randconfig-a013
+i386                          randconfig-a012
+x86_64                        randconfig-a011
+arm                              allyesconfig
+i386                          randconfig-a016
+arm64                            allyesconfig
+alpha                            allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+powerpc                   motionpro_defconfig
+arm                         at91_dt_defconfig
+ia64                             allmodconfig
+sh                           se7343_defconfig
+x86_64                           alldefconfig
+sh                     sh7710voipgw_defconfig
+m68k                       bvme6000_defconfig
+arm                           h5000_defconfig
+m68k                           sun3_defconfig
+sh                             shx3_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+i386                          randconfig-c001
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
 
-vim +/MACB_MII_OFFSET +4114 drivers/net/ethernet/cadence/macb_main.c
-
-421d9df0628be1 drivers/net/ethernet/cadence/macb.c      Cyrille Pitchen 2015-03-07  4112  
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4113  static const struct macb_usrio_config macb_default_usrio = {
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03 @4114  	.mii = MACB_BIT(MII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4115  	.rmii = MACB_BIT(RMII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4116  	.rgmii = GEM_BIT(RGMII),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4117  	.refclk = MACB_BIT(CLKEN),
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4118  };
-b12422362ce947 drivers/net/ethernet/cadence/macb_main.c Atish Patra     2021-03-03  4119  
-
-:::::: The code at line 4114 was first introduced by commit
-:::::: b12422362ce947098ac420ac3c975fc006af4c02 net: macb: Add default usrio config to default gem config
-
-:::::: TO: Atish Patra <atish.patra@wdc.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+clang tested configs:
+hexagon              randconfig-r045-20220803
+hexagon              randconfig-r041-20220803
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a014
+i386                          randconfig-a011
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+arm                         s5pv210_defconfig
+arm                         lpc32xx_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-k001
 
 -- 
 0-DAY CI Kernel Test Service

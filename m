@@ -2,143 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D425589421
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BBC589423
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiHCVrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 17:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S237884AbiHCVsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 17:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiHCVrv (ORCPT
+        with ESMTP id S231407AbiHCVsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:47:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D081167C0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659563268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g5uD7GSiugR//AbWEYTlGaC1DztD7rLesYw/5UTNxzU=;
-        b=A/bSjWP8GK9d9Edsb7UaFg6mOeuTN2bBiEZYx80PLIQekj1fFeYX561mgc4m1W6pCFIcEZ
-        1TdqRKssL6nPEonWEgwZjkNSV1ZPv9gBVPLd5mH3cbUilHLxsfVP13gHKwfchFSQtECk6c
-        Dqm3Z9+xrGv9v3xV/VALj95SyLxWFcM=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-Flu34mOwNsSTK1Wtwd0rhA-1; Wed, 03 Aug 2022 17:47:47 -0400
-X-MC-Unique: Flu34mOwNsSTK1Wtwd0rhA-1
-Received: by mail-qv1-f70.google.com with SMTP id ea7-20020ad458a7000000b00476b8d9bfdcso5168658qvb.18
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 14:47:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g5uD7GSiugR//AbWEYTlGaC1DztD7rLesYw/5UTNxzU=;
-        b=4NsSBdCuTLJ9Xwb+MTG6zhhiyfJnvS/PLnZsMXNM1De653m3CALojUzsPamz9Z3ep2
-         F9Kz1x4pODJKEgCPj3JfhBiQWefhHjx6ri8t/BVLNcM1V5ZM46SLroVhJg6XUG+XrZHY
-         +semD35vZn62WYBVUto+x+T88N5gP4V9FID9AcU2Qj0Vx7lmYEYg/5c1wDQQUUncLBo4
-         2rKU43GhhxcLuXOhNorqDXyacuZ4KShalvUM4wTohMwUIpomZv5I5opML9kqPVaQBY+Y
-         SyfWUrhWAfedHUCfoy7vmTQ5JJaJ/u9ibJmYJYg2zlATvP9AGI5c5y2IE+Sh9Ps04VBz
-         kbRw==
-X-Gm-Message-State: ACgBeo1SyTB6UM2HyEoWrHHF3uDy1YDIdMyLafifdcup27/7CmtChOE6
-        xxoxkisg642QUf21kTS/u6/KdL5QhaoUiWCogfDemDPR/u4pR1p+9THePVYM71ijlWaOewig73P
-        HDXF9QEiLm2L+YpKzTnHuZxRp
-X-Received: by 2002:a0c:9124:0:b0:473:be1e:b11d with SMTP id q33-20020a0c9124000000b00473be1eb11dmr24163954qvq.20.1659563266912;
-        Wed, 03 Aug 2022 14:47:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6/gRpPz8gLgLfIEYyRXhCQb2VYGd3wNqztIznBSwaTIiI4cLk8hTAC1nnQQJ0h//cPezJe6w==
-X-Received: by 2002:a0c:9124:0:b0:473:be1e:b11d with SMTP id q33-20020a0c9124000000b00473be1eb11dmr24163938qvq.20.1659563266681;
-        Wed, 03 Aug 2022 14:47:46 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006b5cb0c512asm13963191qkp.101.2022.08.03.14.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 14:47:46 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 17:47:44 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kbuild-all@lists.01.org, Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 2/2] mm: Remember young bit for page migrations
-Message-ID: <YurtAFQ9xfZ7KfOF@xz-m1.local>
-References: <20220803012159.36551-3-peterx@redhat.com>
- <202208032031.PVcMB0Hr-lkp@intel.com>
+        Wed, 3 Aug 2022 17:48:38 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EA319008
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659563317; x=1691099317;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OszUSZaeTwre2lg3VQaRr0MRLW8RAU4JNI+oAxhiK9I=;
+  b=Ja1YOJy7hF9EFCAV9v0jbZvZSvH8uMG2+7fcBGGe9z+XBZygsPyjQBR1
+   bb074Rj51vDmxMWv1lfejADaDD1JOgFU2gKOFocCcO3O0Ph5XNJphj3Vo
+   Nlx82WIWU1Cm3akplXeSALgtgsT04WD23PG2TmCLyp7Y1GD36DEcEV4fs
+   UR5X3M0KAr3wPOm3Fll1Iu8nCYOwoibwRMDaJaT8Zbb90cZ5FJXG9/WQk
+   z2LIvOcG4pxPALO6rSAB9EJNYVrd+RfQW+bZSFFkizBkmNqsERoKdDzwH
+   3zIq4GfmPclm3g3Zzc3e5OWSbTJkoMvWUynxEhqz077z9EdWGNQXn6Sz1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="351497938"
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="351497938"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:48:36 -0700
+X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
+   d="scan'208";a="606530320"
+Received: from bliviero-mobl.amr.corp.intel.com (HELO [10.209.58.137]) ([10.209.58.137])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:48:35 -0700
+Message-ID: <6b492245-f25b-1019-0728-7c77a54a7540@intel.com>
+Date:   Wed, 3 Aug 2022 14:48:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202208032031.PVcMB0Hr-lkp@intel.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1.1 1/2] x86/sev: Use per-CPU PSC structure in prep for
+ unaccepted memory support
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+References: <1b50311c-448b-96aa-1d96-f4bfed409c1f@amd.com>
+ <cover.1659550264.git.thomas.lendacky@amd.com>
+ <2a2adc3570ae9c24d03fff877c4fe79ed43605e0.1659550264.git.thomas.lendacky@amd.com>
+ <d5902382-70f4-be07-99f6-80d17cdfdcaa@intel.com>
+ <9f47ed0f-99cc-a237-f09b-45291feffcd3@amd.com>
+ <e52341be-076e-92d1-a649-421dac5a4f5d@intel.com>
+ <0eccea46-648d-ff70-dcc6-fdca88ff1234@amd.com>
+ <3cf239c8-ccc4-d112-fb42-605661816cf0@intel.com>
+ <b33876b6-96bd-afe0-3523-b51b8628616a@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <b33876b6-96bd-afe0-3523-b51b8628616a@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 08:21:43PM +0800, kernel test robot wrote:
-> Hi Peter,
+On 8/3/22 14:34, Tom Lendacky wrote:
+>> Also, private<->shared page conversions are *NOT* common from what I can
+>> tell.  There are a few pages converted at boot, but most host the
+>> guest<->host communications are through the swiotlb pages which are
+>> static.
 > 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-Remember-young-bit-for-migration-entries/20220803-092311
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> config: openrisc-randconfig-r016-20220803 (https://download.01.org/0day-ci/archive/20220803/202208032031.PVcMB0Hr-lkp@intel.com/config)
-> compiler: or1k-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/2fca6cb25745d1404fc34e0ec2ea89b6195a8c27
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Peter-Xu/mm-Remember-young-bit-for-migration-entries/20220803-092311
->         git checkout 2fca6cb25745d1404fc34e0ec2ea89b6195a8c27
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    or1k-linux-ld: mm/rmap.o: in function `migration_entry_supports_young':
-> >> include/linux/swapops.h:288: undefined reference to `max_swapfile_size'
->    include/linux/swapops.h:288:(.text+0x31a0): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `max_swapfile_size'
->    or1k-linux-ld: mm/migrate.o: in function `migration_entry_supports_young':
-> >> include/linux/swapops.h:288: undefined reference to `max_swapfile_size'
->    include/linux/swapops.h:288:(.text+0x158): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `max_swapfile_size'
+> Generally, that's true. But, e.g., a dma_alloc_coherent() actually
+> doesn't go through SWIOTLB, but instead allocates the pages and makes
+> them shared, which results in a page state change. The NVMe driver was
+> calling that API a lot. In this case, though, the NVMe driver was
+> running in IRQ context and set_memory_decrypted() could sleep, so an
+> unencrypted DMA memory pool was created to work around the sleeping
+> issue and reduce the page state changes. It's just things like that,
+> that make me wary.
 
-Hmm, a bit surprised to know swapops.h will be used without CONFIG_SWAP..
-I'll squash this in the next version (if not going via a page flag based
-approach):
+Interesting.  Is that a real passthrough NVMe device or the hypervisor
+presenting a virtual one that just happens to use the NVMe driver?
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 9ddede3790a4..d689f59479c3 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -285,7 +285,11 @@ static inline bool migration_entry_supports_young(void)
-         * entry has the offset larger than storing the PFN value, then it
-         * means there's extra bit(s) where we can store the young bit.
-         */
-+#ifdef CONFIG_SWAP
-        return max_swapfile_size() > SWP_MIG_YOUNG_BIT;
-+#else
-+       return false;
-+#endif
- }
- 
- static inline swp_entry_t make_migration_entry_young(swp_entry_t entry)
+I'm pretty sure the TDX folks have been banking on having very few page
+state changes.  But, part of that at least is their expectation of
+relying heavily on virtio.
 
--- 
-Peter Xu
-
+I wonder if their expectations are accurate, or if once TDX gets out
+into the real world if their hopes will be dashed.

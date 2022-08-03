@@ -2,180 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361CC5886B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA885886B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiHCFDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 01:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S233923AbiHCFN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 01:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiHCFDF (ORCPT
+        with ESMTP id S229730AbiHCFNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 01:03:05 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0AE1902F;
-        Tue,  2 Aug 2022 22:03:03 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id c3so12120275qko.1;
-        Tue, 02 Aug 2022 22:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uVXW0Uy4uUbhDpgN7+ORPCX7CU++KL6atoUXVVGMX04=;
-        b=GYLOGQfv4Csm0/5P5UXlkqmgpySaPoYMB3N3pcaxe6OzzYNEhb2cjJvGoYzGESWik+
-         1sAg1d1RgqafxVoflsfy6YConAXVE5eDYxLOKMFpWlNHcWXdlxkaqL1slVe2lxjanuDv
-         bAxyIX7QqUnpfVGIh6FJZFRs3YZYPHJ3qbH95x/etzVZ4JooHTsU7LfNcgDbJxnxCF1m
-         r0Q1fORFoB6568a9GK/ZNGzaiHfaxILGiMWtb7/fWxeBFkUsDZEXBj9AiQ5gYKe5dSHu
-         FK4GPKbftDaufad4jDXZ1hAd15hJYZlTrpywq6DjuWPM9Qb/Sn1kZjouCcrS+0PfLIwl
-         6jlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uVXW0Uy4uUbhDpgN7+ORPCX7CU++KL6atoUXVVGMX04=;
-        b=FptzxadmdX/ZhYU3taL1rQgnPIPLbFVHJEzxDRtVBqeo+nmJm7hdiAbhZlTrH2bn3s
-         hzGtHF1G1W8A7EH8gtCc1QSOfhRRtjpQ4+TovqEzIP66HL41mkR72w+ucCwmEZdgMtEx
-         vphgvELZCqCN833exG5cd2ztiiA8tdkFDBGGeAQyxUNwLn4zw1c9vPNtvXtlJrP757kS
-         PmsijTv4vdCfVwgHCUm0O9sJlnXh3panv/QJwtTduKFIlnu3sB7k6Ie4+8z3dBJEAqoW
-         BWpjN+UBK6Q8e4vhkqE4yq3+VlMvMmO0fY6kZ6iaijScrzzku3ySqP9/FuADCHTJdrx0
-         8+xw==
-X-Gm-Message-State: AJIora8RzSiKTfj3VC31lJyRhjMU4ARxApi9HWcI/nsYFxanWF/bnlQz
-        xASaNiLCFpP5CZ2PfTHqkg==
-X-Google-Smtp-Source: AGRyM1v8I+fKQMI8kklagMtT2p4ecs0kmq7Ny6EvoPp7eDjY/UgwGMfIhAg4BcHt6sb1s8CEB/8jTQ==
-X-Received: by 2002:a05:620a:138b:b0:6b5:d5eb:aabf with SMTP id k11-20020a05620a138b00b006b5d5ebaabfmr17334494qki.393.1659502982588;
-        Tue, 02 Aug 2022 22:03:02 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
-        by smtp.gmail.com with ESMTPSA id x22-20020a05622a001600b0033d1ac2517esm1260993qtw.64.2022.08.02.22.03.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 22:03:02 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-audit@redhat.com,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH] audit, io_uring, io-wq: Fix memory leak in io_sq_thread() and io_wqe_worker()
-Date:   Tue,  2 Aug 2022 22:02:30 -0700
-Message-Id: <20220803050230.30152-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 3 Aug 2022 01:13:53 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA2F1CB3B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 22:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659503632; x=1691039632;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O5EojvPN6N/DT/cah6pxOiMEeRKVEqcOgsYwVZ+IxAQ=;
+  b=Zz/3g7S/ARuf7xOH3tVzB04o5hDQ2nCo52G/lSHaBSzVNMtYADp5QBaW
+   Dx0G4VHH6ij/G3hr4aX/CZ58g8jk/Io+wPnV/VOr5knWVp9Oj2BwE9GxV
+   WMPsyzOXDk7H5vqFKoSUshBTkeV9JT1Xaw+DaOoDTqUij93DN+bUhDFFZ
+   w48DdxIrcCEMsvsBi4wo2hrf70iLUzLuIw3S6BhIhYWBTBj/npxcggV5k
+   drMrLJv++SVPUyYO0BQT1ox3O+4w4AZgVmppSKzjH8J0b0b8I0WcamT2p
+   QYS6C2GKBdwccYr5IMT2MZX0GH3KOyK1DiB9Mv248GSjowRHQ2KoMlbLM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="351297535"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="351297535"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 22:13:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="635547240"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 02 Aug 2022 22:13:50 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ6hZ-000Grb-1X;
+        Wed, 03 Aug 2022 05:13:49 +0000
+Date:   Wed, 3 Aug 2022 13:13:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 9/9] lib/crypto/chacha.c:28
+ chacha_permute() warn: inconsistent indenting
+Message-ID: <202208031320.4h7OAbtq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   29d7baa1e13b4304df93126e0c8baf56584b720a
+commit: 29d7baa1e13b4304df93126e0c8baf56584b720a [9/9] random: implement getrandom() in vDSO
+config: x86_64-randconfig-m001-20220801 (https://download.01.org/0day-ci/archive/20220803/202208031320.4h7OAbtq-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 
-Currently @audit_context is allocated twice for io_uring workers:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  1. copy_process() calls audit_alloc();
-  2. io_sq_thread() or io_wqe_worker() calls audit_alloc_kernel() (which
-     is effectively audit_alloc()) and overwrites @audit_context,
-     causing:
+smatch warnings:
+lib/crypto/chacha.c:28 chacha_permute() warn: inconsistent indenting
 
-  BUG: memory leak
-  unreferenced object 0xffff888144547400 (size 1024):
-<...>
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00  ................
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    backtrace:
-      [<ffffffff8135cfc3>] audit_alloc+0x133/0x210
-      [<ffffffff81239e63>] copy_process+0xcd3/0x2340
-      [<ffffffff8123b5f3>] create_io_thread+0x63/0x90
-      [<ffffffff81686604>] create_io_worker+0xb4/0x230
-      [<ffffffff81686f68>] io_wqe_enqueue+0x248/0x3b0
-      [<ffffffff8167663a>] io_queue_iowq+0xba/0x200
-      [<ffffffff816768b3>] io_queue_async+0x113/0x180
-      [<ffffffff816840df>] io_req_task_submit+0x18f/0x1a0
-      [<ffffffff816841cd>] io_apoll_task_func+0xdd/0x120
-      [<ffffffff8167d49f>] tctx_task_work+0x11f/0x570
-      [<ffffffff81272c4e>] task_work_run+0x7e/0xc0
-      [<ffffffff8125a688>] get_signal+0xc18/0xf10
-      [<ffffffff8111645b>] arch_do_signal_or_restart+0x2b/0x730
-      [<ffffffff812ea44e>] exit_to_user_mode_prepare+0x5e/0x180
-      [<ffffffff844ae1b2>] syscall_exit_to_user_mode+0x12/0x20
-      [<ffffffff844a7e80>] do_syscall_64+0x40/0x80
+vim +28 lib/crypto/chacha.c
 
-Then,
+1ca1b917940c24c lib/chacha.c   Eric Biggers  2018-11-16  24  
+1ca1b917940c24c lib/chacha.c   Eric Biggers  2018-11-16  25  	for (i = 0; i < nrounds; i += 2) {
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  26  		x[0]  += x[4];    x[12] = rol32(x[12] ^ x[0],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  27  		x[1]  += x[5];    x[13] = rol32(x[13] ^ x[1],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31 @28  		x[2]  += x[6];    x[14] = rol32(x[14] ^ x[2],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  29  		x[3]  += x[7];    x[15] = rol32(x[15] ^ x[3],  16);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  30  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  31  		x[8]  += x[12];   x[4]  = rol32(x[4]  ^ x[8],  12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  32  		x[9]  += x[13];   x[5]  = rol32(x[5]  ^ x[9],  12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  33  		x[10] += x[14];   x[6]  = rol32(x[6]  ^ x[10], 12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  34  		x[11] += x[15];   x[7]  = rol32(x[7]  ^ x[11], 12);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  35  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  36  		x[0]  += x[4];    x[12] = rol32(x[12] ^ x[0],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  37  		x[1]  += x[5];    x[13] = rol32(x[13] ^ x[1],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  38  		x[2]  += x[6];    x[14] = rol32(x[14] ^ x[2],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  39  		x[3]  += x[7];    x[15] = rol32(x[15] ^ x[3],   8);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  40  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  41  		x[8]  += x[12];   x[4]  = rol32(x[4]  ^ x[8],   7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  42  		x[9]  += x[13];   x[5]  = rol32(x[5]  ^ x[9],   7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  43  		x[10] += x[14];   x[6]  = rol32(x[6]  ^ x[10],  7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  44  		x[11] += x[15];   x[7]  = rol32(x[7]  ^ x[11],  7);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  45  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  46  		x[0]  += x[5];    x[15] = rol32(x[15] ^ x[0],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  47  		x[1]  += x[6];    x[12] = rol32(x[12] ^ x[1],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  48  		x[2]  += x[7];    x[13] = rol32(x[13] ^ x[2],  16);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  49  		x[3]  += x[4];    x[14] = rol32(x[14] ^ x[3],  16);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  50  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  51  		x[10] += x[15];   x[5]  = rol32(x[5]  ^ x[10], 12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  52  		x[11] += x[12];   x[6]  = rol32(x[6]  ^ x[11], 12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  53  		x[8]  += x[13];   x[7]  = rol32(x[7]  ^ x[8],  12);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  54  		x[9]  += x[14];   x[4]  = rol32(x[4]  ^ x[9],  12);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  55  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  56  		x[0]  += x[5];    x[15] = rol32(x[15] ^ x[0],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  57  		x[1]  += x[6];    x[12] = rol32(x[12] ^ x[1],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  58  		x[2]  += x[7];    x[13] = rol32(x[13] ^ x[2],   8);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  59  		x[3]  += x[4];    x[14] = rol32(x[14] ^ x[3],   8);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  60  
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  61  		x[10] += x[15];   x[5]  = rol32(x[5]  ^ x[10],  7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  62  		x[11] += x[12];   x[6]  = rol32(x[6]  ^ x[11],  7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  63  		x[8]  += x[13];   x[7]  = rol32(x[7]  ^ x[8],   7);
+7660b1fb367eb37 lib/chacha20.c Eric Biggers  2017-12-31  64  		x[9]  += x[14];   x[4]  = rol32(x[4]  ^ x[9],   7);
+e192be9d9a30555 lib/chacha20.c Theodore Ts'o 2016-06-12  65  	}
+dd333449d0fb667 lib/chacha20.c Eric Biggers  2018-11-16  66  }
+dd333449d0fb667 lib/chacha20.c Eric Biggers  2018-11-16  67  
 
-  3. io_sq_thread() or io_wqe_worker() frees @audit_context using
-     audit_free();
-  4. do_exit() eventually calls audit_free() again, which is okay
-     because audit_free() does a NULL check.
+:::::: The code at line 28 was first introduced by commit
+:::::: 7660b1fb367eb3723b48d3980451fc4f25a05021 crypto: chacha20 - use rol32() macro from bitops.h
 
-Free the old @audit_context first in audit_alloc_kernel(), and delete
-the redundant calls to audit_free() for less confusion.
+:::::: TO: Eric Biggers <ebiggers@google.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
 
-Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-Cc: stable@vger.kernel.org
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-Hi all,
-
-A better way to fix this memleak would probably be checking
-@args->io_thread in copy_process()?  Something like:
-
-    if (args->io_thread)
-	retval = audit_alloc_kernel();
-    else
-	retval = audit_alloc();
-
-But I didn't want to add another if to copy_process() for this bugfix.
-Please suggest, thanks!
-
-Peilin Ye
-
- fs/io-wq.c       | 1 -
- fs/io_uring.c    | 2 --
- kernel/auditsc.c | 1 +
- 3 files changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/fs/io-wq.c b/fs/io-wq.c
-index 824623bcf1a5..0f4804a5e873 100644
---- a/fs/io-wq.c
-+++ b/fs/io-wq.c
-@@ -670,7 +670,6 @@ static int io_wqe_worker(void *data)
- 	if (test_bit(IO_WQ_BIT_EXIT, &wq->state))
- 		io_worker_handle_work(worker);
- 
--	audit_free(current);
- 	io_worker_exit(worker);
- 	return 0;
- }
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e8e769be9ed0..0f27914f37f2 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9283,8 +9283,6 @@ static int io_sq_thread(void *data)
- 	io_run_task_work();
- 	mutex_unlock(&sqd->lock);
- 
--	audit_free(current);
--
- 	complete(&sqd->exited);
- 	do_exit(0);
- }
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 3a8c9d744800..7948090fd12f 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -1095,6 +1095,7 @@ int audit_alloc_kernel(struct task_struct *tsk)
- 	 * 2. The {set,clear}_task_syscall_work() ops likely have zero effect
- 	 * on these internal kernel tasks, but they probably don't hurt either.
- 	 */
-+	__audit_free(current);
- 	return audit_alloc(tsk);
- }
- 
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

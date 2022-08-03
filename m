@@ -2,161 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AEA588510
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 02:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E41588514
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 02:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbiHCAOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 20:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S232163AbiHCAQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 20:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiHCAOn (ORCPT
+        with ESMTP id S230234AbiHCAQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 20:14:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE9F22517;
-        Tue,  2 Aug 2022 17:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659485682; x=1691021682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xpxxa/VeBWxsoXeuPULa0bmbGExEbeR3SKlaLFr5VXs=;
-  b=TSea9EEsP8gwiCOeQ+BYrJiJQWhtSwMkAE0wlYH1/8ty8Egbg/jf2sgG
-   x3wyh7k6wMS7zazunxcqJ2JcY40WrkiSVGfD7tPZxa7XXA/9/hsn6ULE3
-   ALb/kFnAlxGwDHFaVF3XS/ffwxWU8gt9Qb7NevO41FtQfeeslBKIWQZFl
-   GejANm7XekiaoEmGAZ7Jn7FCn6Y+IbFBo3hYHx5/h6cfWw+BecXQb1Xx+
-   6zgIwZJ+qHWfN4xz3bYElEj+JMtvc98GnuwPIYrWIJEklRM7RByGR1HGM
-   zb6KzuOKFNMUjCWQJt4fTi2Yhvfhe5NVmTx2jklIJh4iBBgaQe7cTHWcF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="375847850"
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="375847850"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 17:14:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
-   d="scan'208";a="578426894"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Aug 2022 17:14:39 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJ223-000Gap-0G;
-        Wed, 03 Aug 2022 00:14:39 +0000
-Date:   Wed, 3 Aug 2022 08:13:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Eddie James <eajames@linux.ibm.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] leds: pca955x: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208030828.HPkXzKSf-lkp@intel.com>
-References: <20220802212518.7060-1-andriy.shevchenko@linux.intel.com>
+        Tue, 2 Aug 2022 20:16:05 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B850BBF6B
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 17:16:02 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id e5so11585399qts.1
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 17:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZbHc1iEAZVkOCSroOZMrX+NJF9WF2AGs0gYDdDjKIqI=;
+        b=Wes9hWt4rUxxS8EfD4lQNuBDh6FZLW2G0p1/zsD08Z/MLFvRRsoH8ub00qjH7TPihF
+         WETa1mBrEKqnzd9vD3uYpOLCjn6gGdrR0xL2ER87xtrjcWSSXeLFVucs9ZVgyYzYG7mv
+         NMiyxPJ/VYMbgtxFSz+Sc5m4du1qlaLg8Yi6SBHMFWq2S0eUHV2probHStP53F6+yQe4
+         xxy7Bjs+4mD/7HFHin+LGujMFpNrc4DfIlfclng4wFN+AEjVvBQztnxpFwjT39V6wFqq
+         9P/7XiMVpxtE17Dgq+j8nzP00+OofOs4gSPyjzWi9YkX8lEwOfD7NxH7/UR42xRlJQS8
+         Q+Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZbHc1iEAZVkOCSroOZMrX+NJF9WF2AGs0gYDdDjKIqI=;
+        b=RZioovqRr6RigDYS5dKj+CgAqiHy2xiA06UXq5fvKYVsMscAPugUyocdp3PkwH5Cuy
+         mFtETzqpz1q8IEFADXCczjhm8l2II1ddO0kNzHonXxqrfwi+LsRURK+u47GCtxfeTTma
+         1nKF3m/ejobjHZGXdTMwdfLYS+b6JpniVCfGz0wb/ipzOPzyKVTHHUlFQxquiddBvVWE
+         9zRxeh++UoP1MZsqJom2ke/oYTkM0Stn0vS2nSaSv2wpLXYHyn5+GqpxQ5kDZUmtbqWe
+         zK5S+uOzw0Os83Zys6Yl4W8sjUdjUdnpa1gnG0VVkS01FTFi+eC1GGZlVWBlsLWVAGWf
+         Ht+A==
+X-Gm-Message-State: AJIora9erTd0GipKhZZ5wkqAk70jPwuOCgV1QDcncmB/i3aJi4uDUUho
+        SV4T4189Uz0GvO93XR8muEzNTK3w5yvx3ZdvDUnGtg==
+X-Google-Smtp-Source: AGRyM1vX9UN+546ucDj3+mulKfBgqsUc1kz4nGhdARP3ax5BGJ++1z+Ddl89PFeSh4Hy/j3DSeXElqlNK9+UgwJX0vs=
+X-Received: by 2002:a05:622a:4e:b0:31e:f84c:bf17 with SMTP id
+ y14-20020a05622a004e00b0031ef84cbf17mr20355611qtw.566.1659485761782; Tue, 02
+ Aug 2022 17:16:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802212518.7060-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801205039.2755281-1-haoluo@google.com> <YukHHCF0DA6Xb/Rf@krava>
+In-Reply-To: <YukHHCF0DA6Xb/Rf@krava>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 2 Aug 2022 17:15:50 -0700
+Message-ID: <CA+khW7iGQyoxRuOR=fHFzjpXLnHKraJ6=brktaZw6Rqkg85a6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] bpf, iter: clean up bpf_seq_read().
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Tue, Aug 2, 2022 at 4:14 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Mon, Aug 01, 2022 at 01:50:39PM -0700, Hao Luo wrote:
+>
+> SNIP
+>
+> > +static int do_seq_show(struct seq_file *seq, void *p, size_t offs)
+> > +{
+> > +     int err;
+> > +
+> > +     WARN_ON(IS_ERR_OR_NULL(p));
+> > +
+> > +     err = seq->op->show(seq, p);
+> > +     if (err > 0) {
+> > +             /* object is skipped, decrease seq_num, so next
+> > +              * valid object can reuse the same seq_num.
+> > +              */
+> > +             bpf_iter_dec_seq_num(seq);
+> > +             seq->count = offs;
+> > +             return err;
+> > +     }
+> > +
+> > +     if (err < 0 || seq_has_overflowed(seq)) {
+> > +             seq->count = offs;
+> > +             return err ? err : -E2BIG;
+> > +     }
+> > +
+> > +     /* err == 0 and no overflow */
+> > +     return 0;
+> > +}
+> > +
+> > +/* do_seq_stop, stops at the given object 'p'. 'p' could be an ERR or NULL. If
+> > + * 'p' is an ERR or there was an overflow, reset seq->count to 'offs' and
+> > + * returns error. Returns 0 otherwise.
+> > + */
+> > +static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
+> > +{
+> > +     if (IS_ERR(p)) {
+> > +             seq->op->stop(seq, NULL);
+> > +             seq->count = offs;
+>
+> should we set seq->count to 0 in case of error?
+>
 
-I love your patch! Yet something to improve:
+Thanks Jiri. To be honest, I don't know. There are two paths that may
+lead to an error "p".
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+First, seq->op->start() could return ERR, in that case, '"offs'" is
+zero and we set it to zero already. This is fine.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-pca955x-Get-rid-of-custom-led_init_default_state_get/20220803-052712
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: x86_64-randconfig-a002-20220801 (https://download.01.org/0day-ci/archive/20220803/202208030828.HPkXzKSf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46936c7c7d9d52d3029e319fc78b727a9e0fc046
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-pca955x-Get-rid-of-custom-led_init_default_state_get/20220803-052712
-        git checkout 46936c7c7d9d52d3029e319fc78b727a9e0fc046
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/leds/
+The other one, seq->op->next() could return ERR. This is a case where
+bpf_seq_read() fails to handle right now, so I am not sure what to do.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Based on my understanding reading the code, if seq->count isn't
+zeroed, the current read() will not copy data, but the next read()
+will copy data (see the "if (seq->count)" at the beginning of
+bpf_seq_read). If seq->count is zeroed, the data in buffer will be
+discarded. I don't know what is right.
 
-All error/warnings (new ones prefixed by >>):
-
->> drivers/leds/leds-pca955x.c:457:24: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   led->default_state = led_init_default_state_get(child);
-                                        ^
->> drivers/leds/leds-pca955x.c:446:15: warning: unused variable 'state' [-Wunused-variable]
-                   const char *state;
-                               ^
-   drivers/leds/leds-pca955x.c:494:15: warning: cast to smaller integer type 'enum pca955x_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-                   chip_type = (enum pca955x_type)md;
-                               ^~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
-
-
-vim +/led_init_default_state_get +457 drivers/leds/leds-pca955x.c
-
-   422	
-   423	static struct pca955x_platform_data *
-   424	pca955x_get_pdata(struct i2c_client *client, struct pca955x_chipdef *chip)
-   425	{
-   426		struct pca955x_platform_data *pdata;
-   427		struct pca955x_led *led;
-   428		struct fwnode_handle *child;
-   429		int count;
-   430	
-   431		count = device_get_child_node_count(&client->dev);
-   432		if (count > chip->bits)
-   433			return ERR_PTR(-ENODEV);
-   434	
-   435		pdata = devm_kzalloc(&client->dev, sizeof(*pdata), GFP_KERNEL);
-   436		if (!pdata)
-   437			return ERR_PTR(-ENOMEM);
-   438	
-   439		pdata->leds = devm_kcalloc(&client->dev,
-   440					   chip->bits, sizeof(struct pca955x_led),
-   441					   GFP_KERNEL);
-   442		if (!pdata->leds)
-   443			return ERR_PTR(-ENOMEM);
-   444	
-   445		device_for_each_child_node(&client->dev, child) {
- > 446			const char *state;
-   447			u32 reg;
-   448			int res;
-   449	
-   450			res = fwnode_property_read_u32(child, "reg", &reg);
-   451			if ((res != 0) || (reg >= chip->bits))
-   452				continue;
-   453	
-   454			led = &pdata->leds[reg];
-   455			led->type = PCA955X_TYPE_LED;
-   456			led->fwnode = child;
- > 457			led->default_state = led_init_default_state_get(child);
-   458	
-   459			fwnode_property_read_u32(child, "type", &led->type);
-   460		}
-   461	
-   462		pdata->num_leds = chip->bits;
-   463	
-   464		return pdata;
-   465	}
-   466	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> jirka
+>
+> > +             return PTR_ERR(p);
+> > +     }
+> > +
+> > +     seq->op->stop(seq, p);
+> > +     if (!p) {
+> > +             if (!seq_has_overflowed(seq)) {
+> > +                     bpf_iter_done_stop(seq);
+> > +             } else {
+> > +                     seq->count = offs;
+> > +                     if (offs == 0)
+> > +                             return -E2BIG;
+> > +             }
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> >  /* maximum visited objects before bailing out */
+> >  #define MAX_ITER_OBJECTS     1000000
+> >
+>
+> SNIP

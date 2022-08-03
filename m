@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276095892AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425805892B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238234AbiHCTWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S238167AbiHCT1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbiHCTWU (ORCPT
+        with ESMTP id S231508AbiHCT1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:22:20 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72D4D149
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:22:18 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id q3so13641986qvp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:22:18 -0700 (PDT)
+        Wed, 3 Aug 2022 15:27:04 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D18564E5
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:27:03 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id d31-20020a631d1f000000b0041a5a805e26so7111833pgd.16
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=c0anUqpP2C7sKweDNx6tz5eeeYeeCajDunQoGL7Ybz0=;
-        b=nLaoCQbdkBOJTfuCR3nvXQ6rGDdylxjmz1jZ8Tm+nJhB6uRVEzkJe9J4YvGiaLZJIB
-         eWPFrU1LaDhgB2s2lw2eeu9wk/emPqRLAABUjCEPpahzxkyec1saBHzutYUk9LjwCn1W
-         NDD4glL0si9CYF94gTQapu1l/uknEiTgOX1JK7P0ZfPvWAntrY41DosPltyCmtNzocQd
-         u0y+VnjfLoLyPQNDeLJGLo35kTLX8U7m3Md4z4tb8wRmVQCEoDIBm+JIZRe1M2hFceis
-         Nk7XsPtsik05vCUxaU21b6nk/4AzADB2kCAMEgmcUghE3x5ypb3WJtPKnhrzaNTK6OU0
-         cJHA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to:from:to:cc;
+        bh=3RPOTZgLH8z1mj6S/J2PJvuGpfhZNmF41DEbta7HrMo=;
+        b=gKuIIBdvQdBJu4sMYgx0Q90wW6lAC9OxXICWsrcsxMFPRuEUESQwb5lFSQVlxB5M3l
+         KYvk4/WS21iPidCi1NOprQmF5glOHs1jagHWpFq4vyPuxvEGlvDBSF3G/SEIARiwW58W
+         dkcwKi1TGOe2JtSdnws1BPabQEsQa68tBLCq1ON+yguApZeW0273w6rIIo8KHUtOJ0oE
+         abP2CCLzkEMHdbdIn8XM6a700vkIVxoQNYLM28ri08U8AXVy3PGSJ/cmn39/4eejnV24
+         lXnpQIMPF/jz6Sg11yUn1r/RGmjtK44kIbygKPZBdd8Vrm7S1QZ/vpaPwiQl7e1TzuKn
+         cvlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=c0anUqpP2C7sKweDNx6tz5eeeYeeCajDunQoGL7Ybz0=;
-        b=LnGjtH0RsSJZGwLFZ/rI1ay/O5T1ZGCSBdwfq4p9CiQ5uG6xn8HXHRCYs7RtVMNjCc
-         3rH9HxnEsuSOGxB5DQCcIq9AOFenarn506P0Lgo7eh1pHPfR1O+nOIYsqJoGex2o7oBk
-         /OdxwSeSrT2bR6QkCKYabR/Nj1ZnYl/i3X+sFD4HyAFN+sq09LwnzyDDSVrIWjfgyaIx
-         0LgQ4o3EpTUESu913VR+jc+G+J6uX6NOfbwQ24lzRauAHxAVgvDNpNQgb3inUvAlboHA
-         A8SoWw2ZmHotopid+Mb0BTg2IrdYny1Yz0TpgzGheUg5r4S/kk77IG6vIlUx8XUVuoSV
-         wuEg==
-X-Gm-Message-State: ACgBeo2aYduNGTQll922BpSFOImnVgatvPhwnzqGWdi7ZfKG8ePwJmOy
-        ITfWg+qa7C2bf10bzrla/q4M2A==
-X-Google-Smtp-Source: AA6agR4TkWrYPxjKmcUZ27Y4WmzwJ9slM6j/RDvOC1vEiV2I9GNQ5PtUVSvJJX3BnrPwhRyC6MYmEQ==
-X-Received: by 2002:ad4:5f0a:0:b0:474:8978:9a9f with SMTP id fo10-20020ad45f0a000000b0047489789a9fmr23754893qvb.71.1659554538002;
-        Wed, 03 Aug 2022 12:22:18 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::a0f2])
-        by smtp.gmail.com with ESMTPSA id bm7-20020a05620a198700b006b629f86244sm13216262qkb.50.2022.08.03.12.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 12:22:17 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 15:22:16 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>, surenb@google.com,
-        mingo@redhat.com, peterz@infradead.org, corbet@lwn.net,
-        akpm@linux-foundation.org, rdunlap@infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
- psi_inner_cgroup
-Message-ID: <YurK6MXdJPrV2VYS@cmpxchg.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-9-zhouchengming@bytedance.com>
- <Yt7KQc0nnOypB2b2@cmpxchg.org>
- <YuAqWprKd6NsWs7C@slm.duckdns.org>
- <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
- <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yuq3Q6Y9dRnjjcPt@slm.duckdns.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:mime-version:message-id:date:reply-to
+         :x-gm-message-state:from:to:cc;
+        bh=3RPOTZgLH8z1mj6S/J2PJvuGpfhZNmF41DEbta7HrMo=;
+        b=SHFXXDJ0qw0m/ryLlbYu1gGqnI4WrKqP238qlVeYNcyQyBZXgyK+mpK0aclimS4WJR
+         Foddrm8gIfnP1xZfng7wdJcgQlCl6K2nnSRHyXCHVxvN5inqsk9fbywaWqBX00wkgZ0e
+         noljOVXHHwQYurXiLsoyu6RG9ZJBcyUVkzYGfPccoPi1s+KhGoStHva8NLnckT3KU6oL
+         F83qI5X8BlrojdgeS4MhaFqsi1IVsyLXD/mjn0yhY+aVHYFvygp0lG568NBnerqgAbmN
+         o1VzUqJ1aLku2uUuvlCdMzLOhI2eFD/q7+b18PUn4j8/CcCWZ4BIscgoRO57q/+brbcy
+         a8jw==
+X-Gm-Message-State: ACgBeo0p0/WG3GdfnIlcxBsXQ87pPOJJ0jjpEUquizN6F2VmuskKS4sM
+        aRPkwmFmdmFZraWFIgZGMV1uDAjo7j0=
+X-Google-Smtp-Source: AA6agR5/G+xmOFeILNiqYjsu2HB21yEsKdqFRR0RpP9Yl20POWePtSeiNqhqUeJqaXc6xllutDPlQynosOU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:32d2:b0:16e:dfed:b4b6 with SMTP id
+ i18-20020a17090332d200b0016edfedb4b6mr18139404plr.108.1659554823230; Wed, 03
+ Aug 2022 12:27:03 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  3 Aug 2022 19:26:51 +0000
+Message-Id: <20220803192658.860033-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v2 0/7] KVM: x86: Intel PERF_CAPABILITIES fixes and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +74,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 07:58:27AM -1000, Tejun Heo wrote:
-> Hello,
-> 
-> On Wed, Aug 03, 2022 at 08:17:22PM +0800, Chengming Zhou wrote:
-> > > Assuming the above isn't wrong, if we can figure out how we can re-enable
-> > > it, which is more difficult as the counters need to be resynchronized with
-> > > the current state, that'd be ideal. Then, we can just allow each cgroup to
-> > > enable / disable PSI reporting dynamically as they see fit.
-> > 
-> > This method is more fine-grained but more difficult like you said above.
-> > I think it may meet most needs to disable PSI stats in intermediate cgroups?
-> 
-> So, I'm not necessarily against implementing something easier but we at
-> least wanna get the interface right, so that if we decide to do the full
-> thing later we can easily expand on the existing interface. ie. let's please
-> not be too hacky. I don't think it'd be that difficult to implement
-> per-cgroup disable-only operation that we can later expand to allow
-> re-enabling, right?
+Bug fixes and cleanups related to KVM's handling of PERF_CAPABILITIES.
 
-It should be relatively straight-forward to disable and re-enable
-state aggregation, time tracking, averaging on a per-cgroup level, if
-we can live with losing history from while it was disabled. I.e. the
-avgs will restart from 0, total= will have gaps - should be okay, IMO.
+Bug #1 - Refresh KVM's vPMU after userspace writes PERF_CAPABILITIES, and
+then leverage that fix to avoiding checking guest_cpuid_has(X86_FEATURE_PDCM)
+during VM-Enter, which is slow enough that it shows up in perf traces[*].
 
-Where it gets trickier is also stopping the tracking of task counts in
-a cgroup. For re-enabling afterwards, we'd have to freeze scheduler
-and cgroup state and find all tasks of interest across all CPUs for
-the given cgroup to recreate the counts. I'm not quite sure whether
-that's feasible, and if so, whether it's worth the savings.
+Bug #2 - Don't advertise PMU_CAP_LBR_FMT to userspace if perf has disabled
+LBRs, e.g. because probing one or more LBR MSRs during setup hit a #GP.
 
-It might be good to benchmark the two disabling steps independently.
-Maybe stopping aggregation while keeping task counts is good enough,
-and we can commit to a disable/re-enable interface from the start.
+The non-KVM patches remove unnecessary stubs and unreachable error paths,
+which allows for a cleaner fix for bug #2.
 
-Or maybe it's all in the cachelines and iteration, and stopping the
-aggregation while still writing task counts isn't saving much. In that
-case we'd have to look closer at reconstructing task counts, to see if
-later re-enabling is actually a practical option or whether a one-off
-kill switch is more realistic.
+[*] https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
 
-Chengming, can you experiment with disabling: record_times(), the
-test_state() loop and state_mask construction, and the averaging
-worker - while keeping the groupc->tasks updates?
+v2:
+ - Add patches to fix bug #2. [Like]
+ - Add a patch to clean up the capability check.
+ - Tweak the changelog for the PMU refresh bug fix to call out that
+   KVM should disallow changing feature MSRs after KVM_RUN. [Like]
+
+v1: https://lore.kernel.org/all/20220727233424.2968356-1-seanjc@google.com
+
+Sean Christopherson (7):
+  KVM: x86: Refresh PMU after writes to MSR_IA32_PERF_CAPABILITIES
+  perf/x86/core: Remove unnecessary stubs provided for KVM-only helpers
+  perf/x86/core: Drop the unnecessary return value from
+    x86_perf_get_lbr()
+  KVM: VMX: Advertise PMU LBRs if and only if perf supports LBRs
+  KVM: VMX: Use proper type-safe functions for vCPU => LBRs helpers
+  KVM: VMX: Adjust number of LBR records for PERF_CAPABILITIES at
+    refresh
+  KVM: VMX: Simplify capability check when handling PERF_CAPABILITIES
+    write
+
+ arch/x86/events/intel/lbr.c       |  6 +---
+ arch/x86/include/asm/perf_event.h | 55 ++++++++-----------------------
+ arch/x86/kvm/vmx/capabilities.h   |  5 ++-
+ arch/x86/kvm/vmx/pmu_intel.c      | 12 ++-----
+ arch/x86/kvm/vmx/vmx.c            |  6 ++--
+ arch/x86/kvm/vmx/vmx.h            | 53 +++++++++++++++++------------
+ arch/x86/kvm/x86.c                |  4 +--
+ 7 files changed, 58 insertions(+), 83 deletions(-)
+
+
+base-commit: 93472b79715378a2386598d6632c654a2223267b
+-- 
+2.37.1.559.g78731f0fdb-goog
+

@@ -2,196 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCEB588901
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DCB588905
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235222AbiHCJDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S235540AbiHCJD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiHCJC6 (ORCPT
+        with ESMTP id S229602AbiHCJD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:02:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C389A6249;
-        Wed,  3 Aug 2022 02:02:57 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id f192so6431655pfa.9;
-        Wed, 03 Aug 2022 02:02:57 -0700 (PDT)
+        Wed, 3 Aug 2022 05:03:57 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A99F286F3;
+        Wed,  3 Aug 2022 02:03:55 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v5so8380353wmj.0;
+        Wed, 03 Aug 2022 02:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m7aWJNOeI0wNeEE9TxEpJnxSjW0YsgfE4r1KcBZ+Q7E=;
-        b=V3+4HcIs193GSeKyBT1AxL/JjCD9KiSa4jred6/XUWdJwlKhhAGt1z3YCxTk1+cRDK
-         1q/9n0EYibWmglVPGHj7W2FhX76A9yfl04+My1HvEL49aIQcgaqDMze8TCaY73KOX7wE
-         bWOQKlNrRTe7YGg2eKr6EpBFXxuO/PIihVCaYw93DNf5lhDPkDohGFOk9vbkP+5lh5vw
-         EMaxv8ajbyeHOQZsxrzij0Ch8Kch3F1yuiHCs7kYO3mLeg1n3TQhgamNMA6lc28f6Vi+
-         LR77PoHV3juOfTHKY6XZY03XdoXMrL4d9Fi+edEgUVv+ETSEqsbhS1LygvQgzQCpaozl
-         b7BA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZIQ4PjPtMmNCTF5H7NB1i9jqDTRqe+lP8qX6KWAkRQM=;
+        b=ixVRcFv91G8mWMmEK8rgK9zV0RILjdiLL7X7n12x2d0b6i3xqWxVAr0FjKLrrbZeFw
+         ZAu6yNOIw0rlHwKsSI8YWUfDv7YPR22qli2/tMGMenEwAK7MFTw6X9FlDehfl8ZwIms4
+         YK8hRJwtnQWnxUrYUTxpquKrgmgRovKBOh94wyIHU6lP+aFocfWjQzETJKEzBzEV9jlS
+         /mpWt+zYv9EiJI+CN6bt9IEsRo1s8iNNRDaEvyc52WEBZopYPMAD5Y1/DL2dM/yGRVoV
+         BZAWIWyZaRpyZl1+ETD11ULtTApuBelJmzlCbckkOCR/WiJZsIYrF4U5wCZbACbYE+VM
+         LyTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m7aWJNOeI0wNeEE9TxEpJnxSjW0YsgfE4r1KcBZ+Q7E=;
-        b=tIhkuSu5vPGtKC70v+tE/0ntcGf+DlqiWz9GiSiy9R7rR08yqIfiB+UHIyVSIUhlUT
-         y6AteOGUzsKVJZMi7r7u8uCQ3MrQH1VLvFX7PIE+p959fwQ8ZiPYLXaXquPI2bE17/pX
-         gk50/PPR2rATjWgd6ZYJrJMw3a3P4lxhl1/8QccrdQxP6hQN2czgzBdiv5wJl7VvyDq/
-         /FUxUIrdqQyKsrXNIgcot2hUhe5DV9vc0FXNhIAYXgKNyW3ddCQwkRWcMeoACJB73YKM
-         WvGgvAfhgeSFmzzKjPU47WNfTEfm7OuCgi2hQqaz553CeM35YmirLDrcj6Pbgh/1l3a8
-         fGpA==
-X-Gm-Message-State: AJIora/SnC+kyjrV0I8HXw9W8pcuCmzzBYfg/TGPSR9swT8rTo78qkoz
-        zQypjOisCI1sfkb0ORnaMhUVH+gdbU8=
-X-Google-Smtp-Source: AGRyM1vFHJPSkqiOpsvZ4sCzy0U4JcOXZeDCVQlp656F96jJaqtbxlvRJrtArp4nYZuIhYMTS1Umww==
-X-Received: by 2002:a05:6a00:b55:b0:52a:db7b:2880 with SMTP id p21-20020a056a000b5500b0052adb7b2880mr24630179pfo.22.1659517377024;
-        Wed, 03 Aug 2022 02:02:57 -0700 (PDT)
-Received: from localhost.localdomain ([221.158.180.156])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b0016ed8af2ec0sm1353137pla.29.2022.08.03.02.02.55
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ZIQ4PjPtMmNCTF5H7NB1i9jqDTRqe+lP8qX6KWAkRQM=;
+        b=hEnFK4hyBSpDbaKoVBXgOmldxPnZEN9kPe73N4Gnk8AKwAjAt+m+wdTyBcKHZbTvYF
+         rLW+L/uMhl52VnPnmlqWuu5KpOK2ioFuFAxka/F7sQRUoxq0g5umqMjbeLIHOdZMYdCD
+         R2psnw2k268Y7fm4B/ITx3eXIgCBFmELFa1ClM6i38z7nEE6r4cSZmyAEgjcH6UKLAPp
+         G1XYUG2TybHvcOJ36mNNvFhnX2mVR7svv/vDX01h/1it2BuN2hFq0Sv5V0OKuA02bx2H
+         N1bhwni2AHNcTJZDqAURTuNV35TKVGjECuRmLCMujzBrWb54BGQ8cxwcruftF2ip9+XT
+         qC9A==
+X-Gm-Message-State: ACgBeo2nMBcf5NwR15bT6VMh2DsWa2lKYB/rsYD3TC62pzbYAJ93D3EO
+        d9mQ3p87JxxbhyA/YQtu9L8=
+X-Google-Smtp-Source: AA6agR5AlI8pFtqxcdL50XhMpI9RUrux8QwexLdrXlPCfhJ1XrvtDSfR2w30D3d9+GXwDYSolN0U0A==
+X-Received: by 2002:a05:600c:384c:b0:3a3:744d:8dd2 with SMTP id s12-20020a05600c384c00b003a3744d8dd2mr2131689wmr.117.1659517433839;
+        Wed, 03 Aug 2022 02:03:53 -0700 (PDT)
+Received: from gmail.com (84-236-113-167.pool.digikabel.hu. [84.236.113.167])
+        by smtp.gmail.com with ESMTPSA id k17-20020adff291000000b0021d6924b777sm17673007wro.115.2022.08.03.02.03.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 02:02:56 -0700 (PDT)
-From:   Seunghun Han <kkamagui@gmail.com>
-To:     oliver@neukum.org
-Cc:     davem@davemloft.net, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kkamagui@gmail.com
-Subject: [PATCH] net: usb: cdc_mbim: adding Microsoft mobile broadband modem
-Date:   Wed,  3 Aug 2022 18:02:18 +0900
-Message-Id: <20220803090218.1313187-1-kkamagui@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 03 Aug 2022 02:03:52 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 3 Aug 2022 11:03:50 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        kvm@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Message-ID: <Yuo59tV071/i6yhf@gmail.com>
+References: <20220731050342.56513-1-khuey@kylehuey.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731050342.56513-1-khuey@kylehuey.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microsoft branded mobile broadband modems typically used in the Surface series
-don't work with the Linux kernel. When I query firmware information to the
-modem using the mbimcli tool, it always returns the Failure (0x02) value like
-below.
 
-=== Start of the firmware id query ===
-$> mbimcli -d /dev/cdc-wdm4 --ms-query-firmware-id -v
-[26  Jul 2022, 05:24:07] [Debug] opening device...
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Queried max control message size: 4096
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Sent message...
-<<<<<< RAW:
-<<<<<<   length = 16
-<<<<<<   data   = 01:00:00:00:10:00:00:00:01:00:00:00:00:10:00:00
+* Kyle Huey <me@kylehuey.com> wrote:
 
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Sent message (translated)...
-<<<<<< Header:
-<<<<<<   length      = 16
-<<<<<<   type        = open (0x00000001)
-<<<<<<   transaction = 1
-<<<<<< Contents:
-<<<<<<   max control transfer = 4096
+> From: Kyle Huey <me@kylehuey.com>
+> 
+> When management of the PKRU register was moved away from XSTATE, emulation
+> of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> for APIs that write XSTATE. This can be seen by running gdb and executing
+> `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> write to the PKRU register (which gdb performs through ptrace) is ignored.
+> 
+> There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> and sigreturn pass in pointers to the appropriate PKRU value.
+> 
+> This also adds code to initialize the PKRU value to the hardware init value
+> (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> This is a change to the current KVM_SET_XSAVE behavior.
+> 
+> Signed-off-by: Kyle Huey <me@kylehuey.com>
+> Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
+> Cc: stable@vger.kernel.org # 5.14+
+> Fixes: e84ba47e313dbc097bf859bb6e4f9219883d5f78
+> ---
+>  arch/x86/kernel/fpu/core.c   | 11 +----------
+>  arch/x86/kernel/fpu/regset.c |  2 +-
+>  arch/x86/kernel/fpu/signal.c |  2 +-
+>  arch/x86/kernel/fpu/xstate.c | 26 +++++++++++++++++++++-----
+>  arch/x86/kernel/fpu/xstate.h |  4 ++--
+>  5 files changed, 26 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 0531d6a06df5..dfb79e2ee81f 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -406,16 +406,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+>  	if (ustate->xsave.header.xfeatures & ~xcr0)
+>  		return -EINVAL;
+>  
+> -	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/* Retrieve PKRU if not in init state */
+> -	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+> -		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+> -		*vpkru = xpkru->pkru;
+> -	}
+> -	return 0;
+> +	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+>  }
+>  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+>  #endif /* CONFIG_KVM */
+> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> index 75ffaef8c299..6d056b68f4ed 100644
+> --- a/arch/x86/kernel/fpu/regset.c
+> +++ b/arch/x86/kernel/fpu/regset.c
+> @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+>  	}
+>  
+>  	fpu_force_restore(fpu);
+> -	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
+> +	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+>  
+>  out:
+>  	vfree(tmpbuf);
+> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+> index 91d4b6de58ab..558076dbde5b 100644
+> --- a/arch/x86/kernel/fpu/signal.c
+> +++ b/arch/x86/kernel/fpu/signal.c
+> @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+>  
+>  	fpregs = &fpu->fpstate->regs;
+>  	if (use_xsave() && !fx_only) {
+> -		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
+> +		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+>  			return false;
+>  	} else {
+>  		if (__copy_from_user(&fpregs->fxsave, buf_fx,
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index c8340156bfd2..1eea7af4afd9 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+>  
+>  
+>  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+> -			       const void __user *ubuf)
+> +			       const void __user *ubuf, u32 *pkru)
+>  {
+>  	struct xregs_state *xsave = &fpstate->regs.xsave;
+>  	unsigned int offset, size;
+> @@ -1235,6 +1235,22 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>  	for (i = 0; i < XFEATURE_MAX; i++) {
+>  		mask = BIT_ULL(i);
+>  
+> +		if (i == XFEATURE_PKRU) {
+> +			/*
+> +			 * Retrieve PKRU if not in init state, otherwise
+> +			 * initialize it.
+> +			 */
+> +			if (hdr.xfeatures & mask) {
+> +				struct pkru_state xpkru = {0};
+> +
+> +				copy_from_buffer(&xpkru, xstate_offsets[i],
+> +						 sizeof(xpkru), kbuf, ubuf);
 
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Received message...
->>>>>> RAW:
->>>>>>   length = 16
->>>>>>   data   = 01:00:00:80:10:00:00:00:01:00:00:00:02:00:00:00
+Shouldn't the failure case of copy_from_buffer() be handled?
 
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Received message...Message Type 80000001
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 864
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 897
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 923
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 930
-[26  Jul 2022, 05:24:07] [Debug] [/dev/cdc-wdm4] Processing process_message 935
-[26  Jul 2022, 05:24:07] [Debug] getting open done result failed: closed
-error: couldn't open the MbimDevice: Failure
-=== End of the firmware id query ===
+Also, what's the security model for this register, do we trust all input 
+values user-space provides for the PKRU field in the XSTATE? I realize that 
+WRPKRU already gives user-space write access to the register - but does the 
+CPU write it all into the XSTATE, with no restrictions on content 
+whatsoever?
 
-After kernel debugging, I found that the modem reported that the dwNtbInMaxSize
-value of ncm_parm was 16384 during the initialization sequence.
-So the cdc_ncm_update_rxtx_max() in cdc_ncm_bind_common() didn't send
-USB_CDC_SET_NTB_INPUT_SIZE command because the default input size was the same,
-16384.
+Thanks,
 
-It's good and proper behavior. However, Microsoft branded MBMs (including the
-latest one in Surface Go 3) fail until the kernel explicitly sets the input
-size.
-
-This patch adds a new table and code changes that explicitly send
-the USB_CDC_SET_NTB_INPUT_SIZE command to support Microsoft branded MBMs.
-
-Signed-off-by: Seunghun Han <kkamagui@gmail.com>
----
- drivers/net/usb/cdc_mbim.c  | 24 ++++++++++++++++++++++++
- drivers/net/usb/cdc_ncm.c   |  2 +-
- include/linux/usb/cdc_ncm.h |  1 +
- 3 files changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/cdc_mbim.c b/drivers/net/usb/cdc_mbim.c
-index c89639381eca..c0c23cfc02a7 100644
---- a/drivers/net/usb/cdc_mbim.c
-+++ b/drivers/net/usb/cdc_mbim.c
-@@ -618,6 +618,22 @@ static const struct driver_info cdc_mbim_info_avoid_altsetting_toggle = {
- 	.data = CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE,
- };
- 
-+/* Microsoft branded modems do not work properly without setting the input size
-+ * explicitly in cdc_ncm_bind_common.
-+ * CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY flag is used to set the input size
-+ * during initialization.
-+ */
-+static const struct driver_info cdc_mbim_info_set_input_size_explicitly = {
-+	.description = "CDC MBIM",
-+	.flags = FLAG_NO_SETINT | FLAG_MULTI_PACKET | FLAG_WWAN | FLAG_SEND_ZLP,
-+	.bind = cdc_mbim_bind,
-+	.unbind = cdc_mbim_unbind,
-+	.manage_power = cdc_mbim_manage_power,
-+	.rx_fixup = cdc_mbim_rx_fixup,
-+	.tx_fixup = cdc_mbim_tx_fixup,
-+	.data = CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY,
-+};
-+
- static const struct usb_device_id mbim_devs[] = {
- 	/* This duplicate NCM entry is intentional. MBIM devices can
- 	 * be disguised as NCM by default, and this is necessary to
-@@ -665,6 +681,14 @@ static const struct usb_device_id mbim_devs[] = {
- 	  .driver_info = (unsigned long)&cdc_mbim_info_avoid_altsetting_toggle,
- 	},
- 
-+	/* Some Microsoft branded mobile broadband modems used in the Surface
-+	 * seires are known to fail unless the input size is set explicitly.
-+	 * Applying it to all Microsoft branded MBMs.
-+	 */
-+	{ USB_VENDOR_AND_INTERFACE_INFO(0x045e, USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
-+	  .driver_info = (unsigned long)&cdc_mbim_info_set_input_size_explicitly,
-+	},
-+
- 	/* default entry */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_MBIM, USB_CDC_PROTO_NONE),
- 	  .driver_info = (unsigned long)&cdc_mbim_info_zlp,
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 8d5cbda33f66..915e29c987cb 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -407,7 +407,7 @@ static void cdc_ncm_update_rxtx_max(struct usbnet *dev, u32 new_rx, u32 new_tx)
- 	val = cdc_ncm_check_rx_max(dev, new_rx);
- 
- 	/* inform device about NTB input size changes */
--	if (val != ctx->rx_max) {
-+	if (val != ctx->rx_max || ctx->drvflags & CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY) {
- 		__le32 dwNtbInMaxSize = cpu_to_le32(val);
- 
- 		dev_info(&dev->intf->dev, "setting rx_max = %u\n", val);
-diff --git a/include/linux/usb/cdc_ncm.h b/include/linux/usb/cdc_ncm.h
-index 2d207cb4837d..a24f84b31a54 100644
---- a/include/linux/usb/cdc_ncm.h
-+++ b/include/linux/usb/cdc_ncm.h
-@@ -88,6 +88,7 @@
- #define CDC_NCM_FLAG_NDP_TO_END			0x02	/* NDP is placed at end of frame */
- #define CDC_MBIM_FLAG_AVOID_ALTSETTING_TOGGLE	0x04	/* Avoid altsetting toggle during init */
- #define CDC_NCM_FLAG_PREFER_NTB32 0x08	/* prefer NDP32 over NDP16 */
-+#define CDC_MBIM_FLAG_SET_INPUT_SIZE_EXPLICITLY	0x10	/* Set input size explicitly during init */
- 
- #define cdc_ncm_comm_intf_is_mbim(x)  ((x)->desc.bInterfaceSubClass == USB_CDC_SUBCLASS_MBIM && \
- 				       (x)->desc.bInterfaceProtocol == USB_CDC_PROTO_NONE)
--- 
-2.30.2
-
+	Ingo

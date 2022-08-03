@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C21F588E1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B0D588E24
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238514AbiHCOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 10:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S238506AbiHCOB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236478AbiHCOAH (ORCPT
+        with ESMTP id S236785AbiHCOB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:00:07 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A6AB8A;
-        Wed,  3 Aug 2022 07:00:05 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id DDC235FD2F;
-        Wed,  3 Aug 2022 17:00:03 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1659535203;
-        bh=ZKMXpCA9Ey3wdzBNP+gXLnhyO45OV7iXKTbsieEn9NI=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=nBsWoYp0gXHeJkZUq0y+1zuiM+x8y2iDCV5d//JxA36M1kJMBu3y/1J3F0zxmuI+N
-         BqtPoHFKqABGbBsU+ajMZIH0kNWWfDi298My4nETIadzE6Wz/dTbWbWDEG+ajR8Km6
-         MF5u7zryJXGaKpzLlTfFvVQAI033RJwzcL42uIYBeMcoNR72HlucfW1NwSg4oqwWIV
-         wWsyjxYlVJ4EezJsadCMSMmO6eXTDvabu0A+GcgyzaQRjV4E0tsmF0FU6JeSvF/rxS
-         aiop8S64qAhW1FAr9rUKc2FUpkKcnliGuHYzQmhOPaKIlCrTD8E0worXqN1JAglCMf
-         9cA7PAy7Nrh3g==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  3 Aug 2022 17:00:02 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "Arseniy Krasnov" <AVKrasnov@sberdevices.ru>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: [RFC PATCH v3 5/9] vsock: pass sock_rcvlowat to notify_poll_in as
- target
-Thread-Topic: [RFC PATCH v3 5/9] vsock: pass sock_rcvlowat to notify_poll_in
- as target
-Thread-Index: AQHYp0FLSVsieEsYCEKStjqm/Ox4tQ==
-Date:   Wed, 3 Aug 2022 13:59:49 +0000
-Message-ID: <5e343101-8172-d0fa-286f-5de422c6db0b@sberdevices.ru>
-In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B80F0681314D6C4E922F57A91A26F18B@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Wed, 3 Aug 2022 10:01:56 -0400
+Received: from aer-iport-6.cisco.com (aer-iport-6.cisco.com [173.38.203.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA52B269
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1217; q=dns/txt; s=iport;
+  t=1659535315; x=1660744915;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8t9zvnYmA65JIhzd4OZ3iRWK42/wNYyO3z9pUde/lNI=;
+  b=jUfLG+EBOMa4OvAZIvwlV0bn4aTThW5dKTE3QLa7gNKIy40SN5F7k5R4
+   /TfIsdUEAxRq4AnnGiLmSAGAZJiRwQArKjz/OkjDue4EQo+YMAMYfDn/c
+   mO/1d2Jl/RU9NfpkC2IkkJiTHmQocUgWmWNowGIoMXSVJrsp5ERUnnZWp
+   8=;
+X-IronPort-AV: E=Sophos;i="5.93,214,1654560000"; 
+   d="scan'208";a="698913"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-1.cisco.com) ([173.38.203.22])
+  by aer-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 03 Aug 2022 14:01:53 +0000
+Received: from hce-anki.rd.cisco.com ([10.47.79.243])
+        by aer-core-1.cisco.com (8.15.2/8.15.2) with ESMTP id 273E1qWF002584;
+        Wed, 3 Aug 2022 14:01:53 GMT
+From:   Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org,
+        Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+Subject: [v4.9 PATCH v3 6/6] random: only call boot_init_stack_canary() once
+Date:   Wed,  3 Aug 2022 16:01:51 +0200
+Message-Id: <20220803140151.687558-1-hegtvedt@cisco.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Yupk5K1S7flR7yjD@kroah.com>
+References: <Yupk5K1S7flR7yjD@kroah.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.79.243, [10.47.79.243]
+X-Outbound-Node: aer-core-1.cisco.com
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBjYWxsYmFjayBjb250cm9scyBzZXR0aW5nIG9mIFBPTExJTixQT0xMUkROT1JNIG91dHB1
-dCBiaXRzIG9mIHBvbGwoKQ0Kc3lzY2FsbCxidXQgaW4gc29tZSBjYXNlcyxpdCBpcyBpbmNvcnJl
-Y3RseSB0byBzZXQgaXQsIHdoZW4gc29ja2V0IGhhcw0KYXQgbGVhc3QgMSBieXRlcyBvZiBhdmFp
-bGFibGUgZGF0YS4NCg0KU2lnbmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZA
-c2JlcmRldmljZXMucnU+DQotLS0NCiBuZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMgfCAzICsrLQ0K
-IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCg0KZGlmZiAt
-LWdpdCBhL25ldC92bXdfdnNvY2svYWZfdnNvY2suYyBiL25ldC92bXdfdnNvY2svYWZfdnNvY2su
-Yw0KaW5kZXggMDE2YWQ1ZmY3OGI3Li4zYTE0MjZlYjhiYWEgMTAwNjQ0DQotLS0gYS9uZXQvdm13
-X3Zzb2NrL2FmX3Zzb2NrLmMNCisrKyBiL25ldC92bXdfdnNvY2svYWZfdnNvY2suYw0KQEAgLTEw
-NjYsOCArMTA2Niw5IEBAIHN0YXRpYyBfX3BvbGxfdCB2c29ja19wb2xsKHN0cnVjdCBmaWxlICpm
-aWxlLCBzdHJ1Y3Qgc29ja2V0ICpzb2NrLA0KIAkJaWYgKHRyYW5zcG9ydCAmJiB0cmFuc3BvcnQt
-PnN0cmVhbV9pc19hY3RpdmUodnNrKSAmJg0KIAkJICAgICEoc2stPnNrX3NodXRkb3duICYgUkNW
-X1NIVVRET1dOKSkgew0KIAkJCWJvb2wgZGF0YV9yZWFkeV9ub3cgPSBmYWxzZTsNCisJCQlpbnQg
-dGFyZ2V0ID0gc29ja19yY3Zsb3dhdChzaywgMCwgSU5UX01BWCk7DQogCQkJaW50IHJldCA9IHRy
-YW5zcG9ydC0+bm90aWZ5X3BvbGxfaW4oDQotCQkJCQl2c2ssIDEsICZkYXRhX3JlYWR5X25vdyk7
-DQorCQkJCQl2c2ssIHRhcmdldCwgJmRhdGFfcmVhZHlfbm93KTsNCiAJCQlpZiAocmV0IDwgMCkg
-ew0KIAkJCQltYXNrIHw9IEVQT0xMRVJSOw0KIAkJCX0gZWxzZSB7DQotLSANCjIuMjUuMQ0K
+In commit 166a592cad36 ("random: move rand_initialize() earlier") the
+boot_init_stack_canary() call was added after the new random_init()
+call.
+
+However, the upstream commit d55535232c3d ("random: move
+rand_initialize() earlier") also included removing the earlier call to
+boot_init_stack_canary(), making sure this call is done after
+random_init().
+
+Hence fix what I assume is a wrong merge conflict resolution on the
+linux-4.9.y stable branch.
+
+Signed-off-by: Hans-Christian Noren Egtvedt <hegtvedt@cisco.com>
+---
+ init/main.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/init/main.c b/init/main.c
+index 6bc1a3fa152..6537f51a0ba 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -500,13 +500,6 @@ asmlinkage __visible void __init start_kernel(void)
+ 	page_address_init();
+ 	pr_notice("%s", linux_banner);
+ 	setup_arch(&command_line);
+-	/*
+-	 * Set up the the initial canary and entropy after arch
+-	 * and after adding latent and command line entropy.
+-	 */
+-	add_latent_entropy();
+-	add_device_randomness(command_line, strlen(command_line));
+-	boot_init_stack_canary();
+ 	mm_init_cpumask(&init_mm);
+ 	setup_command_line(command_line);
+ 	setup_nr_cpu_ids();
+-- 
+2.34.1
+

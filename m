@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A85E58949F
-	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0345894A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  4 Aug 2022 01:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiHCXGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 19:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S236969AbiHCXIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 19:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiHCXGV (ORCPT
+        with ESMTP id S232503AbiHCXIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 19:06:21 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5E4F1A4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:06:18 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id j1so14864537wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:06:18 -0700 (PDT)
+        Wed, 3 Aug 2022 19:08:15 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABB24F691
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 16:08:14 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so13073684otf.12
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 16:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FoVaTdVnnKpapjEtX/Bhowc8mgQLn0GKcR1f2+ULZaU=;
-        b=APJ5cgJSkIzr57+jBa3oRb2z34UPYSKa+b/ufo9X8GlDTJhGmNcxt2UT3D6O8AJhYv
-         fe5IJq6HulCvtyg8CEBqaW42GWRihB4xUrv+pfwV6jTLu8ALODD+UvWo7YAkZSg+fEbZ
-         MKb3WMm1e2aCQAqP4njGZA2TUVkUt8943tSPUhL7KeXr8V6xyKQ7v6xS1fVIJzCVbyyP
-         IZam3HmgWZFxPGIs9jNKGQK4P3cWsMaluPcDVgMpM0471A5r3wBE/ZPd6rzdt1KUGkRE
-         JEX+0paS44ZrXrteN3j02Bu63IsjIl/dZ2NV3sjzXinD1mgRelOh7orv8aabwA5dmSpV
-         C/bg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zK33He6y28I2A9IcjFpGLeX6JG4yyriF39hUBO95RxU=;
+        b=cNbtWAh9PYV+AhaqpPHWspWjIZUyRV6dWb78y3lddg5jfwOucE3VftBWAmYjru2+Ia
+         i6hTWOVSobiSioHAlIsXVsHMvwTx8Etkv0HfP6yEfZ4cWyshUaYtgH6VNT25v+XddRiA
+         unwClFJy1DZMyAIm6AiZ/vNdEvpuSOSRR6N7A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FoVaTdVnnKpapjEtX/Bhowc8mgQLn0GKcR1f2+ULZaU=;
-        b=r8Pq1qjJuE/OjfQGSKbLDlsyDW5y5ohFDzRY6qjwbIeSYX2V7AiZACz6Kdoiha9Q0Z
-         zudRDncq32HFeBy0Av3+uRbXxRIqet5ak8picWnJuDl1+GTSK4jY7vaUj0c3TUAJlFRZ
-         EsLdDnZnYjlgH7xzt6yo7x8E48Zn+c2t6yDy8W6odd6g0fUsRQ+7YkVX16V89+bhFy/K
-         ctlztFOfyjLse9Cv1bS7+ednaWZXxIu63zXLqfF7rpKXD0itO4JScb30BQCGocX+Jpd9
-         5CSGQ7CgOZ0Gp47nnpONM5v/+aMtGsLDAClFRBv+IEZXQAd0THhNc7406VdSRMOhpfX2
-         j/mQ==
-X-Gm-Message-State: ACgBeo0bfWvT/uFZR98BFJVEilQTxJ2xargbCXyad1HvwqBPfh++lK0V
-        2QO+Lmd1rRKkMP2XHnxTsrHL540hNVm+gonFG8oDzw==
-X-Google-Smtp-Source: AA6agR5G0W57caREqGvPCwmAaQ13rQA8ouaOC7td77160JwzDVuMHiVltMu/kLxYKeaBwDLnuBQMRvDJKIsznsdbFjo=
-X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
- i9-20020a0560001ac900b002207f4049e3mr1834734wry.40.1659567976810; Wed, 03 Aug
- 2022 16:06:16 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zK33He6y28I2A9IcjFpGLeX6JG4yyriF39hUBO95RxU=;
+        b=NSV9H2sd13ZVTEhKNaoVtK5GF1PTcBRhzdszuHnZZsr+mcVZxLUMxCOrEADOeDaPt7
+         M6QQW3MHsYycs2ki8euiuWQybE9JhkoKsEwhgNopf+M90XU8GDCOXn9bUI7O2nkM3XgR
+         oMgujb3q6CskxHeAq9hp2BaJ7Am+eB11w9clSCoe4adJNCSEzGRJWOT+TmoI2m7yZEDK
+         7BiH/JykjtnjSdv1zD7q7+KzpnRJfjpUzKL6re++WCw7F296Egt+3VdRxFNZjWatY0pZ
+         01ZEZ+edBq+/v0zeWAkf12mIb6zJzrR+0L3rcNPnje+VzAvJGLaU/CQYHqKs8rLsvI49
+         oS/Q==
+X-Gm-Message-State: AJIora+/AU1sdLcqiGVCYQepnH4+Zyd09h7zeQ2drPH6DivuLpAcJPpJ
+        pB3SnCpLHkg3I0mwSZHWNaetmg==
+X-Google-Smtp-Source: AGRyM1tPuti8ZQ0UO1fbTpjB5tLkNS+5eRQ4uoNezs4/RqKsJQVjN40F0a5Om7/CKEcZSIIF3a9nig==
+X-Received: by 2002:a9d:61d7:0:b0:61c:7bed:ce14 with SMTP id h23-20020a9d61d7000000b0061c7bedce14mr10041161otk.366.1659568093984;
+        Wed, 03 Aug 2022 16:08:13 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id bd37-20020a056870d7a500b000f5e89a9c60sm4714494oab.3.2022.08.03.16.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 16:08:13 -0700 (PDT)
+Subject: Re: [PATCH] selftests/landlock: fix broken include of
+ linux/landlock.h
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <677a5a8f-87df-dde6-0adc-292858e4b5bd@linuxfoundation.org>
+Date:   Wed, 3 Aug 2022 17:08:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220803150744.133128-1-leo.yan@linaro.org>
-In-Reply-To: <20220803150744.133128-1-leo.yan@linaro.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 3 Aug 2022 16:06:04 -0700
-Message-ID: <CAP-5=fWArHKrxu80WKZystkEDFW_jhuU02m89S8tXkqvOChpoA@mail.gmail.com>
-Subject: Re: [PATCH v1] perf test: Introduce script for data symbol parsing
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,134 +78,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 8:07 AM Leo Yan <leo.yan@linaro.org> wrote:
->
-> This commit introduces a shell script for data symbol parsing.
->
-> The testing is designed a data structure with 64-byte alignment, and it
-> has two fields "data1" and "data2", and other fields are reserved.
->
-> Using "perf mem" command, it records and reports memory samples for a
-> workload with 1 second duration.  If have no any memory sample for the
-> data structure "buf1", it reports failure;  and any memory accessing for
-> the data structure is not for "data1" and "data2" filed, it also means
-> the wrong data symbol parsing and returns failure.
->
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+On 8/3/22 2:13 PM, Guillaume Tucker wrote:
+> Revert part of the earlier changes to fix the kselftest build when
+> using a sub-directory from the top of the tree as this broke the
+> landlock test build as a side-effect when building with "make -C
+> tools/testing/selftests/landlock".
+> 
+> Reported-by: Mickaël Salaün <mic@digikod.net>
+> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
+> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 > ---
->  tools/perf/tests/shell/test_data_symbol.sh | 94 ++++++++++++++++++++++
->  1 file changed, 94 insertions(+)
->  create mode 100755 tools/perf/tests/shell/test_data_symbol.sh
->
-> diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-> new file mode 100755
-> index 000000000000..7039dae4e087
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/test_data_symbol.sh
-> @@ -0,0 +1,94 @@
-> +#!/bin/bash
-> +# Check perf data symbol parsing
-> +
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Leo Yan <leo.yan@linaro.org>, 2022
-> +
-> +skip_if_no_mem_event() {
-> +       perf mem record -e list 2>&1 | egrep -q 'available' && return 0
-> +       return 2
-> +}
-> +
-> +skip_if_no_mem_event || exit 2
-> +
-> +# skip if there's no compiler
-> +if ! [ -x "$(command -v cc)" ]; then
-> +       echo "skip: no compiler, install gcc"
-> +       exit 2
-> +fi
-> +
-> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/__perf_test.program.XXXXX.c)
-> +TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
-> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +
-> +check_result() {
-> +       # The memory report format is as below:
-> +       #    99.92%  ...  [.] buf1+0x38  ...
-> +       result=$(perf mem report -i ${PERF_DATA} --stdio 2>&1 | egrep "buf1" | \
-> +               awk '{ for (i = 1; i <= NF; i++) { if ($i ~ /^buf1/) { print $i; break; } } }')
-> +
-> +       # Testing is failed if has no any sample for "buf1"
-> +       [ -z "$result" ] && return 1
-> +
-> +       while IFS= read -r line; do
-> +               # The "data1" and "data2" fields in structure "buf1" have
-> +               # offset "0x0" and "0x38", returns failure if detect any
-> +               # other offset value.
-> +               if [ "$line" != "buf1+0x0" ] && [ "$line" != "buf1+0x38" ]; then
-> +                       return 1
-> +               fi
-> +       done <<< "$result"
-> +
-> +       return 0
-> +}
-> +
-> +cleanup_files()
-> +{
-> +       echo "Cleaning up files..."
-> +       rm -f ${PERF_DATA}
-> +       rm -f ${TEST_PROGRAM_SOURCE}
-> +       rm -f ${TEST_PROGRAM}
-> +}
-> +
-> +trap cleanup_files exit term int
-> +
-> +# compile test program
-> +cat << EOF > $TEST_PROGRAM_SOURCE
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +
-> +typedef struct _buf {
-> +       long data1;
-> +       long reserved[6];
-> +       long data2;
-> +} buf __attribute__((aligned (64)));
-> +
-> +static buf buf1;
-> +
-> +int main() {
-> +       int i;
-> +       for (;;) {
-> +               buf1.data1++;
-> +               buf1.data2 += buf1.data1;
-> +       }
-> +       return 0;
-> +}
-> +EOF
-> +
-> +echo "Compiling test program..."
-> +cc $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
-> +
-> +echo "Recording workload..."
-> +perf mem record --all-user -o ${PERF_DATA} -- $TEST_PROGRAM &
-> +PERFPID=$!
+>   tools/testing/selftests/landlock/Makefile | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
 
-I wonder here you could do:
-TESTPID=$(ps -o pid -h --ppid "$PERFPID")
+Thank you. Now applied to linux-kselftest next for the next pull request.
 
-> +sleep 1
-> +
-> +kill $PERFPID
-> +wait $PERFPID
-> +# test program may leave an orphan process running the workload
-> +killall $(basename $TEST_PROGRAM)
-
-And then here kill $TESTPID to avoid the killall which worries me a little.
-
-Thanks,
-Ian
-
-> +
-> +check_result "$variable_name"
-> +exit $?
-> --
-> 2.25.1
->
+thanks,
+-- Shuah

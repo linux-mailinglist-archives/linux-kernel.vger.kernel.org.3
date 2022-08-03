@@ -2,104 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEA7588729
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8636058872A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 08:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235780AbiHCGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 02:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S235840AbiHCGLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 02:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235622AbiHCGLI (ORCPT
+        with ESMTP id S231150AbiHCGLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 02:11:08 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49435201B7
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:11:07 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id m9so17833387ljp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 23:11:07 -0700 (PDT)
+        Wed, 3 Aug 2022 02:11:41 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579F11FCE5
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 23:11:40 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id g12so15595934pfb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 23:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QoMJEDXqR4eIF4IASWXdOokQ+55n5mDMby1kRaG/HSM=;
-        b=OhJcdZq9zDydApto3QxFuxa9FqLO7pJWxzKfN2DV0yGhlBLC9EFrB9hSwYRUHyWfz7
-         OSsjTc8Hn9m5eZQzG8cI0MnIcVg9eyNhajmfcXpgfxDbwEB1T3rMFElhaIjQoHSo/WTJ
-         NFYOzHs0Z67TWBlUGJxOgpSHxplYLxJtOb0N8iU8iNsHMmtFgL2IWq+mZusa3hzU49K6
-         nlf/maCe1y6OHkSX/p9UFzB1TVrAbINL2Wr1sFL0ulmHLMDdBQvfYBft2p/frxLNw9zA
-         UHGyuZmaHaF39CAT4K+ZAyG9QsQCfeyHZH9CIGcvnG5N6fBAkhsv6KJt22GPRzoKXoBy
-         GS6g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=hArGsep6w0XB1WHGT+Gmkg3i/QE/wzavCdCkpGkoxac=;
+        b=byyHuqw5AjLIJsJ97Gx1MKa0/Rl4jOk6meIJgq4wXQFPt8qKBWBp2JA83QLGFyMgjc
+         xAsY8pPn/uAPtsims6qlsBH+QoubyeUhdRmQz7B8iCnb4CDYx6TdaJ2MLMHIEKAwBTlY
+         +Yv06UH/cuevggFpTe94gj1u6bLbKamLMRTPIiGIlTnC6GdUqpzsBEvvs7AZiACWLpFE
+         VnxjE+/MLqcGNPOvE8Ez/dKlDoccr4lWLeakIBY3OOZQRaETsmCHvPkYlpqMRVdbWOf+
+         zywdwi9ZnNBJDYb4RLHl+k2IBu4zXtAwuftvJAqlefyzQx+opkq/43KGVuhZsmxOQjJ4
+         +AKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QoMJEDXqR4eIF4IASWXdOokQ+55n5mDMby1kRaG/HSM=;
-        b=t6m8KEa4kVv1GZmlCGKjG6ibWAqIFiod5HtoKZn9wjdQN1/eaLRIlhYe8cR7bHJYNP
-         dXZpdBK5Z0WLonNzRr+qbqpTr7rpNQWT3IUl1vGIcYtYDzTDunCaBJC2kztDEZbfu76p
-         gS9BmL37cceVlkzU1FwFifL8Us5odt0BIrWmsaSsUoJ0bOa6dCFAH0kQLSRbVgZ4Gtgy
-         wgbl03kGXMyzAYhhfAxYVtQSrozCzNE139dn39gNf/p1uH0ts+reamFxZrhgNvYemNda
-         Hokon9tXffmMcPYs1nNLNiEn5Eg5tJBaFP2DVuIsladAEMmJJXWdOegltQKqUKUfaAtO
-         YP3g==
-X-Gm-Message-State: AJIora/v6QFlsYXw/uo0S5beWofmUMaEG634eh0AfbF8i283E1FJgGAK
-        1k9nHeKHmkduWJeuXGeOJ5dk+g==
-X-Google-Smtp-Source: AGRyM1vW8N/9hORhsm1kN8Q9PDUfMzZ2mGXeJpVq9yj72rbi1OLc/w3tUsYZ84ZlhLAxUACT1oT/2g==
-X-Received: by 2002:a05:651c:1992:b0:25e:68d:e757 with SMTP id bx18-20020a05651c199200b0025e068de757mr7245754ljb.309.1659507065652;
-        Tue, 02 Aug 2022 23:11:05 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id o18-20020ac25e32000000b00489f0c8bddesm455144lfg.207.2022.08.02.23.11.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 23:11:04 -0700 (PDT)
-Message-ID: <dc7bca02-5eb3-3b33-8911-a950b630f197@linaro.org>
-Date:   Wed, 3 Aug 2022 08:11:03 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=hArGsep6w0XB1WHGT+Gmkg3i/QE/wzavCdCkpGkoxac=;
+        b=Eobo41OiFcVrTMQftAWKAqEixJm6T8jUqEQ/U/GcHRwlRbI24gCkEhsSNjEYF5wST+
+         86LoThG92iWuL6Z/IQIccbbk9PRhzAUMsD8RtNXsxM+eISS5H55lsgfzAjQzn6EiGUTZ
+         kHZ1ZrRXlXWNdUKNT2shH7v6IfohvTxWffIgZo4lmXH479tI7yqQlqk7rG7DnILkmW3D
+         AZTClFPlXU4uMcoybReHviP90+kgAAkg60iBr9sk1L1O8HwlpyONT6fBDTzrvmc9pAz6
+         05mUFuqsgmp98ysZojo1+oxtmNlAfg+ODay21pq4QXdCi689JFsrRcbTOfw6+hyj4ux5
+         rfBQ==
+X-Gm-Message-State: ACgBeo0DjkP8v6hh60CbHzVPfSlCkQUsY+sjSSV/gAQlgRhCgYEig/4v
+        XB2wHIvmjLLIPNaobmXSczbaJKLl5o8=
+X-Google-Smtp-Source: AA6agR6OON8xYV30qq9idigkbOKyKiDwpBQFgenrQzHAWtwrDYvpYN5ZDCrRQadXcU4VbqZ5gxkv6g==
+X-Received: by 2002:a63:5a08:0:b0:41b:df3c:fd6c with SMTP id o8-20020a635a08000000b0041bdf3cfd6cmr14088534pgb.35.1659507099634;
+        Tue, 02 Aug 2022 23:11:39 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w128-20020a626286000000b0052d7606d144sm5711690pfb.74.2022.08.02.23.11.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 23:11:39 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     linux-kernel@vger.kernel.org
+Cc:     zbr@ioremap.net, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] w1: omap-hdq:using the pm_runtime_resume_and_get to simplify the code
+Date:   Wed,  3 Aug 2022 06:11:35 +0000
+Message-Id: <20220803061135.1650266-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] spi: dt-binding: add Microchip CoreQSPI compatible
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naga Sureshkumar Relli <nagasuresh.relli@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220801094255.664548-1-nagasuresh.relli@microchip.com>
- <20220801094255.664548-2-nagasuresh.relli@microchip.com>
- <6d36b192-9e63-ec13-5583-22b81c99c18b@linaro.org>
- <Yuki3jpCSJDdXcWA@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yuki3jpCSJDdXcWA@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/08/2022 15:13, Mark Brown wrote:
-> On Tue, Aug 02, 2022 at 10:52:25AM +0200, Krzysztof Kozlowski wrote:
->> On 01/08/2022 11:42, Naga Sureshkumar Relli wrote:
-> 
->>> -    enum:
->>> -      - microchip,mpfs-spi
->>> -      - microchip,mpfs-qspi
->>> +    oneOf:
->>> +      - description: Microchip's Polarfire SoC SPI controller.
->>> +        const: microchip,mpfs-spi
->>> +      - description: Microchip's Polarfire SoC QSPI controller.
-> 
->> Useless descriptions - they repeat compatible. Just keep it as enum and
->> skip descriptions. What value do they bring?
-> 
-> Someone not familiar with the full Microchip product line might not be
-> aware of the expansion of mpfs, it's not blindingly obvious.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Then it should be explained in title/description of the binding, not in
-compatible. This is the usual way of providing some text description,
-not for each compatible by repeating the compatible text.
+Using pm_runtime_resume_and_get() to instade of
+ pm_runtime_get_sync and pm_runtime_put_noidle.
 
-Best regards,
-Krzysztof
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/w1/masters/omap_hdq.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/w1/masters/omap_hdq.c b/drivers/w1/masters/omap_hdq.c
+index bf2ec59c1f9d..ec4292bc0458 100644
+--- a/drivers/w1/masters/omap_hdq.c
++++ b/drivers/w1/masters/omap_hdq.c
+@@ -372,9 +372,8 @@ static u8 omap_w1_triplet(void *_hdq, u8 bdir)
+ 		  OMAP_HDQ_CTRL_STATUS_INTERRUPTMASK;
+ 	u8 mask = ctrl | OMAP_HDQ_CTRL_STATUS_DIR;
+ 
+-	err = pm_runtime_get_sync(hdq_data->dev);
++	err = pm_runtime_resume_and_get(hdq_data->dev);
+ 	if (err < 0) {
+-		pm_runtime_put_noidle(hdq_data->dev);
+ 
+ 		return err;
+ 	}
+@@ -463,9 +462,8 @@ static u8 omap_w1_reset_bus(void *_hdq)
+ 	struct hdq_data *hdq_data = _hdq;
+ 	int err;
+ 
+-	err = pm_runtime_get_sync(hdq_data->dev);
++	err = pm_runtime_resume_and_get(hdq_data->dev);
+ 	if (err < 0) {
+-		pm_runtime_put_noidle(hdq_data->dev);
+ 
+ 		return err;
+ 	}
+@@ -485,9 +483,8 @@ static u8 omap_w1_read_byte(void *_hdq)
+ 	u8 val = 0;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(hdq_data->dev);
++	ret = pm_runtime_resume_and_get(hdq_data->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(hdq_data->dev);
+ 
+ 		return -1;
+ 	}
+@@ -509,9 +506,8 @@ static void omap_w1_write_byte(void *_hdq, u8 byte)
+ 	int ret;
+ 	u8 status;
+ 
+-	ret = pm_runtime_get_sync(hdq_data->dev);
++	ret = pm_runtime_resume_and_get(hdq_data->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(hdq_data->dev);
+ 
+ 		return;
+ 	}
+@@ -605,9 +601,8 @@ static int omap_hdq_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(&pdev->dev);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, 300);
+-	ret = pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(&pdev->dev);
+ 		dev_dbg(&pdev->dev, "pm_runtime_get_sync failed\n");
+ 		goto err_w1;
+ 	}
+@@ -659,9 +654,8 @@ static int omap_hdq_remove(struct platform_device *pdev)
+ {
+ 	int active;
+ 
+-	active = pm_runtime_get_sync(&pdev->dev);
++	active = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (active < 0)
+-		pm_runtime_put_noidle(&pdev->dev);
+ 
+ 	w1_remove_master_device(&omap_w1_master);
+ 
+-- 
+2.25.1

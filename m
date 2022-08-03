@@ -2,204 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC65588CAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B4F588E28
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 16:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbiHCNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S238555AbiHCOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 10:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiHCNKo (ORCPT
+        with ESMTP id S236785AbiHCOCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:10:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D6F638D
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659532244; x=1691068244;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=gvdfXIpDR9U0X3BkONhDfNxBY0dzFfmMfpLsESnTgKg=;
-  b=Oyy7mX5JHWaTgCYYt32qDe5QOn+uPJ/f+Cg68V3ee0Nm4mHrE5MwIc+4
-   dapTpZhtrvnTkJjDFU6kVMh2NvTFfJTha8sVdB83qwXajcRFcD4CqUd3Q
-   InnKK3jiPRn8CpoKmkL1Y25aJDd1BxOxpxD/ruoKfKVvja+n2+1ROJqRR
-   jRfGroSwIjdJ6+oZFUwOQBLp8p8tcn+buO7unoCE527c8u0cHZ2peoYRQ
-   RU+T3AihwhjbitHiT8o3eNr8PexFdt7RiW8pT0qJOhezpkmKQzVw8Epq6
-   /PPAjXJZDKBmjhOF+WG4gwStss+hkkHjvIXwy7NoBGt+IUliGeqFxRIcE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="315527828"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="315527828"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 06:10:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="631142976"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2022 06:10:43 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 3 Aug 2022 06:10:43 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Wed, 3 Aug 2022 06:10:43 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Wed, 3 Aug 2022 06:10:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jKs2sUDQC9g6nBWrTZCtzbESI/SvwboLNiuSsml+xZH5KywwB5OxXt+eDd8Kl7RaSWgVME4zWi/QR4PNjgl0ndEWdXVoX1I22oFxvf5VZ+APiFiHEHCTD9NJSFgK+zU5p29rJDe5OGe0ADWoAdLfbVkGJzhNWHRTbjsm7dXRg6LRI8q3Crv724nCuPlR3O7mNfD/BZ56XwfHZMN8RHVB0WvRSSkdbEnySOfUO0Sw4AQxRXjxhIu+Y4uaTPb5y2BVxFbdubbKSfMkRSAju9yEbo+CNFmI9ERDo0gMKEmgTgZA/MchR7dLXKCcKuWyLdT8IGZr+7RisPww+m+63slLEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rWa1jZj8UqnnARY85bdW3AgiUN1E0ILfUb3R2Bl6IrU=;
- b=m4l7gCJjrmn0v814IN2xdn6nomZ/ATYe2LnvU4fZG3LPS54htvsFlDJihZpMeO4WXfRs+NDbqM+JG9CCK36Q+4n29NAldYasngB+MoOxecPnolk3Gx/8dcoKRNXZFSJXnRoDrXbrQxV4xm9phO6vMcD1dxxEsMS6HChGcU26AYwVBlxz7RsG7uDmBBn47Y1aEPOCR8k+sCJhtwnWkMmK7OWbz4ydVNOBVaJalSBh3R6d4HHgZo7eCDRivwPNtY8nk86KjlvyE8/8iHgR+zXW41tKZBAJCv+xgRJOn7TSvYj5pr7IcpFKIl71SF8yiJfhnJm/Y4ljQHXiBpqmKtIijg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by PH0PR11MB5830.namprd11.prod.outlook.com (2603:10b6:510:129::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Wed, 3 Aug
- 2022 13:10:40 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::8525:4565:6b49:dc55]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::8525:4565:6b49:dc55%6]) with mapi id 15.20.5458.024; Wed, 3 Aug 2022
- 13:10:40 +0000
-Date:   Thu, 4 Aug 2022 05:08:34 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Wed, 3 Aug 2022 10:02:14 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ADC2CE1C;
+        Wed,  3 Aug 2022 07:02:12 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id A28B15FD2E;
+        Wed,  3 Aug 2022 17:02:10 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1659535330;
+        bh=B7MnM9LlcIMliFAHXLeyzEfSXIZ8NB66nwrKZJSvDgc=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=dubY+hTMsFMWN19jwfE4rvvJP42QM4Q1Rlayal/qamG5DnPV1O6AZrOmFdfK+MLlh
+         yH2241C6lJ0DegbnqYsKDBn0rs7Q3l0xU04J7gNW0IhfbdIhZ3Qw/uDYE0gcc2faN3
+         xGllPhWGN2OeRcK1s+cTaiXGjbI/x/EDLfwZqUL+gQXjXrxGpkdJ+M37vtkA45HH43
+         6uz/RXK6ghh3QAukfqDSx5Yb5Ep5dKLmp+RF4hwblnB9coftL3GR8m488A2T+xD0+b
+         5qc/aT4TyBS+Obq0WEH6Xmq/h7JnaXKCDdTkqhj7HA62bTPobp9LUgYFaOiGwsrQXY
+         cZYSj59OemWeg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  3 Aug 2022 17:02:10 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "Arseniy Krasnov" <AVKrasnov@sberdevices.ru>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH] mm: mempolicy: fix policy_nodemask() for
- MPOL_PREFERRED_MANY case
-Message-ID: <Yurj0sOXgGf40AJE@feng-clx>
-References: <Yui7hWZYMX31ktOr@feng-skl>
- <YujGy8EIeZc1Avc7@FVFYT0MHHV2J>
- <YujUyCIBjFj+FzX5@feng-skl>
- <YujoLQt09Js/sSQL@dhcp22.suse.cz>
- <YuoYkPk+YzdPNvmN@feng-snb>
- <YuolieBmdaIzoS3t@dhcp22.suse.cz>
- <Yuqs+BTpfh9/PjtP@feng-clx>
- <Yupb+1mmn9sQ/G8K@dhcp22.suse.cz>
- <Yurd2iYp4XMIYM7T@feng-clx>
- <YupwjN6K6e6V3y+Q@dhcp22.suse.cz>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YupwjN6K6e6V3y+Q@dhcp22.suse.cz>
-X-ClientProxiedBy: SG2PR04CA0151.apcprd04.prod.outlook.com (2603:1096:4::13)
- To MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v3 6/9] vsock: add API call for data ready
+Thread-Topic: [RFC PATCH v3 6/9] vsock: add API call for data ready
+Thread-Index: AQHYp0GXMIwj7aEDFUyU7Z65eKQpMg==
+Date:   Wed, 3 Aug 2022 14:01:57 +0000
+Message-ID: <edb1163d-fb78-3af0-2fdd-606c875a535b@sberdevices.ru>
+In-Reply-To: <2ac35e2c-26a8-6f6d-2236-c4692600db9e@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <85A4929A98C0C144AB0C8DA1959BA189@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b96cafcb-75b2-4a88-062c-08da75519019
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5830:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fgnRpJq2YeeTSj1le2z6fsgzPvytS/2Dy0bZZ3TjRnw+CpM5ig8aMj19MH2zfCgnEJmCdzh0j8AaGHh6O534LUDCDeBiFzN66iiZci5IyUAfBOgq/jq4fKqi8pfAKNY0zuPjyQCmdBGsA//9XK5qtzyGHzF5x6x3Mn7cij6586Xv+KvqM0Ublvc3TKCTbRk98l0/ybx6nmwrcSlYTsrK/iJZJXm4WSZ2DiDmnvQDrn3wpb9KjUyhiKUPzLXSw0P1irdEnzNU1jy6rn9+tYrwA11++ulVmC3axVskfS0+G8OMSar9rGIJ44J+RzaWya8odwCjTRj5I6BG2HCLtfuNOF5ywPbSbph9RaVcxabBxdX94yl8M9AeRWMZ3OyEOP3ESGO6m4o4lZSo3JNv9f9htBvWd4yBh7dn7xIJOX717IoL/DklA8Bj/6yDmtbV5U1Ud7sPJNeY4JpggZX7l6nYRRjINuSsxBcS7W8xe/rWHJqIloBfdvfukCbHp++0r4oGP5o7xtwSDJSEIUi0KJgFLM4W5JhpRjSga+YMYVd7dzeLxXsCXncb4FvleKdxW2CeBJ1OzQzX0kAuMxAv0e1RQpvz2ouIAnreXyESHE0fCMW9Dd//MmvKMd2nIPKCL86XZyTfCmlkUA9wHYoqMn+fosZMWe3SGw0NeiJxNCN5X7WFYA7DLDyioJaq7qabA2DW1OqKTbyDij63xiedXod14XYoy02Qw0Tb03F4WMda4LVvgIgFTtTXRQRPHsGr48aq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(346002)(136003)(366004)(39860400002)(6666004)(41300700001)(6506007)(26005)(9686003)(6512007)(33716001)(478600001)(316002)(6916009)(86362001)(82960400001)(54906003)(6486002)(38100700002)(4326008)(186003)(44832011)(2906002)(5660300002)(8676002)(8936002)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3Ys3Tb8R/GfgNyWjoa+i5qrTbMqu0q5/2DyU3oH+29aScY4uDvCjj9JpLE0b?=
- =?us-ascii?Q?+SyhAkgrdzDZ85+K3fln1posxeH01Z+ombHuXoIXyLmCGS8S21pQGK0HVDAB?=
- =?us-ascii?Q?ti4GDDDMdaiIh7GdXf3VZ8olMfCXgHkTNSMVwRt3n8Z9LylqHbH6boqD2v2f?=
- =?us-ascii?Q?M+qZzC5PIWVierR00TvrAHwcQI4FZJhKeBfHn0pCWjuU6T23UKLPs0IQCrSY?=
- =?us-ascii?Q?NMZ63OsKMEwhYHVQHh4DI/FHXcQEuUzwMSX1WOoM8/Ad+gvDNmWOfrxyO/RB?=
- =?us-ascii?Q?f0zqhXUGTpE8y262wV0x2bYmuTbjhlJOTNtNu4DE/4EsEZNSFWIIv+Uz1A0V?=
- =?us-ascii?Q?t6dlMo1J5YaaSlZmyyCnOaTBzCkNIm6sInaMCZdSYg7WZfFk5Lt0jbaGi7U2?=
- =?us-ascii?Q?ANYJFH7VxWf/YTzJGMtPlcPMbSvU2IDZr1dAhtOXAx8MHXIOWbEKXCzVgWU+?=
- =?us-ascii?Q?JwJKM/AazdIkNgwRNPwhDQLB4SMDCMF3HXxKlSpRKTdmakAkeMu2QjQ3+Nix?=
- =?us-ascii?Q?hzYjxWkkYUPAY4t3zS2Yb5BrC+LDfmcDOqufJL4rSGsWjwC+Z4yfu94+wxA/?=
- =?us-ascii?Q?MJDuz2c12wBydFNVcZsa6t0TlBSZSPGl7yh5V1IHEkuNas8AtQxTrhqqdKJF?=
- =?us-ascii?Q?deDmoWz/6PuWsjzyuJgL7PFG956kszN0ky+7ZF+z+H+FpaQoI3MYnrPCM39U?=
- =?us-ascii?Q?4vkEjehO9n9PVojDXFjcsKG7EXc8XXjIHxlvtfzk4bTIWachUIGg20MxEVC6?=
- =?us-ascii?Q?zipNs0E4FEH+Mg/ZCO5n4GOT6xXVGavmQkzF+hmfygre7guahrR95cliCMy2?=
- =?us-ascii?Q?roq70FBZYIRDTkf+Lisl/N3gPnr1vrPFqndXvuHtBp2bummrObrsVZl4XARY?=
- =?us-ascii?Q?xeJpo7UD/AaY17Nndw9iZMssblqUe9J6NF4QaYXY+a3bIJEAvXYPPV463NYh?=
- =?us-ascii?Q?8pn2yp5tnR2E1EY3o/09DMXb+nDjuguBeTtDZmvbgBVVOwEHFiV3wEnP3Afa?=
- =?us-ascii?Q?jjY8APqb64dygTCFr9qxN/4aOIV+Bajb5iAi1xr7UQdh3rxTgmNbfCEpsnZh?=
- =?us-ascii?Q?Ez3cn40ux7HRMmoZehnalqfnJTVUyxT1vGjs0mb9jdjbkeMliSCnTIfZBCk+?=
- =?us-ascii?Q?qX7mYWvfzTv/KZPjX4T1mk6ovmulqiCkYsAxhsi8V3cRs63BchADtFd4iPFA?=
- =?us-ascii?Q?SYYc54Pn9uQmAHLWl9UT8VK5sqdUPKaA8Jv26E6akb1UNdIyNmVttJ7CIgGf?=
- =?us-ascii?Q?bweIXQY+GS6ZtIM7Jtes5Zpek6MOje64L+hZoGiD9vSOHrUUW+QQovBTBnBK?=
- =?us-ascii?Q?f/MrZAmAFK9WyK3SIcvWKdJlOVzS/kARBWzMwXTZFN9ADiOAdunE5XNuNSt4?=
- =?us-ascii?Q?bUtWhPZIn4EqWHtnEEAfeVKLIdrCMr+vh+rBmFbLCcEew5LvJmsXebHBPwSd?=
- =?us-ascii?Q?n1bjj/wLlNoZwBHtJheQ0jAIJMbGmSv3/NlqZkHxfD9zeXofVhvAeKdDEIb7?=
- =?us-ascii?Q?OvP8gfmmwCEkrt7QddYQ8tvqLAy/c6QLAMRwbmuAoJ6zpwuqFMOqayVb3OKQ?=
- =?us-ascii?Q?edFYqWF3FqxDD5dxkmA7bHSN+qqUXUF16pcpKKCj?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b96cafcb-75b2-4a88-062c-08da75519019
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 13:10:39.8893
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ROmWV9yCbCmC8jMQJm2IgjC2V37Pgs83VStUgy1xmHBPrVLeTumTG2HXQY5U+hgEpk6YIHCsUgc/vgBbHED+/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5830
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/03 07:41:00 #20041172
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 08:56:44PM +0800, Michal Hocko wrote:
-> On Thu 04-08-22 04:43:06, Feng Tang wrote:
-> > On Wed, Aug 03, 2022 at 07:28:59PM +0800, Michal Hocko wrote:
-> [...]
-> > > +struct mempolicy *policy_mbind_nodemask(gfp_t gfp)
-> > > +{
-> > > +#ifdef CONFIG_MEMPOLICY
-> > > +	struct mempolicy *mpol = get_task_policy(current);
-> > > +
-> > > +	/*
-> > > +	 * only enforce MBIND which overlaps with cpuset policy (from policy_nodemask)
-> > > +	 * specifically for hugetlb case
-> > > +	 */
-> > > +	if (mpol->mode == MPOL_BIND &&
-> > > +		(apply_policy_zone(mpol, gfp_zone(gfp)) &&
-> > > +		 cpuset_nodemask_valid_mems_allowed(&policy->nodes))
-> > > +		return &mpol->nodes;
-> > > +#endif
-> > > +	return NULL;
-> > 
-> > I saw the logic is not changed, and it confused me that if there is
-> > no qualified node, it will still return NULL which effectively equals
-> > node_states[N_MEMORY], while I think it should return a all zero
-> > nodemasks.
-> 
-> This is a separate thing and I have to admit that the existing code is
-> rather non-intuitive or even broken. I guess we do not care all that
-> much because MBIND with completely non-overlapping cpusets is just a
-> broken configuration. I am not sure this case is interesting or even
-> supported.
-
-Fair enough, and moving the policy_mbind_nodemask() into hugetlb.c for
-one single caller make it much less severe.
-
-Do we still need the other nodemask API I proposed earlier which has
-no parameter of gfp_flag, and used for __nr_hugepages_store_common?
-
-Thanks,
-Feng
-
-
-> -- 
-> Michal Hocko
-> SUSE Labs
-> 
+VGhpcyBhZGRzICd2c29ja19kYXRhX3JlYWR5KCknIHdoaWNoIG11c3QgYmUgY2FsbGVkIGJ5IHRy
+YW5zcG9ydCB0byBraWNrDQpzbGVlcGluZyBkYXRhIHJlYWRlcnMuIEl0IGNoZWNrcyBmb3IgU09f
+UkNWTE9XQVQgdmFsdWUgYmVmb3JlIHdha2luZw0KdXNlcix0aHVzIHByZXZlbnRpbmcgc3B1cmlv
+dXMgd2FrZSB1cHMuQmFzZWQgb24gJ3RjcF9kYXRhX3JlYWR5KCknIGxvZ2ljLg0KDQpTaWduZWQt
+b2ZmLWJ5OiBBcnNlbml5IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0tLQ0K
+IGluY2x1ZGUvbmV0L2FmX3Zzb2NrLmggICB8ICAxICsNCiBuZXQvdm13X3Zzb2NrL2FmX3Zzb2Nr
+LmMgfCAxMCArKysrKysrKysrDQogMiBmaWxlcyBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspDQoN
+CmRpZmYgLS1naXQgYS9pbmNsdWRlL25ldC9hZl92c29jay5oIGIvaW5jbHVkZS9uZXQvYWZfdnNv
+Y2suaA0KaW5kZXggZWFlNTg3NGJhZTM1Li43Yjc5ZmM1MTY0Y2MgMTAwNjQ0DQotLS0gYS9pbmNs
+dWRlL25ldC9hZl92c29jay5oDQorKysgYi9pbmNsdWRlL25ldC9hZl92c29jay5oDQpAQCAtNzcs
+NiArNzcsNyBAQCBzdHJ1Y3QgdnNvY2tfc29jayB7DQogczY0IHZzb2NrX3N0cmVhbV9oYXNfZGF0
+YShzdHJ1Y3QgdnNvY2tfc29jayAqdnNrKTsNCiBzNjQgdnNvY2tfc3RyZWFtX2hhc19zcGFjZShz
+dHJ1Y3QgdnNvY2tfc29jayAqdnNrKTsNCiBzdHJ1Y3Qgc29jayAqdnNvY2tfY3JlYXRlX2Nvbm5l
+Y3RlZChzdHJ1Y3Qgc29jayAqcGFyZW50KTsNCit2b2lkIHZzb2NrX2RhdGFfcmVhZHkoc3RydWN0
+IHNvY2sgKnNrKTsNCiANCiAvKioqKiBUUkFOU1BPUlQgKioqKi8NCiANCmRpZmYgLS1naXQgYS9u
+ZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMgYi9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMNCmluZGV4
+IDNhMTQyNmViOGJhYS4uNDdlODBhN2NiYmRmIDEwMDY0NA0KLS0tIGEvbmV0L3Ztd192c29jay9h
+Zl92c29jay5jDQorKysgYi9uZXQvdm13X3Zzb2NrL2FmX3Zzb2NrLmMNCkBAIC04ODIsNiArODgy
+LDE2IEBAIHM2NCB2c29ja19zdHJlYW1faGFzX3NwYWNlKHN0cnVjdCB2c29ja19zb2NrICp2c2sp
+DQogfQ0KIEVYUE9SVF9TWU1CT0xfR1BMKHZzb2NrX3N0cmVhbV9oYXNfc3BhY2UpOw0KIA0KK3Zv
+aWQgdnNvY2tfZGF0YV9yZWFkeShzdHJ1Y3Qgc29jayAqc2spDQorew0KKwlzdHJ1Y3QgdnNvY2tf
+c29jayAqdnNrID0gdnNvY2tfc2soc2spOw0KKw0KKwlpZiAodnNvY2tfc3RyZWFtX2hhc19kYXRh
+KHZzaykgPj0gc2stPnNrX3Jjdmxvd2F0IHx8DQorCSAgICBzb2NrX2ZsYWcoc2ssIFNPQ0tfRE9O
+RSkpDQorCQlzay0+c2tfZGF0YV9yZWFkeShzayk7DQorfQ0KK0VYUE9SVF9TWU1CT0xfR1BMKHZz
+b2NrX2RhdGFfcmVhZHkpOw0KKw0KIHN0YXRpYyBpbnQgdnNvY2tfcmVsZWFzZShzdHJ1Y3Qgc29j
+a2V0ICpzb2NrKQ0KIHsNCiAJX192c29ja19yZWxlYXNlKHNvY2stPnNrLCAwKTsNCi0tIA0KMi4y
+NS4xDQo=

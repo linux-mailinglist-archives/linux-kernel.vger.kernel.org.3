@@ -2,125 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E32588BEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD96588BF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbiHCMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S229784AbiHCMZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiHCMWL (ORCPT
+        with ESMTP id S235493AbiHCMZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:22:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3C13E07
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659529330; x=1691065330;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q5oMqDUOf5jPtkD4LDnaNhTX3jxTVkViK2zCA1vHBOs=;
-  b=lpbKz8VqhN/ADLcbLb0J5OFwmmotenmG8idkvDHWwHjFd5RNb2KmIQIb
-   +2yIOzg5LUNTKreW8Qnl/n+AFzCN/kMqqEq0g2ZDD/0HSIpsstgxAQvIA
-   U/PuFC+4/qyVhLivLqb7PwE5vBjqgr5ued7sf35kIF4gJSWIP6cWGAAdP
-   AfUGMSg0PRY0NymM8Nl/+ec7mZhkHPPIcgiw6ihcSGklSqNPfhJNQtSeb
-   pi42V7PspmMOWE77HH1AYPJbh9KfAPHNtLmvym0o7wuHha/gx2AFkJHyK
-   HI0kskCzIqIzC4R/iUEGPgMgiLQvigtlt5ImVSwHdgtURK2JzVoQuz8kj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269427574"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="269427574"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="848562356"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJDO1-000HFf-0U;
-        Wed, 03 Aug 2022 12:22:05 +0000
-Date:   Wed, 3 Aug 2022 20:21:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org, Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Huang Ying <ying.huang@intel.com>, peterx@redhat.com,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 2/2] mm: Remember young bit for page migrations
-Message-ID: <202208032031.PVcMB0Hr-lkp@intel.com>
-References: <20220803012159.36551-3-peterx@redhat.com>
+        Wed, 3 Aug 2022 08:25:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E4536468;
+        Wed,  3 Aug 2022 05:25:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B443C11FB;
+        Wed,  3 Aug 2022 05:25:27 -0700 (PDT)
+Received: from [10.1.28.148] (e121487-lin.cambridge.arm.com [10.1.28.148])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70F163F67D;
+        Wed,  3 Aug 2022 05:25:24 -0700 (PDT)
+Message-ID: <33f0f429-491c-49da-bd2e-bf9f62cb3efb@arm.com>
+Date:   Wed, 3 Aug 2022 13:25:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803012159.36551-3-peterx@redhat.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/4] hwrng: virtio - always add a pending request
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laurent Vivier <lvivier@redhat.com>, linux-kernel@vger.kernel.org,
+        amit@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Matt Mackall <mpm@selenic.com>,
+        virtualization@lists.linux-foundation.org,
+        Dmitriy Vyukov <dvyukov@google.com>, rusty@rustcorp.com.au,
+        akong@redhat.com, Alexander Potapenko <glider@google.com>,
+        linux-crypto@vger.kernel.org,
+        Mauricio De Carvalho <Mauricio.DeCarvalho@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>
+References: <20211028101111.128049-1-lvivier@redhat.com>
+ <20211028101111.128049-5-lvivier@redhat.com>
+ <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
+ <2c1198c4-77aa-5cb8-6bb4-b974850651be@arm.com>
+ <20220803073243-mutt-send-email-mst@kernel.org>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <20220803073243-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On 8/3/22 12:39, Michael S. Tsirkin wrote:
+> On Wed, Aug 03, 2022 at 09:57:35AM +0100, Vladimir Murzin wrote:
+>> On 8/2/22 13:49, Vladimir Murzin wrote:
+>>> Hi Laurent,
+>>>
+>>> On 10/28/21 11:11, Laurent Vivier wrote:
+>>>> If we ensure we have already some data available by enqueuing
+>>>> again the buffer once data are exhausted, we can return what we
+>>>> have without waiting for the device answer.
+>>>>
+>>>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>>>> ---
+>>>>  drivers/char/hw_random/virtio-rng.c | 26 ++++++++++++--------------
+>>>>  1 file changed, 12 insertions(+), 14 deletions(-)
+>>>>
+>>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>>>> index 8ba97cf4ca8f..0a7dde135db1 100644
+>>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>>> @@ -20,7 +20,6 @@ struct virtrng_info {
+>>>>  	struct virtqueue *vq;
+>>>>  	char name[25];
+>>>>  	int index;
+>>>> -	bool busy;
+>>>>  	bool hwrng_register_done;
+>>>>  	bool hwrng_removed;
+>>>>  	/* data transfer */
+>>>> @@ -44,16 +43,18 @@ static void random_recv_done(struct virtqueue *vq)
+>>>>  		return;
+>>>>  
+>>>>  	vi->data_idx = 0;
+>>>> -	vi->busy = false;
+>>>>  
+>>>>  	complete(&vi->have_data);
+>>>>  }
+>>>>  
+>>>> -/* The host will fill any buffer we give it with sweet, sweet randomness. */
+>>>> -static void register_buffer(struct virtrng_info *vi)
+>>>> +static void request_entropy(struct virtrng_info *vi)
+>>>>  {
+>>>>  	struct scatterlist sg;
+>>>>  
+>>>> +	reinit_completion(&vi->have_data);
+>>>> +	vi->data_avail = 0;
+>>>> +	vi->data_idx = 0;
+>>>> +
+>>>>  	sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>>  
+>>>>  	/* There should always be room for one buffer. */
+>>>> @@ -69,6 +70,8 @@ static unsigned int copy_data(struct virtrng_info *vi, void *buf,
+>>>>  	memcpy(buf, vi->data + vi->data_idx, size);
+>>>>  	vi->data_idx += size;
+>>>>  	vi->data_avail -= size;
+>>>> +	if (vi->data_avail == 0)
+>>>> +		request_entropy(vi);
+>>>>  	return size;
+>>>>  }
+>>>>  
+>>>> @@ -98,13 +101,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>>>  	 * so either size is 0 or data_avail is 0
+>>>>  	 */
+>>>>  	while (size != 0) {
+>>>> -		/* data_avail is 0 */
+>>>> -		if (!vi->busy) {
+>>>> -			/* no pending request, ask for more */
+>>>> -			vi->busy = true;
+>>>> -			reinit_completion(&vi->have_data);
+>>>> -			register_buffer(vi);
+>>>> -		}
+>>>> +		/* data_avail is 0 but a request is pending */
+>>>>  		ret = wait_for_completion_killable(&vi->have_data);
+>>>>  		if (ret < 0)
+>>>>  			return ret;
+>>>> @@ -126,8 +123,7 @@ static void virtio_cleanup(struct hwrng *rng)
+>>>>  {
+>>>>  	struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
+>>>>  
+>>>> -	if (vi->busy)
+>>>> -		complete(&vi->have_data);
+>>>> +	complete(&vi->have_data);
+>>>>  }
+>>>>  
+>>>>  static int probe_common(struct virtio_device *vdev)
+>>>> @@ -163,6 +159,9 @@ static int probe_common(struct virtio_device *vdev)
+>>>>  		goto err_find;
+>>>>  	}
+>>>>  
+>>>> +	/* we always have a pending entropy request */
+>>>> +	request_entropy(vi);
+>>>> +
+>>>>  	return 0;
+>>>>  
+>>>>  err_find:
+>>>> @@ -181,7 +180,6 @@ static void remove_common(struct virtio_device *vdev)
+>>>>  	vi->data_idx = 0;
+>>>>  	complete(&vi->have_data);
+>>>>  	vdev->config->reset(vdev);
+>>>> -	vi->busy = false;
+>>>>  	if (vi->hwrng_register_done)
+>>>>  		hwrng_unregister(&vi->hwrng);
+>>>>  	vdev->config->del_vqs(vdev);
+>>>
+>>> We observed that after this commit virtio-rng implementation in FVP doesn't
+>>> work
+>>>
+>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+>>> INFO: bp.virtio_rng: Using seed value: 0x5674bba8
+>>> Error: FVP_Base_AEMvA: bp.virtio_rng: <vq0-requestq> Found invalid descriptor index
+>>> In file: (unknown):0
+>>> In process: FVP_Base_AEMvA.thread_p_12 @ 935500020 ns
+>>> Info: FVP_Base_AEMvA: bp.virtio_rng: Could not extract buffer
+>>>
+>>> while basic baremetal test works as expected
+>>>
+>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+>>> INFO: bp.virtio_rng: Using seed value: 0x541c142e
+>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0x4b098991ceb377e6
+>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0xbdcbe3f765ba62f7
+>>>
+>>> We are trying to get an idea what is missing and where, yet none of us familiar
+>>> with the driver :(
+>>>
+>>> I'm looping Kevin who originally reported that and Mauricio who is looking form
+>>> the FVP side. 
+>>
+>> With the following diff FVP works agin
+>>
+>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>> index a6f3a8a2ac..042503ad6c 100644
+>> --- a/drivers/char/hw_random/virtio-rng.c
+>> +++ b/drivers/char/hw_random/virtio-rng.c
+>> @@ -54,6 +54,7 @@ static void request_entropy(struct virtrng_info *vi)
+>>         reinit_completion(&vi->have_data);
+>>         vi->data_avail = 0;
+>>         vi->data_idx = 0;
+>> +       smp_mb();
+>>  
+>>         sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>  
+>>
+>> What do you reckon?
+>>
+>> Cheers
+>> Vladimir
+> 
+> Thanks for debugging this!
+> 
+> OK, interesting.
+> 
+> data_idx and data_avail are accessed from virtio_read.
+> 
+> Which as far as I can tell is invoked just with reading_mutex.
+> 
+> 
+> But, request_entropy is called from probe when device is registered
+> this time without locks
+> so it can trigger while another thread is calling virtio_read.
+> 
+> Second request_entropy is called from a callback random_recv_done
+> also without locks.
+> 
+> So it's great that smp_mb helped here but I suspect in fact we
+> need locking. Laurent?
+> 
 
-Thank you for the patch! Yet something to improve:
+I'm sorry for the noise, but it looks like I'm seeing issue for some different reasons.
+I manage to reproduce issue even with smb_mb() in place. The reason I though it helped
+is because I changed both environment and added smb_mb().
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Anyway, thank you for your time!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-Remember-young-bit-for-migration-entries/20220803-092311
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: openrisc-randconfig-r016-20220803 (https://download.01.org/0day-ci/archive/20220803/202208032031.PVcMB0Hr-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2fca6cb25745d1404fc34e0ec2ea89b6195a8c27
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peter-Xu/mm-Remember-young-bit-for-migration-entries/20220803-092311
-        git checkout 2fca6cb25745d1404fc34e0ec2ea89b6195a8c27
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   or1k-linux-ld: mm/rmap.o: in function `migration_entry_supports_young':
->> include/linux/swapops.h:288: undefined reference to `max_swapfile_size'
-   include/linux/swapops.h:288:(.text+0x31a0): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `max_swapfile_size'
-   or1k-linux-ld: mm/migrate.o: in function `migration_entry_supports_young':
->> include/linux/swapops.h:288: undefined reference to `max_swapfile_size'
-   include/linux/swapops.h:288:(.text+0x158): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `max_swapfile_size'
+Cheers
+Vladimir
 
 
-vim +288 include/linux/swapops.h
-
-   279	
-   280	static inline bool migration_entry_supports_young(void)
-   281	{
-   282		/*
-   283		 * max_swapfile_size() returns the max supported swp-offset plus 1.
-   284		 * We can support the migration young bit only if the pfn swap
-   285		 * entry has the offset larger than storing the PFN value, then it
-   286		 * means there's extra bit(s) where we can store the young bit.
-   287		 */
- > 288		return max_swapfile_size() > SWP_MIG_YOUNG_BIT;
-   289	}
-   290	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

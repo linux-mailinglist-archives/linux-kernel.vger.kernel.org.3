@@ -2,101 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251CC588540
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23002588545
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 03:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiHCBDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 21:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S232820AbiHCBFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 21:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiHCBDf (ORCPT
+        with ESMTP id S234910AbiHCBFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 21:03:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3AF51A20;
-        Tue,  2 Aug 2022 18:03:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBFCFB810B0;
-        Wed,  3 Aug 2022 01:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC8CC433D6;
-        Wed,  3 Aug 2022 01:03:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659488611;
-        bh=7w4Dyur9noVacYI2xbunChed9UXqfXV8yWPOuwSLVxA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=URLI4lCs7bA3y7gBpj+H/jt63+bXnxw8biWjJZVACABO26BtY+6AB/MwzRvzVaKCk
-         utX9SgA0xvvQJ4SDpXidd8UTTufkyHFMBWvk6viLX/sMLra1z/JMYYvVltq/fjkzpW
-         NDPIubeRTmF5COl27UpqVnx4MgSA4NtKXkA0QJgSIW6a/7JJ3oLcoDaPV/j9VR3uX5
-         nb1orxtMcjMD9gOb8NKW57emnk+HR9/mQHScfRLNfPkhICXYVAa7vv3JMwDDSxZO/D
-         3+Vz8ffAdYWDmBVt5a0l9z0r79Oq5Vi/7PP/P6ADvvzSEeahBMxpGnMXsODyHXrO8N
-         7C6E1hF5NLt8A==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Aug 2
-Date:   Wed,  3 Aug 2022 02:03:26 +0100
-Message-Id: <20220803010326.2814276-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 2 Aug 2022 21:05:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4314911476;
+        Tue,  2 Aug 2022 18:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659488743; x=1691024743;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fG0SfUv60QUrMeLSFbWDuntgIs0PdphLkGOfDYE6X84=;
+  b=Tc/UIbXHMrk6IAKp7jHHFZ5svXOs1p305QZ/b/CRMzzSS8KaKmRMTJXA
+   oPOX5xkYAvv2lDlCRcKaiXeBmIR3JXKpRftHK3r/UaGc+vHoNQlmv+6vh
+   f/ykU4Px/Y4kPuuyVBFT89XsJ2rcphLXEhGsqpoOBG11r59kD/h7QGDa5
+   U03/PmotFhJn2vY2iiIGnZ/GJSklDHA0pSB8I7kGJmd7M1YJ5VTOiPyfp
+   WnE7TZQXLoem7PefczyU5fRyOwXWX+Sem31S3GwHWCPQR+bhEjJ8WxA0O
+   3/lcU05/MQ2VyQWE8kh/REKZKcojit5lnX9Y5Gk38RxDi2+aR5DTXtZo/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269325497"
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="269325497"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 18:05:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,212,1654585200"; 
+   d="scan'208";a="930189178"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 18:05:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ2pQ-000GdT-2k;
+        Wed, 03 Aug 2022 01:05:40 +0000
+Date:   Wed, 3 Aug 2022 09:05:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v1 1/1] leds: bcm6328: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <202208030838.PJKVWL10-lkp@intel.com>
+References: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi Andy,
 
-Changes since 20220728:
+I love your patch! Yet something to improve:
 
-The hid tree gained a build failure which I fixed up.
+[auto build test ERROR on pavel-leds/for-next]
+[also build test ERROR on linus/master v5.19 next-20220728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The thermal tree gained a build failure, I used the version from 20220728
-instead.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6328-Get-rid-of-custom-led_init_default_state_get/20220803-052959
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
+config: hexagon-randconfig-r045-20220802 (https://download.01.org/0day-ci/archive/20220803/202208030838.PJKVWL10-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/514383e5dd28e25f812c88b0454a02d59e4d205c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6328-Get-rid-of-custom-led_init_default_state_get/20220803-052959
+        git checkout 514383e5dd28e25f812c88b0454a02d59e4d205c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/leds/
 
-The net-next tree gained a conflict against the net tree.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The kvm tree gained a conflict with the kvms390-fixes tree.
+All errors (new ones prefixed by >>):
 
-The pinctrl tree gained a build failure for which I reverted a commit.
+>> drivers/leds/leds-bcm6328.c:353:10: error: call to undeclared function 'led_init_default_state_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           state = led_init_default_state_get(init_data.fwnode);
+                   ^
+   1 error generated.
 
-Non-merge commits (relative to Linus' tree): 12734
- 12594 files changed, 1319236 insertions(+), 278745 deletions(-)
 
-----------------------------------------------------------------------------
+vim +/led_init_default_state_get +353 drivers/leds/leds-bcm6328.c
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+   326	
+   327	static int bcm6328_led(struct device *dev, struct device_node *nc, u32 reg,
+   328			       void __iomem *mem, spinlock_t *lock,
+   329			       unsigned long *blink_leds, unsigned long *blink_delay)
+   330	{
+   331		struct led_init_data init_data = {};
+   332		struct bcm6328_led *led;
+   333		enum led_default_state state;
+   334		unsigned long val, shift;
+   335		void __iomem *mode;
+   336		int rc;
+   337	
+   338		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
+   339		if (!led)
+   340			return -ENOMEM;
+   341	
+   342		led->pin = reg;
+   343		led->mem = mem;
+   344		led->lock = lock;
+   345		led->blink_leds = blink_leds;
+   346		led->blink_delay = blink_delay;
+   347	
+   348		if (of_property_read_bool(nc, "active-low"))
+   349			led->active_low = true;
+   350	
+   351		init_data.fwnode = of_fwnode_handle(nc);
+   352	
+ > 353		state = led_init_default_state_get(init_data.fwnode);
+   354		switch (state) {
+   355		case LEDS_DEFSTATE_ON:
+   356			led->cdev.brightness = LED_FULL;
+   357			break;
+   358		case LEDS_DEFSTATE_KEEP:
+   359			shift = bcm6328_pin2shift(led->pin);
+   360			if (shift / 16)
+   361				mode = mem + BCM6328_REG_MODE_HI;
+   362			else
+   363				mode = mem + BCM6328_REG_MODE_LO;
+   364	
+   365			val = bcm6328_led_read(mode) >> BCM6328_LED_SHIFT(shift % 16);
+   366			val &= BCM6328_LED_MODE_MASK;
+   367			if ((led->active_low && val == BCM6328_LED_MODE_OFF) ||
+   368			    (!led->active_low && val == BCM6328_LED_MODE_ON))
+   369				led->cdev.brightness = LED_FULL;
+   370			else
+   371				led->cdev.brightness = LED_OFF;
+   372			break;
+   373		default:
+   374			led->cdev.brightness = LED_OFF;
+   375		}
+   376	
+   377		bcm6328_led_set(&led->cdev, led->cdev.brightness);
+   378	
+   379		led->cdev.brightness_set = bcm6328_led_set;
+   380		led->cdev.blink_set = bcm6328_blink_set;
+   381	
+   382		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
+   383		if (rc < 0)
+   384			return rc;
+   385	
+   386		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
+   387	
+   388		return 0;
+   389	}
+   390	
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with an arm64 defconfig, an allmodconfig build for x86_64, a
-multi_v7_defconfig for arm and a native (arm64) build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 357 trees (counting Linus' and 98 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,171 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A3A588BD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F80588BD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbiHCML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S237810AbiHCMNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiHCMLz (ORCPT
+        with ESMTP id S235604AbiHCMNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:11:55 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E797224952
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:11:53 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273C0U6l010248;
-        Wed, 3 Aug 2022 12:11:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=i3vrGtLKk54GjywNuOjyLBp9+Zl8eSi2kBgveh0LTXg=;
- b=hsVlwcWKJ303CcKotqoutIVholfWadcE3VXILpPmWy+s9Acro2eXxpfyJZNcoDXxP4xB
- OVAPGF8OgIcwTD56okXuOa9uCNazc/9PzKX7NSetyNGQjqdBwgvUahlnD4mWvgTAZzMr
- 71iMl++UGycDJ2b2fHzZ7Pc+InogK6OPFg3njFufOtd+VLZZmYeNEyuBuB2sqbpFaAi8
- bQ96TC34O2jltaegUL11QBm6aRcvOm9WRwbkQcA5fjuBnnv6xnSgOw0FRIpk6RJemQ+M
- wm8lxs9VYR1uQT/rK+AOfjcoOFbuDeCRglNIv91OKcoKBS/TrOb8ABbcqdn/t066F9Eh 8Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmv8s9qyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Aug 2022 12:11:45 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 273A3H5W002984;
-        Wed, 3 Aug 2022 12:11:45 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu338yty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Aug 2022 12:11:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TprxqMbHicL80Q0cVF9YZGMMZQSc2Ewli3vB0DMnGVEeSeXN+Fi5lRphb6d8LkagINlcsNPTqXpe2/lt+MOmmyeyVU3m+KaykoDJ+a3o5hRmF/J3z+fBfHFFXQUm2JtHcmlxkxMQD77a8zG1jS7ceDdZu4KkFd5hEbOk+AKxAtHT541eoqGUnTzhfGWqINjl3LpXcoEtUjfqp5w6AF6hhPMGZYpQaGJHOG8ZuLFfKsLROvT6+wbtiZ/60uJTODVRXi38NAvPtteWaLjM+W/7/ptdcFgo3OEnbAtPltuFFSxAVBU6Y0iDiRvC5H645FbCyaxR+1GQcVdDpWJswYpFyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i3vrGtLKk54GjywNuOjyLBp9+Zl8eSi2kBgveh0LTXg=;
- b=HAV2ttW7PDE2P0zVBHlXmWwkVFmZLetT37ECdadk81JY5FQa4EPZ7lkFil8ZPHLAIYavLcyGe5oyuRNhFuyurknnC/6aGu2RwQF2OH0kTqxI+ZtNYPPfG5tO0ihIbbjhhNZdZEaoQdPLx4lxAltO0TQrsjW6M10zeMefwIk8ysHvX8y91D3Oly9Qod+AVmrSY0wESUsBAQs16BgUCCABvlH4a3ZYsy+bQM35VcpWAXopElnoKN/mWdj0KY7y2aES7un+QINRhVFGBxZmZjpYOZH769D42wRBNNOOmm1liopcR3AtmqBlhakrKyUH0uIw81ofmpnpq1NB25fPXolUqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i3vrGtLKk54GjywNuOjyLBp9+Zl8eSi2kBgveh0LTXg=;
- b=lvsN9uJb985TCWJP82ONMKFVJWr2kQTmBicxr9UbZXh9h8fqDZPk+/3jg9VFdb5cB8K0x5HiunDTxkVFk1DTzhlFAWf4d+YLgDZDjIUYvC8bSdYiTNwChJHzZXda+HmOyz8qh91jqn4P4tKmwoZq61cpTx+31GV2AXY4O9V8EUQ=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CH0PR10MB5050.namprd10.prod.outlook.com
- (2603:10b6:610:c3::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Wed, 3 Aug
- 2022 12:11:43 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5504.014; Wed, 3 Aug 2022
- 12:11:43 +0000
-Date:   Wed, 3 Aug 2022 15:11:08 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        paskripkin@gmail.com, straube.linux@gmail.com, martin@kaiser.cx,
-        abdun.nihaal@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: convert rtw_p2p_enable to correct
- error code semantics
-Message-ID: <20220803121108.GC3438@kadam>
-References: <20220802234408.930-1-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802234408.930-1-phil@philpotter.co.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0057.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::9)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Wed, 3 Aug 2022 08:13:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B78824952
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:13:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659528795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pac0fLKUr+LLeDtwdQkuut5jEFDOTwai1Q05E+YZAsc=;
+        b=QmphaJLb92Z9lZASKdozCbL3pNIM+xXTjPNlHCgwCo6uiBU9BI92jj335eh0OlcGsw43HT
+        IiV2CLWxin6zANYa+ylEaGPAn/ACaOLTejdEofMZu/nVY8BJXwtMI3TdLT4vEZhxznF/VI
+        B1nii/nDa7CILpONFbaTr/To+hzYwcU=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-Bae2zrwbPYekbv2LS9m0Mw-1; Wed, 03 Aug 2022 08:13:14 -0400
+X-MC-Unique: Bae2zrwbPYekbv2LS9m0Mw-1
+Received: by mail-lf1-f72.google.com with SMTP id o4-20020ac25e24000000b0048af174d5bdso2677754lfg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 05:13:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pac0fLKUr+LLeDtwdQkuut5jEFDOTwai1Q05E+YZAsc=;
+        b=UALmKoQ6W2JyjBTW5gpxSgapsW+ldEw7TwbBU0E7vp3dbXA5IZ2F+4Ctnv/nYCF1f1
+         yqhc+ZnJUbRIrLaN435v3uRO3ZpmdEm+T8F/C31DU+w1/DRKqKLBMQmiU3X+aNozL7zu
+         vikGnfngnk9Gn9gCBzC737ORDApPv9OOw2wB4bJ7HRXOdtwg2DM6QjhCDpkozVKffQG2
+         TFPs1WPuXzyF5M5EGe6oXNIHkURxaEVPXUkUUvrNojxybIfmawj9J6pAhliE8aMIRPtn
+         Pq+ImWRrYgRgkBSnEw6LRZF4VozCQo3WcUQmT5e158q3YcraN01vuilTwLrzZiYrcAlH
+         SsNQ==
+X-Gm-Message-State: AJIora/DHSGas5k4NRMox9g5jIQ6DmiG8QWHLlciq9dztWYnT/2diQEr
+        d9Ibfs9Aiyf8CgkbKOCtTyKUDq6AGcgoUnsq1PbGLG2gExmjOn4SLi0KVhqQ8k/5K9vSuyvV3mJ
+        9H1PyuSEF6rTC5tqTTWcIWx4ov+tREuvpt57r2tvT
+X-Received: by 2002:a05:6512:218c:b0:48a:1e1e:7b59 with SMTP id b12-20020a056512218c00b0048a1e1e7b59mr8636653lft.580.1659528791980;
+        Wed, 03 Aug 2022 05:13:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5eqLfz51F4vI6hlrko03HSNDnzXK8f0DAxH23CXvm2bAXjm5q5cq5DE8ixYK8xiR7Qkv8/dMoNc3F50YqiLRE=
+X-Received: by 2002:a05:6512:218c:b0:48a:1e1e:7b59 with SMTP id
+ b12-20020a056512218c00b0048a1e1e7b59mr8636635lft.580.1659528791531; Wed, 03
+ Aug 2022 05:13:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bdcfdf9-ed20-4e14-0179-08da75495389
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5050:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EUS8aadowDwtL/M9xQH5N33PLSa9DWDRgGRGfP4Y1/HJvulZ88dJWmFlsMRnoDUbuOTrl94Egut6QbXjL1Su+UB+fk3a4Tn5921HsC/bT0VZ1hFh/1bo0peFFlL+727jyNqfOIri3IsGn78wdKTuyPE3jBh/AB2TYJENkTpV7RMUIRvJCJyOdLKLmzRuGJ+OjUlZ6XH9sZ10amh1VdG5ZILjCH3VQnqUWk+T4sbR6sibrFoXaDQadkcFLgB1WMG7QLxmCcJicoRNHfWptRCj+oNjrnjMUMKY8g62XzvIH+6mC/Nyjp2F30Kexvwgu6dPcz1pS/g9l/iS/8LSuzBs7UFtUJ3FuRFaFronItWvEDudN7ZI1B2ngehHL/RAFD1EjyoJl+HRpzXmeFnV5xHCbk/RwwmIepmuHNWUPg/uoc49J1ABr5CzFMaieiPHP23oGte6Bh7GjKLCugtVIiJjUQUOe/GyqDu/lNK4O8e4zJTbsBDeR9RVAB/VpoQ6EnnQK4bnclCEpUgD2sn7Ptt4wQS3JaYyeO0QZIzTa7w3PG1osW4crRLyBvOmBOcxREP+Fz3Jw3pRIIWZBYMFGmRrQiXffXSvaRXqAaVZihTerzMq8/SKXQ0fXhEhhvfISt+ytYPWBY7nPEdCl9TBQKP3RJDOznXTTMz+5NaY+ACZeHu8puHtMYiHHRff7tiFgkdmLwdcGVOfv5NEmY7ADmYAEHaw0KDxsFcAqOCDu2BHxjyqpX463UdDXyQKsURhiGGzTNsApA0YNQ6b1x/HqvIiZwQ3vCSG+JPJ6z/1nSrkRtVd9n+BOj/ZYMcQEoyZ6mW1dQE580rDNnLI+Y0mcoyZ1A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(39860400002)(366004)(136003)(376002)(26005)(6666004)(6512007)(86362001)(41300700001)(9686003)(52116002)(6916009)(6506007)(478600001)(33716001)(6486002)(38350700002)(38100700002)(1076003)(186003)(316002)(4744005)(5660300002)(83380400001)(4326008)(33656002)(66556008)(66946007)(44832011)(8676002)(66476007)(2906002)(8936002)(70780200001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Cai/mI3Gjsx9CQwuUIbKsKBjzB7Oj8SJ8a49ijxO2HsbRgspZdBxXUpK/xK0?=
- =?us-ascii?Q?PbvkCptpo/M049Qth9J9DtrSYTTsBqqhuzbX4UC0+6BYuWfTJL4nXK34T3rO?=
- =?us-ascii?Q?LCRlXyKAG//zhLJknbT/wwf88nq2tXXheePO2SPux2wKBt0HoemJMq461dmG?=
- =?us-ascii?Q?mByUIbSiv7eRy0aDM2eFwwcGGFplbN54pmjOdL+0kTLAXF831k2AlzaDmC7E?=
- =?us-ascii?Q?uuB/hVQ2kQOEZAJRtEO7sxmZVuE7OcR0aeG1+BJ57BWsKGR7cX+UZjfY2q+c?=
- =?us-ascii?Q?CVvLIEAZL5JlNOF45W1e9SQMJSsIzHeat32V4BxaDJPaL2+3hfss5A4hjPAD?=
- =?us-ascii?Q?iy7jeWvMSIhwVT/jyCthnccETDBVLuaa3vY1/HLE5NXUkXRbGcXhe5jRq/9x?=
- =?us-ascii?Q?Kwff50G+E6yvBc1Gc/Ok6Ho2gi42zJTVeENK3Uo1fn74TNQ7Fe/yanNdpEtU?=
- =?us-ascii?Q?XQUXymulHfDsGxS45zVHAq6FUDhECL7+4YsfnH70FWqY+r86Y8DwL+QYspJz?=
- =?us-ascii?Q?IXQu1Hbts5+w/fkzN+c+KeBsQLX8XkF+Xe/SfnUc59sGlyo1FL4gy2NdAbbm?=
- =?us-ascii?Q?DHONrjvUf3Zaiqvk2JUAVbycEhtl41ZKMmy8LSakr6G1nEgohoVApmSM57Rl?=
- =?us-ascii?Q?gTryIdLnPM/szbM7TEGX5xQihTT4X7fIS/0qPPXoZdYk+t6DSNzLocmHvSYm?=
- =?us-ascii?Q?JEvQb3qRjuFXj+PVKOJ9o2vHgdUZ3uDi9t8ZDyXEqMuDX1YDOoSz19jkOp4W?=
- =?us-ascii?Q?cWnMPW9Za645D4fS4jviuJtD6PDzATaoSeyNczM3fIzcM1ezF2wLWwTcO/9p?=
- =?us-ascii?Q?rQgfXLnjrljBjQdgh5XD67H8dm0M5Fxm00jz9ft6J1CUSvRFfV8Z19M5+PYU?=
- =?us-ascii?Q?bFNkYoyWGVKChMCCehTBk1UEsq6vAfp102JlxtVGY6xezer+Chif4RviWzBC?=
- =?us-ascii?Q?fhQHJxwbzVLR9F824sCeDei/bHjRu34JpZ2Dpn3WSTqX6g3rhzsLrSKo1xq8?=
- =?us-ascii?Q?+v/4QPTKX0KZd47ZhDXjrIEt+7nw8tosigZ6X/4Zh0w4nlYQR6Z/aKZ9vkmG?=
- =?us-ascii?Q?nVLTvs9K51bjBRoATX/ZjNRxrqdbJcFQvWWsktnwh1bX2e+sdrWf9x8QJDod?=
- =?us-ascii?Q?/PbytkZaQ7zpeh315W990fhPzdoj/qpg9uHpOEuKeYQOYj+hVp1f1GP4o6b6?=
- =?us-ascii?Q?1wBCkMiKIun3KSs5a3MeBGJZORMYdotLVv9De2tzGUeuSi2WiI/UXSRtuNkH?=
- =?us-ascii?Q?WTFFwlthCH5A5QCSLu+wcN7RY//GK7v7zSBLJJ6eZ6sJ/hpwDdD6PCDjbcLS?=
- =?us-ascii?Q?OjMMoh84tBKk2xrEpcFpLEYIMm1n4Mm4N8AskEZpucex1/k900HSVjVV0MUT?=
- =?us-ascii?Q?U0sptwe+Y1hqLI12CPFndGl458XrBKtJpDOCcp/d28hLTZlfjOl7rjr5iVGW?=
- =?us-ascii?Q?ib2BTGf+c4ASp1j9VRA+R9y0c0DDc4l/PlHg7gk417za1xK3atdGu51Zt5Ew?=
- =?us-ascii?Q?BIQAMwbYp7DTJ84mZCUKr6OAWFHScNEvfYgvlJAaNWzcDTMYKGORvZmLPhoN?=
- =?us-ascii?Q?9rvkwVH/JvvWszBoWxDWe9TUoSIRU+hvYGMsMqhm?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bdcfdf9-ed20-4e14-0179-08da75495389
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2022 12:11:43.0114
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UtFmJA9CZ8tbtUr6+5RzLKAqGBC6R6iJDT31NEluDg1qfmmwTB1K9mQ2+7TmN/6qVwggKy9hFDCoEgEG3iZ9tMmHuXfr7sSPsTur4Wsb4jM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5050
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 phishscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208030052
-X-Proofpoint-GUID: aSnXof17eGTOztINtYUL6_TDDKnS1XWd
-X-Proofpoint-ORIG-GUID: aSnXof17eGTOztINtYUL6_TDDKnS1XWd
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+QYu4qxW1BUcbC9MwG1BxXjPO96sa9BOUXOHCj1SLY7ObJnQw@mail.gmail.com>
+ <20220802122356.6f163a79@kernel.org>
+In-Reply-To: <20220802122356.6f163a79@kernel.org>
+From:   Bruno Goncalves <bgoncalv@redhat.com>
+Date:   Wed, 3 Aug 2022 14:13:00 +0200
+Message-ID: <CA+QYu4ob4cbh3Vnh9DWgaPpyw8nTLFG__TbBpBsYg1tWJPxygg@mail.gmail.com>
+Subject: Re: RIP: 0010:qede_load+0x128d/0x13b0 [qede] - 5.19.0
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        CKI Project <cki-project@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 12:44:08AM +0100, Phillip Potter wrote:
-> Convert the rtw_p2p_enable function to use correct error code semantics
-> rather than _SUCCESS/_FAIL, and also make sure we allow these to be
-> passed through properly in the one caller where we actually check the
-> code, rtw_wext_p2p_enable.
-> 
-> This change moves these functions to a clearer 'return 0;' style at the
-> end of the function, and in the case of errors now returns ret instead
-> of jumping to the end of the function, so that these can still be passed
-> through but without using a goto to jump to a single return statement at
-> the end which is less clear.
-> 
-> This change moves the driver slowly closer to using standard error code
-> semantics everywhere.
-> 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+On Tue, 2 Aug 2022 at 21:24, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 2 Aug 2022 13:27:32 +0200 Bruno Goncalves wrote:
+> > Hello,
+> >
+> > We've noticed the following panic when booting up kernel 5.19.0 on a
+> > specific machine.
+> > The panic seems to happen when we build the kernel with debug flags.
+> > Below is the first crash we noticed, more logs at [1] and the kernel
+> > config is at [2].
+> >
+> > [   59.207684] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> > [   59.212949] CPU: 32 PID: 1967 Comm: NetworkManager Not tainted 5.19.0-rc3 #1
+> > [   59.220041] Hardware name: HPE ProLiant DL325 Gen10 Plus/ProLiant
+> > DL325 Gen10 Plus, BIOS A43 08/09/2021
+> > [   59.229490] RIP: 0010:qede_load.cold+0x5a1/0x819 [qede]
+>
+> Is it this warning?
+>
+>    WARN_ON(xdp_rxq_info_reg(&fp->rxq->xdp_rxq, edev->ndev,
+>
+> Would you be able to run the stacktrace thru
+> scripts/decode_stacktrace.sh ?
 
-Looks good.  Thanks!
+Got this from the most recent failure (kernel built using commit 0805c6fb39f6):
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+the tarball is https://s3.amazonaws.com/arr-cki-prod-trusted-artifacts/trusted-artifacts/603714145/build%20x86_64%20debug/2807738987/artifacts/kernel-mainline.kernel.org-redhat_603714145_x86_64_debug.tar.gz
+and the call trace from
+https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/08/02/redhat:603123526/build_x86_64_redhat:603123526_x86_64_debug/tests/1/results_0001/console.log/console.log
 
-regards,
-dan carpenter
+[   69.876513] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[   69.888521] Hardware name: HPE ProLiant DL325 Gen10 Plus/ProLiant
+DL325 Gen10 Plus, BIOS A43 08/09/2021
+[   69.897971] RIP: 0010:qede_load.cold
+(/builds/2807738987/workdir/./include/linux/spinlock.h:389
+/builds/2807738987/workdir/./include/linux/netdevice.h:4294
+/builds/2807738987/workdir/./include/linux/netdevice.h:4385
+/builds/2807738987/workdir/drivers/net/ethernet/qlogic/qede/qede_main.c:2594
+/builds/2807738987/workdir/drivers/net/ethernet/qlogic/qede/qede_main.c:2575)
+qede
+[ 69.903242] Code: 41 88 84 24 b1 00 00 00 41 0f b7 84 24 b6 00 00 00
+45 88 b4 24 b3 00 00 00 e9 12 ff fe ff 48 c7 c1 09 c6 d7 c0 e9 6f ff
+ff ff <0f> 0b 49 8b 7c 24 08 e8 8c e0 fe ff 48 89 c1 48 85 c0 74 32 ba
+2a
+All code
+========
+   0:    41 88 84 24 b1 00 00     mov    %al,0xb1(%r12)
+   7:    00
+   8:    41 0f b7 84 24 b6 00     movzwl 0xb6(%r12),%eax
+   f:    00 00
+  11:    45 88 b4 24 b3 00 00     mov    %r14b,0xb3(%r12)
+  18:    00
+  19:    e9 12 ff fe ff           jmpq   0xfffffffffffeff30
+  1e:    48 c7 c1 09 c6 d7 c0     mov    $0xffffffffc0d7c609,%rcx
+  25:    e9 6f ff ff ff           jmpq   0xffffffffffffff99
+  2a:*    0f 0b                    ud2            <-- trapping instruction
+  2c:    49 8b 7c 24 08           mov    0x8(%r12),%rdi
+  31:    e8 8c e0 fe ff           callq  0xfffffffffffee0c2
+  36:    48 89 c1                 mov    %rax,%rcx
+  39:    48 85 c0                 test   %rax,%rax
+  3c:    74 32                    je     0x70
+  3e:    ba                       .byte 0xba
+  3f:    2a                       .byte 0x2a
+
+Code starting with the faulting instruction
+===========================================
+   0:    0f 0b                    ud2
+   2:    49 8b 7c 24 08           mov    0x8(%r12),%rdi
+   7:    e8 8c e0 fe ff           callq  0xfffffffffffee098
+   c:    48 89 c1                 mov    %rax,%rcx
+   f:    48 85 c0                 test   %rax,%rax
+  12:    74 32                    je     0x46
+  14:    ba                       .byte 0xba
+  15:    2a                       .byte 0x2a
+[   69.922125] RSP: 0018:ffffac3c848a3658 EFLAGS: 00010206
+[   69.927385] RAX: 000000000000006b RBX: 0000000000000000 RCX: 0000000000000006
+[   69.934562] RDX: ffff94a3f3eabba8 RSI: ffffffff9e9578a7 RDI: ffffffff9e8d8176
+[   69.941738] RBP: ffff94a3ee75acd0 R08: 0000000000000001 R09: 0000000000000001
+[   69.948914] R10: 0000000000000000 R11: 00000000f6665eaf R12: ffff94a3ee75ac00
+[   69.956089] R13: ffff94a3f31bb928 R14: ffffac3ca31dd000 R15: 0000000000000000
+[   69.963265] FS:  00007f623da2c500(0000) GS:ffff94b2bc240000(0000)
+knlGS:0000000000000000
+[   69.971405] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   69.977183] CR2: 000056491c907688 CR3: 000000015ebe2000 CR4: 0000000000350ee0
+[   69.984361] Call Trace:
+[   69.986820]  <TASK>
+[   69.988950] qede_open
+(/builds/2807738987/workdir/drivers/net/ethernet/qlogic/qede/qede_main.c:2552)
+qede
+[   69.992817] __dev_open (/builds/2807738987/workdir/net/core/dev.c:1434)
+[   69.996247] __dev_change_flags
+(/builds/2807738987/workdir/net/core/dev.c:8537)
+[   70.000459] dev_change_flags (/builds/2807738987/workdir/net/core/dev.c:8608)
+[   70.004318] do_setlink (/builds/2807738987/workdir/net/core/rtnetlink.c:2780)
+[   70.007916] ? lock_is_held_type
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:466
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5710)
+[   70.012131] ? lock_is_held_type
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:466
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5710)
+[   70.016342] ? __nla_validate_parse
+(/builds/2807738987/workdir/./include/net/netlink.h:1159
+(discriminator 2) /builds/2807738987/workdir/lib/nlattr.c:576
+(discriminator 2))
+[   70.020816] ? mark_held_locks
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:4234)
+[   70.024767] ? _raw_spin_unlock_irqrestore
+(/builds/2807738987/workdir/./arch/x86/include/asm/paravirt.h:704
+/builds/2807738987/workdir/./arch/x86/include/asm/irqflags.h:138
+/builds/2807738987/workdir/./include/linux/spinlock_api_smp.h:151
+/builds/2807738987/workdir/kernel/locking/spinlock.c:194)
+[   70.029763] ? lockdep_hardirqs_on
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:4383)
+[   70.034152] __rtnl_newlink
+(/builds/2807738987/workdir/net/core/rtnetlink.c:3546)
+[   70.038020] ? rtnl_newlink
+(/builds/2807738987/workdir/net/core/rtnetlink.c:3590)
+[   70.041702] ? rcu_read_lock_sched_held
+(/builds/2807738987/workdir/kernel/rcu/update.c:125
+/builds/2807738987/workdir/kernel/rcu/update.c:119)
+[   70.046437] ? trace_kmalloc
+(/builds/2807738987/workdir/./include/trace/events/kmem.h:52
+/builds/2807738987/workdir/./include/trace/events/kmem.h:52)
+[   70.050297] ? kmem_cache_alloc_trace
+(/builds/2807738987/workdir/mm/slub.c:3286)
+[   70.055035] rtnl_newlink
+(/builds/2807738987/workdir/net/core/rtnetlink.c:3594)
+[   70.058544] rtnetlink_rcv_msg
+(/builds/2807738987/workdir/net/core/rtnetlink.c:6089)
+[   70.062667] ? lock_acquire
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:466
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5668
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5631)
+[   70.066442] ? rtnl_stats_set
+(/builds/2807738987/workdir/net/core/rtnetlink.c:5986)
+[   70.070478] netlink_rcv_skb
+(/builds/2807738987/workdir/net/netlink/af_netlink.c:2501)
+[   70.074345] netlink_unicast
+(/builds/2807738987/workdir/net/netlink/af_netlink.c:1320
+/builds/2807738987/workdir/net/netlink/af_netlink.c:1345)
+[   70.078295] netlink_sendmsg
+(/builds/2807738987/workdir/net/netlink/af_netlink.c:1921)
+[   70.082249] sock_sendmsg
+(/builds/2807738987/workdir/net/socket.c:714
+/builds/2807738987/workdir/net/socket.c:734)
+[   70.085760] ____sys_sendmsg (/builds/2807738987/workdir/net/socket.c:2488)
+[   70.089705] ? import_iovec (/builds/2807738987/workdir/lib/iov_iter.c:2001)
+[   70.093389] ? sendmsg_copy_msghdr
+(/builds/2807738987/workdir/net/socket.c:2429
+/builds/2807738987/workdir/net/socket.c:2519)
+[   70.097689] ___sys_sendmsg (/builds/2807738987/workdir/net/socket.c:2544)
+[   70.101378] ? lock_is_held_type
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:466
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5710)
+[   70.105588] ? find_held_lock
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:5156)
+[   70.109451] ? lock_release
+(/builds/2807738987/workdir/kernel/locking/lockdep.c:466
+/builds/2807738987/workdir/kernel/locking/lockdep.c:5688)
+[   70.113313] ? __fget_files (/builds/2807738987/workdir/fs/file.c:917)
+[   70.117089] __sys_sendmsg (/builds/2807738987/workdir/net/socket.c:2571)
+[   70.120692] do_syscall_64
+(/builds/2807738987/workdir/arch/x86/entry/common.c:50
+/builds/2807738987/workdir/arch/x86/entry/common.c:80)
+[   70.124294] entry_SYSCALL_64_after_hwframe
+(/builds/2807206727/workdir/arch/x86/entry/entry_64.S:120)
+[   70.129378] RIP: 0033:0x7f623e42e71d
+[ 70.132988] Code: 28 89 54 24 1c 48 89 74 24 10 89 7c 24 08 e8 2a 9b
+f7 ff 8b 54 24 1c 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 2e 00 00 00
+0f 05 <48> 3d 00 f0 ff ff 77 33 44 89 c7 48 89 44 24 08 e8 7e 9b f7 ff
+48
+All code
+========
+   0:    28 89 54 24 1c 48        sub    %cl,0x481c2454(%rcx)
+   6:    89 74 24 10              mov    %esi,0x10(%rsp)
+   a:    89 7c 24 08              mov    %edi,0x8(%rsp)
+   e:    e8 2a 9b f7 ff           callq  0xfffffffffff79b3d
+  13:    8b 54 24 1c              mov    0x1c(%rsp),%edx
+  17:    48 8b 74 24 10           mov    0x10(%rsp),%rsi
+  1c:    41 89 c0                 mov    %eax,%r8d
+  1f:    8b 7c 24 08              mov    0x8(%rsp),%edi
+  23:    b8 2e 00 00 00           mov    $0x2e,%eax
+  28:    0f 05                    syscall
+  2a:*    48 3d 00 f0 ff ff        cmp    $0xfffffffffffff000,%rax
+   <-- trapping instruction
+  30:    77 33                    ja     0x65
+  32:    44 89 c7                 mov    %r8d,%edi
+  35:    48 89 44 24 08           mov    %rax,0x8(%rsp)
+  3a:    e8 7e 9b f7 ff           callq  0xfffffffffff79bbd
+  3f:    48                       rex.W
+
+Code starting with the faulting instruction
+===========================================
+   0:    48 3d 00 f0 ff ff        cmp    $0xfffffffffffff000,%rax
+   6:    77 33                    ja     0x3b
+   8:    44 89 c7                 mov    %r8d,%edi
+   b:    48 89 44 24 08           mov    %rax,0x8(%rsp)
+  10:    e8 7e 9b f7 ff           callq  0xfffffffffff79b93
+  15:    48                       rex.W
+[   70.151871] RSP: 002b:00007fff0ccddd70 EFLAGS: 00000293 ORIG_RAX:
+000000000000002e
+[   70.159488] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f623e42e71d
+[   70.166665] RDX: 0000000000000000 RSI: 00007fff0ccdddb0 RDI: 000000000000000d
+[   70.173842] RBP: 0000564bf49cb090 R08: 0000000000000000 R09: 0000000000000000
+[   70.181017] R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000000b
+[   70.188192] R13: 00007fff0ccddf20 R14: 00007fff0ccddf1c R15: 0000000000000000
+[   70.195379]  </TASK>
+[   70.197575] Modules linked in: acpi_cpufreq(-) rfkill sunrpc qede
+vfat fat intel_rapl_msr intel_rapl_common qed ipmi_ssif crc8
+edac_mce_amd k10temp pcspkr rapl ptdma acpi_ipmi ses igb hpilo
+enclosure ipmi_si ipmi_devintf dca i2c_piix4 ipmi_msghandler acpi_tad
+acpi_power_meter fuse zram xfs mgag200 crct10dif_pclmul i2c_algo_bit
+crc32_pclmul drm_shmem_helper crc32c_intel drm_kms_helper
+ghash_clmulni_intel drm hpwdt ccp smartpqi scsi_transport_sas
+sp5100_tco wmi
+[   70.238596] ---[ end trace 0000000000000000 ]---
+[   70.310657] RIP: 0010:qede_load.cold
+(/builds/2807738987/workdir/./include/linux/spinlock.h:389
+/builds/2807738987/workdir/./include/linux/netdevice.h:4294
+/builds/2807738987/workdir/./include/linux/netdevice.h:4385
+/builds/2807738987/workdir/drivers/net/ethernet/qlogic/qede/qede_main.c:2594
+/builds/2807738987/workdir/drivers/net/ethernet/qlogic/qede/qede_main.c:2575)
+qede
+[ 70.316130] Code: 41 88 84 24 b1 00 00 00 41 0f b7 84 24 b6 00 00 00
+45 88 b4 24 b3 00 00 00 e9 12 ff fe ff 48 c7 c1 09 c6 d7 c0 e9 6f ff
+ff ff <0f> 0b 49 8b 7c 24 08 e8 8c e0 fe ff 48 89 c1 48 85 c0 74 32 ba
+2a
+All code
+========
+   0:    41 88 84 24 b1 00 00     mov    %al,0xb1(%r12)
+   7:    00
+   8:    41 0f b7 84 24 b6 00     movzwl 0xb6(%r12),%eax
+   f:    00 00
+  11:    45 88 b4 24 b3 00 00     mov    %r14b,0xb3(%r12)
+  18:    00
+  19:    e9 12 ff fe ff           jmpq   0xfffffffffffeff30
+  1e:    48 c7 c1 09 c6 d7 c0     mov    $0xffffffffc0d7c609,%rcx
+  25:    e9 6f ff ff ff           jmpq   0xffffffffffffff99
+  2a:*    0f 0b                    ud2            <-- trapping instruction
+  2c:    49 8b 7c 24 08           mov    0x8(%r12),%rdi
+  31:    e8 8c e0 fe ff           callq  0xfffffffffffee0c2
+  36:    48 89 c1                 mov    %rax,%rcx
+  39:    48 85 c0                 test   %rax,%rax
+  3c:    74 32                    je     0x70
+  3e:    ba                       .byte 0xba
+  3f:    2a                       .byte 0x2a
+
+Code starting with the faulting instruction
+===========================================
+   0:    0f 0b                    ud2
+   2:    49 8b 7c 24 08           mov    0x8(%r12),%rdi
+   7:    e8 8c e0 fe ff           callq  0xfffffffffffee098
+   c:    48 89 c1                 mov    %rax,%rcx
+   f:    48 85 c0                 test   %rax,%rax
+  12:    74 32                    je     0x46
+  14:    ba                       .byte 0xba
+  15:    2a                       .byte 0x2a
+[   70.335057] RSP: 0018:ffffac3c848a3658 EFLAGS: 00010206
+[   70.340332] RAX: 000000000000006b RBX: 0000000000000000 RCX: 0000000000000006
+[   70.347554] RDX: ffff94a3f3eabba8 RSI: ffffffff9e9578a7 RDI: ffffffff9e8d8176
+[   70.354747] RBP: ffff94a3ee75acd0 R08: 0000000000000001 R09: 0000000000000001
+[   70.361968] R10: 0000000000000000 R11: 00000000f6665eaf R12: ffff94a3ee75ac00
+[   70.369160] R13: ffff94a3f31bb928 R14: ffffac3ca31dd000 R15: 0000000000000000
+[   70.376385] FS:  00007f623da2c500(0000) GS:ffff94b2bc240000(0000)
+knlGS:0000000000000000
+[   70.384543] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   70.390336] CR2: 000056491c907688 CR3: 000000015ebe2000 CR4: 0000000000350ee0
+[   70.397531] Kernel panic - not syncing: Fatal exception
+[   70.406430] Kernel Offset: 0x1c000000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[   70.484036] ---[ end Kernel panic - not syncing: Fatal exception ]---
+
+Thanks,
+Bruno
+>
+> > [   59.234757] Code: 41 88 84 24 b1 00 00 00 41 0f b7 84 24 b6 00 00
+> > 00 45 88 b4 24 b3 00 00 00 e9 b8 00 ff ff 48 c7 c1 09 66 46 c1 e9 6f
+> > ff ff ff <0f> 0b 49 8b 7c 24 08 e8 82 e2 fe ff 48 89 c1 48 85 c0 74 32
+> > ba 2a
+> > [   59.253639] RSP: 0018:ffffae1e04593688 EFLAGS: 00010206
+> > [   59.258897] RAX: 000000000000006b RBX: 0000000000000000 RCX: 0000000000000006
+> > [   59.266073] RDX: ffff8f8f35332be8 RSI: ffffffffaf96411f RDI: ffffffffaf8e4b1e
+> > [   59.273250] RBP: ffff8f8f2a87acd0 R08: 0000000000000001 R09: 0000000000000001
+> > [   59.280426] R10: 0000000000000000 R11: 000000000f8c087f R12: ffff8f8f2a87ac00
+> > [   59.287602] R13: ffff8f8f34d7f928 R14: ffffae1e0c039000 R15: 0000000000000000
+> > [   59.294777] FS:  00007f164509f500(0000) GS:ffff8f9dfd800000(0000)
+> > knlGS:0000000000000000
+> > [   59.302917] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   59.308697] CR2: 00005575f29a5c08 CR3: 0000000163810000 CR4: 0000000000350ee0
+> > [   59.315875] Call Trace:
+> > [   59.318335]  <TASK>
+> > [   59.320458]  qede_open+0x3b/0x90 [qede]
+> > [   59.324323]  __dev_open+0xf1/0x1c0
+> > [   59.327748]  __dev_change_flags+0x1f8/0x280
+> > [   59.331957]  dev_change_flags+0x22/0x60
+> > [   59.335816]  do_setlink+0x327/0x1140
+> > [   59.339413]  ? lock_is_held_type+0xe3/0x140
+> > [   59.343625]  ? lock_is_held_type+0xe3/0x140
+> > [   59.347833]  ? __nla_validate_parse+0x5f/0xb70
+> > [   59.352307]  ? mark_held_locks+0x49/0x70
+> > [   59.356256]  ? _raw_spin_unlock_irqrestore+0x30/0x60
+> > [   59.361254]  ? lockdep_hardirqs_on+0x7d/0x100
+> > [   59.365640]  __rtnl_newlink+0x59c/0x950
+> > [   59.369502]  ? rtnl_newlink+0x2a/0x60
+> > [   59.373185]  ? rcu_read_lock_sched_held+0x3c/0x70
+> > [   59.377918]  ? trace_kmalloc+0x30/0xf0
+> > [   59.381692]  ? kmem_cache_alloc_trace+0x1ad/0x270
+> > [   59.386426]  rtnl_newlink+0x43/0x60
+> > [   59.389936]  rtnetlink_rcv_msg+0x184/0x540
+> > [   59.394057]  ? lock_acquire+0xe2/0x2e0
+> > [   59.397830]  ? rtnl_stats_set+0x190/0x190
+> > [   59.401863]  netlink_rcv_skb+0x51/0xf0
+> > [   59.405639]  netlink_unicast+0x189/0x260
+> > [   59.409586]  netlink_sendmsg+0x25a/0x4c0
+> > [   59.413536]  sock_sendmsg+0x5c/0x60
+> > [   59.417045]  ____sys_sendmsg+0x22b/0x270
+> > [   59.420991]  ? import_iovec+0x17/0x20
+> > [   59.424675]  ? sendmsg_copy_msghdr+0x78/0xa0
+> > [   59.428972]  ___sys_sendmsg+0x85/0xc0
+> > [   59.432658]  ? lock_is_held_type+0xe3/0x140
+> > [   59.436867]  ? find_held_lock+0x2b/0x80
+> > [   59.440727]  ? lock_release+0x145/0x300
+> > [   59.444586]  ? __fget_files+0xe5/0x170
+> > [   59.448360]  __sys_sendmsg+0x5c/0xb0
+> > [   59.451961]  do_syscall_64+0x5b/0x80
+> > [   59.455558]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > [   59.460641] RIP: 0033:0x7f164628539d
+> > [   59.464251] Code: 28 89 54 24 1c 48 89 74 24 10 89 7c 24 08 e8 0a
+> > b1 f7 ff 8b 54 24 1c 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 2e 00 00
+> > 00 0f 05 <48> 3d 00 f0 ff ff 77 33 44 89 c7 48 89 44 24 08 e8 5e b1 f7
+> > ff 48
+> > [   59.483133] RSP: 002b:00007ffd9bf01520 EFLAGS: 00000293 ORIG_RAX:
+> > 000000000000002e
+> > [   59.490749] RAX: ffffffffffffffda RBX: 000000000000000d RCX: 00007f164628539d
+> > [   59.497925] RDX: 0000000000000000 RSI: 00007ffd9bf01560 RDI: 000000000000000c
+> > [   59.505100] RBP: 00005575f2915040 R08: 0000000000000000 R09: 0000000000000000
+> > [   59.512275] R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+> > [   59.519453] R13: 00007ffd9bf016c0 R14: 00007ffd9bf016bc R15: 0000000000000000
+> > [   59.526637]  </TASK>
+> > [   59.528834] Modules linked in: rfkill sunrpc intel_rapl_msr
+> > intel_rapl_common vfat fat qede qed edac_mce_amd i2c_piix4 crc8 rapl
+> > igb ipmi_ssif ptdma ses enclosure pcspkr dca hpilo k10temp acpi_ipmi
+> > acpi_tad ipmi_si acpi_power_meter fuse zram xfs crct10dif_pclmul
+> > crc32_pclmul crc32c_intel mgag200 i2c_algo_bit drm_shmem_helper
+> > drm_kms_helper ghash_clmulni_intel drm hpwdt smartpqi ccp
+> > scsi_transport_sas sp5100_tco wmi ipmi_devintf ipmi_msghandler
+> > [   59.568459] ---[ end trace 0000000000000000 ]---
+> > [   59.632952] RIP: 0010:qede_load.cold+0x5a1/0x819 [qede]
+> > [   59.632967] Code: 41 88 84 24 b1 00 00 00 41 0f b7 84 24 b6 00 00
+> > 00 45 88 b4 24 b3 00 00 00 e9 b8 00 ff ff 48 c7 c1 09 66 46 c1 e9 6f
+> > ff ff ff <0f> 0b 49 8b 7c 24 08 e8 82 e2 fe ff 48 89 c1 48 85 c0 74 32
+> > ba 2a
+> > [   59.632970] RSP: 0018:ffffae1e04593688 EFLAGS: 00010206
+> > [   59.632972] RAX: 000000000000006b RBX: 0000000000000000 RCX: 0000000000000006
+> > [   59.632974] RDX: ffff8f8f35332be8 RSI: ffffffffaf96411f RDI: ffffffffaf8e4b1e
+> > [   59.632977] RBP: ffff8f8f2a87acd0 R08: 0000000000000001 R09: 0000000000000001
+> > [   59.632978] R10: 0000000000000000 R11: 000000000f8c087f R12: ffff8f8f2a87ac00
+> > [   59.632980] R13: ffff8f8f34d7f928 R14: ffffae1e0c039000 R15: 0000000000000000
+> > [   59.632982] FS:  00007f164509f500(0000) GS:ffff8f9dfd800000(0000)
+> > knlGS:0000000000000000
+> > [   59.632984] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   59.632986] CR2: 00005575f29a5c08 CR3: 0000000163810000 CR4: 0000000000350ee0
+> > [   59.632989] Kernel panic - not syncing: Fatal exception
+> > [   59.732905] Kernel Offset: 0x2d000000 from 0xffffffff81000000
+> > (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> > [   59.807803] ---[ end Kernel panic - not syncing: Fatal exception ]---
+> >
+> >
+> > cki issue tracker: https://datawarehouse.cki-project.org/issue/1470
+> >
+> > [1] https://datawarehouse.cki-project.org/kcidb/tests/4002370
+> > [2] http://s3.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/06/20/568171088/redhat:568171088/redhat:568171088_x86_64_debug/.config
+> >
+> > Thanks,
+> > Bruno Goncalves
+> >
+>
 

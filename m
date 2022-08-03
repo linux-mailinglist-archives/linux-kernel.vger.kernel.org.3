@@ -2,169 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2EC58862E
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB35C588633
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiHCELg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S235306AbiHCEM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiHCELb (ORCPT
+        with ESMTP id S235340AbiHCEMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:11:31 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B51D0DA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:11:29 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220803041127epoutp0445031a1320257686a5e2871fd33bb11b~HulrzoNLE3086430864epoutp04y
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:11:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220803041127epoutp0445031a1320257686a5e2871fd33bb11b~HulrzoNLE3086430864epoutp04y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1659499887;
-        bh=nk0HgHTb3YmPbS1gAOn05D8FZD3X0XhQ93Vr7Llg3x0=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=mfyPa+F3D0uLTFIE3/dpTjOqq4vVvtzcTBTIc8mYzuoJfO/LL5djTo4UVN7I46DlV
-         aq9AyTS6sqoeaLUbnQTctCgOsqP0RwAE6ssmjlPf1WbxQ+VqWytjQhqd/aeewebRUq
-         p/OoE1wdg972zniPLa8B5aI9G0KqfufBAjtQZcEk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220803041127epcas2p1f1aaebfc58c526c02d20a35f053e16f8~HulrXhzgs1348113481epcas2p1F;
-        Wed,  3 Aug 2022 04:11:27 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.99]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4LyJML3nTkz4x9Q1; Wed,  3 Aug
-        2022 04:11:26 +0000 (GMT)
-X-AuditID: b6c32a47-5e1ff700000025aa-6e-62e9f56e9d65
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.AD.09642.E65F9E26; Wed,  3 Aug 2022 13:11:26 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v6 5/6] scsi: ufs: wb: Modify messages
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Stanley Chu <chu.stanley@gmail.com>
-CC:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220803041126epcms2p82bafb63e4f135d09017519ed3066f914@epcms2p8>
-Date:   Wed, 03 Aug 2022 13:11:26 +0900
-X-CMS-MailID: 20220803041126epcms2p82bafb63e4f135d09017519ed3066f914
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmuW7e15dJBj82y1icfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBZfLu5ntnh5SNNi0Y1tTBaXd81hs+i+voPNYvnxf0wO3B6Xr3h7
-        7Jx1l91j8Z6XTB4TFh1g9Pi+voPN4+PTWywefVtWMXp83iTn0X6gmymAMyrbJiM1MSW1SCE1
-        Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoWCWFssScUqBQQGJxsZK+
-        nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsaBT7OZCqaIVFw4
-        P4O1gXEqfxcjB4eEgInExefZXYxcHEICOxglWl9OZgGJ8woISvzdIdzFyMkhLGArca//OSuI
-        LSSgJHFuzSxGkBJhAQOJW73mIGE2AT2Jn0tmsIHYIgLqEkf2HmcDGckscJZZ4t+UL2C9EgK8
-        EjPan7JA2NIS25dvZQSxOQUCJab8msgMEdeQ+LGsF8oWlbi5+i07jP3+2HxGCFtEovXeWaga
-        QYkHP3dDxSUlDh36ygbxVr7EhgOBEOEaibfLD0CV6Etc69gIdgKvgK/EkdlzwcazCKhKzFv2
-        HGqVi8T6hzfBxjMLyEtsfzuHGWQks4CmxPpd+hDTlSWO3GKBeaph4292dDazAJ9Ex+G/cPEd
-        854wQbSqSSxqMprAqDwLEcqzkKyahbBqASPzKkax1ILi3PTUYqMCY3i8JufnbmIEJ1kt9x2M
-        M95+0DvEyMTBeIhRgoNZSYT3jsvzJCHelMTKqtSi/Pii0pzU4kOMpkBPTmSWEk3OB6b5vJJ4
-        QxNLAxMzM0NzI1MDcyVxXq+UDYlCAumJJanZqakFqUUwfUwcnFINTItdfDe9nBwrkznhSt1B
-        BuGiJVyP82Ra9y1bb6Zzg8nV4u6vTw6WtUd/e2p/+ROaa9Lz3csgqOyXgqzDzB8RC/pZo6aG
-        FT1ed+p8wePNb0/4Hjvd9e7tnPcH7j53NvA6MJuje9sh7dD151y/FJ8LddzKlPOs7P1SWVe9
-        4Gs3nwhsWLWp5C9vuTTTOaZPlz1mS6v3psuejvoodb6Bb7r+mpfO3185OLVYxE05lP4pxPBc
-        W0/vjfzY07UTgtdsei/ZNntHVMWVBr/z8T2GYl9OVzfeWs37ZZtdwZl3cacfzZzbHsmyKWXJ
-        uV5e10Nnzi+/lf5yTn1wDY/1PpnFdqpGqyXuKVVoszx637h4woLwT1uUWIozEg21mIuKEwHn
-        3okyOwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce
-References: <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com>
-        <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
-        <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
-        <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p8>
+        Wed, 3 Aug 2022 00:12:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0327169
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659499970; x=1691035970;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9oX+onP7ht9HH5c0vbwg203y/Tb7RxzqJrlpcQeSffE=;
+  b=hvNjgwFWQ4t8bQzF8srAIQTDyqNot1pGhRoOh7vMNCPGGBd3t1P4uzqr
+   Hd8LHrgUy2cqlOdGCXEQoqGAJvtVsX2PdpgGLZZWim4Xqv9li73MZwzWM
+   nYuZHwa0zZGeUqf/h1ocwZp3wz3Jbf25el2iGiCFmGncvUsd/xZKuuJ5b
+   uCLpwjGpsgRAYjF8yCWT7nbcH0iEW8iljCzeizQp9HyiewLYs6PSh9GRW
+   QhlHszFrTlvE5CYWlrR8rDVmVZzxuHs4dGNd5eMNpoNUjURT5pXUNDpsR
+   6lZUnonRGXQuppSgkFVLNpsMOYxqqHRYNhiSqSo9uU363dYxdMIETGmyA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="288333949"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="288333949"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2022 21:12:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="930230395"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Aug 2022 21:12:48 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ5kV-000Go9-2h;
+        Wed, 03 Aug 2022 04:12:47 +0000
+Date:   Wed, 3 Aug 2022 12:11:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dongjin Kim <tobetter@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [tobetter:odroid-5.19.y 51/99] drivers/gpu/drm/drm_mipi_dbi.c:77:17:
+ warning: unused variable 'mipi_dbi_dcs_read_commands'
+Message-ID: <202208031219.1wtTDs54-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Stanley,
+Hi Dongjin,
 
->Hi,
->
->On Tue, Aug 2, 2022 at 4:29 PM Jinyoung CHOI <j-young.choi@samsung.com> wrote:
->>
->> Messages are modified to fit the format of others.
->>
->> Reviewed-by: Avri Altman <avri.altman@wdc.com>
->> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
->> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
->> ---
->>  drivers/ufs/core/ufs-sysfs.c |  2 +-
->>  drivers/ufs/core/ufshcd.c    | 23 +++++++++++------------
->>  2 files changed, 12 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
->> index 2c0b7f45de4b..117272cf7d61 100644
->> --- a/drivers/ufs/core/ufs-sysfs.c
->> +++ b/drivers/ufs/core/ufs-sysfs.c
->> @@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
->>                  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
->>                  * on/off will be done while clock scaling up/down.
->>                  */
->> -               dev_warn(dev, "To control WB through wb_on is not allowed!\n");
->> +               dev_warn(dev, "It is not allowed to configure WB!\n");
->>                 return -EOPNOTSUPP;
->>         }
->>
->> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
->> index 5099d161f115..dcd7f03db2a2 100644
->> --- a/drivers/ufs/core/ufshcd.c
->> +++ b/drivers/ufs/core/ufshcd.c
->> @@ -5737,13 +5737,13 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
->>
->>         ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
->>         if (ret) {
->> -               dev_err(hba->dev, "%s Write Booster %s failed %d\n",
->> -                       __func__, enable ? "enable" : "disable", ret);
->> +               dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
->> +                       __func__, enable ? "enabling" : "disabling", ret);
->>                 return ret;
->>         }
->>
->>         hba->dev_info.wb_enabled = enable;
->> -       dev_info(hba->dev, "%s Write Booster %s\n",
->> +       dev_info(hba->dev, "%s: Write Booster %s\n",
->>                         __func__, enable ? "enabled" : "disabled");
->
->You need to rebase this patch to follow the latest change as
->https://lore.kernel.org/all/20220709000027.3929970-1-bjorn.andersson@linaro.org/
+First bad commit (maybe != root cause):
 
-I am currently working on the latest 5.20/scsi-staging.
-In this case, can I refer the commit of 5.19/scsi-fixes 
-and add commit to 5.20/scsi-staging?
-Or can I reflect it in my change?
-I have no experience, so please guide. :)
+tree:   https://github.com/tobetter/linux odroid-5.19.y
+head:   7df5baf82efb498c71096e60e58d2bba6f4fb0e1
+commit: 909850898b8e826a9df13be97cf03b0d01cf4b1b [51/99] ODROID-COMMON: gpu/drm: Add new Tiny DRM driver with Ili9488
+config: s390-randconfig-c005-20220802 (https://download.01.org/0day-ci/archive/20220803/202208031219.1wtTDs54-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/tobetter/linux/commit/909850898b8e826a9df13be97cf03b0d01cf4b1b
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.19.y
+        git checkout 909850898b8e826a9df13be97cf03b0d01cf4b1b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/
 
-Thank you for checking.
-Jinyoung.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/drm_mipi_dbi.c:13:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/drm_mipi_dbi.c:13:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/gpu/drm/drm_mipi_dbi.c:13:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/drm_mipi_dbi.c:77:17: warning: unused variable 'mipi_dbi_dcs_read_commands' [-Wunused-const-variable]
+   static const u8 mipi_dbi_dcs_read_commands[] = {
+                   ^
+   13 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
+   Selected by [y]:
+   - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=y] || QCOM_LLCC [=y]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
 
 
+vim +/mipi_dbi_dcs_read_commands +77 drivers/gpu/drm/drm_mipi_dbi.c
 
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   76  
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22  @77  static const u8 mipi_dbi_dcs_read_commands[] = {
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   78  	MIPI_DCS_GET_DISPLAY_ID,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   79  	MIPI_DCS_GET_RED_CHANNEL,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   80  	MIPI_DCS_GET_GREEN_CHANNEL,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   81  	MIPI_DCS_GET_BLUE_CHANNEL,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   82  	MIPI_DCS_GET_DISPLAY_STATUS,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   83  	MIPI_DCS_GET_POWER_MODE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   84  	MIPI_DCS_GET_ADDRESS_MODE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   85  	MIPI_DCS_GET_PIXEL_FORMAT,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   86  	MIPI_DCS_GET_DISPLAY_MODE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   87  	MIPI_DCS_GET_SIGNAL_MODE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   88  	MIPI_DCS_GET_DIAGNOSTIC_RESULT,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   89  	MIPI_DCS_READ_MEMORY_START,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   90  	MIPI_DCS_READ_MEMORY_CONTINUE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   91  	MIPI_DCS_GET_SCANLINE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   92  	MIPI_DCS_GET_DISPLAY_BRIGHTNESS,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   93  	MIPI_DCS_GET_CONTROL_DISPLAY,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   94  	MIPI_DCS_GET_POWER_SAVE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   95  	MIPI_DCS_GET_CABC_MIN_BRIGHTNESS,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   96  	MIPI_DCS_READ_DDB_START,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   97  	MIPI_DCS_READ_DDB_CONTINUE,
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   98  	0, /* sentinel */
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22   99  };
+02dd95fe3169362 drivers/gpu/drm/tinydrm/mipi-dbi.c Noralf Trønnes 2017-01-22  100  
+
+:::::: The code at line 77 was first introduced by commit
+:::::: 02dd95fe316936269a52d6ccb971bb956412b40a drm/tinydrm: Add MIPI DBI support
+
+:::::: TO: Noralf Trønnes <noralf@tronnes.org>
+:::::: CC: Noralf Trønnes <noralf@tronnes.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

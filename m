@@ -2,106 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C9358888A
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD26588891
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiHCIPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S235123AbiHCIQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiHCIPf (ORCPT
+        with ESMTP id S237435AbiHCIP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:15:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BFE60D0
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:15:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 558AD1FED9;
-        Wed,  3 Aug 2022 08:15:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659514532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aluuMVa/fjoydrBodCTg8q62SCW5RTs+YXF3mxxkRS4=;
-        b=cWT3eTB9Y9vn1CONW64FqYinNeGYVTE3BryGQqVng0wVg7LOBtK03YpuqkkN8HZAw/3667
-        jprj3Ljl8tKOupGlPzHVrMY0LMnWiwfMCLoFPf309N/9TC6ToIFULSiejDj/eniZLu7KuF
-        7lcrYa47rNBVzvonJ52a00iF2b+4Ruk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659514532;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aluuMVa/fjoydrBodCTg8q62SCW5RTs+YXF3mxxkRS4=;
-        b=DdGJA6e9cbQxNXTW+KT0sh0zqj4KZeC6CM9LshXwnB8bWDN6FDxhZx/sbp0Vd39gLm4awp
-        1lF/UJPTnbyY0pAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 373D813AD8;
-        Wed,  3 Aug 2022 08:15:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yvjIDKQu6mIYYwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 03 Aug 2022 08:15:32 +0000
-Message-ID: <6ac42cd6-9f93-e80c-0bd3-d0c9439cf327@suse.cz>
-Date:   Wed, 3 Aug 2022 10:15:31 +0200
+        Wed, 3 Aug 2022 04:15:59 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6AB60E2
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659514558; x=1691050558;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FXwmgyslZZE5b28VYrKrk9yKDHO6M7WRyutjjaxjhcA=;
+  b=kVza93VKGnQJLxo/wJU8iK0cGSfQnGIJP8+nG2zI+SZUoPGIl99EanIA
+   4SJPKm4valSjbxNGIc6O91D3UMRnAgl2ROkjYIrT6R3jKzKRMCA8WLoV5
+   KTze/mJKfBreVn+HiXksByHpxDUcpyvKQqulE9QQAlJTOvgwBJ9gF8xn9
+   /cZjtSLVAdpW9XfzMBTVFRUBgLnl0cL9AOQrhKikulXcWCiL5pxxZbjcq
+   q2sHy4ZkqJqOx5DIh91mBCMGlFydzZ6gyB/5u8oXPukO2fYvOEvnub1I5
+   LrErMNbxWqGnIAF2Y3HhOJcQuiuo9tmfp9iEQJZcBMr+PCNv1UX++ADly
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353619615"
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="353619615"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 01:15:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
+   d="scan'208";a="848500924"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 01:15:57 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oJ9Xo-000H2F-1Y;
+        Wed, 03 Aug 2022 08:15:56 +0000
+Date:   Wed, 03 Aug 2022 16:15:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ d171011e6adad135eaced630dce26cac9a174037
+Message-ID: <62ea2eaa.l7o3D6IbdFLnGN3r%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm/page_alloc: only search higher order when fallback
-Content-Language: en-US
-To:     Abel Wu <wuyun.abel@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220803025121.47018-1-wuyun.abel@bytedance.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220803025121.47018-1-wuyun.abel@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 04:51, Abel Wu wrote:
-> It seems unnecessary to search pages with order < alloc_order in
-> fallback allocation.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: d171011e6adad135eaced630dce26cac9a174037  selftests: futex: Fix 'the the' typo in comment
 
-This can currently happen with ALLOC_NOFRAGMENT and alloc_order >
-pageblock_order, so add a test to prevent it.
+elapsed time: 717m
 
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+configs tested: 53
+configs skipped: 2
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> ---
->  mm/page_alloc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e008a3df0485..0abafc2fc3e0 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -2934,7 +2934,7 @@ __rmqueue_fallback(struct zone *zone, int order, int start_migratetype,
->  	 * i.e. orders < pageblock_order. If there are no local zones free,
->  	 * the zonelists will be reiterated without ALLOC_NOFRAGMENT.
->  	 */
-> -	if (alloc_flags & ALLOC_NOFRAGMENT)
-> +	if (order < pageblock_order && alloc_flags & ALLOC_NOFRAGMENT)
->  		min_order = pageblock_order;
->  
->  	/*
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+i386                                defconfig
+x86_64                           allyesconfig
+arc                  randconfig-r043-20220801
+i386                             allyesconfig
+powerpc                           allnoconfig
+s390                 randconfig-r044-20220801
+riscv                randconfig-r042-20220801
+powerpc                          allmodconfig
+x86_64               randconfig-a014-20220801
+arm                                 defconfig
+x86_64               randconfig-a015-20220801
+sh                               allmodconfig
+x86_64               randconfig-a011-20220801
+mips                             allyesconfig
+x86_64               randconfig-a012-20220801
+arm64                            allyesconfig
+arm                              allyesconfig
+x86_64               randconfig-a013-20220801
+x86_64               randconfig-a016-20220801
+m68k                             allmodconfig
+arc                              allyesconfig
+i386                 randconfig-a012-20220801
+alpha                            allyesconfig
+i386                 randconfig-a013-20220801
+i386                 randconfig-a014-20220801
+i386                 randconfig-a011-20220801
+i386                 randconfig-a016-20220801
+i386                 randconfig-a015-20220801
+m68k                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+ia64                             allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
 
+clang tested configs:
+hexagon              randconfig-r045-20220801
+hexagon              randconfig-r041-20220801
+i386                 randconfig-a004-20220801
+i386                 randconfig-a006-20220801
+i386                 randconfig-a001-20220801
+i386                 randconfig-a002-20220801
+i386                 randconfig-a003-20220801
+i386                 randconfig-a005-20220801
+x86_64               randconfig-a002-20220801
+x86_64               randconfig-a001-20220801
+x86_64               randconfig-a003-20220801
+x86_64               randconfig-a004-20220801
+x86_64               randconfig-a005-20220801
+x86_64               randconfig-a006-20220801
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5891588A21
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFFB588A1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 12:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbiHCKGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 06:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S237674AbiHCKFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 06:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiHCKGt (ORCPT
+        with ESMTP id S236217AbiHCKFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:06:49 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4D664C6;
-        Wed,  3 Aug 2022 03:06:47 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 273A6Sxb016646;
-        Wed, 3 Aug 2022 19:06:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 273A6Sxb016646
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1659521189;
-        bh=wmOcErEdU+TDtdRRUU4DWlVjpGfT3KCiEB6lg4A7q+8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nzVEfTvVC4k0SeABNbuU4Xy0ENX70LuhMNqIoWlX2awwFzgEdhNzGsI33Ulmtp31w
-         orl2KKEzeKkuZusLBa0lBlkxqpGnO32u5af5Dpdf6Q8FSntELV1EWNlIUfSGt7AAam
-         2eRE+7DicEYeq2IpYDPCrtK+Pin5fXmfplLOleU8HarlDEuzOg3lB6gaw+oa/xRlKt
-         /+MbQabuR9+CZceZF7IEHEP+wCwDmDUB0Fe7FMnrtN298BRTpXM9v1YU5csD06zhKp
-         wvNUvKhmwcX7JPXD1K/Zn2SPtFfJu4Pxpx7eqPi8p7PkeJRIzhT/h6xGRkRSd3/yx7
-         71X9NspaeuVLw==
-X-Nifty-SrcIP: [209.85.128.49]
-Received: by mail-wm1-f49.google.com with SMTP id c22so8449362wmr.2;
-        Wed, 03 Aug 2022 03:06:29 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0xnwJpauz3INEd8slSbUJfVRIkrlDe+wA4BqpSfwg1nEeueTjr
-        PfZZuOCKfo4XqRY6KUHbemeioWxOyFBn1vGpTt4=
-X-Google-Smtp-Source: AA6agR5YxxFZ2fNQSoyxT6/q86ZBjZAZ6ZGShjeXN79KJ+JSWZkpKY0XMUBWZfHoRVj7/xkf66qN7E4gJg3Ypb6yGQc=
-X-Received: by 2002:a05:600c:a18e:b0:3a3:10ef:672a with SMTP id
- id14-20020a05600ca18e00b003a310ef672amr2234630wmb.14.1659521188077; Wed, 03
- Aug 2022 03:06:28 -0700 (PDT)
+        Wed, 3 Aug 2022 06:05:37 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D80C65E8
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 03:05:36 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so14688391pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 03:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=C9VGA9sPog0r28l3bCbEGjn4o1fpHQlIN2nhYVLWw/k=;
+        b=F0m9Q1ha0av70aTNZazPL/+nYhOyWG5MFlSFketERp6xdP5CSW0snaik6ZkvSq5eG0
+         ASzhGNd9PIVGQkeOyDWp7E6trgcnW6YQnzCJsnm3/xp4/cnzmdVd84VJmGEcFRvQWDpz
+         Ta3UeNHGrT/OOlpZzTMrvC3yq0QN4Gz6nYpd31UTk6ZF2hht6W0p+Nk2o1oezlGPAetK
+         xyW1x0aBUGYc3eu0LRIoxwxtt1+ihbYAyyZA59IRajKm7mDGFOtGTtonWxbI6xA8i++7
+         4N+tUoCcG83KFeLFJXYlc6vTDa6GT8Qy8XRZbdxAABre6Q42qnRXf9JfN4pH7f02ebqe
+         KlyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=C9VGA9sPog0r28l3bCbEGjn4o1fpHQlIN2nhYVLWw/k=;
+        b=HkGPLJEb9HOnLngb0A4g32rfCp4oudqfHsXaX56TMrmZ3EOjMRaoW1++sx3OJffX1L
+         VxNnEr5mDkbzUO51zBwWcXhzK5JzoZlM2K93SmmuoenyfBta/xLfEQaDs2LarXRa9H4H
+         1+TC0kbDZjtiPZG/eGbLm6zkEZW0mPyWDePE20mDRRuY2v+WfB9bzeU3Qv46oOurVLEX
+         noJvQEZDB+bXntw5ShV8wBJtfkIW4BLiAxsKAJAShF89dM7cyHYkQT5vV8vVK6kD3C1Z
+         HF7d2Y6adorZVXjAXEzZHoV6rGBw6maWAmIJl2rQ1ljpHAl2cZbMlJrN2iktWMSemeGS
+         WhVQ==
+X-Gm-Message-State: ACgBeo2fZDg3qnCFxfZwPX3KHPkEtz6ynfxsIiyPBzitAihyus63spY7
+        NHuxw4geQNJgYfaYlpVsZic=
+X-Google-Smtp-Source: AA6agR6kGDhUSD4pprsK8/LMWUFqIDLfXb2kskwuuEFcf+pw4VJ649BtqcFgbC/w1Qh3CAiRFsQpqA==
+X-Received: by 2002:a05:6a00:1f8b:b0:52d:5b9e:3ecf with SMTP id bg11-20020a056a001f8b00b0052d5b9e3ecfmr14659525pfb.48.1659521135990;
+        Wed, 03 Aug 2022 03:05:35 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w8-20020a1709026f0800b0016dd667d511sm1452653plk.252.2022.08.03.03.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 03:05:35 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.con.cn
+To:     akpm@linux-foundation.org
+Cc:     hughd@google.com, izik.eidus@ravellosystems.com,
+        willy@infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
+        CGEL <cgel.zte@gmail.com>
+Subject: [RFC PATCH 2/4] ksm: implement scan-enhanced algorithm of auto mode
+Date:   Wed,  3 Aug 2022 10:05:30 +0000
+Message-Id: <20220803100530.1653496-1-xu.xin16@zte.con.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220803100306.1653382-1-xu.xin16@zte.con.cn>
+References: <20220803100306.1653382-1-xu.xin16@zte.con.cn>
 MIME-Version: 1.0
-References: <20220730173636.1303357-1-masahiroy@kernel.org> <CAKwvOd=gZc6TKaV1yh4pfbtj26xoQasVw=i+Vq+jOu2dgzFsFA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=gZc6TKaV1yh4pfbtj26xoQasVw=i+Vq+jOu2dgzFsFA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 3 Aug 2022 19:05:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT7ni-nOmhyjPByn=a40a-_D2sgkhvNFpqgHQsPDMm7Tg@mail.gmail.com>
-Message-ID: <CAK7LNAT7ni-nOmhyjPByn=a40a-_D2sgkhvNFpqgHQsPDMm7Tg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] modpost: add array range check to sec_name()
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,82 +73,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 2:55 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Sat, Jul 30, 2022 at 10:37 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > The section index is always positive, so the argunent, secindex, should
-> > be unsigned.
-> >
-> > Also, inserted the array range check.
-> >
-> > If sym->st_shndx is a special section index (between SHN_LORESERVE and
-> > SHN_HIRESERVE), there is no corresponding section header.
-> >
-> > For example, if a symbol specifies an absolute value, sym->st_shndx is
-> > SHN_ABS (=0xfff1).
-> >
-> > The current users do not cause the out-of-range access of
-> > info->sechddrs[], but it is better to avoid such a pitfall.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> I don't mind adding this check; though if it's anomalous I think we
-> could also just print to stderr and abort.
+From: xu xin <xu.xin16@zte.com.cn>
 
+Implement the scan-enhanced algorithm of auto mode. In this algorithm,
+after every time of scanning, if new ksm pages are obtained, it will
+double pages_to_scan for the next scanning until the general
+multiplying factor is not less than max_scanning_factor. If no new ksm
+pages are obtained, then reset pages_to_scan to the default value.
 
-If  sec_name() has a failure path,
-I need to add another check before calling sec_name().
+We add the sysfs klob of max_scanning_factor to limit scanning factor's
+excessive growth.
 
+Signed-off-by: CGEL <cgel.zte@gmail.com>
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+---
+ mm/ksm.c | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 86 insertions(+), 2 deletions(-)
 
-I want to get a return value that can be safely passed
-to strcmp(), etc.
+diff --git a/mm/ksm.c b/mm/ksm.c
+index c80d908221a4..8acc893e4d61 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -131,6 +131,8 @@ struct mm_slot {
+  * @address: the next address inside that to be scanned
+  * @rmap_list: link to the next rmap to be scanned in the rmap_list
+  * @seqnr: count of completed full scans (needed when removing unstable node)
++ * @new_ksmpages_of_this_scanning: count of the new merged KSM pages in the
++ *		current scanning of mm_lists (cleared after ksm_do_scan() ends)
+  *
+  * There is only the one ksm_scan instance of this cursor structure.
+  */
+@@ -139,6 +141,7 @@ struct ksm_scan {
+ 	unsigned long address;
+ 	struct rmap_item **rmap_list;
+ 	unsigned long seqnr;
++	unsigned long new_ksmpages_of_this_scanning;
+ };
+ 
+ /**
+@@ -277,6 +280,20 @@ static unsigned int zero_checksum __read_mostly;
+ /* Whether to merge empty (zeroed) pages with actual zero pages */
+ static bool ksm_use_zero_pages __read_mostly;
+ 
++/*
++ * Work in auto-mode.
++ * Maximum number of multiplicative factor of pages_to_scan.
++ */
++static unsigned int ksm_max_scanning_factor = 32;
++
++/*
++ * Work in auto-mode.
++ * The multiplicative factor of pages_to_scan.
++ * Real pages to scan equals to the product of scanning_factor
++ * and pages_to_scan
++ */
++static unsigned int scanning_factor = 1;
++
+ #ifdef CONFIG_NUMA
+ /* Zeroed when merging across nodes is not allowed */
+ static unsigned int ksm_merge_across_nodes = 1;
+@@ -2031,6 +2048,8 @@ static void stable_tree_append(struct rmap_item *rmap_item,
+ 	rmap_item->address |= STABLE_FLAG;
+ 	hlist_add_head(&rmap_item->hlist, &stable_node->hlist);
+ 
++	ksm_scan.new_ksmpages_of_this_scanning++;
++
+ 	if (rmap_item->hlist.next)
+ 		ksm_pages_sharing++;
+ 	else
+@@ -2396,6 +2415,23 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
+ 	return NULL;
+ }
+ 
++/*
++ * enhance_scanning_factor():
++ * double the values of scanning_factor, but not more than
++ * ksm_max_scanning_factor.
++ */
++static inline void enhance_scanning_factor(void)
++{
++	scanning_factor = scanning_factor << 1;
++	if (scanning_factor > ksm_max_scanning_factor)
++		scanning_factor = ksm_max_scanning_factor;
++}
++
++static inline void reset_scanning_factor(void)
++{
++	scanning_factor = 1;
++}
++
+ /**
+  * ksm_do_scan  - the ksm scanner main worker function.
+  * @scan_npages:  number of pages we want to scan before we return.
+@@ -2432,10 +2468,31 @@ static int ksm_scan_thread(void *nothing)
+ 	while (!kthread_should_stop()) {
+ 		mutex_lock(&ksm_thread_mutex);
+ 		wait_while_offlining();
+-		if (ksmd_should_run())
+-			ksm_do_scan(ksm_thread_pages_to_scan);
++		if (ksmd_should_run()) {
++			if (ksm_run & KSM_RUN_AUTO)
++				ksm_do_scan(ksm_thread_pages_to_scan * scanning_factor);
++			else
++				ksm_do_scan(ksm_thread_pages_to_scan);
++		}
+ 		mutex_unlock(&ksm_thread_mutex);
+ 
++		/*
++		 * If there are new ksm pages after scanning, then we
++		 * can enhance scanning_factor to improve ksm_thread's
++		 * pages_to_scan to speed up scanning. Otherwaise, we
++		 * reset scanning_factor to be one, so that to recover
++		 * the normal state because there is greater probability
++		 * of getting no new KsmPages in the next scanning.
++		 */
++		if (ksm_run & KSM_RUN_AUTO) {
++			if (ksm_scan.new_ksmpages_of_this_scanning > 0)
++				enhance_scanning_factor();
++			else
++				reset_scanning_factor();
++
++			ksm_scan.new_ksmpages_of_this_scanning = 0;
++		}
++
+ 		try_to_freeze();
+ 
+ 		if (ksmd_should_run()) {
+@@ -2952,6 +3009,32 @@ static ssize_t run_store(struct kobject *kobj, struct kobj_attribute *attr,
+ }
+ KSM_ATTR(run);
+ 
++static ssize_t max_scanning_factor_show(struct kobject *kobj,
++						struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", ksm_max_scanning_factor);
++}
++
++static ssize_t max_scanning_factor_store(struct kobject *kobj,
++								struct kobj_attribute *attr,
++								const char *buf, size_t count)
++{
++		unsigned int value;
++		int err;
++
++		err = kstrtouint(buf, 10, &value);
++		if (err)
++			return -EINVAL;
++
++		if (value < 1)
++			return -EINVAL;
++
++		ksm_max_scanning_factor = value;
++
++		return count;
++}
++KSM_ATTR(max_scanning_factor);
++
+ #ifdef CONFIG_NUMA
+ static ssize_t merge_across_nodes_show(struct kobject *kobj,
+ 				       struct kobj_attribute *attr, char *buf)
+@@ -3162,6 +3245,7 @@ static struct attribute *ksm_attrs[] = {
+ 	&sleep_millisecs_attr.attr,
+ 	&pages_to_scan_attr.attr,
+ 	&run_attr.attr,
++	&max_scanning_factor_attr.attr,
+ 	&pages_shared_attr.attr,
+ 	&pages_sharing_attr.attr,
+ 	&pages_unshared_attr.attr,
+-- 
+2.25.1
 
-
-For example,
-
-   strcmp(!sec_name(elf, secindex),  "some_pattern");
-
-
-Returning "" for special sections
-will work nicely without additional check code.
-
-
-
-I am changing the code with a bigger picture in my mind,
-although that may not be so clear if you look at this patch only.
-
-
-
-> I would prefer Elf_Sym over unsigned int though.  WDYT?
->
-
-In /usr/include/elf.h, Elf{32,64}_Sym are structures.
-How to use it instead of unsigned int?
-
-
-typedef struct
-{
-  Elf32_Word    st_name;                /* Symbol name (string tbl index) */
-  Elf32_Addr    st_value;               /* Symbol value */
-  Elf32_Word    st_size;                /* Symbol size */
-  unsigned char st_info;                /* Symbol type and binding */
-  unsigned char st_other;               /* Symbol visibility */
-  Elf32_Section st_shndx;               /* Section index */
-} Elf32_Sym;
-
-typedef struct
-{
-  Elf64_Word    st_name;                /* Symbol name (string tbl index) */
-  unsigned char st_info;                /* Symbol type and binding */
-  unsigned char st_other;               /* Symbol visibility */
-  Elf64_Section st_shndx;               /* Section index */
-  Elf64_Addr    st_value;               /* Symbol value */
-  Elf64_Xword   st_size;                /* Symbol size */
-} Elf64_Sym;
-
-
-
-
-Best Regards
-Masahiro Yamada

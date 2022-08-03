@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03224588B28
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADDA588B2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbiHCL1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S236164AbiHCL3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235289AbiHCL1m (ORCPT
+        with ESMTP id S235935AbiHCL3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:27:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0F1A2B245
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659526060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXCHkKJ3NiqFVPxxjTWcCdeUI1hi1Vc6RuS+UWOjl2A=;
-        b=IKKB6OZsQA1NNKLXpTk4sheuCbO69Z9pu42/195oCnfdHXyA/WCUlMs+GMIK0x8pFhQeWK
-        Zd8dtr41P1ph96P/pZdPC8V0JMh34D9sm4k60s87tqEdOj3kfX04CQ/XW8dJSclqNi7wgq
-        Is6UN2cXS/VHws+7I+wMAyidqE2uUBI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-543-HY_s7UGMPwuYrKGlb2r65w-1; Wed, 03 Aug 2022 07:27:39 -0400
-X-MC-Unique: HY_s7UGMPwuYrKGlb2r65w-1
-Received: by mail-qt1-f199.google.com with SMTP id h6-20020ac87146000000b0033eb4c65676so764225qtp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 04:27:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WXCHkKJ3NiqFVPxxjTWcCdeUI1hi1Vc6RuS+UWOjl2A=;
-        b=10WB7olrP5k25E4mYc8RllDm98aIbO6E3H3CgooCz564QUhqOoINGJFCfscoqB8M12
-         JmaOUXWWcyQ0REz74VvURs1O9J6Ti/kN3AOwTqlpHQWs8bit3HaDlD+qRbnQJCsJ8O8k
-         EL81KmzhOrmt0rjSDXGg6Nyv7ad5t7r3b2PKDFxb0UzzsCpQlBpr3MzHesJpsZemqdaB
-         TaNDtPtpefd3q+yHfcKSBWw+26ZGAFewobBiKuJ13XuoTD+h+RvTonNIhTLDrWEruLl+
-         N6GjGwxO1EbQn9E8wwpyGKDwwx/pgLkrGTd3HeVFYEk3U+wrmYrCSwaC85vnbAZ5ULOn
-         BHGg==
-X-Gm-Message-State: AJIora/w3j6gnVh84j1oqkbGIzyw4niSqNO7itJshS5SqkuT1hPPZl9z
-        n7hJz/R2smm4oVpZrxWrkxCl4rZozEyIzGnuW+3B8S/Pjw7TZcXGDAniIWSj00njA9mL8m7hfBM
-        r5lo64hakw8aRf3X41e0xLBD1
-X-Received: by 2002:a05:620a:29d6:b0:6b5:be51:fcf0 with SMTP id s22-20020a05620a29d600b006b5be51fcf0mr18064239qkp.705.1659526058539;
-        Wed, 03 Aug 2022 04:27:38 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uy36sdA7Sh8aasUy+6BxrbC/DrMuE16xQziCA4OiQcdH+TqUbY9dg+IdQ3r5/Ko0Cx+GqURg==
-X-Received: by 2002:a05:620a:29d6:b0:6b5:be51:fcf0 with SMTP id s22-20020a05620a29d600b006b5be51fcf0mr18064224qkp.705.1659526058324;
-        Wed, 03 Aug 2022 04:27:38 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id fd9-20020a05622a4d0900b00304fe5247bfsm10712589qtb.36.2022.08.03.04.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 04:27:37 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 13:27:32 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, roopa@nvidia.com,
-        eng.alaamohamedsoliman.am@gmail.com, bigeasy@linutronix.de,
-        saeedm@nvidia.com, leon@kernel.org, roid@nvidia.com,
-        maord@nvidia.com, lariel@nvidia.com, vladbu@nvidia.com,
-        cmi@nvidia.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-rdma@vger.kernel.org, nicolas.dichtel@6wind.com,
-        eyal.birger@gmail.com, jesse@nicira.com, linville@tuxdriver.com,
-        daniel@iogearbox.net, hadarh@mellanox.com, ogerlitz@mellanox.com,
-        willemb@google.com, martin.varghese@nokia.com
-Subject: Re: [PATCH v2 net 0/4] Do not use RT_TOS for IPv6 flowlabel
-Message-ID: <20220803112732.GB29408@pc-4.home>
-References: <20220802120935.1363001-1-matthias.may@westermo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802120935.1363001-1-matthias.may@westermo.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 3 Aug 2022 07:29:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB7B357C3;
+        Wed,  3 Aug 2022 04:29:06 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273Awv2w025786;
+        Wed, 3 Aug 2022 11:29:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=apAJC9A1P4zDZZhOp4LM7NtUEQKsAgXOLw893NJkRig=;
+ b=WG/8/is7UNuWpvhyuyOEZK/gSNXF3d5jyBbdX/ywjSoTmndb0jgIFYxAToJHW6D2Nmpb
+ v0/NCDzTdI3j4R5Fn/wy32jUBYN+eBgw2OINBNNm85EWESezz5s1Yiy4we0j2r+Om0kV
+ ArwUXrPrGvHFpyl/x4UVvQMu1FoBl1zSFxacgqOnlj78f/DD25JB2UeEdZAKEhfP0dht
+ UgN0Ta222Mb37bFQPUgFGOzjHwotBBWcfVZciWqe9wsI3ZnvVWFIch6NLaTKjXU3PUTf
+ FRkgKs9cwjFR0chnyxgtBak+ZkqX1w0J9zV7MTqS/L+2br667Nv7s1EUiOdIDbEzfn69 kQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hqev411ur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Aug 2022 11:29:03 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 273BSwMC023584;
+        Wed, 3 Aug 2022 11:28:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3hmwqkd7d8-1;
+        Wed, 03 Aug 2022 11:28:58 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 273BSwsL023564;
+        Wed, 3 Aug 2022 11:28:58 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.37])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 273BSwfH023559;
+        Wed, 03 Aug 2022 11:28:58 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id 6E16141BE; Wed,  3 Aug 2022 16:58:57 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Subject: [PATCH v5 0/3] PCI: Restrict pci transactions after pci suspend
+Date:   Wed,  3 Aug 2022 16:58:51 +0530
+Message-Id: <1659526134-22978-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4It0i_2UFOMb7dbzcS1xEfH7a397He8Z
+X-Proofpoint-ORIG-GUID: 4It0i_2UFOMb7dbzcS1xEfH7a397He8Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 spamscore=0 adultscore=0 phishscore=0 bulkscore=0
+ mlxlogscore=788 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208030050
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 02:09:31PM +0200, Matthias May wrote:
-> According to Guillaume Nault RT_TOS should never be used for IPv6.
-> 
-> Quote:
-> RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-> the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-> code, although, given the current state of the code, most of the
-> existing calls have no consequence.
-> 
-> But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-> field to be interpreted the RFC 1349 way. There's no historical
-> compatibility to worry about.
+If the endpoint device state is D0 and irq's are not freed, then
+kernel try to mask interrupts in system suspend path by writing in to
+the vector table (for MSIX interrupts) and config space (for MSI's).
 
-Apart from the not so informative commit messages, I'm fine with this
-series. Please keep my acked-by on all patches if you send a v3.
+These transactions are initiated in the pm suspend after pcie clocks got
+disabled as part of platform driver pm  suspend call. Due to it, these
+transactions are resulting in un-clocked access and eventually to crashes.
 
-Thanks again for fixing this.
+So added a logic in qcom driver to restrict these unclocked access.
+And updated the logic to check the link state before masking
+or unmasking the interrupts.
 
-Acked-by: Guillaume Nault <gnault@redhat.com>
+And some devices are taking time to settle the link in L1ss, so added a
+retry logic in the suspend ops.
 
-> ---
-> v1 -> v2:
->  - Fix spacing of "Fixes" tag.
->  - Add missing CCs
-> 
-> Matthias May (4):
->   geneve: do not use RT_TOS for IPv6 flowlabel
->   vxlan: do not use RT_TOS for IPv6 flowlabel
->   mlx5: do not use RT_TOS for IPv6 flowlabel
->   ipv6: do not use RT_TOS for IPv6 flowlabel
-> 
->  drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c | 4 ++--
->  drivers/net/geneve.c                                | 3 +--
->  drivers/net/vxlan/vxlan_core.c                      | 2 +-
->  net/ipv6/ip6_output.c                               | 3 +--
->  4 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+Krishna chaitanya chundru (3):
+  PCI: qcom: Add system PM support
+  PCI: qcom: Restrict pci transactions after pci suspend
+  PCI: qcom: Add retry logic for link to be stable in L1ss
+
+ drivers/pci/controller/dwc/pcie-designware-host.c |  14 ++-
+ drivers/pci/controller/dwc/pcie-qcom.c            | 117 +++++++++++++++++++++-
+ 2 files changed, 127 insertions(+), 4 deletions(-)
+
+-- 
+2.7.4
 

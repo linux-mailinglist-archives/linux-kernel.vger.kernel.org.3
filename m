@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149CF5887D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A265887E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiHCHUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S234619AbiHCH1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbiHCHUR (ORCPT
+        with ESMTP id S230166AbiHCH1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:20:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5735F264B
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:20:16 -0700 (PDT)
+        Wed, 3 Aug 2022 03:27:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F84F1AF1F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:27:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E861A61517
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54930C433D6;
-        Wed,  3 Aug 2022 07:20:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50BEDB82187
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0839BC433D6;
+        Wed,  3 Aug 2022 07:27:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659511215;
-        bh=8V1+O6tpf7JZgcnyYVZj42/dq24jisoCqFMvzapxHQI=;
+        s=k20201202; t=1659511626;
+        bh=yxRVrPG4pfs4jICW8GbmfhqXjuq37OE2L2tZb3nRfPQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O68PkUMwhkTqY+YWcymrBSP7EsvcKweWdR1THR6k7BSdNHCFcvovq8PH0pkxGh79e
-         PnFxTTtRBg0ukAPy3pmbkywE2BHH1lR3fOEd95Cn3mCZEbTMs7vYRJzSdmrQol9uQI
-         7Lpt7BHd8p7NAzOMgyHiJ7ufUDyf/CDkiqkNFjFjKj53qP9nbxVKMp1qwpzMDQ06Ff
-         p++h12WVTTk7GE6ozPsvumiyufbnmrPP5Fe3eqBgjv6OAWVKHv7x46hl39HH378G2E
-         Ex+dCkv2DSlAfYVRS2VFqwIvBT9ZCpQ8CKaTKdBBRgEhMg5fJ4WkDwdWZ5PkeinzU6
-         tmRpM4gS7pDjg==
+        b=AOeEAqRapUDchZqY7nr7uHic2mkrUNpZ7u+xgm/QQGBfx5AXpwks6H8Vcmah3zxb5
+         hs813xkZPdITwKVnKjy2Ju3933FvWBpBvYv6vHzMMjgc2AiwLIh/3a4Hu3mtnn48ES
+         T1XGsUD7jwRe7hhF+OhGhuEFu/EEYV0UJzcseggBAPSFpzp9IuZUh5js0t4H9C/i2C
+         VJYoO6K8sN7PcBJmCqlIHYKb+7KZ0nqwnxej8IQtNBOiUIPX7QzrpVtS5xCYmYP/qo
+         oVQr/BTvbiTgE74DPbL1gNzkJE0pSuZNcnjAMbAz4BTFOwiZ0w7rv/lfeC8/FD+2jS
+         +vS9tz9HEjAUg==
 Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oJ8ft-000gmz-5p;
-        Wed, 03 Aug 2022 08:20:13 +0100
-Date:   Wed, 03 Aug 2022 08:20:14 +0100
-Message-ID: <87r11xbxox.wl-maz@kernel.org>
+        id 1oJ8mW-000gpy-3Y;
+        Wed, 03 Aug 2022 08:27:04 +0100
+Date:   Wed, 03 Aug 2022 08:27:05 +0100
+Message-ID: <87pmhhbxdi.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 1/2] irqchip/loongson-eiointc: Check hwirq overflow
-In-Reply-To: <20220803042728.3230346-1-chenhuacai@loongson.cn>
-References: <20220803042728.3230346-1-chenhuacai@loongson.cn>
+To:     kernel test robot <lkp@intel.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: Re: drivers/irqchip/irq-loongson-eiointc.c:289:20: warning: no previous prototype for 'acpi_get_vec_parent'
+In-Reply-To: <202208030600.u3ehRjUE-lkp@intel.com>
+References: <202208030600.u3ehRjUE-lkp@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Rcpt-To: lkp@intel.com, chenhuacai@loongson.cn, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, lvjianmin@loongson.cn
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,37 +66,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 03 Aug 2022 05:27:27 +0100,
-Huacai Chen <chenhuacai@loongson.cn> wrote:
+On Wed, 03 Aug 2022 00:02:04 +0100,
+kernel test robot <lkp@intel.com> wrote:
 > 
-> Check hwirq overflow when allocate irq in eiointc domain.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   c1dbe9a1c86da098a29dcdca1a67b65e2de7ec3a
+> commit: dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7 irqchip: Add Loongson Extended I/O interrupt controller support
+> date:   2 weeks ago
+> config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220803/202208030600.u3ehRjUE-lkp@intel.com/config)
+> compiler: loongarch64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout dd281e1a1a937ee2f13bd0db5be78e5f5b811ca7
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/irqchip/ drivers/platform/surface/aggregator/
 > 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/irqchip/irq-loongson-eiointc.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> index 80d8ca6f2d46..f8060e58ee06 100644
-> --- a/drivers/irqchip/irq-loongson-eiointc.c
-> +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -241,8 +241,11 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
->  	struct eiointc *priv = domain->host_data;
->  
->  	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
-> -	if (ret)
-> -		return ret;
-> +	if (ret < 0)
-> +		return -EINVAL;
-> +
-> +	if (hwirq >= IOCSR_EXTIOI_VECTOR_NUM)
-> +		return -EINVAL;
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/irqchip/irq-loongson-eiointc.c:289:20: warning: no previous prototype for 'acpi_get_vec_parent' [-Wmissing-prototypes]
+>      289 | struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+>          |                    ^~~~~~~~~~~~~~~~~~~
+> 
+> 
+> vim +/acpi_get_vec_parent +289 drivers/irqchip/irq-loongson-eiointc.c
+> 
+>    288	
+>  > 289	struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group *vec_group)
+>    290	{
+>    291		int i;
+>    292	
+>    293		for (i = 0; i < MAX_IO_PICS; i++) {
+>    294			if (node == vec_group[i].node)
+>    295				return vec_group[i].parent;
+>    296		}
+>    297		return NULL;
+>    298	}
+>    299	
 
-How can this happen? Also, you're allocating a *range*. Surely the
-upper boundary should matter too?
+Huacan, Jiamin,
 
-And for the umpteenth time, please add a cover letter when sending
-multiple patches. This is a hard requirement for me.
+There is a bunch of these failures:
+
+- 202208021528.FiUMZ8BX-lkp@intel.com
+- 202208021521.Z3FSeLUl-lkp@intel.com
+- 202208022031.9hRlPwUl-lkp@intel.com
+- 202208020817.G8vpKIfp-lkp@intel.com
+
+Please investigate them, as LoongArch is so far the largest offender
+in the irqchip tree.
 
 Thanks,
 

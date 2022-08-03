@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B3758870F
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C70588712
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 07:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiHCF4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 01:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S234455AbiHCF5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 01:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbiHCF41 (ORCPT
+        with ESMTP id S229789AbiHCF5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 01:56:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5153BDFDA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 22:56:25 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJ7Md-0008G4-Fm; Wed, 03 Aug 2022 07:56:15 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oJ7MQ-0000Ia-QS; Wed, 03 Aug 2022 07:56:02 +0200
-Date:   Wed, 3 Aug 2022 07:56:02 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-Message-ID: <20220803055602.b5x7ekgm54x45r5n@pengutronix.de>
-References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
- <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de>
- <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de>
- <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+        Wed, 3 Aug 2022 01:57:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07B52E01E
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 22:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659506252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=syL/2eT8W871dMcS7JXPVuHY+ucOOO9cLIJgDqnS+3w=;
+        b=hSwqls5+kpKUxfYEqTxh8BhKdy+kiYWA3KoHjKW6sQsWiXiTs/luj2pKVt8ozWQwqHQzzQ
+        odn9Eg0hFqDlHUGSFLrMyySy6zViyrOOZmSBu3ddGmgEA2DqymmHqPb9O+7AzftxLA7zMq
+        AVXml/xZ8F4kmWrfWOlHTLhMRD1qOb0=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-482-Y_lb_pEMP9q16nJQsWFPMQ-1; Wed, 03 Aug 2022 01:57:30 -0400
+X-MC-Unique: Y_lb_pEMP9q16nJQsWFPMQ-1
+Received: by mail-qt1-f199.google.com with SMTP id hf13-20020a05622a608d00b003214b6b3777so7527373qtb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 22:57:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=syL/2eT8W871dMcS7JXPVuHY+ucOOO9cLIJgDqnS+3w=;
+        b=EzXQfUaUskZxOjABDLQAFcPcXAJxkUNuff2hd5o93EFdmbXDxFvTpOozvjvLR5QuYp
+         l3BC+9kLHa9e2cNL+rZurmFstmRiXBZPbkqD40RnlQX+pefUbgPyS0MRK45JU3JVM+MS
+         9uypeFht4LRpCfM6saR067UKtN0d+dFdws/V/ZWNMxy9dmNDIvIfKwdO1eM8J5h8P4s9
+         ney4FtUAlShtvQ1/JOSIQNxAytYLurkGQ3bOYGtidoDPMZiyJavjy1qhSAU4M31nzn7s
+         uRCKulO3VhN9KocyURVKgvB2lkoBMMc7HC4QE7PATMx8enaAExEBINbx5x72kwCPkQ8u
+         DL9A==
+X-Gm-Message-State: ACgBeo0XL8ROKQPKkX1hItifrF1o9O0KHITpT85/BsXFNtKlRD3fyzwE
+        3+E1d6WT5WF69iiqNdxumIY3hs6fHUDqQbUHtT7j89jY5ySQr2Mr0XhJPr8YVw91s9FRvvU1FIj
+        BGR3VkRDHffAKwF+0I+/JwdEH
+X-Received: by 2002:a05:620a:126e:b0:6b8:e049:ced3 with SMTP id b14-20020a05620a126e00b006b8e049ced3mr2692034qkl.480.1659506250211;
+        Tue, 02 Aug 2022 22:57:30 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7M652KpGiAZvnK7jxc22YqWZgmt/8LElqDQL5jyBtI7LxpkkaZB6bpmgVTEEhbva0N5GhNuQ==
+X-Received: by 2002:a05:620a:126e:b0:6b8:e049:ced3 with SMTP id b14-20020a05620a126e00b006b8e049ced3mr2692013qkl.480.1659506249945;
+        Tue, 02 Aug 2022 22:57:29 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.52.6])
+        by smtp.gmail.com with ESMTPSA id ca21-20020a05622a1f1500b0031eb51dd72csm10410853qtb.85.2022.08.02.22.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 22:57:29 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 07:57:21 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched, cpuset: Fix dl_cpu_busy() panic due to empty
+ cs->cpus_allowed
+Message-ID: <YuoOQRiZH4R0UZ6q@localhost.localdomain>
+References: <20220803015451.2219567-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220803015451.2219567-1-longman@redhat.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+Hi,
 
-sorry for the delay.
-
-On 22-08-02, Adam Ford wrote:
-
-...
-
-> > > I think that the most important one is the blanking calc. Can you try to
-> > > revert "drm/bridge: adv7511: Repair bus_flags and bus_format" and check
-> > > if you can get a output still? Also something to try would be to disable
-> > > the internal timing generator by specifying
-> > > 'adi,disable-timing-generator'. Also if you have an oscilloscope for
+On 02/08/22 21:54, Waiman Long wrote:
+> With cgroup v2, the cpuset's cpus_allowed mask can be empty indicating
+> that the cpuset will just use the effective cpus of its parent. So
+> cpuset_can_attach() can call task_can_attach() with an empty mask.
+> This can lead to cpumask_any_and() returns nr_cpu_ids causing the call
+> to dl_bw_of() to crash due to percpu value access of an out of bound
+> cpu value. For example,
 > 
-> I did some reading about the internal timing generator.  It appears
-> that it's required when video formats use fractional bytes, and it's
-> preconfigured to run at 720p by default, but registers 28h through 37h
-> configure it for other video modes.
+> [80468.182258] BUG: unable to handle page fault for address: ffffffff8b6648b0
+>   :
+> [80468.191019] RIP: 0010:dl_cpu_busy+0x30/0x2b0
+>   :
+> [80468.207946] Call Trace:
+> [80468.208947]  cpuset_can_attach+0xa0/0x140
+> [80468.209953]  cgroup_migrate_execute+0x8c/0x490
+> [80468.210931]  cgroup_update_dfl_csses+0x254/0x270
+> [80468.211898]  cgroup_subtree_control_write+0x322/0x400
+> [80468.212854]  kernfs_fop_write_iter+0x11c/0x1b0
+> [80468.213777]  new_sync_write+0x11f/0x1b0
+> [80468.214689]  vfs_write+0x1eb/0x280
+> [80468.215592]  ksys_write+0x5f/0xe0
+> [80468.216463]  do_syscall_64+0x5c/0x80
+> [80468.224287]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Fix that by using effective_cpus instead. For cgroup v1, effective_cpus
+> is the same as cpus_allowed. For v2, effective_cpus is the real cpumask
+> to be used by tasks within the cpuset anyway.
+> 
+> Also update task_can_attach()'s 2nd argument name to cs_effective_cpus to
+> reflect the change. In addition, a check is added to task_can_attach()
+> to guard against the possibility that cpumask_any_and() may return a
+> value >= nr_cpu_ids.
+> 
+> Fixes: 7f51412a415d ("sched/deadline: Fix bandwidth check/update when migrating tasks between exclusive cpusets")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
 
-I thought this timing generator can detect the sync timing
-automatically. Also I saw some mail discussions where this timing
-generator can trigger missbehaviours. Since we send the sync packages
-from the dsi-host to the ADV, I think it should be possible for the ADV
-to reconstruct the sync signals without the need of the internal timing
-generator.
+Looks good to me. Thanks for looking into it!
 
-> Are you thinking the imx8mm DSI generator would do it better?
+Acked-by: Juri Lelli <juri.lelli@redhat.com>
 
-You mean the porches we are sending?
+Best,
+Juri
 
-Regards,
-  Marco

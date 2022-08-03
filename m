@@ -2,85 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF725887ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0407E5887EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiHCH32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
+        id S235233AbiHCH3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiHCH30 (ORCPT
+        with ESMTP id S230166AbiHCH33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:29:26 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4261AF3C;
-        Wed,  3 Aug 2022 00:29:23 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l22so20487427wrz.7;
-        Wed, 03 Aug 2022 00:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DnwCv3ne7t4VsczDACOd/QZeuOU46Y+vUbACe7h+Vcc=;
-        b=Z9sHp1rQ6UEA5jgNJMBEfObRj9UkraU1s6VGfAtODedoODzmyqMJs74Ou1T5zAFdl/
-         qlvnNMM43doBpGk4tYPtiFceevUd2Kooh4xnSc80aLayidq54YvRiZkrvbN/5Ivzb34D
-         Ju1khvS/beoLsMQjxcLMPukRYK3sjOwroQoqzxErS0ZlNu0A54/+3Kk4CX+hXF19U/Zw
-         vvc36mm9E3bZJFIW8e+eJ4n4Z00djrTvjghQi6wAOE6LlwaKZhIV3CBlh5dankXnRcPK
-         rQ989EL6fWmQT7Z+p//oyV8FipQr8khyVR8x9+oLPYGZaf3AqjSSlm9GQvdcVW8kmi+m
-         4KHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DnwCv3ne7t4VsczDACOd/QZeuOU46Y+vUbACe7h+Vcc=;
-        b=Z8vCkjL3Ya7tVZET/3YFuqLO06OJ/KzIBFMeTCLbMwwQcawfzH0HVFisKZ0jz/IUaw
-         DUu3JOY0coWh4SmdjtOBApn2+fTPD7ER/vUjZEIIy5TLJud+DyyFbtFy7pklRjpXxU4I
-         mwkvJGs/mLqTZ31Htqvo3QlRP7sHvKoAqLo8wVkIGuKj5nJ2RgYsSrWSzcnUR7gonk0P
-         hm5Mbc00vJHIE2P6iJcqwrGEh4knvshV9XyeRVB3F2BToc9wU3oixU2yKMXQTqx+ejqE
-         TOhIgd9NgGkh8qvfNKibpyorVkoR7YQWUMVQhgokl5jt19B4DoKxvv/8GzbNvGiCVmyU
-         XvSw==
-X-Gm-Message-State: ACgBeo3HVC9kFmqx2iOPblM61EGIHlXOVubuUu8QoeZowcTtQRhyrXj0
-        qTVTA3XDknFgYp27yjHuhOo=
-X-Google-Smtp-Source: AA6agR4B4mTSnCya1ay3mFK+wvoTuG8FqPaeL+iK2sTy/kBDZ8JKZSekqB8xHebkI7cpKW3jtLjAGg==
-X-Received: by 2002:a05:6000:887:b0:21e:24a0:f302 with SMTP id ca7-20020a056000088700b0021e24a0f302mr14565311wrb.466.1659511762271;
-        Wed, 03 Aug 2022 00:29:22 -0700 (PDT)
-Received: from ainazi.localnet (p200300d09706d9000384b2cb471c28f8.dip0.t-ipconnect.de. [2003:d0:9706:d900:384:b2cb:471c:28f8])
-        by smtp.gmail.com with ESMTPSA id a5-20020adffb85000000b0021e5cc26dd0sm17176199wrr.62.2022.08.03.00.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 00:29:21 -0700 (PDT)
-From:   Shinjo Park <peremen@gmail.com>
-To:     Rudraksha Gupta <guptarud@gmail.com>
-Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] ARM: dts: qcom: msm8960: add the device node of USB1
-Date:   Wed, 03 Aug 2022 09:29:20 +0200
-Message-ID: <2654048.mvXUDI8C0e@ainazi>
-In-Reply-To: <cbccc7c3-a45e-43d0-50d9-55776579afa1@gmail.com>
-References: <76ed8999-c211-f8ea-c70c-21fddd75a896@linaro.org> <20220730081412.14297-1-peremen@gmail.com> <cbccc7c3-a45e-43d0-50d9-55776579afa1@gmail.com>
+        Wed, 3 Aug 2022 03:29:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2748D1B7B3;
+        Wed,  3 Aug 2022 00:29:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D3676153F;
+        Wed,  3 Aug 2022 07:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789A3C433C1;
+        Wed,  3 Aug 2022 07:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1659511768;
+        bh=1AMumXsn09r0G6qP13M87wEobGRiCzvJnaO+AC6oFEg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aVeEE3DueIb4Bj5GZw5uhZeKCENFX+YQEHnrNxfEKD4RPiA7tkAdsScxQQ63iN2xz
+         r2G2Rsb13P4Ts3kUq0OakUvhvXaB22JrlKU5bntQVpFXRJ8XUt1vtMkN5HHffFVCu/
+         A4ypoZnmH3rK/ky2nGovMHAvj5j/154fZ6kZFZfI=
+Date:   Wed, 3 Aug 2022 09:29:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] binder: fix UAF of ref->proc caused by race condition
+Message-ID: <Yuoj1GVrgtflsYYZ@kroah.com>
+References: <20220801182511.3371447-1-cmllamas@google.com>
+ <Yul9sEAtM+4aGbEg@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yul9sEAtM+4aGbEg@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022=EB=85=84 8=EC=9B=94 2=EC=9D=BC =ED=99=94=EC=9A=94=EC=9D=BC =EC=98=
-=A4=EC=A0=84 7=EC=8B=9C 21=EB=B6=84 54=EC=B4=88 CEST Rudraksha Gupta wrote:
->  > #include <dt-bindings/clock/qcom,lcc-msm8960.h>
->=20
-> Does not apply cleanly to mainline. Please include the above
+On Tue, Aug 02, 2022 at 07:40:32PM +0000, Carlos Llamas wrote:
+> On Mon, Aug 01, 2022 at 06:25:11PM +0000, Carlos Llamas wrote:
+> > A transaction of type BINDER_TYPE_WEAK_HANDLE can fail to increment the
+> > reference for a node. In this case, the target proc normally releases
+> > the failed reference upon close as expected. However, if the target is
+> > dying in parallel the call will race with binder_deferred_release(), so
+> > the target could have released all of its references by now leaving the
+> > cleanup of the new failed reference unhandled.
+> > 
+> > The transaction then ends and the target proc gets released making the
+> > ref->proc now a dangling pointer. Later on, ref->node is closed and we
+> > attempt to take spin_lock(&ref->proc->inner_lock), which leads to the
+> > use-after-free bug reported below. Let's fix this by cleaning up the
+> > failed reference on the spot instead of relying on the target to do so.
+> > 
+> >   ==================================================================
+> >   BUG: KASAN: use-after-free in _raw_spin_lock+0xa8/0x150
+> >   Write of size 4 at addr ffff5ca207094238 by task kworker/1:0/590
+> > 
+> >   CPU: 1 PID: 590 Comm: kworker/1:0 Not tainted 5.19.0-rc8 #10
+> >   Hardware name: linux,dummy-virt (DT)
+> >   Workqueue: events binder_deferred_func
+> >   Call trace:
+> >    dump_backtrace.part.0+0x1d0/0x1e0
+> >    show_stack+0x18/0x70
+> >    dump_stack_lvl+0x68/0x84
+> >    print_report+0x2e4/0x61c
+> >    kasan_report+0xa4/0x110
+> >    kasan_check_range+0xfc/0x1a4
+> >    __kasan_check_write+0x3c/0x50
+> >    _raw_spin_lock+0xa8/0x150
+> >    binder_deferred_func+0x5e0/0x9b0
+> >    process_one_work+0x38c/0x5f0
+> >    worker_thread+0x9c/0x694
+> >    kthread+0x188/0x190
+> >    ret_from_fork+0x10/0x20
+> > 
+> > Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> > ---
+> >  drivers/android/binder.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> > index 362c0deb65f1..9d42afe60180 100644
+> > --- a/drivers/android/binder.c
+> > +++ b/drivers/android/binder.c
+> > @@ -1361,6 +1361,18 @@ static int binder_inc_ref_for_node(struct binder_proc *proc,
+> >  	}
+> >  	ret = binder_inc_ref_olocked(ref, strong, target_list);
+> >  	*rdata = ref->data;
+> > +	if (ret && ref == new_ref) {
+> > +		/*
+> > +		 * Cleanup the failed reference here as the target
+> > +		 * could now be dead and have already released its
+> > +		 * references by now. Calling on the new reference
+> > +		 * with strong=0 and a tmp_refs will not decrement
+> > +		 * the node. The new_ref gets kfree'd below.
+> > +		 */
+> > +		binder_cleanup_ref_olocked(new_ref);
+> > +		ref = NULL;
+> > +	}
+> > +
+> >  	binder_proc_unlock(proc);
+> >  	if (new_ref && ref != new_ref)
+> >  		/*
+> > -- 
+> > 2.37.1.455.g008518b4e5-goog
+> > 
+> 
+> Sorry, I forgot to CC stable. This patch should be applied to all stable
+> kernels starting with 4.14 and higher.
+> 
+> Cc: stable@vger.kernel.org # 4.14+
 
-Will be fixed in the next revision of this patch.
+Thanks, I'll add this when I queue it up after 5.20-rc1 is out.
 
-
+greg k-h

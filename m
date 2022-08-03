@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220AB5886A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6820E5886A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiHCEuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S233698AbiHCExM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiHCEuR (ORCPT
+        with ESMTP id S232456AbiHCExI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:50:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0623F2BEA;
-        Tue,  2 Aug 2022 21:50:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2ED6B82192;
-        Wed,  3 Aug 2022 04:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E3C4C433D7;
-        Wed,  3 Aug 2022 04:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659502213;
-        bh=0n4Gv/LGiTAmPuXcUPXzAPXu9z+BAUuhUK1p1r+ZTww=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VziFniyBOvJn4lb1oEAInkGfWWXesiIUiFdIVmc1tqj4eg2BWGUp4TjdIpQ7Dcptz
-         GxNOXcvmExbvFzcszxtBeeoeXtdTMBZTSHQHTIkDWremOD28o7/dW4PZMF3PG0RszW
-         7FeHENR0IZk3P9HB0/Yk5Q//dvqa/MJyRFjo27/zpJcFGYTpaopFrZj6kVTHoa/saj
-         yVl+rgykotR+M8ng//sg8j2F2uPJVKX5ALw//JdQ6dqxY7NdErgUlH9DQ4aSIjk/3i
-         Vpa1NrvvphapfOpR2fVv38Epavnf14Waw6NMSBQmGWR5MdcCRlsAMqPWo48fv5cC0g
-         LCKHSnRQeGXLg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4544FC43143;
-        Wed,  3 Aug 2022 04:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 3 Aug 2022 00:53:08 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F233457233
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:53:07 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id f5-20020a056e020b4500b002df180f0997so909619ilu.21
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 21:53:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=bT3YULCXKnZc8y+zrRqHabIVdyfiW1cYQ26ZuMNbOJs=;
+        b=zhXu5Pd7wJObR6H3CGL0xNOTg0Cdizy1d0IUaTTnGj4vJ+w414icCMx8HekfW4q+qg
+         vYu1av/oFbPt9JydWrdyvtlfPy6IzcNFzdnq1FwtNd4ZbCEmTXYMhBJaFRVgbPek9V+o
+         MqDf8Fd2xvSVumaOH3CfEB5i0CbrXfqySATMtpSeqMHxv2SSRTV369aMlSmugV+du+PN
+         GC9xwgcLi0o0ZdA5sIGiQpW9G6ksDFgME4StGAHsvSQDVFgLhGHuwlYU4nNgFLylPDa/
+         W4vqjUB0IlgnoWTH2GdCiMG/AQPM8YNlVUMjw/a9RI3jxeLHMpC3hLR8afu72OYsz7Pb
+         SXUg==
+X-Gm-Message-State: ACgBeo39KAJfBprICj0u+z+nlkOJTCYqwdzH8/q6DrAFm8RKsLZYvM6y
+        4gjdeCgMSbtDzYqcVwYn6WW1/c14ydnQU7HZOPiJLyfVBOaK
+X-Google-Smtp-Source: AA6agR7jwtRilJZsNtewGloH//4KZJ9mP2xale2iRjqRKkPPjGUhtEgBUTn8zZV8ELRAlwrLu5JX7a79CQDtjoxVI7nP7gNXowEy
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] doc: sfp-phylink: Fix a broken reference
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165950221327.10470.496233845486035537.git-patchwork-notify@kernel.org>
-Date:   Wed, 03 Aug 2022 04:50:13 +0000
-References: <be3c7e87ca7f027703247eccfe000b8e34805094.1659247114.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <be3c7e87ca7f027703247eccfe000b8e34805094.1659247114.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, linux@armlinux.org.uk,
-        ioana.ciornei@nxp.com, robh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:190b:b0:2de:ba7d:40a9 with SMTP id
+ w11-20020a056e02190b00b002deba7d40a9mr4550902ilu.52.1659502387164; Tue, 02
+ Aug 2022 21:53:07 -0700 (PDT)
+Date:   Tue, 02 Aug 2022 21:53:07 -0700
+In-Reply-To: <CAJfpeguS6Ta9LcGU0A_JkfvPWZup_Ndg+tpvpbzXJuWPNZwGgw@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004a9f7b05e54f0213@google.com>
+Subject: Re: [syzbot] memory leak in cap_inode_getsecurity
+From:   syzbot <syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-On Sun, 31 Jul 2022 07:59:00 +0200 you wrote:
-> The commit in Fixes: has changed a .txt file into a .yaml file. Update the
-> documentation accordingly.
-> 
-> While at it add some `` around some file names to improve the output.
-> 
-> Fixes: 70991f1e6858 ("dt-bindings: net: convert sff,sfp to dtschema")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> 
-> [...]
+Reported-and-tested-by: syzbot+942d5390db2d9624ced8@syzkaller.appspotmail.com
 
-Here is the summary with links:
-  - doc: sfp-phylink: Fix a broken reference
-    https://git.kernel.org/netdev/net-next/c/6f63d04473f2
+Tested on:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+commit:         e2b54210 Merge tag 'flexible-array-transformations-UAP..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c050a2080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f5367bd9b8d9fa72
+dashboard link: https://syzkaller.appspot.com/bug?extid=942d5390db2d9624ced8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17a74536080000
 
-
+Note: testing is done by a robot and is best-effort only.

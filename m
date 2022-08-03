@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F43588F77
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572AD588F7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 17:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbiHCPfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 11:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S236510AbiHCPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 11:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiHCPfo (ORCPT
+        with ESMTP id S235646AbiHCPgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:35:44 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08E613F75;
-        Wed,  3 Aug 2022 08:35:42 -0700 (PDT)
-Received: from [192.168.1.101] (abxi232.neoplus.adsl.tpnet.pl [83.9.2.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 3 Aug 2022 11:36:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8763C13F92;
+        Wed,  3 Aug 2022 08:36:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E29413F751;
-        Wed,  3 Aug 2022 17:35:39 +0200 (CEST)
-Message-ID: <e53cee9d-8eb8-6f8c-4b88-5dedb394a758@somainline.org>
-Date:   Wed, 3 Aug 2022 17:35:39 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24E4E6171D;
+        Wed,  3 Aug 2022 15:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766A8C433C1;
+        Wed,  3 Aug 2022 15:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659540970;
+        bh=wJv8MzMWPy/43LAR/Bf81dgt0Pb1oEPnrqlJGe2lp9k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YcHCSRXZrUTUq7tftRirD+Cp7OJOhB5kkU1MqxhDFHpWBwoyqSRfeeTvG93g3x8Yw
+         rNRca4iRetEkO1KvW93bNXrgkF2g3d8AYFoEuxMmTci8u4IxIy5HwuThJOBf1L19yB
+         Aaj2DERFzIaFxPWBPWPXkM3oZpJGaGyLju18VVMKGbwPFAKj6s+kVJMGuiQZaF1epW
+         TC+KNJpVF/o6O/nd8GLahQEElSv+u6DJhzNIm43QrgLHAjZIvHZgiL9HAbEzTa4bA7
+         fiez1Dvu7ireftrQipIBR8YWq5HPonl3vK0KxFIsrs4T5802UN9Yy6pdQlcH+Q7Ik4
+         HaDu/Zm2U4Pjw==
+Date:   Wed, 3 Aug 2022 08:36:10 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
+Subject: [GIT PULL] iomap: new code for 5.20, part 1
+Message-ID: <YuqV6qB/p69HL3yR@magnolia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/5] ARM: dts: qcom: use GPIO flags for tlmm
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     corbet@lwn.net
-References: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
- <20220802153947.44457-5-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220802153947.44457-5-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,126 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+Please pull this first branch containing new code for iomap for
+5.20.  The most notable change in the first batch is that we no longer
+schedule pages beyond i_size for writeback, preferring instead to let
+truncate deal with those pages.
 
-On 2.08.2022 17:39, Krzysztof Kozlowski wrote:
-> Use respective GPIO_ACTIVE_LOW/HIGH flags for tlmm GPIOs.  Include
-> gpio.h header if this is first usage of that flag.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Next week, there may be a second pull request to remove iomap_writepage
+from the other two filesystems (gfs2/zonefs) that use iomap for buffered
+IO.  This follows in the same vein as the recent removal of writepage
+from XFS, since it hasn't been triggered in a few years; it does nothing
+during direct reclaim; and as far as the people who examined the
+patchset can tell, it's moving the codebase in the right direction.
+However, as it was a late addition to for-next, I'm holding off on that
+section for another week of testing to see if anyone can come up with a
+solid reason for holding off in the meantime.
 
-Konrad
->  arch/arm/boot/dts/qcom-apq8074-dragonboard.dts           | 3 ++-
->  arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi            | 3 ++-
->  arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi            | 4 ++--
->  arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts          | 5 +++--
->  arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts | 2 +-
->  5 files changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-> index 3051a861ff0c..91716298ec5e 100644
-> --- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
-> @@ -1,4 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#include <dt-bindings/gpio/gpio.h>
->  #include "qcom-msm8974.dtsi"
->  #include "qcom-pm8841.dtsi"
->  #include "qcom-pm8941.dtsi"
-> @@ -261,7 +262,7 @@ &sdhc_1 {
->  &sdhc_2 {
->  	status = "okay";
->  
-> -	cd-gpios = <&tlmm 62 0x1>;
-> +	cd-gpios = <&tlmm 62 GPIO_ACTIVE_LOW>;
->  	vmmc-supply = <&pm8941_l21>;
->  	vqmmc-supply = <&pm8941_l13>;
->  
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
-> index 03bb9e1768c4..0505270cf508 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
-> @@ -14,6 +14,7 @@
->   *
->   */
->  
-> +#include <dt-bindings/gpio/gpio.h>
->  #include "qcom-ipq4019.dtsi"
->  
->  / {
-> @@ -72,7 +73,7 @@ spi@78b5000 {
->  			pinctrl-0 = <&spi_0_pins>;
->  			pinctrl-names = "default";
->  			status = "okay";
-> -			cs-gpios = <&tlmm 54 0>;
-> +			cs-gpios = <&tlmm 54 GPIO_ACTIVE_HIGH>;
->  
->  			mx25l25635e@0 {
->  				#address-cells = <1>;
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
-> index 44a9597d8bfd..c2f5222e72de 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi
-> @@ -87,7 +87,7 @@ spi@78b5000 { /* BLSP1 QUP1 */
->  			pinctrl-0 = <&spi_0_pins>;
->  			pinctrl-names = "default";
->  			status = "okay";
-> -			cs-gpios = <&tlmm 12 0>;
-> +			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
->  
->  			flash@0 {
->  				#address-cells = <1>;
-> @@ -100,7 +100,7 @@ flash@0 {
->  
->  		pci@40000000 {
->  			status = "okay";
-> -			perst-gpio = <&tlmm 38 0x1>;
-> +			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
->  		};
->  
->  		qpic-nand@79b0000 {
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
-> index c7a6e77da272..7fc33149060c 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
-> +++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dts
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  // Copyright (c) 2018, The Linux Foundation. All rights reserved.
->  
-> +#include <dt-bindings/gpio/gpio.h>
->  #include "qcom-ipq4019-ap.dk07.1.dtsi"
->  
->  / {
-> @@ -10,7 +11,7 @@ / {
->  	soc {
->  		pci@40000000 {
->  			status = "okay";
-> -			perst-gpio = <&tlmm 38 0x1>;
-> +			perst-gpio = <&tlmm 38 GPIO_ACTIVE_LOW>;
->  		};
->  
->  		spi@78b6000 {
-> @@ -50,7 +51,7 @@ spi@78b5000 {
->  			pinctrl-0 = <&spi_0_pins>;
->  			pinctrl-names = "default";
->  			status = "okay";
-> -			cs-gpios = <&tlmm 12 0>;
-> +			cs-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
->  
->  			flash@0 {
->  				#address-cells = <1>;
-> diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> index ec5d340562b6..6daceaa87802 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> @@ -175,7 +175,7 @@ i2c-gate {
->  			ak8963@f {
->  				compatible = "asahi-kasei,ak8963";
->  				reg = <0x0f>;
-> -				gpios = <&tlmm 67 0>;
-> +				gpios = <&tlmm 67 GPIO_ACTIVE_HIGH>;
->  				vid-supply = <&pm8941_lvs1>;
->  				vdd-supply = <&pm8941_l17>;
->  			};
+As usual, I did a test-merge with upstream master as of a few minutes
+ago, and didn't see any conflicts.  Please let me know if you encounter
+any problems.
+
+--D
+
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
+
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/iomap-5.20-merge-1
+
+for you to fetch changes up to f8189d5d5fbf082786fb91c549f5127f23daec09:
+
+  dax: set did_zero to true when zeroing successfully (2022-06-30 10:05:11 -0700)
+
+----------------------------------------------------------------
+New code for 5.20:
+ - Skip writeback for pages that are completely beyond EOF
+ - Minor code cleanups
+
+----------------------------------------------------------------
+Chris Mason (1):
+      iomap: skip pages past eof in iomap_do_writepage()
+
+Kaixu Xia (2):
+      iomap: set did_zero to true when zeroing successfully
+      dax: set did_zero to true when zeroing successfully
+
+ fs/dax.c               |  4 ++--
+ fs/iomap/buffered-io.c | 15 ++++++++-------
+ 2 files changed, 10 insertions(+), 9 deletions(-)

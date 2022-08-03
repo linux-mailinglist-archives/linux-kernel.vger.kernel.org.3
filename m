@@ -2,145 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48757589282
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9758A589287
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 20:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbiHCS5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 14:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S236188AbiHCS7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 14:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHCS5s (ORCPT
+        with ESMTP id S229765AbiHCS7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:57:48 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051DA33A0E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:57:47 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id uj29so19920469ejc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=/dqFZCHimKdfgJ5h2Hr/dgVrJv3glvLsMO7a64z+Kfw=;
-        b=EVf6K6yS1s/uIkLCTDq/IPckjNF1FRgd+BEcICTHa2dhO1BuQMok9ES/sWfkORPWD9
-         72cZfMHbz0woORa8syTupSGqbMlAQt16vp4Mjcz6+RL2EJNtdOfihZO7wX6ZryjGL/mV
-         kwPnHvH3UEYHQZ7IBtgQmfGVkUXinWJgrYiKM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=/dqFZCHimKdfgJ5h2Hr/dgVrJv3glvLsMO7a64z+Kfw=;
-        b=ht8Muhkb8uY6uOWAglO6LvrvHUUdUBAMYnPfcRkscRv5h1gqktL8OEMo2YwS8dSFyL
-         JbnyqS7TmTcbHwxA2eyBZDk1zm03FIwbkKph/zcPqSFnjT8t0e1VfV1gksYu3c1SVey3
-         BML4Gw7OW0OwaLbSLDYWfihWnKrjZrAf+1R5a83U9gm6FDXKWS9BYfq0AQuiqZs2riw6
-         bn3pGUbWcHlvWTlABqcTKEVMv66OM/jY39Vi0/2wSsy4kfwNAOOFv942J5nnwWmzXDUA
-         yuT/XqPKPpvZIXQi7DcETGAItChTnt19+1J0wjEV9zovxAIMxGRMY1nm6hqJOyUZOUm6
-         bUbw==
-X-Gm-Message-State: ACgBeo2PRjh4NwvUhc3rYM8cOlqufrwnOPShQfxV/XEWvaFrEsXSDq4o
-        6N0qPodmpMOm4YJ6vJux2sndFIYLbK3GBUeI
-X-Google-Smtp-Source: AA6agR6nrkmJfnba5eeQgEBaX3oYJT7jiVAsfBTS1OrKrcGWUbQ+OeuGKwKfq9Odx4mk/+AoVZSR5A==
-X-Received: by 2002:a17:907:97c3:b0:730:978c:bfbe with SMTP id js3-20020a17090797c300b00730978cbfbemr10002927ejc.186.1659553065119;
-        Wed, 03 Aug 2022 11:57:45 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id nb41-20020a1709071ca900b0072637b9c8c0sm849490ejc.219.2022.08.03.11.57.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 11:57:44 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id h13so3346303wrf.6
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 11:57:44 -0700 (PDT)
-X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
- m15-20020a5d56cf000000b0021ece64afe7mr16553047wrw.281.1659553063979; Wed, 03
- Aug 2022 11:57:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <YurA3aSb4GRr4wlW@ZenIV>
-In-Reply-To: <YurA3aSb4GRr4wlW@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 3 Aug 2022 11:57:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
-Message-ID: <CAHk-=wizUgMbZKnOjvyeZT5E+WZM0sV+zS5Qxt84wp=BsRk3eQ@mail.gmail.com>
-Subject: Re: [git pull] vfs.git pile 3 - dcache
-To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Wed, 3 Aug 2022 14:59:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542B76561
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 11:59:45 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oJJaO-0003s9-Hq; Wed, 03 Aug 2022 20:59:16 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2254BC2421;
+        Wed,  3 Aug 2022 18:59:12 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 20:59:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/net/can/spi/mcp251x.c: Fix race condition on
+ receive interrupt
+Message-ID: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
+References: <20220803153300.58732-1-sebastian.wuerl@ororatech.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="stfxcn4l5cg4r6dp"
+Content-Disposition: inline
+In-Reply-To: <20220803153300.58732-1-sebastian.wuerl@ororatech.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 11:39 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
->         Main part here is making parallel lookups safe for RT - making
-> sure preemption is disabled in start_dir_add()/ end_dir_add() sections (on
-> non-RT it's automatic, on RT it needs to to be done explicitly) and moving
-> wakeups from __d_lookup_done() inside of such to the end of those sections.
 
-Ugh.
+--stfxcn4l5cg4r6dp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I really dislike this pattern:
+On 03.08.2022 17:32:59, Sebastian W=C3=BCrl wrote:
+> The mcp251x driver uses both receiving mailboxes of the can controller
+> chips. For retrieving the CAN frames from the controller via SPI, it chec=
+ks
+> once per interrupt which mailboxes have been filled, an will retrieve the
+> messages accordingly.
+>=20
+> This introduces a race condition, as another CAN frame can enter mailbox 1
+> while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 unt=
+il
+> the interrupt handler is called next, mailbox 0 is emptied before
+> mailbox 1, leading to out-of-order CAN frames in the network device.
+>=20
+> This is fixed by checking the interrupt flags once again after freeing
+> mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
 
-        if (IS_ENABLED(CONFIG_PREEMPT_RT))
-                preempt_disable();
-       ...
-        if (IS_ENABLED(CONFIG_PREEMPT_RT))
-                preempt_enable();
+Nitpick: On mcp2515 the buffer is freed automatically.
+With this change the interrupt flags are _always_ checked a 2nd time,
+even if buffer 0 is not serviced. See below for a change proposal.
 
-and while the new comment explains *why* it exists, it's still very ugly indeed.
+> For reproducing the bug I created the following setup:
+>  - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
+>  - Setup CAN to 1 MHz
+>  - Spam bursts of 5 CAN-messages with increasing CAN-ids
+>  - Continue sending the bursts while sleeping a second between the bursts
+>  - Check on the RPi whether the received messages have increasing CAN-ids
+>  - Without this patch, every burst of messages will contain a flipped pair
+>=20
+> Signed-off-by: Sebastian W=C3=BCrl <sebastian.wuerl@ororatech.com>
+> ---
+>  drivers/net/can/spi/mcp251x.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+> index 666a4505a55a..687aafef4717 100644
+> --- a/drivers/net/can/spi/mcp251x.c
+> +++ b/drivers/net/can/spi/mcp251x.c
+> @@ -1063,17 +1063,14 @@ static irqreturn_t mcp251x_can_ist(int irq, void =
+*dev_id)
+>  	mutex_lock(&priv->mcp_lock);
+>  	while (!priv->force_quit) {
+>  		enum can_state new_state;
+> -		u8 intf, eflag;
+> +		u8 intf, intf0, intf1, eflag, eflag0, eflag1;
+>  		u8 clear_intf =3D 0;
+>  		int can_id =3D 0, data1 =3D 0;
+> =20
+> -		mcp251x_read_2regs(spi, CANINTF, &intf, &eflag);
+> -
+> -		/* mask out flags we don't care about */
+> -		intf &=3D CANINTF_RX | CANINTF_TX | CANINTF_ERR;
+> +		mcp251x_read_2regs(spi, CANINTF, &intf0, &eflag0);
+> =20
+>  		/* receive buffer 0 */
+> -		if (intf & CANINTF_RX0IF) {
+> +		if (intf0 & CANINTF_RX0IF) {
+>  			mcp251x_hw_rx(spi, 0);
+>  			/* Free one buffer ASAP
+>  			 * (The MCP2515/25625 does this automatically.)
+> @@ -1083,14 +1080,24 @@ static irqreturn_t mcp251x_can_ist(int irq, void =
+*dev_id)
+>  						   CANINTF_RX0IF, 0x00);
+>  		}
+> =20
+> +		/* intf needs to be read again to avoid a race condition */
+> +		mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
 
-We have it in a couple of other places, and we also end up having
-another variation on the theme that is about "migrate_{dis,en}able()",
-except it is written as
+I think we only have to re-read the interrupt flag if we actually read
+data from buffer 0. So what about moving this into the if () { } above?
 
-        if (IS_ENABLED(CONFIG_PREEMPT_RT))
-                migrate_disable();
-        else
-                preempt_disable();
+> +
+>  		/* receive buffer 1 */
+> -		if (intf & CANINTF_RX1IF) {
+> +		if (intf1 & CANINTF_RX1IF) {
+>  			mcp251x_hw_rx(spi, 1);
+>  			/* The MCP2515/25625 does this automatically. */
+>  			if (mcp251x_is_2510(spi))
+>  				clear_intf |=3D CANINTF_RX1IF;
+>  		}
+> =20
+> +		/* combine flags from both operations for error handling */
+> +		intf =3D intf0 | intf1;
+> +		eflag =3D eflag0 | eflag1;
+> +
+> +		/* mask out flags we don't care about */
+> +		intf &=3D CANINTF_RX | CANINTF_TX | CANINTF_ERR;
+> +
+>  		/* any error or tx interrupt we need to clear? */
+>  		if (intf & (CANINTF_ERR | CANINTF_TX))
+>  			clear_intf |=3D intf & (CANINTF_ERR | CANINTF_TX);
 
-because on non-PREEMPT_RT obviously preempt_disable() is the better
-and simpler thing.
+Marc
 
-Can we please just introduce helper functions?
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-At least that
+--stfxcn4l5cg4r6dp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        if (IS_ENABLED(CONFIG_PREEMPT_RT))
-                preempt_disable();
-        ...
+-----BEGIN PGP SIGNATURE-----
 
-pattern could be much more naturally expressed as
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLqxXwACgkQrX5LkNig
+010UsAf/csW6sKyno2ENqU9sWHtlY8D1cUENGHLb9SC+LTOXHEe+1oo1vD+IoWBW
+kVJlZYQmDZh/UO4XS3EyKesE2eJZEmQxty7HluEUQb3sdjPp4Qc4goCpTLStTZRS
+TBKf3kps/BHYpAo5LeoKY96MRRVnytdyecinnfTCKK5FCtlV2SOirinZoqLGb3T0
+HyEFOtgA9gto4e75XetqLPmm7lDkmu8/DWQ/k1BocQLasCy/b7Y2mZVc0q0CEYf6
+qvAXNHzhqUAkEypVRl31I/xOjoAn6ybBibp7Ty88oGG3KcMWgcx+3FWacAHbUg53
+GX8+IkrxGxDDmN64x2SU35gl4I1maQ==
+=sE5h
+-----END PGP SIGNATURE-----
 
-        preempt_disable_under_spinlock();
-        ...
-
-which would make the code really explain what is going on. I would
-still encourage that *comment* about it, but I think we really should
-strive for code that makes sense even without a comment.
-
-The fact that then without PREEMPT_RT, the whole
-"preempt_disable_under_spinlock()" becomes a no-op is then an
-implementation detail - and not so different from how a regular
-preempt_disable() becomes a no-op when on UP (or with PREEMPT_NONE).
-
-And that "preempt_disable_under_spinlock()" really documents what is
-going on, and I feel would make that code easier to understand? The
-fact that PREEMPT_RT has different rules about preemption is not
-something that the dentry code should care about.
-
-The dentry code could just say "I want to disable preemption, and I
-already hold a spinlock, so do what is best".
-
-So then "preempt_disable_under_spinlock()" precisely documents what
-the dentry code really wants.
-
-No?
-
-Anyway, I have pulled this, but I really would like fewer of these
-random PREEMPT_RT turds around, and more "this code makes sense" code.
-
-                Linus
+--stfxcn4l5cg4r6dp--

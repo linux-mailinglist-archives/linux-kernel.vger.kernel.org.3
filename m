@@ -2,161 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982F2588B89
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDFA588B8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236258AbiHCLuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S235713AbiHCLwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiHCLuU (ORCPT
+        with ESMTP id S231537AbiHCLwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:50:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C864FD;
-        Wed,  3 Aug 2022 04:50:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z2so10731423edc.1;
-        Wed, 03 Aug 2022 04:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=Xfy8aNBxAEIDUkqVJF9Ibo2cxQdqUrKmq9nVT5TGeb4=;
-        b=q06uYS6Lpx/evNZGomXqRCnSi8342gUetR1Y0vA5vGVC2K7QTTrg9ovmNnswtOpK9p
-         /V4/ZUdZjbfOW2zWJjg7XiQwxU53nb2+eDwpGKlHO7YPCRtD6OFQeTLZmdyVWlwZx0ij
-         nUUKDAIt3HmRppJ+39xNtUUtCtprkKWFC46XstVepKe4JiEpPKX4nOjCRS1sU/+MN9PE
-         n0UhmANWMeoOA5glqzgucEP4wXMj5F1jkRObnn/JxnP4M/xabXdawTGm4D9clsJs9r6F
-         a5js8QGii+4Y/Agw140jFr+0cE7XEVFNCaB1KMTa5WUerLCuh9GQ+8KqNhGIQNX7DiMq
-         Y5sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=Xfy8aNBxAEIDUkqVJF9Ibo2cxQdqUrKmq9nVT5TGeb4=;
-        b=ZY2eVBhOAdEu96V9K819UVOG3x89xNW+15ehIqM2ZYo0pmXYHuzbxN0tMW//Lu7V8q
-         9p/V14HOZ/TAd2P82nw8aTkH1JRnjiRPgfovichl8XuXFUaYJcNeFu0YAjlyZzlXdD2f
-         phjO+ZTtxmV84Lytvo9m5lvqIf68uT32SQNn9TH6Kl6DTWW3/wbApcnjV9hhEAbTkhG4
-         6Cd1jJbbwCbP6vqTrvVf4Je21j5a794VZ0jxu7w9q/HoCYzg/OJKxCrUeYEguYjWD8CT
-         QWVSvgFdE4hra95a2j2WWxxmMvL8bannhzaJ7Ru/SvFX0Q2D6QsTkVEMnKfbS+IsNu10
-         +/9Q==
-X-Gm-Message-State: AJIora+m/qiMW2785VxAVViih1R9ZCgPnQWcyIeAmQ5/ys5oUDIvQ/yp
-        NZMkRERGJLgJ7YhrYAMSKnY=
-X-Google-Smtp-Source: AGRyM1uLxFjncVzokhngRcR7TZtCqTFZL6ndKOsdpRVVFE/OJQ+H7/6eOszl1lH6X3Ddu0EYpF5sDQ==
-X-Received: by 2002:a05:6402:ce:b0:43c:874f:e08f with SMTP id i14-20020a05640200ce00b0043c874fe08fmr25805718edu.225.1659527417668;
-        Wed, 03 Aug 2022 04:50:17 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b0072af92fa086sm7197649ejt.32.2022.08.03.04.50.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 04:50:17 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 3 Aug 2022 13:50:15 +0200
-To:     Hao Luo <haoluo@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: Re: [PATCH bpf-next v1] bpf, iter: clean up bpf_seq_read().
-Message-ID: <Yupg989wWYl4kmdZ@krava>
-References: <20220801205039.2755281-1-haoluo@google.com>
- <YukHHCF0DA6Xb/Rf@krava>
- <CA+khW7iGQyoxRuOR=fHFzjpXLnHKraJ6=brktaZw6Rqkg85a6g@mail.gmail.com>
+        Wed, 3 Aug 2022 07:52:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04603205E3;
+        Wed,  3 Aug 2022 04:52:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C2561226;
+        Wed,  3 Aug 2022 11:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174A8C433C1;
+        Wed,  3 Aug 2022 11:52:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659527521;
+        bh=SkQ8uBrmL3zyHryQ8RNaHRKITkAnNBPeCIkPX7+WCHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pGUR/O3gxvOv9XIoMN0aGttCgsdILYpipPLpWwkIeZb7/kvPwXdC7V0GPTW1crQ59
+         /jQG2H/ryIdU9q7CA0NyITT82tGIZRIJTVDsOenI88c3jh7PmCmCEFBSoLjHmo6Ne/
+         yrRBfWo+E+t+x0ziJqk6GiE7xs3C36ntq2zOGJvCVSgjyfNGJ2ELOBi1EfQQW92vvd
+         hi48N0M1VgHmAW89fleBS5KCl5b3yxOiUat63GRbWNT55veeNG2kH0qx1StcL+Oyyi
+         Vh0i9d3zUkInqf/oDta8FjZS3/I4dHhcXBXnEgeMfRzyvINfH6HhFHRoXet4HIGCjM
+         jn9pO9/r9qUoQ==
+Date:   Wed, 3 Aug 2022 12:51:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Aug 2
+Message-ID: <YuphXWlnKgTgnE6U@sirena.org.uk>
+References: <20220803010326.2814276-1-broonie@kernel.org>
+ <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hO9CDiCpsVXVES1L"
 Content-Disposition: inline
-In-Reply-To: <CA+khW7iGQyoxRuOR=fHFzjpXLnHKraJ6=brktaZw6Rqkg85a6g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:15:50PM -0700, Hao Luo wrote:
-> On Tue, Aug 2, 2022 at 4:14 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Mon, Aug 01, 2022 at 01:50:39PM -0700, Hao Luo wrote:
-> >
-> > SNIP
-> >
-> > > +static int do_seq_show(struct seq_file *seq, void *p, size_t offs)
-> > > +{
-> > > +     int err;
-> > > +
-> > > +     WARN_ON(IS_ERR_OR_NULL(p));
-> > > +
-> > > +     err = seq->op->show(seq, p);
-> > > +     if (err > 0) {
-> > > +             /* object is skipped, decrease seq_num, so next
-> > > +              * valid object can reuse the same seq_num.
-> > > +              */
-> > > +             bpf_iter_dec_seq_num(seq);
-> > > +             seq->count = offs;
-> > > +             return err;
-> > > +     }
-> > > +
-> > > +     if (err < 0 || seq_has_overflowed(seq)) {
-> > > +             seq->count = offs;
-> > > +             return err ? err : -E2BIG;
-> > > +     }
-> > > +
-> > > +     /* err == 0 and no overflow */
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +/* do_seq_stop, stops at the given object 'p'. 'p' could be an ERR or NULL. If
-> > > + * 'p' is an ERR or there was an overflow, reset seq->count to 'offs' and
-> > > + * returns error. Returns 0 otherwise.
-> > > + */
-> > > +static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
-> > > +{
-> > > +     if (IS_ERR(p)) {
-> > > +             seq->op->stop(seq, NULL);
-> > > +             seq->count = offs;
-> >
-> > should we set seq->count to 0 in case of error?
-> >
-> 
-> Thanks Jiri. To be honest, I don't know. There are two paths that may
-> lead to an error "p".
-> 
-> First, seq->op->start() could return ERR, in that case, '"offs'" is
-> zero and we set it to zero already. This is fine.
 
-ah right, offs is zero at that time, looks good then
+--hO9CDiCpsVXVES1L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> The other one, seq->op->next() could return ERR. This is a case where
-> bpf_seq_read() fails to handle right now, so I am not sure what to do.
+On Wed, Aug 03, 2022 at 08:48:58AM +0700, Bagas Sanjaya wrote:
 
-but maybe we don't need to set seq->count in here, like:
+> What is missing here is powerpc build (ppc64_defconfig), since the
+> architecture is often used for cross-compile test.
 
-	static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
-	{
-		if (IS_ERR(p)) {
-			seq->op->stop(seq, NULL);
-			return PTR_ERR(p);
-		}
+No, it's not missing.  Stephen's native PowerPC build has been
+deliberately replaced with a native arm64 defconfig build since that's
+the system I have access to and that's who's paying the bills here.
 
-because it's already set by error path of do_seq_show
+> And I think since we're at merge window for 6.0, we need to say
+> "Please do not add material for 6.1 until 6.0-rc1 have been
+> released".
 
-> 
-> Based on my understanding reading the code, if seq->count isn't
-> zeroed, the current read() will not copy data, but the next read()
-> will copy data (see the "if (seq->count)" at the beginning of
-> bpf_seq_read). If seq->count is zeroed, the data in buffer will be
-> discarded. I don't know what is right.
+Right, I didn't add a note about that.  Hopefully people are sensible
+enough to figure it out without the explicit statement in the -next
+mails.
 
-I think we should return the buffer up to the point there's an error,
-that's why we set seq->count to previous offs value after failed
-show callback
+--hO9CDiCpsVXVES1L
+Content-Type: application/pgp-signature; name="signature.asc"
 
-jirka
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLqYVwACgkQJNaLcl1U
+h9DJsgf/fx+sZB2Jz3BHGilY3tBeZvtVlkjfS2nKYbaMG+g59RUbV5IBEgRXxVTB
+ZaL/UkzG51ovTvPE8Mr0RP9lanRQvfpmIc6cDjHofP9IYa4n8IBhgtmF9nRcx3ju
+1yzg/DjHN6HWk0Psf2Y5BWcdt8nXFhv2CtnY+RLfNupInkJqhe34ybv7OEcEtU2q
+rmuM0P3FS/l1fADTGH7e0XCcHq7ibZ7YmAYt0xpjK1PWiQiYgpjcWW6nfA3l7dGc
+DPCzwtnBc3HxHRW8WzVNxqIU8Ks6BGB/JIn3fvaYHhZvTI5bjtmZwakAX/HfC+kc
+CohjqFgLDZJK8M/mMTH4clKkU9RqtA==
+=AUXC
+-----END PGP SIGNATURE-----
+
+--hO9CDiCpsVXVES1L--

@@ -2,125 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10F958862C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2EC58862E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiHCELH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S231321AbiHCELg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiHCELE (ORCPT
+        with ESMTP id S234223AbiHCELb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:11:04 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59D5FF7;
-        Tue,  2 Aug 2022 21:11:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id tl27so11422568ejc.1;
-        Tue, 02 Aug 2022 21:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WBcWLfOi59Zr0OA6U2ZttJvd4WsA8un2MakZZH/LgV0=;
-        b=D6kV0fC3rK/LOD5m0hcWijn1wlfGGcZssoqodkcTn+/Cm0HOeSQ4TfcZ1qjI0He4+Z
-         ZexOIfLUrcDA0spFK3yGySsBVibEV++GmmBTY8WEdFt52uNemXA+mxP7srG48R9TGX2T
-         0DeXhTkxTzUM4WG5IrLgNaK7oNAS7/95/uj+VOXGeP06ioEb9dK2gtDrAx5P1lwHEJz4
-         A0HorGO9TB0SMac2TPz3RSVKmGJkCBY/02IVX/TSXeV9A3eCpFtuXS5IIpPUi5LArKH+
-         nhXWlhiM7K+vBGdFzg3cc1DpmXwts8Z95jLd87uu2XYwKUMXVMUvIDnUAHiz8VtAPksP
-         gcXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WBcWLfOi59Zr0OA6U2ZttJvd4WsA8un2MakZZH/LgV0=;
-        b=GgkbuSJy+l7kO8PQ5KokpnUl2zptObCpWD5rYrNjOQE0DXS4mz8Q3NY2FfVbHcs8LT
-         g99Bzi+5+C1EX+JRaB+Rqy/D+3XpyoYZ4eIKQD/f+eVxARfXUDAE7WV0HiVkv2Pqc4NK
-         T0FzGEEb+9HRuULldmJka1tA9WjRckWvvonotlsvbq+S48oKW6ObZ/R+9xwyhXcve3T0
-         bZvfXnZD+H5iYK691hjRIFn+Qvy86Llz6Y8kwpNnTpeI+Vf0HXND0Ix1COm0rygAga3a
-         VaOuQpWJd0D7cvDdxR/amWktpjSaAXwOcdp7XhEyKyz/XvrkPVZHHWK6FUaZS4fPtVxF
-         Uu/A==
-X-Gm-Message-State: AJIora8nPI0vIlAw1W6xBKB063GxuMQiLR/Aq4yDLVsE/bfOQFbe6GqU
-        NmXSucuFGB0THHLzmETTOyroSFXDMyR/nqPY/dE=
-X-Google-Smtp-Source: AGRyM1soNFypQaJtvjgXMvAEI6HJEv2aCgoO8EqtElH6QUrSikaWdCRfoInwTfCYEKKwn0F52DRoiLdyScRVZ84K0XQ=
-X-Received: by 2002:a17:906:2ed7:b0:72f:d080:411 with SMTP id
- s23-20020a1709062ed700b0072fd0800411mr18505734eji.203.1659499861920; Tue, 02
- Aug 2022 21:11:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220728155121.12145-1-code@siddh.me> <18258c1d370.6c4bec7a269297.4170944235031209431@siddh.me>
- <Yuepw21SyLbWt9F+@kroah.com> <182597c78f6.70a93066293735.4741894763116073008@siddh.me>
- <182597eccd3.14cac6a4293987.1730526835854998440@siddh.me> <20220801161642.GA1932489@berlinger>
- <1825abd83c7.2fc2819e194605.6286442523651645797@siddh.me>
-In-Reply-To: <1825abd83c7.2fc2819e194605.6286442523651645797@siddh.me>
-From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
-Date:   Tue, 2 Aug 2022 21:10:50 -0700
-Message-ID: <CANX2M5aK5HED2R=VyXGw9osEn3MoX=sRjH9x2i8WvGcM8VFhrg@mail.gmail.com>
-Subject: Re: [PATCH v3] kernel/watch_queue: Make pipe NULL while clearing watch_queue
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "syzbot+c70d87ac1d001f29a058" 
-        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        linux-security-modules <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Priyanka Bose <its.priyanka.bose@gmail.com>,
-        Marius Fleischer <fleischermarius@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 3 Aug 2022 00:11:31 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B51D0DA
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:11:29 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220803041127epoutp0445031a1320257686a5e2871fd33bb11b~HulrzoNLE3086430864epoutp04y
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:11:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220803041127epoutp0445031a1320257686a5e2871fd33bb11b~HulrzoNLE3086430864epoutp04y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1659499887;
+        bh=nk0HgHTb3YmPbS1gAOn05D8FZD3X0XhQ93Vr7Llg3x0=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=mfyPa+F3D0uLTFIE3/dpTjOqq4vVvtzcTBTIc8mYzuoJfO/LL5djTo4UVN7I46DlV
+         aq9AyTS6sqoeaLUbnQTctCgOsqP0RwAE6ssmjlPf1WbxQ+VqWytjQhqd/aeewebRUq
+         p/OoE1wdg972zniPLa8B5aI9G0KqfufBAjtQZcEk=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220803041127epcas2p1f1aaebfc58c526c02d20a35f053e16f8~HulrXhzgs1348113481epcas2p1F;
+        Wed,  3 Aug 2022 04:11:27 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LyJML3nTkz4x9Q1; Wed,  3 Aug
+        2022 04:11:26 +0000 (GMT)
+X-AuditID: b6c32a47-5e1ff700000025aa-6e-62e9f56e9d65
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D0.AD.09642.E65F9E26; Wed,  3 Aug 2022 13:11:26 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH v6 5/6] scsi: ufs: wb: Modify messages
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     Stanley Chu <chu.stanley@gmail.com>
+CC:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220803041126epcms2p82bafb63e4f135d09017519ed3066f914@epcms2p8>
+Date:   Wed, 03 Aug 2022 13:11:26 +0900
+X-CMS-MailID: 20220803041126epcms2p82bafb63e4f135d09017519ed3066f914
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmuW7e15dJBj82y1icfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Vi2oefzBZfLu5ntnh5SNNi0Y1tTBaXd81hs+i+voPNYvnxf0wO3B6Xr3h7
+        7Jx1l91j8Z6XTB4TFh1g9Pi+voPN4+PTWywefVtWMXp83iTn0X6gmymAMyrbJiM1MSW1SCE1
+        Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoWCWFssScUqBQQGJxsZK+
+        nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsaBT7OZCqaIVFw4
+        P4O1gXEqfxcjB4eEgInExefZXYxcHEICOxglWl9OZgGJ8woISvzdIdzFyMkhLGArca//OSuI
+        LSSgJHFuzSxGkBJhAQOJW73mIGE2AT2Jn0tmsIHYIgLqEkf2HmcDGckscJZZ4t+UL2C9EgK8
+        EjPan7JA2NIS25dvZQSxOQUCJab8msgMEdeQ+LGsF8oWlbi5+i07jP3+2HxGCFtEovXeWaga
+        QYkHP3dDxSUlDh36ygbxVr7EhgOBEOEaibfLD0CV6Etc69gIdgKvgK/EkdlzwcazCKhKzFv2
+        HGqVi8T6hzfBxjMLyEtsfzuHGWQks4CmxPpd+hDTlSWO3GKBeaph4292dDazAJ9Ex+G/cPEd
+        854wQbSqSSxqMprAqDwLEcqzkKyahbBqASPzKkax1ILi3PTUYqMCY3i8JufnbmIEJ1kt9x2M
+        M95+0DvEyMTBeIhRgoNZSYT3jsvzJCHelMTKqtSi/Pii0pzU4kOMpkBPTmSWEk3OB6b5vJJ4
+        QxNLAxMzM0NzI1MDcyVxXq+UDYlCAumJJanZqakFqUUwfUwcnFINTItdfDe9nBwrkznhSt1B
+        BuGiJVyP82Ra9y1bb6Zzg8nV4u6vTw6WtUd/e2p/+ROaa9Lz3csgqOyXgqzDzB8RC/pZo6aG
+        FT1ed+p8wePNb0/4Hjvd9e7tnPcH7j53NvA6MJuje9sh7dD151y/FJ8LddzKlPOs7P1SWVe9
+        4Gs3nwhsWLWp5C9vuTTTOaZPlz1mS6v3psuejvoodb6Bb7r+mpfO3185OLVYxE05lP4pxPBc
+        W0/vjfzY07UTgtdsei/ZNntHVMWVBr/z8T2GYl9OVzfeWs37ZZtdwZl3cacfzZzbHsmyKWXJ
+        uV5e10Nnzi+/lf5yTn1wDY/1PpnFdqpGqyXuKVVoszx637h4woLwT1uUWIozEg21mIuKEwHn
+        3okyOwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce
+References: <CAGaU9a_YZDxaeOCErnQwFF9mE7bARDf4sw3F3ai1DiWwNVMFcw@mail.gmail.com>
+        <20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p2>
+        <20220802080927epcms2p1d0d89c32a9bd07c07f233801bb954807@epcms2p1>
+        <CGME20220802080146epcms2p24b86bfce3d3c09c79b91d861cb3b2cce@epcms2p8>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 11:49 AM Siddh Raman Pant <code@siddh.me> wrote:
->
-> On Mon, 01 Aug 2022 21:46:42 +0530  Dipanjan Das <mail.dipanjan.das@gmail.com> wrote:
-> > Are you referring to the reproducer attached to our original report?
-> > https://lore.kernel.org/all/CANX2M5bHye2ZEEhEV6PUj1kYL2KdWYeJtgXw8KZRzwrNpLYz+A@mail.gmail.com/
->
-> Yes, I meant the reproducer you gave.
->
-> I suspect I must have missed CONFIG_WATCH_QUEUE=y while setting the kernel
-> up, extremely sorry for it.
->
-> I now tried 5.10.y with it (using a modification of syzkaller's dashboard
-> config I had been using[1]), and I'm getting a __post_watch_notification()
-> crash (which is a related crash, as the fix[2][3] for that causes the
-> reproducer to not reproduce the post_one_notification crash on mainline),
-> but not the post_one_notification() crash you had reported. It seems if I
-> apply my patch, it doesn't trigger this related crash, so these bugs are
-> seem to be very related maybe due to racing? I haven't looked at that yet.
->
-> I then tried on v5.10.131 since that was the exact version you had
-> reproduced on, and it reproduces the post_one_notification() error
-> successfully. Applying 353f7988dd84 causes __post_watch_notification()
-> crash, and then applying this v3 patch does not trigger the issue, but
-> the patch to fix __post_watch_notification() crash is [2], which does
-> not really address the issue of post_one_notification() crash which
-> is due to the dangling reference to a freed pipe.
->
-> Can you please try reproducer at your end?
+Hi, Stanley,
 
-We can confirm that the repro triggers the `post_watch_notification`
-crash on 5.10.134 (7a62a4b6212a7f04251fdaf8b049c47aec59c54a). After
-applying your v3 patch, the repro did not trigger the bug.
-
+>Hi,
 >
-> [1] https://gist.github.com/siddhpant/06c7d64ca83273f0fd6604e4677f7c0d
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e64ab2dbd882933b65cd82ff6235d705ad65dbb6
-> [3] https://lore.kernel.org/linux-mm/18259769e5e.52eb2082293078.3991591702430862151@siddh.me/
+>On Tue, Aug 2, 2022 at 4:29 PM Jinyoung CHOI <j-young.choi@samsung.com> wrote:
+>>
+>> Messages are modified to fit the format of others.
+>>
+>> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+>> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+>> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+>> ---
+>>  drivers/ufs/core/ufs-sysfs.c |  2 +-
+>>  drivers/ufs/core/ufshcd.c    | 23 +++++++++++------------
+>>  2 files changed, 12 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+>> index 2c0b7f45de4b..117272cf7d61 100644
+>> --- a/drivers/ufs/core/ufs-sysfs.c
+>> +++ b/drivers/ufs/core/ufs-sysfs.c
+>> @@ -230,7 +230,7 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
+>>                  * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
+>>                  * on/off will be done while clock scaling up/down.
+>>                  */
+>> -               dev_warn(dev, "To control WB through wb_on is not allowed!\n");
+>> +               dev_warn(dev, "It is not allowed to configure WB!\n");
+>>                 return -EOPNOTSUPP;
+>>         }
+>>
+>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>> index 5099d161f115..dcd7f03db2a2 100644
+>> --- a/drivers/ufs/core/ufshcd.c
+>> +++ b/drivers/ufs/core/ufshcd.c
+>> @@ -5737,13 +5737,13 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+>>
+>>         ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_EN);
+>>         if (ret) {
+>> -               dev_err(hba->dev, "%s Write Booster %s failed %d\n",
+>> -                       __func__, enable ? "enable" : "disable", ret);
+>> +               dev_err(hba->dev, "%s: Write Booster %s failed %d\n",
+>> +                       __func__, enable ? "enabling" : "disabling", ret);
+>>                 return ret;
+>>         }
+>>
+>>         hba->dev_info.wb_enabled = enable;
+>> -       dev_info(hba->dev, "%s Write Booster %s\n",
+>> +       dev_info(hba->dev, "%s: Write Booster %s\n",
+>>                         __func__, enable ? "enabled" : "disabled");
+>
+>You need to rebase this patch to follow the latest change as
+>https://lore.kernel.org/all/20220709000027.3929970-1-bjorn.andersson@linaro.org/
+
+I am currently working on the latest 5.20/scsi-staging.
+In this case, can I refer the commit of 5.19/scsi-fixes 
+and add commit to 5.20/scsi-staging?
+Or can I reflect it in my change?
+I have no experience, so please guide. :)
+
+Thank you for checking.
+Jinyoung.
 
 
 
--- 
-Thanks and Regards,
-
-Dipanjan

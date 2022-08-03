@@ -2,202 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFAB5888F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA5A5888F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234673AbiHCI5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S235207AbiHCI72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 04:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiHCI5s (ORCPT
+        with ESMTP id S231495AbiHCI70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:57:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D711A1FCE4;
-        Wed,  3 Aug 2022 01:57:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 237BA13D5;
-        Wed,  3 Aug 2022 01:57:48 -0700 (PDT)
-Received: from [10.1.28.148] (e121487-lin.cambridge.arm.com [10.1.28.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E4F03F67D;
-        Wed,  3 Aug 2022 01:57:44 -0700 (PDT)
-Message-ID: <2c1198c4-77aa-5cb8-6bb4-b974850651be@arm.com>
-Date:   Wed, 3 Aug 2022 09:57:35 +0100
+        Wed, 3 Aug 2022 04:59:26 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1B32251E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:59:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1659517103; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=Z0C1RFtHhWVL38VXioPhEM9PPXQDeSm2BDZOVRVGojx6UymDi/ZUoEg/9UlUSIi8g46xDsAVg3Wogu/iGCelF+aWVZgdR30N2JlZVoWe0d7g9IZEbw8HknkaCjZS/WUf9xENkOYap7Kid2PxtROalZuz9xImGkscEjCgzYGXK/w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1659517103; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=UWM3Q8d65CxhgoPYwJTl/FGjavrP+S1bO4WDYI0LZmM=; 
+        b=W1ZXKcqpJWvXzse0uYPyMk5Wbt9n5kgRL/CVobzc02368p5EC0Ah11Wp88I6dQluMagaIz4YapLyoKV4I92lJKghTxunvVTR7ciVfMNZTYGJTZrhddT9YrFsVYVxEqNoANNhdj+Cq8NcBSExPI+hLofdFE4yO4jASvWPZLYwIZc=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1659517103;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=UWM3Q8d65CxhgoPYwJTl/FGjavrP+S1bO4WDYI0LZmM=;
+        b=aCGxjGguCX3vmghCE0g7WVP1LHmEMjvjiTKUyp/oqsYrIKb3ZJNjNRLgT+oM4CoJ
+        rWMDVAwlOrhZwXBzDi0MRaLxBoGofBlWCY+U+51CCIwe+hrxMUUzFVdUFsrOuwCpAcw
+        54wHQHb2HtbY4dhL/2oz06j/DHLsiwL0BnUp6/mc=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1659517084780174.63182416015275; Wed, 3 Aug 2022 14:28:04 +0530 (IST)
+Date:   Wed, 03 Aug 2022 14:28:04 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Ingo Molnar" <mingo@kernel.org>
+Cc:     "x86" <x86@kernel.org>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Message-ID: <18262ed2459.44b0d74d434377.3690496800292832933@siddh.me>
+In-Reply-To: <Yuo2UkkyaYtZ3rMZ@gmail.com>
+References: <20220731160913.632092-1-code@siddh.me>
+ <YukFgFTaq4Aw+uht@gmail.com>
+ <1825f63b142.8968bde3116633.1242410031840350968@siddh.me> <Yuo2UkkyaYtZ3rMZ@gmail.com>
+Subject: Re: [PATCH] x86/numa: Use cpumask_available instead of hardcoded
+ NULL check
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/4] hwrng: virtio - always add a pending request
-Content-Language: en-US
-To:     Laurent Vivier <lvivier@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     amit@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        Matt Mackall <mpm@selenic.com>,
-        virtualization@lists.linux-foundation.org,
-        Dmitriy Vyukov <dvyukov@google.com>, rusty@rustcorp.com.au,
-        akong@redhat.com, Alexander Potapenko <glider@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        linux-crypto@vger.kernel.org,
-        Mauricio De Carvalho <Mauricio.DeCarvalho@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>
-References: <20211028101111.128049-1-lvivier@redhat.com>
- <20211028101111.128049-5-lvivier@redhat.com>
- <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
-From:   Vladimir Murzin <vladimir.murzin@arm.com>
-In-Reply-To: <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/2/22 13:49, Vladimir Murzin wrote:
-> Hi Laurent,
+On Wed, 03 Aug 2022 14:18:18 +0530  Ingo Molnar <mingo@kernel.org> wrote:
 > 
-> On 10/28/21 11:11, Laurent Vivier wrote:
->> If we ensure we have already some data available by enqueuing
->> again the buffer once data are exhausted, we can return what we
->> have without waiting for the device answer.
->>
->> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
->> ---
->>  drivers/char/hw_random/virtio-rng.c | 26 ++++++++++++--------------
->>  1 file changed, 12 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
->> index 8ba97cf4ca8f..0a7dde135db1 100644
->> --- a/drivers/char/hw_random/virtio-rng.c
->> +++ b/drivers/char/hw_random/virtio-rng.c
->> @@ -20,7 +20,6 @@ struct virtrng_info {
->>  	struct virtqueue *vq;
->>  	char name[25];
->>  	int index;
->> -	bool busy;
->>  	bool hwrng_register_done;
->>  	bool hwrng_removed;
->>  	/* data transfer */
->> @@ -44,16 +43,18 @@ static void random_recv_done(struct virtqueue *vq)
->>  		return;
->>  
->>  	vi->data_idx = 0;
->> -	vi->busy = false;
->>  
->>  	complete(&vi->have_data);
->>  }
->>  
->> -/* The host will fill any buffer we give it with sweet, sweet randomness. */
->> -static void register_buffer(struct virtrng_info *vi)
->> +static void request_entropy(struct virtrng_info *vi)
->>  {
->>  	struct scatterlist sg;
->>  
->> +	reinit_completion(&vi->have_data);
->> +	vi->data_avail = 0;
->> +	vi->data_idx = 0;
->> +
->>  	sg_init_one(&sg, vi->data, sizeof(vi->data));
->>  
->>  	/* There should always be room for one buffer. */
->> @@ -69,6 +70,8 @@ static unsigned int copy_data(struct virtrng_info *vi, void *buf,
->>  	memcpy(buf, vi->data + vi->data_idx, size);
->>  	vi->data_idx += size;
->>  	vi->data_avail -= size;
->> +	if (vi->data_avail == 0)
->> +		request_entropy(vi);
->>  	return size;
->>  }
->>  
->> @@ -98,13 +101,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
->>  	 * so either size is 0 or data_avail is 0
->>  	 */
->>  	while (size != 0) {
->> -		/* data_avail is 0 */
->> -		if (!vi->busy) {
->> -			/* no pending request, ask for more */
->> -			vi->busy = true;
->> -			reinit_completion(&vi->have_data);
->> -			register_buffer(vi);
->> -		}
->> +		/* data_avail is 0 but a request is pending */
->>  		ret = wait_for_completion_killable(&vi->have_data);
->>  		if (ret < 0)
->>  			return ret;
->> @@ -126,8 +123,7 @@ static void virtio_cleanup(struct hwrng *rng)
->>  {
->>  	struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
->>  
->> -	if (vi->busy)
->> -		complete(&vi->have_data);
->> +	complete(&vi->have_data);
->>  }
->>  
->>  static int probe_common(struct virtio_device *vdev)
->> @@ -163,6 +159,9 @@ static int probe_common(struct virtio_device *vdev)
->>  		goto err_find;
->>  	}
->>  
->> +	/* we always have a pending entropy request */
->> +	request_entropy(vi);
->> +
->>  	return 0;
->>  
->>  err_find:
->> @@ -181,7 +180,6 @@ static void remove_common(struct virtio_device *vdev)
->>  	vi->data_idx = 0;
->>  	complete(&vi->have_data);
->>  	vdev->config->reset(vdev);
->> -	vi->busy = false;
->>  	if (vi->hwrng_register_done)
->>  		hwrng_unregister(&vi->hwrng);
->>  	vdev->config->del_vqs(vdev);
+> * Siddh Raman Pant <code@siddh.me> wrote:
 > 
-> We observed that after this commit virtio-rng implementation in FVP doesn't
-> work
+> > On Tue, 02 Aug 2022 16:37:44 +0530  Ingo Molnar <mingo@kernel.org> wrote:
+> > > Your fix makes sense I suppose, but I'm wondering how testing didn't 
+> > > trigger this warning.
+> > > 
+> > > Off-stack isn't a rare config option:
+> > > 
+> > >   kepler:~/tip> make allmodconfig
+> > >   #
+> > >   # No change to .config
+> > >   #
+> > >   kepler:~/tip> grep CPUMASK_OFFSTACK .config
+> > >   CONFIG_CPUMASK_OFFSTACK=y
+> > >   kepler:~/tip> 
+> > > 
+> > > What am I missing?
+> > 
+> > Maybe this triggers on certain config options set, or maybe due to new
+> > gcc version? (I'm using gcc-12, I also likely saw while on gcc-11.)
+> > It nevertheless is a helpful warning.
+> > 
+> > I just now tried `make defconfig` (default configuration based on
+> > 'x86_64_defconfig') and compiling with `make -j13 all`, and gcc doesn't
+> > give any warning. (CONFIG_CPUMASK_OFFSTACK isn't even listed in the
+> > .config file produced, grep fails.)
 > 
-> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
-> INFO: bp.virtio_rng: Using seed value: 0x5674bba8
-> Error: FVP_Base_AEMvA: bp.virtio_rng: <vq0-requestq> Found invalid descriptor index
-> In file: (unknown):0
-> In process: FVP_Base_AEMvA.thread_p_12 @ 935500020 ns
-> Info: FVP_Base_AEMvA: bp.virtio_rng: Could not extract buffer
+> Does 'allmodconfig' reproduce the warning for you:
 > 
-> while basic baremetal test works as expected
+>   $ make allmodconfig
+>   $ make arch/x86/mm/numa.o
 > 
-> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
-> INFO: bp.virtio_rng: Using seed value: 0x541c142e
-> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0x4b098991ceb377e6
-> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0xbdcbe3f765ba62f7
+> ?
 > 
-> We are trying to get an idea what is missing and where, yet none of us familiar
-> with the driver :(
+> If yes, then this could be due to gcc-12, as it doesn't reproduce with 
+> gcc-11 for me:
 > 
-> I'm looping Kevin who originally reported that and Mauricio who is looking form
-> the FVP side. 
+>    gcc version 11.2.0 (Ubuntu 11.2.0-19ubuntu1) 
+> 
+> Thanks,
+> 
+>     Ingo
+> 
 
-With the following diff FVP works agin
+There is no reason why allmodconfig would trigger the warning, as it has
+CONFIG_CPUMASK_OFFSTACK=y, but the warning is because of the other case.
+Still, I tried that, and as expected there was no warning.
 
-diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
-index a6f3a8a2ac..042503ad6c 100644
---- a/drivers/char/hw_random/virtio-rng.c
-+++ b/drivers/char/hw_random/virtio-rng.c
-@@ -54,6 +54,7 @@ static void request_entropy(struct virtrng_info *vi)
-        reinit_completion(&vi->have_data);
-        vi->data_avail = 0;
-        vi->data_idx = 0;
-+       smp_mb();
- 
-        sg_init_one(&sg, vi->data, sizeof(vi->data));
- 
+Did you try the config file I had linked to earlier?
 
-What do you reckon?
-
-Cheers
-Vladimir
-
-> 
-> Cheers
-> Vladimir
-
+Thanks,
+Siddh

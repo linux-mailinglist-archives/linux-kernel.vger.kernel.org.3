@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69B358929C
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C52D58929E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 21:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237029AbiHCTLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 15:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S238442AbiHCTM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 15:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiHCTLp (ORCPT
+        with ESMTP id S236436AbiHCTMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 15:11:45 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44170186F9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:11:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id w14so4227218plp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:11:44 -0700 (PDT)
+        Wed, 3 Aug 2022 15:12:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC17C186F9
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 12:12:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so3105798pjf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 12:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yem/qpYgEmCA72j+50vuDoYqx1yqH6LmWKyXF9t4QJg=;
-        b=EwxcoNIv8M8nBbi4W52JGeZOlI+IHvVO1zFTLNFcaeZacJh9+EWETN98RqBn/VQxu6
-         tCrof60TWxBkZ5GDGErF9ZuxvR8nwF+2Pc/wZrDG1ZNQg3Qg+n2XVZsdsY8DPBEuS72x
-         QQ29+MDE/K9tTT1pexxtQ+L7ZNYHVNzt0AB6s=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=4zK98BC9usZ9tCVJy5TId+ZcNTpp4zIbOepI4rir8+w=;
+        b=jefqFTwXKQxf9ICOYbWVIDyQg4yWmfjrIZmSzw/bSBZ83YTAGVnnRSeh6mOJNxCZ5g
+         yDnFiIHRXE0f4s0Kwp9tvz4GBi5F9zihVzVEqhhu9+DEDOLhz3TIJv4XDi7MFbqir6g2
+         evAIYudAWhonqSxE9Ml/Xtwox+WswEwhojHLS3Osj/nk3oxZ3pX3Zn1sNNRmFno42nth
+         6EHSqaZ7JGpv+5T+zrriqdYmxMLuk9UdqgOcUXjHSFXv/cyOqMLaEqrIzMQlq4NsAv1z
+         bJISEiPsEWdfj2rR/Gs84Jd2TlK+ec74LfRdkE9ZhRnAQS382UBb14kRtGGJBKuLpBDz
+         l3lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yem/qpYgEmCA72j+50vuDoYqx1yqH6LmWKyXF9t4QJg=;
-        b=h2ZUV+VpdhGKBKhcvst7TLU7buPKvSyplodBqs5uLscS94Y2YBGx1QelekbH6iy8B3
-         mpCeCWQ+sVO4yeQ/I4ZEcC4ZOXUtYh+WnwXx3V4Ha6eB/0mseFSelGzIzp53aoVkOa2W
-         bm7h6trjRDd1Zxu4b4A/xytoORZyibjzqrqtgFuDc0nVkE8D6J7fBYdN/qGFm2fnIbv+
-         losxoBTsk1RAO+2U6p79Vy7/jQBui6rgBhQ+BCKFMDtYAOgDoauhZsbKEHux/CMfa9Ff
-         0bScbUG5j4I+71/euoeoDkOcw+2MDsDwbSOZE+UQGSx3AvwJILrQEwBs/YXHbMdD7cgP
-         /NCA==
-X-Gm-Message-State: ACgBeo2rrE75kdm8LfOLTHAPh9cj3hw5psvL8zzW7raYs34dXry/w1P8
-        bnAT/uSHrq8BABAKCHB5rjxLRw==
-X-Google-Smtp-Source: AA6agR7H1WXgeyhi8psPWgku2rAwpAfqOGEf+yJ1MpMRzacBssEBrY3b5f72u5r2VE1mq17XXJL1sw==
-X-Received: by 2002:a17:90b:1c0a:b0:1f3:1848:591c with SMTP id oc10-20020a17090b1c0a00b001f31848591cmr6248533pjb.24.1659553903773;
-        Wed, 03 Aug 2022 12:11:43 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:238b:c074:f5f8:56d0])
-        by smtp.gmail.com with UTF8SMTPSA id k15-20020a170902c40f00b0016dbaf3ff2esm2456247plk.22.2022.08.03.12.11.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 12:11:43 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 12:11:41 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] usb: dwc3: qcom: fix broken non-host-mode suspend
-Message-ID: <YurIbcXHPF6K3oPa@google.com>
-References: <20220802151404.1797-1-johan+linaro@kernel.org>
- <20220802151404.1797-4-johan+linaro@kernel.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=4zK98BC9usZ9tCVJy5TId+ZcNTpp4zIbOepI4rir8+w=;
+        b=7HhKxtwhWmQJSXUP4cfstbp+RQl4Yuj5UO3dIds+xQs9RW6VURVaquRcbQNRvjrslU
+         zsGKbGbbNiDbnBJOqH4nL5v7oURvCoql+9BQa4K+VR98XoWEpjlNGYgIpWEa5MyKmvod
+         T/e0gmtDDMlOEPehY6+Sx3LqyD4TcoxrCuGyH2YxPJQ2jULyZp/hudKN1vBStQC0zv08
+         QriTh+3bGWENZlmT3n0GHKUyGN8ZyX4c9LljC8afW/YtpNV12WUCAK/lfgYsL9vG9fIB
+         KGOBTa5JSDYDBSrhtXNuF64liOSYSE/RhKTb2Jv4iUNA+Sv9b3sPdqDux6OXpt6DBGhs
+         8qiA==
+X-Gm-Message-State: ACgBeo0IHbbh1QQsii44vU/KWz7FlTMoscVoYMsFbZ+zKi/s5jLjRo+s
+        9RxGjCfrqK+1GMg7SMFMcU+GeQ==
+X-Google-Smtp-Source: AA6agR7eif7XcVJJauFJ7KJikkw8K6ljVbPKusohoOjLWeaqzENPk+57orK916Zy3RzqqeWDsMgaPA==
+X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id p2-20020a1709026b8200b0016dd2683842mr26784523plk.16.1659553973988;
+        Wed, 03 Aug 2022 12:12:53 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:ddbf:1bd6:4443:9e5b:2aa2])
+        by smtp.gmail.com with ESMTPSA id a2-20020a17090a740200b001f1694dafb1sm1971285pjg.44.2022.08.03.12.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 12:12:53 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
+Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        alexander.shishkin@linux.intel.com, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] coresight: etm4x: Fix crash observed on Qcom ETM parts with 'Low power override'
+Date:   Thu,  4 Aug 2022 00:42:36 +0530
+Message-Id: <20220803191236.3037591-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220802151404.1797-4-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +71,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 05:13:59PM +0200, Johan Hovold wrote:
-> A recent commit implementing wakeup support in host mode instead broke
-> suspend for peripheral and OTG mode.
-> 
-> The hack that was added in the suspend path to determine the speed of
-> any device connected to the USB2 bus not only accesses internal driver
-> data for a child device, but also dereferences a NULL pointer when not
-> in host mode and there is no HCD.
-> 
-> As the controller can switch role at any time when in OTG mode, there's
-> no quick fix to this, and since reverting would leave us with broken
-> suspend in host-mode (wakeup triggers immediately), keep the hack for
-> now and only fix the NULL-pointer dereference.
-> 
-> Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index be2e3dd36440..b75ff40f75a2 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -301,8 +301,17 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
->  static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
->  {
->  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> -	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
->  	struct usb_device *udev;
-> +	struct usb_hcd *hcd;
-> +
-> +	if (qcom->mode != USB_DR_MODE_HOST)
-> +		return USB_SPEED_UNKNOWN;
+Some Qualcomm ETM implementations require skipping powering up
+the trace unit, as the ETMs are in the same power domain as
+their CPU cores.
 
-Couldn't instead the below block in dwc3_qcom_suspend() be conditional on
-the controller being in host mode?
+Via commit 5214b563588e ("coresight: etm4x: Add support for
+sysreg only devices"), the setting of 'skip_power_up' flag was
+moved after the 'etm4_init_arch_data' function is called, whereas
+the flag value is itself used inside the function. This causes
+a crash when ETM mode 'Low-power state behavior override' is set
+on some Qualcomm parts.
 
-	if (device_may_wakeup(qcom->dev)) {
-		qcom->usb2_speed = dwc3_qcom_read_usb2_speed(qcom);
-		dwc3_qcom_enable_interrupts(qcom);
-	}
+Fix the same.
 
-I see, the problem is that the role switch could happen at any time as the
-commit message says. With this patch there is also a race though, the role
-switch could happen just after the check and before obtaining 'hcd'.
+Fixes: 5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index d39660a3e50c..cf6254b87fd5 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -1943,6 +1943,16 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
+ 	init_arg.csa = &desc.access;
+ 	init_arg.pid = etm_pid;
+ 
++	/*
++	 * Some Qualcomm implementations require skipping powering up the trace unit,
++	 * as the ETMs are in the same power domain as their CPU cores.
++	 *
++	 * Since the 'skip_power_up' flag is used inside 'etm4_init_arch_data' function,
++	 * initialize it before the function is called.
++	 */
++	if (fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
++		drvdata->skip_power_up = true;
++
+ 	if (smp_call_function_single(drvdata->cpu,
+ 				etm4_init_arch_data,  &init_arg, 1))
+ 		dev_err(dev, "ETM arch init failed\n");
+@@ -1951,8 +1961,7 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
+ 		return -EINVAL;
+ 
+ 	/* TRCPDCR is not accessible with system instructions. */
+-	if (!desc.access.io_mem ||
+-	    fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
++	if (!desc.access.io_mem)
+ 		drvdata->skip_power_up = true;
+ 
+ 	major = ETM_ARCH_MAJOR_VERSION(drvdata->arch);
+-- 
+2.35.3
+

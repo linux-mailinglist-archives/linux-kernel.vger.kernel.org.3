@@ -2,128 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F165885A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AABC5885AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 04:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiHCCK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 2 Aug 2022 22:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S233297AbiHCCOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 2 Aug 2022 22:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbiHCCKV (ORCPT
+        with ESMTP id S231560AbiHCCO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 2 Aug 2022 22:10:21 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525284F182
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:10:19 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id h188so18170308oia.13
-        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 19:10:19 -0700 (PDT)
+        Tue, 2 Aug 2022 22:14:29 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDBB50733
+        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 19:14:27 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ss3so28927524ejc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 02 Aug 2022 19:14:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=AKd54UEEghsfwjXpz+oyC5/2q9GwxUZBaaXWayE5vh0=;
-        b=qg9W/DQpVQE1zuA+4brg05l1CHy54NhyVGtRCydMFzE12zh988wMgOkkr9TR0NnbD+
-         WwLZEYJ1Cian3j4YxJ6WBJI2n6yDUQvvjr4ehpvwK4KCp7f4yn0RdxKoUyszuGjYGU8/
-         s4E1AMSrnr1lDlkjPOo5wKPaIBoLHwkBvOU9km4nzASl+QT9wg5vM/8K7SAjtTtkEW29
-         25vFkfMoCHPaDw7h3m3M0vH4pxXB12va4kqeKDyoWrNWw4lZSEAvXXf1zX0yDfCNnWyC
-         aH8Nd3hL8pHuRPIP8ArbTcaG9k+HPIfZ6HqKDQfDUUkpcdS83+0RZGlY6YZT3HQacIml
-         6HCw==
+        bh=5PfzgdkwKk8vgPVTM9VmmwC+o/EB6JpB4y6rlRNyThM=;
+        b=WCDL7VdJKYamc04OZNM6Emi960roLI1Wg4lQOCL0k/GRrVSiXxLCr80L/Ph/kx8A6p
+         4eGb8Pr9BLTO0N5mIr8IRNe3C3QdpoG5mPykccOhVJxOXIpQBuCuFFsIg2qUtqFxV68C
+         SYyxbuwZFgo5g+0TtO0f+UCDzwQX/QJMReXFaQirKgGcvwmINj0WIuDd4AQvXGMlUEmR
+         BvuG7/BQa3OKK8m3Wm4XuesWDIF2w7qTRMoTnqiEnGIt99frrPl/f4QXsz2L5L/1bK0j
+         3vlR2t3JVUHmA2aISWQl9g+XofaUjZeNzB2pY3QqvOw5G9Wjs2HptoleurtoOm3b0ZCV
+         yIBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=AKd54UEEghsfwjXpz+oyC5/2q9GwxUZBaaXWayE5vh0=;
-        b=7NU5f55FJk6WyG05HJgyC45KS204f2JdydTDoNzJmMM2fnaN/pcVxuZRtMSm+iDl2W
-         urquAYJoZtSvC371DuM0b8zUqwE8CnznXfN05S+tx6WXqmnfQKx5rbDXDV3rvRdVTbjq
-         MWHzbIATbuksDVk7LnKWs2fDgNichOO6735nZ4YbTOsFcBTnbjvA1GzJYgmp9IqjaN2j
-         ggNjNuv+8Z3d9T534E86KbhxL2NJGNlbcle3JCqWfBscf42N1mUoW8L8hWXKJOlsQdsp
-         Y27Q7WBAL/t+zA4x2aWsB9X1F/MkiupQrFFzM2E3D+4goo6Mm1uYnvbC+LF6SBHvmZjf
-         tB3g==
-X-Gm-Message-State: ACgBeo0rLLE8Cv4vyB8KPflE0c3l/r9urkBfvm4WnoXtJF6y23RLeKwH
-        usnwkwRrSnAyqYsNLbAL1pnJgwp6arNCf03R+lm7
-X-Google-Smtp-Source: AA6agR4S03AR8N+erK0dIxoJgLjDzb1SXWDYWcC+fk2W8Ymp3AWVXTOqoLi3Urbw7V2XDi+6IlDjFLZ1083IjnRqlFk=
-X-Received: by 2002:a05:6808:2389:b0:33a:cbdb:f37a with SMTP id
- bp9-20020a056808238900b0033acbdbf37amr928281oib.136.1659492618285; Tue, 02
- Aug 2022 19:10:18 -0700 (PDT)
+        bh=5PfzgdkwKk8vgPVTM9VmmwC+o/EB6JpB4y6rlRNyThM=;
+        b=hYunEWj5YEQg0gBjS/sjYl55z5GDh5Lk3496PTKv3hZpr/aWAYeOHgryKX+XldJq3M
+         w2juX1VFAxvodpK+iELa3LOUpyjLWWC2EIpaUJr/Ck8ASMVLfCnE4vO1GxZP5K35jtUD
+         GG56pu+xv87wuW9KZNWmfGvqZ3W2LiFaepnH6LuA0qbr7PW1eZgblc0c+9vTgyq+i044
+         ovfAg5eijweM1W0WfQ8f+KsSEBus3rGYj8B9lli/8przosMC33HQOuakzri/g/wSRWZJ
+         AZ7aXhx/luglrr3v6fmZiBhDr56OB8MJEOp1Awa8zsUzEsJLCS/heKYH+CJmUoE0cB2U
+         plgQ==
+X-Gm-Message-State: ACgBeo208BNur/lhV/6zxFzA42B3h3SH2uXZATQNpPR8umJcuhg3Oa1e
+        k8EAuyRD9wGBNflOan/iz0FvS6fC2MIEM55Zu/Y=
+X-Google-Smtp-Source: AA6agR4LB+/dYGmRzWqiOBOhzTd/1zOEZINeD17iFmHGwgfAGxP61hT2stDKtnxOlK9eu6dglwUMUEXjaXegPG5nVMU=
+X-Received: by 2002:a17:907:a428:b0:730:aee3:2da7 with SMTP id
+ sg40-20020a170907a42800b00730aee32da7mr828489ejc.613.1659492866192; Tue, 02
+ Aug 2022 19:14:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87les7cq03.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 2 Aug 2022 22:10:07 -0400
-Message-ID: <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
+References: <CAHCN7xJ=N1vWVTBjArskJ59fyaLzmAGWfc0E=_iGizrDNR_Udw@mail.gmail.com>
+ <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
+ <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
+ <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
+ <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
+ <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
+ <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
+ <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+In-Reply-To: <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Tue, 2 Aug 2022 21:14:15 -0500
+Message-ID: <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com>
+Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
+        Stefan Agner <stefan@agner.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
+        laurentiu.palcu@nxp.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Frederick Lawler <fred@cloudflare.com> writes:
+On Tue, Aug 2, 2022 at 8:51 AM Adam Ford <aford173@gmail.com> wrote:
 >
-> > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > used the LSM cred_prepare hook because that is the closest hook to prevent
-> > a call to create_user_ns().
+> On Tue, Aug 2, 2022 at 7:13 AM Adam Ford <aford173@gmail.com> wrote:
+> >
+> > On Tue, Aug 2, 2022 at 3:08 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> > >
+> > > Hi Adam, Fabio,
+> > >
+> > > On 22-08-01, Adam Ford wrote:
+> > > > On Mon, Aug 1, 2022 at 8:53 PM Fabio Estevam <festevam@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, Aug 1, 2022 at 10:39 PM Adam Ford <aford173@gmail.com> wrote:
+> > > > >
+> > > > > > I managed to get my HDMI output working. I had the lanes set to 2
+> > > > > > instead of 4.  Once I switched to 4-lanes, the monitor came up in
+> > > > > > 1080p.  I haven't yet been able to get other modes to work.
+> > > > >
+> > > > > Ok, good. On another thread, you mentioned that you were also trying
+> > > > > to get LVDS to work via SN65DSI83.
+> > > > >
+> > > > > Does LVDS work for you on this branch?
+> > > >
+> > > > I haven't tried with Marek's latest suggestion.  In the other thread
+> > > > he mentioned a burst mode and setting the DSI speeds to higher
+> > > > frequencies, but the patch he had didn't look like it would apply
+> > > > cleanly, so I will need to dig into that a bit further.
+> > >
+> > > Can you provide me a link to this thread?
+> >
+> > Sure,
+> >
+> > https://www.spinics.net/lists/dri-devel/msg358301.html
+> >
+> > >
+> > > > Since my company doesn't really ship the LVDS displays with the kits,
+> > > > the HDMI is the default video, so I've been focusing on it.
+> > > >
+> > > > To answer Marco's question, I was able to revert "MLK-21958-13:
+> > > > drm/bridge: adv7511: Limit supported clocks" and still get a display
+> > > > at 1080p, but all the other resolutions I tried appear to come up
+> > > > blank.
+> > >
+> > > Cool so now you have the same state as we are.
+> >
+> > I have a couple patches applied to mine which mimic some of the stuff
+> > that NXP did.  Since I have access to a programmer manual, i was able
+> > to confirm some of the 7535 specific stuff and the low-refresh rate
+> > changes in their kernel appear appropriate and I also created a second
+> > table of default settings for the 7535 and if the type is set
+> > properly, i'll use the newer table instead of the older one. If anyone
+> > wants any of these patches, I can certainly share them, but I am not
+> > certain they make any difference.
+> >
+> > There are a few other items in the programmer manual that I want to
+> > attempt to implement once I have a chance to further review the
+> > document.
+> >
+> > >
+> > > I think that the most important one is the blanking calc. Can you try to
+> > > revert "drm/bridge: adv7511: Repair bus_flags and bus_format" and check
+> > > if you can get a output still? Also something to try would be to disable
+> > > the internal timing generator by specifying
+> > > 'adi,disable-timing-generator'. Also if you have an oscilloscope for
 >
-> Re-nack for all of the same reasons.
-> AKA This can only break the users of the user namespace.
->
-> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
->
-> You aren't fixing what your problem you are papering over it by denying
-> access to the user namespace.
->
-> Nack Nack Nack.
->
-> Stop.
->
-> Go back to the drawing board.
->
-> Do not pass go.
->
-> Do not collect $200.
+> I did some reading about the internal timing generator.  It appears
+> that it's required when video formats use fractional bytes, and it's
+> preconfigured to run at 720p by default, but registers 28h through 37h
+> configure it for other video modes.
+I think there may still be some issues with the DSIM since some of the
+clock frequencies are set in the device tree.
 
-If you want us to take your comments seriously Eric, you need to
-provide the list with some constructive feedback that would allow
-Frederick to move forward with a solution to the use case that has
-been proposed.  You response above may be many things, but it is
-certainly not that.
+From what I can tell, the pixel rate is calculated based on the
+burst-clock-frequency and that generates a byte clock.  For 891000000,
+the byte clock is 111375000.
 
-We've heard from different users now that there are very real use
-cases for this LSM hook.  I understand you are concerned about adding
-additional controls to user namespaces, but these are controls
-requested by real users, and the controls being requested (LSM hooks,
-with BPF and SELinux implementations) are configurable by the *users*
-at *runtime*.  This patchset does not force additional restrictions on
-user namespaces, it provides a mechanism that *users* can leverage to
-add additional granularity to the access controls surrounding user
-namespaces.
+Modetest timings for 1080p show:
 
-Eric, if you have a different approach in mind to adding a LSM hook to
-user namespace creation I think we would all very much like to hear
-about it.  However, if you do not have any suggestions along those
-lines, and simply want to NACK any effort to add a LSM hook to user
-namespace creation, I think we all understand your point of view and
-respectfully disagree.  Barring any new approaches or suggestions, I
-think Frederick's patches look reasonable and I still plan on merging
-them into the LSM next branch when the merge window closes.
+index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
+  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
+flags: nhsync, nvsync; type: driver
 
--- 
-paul-moore.com
+
+When looking at modetest, there is a clock for 1080p which appears to be 148500.
+111375000/148500 = 750.
+
+The rest of the entries in my table do not divide evenly.  I don;t
+know if that explains the lack of display, but it's something to note.
+It seems to me that instead of fixing the
+samsung,burst-clock-frequency to 891000000, we should make the desired
+PLL related to the desired pixel clock so it divides evenly.
+
+Looking at NXP's kernel, I also noticed that their esc_prescaler is
+based on the byte clock divided by 20MHz.  With some small code
+changes to get the PLL based on the desired pixel clock instead of
+hard-coded,  I was able to set
+
+samsung,burst-clock-frequency = <1500000000>;
+samsung,esc-clock-frequency = <20000000>;
+
+With these settings and the above mentioned code changes, 1080p still
+appears, however when attempting other modes, the display still fails
+to load.  I also noticed that the phy ref clock is set to 27MHz
+instead of NXP's 12MHz.  I attempted to play with that setting, but I
+couldn't get 1080p to work again, so I backed it out.
+
+Maybe I am headed in the wrong direction, but I'm going to examine the
+P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
+this code compares.
+
+If someone who understands the interactions between these different
+components has suggestions, I'm willing to run some experiments.
+
+adam
+
+
+
+>
+> Are you thinking the imx8mm DSI generator would do it better?
+>
+> > > such frequencies you can check the hdmi clk-lane. I noticed that this is
+> > > sometimes wrong.
+> >
+> > I am doing this from my home office as a side project, so I don't have
+> > a scope, but I can try to revert the other patch and try to disable
+> > the internal timing generator when I get home tonight.  I'll report my
+> > findings.
+> >
+> > >
+> > > Regards,
+> > >   Marco
+> > >
+> > > > I didn't try every one.  With that revert, more options come
+> > > > available, but 1440x900 and 800x600 were options I tried
+> > > > unsuccessfullyl.
+> > >
+> > > >
+> > > > adam
+> > > >

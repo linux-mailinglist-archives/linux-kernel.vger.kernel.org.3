@@ -2,46 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E285888F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 10:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF825888FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235111AbiHCI7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 04:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S235168AbiHCJBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiHCI7G (ORCPT
+        with ESMTP id S229602AbiHCJBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 04:59:06 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE432251E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 01:59:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VLGE8GG_1659517139;
-Received: from 30.178.80.143(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VLGE8GG_1659517139)
-          by smtp.aliyun-inc.com;
-          Wed, 03 Aug 2022 16:59:01 +0800
-Message-ID: <c4058896-947d-c802-ac57-bf03eb986378@linux.alibaba.com>
-Date:   Wed, 3 Aug 2022 16:58:59 +0800
+        Wed, 3 Aug 2022 05:01:08 -0400
+Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651B4286D3
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:01:04 -0700 (PDT)
+Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
+        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id 3890B10087D61;
+        Wed,  3 Aug 2022 17:01:00 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id EE83E37C93E;
+        Wed,  3 Aug 2022 17:00:59 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta91.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ST7DrKPqboO2; Wed,  3 Aug 2022 17:00:59 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id C4AC737C93D;
+        Wed,  3 Aug 2022 17:00:59 +0800 (CST)
+Date:   Wed, 3 Aug 2022 17:00:59 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>, Michael Tsirkin <mst@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        sgarzare <sgarzare@redhat.com>
+Message-ID: <2082515061.4772968.1659517259455.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <4185ee25-52af-8271-c4de-3824490fba6a@sjtu.edu.cn>
+References: <20220709022745.21020-1-qtxuning1999@sjtu.edu.cn> <4185ee25-52af-8271-c4de-3824490fba6a@sjtu.edu.cn>
+Subject: Re: [PATCH v3 0/4] virtio/virtio_test
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [PATCH] sched/debug: avoid executing show_state and causing rcu
- stall warning
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <1659489525-82994-1-git-send-email-liusong@linux.alibaba.com>
- <Yuo0U2aWUZRLBAsA@gmail.com>
-From:   Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <Yuo0U2aWUZRLBAsA@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=GB2312
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [36.148.64.77]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
+Thread-Topic: virtio/virtio_test
+Thread-Index: sTk/JzG5xzfYKxwClrIRzy7E2UoPqA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,40 +55,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> * Liu Song <liusong@linux.alibaba.com> wrote:
->
->> From: Liu Song <liusong@linux.alibaba.com>
+
+----- Original Message -----
+> From: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
+> To: "jasowang" <jasowang@redhat.com>, "Michael Tsirkin" <mst@redhat.com>
+> Cc: "eperezma" <eperezma@redhat.com>, "virtualization" <virtualization@lists.linux-foundation.org>, "linux-kernel"
+> <linux-kernel@vger.kernel.org>, "sgarzare" <sgarzare@redhat.com>
+> Sent: Thursday, July 21, 2022 7:55:31 PM
+> Subject: Re: [PATCH v3 0/4] virtio/virtio_test
+
+> On 2022/7/9 10:27, Guo Zhi wrote:
+>> Original virtio_test only use add one descriptor for each io event, thus code of
+>> descriptor chain and indirection have not been tested(one descriptor will not
+>> use indirect feature even indirect feature has been specified). In fact it
+>> would have not been possible for vhost_test to access to the indirect
+>> descriptor table, because it's impossible for virtio_ring.c to allocate it.
 >>
->> If the number of CPUs is large, "sysrq_sched_debug_show" will execute for
->> a long time. Every time I execute "echo t > /proc/sysrq-trigger" on my
->> 128-core machine, the rcu stall warning will be triggered. Moreover,
->> sysrq_sched_debug_show does not need to be protected by rcu_read_lock,
->    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> and no rcu stall warning will appear after adjustment.
+>> This series using descriptor chain and enable indirection feature. And through
+>> gcov we find the code coverage has been improved(not high for virtio_ring.c
+>> because virtio_test only test split virtqueue):
 >>
-> That doesn't mean it doesn't have to be protected by *any* lock - which
-> your patch implements AFAICS.
->
-> There's a couple of lines such as:
->
->          for_each_online_cpu(cpu) {
+>> +------------+-------------+-------------+
+>> |            |virtio_test.c|virtio_ring.c|
+>> +------------+-------------+-------------+
+>> | original   |   72.32%    |   24.71%    |
+>> +------------+-------------+-------------+
+>> | current    |    75%      |   28.05%    |
+>> +------------+-------------+-------------+
+>>
+>> Guo Zhi (4):
+>>    virtio_test: kick vhost for a batch of descriptors
+>>    virtio_test: use random length scatterlists to test descriptor chain
+>>    virtio_test: enable indirection feature
+>>    virtio_test: pregenerate random numbers
+>>
+>>   tools/virtio/virtio_test.c | 85 ++++++++++++++++++++++++++++++--------
+>>   1 file changed, 68 insertions(+), 17 deletions(-)
+>>
+> Hi, the new version patch of virtio_test is waiting for review:)
+> 
+> Thanks.
 
-Hi,
-
-Here I refer to the implementation of "sysrq_timer_list_show", and I 
-don't see any lock.
-
-Maybe there is a problem with the implementation of "sysrq_timer_list_show".
-
-
+Friendly ping for the patches:)
 Thanks
-
->
-> ... which need to be protected against CPU hotplug events.
->
-> I haven't checked any of the deeper code to see what RCU or other
-> protection it may need, but clearly you didn't either ...
->
-> Thanks,
->
-> 	Ingo

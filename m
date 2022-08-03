@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320715887D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149CF5887D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 09:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234909AbiHCHTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 03:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S234857AbiHCHUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 03:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbiHCHTQ (ORCPT
+        with ESMTP id S233836AbiHCHUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 03:19:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22AB5183A9
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659511149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FyM6qsYORmjhyO073Hc8R+EG5HGOEnKHb40DOBWxAFQ=;
-        b=TvFTWNfteyPyyTyZBU3yzBqOH25o3g5J8U2qHPjNuyAYoGlSaZ/DwPLDc6u5FYOurVxgoe
-        kwb8Q6UWALYThYsLtQYm2CQqP41Qqge8h8kN90LwB7UYH0M5zhGJYU9r6IYcgdxiktt+D3
-        R+/iVsvxCSuVv2Fuld5Qjv0z/98/s/o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-CB-BiDc2ORybVdic3VtL2g-1; Wed, 03 Aug 2022 03:19:05 -0400
-X-MC-Unique: CB-BiDc2ORybVdic3VtL2g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 3 Aug 2022 03:20:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5735F264B
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 00:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13846802E5C;
-        Wed,  3 Aug 2022 07:19:03 +0000 (UTC)
-Received: from fedora (unknown [10.40.192.214])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09858492C3B;
-        Wed,  3 Aug 2022 07:19:01 +0000 (UTC)
-Date:   Wed, 3 Aug 2022 09:18:59 +0200
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Michael Wu <michael@allwinnertech.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-Subject: Re: [PATCH] ext4: fix error when itable blocks is greater than
- s_itb_per_group
-Message-ID: <20220803071859.elywnni2yfol4bea@fedora>
-References: <20220802021029.16046-1-michael@allwinnertech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802021029.16046-1-michael@allwinnertech.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E861A61517
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 07:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54930C433D6;
+        Wed,  3 Aug 2022 07:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659511215;
+        bh=8V1+O6tpf7JZgcnyYVZj42/dq24jisoCqFMvzapxHQI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O68PkUMwhkTqY+YWcymrBSP7EsvcKweWdR1THR6k7BSdNHCFcvovq8PH0pkxGh79e
+         PnFxTTtRBg0ukAPy3pmbkywE2BHH1lR3fOEd95Cn3mCZEbTMs7vYRJzSdmrQol9uQI
+         7Lpt7BHd8p7NAzOMgyHiJ7ufUDyf/CDkiqkNFjFjKj53qP9nbxVKMp1qwpzMDQ06Ff
+         p++h12WVTTk7GE6ozPsvumiyufbnmrPP5Fe3eqBgjv6OAWVKHv7x46hl39HH378G2E
+         Ex+dCkv2DSlAfYVRS2VFqwIvBT9ZCpQ8CKaTKdBBRgEhMg5fJ4WkDwdWZ5PkeinzU6
+         tmRpM4gS7pDjg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oJ8ft-000gmz-5p;
+        Wed, 03 Aug 2022 08:20:13 +0100
+Date:   Wed, 03 Aug 2022 08:20:14 +0100
+Message-ID: <87r11xbxox.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 1/2] irqchip/loongson-eiointc: Check hwirq overflow
+In-Reply-To: <20220803042728.3230346-1-chenhuacai@loongson.cn>
+References: <20220803042728.3230346-1-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 10:10:29AM +0800, Michael Wu wrote:
-> The following error occurs when mounting the ext4 image made by image
-> making tool:
-> "ext4_init_inode_table:1301:comm ext4lazyinit:Something is wrong with group
-> 0: used itable blocks: 491; itable unused count: 0."
+On Wed, 03 Aug 2022 05:27:27 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
 > 
-> Currently all the inodes in block group0 and ext4 image is divided by
-> s_inodes_per_group. That leads to a hazard: we can't ensure all
-> s_inodes_per_group are divisible by s_inodes_per_block. For example, when
-> the s_inodes_per_group (equals to 7851) is divided by s_inodes_per_block
-> (which is 16), because 7851 is undivisible by 16, we get the wrong result
-> 490, while 491 is expected.
+> Check hwirq overflow when allocate irq in eiointc domain.
 > 
-> So, we suggest that s_itb_per_group should equal to
-> DIV_ROUND_UP(s_inodes_per_group, s_inodes_per_block) instead of directly
-> getting the result from s_inodes_per_group/s_inodes_per_block.
-
-Hi Michael,
-
-mke2fs is making sure that we completely fill the inote table blocks.
-This is a corrupted image and so AFAICT ext4 is doing the right thing
-here. There does not seem to be a problem to fix, unless you can somehow
-trick mke2fs to make a file system like this.
-
--Lukas
-
-> 
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  fs/ext4/super.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/irqchip/irq-loongson-eiointc.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 845f2f8aee5f..76cbd638ea10 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -4796,8 +4796,8 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  			 sbi->s_inodes_per_group);
->  		goto failed_mount;
->  	}
-> -	sbi->s_itb_per_group = sbi->s_inodes_per_group /
-> -					sbi->s_inodes_per_block;
-> +	sbi->s_itb_per_group = DIV_ROUND_UP(sbi->s_inodes_per_group,
-> +					    sbi->s_inodes_per_block);
->  	sbi->s_desc_per_block = blocksize / EXT4_DESC_SIZE(sb);
->  	sbi->s_sbh = bh;
->  	sbi->s_mount_state = le16_to_cpu(es->s_state) & ~EXT4_FC_REPLAY;
-> -- 
-> 2.29.0
-> 
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 80d8ca6f2d46..f8060e58ee06 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -241,8 +241,11 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  	struct eiointc *priv = domain->host_data;
+>  
+>  	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
+> -	if (ret)
+> -		return ret;
+> +	if (ret < 0)
+> +		return -EINVAL;
+> +
+> +	if (hwirq >= IOCSR_EXTIOI_VECTOR_NUM)
+> +		return -EINVAL;
 
+How can this happen? Also, you're allocating a *range*. Surely the
+upper boundary should matter too?
+
+And for the umpteenth time, please add a cover letter when sending
+multiple patches. This is a hard requirement for me.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

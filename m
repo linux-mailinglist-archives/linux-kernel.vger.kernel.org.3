@@ -2,95 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ACF588B85
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982F2588B89
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbiHCLsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S236258AbiHCLuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiHCLr6 (ORCPT
+        with ESMTP id S232187AbiHCLuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:47:58 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195636350
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:47:57 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LyVV30c2yz9sjr;
-        Wed,  3 Aug 2022 13:47:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id doBvf-znTPLH; Wed,  3 Aug 2022 13:47:55 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LyVV23kJVz9sjJ;
-        Wed,  3 Aug 2022 13:47:54 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6CB658B77E;
-        Wed,  3 Aug 2022 13:47:54 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ApcK4IofWmRZ; Wed,  3 Aug 2022 13:47:54 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4AC5A8B76D;
-        Wed,  3 Aug 2022 13:47:54 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 273BleqG2500049
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 3 Aug 2022 13:47:41 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 273Bld662500048;
-        Wed, 3 Aug 2022 13:47:39 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
-Subject: [PATCH] powerpc/ppc-opcode: Fix PPC_RAW_TW()
-Date:   Wed,  3 Aug 2022 13:47:33 +0200
-Message-Id: <eca9251f1e1f82c4c46ec6380ddb28356ab3fdfe.1659527244.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.36.1
+        Wed, 3 Aug 2022 07:50:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C864FD;
+        Wed,  3 Aug 2022 04:50:19 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z2so10731423edc.1;
+        Wed, 03 Aug 2022 04:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=Xfy8aNBxAEIDUkqVJF9Ibo2cxQdqUrKmq9nVT5TGeb4=;
+        b=q06uYS6Lpx/evNZGomXqRCnSi8342gUetR1Y0vA5vGVC2K7QTTrg9ovmNnswtOpK9p
+         /V4/ZUdZjbfOW2zWJjg7XiQwxU53nb2+eDwpGKlHO7YPCRtD6OFQeTLZmdyVWlwZx0ij
+         nUUKDAIt3HmRppJ+39xNtUUtCtprkKWFC46XstVepKe4JiEpPKX4nOjCRS1sU/+MN9PE
+         n0UhmANWMeoOA5glqzgucEP4wXMj5F1jkRObnn/JxnP4M/xabXdawTGm4D9clsJs9r6F
+         a5js8QGii+4Y/Agw140jFr+0cE7XEVFNCaB1KMTa5WUerLCuh9GQ+8KqNhGIQNX7DiMq
+         Y5sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=Xfy8aNBxAEIDUkqVJF9Ibo2cxQdqUrKmq9nVT5TGeb4=;
+        b=ZY2eVBhOAdEu96V9K819UVOG3x89xNW+15ehIqM2ZYo0pmXYHuzbxN0tMW//Lu7V8q
+         9p/V14HOZ/TAd2P82nw8aTkH1JRnjiRPgfovichl8XuXFUaYJcNeFu0YAjlyZzlXdD2f
+         phjO+ZTtxmV84Lytvo9m5lvqIf68uT32SQNn9TH6Kl6DTWW3/wbApcnjV9hhEAbTkhG4
+         6Cd1jJbbwCbP6vqTrvVf4Je21j5a794VZ0jxu7w9q/HoCYzg/OJKxCrUeYEguYjWD8CT
+         QWVSvgFdE4hra95a2j2WWxxmMvL8bannhzaJ7Ru/SvFX0Q2D6QsTkVEMnKfbS+IsNu10
+         +/9Q==
+X-Gm-Message-State: AJIora+m/qiMW2785VxAVViih1R9ZCgPnQWcyIeAmQ5/ys5oUDIvQ/yp
+        NZMkRERGJLgJ7YhrYAMSKnY=
+X-Google-Smtp-Source: AGRyM1uLxFjncVzokhngRcR7TZtCqTFZL6ndKOsdpRVVFE/OJQ+H7/6eOszl1lH6X3Ddu0EYpF5sDQ==
+X-Received: by 2002:a05:6402:ce:b0:43c:874f:e08f with SMTP id i14-20020a05640200ce00b0043c874fe08fmr25805718edu.225.1659527417668;
+        Wed, 03 Aug 2022 04:50:17 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b0072af92fa086sm7197649ejt.32.2022.08.03.04.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 04:50:17 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 3 Aug 2022 13:50:15 +0200
+To:     Hao Luo <haoluo@google.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf-next v1] bpf, iter: clean up bpf_seq_read().
+Message-ID: <Yupg989wWYl4kmdZ@krava>
+References: <20220801205039.2755281-1-haoluo@google.com>
+ <YukHHCF0DA6Xb/Rf@krava>
+ <CA+khW7iGQyoxRuOR=fHFzjpXLnHKraJ6=brktaZw6Rqkg85a6g@mail.gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1659527252; l=1237; s=20211009; h=from:subject:message-id; bh=q4z8VGusFX6wV2lZ89BFKcrRPn8EYW1/BTdsXFIX+ic=; b=QrC0fGdSrkhzt9X+BoEVgsQuNiuVNKmdGGJ4AE7S5ZbvAtRttsUlWfm4elBxCgDK6qMZ1Uy2jDBW F54j4BQFA2ziw7cN6UoVf8HD/lmDAJ8b2ZkilTqvq04jqCR1I8DX
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+khW7iGQyoxRuOR=fHFzjpXLnHKraJ6=brktaZw6Rqkg85a6g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PPC_RAW_TW() is erroneously defined with base code 0x7f000008
-instead of 0x7c000008.
+On Tue, Aug 02, 2022 at 05:15:50PM -0700, Hao Luo wrote:
+> On Tue, Aug 2, 2022 at 4:14 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Mon, Aug 01, 2022 at 01:50:39PM -0700, Hao Luo wrote:
+> >
+> > SNIP
+> >
+> > > +static int do_seq_show(struct seq_file *seq, void *p, size_t offs)
+> > > +{
+> > > +     int err;
+> > > +
+> > > +     WARN_ON(IS_ERR_OR_NULL(p));
+> > > +
+> > > +     err = seq->op->show(seq, p);
+> > > +     if (err > 0) {
+> > > +             /* object is skipped, decrease seq_num, so next
+> > > +              * valid object can reuse the same seq_num.
+> > > +              */
+> > > +             bpf_iter_dec_seq_num(seq);
+> > > +             seq->count = offs;
+> > > +             return err;
+> > > +     }
+> > > +
+> > > +     if (err < 0 || seq_has_overflowed(seq)) {
+> > > +             seq->count = offs;
+> > > +             return err ? err : -E2BIG;
+> > > +     }
+> > > +
+> > > +     /* err == 0 and no overflow */
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +/* do_seq_stop, stops at the given object 'p'. 'p' could be an ERR or NULL. If
+> > > + * 'p' is an ERR or there was an overflow, reset seq->count to 'offs' and
+> > > + * returns error. Returns 0 otherwise.
+> > > + */
+> > > +static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
+> > > +{
+> > > +     if (IS_ERR(p)) {
+> > > +             seq->op->stop(seq, NULL);
+> > > +             seq->count = offs;
+> >
+> > should we set seq->count to 0 in case of error?
+> >
+> 
+> Thanks Jiri. To be honest, I don't know. There are two paths that may
+> lead to an error "p".
+> 
+> First, seq->op->start() could return ERR, in that case, '"offs'" is
+> zero and we set it to zero already. This is fine.
 
-That's invisible because its only user is PPC_RAW_TRAP() which is
-0x7fe00008, but fix it anyway to avoid any risk of future bug.
+ah right, offs is zero at that time, looks good then
 
-Reported-by: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
-Fixes: d00d762daf12 ("powerpc/ppc-opcode: Define and use PPC_RAW_TRAP() and PPC_RAW_TW()")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/ppc-opcode.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> The other one, seq->op->next() could return ERR. This is a case where
+> bpf_seq_read() fails to handle right now, so I am not sure what to do.
 
-diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
-index d9703c5fd713..c6d724104ed1 100644
---- a/arch/powerpc/include/asm/ppc-opcode.h
-+++ b/arch/powerpc/include/asm/ppc-opcode.h
-@@ -571,7 +571,7 @@
- 
- #define PPC_RAW_BRANCH(offset)		(0x48000000 | PPC_LI(offset))
- #define PPC_RAW_BL(offset)		(0x48000001 | PPC_LI(offset))
--#define PPC_RAW_TW(t0, a, b)		(0x7f000008 | ___PPC_RS(t0) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_TW(t0, a, b)		(0x7c000008 | ___PPC_RS(t0) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_TRAP()			PPC_RAW_TW(31, 0, 0)
- #define PPC_RAW_SETB(t, bfa)		(0x7c000100 | ___PPC_RT(t) | ___PPC_RA((bfa) << 2))
- 
--- 
-2.36.1
+but maybe we don't need to set seq->count in here, like:
 
+	static int do_seq_stop(struct seq_file *seq, void *p, size_t offs)
+	{
+		if (IS_ERR(p)) {
+			seq->op->stop(seq, NULL);
+			return PTR_ERR(p);
+		}
+
+because it's already set by error path of do_seq_show
+
+> 
+> Based on my understanding reading the code, if seq->count isn't
+> zeroed, the current read() will not copy data, but the next read()
+> will copy data (see the "if (seq->count)" at the beginning of
+> bpf_seq_read). If seq->count is zeroed, the data in buffer will be
+> discarded. I don't know what is right.
+
+I think we should return the buffer up to the point there's an error,
+that's why we set seq->count to previous offs value after failed
+show callback
+
+jirka

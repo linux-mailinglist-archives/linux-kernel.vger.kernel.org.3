@@ -2,173 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD030588BEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D986588BEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbiHCMW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S237743AbiHCMWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237851AbiHCMWM (ORCPT
+        with ESMTP id S236097AbiHCMWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:22:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A6513E35;
-        Wed,  3 Aug 2022 05:22:11 -0700 (PDT)
+        Wed, 3 Aug 2022 08:22:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B33D13D5B;
+        Wed,  3 Aug 2022 05:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659529331; x=1691065331;
+  t=1659529329; x=1691065329;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8HOQd1wDQcuWohstXq9pTpJMEGYQijbNIPB9ABdU6tw=;
-  b=Wja+KGDF6ED1c/PFQeHRmrG6r5ex49D9qR0bCosND93NnD/0oGUlhxqm
-   DbDk0X7YVb1BXT92IvVGxosw2xj2SlrjQngSutyuI+mKkZwq9AKcifusJ
-   F1PlvUVHP6DHDG9O3kkv4Bp5S6Id9J6gxGXHOAjdk6QFzs9UBHqVTl79D
-   zbENzpk8tKVUgKyc0CpMZ8NWIXT8G94+pDaTiZaBHcXip7BR4hIAuV36p
-   25o5zofNGsJ3VtJ/nQyzIcCjCOejLyjIANZA6JhCmvqIi71PH0Os7W8+m
-   GlRjIUsCJdQVqzjzMLngLRwJXzkn/X0g6gcxgZYJWzv2TK3i8elyVIyxq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="269427567"
+  bh=5vBF8Ok5lBg7xULP4o1v53TnQYulqo1ZFvofkSMmRTc=;
+  b=nnrcFwt7L/ki9Xf9CAQEpVl0vsHdAGWIRCGu7F1GcbUMRPLsMuwNHwLO
+   yoxgtyR54ga04dLUo86/WQH0uya+qiqJa1/zeERmJOJEeV93sD9TAYlXZ
+   qArm7nR0thDseZ1ccEty5chNhk+fZotpFvHawrFUOxkFhNSS5Olxs9ciR
+   lelkF50xV+vGYFFSwGEPOdf59rsMmedMkMhzmZwZ8v6NXKhRVTZFFXDaa
+   zmH/0uQOehUr61atC+bJG05/pDQtmW5qZwQfEI1gKUWvHMRYLDgVQxc/M
+   Jq9y6nPfpCmz8GB9X0CGAdzVA47oo5DhvHw0Zj7hzYIFZtV84hQZMN17O
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="276571622"
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="269427567"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:07 -0700
+   d="scan'208";a="276571622"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 05:22:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="848562337"
+   d="scan'208";a="553301867"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
+  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2022 05:22:05 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oJDO1-000HFi-0X;
+        id 1oJDO1-000HFb-0I;
         Wed, 03 Aug 2022 12:22:05 +0000
-Date:   Wed, 3 Aug 2022 20:21:40 +0800
+Date:   Wed, 3 Aug 2022 20:21:42 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v1 1/1] leds: bcm6328: Get rid of custom
- led_init_default_state_get()
-Message-ID: <202208032028.jurRnUDS-lkp@intel.com>
-References: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
+To:     Eddie James <eajames@linux.ibm.com>, joel@jms.id.au
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, linux@roeck-us.net,
+        jdelvare@suse.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        devicetree@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Subject: Re: [PATCH 3/3] hwmon: (occ) Check for device property for setting
+ OCC active during probe
+Message-ID: <202208032055.PEvfcqsc-lkp@intel.com>
+References: <20220802194656.240564-4-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802212549.7184-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220802194656.240564-4-eajames@linux.ibm.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi Eddie,
 
 I love your patch! Yet something to improve:
 
-[auto build test ERROR on pavel-leds/for-next]
-[also build test ERROR on linus/master v5.19 next-20220802]
+[auto build test ERROR on next-20220728]
+[also build test ERROR on v5.19]
+[cannot apply to groeck-staging/hwmon-next linus/master v5.19 v5.19-rc8 v5.19-rc7]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/leds-bcm6328-Get-rid-of-custom-led_init_default_state_get/20220803-052959
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
-config: arc-randconfig-r016-20220801 (https://download.01.org/0day-ci/archive/20220803/202208032028.jurRnUDS-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
+base:    7c5e07b73ff3011c9b82d4a3286a3362b951ad2b
+config: arm-randconfig-r021-20220803 (https://download.01.org/0day-ci/archive/20220803/202208032055.PEvfcqsc-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 495519e5f8232d144ed26e9c18dbcbac6a5f25eb)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/514383e5dd28e25f812c88b0454a02d59e4d205c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/31dc5bad51ddf22f4e097c0c5862d14341708188
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/leds-bcm6328-Get-rid-of-custom-led_init_default_state_get/20220803-052959
-        git checkout 514383e5dd28e25f812c88b0454a02d59e4d205c
+        git fetch --no-tags linux-review Eddie-James/occ-Restore-default-behavior-of-polling-OCC-during-init/20220803-034854
+        git checkout 31dc5bad51ddf22f4e097c0c5862d14341708188
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/occ/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/leds/leds-bcm6328.c: In function 'bcm6328_led':
->> drivers/leds/leds-bcm6328.c:353:17: error: implicit declaration of function 'led_init_default_state_get'; did you mean 'led_get_default_pattern'? [-Werror=implicit-function-declaration]
-     353 |         state = led_init_default_state_get(init_data.fwnode);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 led_get_default_pattern
-   cc1: some warnings being treated as errors
+>> drivers/hwmon/occ/p9_sbe.c:188:25: error: use of undeclared identifier 'p8_i2c_occ_of_match'; did you mean 'p9_sbe_occ_of_match'?
+   MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
+                           ^~~~~~~~~~~~~~~~~~~
+                           p9_sbe_occ_of_match
+   include/linux/module.h:244:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                 ^
+   drivers/hwmon/occ/p9_sbe.c:183:34: note: 'p9_sbe_occ_of_match' declared here
+   static const struct of_device_id p9_sbe_occ_of_match[] = {
+                                    ^
+   1 error generated.
 
 
-vim +353 drivers/leds/leds-bcm6328.c
+vim +188 drivers/hwmon/occ/p9_sbe.c
 
-   326	
-   327	static int bcm6328_led(struct device *dev, struct device_node *nc, u32 reg,
-   328			       void __iomem *mem, spinlock_t *lock,
-   329			       unsigned long *blink_leds, unsigned long *blink_delay)
-   330	{
-   331		struct led_init_data init_data = {};
-   332		struct bcm6328_led *led;
-   333		enum led_default_state state;
-   334		unsigned long val, shift;
-   335		void __iomem *mode;
-   336		int rc;
-   337	
-   338		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-   339		if (!led)
-   340			return -ENOMEM;
-   341	
-   342		led->pin = reg;
-   343		led->mem = mem;
-   344		led->lock = lock;
-   345		led->blink_leds = blink_leds;
-   346		led->blink_delay = blink_delay;
-   347	
-   348		if (of_property_read_bool(nc, "active-low"))
-   349			led->active_low = true;
-   350	
-   351		init_data.fwnode = of_fwnode_handle(nc);
-   352	
- > 353		state = led_init_default_state_get(init_data.fwnode);
-   354		switch (state) {
-   355		case LEDS_DEFSTATE_ON:
-   356			led->cdev.brightness = LED_FULL;
-   357			break;
-   358		case LEDS_DEFSTATE_KEEP:
-   359			shift = bcm6328_pin2shift(led->pin);
-   360			if (shift / 16)
-   361				mode = mem + BCM6328_REG_MODE_HI;
-   362			else
-   363				mode = mem + BCM6328_REG_MODE_LO;
-   364	
-   365			val = bcm6328_led_read(mode) >> BCM6328_LED_SHIFT(shift % 16);
-   366			val &= BCM6328_LED_MODE_MASK;
-   367			if ((led->active_low && val == BCM6328_LED_MODE_OFF) ||
-   368			    (!led->active_low && val == BCM6328_LED_MODE_ON))
-   369				led->cdev.brightness = LED_FULL;
-   370			else
-   371				led->cdev.brightness = LED_OFF;
-   372			break;
-   373		default:
-   374			led->cdev.brightness = LED_OFF;
-   375		}
-   376	
-   377		bcm6328_led_set(&led->cdev, led->cdev.brightness);
-   378	
-   379		led->cdev.brightness_set = bcm6328_led_set;
-   380		led->cdev.blink_set = bcm6328_blink_set;
-   381	
-   382		rc = devm_led_classdev_register_ext(dev, &led->cdev, &init_data);
-   383		if (rc < 0)
-   384			return rc;
-   385	
-   386		dev_dbg(dev, "registered LED %s\n", led->cdev.name);
-   387	
-   388		return 0;
-   389	}
-   390	
+   182	
+   183	static const struct of_device_id p9_sbe_occ_of_match[] = {
+   184		{ .compatible = "ibm,p9-occ-hwmon" },
+   185		{ .compatible = "ibm,p10-occ-hwmon" },
+   186		{}
+   187	};
+ > 188	MODULE_DEVICE_TABLE(of, p8_i2c_occ_of_match);
+   189	
 
 -- 
 0-DAY CI Kernel Test Service

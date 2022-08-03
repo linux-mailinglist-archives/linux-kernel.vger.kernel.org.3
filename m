@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B0558895D
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C6B58895E
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237426AbiHCJZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S237424AbiHCJZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbiHCJZZ (ORCPT
+        with ESMTP id S237550AbiHCJZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:25:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2442B6477;
-        Wed,  3 Aug 2022 02:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659518724; x=1691054724;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Mpc9ql9WljDPRP7txCzjpWEnWSBDud0g9AFs6lsLb7c=;
-  b=MiiwfjDEd8BwyOcV3SblIIuRghZBoLGnTsjLuq7SInxneDHdy/S2Yiel
-   +jHKwgKwFN1PGG/LBEPZv0tkRzMSpByPyodzth7zEKE5O1SYCwjjIFwkp
-   Ntxcjv/RaI/t7bpF+1Nsd89tnMdZghtnMyvq/UjsLJYdGn47mO8iThqjO
-   hCv29smHg7n1g2AHOWsXFux5SpKxO35lDEOYSZeRJAvEQFvidLf+Ia1Ca
-   rtPipAqsyv8kKKyZKK7+8S5I0Ld7ZklY+Ley/C7a04dyf47qg2djFqu4u
-   P5B9ZfOpAchK7KrxoFP6aFVOX2qFwnG9fxwUKL9xr9DZFCwMQI/tLw88W
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="353631315"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="353631315"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:25:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="606323582"
-Received: from gvenka2-desk.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.85.17])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 02:25:18 -0700
-Message-ID: <49bdec04ae962e25d9c9dbce61a8098beba1682e.camel@intel.com>
-Subject: Re: [PATCH v5 1/22] x86/virt/tdx: Detect TDX during kernel boot
-From:   Kai Huang <kai.huang@intel.com>
-To:     "Wu, Binbin" <binbin.wu@linux.intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Wed, 03 Aug 2022 21:25:16 +1200
-In-Reply-To: <7bd30975-fdcc-7d87-af4a-448b92bb6e02@linux.intel.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <062075b36150b119bf2d0a1262de973b0a2b11a7.1655894131.git.kai.huang@intel.com>
-         <7bd30975-fdcc-7d87-af4a-448b92bb6e02@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Wed, 3 Aug 2022 05:25:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7F65072C
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 02:25:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CFE713D5;
+        Wed,  3 Aug 2022 02:25:45 -0700 (PDT)
+Received: from [10.57.12.36] (unknown [10.57.12.36])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 85F5B3F67D;
+        Wed,  3 Aug 2022 02:25:42 -0700 (PDT)
+Message-ID: <5bce32f7-c3c2-7750-2c48-1d54eb645607@arm.com>
+Date:   Wed, 3 Aug 2022 10:25:37 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] iommu/arm-smmu-v3: fixed check process for disable_bypass
+ module parameter
+Content-Language: en-GB
+To:     Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>, will@kernel.org,
+        joro@8bytes.org, thunder.leizhen@huawei.com, jgg@ziepe.ca,
+        tglx@linutronix.de, chenxiang66@hisilicon.com,
+        christophe.jaillet@wanadoo.fr, john.garry@huawei.com,
+        baolu.lu@linux.intel.com, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220802234207.1994093-1-ishii.shuuichir@fujitsu.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220802234207.1994093-1-ishii.shuuichir@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-02 at 10:01 +0800, Wu, Binbin wrote:
-> On 2022/6/22 19:15, Kai Huang wrote:
-> > +	/*
-> > +	 * TDX guarantees at least two TDX KeyIDs are configured by
-> > +	 * BIOS, otherwise SEAMRR is disabled.  Invalid TDX private
-> > +	 * range means kernel bug (TDX is broken).
-> > +	 */
-> > +	if (WARN_ON(!tdx_keyid_start || tdx_keyid_num < 2)) {
-> Do you think it's better to define a meaningful macro instead of the=20
-> number here and below?
-> >=20
+On 2022-08-03 00:42, Shuuichirou Ishii wrote:
+> The current process does not enable the bypass setting regardless of
+> the value of the disable_bypass module parameter when ACPI is enabled,
+> so the value of the disable_bypass module parameter has been corrected
+> so that it is handled correctly.
+> 
+> Signed-off-by: Shuuichirou Ishii <ishii.shuuichir@fujitsu.com>
+> ---
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 88817a3376ef..256d7b2a83a7 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -3396,7 +3396,7 @@ static int arm_smmu_device_reset(struct arm_smmu_device *smmu, bool bypass)
+>   		enables &= ~(CR0_EVTQEN | CR0_PRIQEN);
+>   
+>   	/* Enable the SMMU interface, or ensure bypass */
+> -	if (!bypass || disable_bypass) {
+> +	if (!bypass && disable_bypass) {
 
-Personally I don't think we need a macro.  The comment already said "two", =
-so=20
-having a macro doesn't help readability here (and below).  But I am open on
-this.
+This change looks obviously wrong - if bypass is false here then we 
+definitely want to enable the SMMU, so disable_bypass is irrelevant. It 
+shouldn't even be possible to get here with bypass==true under ACPI, 
+since arm_smmu_device_acpi_probe() cannot fail :/
 
---=20
-Thanks,
--Kai
+Robin.
 
-
+>   		enables |= CR0_SMMUEN;
+>   	} else {
+>   		ret = arm_smmu_update_gbpa(smmu, 0, GBPA_ABORT);

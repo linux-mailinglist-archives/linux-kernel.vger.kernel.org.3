@@ -2,171 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECF35893DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCAB5893E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 23:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238731AbiHCVCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 17:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S238798AbiHCVCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 17:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiHCVCa (ORCPT
+        with ESMTP id S238619AbiHCVCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:02:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D575C94E
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 14:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659560549; x=1691096549;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bkeutH+PhWIi8EKHJGINnOhqui6pIAVhNRZOLh6qgBY=;
-  b=NkYUUB4VMjKOd3vCbPq1d3cVXSW8oBfufp91G/ptfgfp2p3u2LYP1F59
-   xu0HrnGRYDRUwTTBXKS9YJGYei3Jm69rPSAzvuJ+5PV5discyBFYX3SmL
-   xEKUeKZrGpc8o6Wa4z4KkiwYXZMo2BK8LjggPAIKajXQ+CM8rLcxMOBVK
-   FdAAuLM2Ibb5ddZP2FZOfzcN2moVNe2eFQj4HSKgtr90MMXYyXphgwt5q
-   MFsrxMBKRX9wjtpw3GFWUvEz7KA6OtRrzWLZKpLLPoiUuBnjlnFrC5GjW
-   W7YPwmFS+T6jcbhrMUIhqRVUtI0RdqoNtLC9NbB+RAFzEidaz76lj/Nv2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10428"; a="272822536"
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="272822536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 14:02:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,214,1654585200"; 
-   d="scan'208";a="631300049"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2022 14:02:23 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oJLVW-000HeT-1p;
-        Wed, 03 Aug 2022 21:02:22 +0000
-Date:   Thu, 4 Aug 2022 05:01:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/100-shutdown-notifier 4/20] kernel/reboot.c:527:
- warning: expecting prototype for devm_register_sys_off_handler(). Prototype
- was for register_sys_off_handler() instead
-Message-ID: <202208040448.eeEkCz9R-lkp@intel.com>
+        Wed, 3 Aug 2022 17:02:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D715C975;
+        Wed,  3 Aug 2022 14:02:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE1E4B8227F;
+        Wed,  3 Aug 2022 21:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC5CEC433C1;
+        Wed,  3 Aug 2022 21:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659560565;
+        bh=e+grTF5BE4esl7EzfvSL6GjdlRB7jhRFfHvw7jH6pxg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OZk4UIopQVoEbylvtTkTJUwOrpHDwWqYwZDK5TqVpbsJnc/OBciMhmH/iIaTNPk+m
+         BQrT/EwwHs2eAjPdXNb2gphNWUp+XlFj3Rc25cQioXWtbOzjZ9CX6ffnLMwMwftgs/
+         fiz3wM3DI7e7Wnmfw+BaEsqoxW9MEAccOobYTJ51TV+J9ThZQOIi2A1ZuMkwH/UcOI
+         MTH2JL3rLzmdEswbZvY4HmyNafn6Tsifr5L9mYMhZC4pAVYiiHgL+ko0KyUYbwQkUB
+         eaN6pOzDPOk3S/HBgbQgt9BlaSpL+dMG/BezZ3aXFJe5WyaUHwpZWgEd3cjJ3/CVlL
+         AKtgWprzmiW0w==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] tpmdd updates for v5.20
+Date:   Thu,  4 Aug 2022 00:02:28 +0300
+Message-Id: <20220803210228.158993-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
-head:   46a27d382539df38bc077d9b5222bc59c5419da3
-commit: a3f4d076562a88f1b59fbb194befc2dd9766838b [4/20] kernel: Add combined power-off+restart handler call chain API
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220804/202208040448.eeEkCz9R-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/AsahiLinux/linux/commit/a3f4d076562a88f1b59fbb194befc2dd9766838b
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/100-shutdown-notifier
-        git checkout a3f4d076562a88f1b59fbb194befc2dd9766838b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+Contains mostly TPM and also few keyring fixes.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+BR, Jarkko
 
-All warnings (new ones prefixed by >>):
+The following changes since commit 200e340f2196d7fd427a5810d06e893b932f145a:
 
-   kernel/reboot.c:231: warning: Function parameter or member 'cmd' not described in 'do_kernel_restart'
->> kernel/reboot.c:527: warning: expecting prototype for devm_register_sys_off_handler(). Prototype was for register_sys_off_handler() instead
-   kernel/reboot.c:1123: warning: Function parameter or member 'poweroff_delay_ms' not described in 'hw_failure_emergency_poweroff'
+  Merge tag 'pull-work.dcache' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2022-08-03 11:43:12 -0700)
 
+are available in the Git repository at:
 
-vim +527 kernel/reboot.c
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.20
 
-   515	
-   516	/**
-   517	 *	devm_register_sys_off_handler - Register system power-off/restart handler
-   518	 *	@dev: Device that registers handler
-   519	 *	@handler: System-off handler
-   520	 *
-   521	 *	Registers handler that will be called as last step of the power-off
-   522	 *	and restart sequences.
-   523	 *
-   524	 *	Returns zero on success, or error code on failure.
-   525	 */
-   526	int register_sys_off_handler(struct sys_off_handler *handler)
- > 527	{
-   528		struct sys_off_handler_private_data *priv;
-   529		int err, priority;
-   530	
-   531		priv = sys_off_handler_private_data(handler);
-   532	
-   533		/* sanity-check whether handler is registered twice */
-   534		if (priv->registered)
-   535			return -EBUSY;
-   536	
-   537		if (handler->power_off_cb || handler->power_off_prepare_cb) {
-   538			if (handler->power_off_priority == POWEROFF_PRIO_RESERVED)
-   539				priority = POWEROFF_PRIO_DEFAULT;
-   540			else
-   541				priority = handler->power_off_priority;
-   542	
-   543			priv->power_off_nb.notifier_call = sys_off_handler_power_off;
-   544			priv->power_off_nb.priority = priority;
-   545	
-   546			err = register_power_off_handler(&priv->power_off_nb);
-   547			if (err)
-   548				goto reset_sys_off_handler;
-   549		}
-   550	
-   551		if (handler->restart_cb) {
-   552			if (handler->restart_priority == RESTART_PRIO_RESERVED)
-   553				priority = RESTART_PRIO_DEFAULT;
-   554			else
-   555				priority = handler->restart_priority;
-   556	
-   557			priv->restart_nb.notifier_call = sys_off_handler_restart;
-   558			priv->restart_nb.priority = priority;
-   559	
-   560			err = register_restart_handler(&priv->restart_nb);
-   561			if (err)
-   562				goto unreg_power_off_handler;
-   563		}
-   564	
-   565		if (handler->reboot_prepare_cb) {
-   566			priv->reboot_nb.notifier_call = sys_off_handler_reboot;
-   567			priv->reboot_nb.priority = handler->reboot_priority;
-   568	
-   569			err = register_reboot_notifier(&priv->reboot_nb);
-   570			if (err)
-   571				goto unreg_restart_handler;
-   572		}
-   573	
-   574		priv->registered = true;
-   575	
-   576		return 0;
-   577	
-   578	unreg_restart_handler:
-   579		if (handler->restart_cb)
-   580			unregister_restart_handler(&priv->restart_nb);
-   581	
-   582	unreg_power_off_handler:
-   583		if (handler->power_off_cb)
-   584			unregister_power_off_handler(&priv->power_off_nb);
-   585	
-   586	reset_sys_off_handler:
-   587		memset(priv, 0, sizeof(*priv));
-   588	
-   589		return err;
-   590	}
-   591	EXPORT_SYMBOL(register_sys_off_handler);
-   592	
+for you to fetch changes up to 863ed94c589fcd1984f4e3080f069d30508044bb:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  tpm: Add check for Failure mode for TPM2 modules (2022-08-03 23:56:20 +0300)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.20
+
+----------------------------------------------------------------
+Alexander Steffen (3):
+      dt-bindings: trivial-devices: Add Infineon SLB9673 TPM
+      tpm: Add tpm_tis_verify_crc to the tpm_tis_phy_ops protocol layer
+      tpm: Add tpm_tis_i2c backend for tpm_tis_core
+
+Elvira Khabirova (1):
+      pkcs7: support EC-RDSA/streebog in SignerInfo
+
+Huacai Chen (1):
+      tpm: eventlog: Fix section mismatch for DEBUG_SECTION_MISMATCH
+
+Mårten Lindahl (1):
+      tpm: Add check for Failure mode for TPM2 modules
+
+Stefan Mahnke-Hartmann (1):
+      tpm: Add upgrade/reduced mode support for TPM1.2 modules
+
+Tianjia Zhang (4):
+      X.509: Support parsing certificate using SM2 algorithm
+      sign-file: Fix confusing error messages
+      pkcs7: parser support SM2 and SM3 algorithms combination
+      KEYS: asymmetric: enforce SM2 signature use pkey algo
+
+Yang Li (1):
+      tpm: fix platform_no_drv_owner.cocci warning
+
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ crypto/asymmetric_keys/pkcs7_parser.c              |  18 +
+ crypto/asymmetric_keys/public_key.c                |   7 +-
+ crypto/asymmetric_keys/x509_cert_parser.c          |   3 +
+ drivers/char/tpm/Kconfig                           |  12 +
+ drivers/char/tpm/Makefile                          |   1 +
+ drivers/char/tpm/tpm.h                             |   1 +
+ drivers/char/tpm/tpm1-cmd.c                        |   7 +-
+ drivers/char/tpm/tpm2-cmd.c                        |   6 +
+ drivers/char/tpm/tpm_tis_core.c                    |  14 +
+ drivers/char/tpm/tpm_tis_core.h                    |  10 +
+ drivers/char/tpm/tpm_tis_i2c.c                     | 390 +++++++++++++++++++++
+ include/linux/tpm_eventlog.h                       |   2 +-
+ scripts/sign-file.c                                |   2 +-
+ 14 files changed, 470 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c

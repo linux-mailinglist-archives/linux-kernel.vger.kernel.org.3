@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96307588D51
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF1A588D55
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237246AbiHCNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S237968AbiHCNlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiHCNkY (ORCPT
+        with ESMTP id S237561AbiHCNlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:40:24 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D75FEF
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:40:23 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id u9-20020a056e021a4900b002dc685a1c13so10338360ilv.19
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 06:40:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=JBAejNxVt67YabHPJXP/y31UMn3ag+IABmrC+RpE9OM=;
-        b=1QvTkc+pkRUJj9Hyal+Dyv2/5qA1b5ZSnIuLDz6YsZ/5wRyWuB+dXHFlAufHdETR/u
-         Mbds67BhvxrkGScKALmZWixj14boXSui75cX/3G18Mp4Atvb+n7xYHeXOYQKPDGTD2/w
-         Qb38pebxh9TKbx91FpWmR5uhhyZRqTJw/M0mzjn+j6sRQz0KElbRJy7lE8Nzw7YiyNLi
-         pYaI30sLo9TSfj7FiwQlqsmexuTcggSLksTKXg+Jc41C5DjJhVlXICb+NfVerdyEsziN
-         IXOp27Zevy5YowWsaG4axEpWNu+vf6g+J29FrHSZS/+KQpUMiXhoXWHNGC78xKKUT8aX
-         Emcw==
-X-Gm-Message-State: AJIora8nR0SYZv16d2lF6a8TwagL90Ti4QHUlZxB2AXTgA0onrKDLHhV
-        XOCXN46FPwSeHG+YcCc2MlwfFoWMqwYUMPXLRTanpwknVJGt
-X-Google-Smtp-Source: AGRyM1vKn6C1vLX/G6Ri0XAQZkvZt0wAtHciHpTPEMab2Mww96EfhC5Mhlc84rwCmjPFAfWVl7EyfNdqXVRGIxma2Om/8H9Lzt2V
+        Wed, 3 Aug 2022 09:41:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37C00656F
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659534078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2EMAmRyDzCav04cN9aQ0b6aj3Y4wJ0XJs9MDP4m98Go=;
+        b=ClLT568mZ2qElJa/gX0Q1i91d7AdHZkUerhLwOz89W/LcLy8gr65aaDQXqpZojazoEADKS
+        MflvMXmjjJ+1agpkCMI4rctGiywugZz/doscH/EXB5kYiuKI6tNqpUSJi41UOJH7WeiUyj
+        2zsEayzz2FDvO93/M8lr70Vo1ZlAT6g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-JnN8OR_SOWa56aWnFQtI_A-1; Wed, 03 Aug 2022 09:41:14 -0400
+X-MC-Unique: JnN8OR_SOWa56aWnFQtI_A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5630580A0B7;
+        Wed,  3 Aug 2022 13:41:13 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AE91492C3B;
+        Wed,  3 Aug 2022 13:41:10 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 00/40] KVM: x86: hyper-v: Fine-grained TLB flush + L2 TLB flush features
+Date:   Wed,  3 Aug 2022 15:40:30 +0200
+Message-Id: <20220803134110.397885-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:1607:0:b0:33f:3af8:61e3 with SMTP id
- a7-20020a021607000000b0033f3af861e3mr10638206jaa.307.1659534023102; Wed, 03
- Aug 2022 06:40:23 -0700 (PDT)
-Date:   Wed, 03 Aug 2022 06:40:23 -0700
-In-Reply-To: <0000000000006ed46805dfaded18@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f0980c05e5565f2d@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in rxe_cleanup_task
-From:   syzbot <syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com>
-To:     haris.iqbal@ionos.com, jgg@nvidia.com, jgg@ziepe.ca,
-        leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, rpearsonhpe@gmail.com,
-        syzkaller-bugs@googlegroups.com, yanjun.zhu@linux.dev,
-        zyjzyj2000@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,150 +64,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Changes since v8:
+- Rebase to the current kvm/queue (93472b797153)
+- selftests: move Hyper-V test pages to a dedicated struct untangling from 
+ vendor-specific (VMX/SVM) pages allocation [Sean].
 
-HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=152d1832080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=833061116fa28df97f3b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13bdcf3c080000
+Original description:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+833061116fa28df97f3b@syzkaller.appspotmail.com
+Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
+by flushing the whole VPID and this is sub-optimal. This series introduces
+the required mechanism to make handling of these requests more 
+fine-grained by flushing individual GVAs only (when requested). On this
+foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The 
+feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
+L0 without the need to reflect the exit to L1. This has at least two
+benefits: reflecting vmexit and the consequent vmenter are avoided + L0
+has precise information whether the target vCPU is actually running (and
+thus requires a kick).
 
-infiniband syz2: set active
-infiniband syz2: added gre0
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 3736 Comm: syz-executor.1 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:979 [inline]
- register_lock_class+0xf30/0x1130 kernel/locking/lockdep.c:1292
- __lock_acquire+0x10a/0x5660 kernel/locking/lockdep.c:4932
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:365 [inline]
- rxe_cleanup_task+0x6f/0xc0 drivers/infiniband/sw/rxe/rxe_task.c:117
- rxe_qp_do_cleanup+0x88/0x8b0 drivers/infiniband/sw/rxe/rxe_qp.c:781
- execute_in_process_context+0x37/0x150 kernel/workqueue.c:3359
- rxe_elem_release drivers/infiniband/sw/rxe/rxe_pool.c:206 [inline]
- kref_put include/linux/kref.h:65 [inline]
- __rxe_put+0x107/0x1f0 drivers/infiniband/sw/rxe/rxe_pool.c:221
- rxe_create_qp+0x2a5/0x320 drivers/infiniband/sw/rxe/rxe_verbs.c:435
- create_qp+0x5ac/0x960 drivers/infiniband/core/verbs.c:1233
- ib_create_qp_kernel+0x9d/0x310 drivers/infiniband/core/verbs.c:1344
- ib_create_qp include/rdma/ib_verbs.h:3732 [inline]
- create_mad_qp+0x177/0x2d0 drivers/infiniband/core/mad.c:2910
- ib_mad_port_open drivers/infiniband/core/mad.c:2991 [inline]
- ib_mad_init_device+0xd51/0x13f0 drivers/infiniband/core/mad.c:3082
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
- ib_register_device drivers/infiniband/core/device.c:1420 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1366
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1112
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:521
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:195 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:176
- nldev_newlink+0x32e/0x5c0 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2485
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2539
- __sys_sendmsg net/socket.c:2568 [inline]
- __do_sys_sendmsg net/socket.c:2577 [inline]
- __se_sys_sendmsg net/socket.c:2575 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2575
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f5cc9289209
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5cca378168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f5cc939bf60 RCX: 00007f5cc9289209
-RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007f5cc92e3161 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcbec8964f R14: 00007f5cca378300 R15: 0000000000022000
- </TASK>
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-BUG: KASAN: null-ptr-deref in atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
-BUG: KASAN: null-ptr-deref in rxe_qp_do_cleanup+0x235/0x8b0 drivers/infiniband/sw/rxe/rxe_qp.c:807
-Write of size 4 at addr 00000000000001e0 by task syz-executor.1/3736
+Sean Christopherson (1):
+  KVM: x86: hyper-v: Add helper to read hypercall data for array
 
-CPU: 0 PID: 3736 Comm: syz-executor.1 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_dec include/linux/atomic/atomic-instrumented.h:257 [inline]
- rxe_qp_do_cleanup+0x235/0x8b0 drivers/infiniband/sw/rxe/rxe_qp.c:807
- execute_in_process_context+0x37/0x150 kernel/workqueue.c:3359
- rxe_elem_release drivers/infiniband/sw/rxe/rxe_pool.c:206 [inline]
- kref_put include/linux/kref.h:65 [inline]
- __rxe_put+0x107/0x1f0 drivers/infiniband/sw/rxe/rxe_pool.c:221
- rxe_create_qp+0x2a5/0x320 drivers/infiniband/sw/rxe/rxe_verbs.c:435
- create_qp+0x5ac/0x960 drivers/infiniband/core/verbs.c:1233
- ib_create_qp_kernel+0x9d/0x310 drivers/infiniband/core/verbs.c:1344
- ib_create_qp include/rdma/ib_verbs.h:3732 [inline]
- create_mad_qp+0x177/0x2d0 drivers/infiniband/core/mad.c:2910
- ib_mad_port_open drivers/infiniband/core/mad.c:2991 [inline]
- ib_mad_init_device+0xd51/0x13f0 drivers/infiniband/core/mad.c:3082
- add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
- enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
- ib_register_device drivers/infiniband/core/device.c:1420 [inline]
- ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1366
- rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:1112
- rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:521
- rxe_newlink drivers/infiniband/sw/rxe/rxe.c:195 [inline]
- rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:176
- nldev_newlink+0x32e/0x5c0 drivers/infiniband/core/nldev.c:1717
- rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
- rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
- rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2485
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2539
- __sys_sendmsg net/socket.c:2568 [inline]
- __do_sys_sendmsg net/socket.c:2577 [inline]
- __se_sys_sendmsg net/socket.c:2575 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2575
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f5cc9289209
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5cca378168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f5cc939bf60 RCX: 00007f5cc9289209
-RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007f5cc92e3161 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcbec8964f R14: 00007f5cca378300 R15: 0000000000022000
- </TASK>
-==================================================================
+Vitaly Kuznetsov (39):
+  KVM: x86: Rename 'enable_direct_tlbflush' to 'enable_l2_tlb_flush'
+  KVM: x86: hyper-v: Resurrect dedicated KVM_REQ_HV_TLB_FLUSH flag
+  KVM: x86: hyper-v: Introduce TLB flush fifo
+  KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls
+    gently
+  KVM: x86: hyper-v: Expose support for extended gva ranges for flush
+    hypercalls
+  KVM: x86: Prepare kvm_hv_flush_tlb() to handle L2's GPAs
+  x86/hyperv: Introduce
+    HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
+  KVM: x86: hyper-v: Use
+    HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK instead of raw
+    '64'
+  KVM: x86: hyper-v: Don't use sparse_set_to_vcpu_mask() in
+    kvm_hv_send_ipi()
+  KVM: x86: hyper-v: Create a separate fifo for L2 TLB flush
+  KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv'
+    instead of on-stack 'sparse_banks'
+  KVM: nVMX: Keep track of hv_vm_id/hv_vp_id when eVMCS is in use
+  KVM: nSVM: Keep track of Hyper-V hv_vm_id/hv_vp_id
+  KVM: x86: Introduce .hv_inject_synthetic_vmexit_post_tlb_flush()
+    nested hook
+  KVM: x86: hyper-v: Introduce kvm_hv_is_tlb_flush_hcall()
+  KVM: x86: hyper-v: L2 TLB flush
+  KVM: x86: hyper-v: Introduce fast guest_hv_cpuid_has_l2_tlb_flush()
+    check
+  x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
+  KVM: nVMX: hyper-v: Cache VP assist page in 'struct kvm_vcpu_hv'
+  KVM: nVMX: hyper-v: Enable L2 TLB flush
+  KVM: nSVM: hyper-v: Enable L2 TLB flush
+  KVM: x86: Expose Hyper-V L2 TLB flush feature
+  KVM: selftests: Better XMM read/write helpers
+  KVM: selftests: Move HYPERV_LINUX_OS_ID definition to a common header
+  KVM: selftests: Move the function doing Hyper-V hypercall to a common
+    header
+  KVM: selftests: Hyper-V PV IPI selftest
+  KVM: selftests: Fill in vm->vpages_mapped bitmap in virt_map() too
+  KVM: selftests: Export vm_vaddr_unused_gap() to make it possible to
+    request unmapped ranges
+  KVM: selftests: Export _vm_get_page_table_entry()
+  KVM: selftests: Hyper-V PV TLB flush selftest
+  KVM: selftests: Sync 'struct hv_enlightened_vmcs' definition with
+    hyperv-tlfs.h
+  KVM: selftests: Sync 'struct hv_vp_assist_page' definition with
+    hyperv-tlfs.h
+  KVM: selftests: Move Hyper-V VP assist page enablement out of evmcs.h
+  KVM: selftests: Split off load_evmcs() from load_vmcs()
+  KVM: selftests: Create a vendor independent helper to allocate Hyper-V
+    specific test pages
+  KVM: selftests: Allocate Hyper-V partition assist page
+  KVM: selftests: evmcs_test: Introduce L2 TLB flush test
+  KVM: selftests: hyperv_svm_test: Introduce L2 TLB flush test
+  KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'
+
+ arch/x86/include/asm/hyperv-tlfs.h            |   6 +-
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+ arch/x86/include/asm/kvm_host.h               |  43 +-
+ arch/x86/kvm/Makefile                         |   3 +-
+ arch/x86/kvm/hyperv.c                         | 334 +++++++--
+ arch/x86/kvm/hyperv.h                         |  53 +-
+ arch/x86/kvm/svm/hyperv.c                     |  18 +
+ arch/x86/kvm/svm/hyperv.h                     |  48 ++
+ arch/x86/kvm/svm/nested.c                     |  39 +-
+ arch/x86/kvm/svm/svm_onhyperv.c               |   2 +-
+ arch/x86/kvm/svm/svm_onhyperv.h               |   6 +-
+ arch/x86/kvm/trace.h                          |  21 +-
+ arch/x86/kvm/vmx/evmcs.c                      |  42 +-
+ arch/x86/kvm/vmx/evmcs.h                      |  13 +-
+ arch/x86/kvm/vmx/nested.c                     |  44 +-
+ arch/x86/kvm/vmx/vmx.c                        |   6 +-
+ arch/x86/kvm/x86.c                            |  18 +-
+ arch/x86/kvm/x86.h                            |   1 +
+ include/asm-generic/hyperv-tlfs.h             |   5 +
+ include/asm-generic/mshyperv.h                |  11 +-
+ tools/testing/selftests/kvm/.gitignore        |   4 +-
+ tools/testing/selftests/kvm/Makefile          |   5 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   1 +
+ .../selftests/kvm/include/x86_64/evmcs.h      |  50 +-
+ .../selftests/kvm/include/x86_64/hyperv.h     | 100 +++
+ .../selftests/kvm/include/x86_64/processor.h  |  72 +-
+ .../selftests/kvm/include/x86_64/vmx.h        |   8 -
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   9 +-
+ .../testing/selftests/kvm/lib/x86_64/hyperv.c |  46 ++
+ .../selftests/kvm/lib/x86_64/processor.c      |   5 +-
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |  45 +-
+ .../x86_64/{evmcs_test.c => hyperv_evmcs.c}   |  69 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |  24 +-
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c | 330 +++++++++
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  64 +-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 644 ++++++++++++++++++
+ 36 files changed, 1934 insertions(+), 257 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/hyperv.c
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/hyperv.c
+ rename tools/testing/selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c} (73%)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_tlb_flush.c
+
+-- 
+2.35.3
 

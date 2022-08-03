@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2601A588ADB
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C99588AE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 13:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiHCLCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 07:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S235790AbiHCLHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 07:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiHCLCv (ORCPT
+        with ESMTP id S230272AbiHCLHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 07:02:51 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CCDA45A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:02:50 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gb36so5221359ejc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 04:02:50 -0700 (PDT)
+        Wed, 3 Aug 2022 07:07:30 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF921A2;
+        Wed,  3 Aug 2022 04:07:28 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id uj29so17667891ejc.0;
+        Wed, 03 Aug 2022 04:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zxgCuHXvqBGV53L1EzFqMcpK4LaucGFDh7Te55uTYfI=;
-        b=F3Lf5AT5HNki4cKAvSdXFqMfIWzz1TfCcYy+1hPz1R6nHXiIut+qNKn60SlWPW+3/y
-         YfjUtWaLxatamH3JPmWeS4hkuRABneECWZTVIISUgmeFl1BD50UQgrJvEv4Wgte7xfpx
-         SSHhO4njWJJlcXEuwNIa0ktmNRm0Ej3K29Qqsrsvmh30h46DilKnagQCIQ0dEQnWyKGK
-         3WDo46XHPjL1aBI99Crh0mxrKCTdL4ZMwJ3bZdcLFhKnW9eyXm0j4s33TudMxh5Imy8M
-         XRAKQIcjIqvdiWNNlVMx+1VkMIjEzxlsX27X9aJa2wbDtz2qkFiMO71vCZBQbjPWkinG
-         fPYA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uJf2Rd5aYjBzLVvZyoKj8ZEt37zTrFyyOUBbDF7qQoQ=;
+        b=VRzqAzRkMg1iji03JVVS21GDJcFATk1vNkRcbyyoBTPNets1KqTdCZjrUQjX3dTQRX
+         zAEw1RwiUMOz46ZC6lWGu3Vtrnx72ru4RBbgclRXQV1N7JoPlPkEJ177+7tnBN68Bi94
+         BLPpcFo3QN55k9frE83NphXOHZo8joIU3RaZdSMxqWgijNrFZU3QkOljOSnbtOLde3sW
+         5/oMo410AZA+z/RNxKjqr9zFVjh3mqQlZ57Xcwz0DObTczNeoPhpRHu3xj8XzBaXgm34
+         pL1st712o6b7Sn2/wg6JDSd1JE8aVtZu1kr2WxacQ5RLN0mipTCr7c3T5AkHlVS9vovv
+         LUKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zxgCuHXvqBGV53L1EzFqMcpK4LaucGFDh7Te55uTYfI=;
-        b=xhdl2PK36l3333KyhL21CrlINHEX8tviO3Y084omxPKJKSp0q9eMIa1rRdBqwgAdG/
-         3xe1+hnN8VdeVK2FCLTC6+dp+tW9zAx79mQaiP1+xFagjqDjZr0pZVEnEczrVVMS4jkf
-         +w3y30TzhIe/Mkqr5NlSkH4aIT1z5BCH81eORrWtzffxRCb+wT8X+hf6LWL2GW0FfNOk
-         4h2HW2vbiNnSYgN4nDwi92wLQzfAIZ6yO8Kk09/8GrqiPE/TG7TdTgmQ8Awb/qBPcvRi
-         FinrBpu+0rxw6AU4perIQ3dyCS/Ml+AXuDJbSt3AzrOy0lhWFTkIVHG3k/iw8KUjcTbL
-         qdow==
-X-Gm-Message-State: ACgBeo2rnSSjW4boVcq1Fa/vhqI4qVuFJ2KKjuaepIKaTH0uVHqjFe1l
-        v6hWOcYshtI858LbFlBT4eY4GRCsMiTWV6KyZSQ=
-X-Google-Smtp-Source: AA6agR7ObxEWtwATMauPJTbh0Azra7vBLI4e8TscLwSRwrNkywCyZlDAjLltwHNg7cP/LTzPSuwmoMfcWmPJhJ9oras=
-X-Received: by 2002:a17:907:a428:b0:730:aee3:2da7 with SMTP id
- sg40-20020a170907a42800b00730aee32da7mr2164462ejc.613.1659524568874; Wed, 03
- Aug 2022 04:02:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uJf2Rd5aYjBzLVvZyoKj8ZEt37zTrFyyOUBbDF7qQoQ=;
+        b=gGB3NTMIpCaUKtFIUTmZpV2rxal88vl3vD7tbrUJyKjIAgTBXiaioewo4P194IXBUP
+         P5Zdt33Y93eh3UpcM8fZTj2/2tXk274O4YYUMA4+vDqWnIfd4kZZ1s3rC9rcCePSddlQ
+         /t3Vrdpaivx/GyN1f2IU07uX1GoI61vKOGzAPT3syMmOYRLlIjC+/y/bx41fahxNzsMh
+         GiIx8SED1SC1IjD6bBlSNzdLfKUoQ5k89F8LrIBSYAsdEQuvb1/CvGMGtPN5jZntTj0L
+         /uAQGB4rQA3SgkQVYZMpnAEJbhRMMyRePPiHN7ogSL9Dk2T/PYFZCoimBHA1ryPjIis0
+         f+cg==
+X-Gm-Message-State: ACgBeo0/huTi/254oAaPFPhrzU4axI5GZY80WRyxa6W6zLL05kCdjaD1
+        vta8dG3B/O2TxUVLDGaLty0=
+X-Google-Smtp-Source: AA6agR4/sWa0cwLxrpCL0TrsfmDDwzNEIyzON8DHDlaYaUoVEmvRbU7nfHLLBkpGDLG2x2+Qdm0fQg==
+X-Received: by 2002:a17:907:d1f:b0:730:95c0:6cbc with SMTP id gn31-20020a1709070d1f00b0073095c06cbcmr8654385ejc.395.1659524846660;
+        Wed, 03 Aug 2022 04:07:26 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id g25-20020a170906539900b00730b933410csm292960ejo.145.2022.08.03.04.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 04:07:25 -0700 (PDT)
+Date:   Wed, 3 Aug 2022 14:07:23 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun.Ramadoss@microchip.com
+Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
+        linux@armlinux.org.uk, f.fainelli@gmail.com, kuba@kernel.org,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        Woojung.Huh@microchip.com, davem@davemloft.net
+Subject: Re: [Patch RFC net-next 2/4] net: dsa: microchip: lan937x: remove
+ vlan_filtering_is_global flag
+Message-ID: <20220803110723.hym43imgsnnrgdnj@skbuf>
+References: <20220729151733.6032-1-arun.ramadoss@microchip.com>
+ <20220729151733.6032-1-arun.ramadoss@microchip.com>
+ <20220729151733.6032-3-arun.ramadoss@microchip.com>
+ <20220729151733.6032-3-arun.ramadoss@microchip.com>
+ <20220802104032.7g7jgn6t3xq6tcu5@skbuf>
+ <1fe46b15172ff82125c46369d9ed235f67ed5afe.camel@microchip.com>
 MIME-Version: 1.0
-References: <CAOMZO5BAheG4r1Umnd7bLhOqezsxJgE0x1c-858EcabbpPm6Pg@mail.gmail.com>
- <20220801225538.qtdb5zd66g6ipewz@pengutronix.de> <CAOMZO5DUTxQKbpTVOgaVC0V7hPqJG77sgmkW8p=aNpG8th-aLw@mail.gmail.com>
- <CAHCN7xL2w7a=SeXbwcNNxqb3kpRV9Bs0AbK0Nmjbj+dm0NDaVA@mail.gmail.com>
- <CAOMZO5BQWnUj4Ouq3=vhqq55zN8otO_9vPX8ht+muFM_5pg9Fg@mail.gmail.com>
- <CAHCN7xJy6X5733m3zwcFMuWM9oGHJEmKrs2KUNhzMzNVggRx0g@mail.gmail.com>
- <20220802080820.jyf3tfpgcj3pvbtp@pengutronix.de> <CAHCN7xL-7wGnEhY9+zDXYjigZfnfsnY_NsRf+enYt_BPsFxgnQ@mail.gmail.com>
- <CAHCN7xLpCbOY+Ma6gKJievw6aUZ5-Qs4S=zxjTgRu=Be7zvhoQ@mail.gmail.com>
- <CAHCN7xKzYcCPL0ddTENGw6xdCMNdYw-m5u4NSBHb96Vb_tByGg@mail.gmail.com> <20220803062024.vn7awasmifkp5xow@pengutronix.de>
-In-Reply-To: <20220803062024.vn7awasmifkp5xow@pengutronix.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 3 Aug 2022 06:02:37 -0500
-Message-ID: <CAHCN7xL3maPyX8eUiT6mKYei==6pkEvVTwX3vY+1uLTSNDGQ3Q@mail.gmail.com>
-Subject: Re: imx8mm lcdif->dsi->adv7535 no video, no errors
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>,
-        Stefan Agner <stefan@agner.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Jagan Teki <jagan@amarulasolutions.com>, robert.chiras@nxp.com,
-        laurentiu.palcu@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1fe46b15172ff82125c46369d9ed235f67ed5afe.camel@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,139 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 3, 2022 at 1:20 AM Marco Felsch <m.felsch@pengutronix.de> wrote:
->
-> On 22-08-02, Adam Ford wrote:
->
-> ...
->
-> > > I did some reading about the internal timing generator.  It appears
-> > > that it's required when video formats use fractional bytes, and it's
-> > > preconfigured to run at 720p by default, but registers 28h through 37h
-> > > configure it for other video modes.
-> >
-> > I think there may still be some issues with the DSIM since some of the
-> > clock frequencies are set in the device tree.
-> >
-> > From what I can tell, the pixel rate is calculated based on the
->
-> By pixel rate you mean the HDMI pixel rate from the ADV? If so then yes.
-> The ADV has an divider which is already configured by the driver but
-> meaningless since the driver is lacking of setting the "manual-divider"
-> bit within the same register.
+On Tue, Aug 02, 2022 at 04:09:35PM +0000, Arun.Ramadoss@microchip.com wrote:
+> I have done some study on this SW_VLAN_ENABLE bit. By default the pvid
+> of the port is 1 and vlan port membership (0xNA04) is 0xff. So if the
+> bit is 0, then unknown dest addr packets are broadcasted which is the
+> default behaviour of switch.
+> Now consider when the bit is 1,
+> - If the invalid vlan packet is received, then based on drop invalid
+> vid or unknown vid forward bit, packets are discarded or forwarded.
+> - If the valid vlan packet is received, then broadcast to ports in vlan
+> port membership list.
+> The port membership register set using the ksz9477_cfg_port_member
+> function.
+> In summary, I infer that we can enable this bit in the port_setup and
+> based on the port membership packets can be forwarded. Is my
+> understanding correct?
+> Can I remove this patch from this series and submit as the separate
+> one?
 
-I was thinking about the pixel clock from the DSI to the ADV.  I did
-see the manual-divider bit was missing.  I tried enabling that bit,
-but it didn't appear to make much difference.
->
-> > burst-clock-frequency and that generates a byte clock.  For 891000000,
-> > the byte clock is 111375000.
->
-> The burst-clock-frequency is the hs-clk and DDR. So the MIPI-DSI clock
-> is burst-clock-frequency/2 which is in your case: 891000000/2 =
-> 445500000. This clock is than divided by 3 within the ADV and you get
-> your 148500000 pixel clock. This divide by 3 is detected automatically
-> by the ADV due to the missing bit (see above).
->
-> > Modetest timings for 1080p show:
-> >
-> > index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
-> >   #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500
-> > flags: nhsync, nvsync; type: driver
-> >
-> >
-> > When looking at modetest, there is a clock for 1080p which appears to be 148500.
-> > 111375000/148500 = 750.
->
-> Please see above.
->
-> > The rest of the entries in my table do not divide evenly.  I don;t
-> > know if that explains the lack of display, but it's something to note.
-> > It seems to me that instead of fixing the
-> > samsung,burst-clock-frequency to 891000000, we should make the desired
-> > PLL related to the desired pixel clock so it divides evenly.
->
-> Please see above.
->
-> > Looking at NXP's kernel, I also noticed that their esc_prescaler is
-> > based on the byte clock divided by 20MHz.  With some small code
-> > changes to get the PLL based on the desired pixel clock instead of
-> > hard-coded,  I was able to set
-> >
-> > samsung,burst-clock-frequency = <1500000000>;
->
-> This is not correct since the burst-clock-freq. specifies the hs-clock
-> for the data lanes (see above).
+I'm not sure that the switch's capabilities are quite in line with the
+Linux kernel expectations if you always force the 802.1Q VLAN Enable bit
+to true.
 
-But I don't think the clock should be fixed. I think it should vary as
-the resolution changes.  From what I can tell, NXP's DSI code doesn't
-hard code this value, but it does appear to cap it at 1.5G.  I did
-soom looking into the NXP frequency calculation and it is capable of
-adjusting resolutions to some extent and from what I can see the
-891MHz clock is only set when 1080p.  At 720p, thier kernel shows the
-output frequency at  445.5 MHz.  The way the DSIM is currently
-configured, it's fixed at 891MHz, so I don't expect the output feeding
-the adv7535 to be correct for the different resolutions.
+I am looking at Table 4-8: VLAN forwarding from the KSZ9563 datasheet,
+and it says that when the "Unknown VID forward" bit is set and we are in
+VLAN enable mode, packets are forwarded to the Unknown VID packet
+forward list regardless of ALU match (which is "don't care" in this table).
+In essence this is because the switch failed to resolve the unknown VID
+to a FID. Other switches have a default FID for this case, but it
+doesn't appear to hold true for KSZ.
 
-
->
-> > samsung,esc-clock-frequency = <20000000>;
->
-> This is correct, we also use a esc-clock of 20MHz.
->
-> > With these settings and the above mentioned code changes, 1080p still
-> > appears, however when attempting other modes, the display still fails
-> > to load.  I also noticed that the phy ref clock is set to 27MHz
-> > instead of NXP's 12MHz.
->
-> That's interesting, I didn't noticed that NXP uses 12 MHz as refclock
-> but I don't think that this is the problem. Since we have other
-> converter chips using the bridge driver and they work fine. I still
-> think that the main problem is within the ADV driver.
-
-Do the other converter chips work fine at different resolutions?
-
->
-> > I attempted to play with that setting, but I couldn't get 1080p to
-> > work again, so I backed it out.
-> >
-> > Maybe I am headed in the wrong direction, but I'm going to examine the
-> > P/M/S calculation of the timing on NXP's kernel to see how the DSIM in
-> > this code compares.
->
-> I think the pms values are fine.
-
-I compared the P/M/S values between this driver and NXP's and they
-calculate different values of PMS when running at 1080P.
-NXP @ 1080p:
-fout = 891000, fin = 12000, m = 297, p = 2, s = 1, best_delta = 0
-
-This kernel @ 1080p:
-
-PLL freq 891000000, (p 3, m 99, s 0)
-
-at 720P, the NXP Kernel
-fout = 445500, fin = 12000, m = 297, p = 2, s = 2, best_delta = 0
-(working)
-
-at 720P, this kernel:
-PLL freq 891000000, (p 3, m 99, s 0)
-hs_clk = 891000000, byte_clk = 111375000, esc_clk = 18562500
-(not working)
-
-
->
-> > If someone who understands the interactions between these different
-> > components has suggestions, I'm willing to run some experiments.
->
-> Did managed to get access to the ADV7535 programming guide? This is the
-> black box here. Let me check if I can provide you a link with our repo
-> so you can test our current DSIM state if you want.
-
-I do have access to the programming guide, but it's under NDA, but
-I'll try to answer questions if I can.
-
-adam
->
-> Regards,
->   Marco
+The last thing you want is for packets under a VLAN-unaware bridge to be
+always flooded to the ports in the Unknown VID packet forward list, and
+bypass ALU lookups.

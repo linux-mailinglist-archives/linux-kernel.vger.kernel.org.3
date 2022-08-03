@@ -2,123 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91144588D80
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282F7588D61
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 15:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237936AbiHCNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S238142AbiHCNlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 09:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiHCNpi (ORCPT
+        with ESMTP id S238020AbiHCNlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 09:45:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E42C5F47;
-        Wed,  3 Aug 2022 06:45:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E43F9400BE;
-        Wed,  3 Aug 2022 13:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1659534335;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 3 Aug 2022 09:41:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0CE014012
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 06:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659534086;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=akp1pNQEiXkOGeo4BViAGmqcuddhmRP3JLmV9s8Jl30=;
-        b=X2G0jJi1PM5voo71dPWDflfqa+/6EF7wfOcwNxDI+kawn2SHTL39NxngM8de4U6PkAhu/y
-        KpbSrgZfB3DLXfNjJlX3sRKlsYB875Jzg71y6CJgp42J6mJh5wCRKEirky86UJVsb5C/3l
-        tFQiVsEBfXBuKvknaPtIQVHQoC2kqO0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1659534335;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=akp1pNQEiXkOGeo4BViAGmqcuddhmRP3JLmV9s8Jl30=;
-        b=/0Ob9r/t/uNjK4UfEGtcaSYFnM351yM09euQxQwh7QlaExjLrFGlFM+suKMA7O2q8T8UQ+
-        wihK1T3bcovbV2Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=oOQlrwGCnAOz5ycFucSaKvMF/UYRePkBS4WwbQlHut0=;
+        b=BAtYU00Ld+cd032hkBwhRfjrj+fR5n2sg6X4rL3vKm2AzdTDU1dT5vBvE5iGKiprc23qdt
+        bsr0biotZa5ktSzFZc6ocx8XNssQyywy17lsJ5X+hkKg+UrmywA+j9MtyL2lp/sQuw8xiE
+        AdjgqZoV+7T+Fut24nWd/lCypk5blkE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-552-64VjwJaDMkKMdrixhsd5-w-1; Wed, 03 Aug 2022 09:41:24 -0400
+X-MC-Unique: 64VjwJaDMkKMdrixhsd5-w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A199E13A94;
-        Wed,  3 Aug 2022 13:45:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5ziHJv976mJ1BwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 03 Aug 2022 13:45:35 +0000
-Date:   Wed, 3 Aug 2022 15:40:33 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     alexlzhu@fb.com
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] btrfs: fix alginment of VMA for memory mapped files
- on THP
-Message-ID: <20220803134033.GG13489@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, alexlzhu@fb.com, kernel-team@fb.com,
-        linux-mm@kvack.org, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220802203246.434560-1-alexlzhu@fb.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A925101A54E;
+        Wed,  3 Aug 2022 13:41:24 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.195.93])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 019C6492C3B;
+        Wed,  3 Aug 2022 13:41:21 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 04/40] KVM: x86: hyper-v: Add helper to read hypercall data for array
+Date:   Wed,  3 Aug 2022 15:40:34 +0200
+Message-Id: <20220803134110.397885-5-vkuznets@redhat.com>
+In-Reply-To: <20220803134110.397885-1-vkuznets@redhat.com>
+References: <20220803134110.397885-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802203246.434560-1-alexlzhu@fb.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 01:32:46PM -0700, alexlzhu@fb.com wrote:
-> From: Alexander Zhu <alexlzhu@fb.com>
-> 
-> With CONFIG_READ_ONLY_THP_FOR_FS, the Linux kernel supports using THPs for
-> read-only mmapped files, such as shared libraries. However, the kernel
-> makes no attempt to actually align those mappings on 2MB boundaries,
-> which makes it impossible to use those THPs most of the time. This issue
-> applies to general file mapping THP as well as existing setups using
-> CONFIG_READ_ONLY_THP_FOR_FS. This is easily fixed by using
-> thp_get_unmapped_area for the unmapped_area function in btrfs, which
-> is what ext2, ext4, fuse, and xfs all use.
-> 
-> Initially btrfs had been left out in Commit 8c07fc452ac0 ("btrfs: fix
-> alginment of VMA for memory mapped files on THP") as btrfs does not support
-> DAX. However, Commit 1854bc6e2420 ("mm/readahead: Align file mappings
-> for non-DAX") removed the DAX requirement. We should now be able to call
-> thp_get_unmapped_area() for btrfs.
-> 
-> The problem can be seen in /proc/PID/smaps where THPeligible is set to 0
-> on mappings to eligible shared object files as shown below.
-> 
-> Before this patch:
-> 
-> 7fc6a7e18000-7fc6a80cc000 r-xp 00000000 00:1e 199856
-> /usr/lib64/libcrypto.so.1.1.1k
-> Size:               2768 kB
-> THPeligible:    0
-> VmFlags: rd ex mr mw me
-> 
-> With this patch the library is mapped at a 2MB aligned address:
-> 
-> fbdfe200000-7fbdfe4b4000 r-xp 00000000 00:1e 199856
-> /usr/lib64/libcrypto.so.1.1.1k
-> Size:               2768 kB
-> THPeligible:    1
-> VmFlags: rd ex mr mw me
-> 
-> This fixes the alignment of VMAs for any mmap of a file that has the
-> rd and ex permissions and size >= 2MB. The VMA alignment and
-> THPeligible field for anonymous memory is handled separately and
-> is thus not effected by this change.
-> 
-> Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+From: Sean Christopherson <seanjc@google.com>
 
-Added to misc-next, thanks.
+Move the guts of kvm_get_sparse_vp_set() to a helper so that the code for
+reading a guest-provided array can be reused in the future, e.g. for
+getting a list of virtual addresses whose TLB entries need to be flushed.
+
+Opportunisticaly swap the order of the data and XMM adjustment so that
+the XMM/gpa offsets are bundled together.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/hyperv.c | 53 +++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 20 deletions(-)
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 5bc6eeec7fe0..a3e984abadcc 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1759,38 +1759,51 @@ struct kvm_hv_hcall {
+ 	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
+ };
+ 
+-static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+-				 int consumed_xmm_halves,
+-				 u64 *sparse_banks, gpa_t offset)
+-{
+-	u16 var_cnt;
+-	int i;
+ 
+-	if (hc->var_cnt > 64)
+-		return -EINVAL;
+-
+-	/* Ignore banks that cannot possibly contain a legal VP index. */
+-	var_cnt = min_t(u16, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS);
++static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
++			      u16 orig_cnt, u16 cnt_cap, u64 *data,
++			      int consumed_xmm_halves, gpa_t offset)
++{
++	/*
++	 * Preserve the original count when ignoring entries via a "cap", KVM
++	 * still needs to validate the guest input (though the non-XMM path
++	 * punts on the checks).
++	 */
++	u16 cnt = min(orig_cnt, cnt_cap);
++	int i, j;
+ 
+ 	if (hc->fast) {
+ 		/*
+ 		 * Each XMM holds two sparse banks, but do not count halves that
+ 		 * have already been consumed for hypercall parameters.
+ 		 */
+-		if (hc->var_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
++		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-		for (i = 0; i < var_cnt; i++) {
+-			int j = i + consumed_xmm_halves;
++
++		for (i = 0; i < cnt; i++) {
++			j = i + consumed_xmm_halves;
+ 			if (j % 2)
+-				sparse_banks[i] = sse128_hi(hc->xmm[j / 2]);
++				data[i] = sse128_hi(hc->xmm[j / 2]);
+ 			else
+-				sparse_banks[i] = sse128_lo(hc->xmm[j / 2]);
++				data[i] = sse128_lo(hc->xmm[j / 2]);
+ 		}
+ 		return 0;
+ 	}
+ 
+-	return kvm_read_guest(kvm, hc->ingpa + offset, sparse_banks,
+-			      var_cnt * sizeof(*sparse_banks));
++	return kvm_read_guest(kvm, hc->ingpa + offset, data,
++			      cnt * sizeof(*data));
++}
++
++static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
++				 u64 *sparse_banks, int consumed_xmm_halves,
++				 gpa_t offset)
++{
++	if (hc->var_cnt > 64)
++		return -EINVAL;
++
++	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
++	return kvm_hv_get_hc_data(kvm, hc, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS,
++				  sparse_banks, consumed_xmm_halves, offset);
+ }
+ 
+ static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu)
+@@ -1900,7 +1913,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		if (!hc->var_cnt)
+ 			goto ret_success;
+ 
+-		if (kvm_get_sparse_vp_set(kvm, hc, 2, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
+ 					  offsetof(struct hv_tlb_flush_ex,
+ 						   hv_vp_set.bank_contents)))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+@@ -2011,7 +2024,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		if (!hc->var_cnt)
+ 			goto ret_success;
+ 
+-		if (kvm_get_sparse_vp_set(kvm, hc, 1, sparse_banks,
++		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 1,
+ 					  offsetof(struct hv_send_ipi_ex,
+ 						   vp_set.bank_contents)))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-- 
+2.35.3
+

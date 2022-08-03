@@ -2,207 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513F9588BB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D34588BDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237697AbiHCMDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S237809AbiHCMRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiHCMDN (ORCPT
+        with ESMTP id S235105AbiHCMRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:03:13 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2583B1A072;
-        Wed,  3 Aug 2022 05:03:12 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LyVp82HH1z6S2yZ;
-        Wed,  3 Aug 2022 20:01:52 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX38P6Y+piI+qYAA--.61185S4;
-        Wed, 03 Aug 2022 20:03:08 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     jack@suse.cz, axboe@kernel.dk, osandov@fb.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH] sbitmap: fix possible io hung due to lost wakeup
-Date:   Wed,  3 Aug 2022 20:15:04 +0800
-Message-Id: <20220803121504.212071-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 3 Aug 2022 08:17:33 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0117E2E
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:17:31 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w17-20020a17090a8a1100b001f326c73df6so1818754pjn.3
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 05:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=x4/SZID/1XNhMOqSKnwdkmMau4H8OofmRy/FbmoxvEg=;
+        b=Qxzz3XQYiaXJalf/es7ikBYZATLndo+CihdM+270E6X3mVgzGHjCbX2gbmb16gI/Ov
+         rSvkxx6lRoeo0n2OX5ZnfuAy8nbvYly0hxZzmx4jRrMK3YAojWRnz9b/UBXXdof2JCyx
+         MvxcEmgyVsGeFiHOJm57LKUERvfEZrlKvzFZlFtQC7MQx7qVLmttFCceB2hpMNmhF0H3
+         WG3yWnPUiGHHvyWe6AFqcmygCvj6+OGKU14bNnYcfbJUgjyynfru3pUhW0UfZCn33pBG
+         xE434cPgQOYCKWyhFTYcYMhdWG+uYLoohGsHSPlyIgsQAgra2xR93ptHB+/TGhmMCmBo
+         sxAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x4/SZID/1XNhMOqSKnwdkmMau4H8OofmRy/FbmoxvEg=;
+        b=mIVdZwaUqIVRFV7c2sR8nFMs8J+uB57Mms7X/6dvye2lqsl4TqzrzXEYSripysAaL6
+         y7cuXVJ9A8wPdb6XWjKddoW5DL9j94grUBiNmHfHjNfWBStmuCXwXB11bTjrp2afwh2k
+         sl2JKHZ1he0RuIJ3W1jIic737vic+kxCtjPCyXUI7k+o6x9iJCjBTyW3zQ7pBe25R4xb
+         jFSssDGEN0WiROupGbwzRKXPL345GgZtXHShV6Qx9fhKRkwxmd/2rDcIjFQ6CDNOGZ4/
+         thn7E8TKbtThIldcawuYu8N+vWqf3nayeGb6FigyZecd41esiKNTjtHC6YfiAu6G4QCg
+         /2Yw==
+X-Gm-Message-State: ACgBeo1YX2quoDNEjM9auc77slrJ8HJIvBwOcQaEgkY/QfGDxE8c28gB
+        IDGo1aafYnQFAb/szUrkRixHeA==
+X-Google-Smtp-Source: AA6agR6K3MfdANHxcunD2XRTV9uJBMf+zOY1iDRSOo00/SlZyGwxYzO+c0r66ftoR1wGizK1pICcPQ==
+X-Received: by 2002:a17:902:cccf:b0:168:c4c3:e8ca with SMTP id z15-20020a170902cccf00b00168c4c3e8camr26226711ple.40.1659529051172;
+        Wed, 03 Aug 2022 05:17:31 -0700 (PDT)
+Received: from [10.70.253.98] ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id x185-20020a6263c2000000b00528c066678csm12815094pfb.72.2022.08.03.05.17.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 05:17:30 -0700 (PDT)
+Message-ID: <5a3410d6-428d-9ad1-3e5a-01ca805ceeeb@bytedance.com>
+Date:   Wed, 3 Aug 2022 20:17:22 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX38P6Y+piI+qYAA--.61185S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr17AF4ruFWfAr4DCr48WFg_yoWrtrWrpr
-        43GFnYqanYvFWIywsrJw4UZa4Ykw4vg3srGrWfK34rCr12gr4Ykr109r15ury8Ars8Wry5
-        tr4fJFZ3CFWUXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
+ psi_inner_cgroup
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>
+Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        corbet@lwn.net, akpm@linux-foundation.org, rdunlap@infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, cgroups@vger.kernel.org
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-9-zhouchengming@bytedance.com>
+ <Yt7KQc0nnOypB2b2@cmpxchg.org> <YuAqWprKd6NsWs7C@slm.duckdns.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YuAqWprKd6NsWs7C@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On 2022/7/27 01:54, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, Jul 25, 2022 at 12:52:17PM -0400, Johannes Weiner wrote:
+>> On Thu, Jul 21, 2022 at 12:04:38PM +0800, Chengming Zhou wrote:
+>>> PSI accounts stalls for each cgroup separately and aggregates it
+>>> at each level of the hierarchy. This may case non-negligible overhead
+>>> for some workloads when under deep level of the hierarchy.
+>>>
+>>> commit 3958e2d0c34e ("cgroup: make per-cgroup pressure stall tracking configurable")
+>>> make PSI to skip per-cgroup stall accounting, only account system-wide
+>>> to avoid this each level overhead.
+>>>
+>>> For our use case, we also want leaf cgroup PSI accounted for userspace
+>>> adjustment on that cgroup, apart from only system-wide management.
+>>
+>> I hear the overhead argument. But skipping accounting in intermediate
+>> levels is a bit odd and unprecedented in the cgroup interface. Once we
+>> do this, it's conceivable people would like to do the same thing for
+>> other stats and accounting, like for instance memory.stat.
+>>
+>> Tejun, what are your thoughts on this?
+> 
+> Given that PSI requires on-the-spot recursive accumulation unlike other
+> stats, it can add quite a bit of overhead, so I'm sympathetic to the
+> argument because PSI can't be made cheaper by kernel being better (or at
+> least we don't know how to yet).
+> 
+> That said, "leaf-only" feels really hacky to me. My memory is hazy but
+> there's nothing preventing any cgroup from being skipped over when updating
+> PSI states, right? The state count propagation is recursive but it's each
+> task's state being propagated upwards not the child cgroup's, so we can skip
+> over any cgroup arbitrarily. ie. we can at least turn off PSI reporting on
+> any given cgroup without worrying about affecting others. Am I correct?
 
-There are two problems can lead to lost wakeup:
+Yes, I think it's correct.
 
-1) invalid wakeup on the wrong waitqueue:
+> 
+> Assuming the above isn't wrong, if we can figure out how we can re-enable
+> it, which is more difficult as the counters need to be resynchronized with
+> the current state, that'd be ideal. Then, we can just allow each cgroup to
+> enable / disable PSI reporting dynamically as they see fit.
 
-For example, 2 * wake_batch tags are put, while only wake_batch threads
-are woken:
+This method is more fine-grained but more difficult like you said above.
+I think it may meet most needs to disable PSI stats in intermediate cgroups?
 
-__sbq_wake_up
- atomic_cmpxchg -> reset wait_cnt
-			__sbq_wake_up -> decrease wait_cnt
-			...
-			__sbq_wake_up -> wait_cnt is decreased to 0 again
-			 atomic_cmpxchg
-			 sbq_index_atomic_inc -> increase wake_index
-			 wake_up_nr -> wake up and waitqueue might be empty
- sbq_index_atomic_inc -> increase again, one waitqueue is skipped
- wake_up_nr -> invalid wake up because old wakequeue might be empty
+Thanks!
 
-To fix the problem, increasing 'wake_index' before resetting 'wait_cnt'.
-
-2) 'wait_cnt' can be decreased while waitqueue is empty
-
-As pointed out by Jan Kara, following race is possible:
-
-CPU1				CPU2
-__sbq_wake_up			 __sbq_wake_up
- sbq_wake_ptr()			 sbq_wake_ptr() -> the same
- wait_cnt = atomic_dec_return()
- /* decreased to 0 */
- sbq_index_atomic_inc()
- /* move to next waitqueue */
- atomic_set()
- /* reset wait_cnt */
- wake_up_nr()
- /* wake up on the old waitqueue */
-				 wait_cnt = atomic_dec_return()
-				 /*
-				  * decrease wait_cnt in the old
-				  * waitqueue, while it can be
-				  * empty.
-				  */
-
-Fix the problem by waking up before updating 'wake_index' and
-'wait_cnt'.
-
-With this patch, noted that 'wait_cnt' is still decreased in the old
-empty waitqueue, however, the wakeup is redirected to a active waitqueue,
-and the extra decrement on the old empty waitqueue is not handled.
-
-Fixes: 88459642cba4 ("blk-mq: abstract tag allocation out into sbitmap library")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
-Changes in official version:
-- fix spelling mistake in comments
-- add review tag
-Changes in rfc v4:
- - remove patch 1, which improve fairness with overhead
- - merge patch2 and patch 3
-Changes in rfc v3:
- - rename patch 2, and add some comments.
- - add patch 3, which fixes a new issue pointed out by Jan Kara.
-Changes in rfc v2:
- - split to spearate patches for different problem.
- - add fix tag
-
- previous versions:
-rfc v1: https://lore.kernel.org/all/20220617141125.3024491-1-yukuai3@huawei.com/
-rfc v2: https://lore.kernel.org/all/20220619080309.1630027-1-yukuai3@huawei.com/
-rfc v3: https://lore.kernel.org/all/20220710042200.20936-1-yukuai1@huaweicloud.com/
-rfc v4: https://lore.kernel.org/all/20220723024122.2990436-1-yukuai1@huaweicloud.com/
- lib/sbitmap.c | 55 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 33 insertions(+), 22 deletions(-)
-
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 29eb0484215a..1aa55806f6a5 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -611,32 +611,43 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
- 		return false;
- 
- 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
--	if (wait_cnt <= 0) {
--		int ret;
-+	/*
-+	 * For concurrent callers of this, callers should call this function
-+	 * again to wakeup a new batch on a different 'ws'.
-+	 */
-+	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
-+		return true;
- 
--		wake_batch = READ_ONCE(sbq->wake_batch);
-+	if (wait_cnt > 0)
-+		return false;
- 
--		/*
--		 * Pairs with the memory barrier in sbitmap_queue_resize() to
--		 * ensure that we see the batch size update before the wait
--		 * count is reset.
--		 */
--		smp_mb__before_atomic();
-+	wake_batch = READ_ONCE(sbq->wake_batch);
- 
--		/*
--		 * For concurrent callers of this, the one that failed the
--		 * atomic_cmpxhcg() race should call this function again
--		 * to wakeup a new batch on a different 'ws'.
--		 */
--		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
--		if (ret == wait_cnt) {
--			sbq_index_atomic_inc(&sbq->wake_index);
--			wake_up_nr(&ws->wait, wake_batch);
--			return false;
--		}
-+	/*
-+	 * Wake up first in case that concurrent callers decrease wait_cnt
-+	 * while waitqueue is empty.
-+	 */
-+	wake_up_nr(&ws->wait, wake_batch);
- 
--		return true;
--	}
-+	/*
-+	 * Pairs with the memory barrier in sbitmap_queue_resize() to
-+	 * ensure that we see the batch size update before the wait
-+	 * count is reset.
-+	 *
-+	 * Also pairs with the implicit barrier between decrementing wait_cnt
-+	 * and checking for waitqueue_active() to make sure waitqueue_active()
-+	 * sees result of the wakeup if atomic_dec_return() has seen the result
-+	 * of atomic_set().
-+	 */
-+	smp_mb__before_atomic();
-+
-+	/*
-+	 * Increase wake_index before updating wait_cnt, otherwise concurrent
-+	 * callers can see valid wait_cnt in old waitqueue, which can cause
-+	 * invalid wakeup on the old waitqueue.
-+	 */
-+	sbq_index_atomic_inc(&sbq->wake_index);
-+	atomic_set(&ws->wait_cnt, wake_batch);
- 
- 	return false;
- }
--- 
-2.31.1
-
+> 
+> Thanks.
+> 

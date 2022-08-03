@@ -2,133 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13B3588BB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF38A588BBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 14:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237681AbiHCMA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 08:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S237687AbiHCMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 08:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiHCMAZ (ORCPT
+        with ESMTP id S234698AbiHCMDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 08:00:25 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F433647C
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 05:00:24 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10e6bdbe218so20476490fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 05:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=k85+BXyXynjZ9LSZSXWsf3MQl+dSKBggc5agia098P8=;
-        b=nzSIftlCZzp3NnHVf+zVO4P2cvt7R0Vb/+9SeBIE7ot8a+Nn1akpwSxc0WDrMCtXJj
-         JI5Wvvp+C4dq0ctrpVggyBfSTZZqK31vKg71HccE6605WiBxHVM90sRcfC70eZ3BX3tx
-         +l0MbhSURmo/uGc5YeluJ0GfF7ZLnENFCj4b5CDk6HGCwFaIbvZchvnH8T2Uie1ofxi2
-         /thywAWJTxoq2RFTyHHmKE64nNI1hQ1qHCsKlxrW7jZMK7SYi/HRKTz3Q0HL7EskMRdD
-         UxGDPfOCsSx6BmDytaLpr2kpbuMHCKO1oxcGBvASzy2Sx/za5WF9eT9zGKEfClt7QINY
-         M7kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=k85+BXyXynjZ9LSZSXWsf3MQl+dSKBggc5agia098P8=;
-        b=s6MMfaT1qVihDIYIGsSIblRXLTdWqZI5yAlNuo6jm/cMU2hInzBighsnCUnlLsMhOw
-         ciinqI+cPvrjSWyA0RHOjYWQxr5D7qJgRfGCZkz/SrwNCP9qw4SkHbwEDgK7rLl2bIA+
-         lKekiv6/lC3DQUwfguaie4vx513kSGY5jCMkC4eFeTQo//rNBmqecix9sGSNR4rL7TNc
-         p8yHR1chZdKTxE67nb8nl0oXaHnOThsa2kCh/PYsZPaFxAvgj3HD+f5ZjoZMxEGtIl20
-         IiBcn84D8fkvUq31uR0EQsCa+Ueptnpf+7CIqCPXIl6seRAmsfmtJDjK+5RP5114L5hQ
-         s5HQ==
-X-Gm-Message-State: ACgBeo2YfTO0qhA9FtovEzh9F56TRCYzHTQFf9Hla4xHlV/9Z5L4grfs
-        sFl//iSYmbZ5ykERFrBJgnu6dbd7XxeOEg==
-X-Google-Smtp-Source: AA6agR4OJE3JEX4SdirNZxWAXw9IAgX/r+aRoG9wImJGaaaVzzAwEAFHvKjOXWZNXgjW9YZTnbEifA==
-X-Received: by 2002:a05:6870:a1aa:b0:10d:a546:8aa3 with SMTP id a42-20020a056870a1aa00b0010da5468aa3mr1727370oaf.287.1659528023546;
-        Wed, 03 Aug 2022 05:00:23 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id g8-20020a9d6208000000b0061cbd18bd18sm4078207otj.45.2022.08.03.05.00.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 05:00:22 -0700 (PDT)
-Message-ID: <81d363ba-82ef-d556-2d77-083e3b2d9d02@linaro.org>
-Date:   Wed, 3 Aug 2022 07:00:21 -0500
+        Wed, 3 Aug 2022 08:03:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F335F1A072;
+        Wed,  3 Aug 2022 05:03:39 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 273BgHoB023513;
+        Wed, 3 Aug 2022 12:03:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GnzalkEgh8cDTb75tWrLwtPfYTUvsZnCQhi2QQqTBzc=;
+ b=eHB1otNZGzEIiY6kitI6Wxukbi55TjmemyWCgVhlK/XPdaHgBxSN8OyGy3bJSqbqV9Kb
+ LSRWvQQSr8x9fCbhcAAUCAc3QqWhF05dBHaCih8DbcT1ZgBf/PgPYlcVGX+fHIi0z4pF
+ WgjuKUYDbEhaqonggiolRp9UXwJywqYimBH2Fg/qCqTDIDI5zwEyaDnQ38UZrnVqmOcN
+ 54bAPb5tR7PYKQTixdjFeKyosU6a+C0USSWzQlswkachvtNTXFrc+VoUlEfcH66pouiz
+ LvaHnzHLLLlLR88hyNFGOg0BOE319bE2ZKVjUcUg+ayBybSH+Y4hdKzdqPR/LQQuNvLP kw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hqrcbrp1a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Aug 2022 12:03:06 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 273BmEhu029360;
+        Wed, 3 Aug 2022 12:01:37 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3hmuwhsr07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Aug 2022 12:01:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 273C1nRQ28508616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Aug 2022 12:01:49 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC62242049;
+        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E00142042;
+        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
+Received: from [9.171.89.39] (unknown [9.171.89.39])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  3 Aug 2022 12:01:33 +0000 (GMT)
+Message-ID: <f2c6f744-7139-05b6-6d96-4e207dcd9c1f@linux.ibm.com>
+Date:   Wed, 3 Aug 2022 14:01:31 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [greybus-dev] Re: [PATCH linux-next] staging: greybus:using the
+Subject: Re: [PATCH v2] random: handle archrandom in plural words
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>, cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220803062258.1650792-1-ye.xingchen@zte.com.cn>
- <YuoWCSQCnNU3DrUL@kroah.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <YuoWCSQCnNU3DrUL@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        x86@kernel.org, Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Harald Freudenberger <freude@linux.ibm.com>
+References: <YtP1+MJ1tNdJA60l@zx2c4.com>
+ <20220717200356.75060-1-Jason@zx2c4.com>
+ <46c1a7be-080b-3315-50cc-d3c848fd99e3@linux.ibm.com>
+ <YtqIbrds53EuyqPE@zx2c4.com>
+From:   Holger Dengler <dengler@linux.ibm.com>
+In-Reply-To: <YtqIbrds53EuyqPE@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HRjzL3yFJDN9d8vu57sKCKxbeNHkTfQy
+X-Proofpoint-ORIG-GUID: HRjzL3yFJDN9d8vu57sKCKxbeNHkTfQy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-03_03,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=635
+ lowpriorityscore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208030052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 1:30 AM, Greg KH wrote:
-> On Wed, Aug 03, 2022 at 06:22:58AM +0000, cgel.zte@gmail.com wrote:
->> From: ye xingchen <ye.xingchen@zte.com.cn>
->>
->> Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
->> and pm_runtime_put_noidle.
->>
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by:  <ye.xingchen@zte.com.cn>
->> ---
->>   drivers/greybus/core.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/greybus/core.c b/drivers/greybus/core.c
->> index e546c6431877..b9063e86534b 100644
->> --- a/drivers/greybus/core.c
->> +++ b/drivers/greybus/core.c
->> @@ -174,9 +174,8 @@ static int greybus_probe(struct device *dev)
->>   	if (!id)
->>   		return -ENODEV;
->>   
->> -	retval = pm_runtime_get_sync(&bundle->intf->dev);
->> +	retval = pm_runtime_resume_and_get(&bundle->intf->dev);
->>   	if (retval < 0) {
->> -		pm_runtime_put_noidle(&bundle->intf->dev);
->>   		return retval;
->>   	}
->>   
->> -- 
->> 2.25.1
+Hi Jason,
+
+On 22/07/2022 13:22, Jason A. Donenfeld wrote:
+> On Fri, Jul 22, 2022 at 10:08:05AM +0200, Holger Dengler wrote:
+>> Why not changing the API to take bytes instead of words? Sure, at the
+>> moment it looks like all platforms with TRNG support are able to
+>> deliver at least one word, but bytes would be more flexible. 
 > 
-> Now this is just being silly.  Consider all future emails also dropped.
+> The idea is to strike a sweet spot between capabilities. S390x is fine
+> with byte-level granularity up to arbitrary lengths, while x86 is best
+> with word-level granularity of length 1. The happy intersection between
+> the two is just word-level granularity of arbitrary length. Yes we
+> _could_ introduce a lot of code complexity by cascading the x86 case
+> down into smaller and smaller registers, ignoring the fact that it's no
+> longer efficient below 32- or 64-bit registers depending on vendor. But
+> then we're relying on the inliner to remove all of that extra code,
+> since all callers actually only ever want 32 or 64 bytes. Why bloat for
+> nothing? The beauty of this approach is that it translates very
+> naturally over all the various quirks of architectures without having to
+> have a lot of coupling code.
+
+You're absolutely right. Your solution addresses all needs of current architectures. My proposal was just meant as preparation for the case, that new (smaller) architectures may come up in the future with a TRNG support, but with other granularity. But anyhow: we can handle it as soon as it happens, fine with me.
 
 
-No Greg, please don't do this, or please undo this.
-
-This happened because the original poster was not a subscriber to the
-greybus-dev mailing list.  Such messages get held until someone (me)
-releases them after picking them out from the mostly spam that is
-caught and held.  I have been trying to do that daily lately but
-it's still not enough to avoid this happening.
-
-You were on the original addressee list.  So you got the message
-immediately.  But the mailing list filter held it and sent it
-again when I released it yesterday.  This is why you saw it the
-second time.
-
-Ye Xingchen had nothing to do with your receiving the message twice.
-
-					-Alex
-
-> greg k-h
-> _______________________________________________
-> greybus-dev mailing list -- greybus-dev@lists.linaro.org
-> To unsubscribe send an email to greybus-dev-leave@lists.linaro.org
-
+-- 
+Mit freundlichen Grüßen / Kind regards
+Holger Dengler
+--
+IBM Systems, Linux on IBM Z Development
+dengler@linux.ibm.com

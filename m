@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE906589180
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33D5589184
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 19:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbiHCRdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 13:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S238214AbiHCRfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 13:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238310AbiHCRdu (ORCPT
+        with ESMTP id S238072AbiHCRfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 13:33:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 995845727A
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659548028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+5QAlTD0yVo3KUlmnd7w4NlvzNv43A/mFCjPCFZegUM=;
-        b=Nk38WKu5DsyfQcDtXoMj9DCJ8w75rjyG1Di9whCV9hr3seZXd0z+pY7JFi0ET6j7vV5rGV
-        qVmzpr6HB/H+oVSUme7RNsu0KMOXp0UtpPbJL91mmr6BTVhEbYOBZgBNMLOLUiukENP2RW
-        0vss2p120iR0+1nLNpZQmVKyoiuyH3Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-HiAS59uBOkqL4MXJz728cw-1; Wed, 03 Aug 2022 13:33:47 -0400
-X-MC-Unique: HiAS59uBOkqL4MXJz728cw-1
-Received: by mail-wm1-f72.google.com with SMTP id m4-20020a7bce04000000b003a386063752so382263wmc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:33:47 -0700 (PDT)
+        Wed, 3 Aug 2022 13:35:08 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729EE5725A
+        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 10:35:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id tk8so32701315ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 03 Aug 2022 10:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=39DQIGQXThBozrEjWiDrDLhudCkP9OJY7K/8OUvd6/I=;
+        b=T0ECUMDQyzHYeVYDtBxdrJfXbZ6pCVez9cmhnZRCRu5+U4KzPZUaNDD2xluVSBppE/
+         gFdLH//buvE6AMKInJkbT83OWEFjWoziInti0CnrgWH9ip5wzV5ykMwcAiGQ0SuKnsat
+         RcpOxXDWkr4mWKi0AqCe3bMiGzIFfrOiL1xdFXkNmHd2Mi8bsuLOtKK2JsCG0lBuHWt7
+         knaJo/3VYjNjxFf/fwYTRfpRSC+DiPEbImNzF2e/cRoXO8vYs24OxpfKmpLNlsHbfpVo
+         /93/MsnxblKS7iEUOuF1gRJRZrIMgZo8rjJHPeoQrYOY50XWc933rr7850HnkVhm3Snt
+         mM1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=+5QAlTD0yVo3KUlmnd7w4NlvzNv43A/mFCjPCFZegUM=;
-        b=ONcFQiWGZGtiKf+7fhccBou1kQfu6VZIz/mUPzxHpNRyVu3VvlfsKFP9rElcOG+5If
-         Eytw9UrzRtywSwrB5UFZ94Ww8RZhQasbO0WeYDqvj2B8DuX+QU4J+hxk7GCv4tf8EZnW
-         lsrVDTDp+SIXjecM586o2YSzQLPd4UaCm0K+ssAnwFagxvScTRxDd1iz6NpnRdH0ltZG
-         y2IPOY9PhWtXJspCVqnTQ/PR/XyhTuWMkoN0pjcwDVDWTpvi9MMBNnLIw+c3+9sG058o
-         VyFHRCp0ykp/3ynWvPBtQKQOz9GTwredE4qz/WmUrhmz5nzO1NznjH/6pO3cGHdghxEB
-         PK+g==
-X-Gm-Message-State: ACgBeo3oYAfqXpN/s5Vb6TSmrV1mW7ZuCa/kR7TxTOE1p43Rdeq9RHXf
-        OS8faa1E5fQpj7DgayLgDQDxK18nB5XfcwB5IwhTwn8k/A+QrvfmU9kUkC5kEWmcLiHVa82UvKl
-        DPZISky7hmOUZzCbQK5h6qDvM
-X-Received: by 2002:a5d:5a1a:0:b0:21f:a9b:62c6 with SMTP id bq26-20020a5d5a1a000000b0021f0a9b62c6mr16526613wrb.20.1659548026122;
-        Wed, 03 Aug 2022 10:33:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7NS7DQx36jQ4hn2m0a7zi3iwiyfGu90K9fZ7IwCQxglzQUf40ZJcqhUqtqEInch/OWlH0/yQ==
-X-Received: by 2002:a5d:5a1a:0:b0:21f:a9b:62c6 with SMTP id bq26-20020a5d5a1a000000b0021f0a9b62c6mr16526595wrb.20.1659548025917;
-        Wed, 03 Aug 2022 10:33:45 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id m15-20020adffa0f000000b0021e5f32ade7sm18593005wrr.68.2022.08.03.10.33.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 10:33:45 -0700 (PDT)
-Message-ID: <899e4d3d-e086-71a5-38f9-17e85ce11ea4@redhat.com>
-Date:   Wed, 3 Aug 2022 19:33:39 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=39DQIGQXThBozrEjWiDrDLhudCkP9OJY7K/8OUvd6/I=;
+        b=Z9MlPX4uFANdQhIJxSRXaV/8aw1namr0PV00yDnIwjTBC+h250wtEIUNCS4I4iPfR5
+         kbenTVUMSo+0/iZfo2g4U3207/qKTfhdPiZO3+tmvQNsObfdkb9IkbTRKE2/SHYTlIpU
+         SvqIqX4BXktpt5iKGVV5tYv6MRFuKzJjU3f8DSl2FYv2OReWrrVNnX++qDffBUa9VuQx
+         k4tnMqyYGA5Ord0Zy05W7WvbE5duPRn3Qz9L9lF9Zp0LEAlSqB24Esxs0IQrQRXu/oxj
+         W6Gq1tJMXEUGNpHMjKcbo3okWjNF0a1Cm4qjRuJvc+ETaTrU4ZuEWCKO/oip7ikl0I02
+         ajyQ==
+X-Gm-Message-State: AJIora/McWm3tbWdd99mo4L2xG8PBw/eDqPZlI2Fz9qbNscjARUgK6yq
+        o13lk/iDE/enegLRxD8dvmpiFCrVRzlldbhZUxC+QQ==
+X-Google-Smtp-Source: AGRyM1ua61ngReTCruH53k/WgeL39qAn7374O3trKod4RhmxrLdTDW1BzvH+okqkgk8HVOl/oaOepnZjb6M/dewNQEk=
+X-Received: by 2002:a17:906:a089:b0:72f:826b:e084 with SMTP id
+ q9-20020a170906a08900b0072f826be084mr21382249ejy.708.1659548105017; Wed, 03
+ Aug 2022 10:35:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-Content-Language: en-US
-To:     Ingo Molnar <mingo@kernel.org>, Kyle Huey <me@kylehuey.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        kvm@vger.kernel.org, stable@vger.kernel.org
-References: <20220731050342.56513-1-khuey@kylehuey.com>
- <Yuo59tV071/i6yhf@gmail.com>
- <CAP045ArF0SX84tDr=iZoK=EnXK2LsXYut3-KMkCxQO2OOhn=0A@mail.gmail.com>
- <Yuqvkufu7Hu4drL6@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yuqvkufu7Hu4drL6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+ <20220802175755.6530-2-sudip.mukherjee@sifive.com> <YulxX3Zo168cWhwP@sirena.org.uk>
+In-Reply-To: <YulxX3Zo168cWhwP@sirena.org.uk>
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Date:   Wed, 3 Aug 2022 18:34:53 +0100
+Message-ID: <CAHyZL-dA+mFW6Jcvpds69f-9iJf6nk7PCpO6S2Au+ugSZMgisw@mail.gmail.com>
+Subject: Re: [PATCH 01/11] spi: dw: define capability for enhanced spi
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeegar Lakhani <jeegar.lakhani@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 19:25, Ingo Molnar wrote:
-> Ok - allowing ptrace to set the full 32 bits of the PKRU register seems OK
-> then, and is 100% equivalent to using WRPKRU, right? So there's no implicit
-> masking/clearing of bits depending on how many keys are available, or other
-> details where WRPKRU might differ from a pure 32-bit per thread write,
-> correct?
+On Tue, Aug 2, 2022 at 7:48 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Aug 02, 2022 at 06:57:45PM +0100, Sudip Mukherjee wrote:
+>
+> > Some Synopsys SSI controllers support enhanced SPI which includes
+> > Dual mode, Quad mode and Octal mode. Define the capability and mention
+> > it in the controller supported modes.
+>
+> > +#define DW_SPI_CAP_EXT_SPI           BIT(2)
+>
+> This isn't at all descriptive, it'd be better to have a capability bit
+> for the various multi-line data modes (or possibly individual bits for
+> them, though board setup will stop us using things that aren't supported
+> in a given design anyway so it's a bit redundant) - that'd be a lot
+> clearer and avoid confusion further down the line when some other
+> feature gets added.
 
-Yes, it's the same.
+Do you mean to add separate capability bit like:
+DW_SPI_CAP_DUAL_SPI
+DW_SPI_CAP_QUAD_SPI and
+DW_SPI_CAP_OCTAL_SPI ?
 
-Paolo
 
+--
+Regards
+Sudip

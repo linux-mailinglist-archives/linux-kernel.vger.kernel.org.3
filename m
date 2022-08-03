@@ -2,237 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E00588634
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34421588638
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 06:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235490AbiHCENG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 00:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S232665AbiHCEUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 00:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiHCENC (ORCPT
+        with ESMTP id S230239AbiHCEUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 00:13:02 -0400
+        Wed, 3 Aug 2022 00:20:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7905447BBA
-        for <linux-kernel@vger.kernel.org>; Tue,  2 Aug 2022 21:13:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0FF2B60B;
+        Tue,  2 Aug 2022 21:20:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F54612E4
-        for <linux-kernel@vger.kernel.org>; Wed,  3 Aug 2022 04:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AF5C43146;
-        Wed,  3 Aug 2022 04:12:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B958A612E4;
+        Wed,  3 Aug 2022 04:20:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84062C433D6;
+        Wed,  3 Aug 2022 04:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659499980;
-        bh=SvGVzKWmN4GNKfHbAT3CERRiu9R0YWc3B8gflnIPfHU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=f9d7KlCnmhT7qVAJeF11oTWRdQ64p9A1jSsyrBK45/leTqLucMqUGv76VEtl0omy4
-         Rt6kPrNz7IAnU1pCnfJjR0f6aAMu5lscHu/qPTYpCbtE4MUBnWE/7BurFEqRzb/xi8
-         xJimgQSUTM7n3hPzFOuQccNrLWrXaWMu8ygEkMgNxcLKJzRUpcI+f/6yoP8DRzF1Wc
-         alTgIWr1WMEQ7Mwju1x6Y8pdLJ79DHiB6v2itTatCvk19r2XloTB3yUP4aMO7aE1O5
-         cpDVzMfCzsz4Pz8vrLw7y0tKZY4b8IuF56mzztz62QaZYgoHvFp1HQr0aOEII1sIfK
-         RnNHZmAL8gu7w==
-Date:   Wed, 3 Aug 2022 04:12:56 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
-        tzungbi@kernel.org, linux-kernel@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Subject: [GIT PULL] chrome-platform changes for v5.20
-Message-ID: <Yun1yFEsqpF59Tdy@google.com>
+        s=k20201202; t=1659500406;
+        bh=4XvW6Am+LFtU+beJUyoqbF5SdzyM95956jiHnqhMtGw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fP7OAmnJdeDrH+3lKsGs+j7tgGMMLB/DbAh9jWp67VxaRsmO7QibW7knm2D2iYqZG
+         dSVQlg7tWQQjiQP2uvEepCh5ML010EhvEJDE6rnIBneJxT3mWexptkIVMdxHaAV9PK
+         0GEngfIwWPmIHP8Fi2aou9E21t9PuJdIKKksaZuqUSdy5tBFXAiPLM3QVzxB6rTWH8
+         uLbLhTU3bzqlWeg5Q8xKUlmlh6Owbdvf+LjbUXbJDiTCYyWephMAaEvGelYdg7GiDO
+         OlG7AH4mP60rel0pO+jvwR0Jy/ng+Vz0sYXEMcntQ2SgFkrnZdDl4V69RvYnSuPOMD
+         02P7prfEmDn8g==
+Message-ID: <9e8728e0-75e7-d3a8-038b-48e51be4df07@kernel.org>
+Date:   Tue, 2 Aug 2022 22:20:04 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uoQWHsGDqpU1z+Ga"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH] net: seg6: initialize induction variable to first valid
+ array index
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+References: <20220802161203.622293-1-ndesaulniers@google.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220802161203.622293-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ cc Andrea ]
 
---uoQWHsGDqpU1z+Ga
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/2/22 10:12 AM, Nick Desaulniers wrote:
+> Fixes the following warnings observed when building
+> CONFIG_IPV6_SEG6_LWTUNNEL=y with clang:
+> 
+>   net/ipv6/seg6_local.o: warning: objtool: seg6_local_fill_encap() falls
+>   through to next function seg6_local_get_encap_size()
+>   net/ipv6/seg6_local.o: warning: objtool: seg6_local_cmp_encap() falls
+>   through to next function input_action_end()
+> 
+> LLVM can fully unroll loops in seg6_local_get_encap_size() and
+> seg6_local_cmp_encap(). One issue in those loops is that the induction
+> variable is initialized to 0. The loop iterates over members of
+> seg6_action_params, a global array of struct seg6_action_param calling
+> their put() function pointer members.  seg6_action_param uses an array
+> initializer to initialize SEG6_LOCAL_SRH and later elements, which is
+> the third enumeration of an anonymous union.
+> 
+> The guard `if (attrs & SEG6_F_ATTR(i))` may prevent this from being
+> called at runtime, but it would still be UB for
+> `seg6_action_params[0]->put` to be called; the unrolled loop will make
+> the initial iterations unreachable, which LLVM will later rotate to
+> fallthrough to the next function.
+> 
+> Make this more obvious that this cannot happen to the compiler by
+> initializing the loop induction variable to the minimum valid index that
+> seg6_action_params is initialized to.
+> 
+> Reported-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  net/ipv6/seg6_local.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index 2cd4a8d3b30a..b7de5e46fdd8 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+> @@ -1614,7 +1614,7 @@ static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
+>  	 * callback. If the callback is not available, then we skip to the next
+>  	 * attribute; otherwise, we call the destroy() callback.
+>  	 */
+> -	for (i = 0; i < max_parsed; ++i) {
+> +	for (i = SEG6_LOCAL_SRH; i < max_parsed; ++i) {
+>  		if (!(parsed_attrs & SEG6_F_ATTR(i)))
+>  			continue;
+>  
+> @@ -1643,7 +1643,7 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
+>  	struct seg6_action_param *param;
+>  	int err, i;
+>  
+> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; ++i) {
+> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; ++i) {
+>  		if (!(desc->optattrs & SEG6_F_ATTR(i)) || !attrs[i])
+>  			continue;
+>  
+> @@ -1742,7 +1742,7 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+>  	}
+>  
+>  	/* parse the required attributes */
+> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
+> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
+>  		if (desc->attrs & SEG6_F_ATTR(i)) {
+>  			if (!attrs[i])
+>  				return -EINVAL;
+> @@ -1847,7 +1847,7 @@ static int seg6_local_fill_encap(struct sk_buff *skb,
+>  
+>  	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
+>  
+> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
+> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
+>  		if (attrs & SEG6_F_ATTR(i)) {
+>  			param = &seg6_action_params[i];
+>  			err = param->put(skb, slwt);
+> @@ -1927,7 +1927,7 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
+>  	if (attrs_a != attrs_b)
+>  		return 1;
+>  
+> -	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
+> +	for (i = SEG6_LOCAL_SRH; i < SEG6_LOCAL_MAX + 1; i++) {
+>  		if (attrs_a & SEG6_F_ATTR(i)) {
+>  			param = &seg6_action_params[i];
+>  			if (param->cmp(slwt_a, slwt_b))
 
-Linus,
-
-Please pull chrome-platform updates for v5.20.
-
-Thanks,
-TzungBi
-
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/ =
-tags/tag-chrome-platform-for-v5.20
-
-for you to fetch changes up to afef1e1a0223623d063a6df51dbc342c9517b948:
-
-  platform/chrome: cros_kunit_util: add default value for `msg->result` (20=
-22-07-21 08:49:28 +0000)
-
-----------------------------------------------------------------
-chrome platform changes for 5.20
-
-cros_ec_proto:
-* Leverage Kunit and add Kunit test cases.
-* Clean-ups.
-* Fix typo.
-
-cros_ec_commands:
-* Fix typo.
-* Fix compile errors.
-
-cros_kbd_led_backlight:
-* Support OF match.
-* Support EC PWM backend.
-
-cros_ec:
-* Always expose the last resume result to fix sleep hang detection on
-  ARM-based chromebooks.
-
-wilco_ec:
-* Fix typo.
-
-cros_ec_typec:
-* Clean-ups.
-* Use Type-C framework utilities to manage altmode structs.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      platform/chrome: cros_ec_proto: Fix spelling mistake "unknwon" -> "un=
-known"
-
-Jiang Jian (1):
-      platform/chrome: wilco_ec: event: Fix typo in comment
-
-N=EDcolas F. R. A. Prado (1):
-      platform/chrome: cros_ec_typec: Use dev_err_probe on port register fa=
-il
-
-Prashant Malani (5):
-      regulator: cros-ec: Use common cros_ec_command()
-      platform/chrome: cros_ec_proto: Rename cros_ec_command function
-      platform/chrome: cros_ec_proto: Update size arg types
-      platform/chrome: cros_ec_typec: Rename port altmode array
-      platform/chrome: cros_ec_typec: Register port altmodes
-
-Stephen Boyd (1):
-      platform/chrome: cros_ec: Always expose last resume result
-
-Tzung-Bi Shih (49):
-      platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_prepare_t=
-x()
-      platform/chrome: cros_ec_proto: factor legacy out from cros_ec_prepar=
-e_tx()
-      platform/chrome: cros_ec_proto: update cros_ec_check_result() comment
-      platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_check_res=
-ult()
-      platform/chrome: cros_kbd_led_backlight: sort headers alphabetically
-      platform/chrome: cros_kbd_led_backlight: separate ACPI backend
-      dt-bindings: add google,cros-kbd-led-backlight
-      platform/chrome: cros_kbd_led_backlight: support OF match
-      platform/chrome: cros_kbd_led_backlight: support EC PWM backend
-      platform/chrome: cros_ec_commands: fix compile errors
-      platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all=
-()
-      platform/chrome: use macros for passthru indexes
-      platform/chrome: cros_ec_proto: assign buffer size from protocol info
-      platform/chrome: cros_ec_proto: remove redundant NULL check
-      platform/chrome: cros_ec_proto: use cros_ec_map_error()
-      platform/chrome: cros_ec_proto: separate cros_ec_get_proto_info()
-      platform/chrome: cros_ec_proto: add Kunit tests for getting proto info
-      platform/chrome: cros_ec_proto: handle empty payload in getting proto=
- info
-      platform/chrome: cros_ec_proto: separate cros_ec_get_proto_info_legac=
-y()
-      platform/chrome: cros_ec_proto: add Kunit test for getting legacy info
-      platform/chrome: cros_ec_proto: handle empty payload in getting info =
-legacy
-      platform/chrome: cros_ec_proto: don't show MKBP version if unsupported
-      platform/chrome: cros_ec_proto: return 0 on getting cmd mask success
-      platform/chrome: cros_ec_proto: add Kunit test for getting cmd mask e=
-rror
-      platform/chrome: cros_ec_proto: check `msg->result` in getting cmd ma=
-sk
-      platform/chrome: cros_ec_proto: add Kunit tests for getting cmd mask
-      platform/chrome: cros_ec_proto: handle empty payload in getting cmd m=
-ask
-      platform/chrome: cros_ec_proto: return 0 on getting wake mask success
-      platform/chrome: cros_ec_proto: add Kunit test for getting wake mask
-      platform/chrome: cros_ec_proto: handle empty payload in getting wake =
-mask
-      platform/chrome: cros_ec_proto: add "cros_ec_" prefix to send_command=
-()
-      platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_cmd_xfer()
-      platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_send_comm=
-and()
-      platform/chrome: cros_ec_proto: separate cros_ec_xfer_command()
-      platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
-      platform/chrome: cros_ec_proto: change Kunit expectation when timed o=
-ut
-      platform/chrome: cros_ec_proto: return -EAGAIN when retries timed out
-      platform/chrome: cros_ec_proto: add Kunit test for empty payload
-      platform/chrome: cros_ec_proto: return -EPROTO if empty payload
-      platform/chrome: cros_ec_proto: add Kunit tests for cmd_xfer_status
-      platform/chrome: cros_ec_proto: add Kunit test for cros_ec_map_error()
-      platform/chrome: cros_ec_proto: add Kunit tests for get_next_event
-      platform/chrome: cros_ec_proto: add Kunit tests for get_host_event
-      platform/chrome: cros_ec_proto: add Kunit tests for check_features
-      platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
-      platform/chrome: cros_ec_proto: add Kunit test for cros_ec_cmd()
-      platform/chrome: cros_kbd_led_backlight: fix build warning
-      platform/chrome: merge Kunit utils and test cases
-      platform/chrome: cros_kunit_util: add default value for `msg->result`
-
-Xiang wangx (1):
-      platform/chrome: cros_ec_commands: Fix syntax errors in comments
-
- .../chrome/google,cros-kbd-led-backlight.yaml      |   35 +
- .../devicetree/bindings/mfd/google,cros-ec.yaml    |    3 +
- drivers/mfd/cros_ec_dev.c                          |    4 +-
- drivers/platform/chrome/Kconfig                    |   11 +-
- drivers/platform/chrome/Makefile                   |    5 +
- drivers/platform/chrome/cros_ec.c                  |   11 +-
- drivers/platform/chrome/cros_ec_proto.c            |  473 ++--
- drivers/platform/chrome/cros_ec_proto_test.c       | 2753 ++++++++++++++++=
-++++
- drivers/platform/chrome/cros_ec_trace.h            |    8 +-
- drivers/platform/chrome/cros_ec_typec.c            |   93 +-
- drivers/platform/chrome/cros_kbd_led_backlight.c   |  196 +-
- drivers/platform/chrome/cros_kunit_util.c          |  130 +
- drivers/platform/chrome/cros_kunit_util.h          |   48 +
- drivers/platform/chrome/cros_usbpd_notify.c        |    4 +-
- drivers/platform/chrome/wilco_ec/event.c           |    2 +-
- drivers/regulator/cros-ec-regulator.c              |   36 +-
- include/linux/platform_data/cros_ec_commands.h     |    6 +-
- include/linux/platform_data/cros_ec_proto.h        |    7 +-
- 18 files changed, 3490 insertions(+), 335 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-kb=
-d-led-backlight.yaml
- create mode 100644 drivers/platform/chrome/cros_ec_proto_test.c
- create mode 100644 drivers/platform/chrome/cros_kunit_util.c
- create mode 100644 drivers/platform/chrome/cros_kunit_util.h
-
---uoQWHsGDqpU1z+Ga
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQS0yQeDP3cjLyifNRUrxTEGBto89AUCYun1xQAKCRArxTEGBto8
-9HxeAP4rAbwrEjg4ZzNyPLHRqMygr08vOw25SrkwfI0kqDMcuQEAmy+WVD1oHb+a
-ob3Q6ZDs4gBTGu6PVFc/errsBN8M6Qk=
-=xFyU
------END PGP SIGNATURE-----
-
---uoQWHsGDqpU1z+Ga--

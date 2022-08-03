@@ -2,222 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7DD588955
-	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2578B588958
+	for <lists+linux-kernel@lfdr.de>; Wed,  3 Aug 2022 11:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbiHCJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 3 Aug 2022 05:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
+        id S234601AbiHCJYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 3 Aug 2022 05:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbiHCJYM (ORCPT
+        with ESMTP id S237301AbiHCJYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 3 Aug 2022 05:24:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5E5925A;
-        Wed,  3 Aug 2022 02:24:06 -0700 (PDT)
-X-UUID: d9d12955ca5d450897c69e1b2d0e25d7-20220803
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=Fl4bATNs9s6unC164yvwNu/u3cuRgxNAqyKpfiZDxTU=;
-        b=tRr2BpF6bXQHeRTdkQ8mBlDuNHlynml/3HvyUPJsSSRYdqLfXRyo+rlklcnTxV9dXNtgvC+cwG41FcpKdYAdj+cCeRG8rdtNgPEwz55yQDpQ4ghEs04WCNhCrwEkQcqlJhjW5SsTToHFTZFtcPKBUIKl2nM6jMlecFm8gnw0XG0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:18b1fdb5-e3a0-42c0-bd57-d9af0ff2e881,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:119a2625-a982-4824-82d2-9da3b6056c2a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d9d12955ca5d450897c69e1b2d0e25d7-20220803
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 917243406; Wed, 03 Aug 2022 17:23:59 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 3 Aug 2022 17:23:57 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 3 Aug 2022 17:23:57 +0800
-Message-ID: <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
-Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
- fallbacks and example
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        <nfraprado@collabora.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 3 Aug 2022 17:23:57 +0800
-In-Reply-To: <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
-References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
-         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
-         <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
-         <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 3 Aug 2022 05:24:31 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4B35A164;
+        Wed,  3 Aug 2022 02:24:29 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id x2-20020a17090ab00200b001f4da5cdc9cso1420702pjq.0;
+        Wed, 03 Aug 2022 02:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=TyPYU7JAMWQWl+WhPsqBxHvEkTIS/4JLI5sbDwhItOY=;
+        b=dJNn1nWWaL2AuEuXjimOgDz7y+wxBEIUdAmLlrH1FBuhkjWabFM25S6WDPDHkO9LZ+
+         L+DwulUjkptr87COHH9c5aE39No2pGoysHi7SoWczDZxsJS4hbtArJANpEQXMCYEZJ3i
+         xaC9A9Cxi+dN8mpE8Ny53wPSUcnHvF7xBFnuCeI5qsLbClRGLg7a9AqauJk7jWXbQPA9
+         0jdlv2/6DPSFb7W2JWiDJrF0bk2D6/5i9MawrYOKIs+Q7ph/rOLT0sp13bnWQxcSUGqL
+         vV2SZkU/I7jPtsrFcvd33JtXtrRZwS51SR6adRWu58/p+nPSVN92xia98UGOLVxFQmWE
+         HHbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=TyPYU7JAMWQWl+WhPsqBxHvEkTIS/4JLI5sbDwhItOY=;
+        b=qW9cO81L8eFEoW4HuVssVTwTLEHICCx8GFQ6+1FB+79eaiy+Jj2YCVraJBAp8cd4tH
+         uqj74pfp26T11SEFyxccsFixNxb5Rc10HfxD5rGESEWpwQr+C3WYpyjYVQolrX8ehasI
+         WodapTNdAUB5ircA8W2S0CkuHeHZGuAeQ+odXF5POw7Jzhr5R3OX65z/PnMjpGqz9v58
+         F/DOYC6OrfaQrnWXB3nbETxEuv8npDAGRiDCH7JdNR76Lf5k9V3Ld/G0482iIrgSSnE4
+         GnXQS1F0CBCSn0KyUlJXGXtisk1ljJMHIvUndTaM/k3SUdwT4YDnoGcSEdwtirbnDfT7
+         sJ7w==
+X-Gm-Message-State: ACgBeo08EXfjwwfvD6YQx7xsbK1hlbeilsx9DYAr2MkV3ZnFAU9jenRM
+        KYQbra+jnhGL0t0Bz1zJRw==
+X-Google-Smtp-Source: AA6agR7AGuv1JhwCpiEw7Mov0djrXjR7uRpZo/ejIF30ks+zTdgKibiEd8aWFGtvsoKPh1vdUGtHcw==
+X-Received: by 2002:a17:90b:180f:b0:1f5:160c:a656 with SMTP id lw15-20020a17090b180f00b001f5160ca656mr4000341pjb.193.1659518668515;
+        Wed, 03 Aug 2022 02:24:28 -0700 (PDT)
+Received: from localhost.localdomain ([166.111.133.51])
+        by smtp.gmail.com with ESMTPSA id a4-20020a1709027e4400b0016c9e5f291bsm1377194pln.111.2022.08.03.02.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 02:24:28 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Zheyu Ma <zheyuma97@gmail.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] video: fbdev: i740fb: Check the argument of i740_calc_vclk()
+Date:   Wed,  3 Aug 2022 17:24:19 +0800
+Message-Id: <20220803092419.2821723-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu and Mathias,
+Since the user can control the arguments of the ioctl() from the user
+space, under special arguments that may result in a divide-by-zero bug.
 
-Sincere apologies for the delayed response.
+If the user provides an improper 'pixclock' value that makes the argumet
+of i740_calc_vclk() less than 'I740_RFREQ_FIX', it will cause a
+divide-by-zero bug in:
+    drivers/video/fbdev/i740fb.c:353 p_best = min(15, ilog2(I740_MAX_VCO_FREQ / (freq / I740_RFREQ_FIX)));
 
-On Tue, 2022-08-02 at 13:04 +0200, Matthias Brugger wrote:
-> 
-> On 01/08/2022 11:29, Chen-Yu Tsai wrote:
-> > On Thu, Jul 21, 2022 at 10:50 AM Allen-KH Cheng
-> > <allen-kh.cheng@mediatek.com> wrote:
-> > > 
-> > > The watchdog timer of mt8186. mt8195 and mt7986 have their DT
-> > > data.
-> > > We should not use 'mediatek,mt6589-wdt' as fallback.
-> > > 
-> > > For mediatek,wdt example of mt8183, We remove mediatek,mt6589-wdt 
-> > > fallback.
-> > 
-> > I think this needs some more information.
-> > 
-> > Right now on the kernel side, mt6589-wdt provides just watchdog
-> > support.
-> > The SoC-specific compatibles that are touched by this patch provide
-> > reset
-> > controls in addition to the standard watchdog, which remains the
-> > same.
-> > 
-> > If that is the case, then the fallback compatibles are correct. A
-> > fallback
-> > says that the new hardware is compatible with some older hardware,
-> > and
-> > can be run with the driver supporting that older hardware, likely
-> > with
-> > reduced functionality.
-> > 
-> 
-> My understanding is, that we add a fallback because although at the
-> time we 
-> entered the compatible, the functionality of the device is the same
-> as the 
-> fallback. Nonetheless we add a compatible specific for the device in
-> case in the 
-> future we realize that the device has some functionality that is not
-> and can not 
-> be covered by the fallback.
-> 
-> This is the case here. Actually adding the fallback in the first
-> place was 
-> wrong, because the driver since ever supports the extra function for
-> the device, 
-> the reset.
-> 
-> So this is a mere cleanup of the binding to reflect what was always
-> present in 
-> the driver.
-> 
-> Regards,
-> Matthias
-> 
+The following log can reveal it:
 
-mt6589-wdt dosen't contains a reset control for other modules, like
-chen-yu mention "mt6589-wdt provides just watchdog support."
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:i740_calc_vclk drivers/video/fbdev/i740fb.c:353 [inline]
+RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:646 [inline]
+RIP: 0010:i740fb_set_par+0x163f/0x3b70 drivers/video/fbdev/i740fb.c:742
+Call Trace:
+ fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
 
-For instance, there is a reset control in mt8195-wdt and we have a DT
-data to define its reset number of TOPRGU. I thought it's better not
-use mt6589-wdt as fallback.
+Fix this by checking the argument of i740_calc_vclk() first.
 
-Please let me know if this works and if you have any suggestions or
-comments.
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/video/fbdev/i740fb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Thanks,
-Allen
-
-> > As an example, if mt8195-wdt is backward compatible with mt6589-
-> > wdt,
-> > then it should run as mt6589-wdt, and would just be missing new
-> > functionality, in this case the reset controls.
-> > 
-> > So either mt6589-wdt also contains a reset control that is not the
-> > same
-> > as the other newer chips, or has some other functionality that the
-> > other
-> > chips contain, and justifies the removal of the fallback, or this
-> > patch
-> > is incorrect. Note that mt2701-wdt and mt762*-wdt are still listed
-> > as
-> > compatible with mt6589-wdt. So I think a better explanation is
-> > required.
-> > 
-> > 
-> > Regards
-> > ChenYu
-> > 
-> > 
-> > > Fixes:a45b408a020b("dt-bindings: watchdog: Add compatible for
-> > > MediaTek MT8186")
-> > > Fixes:b326f2c85f3d("dt-bindings: watchdog: Add compatible for
-> > > Mediatek MT8195")
-> > > Fixes:41e73feb1024("dt-bindings: watchdog: Add compatible for
-> > > Mediatek MT7986")
-> > > Fixes:f43f97a0fc0e("dt-bindings: mediatek: mt8183: Add #reset-
-> > > cells")
-> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 9
-> > > ++++-----
-> > >   1 file changed, 4 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/watchdog/mtk-
-> > > wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> > > index 762c62e428ef..67ef991ec4cf 100644
-> > > --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> > > +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
-> > > @@ -14,12 +14,12 @@ Required properties:
-> > >          "mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for MT7622
-> > >          "mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for MT7623
-> > >          "mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for MT7629
-> > > -       "mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
-> > > +       "mediatek,mt7986-wdt": for MT7986
-> > >          "mediatek,mt8183-wdt": for MT8183
-> > > -       "mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
-> > > +       "mediatek,mt8186-wdt": for MT8186
-> > >          "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
-> > >          "mediatek,mt8192-wdt": for MT8192
-> > > -       "mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
-> > > +       "mediatek,mt8195-wdt": for MT8195
-> > > 
-> > >   - reg : Specifies base physical address and size of the
-> > > registers.
-> > > 
-> > > @@ -32,8 +32,7 @@ Optional properties:
-> > >   Example:
-> > > 
-> > >   watchdog: watchdog@10007000 {
-> > > -       compatible = "mediatek,mt8183-wdt",
-> > > -                    "mediatek,mt6589-wdt";
-> > > +       compatible = "mediatek,mt8183-wdt";
-> > >          mediatek,disable-extrst;
-> > >          reg = <0 0x10007000 0 0x100>;
-> > >          interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
-> > > --
-> > > 2.18.0
-> > > 
-> > > 
+diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
+index 09dd85553d4f..7f09a0daaaa2 100644
+--- a/drivers/video/fbdev/i740fb.c
++++ b/drivers/video/fbdev/i740fb.c
+@@ -400,7 +400,7 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	u32 xres, right, hslen, left, xtotal;
+ 	u32 yres, lower, vslen, upper, ytotal;
+ 	u32 vxres, xoffset, vyres, yoffset;
+-	u32 bpp, base, dacspeed24, mem;
++	u32 bpp, base, dacspeed24, mem, freq;
+ 	u8 r7;
+ 	int i;
+ 
+@@ -643,7 +643,12 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	par->atc[VGA_ATC_OVERSCAN] = 0;
+ 
+ 	/* Calculate VCLK that most closely matches the requested dot clock */
+-	i740_calc_vclk((((u32)1e9) / var->pixclock) * (u32)(1e3), par);
++	freq = (((u32)1e9) / var->pixclock) * (u32)(1e3);
++	if (freq < I740_RFREQ_FIX) {
++		fb_dbg(info, "invalid pixclock\n");
++		freq = I740_RFREQ_FIX;
++	}
++	i740_calc_vclk(freq, par);
+ 
+ 	/* Since we program the clocks ourselves, always use VCLK2. */
+ 	par->misc |= 0x0C;
+-- 
+2.25.1
 
